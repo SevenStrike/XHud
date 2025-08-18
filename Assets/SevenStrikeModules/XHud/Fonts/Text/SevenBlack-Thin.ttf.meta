@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: 6dbf92e64400a2143bec2b09f8f3c418
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - ZHDH
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: b105846cc42c40448a5da2120b297a7d, type: 3}
+  - {fileID: 12800000, guid: a6938e4cde47e0241a28493224f56376, type: 3}
+  - {fileID: 12800000, guid: d0c2b0af99f704d4bb19a44f49e5afe5, type: 3}
+  - {fileID: 12800000, guid: 04aab7cee3241a3428b78bdef8ce2efc, type: 3}
+  - {fileID: 12800000, guid: 4b481496ebeea8d46a8740171e2c329a, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

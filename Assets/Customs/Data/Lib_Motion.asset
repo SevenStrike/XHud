@@ -1,0 +1,187 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4957f5a88b59f44cb4e88cb14556626, type: 3}
+  m_Name: Lib_Motion
+  m_EditorClassIdentifier: 
+  LibraryName: NewMotionLibrary
+  itemHeight: 80
+  visibleItemCount: 7
+  Find: 
+  Highlight: 
+  SelectedIndex: -1
+  LocationSelectedIndex: -1
+  ElementMotionList_Scroller: {x: 0, y: 0}
+  ElementMotionList:
+  - Name: Motion_Element_Create
+    Mode: 0
+    Des: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8E\u5143\u7D20\u8F7D\u5165\u65F6\u7684\u52A8\u6548"
+    Crc:
+      anchor: 5
+      MotionAnimateEndState: 0
+      Alpha:
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        CurveName: 
+        Ease: 12
+      Movement:
+        Movement: 1
+        Distance: 100
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        CurveName: 
+        Ease: 12
+      Rotation:
+        Rotation: 0
+        Degree: 0
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        CurveName: 
+        Ease: 12
+    Rec:
+      MotionAnimateEndState: 0
+      Alpha:
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        CurveName: 
+        Ease: 12
+      Movement:
+        Movement: 2
+        Distance: 100
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        CurveName: 
+        Ease: 12
+      Rotation:
+        Rotation: 0
+        Degree: 0
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        CurveName: 
+        Ease: 12
+  - Name: Motion_Element_Recycle
+    Mode: 1
+    Des: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8E\u5143\u7D20\u56DE\u6536\u65F6\u7684\u52A8\u6548"
+    Crc:
+      anchor: 5
+      MotionAnimateEndState: 0
+      Alpha:
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        CurveName: 
+        Ease: 12
+      Movement:
+        Movement: 1
+        Distance: 100
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        CurveName: 
+        Ease: 12
+      Rotation:
+        Rotation: 0
+        Degree: 0
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        CurveName: 
+        Ease: 12
+    Rec:
+      MotionAnimateEndState: 0
+      Alpha:
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        CurveName: 
+        Ease: 12
+      Movement:
+        Movement: 2
+        Distance: 100
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        CurveName: 
+        Ease: 12
+      Rotation:
+        Rotation: 0
+        Degree: 0
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        CurveName: 
+        Ease: 12
