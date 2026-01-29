@@ -84,8 +84,8 @@ namespace SevenStrikeModules.XHud
         #endregion
 
         #region 公共路径
-        public static string path_GUISTYLE = "Assets/SevenStrikeModules/XHud/GUI/Editor/HudGuiStyle/";
-        public static string path_GUIROOT = "Assets/SevenStrikeModules/XHud/GUI/Editor/";
+        public static string path_GUISTYLE = "Assets/SevenStrikeModules/XHud/GUI/HudGuiStyle/";
+        public static string path_GUIROOT = "Assets/SevenStrikeModules/XHud/GUI/";
         public static string path_XHUD_ROOT = "Assets/SevenStrikeModules/XHud/";
         public static string path_XHUD_MATERIAL = "Assets/SevenStrikeModules/XHud/Materials/";
         public static string path_XHUD_PREFABS = "Assets/SevenStrikeModules/XHud/Prefabs/";
@@ -106,7 +106,7 @@ namespace SevenStrikeModules.XHud
             return path_XHUD_ROOT;
         }
         /// <summary>
-        /// 获取XHUD GUIROOT路径，根目录：SevenStrikeModules/XHud/GUI/Editor/
+        /// 获取XHUD GUIROOT路径，根目录：SevenStrikeModules/XHud/GUI/
         /// </summary>
         /// <returns></returns>
         public static string Get_GUIRoot_Path()
@@ -114,7 +114,7 @@ namespace SevenStrikeModules.XHud
             return path_GUIROOT;
         }
         /// <summary>
-        /// 获取XHUD GUISTYLE路径，根目录：SevenStrikeModules/XHud/GUI/Editor/HudGuiStyle
+        /// 获取XHUD GUISTYLE路径，根目录：SevenStrikeModules/XHud/GUI/HudGuiStyle
         /// </summary>
         /// <returns></returns>
         public static string Get_GUIStyle_Path()

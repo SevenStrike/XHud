@@ -2639,9 +2639,9 @@ namespace SevenStrikeModules.XHud.Hud
                             {
                                 BaseScript.hm_BluePrint_Remove();
 
-                                Material mat = AssetDatabase.LoadAssetAtPath<Material>($"{util_Dashboard.Get_GUIRoot_Path()}BluePrints/Mat/BluePrint.mat");
-                                TMP_FontAsset title = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{util_Dashboard.Get_GUIRoot_Path()}Fonts/Tmp/SevenBlack-Bold SDF.asset");
-                                TMP_FontAsset subtitle = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{util_Dashboard.Get_GUIRoot_Path()}Fonts/Tmp/SevenBlack-Light SDF.asset");
+                                Material mat = AssetDatabase.LoadAssetAtPath<Material>($"{util_Dashboard.Get_Materials_Path()}BluePrints/Mat/BluePrint.mat");
+                                TMP_FontAsset title = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{util_Dashboard.Get_path_XHUD_FONTS_Path()}Fonts/Tmp/SevenBlack-Bold SDF.asset");
+                                TMP_FontAsset subtitle = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{util_Dashboard.Get_path_XHUD_FONTS_Path()}Fonts/Tmp/SevenBlack-Light SDF.asset");
                                 BaseScript.hm_BluePrint_Create(true, mat, title, subtitle);
                             }
                         }
