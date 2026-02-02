@@ -43,20 +43,6 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         public int SelectedIndex = 0;
 
-        #region 运行效能状态
-        private Texture2D
-            LiquidBg_Playing,
-            LiquidBg_Playing_Lines,
-            LiquidBg_Edge,
-            LiquidBg_Ready,
-            LiquidBg_Ready_Lines;
-        private Color TweenLedOnColor;
-        private Color TweenLiquid_On;
-        private Color TweenLiquid_Off;
-        private Texture2D TweenLiquidScreen;
-        private string TweenLiquidContent;
-        #endregion
-
         /// <summary>
         /// 字体 - 粗体
         /// </summary>
@@ -109,25 +95,8 @@ namespace SevenStrikeModules.XHud.Hud
             falseicon = util_XHUDGUI.GetIcon("Icons_XHudDiagnostic/falseicon");
             systemcursor = util_XHUDGUI.GetIcon("Icons_XHudDiagnostic/systemcursor");
 
-            LiquidBg_Playing = util_XHUDGUI.GetIcon("Icons_Hud_XTween_Controller/LiquidBg_Playing");
-            LiquidBg_Ready = util_XHUDGUI.GetIcon("Icons_Hud_XTween_Controller/LiquidBg_Ready");
-            LiquidBg_Edge = util_XHUDGUI.GetIcon("Icons_Hud_XTween_Controller/LiquidBg_Edge");
-            LiquidBg_Playing_Lines = util_XHUDGUI.GetIcon("Icons_Hud_XTween_Controller/LiquidBg_Playing_Lines");
-            LiquidBg_Ready_Lines = util_XHUDGUI.GetIcon("Icons_Hud_XTween_Controller/LiquidBg_Ready_Lines");
-
             Font_Bold = util_XHUDGUI.GetFont("SS_Editor_Bold");
             Font_Light = util_XHUDGUI.GetFont("SS_Editor_Light");
-
-            if (util_Dashboard.LiquidLagacyColor)
-            {
-                TweenLiquid_On = new Color(0.721507f, 0.8396226f, 0.376246f, 1);
-                TweenLiquid_Off = new Color(0.7893765f, 0.8584906f, 0.6206887f, 1);
-            }
-            else
-            {
-                TweenLiquid_On = util_Dashboard.Theme_Primary;
-                TweenLiquid_Off = Color.white;
-            }
         }
 
         private void OnDestroy()

@@ -2,7 +2,6 @@ namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Hud;
     using SevenStrikeModules.XHud.Utilitys;
-    using UnityEditor;
 #if UNITY_EDITOR
     using UnityEditor.Callbacks;
 #endif
@@ -186,74 +185,6 @@ namespace SevenStrikeModules.XHud
             return path_XHUD_SCRIPTS;
         }
         #endregion
-        #endregion
-
-        #region TweenController样式配置
-        /// <summary>
-        /// TweenController的预览液晶显示器的LED指示器在预览时是否闪烁
-        /// </summary>
-        public static bool Tween_LiquidLEDBlink = true;
-        #endregion
-
-        #region 液晶面板预览样式配置
-        /// <summary>
-        /// 预览液晶显示器是否使用复古的扫描效果
-        /// </summary>
-        public static bool LiquidScanStyle = true;
-        /// <summary>
-        /// 预览液晶显示器的颜色是否使用传统橄榄绿色
-        /// </summary>
-        public static bool LiquidLagacyColor = true;
-        /// <summary>
-        /// 预览液晶显示器是否使用肮脏污迹
-        /// </summary>
-        public static bool LiquidDirty = true;
-        /// <summary>
-        /// 预览液晶显示器是否使用动画进度条
-        /// </summary>
-        public static bool LiquidProgressAnimation = true;
-
-        public static Color Liquid_On_Color = new Color(0.6322733f, 0.695f, 0.448275f, 0.8f);
-        public static Color Liquid_Off_Color = new Color(0.7893765f, 0.8584906f, 0.6206887f, 0.85f);
-
-#if UNITY_EDITOR
-        [InitializeOnEnterPlayMode]
-        [DidReloadScripts]
-        public static void LoadLiquidStyle()
-        {
-            if (util_Tools.PlayerPrefs_KeyIsExist_ForEditor("LiquidLagacyColor"))
-                LiquidLagacyColor = util_Tools.PlayerPrefs_ReadValue_Bool_ForEditor("LiquidLagacyColor");
-            else
-            {
-                LiquidLagacyColor = true;
-                util_Tools.PlayerPrefs_SaveValue_ForEditor("LiquidLagacyColor", LiquidLagacyColor);
-            }
-
-            if (util_Tools.PlayerPrefs_KeyIsExist_ForEditor("LiquidScanStyle"))
-                LiquidScanStyle = util_Tools.PlayerPrefs_ReadValue_Bool_ForEditor("LiquidScanStyle");
-            else
-            {
-                LiquidScanStyle = true;
-                util_Tools.PlayerPrefs_SaveValue_ForEditor("LiquidScanStyle", LiquidScanStyle);
-            }
-
-            if (util_Tools.PlayerPrefs_KeyIsExist_ForEditor("LiquidProgressAnimation"))
-                LiquidProgressAnimation = util_Tools.PlayerPrefs_ReadValue_Bool_ForEditor("LiquidProgressAnimation");
-            else
-            {
-                LiquidProgressAnimation = true;
-                util_Tools.PlayerPrefs_SaveValue_ForEditor("LiquidProgressAnimation", LiquidProgressAnimation);
-            }
-
-            if (util_Tools.PlayerPrefs_KeyIsExist_ForEditor("LiquidDirty"))
-                LiquidDirty = util_Tools.PlayerPrefs_ReadValue_Bool_ForEditor("LiquidDirty");
-            else
-            {
-                LiquidDirty = true;
-                util_Tools.PlayerPrefs_SaveValue_ForEditor("LiquidDirty", LiquidDirty);
-            }
-        }
-#endif
         #endregion
     }
 }

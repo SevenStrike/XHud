@@ -39,7 +39,7 @@ namespace SevenStrikeModules.XHud.Hud
         static object gameViewSizesInstance;
 
         #region 序列化属性
-        SerializedProperty IsInitialized, Lib_ElementLibrarys, SoundLibrary, SounderPoolCount, Anchors_Layout_Screen, HudCanvas_ScreenAnchor, Lib_Color, Lib_Curve, Lib_Sound, Lib_TextStyleLibrary, Lib_ElementMotion, Lib_Transition, HudCamera, FontSizeMultiply, CanvasScalerModeIndex, CanvasScalerScreenSize, CanvasMatchDir, HudCanvas_Screen, HudCanvas_World, HudCanvasScaler, HudCanvas_WorldAnchor, Mask, HudCanvasGroup_Screen, HudCanvasGroup_World, UseInstanceMode, UseDebug, UseSafeFrame, UseAutoPerfectPixel, UsePerfectPixelUpdate, SafeFrameStructureDisplayer, CameraOthograpicMode, CustomCursor, CustomTransition, SupportWorldUI, Safe_Frame, Margins, MarginHorizontal, MarginMultiply, MarginVertical, MarkSize, Color_LayoutAnchorMark, Color_FrameLine, ScreenRes, Safe_FrameLine_Width, Safe_FrameLine_Margins, Color_SeperaterLine, Safe_Seperater_Length, Safe_CenterMarkLength, Safe_CenterMarkWidth, Color_CenterMark, Safe_CenterMarkDistance, CameraOrthographicSize, CameraFov, CameraCutter_Near, CameraCutter_Far, HudCanvasAnchor, CanvasDistance, HudCanvasAnchorIndex, MaskAlpha, MaskTexture, MaskRaycastAlphaThreshold, MaskRaycastEnabled, MaskColor, BlurMask, BlurMaskAlpha, BlurMaskColor, BlurMaskTexture, BlurMaskRaycastAlphaThreshold, BlurMaskRaycastEnabled, ContentAlpha_Screen, ContentAlpha_World, DurationMultiply, Hud_MouseCursor, Hud_TransitionController, RecycleArgs_Default, CreateArgs_Default, SceneCamera, Volume, VolumeMute, BluePrint_root, BluePrintMode, BluePrint_grid_size, BluePrint_grid_color, BluePrint_bg_color, BluePrint_bg_decal_color, BluePrint_mark_size, BluePrint_mark_opacity, BluePrint_linewidth, BluePrint_title_content, BluePrint_subtitle_content, BluePrint_marktitle_color, BluePrint_marksubtitle_color, BluePrint_mark_margin, BluePrint_MarkAnchors, BluePrint_mark_space, BluePrint_opacity, BluePrint_AnimationDuration, BluePrint_Displayed, BluePrint_OnStartHide, BluePrint_Grid_AnimationEase, BluePrint_grid_Opacity, BluePrint_Grid_AnimationDuration, BluePrint_Bg_AnimationEase_In, BluePrint_Bg_AnimationEase_Out, BluePrint_bg_opacity, BluePrint_Bg_FadeAnimationDelay, BluePrint_Grid_LengthPercentage, BluePrint_Grid_LevelHeight, BluePrint_GridEnd, BluePrint_bg_tilling, BluePrint_bg_name, BluePrint_bg_usetilling_index, BluePrint_bg_usesquareratio_index, BluePrint_bg_mapOpacity, UniversalFeature_Blur_Intensity, Eft_Grid, Eft_GridFade, Eft_Bg, Eft_Mark, RMS_Enabled, RMS_CurrentSolution, RMS_Nodes, theme_color, theme_color_gp, theme_color_sep, EnabledLedEffect, ThemeSolution, ThemeEdgeSolution, Hud_EventSystem, Hud_InputSystemUIInputModule, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, Crc_Lib_Name, Rec_Lib_Name, UseLocalization, sp_PhysicsScreenSize, sp_Reference_Image, UseRatioReference, RatioReferenceIsPart, sp_Reference_Image_Color, sp_Res_Full, sp_Res_Part, sp_ReferShape_RatioSize, sp_ReferShape_RatioTolerance, FoldAllPanelWithDisabled, CompGuide_Anchors, CompGuide_AnchorRoot, UseCompGuide, CompGuideMode, GuideColor, GuidePointColor, GuideParam_Mirror_LR_Offset, GuideParam_Mirror_UD_Offset, GuideParam_Mirror_LR_GoldenMode, GuideParam_Mirror_UD_GoldenMode, GuideParam_Fibonacci_Mode, GuideParam_CornerLookat_Offset_H, GuideParam_CornerLookat_Offset_V, GuideParam_Three_Offset_H, GuideParam_Three_Offset_Coverage, GuideParam_Three_Offset_V, GuideParam_GuideLine_BaseHeight, GuideParam_GuideLine_Offset_Near, GuideParam_GuideLine_Offset_Far, GuideParam_GuideLine_Offset_NearHeight, GuideParam_Triangle_BaseHeight, GuideParam_Triangle_BottomHeight, GuideParam_Triangle_Offset_Left, GuideParam_Triangle_Offset_Right, GuideParam_Triangle_TopOffset, GuideParam_CenterPointSize, GuideParam_IShape_TopHeight, GuideParam_IShape_BottomHeight, GuideParam_IShape_Offset_Left, GuideParam_IShape_Offset_Right, GuideParam_GuideLine_BaseOffset, sp_LiquidLagacyColor, sp_LiquidScanStyle, sp_LiquidProgressAnimation, sp_LiquidDirty;
+        SerializedProperty IsInitialized, Lib_ElementLibrarys, SoundLibrary, SounderPoolCount, Anchors_Layout_Screen, HudCanvas_ScreenAnchor, Lib_Color, Lib_Curve, Lib_Sound, Lib_TextStyleLibrary, Lib_ElementMotion, Lib_Transition, HudCamera, FontSizeMultiply, CanvasScalerModeIndex, CanvasScalerScreenSize, CanvasMatchDir, HudCanvas_Screen, HudCanvas_World, HudCanvasScaler, HudCanvas_WorldAnchor, Mask, HudCanvasGroup_Screen, HudCanvasGroup_World, UseInstanceMode, UseDebug, UseSafeFrame, UseAutoPerfectPixel, UsePerfectPixelUpdate, SafeFrameStructureDisplayer, CameraOthograpicMode, CustomCursor, CustomTransition, SupportWorldUI, Safe_Frame, Margins, MarginHorizontal, MarginMultiply, MarginVertical, MarkSize, Color_LayoutAnchorMark, Color_FrameLine, ScreenRes, Safe_FrameLine_Width, Safe_FrameLine_Margins, Color_SeperaterLine, Safe_Seperater_Length, Safe_CenterMarkLength, Safe_CenterMarkWidth, Color_CenterMark, Safe_CenterMarkDistance, CameraOrthographicSize, CameraFov, CameraCutter_Near, CameraCutter_Far, HudCanvasAnchor, CanvasDistance, HudCanvasAnchorIndex, MaskAlpha, MaskTexture, MaskRaycastAlphaThreshold, MaskRaycastEnabled, MaskColor, BlurMask, BlurMaskAlpha, BlurMaskColor, BlurMaskTexture, BlurMaskRaycastAlphaThreshold, BlurMaskRaycastEnabled, ContentAlpha_Screen, ContentAlpha_World, DurationMultiply, Hud_MouseCursor, Hud_TransitionController, RecycleArgs_Default, CreateArgs_Default, SceneCamera, Volume, VolumeMute, BluePrint_root, BluePrintMode, BluePrint_grid_size, BluePrint_grid_color, BluePrint_bg_color, BluePrint_bg_decal_color, BluePrint_mark_size, BluePrint_mark_opacity, BluePrint_linewidth, BluePrint_title_content, BluePrint_subtitle_content, BluePrint_marktitle_color, BluePrint_marksubtitle_color, BluePrint_mark_margin, BluePrint_MarkAnchors, BluePrint_mark_space, BluePrint_opacity, BluePrint_AnimationDuration, BluePrint_Displayed, BluePrint_OnStartHide, BluePrint_Grid_AnimationEase, BluePrint_grid_Opacity, BluePrint_Grid_AnimationDuration, BluePrint_Bg_AnimationEase_In, BluePrint_Bg_AnimationEase_Out, BluePrint_bg_opacity, BluePrint_Bg_FadeAnimationDelay, BluePrint_Grid_LengthPercentage, BluePrint_Grid_LevelHeight, BluePrint_GridEnd, BluePrint_bg_tilling, BluePrint_bg_name, BluePrint_bg_usetilling_index, BluePrint_bg_usesquareratio_index, BluePrint_bg_mapOpacity, UniversalFeature_Blur_Intensity, Eft_Grid, Eft_GridFade, Eft_Bg, Eft_Mark, RMS_Enabled, RMS_CurrentSolution, RMS_Nodes, theme_color, theme_color_gp, theme_color_sep, EnabledLedEffect, ThemeSolution, ThemeEdgeSolution, Hud_EventSystem, Hud_InputSystemUIInputModule, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, Crc_Lib_Name, Rec_Lib_Name, UseLocalization, sp_PhysicsScreenSize, sp_Reference_Image, UseRatioReference, RatioReferenceIsPart, sp_Reference_Image_Color, sp_Res_Full, sp_Res_Part, sp_ReferShape_RatioSize, sp_ReferShape_RatioTolerance, FoldAllPanelWithDisabled, CompGuide_Anchors, CompGuide_AnchorRoot, UseCompGuide, CompGuideMode, GuideColor, GuidePointColor, GuideParam_Mirror_LR_Offset, GuideParam_Mirror_UD_Offset, GuideParam_Mirror_LR_GoldenMode, GuideParam_Mirror_UD_GoldenMode, GuideParam_Fibonacci_Mode, GuideParam_CornerLookat_Offset_H, GuideParam_CornerLookat_Offset_V, GuideParam_Three_Offset_H, GuideParam_Three_Offset_Coverage, GuideParam_Three_Offset_V, GuideParam_GuideLine_BaseHeight, GuideParam_GuideLine_Offset_Near, GuideParam_GuideLine_Offset_Far, GuideParam_GuideLine_Offset_NearHeight, GuideParam_Triangle_BaseHeight, GuideParam_Triangle_BottomHeight, GuideParam_Triangle_Offset_Left, GuideParam_Triangle_Offset_Right, GuideParam_Triangle_TopOffset, GuideParam_CenterPointSize, GuideParam_IShape_TopHeight, GuideParam_IShape_BottomHeight, GuideParam_IShape_Offset_Left, GuideParam_IShape_Offset_Right, GuideParam_GuideLine_BaseOffset;
         #endregion
 
         #region 图标
@@ -429,24 +429,6 @@ namespace SevenStrikeModules.XHud.Hud
             Coroutine_LedBlink = EditorCoroutineUtility.StartCoroutine(LedBlinker(), this);
 
             RatioReference_Update();
-
-            #region 液晶样式读取
-            util_Dashboard.LiquidLagacyColor = sp_LiquidLagacyColor.boolValue;
-            sp_LiquidLagacyColor.boolValue = util_Tools.PlayerPrefs_ReadValue_Bool_ForEditor("LiquidLagacyColor");
-            sp_LiquidLagacyColor.serializedObject.ApplyModifiedProperties();
-
-            util_Dashboard.LiquidScanStyle = sp_LiquidScanStyle.boolValue;
-            sp_LiquidScanStyle.boolValue = util_Tools.PlayerPrefs_ReadValue_Bool_ForEditor("LiquidScanStyle");
-            sp_LiquidScanStyle.serializedObject.ApplyModifiedProperties();
-
-            util_Dashboard.LiquidProgressAnimation = sp_LiquidProgressAnimation.boolValue;
-            sp_LiquidProgressAnimation.boolValue = util_Tools.PlayerPrefs_ReadValue_Bool_ForEditor("LiquidProgressAnimation");
-            sp_LiquidProgressAnimation.serializedObject.ApplyModifiedProperties();
-
-            util_Dashboard.LiquidDirty = sp_LiquidDirty.boolValue;
-            sp_LiquidDirty.boolValue = util_Tools.PlayerPrefs_ReadValue_Bool_ForEditor("LiquidDirty");
-            sp_LiquidDirty.serializedObject.ApplyModifiedProperties();
-            #endregion
         }
 
         private void EditorApplication_EditorManagerUpdate()
@@ -959,49 +941,6 @@ namespace SevenStrikeModules.XHud.Hud
                     #region 关闭面板后是否折叠所有选项卡
                     util_XHUDGUI.Gui_Layout_Toggle<bool, Hud_Manager>("关闭时折叠所有", stroptions_enabled, ref FoldAllPanelWithDisabled, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
                     #endregion
-
-                    util_XHUDGUI.Gui_Layout_Seperator(1, util_Dashboard.Theme_SeperateLine);
-
-                    #region 液晶面板传统色
-                    EditorGUI.BeginChangeCheck();
-                    util_XHUDGUI.Gui_Layout_Toggle<bool, Hud_Manager>("液晶面板传统色", new string[2] { "禁用", "启用" }, ref sp_LiquidLagacyColor, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        util_Dashboard.LiquidLagacyColor = sp_LiquidLagacyColor.boolValue;
-                        util_Tools.PlayerPrefs_SaveValue_ForEditor("LiquidLagacyColor", sp_LiquidLagacyColor.boolValue);
-                    }
-                    #endregion
-
-                    #region 复古液晶面板
-                    EditorGUI.BeginChangeCheck();
-                    util_XHUDGUI.Gui_Layout_Toggle<bool, Hud_Manager>("复古液晶面板", new string[2] { "禁用", "启用" }, ref sp_LiquidScanStyle, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        util_Dashboard.LiquidScanStyle = sp_LiquidScanStyle.boolValue;
-                        util_Tools.PlayerPrefs_SaveValue_ForEditor("LiquidScanStyle", sp_LiquidScanStyle.boolValue);
-                    }
-                    #endregion
-
-                    #region 液晶面板肮脏
-                    EditorGUI.BeginChangeCheck();
-                    util_XHUDGUI.Gui_Layout_Toggle<bool, Hud_Manager>("液晶面板肮脏", new string[2] { "禁用", "启用" }, ref sp_LiquidDirty, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        util_Dashboard.LiquidDirty = sp_LiquidDirty.boolValue;
-                        util_Tools.PlayerPrefs_SaveValue_ForEditor("LiquidDirty", sp_LiquidDirty.boolValue);
-                    }
-                    #endregion
-
-                    #region 动态液晶面板
-                    EditorGUI.BeginChangeCheck();
-                    util_XHUDGUI.Gui_Layout_Toggle<bool, Hud_Manager>("动态液晶面板", new string[2] { "禁用", "启用" }, ref sp_LiquidProgressAnimation, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        util_Dashboard.LiquidProgressAnimation = sp_LiquidProgressAnimation.boolValue;
-                        util_Tools.PlayerPrefs_SaveValue_ForEditor("LiquidProgressAnimation", sp_LiquidProgressAnimation.boolValue);
-                    }
-                    #endregion
-
 
                     util_XHUDGUI.Gui_Layout_Seperator(1, util_Dashboard.Theme_SeperateLine);
 
@@ -4265,11 +4204,6 @@ namespace SevenStrikeModules.XHud.Hud
             Rec_Lib_Name = GetSerializedProperty("Rec_Lib_Name");
 
             UseLocalization = GetSerializedProperty("UseLocalization");
-
-            sp_LiquidLagacyColor = serializedObject.FindProperty("LiquidLagacyColor");
-            sp_LiquidScanStyle = serializedObject.FindProperty("LiquidScanStyle");
-            sp_LiquidProgressAnimation = serializedObject.FindProperty("LiquidProgressAnimation");
-            sp_LiquidDirty = serializedObject.FindProperty("LiquidDirty");
         }
         /// <summary>
         /// 初始化HudManager的子结构
@@ -4645,7 +4579,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             #region 创建XTween动画管理器
             GameObject xtween_obj = new GameObject();
-            xtween_obj.name = "XTween(Mgr)";
+            xtween_obj.name = "XTween(Manager)";
             xtween_obj.layer = LayerMask.NameToLayer("XHud");
             xtween_obj.transform.SetParent(BaseScript.transform);
             xtween_obj.transform.localPosition = Vector3.zero;

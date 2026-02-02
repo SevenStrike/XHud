@@ -19,7 +19,6 @@ namespace SevenStrikeModules.XHud.Hud
     using Image = UnityEngine.UI.Image;
     using UnityEngine.InputSystem.UI;
     using TMPro;
-    using SevenStrikeModules.XHud.XTween;
 
     #region CustomClass
 
@@ -1691,22 +1690,6 @@ namespace SevenStrikeModules.XHud.Hud
         /// 是否启用参考构图模式
         /// </summary>
         public bool UseCompGuide;
-        /// <summary>
-        /// 液晶预览使用传统色
-        /// </summary>
-        public bool LiquidLagacyColor = true;
-        /// <summary>
-        /// 液晶使用扫描线样式
-        /// </summary>
-        public bool LiquidScanStyle = true;
-        /// <summary>
-        /// 液晶使用动画进度条效果
-        /// </summary>
-        public bool LiquidProgressAnimation = true;
-        /// <summary>
-        /// 液晶使用肮脏污迹
-        /// </summary>
-        public bool LiquidDirty = true;
         #endregion
 
         #region 布局匹配方案(RMS = R esolution M atching S olution)
