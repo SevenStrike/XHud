@@ -275,7 +275,7 @@ namespace SevenStrikeModules.XTween
         /// <summary>
         /// 四元数过渡方式
         /// </summary>
-        [SerializeField] public HudRotateMode HudRotateMode = HudRotateMode.SlerpUnclamped;
+        [SerializeField] public RotateLerpType HudRotateMode = RotateLerpType.SlerpUnclamped;
         /// <summary>
         /// 欧拉角度旋转方式
         /// </summary>
@@ -296,6 +296,14 @@ namespace SevenStrikeModules.XTween
         /// 自动开始动画
         /// </summary>
         [SerializeField] public bool AutoStart;
+        /// <summary>
+        /// 动画已暂停
+        /// </summary>
+        [SerializeField] public bool IsPaused;
+        /// <summary>
+        /// Tween动画坐标空间
+        /// </summary>
+        [SerializeField] public TweenSpace AnimateSpace = TweenSpace.绝对;
         #endregion
 
         #region 动画目标值（End）
@@ -422,6 +430,10 @@ namespace SevenStrikeModules.XTween
         /// </summary>
         [SerializeField] public string index_TweenTypes_Rotations = "欧拉角度_Euler";
         /// <summary>
+        /// 索引 - 旋转动画的坐标空间
+        /// </summary>
+        [SerializeField] public string index_TweenTypes_Rotation_Space = "Self";
+        /// <summary>
         /// 索引 - 透明度动画子类型
         /// </summary>
         [SerializeField] public string index_TweenTypes_Alphas = "Image组件";
@@ -490,6 +502,10 @@ namespace SevenStrikeModules.XTween
         /// 按键控制 - 动画播放
         /// </summary>
         [SerializeField] private KeyCode keyControl_Tween_Play = KeyCode.W;
+        /// <summary>
+        /// 按键控制 - 动画暂停&继续
+        /// </summary>
+        [SerializeField] private KeyCode keyControl_Tween_Pause_Resume = KeyCode.P;
         /// <summary>
         /// 按键控制 - 动画倒退
         /// </summary>
@@ -629,6 +645,13 @@ namespace SevenStrikeModules.XTween
                 {
                     Tween_Replay();
                 }
+                if (Input.GetKeyDown(keyControl_Tween_Pause_Resume))
+                {
+                    if (IsPaused)
+                        Tween_Resume();
+                    else
+                        Tween_Pause();
+                }
             }
         }
         /// <summary>
@@ -687,6 +710,50 @@ namespace SevenStrikeModules.XTween
             }
 
             CurrentTweener.Play();
+        }
+        /// <summary>
+        /// 动画暂停
+        /// </summary>
+        public void Tween_Pause()
+        {
+            if (IsPaused)
+                return;
+            IsPaused = true;
+            if (CurrentTweener == null)
+            {
+                if (DebugMode)
+                    XTween_Utilitys.DebugInfo("XTween控制器消息", "未能暂停动画！因为当前不存在动画！", GUIMsgState.警告);
+                return;
+            }
+            if (TweenTypes == XTweenTypes.无_None)
+            {
+                if (DebugMode)
+                    XTween_Utilitys.DebugInfo("XTween控制器消息", "未能暂停动画！因为当前模式不是有效的动画模式！", GUIMsgState.警告);
+                return;
+            }
+            CurrentTweener.Pause();
+        }
+        /// <summary>
+        /// 动画继续
+        /// </summary>
+        public void Tween_Resume()
+        {
+            if (!IsPaused)
+                return;
+            IsPaused = false;
+            if (CurrentTweener == null)
+            {
+                if (DebugMode)
+                    XTween_Utilitys.DebugInfo("XTween控制器消息", "未能继续动画！因为当前不存在动画！", GUIMsgState.警告);
+                return;
+            }
+            if (TweenTypes == XTweenTypes.无_None)
+            {
+                if (DebugMode)
+                    XTween_Utilitys.DebugInfo("XTween控制器消息", "未能继续动画！因为当前模式不是有效的动画模式！", GUIMsgState.警告);
+                return;
+            }
+            CurrentTweener.Resume();
         }
         /// <summary>
         /// 动画倒退
