@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e786b25f0ff5fd4ebc0a5974683371f, type: 3}
+  m_Name: Lib_Element
+  m_EditorClassIdentifier: 
+  LibraryName: NewElementLibrary
+  LibraryDescription: NewDescription
+  LibraryRoot: {fileID: 0}
+  itemHeight: 50
+  visibleItemCount: 10
+  Find: 
+  Highlight: 
+  SelectedIndex: 0
+  LocationSelectedIndex: -1
+  ElementInfoList_Original_Scroller: {x: 0, y: 0}
+  ElementLibrary:
+  - Name: Corners
+    InitializeCount: 1
+    UsedCount: 0
+    RecycledCount: 0
+    NextIndex: 0
+    Root: {fileID: 0}
+    Target: {fileID: 5639770725388097412, guid: cec297e172bafcf43859fc6f40d3e653, type: 3}
+    PreloadElements: []
+  - Name: Dots
+    InitializeCount: 1
+    UsedCount: 0
+    RecycledCount: 0
+    NextIndex: 0
+    Root: {fileID: 0}
+    Target: {fileID: 124839897453772305, guid: c9cd92f1e4fe4544fa3c1b11c0d662c4, type: 3}
+    PreloadElements: []
+  - Name: Clicker
+    InitializeCount: 1
+    UsedCount: 0
+    RecycledCount: 0
+    NextIndex: 0
+    Root: {fileID: 0}
+    Target: {fileID: 4876617780444444740, guid: 941a34fd27cd8bb4fb236e9024a6c0cf, type: 3}
+    PreloadElements: []
+  - Name: Logo
+    InitializeCount: 1
+    UsedCount: 0
+    RecycledCount: 0
+    NextIndex: 0
+    Root: {fileID: 0}
+    Target: {fileID: 2732847327500778691, guid: 6cafd8c6e9fe15943b4875472defd33b, type: 3}
+    PreloadElements: []

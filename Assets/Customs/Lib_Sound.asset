@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dca0e36e82e44f4fa0e11548904f320, type: 3}
+  m_Name: Lib_Sound
+  m_EditorClassIdentifier: 
+  LibraryName: NewSoundLibrary
+  UseRandomPitch: 0
+  Pitch_Min: 1
+  Pitch_Max: 1
+  Find: 
+  itemHeight: 50
+  visibleItemCount: 9
+  SoundInfoList_Original_Scroller: {x: 0, y: 0}
+  Highlight: 
+  SelectedIndex: 0
+  LocationSelectedIndex: -1
+  SoundLibrary:
+  - Name: DefaultSound
+    Clip: {fileID: 8300000, guid: 7c59136550e71ea49b3082ed00aff460, type: 3}
+    Frequency: 22050
+    Channel: 1
+    Length: 0.5885714

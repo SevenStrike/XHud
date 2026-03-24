@@ -745,7 +745,7 @@ namespace SevenStrikeModules.XHud.Hud
             Hud_Manager mgr = util_Dashboard.HudManagerGet();
 
             //获取预览序列帧
-            PreviewDatas = LoadAllAssetsAtPathWithIO<Hud_Library_Color_Setter_PreviewData>("SevenStrikeModules/XHud/GUI/Editor/HudGuiStyle/Icon/Icons_Hud_Library_Color_Setter/samples", ".asset").ToArray();
+            PreviewDatas = LoadAllAssetsAtPathWithIO<Hud_Library_Color_Setter_PreviewData>("SevenStrikeModules/XHud/GUI/HudGuiStyle/Icon/Icons_Hud_Library_Color_Setter/samples", ".asset").ToArray();
 
             var waitForOneSecond = new EditorWaitForSeconds(PreviewDataDuration);
             while (true)

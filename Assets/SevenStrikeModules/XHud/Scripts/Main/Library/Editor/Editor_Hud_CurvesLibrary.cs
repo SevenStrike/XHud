@@ -133,7 +133,7 @@ namespace SevenStrikeModules.XHud.Hud
                 BaseScript.SelectedReferImage = null;
                 BaseScript.SelectedReferImage = tex;
             }
-            ReferImages = LoadAllAssetsAtPathWithIO<Texture2D>($"SevenStrikeModules/XHud/GUI/Editor/HudGuiStyle/CurvePreviewImgs/", ".png").ToArray();
+            ReferImages = LoadAllAssetsAtPathWithIO<Texture2D>($"SevenStrikeModules/XHud/GUI/HudGuiStyle/CurvePreviewImgs/", ".png").ToArray();
             sp_ReferImgIndex.intValue = 0;
             BaseScript.SelectedReferImage = ReferImages[sp_ReferImgIndex.intValue];
             #endregion
