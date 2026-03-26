@@ -4,7 +4,7 @@ namespace SevenStrikeModules.XHud
     using UnityEngine;
     using UnityEngine.UI;
 
-    public class xHud_PerformanceMonitor : MonoBehaviour
+    public class XHud_PerformanceMonitor : MonoBehaviour
     {
         [SerializeField] public float updateInterval = 0.4f;
         [SerializeField] private float lastUpdateTime = 0f;
@@ -20,7 +20,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 标题
         /// </summary>
-        [SerializeField] public xHud_Module_TmpText Title;
+        [SerializeField] public XHud_Module_TmpText Title;
         /// <summary>
         /// 滚动条
         /// </summary>

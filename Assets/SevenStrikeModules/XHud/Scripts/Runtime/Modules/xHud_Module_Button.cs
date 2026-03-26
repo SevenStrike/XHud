@@ -1,8 +1,8 @@
 namespace SevenStrikeModules.XHud.Hud
 {
-    using DG.Tweening;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XTween;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -14,9 +14,9 @@ namespace SevenStrikeModules.XHud.Hud
     /// <summary>    
     /// Hud按钮
     /// </summary>    
-    public class xHud_Module_Button : Button
+    public class XHud_Module_Button : Button
     {
-        public xHud_Module_Option HudOption;
+        public XHud_Module_Option HudOption;
 
         public RectTransform RectTransform;
         [SerializeField]
@@ -28,13 +28,13 @@ namespace SevenStrikeModules.XHud.Hud
         [SerializeField]
         public string ButtonName = "BtnName";
         [SerializeField]
-        public xHud_Module_Text ButtonText;
+        public XHud_Module_Text ButtonText;
         [SerializeField]
         public Image IconImage;
         [SerializeField]
         public Image BgImage;
         [SerializeField]
-        public xHud_Module_TmpText ButtonTmpText;
+        public XHud_Module_TmpText ButtonTmpText;
 
         [SerializeField]
         public Hud_ButtonAction HudButtonState = Hud_ButtonAction.待命;
@@ -53,74 +53,74 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动作 - 当 - 取消选择时
         /// </summary>
-        public UnityAction<xHud_Module_Button, Hud_ButtonAction> act_on_DeSelect;
+        public UnityAction<XHud_Module_Button, Hud_ButtonAction> act_on_DeSelect;
         /// <summary>
         /// 动作 - 当 - 被选择时
         /// </summary>
-        public UnityAction<xHud_Module_Button, Hud_ButtonAction> act_on_Select;
+        public UnityAction<XHud_Module_Button, Hud_ButtonAction> act_on_Select;
         /// <summary>
         /// 动作 - 当 - 鼠标点击时
         /// </summary>
-        public UnityAction<xHud_Module_Button, Hud_ButtonAction> act_on_Clicked;
+        public UnityAction<XHud_Module_Button, Hud_ButtonAction> act_on_Clicked;
         /// <summary>
         /// 动作 - 当 - 鼠标按下时
         /// </summary>
-        public UnityAction<xHud_Module_Button, Hud_ButtonAction> act_on_Press;
+        public UnityAction<XHud_Module_Button, Hud_ButtonAction> act_on_Press;
         /// <summary>
         /// 动作 - 当 - 鼠标进入时
         /// </summary>
-        public UnityAction<xHud_Module_Button, Hud_ButtonAction> act_on_Enter;
+        public UnityAction<XHud_Module_Button, Hud_ButtonAction> act_on_Enter;
         /// <summary>
         /// 动作 - 当 - 鼠标退出时
         /// </summary>
-        public UnityAction<xHud_Module_Button, Hud_ButtonAction> act_on_Exit;
+        public UnityAction<XHud_Module_Button, Hud_ButtonAction> act_on_Exit;
         /// <summary>
         /// 动作 - 当 - 鼠标抬起时
         /// </summary>
-        public UnityAction<xHud_Module_Button, Hud_ButtonAction> act_on_Release;
+        public UnityAction<XHud_Module_Button, Hud_ButtonAction> act_on_Release;
         /// <summary>
         /// 动作 - 当 - 鼠标长按时
         /// </summary>
-        public UnityAction<xHud_Module_Button, Hud_ButtonAction> act_on_LongPressed;
+        public UnityAction<XHud_Module_Button, Hud_ButtonAction> act_on_LongPressed;
         /// <summary>
         /// 动作 - 当 - 鼠标长按时 - 过程
         /// </summary>
-        public UnityAction<xHud_Module_Button, float> act_on_LongPressPer;
+        public UnityAction<XHud_Module_Button, float> act_on_LongPressPer;
         #endregion
 
         #region UnityEvent        
         /// <summary>
         /// 事件 - 当 - 取消选择时
         /// </summary>
-        public UnityEvent eve_on_Deselect;        
+        public UnityEvent eve_on_Deselect;
         /// <summary>
         /// 事件 - 当 - 被选择时
         /// </summary>
-        public UnityEvent eve_on_Select;        
+        public UnityEvent eve_on_Select;
         /// <summary>
         /// 事件 - 当 - 鼠标点击时
         /// </summary>
-        public UnityEvent eve_on_Click;        
+        public UnityEvent eve_on_Click;
         /// <summary>
         /// 事件 - 当 - 鼠标按下时
         /// </summary>
-        public UnityEvent eve_on_Press;        
+        public UnityEvent eve_on_Press;
         /// <summary>
         /// 事件 - 当 - 鼠标进入时
         /// </summary>
-        public UnityEvent eve_on_Enter;        
+        public UnityEvent eve_on_Enter;
         /// <summary>
         /// 事件 - 当 - 鼠标退出时
         /// </summary>
-        public UnityEvent eve_on_Exit;        
+        public UnityEvent eve_on_Exit;
         /// <summary>
         /// 事件 - 当 - 鼠标抬起时
         /// </summary>
-        public UnityEvent eve_on_Release;        
+        public UnityEvent eve_on_Release;
         /// <summary>
         /// 事件 - 当 - 鼠标长按时
         /// </summary>
-        public UnityEvent eve_on_Longpressed;        
+        public UnityEvent eve_on_Longpressed;
         /// <summary>
         /// 事件 - 当 - 鼠标长按时-过程
         /// </summary>
@@ -163,7 +163,7 @@ namespace SevenStrikeModules.XHud.Hud
         public HudElementAnimateState AnimateState = HudElementAnimateState.Static;
         bool LongPressIsInvoke;
         public float Button_Animators_GlobalDuration = 1;
-        public List<AnimatorNode> BtnAnimatorNodes = new List<AnimatorNode>();
+        public List<ElementNode_Animator> BtnAnimatorNodes = new List<ElementNode_Animator>();
 
         /// <summary>
         /// 动画列表中筛选出的最大时长
@@ -192,20 +192,20 @@ namespace SevenStrikeModules.XHud.Hud
 
         public string ButtonActionTiming = "鼠标点击";
 
-        private Tweener tweener_TextColor;
+        private XTween_Interface tweener_TextColor;
 
         protected override void Awake()
         {
             base.Awake();
             if (HudOption == null)
-                HudOption = GetComponentInParent<xHud_Module_Option>();
+                HudOption = GetComponentInParent<XHud_Module_Option>();
             if (RectTransform == null)
                 RectTransform = GetComponent<RectTransform>();
 
             //---如果按钮文字模块上有Animator那么将当前按钮组件赋值给Animator的modButton模块以此防止按钮文字变色功能受到Animator实时同步颜色的阻碍
             if (ButtonTmpText != null)
             {
-                xHud_Module_Animator animator = ButtonTmpText.GetComponent<xHud_Module_Animator>();
+                XHud_Module_Animator animator = ButtonTmpText.GetComponent<XHud_Module_Animator>();
                 if (animator != null)
                 {
                     animator.mod_HudButton = this;
@@ -254,9 +254,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="indicator">目标标识名称</param>
         /// <returns>返回一个匹配标识名称的HudAnimator动画器</returns>
-        public xHud_Module_Animator GetAnimator(string indicator)
+        public XHud_Module_Animator GetAnimator(string indicator)
         {
-            xHud_Module_Animator am = null;
+            XHud_Module_Animator am = null;
             for (int i = 0; i < BtnAnimatorNodes.Count; i++)
             {
                 if (BtnAnimatorNodes[i].Animator.GetIndicator() == indicator)
@@ -267,12 +267,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (am == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到标识名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到标识名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
             }
             return am;
         }
@@ -282,9 +282,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="name">目标物体名称</param>
         /// <returns>返回一个匹配物体名称名称的HudAnimator动画器</returns>
-        public xHud_Module_Animator GetAnimator_WithObjectName(string name)
+        public XHud_Module_Animator GetAnimator_WithObjectName(string name)
         {
-            xHud_Module_Animator am = null;
+            XHud_Module_Animator am = null;
             for (int i = 0; i < BtnAnimatorNodes.Count; i++)
             {
                 if (BtnAnimatorNodes[i].Animator.gameObject.name == name)
@@ -295,12 +295,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (am == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
             }
             return am;
         }
@@ -310,9 +310,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="id">目标动画器的ID</param>
         /// <returns>返回一个匹配ID的HudAnimator动画器</returns>
-        public xHud_Module_Animator GetAnimator(int id)
+        public XHud_Module_Animator GetAnimator(int id)
         {
-            xHud_Module_Animator am = null;
+            XHud_Module_Animator am = null;
             for (int i = 0; i < BtnAnimatorNodes.Count; i++)
             {
                 if (BtnAnimatorNodes[i].Animator.GetID() == id)
@@ -323,12 +323,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (am == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
             }
             return am;
         }
@@ -341,25 +341,25 @@ namespace SevenStrikeModules.XHud.Hud
         /// <returns></returns>
         public TweenNode GetAnimatorTween(string animator_indicator, int tween_id)
         {
-            xHud_Module_Animator anim = GetAnimator(animator_indicator);
+            XHud_Module_Animator anim = GetAnimator(animator_indicator);
             TweenNode node = anim.TweenNode_GetByID(tween_id);
 
             if (anim == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
                 }
             }
 
@@ -374,25 +374,25 @@ namespace SevenStrikeModules.XHud.Hud
         /// <returns></returns>
         public TweenNode GetAnimatorTween(int animator_id, int tween_id)
         {
-            xHud_Module_Animator anim = GetAnimator(animator_id);
+            XHud_Module_Animator anim = GetAnimator(animator_id);
             TweenNode node = anim.TweenNode_GetByID(tween_id);
 
             if (anim == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
                 }
             }
 
@@ -407,25 +407,25 @@ namespace SevenStrikeModules.XHud.Hud
         /// <returns></returns>
         public TweenNode GetAnimatorTween(string animator_indicator, string tween_indicator)
         {
-            xHud_Module_Animator anim = GetAnimator(animator_indicator);
+            XHud_Module_Animator anim = GetAnimator(animator_indicator);
             TweenNode node = anim.TweenNode_GetByIndicator(tween_indicator);
 
             if (anim == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
                 }
             }
 
@@ -479,12 +479,12 @@ namespace SevenStrikeModules.XHud.Hud
 
             for (int i = 0; i < BtnAnimatorNodes.Count; i++)
             {
-                xHud_Module_Animator animator = BtnAnimatorNodes[i].Animator;
+                XHud_Module_Animator animator = BtnAnimatorNodes[i].Animator;
                 animator.Play(tim, BtnAnimatorNodes[i].DelayTime, Button_Animators_GlobalDuration * animator.Animator_GlobalDuration, true, null, null, 0.5f);
             }
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "播放所有动画器动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "播放所有动画器动画！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -504,12 +504,12 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (BtnAnimatorNodes[i].Animator.GetID() != id)
                     continue;
-                xHud_Module_Animator anim = BtnAnimatorNodes[i].Animator;
+                XHud_Module_Animator anim = BtnAnimatorNodes[i].Animator;
                 anim.Play(tim, BtnAnimatorNodes[i].DelayTime, Button_Animators_GlobalDuration * anim.Animator_GlobalDuration);
             }
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -519,11 +519,11 @@ namespace SevenStrikeModules.XHud.Hud
         {
             for (int i = 0; i < BtnAnimatorNodes.Count; i++)
             {
-                xHud_Module_Animator anim = BtnAnimatorNodes[i].Animator;
+                XHud_Module_Animator anim = BtnAnimatorNodes[i].Animator;
                 anim.RewindAllTweenNode();
             }
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "复位按钮动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "复位按钮动画！", HudMsgState.确认);
         }
         #endregion       
 
@@ -545,7 +545,7 @@ namespace SevenStrikeModules.XHud.Hud
             act_on_LongPressPer = null;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "清空所有委托！", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "清空所有委托！", HudMsgState.设置);
         }
 
         /// <summary>
@@ -564,7 +564,7 @@ namespace SevenStrikeModules.XHud.Hud
             eve_on_LongpressPer.RemoveAllListeners();
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "清空所有事件！", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "清空所有事件！", HudMsgState.设置);
         }
 
         #endregion
@@ -591,7 +591,7 @@ namespace SevenStrikeModules.XHud.Hud
                 act_on_DeSelect(this, HudButtonState);
             eve_on_Deselect.Invoke();
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "取消选中！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "取消选中！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -613,7 +613,7 @@ namespace SevenStrikeModules.XHud.Hud
                 act_on_Select(this, HudButtonState);
             eve_on_Select.Invoke();
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "选中！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "选中！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -640,7 +640,7 @@ namespace SevenStrikeModules.XHud.Hud
                 act_on_Clicked(this, HudButtonState);
             eve_on_Click.Invoke();
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "点击！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "点击！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -662,7 +662,7 @@ namespace SevenStrikeModules.XHud.Hud
                 act_on_Enter(this, HudButtonState);
             eve_on_Enter.Invoke();
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "鼠标进入！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "鼠标进入！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -685,7 +685,7 @@ namespace SevenStrikeModules.XHud.Hud
             eve_on_Exit.Invoke();
             IsLongPress = false;
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "鼠标退出！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "鼠标退出！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -707,36 +707,36 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (ButtonText != null)
                 {
-                    if (tweener_TextColor != null && tweener_TextColor.active)
+                    if (tweener_TextColor != null && tweener_TextColor.IsActive)
                     {
-                        if (tweener_TextColor.IsPlaying())
+                        if (tweener_TextColor.IsPlaying)
                         {
                             tweener_TextColor.Kill();
                         }
                     }
-                    tweener_TextColor = DOTween.To(() => ButtonText.TextStyleInfo.FontColor, x => ButtonText.TextStyleInfo.FontColor = x, colors.pressedColor, colors.fadeDuration).SetAutoKill(true);
+                    tweener_TextColor = XTween.To(() => ButtonText.TextStyleInfo.FontColor, x => ButtonText.TextStyleInfo.FontColor = x, colors.pressedColor, colors.fadeDuration).SetAutoKill(true);
                 }
                 if (ButtonTmpText != null)
                 {
-                    if (tweener_TextColor != null && tweener_TextColor.active)
+                    if (tweener_TextColor != null && tweener_TextColor.IsActive)
                     {
-                        if (tweener_TextColor.IsPlaying())
+                        if (tweener_TextColor.IsPlaying)
                         {
                             tweener_TextColor.Kill();
                         }
                     }
-                    tweener_TextColor = DOTween.To(() => ButtonTmpText.TextStyleInfo.tmp_color, x => ButtonTmpText.TextStyleInfo.tmp_color = x, colors.pressedColor, colors.fadeDuration).SetAutoKill(true);
+                    tweener_TextColor = XTween.To(() => ButtonTmpText.TextStyleInfo.tmp_color, x => ButtonTmpText.TextStyleInfo.tmp_color = x, colors.pressedColor, colors.fadeDuration).SetAutoKill(true);
                 }
             }
             if (IconColorSyncFade)
             {
                 if (IconImage != null)
-                    IconImage.DOColor(colors.pressedColor, colors.fadeDuration);
+                    IconImage.xt_Color_To(colors.pressedColor, colors.fadeDuration, true);
             }
             if (BgColorSyncFade)
             {
                 if (BgImage != null)
-                    BgImage.DOColor(colors.pressedColor, colors.fadeDuration);
+                    BgImage.xt_Color_To(colors.pressedColor, colors.fadeDuration, true);
             }
 
             if (act_on_Press != null)
@@ -744,7 +744,7 @@ namespace SevenStrikeModules.XHud.Hud
             eve_on_Press.Invoke();
             IsLongPress = true;
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "按住！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "按住！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -768,43 +768,43 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (ButtonText != null)
                 {
-                    if (tweener_TextColor != null && tweener_TextColor.active)
+                    if (tweener_TextColor != null && tweener_TextColor.IsActive)
                     {
-                        if (tweener_TextColor.IsPlaying())
+                        if (tweener_TextColor.IsPlaying)
                         {
                             tweener_TextColor.Kill();
                         }
                     }
-                    tweener_TextColor = DOTween.To(() => ButtonText.TextStyleInfo.FontColor, x => ButtonText.TextStyleInfo.FontColor = x, colors.normalColor, colors.fadeDuration).SetAutoKill(true);
+                    tweener_TextColor = XTween.To(() => ButtonText.TextStyleInfo.FontColor, x => ButtonText.TextStyleInfo.FontColor = x, colors.normalColor, colors.fadeDuration).SetAutoKill(true);
                 }
                 if (ButtonTmpText != null)
                 {
-                    if (tweener_TextColor != null && tweener_TextColor.active)
+                    if (tweener_TextColor != null && tweener_TextColor.IsActive)
                     {
-                        if (tweener_TextColor.IsPlaying())
+                        if (tweener_TextColor.IsPlaying)
                         {
                             tweener_TextColor.Kill();
                         }
                     }
-                    tweener_TextColor = DOTween.To(() => ButtonTmpText.TextStyleInfo.tmp_color, x => ButtonTmpText.TextStyleInfo.tmp_color = x, colors.normalColor, colors.fadeDuration).SetAutoKill(true);
+                    tweener_TextColor = XTween.To(() => ButtonTmpText.TextStyleInfo.tmp_color, x => ButtonTmpText.TextStyleInfo.tmp_color = x, colors.normalColor, colors.fadeDuration).SetAutoKill(true);
                 }
             }
             if (IconColorSyncFade)
             {
                 if (IconImage != null)
-                    IconImage.DOColor(colors.normalColor, colors.fadeDuration);
+                    IconImage.xt_Color_To(colors.normalColor, colors.fadeDuration, true);
             }
             if (BgColorSyncFade)
             {
                 if (BgImage != null)
-                    BgImage.DOColor(colors.normalColor, colors.fadeDuration);
+                    BgImage.xt_Color_To(colors.normalColor, colors.fadeDuration, true);
             }
             if (act_on_Release != null)
                 act_on_Release(this, HudButtonState);
             eve_on_Release.Invoke();
             IsLongPress = false;
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "松开！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "松开！", HudMsgState.确认);
         }
 
         #endregion
@@ -861,12 +861,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("按钮控件通知", "启用按钮交互", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "启用按钮交互", HudMsgState.警告);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("按钮控件通知", "禁用按钮交互", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "禁用按钮交互", HudMsgState.警告);
             }
         }
 
@@ -886,7 +886,7 @@ namespace SevenStrikeModules.XHud.Hud
         public float btn_GetLongPressPercent()
         {
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "获取到长按百分比：" + LongPress_Percent, HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "获取到长按百分比：" + LongPress_Percent, HudMsgState.警告);
             return LongPress_Percent;
         }
 
@@ -900,12 +900,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("按钮控件通知", "长按松开平滑回退启用！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "长按松开平滑回退启用！", HudMsgState.警告);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("按钮控件通知", "长按松开平滑回退禁用！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "长按松开平滑回退禁用！", HudMsgState.通知);
             }
         }
 
@@ -918,7 +918,7 @@ namespace SevenStrikeModules.XHud.Hud
             LongPress_Threshold = value;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "设置长按阈值为：" + value, HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "设置长按阈值为：" + value, HudMsgState.警告);
         }
 
         /// <summary>
@@ -941,7 +941,7 @@ namespace SevenStrikeModules.XHud.Hud
                 ButtonText.text = content;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "设置按钮显示文字为：" + content, HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "设置按钮显示文字为：" + content, HudMsgState.设置);
             return content;
         }
 
@@ -960,9 +960,9 @@ namespace SevenStrikeModules.XHud.Hud
                 btn_ActionsClear();
 
             //变色动画器杀死
-            if (tweener_TextColor != null && tweener_TextColor.active)
+            if (tweener_TextColor != null && tweener_TextColor.IsActive)
             {
-                if (tweener_TextColor.IsPlaying())
+                if (tweener_TextColor.IsPlaying)
                 {
                     tweener_TextColor.Kill();
                     tweener_TextColor = null;
@@ -973,7 +973,7 @@ namespace SevenStrikeModules.XHud.Hud
             LongPress_Percent = 0;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "已停止长按逻辑检测协程！", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已停止长按逻辑检测协程！", HudMsgState.设置);
         }
 
         public float ClickDelayTime;
@@ -987,7 +987,7 @@ namespace SevenStrikeModules.XHud.Hud
         IEnumerator LongPress()
         {
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "已启动长按逻辑检测协程！", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已启动长按逻辑检测协程！", HudMsgState.设置);
             while (true)
             {
                 if (IsLongPress)
@@ -1009,7 +1009,7 @@ namespace SevenStrikeModules.XHud.Hud
                             eve_on_Longpressed.Invoke();
 
                             if (DebugState)
-                                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "长按动作完成！", HudMsgState.设置);
+                                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "长按动作完成！", HudMsgState.设置);
                         }
                         if (LongPress_UseRewind)
                             IsLongPress = false;
@@ -1058,7 +1058,7 @@ namespace SevenStrikeModules.XHud.Hud
                 if (HudOption == null)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("按钮控件通知", "未发现此按钮处于选项层级中！", HudMsgState.错误);
+                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未发现此按钮处于选项层级中！", HudMsgState.错误);
                     return;
                 }
                 for (int i = 0; i < HudOption.OptionButtonNodes.Count; i++)
@@ -1069,7 +1069,7 @@ namespace SevenStrikeModules.XHud.Hud
                         //HudOption.opt_Clicked(i);
                         HudOption.opt_Select(Indicator);
                         if (DebugState)
-                            xHud_Utilitys.Func_PrintInfo("按钮控件通知", "选项点击！", HudMsgState.确认);
+                            XHud_Utilitys.Func_PrintInfo("按钮控件通知", "选项点击！", HudMsgState.确认);
                     }
                 }
             }
@@ -1087,7 +1087,7 @@ namespace SevenStrikeModules.XHud.Hud
                 ButtonText.text = null;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("按钮控件通知", "清空显示文字！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "清空显示文字！", HudMsgState.通知);
         }
 
         #endregion

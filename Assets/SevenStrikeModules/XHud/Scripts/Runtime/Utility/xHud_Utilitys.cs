@@ -13,7 +13,7 @@ namespace SevenStrikeModules.XHud.Utilitys
     /// <summary>
     /// 常用功能
     /// </summary>
-    public static class xHud_Utilitys
+    public static class XHud_Utilitys
     {
         public static bool PrintMsgEnable = true;
 

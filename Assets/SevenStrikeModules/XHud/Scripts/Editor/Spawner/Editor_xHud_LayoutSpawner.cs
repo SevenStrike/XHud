@@ -1,6 +1,6 @@
 namespace SevenStrikeModules.XHud.Hud
 {
-    using DG.Tweening;
+    using SevenStrikeModules.XTween;
     using Newtonsoft.Json;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
@@ -11,11 +11,11 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEngine;
 
     [CanEditMultipleObjects]
-    [CustomEditor(typeof(xHud_LayoutSpawner))]
-    public class Editor_xHud_LayoutSpawner : Editor
+    [CustomEditor(typeof(XHud_LayoutSpawner))]
+    public class Editor_XHud_LayoutSpawner : Editor
     {
         #region 组件 / 列表
-        private xHud_LayoutSpawner BaseScript;
+        private XHud_LayoutSpawner BaseScript;
         /// <summary>
         /// 元素列表 - 屏幕
         /// </summary>
@@ -54,23 +54,23 @@ namespace SevenStrikeModules.XHud.Hud
         #endregion
 
         #region 批量化操作
-        xHud_LayoutSpawner[] SelectedObjects;
+        XHud_LayoutSpawner[] SelectedObjects;
 
         private void GetAllTargets()
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new xHud_LayoutSpawner[targets.Length];
+                SelectedObjects = new XHud_LayoutSpawner[targets.Length];
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (xHud_LayoutSpawner)t;
+                    SelectedObjects[i] = (XHud_LayoutSpawner)t;
                 }
             }
             else
             {
-                SelectedObjects = new xHud_LayoutSpawner[targets.Length];
-                SelectedObjects[0] = (xHud_LayoutSpawner)target;
+                SelectedObjects = new XHud_LayoutSpawner[targets.Length];
+                SelectedObjects[0] = (XHud_LayoutSpawner)target;
             }
         }
 
@@ -99,38 +99,38 @@ namespace SevenStrikeModules.XHud.Hud
 
         private void OnEnable()
         {
-            BaseScript = (xHud_LayoutSpawner)target;
+            BaseScript = (XHud_LayoutSpawner)target;
 
             SerializedAllVariables();
 
             #region 获取字体
-            Font_Bold = Editor_xHudGUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_xHudGUI.GetFont("SS_Editor_Light");
+            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
+            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Light");
             #endregion
 
             #region 获取图标
-            icon_main = Editor_xHudGUI.GetIcon("Icons_Hud_LayoutSpawner/icon_main");
-            save_r = Editor_xHudGUI.GetIcon("Icons_Hud_LayoutSpawner/save_r");
-            save_p = Editor_xHudGUI.GetIcon("Icons_Hud_LayoutSpawner/save_p");
-            locate_r = Editor_xHudGUI.GetIcon("Icons_Hud_LayoutSpawner/locate_r");
-            locate_p = Editor_xHudGUI.GetIcon("Icons_Hud_LayoutSpawner/locate_p");
-            elementicon = Editor_xHudGUI.GetIcon("Icons_Hud_LayoutSpawner/elementicon");
-            dot = Editor_xHudGUI.GetIcon("Icons_Hud_LayoutSpawner/dot");
-            icon_unfold_r = Editor_xHudGUI.GetIcon("Icons_Hud_LayoutSpawner/icon_unfold_r");
-            icon_unfold_p = Editor_xHudGUI.GetIcon("Icons_Hud_LayoutSpawner/icon_unfold_p");
-            anim_fold_r = Editor_xHudGUI.GetIcon("Icons_Hud_LayoutSpawner/anim_fold_r");
-            anim_fold_p = Editor_xHudGUI.GetIcon("Icons_Hud_LayoutSpawner/anim_fold_p");
-            reset_r = Editor_xHudGUI.GetIcon("Icons_Hud_ElementPreview/reset_r");
-            reset_p = Editor_xHudGUI.GetIcon("Icons_Hud_ElementPreview/reset_p");
+            icon_main = Editor_XHud_GUI.GetIcon("Icons_Hud_LayoutSpawner/icon_main");
+            save_r = Editor_XHud_GUI.GetIcon("Icons_Hud_LayoutSpawner/save_r");
+            save_p = Editor_XHud_GUI.GetIcon("Icons_Hud_LayoutSpawner/save_p");
+            locate_r = Editor_XHud_GUI.GetIcon("Icons_Hud_LayoutSpawner/locate_r");
+            locate_p = Editor_XHud_GUI.GetIcon("Icons_Hud_LayoutSpawner/locate_p");
+            elementicon = Editor_XHud_GUI.GetIcon("Icons_Hud_LayoutSpawner/elementicon");
+            dot = Editor_XHud_GUI.GetIcon("Icons_Hud_LayoutSpawner/dot");
+            icon_unfold_r = Editor_XHud_GUI.GetIcon("Icons_Hud_LayoutSpawner/icon_unfold_r");
+            icon_unfold_p = Editor_XHud_GUI.GetIcon("Icons_Hud_LayoutSpawner/icon_unfold_p");
+            anim_fold_r = Editor_XHud_GUI.GetIcon("Icons_Hud_LayoutSpawner/anim_fold_r");
+            anim_fold_p = Editor_XHud_GUI.GetIcon("Icons_Hud_LayoutSpawner/anim_fold_p");
+            reset_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/reset_r");
+            reset_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/reset_p");
             #endregion
 
             GetAllTargets();
 
             #region 用于第一次加载脚本判断库名是否是空的
-            if (!Application.isPlaying && xHud_Dashboard.HudManagerGet() != null)
+            if (!Application.isPlaying && XHud_Dashboard.HudManagerGet() != null)
             {
                 //获取所有元素库名称
-                string[] LibNames = xHud_Dashboard.HudManagerGet().hm_ElementLibrary_GetAllLibraryNames();
+                string[] LibNames = XHud_Dashboard.HudManagerGet().hm_ElementLibrary_GetAllLibraryNames();
                 //如果不是空的
                 if (LibNames.Length > 0)
                 {
@@ -154,7 +154,7 @@ namespace SevenStrikeModules.XHud.Hud
                     {
                         // 高亮标记表示选中
                         item_rect_screen.Set(rect.x + 8, rect.y + 30, 5, 5);
-                        EditorGUI.DrawRect(item_rect_screen, xHud_Dashboard.Theme_Primary);
+                        EditorGUI.DrawRect(item_rect_screen, XHud_Dashboard.Theme_Primary);
                     }
                 },
                 drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
@@ -183,38 +183,38 @@ namespace SevenStrikeModules.XHud.Hud
 
                     #region 开关
                     drawelement_screen_rect.Set(rect.x, rect.y, 20, 20);
-                    sp_isEnabled.boolValue = Editor_xHudGUI.Gui_Toggle(drawelement_screen_rect, true, null, sp_isEnabled.boolValue);
+                    sp_isEnabled.boolValue = Editor_XHud_GUI.Gui_Toggle(drawelement_screen_rect, true, null, sp_isEnabled.boolValue);
                     #endregion
 
                     #region 索引号
                     drawelement_screen_rect.Set(rect.x + 25, rect.y, 40, 20);
-                    Editor_xHudGUI.Gui_Labelfield(drawelement_screen_rect, index.ToString("D1"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, Font_Light);
+                    Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, index.ToString("D1"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, Font_Light);
                     #endregion
 
                     #region 徽标
                     if (sp_Spawned.boolValue)
-                        GUI.backgroundColor = xHud_Dashboard.Theme_Primary;
+                        GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
                     else
                         GUI.backgroundColor = Color.gray;
 
                     drawelement_screen_rect.Set(rect.x + 45, rect.y + 5, 10, 10);
-                    Editor_xHudGUI.Gui_Icon(drawelement_screen_rect, elementicon);
+                    Editor_XHud_GUI.Gui_Icon(drawelement_screen_rect, elementicon);
                     GUI.backgroundColor = Color.white;
                     #endregion
 
                     #region 名称类
                     drawelement_screen_rect.Set(rect.x + 68, rect.y, rect.width - 10 - 68, 20);
-                    Editor_xHudGUI.Gui_Labelfield(drawelement_screen_rect, sp_SpawnName.stringValue, HudFilled.无, HudColor.深空灰, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 12, true, TextClipping.Ellipsis, true, Font_Bold);
+                    Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, sp_SpawnName.stringValue, HudFilled.无, HudColor.深空灰, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 12, true, TextClipping.Ellipsis, true, Font_Bold);
 
                     drawelement_screen_rect.Set(rect.x + 30, rect.y + 23, rect.width - 130 - 5, 20);
-                    Editor_xHudGUI.Gui_Labelfield(drawelement_screen_rect, sp_Indicator.stringValue, HudFilled.无, HudColor.深空灰, Color.white * 0.85f, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                    Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, sp_Indicator.stringValue, HudFilled.无, HudColor.深空灰, Color.white * 0.85f, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
                     #endregion
 
                     #region 折叠开关
                     if (!sp_isFold.boolValue)
                     {
                         drawelement_screen_rect.Set(rect.x + 2, rect.y + 25, 12, 12);
-                        if (Editor_xHudGUI.Gui_Button(drawelement_screen_rect, icon_unfold_r, icon_unfold_p, true, "", "", Color.white))
+                        if (Editor_XHud_GUI.Gui_Button(drawelement_screen_rect, icon_unfold_r, icon_unfold_p, true, "", "", Color.white))
                         {
                             for (int i = 0; i < ElementList_Screen.count; i++)
                             {
@@ -231,7 +231,7 @@ namespace SevenStrikeModules.XHud.Hud
                     else
                     {
                         drawelement_screen_rect.Set(rect.x + 2, rect.y + 25, 12, 12);
-                        if (Editor_xHudGUI.Gui_Button(drawelement_screen_rect, anim_fold_r, anim_fold_p, true, "", "", Color.white))
+                        if (Editor_XHud_GUI.Gui_Button(drawelement_screen_rect, anim_fold_r, anim_fold_p, true, "", "", Color.white))
                         {
                             for (int i = 0; i < ElementList_Screen.count; i++)
                             {
@@ -247,16 +247,16 @@ namespace SevenStrikeModules.XHud.Hud
                     #endregion
 
                     #region AutoIn
-                    GUI.backgroundColor = xHud_Dashboard.Theme_Primary;
+                    GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
                     drawelement_screen_rect.Set(rect.width, rect.y + 27, 55, 12);
-                    Editor_xHudGUI.Gui_PopupWithString(drawelement_screen_rect, ref sp_AutoIn, new string[2] { "自动 In", "手动 In" }, HudFilled.无, HudColor.亮白, xHud_Dashboard.Theme_Primary);
+                    Editor_XHud_GUI.Gui_PopupWithString(drawelement_screen_rect, ref sp_AutoIn, new string[2] { "自动 In", "手动 In" }, HudFilled.无, HudColor.亮白, XHud_Dashboard.Theme_Primary);
                     GUI.backgroundColor = Color.white;
                     #endregion
 
                     #region 使用生成器的通用动效
-                    GUI.backgroundColor = xHud_Dashboard.Theme_Primary;
+                    GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
                     drawelement_screen_rect.Set(rect.width - 70, rect.y + 27, 75, 12);
-                    Editor_xHudGUI.Gui_PopupWithString(drawelement_screen_rect, ref sp_UseSpawnerMotion, new string[2] { "自身动效", "生成器动效" }, HudFilled.无, HudColor.亮白, xHud_Dashboard.Theme_Primary);
+                    Editor_XHud_GUI.Gui_PopupWithString(drawelement_screen_rect, ref sp_UseSpawnerMotion, new string[2] { "自身动效", "生成器动效" }, HudFilled.无, HudColor.亮白, XHud_Dashboard.Theme_Primary);
                     GUI.backgroundColor = Color.white;
                     #endregion
 
@@ -264,57 +264,57 @@ namespace SevenStrikeModules.XHud.Hud
 
                     #region 正在生成 / 回收进度条
                     drawelement_screen_rect.Set(rect.x, baseheight, rect.width, 1);
-                    Editor_xHudGUI.Gui_Box(drawelement_screen_rect, Color.gray);
+                    Editor_XHud_GUI.Gui_Box(drawelement_screen_rect, Color.gray);
 
                     if (sp_InMotion.boolValue)
                     {
                         GUI.backgroundColor = Color.white;
                         Repaint();
                         drawelement_screen_rect.Set(rect.x, baseheight, rect.width * sp_MotionPercentage.floatValue, 1);
-                        Editor_xHudGUI.Gui_Box(drawelement_screen_rect, xHud_Dashboard.Theme_Primary);
+                        Editor_XHud_GUI.Gui_Box(drawelement_screen_rect, XHud_Dashboard.Theme_Primary);
                     }
                     #endregion
 
                     #region 延迟参数
                     drawelement_screen_rect.Set(rect.x, baseheight + 10, rect.width / 2 - 5, 18);
-                    Editor_xHudGUI.Gui_Property_Field(drawelement_screen_rect, "延迟生成", "ds", sp_Delay_Spawn);
+                    Editor_XHud_GUI.Gui_Property_Field(drawelement_screen_rect, "延迟生成", "ds", sp_Delay_Spawn);
 
                     drawelement_screen_rect.Set(rect.x + rect.width / 2 + 5, baseheight + 10, rect.width / 2 - 5, 18);
-                    Editor_xHudGUI.Gui_Property_Field(drawelement_screen_rect, "延迟回收", "dd", sp_Delay_Despawn);
+                    Editor_XHud_GUI.Gui_Property_Field(drawelement_screen_rect, "延迟回收", "dd", sp_Delay_Despawn);
                     #endregion
 
                     #region 信息
                     if (!sp_isFold.boolValue)
                     {
-                        string hexcol = xHud_Utilitys.Color_To_HexColor(Color.white * 0.75f, true);
-                        string darkcol = xHud_Utilitys.Color_To_HexColor(Color.gray, true);
+                        string hexcol = XHud_Utilitys.Color_To_HexColor(Color.white * 0.75f, true);
+                        string darkcol = XHud_Utilitys.Color_To_HexColor(Color.gray, true);
 
                         drawelement_screen_rect.Set(rect.x, baseheight + 40, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>pos：</color> <color={darkcol}>{sp_Position.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>pos：</color> <color={darkcol}>{sp_Position.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_screen_rect.Set(rect.x + rect.width / 2 + 5, baseheight + 40, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>rot：</color> <color={darkcol}>{sp_Euler.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>rot：</color> <color={darkcol}>{sp_Euler.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_screen_rect.Set(rect.x, baseheight + 65, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>offset：</color> <color={darkcol}>{sp_Offset.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>offset：</color> <color={darkcol}>{sp_Offset.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_screen_rect.Set(rect.x + rect.width / 2 + 5, baseheight + 65, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>scl：</color> <color={darkcol}>{sp_Scale.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>scl：</color> <color={darkcol}>{sp_Scale.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_screen_rect.Set(rect.x, baseheight + 90, rect.width, 1);
-                        Editor_xHudGUI.Gui_Box(drawelement_screen_rect, Color.gray * 0.7f);
+                        Editor_XHud_GUI.Gui_Box(drawelement_screen_rect, Color.gray * 0.7f);
 
                         drawelement_screen_rect.Set(rect.x, baseheight + 98, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>size：</color> <color={darkcol}>{sp_Size.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>size：</color> <color={darkcol}>{sp_Size.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_screen_rect.Set(rect.x + rect.width / 2 + 5, baseheight + 98, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>pivot：</color> <color={darkcol}>{sp_Pivot.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>pivot：</color> <color={darkcol}>{sp_Pivot.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_screen_rect.Set(rect.x, baseheight + 118, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>anc min：</color> <color={darkcol}>{sp_Anchor_Min.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>anc min：</color> <color={darkcol}>{sp_Anchor_Min.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_screen_rect.Set(rect.x + rect.width / 2 + 5, baseheight + 118, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>anc max：</color> <color={darkcol}>{sp_Anchor_Max.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, $"<color={hexcol}>anc max：</color> <color={darkcol}>{sp_Anchor_Max.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
                     }
                     #endregion
 
@@ -327,7 +327,7 @@ namespace SevenStrikeModules.XHud.Hud
                         GenericMenu menu = new GenericMenu();
                         menu.AddItem(new GUIContent("E 修改元素动效"), false, () =>
                         {
-                            XHud.xHud_LibraryArg_Motion motion = new XHud.xHud_LibraryArg_Motion("", 0, "", BaseScript.SpawnItemList_Screen[index].CreateArgs, BaseScript.SpawnItemList_Screen[index].RecycleArgs);
+                            XHud.XHud_LibraryArg_Motion motion = new XHud.XHud_LibraryArg_Motion("", 0, "", BaseScript.SpawnItemList_Screen[index].CreateArgs, BaseScript.SpawnItemList_Screen[index].RecycleArgs);
                             OpenParameterModifier(motion, sp_SpawnName.stringValue);
                             return;
                         });
@@ -374,7 +374,7 @@ namespace SevenStrikeModules.XHud.Hud
                     {
                         // 高亮标记表示选中
                         item_rect_world.Set(rect.x + 8, rect.y + 30, 5, 5);
-                        EditorGUI.DrawRect(item_rect_world, xHud_Dashboard.Theme_Primary);
+                        EditorGUI.DrawRect(item_rect_world, XHud_Dashboard.Theme_Primary);
                     }
                 },
                 drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
@@ -403,38 +403,38 @@ namespace SevenStrikeModules.XHud.Hud
 
                     #region 开关
                     drawelement_world_rect.Set(rect.x, rect.y, 20, 20);
-                    sp_isEnabled.boolValue = Editor_xHudGUI.Gui_Toggle(drawelement_world_rect, true, null, sp_isEnabled.boolValue);
+                    sp_isEnabled.boolValue = Editor_XHud_GUI.Gui_Toggle(drawelement_world_rect, true, null, sp_isEnabled.boolValue);
                     #endregion
 
                     #region 索引号
                     drawelement_world_rect.Set(rect.x + 25, rect.y, 40, 20);
-                    Editor_xHudGUI.Gui_Labelfield(drawelement_world_rect, index.ToString("D1"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, Font_Light);
+                    Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, index.ToString("D1"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, Font_Light);
                     #endregion
 
                     #region 徽标
                     if (sp_Spawned.boolValue)
-                        GUI.backgroundColor = xHud_Dashboard.Theme_Primary;
+                        GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
                     else
                         GUI.backgroundColor = Color.gray;
 
                     drawelement_world_rect.Set(rect.x + 45, rect.y + 5, 10, 10);
-                    Editor_xHudGUI.Gui_Icon(drawelement_world_rect, elementicon);
+                    Editor_XHud_GUI.Gui_Icon(drawelement_world_rect, elementicon);
                     GUI.backgroundColor = Color.white;
                     #endregion
 
                     #region 名称类
                     drawelement_world_rect.Set(rect.x + 68, rect.y, rect.width - 10 - 68, 20);
-                    Editor_xHudGUI.Gui_Labelfield(drawelement_world_rect, sp_SpawnName.stringValue, HudFilled.无, HudColor.深空灰, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 12, true, TextClipping.Ellipsis, true, Font_Bold);
+                    Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, sp_SpawnName.stringValue, HudFilled.无, HudColor.深空灰, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 12, true, TextClipping.Ellipsis, true, Font_Bold);
 
                     drawelement_world_rect.Set(rect.x + 30, rect.y + 23, rect.width - 130 - 5, 20);
-                    Editor_xHudGUI.Gui_Labelfield(drawelement_world_rect, sp_Indicator.stringValue, HudFilled.无, HudColor.深空灰, Color.white * 0.85f, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                    Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, sp_Indicator.stringValue, HudFilled.无, HudColor.深空灰, Color.white * 0.85f, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
                     #endregion
 
                     #region 折叠开关
                     if (!sp_isFold.boolValue)
                     {
                         drawelement_world_rect.Set(rect.x + 2, rect.y + 25, 12, 12);
-                        if (Editor_xHudGUI.Gui_Button(drawelement_world_rect, icon_unfold_r, icon_unfold_p, true, "", "", Color.white))
+                        if (Editor_XHud_GUI.Gui_Button(drawelement_world_rect, icon_unfold_r, icon_unfold_p, true, "", "", Color.white))
                         {
                             for (int i = 0; i < ElementList_World.count; i++)
                             {
@@ -451,7 +451,7 @@ namespace SevenStrikeModules.XHud.Hud
                     else
                     {
                         drawelement_world_rect.Set(rect.x + 2, rect.y + 25, 12, 12);
-                        if (Editor_xHudGUI.Gui_Button(drawelement_world_rect, anim_fold_r, anim_fold_p, true, "", "", Color.white))
+                        if (Editor_XHud_GUI.Gui_Button(drawelement_world_rect, anim_fold_r, anim_fold_p, true, "", "", Color.white))
                         {
                             for (int i = 0; i < ElementList_World.count; i++)
                             {
@@ -467,16 +467,16 @@ namespace SevenStrikeModules.XHud.Hud
                     #endregion
 
                     #region AutoIn
-                    GUI.backgroundColor = xHud_Dashboard.Theme_Primary;
+                    GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
                     drawelement_world_rect.Set(rect.width, rect.y + 27, 55, 12);
-                    Editor_xHudGUI.Gui_PopupWithString(drawelement_world_rect, ref sp_AutoIn, new string[2] { "自动 In", "手动 In" }, HudFilled.无, HudColor.亮白, xHud_Dashboard.Theme_Primary);
+                    Editor_XHud_GUI.Gui_PopupWithString(drawelement_world_rect, ref sp_AutoIn, new string[2] { "自动 In", "手动 In" }, HudFilled.无, HudColor.亮白, XHud_Dashboard.Theme_Primary);
                     GUI.backgroundColor = Color.white;
                     #endregion
 
                     #region 使用生成器的通用动效
-                    GUI.backgroundColor = xHud_Dashboard.Theme_Primary;
+                    GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
                     drawelement_world_rect.Set(rect.width - 70, rect.y + 27, 75, 12);
-                    Editor_xHudGUI.Gui_PopupWithString(drawelement_world_rect, ref sp_UseSpawnerMotion, new string[2] { "自身动效", "生成器动效" }, HudFilled.无, HudColor.亮白, xHud_Dashboard.Theme_Primary);
+                    Editor_XHud_GUI.Gui_PopupWithString(drawelement_world_rect, ref sp_UseSpawnerMotion, new string[2] { "自身动效", "生成器动效" }, HudFilled.无, HudColor.亮白, XHud_Dashboard.Theme_Primary);
                     GUI.backgroundColor = Color.white;
                     #endregion
 
@@ -484,57 +484,57 @@ namespace SevenStrikeModules.XHud.Hud
 
                     #region 正在生成 / 回收进度条
                     drawelement_world_rect.Set(rect.x, baseheight, rect.width, 1);
-                    Editor_xHudGUI.Gui_Box(drawelement_world_rect, Color.gray);
+                    Editor_XHud_GUI.Gui_Box(drawelement_world_rect, Color.gray);
 
                     if (sp_InMotion.boolValue)
                     {
                         GUI.backgroundColor = Color.white;
                         Repaint();
                         drawelement_world_rect.Set(rect.x, baseheight, rect.width * sp_MotionPercentage.floatValue, 1);
-                        Editor_xHudGUI.Gui_Box(drawelement_world_rect, xHud_Dashboard.Theme_Primary);
+                        Editor_XHud_GUI.Gui_Box(drawelement_world_rect, XHud_Dashboard.Theme_Primary);
                     }
                     #endregion
 
                     #region 延迟参数
                     drawelement_world_rect.Set(rect.x, baseheight + 10, rect.width / 2 - 5, 18);
-                    Editor_xHudGUI.Gui_Property_Field(drawelement_world_rect, "延迟生成", "ds", sp_Delay_Spawn);
+                    Editor_XHud_GUI.Gui_Property_Field(drawelement_world_rect, "延迟生成", "ds", sp_Delay_Spawn);
 
                     drawelement_world_rect.Set(rect.x + rect.width / 2 + 5, baseheight + 10, rect.width / 2 - 5, 18);
-                    Editor_xHudGUI.Gui_Property_Field(drawelement_world_rect, "延迟回收", "dd", sp_Delay_Despawn);
+                    Editor_XHud_GUI.Gui_Property_Field(drawelement_world_rect, "延迟回收", "dd", sp_Delay_Despawn);
                     #endregion
 
                     #region 信息
                     if (!sp_isFold.boolValue)
                     {
-                        string hexcol = xHud_Utilitys.Color_To_HexColor(Color.white * 0.75f, true);
-                        string darkcol = xHud_Utilitys.Color_To_HexColor(Color.gray, true);
+                        string hexcol = XHud_Utilitys.Color_To_HexColor(Color.white * 0.75f, true);
+                        string darkcol = XHud_Utilitys.Color_To_HexColor(Color.gray, true);
 
                         drawelement_world_rect.Set(rect.x, baseheight + 40, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>pos：</color> <color={darkcol}>{sp_Position.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>pos：</color> <color={darkcol}>{sp_Position.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_world_rect.Set(rect.x + rect.width / 2 + 5, baseheight + 40, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>rot：</color> <color={darkcol}>{sp_Euler.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>rot：</color> <color={darkcol}>{sp_Euler.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_world_rect.Set(rect.x, baseheight + 65, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>offset：</color> <color={darkcol}>{sp_Offset.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>offset：</color> <color={darkcol}>{sp_Offset.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_world_rect.Set(rect.x + rect.width / 2 + 5, baseheight + 65, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>scl：</color> <color={darkcol}>{sp_Scale.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>scl：</color> <color={darkcol}>{sp_Scale.vector3Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_world_rect.Set(rect.x, baseheight + 90, rect.width, 1);
-                        Editor_xHudGUI.Gui_Box(drawelement_world_rect, Color.gray * 0.7f);
+                        Editor_XHud_GUI.Gui_Box(drawelement_world_rect, Color.gray * 0.7f);
 
                         drawelement_world_rect.Set(rect.x, baseheight + 98, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>size：</color> <color={darkcol}>{sp_Size.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>size：</color> <color={darkcol}>{sp_Size.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_world_rect.Set(rect.x + rect.width / 2 + 5, baseheight + 98, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>pivot：</color> <color={darkcol}>{sp_Pivot.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>pivot：</color> <color={darkcol}>{sp_Pivot.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_world_rect.Set(rect.x, baseheight + 118, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>anc min：</color> <color={darkcol}>{sp_Anchor_Min.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>anc min：</color> <color={darkcol}>{sp_Anchor_Min.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
 
                         drawelement_world_rect.Set(rect.x + rect.width / 2 + 5, baseheight + 118, rect.width / 2 - 5, 20);
-                        Editor_xHudGUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>anc max：</color> <color={darkcol}>{sp_Anchor_Max.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+                        Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, $"<color={hexcol}>anc max：</color> <color={darkcol}>{sp_Anchor_Max.vector2Value}</color>", HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
                     }
                     #endregion
 
@@ -547,7 +547,7 @@ namespace SevenStrikeModules.XHud.Hud
                         GenericMenu menu = new GenericMenu();
                         menu.AddItem(new GUIContent("E 修改元素动效"), false, () =>
                         {
-                            XHud.xHud_LibraryArg_Motion motion = new XHud.xHud_LibraryArg_Motion("", 0, "", BaseScript.SpawnItemList_World[index].CreateArgs, BaseScript.SpawnItemList_World[index].RecycleArgs);
+                            XHud.XHud_LibraryArg_Motion motion = new XHud.XHud_LibraryArg_Motion("", 0, "", BaseScript.SpawnItemList_World[index].CreateArgs, BaseScript.SpawnItemList_World[index].RecycleArgs);
                             OpenParameterModifier(motion, sp_SpawnName.stringValue);
                             return;
                         });
@@ -611,32 +611,32 @@ namespace SevenStrikeModules.XHud.Hud
         {
             serializedObject.Update();
 
-            Editor_xHudGUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 布局元素生成器", Color.white);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 布局元素生成器", Color.white);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             #region 状态
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "状态", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "状态", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.StatuDisplayer_text(null, 12, new Vector2(0, 7), "生成器状态", 12, inMotion.boolValue ? "运行中" : "待命中", xHud_Dashboard.Theme_Primary, 11, false);
+            Editor_XHud_GUI.StatuDisplayer_text(null, 12, new Vector2(0, 7), "生成器状态", 12, inMotion.boolValue ? "运行中" : "待命中", XHud_Dashboard.Theme_Primary, 11, false);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 选项
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "选项", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "选项", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_LayoutSpawner>("手动生成与回收", stroptions_enabled, ref UseManullyKey, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_LayoutSpawner>("手动生成与回收", stroptions_enabled, ref UseManullyKey, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_LayoutSpawner>("屏幕元素控制", stroptions_control, ref ControlScreen, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_LayoutSpawner>("屏幕元素控制", stroptions_control, ref ControlScreen, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_LayoutSpawner>("世界元素控制", stroptions_control, ref ControlWorld, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_LayoutSpawner>("世界元素控制", stroptions_control, ref ControlWorld, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_LayoutSpawner>("防误触操作", stroptions_protecte, ref ProtectedAction, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_LayoutSpawner>("防误触操作", stroptions_protecte, ref ProtectedAction, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
             if (mgr == null)
             {
@@ -653,94 +653,94 @@ namespace SevenStrikeModules.XHud.Hud
                     #region 选择元素库
                     string[] libsname = mgr.hm_ElementLibrary_GetAllLibraryNames();
 
-                    Editor_xHudGUI.Gui_Layout_Popup<string, xHud_LayoutSpawner>("元素库", libsname, ref LibName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) => { });
+                    Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_LayoutSpawner>("元素库", libsname, ref LibName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) => { });
                     #endregion
                 }
             }
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 参数
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "参数", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "参数", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("生成器标识", SpawnerIndicator);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("生成器标识", SpawnerIndicator);
 
             if (UseManullyKey.boolValue)
             {
-                Editor_xHudGUI.Gui_Layout_Space(5);
-                Editor_xHudGUI.Gui_Layout_Seperator(1, xHud_Dashboard.Theme_SeperateLine);
-                Editor_xHudGUI.Gui_Layout_Space(10);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+                Editor_XHud_GUI.Gui_Layout_Space(10);
 
-                Editor_xHudGUI.Gui_Layout_Property_Field("主要辅助按键", SpawnFunctionKey_Primary, 170);
-                Editor_xHudGUI.Gui_Layout_Space(5);
-                Editor_xHudGUI.Gui_Layout_Property_Field("次级辅助按键", SpawnFunctionKey_Secondary, 170);
-                Editor_xHudGUI.Gui_Layout_Space(5);
-                Editor_xHudGUI.Gui_Layout_Property_Field("生成按键", Key_Create, 170);
-                Editor_xHudGUI.Gui_Layout_Space(5);
-                Editor_xHudGUI.Gui_Layout_Property_Field("回收按键", Key_Recycle, 170);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("主要辅助按键", SpawnFunctionKey_Primary, 170);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("次级辅助按键", SpawnFunctionKey_Secondary, 170);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("生成按键", Key_Create, 170);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("回收按键", Key_Recycle, 170);
             }
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Seperator(1, xHud_Dashboard.Theme_SeperateLine);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
             EditorGUILayout.HelpBox("间隔时间为0时，元素按照并发模式生成 / 回收", MessageType.Info);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("生成间隔  (屏幕空间)", DelayOrder_Spawn_Screen, 170);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("生成间隔  (屏幕空间)", DelayOrder_Spawn_Screen, 170);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("回收间隔  (屏幕空间)", DelayOrder_Despawn_Screen, 170);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("回收间隔  (屏幕空间)", DelayOrder_Despawn_Screen, 170);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Seperator(1, xHud_Dashboard.Theme_SeperateLine);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
             EditorGUILayout.HelpBox("间隔时间为0时，元素按照并发模式生成 / 回收", MessageType.Info);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("生成间隔  (世界空间)", DelayOrder_Spawn_World, 170);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("生成间隔  (世界空间)", DelayOrder_Spawn_World, 170);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("回收间隔  (世界空间)", DelayOrder_Despawn_World, 170);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("回收间隔  (世界空间)", DelayOrder_Despawn_World, 170);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 元素项
 
-            string hexcol = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
             #region 屏幕UI
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "元素项 - 屏幕空间", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "元素项 - 屏幕空间", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
             if (SpawnItemList_Screen.arraySize <= 0)
             {
                 #region 收集布局
-                if (Editor_xHudGUI.Gui_Layout_Button("收集", "收集当前在LayoutScreen锚点下的所有屏幕元素部署布局", HudFilled.实体, HudColor.深空灰, Color.white, 30, Font_Bold))
+                if (Editor_XHud_GUI.Gui_Layout_Button("收集", "收集当前在LayoutScreen锚点下的所有屏幕元素部署布局", HudFilled.实体, HudColor.深空灰, Color.white, 30, Font_Bold))
                 {
                     if (string.IsNullOrEmpty(LibName.stringValue))
                     {
-                        Editor_xHudGUI.Open(xHudDialogType.警告, $"Spawner元素生成器通知", "收集元素异常", $"请先指定目标元素库！", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.警告, $"Spawner元素生成器通知", "收集元素异常", $"请先指定目标元素库！", "明白", 0);
                         return;
                     }
                     if (mgr == null)
@@ -750,7 +750,7 @@ namespace SevenStrikeModules.XHud.Hud
                     HudElementInfo ele_info_s = AnchorElementInfosGet_Screen();
 
                     //无效名称列表
-                    List<xHudGUI_Dialog_ListDatas> DialogDatas = new List<xHudGUI_Dialog_ListDatas>();
+                    List<XHud_GUI_Dialog_ListDatas> DialogDatas = new List<XHud_GUI_Dialog_ListDatas>();
 
                     //---获取元素
                     for (int i = 0; i < ele_info_s.elements.Count; i++)
@@ -760,7 +760,7 @@ namespace SevenStrikeModules.XHud.Hud
                         {
                             #region 加入非库中元素名称列表
                             string s = item_name;
-                            xHudGUI_Dialog_ListDatas data = new xHudGUI_Dialog_ListDatas();
+                            XHud_GUI_Dialog_ListDatas data = new XHud_GUI_Dialog_ListDatas();
                             data.Title = SpawnerIndicator.stringValue;
                             data.SubTitle = "非库中元素";
                             data.Message = s;
@@ -771,7 +771,7 @@ namespace SevenStrikeModules.XHud.Hud
                         else
                         {
                             #region 新建一个生成项，用于快速收集目标元素的基础信息（坐标、缩放、尺寸）
-                            LayoutSpawnerItem item = new LayoutSpawnerItem();
+                            XHud_LayoutSpawner_Item item = new XHud_LayoutSpawner_Item();
                             item.SpawnName = item_name;
                             item.isEnabled = true;
                             item.isFold = true;
@@ -844,7 +844,7 @@ namespace SevenStrikeModules.XHud.Hud
                     //如果获取到无效元素名称
                     if (DialogDatas.Count > 0)
                     {
-                        Editor_xHudGUI.Open(DialogDatas.ToArray(), xHudDialogType.警告, "LayoutSpawner元素生成器通知", "元素物体异常", $"检测到以下不合理的物体，原因：未加入到元素池中。解决方法：如果您想让这些元素被记录到部署布局中，请将其加入元素池！", "明白", 0, true);
+                        Editor_XHud_GUI.Open(DialogDatas.ToArray(), XHud_DialogType.警告, "LayoutSpawner元素生成器通知", "元素物体异常", $"检测到以下不合理的物体，原因：未加入到元素池中。解决方法：如果您想让这些元素被记录到部署布局中，请将其加入元素池！", "明白", 0, true);
                     }
 
                     //如果获取到非预制体元素名称
@@ -856,7 +856,7 @@ namespace SevenStrikeModules.XHud.Hud
                             string s = ele_info_s.notPrefabsList[w].name;
 
                             #region 加入非预制体元素名称列表
-                            xHudGUI_Dialog_ListDatas data = new xHudGUI_Dialog_ListDatas();
+                            XHud_GUI_Dialog_ListDatas data = new XHud_GUI_Dialog_ListDatas();
                             data.Title = SpawnerIndicator.stringValue;
                             data.SubTitle = "非预制体元素";
                             data.Message = s;
@@ -864,7 +864,7 @@ namespace SevenStrikeModules.XHud.Hud
                             #endregion
                         }
 
-                        string res = Editor_xHudGUI.Open(DialogDatas.ToArray(), xHudDialogType.警告, "LayoutSpawner元素生成器通知", "元素物体异常", $"检测到以下不合理的物体，原因：物体虽然是HudElement元素但未将其制成预制体。解决方法：如果您想让这些元素被记录到部署布局中，请将其制成预制体！", "明白", "选中", 0, true);
+                        string res = Editor_XHud_GUI.Open(DialogDatas.ToArray(), XHud_DialogType.警告, "LayoutSpawner元素生成器通知", "元素物体异常", $"检测到以下不合理的物体，原因：物体虽然是HudElement元素但未将其制成预制体。解决方法：如果您想让这些元素被记录到部署布局中，请将其制成预制体！", "明白", "选中", 0, true);
                         if (res == "选中")
                         {
                             Selection.objects = ele_info_s.notPrefabsList.ToArray();
@@ -875,7 +875,7 @@ namespace SevenStrikeModules.XHud.Hud
                     #region 记录后处理元素方式
                     if (ele_info_s.elements.Count > 0)
                     {
-                        string res = Editor_xHudGUI.Open(xHudDialogType.帮助, "LayoutSpawner元素生成器通知", "元素物体处理", $"如何处理场景中被记录的屏幕UI的HudElement元素物体？", "不做处理", "移除", "隐藏", 0, true);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "LayoutSpawner元素生成器通知", "元素物体处理", $"如何处理场景中被记录的屏幕UI的HudElement元素物体？", "不做处理", "移除", "隐藏", 0, true);
                         if (res == "不做处理")
                         {
 
@@ -898,18 +898,18 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     else
                     {
-                        Editor_xHudGUI.Open(xHudDialogType.通知, "LayoutSpawner元素生成器通知", "元素物体收集", $"未发现<color={hexcol}> 屏幕根节点 </color>下存在任何Hud元素物体！", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.通知, "LayoutSpawner元素生成器通知", "元素物体收集", $"未发现<color={hexcol}> 屏幕根节点 </color>下存在任何Hud元素物体！", "明白", 0);
                     }
                     #endregion
                     return;
                 }
                 #endregion
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
             }
 
             #region 重置清空
-            if (Editor_xHudGUI.Gui_Layout_Button("重置", "将当前的元素部署布局列表清空", HudFilled.实体, HudColor.深空灰, Editor_xHudGUI.GetColor(HudColor.魅力红), 30, Font_Bold))
+            if (Editor_XHud_GUI.Gui_Layout_Button("重置", "将当前的元素部署布局列表清空", HudFilled.实体, HudColor.深空灰, Editor_XHud_GUI.GetColor(HudColor.魅力红), 30, Font_Bold))
             {
                 if (mgr == null)
                     return;
@@ -928,7 +928,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (SpawnItemList_Screen.arraySize > 0)
             {
                 #region 加载布局
-                if (!IsLoadedLayout_Screen.boolValue && Editor_xHudGUI.Gui_Layout_Button("加载", "根据元素列表中的信息重建元素部署布局到LayoutScreen锚点下", HudFilled.实体, HudColor.深空灰, xHud_Dashboard.Theme_Primary, 30, Font_Bold))
+                if (!IsLoadedLayout_Screen.boolValue && Editor_XHud_GUI.Gui_Layout_Button("加载", "根据元素列表中的信息重建元素部署布局到LayoutScreen锚点下", HudFilled.实体, HudColor.深空灰, XHud_Dashboard.Theme_Primary, 30, Font_Bold))
                 {
                     if (mgr == null)
                         return;
@@ -945,7 +945,7 @@ namespace SevenStrikeModules.XHud.Hud
                 #endregion
 
                 #region 卸载布局
-                if (IsLoadedLayout_Screen.boolValue && Editor_xHudGUI.Gui_Layout_Button("卸载", "将当前重建的元素部署布局清空", HudFilled.实体, HudColor.深空灰, Editor_xHudGUI.GetColor(HudColor.魅力红), 30, Font_Bold))
+                if (IsLoadedLayout_Screen.boolValue && Editor_XHud_GUI.Gui_Layout_Button("卸载", "将当前重建的元素部署布局清空", HudFilled.实体, HudColor.深空灰, Editor_XHud_GUI.GetColor(HudColor.魅力红), 30, Font_Bold))
                 {
                     if (mgr == null)
                         return;
@@ -964,36 +964,36 @@ namespace SevenStrikeModules.XHud.Hud
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             FoldScreen.boolValue = EditorGUILayout.Foldout(FoldScreen.boolValue, new GUIContent("元素项列表"), true);
             if (FoldScreen.boolValue)
             {
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
                 ElementList_Screen.DoLayoutList();
             }
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 世界UI
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "元素项 - 世界空间", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "元素项 - 世界空间", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
             if (SpawnItemList_World.arraySize <= 0)
             {
                 #region 收集布局
-                if (Editor_xHudGUI.Gui_Layout_Button("收集", "收集当前在LayoutWorld锚点下的所有世界元素部署布局", HudFilled.实体, HudColor.深空灰, Color.white, 30, Font_Bold))
+                if (Editor_XHud_GUI.Gui_Layout_Button("收集", "收集当前在LayoutWorld锚点下的所有世界元素部署布局", HudFilled.实体, HudColor.深空灰, Color.white, 30, Font_Bold))
                 {
                     if (string.IsNullOrEmpty(LibName.stringValue))
                     {
-                        Editor_xHudGUI.Open(xHudDialogType.警告, $"Spawner元素生成器通知", "收集元素异常", $"请先指定目标元素库！", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.警告, $"Spawner元素生成器通知", "收集元素异常", $"请先指定目标元素库！", "明白", 0);
                         return;
                     }
 
@@ -1004,7 +1004,7 @@ namespace SevenStrikeModules.XHud.Hud
                     HudElementInfo ele_info_w = AnchorElementInfosGet_World();
 
                     //无效名称列表
-                    List<xHudGUI_Dialog_ListDatas> DialogDatas = new List<xHudGUI_Dialog_ListDatas>();
+                    List<XHud_GUI_Dialog_ListDatas> DialogDatas = new List<XHud_GUI_Dialog_ListDatas>();
 
                     //---获取
                     for (int i = 0; i < ele_info_w.elements.Count; i++)
@@ -1014,7 +1014,7 @@ namespace SevenStrikeModules.XHud.Hud
                         {
                             #region 加入非库中元素名称列表
                             string s = item_name;
-                            xHudGUI_Dialog_ListDatas data = new xHudGUI_Dialog_ListDatas();
+                            XHud_GUI_Dialog_ListDatas data = new XHud_GUI_Dialog_ListDatas();
                             data.Title = SpawnerIndicator.stringValue;
                             data.SubTitle = "非库中元素";
                             data.Message = s;
@@ -1025,7 +1025,7 @@ namespace SevenStrikeModules.XHud.Hud
                         else
                         {
                             #region 新建一个生成项，用于快速收集目标元素的基础信息（坐标、缩放、尺寸）
-                            LayoutSpawnerItem item = new LayoutSpawnerItem();
+                            XHud_LayoutSpawner_Item item = new XHud_LayoutSpawner_Item();
                             item.SpawnName = item_name;
                             item.Position = ele_info_w.elements[i].RectTransform.position;
                             item.Scale = ele_info_w.elements[i].RectTransform.localScale;
@@ -1040,7 +1040,7 @@ namespace SevenStrikeModules.XHud.Hud
                     //如果获取到无效元素名称
                     if (DialogDatas.Count > 0)
                     {
-                        Editor_xHudGUI.Open(DialogDatas.ToArray(), xHudDialogType.警告, "LayoutSpawner元素生成器通知", "元素物体异常", $"检测到以下不合理的物体，原因：未加入到元素池中。解决方法：如果您想让这些元素被记录到部署布局中，请将其加入元素池！", "明白", 0, true);
+                        Editor_XHud_GUI.Open(DialogDatas.ToArray(), XHud_DialogType.警告, "LayoutSpawner元素生成器通知", "元素物体异常", $"检测到以下不合理的物体，原因：未加入到元素池中。解决方法：如果您想让这些元素被记录到部署布局中，请将其加入元素池！", "明白", 0, true);
                     }
 
                     //如果获取到非预制体元素名称
@@ -1052,7 +1052,7 @@ namespace SevenStrikeModules.XHud.Hud
                             string s = ele_info_w.notPrefabsList[w].name;
 
                             #region 加入非预制体元素名称列表
-                            xHudGUI_Dialog_ListDatas data = new xHudGUI_Dialog_ListDatas();
+                            XHud_GUI_Dialog_ListDatas data = new XHud_GUI_Dialog_ListDatas();
                             data.Title = SpawnerIndicator.stringValue;
                             data.SubTitle = "非预制体元素";
                             data.Message = s;
@@ -1060,7 +1060,7 @@ namespace SevenStrikeModules.XHud.Hud
                             #endregion
                         }
 
-                        string res = Editor_xHudGUI.Open(DialogDatas.ToArray(), xHudDialogType.警告, "LayoutSpawner元素生成器通知", "元素物体异常", $"检测到以下不合理的物体，原因：物体虽然是HudElement元素但未将其制成预制体。解决方法：如果您想让这些元素被记录到部署布局中，请将其制成预制体！", "明白", "选中", 0, true);
+                        string res = Editor_XHud_GUI.Open(DialogDatas.ToArray(), XHud_DialogType.警告, "LayoutSpawner元素生成器通知", "元素物体异常", $"检测到以下不合理的物体，原因：物体虽然是HudElement元素但未将其制成预制体。解决方法：如果您想让这些元素被记录到部署布局中，请将其制成预制体！", "明白", "选中", 0, true);
                         if (res == "选中")
                         {
                             Selection.objects = ele_info_w.notPrefabsList.ToArray();
@@ -1071,7 +1071,7 @@ namespace SevenStrikeModules.XHud.Hud
                     #region 记录后处理元素方式
                     if (ele_info_w.elements.Count > 0)
                     {
-                        string res = Editor_xHudGUI.Open(xHudDialogType.帮助, "LayoutSpawner元素生成器通知", "元素物体处理", $"如何处理场景中被记录的世界UI的HudElement元素物体？", "不做处理", "移除", "隐藏", 0, true);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "LayoutSpawner元素生成器通知", "元素物体处理", $"如何处理场景中被记录的世界UI的HudElement元素物体？", "不做处理", "移除", "隐藏", 0, true);
                         if (res == "不做处理")
                         {
 
@@ -1094,18 +1094,18 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     else
                     {
-                        Editor_xHudGUI.Open(xHudDialogType.通知, "LayoutSpawner元素生成器通知", "元素物体收集", $"未发现<color={hexcol}> 世界根节点 </color>下存在任何Hud元素物体！", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.通知, "LayoutSpawner元素生成器通知", "元素物体收集", $"未发现<color={hexcol}> 世界根节点 </color>下存在任何Hud元素物体！", "明白", 0);
                     }
                     #endregion               
                     return;
                 }
                 #endregion
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
             }
 
             #region 重置清空
-            if (Editor_xHudGUI.Gui_Layout_Button("重置", "将当前的元素部署布局列表清空", HudFilled.实体, HudColor.深空灰, Editor_xHudGUI.GetColor(HudColor.魅力红), 30, Font_Bold))
+            if (Editor_XHud_GUI.Gui_Layout_Button("重置", "将当前的元素部署布局列表清空", HudFilled.实体, HudColor.深空灰, Editor_XHud_GUI.GetColor(HudColor.魅力红), 30, Font_Bold))
             {
                 if (mgr == null)
                     return;
@@ -1124,7 +1124,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (SpawnItemList_World.arraySize > 0)
             {
                 #region 加载布局
-                if (!IsLoadedLayout_World.boolValue && Editor_xHudGUI.Gui_Layout_Button("加载", "根据元素列表中的信息重建元素部署布局到LayoutWorld锚点下", HudFilled.实体, HudColor.深空灰, xHud_Dashboard.Theme_Primary, 30, Font_Bold))
+                if (!IsLoadedLayout_World.boolValue && Editor_XHud_GUI.Gui_Layout_Button("加载", "根据元素列表中的信息重建元素部署布局到LayoutWorld锚点下", HudFilled.实体, HudColor.深空灰, XHud_Dashboard.Theme_Primary, 30, Font_Bold))
                 {
                     if (mgr == null)
                         return;
@@ -1141,7 +1141,7 @@ namespace SevenStrikeModules.XHud.Hud
                 #endregion
 
                 #region 卸载布局
-                if (IsLoadedLayout_World.boolValue && Editor_xHudGUI.Gui_Layout_Button("卸载", "将当前重建的元素部署布局清空", HudFilled.实体, HudColor.深空灰, Editor_xHudGUI.GetColor(HudColor.魅力红), 30, Font_Bold))
+                if (IsLoadedLayout_World.boolValue && Editor_XHud_GUI.Gui_Layout_Button("卸载", "将当前重建的元素部署布局清空", HudFilled.实体, HudColor.深空灰, Editor_XHud_GUI.GetColor(HudColor.魅力红), 30, Font_Bold))
                 {
                     if (mgr == null)
                         return;
@@ -1160,27 +1160,27 @@ namespace SevenStrikeModules.XHud.Hud
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             FoldWorld.boolValue = EditorGUILayout.Foldout(FoldWorld.boolValue, new GUIContent("元素项列表"), true);
             if (FoldWorld.boolValue)
             {
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
                 ElementList_World.DoLayoutList();
             }
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #endregion
 
             #region 动效参数
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "动效参数", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "动效参数", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 模版库                             
             //确保动效库存在
@@ -1189,12 +1189,12 @@ namespace SevenStrikeModules.XHud.Hud
                 //确保动效库不是空的
                 if (mgr.Hud_ElementMotion.ElementMotionList != null && mgr.Hud_ElementMotion.ElementMotionList.Count > 0)
                 {
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
 
                     //动效列表
                     string[] motnames = mgr.Hud_ElementMotion.ElementMotion_GetAllName_With_Create();
                     EditorGUI.BeginChangeCheck();
-                    Editor_xHudGUI.Gui_Layout_Popup<string, xHud_LayoutSpawner>("生成", motnames, ref Crc_Lib_Name, HudFilled.实体, 120, 22, SelectedObjects);
+                    Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_LayoutSpawner>("生成", motnames, ref Crc_Lib_Name, HudFilled.实体, 120, 22, SelectedObjects);
                     if (EditorGUI.EndChangeCheck())
                     {
                         Motion_Creator crc = mgr.Hud_ElementMotion.ElementMotion_GetElementCreator_At_Create(Crc_Lib_Name.stringValue);
@@ -1223,17 +1223,17 @@ namespace SevenStrikeModules.XHud.Hud
                     }
 
                     #region 保存 & 定位模板
-                    Editor_xHudGUI.Gui_Layout_Space(10);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
 
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "保存", save_r, save_p, 2))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "保存", save_r, save_p, 2))
                     {
                         OpenParameterSetter(HudElementMotionType.Creator);
                         return;
                     }
 
-                    Editor_xHudGUI.Gui_Layout_Space(10);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
 
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "定位", locate_r, locate_p, 2))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "定位", locate_r, locate_p, 2))
                     {
                         if (!mgr.Hud_ElementMotion.ElementMotion_IsExist(Crc_Lib_Name.stringValue))
                             return;
@@ -1242,75 +1242,75 @@ namespace SevenStrikeModules.XHud.Hud
                         return;
                     }
 
-                    Editor_xHudGUI.Gui_Layout_Space(10);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
 
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "重置", reset_r, reset_p, 2))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "重置", reset_r, reset_p, 2))
                     {
-                        string res = Editor_xHudGUI.Open(xHudDialogType.警告, "ElementPreview元素预览器通知", "重置动效参数", "确定要将动效参数重置吗？您将丢失当前的动效参数！", "重置", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "ElementPreview元素预览器通知", "重置动效参数", "确定要将动效参数重置吗？您将丢失当前的动效参数！", "重置", "暂不", 0);
                         if (res == "重置")
                             ResetMotionParams("CreateArgs");
                         return;
                     }
 
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                     #endregion
 
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 }
                 else
                 {
                     EditorGUILayout.HelpBox("未在动效库中发现任何动效资源，请先为其添加动效资源!", MessageType.Warning);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                 }
             }
             else
             {
                 EditorGUILayout.HelpBox("Hud管理器中未指定动效库，请先配置动效库!", MessageType.Warning);
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
             }
             #endregion
 
             #region 位移
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
             create_fold_move.boolValue = EditorGUILayout.Foldout(create_fold_move.boolValue, "位移", true);
             create_fold_move.serializedObject.ApplyModifiedProperties();
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
             if (create_fold_move.boolValue)
             {
                 SerializedProperty sp_move_type = CreateArgs.FindPropertyRelative("Movement.Movement");
-                Editor_xHudGUI.Gui_Layout_Property_Field("方式", sp_move_type);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("方式", sp_move_type);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_move_dis = CreateArgs.FindPropertyRelative("Movement.Distance");
-                Editor_xHudGUI.Gui_Layout_Property_Field("距离", sp_move_dis);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("距离", sp_move_dis);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_move_dur = CreateArgs.FindPropertyRelative("Movement.Duration");
-                Editor_xHudGUI.Gui_Layout_Property_Field("耗时", sp_move_dur);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("耗时", sp_move_dur);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_move_delay = CreateArgs.FindPropertyRelative("Movement.Delay");
-                Editor_xHudGUI.Gui_Layout_Property_Field("延迟", sp_move_delay);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("延迟", sp_move_delay);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_move_ease = CreateArgs.FindPropertyRelative("Movement.Ease");
-                Editor_xHudGUI.Gui_Layout_Property_Field("缓动", sp_move_ease);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("缓动", sp_move_ease);
 
-                if ((Ease)sp_move_ease.enumValueIndex == Ease.Unset)
+                if ((EaseMode)sp_move_ease.enumValueIndex == EaseMode.Unset)
                 {
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     SerializedProperty sp_move_curve = CreateArgs.FindPropertyRelative("Movement.Curve");
-                    Editor_xHudGUI.Gui_Layout_Property_Field("曲线", sp_move_curve);
+                    Editor_XHud_GUI.Gui_Layout_Property_Field("曲线", sp_move_curve);
 
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     #region 曲线列表
                     SerializedProperty sp_CurveName = CreateArgs.FindPropertyRelative("Movement.CurveName");
@@ -1320,7 +1320,7 @@ namespace SevenStrikeModules.XHud.Hud
                         if (mgr.Hud_Curves.CurveLibrary != null && mgr.Hud_Curves.CurveLibrary.Count > 0)
                         {
                             string[] names = mgr.Hud_Curves.CurveLibrary_GetCurveNames();
-                            Editor_xHudGUI.Gui_Layout_Popup<string, xHud_LayoutSpawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
+                            Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_LayoutSpawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                             {
                                 sp_Curve.animationCurveValue = mgr.Hud_Curves.CurveLibrary_GetCurve(res);
                                 sp_Curve.serializedObject.ApplyModifiedProperties();
@@ -1329,13 +1329,13 @@ namespace SevenStrikeModules.XHud.Hud
                         else
                         {
                             EditorGUILayout.HelpBox("未在动效库中发现任何曲线资源，请先为其添加曲线资源!", MessageType.Warning);
-                            Editor_xHudGUI.Gui_Layout_Space(5);
+                            Editor_XHud_GUI.Gui_Layout_Space(5);
                         }
                     }
                     else
                     {
                         EditorGUILayout.HelpBox("Hud管理器中未指定曲线库，请先配置曲线库!", MessageType.Warning);
-                        Editor_xHudGUI.Gui_Layout_Space(5);
+                        Editor_XHud_GUI.Gui_Layout_Space(5);
                     }
                     #endregion
                 }
@@ -1343,49 +1343,49 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             #region 旋转
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
             create_fold_rotate.boolValue = EditorGUILayout.Foldout(create_fold_rotate.boolValue, "旋转", true);
             create_fold_rotate.serializedObject.ApplyModifiedProperties();
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
             if (create_fold_rotate.boolValue)
             {
                 SerializedProperty sp_rot_type = CreateArgs.FindPropertyRelative("Rotation.Rotation");
-                Editor_xHudGUI.Gui_Layout_Property_Field("方式", sp_rot_type);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("方式", sp_rot_type);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_rot_deg = CreateArgs.FindPropertyRelative("Rotation.Degree");
-                Editor_xHudGUI.Gui_Layout_Property_Field("角度", sp_rot_deg);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("角度", sp_rot_deg);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_rot_dur = CreateArgs.FindPropertyRelative("Rotation.Duration");
-                Editor_xHudGUI.Gui_Layout_Property_Field("耗时", sp_rot_dur);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("耗时", sp_rot_dur);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_rot_delay = CreateArgs.FindPropertyRelative("Rotation.Delay");
-                Editor_xHudGUI.Gui_Layout_Property_Field("延迟", sp_rot_delay);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("延迟", sp_rot_delay);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_rot_ease = CreateArgs.FindPropertyRelative("Rotation.Ease");
-                Editor_xHudGUI.Gui_Layout_Property_Field("缓动", sp_rot_ease);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("缓动", sp_rot_ease);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
 
-                if ((Ease)sp_rot_ease.enumValueIndex == Ease.Unset)
+                if ((EaseMode)sp_rot_ease.enumValueIndex == EaseMode.Unset)
                 {
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     SerializedProperty sp_rot_curve = CreateArgs.FindPropertyRelative("Rotation.Curve");
-                    Editor_xHudGUI.Gui_Layout_Property_Field("曲线", sp_rot_curve);
+                    Editor_XHud_GUI.Gui_Layout_Property_Field("曲线", sp_rot_curve);
 
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     #region 曲线列表
                     SerializedProperty sp_CurveName = CreateArgs.FindPropertyRelative("Rotation.CurveName");
@@ -1395,7 +1395,7 @@ namespace SevenStrikeModules.XHud.Hud
                         if (mgr.Hud_Curves.CurveLibrary != null && mgr.Hud_Curves.CurveLibrary.Count > 0)
                         {
                             string[] names = mgr.Hud_Curves.CurveLibrary_GetCurveNames();
-                            Editor_xHudGUI.Gui_Layout_Popup<string, xHud_LayoutSpawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
+                            Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_LayoutSpawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                             {
                                 sp_Curve.animationCurveValue = mgr.Hud_Curves.CurveLibrary_GetCurve(res);
                                 sp_Curve.serializedObject.ApplyModifiedProperties();
@@ -1404,13 +1404,13 @@ namespace SevenStrikeModules.XHud.Hud
                         else
                         {
                             EditorGUILayout.HelpBox("未在动效库中发现任何曲线资源，请先为其添加曲线资源!", MessageType.Warning);
-                            Editor_xHudGUI.Gui_Layout_Space(5);
+                            Editor_XHud_GUI.Gui_Layout_Space(5);
                         }
                     }
                     else
                     {
                         EditorGUILayout.HelpBox("Hud管理器中未指定曲线库，请先配置曲线库!", MessageType.Warning);
-                        Editor_xHudGUI.Gui_Layout_Space(5);
+                        Editor_XHud_GUI.Gui_Layout_Space(5);
                     }
                     #endregion
                 }
@@ -1418,39 +1418,39 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             #region 透明度
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
             create_fold_alpha.boolValue = EditorGUILayout.Foldout(create_fold_alpha.boolValue, "透明度", true);
             create_fold_alpha.serializedObject.ApplyModifiedProperties();
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
             if (create_fold_alpha.boolValue)
             {
                 SerializedProperty sp_alpha_type = CreateArgs.FindPropertyRelative("Alpha.Duration");
-                Editor_xHudGUI.Gui_Layout_Property_Field("耗时", sp_alpha_type);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("耗时", sp_alpha_type);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_alpha_delay = CreateArgs.FindPropertyRelative("Alpha.Delay");
-                Editor_xHudGUI.Gui_Layout_Property_Field("延迟", sp_alpha_delay);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("延迟", sp_alpha_delay);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_alpha_ease = CreateArgs.FindPropertyRelative("Alpha.Ease");
-                Editor_xHudGUI.Gui_Layout_Property_Field("缓动", sp_alpha_ease);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("缓动", sp_alpha_ease);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
 
-                if ((Ease)sp_alpha_ease.enumValueIndex == Ease.Unset)
+                if ((EaseMode)sp_alpha_ease.enumValueIndex == EaseMode.Unset)
                 {
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     SerializedProperty sp_alpha_curve = CreateArgs.FindPropertyRelative("Alpha.Curve");
-                    Editor_xHudGUI.Gui_Layout_Property_Field("曲线", sp_alpha_curve);
+                    Editor_XHud_GUI.Gui_Layout_Property_Field("曲线", sp_alpha_curve);
 
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     #region 曲线列表
                     SerializedProperty sp_CurveName = CreateArgs.FindPropertyRelative("Alpha.CurveName");
@@ -1460,7 +1460,7 @@ namespace SevenStrikeModules.XHud.Hud
                         if (mgr.Hud_Curves.CurveLibrary != null && mgr.Hud_Curves.CurveLibrary.Count > 0)
                         {
                             string[] names = mgr.Hud_Curves.CurveLibrary_GetCurveNames();
-                            Editor_xHudGUI.Gui_Layout_Popup<string, xHud_LayoutSpawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
+                            Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_LayoutSpawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                             {
                                 sp_Curve.animationCurveValue = mgr.Hud_Curves.CurveLibrary_GetCurve(res);
                                 sp_Curve.serializedObject.ApplyModifiedProperties();
@@ -1469,13 +1469,13 @@ namespace SevenStrikeModules.XHud.Hud
                         else
                         {
                             EditorGUILayout.HelpBox("未在动效库中发现任何曲线资源，请先为其添加曲线资源!", MessageType.Warning);
-                            Editor_xHudGUI.Gui_Layout_Space(5);
+                            Editor_XHud_GUI.Gui_Layout_Space(5);
                         }
                     }
                     else
                     {
                         EditorGUILayout.HelpBox("Hud管理器中未指定曲线库，请先配置曲线库!", MessageType.Warning);
-                        Editor_xHudGUI.Gui_Layout_Space(5);
+                        Editor_XHud_GUI.Gui_Layout_Space(5);
                     }
                     #endregion
                 }
@@ -1483,7 +1483,7 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Layout_Property_Field("动效结束时机", CreateArgs_MotionAnimateEndState, 85);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("动效结束时机", CreateArgs_MotionAnimateEndState, 85);
             if (EditorGUI.EndChangeCheck())
             {
                 MotionAnimateEndState state = (MotionAnimateEndState)CreateArgs_MotionAnimateEndState.enumValueIndex;
@@ -1493,7 +1493,7 @@ namespace SevenStrikeModules.XHud.Hud
                         HudMotion_Movement m = (HudMotion_Movement)CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex;
                         if (m == HudMotion_Movement.A_无运动)
                         {
-                            Editor_xHudGUI.Open(xHudDialogType.警告, $"Spawner元素生成器通知", "设定动画结束时机", $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！", "明白", 0);
+                            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"Spawner元素生成器通知", "设定动画结束时机", $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！", "明白", 0);
                             CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                         }
                         break;
@@ -1501,16 +1501,16 @@ namespace SevenStrikeModules.XHud.Hud
                         HudMotion_Rotation r = (HudMotion_Rotation)CreateArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
                         if (r == HudMotion_Rotation.A_无旋转)
                         {
-                            Editor_xHudGUI.Open(xHudDialogType.警告, $"Spawner元素生成器通知", "设定动画结束时机", $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！", "明白", 0);
+                            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"Spawner元素生成器通知", "设定动画结束时机", $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！", "明白", 0);
                             CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                         }
                         break;
                 }
             }
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Seperator(1, xHud_Dashboard.Theme_SeperateLine);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 模版库                             
             //确保动效库存在
@@ -1519,12 +1519,12 @@ namespace SevenStrikeModules.XHud.Hud
                 //确保动效库不是空的
                 if (mgr.Hud_ElementMotion.ElementMotionList != null && mgr.Hud_ElementMotion.ElementMotionList.Count > 0)
                 {
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
 
                     //动效列表
                     string[] motnames = mgr.Hud_ElementMotion.ElementMotion_GetAllName_With_Recycle();
                     EditorGUI.BeginChangeCheck();
-                    Editor_xHudGUI.Gui_Layout_Popup<string, xHud_LayoutSpawner>("动效模板 - 回收", motnames, ref Rec_Lib_Name, HudFilled.实体, 120, 22, SelectedObjects);
+                    Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_LayoutSpawner>("动效模板 - 回收", motnames, ref Rec_Lib_Name, HudFilled.实体, 120, 22, SelectedObjects);
                     if (EditorGUI.EndChangeCheck())
                     {
                         Motion_Recycler rec = mgr.Hud_ElementMotion.ElementMotion_GetElementCreator_At_Recycle(Rec_Lib_Name.stringValue);
@@ -1552,17 +1552,17 @@ namespace SevenStrikeModules.XHud.Hud
                     }
 
                     #region 保存 & 定位模板
-                    Editor_xHudGUI.Gui_Layout_Space(10);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
 
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "保存", save_r, save_p, 2))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "保存", save_r, save_p, 2))
                     {
                         OpenParameterSetter(HudElementMotionType.Recycler);
                         return;
                     }
 
-                    Editor_xHudGUI.Gui_Layout_Space(10);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
 
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "定位", locate_r, locate_p, 2))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "定位", locate_r, locate_p, 2))
                     {
                         if (!mgr.Hud_ElementMotion.ElementMotion_IsExist(Rec_Lib_Name.stringValue, HudElementMotionType.Recycler))
                             return;
@@ -1571,75 +1571,75 @@ namespace SevenStrikeModules.XHud.Hud
                         return;
                     }
 
-                    Editor_xHudGUI.Gui_Layout_Space(10);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
 
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "重置", reset_r, reset_p, 2))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "重置", reset_r, reset_p, 2))
                     {
-                        string res = Editor_xHudGUI.Open(xHudDialogType.警告, "ElementPreview元素预览器通知", "重置动效参数", "确定要将动效参数重置吗？您将丢失当前的动效参数！", "重置", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "ElementPreview元素预览器通知", "重置动效参数", "确定要将动效参数重置吗？您将丢失当前的动效参数！", "重置", "暂不", 0);
                         if (res == "重置")
                             ResetMotionParams("RecycleArgs");
                         return;
                     }
 
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                     #endregion
 
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 }
                 else
                 {
                     EditorGUILayout.HelpBox("未在动效库中发现任何动效资源，请先为其添加动效资源!", MessageType.Warning);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                 }
             }
             else
             {
                 EditorGUILayout.HelpBox("Hud管理器中未指定动效库，请先配置动效库!", MessageType.Warning);
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
             }
             #endregion
 
             #region 位移
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
             recycle_fold_move.boolValue = EditorGUILayout.Foldout(recycle_fold_move.boolValue, "位移", true);
             recycle_fold_move.serializedObject.ApplyModifiedProperties();
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
             if (recycle_fold_move.boolValue)
             {
                 SerializedProperty sp_move_type = RecycleArgs.FindPropertyRelative("Movement.Movement");
-                Editor_xHudGUI.Gui_Layout_Property_Field("方式", sp_move_type);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("方式", sp_move_type);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_move_dis = RecycleArgs.FindPropertyRelative("Movement.Distance");
-                Editor_xHudGUI.Gui_Layout_Property_Field("距离", sp_move_dis);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("距离", sp_move_dis);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_move_dur = RecycleArgs.FindPropertyRelative("Movement.Duration");
-                Editor_xHudGUI.Gui_Layout_Property_Field("耗时", sp_move_dur);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("耗时", sp_move_dur);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_move_delay = RecycleArgs.FindPropertyRelative("Movement.Delay");
-                Editor_xHudGUI.Gui_Layout_Property_Field("延迟", sp_move_delay);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("延迟", sp_move_delay);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_move_ease = RecycleArgs.FindPropertyRelative("Movement.Ease");
-                Editor_xHudGUI.Gui_Layout_Property_Field("缓动", sp_move_ease);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("缓动", sp_move_ease);
 
-                if ((Ease)sp_move_ease.enumValueIndex == Ease.Unset)
+                if ((EaseMode)sp_move_ease.enumValueIndex == EaseMode.Unset)
                 {
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     SerializedProperty sp_move_curve = RecycleArgs.FindPropertyRelative("Movement.Curve");
-                    Editor_xHudGUI.Gui_Layout_Property_Field("曲线", sp_move_curve);
+                    Editor_XHud_GUI.Gui_Layout_Property_Field("曲线", sp_move_curve);
 
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     #region 曲线列表
                     SerializedProperty sp_CurveName = RecycleArgs.FindPropertyRelative("Movement.CurveName");
@@ -1649,7 +1649,7 @@ namespace SevenStrikeModules.XHud.Hud
                         if (mgr.Hud_Curves.CurveLibrary != null && mgr.Hud_Curves.CurveLibrary.Count > 0)
                         {
                             string[] names = mgr.Hud_Curves.CurveLibrary_GetCurveNames();
-                            Editor_xHudGUI.Gui_Layout_Popup<string, xHud_LayoutSpawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
+                            Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_LayoutSpawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                             {
                                 sp_Curve.animationCurveValue = mgr.Hud_Curves.CurveLibrary_GetCurve(res);
                                 sp_Curve.serializedObject.ApplyModifiedProperties();
@@ -1658,13 +1658,13 @@ namespace SevenStrikeModules.XHud.Hud
                         else
                         {
                             EditorGUILayout.HelpBox("未在动效库中发现任何曲线资源，请先为其添加曲线资源!", MessageType.Warning);
-                            Editor_xHudGUI.Gui_Layout_Space(5);
+                            Editor_XHud_GUI.Gui_Layout_Space(5);
                         }
                     }
                     else
                     {
                         EditorGUILayout.HelpBox("Hud管理器中未指定曲线库，请先配置曲线库!", MessageType.Warning);
-                        Editor_xHudGUI.Gui_Layout_Space(5);
+                        Editor_XHud_GUI.Gui_Layout_Space(5);
                     }
                     #endregion
                 }
@@ -1672,46 +1672,46 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             #region 旋转
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
             recycle_fold_rotate.boolValue = EditorGUILayout.Foldout(recycle_fold_rotate.boolValue, "旋转", true);
             recycle_fold_rotate.serializedObject.ApplyModifiedProperties();
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
             if (recycle_fold_rotate.boolValue)
             {
                 SerializedProperty sp_rot_type = RecycleArgs.FindPropertyRelative("Rotation.Rotation");
-                Editor_xHudGUI.Gui_Layout_Property_Field("方式", sp_rot_type);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("方式", sp_rot_type);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_rot_deg = RecycleArgs.FindPropertyRelative("Rotation.Degree");
-                Editor_xHudGUI.Gui_Layout_Property_Field("角度", sp_rot_deg);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("角度", sp_rot_deg);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_rot_dur = RecycleArgs.FindPropertyRelative("Rotation.Duration");
-                Editor_xHudGUI.Gui_Layout_Property_Field("耗时", sp_rot_dur);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("耗时", sp_rot_dur);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_rot_delay = RecycleArgs.FindPropertyRelative("Rotation.Delay");
-                Editor_xHudGUI.Gui_Layout_Property_Field("延迟", sp_rot_delay);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("延迟", sp_rot_delay);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_rot_ease = RecycleArgs.FindPropertyRelative("Rotation.Ease");
-                Editor_xHudGUI.Gui_Layout_Property_Field("缓动", sp_rot_ease);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("缓动", sp_rot_ease);
 
-                if ((Ease)sp_rot_ease.enumValueIndex == Ease.Unset)
+                if ((EaseMode)sp_rot_ease.enumValueIndex == EaseMode.Unset)
                 {
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     SerializedProperty sp_rot_curve = RecycleArgs.FindPropertyRelative("Rotation.Curve");
-                    Editor_xHudGUI.Gui_Layout_Property_Field("曲线", sp_rot_curve);
+                    Editor_XHud_GUI.Gui_Layout_Property_Field("曲线", sp_rot_curve);
 
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     #region 曲线列表
                     SerializedProperty sp_CurveName = RecycleArgs.FindPropertyRelative("Rotation.CurveName");
@@ -1721,7 +1721,7 @@ namespace SevenStrikeModules.XHud.Hud
                         if (mgr.Hud_Curves.CurveLibrary != null && mgr.Hud_Curves.CurveLibrary.Count > 0)
                         {
                             string[] names = mgr.Hud_Curves.CurveLibrary_GetCurveNames();
-                            Editor_xHudGUI.Gui_Layout_Popup<string, xHud_LayoutSpawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
+                            Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_LayoutSpawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                             {
                                 sp_Curve.animationCurveValue = mgr.Hud_Curves.CurveLibrary_GetCurve(res);
                                 sp_Curve.serializedObject.ApplyModifiedProperties();
@@ -1730,13 +1730,13 @@ namespace SevenStrikeModules.XHud.Hud
                         else
                         {
                             EditorGUILayout.HelpBox("未在动效库中发现任何曲线资源，请先为其添加曲线资源!", MessageType.Warning);
-                            Editor_xHudGUI.Gui_Layout_Space(5);
+                            Editor_XHud_GUI.Gui_Layout_Space(5);
                         }
                     }
                     else
                     {
                         EditorGUILayout.HelpBox("Hud管理器中未指定曲线库，请先配置曲线库!", MessageType.Warning);
-                        Editor_xHudGUI.Gui_Layout_Space(5);
+                        Editor_XHud_GUI.Gui_Layout_Space(5);
                     }
                     #endregion
                 }
@@ -1744,38 +1744,38 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             #region 透明度
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
             recycle_fold_alpha.boolValue = EditorGUILayout.Foldout(recycle_fold_alpha.boolValue, "透明度", true);
             recycle_fold_alpha.serializedObject.ApplyModifiedProperties();
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
             if (recycle_fold_alpha.boolValue)
             {
                 SerializedProperty sp_alpha_type = RecycleArgs.FindPropertyRelative("Alpha.Duration");
-                Editor_xHudGUI.Gui_Layout_Property_Field("耗时", sp_alpha_type);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("耗时", sp_alpha_type);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_alpha_delay = RecycleArgs.FindPropertyRelative("Alpha.Delay");
-                Editor_xHudGUI.Gui_Layout_Property_Field("延迟", sp_alpha_delay);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("延迟", sp_alpha_delay);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 SerializedProperty sp_alpha_ease = RecycleArgs.FindPropertyRelative("Alpha.Ease");
-                Editor_xHudGUI.Gui_Layout_Property_Field("缓动", sp_alpha_ease);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("缓动", sp_alpha_ease);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                if ((Ease)sp_alpha_ease.enumValueIndex == Ease.Unset)
+                if ((EaseMode)sp_alpha_ease.enumValueIndex == EaseMode.Unset)
                 {
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     SerializedProperty sp_alpha_curve = RecycleArgs.FindPropertyRelative("Alpha.Curve");
-                    Editor_xHudGUI.Gui_Layout_Property_Field("曲线", sp_alpha_curve);
+                    Editor_XHud_GUI.Gui_Layout_Property_Field("曲线", sp_alpha_curve);
 
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     #region 曲线列表
                     SerializedProperty sp_CurveName = RecycleArgs.FindPropertyRelative("Alpha.CurveName");
@@ -1785,7 +1785,7 @@ namespace SevenStrikeModules.XHud.Hud
                         if (mgr.Hud_Curves.CurveLibrary != null && mgr.Hud_Curves.CurveLibrary.Count > 0)
                         {
                             string[] names = mgr.Hud_Curves.CurveLibrary_GetCurveNames();
-                            Editor_xHudGUI.Gui_Layout_Popup<string, xHud_LayoutSpawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
+                            Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_LayoutSpawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                             {
                                 sp_Curve.animationCurveValue = mgr.Hud_Curves.CurveLibrary_GetCurve(res);
                                 sp_Curve.serializedObject.ApplyModifiedProperties();
@@ -1794,13 +1794,13 @@ namespace SevenStrikeModules.XHud.Hud
                         else
                         {
                             EditorGUILayout.HelpBox("未在动效库中发现任何曲线资源，请先为其添加曲线资源!", MessageType.Warning);
-                            Editor_xHudGUI.Gui_Layout_Space(5);
+                            Editor_XHud_GUI.Gui_Layout_Space(5);
                         }
                     }
                     else
                     {
                         EditorGUILayout.HelpBox("Hud管理器中未指定曲线库，请先配置曲线库!", MessageType.Warning);
-                        Editor_xHudGUI.Gui_Layout_Space(5);
+                        Editor_XHud_GUI.Gui_Layout_Space(5);
                     }
                     #endregion
                 }
@@ -1808,7 +1808,7 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Layout_Property_Field("动效结束时机", RecycleArgs_MotionAnimateEndState, 85);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("动效结束时机", RecycleArgs_MotionAnimateEndState, 85);
             if (EditorGUI.EndChangeCheck())
             {
                 MotionAnimateEndState state = (MotionAnimateEndState)RecycleArgs_MotionAnimateEndState.enumValueIndex;
@@ -1818,7 +1818,7 @@ namespace SevenStrikeModules.XHud.Hud
                         HudMotion_Movement m = (HudMotion_Movement)RecycleArgs.FindPropertyRelative("Movement.Movement").enumValueIndex;
                         if (m == HudMotion_Movement.A_无运动)
                         {
-                            Editor_xHudGUI.Open(xHudDialogType.警告, $"Spawner元素生成器通知", "设定动画结束时机", $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！", "明白", 0);
+                            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"Spawner元素生成器通知", "设定动画结束时机", $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！", "明白", 0);
                             RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                         }
                         break;
@@ -1826,15 +1826,15 @@ namespace SevenStrikeModules.XHud.Hud
                         HudMotion_Rotation r = (HudMotion_Rotation)RecycleArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
                         if (r == HudMotion_Rotation.A_无旋转)
                         {
-                            Editor_xHudGUI.Open(xHudDialogType.警告, $"Spawner元素生成器通知", "设定动画结束时机", $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！", "明白", 0);
+                            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"Spawner元素生成器通知", "设定动画结束时机", $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！", "明白", 0);
                             RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                         }
                         break;
                 }
             }
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
@@ -1847,7 +1847,7 @@ namespace SevenStrikeModules.XHud.Hud
                 menu.AddDisabledItem(new GUIContent("动效快速操作"));
                 menu.AddItem(new GUIContent("E (复制动效)"), false, () =>
                 {
-                    string res = Editor_xHudGUI.Open(xHudDialogType.修改, "LayoutSpawner元素生成器通知", "复制动效", "请选择动效参数复制模式！", "取消", "生成", "回收", 0);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "LayoutSpawner元素生成器通知", "复制动效", "请选择动效参数复制模式！", "取消", "生成", "回收", 0);
                     if (res == "取消")
                         return;
 
@@ -1867,7 +1867,7 @@ namespace SevenStrikeModules.XHud.Hud
                             M.Distance = sp_CreateArgs.FindPropertyRelative("Movement.Distance").floatValue;
                             M.Duration = sp_CreateArgs.FindPropertyRelative("Movement.Duration").floatValue;
                             M.Delay = sp_CreateArgs.FindPropertyRelative("Movement.Delay").floatValue;
-                            M.Ease = (Ease)sp_CreateArgs.FindPropertyRelative("Movement.Ease").enumValueIndex;
+                            M.Ease = (EaseMode)sp_CreateArgs.FindPropertyRelative("Movement.Ease").enumValueIndex;
                             M.Curve = sp_CreateArgs.FindPropertyRelative("Movement.Curve").animationCurveValue;
                             M.CurveName = sp_CreateArgs.FindPropertyRelative("Movement.CurveName").stringValue;
 
@@ -1876,7 +1876,7 @@ namespace SevenStrikeModules.XHud.Hud
                             R.Degree = sp_CreateArgs.FindPropertyRelative("Rotation.Degree").floatValue;
                             R.Duration = sp_CreateArgs.FindPropertyRelative("Rotation.Duration").floatValue;
                             R.Delay = sp_CreateArgs.FindPropertyRelative("Rotation.Delay").floatValue;
-                            R.Ease = (Ease)sp_CreateArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex;
+                            R.Ease = (EaseMode)sp_CreateArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex;
                             R.Curve = sp_CreateArgs.FindPropertyRelative("Rotation.Curve").animationCurveValue;
                             R.CurveName = sp_CreateArgs.FindPropertyRelative("Rotation.CurveName").stringValue;
 
@@ -1884,7 +1884,7 @@ namespace SevenStrikeModules.XHud.Hud
                             A.Duration = sp_CreateArgs.FindPropertyRelative("Alpha.Duration").floatValue;
                             A.Curve = sp_CreateArgs.FindPropertyRelative("Alpha.Curve").animationCurveValue;
                             A.CurveName = sp_CreateArgs.FindPropertyRelative("Alpha.CurveName").stringValue;
-                            A.Ease = (Ease)sp_CreateArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex;
+                            A.Ease = (EaseMode)sp_CreateArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex;
                             A.Delay = sp_CreateArgs.FindPropertyRelative("Alpha.Delay").floatValue;
 
                             crc.Movement = M;
@@ -1892,7 +1892,7 @@ namespace SevenStrikeModules.XHud.Hud
                             crc.Alpha = A;
 
                             json = JsonConvert.SerializeObject(crc);
-                            Editor_xHudGUI.EditorData_Set_With_String("XED_HudSpawner_Copy_MotionArgs", json);
+                            Editor_XHud_GUI.EditorData_Set_With_String("XED_HudSpawner_Copy_MotionArgs", json);
                             break;
                         case "回收"://回收
                             Motion_Recycler rec = new Motion_Recycler();
@@ -1902,7 +1902,7 @@ namespace SevenStrikeModules.XHud.Hud
                             M.Distance = sp_RecycleArgs.FindPropertyRelative("Movement.Distance").floatValue;
                             M.Duration = sp_RecycleArgs.FindPropertyRelative("Movement.Duration").floatValue;
                             M.Delay = sp_RecycleArgs.FindPropertyRelative("Movement.Delay").floatValue;
-                            M.Ease = (Ease)sp_RecycleArgs.FindPropertyRelative("Movement.Ease").enumValueIndex;
+                            M.Ease = (EaseMode)sp_RecycleArgs.FindPropertyRelative("Movement.Ease").enumValueIndex;
                             M.Curve = sp_RecycleArgs.FindPropertyRelative("Movement.Curve").animationCurveValue;
                             M.CurveName = sp_RecycleArgs.FindPropertyRelative("Movement.CurveName").stringValue;
 
@@ -1911,7 +1911,7 @@ namespace SevenStrikeModules.XHud.Hud
                             R.Degree = sp_RecycleArgs.FindPropertyRelative("Rotation.Degree").floatValue;
                             R.Duration = sp_RecycleArgs.FindPropertyRelative("Rotation.Duration").floatValue;
                             R.Delay = sp_RecycleArgs.FindPropertyRelative("Rotation.Delay").floatValue;
-                            R.Ease = (Ease)sp_RecycleArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex;
+                            R.Ease = (EaseMode)sp_RecycleArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex;
                             R.Curve = sp_RecycleArgs.FindPropertyRelative("Rotation.Curve").animationCurveValue;
                             R.CurveName = sp_RecycleArgs.FindPropertyRelative("Rotation.CurveName").stringValue;
 
@@ -1919,7 +1919,7 @@ namespace SevenStrikeModules.XHud.Hud
                             A.Duration = sp_RecycleArgs.FindPropertyRelative("Alpha.Duration").floatValue;
                             A.Curve = sp_RecycleArgs.FindPropertyRelative("Alpha.Curve").animationCurveValue;
                             A.CurveName = sp_RecycleArgs.FindPropertyRelative("Alpha.CurveName").stringValue;
-                            A.Ease = (Ease)sp_RecycleArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex;
+                            A.Ease = (EaseMode)sp_RecycleArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex;
                             A.Delay = sp_RecycleArgs.FindPropertyRelative("Alpha.Delay").floatValue;
 
                             rec.Movement = M;
@@ -1927,7 +1927,7 @@ namespace SevenStrikeModules.XHud.Hud
                             rec.Alpha = A;
 
                             json = JsonConvert.SerializeObject(rec);
-                            Editor_xHudGUI.EditorData_Set_With_String("XED_HudSpawner_Copy_MotionArgs", json);
+                            Editor_XHud_GUI.EditorData_Set_With_String("XED_HudSpawner_Copy_MotionArgs", json);
                             break;
                     }
 
@@ -1938,14 +1938,14 @@ namespace SevenStrikeModules.XHud.Hud
                     else if (res == "回收")
                         mode = "回收动效参数";
 
-                    Editor_xHudGUI.Open(xHudDialogType.确认, "LayoutSpawner元素生成器通知", "复制动效", $"已复制 \" {mode} \" 到系统剪贴板 ！", "明白", 0);
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "LayoutSpawner元素生成器通知", "复制动效", $"已复制 \" {mode} \" 到系统剪贴板 ！", "明白", 0);
                 });
                 menu.AddItem(new GUIContent("R (粘贴动效)"), false, () =>
                 {
-                    string buffer = Editor_xHudGUI.EditorData_Get_With_String("XED_HudSpawner_Copy_MotionArgs");
+                    string buffer = Editor_XHud_GUI.EditorData_Get_With_String("XED_HudSpawner_Copy_MotionArgs");
                     if (buffer.Contains("anchor"))//粘贴生成参数
                     {
-                        string res = Editor_xHudGUI.Open(xHudDialogType.修改, "LayoutSpawner元素生成器通知", "粘贴动效", "检测到动效参数类型为： \"生成动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "LayoutSpawner元素生成器通知", "粘贴动效", "检测到动效参数类型为： \"生成动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
                         if (res == "暂不")
                             return;
 
@@ -1977,11 +1977,11 @@ namespace SevenStrikeModules.XHud.Hud
 
                         sp_CreateArgs.serializedObject.ApplyModifiedProperties();
 
-                        Editor_xHudGUI.Open(xHudDialogType.确认, "LayoutSpawner元素生成器通知", "粘贴动效", "已更新 \"生成\" 动效参数!", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "LayoutSpawner元素生成器通知", "粘贴动效", "已更新 \"生成\" 动效参数!", "明白", 0);
                     }
                     else//粘贴回收参数
                     {
-                        string res = Editor_xHudGUI.Open(xHudDialogType.修改, "LayoutSpawner元素生成器通知", "粘贴动效", "检测到动效参数类型为： \"回收动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "LayoutSpawner元素生成器通知", "粘贴动效", "检测到动效参数类型为： \"回收动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
                         if (res == "暂不")
                             return;
 
@@ -2011,7 +2011,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                         sp_RecycleArgs.serializedObject.ApplyModifiedProperties();
 
-                        Editor_xHudGUI.Open(xHudDialogType.确认, "LayoutSpawner元素生成器通知", "粘贴动效", "已更新 \"回收\" 动效参数!", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "LayoutSpawner元素生成器通知", "粘贴动效", "已更新 \"回收\" 动效参数!", "明白", 0);
                     }
                 });
                 menu.AddSeparator("");
@@ -2070,21 +2070,21 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             #region 源脚本
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 原始变量
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
             BasicVars = EditorGUILayout.Foldout(BasicVars, "变量/属性", true);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
             if (BasicVars)
                 DrawDefaultInspector();
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             serializedObject.ApplyModifiedProperties();
@@ -2106,19 +2106,19 @@ namespace SevenStrikeModules.XHud.Hud
                 CreateArgs.FindPropertyRelative("Movement.Delay").floatValue = 0;
                 CreateArgs.FindPropertyRelative("Movement.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 CreateArgs.FindPropertyRelative("Movement.CurveName").stringValue = "";
-                CreateArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)Ease.OutQuart;
+                CreateArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)EaseMode.OutQuart;
                 CreateArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)HudMotion_Rotation.A_无旋转;
                 CreateArgs.FindPropertyRelative("Rotation.Degree").floatValue = 0;
                 CreateArgs.FindPropertyRelative("Rotation.Duration").floatValue = 1;
                 CreateArgs.FindPropertyRelative("Rotation.Delay").floatValue = 0;
                 CreateArgs.FindPropertyRelative("Rotation.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 CreateArgs.FindPropertyRelative("Rotation.CurveName").stringValue = "";
-                CreateArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)Ease.OutQuart;
+                CreateArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)EaseMode.OutQuart;
                 CreateArgs.FindPropertyRelative("Alpha.Duration").floatValue = 1;
                 CreateArgs.FindPropertyRelative("Alpha.Delay").floatValue = 0;
                 CreateArgs.FindPropertyRelative("Alpha.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 CreateArgs.FindPropertyRelative("Alpha.CurveName").stringValue = "";
-                CreateArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)Ease.OutQuart;
+                CreateArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.OutQuart;
                 CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                 CreateArgs.serializedObject.ApplyModifiedProperties();
             }
@@ -2130,19 +2130,19 @@ namespace SevenStrikeModules.XHud.Hud
                 RecycleArgs.FindPropertyRelative("Movement.Delay").floatValue = 0;
                 RecycleArgs.FindPropertyRelative("Movement.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 RecycleArgs.FindPropertyRelative("Movement.CurveName").stringValue = "";
-                RecycleArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)Ease.OutQuart;
+                RecycleArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)EaseMode.OutQuart;
                 RecycleArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)HudMotion_Rotation.A_无旋转;
                 RecycleArgs.FindPropertyRelative("Rotation.Degree").floatValue = 0;
                 RecycleArgs.FindPropertyRelative("Rotation.Duration").floatValue = 1;
                 RecycleArgs.FindPropertyRelative("Rotation.Delay").floatValue = 0;
                 RecycleArgs.FindPropertyRelative("Rotation.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 RecycleArgs.FindPropertyRelative("Rotation.CurveName").stringValue = "";
-                RecycleArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)Ease.OutQuart;
+                RecycleArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)EaseMode.OutQuart;
                 RecycleArgs.FindPropertyRelative("Alpha.Duration").floatValue = 1;
                 RecycleArgs.FindPropertyRelative("Alpha.Delay").floatValue = 0;
                 RecycleArgs.FindPropertyRelative("Alpha.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 RecycleArgs.FindPropertyRelative("Alpha.CurveName").stringValue = "";
-                RecycleArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)Ease.OutQuart;
+                RecycleArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.OutQuart;
                 RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                 RecycleArgs.serializedObject.ApplyModifiedProperties();
             }
@@ -2154,8 +2154,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <returns></returns>
         public HudElementInfo AnchorElementInfosGet_Screen()
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
-            xHud_Module_Element[] trans = mgr.HudCanvas_ScreenAnchor.GetComponentsInChildren<xHud_Module_Element>();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            XHud_Module_Element[] trans = mgr.HudCanvas_ScreenAnchor.GetComponentsInChildren<XHud_Module_Element>();
             HudElementInfo ElementInfos = new HudElementInfo();
             for (int i = 0; i < trans.Length; i++)
             {
@@ -2177,8 +2177,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <returns></returns>
         public HudElementInfo AnchorElementInfosGet_World()
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
-            xHud_Module_Element[] trans = mgr.HudCanvas_World.GetComponentsInChildren<xHud_Module_Element>();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            XHud_Module_Element[] trans = mgr.HudCanvas_World.GetComponentsInChildren<XHud_Module_Element>();
             HudElementInfo ElementInfos = new HudElementInfo();
             for (int i = 0; i < trans.Length; i++)
             {
@@ -2201,7 +2201,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <returns></returns>
         private bool IsInLibrary(string name)
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
             bool sw = false;
             for (int i = 0; i < mgr.Hud_ElementLibrarys.Count; i++)
             {
@@ -2268,10 +2268,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         public void OpenParameterSetter(HudElementMotionType Type)
         {
-            Editor_xHud_LibrarySetTool_Motion window = EditorWindow.GetWindow<Editor_xHud_LibrarySetTool_Motion>(true);
+            Editor_XHud_LibrarySetTool_Motion window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_Motion>(true);
 
             window.titleContent = new GUIContent("XHud 动效库采集器");
-            Editor_xHudGUI.CenterEditorWindow(new Vector2Int(600, 530), window);
+            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(600, 530), window);
 
             // 将要存入元素库的物体信息发送至窗口
             switch (Type)
@@ -2312,7 +2312,7 @@ namespace SevenStrikeModules.XHud.Hud
             window.SetLibrarySetterMode(LibrarySetterMode.添加到库);
             window.SetButtonText("添加", "取消");
             window.SetTitle("XHud 动效库采集器");
-            window.SetTarget_Hud_MotionLibrary(xHud_Dashboard.HudManagerGet().Hud_ElementMotion);
+            window.SetTarget_Hud_MotionLibrary(XHud_Dashboard.HudManagerGet().Hud_ElementMotion);
             //window.ShowModal();
             window.Show();
         }
@@ -2320,18 +2320,18 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动效参数修改器
         /// </summary>
-        public void OpenParameterModifier(XHud.xHud_LibraryArg_Motion motion, string motionName)
+        public void OpenParameterModifier(XHud.XHud_LibraryArg_Motion motion, string motionName)
         {
-            Editor_xHud_LibrarySetTool_Motion window = EditorWindow.GetWindow<Editor_xHud_LibrarySetTool_Motion>(true);
+            Editor_XHud_LibrarySetTool_Motion window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_Motion>(true);
 
             window.titleContent = new GUIContent("生成器动效修改器");
-            Editor_xHudGUI.CenterEditorWindow(new Vector2Int(600, 530), window);
+            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(600, 530), window);
 
             window.SetElementMotion(motion.Crc, motion.Rec);
             window.SetLibrarySetterMode(LibrarySetterMode.修改生成器项参数);
             window.SetButtonText("完成");
 
-            string hexcol = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
             window.SetTitle($"<color={hexcol}>{motionName} </color>");
             window.ShowModal();
             //window.Show();
@@ -2350,7 +2350,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 添加一个生成项 - 屏幕 Screen
         /// </summary>
         /// <param name="item"></param>
-        private void AddedSpawnItem_Screen(LayoutSpawnerItem item)
+        private void AddedSpawnItem_Screen(XHud_LayoutSpawner_Item item)
         {
             SerializedProperty sp_Item;
             if (SpawnItemList_Screen.arraySize <= 0)
@@ -2398,16 +2398,16 @@ namespace SevenStrikeModules.XHud.Hud
             sp_creator_Movement.enumValueIndex = (int)HudMotion_Movement.S_从下至上;
             sp_creator_Movement_Distance.floatValue = 100;
             sp_creator_Movement_Duration.floatValue = 1;
-            sp_creator_Movement_Ease.enumValueIndex = (int)Ease.OutQuart;
+            sp_creator_Movement_Ease.enumValueIndex = (int)EaseMode.OutQuart;
             sp_creator_Alpha_Duration.floatValue = 1;
-            sp_creator_Alpha_Ease.enumValueIndex = (int)Ease.InOutQuart;
+            sp_creator_Alpha_Ease.enumValueIndex = (int)EaseMode.InOutQuart;
 
             sp_recycle_Movement.enumValueIndex = (int)HudMotion_Movement.D_从上至下;
             sp_recycle_Movement_Distance.floatValue = 100;
             sp_recycle_Movement_Duration.floatValue = 1;
-            sp_recycle_Movement_Ease.enumValueIndex = (int)Ease.InOutQuart;
+            sp_recycle_Movement_Ease.enumValueIndex = (int)EaseMode.InOutQuart;
             sp_recycle_Alpha_Duration.floatValue = 1;
-            sp_recycle_Alpha_Ease.enumValueIndex = (int)Ease.OutQuart;
+            sp_recycle_Alpha_Ease.enumValueIndex = (int)EaseMode.OutQuart;
 
             sp_creator_anchor.enumValueIndex = (int)item.CreateArgs.anchor;
 
@@ -2434,15 +2434,15 @@ namespace SevenStrikeModules.XHud.Hud
         /// 载入一个生成元素 - 屏幕 Screen
         /// </summary>
         /// <param name="item"></param>
-        private void LoadSpawnItem_Screen(LayoutSpawnerItem item)
+        private void LoadSpawnItem_Screen(XHud_LayoutSpawner_Item item)
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
             for (int i = 0; i < mgr.Hud_ElementLibrarys.Count; i++)
             {
                 if (mgr.Hud_ElementLibrarys[i].LibraryName == LibName.stringValue)
                 {
-                    xHud_Module_Element ele = mgr.Hud_ElementLibrarys[i].ElementsLibrary_GetTargetElement(item.SpawnName);
-                    xHud_Module_Element Element = (xHud_Module_Element)PrefabUtility.InstantiatePrefab(ele);
+                    XHud_Module_Element ele = mgr.Hud_ElementLibrarys[i].ElementsLibrary_GetTargetElement(item.SpawnName);
+                    XHud_Module_Element Element = (XHud_Module_Element)PrefabUtility.InstantiatePrefab(ele);
                     RectTransform Root = mgr.hm_Layout_GetAnchor(item.CreateArgs.anchor);
                     Element.RectTransform.SetParent(Root);
                     Element.RectTransform.anchoredPosition3D = item.Position + item.Offset;
@@ -2467,7 +2467,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 卸载一个生成元素 - 屏幕 Screen
         /// </summary>
         /// <param name="item"></param>
-        private void UnLoadSpawnItem_Screen(LayoutSpawnerItem item)
+        private void UnLoadSpawnItem_Screen(XHud_LayoutSpawner_Item item)
         {
             if (item.SpawnedElementNode.Element == null)
                 return;
@@ -2488,7 +2488,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 添加一个生成项 - 世界 World
         /// </summary>
         /// <param name="item"></param>
-        private void AddedSpawnItem_World(LayoutSpawnerItem item)
+        private void AddedSpawnItem_World(XHud_LayoutSpawner_Item item)
         {
             SerializedProperty sp_Item;
             if (SpawnItemList_World.arraySize <= 0)
@@ -2532,16 +2532,16 @@ namespace SevenStrikeModules.XHud.Hud
             sp_creator_Movement.enumValueIndex = (int)HudMotion_Movement.S_从下至上;
             sp_creator_Movement_Distance.floatValue = 100;
             sp_creator_Movement_Duration.floatValue = 1;
-            sp_creator_Movement_Ease.enumValueIndex = (int)Ease.OutQuart;
+            sp_creator_Movement_Ease.enumValueIndex = (int)EaseMode.OutQuart;
             sp_creator_Alpha_Duration.floatValue = 1;
-            sp_creator_Alpha_Ease.enumValueIndex = (int)Ease.InOutQuart;
+            sp_creator_Alpha_Ease.enumValueIndex = (int)EaseMode.InOutQuart;
 
             sp_recycle_Movement.enumValueIndex = (int)HudMotion_Movement.D_从上至下;
             sp_recycle_Movement_Distance.floatValue = 100;
             sp_recycle_Movement_Duration.floatValue = 1;
-            sp_recycle_Movement_Ease.enumValueIndex = (int)Ease.InOutQuart;
+            sp_recycle_Movement_Ease.enumValueIndex = (int)EaseMode.InOutQuart;
             sp_recycle_Alpha_Duration.floatValue = 1;
-            sp_recycle_Alpha_Ease.enumValueIndex = (int)Ease.OutQuart;
+            sp_recycle_Alpha_Ease.enumValueIndex = (int)EaseMode.OutQuart;
 
             sp_SpawnName.stringValue = item.SpawnName;
             sp_Indicator.stringValue = "Indicator_" + item.SpawnName;
@@ -2563,7 +2563,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 卸载一个生成元素 - 世界 World
         /// </summary>
         /// <param name="item"></param>
-        private void UnLoadSpawnItem_World(LayoutSpawnerItem item)
+        private void UnLoadSpawnItem_World(XHud_LayoutSpawner_Item item)
         {
             if (item.SpawnedElementNode.Element == null)
                 return;
@@ -2575,15 +2575,15 @@ namespace SevenStrikeModules.XHud.Hud
         /// 载入一个生成元素 - 世界 World
         /// </summary>
         /// <param name="item"></param>
-        private void LoadSpawnItem_World(LayoutSpawnerItem item)
+        private void LoadSpawnItem_World(XHud_LayoutSpawner_Item item)
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
             for (int i = 0; i < mgr.Hud_ElementLibrarys.Count; i++)
             {
                 if (mgr.Hud_ElementLibrarys[i].LibraryName == LibName.stringValue)
                 {
-                    xHud_Module_Element ele = mgr.Hud_ElementLibrarys[i].ElementsLibrary_GetTargetElement(item.SpawnName);
-                    xHud_Module_Element Element = (xHud_Module_Element)PrefabUtility.InstantiatePrefab(ele);
+                    XHud_Module_Element ele = mgr.Hud_ElementLibrarys[i].ElementsLibrary_GetTargetElement(item.SpawnName);
+                    XHud_Module_Element Element = (XHud_Module_Element)PrefabUtility.InstantiatePrefab(ele);
                     RectTransform Root = mgr.hm_GetAnchorRoot(HudSpace.世界空间);
                     Element.RectTransform.SetParent(Root);
                     Element.RectTransform.position = item.Position + item.Offset;

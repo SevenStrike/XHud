@@ -12,7 +12,7 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEngine;
     using Object = UnityEngine.Object;
 
-    public class Editor_xHud_LibrarySetTool_Transition : EditorWindow
+    public class Editor_XHud_LibrarySetTool_Transition : EditorWindow
     {
         private SerializedObject BaseObject;
         private SerializedProperty
@@ -128,9 +128,9 @@ namespace SevenStrikeModules.XHud.Hud
         public string ButtonText_Cancel;
 
         [SerializeField]
-        private xHud_LibraryArg_Transition TransitionNode;
+        private XHud_LibraryArg_Transition TransitionNode;
         [SerializeField]
-        private xHud_LibraryArg_Transition OriginTransitionNode;
+        private XHud_LibraryArg_Transition OriginTransitionNode;
 
         private Color SepLineColor = new Color(1, 1, 1, 0.15f);
         private Color MessageColor = new Color(1, 1, 1, 0.62f);
@@ -138,15 +138,15 @@ namespace SevenStrikeModules.XHud.Hud
 
         private Rect draw_rect;
         private Rect dragarea;
-        private xHud_Library_Transition Target_Hud_TransitionLibrary;
+        private XHud_Library_Transition Target_Hud_TransitionLibrary;
         private string Title;
 
         private void OnDisable()
         {
-            Editor_xHudGUI.EditorData_Set_With_String("XED_Transition_Bg_Grid_ColorA", xHud_Utilitys.Color_To_String(sp_BgGrid_Color_A.colorValue));
-            Editor_xHudGUI.EditorData_Set_With_String("XED_Transition_Bg_Grid_ColorB", xHud_Utilitys.Color_To_String(sp_BgGrid_Color_B.colorValue));
-            Editor_xHudGUI.EditorData_Set_With_String("XED_Transition_Bg_Grid_Tilling", sp_BgGrid_Tilling_multiply.floatValue.ToString("F2"));
-            Editor_xHudGUI.EditorData_Set_With_String("XED_Transition_Bg_Path", AssetDatabase.GetAssetPath(sp_Preview_Texture_Bg.objectReferenceValue));
+            Editor_XHud_GUI.EditorData_Set_With_String("XED_Transition_Bg_Grid_ColorA", XHud_Utilitys.Color_To_String(sp_BgGrid_Color_A.colorValue));
+            Editor_XHud_GUI.EditorData_Set_With_String("XED_Transition_Bg_Grid_ColorB", XHud_Utilitys.Color_To_String(sp_BgGrid_Color_B.colorValue));
+            Editor_XHud_GUI.EditorData_Set_With_String("XED_Transition_Bg_Grid_Tilling", sp_BgGrid_Tilling_multiply.floatValue.ToString("F2"));
+            Editor_XHud_GUI.EditorData_Set_With_String("XED_Transition_Bg_Path", AssetDatabase.GetAssetPath(sp_Preview_Texture_Bg.objectReferenceValue));
         }
 
         private void OnEnable()
@@ -172,18 +172,18 @@ namespace SevenStrikeModules.XHud.Hud
 
             LoadPreviewTexture();
 
-            if (Editor_xHudGUI.EditorData_Has_String("XED_Transition_Bg_Grid_ColorA"))
-                sp_BgGrid_Color_A.colorValue = xHud_Utilitys.Color_From_String(Editor_xHudGUI.EditorData_Get_With_String("XED_Transition_Bg_Grid_ColorA"), false);
+            if (Editor_XHud_GUI.EditorData_Has_String("XED_Transition_Bg_Grid_ColorA"))
+                sp_BgGrid_Color_A.colorValue = XHud_Utilitys.Color_From_String(Editor_XHud_GUI.EditorData_Get_With_String("XED_Transition_Bg_Grid_ColorA"), false);
             else
                 sp_BgGrid_Color_A.colorValue = Color.white * 0.509f;
 
-            if (Editor_xHudGUI.EditorData_Has_String("XED_Transition_Bg_Grid_ColorB"))
-                sp_BgGrid_Color_B.colorValue = xHud_Utilitys.Color_From_String(Editor_xHudGUI.EditorData_Get_With_String("XED_Transition_Bg_Grid_ColorB"), false);
+            if (Editor_XHud_GUI.EditorData_Has_String("XED_Transition_Bg_Grid_ColorB"))
+                sp_BgGrid_Color_B.colorValue = XHud_Utilitys.Color_From_String(Editor_XHud_GUI.EditorData_Get_With_String("XED_Transition_Bg_Grid_ColorB"), false);
             else
                 sp_BgGrid_Color_B.colorValue = Color.white * 0.376f;
 
-            if (Editor_xHudGUI.EditorData_Has_String("XED_Transition_Bg_Grid_Tilling"))
-                sp_BgGrid_Tilling_multiply.floatValue = float.Parse(Editor_xHudGUI.EditorData_Get_With_String("XED_Transition_Bg_Grid_Tilling"));
+            if (Editor_XHud_GUI.EditorData_Has_String("XED_Transition_Bg_Grid_Tilling"))
+                sp_BgGrid_Tilling_multiply.floatValue = float.Parse(Editor_XHud_GUI.EditorData_Get_With_String("XED_Transition_Bg_Grid_Tilling"));
             else
                 sp_BgGrid_Tilling_multiply.floatValue = 5;
 
@@ -191,20 +191,20 @@ namespace SevenStrikeModules.XHud.Hud
             sp_BgGrid_Color_B.serializedObject.ApplyModifiedProperties();
             sp_BgGrid_Tilling_multiply.serializedObject.ApplyModifiedProperties();
 
-            icon_libsetter_transition = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Transition_Setter/logo");
+            icon_libsetter_transition = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/logo");
 
-            Font_Bold = Editor_xHudGUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_xHudGUI.GetFont("SS_Editor_Dialog");
+            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
+            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
 
-            leftarr_p = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Transition_Setter/left_arrow_p");
-            leftarr_r = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Transition_Setter/left_arrow_r");
-            rightarr_p = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Transition_Setter/right_arrow_p");
-            rightarr_r = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Transition_Setter/right_arrow_r");
+            leftarr_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/left_arrow_p");
+            leftarr_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/left_arrow_r");
+            rightarr_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/right_arrow_p");
+            rightarr_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/right_arrow_r");
 
-            stop_r = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Transition_Setter/prw_stop_r");
-            stop_p = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Transition_Setter/prw_stop_p");
-            play_r = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Transition_Setter/prw_play_r");
-            play_p = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Transition_Setter/prw_play_p");
+            stop_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/prw_stop_r");
+            stop_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/prw_stop_p");
+            play_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/prw_play_r");
+            play_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/prw_play_p");
 
             TransitionDescription = "转场说明内容";
             TransitionName = "转场名称";
@@ -250,17 +250,17 @@ namespace SevenStrikeModules.XHud.Hud
 
             #region 序号
             drawelement_rect.Set(rect.x + 15, rect.y + 3, 30, 20);
-            Editor_xHudGUI.Gui_Labelfield(drawelement_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
+            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
             #endregion
 
             #region 名称
             drawelement_rect.Set(rect.x + 40, rect.y, rect.width - 80, rect.height);
-            Editor_xHudGUI.Gui_Labelfield(drawelement_rect, tex.name, HudFilled.无, HudColor.无, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 12, TextClipping.Ellipsis);
+            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, tex.name, HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 12, TextClipping.Ellipsis);
             #endregion
 
             #region 贴图
             drawelement_rect.Set(rect.width - 50, rect.y + rect.height * (0.3f / 2), rect.height * 0.7f, rect.height * 0.7f);
-            Editor_xHudGUI.Gui_Icon(drawelement_rect, tex);
+            Editor_XHud_GUI.Gui_Icon(drawelement_rect, tex);
             #endregion           
         }
 
@@ -289,7 +289,7 @@ namespace SevenStrikeModules.XHud.Hud
                 {
                     // 高亮标记表示选中
                     item_rect.Set(1, i * sp_itemHeight.floatValue + 10, 5, 5);
-                    EditorGUI.DrawRect(item_rect, xHud_Dashboard.Theme_Primary);
+                    EditorGUI.DrawRect(item_rect, XHud_Dashboard.Theme_Primary);
                     // 高亮背景表示选中
                     item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
                     EditorGUI.DrawRect(item_rect, SelectedBg);
@@ -383,20 +383,20 @@ namespace SevenStrikeModules.XHud.Hud
             draw_rect.Set(0, 0, position.width, position.height);
 
             draw_rect.Set(26, 15, 48, 48);
-            Editor_xHudGUI.Gui_Icon(draw_rect, icon_libsetter_transition);
+            Editor_XHud_GUI.Gui_Icon(draw_rect, icon_libsetter_transition);
 
             draw_rect.Set(rect.x + 100, rect.y + 15, rect.width - 80, 30);
-            Editor_xHudGUI.Gui_Labelfield(draw_rect, Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
+            Editor_XHud_GUI.Gui_Labelfield(draw_rect, Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
 
             draw_rect.Set(rect.x + 102, rect.y + 60, 200, 1);
-            Editor_xHudGUI.Gui_Box(draw_rect, SepLineColor);
+            Editor_XHud_GUI.Gui_Box(draw_rect, SepLineColor);
 
             draw_rect.Set(rect.x + 26, rect.y + 80, rect.width - 45, rect.height);
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(draw_rect, "以下为待入库的转场资源参数与效果的预览，您可以检查即将入库的转场资源是否符合您的要求，同时您可以再次调整即将入库的转场资源！(请确保导入的序列图片颜色空间匹配您的渲染管线！)", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(draw_rect, "以下为待入库的转场资源参数与效果的预览，您可以检查即将入库的转场资源是否符合您的要求，同时您可以再次调整即将入库的转场资源！(请确保导入的序列图片颜色空间匹配您的渲染管线！)", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
 
             DateTimes = DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss:ff");
             draw_rect.Set(rect.x + 150, rect.y + 15, rect.width - 180, rect.height);
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(draw_rect, DateTimes, HudFilled.无, HudColor.无, DateTimeColor, TextAnchor.UpperRight, new Vector2(0, 0), 13, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(draw_rect, DateTimes, HudFilled.无, HudColor.无, DateTimeColor, TextAnchor.UpperRight, new Vector2(0, 0), 13, true, Font_Light);
 
             #region 数值关联
             if (sp_Frames.arraySize > 0)
@@ -425,7 +425,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             draw_rect.Set(rect.width - 527, rect.height - 230 + Added_Input_Height, 230, 60);
-            sp_TransitionName.stringValue = Editor_xHudGUI.Gui_TextField(draw_rect, sp_TransitionName.stringValue, LibName_color, 12);
+            sp_TransitionName.stringValue = Editor_XHud_GUI.Gui_TextField(draw_rect, sp_TransitionName.stringValue, LibName_color, 12);
             sp_TransitionName.serializedObject.ApplyModifiedProperties();
             #endregion
 
@@ -444,23 +444,23 @@ namespace SevenStrikeModules.XHud.Hud
                     Description_Color = Color.white;
             }
             draw_rect.Set(rect.width - 285, rect.height - 230 + Added_Input_Height, 260, 60);
-            sp_TransitionDescription.stringValue = Editor_xHudGUI.Gui_TextField(draw_rect, sp_TransitionDescription.stringValue, Description_Color, 12);
+            sp_TransitionDescription.stringValue = Editor_XHud_GUI.Gui_TextField(draw_rect, sp_TransitionDescription.stringValue, Description_Color, 12);
             sp_TransitionDescription.serializedObject.ApplyModifiedProperties();
             #endregion
             #endregion
 
             #region 转场帧信息
             float Added_Info_Height = 30;
-            string hexcol = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
-            Editor_xHudGUI.Gui_Labelfield(new Rect(rect.x + 275, rect.height - 100 + Added_Info_Height, 200, 15), $"总帧数：<color={hexcol}> {sp_TotalFramesCount.intValue} </color> 张", HudFilled.无, HudColor.无, Color.white, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 15, Font_Bold);
+            string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 275, rect.height - 100 + Added_Info_Height, 200, 15), $"总帧数：<color={hexcol}> {sp_TotalFramesCount.intValue} </color> 张", HudFilled.无, HudColor.无, Color.white, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 15, Font_Bold);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin(new Rect(rect.x + 275, rect.height - 75 + Added_Info_Height, 200, 15), $"尾帧 ：{sp_LastFrameIndex.intValue} 帧", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, false, false, true);
+            Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect.x + 275, rect.height - 75 + Added_Info_Height, 200, 15), $"尾帧 ：{sp_LastFrameIndex.intValue} 帧", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, false, false, true);
             #endregion
 
             #region 预览
 
             Rect rect_preview_group = new Rect(rect.width - 530, rect.y + 140, 510, 380);
-            Editor_xHudGUI.Gui_Group(rect_preview_group, HudFilled.纯色边框, HudColor.亮白, "序列帧预览器", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
+            Editor_XHud_GUI.Gui_Group(rect_preview_group, HudFilled.纯色边框, HudColor.亮白, "序列帧预览器", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
 
             if (TransitionNode.Frames != null && TransitionNode.Frames.Count > 0)
             {
@@ -499,7 +499,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                 draw_rect.Set(x, y + 15, textureWidth, textureHeight);
 
-                Editor_xHudGUI.Gui_Box(draw_rect, Color.black * 0.1f);
+                Editor_XHud_GUI.Gui_Box(draw_rect, Color.black * 0.1f);
 
                 Preview_Material.SetColor("_Color", sp_Preview_Color.colorValue);
                 Preview_Material.SetFloat("_Alpha", sp_Preview_Color.colorValue.a);
@@ -542,32 +542,32 @@ namespace SevenStrikeModules.XHud.Hud
 
                 #region 颜色
                 draw_rect.Set(rect_preview.x + rect_preview.width - 50, rect_preview_group.y + 3 + margin, 40, 20);
-                sp_Preview_Color.colorValue = Editor_xHudGUI.Gui_ColorField(draw_rect, sp_Preview_Color.colorValue);
+                sp_Preview_Color.colorValue = Editor_XHud_GUI.Gui_ColorField(draw_rect, sp_Preview_Color.colorValue);
                 #endregion
 
                 #region Grid A颜色
                 draw_rect.Set(rect_preview.x + rect_preview.width - 100, rect_preview_group.y + 3 + margin, 40, 20);
-                sp_BgGrid_Color_A.colorValue = Editor_xHudGUI.Gui_ColorField(draw_rect, sp_BgGrid_Color_A.colorValue);
+                sp_BgGrid_Color_A.colorValue = Editor_XHud_GUI.Gui_ColorField(draw_rect, sp_BgGrid_Color_A.colorValue);
                 #endregion
 
                 #region Grid B颜色
                 draw_rect.Set(rect_preview.x + rect_preview.width - 150, rect_preview_group.y + 3 + margin, 40, 20);
-                sp_BgGrid_Color_B.colorValue = Editor_xHudGUI.Gui_ColorField(draw_rect, sp_BgGrid_Color_B.colorValue);
+                sp_BgGrid_Color_B.colorValue = Editor_XHud_GUI.Gui_ColorField(draw_rect, sp_BgGrid_Color_B.colorValue);
                 #endregion
 
                 #region 背景平铺
                 draw_rect.Set(rect_preview.x + rect_preview.width - 235, rect_preview_group.y + 3 + margin, 65, 20);
-                Editor_xHudGUI.Gui_Property_Field(draw_rect, "平铺", sp_BgGrid_Tilling_multiply, 0, 30);
+                Editor_XHud_GUI.Gui_Property_Field(draw_rect, "平铺", sp_BgGrid_Tilling_multiply, 0, 30);
                 #endregion
 
                 #region 跳帧
                 draw_rect.Set(rect_preview.x + rect_preview.width - 310, rect_preview_group.y + 3 + margin, 65, 20);
-                Editor_xHudGUI.Gui_Property_Field(draw_rect, "跳帧", sp_SkipFrame, 0, 30);
+                Editor_XHud_GUI.Gui_Property_Field(draw_rect, "跳帧", sp_SkipFrame, 0, 30);
                 #endregion
 
                 #region 转场图片
                 draw_rect.Set(rect_preview.x + rect_preview.width - 495, rect_preview_group.y + 3 + margin, 170, 20);
-                Editor_xHudGUI.Gui_Property_Field(draw_rect, "预览图", sp_Preview_Texture_Bg, 0, 40);
+                Editor_XHud_GUI.Gui_Property_Field(draw_rect, "预览图", sp_Preview_Texture_Bg, 0, 40);
                 #endregion
 
                 #region 播放停止模式
@@ -581,7 +581,7 @@ namespace SevenStrikeModules.XHud.Hud
                     stopmode = "手动复位";
                 }
                 draw_rect.Set(rect_preview.x + rect_preview.width - 210, rect_preview.y + 316 + margin + PreviewActiveX_added_height, 40, 20);
-                if (Editor_xHudGUI.Gui_Button(draw_rect, null, null, TextAnchor.MiddleCenter, false, stopmode, "", Color.clear, xHud_Dashboard.Theme_Primary, HudFilled.透明, 12))
+                if (Editor_XHud_GUI.Gui_Button(draw_rect, null, null, TextAnchor.MiddleCenter, false, stopmode, "", Color.clear, XHud_Dashboard.Theme_Primary, HudFilled.透明, 12))
                 {
                     StoppedResetMode = !StoppedResetMode;
                 }
@@ -590,7 +590,7 @@ namespace SevenStrikeModules.XHud.Hud
                 #region 进度条
                 draw_rect.Set(rect_preview.x + 15, rect_preview.y + 316 + margin + PreviewActiveX_added_height, rect_preview.width - 245, 18);
                 EditorGUI.BeginChangeCheck();
-                PreviewData_Index = Editor_xHudGUI.Gui_Slider(draw_rect, "进度", PreviewData_Index, 0, TransitionNode.Frames.Count - 1);
+                PreviewData_Index = Editor_XHud_GUI.Gui_Slider(draw_rect, "进度", PreviewData_Index, 0, TransitionNode.Frames.Count - 1);
                 if (EditorGUI.EndChangeCheck())
                 {
                     StopPreviewUpdate();
@@ -613,7 +613,7 @@ namespace SevenStrikeModules.XHud.Hud
                     inverted = "反色";
                 }
                 draw_rect.Set(rect_preview.x + rect_preview.width - 155, rect_preview.y + 316 + margin + PreviewActiveX_added_height, 40, 20);
-                if (Editor_xHudGUI.Gui_Button(draw_rect, null, null, TextAnchor.MiddleCenter, false, inverted, "", Color.clear, xHud_Dashboard.Theme_Primary, HudFilled.透明, 12))
+                if (Editor_XHud_GUI.Gui_Button(draw_rect, null, null, TextAnchor.MiddleCenter, false, inverted, "", Color.clear, XHud_Dashboard.Theme_Primary, HudFilled.透明, 12))
                 {
                     InvertChannel = !InvertChannel;
                     StopPreviewUpdate();
@@ -625,7 +625,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                 #region 播放
                 draw_rect.Set(rect_preview.x + rect_preview.width - 98, rect_preview.y + 319 + margin + PreviewActiveX_added_height, 14, 14);
-                if (!IsPreviewing && Editor_xHudGUI.Gui_Button(draw_rect, play_r, play_p, true, "", "", Color.white))
+                if (!IsPreviewing && Editor_XHud_GUI.Gui_Button(draw_rect, play_r, play_p, true, "", "", Color.white))
                 {
                     IsPreviewing = true;
                     StartPreviewUpdate();
@@ -634,7 +634,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                 #region 停止
                 draw_rect.Set(rect_preview.x + rect_preview.width - 98, rect_preview.y + 319 + margin + PreviewActiveX_added_height, 14, 14);
-                if (IsPreviewing && Editor_xHudGUI.Gui_Button(draw_rect, stop_r, stop_p, true, "", "", Color.white))
+                if (IsPreviewing && Editor_XHud_GUI.Gui_Button(draw_rect, stop_r, stop_p, true, "", "", Color.white))
                 {
                     IsPreviewing = false;
                     StopPreviewUpdate();
@@ -644,7 +644,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                 #region 左一帧
                 draw_rect.Set(rect_preview.x + rect_preview.width - 60, rect_preview.y + 319 + margin + PreviewActiveX_added_height, 14, 14);
-                if (Editor_xHudGUI.Gui_Button(draw_rect, leftarr_r, leftarr_p, true, "", "", Color.white))
+                if (Editor_XHud_GUI.Gui_Button(draw_rect, leftarr_r, leftarr_p, true, "", "", Color.white))
                 {
                     FrameMoveBackward();
                 }
@@ -652,7 +652,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                 #region 右一帧
                 draw_rect.Set(rect_preview.x + rect_preview.width - 25, rect_preview.y + 319 + margin + PreviewActiveX_added_height, 14, 14);
-                if (Editor_xHudGUI.Gui_Button(draw_rect, rightarr_r, rightarr_p, true, "", "", Color.white))
+                if (Editor_XHud_GUI.Gui_Button(draw_rect, rightarr_r, rightarr_p, true, "", "", Color.white))
                 {
                     FrameMoveForward();
                 }
@@ -660,8 +660,8 @@ namespace SevenStrikeModules.XHud.Hud
 
                 #region 帧显示
                 draw_rect.Set(rect_preview.x + rect_preview.width - 70, rect_preview.y + rect_preview.height - 8, 50, 20);
-                GUI.backgroundColor = xHud_Dashboard.Theme_Primary;
-                Editor_xHudGUI.Gui_Labelfield_Thin(draw_rect, $"{PreviewData_Index} / {sp_TotalFramesCount.intValue}", HudFilled.实体, HudColor.亮白, Color.black, TextAnchor.MiddleCenter, new Vector2(-2, -1), 10, false, false, true);
+                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                Editor_XHud_GUI.Gui_Labelfield_Thin(draw_rect, $"{PreviewData_Index} / {sp_TotalFramesCount.intValue}", HudFilled.实体, HudColor.亮白, Color.black, TextAnchor.MiddleCenter, new Vector2(-2, -1), 10, false, false, true);
                 GUI.backgroundColor = Color.white;
                 #endregion
                 #endregion
@@ -669,7 +669,7 @@ namespace SevenStrikeModules.XHud.Hud
             else
             {
                 draw_rect.Set(rect.width - 530, rect.y + 330, 510, 20);
-                Editor_xHudGUI.Gui_Labelfield(draw_rect, "请先添加序列帧图像", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleCenter, Vector2.zero, 12, Font_Light);
+                Editor_XHud_GUI.Gui_Labelfield(draw_rect, "请先添加序列帧图像", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleCenter, Vector2.zero, 12, Font_Light);
             }
 
             GUI.backgroundColor = Color.white;
@@ -677,7 +677,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             #region 序列帧列表
             Rect rect_transitionlist_group = new Rect(rect.x + 20, rect.y + 140, 245, 518);
-            Editor_xHudGUI.Gui_Group(rect_transitionlist_group, HudFilled.纯色边框, HudColor.亮白, "序列帧列表", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
+            Editor_XHud_GUI.Gui_Group(rect_transitionlist_group, HudFilled.纯色边框, HudColor.亮白, "序列帧列表", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
             DrawTransitionInfoList_Original(rect_transitionlist_group);
             #endregion
 
@@ -714,7 +714,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(631);
+            Editor_XHud_GUI.Gui_Layout_Space(631);
 
             DialogType_Buttons();
 
@@ -804,15 +804,15 @@ namespace SevenStrikeModules.XHud.Hud
         #region 辅助
         private void UpdateToLibrary()
         {
-            string colorhex = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
-            xHud_LibraryArg_Transition info = new xHud_LibraryArg_Transition();
+            XHud_LibraryArg_Transition info = new XHud_LibraryArg_Transition();
             info.CopyData(TransitionNode);
             info.Name = sp_TransitionName.stringValue;
             info.Description = sp_TransitionDescription.stringValue;
             Target_Hud_TransitionLibrary.TransitionsLibrary_Replace(ModifiedIndex, info);
 
-            Editor_xHudGUI.Open(xHudDialogType.确认, "XHud 转场资源修改器消息", "更新完成", $"转场资源已更新完成！", "明白");
+            Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud 转场资源修改器消息", "更新完成", $"转场资源已更新完成！", "明白");
 
             Close();
         }
@@ -859,37 +859,37 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         private void DialogType_Buttons()
         {
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_FlexSpace();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_FlexSpace();
 
-            if (Editor_xHudGUI.Gui_Layout_Button(ButtonText_Cancel, "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Cancel))
+            if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Cancel, "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Cancel))
             {
                 Close();
             }
-            Editor_xHudGUI.Gui_Layout_Space(ButtonDistance);
-            GUI.backgroundColor = xHud_Dashboard.Theme_Primary;
-            if (Editor_xHudGUI.Gui_Layout_Button(ButtonText_Ok, "", HudFilled.实体, HudColor.亮白, xHud_Utilitys.GetBrightnessLimite(xHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Ok))
+            Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
+            GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+            if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Ok, "", HudFilled.实体, HudColor.亮白, XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Ok))
             {
                 UpdateToLibrary();
                 return;
             }
             GUI.backgroundColor = Color.white;
 
-            Editor_xHudGUI.Gui_Layout_Space(25);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(25);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
         }
 
-        public void Set_TransitionNode(xHud_LibraryArg_Transition node)
+        public void Set_TransitionNode(XHud_LibraryArg_Transition node)
         {
             TransitionNode.CopyData(node);
         }
 
-        public void Set_Target_Hud_TransitionLibrary(xHud_Library_Transition lib)
+        public void Set_Target_Hud_TransitionLibrary(XHud_Library_Transition lib)
         {
             Target_Hud_TransitionLibrary = lib;
         }
 
-        public void Set_OriginTransitionNode(xHud_LibraryArg_Transition node)
+        public void Set_OriginTransitionNode(XHud_LibraryArg_Transition node)
         {
             OriginTransitionNode.CopyData(node);
         }
@@ -955,10 +955,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         private void LoadPreviewTexture()
         {
-            string path = Editor_xHudGUI.EditorData_Get_With_String("XED_Transition_Bg_Path");
+            string path = Editor_XHud_GUI.EditorData_Get_With_String("XED_Transition_Bg_Path");
             Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
             if (tex == null)
-                sp_Preview_Texture_Bg.objectReferenceValue = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Transition_Setter/defaultbg");
+                sp_Preview_Texture_Bg.objectReferenceValue = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/defaultbg");
             else
                 sp_Preview_Texture_Bg.objectReferenceValue = tex;
         }

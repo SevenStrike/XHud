@@ -3,7 +3,6 @@ namespace SevenStrikeModules.XHud.Hud
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
     using TMPro;
-    using UnityEditor;
     using UnityEngine;
     using UnityEngine.Events;
 
@@ -11,7 +10,7 @@ namespace SevenStrikeModules.XHud.Hud
     /// <summary>
     /// 间距值
     /// </summary>
-    public class SpacingValue
+    public class XHud_TmpTextSpacingValue
     {
         /// <summary>
         /// 字符间距
@@ -30,7 +29,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         public float space_Paragraph;
 
-        public SpacingValue(float value_cha, float value_word, float value_line, float value_para)
+        public XHud_TmpTextSpacingValue(float value_cha, float value_word, float value_line, float value_para)
         {
             space_Character = value_cha;
             space_Word = value_word;
@@ -39,7 +38,7 @@ namespace SevenStrikeModules.XHud.Hud
         }
     }
 
-    public class xHud_Module_TmpText : TextMeshProUGUI
+    public class XHud_Module_TmpText : TextMeshProUGUI
     {
         [SerializeField]
         /// <summary>
@@ -80,25 +79,25 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// Hud管理器
         /// </summary>
-        private xHud_Manager mgr;
+        private XHud_Manager mgr;
 
         [SerializeField]
         /// <summary>
         /// 字体样式 - 本地
         /// </summary>
-        public xHud_LibraryArg_TextStyle TextStyleInfo = new xHud_LibraryArg_TextStyle();
+        public XHud_LibraryArg_TextStyle TextStyleInfo = new XHud_LibraryArg_TextStyle();
         [SerializeField]
         /// <summary>
         /// 字体样式 - 库
         /// </summary>
-        public xHud_LibraryArg_TextStyle TextStyleInfo_Library = new xHud_LibraryArg_TextStyle();
+        public XHud_LibraryArg_TextStyle TextStyleInfo_Library = new XHud_LibraryArg_TextStyle();
 
         protected override void OnEnable()
         {
             base.OnEnable();
             if (!Application.isPlaying)
                 if (mgr == null)
-                    mgr = FindFirstObjectByType<xHud_Manager>();
+                    mgr = FindFirstObjectByType<XHud_Manager>();
         }
 
         protected override void Start()
@@ -160,7 +159,7 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (mgr == null)
                 {
-                    mgr = FindFirstObjectByType<xHud_Manager>();
+                    mgr = FindFirstObjectByType<XHud_Manager>();
                 }
             }
 
@@ -179,7 +178,7 @@ namespace SevenStrikeModules.XHud.Hud
                 #region 从库中获取字体样式资源到 TextStyleInfo
                 if (Application.isPlaying)
                 {
-                    TextStyleInfo_Library = xHud_Manager.Instance.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(StyleName);
+                    TextStyleInfo_Library = XHud_Manager.Instance.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(StyleName);
                 }
                 else
                 {
@@ -438,7 +437,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     else
                     {
-                        TextStyleInfo.tmp_FontSizeMin_globalscaled = xHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.tmp_FontSizeMin;
+                        TextStyleInfo.tmp_FontSizeMin_globalscaled = XHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.tmp_FontSizeMin;
                     }
 
                     if (TextStyleInfo.tmp_FontSizeMin_globalscaled != fontSizeMin)
@@ -463,7 +462,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     else
                     {
-                        TextStyleInfo.tmp_FontSizeMax_globalscaled = xHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.tmp_FontSizeMax;
+                        TextStyleInfo.tmp_FontSizeMax_globalscaled = XHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.tmp_FontSizeMax;
                     }
 
                     if (TextStyleInfo.tmp_FontSizeMax_globalscaled != fontSizeMax)
@@ -502,7 +501,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     else
                     {
-                        TextStyleInfo.tmp_size_globalscaled = xHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.tmp_size;
+                        TextStyleInfo.tmp_size_globalscaled = XHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.tmp_size;
                     }
 
                     if (TextStyleInfo.tmp_size_globalscaled != fontSize || m_fontSizeBase != m_fontSize)
@@ -606,7 +605,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 从文字样式添加器反向更新文字样式
         /// </summary>
         /// <param tweenName="styleinfo"></param>
-        public void tmp_Update_Style_LibrarySetter(xHud_LibraryArg_TextStyle styleinfo)
+        public void tmp_Update_Style_LibrarySetter(XHud_LibraryArg_TextStyle styleinfo)
         {
             TextStyleInfo = styleinfo;
         }
@@ -706,7 +705,7 @@ namespace SevenStrikeModules.XHud.Hud
         public void tmp_Set_Content(string content, bool ParseEscape = true)
         {
             if (ParseEscape)
-                base.text = xHud_Utilitys.ProcessEscapeSequences(content);
+                base.text = XHud_Utilitys.ProcessEscapeSequences(content);
             else
                 base.text = content;
         }
@@ -715,7 +714,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 从文字样式添加器反向更新文字样式
         /// </summary>
         /// <param tweenName="styleinfo"></param>
-        public void tmp_Set_Style_ForSetter(xHud_LibraryArg_TextStyle styleinfo)
+        public void tmp_Set_Style_ForSetter(XHud_LibraryArg_TextStyle styleinfo)
         {
             TextStyleInfo = styleinfo;
             //Text_Set_Alignment(styleinfo.ContentAnchor);

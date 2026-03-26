@@ -14,7 +14,7 @@ namespace SevenStrikeModules.XHud
     /// </summary>
     public class xHud_LibraryArg_Color
     {
-        public xHud_Module_Animator Animator;
+        public XHud_Module_Animator Animator;
         public string Name;
         public Color Color;
         public string Description;
@@ -44,7 +44,7 @@ namespace SevenStrikeModules.XHud
     }
 
     [CreateAssetMenu(fileName = "XHud_Library_Colors", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-Color (色卡库)", order = 0)]
-    public class xHud_Library_Colors : ScriptableObject
+    public class XHud_Library_Colors : ScriptableObject
     {
         public string LibraryName = "NewColorsLibrary";
 
@@ -507,7 +507,7 @@ namespace SevenStrikeModules.XHud
             {
                 templateColors[i] = new TemplateColors();
                 templateColors[i].Name = word_art[i];
-                templateColors[i].Color = xHud_Utilitys.Color_From_HexString(colors[i]);
+                templateColors[i].Color = XHud_Utilitys.Color_From_HexString(colors[i]);
                 templateColors[i].Description = colors[i];
                 ColorLibrary.Add(new XHud.xHud_LibraryArg_Color(templateColors[i].Name, templateColors[i].Color, templateColors[i].Description));
             }
@@ -536,7 +536,7 @@ namespace SevenStrikeModules.XHud
             {
                 templateColors[i] = new TemplateColors();
                 templateColors[i].Name = word_art[i];
-                templateColors[i].Color = xHud_Utilitys.Color_From_HexString(colors[i]);
+                templateColors[i].Color = XHud_Utilitys.Color_From_HexString(colors[i]);
                 templateColors[i].Description = colors[i];
                 ColorLibrary.Add(new XHud.xHud_LibraryArg_Color(templateColors[i].Name, templateColors[i].Color, templateColors[i].Description));
             }

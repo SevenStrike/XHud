@@ -21,7 +21,7 @@ namespace SevenStrikeModules.XHud
     /// <summary>
     /// Hud字体信息
     /// </summary>
-    public class xHud_LibraryArg_TextStyle
+    public class XHud_LibraryArg_TextStyle
     {
         #region 字段
         //----------------------------------------Based----------------------------------------//
@@ -409,7 +409,7 @@ namespace SevenStrikeModules.XHud
         /// 拷贝数据（主要用于脱离引用的实例化）
         /// </summary>
         /// <param tweenName="target"></param>
-        public void CopyData(xHud_LibraryArg_TextStyle target)
+        public void CopyData(XHud_LibraryArg_TextStyle target)
         {
             //----------------------------------------Based----------------------------------------//
             Name = target.Name;
@@ -494,7 +494,7 @@ namespace SevenStrikeModules.XHud
         /// 拷贝数据忽略名称和说明文字（主要用于脱离引用的实例化）
         /// </summary>
         /// <param tweenName="target"></param>
-        public void CopyData_WithoutType(xHud_LibraryArg_TextStyle target)
+        public void CopyData_WithoutType(XHud_LibraryArg_TextStyle target)
         {
             //----------------------------------------Based----------------------------------------//
             Type = target.Type;
@@ -578,17 +578,17 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="info"></param>
         /// <returns></returns>
-        public bool EqualsData(xHud_LibraryArg_TextStyle info)
+        public bool EqualsData(XHud_LibraryArg_TextStyle info)
         {
             if (info == null)
             {
                 return false;
             }
 
-            xHud_LibraryArg_TextStyle s_info = new xHud_LibraryArg_TextStyle();
+            XHud_LibraryArg_TextStyle s_info = new XHud_LibraryArg_TextStyle();
             s_info.CopyData_WithoutType(this);
 
-            xHud_LibraryArg_TextStyle v_info = new xHud_LibraryArg_TextStyle();
+            XHud_LibraryArg_TextStyle v_info = new XHud_LibraryArg_TextStyle();
             v_info.CopyData_WithoutType(info);
 
             string s = JsonUtility.ToJson(s_info);
@@ -605,7 +605,7 @@ namespace SevenStrikeModules.XHud
         /// 拷贝数据（主要用于脚本与库数据传递，所以忽略库开关属性）
         /// </summary>
         /// <param tweenName="target"></param>
-        public void CopyData_Ignored_LibraryToggle(xHud_LibraryArg_TextStyle target)
+        public void CopyData_Ignored_LibraryToggle(XHud_LibraryArg_TextStyle target)
         {
             //----------------------------------------Based----------------------------------------//
             Name = target.Name;
@@ -997,7 +997,7 @@ namespace SevenStrikeModules.XHud
         /// 间距值设置
         /// </summary>
         /// <param tweenName="values">间距值</param>
-        public void tmp_Set_SpacingSet(SpacingValue values)
+        public void tmp_Set_SpacingSet(XHud_TmpTextSpacingValue values)
         {
             if (values.space_Character != tmp_space_character)
             {
@@ -1195,11 +1195,11 @@ namespace SevenStrikeModules.XHud
     }
 
     [CreateAssetMenu(fileName = "XHud_Library_TextStyle", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-TextStyle (文字样式库)", order = 0)]
-    public class xHud_Library_TextStyle : ScriptableObject
+    public class XHud_Library_TextStyle : ScriptableObject
     {
         public string LibraryName = "NewTextStyleLibrary";
 
-        public List<xHud_LibraryArg_TextStyle> TextStyleLibrary = new List<xHud_LibraryArg_TextStyle>();
+        public List<XHud_LibraryArg_TextStyle> TextStyleLibrary = new List<XHud_LibraryArg_TextStyle>();
 
         public Font Preview_Font;
         public Color PreviewFontColor = Color.white;
@@ -1335,7 +1335,7 @@ namespace SevenStrikeModules.XHud
         /// 替换字体库样式
         /// </summary>
         /// <returns></returns>
-        public void TextStyle_Library_Replace(int index, xHud_LibraryArg_TextStyle info)
+        public void TextStyle_Library_Replace(int index, XHud_LibraryArg_TextStyle info)
         {
             TextStyleLibrary[index].CopyData_Ignored_LibraryToggle(info);
         }
@@ -1372,7 +1372,7 @@ namespace SevenStrikeModules.XHud
         /// 添加一个字体样式模版
         /// </summary>
         /// <param tweenName="info">文字样式信息类</param>
-        public void TextStyle_Library_Add(xHud_LibraryArg_TextStyle info)
+        public void TextStyle_Library_Add(XHud_LibraryArg_TextStyle info)
         {
             TextStyleLibrary.Add(info);
             if (act_on_TextStyleChanged != null)
@@ -1383,7 +1383,7 @@ namespace SevenStrikeModules.XHud
         /// 获取字体库所有样式
         /// </summary>
         /// <returns></returns>
-        public xHud_LibraryArg_TextStyle[] TextStyle_Library_GetAllStyle()
+        public XHud_LibraryArg_TextStyle[] TextStyle_Library_GetAllStyle()
         {
             return TextStyleLibrary.ToArray();
         }
@@ -1406,9 +1406,9 @@ namespace SevenStrikeModules.XHud
         /// 获取字体库所有样式 - Text
         /// </summary>
         /// <returns></returns>
-        public xHud_LibraryArg_TextStyle[] TextStyle_Library_GetAllStyle_With_Text()
+        public XHud_LibraryArg_TextStyle[] TextStyle_Library_GetAllStyle_With_Text()
         {
-            List<xHud_LibraryArg_TextStyle> info = new List<xHud_LibraryArg_TextStyle>();
+            List<XHud_LibraryArg_TextStyle> info = new List<XHud_LibraryArg_TextStyle>();
             for (int i = 0; i < TextStyleLibrary.Count; i++)
             {
                 if (TextStyleLibrary[i].Type == xHud_TextType.Text)
@@ -1436,9 +1436,9 @@ namespace SevenStrikeModules.XHud
         /// 获取字体库所有样式 - TmpText
         /// </summary>
         /// <returns></returns>
-        public xHud_LibraryArg_TextStyle[] TextStyle_Library_GetAllStyle_With_TmpText()
+        public XHud_LibraryArg_TextStyle[] TextStyle_Library_GetAllStyle_With_TmpText()
         {
-            List<xHud_LibraryArg_TextStyle> info = new List<xHud_LibraryArg_TextStyle>();
+            List<XHud_LibraryArg_TextStyle> info = new List<XHud_LibraryArg_TextStyle>();
             for (int i = 0; i < TextStyleLibrary.Count; i++)
             {
                 if (TextStyleLibrary[i].Type == xHud_TextType.TmpText)
@@ -1467,7 +1467,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="index"></param>
         /// <returns></returns>
-        public xHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(int index)
+        public XHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(int index)
         {
             if (index < TextStyleLibrary.Count)
                 return TextStyleLibrary[index];
@@ -1481,7 +1481,7 @@ namespace SevenStrikeModules.XHud
         /// <param tweenName="index"></param>
         /// <param tweenName="type"></param>
         /// <returns></returns>
-        public xHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(int index, xHud_TextType type)
+        public XHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(int index, xHud_TextType type)
         {
             if (index < TextStyleLibrary.Count)
                 if (TextStyleLibrary[index].Type == type)
@@ -1497,9 +1497,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="name"></param>
         /// <returns></returns>
-        public xHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(string name)
+        public XHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(string name)
         {
-            xHud_LibraryArg_TextStyle info = null;
+            XHud_LibraryArg_TextStyle info = null;
             for (int i = 0; i < TextStyleLibrary.Count; i++)
             {
                 if (TextStyleLibrary[i].Name == name)
@@ -1516,9 +1516,9 @@ namespace SevenStrikeModules.XHud
         /// <param tweenName="index"></param>
         /// <param tweenName="type"></param>
         /// <returns></returns>
-        public xHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(string name, xHud_TextType type)
+        public XHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(string name, xHud_TextType type)
         {
-            xHud_LibraryArg_TextStyle info = null;
+            XHud_LibraryArg_TextStyle info = null;
             for (int i = 0; i < TextStyleLibrary.Count; i++)
             {
                 if (TextStyleLibrary[i].Name == name && TextStyleLibrary[i].Type == type)
@@ -1534,9 +1534,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="type"></param>
         /// <returns></returns>
-        public xHud_LibraryArg_TextStyle TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType type)
+        public XHud_LibraryArg_TextStyle TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType type)
         {
-            List<xHud_LibraryArg_TextStyle> infos = new List<xHud_LibraryArg_TextStyle>();
+            List<XHud_LibraryArg_TextStyle> infos = new List<XHud_LibraryArg_TextStyle>();
             for (int i = 0; i < TextStyleLibrary.Count; i++)
             {
                 if (TextStyleLibrary[i].Type == type)

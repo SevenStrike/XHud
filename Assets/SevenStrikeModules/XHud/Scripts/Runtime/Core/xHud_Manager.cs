@@ -6,7 +6,7 @@ namespace SevenStrikeModules.XHud.Hud
     using SevenStrikeModules.XHud.Enums;
     using UnityEngine.UI;
     using UnityEngine.Events;
-    using DG.Tweening;
+    using SevenStrikeModules.XTween;
     using UnityEngine.Rendering.Universal;
     using SevenStrikeModules.XHud.Utilitys;
     using System;
@@ -19,7 +19,6 @@ namespace SevenStrikeModules.XHud.Hud
     using Image = UnityEngine.UI.Image;
     using UnityEngine.InputSystem.UI;
     using TMPro;
-    using UnityEditor.TerrainTools;
 
     #region CustomClass
 
@@ -44,7 +43,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// Hud元素
         /// </summary>
-        public xHud_Module_Element Element;
+        public XHud_Module_Element Element;
         /// <summary>
         /// 动画状态
         /// </summary>
@@ -81,7 +80,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 实例化锚点节点
         /// </summary>
-        /// <param tweenName="Name"></param>
+        /// <param name="Name"></param>
         public Anchor_Layout(string Name)
         {
             switch (Name)
@@ -182,7 +181,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 实例化锚点节点
         /// </summary>
-        /// <param tweenName="Name"></param>
+        /// <param name="Name"></param>
         public Safe_Structure(string Name)
         {
             switch (Name)
@@ -284,24 +283,24 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 初始化元素参数
         /// </summary>
-        /// <param tweenName="m_anchortype">目标固定锚点</param>
-        /// <param tweenName="m_movement">运动样式</param>
-        /// <param tweenName="m_distance">位移距离</param>
-        /// <param tweenName="m_movement_duration">动画速度 - 位移</param>
-        /// <param tweenName="m_movement_delay">动画延迟 - 位移</param>
-        /// <param tweenName="m_movement_curve">位移运动曲线</param>
-        /// <param tweenName="m_movement_ease">位移运动缓动参数</param>
-        /// <param tweenName="m_alpha_duration">动画速度 - 透明度_Alpha</param>
-        /// <param tweenName="m_alpha_delay">动画延迟 - 透明度_Alpha</param>
-        /// <param tweenName="m_alpha_curve">透明度变化曲线</param>
-        /// <param tweenName="m_alpha_ease">透明度变化缓动参数</param>
-        /// <param tweenName="m_rotation">旋转样式</param>
-        /// <param tweenName="m_degree">旋转角度</param>
-        /// <param tweenName="m_rotation_duration">动画速度 - 旋转_Rotation</param>
-        /// <param tweenName="m_rotation_delay">动画延迟 - 旋转_Rotation</param>
-        /// <param tweenName="m_rotation_curve">旋转运动曲线</param>
-        /// <param tweenName="m_rotation_ease">旋转运动缓动参数</param>
-        public Motion_Creator(HudAnchor m_anchortype = HudAnchor.中心, HudMotion_Movement m_movement = HudMotion_Movement.D_从上至下, float m_distance = 100, float m_movement_duration = 1f, float m_movement_delay = 0f, AnimationCurve m_movement_curve = null, string m_movement_curve_name = "", Ease m_movement_ease = Ease.OutQuart, float m_alpha_duration = 1f, float m_alpha_delay = 0f, AnimationCurve m_alpha_curve = null, string m_alpha_curve_name = "", Ease m_alpha_ease = Ease.OutQuart, HudMotion_Rotation m_rotation = HudMotion_Rotation.A_无旋转, float m_degree = 0, float m_rotation_duration = 1f, float m_rotation_delay = 0f, AnimationCurve m_rotation_curve = null, string m_rotation_curve_name = "", Ease m_rotation_ease = Ease.OutQuart)
+        /// <param name="m_anchortype">目标固定锚点</param>
+        /// <param name="m_movement">运动样式</param>
+        /// <param name="m_distance">位移距离</param>
+        /// <param name="m_movement_duration">动画速度 - 位移</param>
+        /// <param name="m_movement_delay">动画延迟 - 位移</param>
+        /// <param name="m_movement_curve">位移运动曲线</param>
+        /// <param name="m_movement_ease">位移运动缓动参数</param>
+        /// <param name="m_alpha_duration">动画速度 - 透明度_Alpha</param>
+        /// <param name="m_alpha_delay">动画延迟 - 透明度_Alpha</param>
+        /// <param name="m_alpha_curve">透明度变化曲线</param>
+        /// <param name="m_alpha_ease">透明度变化缓动参数</param>
+        /// <param name="m_rotation">旋转样式</param>
+        /// <param name="m_degree">旋转角度</param>
+        /// <param name="m_rotation_duration">动画速度 - 旋转_Rotation</param>
+        /// <param name="m_rotation_delay">动画延迟 - 旋转_Rotation</param>
+        /// <param name="m_rotation_curve">旋转运动曲线</param>
+        /// <param name="m_rotation_ease">旋转运动缓动参数</param>
+        public Motion_Creator(HudAnchor m_anchortype = HudAnchor.中心, HudMotion_Movement m_movement = HudMotion_Movement.D_从上至下, float m_distance = 100, float m_movement_duration = 1f, float m_movement_delay = 0f, AnimationCurve m_movement_curve = null, string m_movement_curve_name = "", EaseMode m_movement_ease = EaseMode.OutQuart, float m_alpha_duration = 1f, float m_alpha_delay = 0f, AnimationCurve m_alpha_curve = null, string m_alpha_curve_name = "", EaseMode m_alpha_ease = EaseMode.OutQuart, HudMotion_Rotation m_rotation = HudMotion_Rotation.A_无旋转, float m_degree = 0, float m_rotation_duration = 1f, float m_rotation_delay = 0f, AnimationCurve m_rotation_curve = null, string m_rotation_curve_name = "", EaseMode m_rotation_ease = EaseMode.OutQuart)
         {
             anchor = m_anchortype;
 
@@ -346,23 +345,23 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 初始化元素参数
         /// </summary>
-        /// <param tweenName="m_movement">运动样式</param>
-        /// <param tweenName="m_distance">位移距离</param>
-        /// <param tweenName="m_movement_duration">动画速度 - 位移</param>
-        /// <param tweenName="m_movement_delay">动画延迟 - 位移</param>
-        /// <param tweenName="m_movement_curve">位移运动曲线</param>
-        /// <param tweenName="m_movement_ease">位移运动缓动参数</param>
-        /// <param tweenName="m_alpha_duration">动画速度 - 透明度_Alpha</param>
-        /// <param tweenName="m_alpha_delay">动画延迟 - 透明度_Alpha</param>
-        /// <param tweenName="m_alpha_curve">透明度变化曲线</param>
-        /// <param tweenName="m_alpha_ease">透明度变化缓动参数</param>
-        /// <param tweenName="m_rotation">旋转样式</param>
-        /// <param tweenName="m_degree">旋转角度</param>
-        /// <param tweenName="m_rotation_duration">动画速度 - 旋转_Rotation</param>
-        /// <param tweenName="m_rotation_delay">动画延迟 - 旋转_Rotation</param>
-        /// <param tweenName="m_rotation_curve">旋转运动曲线</param>
-        /// <param tweenName="m_rotation_ease">旋转运动缓动参数</param>
-        public Motion_Recycler(HudMotion_Movement m_movement = HudMotion_Movement.D_从上至下, float m_distance = 100, float m_movement_duration = 1f, float m_movement_delay = 0f, AnimationCurve m_movement_curve = null, string m_movement_curve_index = "", Ease m_movement_ease = Ease.InQuart, float m_alpha_duration = 1f, float m_alpha_delay = 0f, AnimationCurve m_alpha_curve = null, string m_alpha_curve_index = "", Ease m_alpha_ease = Ease.InQuart, HudMotion_Rotation m_rotation = HudMotion_Rotation.A_无旋转, float m_degree = 0, float m_rotation_duration = 1f, float m_rotation_delay = 0f, AnimationCurve m_rotation_curve = null, string m_rotation_curve_index = "", Ease m_rotation_ease = Ease.InQuart)
+        /// <param name="m_movement">运动样式</param>
+        /// <param name="m_distance">位移距离</param>
+        /// <param name="m_movement_duration">动画速度 - 位移</param>
+        /// <param name="m_movement_delay">动画延迟 - 位移</param>
+        /// <param name="m_movement_curve">位移运动曲线</param>
+        /// <param name="m_movement_ease">位移运动缓动参数</param>
+        /// <param name="m_alpha_duration">动画速度 - 透明度_Alpha</param>
+        /// <param name="m_alpha_delay">动画延迟 - 透明度_Alpha</param>
+        /// <param name="m_alpha_curve">透明度变化曲线</param>
+        /// <param name="m_alpha_ease">透明度变化缓动参数</param>
+        /// <param name="m_rotation">旋转样式</param>
+        /// <param name="m_degree">旋转角度</param>
+        /// <param name="m_rotation_duration">动画速度 - 旋转_Rotation</param>
+        /// <param name="m_rotation_delay">动画延迟 - 旋转_Rotation</param>
+        /// <param name="m_rotation_curve">旋转运动曲线</param>
+        /// <param name="m_rotation_ease">旋转运动缓动参数</param>
+        public Motion_Recycler(HudMotion_Movement m_movement = HudMotion_Movement.D_从上至下, float m_distance = 100, float m_movement_duration = 1f, float m_movement_delay = 0f, AnimationCurve m_movement_curve = null, string m_movement_curve_index = "", EaseMode m_movement_ease = EaseMode.InQuart, float m_alpha_duration = 1f, float m_alpha_delay = 0f, AnimationCurve m_alpha_curve = null, string m_alpha_curve_index = "", EaseMode m_alpha_ease = EaseMode.InQuart, HudMotion_Rotation m_rotation = HudMotion_Rotation.A_无旋转, float m_degree = 0, float m_rotation_duration = 1f, float m_rotation_delay = 0f, AnimationCurve m_rotation_curve = null, string m_rotation_curve_index = "", EaseMode m_rotation_ease = EaseMode.InQuart)
         {
             Movement = new MotionNode_Movement();
             Movement.Movement = m_movement;
@@ -421,7 +420,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 位移运动缓动参数
         /// </summary>
-        public Ease Ease = Ease.OutQuart;
+        public EaseMode Ease = EaseMode.OutQuart;
 
         public void CopyData(MotionNode_Movement original)
         {
@@ -465,7 +464,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 旋转运动缓动参数
         /// </summary>
-        public Ease Ease = Ease.OutQuart;
+        public EaseMode Ease = EaseMode.OutQuart;
 
         public void CopyData(MotionNode_Rotation original)
         {
@@ -501,7 +500,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 透明度变化缓动参数
         /// </summary>
-        public Ease Ease = Ease.OutQuart;
+        public EaseMode Ease = EaseMode.OutQuart;
 
         public void CopyData(MotionNode_Alpha original)
         {
@@ -539,7 +538,7 @@ namespace SevenStrikeModules.XHud.Hud
     [System.Serializable]
     public class HudElementInfo
     {
-        public List<xHud_Module_Element> elements = new List<xHud_Module_Element>();
+        public List<XHud_Module_Element> elements = new List<XHud_Module_Element>();
         public List<GameObject> notPrefabsList = new List<GameObject>();
     }
 
@@ -570,21 +569,18 @@ namespace SevenStrikeModules.XHud.Hud
 
     #endregion
 
-    /// <summary>
-    /// Hud Manager管理器消息
-    /// </summary>
-    public class xHud_Manager : MonoBehaviour
+    public class XHud_Manager : MonoBehaviour
     {
         #region 单例模式
-        protected xHud_Manager() { }
-        private static xHud_Manager _instance;
-        public static xHud_Manager Instance
+        protected XHud_Manager() { }
+        private static XHud_Manager _instance;
+        public static XHud_Manager Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "HudManager 还没有被实例化！", HudMsgState.确认);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "HudManager 还没有被实例化！", HudMsgState.确认);
                 }
                 return _instance;
             }
@@ -811,7 +807,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 锚点颜色 - 中心点
         /// </summary>
-        public Color Color_CenterMark = xHud_Dashboard.Theme_Primary;
+        public Color Color_CenterMark = XHud_Dashboard.Theme_Primary;
         [Tooltip("安全框颜色")]
         /// <summary>
         /// 安全框颜色
@@ -821,7 +817,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 锚点颜色 - 主要方向
         /// </summary>
-        public Color Color_SeperaterLine = xHud_Dashboard.Theme_Primary;
+        public Color Color_SeperaterLine = XHud_Dashboard.Theme_Primary;
         [Tooltip("安全框粗细")]
         /// <summary>
         /// 安全框粗细
@@ -980,7 +976,7 @@ namespace SevenStrikeModules.XHud.Hud
         #endregion
 
         public Color GuideColor = new Color(0.5f, 0.5f, 0.5f, 0.2f);
-        public Color GuidePointColor = xHud_Dashboard.Theme_Primary;
+        public Color GuidePointColor = XHud_Dashboard.Theme_Primary;
         #endregion
 
         #region 屏幕遮罩
@@ -1020,22 +1016,22 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动画组件 - 遮罩透明度
         /// </summary>
-        private Tweener twn_MaskAlpha;
+        private XTween_Interface twn_MaskAlpha;
         [Tooltip("动画组件 - 遮罩颜色通道 R")]
         /// <summary>
         /// 动画组件 - 遮罩颜色通道 R
         /// </summary>
-        private Tweener twn_MaskColor_R;
+        private XTween_Interface twn_MaskColor_R;
         [Tooltip("动画组件 - 遮罩颜色通道 G")]
         /// <summary>
         /// 动画组件 - 遮罩颜色通道 G
         /// </summary>
-        private Tweener twn_MaskColor_G;
+        private XTween_Interface twn_MaskColor_G;
         [Tooltip("动画组件 - 遮罩颜色通道 B")]
         /// <summary>
         /// 动画组件 - 遮罩颜色通道 B
         /// </summary>
-        private Tweener twn_MaskColor_B;
+        private XTween_Interface twn_MaskColor_B;
         #endregion
 
         #region 场景散焦遮罩
@@ -1075,22 +1071,22 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动画组件 - 散焦遮罩透明度
         /// </summary>
-        private Tweener twn_BlurMaskAlpha;
+        private XTween_Interface twn_BlurMaskAlpha;
         [Tooltip("动画组件 - 散焦遮罩颜色通道 R")]
         /// <summary>
         /// 动画组件 - 散焦遮罩颜色通道 R
         /// </summary>
-        private Tweener twn_BlurMaskColor_R;
+        private XTween_Interface twn_BlurMaskColor_R;
         [Tooltip("动画组件 - 散焦遮罩颜色通道 G")]
         /// <summary>
         /// 动画组件 - 散焦遮罩颜色通道 G
         /// </summary>
-        private Tweener twn_BlurMaskColor_G;
+        private XTween_Interface twn_BlurMaskColor_G;
         [Tooltip("动画组件 - 散焦遮罩颜色通道 B")]
         /// <summary>
         /// 动画组件 - 散焦遮罩颜色通道 B
         /// </summary>
-        private Tweener twn_BlurMaskColor_B;
+        private XTween_Interface twn_BlurMaskColor_B;
 
         #region 渲染特性
         [Range(0, 1)]
@@ -1106,7 +1102,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 特性 - 散焦模糊 - 动画
         /// </summary>
-        private Tweener twn_UniversalFeature_Blur;
+        private XTween_Interface twn_UniversalFeature_Blur;
         /// <summary>
         /// 特性 - 散焦模糊强度到达最大
         /// </summary>
@@ -1146,12 +1142,12 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 世界内容透明度
         /// </summary>
-        private Tweener twn_ContentAlpha_Screen;
+        private XTween_Interface twn_ContentAlpha_Screen;
         [Tooltip("世界内容透明度")]
         /// <summary>
         /// 世界内容透明度
         /// </summary>
-        private Tweener twn_ContentAlpha_World;
+        private XTween_Interface twn_ContentAlpha_World;
         #endregion
 
         #region 元素库
@@ -1159,7 +1155,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 元素库 - 配置化（Editor期间）
         /// </summary>
-        public List<xHud_Library_Element> Hud_ElementLibrarys = new List<xHud_Library_Element>();
+        public List<XHud_Library_Element> Hud_ElementLibrarys = new List<XHud_Library_Element>();
         #endregion
 
         #region 资源库类
@@ -1167,37 +1163,37 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 曲线库
         /// </summary>
-        public xHud_Library_Curves Hud_Curves;
+        public XHud_Library_Curves Hud_Curves;
         [Tooltip("调色板")]
         /// <summary>
         /// 调色板
         /// </summary>
-        public xHud_Library_Colors Hud_Colors;
+        public XHud_Library_Colors Hud_Colors;
         [Tooltip("音效库")]
         /// <summary>
         /// 音效库
         /// </summary>
-        public xHud_Library_Sounds Hud_Sounds;
+        public XHud_Library_Sounds Hud_Sounds;
         [Tooltip("字体库")]
         /// <summary>
         /// 字体库
         /// </summary>
-        public xHud_Library_TextStyle Hud_TextStyleLibrary;
+        public XHud_Library_TextStyle Hud_TextStyleLibrary;
         [Tooltip("光标样式")]
         /// <summary>
         /// 光标样式
         /// </summary>
-        public xHud_CustomMouseCursor Hud_MouseCursor;
+        public XHud_CustomMouseCursor Hud_MouseCursor;
         [Tooltip("转场")]
         /// <summary>
         /// 转场
         /// </summary>
-        public xHud_Library_Transition Hud_TransitionLib;
+        public XHud_Library_Transition Hud_TransitionLib;
         [Tooltip("元素动效库")]
         /// <summary>
         /// 元素动效库
         /// </summary>
-        public xHud_Library_Motion Hud_ElementMotion;
+        public XHud_Library_Motion Hud_ElementMotion;
         #endregion
 
         #region UI的全局动画速度
@@ -1219,7 +1215,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 转场器组件
         /// </summary>
-        public xHud_TransitionController Hud_TransitionController;
+        public XHud_TransitionController Hud_TransitionController;
         [Tooltip("事件系统")]
         /// <summary>
         /// EventSystem组件
@@ -1230,6 +1226,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// InputSystemUIInputModule组件
         /// </summary>
         public InputSystemUIInputModule Hud_InputSystemUIInputModule;
+        [Tooltip("XTween")]
+        /// <summary>
+        /// XTween
+        /// </summary>
+        public XTween_Manager XTweenManager;
         #endregion
 
         #region 音效声音
@@ -1265,12 +1266,12 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 蓝图视觉总体淡化动画
         /// </summary>
-        private Tweener BluePrint_opacityTweener;
+        private XTween_Interface BluePrint_opacityTweener;
         [Tooltip("蓝图视觉网格淡化动画")]
         /// <summary>
         /// 蓝图视觉网格淡化动画
         /// </summary>
-        private Tweener BluePrint_grid_opacityTweener;
+        private XTween_Interface BluePrint_grid_opacityTweener;
         [Tooltip("蓝图视觉网格尺寸")]
         /// <summary>
         /// 蓝图视觉网格尺寸
@@ -1285,17 +1286,17 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 蓝图视觉网格线颜色
         /// </summary>
-        public Color BluePrint_grid_color = xHud_Utilitys.Color_From_RGBA(166, 166, 166, 26);
+        public Color BluePrint_grid_color = XHud_Utilitys.Color_From_RGBA(166, 166, 166, 26);
         [Tooltip("蓝图视觉背景颜色")]
         /// <summary>
         /// 蓝图视觉背景颜色
         /// </summary>
-        public Color BluePrint_bg_color = xHud_Utilitys.Color_From_RGBA(55, 55, 55, 255);
+        public Color BluePrint_bg_color = XHud_Utilitys.Color_From_RGBA(55, 55, 55, 255);
         [Tooltip("蓝图视觉叠加颜色")]
         /// <summary>
         /// 蓝图视觉叠加颜色
         /// </summary>
-        public Color BluePrint_bg_decal_color = xHud_Utilitys.Color_From_RGBA(0, 0, 0, 80);
+        public Color BluePrint_bg_decal_color = XHud_Utilitys.Color_From_RGBA(0, 0, 0, 80);
         [Tooltip("蓝图视觉背景图像索引名称")]
         /// <summary>
         /// 蓝图视觉背景图像索引名称
@@ -1343,7 +1344,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 蓝图视觉小标题颜色
         /// </summary>
-        public Color BluePrint_marksubtitle_color = xHud_Dashboard.Theme_Primary;
+        public Color BluePrint_marksubtitle_color = XHud_Dashboard.Theme_Primary;
         [Tooltip("蓝图视觉标题尺寸")]
         /// <summary>
         /// 蓝图视觉标题尺寸
@@ -1394,12 +1395,12 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 蓝图视觉大标题组件
         /// </summary>
-        public xHud_Module_TmpText BluePrint_title_module;
+        public XHud_Module_TmpText BluePrint_title_module;
         [Tooltip("蓝图视觉小标题组件")]
         /// <summary>
         /// 蓝图视觉小标题组件
         /// </summary>
-        public xHud_Module_TmpText BluePrint_subtitle_module;
+        public XHud_Module_TmpText BluePrint_subtitle_module;
         [Tooltip("蓝图视觉大标题内容")]
         /// <summary>
         /// 蓝图视觉大标题内容
@@ -1434,12 +1435,12 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 蓝图视觉背景淡化动画
         /// </summary>
-        private Tweener BluePrint_BgFadeTweener;
+        private XTween_Interface BluePrint_BgFadeTweener;
         [Tooltip("蓝图视觉水印淡化动画")]
         /// <summary>
         /// 蓝图视觉水印淡化动画
         /// </summary>
-        private Tweener BluePrint_MarkFadeTweener;
+        private XTween_Interface BluePrint_MarkFadeTweener;
         [Tooltip("蓝图网格状态")]
         /// <summary>
         /// 蓝图网格状态
@@ -1454,17 +1455,17 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 蓝图视觉网格线动画缓动参数
         /// </summary>
-        public Ease BluePrint_Grid_AnimationEase = Ease.OutQuart;
+        public EaseMode BluePrint_Grid_AnimationEase = EaseMode.OutQuart;
         [Tooltip("蓝图视觉背景动画缓动参数 - 入场")]
         /// <summary>
         /// 蓝图视觉背景动画缓动参数 - 入场
         /// </summary>
-        public Ease BluePrint_Bg_AnimationEase_In = Ease.OutQuart;
+        public EaseMode BluePrint_Bg_AnimationEase_In = EaseMode.OutQuart;
         [Tooltip("蓝图视觉背景动画缓动参数 - 出场")]
         /// <summary>
         /// 蓝图视觉背景动画缓动参数 - 出场
         /// </summary>
-        public Ease BluePrint_Bg_AnimationEase_Out = Ease.InQuart;
+        public EaseMode BluePrint_Bg_AnimationEase_Out = EaseMode.InQuart;
         [Tooltip("蓝图视觉网格长度百分比")]
         /// <summary>
         /// 蓝图视觉网格长度百分比
@@ -1489,7 +1490,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 蓝图模式网格长度动画
         /// </summary>
-        private Tweener BluePrint_GridLengthTweener;
+        private XTween_Interface BluePrint_GridLengthTweener;
         public bool Eft_Grid;
         public bool Eft_GridFade;
         public bool Eft_Bg;
@@ -1607,7 +1608,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 委托事件 - 生成元素时
         /// </summary>
-        public UnityAction<xHud_Module_Element> Act_SpawnElement;
+        public UnityAction<XHud_Module_Element> Act_SpawnElement;
         #endregion
 
         #region 多语言
@@ -1741,10 +1742,10 @@ namespace SevenStrikeModules.XHud.Hud
                 HudCanvasScaler = HudCanvas_Screen.GetComponentInChildren<CanvasScaler>();
 
             if (Hud_MouseCursor == null)
-                Hud_MouseCursor = GetComponentInChildren<xHud_CustomMouseCursor>();
+                Hud_MouseCursor = GetComponentInChildren<XHud_CustomMouseCursor>();
 
             if (Hud_TransitionController == null)
-                Hud_TransitionController = GetComponentInChildren<xHud_TransitionController>();
+                Hud_TransitionController = GetComponentInChildren<XHud_TransitionController>();
 
             #region 启动时隐藏蓝图
             if (BluePrint_OnStartHide)
@@ -3101,9 +3102,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 计算三个点的中心点坐标
         /// </summary>
-        /// <param tweenName="pointA">第一个点的坐标</param>
-        /// <param tweenName="pointB">第二个点的坐标</param>
-        /// <param tweenName="pointC">第三个点的坐标</param>
+        /// <param name="pointA">第一个点的坐标</param>
+        /// <param name="pointB">第二个点的坐标</param>
+        /// <param name="pointC">第三个点的坐标</param>
         /// <returns>中心点的坐标</returns>
         public static Vector3 CalculateCentroid(Vector3 pointA, Vector3 pointB, Vector3 pointC)
         {
@@ -3114,8 +3115,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 计算两个点的中心点坐标
         /// </summary>
-        /// <param tweenName="pointA">第一个点的坐标</param>
-        /// <param tweenName="pointB">第二个点的坐标</param>
+        /// <param name="pointA">第一个点的坐标</param>
+        /// <param name="pointB">第二个点的坐标</param>
         /// <returns>中心点的坐标</returns>
         public static Vector3 CalculateMidpoint(Vector3 pointA, Vector3 pointB)
         {
@@ -3126,10 +3127,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 曲线绘制
         /// </summary>
-        /// <param tweenName="start">开始点</param>
-        /// <param tweenName="control1">开始点贝塞尔</param>
-        /// <param tweenName="control2">结束点贝塞尔</param>
-        /// <param tweenName="end">结束点</param>
+        /// <param name="start">开始点</param>
+        /// <param name="control1">开始点贝塞尔</param>
+        /// <param name="control2">结束点贝塞尔</param>
+        /// <param name="end">结束点</param>
         private void DrawBezierCurve(Vector3 start, Vector3 control1, Vector3 control2, Vector3 end)
         {
             // 分割曲线的点数
@@ -3157,11 +3158,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 计算贝塞尔
         /// </summary>
-        /// <param tweenName="t"></param>
-        /// <param tweenName="p0"></param>
-        /// <param tweenName="p1"></param>
-        /// <param tweenName="p2"></param>
-        /// <param tweenName="p3"></param>
+        /// <param name="t"></param>
+        /// <param name="p0"></param>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <param name="p3"></param>
         /// <returns></returns>
         private Vector3 CalculateBezierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
         {
@@ -3192,7 +3193,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取布局构图参考锚点
         /// </summary>
-        /// <param tweenName="anchortype"></param>
+        /// <param name="anchortype"></param>
         /// <returns></returns>
         public RectTransform hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide anchortype)
         {
@@ -3357,7 +3358,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 设置Hud画布的锚点位置
         /// </summary>
-        /// <param tweenName="anchor">画布目标锚点</param>
+        /// <param name="anchor">画布目标锚点</param>
         public void hm_Layout_CanvasDistance(CanvasAnchor anchor)
         {
             if (HudCamera == null)
@@ -3379,7 +3380,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 根据锚点类型获取锚点根物体
         /// </summary>
-        /// <param tweenName="anchor"></param>
+        /// <param name="anchor"></param>
         /// <returns></returns>
         public RectTransform hm_Layout_GetAnchor(HudAnchor anchor)
         {
@@ -3398,7 +3399,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取布局边距
         /// </summary>
-        /// <param tweenName="anchor"></param>
+        /// <param name="anchor"></param>
         /// <returns></returns>
         public float hm_Layout_GetMargins(HudAnchorMargin anchor)
         {
@@ -3437,8 +3438,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 设置相机剪切范围
         /// </summary>
-        /// <param tweenName="near">近距</param>
-        /// <param tweenName="far">远距</param>
+        /// <param name="near">近距</param>
+        /// <param name="far">远距</param>
         public void hm_CameraCutterRange(float near, float far)
         {
             if (HudCamera == null)
@@ -3450,7 +3451,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 相机投影方式设置
         /// </summary>
-        /// <param tweenName="treeState">投影方式</param>
+        /// <param name="treeState">投影方式</param>
         public void hm_CameraOrthographicProjection(bool state)
         {
             if (HudCamera == null)
@@ -3461,7 +3462,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 相机正交投影尺寸
         /// </summary>
-        /// <param tweenName="size">相机正交尺寸</param>
+        /// <param name="size">相机正交尺寸</param>
         public void hm_CameraOrthographicSize(float size)
         {
             if (HudCamera == null)
@@ -3472,7 +3473,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 相机透视投影尺寸
         /// </summary>
-        /// <param tweenName="fov">透视角焦距</param>
+        /// <param name="fov">透视角焦距</param>
         public void hm_CameraPerspectiveFov(float fov)
         {
             if (HudCamera == null)
@@ -3487,7 +3488,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 检查场景相机并自动添加叠加相机堆栈
         /// </summary>
-        /// <param tweenName="cam">场景相机</param>
+        /// <param name="cam">场景相机</param>
         public void hm_SceneCam_CheckStack(Camera cam)
         {
             if (cam == null)
@@ -3813,7 +3814,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 根据方案名称获取RMS的索引号
         /// </summary>
-        /// <param tweenName="solution"></param>
+        /// <param name="solution"></param>
         /// <returns></returns>
         public int hm_RMS_GetSolutionIndex(string solution)
         {
@@ -3889,7 +3890,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 检测是否存在已生成的Hud元素
         /// </summary>
-        /// <returns>返回True则当前Hud Manager管理器消息中已生成了Hud元素反之则说明已清空</returns>
+        /// <returns>返回True则当前xHud Manager管理器消息中已生成了Hud元素反之则说明已清空</returns>
         public bool hm_HasElements()
         {
             bool state = false;
@@ -3906,7 +3907,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 画布像素对齐开关
         /// </summary>
-        /// <param tweenName="treeState">是否开启像素对齐</param>
+        /// <param name="treeState">是否开启像素对齐</param>
         public void hm_UsePixelPerfect(bool state)
         {
             if (!UsePerfectPixelUpdate)
@@ -3917,12 +3918,12 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 为指定的相机堆栈添加Hud叠加层
         /// </summary>
-        /// <param tweenName="uac"></param>
+        /// <param name="uac"></param>
         public void hm_AssignedCameraStack(UniversalAdditionalCameraData uac)
         {
             if (HudCamera == null)
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "当前HudCamera为空，无法为指定的相机堆栈添加Hud叠加层", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "当前HudCamera为空，无法为指定的相机堆栈添加Hud叠加层", HudMsgState.警告);
             if (!uac.cameraStack.Contains(HudCamera))
             {
                 uac.cameraStack.Add(HudCamera);
@@ -3930,7 +3931,7 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 刷新所有生成的Hud元素的动画状态
+        /// xHud Manager管理器消息 - 刷新所有生成的Hud元素的动画状态
         /// </summary>
         public void hm_HudElement_UpdateAnimating()
         {
@@ -3956,7 +3957,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 修改字体尺寸
         /// </summary>
-        /// <param tweenName="size"></param>
+        /// <param name="size"></param>
         public void hm_ChangeFontGlobalSize(float size)
         {
             FontSizeMultiply = size;
@@ -3988,8 +3989,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 创建锚点标记物
         /// </summary>
-        /// <param tweenName="parent"></param>
-        /// <param tweenName="name"></param>
+        /// <param name="parent"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         private Image hm_CreateAnchorMark(Transform parent, string name)
         {
@@ -4274,9 +4275,9 @@ namespace SevenStrikeModules.XHud.Hud
         #region 创建辅助
 
         /// <summary>
-        /// Hud Manager管理器消息 - 收集所有生成的HudElementItem元素 - 屏幕
+        /// xHud Manager管理器消息 - 收集所有生成的HudElementItem元素 - 屏幕
         /// </summary>
-        /// <param tweenName="structs"></param>
+        /// <param name="structs"></param>
         /// <returns></returns>
         private HudElementNode[] hm_HudElement_CollectElements_Screen()
         {
@@ -4293,9 +4294,9 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 收集所有生成的HudElementItem元素 - 世界
+        /// xHud Manager管理器消息 - 收集所有生成的HudElementItem元素 - 世界
         /// </summary>
-        /// <param tweenName="structs"></param>
+        /// <param name="structs"></param>
         /// <returns></returns>
         private HudElementNode[] hm_HudElement_CollectElements_World()
         {
@@ -4309,24 +4310,24 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 实例化方式生成Hud元素
+        /// xHud Manager管理器消息 - 实例化方式生成Hud元素
         /// </summary>
-        /// <param tweenName="ModuleName">模块名称</param>
-        /// <param tweenName="Parent">父物体</param>
-        /// <param tweenName="缩放_Scale">缩放尺寸</param>
+        /// <param name="ModuleName">模块名称</param>
+        /// <param name="Parent">父物体</param>
+        /// <param name="缩放_Scale">缩放尺寸</param>
         /// <returns>返回一个生成的HUD元素</returns>
-        private xHud_Module_Element hm_HudElement_Create(string LibraryName, string ModuleName)
+        private XHud_Module_Element hm_HudElement_Create(string LibraryName, string ModuleName)
         {
-            xHud_Module_Element element = null;
+            XHud_Module_Element element = null;
 
             for (int i = 0; i < Hud_ElementLibrarys.Count; i++)
             {
                 if (LibraryName == Hud_ElementLibrarys[i].LibraryName)
                 {
-                    xHud_Library_Element lib = Hud_ElementLibrarys[i];
+                    XHud_Library_Element lib = Hud_ElementLibrarys[i];
                     for (int s = 0; s < lib.ElementLibrary.Count; s++)
                     {
-                        Library_Item item = lib.ElementLibrary[s];
+                        XHud_LibraryArg_Element_Item item = lib.ElementLibrary[s];
                         if (item.Target.name == ModuleName)
                         {
                             element = hm_ElementLibrary_Spawn(ModuleName);
@@ -4340,9 +4341,9 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 匹配锚点类型
+        /// xHud Manager管理器消息 - 匹配锚点类型
         /// </summary>
-        /// <param tweenName="type">锚点类型</param>
+        /// <param name="type">锚点类型</param>
         /// <returns>返回一个锚点布局</returns>
         public Anchor_Layout hm_HudElement_MatchType(HudAnchor type)
         {
@@ -4357,10 +4358,10 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 清理已存在的Element项 - 屏幕
+        /// xHud Manager管理器消息 - 清理已存在的Element项 - 屏幕
         /// </summary>
-        /// <param tweenName="element">目标元素</param>
-        public void hm_HudElement_CleanAnchor_Screen(xHud_Module_Element element)
+        /// <param name="element">目标元素</param>
+        public void hm_HudElement_CleanAnchor_Screen(XHud_Module_Element element)
         {
             for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
             {
@@ -4375,10 +4376,10 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 清理已存在的Element项 - 世界
+        /// xHud Manager管理器消息 - 清理已存在的Element项 - 世界
         /// </summary>
-        /// <param tweenName="element">目标元素</param>
-        public void hm_HudElement_CleanAnchor_World(xHud_Module_Element element)
+        /// <param name="element">目标元素</param>
+        public void hm_HudElement_CleanAnchor_World(XHud_Module_Element element)
         {
             for (int i = 0; i < Anchors_Layout_World.Count; i++)
             {
@@ -4390,24 +4391,24 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 设置父物体
+        /// xHud Manager管理器消息 - 设置父物体
         /// </summary>
-        /// <param tweenName="element">目标元素</param>
-        /// <param tweenName="anchor">锚点父物体</param>
-        public void hm_HudElement_ParentSetup(xHud_Module_Element element, RectTransform anchor)
+        /// <param name="element">目标元素</param>
+        /// <param name="anchor">锚点父物体</param>
+        public void hm_HudElement_ParentSetup(XHud_Module_Element element, RectTransform anchor)
         {
             element.RectTransform.SetParent(anchor);
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 预存储到锚点列表 - 屏幕
+        /// xHud Manager管理器消息 - 预存储到锚点列表 - 屏幕
         /// </summary>
-        /// <param tweenName="anchor_struct">锚点根节点</param>
-        /// <param tweenName="element">元素</param>
-        /// <param tweenName="module_name">模块名称</param>
-        /// <param tweenName="indicator_name">标识名称</param>
+        /// <param name="anchor_struct">锚点根节点</param>
+        /// <param name="element">元素</param>
+        /// <param name="module_name">模块名称</param>
+        /// <param name="indicator_name">标识名称</param>
         /// <returns></returns>
-        private HudElementNode hm_HudElement_Send_To_AnchorList_Screen(Anchor_Layout anchor_struct, xHud_Module_Element element, string module_name, string indicator_name)
+        private HudElementNode hm_HudElement_Send_To_AnchorList_Screen(Anchor_Layout anchor_struct, XHud_Module_Element element, string module_name, string indicator_name)
         {
             if (anchor_struct.HudElementInfos == null)
                 anchor_struct.HudElementInfos = new List<HudElementNode>();
@@ -4427,14 +4428,14 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 预存储到锚点列表 - 世界
+        /// xHud Manager管理器消息 - 预存储到锚点列表 - 世界
         /// </summary>
-        /// <param tweenName="anchor_struct">锚点根节点</param>
-        /// <param tweenName="element">元素</param>
-        /// <param tweenName="module_name">模块名称</param>
-        /// <param tweenName="indicator_name">标识名称</param>
+        /// <param name="anchor_struct">锚点根节点</param>
+        /// <param name="element">元素</param>
+        /// <param name="module_name">模块名称</param>
+        /// <param name="indicator_name">标识名称</param>
         /// <returns></returns>
-        private HudElementNode hm_HudElement_Send_To_AnchorList_World(xHud_Module_Element element, string module_name, string indicator_name)
+        private HudElementNode hm_HudElement_Send_To_AnchorList_World(XHud_Module_Element element, string module_name, string indicator_name)
         {
             HudElementNode item = new HudElementNode();
             item.ModuleName = module_name;
@@ -4448,12 +4449,12 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 获取目标元素身上的分辨率匹配方案的标识名称的信息
+        /// xHud Manager管理器消息 - 获取目标元素身上的分辨率匹配方案的标识名称的信息
         /// </summary>
-        /// <param tweenName="element">目标元素</param>
-        /// <param tweenName="solutionName">分辨率匹配方案的标识名称</param>
+        /// <param name="element">目标元素</param>
+        /// <param name="solutionName">分辨率匹配方案的标识名称</param>
         /// <returns></returns>
-        private Anchor_Layout hm_GetCurrentSolutionLayout(xHud_Module_Element element, string solutionName)
+        private Anchor_Layout hm_GetCurrentSolutionLayout(XHud_Module_Element element, string solutionName)
         {
             Anchor_Layout layout = null;
             for (int i = 0; i < element.RMS_InfoList.Count; i++)
@@ -4526,7 +4527,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 获取所有元素库
         /// </summary>
         /// <returns></returns>
-        public xHud_Library_Element[] hm_ElementLibrary_GetArray()
+        public XHud_Library_Element[] hm_ElementLibrary_GetArray()
         {
             return Hud_ElementLibrarys.ToArray();
         }
@@ -4535,7 +4536,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 获取所有元素库
         /// </summary>
         /// <returns></returns>
-        public List<xHud_Library_Element> hm_ElementLibrary_GetList()
+        public List<XHud_Library_Element> hm_ElementLibrary_GetList()
         {
             return Hud_ElementLibrarys;
         }
@@ -4558,9 +4559,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// 获取目标元素库
         /// </summary>
         /// <returns></returns>
-        public xHud_Library_Element hm_ElementLibrary_GetTargetLibrary(string name)
+        public XHud_Library_Element hm_ElementLibrary_GetTargetLibrary(string name)
         {
-            xHud_Library_Element lib = null;
+            XHud_Library_Element lib = null;
 
             string[] lib_names = hm_ElementLibrary_GetAllLibraryNames();
             for (int i = 0; i < lib_names.Length; i++)
@@ -4576,10 +4577,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取首位元素库
         /// </summary>
-        /// <param tweenName="LibName">目标元素库</param>
-        public xHud_Library_Element hm_ElementLibrary_GetFirstLibrary()
+        /// <param name="LibName">目标元素库</param>
+        public XHud_Library_Element hm_ElementLibrary_GetFirstLibrary()
         {
-            xHud_Library_Element res_lib = null;
+            XHud_Library_Element res_lib = null;
             if (Hud_ElementLibrarys != null && Hud_ElementLibrarys.Count > 0)
                 res_lib = Hud_ElementLibrarys[0];
             return res_lib;
@@ -4596,10 +4597,10 @@ namespace SevenStrikeModules.XHud.Hud
             #region 更新元素是否正在在被使用的状态
             for (int i = 0; i < Hud_ElementLibrarys.Count; i++)
             {
-                xHud_Library_Element lib = Hud_ElementLibrarys[i];
+                XHud_Library_Element lib = Hud_ElementLibrarys[i];
                 for (int s = 0; s < lib.ElementLibrary.Count; s++)
                 {
-                    Library_Item item = lib.ElementLibrary[s];
+                    XHud_LibraryArg_Element_Item item = lib.ElementLibrary[s];
                     if (item.PreloadElements != null && item.PreloadElements.Count > 0)
                     {
                         for (int v = 0; v < item.PreloadElements.Count; v++)
@@ -4638,7 +4639,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             for (int v = 0; v < Hud_ElementLibrarys.Count; v++)
             {
-                xHud_Library_Element Lib = Hud_ElementLibrarys[v];
+                XHud_Library_Element Lib = Hud_ElementLibrarys[v];
 
                 ///---创建库容器
                 GameObject lib_obj = new GameObject();
@@ -4653,7 +4654,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                 for (int i = 0; i < Lib.ElementLibrary.Count; i++)
                 {
-                    Library_Item item = Lib.ElementLibrary[i];
+                    XHud_LibraryArg_Element_Item item = Lib.ElementLibrary[i];
 
                     GameObject root = new GameObject();
                     root.name = "Category - " + item.Target.name;
@@ -4666,7 +4667,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                     for (int s = 0; s < item.InitializeCount; s++)
                     {
-                        xHud_Module_Element element = Instantiate(item.Target, Vector3.zero, Quaternion.identity, item.Root);
+                        XHud_Module_Element element = Instantiate(item.Target, Vector3.zero, Quaternion.identity, item.Root);
                         ///---保存原始名称
                         element.OriginalName = element.transform.name.Substring(0, element.transform.name.Length - 7);
                         ///---改名
@@ -4675,7 +4676,7 @@ namespace SevenStrikeModules.XHud.Hud
                         element.OriginPoolName = Lib.LibraryName;
 
 
-                        Library_Element pw = new Library_Element();
+                        XHud_LibraryArg_Element_Info pw = new XHud_LibraryArg_Element_Info();
                         pw.HudElement = element;
                         pw.HudElement.CreateState = HudElementCreateState.Recycled;
                         pw.HudElement.element_Reset();
@@ -4692,19 +4693,19 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 从元素库里取出一个元素
         /// </summary>
-        /// <param tweenName="ElementName">元素标识名称</param>
+        /// <param name="ElementName">元素标识名称</param>
         /// <returns></returns>
-        public xHud_Module_Element hm_ElementLibrary_Spawn(string ElementName)
+        public XHud_Module_Element hm_ElementLibrary_Spawn(string ElementName)
         {
-            xHud_Module_Element element = null;
+            XHud_Module_Element element = null;
 
             for (int i = 0; i < Hud_ElementLibrarys.Count; i++)
             {
-                xHud_Library_Element lib = Hud_ElementLibrarys[i];
+                XHud_Library_Element lib = Hud_ElementLibrarys[i];
 
                 for (int k = 0; k < lib.ElementLibrary.Count; k++)
                 {
-                    Library_Item item = lib.ElementLibrary[k];
+                    XHud_LibraryArg_Element_Item item = lib.ElementLibrary[k];
 
                     if (item.Target.name == ElementName)
                     {
@@ -4735,16 +4736,16 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 回收一个元素到元素库
         /// </summary>
-        /// <param tweenName="Element">目标元素</param>
-        public void hm_ElementLibrary_Despawn(xHud_Module_Element Element)
+        /// <param name="Element">目标元素</param>
+        public void hm_ElementLibrary_Despawn(XHud_Module_Element Element)
         {
             for (int i = 0; i < Hud_ElementLibrarys.Count; i++)
             {
-                xHud_Library_Element lib = Hud_ElementLibrarys[i];
+                XHud_Library_Element lib = Hud_ElementLibrarys[i];
 
                 for (int m = 0; m < lib.ElementLibrary.Count; m++)
                 {
-                    Library_Item item = lib.ElementLibrary[m];
+                    XHud_LibraryArg_Element_Item item = lib.ElementLibrary[m];
 
                     if (Element.OriginalName == item.Name)
                     {
@@ -4805,7 +4806,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             for (int v = 0; v < Hud_ElementLibrarys.Count; v++)
             {
-                xHud_Library_Element lib = Hud_ElementLibrarys[v];
+                XHud_Library_Element lib = Hud_ElementLibrarys[v];
                 #region 清理预生成元素及其使用信息痕迹，主要是为了弥补ScriptableObject在运行时也能被赋值
                 lib.LibraryRoot = null;
                 for (int i = 0; i < lib.ElementLibrary.Count; i++)
@@ -4817,7 +4818,7 @@ namespace SevenStrikeModules.XHud.Hud
                     lib.ElementLibrary[i].Root = null;
 
                     if (lib.ElementLibrary[i].PreloadElements == null)
-                        lib.ElementLibrary[i].PreloadElements = new List<Library_Element>();
+                        lib.ElementLibrary[i].PreloadElements = new List<XHud_LibraryArg_Element_Info>();
 
                     lib.ElementLibrary[i].PreloadElements.Clear();
                 }
@@ -4829,18 +4830,18 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 创建元素库的项
         /// </summary>
-        /// <param tweenName="Element">目标元素</param>
-        /// <param tweenName="InitialCount">初始化数量</param>
+        /// <param name="Element">目标元素</param>
+        /// <param name="InitialCount">初始化数量</param>
         /// <returns></returns>
-        public Library_Item hm_ElementLibrary_CreateItem(xHud_Module_Element Element, int InitialCount)
+        public XHud_LibraryArg_Element_Item hm_ElementLibrary_CreateItem(XHud_Module_Element Element, int InitialCount)
         {
-            Library_Item item = new Library_Item();
+            XHud_LibraryArg_Element_Item item = new XHud_LibraryArg_Element_Item();
             item.Target = Element;
             item.Name = string.IsNullOrEmpty(Element.transform.name) ? "NewElement" : Element.transform.name;
             item.InitializeCount = InitialCount;
 
             if (item.PreloadElements == null)
-                item.PreloadElements = new List<Library_Element>();
+                item.PreloadElements = new List<XHud_LibraryArg_Element_Info>();
 
             return item;
         }
@@ -4848,18 +4849,18 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动态创建元素库
         /// </summary>
-        /// <param tweenName="LibraryName">元素库名称</param>
-        /// <param tweenName="Items">元素库项数组</param>
+        /// <param name="LibraryName">元素库名称</param>
+        /// <param name="Items">元素库项数组</param>
         /// <returns>返回元素库</returns>
-        public xHud_Library_Element hm_ElementLibrary_AddItem(string LibraryName, Library_Item[] Items)
+        public XHud_Library_Element hm_ElementLibrary_AddItem(string LibraryName, XHud_LibraryArg_Element_Item[] Items)
         {
-            xHud_Library_Element lib = ScriptableObject.CreateInstance<xHud_Library_Element>();
+            XHud_Library_Element lib = ScriptableObject.CreateInstance<XHud_Library_Element>();
             lib.name = "RunTimeLib";
             lib.LibraryName = LibraryName;
             for (int i = 0; i < Items.Length; i++)
             {
                 if (lib.ElementLibrary == null)
-                    lib.ElementLibrary = new List<Library_Item>();
+                    lib.ElementLibrary = new List<XHud_LibraryArg_Element_Item>();
 
                 lib.ElementLibrary.Add(Items[i]);
             }
@@ -4871,8 +4872,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 实例化目标元素库
         /// </summary>
-        /// <param tweenName="Library">目标元素库</param>
-        public void hm_ElementLibrary_Initialize(xHud_Library_Element Library)
+        /// <param name="Library">目标元素库</param>
+        public void hm_ElementLibrary_Initialize(XHud_Library_Element Library)
         {
             GameObject PoolRoot = transform.Find("Pool_Elements").gameObject;
             if (PoolRoot == null)
@@ -4895,7 +4896,7 @@ namespace SevenStrikeModules.XHud.Hud
             lib_obj.transform.localScale = Vector3.one;
             Library.LibraryRoot = lib_obj.transform;
 
-            List<Library_Item> items = Library.ElementLibrary;
+            List<XHud_LibraryArg_Element_Item> items = Library.ElementLibrary;
 
             for (int i = 0; i < items.Count; i++)
             {
@@ -4909,20 +4910,20 @@ namespace SevenStrikeModules.XHud.Hud
 
                 for (int s = 0; s < items[i].InitializeCount; s++)
                 {
-                    xHud_Module_Element element = Instantiate(items[i].Target, Vector3.zero, Quaternion.identity, items[i].Root);
+                    XHud_Module_Element element = Instantiate(items[i].Target, Vector3.zero, Quaternion.identity, items[i].Root);
                     ///---保存原始名称
                     element.OriginalName = element.transform.name.Substring(0, element.transform.name.Length - 7);
                     ///---改名
                     element.transform.name = element.OriginalName + "_Clone_" + s;
 
-                    Library_Element pw = new Library_Element();
+                    XHud_LibraryArg_Element_Info pw = new XHud_LibraryArg_Element_Info();
                     pw.HudElement = element;
                     pw.HudElement.CreateState = HudElementCreateState.Recycled;
                     pw.HudElement.element_Reset();
                     pw.HudElement.gameObject.SetActive(false);
 
                     if (items[i].PreloadElements == null)
-                        items[i].PreloadElements = new List<Library_Element>();
+                        items[i].PreloadElements = new List<XHud_LibraryArg_Element_Info>();
 
                     items[i].PreloadElements.Add(pw);
                 }
@@ -4937,12 +4938,12 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 删除已经初始化的元素库
         /// </summary>
-        /// <param tweenName="LibName">目标元素库</param>
+        /// <param name="LibName">目标元素库</param>
         public void hm_ElementLibrary_Destroyed(string LibName)
         {
             for (int i = 0; i < Hud_ElementLibrarys.Count; i++)
             {
-                xHud_Library_Element lib = Hud_ElementLibrarys[i];
+                XHud_Library_Element lib = Hud_ElementLibrarys[i];
                 if (lib.LibraryName == LibName)
                 {
                     lib.ElementLibrary_RecycleAll();
@@ -4959,13 +4960,13 @@ namespace SevenStrikeModules.XHud.Hud
         #region 公共
 
         /// <summary>
-        /// Hud Manager管理器消息 - 创建的元素的初始化设置 - 屏幕模式
+        /// xHud Manager管理器消息 - 创建的元素的初始化设置 - 屏幕模式
         /// </summary>
-        /// <param tweenName="element">目标元素</param>
-        /// <param tweenName="anchor">锚点类型</param>
-        /// <param tweenName="alpha">透明度_Alpha</param>
-        /// <param tweenName="offset">位置偏移</param>
-        public void hm_HudElement_Initialize_For_Screen(xHud_Module_Element element, HudAnchor anchor, float alpha, Vector3 offset, Vector3 scale, Vector2 size)
+        /// <param name="element">目标元素</param>
+        /// <param name="anchor">锚点类型</param>
+        /// <param name="alpha">透明度_Alpha</param>
+        /// <param name="offset">位置偏移</param>
+        public void hm_HudElement_Initialize_For_Screen(XHud_Module_Element element, HudAnchor anchor, float alpha, Vector3 offset, Vector3 scale, Vector2 size)
         {
             element.RectTransform.SetParent(hm_Layout_GetAnchor(anchor));
             if (size.x > 0 && size.y > 0)
@@ -4979,20 +4980,20 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 创建的元素的初始化设置 - 屏幕模式 (依据元素自身设计布局信息)
+        /// xHud Manager管理器消息 - 创建的元素的初始化设置 - 屏幕模式 (依据元素自身设计布局信息)
         /// </summary>
-        /// <param tweenName="element">目标元素</param>
-        /// <param tweenName="alpha">透明度_Alpha</param>
-        /// <param tweenName="offset">位置偏移</param>
-        /// <param tweenName="DontCreateID">是否为自身生成随机ID</param>
-        public void hm_HudElement_Initialize_ByDesignLayout_For_Screen(xHud_Module_Element element, float alpha, Vector3 offset, string rms_name, bool DontCreateID = false)
+        /// <param name="element">目标元素</param>
+        /// <param name="alpha">透明度_Alpha</param>
+        /// <param name="offset">位置偏移</param>
+        /// <param name="DontCreateID">是否为自身生成随机ID</param>
+        public void hm_HudElement_Initialize_ByDesignLayout_For_Screen(XHud_Module_Element element, float alpha, Vector3 offset, string rms_name, bool DontCreateID = false)
         {
             bool IsExist = false;
             for (int i = 0; i < element.RMS_InfoList.Count; i++)
             {
                 if (element.RMS_InfoList[i].LayoutName == rms_name)
                 {
-                    OriginalLayoutInfo info = element.RMS_InfoList[i];
+                    Element_OriginalLayoutInfo info = element.RMS_InfoList[i];
                     element.RectTransform.SetParent(hm_Layout_GetAnchor(info.Anchor));
                     element.element_AnchorRangeSet(info.AnchorMin, info.AnchorMax);
                     element.element_PivotSet(info.Pivot);
@@ -5004,7 +5005,7 @@ namespace SevenStrikeModules.XHud.Hud
                         element.ID = element.element_CreateID(hm_HudElement_CollectElements_Screen());
                     element.element_AlphaSet(alpha);
                     if (UseDebug)
-                        xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "已将元素生成到指定设计布局！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "已将元素生成到指定设计布局！", HudMsgState.通知);
                     IsExist = true;
                     break;
                 }
@@ -5016,20 +5017,20 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsExist)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "未找到指定标识名称的设计布局，请检查该元素是否有记录设计布局信息！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "未找到指定标识名称的设计布局，请检查该元素是否有记录设计布局信息！", HudMsgState.错误);
             }
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 创建的元素的初始化设置 - 世界模式
+        /// xHud Manager管理器消息 - 创建的元素的初始化设置 - 世界模式
         /// </summary>
-        /// <param tweenName="element">目标元素</param>
-        /// <param tweenName="pivot">锚点类型</param>
-        /// <param tweenName="alpha">透明度_Alpha</param>
-        /// <param tweenName="offset">位置偏移</param>
-        /// <param tweenName="position">位置_Position</param>
-        /// <param tweenName="rotation">旋转_Rotation</param>
-        public void hm_HudElement_Initialize_For_World(xHud_Module_Element element, Vector2 size, float alpha, Vector3 offset, Vector3 position, Quaternion rotation, Vector3 scale)
+        /// <param name="element">目标元素</param>
+        /// <param name="pivot">锚点类型</param>
+        /// <param name="alpha">透明度_Alpha</param>
+        /// <param name="offset">位置偏移</param>
+        /// <param name="position">位置_Position</param>
+        /// <param name="rotation">旋转_Rotation</param>
+        public void hm_HudElement_Initialize_For_World(XHud_Module_Element element, Vector2 size, float alpha, Vector3 offset, Vector3 position, Quaternion rotation, Vector3 scale)
         {
             element.RectTransform.SetParent(HudCanvas_WorldAnchor);
             if (size.x > 0 || size.y > 0)
@@ -5046,40 +5047,40 @@ namespace SevenStrikeModules.XHud.Hud
 
         #region 屏幕空间
         /// <summary>
-        /// Hud Manager管理器消息 - 创建一个Hud元素 - 屏幕空间
+        /// xHud Manager管理器消息 - 创建一个Hud元素 - 屏幕空间
         /// </summary>
-        /// <param tweenName="libname">目标库名称</param>
-        /// <param tweenName="indicator">从库中取出后的自定义名称（仅为调用者自己理解的自定义名称）</param>
-        /// <param tweenName="modulename">预存入元素池的目标名称</param>
-        /// <param tweenName="offset">元素偏移</param>
-        /// <param tweenName="scale">元素缩放</param>
-        /// <param tweenName="size">元素尺寸</param>
-        /// <param tweenName="rms">RMS系统是否开启？</param>
-        /// <param tweenName="rms_name">RMS系统方案名称</param>
-        /// <param tweenName="args_creator">元素入场动画参数</param>
-        /// <param tweenName="action_in_start">元素入场开始委托</param>
-        /// <param tweenName="action_in_progress">元素入场进度委托</param>
-        /// <param tweenName="action_in_end">元素入场结束委托</param>        
-        /// <param tweenName="action_out_start">元素退场前委托</param>
-        /// <param tweenName="action_out_progress">元素退场进度委托</param>
-        /// <param tweenName="action_out_end">元素退场后委托</param>     
-        /// <param tweenName="autoin">此值是个非常关键的开关，如果你为一个元素编写了一个自定义控制的脚本绑定在它身上，并希望生成出来的时候由您自己决定何时播放动画，那么此值必须为False</param>
+        /// <param name="libname">目标库名称</param>
+        /// <param name="indicator">从库中取出后的自定义名称（仅为调用者自己理解的自定义名称）</param>
+        /// <param name="modulename">预存入元素池的目标名称</param>
+        /// <param name="offset">元素偏移</param>
+        /// <param name="scale">元素缩放</param>
+        /// <param name="size">元素尺寸</param>
+        /// <param name="rms">RMS系统是否开启？</param>
+        /// <param name="rms_name">RMS系统方案名称</param>
+        /// <param name="args_creator">元素入场动画参数</param>
+        /// <param name="action_in_start">元素入场开始委托</param>
+        /// <param name="action_in_progress">元素入场进度委托</param>
+        /// <param name="action_in_end">元素入场结束委托</param>        
+        /// <param name="action_out_start">元素退场前委托</param>
+        /// <param name="action_out_progress">元素退场进度委托</param>
+        /// <param name="action_out_end">元素退场后委托</param>     
+        /// <param name="autoin">此值是个非常关键的开关，如果你为一个元素编写了一个自定义控制的脚本绑定在它身上，并希望生成出来的时候由您自己决定何时播放动画，那么此值必须为False</param>
         /// <returns>返回一个HudElement节点元素体</returns>
         public HudElementNode hm_HudElement_Create_Screen(
             string libname, string indicator, string modulename,
             Vector3 offset = default(Vector3), Vector3 scale = default(Vector3), Vector2 size = default,
             bool rms = false, string rms_name = "",
             Motion_Creator args_creator = null,
-            UnityAction<xHud_Module_Element> action_in_start = null,
+            UnityAction<XHud_Module_Element> action_in_start = null,
             UnityAction<float> action_in_progress = null,
-            UnityAction<xHud_Module_Element> action_in_end = null,
-            UnityAction<xHud_Module_Element> action_out_start = null,
+            UnityAction<XHud_Module_Element> action_in_end = null,
+            UnityAction<XHud_Module_Element> action_out_start = null,
             UnityAction<float> action_out_progress = null,
-            UnityAction<xHud_Module_Element> action_out_end = null,
+            UnityAction<XHud_Module_Element> action_out_end = null,
             bool autoin = true)
         {
             #region 从元素库中取出元素
-            xHud_Module_Element element = hm_HudElement_Create(libname, modulename);
+            XHud_Module_Element element = hm_HudElement_Create(libname, modulename);
             if (element == null)
             {
                 Debug.Log("HudElement生成警告：您从元素池获取的目标元素为空！请检查该元素在元素池中的状态！");
@@ -5149,39 +5150,39 @@ namespace SevenStrikeModules.XHud.Hud
 
         #region 世界空间
         /// <summary>
-        /// Hud Manager管理器消息 - 创建一个Hud元素 - 世界空间
+        /// xHud Manager管理器消息 - 创建一个Hud元素 - 世界空间
         /// </summary>
-        /// <param tweenName="libname">目标元素库</param>
-        /// <param tweenName="indicator">目标标识名称</param>
-        /// <param tweenName="modulename">模块名称</param>
-        /// <param tweenName="size">锚点</param>
-        /// <param tweenName="position">位置_Position</param>
-        /// <param tweenName="rotation">旋转_Rotation</param>
-        /// <param tweenName="scale">缩放_Scale</param>
-        /// <param tweenName="offset">偏移</param>
-        /// <param tweenName="args_creator">元素动效参数 - 创建</param>
-        /// <param tweenName="action_in_start">委托-进入时</param>
-        /// <param tweenName="action_in_progress">委托-进入进度</param>
-        /// <param tweenName="action_in_end">委托-进入后</param>
-        /// <param tweenName="action_out_start">委托-退出时</param>
-        /// <param tweenName="action_out_progress">委托-退出进度</param>
-        /// <param tweenName="action_out_end">委托-退出后</param>
-        /// <param tweenName="autoin">元素自动执行ElementIn</param>
+        /// <param name="libname">目标元素库</param>
+        /// <param name="indicator">目标标识名称</param>
+        /// <param name="modulename">模块名称</param>
+        /// <param name="size">锚点</param>
+        /// <param name="position">位置_Position</param>
+        /// <param name="rotation">旋转_Rotation</param>
+        /// <param name="scale">缩放_Scale</param>
+        /// <param name="offset">偏移</param>
+        /// <param name="args_creator">元素动效参数 - 创建</param>
+        /// <param name="action_in_start">委托-进入时</param>
+        /// <param name="action_in_progress">委托-进入进度</param>
+        /// <param name="action_in_end">委托-进入后</param>
+        /// <param name="action_out_start">委托-退出时</param>
+        /// <param name="action_out_progress">委托-退出进度</param>
+        /// <param name="action_out_end">委托-退出后</param>
+        /// <param name="autoin">元素自动执行ElementIn</param>
         /// <returns>返回一个HudElement节点元素体</returns>
         public HudElementNode hm_HudElement_Create_World(
             string libname, string indicator, string modulename,
             Vector2 size, Vector3 position, Vector3 rotation, Vector3 scale, Vector3 offset,
             Motion_Creator args_creator = null,
-            UnityAction<xHud_Module_Element> action_in_start = null,
+            UnityAction<XHud_Module_Element> action_in_start = null,
             UnityAction<float> action_in_progress = null,
-            UnityAction<xHud_Module_Element> action_in_end = null,
-            UnityAction<xHud_Module_Element> action_out_start = null,
+            UnityAction<XHud_Module_Element> action_in_end = null,
+            UnityAction<XHud_Module_Element> action_out_start = null,
             UnityAction<float> action_out_progress = null,
-            UnityAction<xHud_Module_Element> action_out_end = null,
+            UnityAction<XHud_Module_Element> action_out_end = null,
             bool autoin = true)
         {
             #region 从元素库中取出元素
-            xHud_Module_Element element = hm_HudElement_Create(libname, modulename);
+            XHud_Module_Element element = hm_HudElement_Create(libname, modulename);
             if (element == null)
             {
                 Debug.Log("HudElement生成警告：您从元素池获取的目标元素为空！请检查该元素在元素池中的状态！");
@@ -5221,12 +5222,12 @@ namespace SevenStrikeModules.XHud.Hud
         #region 回收
 
         /// <summary>
-        /// Hud Manager管理器消息 - 清空所有生成的Hud元素
+        /// xHud Manager管理器消息 - 清空所有生成的Hud元素
         /// </summary>
-        /// <param tweenName="args">回收参数</param>
-        /// <param tweenName="action_out_start">委托 - 回收时</param>
-        /// <param tweenName="action_out_end">委托 - 回收后</param>
-        public void hm_HudElement_RecycleAll(Motion_Recycler args, UnityAction<xHud_Module_Element> action_out_start = null, UnityAction<float> action_out_progress = null, UnityAction<xHud_Module_Element> action_out_end = null)
+        /// <param name="args">回收参数</param>
+        /// <param name="action_out_start">委托 - 回收时</param>
+        /// <param name="action_out_end">委托 - 回收后</param>
+        public void hm_HudElement_RecycleAll(Motion_Recycler args, UnityAction<XHud_Module_Element> action_out_start = null, UnityAction<float> action_out_progress = null, UnityAction<XHud_Module_Element> action_out_end = null)
         {
             for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
             {
@@ -5264,13 +5265,13 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 清理目标ID的Hud元素
+        /// xHud Manager管理器消息 - 清理目标ID的Hud元素
         /// </summary>
-        /// <param tweenName="id">目标ID</param>
-        /// <param tweenName="args">回收参数</param>
-        /// <param tweenName="action_out_start">委托 - 回收时</param>
-        /// <param tweenName="action_out_end">委托 - 回收后</param>
-        public void hm_HudElement_RecycleAt(int id, Motion_Recycler args, UnityAction<xHud_Module_Element> action_out_start = null, UnityAction<float> action_out_progress = null, UnityAction<xHud_Module_Element> action_out_end = null)
+        /// <param name="id">目标ID</param>
+        /// <param name="args">回收参数</param>
+        /// <param name="action_out_start">委托 - 回收时</param>
+        /// <param name="action_out_end">委托 - 回收后</param>
+        public void hm_HudElement_RecycleAt(int id, Motion_Recycler args, UnityAction<XHud_Module_Element> action_out_start = null, UnityAction<float> action_out_progress = null, UnityAction<XHud_Module_Element> action_out_end = null)
         {
             bool finded = false;
             int x_id = 0;
@@ -5328,7 +5329,7 @@ namespace SevenStrikeModules.XHud.Hud
                             if (node.Element.act_on_element_out_end == null)
                                 node.Element.act_on_element_out_end += action_out_end;
 
-                            node.Element.act_on_element_out_end += (xHud_Module_Element ele) =>
+                            node.Element.act_on_element_out_end += (XHud_Module_Element ele) =>
                             {
                                 node.Element.element_Reset();
                                 anchorstruct.HudElementInfos.Remove(node);
@@ -5362,7 +5363,7 @@ namespace SevenStrikeModules.XHud.Hud
                         if (node.Element.act_on_element_out_end == null)
                             node.Element.act_on_element_out_end += action_out_end;
 
-                        node.Element.act_on_element_out_end += (xHud_Module_Element ele) =>
+                        node.Element.act_on_element_out_end += (XHud_Module_Element ele) =>
                         {
                             node.Element.element_Reset();
                             Anchors_Layout_World.Remove(node);
@@ -5381,24 +5382,24 @@ namespace SevenStrikeModules.XHud.Hud
             if (!finded)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "Hud元素ID：" + id + " 不存在！未找到要回收的目标元素！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "Hud元素ID：" + id + " 不存在！未找到要回收的目标元素！", HudMsgState.通知);
             }
             else
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "已回收Hud元素：" + x_name + " / " + x_id, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "已回收Hud元素：" + x_name + " / " + x_id, HudMsgState.通知);
             }
             #endregion
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 清理目标ID的Hud元素
+        /// xHud Manager管理器消息 - 清理目标ID的Hud元素
         /// </summary>
-        /// <param tweenName="element">目标名称</param>
-        /// <param tweenName="args">回收参数</param>
-        /// <param tweenName="action_out_start">委托 - 回收时</param>
-        /// <param tweenName="action_out_end">委托 - 回收后</param>
-        public void hm_HudElement_RecycleAt(xHud_Module_Element element, Motion_Recycler args, UnityAction<xHud_Module_Element> action_out_start = null, UnityAction<float> action_out_progress = null, UnityAction<xHud_Module_Element> action_out_end = null)
+        /// <param name="element">目标名称</param>
+        /// <param name="args">回收参数</param>
+        /// <param name="action_out_start">委托 - 回收时</param>
+        /// <param name="action_out_end">委托 - 回收后</param>
+        public void hm_HudElement_RecycleAt(XHud_Module_Element element, Motion_Recycler args, UnityAction<XHud_Module_Element> action_out_start = null, UnityAction<float> action_out_progress = null, UnityAction<XHud_Module_Element> action_out_end = null)
         {
             bool finded = false;
             int x_id = 0;
@@ -5498,12 +5499,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (!finded)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "Hud元素名称：" + element + " 不存在！未找到要回收的目标元素！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "Hud元素名称：" + element + " 不存在！未找到要回收的目标元素！", HudMsgState.通知);
             }
             else
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "已回收Hud元素：" + x_indicator + " / " + x_id, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "已回收Hud元素：" + x_indicator + " / " + x_id, HudMsgState.通知);
             }
             #endregion
         }
@@ -5513,13 +5514,13 @@ namespace SevenStrikeModules.XHud.Hud
         #region 获取
 
         /// <summary>
-        /// Hud Manager管理器消息 - 根据目标ID从锚点列表中获取生成的Hud元素
+        /// xHud Manager管理器消息 - 根据目标ID从锚点列表中获取生成的Hud元素
         /// </summary>
-        /// <param tweenName="id">目标ID的元素</param>
+        /// <param name="id">目标ID的元素</param>
         /// <returns>根据目标ID获取的元素</returns>
-        public xHud_Module_Element hm_HudElement_Get(int id)
+        public XHud_Module_Element hm_HudElement_Get(int id)
         {
-            xHud_Module_Element element = null;
+            XHud_Module_Element element = null;
             for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
             {
                 for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
@@ -5534,13 +5535,13 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        ///  Hud Manager管理器消息 - 根据目标名称从锚点列表中获取生成的Hud元素
+        ///  xHud Manager管理器消息 - 根据目标名称从锚点列表中获取生成的Hud元素
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns>根据目标名称获取的元素</returns>
-        public xHud_Module_Element hm_HudElement_Get(string name)
+        public XHud_Module_Element hm_HudElement_Get(string name)
         {
-            xHud_Module_Element element = null;
+            XHud_Module_Element element = null;
             for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
             {
                 for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
@@ -5555,12 +5556,12 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        ///  Hud Manager管理器消息 - 从锚点列表中获取所有已生成的Hud元素
+        ///  xHud Manager管理器消息 - 从锚点列表中获取所有已生成的Hud元素
         /// </summary>
         /// <returns>所有已生成到锚点里的Hud元素</returns>
-        public xHud_Module_Element[] hm_HudElement_GetAll()
+        public XHud_Module_Element[] hm_HudElement_GetAll()
         {
-            List<xHud_Module_Element> list = new List<xHud_Module_Element>();
+            List<XHud_Module_Element> list = new List<XHud_Module_Element>();
             for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
             {
                 for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
@@ -5572,7 +5573,7 @@ namespace SevenStrikeModules.XHud.Hud
         }
 
         /// <summary>
-        /// Hud Manager管理器消息 - 获取已生成到锚点里的总Element数量
+        /// xHud Manager管理器消息 - 获取已生成到锚点里的总Element数量
         /// </summary>
         /// <returns></returns>
         public int hm_HudElement_TotalCount()
@@ -5597,7 +5598,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             List<GameObject> list = new List<GameObject>();
 
-            xHud_Manager man = FindFirstObjectByType<xHud_Manager>();
+            XHud_Manager man = FindFirstObjectByType<XHud_Manager>();
 
             for (int i = 0; i < man.HudCanvas_ScreenAnchor.childCount; i++)
             {
@@ -5620,10 +5621,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// 主要在编辑器模式下用于获取所有锚点下的物体进行集控
         /// </summary>
         /// <returns></returns>
-        public xHud_Module_Element[] hm_AnchorElementsGet()
+        public XHud_Module_Element[] hm_AnchorElementsGet()
         {
-            xHud_Manager mgr = FindFirstObjectByType<xHud_Manager>();
-            xHud_Module_Element[] trans = mgr.HudCanvas_ScreenAnchor.GetComponentsInChildren<xHud_Module_Element>();
+            XHud_Manager mgr = FindFirstObjectByType<XHud_Manager>();
+            XHud_Module_Element[] trans = mgr.HudCanvas_ScreenAnchor.GetComponentsInChildren<XHud_Module_Element>();
             return trans;
         }
 
@@ -5708,22 +5709,22 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 屏幕内容透明度平滑到
         /// </summary>
-        /// <param tweenName="val">目标透明度</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        /// <param tweenName="action_start">委托 - 开始时</param>
-        /// <param tweenName="action_end">委托 - 结束时</param>
-        public void hm_Screen_ContentAlpha_To(float val, float dur, Ease ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
+        /// <param name="val">目标透明度</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        /// <param name="action_start">委托 - 开始时</param>
+        /// <param name="action_end">委托 - 结束时</param>
+        public void hm_Screen_ContentAlpha_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_ContentAlpha_Screen != null && twn_ContentAlpha_Screen.active)
-                if (twn_ContentAlpha_Screen.IsPlaying())
+            if (twn_ContentAlpha_Screen != null && twn_ContentAlpha_Screen.IsActive)
+                if (twn_ContentAlpha_Screen.IsPlaying)
                     twn_ContentAlpha_Screen.Kill();
-            twn_ContentAlpha_Screen = DOTween.To(() => ContentAlpha_Screen, x => ContentAlpha_Screen = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            twn_ContentAlpha_Screen = XTween.To(() => ContentAlpha_Screen, x => ContentAlpha_Screen = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
-            }).OnComplete(() =>
+            }).OnComplete((d) =>
             {
                 if (action_end != null)
                     action_end();
@@ -5733,22 +5734,22 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 屏幕内容透明度平滑到
         /// </summary>
-        /// <param tweenName="val">目标透明度</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        /// <param tweenName="action_start">委托 - 开始时</param>
-        /// <param tweenName="action_end">委托 - 结束时</param>
+        /// <param name="val">目标透明度</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        /// <param name="action_start">委托 - 开始时</param>
+        /// <param name="action_end">委托 - 结束时</param>
         public void hm_Screen_ContentAlpha_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_ContentAlpha_Screen != null && twn_ContentAlpha_Screen.active)
-                if (twn_ContentAlpha_Screen.IsPlaying())
+            if (twn_ContentAlpha_Screen != null && twn_ContentAlpha_Screen.IsActive)
+                if (twn_ContentAlpha_Screen.IsPlaying)
                     twn_ContentAlpha_Screen.Kill();
-            twn_ContentAlpha_Screen = DOTween.To(() => ContentAlpha_Screen, x => ContentAlpha_Screen = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            twn_ContentAlpha_Screen = XTween.To(() => ContentAlpha_Screen, x => ContentAlpha_Screen = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
-            }).OnComplete(() =>
+            }).OnComplete((d) =>
             {
                 if (action_end != null)
                     action_end();
@@ -5758,11 +5759,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 屏幕内容透明度快速到
         /// </summary>
-        /// <param tweenName="val">目标透明度</param>
+        /// <param name="val">目标透明度</param>
         public void hm_Screen_ContentAlpha_FastTo(float val)
         {
-            if (twn_ContentAlpha_Screen != null && twn_ContentAlpha_Screen.active)
-                if (twn_ContentAlpha_Screen.IsPlaying())
+            if (twn_ContentAlpha_Screen != null && twn_ContentAlpha_Screen.IsActive)
+                if (twn_ContentAlpha_Screen.IsPlaying)
                     twn_ContentAlpha_Screen.Kill();
             ContentAlpha_Screen = val;
         }
@@ -5770,22 +5771,22 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 世界内容透明度平滑到
         /// </summary>
-        /// <param tweenName="val">目标透明度</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        /// <param tweenName="action_start">委托 - 开始时</param>
-        /// <param tweenName="action_end">委托 - 结束时</param>
-        public void hm_World_ContentAlpha_To(float val, float dur, Ease ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
+        /// <param name="val">目标透明度</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        /// <param name="action_start">委托 - 开始时</param>
+        /// <param name="action_end">委托 - 结束时</param>
+        public void hm_World_ContentAlpha_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_ContentAlpha_World != null && twn_ContentAlpha_World.active)
-                if (twn_ContentAlpha_World.IsPlaying())
+            if (twn_ContentAlpha_World != null && twn_ContentAlpha_World.IsActive)
+                if (twn_ContentAlpha_World.IsPlaying)
                     twn_ContentAlpha_World.Kill();
-            twn_ContentAlpha_World = DOTween.To(() => ContentAlpha_World, x => ContentAlpha_World = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            twn_ContentAlpha_World = XTween.To(() => ContentAlpha_World, x => ContentAlpha_World = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
-            }).OnComplete(() =>
+            }).OnComplete((d) =>
             {
                 if (action_end != null)
                     action_end();
@@ -5795,22 +5796,22 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 世界内容透明度平滑到
         /// </summary>
-        /// <param tweenName="val">目标透明度</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        /// <param tweenName="action_start">委托 - 开始时</param>
-        /// <param tweenName="action_end">委托 - 结束时</param>
+        /// <param name="val">目标透明度</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        /// <param name="action_start">委托 - 开始时</param>
+        /// <param name="action_end">委托 - 结束时</param>
         public void hm_World_ContentAlpha_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_ContentAlpha_World != null && twn_ContentAlpha_World.active)
-                if (twn_ContentAlpha_World.IsPlaying())
+            if (twn_ContentAlpha_World != null && twn_ContentAlpha_World.IsActive)
+                if (twn_ContentAlpha_World.IsPlaying)
                     twn_ContentAlpha_World.Kill();
-            twn_ContentAlpha_World = DOTween.To(() => ContentAlpha_World, x => ContentAlpha_World = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            twn_ContentAlpha_World = XTween.To(() => ContentAlpha_World, x => ContentAlpha_World = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
-            }).OnComplete(() =>
+            }).OnComplete((d) =>
             {
                 if (action_end != null)
                     action_end();
@@ -5820,11 +5821,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 世界内容透明度快速到
         /// </summary>
-        /// <param tweenName="val">目标透明度</param>
+        /// <param name="val">目标透明度</param>
         public void hm_World_ContentAlpha_FastTo(float val)
         {
-            if (twn_ContentAlpha_World != null && twn_ContentAlpha_World.active)
-                if (twn_ContentAlpha_World.IsPlaying())
+            if (twn_ContentAlpha_World != null && twn_ContentAlpha_World.IsActive)
+                if (twn_ContentAlpha_World.IsPlaying)
                     twn_ContentAlpha_World.Kill();
             ContentAlpha_World = val;
         }
@@ -5877,67 +5878,67 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 遮罩颜色平滑到
         /// </summary>
-        /// <param tweenName="col">目标颜色</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        public void hm_MaskColor_To(Color col, float dur, Ease ease, float delay)
+        /// <param name="col">目标颜色</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        public void hm_MaskColor_To(Color col, float dur, EaseMode ease, float delay)
         {
-            if (twn_MaskColor_R != null && twn_MaskColor_R.active)
-                if (twn_MaskColor_R.IsPlaying())
+            if (twn_MaskColor_R != null && twn_MaskColor_R.IsActive)
+                if (twn_MaskColor_R.IsPlaying)
                     twn_MaskColor_R.Kill();
-            if (twn_MaskColor_G != null && twn_MaskColor_G.active)
-                if (twn_MaskColor_G.IsPlaying())
+            if (twn_MaskColor_G != null && twn_MaskColor_G.IsActive)
+                if (twn_MaskColor_G.IsPlaying)
                     twn_MaskColor_G.Kill();
-            if (twn_MaskColor_B != null && twn_MaskColor_B.active)
-                if (twn_MaskColor_B.IsPlaying())
+            if (twn_MaskColor_B != null && twn_MaskColor_B.IsActive)
+                if (twn_MaskColor_B.IsPlaying)
                     twn_MaskColor_B.Kill();
 
-            twn_MaskColor_R = DOTween.To(() => MaskColor.r, r => MaskColor.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
-            twn_MaskColor_G = DOTween.To(() => MaskColor.g, g => MaskColor.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
-            twn_MaskColor_B = DOTween.To(() => MaskColor.b, b => MaskColor.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_MaskColor_R = XTween.To(() => MaskColor.r, r => MaskColor.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_MaskColor_G = XTween.To(() => MaskColor.g, g => MaskColor.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_MaskColor_B = XTween.To(() => MaskColor.b, b => MaskColor.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
         }
 
         /// <summary>
         /// 遮罩颜色平滑到
         /// </summary>
-        /// <param tweenName="col">目标颜色</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">曲线</param>
-        /// <param tweenName="delay">延迟</param>
+        /// <param name="col">目标颜色</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">曲线</param>
+        /// <param name="delay">延迟</param>
         public void hm_MaskColor_To(Color col, float dur, AnimationCurve ease, float delay)
         {
-            if (twn_MaskColor_R != null && twn_MaskColor_R.active)
-                if (twn_MaskColor_R.IsPlaying())
+            if (twn_MaskColor_R != null && twn_MaskColor_R.IsActive)
+                if (twn_MaskColor_R.IsPlaying)
                     twn_MaskColor_R.Kill();
-            if (twn_MaskColor_G != null && twn_MaskColor_G.active)
-                if (twn_MaskColor_G.IsPlaying())
+            if (twn_MaskColor_G != null && twn_MaskColor_G.IsActive)
+                if (twn_MaskColor_G.IsPlaying)
                     twn_MaskColor_G.Kill();
-            if (twn_MaskColor_B != null && twn_MaskColor_B.active)
-                if (twn_MaskColor_B.IsPlaying())
+            if (twn_MaskColor_B != null && twn_MaskColor_B.IsActive)
+                if (twn_MaskColor_B.IsPlaying)
                     twn_MaskColor_B.Kill();
 
-            twn_MaskColor_R = DOTween.To(() => MaskColor.r, r => MaskColor.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
-            twn_MaskColor_G = DOTween.To(() => MaskColor.g, g => MaskColor.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
-            twn_MaskColor_B = DOTween.To(() => MaskColor.b, b => MaskColor.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_MaskColor_R = XTween.To(() => MaskColor.r, r => MaskColor.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_MaskColor_G = XTween.To(() => MaskColor.g, g => MaskColor.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_MaskColor_B = XTween.To(() => MaskColor.b, b => MaskColor.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
         }
 
         /// <summary>
         /// 遮罩颜色快速到
         /// </summary>
-        /// <param tweenName="col">目标颜色</param>
+        /// <param name="col">目标颜色</param>
         public void hm_MaskColor_FastTo(Color col)
         {
-            if (twn_MaskColor_R != null && twn_MaskColor_R.active)
-                if (twn_MaskColor_R.IsPlaying())
+            if (twn_MaskColor_R != null && twn_MaskColor_R.IsActive)
+                if (twn_MaskColor_R.IsPlaying)
                     twn_MaskColor_R.Kill();
 
-            if (twn_MaskColor_G != null && twn_MaskColor_G.active)
-                if (twn_MaskColor_G.IsPlaying())
+            if (twn_MaskColor_G != null && twn_MaskColor_G.IsActive)
+                if (twn_MaskColor_G.IsPlaying)
                     twn_MaskColor_G.Kill();
 
-            if (twn_MaskColor_B != null && twn_MaskColor_B.active)
-                if (twn_MaskColor_B.IsPlaying())
+            if (twn_MaskColor_B != null && twn_MaskColor_B.IsActive)
+                if (twn_MaskColor_B.IsPlaying)
                     twn_MaskColor_B.Kill();
 
             MaskColor.r = col.r;
@@ -5948,22 +5949,22 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 遮罩透明度平滑到
         /// </summary>
-        /// <param tweenName="val">目标颜色</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        /// <param tweenName="action_start">委托 - 开始时</param>
-        /// <param tweenName="action_end">委托 - 结束时</param>
-        public void hm_MaskAlpha_To(float val, float dur, Ease ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
+        /// <param name="val">目标颜色</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        /// <param name="action_start">委托 - 开始时</param>
+        /// <param name="action_end">委托 - 结束时</param>
+        public void hm_MaskAlpha_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_MaskAlpha != null && twn_MaskAlpha.active)
-                if (twn_MaskAlpha.IsPlaying())
+            if (twn_MaskAlpha != null && twn_MaskAlpha.IsActive)
+                if (twn_MaskAlpha.IsPlaying)
                     twn_MaskAlpha.Kill();
-            twn_MaskAlpha = DOTween.To(() => MaskAlpha, x => MaskAlpha = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            twn_MaskAlpha = XTween.To(() => MaskAlpha, x => MaskAlpha = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
-            }).OnComplete(() =>
+            }).OnComplete((d) =>
             {
                 if (action_end != null)
                     action_end();
@@ -5973,22 +5974,22 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 遮罩透明度平滑到
         /// </summary>
-        /// <param tweenName="val">目标颜色</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">曲线</param>
-        /// <param tweenName="delay">延迟</param>
-        /// <param tweenName="action_start">委托 - 开始时</param>
-        /// <param tweenName="action_end">委托 - 结束时</param>
+        /// <param name="val">目标颜色</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">曲线</param>
+        /// <param name="delay">延迟</param>
+        /// <param name="action_start">委托 - 开始时</param>
+        /// <param name="action_end">委托 - 结束时</param>
         public void hm_MaskAlpha_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_MaskAlpha != null && twn_MaskAlpha.active)
-                if (twn_MaskAlpha.IsPlaying())
+            if (twn_MaskAlpha != null && twn_MaskAlpha.IsActive)
+                if (twn_MaskAlpha.IsPlaying)
                     twn_MaskAlpha.Kill();
-            twn_MaskAlpha = DOTween.To(() => MaskAlpha, x => MaskAlpha = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            twn_MaskAlpha = XTween.To(() => MaskAlpha, x => MaskAlpha = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
-            }).OnComplete(() =>
+            }).OnComplete((d) =>
             {
                 if (action_end != null)
                     action_end();
@@ -5998,11 +5999,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 遮罩透明度快速到
         /// </summary>
-        /// <param tweenName="val">目标透明度</param>
+        /// <param name="val">目标透明度</param>
         public void hm_MaskAlpha_FastTo(float val)
         {
-            if (twn_MaskAlpha != null && twn_MaskAlpha.active)
-                if (twn_MaskAlpha.IsPlaying())
+            if (twn_MaskAlpha != null && twn_MaskAlpha.IsActive)
+                if (twn_MaskAlpha.IsPlaying)
                     twn_MaskAlpha.Kill();
             MaskAlpha = val;
         }
@@ -6010,7 +6011,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 设置遮罩贴图
         /// </summary>
-        /// <param tweenName="tex">目标遮罩贴图</param>
+        /// <param name="tex">目标遮罩贴图</param>
         public void hm_MaskTextureSet(Texture2D tex)
         {
             if (tex == null)
@@ -6072,67 +6073,67 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 散焦遮罩颜色平滑到
         /// </summary>
-        /// <param tweenName="col">目标颜色</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        public void hm_BlurMaskColor_To(Color col, float dur, Ease ease, float delay)
+        /// <param name="col">目标颜色</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        public void hm_BlurMaskColor_To(Color col, float dur, EaseMode ease, float delay)
         {
-            if (twn_BlurMaskColor_R != null && twn_BlurMaskColor_R.active)
-                if (twn_BlurMaskColor_R.IsPlaying())
+            if (twn_BlurMaskColor_R != null && twn_BlurMaskColor_R.IsActive)
+                if (twn_BlurMaskColor_R.IsPlaying)
                     twn_BlurMaskColor_R.Kill();
-            if (twn_BlurMaskColor_G != null && twn_BlurMaskColor_G.active)
-                if (twn_BlurMaskColor_G.IsPlaying())
+            if (twn_BlurMaskColor_G != null && twn_BlurMaskColor_G.IsActive)
+                if (twn_BlurMaskColor_G.IsPlaying)
                     twn_BlurMaskColor_G.Kill();
-            if (twn_BlurMaskColor_B != null && twn_BlurMaskColor_B.active)
-                if (twn_BlurMaskColor_B.IsPlaying())
+            if (twn_BlurMaskColor_B != null && twn_BlurMaskColor_B.IsActive)
+                if (twn_BlurMaskColor_B.IsPlaying)
                     twn_BlurMaskColor_B.Kill();
 
-            twn_BlurMaskColor_R = DOTween.To(() => BlurMaskColor.r, r => BlurMaskColor.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
-            twn_BlurMaskColor_G = DOTween.To(() => BlurMaskColor.g, g => BlurMaskColor.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
-            twn_BlurMaskColor_B = DOTween.To(() => BlurMaskColor.b, b => BlurMaskColor.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_BlurMaskColor_R = XTween.To(() => BlurMaskColor.r, r => BlurMaskColor.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_BlurMaskColor_G = XTween.To(() => BlurMaskColor.g, g => BlurMaskColor.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_BlurMaskColor_B = XTween.To(() => BlurMaskColor.b, b => BlurMaskColor.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
         }
 
         /// <summary>
         /// 散焦遮罩颜色平滑到
         /// </summary>
-        /// <param tweenName="col">目标颜色</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">曲线</param>
-        /// <param tweenName="delay">延迟</param>
+        /// <param name="col">目标颜色</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">曲线</param>
+        /// <param name="delay">延迟</param>
         public void hm_BlurMaskColor_To(Color col, float dur, AnimationCurve ease, float delay)
         {
-            if (twn_BlurMaskColor_R != null && twn_BlurMaskColor_R.active)
-                if (twn_BlurMaskColor_R.IsPlaying())
+            if (twn_BlurMaskColor_R != null && twn_BlurMaskColor_R.IsActive)
+                if (twn_BlurMaskColor_R.IsPlaying)
                     twn_BlurMaskColor_R.Kill();
-            if (twn_BlurMaskColor_G != null && twn_BlurMaskColor_G.active)
-                if (twn_BlurMaskColor_G.IsPlaying())
+            if (twn_BlurMaskColor_G != null && twn_BlurMaskColor_G.IsActive)
+                if (twn_BlurMaskColor_G.IsPlaying)
                     twn_BlurMaskColor_G.Kill();
-            if (twn_BlurMaskColor_B != null && twn_BlurMaskColor_B.active)
-                if (twn_BlurMaskColor_B.IsPlaying())
+            if (twn_BlurMaskColor_B != null && twn_BlurMaskColor_B.IsActive)
+                if (twn_BlurMaskColor_B.IsPlaying)
                     twn_BlurMaskColor_B.Kill();
 
-            twn_BlurMaskColor_R = DOTween.To(() => BlurMaskColor.r, r => BlurMaskColor.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
-            twn_BlurMaskColor_G = DOTween.To(() => BlurMaskColor.g, g => BlurMaskColor.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
-            twn_BlurMaskColor_B = DOTween.To(() => BlurMaskColor.b, b => BlurMaskColor.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_BlurMaskColor_R = XTween.To(() => BlurMaskColor.r, r => BlurMaskColor.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_BlurMaskColor_G = XTween.To(() => BlurMaskColor.g, g => BlurMaskColor.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_BlurMaskColor_B = XTween.To(() => BlurMaskColor.b, b => BlurMaskColor.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
         }
 
         /// <summary>
         /// 散焦遮罩颜色快速到
         /// </summary>
-        /// <param tweenName="col">目标颜色</param>
+        /// <param name="col">目标颜色</param>
         public void hm_BlurMaskColor_FastTo(Color col)
         {
-            if (twn_BlurMaskColor_R != null && twn_BlurMaskColor_R.active)
-                if (twn_BlurMaskColor_R.IsPlaying())
+            if (twn_BlurMaskColor_R != null && twn_BlurMaskColor_R.IsActive)
+                if (twn_BlurMaskColor_R.IsPlaying)
                     twn_BlurMaskColor_R.Kill();
 
-            if (twn_BlurMaskColor_G != null && twn_BlurMaskColor_G.active)
-                if (twn_BlurMaskColor_G.IsPlaying())
+            if (twn_BlurMaskColor_G != null && twn_BlurMaskColor_G.IsActive)
+                if (twn_BlurMaskColor_G.IsPlaying)
                     twn_BlurMaskColor_G.Kill();
 
-            if (twn_BlurMaskColor_B != null && twn_BlurMaskColor_B.active)
-                if (twn_BlurMaskColor_B.IsPlaying())
+            if (twn_BlurMaskColor_B != null && twn_BlurMaskColor_B.IsActive)
+                if (twn_BlurMaskColor_B.IsPlaying)
                     twn_BlurMaskColor_B.Kill();
 
             BlurMaskColor.r = col.r;
@@ -6143,22 +6144,22 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 散焦遮罩透明度平滑到
         /// </summary>
-        /// <param tweenName="val">目标颜色</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        /// <param tweenName="action_start">委托 - 开始时</param>
-        /// <param tweenName="action_end">委托 - 结束时</param>
-        public void hm_BlurMaskAlpha_To(float val, float dur, Ease ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
+        /// <param name="val">目标颜色</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        /// <param name="action_start">委托 - 开始时</param>
+        /// <param name="action_end">委托 - 结束时</param>
+        public void hm_BlurMaskAlpha_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_BlurMaskAlpha != null && twn_BlurMaskAlpha.active)
-                if (twn_BlurMaskAlpha.IsPlaying())
+            if (twn_BlurMaskAlpha != null && twn_BlurMaskAlpha.IsActive)
+                if (twn_BlurMaskAlpha.IsPlaying)
                     twn_BlurMaskAlpha.Kill();
-            twn_BlurMaskAlpha = DOTween.To(() => BlurMaskAlpha, x => BlurMaskAlpha = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            twn_BlurMaskAlpha = XTween.To(() => BlurMaskAlpha, x => BlurMaskAlpha = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
-            }).OnComplete(() =>
+            }).OnComplete((d) =>
             {
                 if (action_end != null)
                     action_end();
@@ -6168,22 +6169,22 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 散焦遮罩透明度平滑到
         /// </summary>
-        /// <param tweenName="val">目标颜色</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">曲线</param>
-        /// <param tweenName="delay">延迟</param>
-        /// <param tweenName="action_start">委托 - 开始时</param>
-        /// <param tweenName="action_end">委托 - 结束时</param>
+        /// <param name="val">目标颜色</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">曲线</param>
+        /// <param name="delay">延迟</param>
+        /// <param name="action_start">委托 - 开始时</param>
+        /// <param name="action_end">委托 - 结束时</param>
         public void hm_BlurMaskAlpha_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_BlurMaskAlpha != null && twn_BlurMaskAlpha.active)
-                if (twn_BlurMaskAlpha.IsPlaying())
+            if (twn_BlurMaskAlpha != null && twn_BlurMaskAlpha.IsActive)
+                if (twn_BlurMaskAlpha.IsPlaying)
                     twn_BlurMaskAlpha.Kill();
-            twn_BlurMaskAlpha = DOTween.To(() => BlurMaskAlpha, x => BlurMaskAlpha = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            twn_BlurMaskAlpha = XTween.To(() => BlurMaskAlpha, x => BlurMaskAlpha = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
-            }).OnComplete(() =>
+            }).OnComplete((d) =>
             {
                 if (action_end != null)
                     action_end();
@@ -6193,11 +6194,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 散焦遮罩透明度快速到
         /// </summary>
-        /// <param tweenName="val">目标透明度</param>
+        /// <param name="val">目标透明度</param>
         public void hm_BlurMaskAlpha_FastTo(float val)
         {
-            if (twn_BlurMaskAlpha != null && twn_BlurMaskAlpha.active)
-                if (twn_BlurMaskAlpha.IsPlaying())
+            if (twn_BlurMaskAlpha != null && twn_BlurMaskAlpha.IsActive)
+                if (twn_BlurMaskAlpha.IsPlaying)
                     twn_BlurMaskAlpha.Kill();
             BlurMaskAlpha = val;
         }
@@ -6205,7 +6206,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 设置散焦遮罩贴图
         /// </summary>
-        /// <param tweenName="tex">目标散焦遮罩贴图</param>
+        /// <param name="tex">目标散焦遮罩贴图</param>
         public void hm_BlurMaskTextureSet(Texture2D tex)
         {
             if (tex == null)
@@ -6226,7 +6227,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 控制散焦特性强度
         /// </summary>
-        /// <param tweenName="Intensity">强度</param>
+        /// <param name="Intensity">强度</param>
         public void hm_UniversalFeature_Blur_Get()
         {
             if (UniversalFeature_Blur == null)
@@ -6268,24 +6269,24 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 散焦特性效果强度平滑到
         /// </summary>
-        /// <param tweenName="val">目标强度</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        /// <param tweenName="action_start">委托 - 开始时</param>
-        /// <param tweenName="action_end">委托 - 结束时</param>
-        public void hm_UniversalFeature_Blur_To(float val, float dur, Ease ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
+        /// <param name="val">目标强度</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        /// <param name="action_start">委托 - 开始时</param>
+        /// <param name="action_end">委托 - 结束时</param>
+        public void hm_UniversalFeature_Blur_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
             if (UniversalFeature_Blur == null)
                 return;
-            if (twn_UniversalFeature_Blur != null && twn_UniversalFeature_Blur.active)
-                if (twn_UniversalFeature_Blur.IsPlaying())
+            if (twn_UniversalFeature_Blur != null && twn_UniversalFeature_Blur.IsActive)
+                if (twn_UniversalFeature_Blur.IsPlaying)
                     twn_UniversalFeature_Blur.Kill();
-            twn_UniversalFeature_Blur = DOTween.To(() => UniversalFeature_Blur_Intensity, x => UniversalFeature_Blur_Intensity = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            twn_UniversalFeature_Blur = XTween.To(() => UniversalFeature_Blur_Intensity, x => UniversalFeature_Blur_Intensity = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
-            }).OnComplete(() =>
+            }).OnComplete((d) =>
             {
                 if (action_end != null)
                     action_end();
@@ -6295,24 +6296,24 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 散焦特性效果强度平滑到
         /// </summary>
-        /// <param tweenName="val">目标强度</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        /// <param tweenName="action_start">委托 - 开始时</param>
-        /// <param tweenName="action_end">委托 - 结束时</param>
+        /// <param name="val">目标强度</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        /// <param name="action_start">委托 - 开始时</param>
+        /// <param name="action_end">委托 - 结束时</param>
         public void hm_UniversalFeature_Blur_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
             if (UniversalFeature_Blur == null)
                 return;
-            if (twn_UniversalFeature_Blur != null && twn_UniversalFeature_Blur.active)
-                if (twn_UniversalFeature_Blur.IsPlaying())
+            if (twn_UniversalFeature_Blur != null && twn_UniversalFeature_Blur.IsActive)
+                if (twn_UniversalFeature_Blur.IsPlaying)
                     twn_UniversalFeature_Blur.Kill();
-            twn_UniversalFeature_Blur = DOTween.To(() => UniversalFeature_Blur_Intensity, x => UniversalFeature_Blur_Intensity = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            twn_UniversalFeature_Blur = XTween.To(() => UniversalFeature_Blur_Intensity, x => UniversalFeature_Blur_Intensity = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
-            }).OnComplete(() =>
+            }).OnComplete((d) =>
             {
                 if (action_end != null)
                     action_end();
@@ -6322,13 +6323,13 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 散焦特性效果强度快速到
         /// </summary>
-        /// <param tweenName="val">目标强度</param>
+        /// <param name="val">目标强度</param>
         public void hm_UniversalFeature_Blur_FastTo(float val)
         {
             if (UniversalFeature_Blur == null)
                 return;
-            if (twn_UniversalFeature_Blur != null && twn_UniversalFeature_Blur.active)
-                if (twn_UniversalFeature_Blur.IsPlaying())
+            if (twn_UniversalFeature_Blur != null && twn_UniversalFeature_Blur.IsActive)
+                if (twn_UniversalFeature_Blur.IsPlaying)
                     twn_UniversalFeature_Blur.Kill();
             UniversalFeature_Blur_Intensity = val;
         }
@@ -6336,7 +6337,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 散焦特性效果强度快速到 - Editor用
         /// </summary>
-        /// <param tweenName="val">目标强度</param>
+        /// <param name="val">目标强度</param>
         public void hm_UniversalFeature_Blur_FastTo_ForEditor(float val)
         {
             if (UniversalFeature_Blur == null)
@@ -6374,7 +6375,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 音效播放器池初始化
         /// </summary>
-        /// <param tweenName="count">预制数量</param>
+        /// <param name="count">预制数量</param>
         private void hm_LibrarySounds_Initialize(int count)
         {
             if (count == 0)
@@ -6446,7 +6447,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (index == -1)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "无法在音效库里找到目标名称的索引号！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "无法在音效库里找到目标名称的索引号！", HudMsgState.警告);
                 return 0;
             }
             else
@@ -6468,7 +6469,7 @@ namespace SevenStrikeModules.XHud.Hud
             else
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "无法在音效库里找到目标索引号的音效名称！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "无法在音效库里找到目标索引号的音效名称！", HudMsgState.警告);
                 return "";
             }
         }
@@ -6507,7 +6508,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 光标 - 尺寸_Size
         /// </summary>
-        /// <param tweenName="size">尺寸_Size</param>
+        /// <param name="size">尺寸_Size</param>
         public void hm_Cursor_SizeSet(float size)
         {
             if (Hud_MouseCursor == null)
@@ -6598,7 +6599,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 光标 - 改变样式
         /// </summary>
-        /// <param tweenName="style">目标样式</param>
+        /// <param name="style">目标样式</param>
         public void hm_Cursor_ChangeStyle(string style)
         {
             if (Hud_MouseCursor == null)
@@ -6619,7 +6620,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 光标 - 设置颜色
         /// </summary>
-        /// <param tweenName="color">目标颜色</param>
+        /// <param name="color">目标颜色</param>
         public void hm_Cursor_SetColor(Color color)
         {
             if (Hud_MouseCursor == null)
@@ -6635,12 +6636,12 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 蓝图视觉透明度
         /// </summary>
-        public void hm_BluePrint_OpacitySet(float opacity, float dur = 1, Ease ease = Ease.OutExpo, float delay = 0)
+        public void hm_BluePrint_OpacitySet(float opacity, float dur = 1, EaseMode ease = EaseMode.OutExpo, float delay = 0)
         {
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
@@ -6658,28 +6659,28 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图网格入场", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格入场", HudMsgState.设置);
         }
 
         /// <summary>
         /// 蓝图入场
         /// </summary>
-        /// <param tweenName="eft_grid">影响网格</param>
-        /// <param tweenName="eft_bg">影响背景</param>
-        /// <param tweenName="eft_mark">影响水印</param>
+        /// <param name="eft_grid">影响网格</param>
+        /// <param name="eft_bg">影响背景</param>
+        /// <param name="eft_mark">影响水印</param>
         public void hm_BluePrint_In(bool eft_grid = true, bool eft_gridfade = true, bool eft_bg = true, bool eft_mark = true)
         {
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
             if (BluePrint_Displayed)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图网格入场，无需重复入场！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格入场，无需重复入场！", HudMsgState.设置);
                 return;
             }
 
@@ -6705,28 +6706,28 @@ namespace SevenStrikeModules.XHud.Hud
                 Act_BluePrint_In();
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图网格入场", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格入场", HudMsgState.设置);
         }
 
         /// <summary>
         /// 蓝图入场
         /// </summary>
-        /// <param tweenName="eft_grid">影响网格</param>
-        /// <param tweenName="eft_bg">影响背景</param>
-        /// <param tweenName="eft_mark">影响水印</param>
+        /// <param name="eft_grid">影响网格</param>
+        /// <param name="eft_bg">影响背景</param>
+        /// <param name="eft_mark">影响水印</param>
         public void hm_BluePrint_In()
         {
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
             if (BluePrint_Displayed)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图网格入场，无需重复入场！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格入场，无需重复入场！", HudMsgState.设置);
                 return;
             }
 
@@ -6747,7 +6748,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Act_BluePrint_In();
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图网格入场", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格入场", HudMsgState.设置);
         }
 
         /// <summary>
@@ -6758,14 +6759,14 @@ namespace SevenStrikeModules.XHud.Hud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
             if (!BluePrint_Displayed)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图网格已经退场，无需重复退场！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格已经退场，无需重复退场！", HudMsgState.设置);
                 return;
             }
 
@@ -6782,7 +6783,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Act_BluePrint_Out();
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图网格退场", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格退场", HudMsgState.设置);
         }
 
         /// <summary>
@@ -6793,7 +6794,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
@@ -6803,14 +6804,14 @@ namespace SevenStrikeModules.XHud.Hud
             hm_BluePrint_StopTweener(BluePrint_GridLengthTweener);
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图网格清空并停止动画", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格清空并停止动画", HudMsgState.设置);
         }
 
         /// <summary>
         /// 停止动画器
         /// </summary>
-        /// <param tweenName="twn"></param>
-        private void hm_BluePrint_StopTweener(Tweener twn)
+        /// <param name="twn"></param>
+        private void hm_BluePrint_StopTweener(XTween_Interface twn)
         {
             twn.Kill();
             twn.Rewind();
@@ -6824,7 +6825,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
@@ -6833,7 +6834,7 @@ namespace SevenStrikeModules.XHud.Hud
             BluePrint_mark_opacity = 0;
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图网格快速到隐藏状态", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格快速到隐藏状态", HudMsgState.设置);
         }
 
         /// <summary>
@@ -6855,13 +6856,13 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 蓝图淡化方式
         /// </summary>
-        /// <param tweenName="val">透明度_Alpha</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        private void hm_BluePrint_Fade(float val, float dur = 1, Ease ease = Ease.OutQuart, float delay = 0)
+        /// <param name="val">透明度_Alpha</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        private void hm_BluePrint_Fade(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0)
         {
-            BluePrint_opacityTweener = DOTween.To(() => BluePrint_opacity, opa => BluePrint_opacity = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay).OnComplete(() =>
+            BluePrint_opacityTweener = XTween.To(() => BluePrint_opacity, opa => BluePrint_opacity = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay).OnComplete((d) =>
             {
                 hm_BluePrint_StopTweener(BluePrint_opacityTweener);
             });
@@ -6870,37 +6871,37 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 蓝图背景淡化方式
         /// </summary>
-        /// <param tweenName="val">透明度_Alpha</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        private void hm_BluePrint_Bg_Fade(float val, float dur = 1, Ease ease = Ease.OutQuart, float delay = 0)
+        /// <param name="val">透明度_Alpha</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        private void hm_BluePrint_Bg_Fade(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0)
         {
-            BluePrint_BgFadeTweener = DOTween.To(() => BluePrint_bg_opacity, opa => BluePrint_bg_opacity = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay);
+            BluePrint_BgFadeTweener = XTween.To(() => BluePrint_bg_opacity, opa => BluePrint_bg_opacity = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay);
         }
 
         /// <summary>
         /// 水印淡化方式
         /// </summary>
-        /// <param tweenName="val">透明度_Alpha</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        private void hm_BluePrint_Mark_Fade(float val, float dur = 1, Ease ease = Ease.OutQuart, float delay = 0f)
+        /// <param name="val">透明度_Alpha</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        private void hm_BluePrint_Mark_Fade(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0f)
         {
-            BluePrint_MarkFadeTweener = DOTween.To(() => BluePrint_mark_opacity, opa => BluePrint_mark_opacity = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay);
+            BluePrint_MarkFadeTweener = XTween.To(() => BluePrint_mark_opacity, opa => BluePrint_mark_opacity = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay);
         }
 
         /// <summary>
         /// 网格生长方式
         /// </summary>
-        /// <param tweenName="val">透明度_Alpha</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        private void hm_BluePrint_Grid_Length(float val, float dur = 1, Ease ease = Ease.OutQuart, float delay = 0f)
+        /// <param name="val">透明度_Alpha</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        private void hm_BluePrint_Grid_Length(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0f)
         {
-            BluePrint_GridLengthTweener = DOTween.To(() => BluePrint_Grid_LengthPercentage, opa => BluePrint_Grid_LengthPercentage = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay).OnComplete(() =>
+            BluePrint_GridLengthTweener = XTween.To(() => BluePrint_Grid_LengthPercentage, opa => BluePrint_Grid_LengthPercentage = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay).OnComplete((d) =>
             {
                 hm_BluePrint_ResetTweeners();
             });
@@ -6909,13 +6910,13 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 网格淡化方式
         /// </summary>
-        /// <param tweenName="val">透明度_Alpha</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        private void hm_BluePrint_Grid_Fade(float val, float dur = 1, Ease ease = Ease.OutQuart, float delay = 0)
+        /// <param name="val">透明度_Alpha</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        private void hm_BluePrint_Grid_Fade(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0)
         {
-            BluePrint_grid_opacityTweener = DOTween.To(() => BluePrint_grid_Opacity, opa => BluePrint_grid_Opacity = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay).OnComplete(() =>
+            BluePrint_grid_opacityTweener = XTween.To(() => BluePrint_grid_Opacity, opa => BluePrint_grid_Opacity = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay).OnComplete((d) =>
             {
                 hm_BluePrint_StopTweener(BluePrint_grid_opacityTweener);
             });
@@ -6932,7 +6933,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
@@ -7091,7 +7092,7 @@ namespace SevenStrikeModules.XHud.Hud
             trs_mark_title.anchoredPosition3D = Vector3.zero;
             trs_mark_title.localEulerAngles = Vector3.zero;
             trs_mark_title.localScale = Vector3.one;
-            xHud_Module_TmpText title = obj_isolateVisual_mark_title.AddComponent<xHud_Module_TmpText>();
+            XHud_Module_TmpText title = obj_isolateVisual_mark_title.AddComponent<XHud_Module_TmpText>();
             title.TextStyleInfo.gen_RayCastSet(false);
             title.TextStyleInfo.gen_Set_MaskableSet(false);
             title.TextStyleInfo.tmp_font = font_title;
@@ -7110,7 +7111,7 @@ namespace SevenStrikeModules.XHud.Hud
             trs_mark_subtitle.anchoredPosition3D = Vector3.zero;
             trs_mark_subtitle.localEulerAngles = Vector3.zero;
             trs_mark_subtitle.localScale = Vector3.one;
-            xHud_Module_TmpText subtitle = obj_isolateVisual_mark_subtitle.AddComponent<xHud_Module_TmpText>();
+            XHud_Module_TmpText subtitle = obj_isolateVisual_mark_subtitle.AddComponent<XHud_Module_TmpText>();
             subtitle.TextStyleInfo.gen_RayCastSet(false);
             subtitle.TextStyleInfo.gen_Set_MaskableSet(false);
             subtitle.TextStyleInfo.tmp_font = font_subtitle;
@@ -7126,7 +7127,7 @@ namespace SevenStrikeModules.XHud.Hud
             hm_BluePrint_Update();
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "已创建蓝图网格", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "已创建蓝图网格", HudMsgState.设置);
         }
 
         /// <summary>
@@ -7157,7 +7158,7 @@ namespace SevenStrikeModules.XHud.Hud
             hm_BluePrint_ClearHidden();
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("Hud Manager管理器消息", "已移除蓝图网格", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "已移除蓝图网格", HudMsgState.设置);
         }
 
         private void hm_BluePrint_ClearHidden()
@@ -7176,7 +7177,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 设置背景图像
         /// </summary>
-        /// <param tweenName="tex"></param>
+        /// <param name="tex"></param>
         public void hm_BluePrint_SetBgTexture(Texture2D tex)
         {
             if (BluePrint_mainbg != null)
@@ -7186,7 +7187,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 设置背景图像平铺模式
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void hm_BluePrint_SetBg_TilingMode(bool state)
         {
             if (BluePrint_mainbg != null)
@@ -7205,7 +7206,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 设置背景图像强制方形比例
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void hm_BluePrint_SetBg_SquareRatio(bool state)
         {
             if (BluePrint_mainbg != null)
@@ -7224,7 +7225,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 解析Int到Bool
         /// </summary>
-        /// <param tweenName="val"></param>
+        /// <param name="val"></param>
         /// <returns></returns>
         public bool ConvertIntToBool(int val)
         {

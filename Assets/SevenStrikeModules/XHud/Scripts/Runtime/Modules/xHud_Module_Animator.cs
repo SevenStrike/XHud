@@ -1,6 +1,6 @@
 namespace SevenStrikeModules.XHud.Hud
 {
-    using DG.Tweening;
+    using SevenStrikeModules.XTween;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
     using System.Collections;
@@ -126,7 +126,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动画参数 - 缓动参数
         /// </summary>
-        public Ease Ease = Ease.OutQuart;
+        public EaseMode Ease = EaseMode.OutQuart;
         public string AnimationCurveName = "";
         /// <summary>
         /// 动画参数 - 曲线
@@ -243,11 +243,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动画参数 - 旋转模式
         /// </summary>
-        public RotateMode RotateMode = RotateMode.Fast;
+        public XTweenRotationMode RotateMode = XTweenRotationMode.Normal;
         /// <summary>
         /// 动画参数 - 循环模式
         /// </summary>
-        public LoopType LoopType = LoopType.Restart;
+        public XTween_LoopType LoopType = XTween_LoopType.Restart;
         /// <summary>
         /// 动画参数 - 循环次数
         /// </summary>
@@ -255,7 +255,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动画参数 - 动画器
         /// </summary>
-        public Tweener Tweener;
+        public XTween_Interface Tweener;
         /// <summary>
         /// 折叠
         /// </summary>
@@ -539,9 +539,9 @@ namespace SevenStrikeModules.XHud.Hud
     /// </summary>
     [RequireComponent(typeof(CanvasGroup))]
 #if UNITY_EDITOR
-    [RequireComponent(typeof(xHud_Module_AnimatorColorSynchronizer))]
+    [RequireComponent(typeof(XHud_Module_Animator_ColorSynchronizer))]
 #endif
-    public class xHud_Module_Animator : MonoBehaviour
+    public class XHud_Module_Animator : MonoBehaviour
     {
         /// <summary>
         /// 动画器记录的组件原始形态
@@ -579,11 +579,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 组件 - Tmp文字
         /// </summary>
-        [SerializeField] public xHud_Module_TmpText mod_TmpText;
+        [SerializeField] public XHud_Module_TmpText mod_TmpText;
         /// <summary>
         /// 组件 - 文字
         /// </summary>
-        [SerializeField] public xHud_Module_Text mod_Text;
+        [SerializeField] public XHud_Module_Text mod_Text;
         /// <summary>
         /// 组件 - 图片
         /// </summary>
@@ -602,7 +602,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 组件 - 按钮
         /// </summary>
-        [SerializeField] public xHud_Module_Button mod_HudButton;
+        [SerializeField] public XHud_Module_Button mod_HudButton;
         #endregion
 
         #region 成员 - 自定义数值
@@ -816,7 +816,7 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 for (int i = 0; i < AnimateTweenNodes.Count; i++)
                 {
-                    if (AnimateTweenNodes[i].Tweener != null && AnimateTweenNodes[i].Tweener.IsActive() && AnimateTweenNodes[i].Tweener.IsPlaying())
+                    if (AnimateTweenNodes[i].Tweener != null && AnimateTweenNodes[i].Tweener.IsActive && AnimateTweenNodes[i].Tweener.IsPlaying)
                     {
                         animating = true;
                         break;
@@ -856,12 +856,12 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 #region 确保动画存在不为空的情况下，计算每个动画的动画进度
 
-                if (AnimateTweenNodes[i].Tweener != null && AnimateTweenNodes[i].Tweener.IsActive() && AnimateTweenNodes[i].Tweener.IsPlaying())
+                if (AnimateTweenNodes[i].Tweener != null && AnimateTweenNodes[i].Tweener.IsActive && AnimateTweenNodes[i].Tweener.IsPlaying)
                 {
                     if (AnimateTweenNodes[i].Progress > 0.985f)
                         AnimateTweenNodes[i].Progress = 1;
                     else
-                        AnimateTweenNodes[i].Progress = AnimateTweenNodes[i].Tweener.Elapsed(true) / AnimateTweenNodes[i].Tweener.Duration(true);
+                        AnimateTweenNodes[i].Progress = AnimateTweenNodes[i].Tweener.ElapsedTime / AnimateTweenNodes[i].Tweener.Duration;
                 }
 
                 #endregion
@@ -1032,13 +1032,13 @@ namespace SevenStrikeModules.XHud.Hud
                 mod_RawImage = GetComponent<RawImage>();
 
             if (mod_Text == null)
-                mod_Text = GetComponent<xHud_Module_Text>();
+                mod_Text = GetComponent<XHud_Module_Text>();
 
             if (mod_TmpText == null)
-                mod_TmpText = GetComponent<xHud_Module_TmpText>();
+                mod_TmpText = GetComponent<XHud_Module_TmpText>();
 
             if (mod_HudButton == null)
-                mod_HudButton = GetComponentInParent<xHud_Module_Button>();
+                mod_HudButton = GetComponentInParent<XHud_Module_Button>();
         }
         /// <summary>
         /// 获取组件基类类型，判断Image、RawImage、Text、TmpText是否不为空，取其一个不为空的作为他们的Graphic基类传出
@@ -1141,9 +1141,9 @@ namespace SevenStrikeModules.XHud.Hud
             if (SyncLibraryColor)
             {
                 //--如果颜色库存在则设置组件颜色为指定名称的库中的颜色
-                if (xHud_Manager.Instance.Hud_Colors != null)
+                if (XHud_Manager.Instance.Hud_Colors != null)
                 {
-                    UpdateColor(xHud_Manager.Instance.Hud_Colors.ColorsLibrary_GetColor(ColoriseName));
+                    UpdateColor(XHud_Manager.Instance.Hud_Colors.ColorsLibrary_GetColor(ColoriseName));
                 }
             }
             else
@@ -1345,12 +1345,12 @@ namespace SevenStrikeModules.XHud.Hud
 
             if (type == "Min")
             {
-                MinTimer = xHud_Utilitys.Array_MinValue(timers.ToArray());
+                MinTimer = XHud_Utilitys.Array_MinValue(timers.ToArray());
                 return MinTimer;
             }
             else if (type == "Max")
             {
-                MaxTimer = xHud_Utilitys.Array_MaxValue(timers.ToArray());
+                MaxTimer = XHud_Utilitys.Array_MaxValue(timers.ToArray());
                 return MaxTimer;
             }
             else
@@ -1425,7 +1425,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             TweenNode arg = AnimateTweenNodes[index];
 
-            Tweener_Play(arg, xHud_Manager.Instance.DurationMultiply * Animator_GlobalDuration, AnimationAction_Complete, AnimationAction_Percentage, PercentageLimite);
+            Tweener_Play(arg, XHud_Manager.Instance.DurationMultiply * Animator_GlobalDuration, AnimationAction_Complete, AnimationAction_Percentage, PercentageLimite);
 
             if (act_on_Animator_PlayAt != null)
                 act_on_Animator_PlayAt(arg);
@@ -1442,7 +1442,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             TweenNode arg = TweenNode_GetByID(id);
 
-            Tweener_Play(arg, xHud_Manager.Instance.DurationMultiply * Animator_GlobalDuration, AnimationAction_Complete, AnimationAction_Percentage, PercentageLimite);
+            Tweener_Play(arg, XHud_Manager.Instance.DurationMultiply * Animator_GlobalDuration, AnimationAction_Complete, AnimationAction_Percentage, PercentageLimite);
 
             if (act_on_Animator_PlayAt != null)
                 act_on_Animator_PlayAt(arg);
@@ -1459,7 +1459,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             TweenNode arg = TweenNode_GetByIndicator(indicator);
 
-            Tweener_Play(arg, xHud_Manager.Instance.DurationMultiply * Animator_GlobalDuration, AnimationAction_Complete, AnimationAction_Percentage, PercentageLimite);
+            Tweener_Play(arg, XHud_Manager.Instance.DurationMultiply * Animator_GlobalDuration, AnimationAction_Complete, AnimationAction_Percentage, PercentageLimite);
 
             if (act_on_Animator_PlayAt != null)
                 act_on_Animator_PlayAt(arg);
@@ -1530,13 +1530,13 @@ namespace SevenStrikeModules.XHud.Hud
                         if (AnimateTweenNodes[i].Timings == tim)
                         {
                             TweenNode arg = AnimateTweenNodes[i];
-                            Tweener_Play(arg, xHud_Manager.Instance.DurationMultiply * dur, AnimationAction_Complete, AnimationAction_Percentage, PercentageLimite);
+                            Tweener_Play(arg, XHud_Manager.Instance.DurationMultiply * dur, AnimationAction_Complete, AnimationAction_Percentage, PercentageLimite);
                         }
                     }
                     else
                     {
                         TweenNode arg = AnimateTweenNodes[i];
-                        Tweener_Play(arg, xHud_Manager.Instance.DurationMultiply * dur, AnimationAction_Complete, AnimationAction_Percentage, PercentageLimite);
+                        Tweener_Play(arg, XHud_Manager.Instance.DurationMultiply * dur, AnimationAction_Complete, AnimationAction_Percentage, PercentageLimite);
                     }
                 }
                 else
@@ -1561,9 +1561,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param tweenName="AnimationAction_Percentage">动画进度状态动作</param>
         /// <param tweenName="PercentageLimite">激活动画进度状态动作的阈值（最小0，最大1）</param>
         /// <returns></returns>
-        public Tweener Tweener_Play(TweenNode arg, float Duration, UnityAction AnimationAction_Complete = null, UnityAction AnimationAction_Percentage = null, float PercentageLimite = 0.5f)
+        public XTween_Interface Tweener_Play(TweenNode arg, float Duration, UnityAction AnimationAction_Complete = null, UnityAction AnimationAction_Percentage = null, float PercentageLimite = 0.5f)
         {
-            Tweener tween = null;
+            XTween_Interface tween = null;
             bool sw_From = arg.ActivateFrom;
             bool sw_End = arg.ActivateEnd;
             bool sw_OnlyToEnd = arg.ActivateOnlyToEnd;
@@ -1605,10 +1605,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 默认
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOAnchorPos3D(arg.Original_Vector3, arg.Duration * Duration).From(arg.From_Vector3).SetRelative(true).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_AnchoredPosition3D_To(arg.Original_Vector3, arg.Duration * Duration, false, true).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1619,16 +1619,16 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.anchoredPosition3D);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                             if (AnimationAction_Complete != null)
                                 AnimationAction_Complete();
                         });
                     else
-                        tween = mod_RectTransform.DOAnchorPos3D(arg.Original_Vector3, arg.Duration * Duration).From(arg.From_Vector3).SetRelative(true).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_AnchoredPosition3D_To(arg.Original_Vector3, arg.Duration * Duration).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1639,7 +1639,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.anchoredPosition3D);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                             if (AnimationAction_Complete != null)
@@ -1649,10 +1649,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：默认 -> 结束
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOAnchorPos3D(arg.End_Vector3, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1663,14 +1663,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.anchoredPosition3D);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOAnchorPos3D(arg.End_Vector3, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1681,7 +1681,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.anchoredPosition3D);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -1689,10 +1689,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 结束
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOAnchorPos3D(arg.End_Vector3, arg.Duration * Duration).From(arg.From_Vector3).SetRelative(true).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1703,14 +1703,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.anchoredPosition3D);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOAnchorPos3D(arg.End_Vector3, arg.Duration * Duration).From(arg.From_Vector3).SetRelative(true).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1721,7 +1721,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.anchoredPosition3D);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -1729,10 +1729,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：当前 -> 结束
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOAnchorPos3D(arg.End_Vector3, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1743,14 +1743,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.anchoredPosition3D);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOAnchorPos3D(arg.End_Vector3, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1761,7 +1761,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.anchoredPosition3D);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -1773,10 +1773,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 默认
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOLocalRotate(arg.Original_Vector3, arg.Duration * Duration, arg.RotateMode).From(arg.From_Vector3).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_Rotate_To(arg.Original_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1787,14 +1787,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Quaternion_Changed != null)
                                 arg.Act_On_Quaternion_Changed(mod_RectTransform.rotation);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOLocalRotate(arg.Original_Vector3, arg.Duration * Duration, arg.RotateMode).From(arg.From_Vector3).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_Rotate_To(arg.Original_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1803,10 +1803,10 @@ namespace SevenStrikeModules.XHud.Hud
                                         AnimationAction_Percentage();
                                 }
                             }
-                            arg.Progress = tween.Elapsed() / tween.Duration();
+                            arg.Progress = tween.ElapsedTime / tween.Duration;
                             if (arg.Act_On_Quaternion_Changed != null)
                                 arg.Act_On_Quaternion_Changed(mod_RectTransform.rotation);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -1814,10 +1814,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：默认 -> 结束
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOLocalRotate(arg.End_Vector3, arg.Duration * Duration, arg.RotateMode).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1828,14 +1828,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Quaternion_Changed != null)
                                 arg.Act_On_Quaternion_Changed(mod_RectTransform.rotation);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOLocalRotate(arg.End_Vector3, arg.Duration * Duration, arg.RotateMode).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1846,7 +1846,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Quaternion_Changed != null)
                                 arg.Act_On_Quaternion_Changed(mod_RectTransform.rotation);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -1854,10 +1854,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 结束
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOLocalRotate(arg.End_Vector3, arg.Duration * Duration, arg.RotateMode).From(arg.From_Vector3).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1868,14 +1868,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Quaternion_Changed != null)
                                 arg.Act_On_Quaternion_Changed(mod_RectTransform.rotation);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOLocalRotate(arg.End_Vector3, arg.Duration * Duration, arg.RotateMode).From(arg.From_Vector3).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1886,7 +1886,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Quaternion_Changed != null)
                                 arg.Act_On_Quaternion_Changed(mod_RectTransform.rotation);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -1894,10 +1894,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：当前 -> 结束
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOLocalRotate(arg.End_Vector3, arg.Duration * Duration, arg.RotateMode).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1908,14 +1908,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Quaternion_Changed != null)
                                 arg.Act_On_Quaternion_Changed(mod_RectTransform.rotation);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOLocalRotate(arg.End_Vector3, arg.Duration * Duration, arg.RotateMode).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1926,7 +1926,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Quaternion_Changed != null)
                                 arg.Act_On_Quaternion_Changed(mod_RectTransform.rotation);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -1938,10 +1938,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 默认
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOScale(arg.Original_Vector3, arg.Duration * Duration).From(arg.From_Vector3).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_Scale_To(arg.Original_Vector3, arg.Duration * Duration, false, true).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1952,14 +1952,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.localScale);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOScale(arg.Original_Vector3, arg.Duration * Duration).From(arg.From_Vector3).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_Scale_To(arg.Original_Vector3, arg.Duration * Duration, false, true).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1970,7 +1970,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.localScale);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -1978,10 +1978,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：默认 -> 结束
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOScale(arg.End_Vector3, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -1992,14 +1992,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.localScale);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOScale(arg.End_Vector3, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2010,7 +2010,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.localScale);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2018,10 +2018,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 结束
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOScale(arg.End_Vector3, arg.Duration * Duration).From(arg.From_Vector3).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2032,14 +2032,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.localScale);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOScale(arg.End_Vector3, arg.Duration * Duration).From(arg.From_Vector3).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2050,7 +2050,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.localScale);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2058,10 +2058,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：当前 -> 结束
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOScale(arg.End_Vector3, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2072,14 +2072,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.localScale);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOScale(arg.End_Vector3, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2090,7 +2090,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(mod_RectTransform.localScale);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2117,10 +2117,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 默认
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = gc.DOColor(arg.Original_Color, arg.Duration * Duration).From(arg.From_Color).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = gc.xt_Color_To(arg.Original_Color, arg.Duration * Duration, true).SetFrom(arg.From_Color).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2131,14 +2131,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(gc.color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = gc.DOColor(arg.Original_Color, arg.Duration * Duration).From(arg.From_Color).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = gc.xt_Color_To(arg.Original_Color, arg.Duration * Duration, true).SetFrom(arg.From_Color).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2149,7 +2149,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(gc.color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2157,10 +2157,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：默认 -> 结束
                 if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = gc.DOColor(arg.End_Color, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2171,14 +2171,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(gc.color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = gc.DOColor(arg.End_Color, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2189,7 +2189,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(gc.color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2197,10 +2197,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 结束
                 if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = gc.DOColor(arg.End_Color, arg.Duration * Duration).From(arg.From_Color).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true).SetFrom(arg.From_Color).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2211,14 +2211,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(gc.color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = gc.DOColor(arg.End_Color, arg.Duration * Duration).From(arg.From_Color).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true).SetFrom(arg.From_Color).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2229,7 +2229,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(gc.color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2237,10 +2237,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：当前 -> 结束
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = gc.DOColor(arg.End_Color, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2251,14 +2251,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(gc.color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = gc.DOColor(arg.End_Color, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2269,7 +2269,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(gc.color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2283,10 +2283,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 默认
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = CanvasGroup.DOFade(arg.Original_Float, arg.Duration * (Duration)).From(arg.From_Float).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = CanvasGroup.xt_Alpha_To(arg.Original_Float, arg.Duration * Duration, true).SetFrom(arg.From_Float).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2297,14 +2297,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CanvasGroup.alpha);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = CanvasGroup.DOFade(arg.Original_Float, arg.Duration * (Duration)).From(arg.From_Float).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = CanvasGroup.xt_Alpha_To(arg.Original_Float, arg.Duration * Duration, true).SetFrom(arg.From_Float).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2315,7 +2315,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CanvasGroup.alpha);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2323,10 +2323,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：默认 -> 结束
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = CanvasGroup.DOFade(arg.End_Float, arg.Duration * (Duration)).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2337,14 +2337,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CanvasGroup.alpha);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = CanvasGroup.DOFade(arg.End_Float, arg.Duration * (Duration)).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2355,7 +2355,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CanvasGroup.alpha);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2363,10 +2363,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 结束
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = CanvasGroup.DOFade(arg.End_Float, arg.Duration * (Duration)).From(arg.From_Float).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true).SetFrom(arg.From_Float).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2377,14 +2377,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CanvasGroup.alpha);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = CanvasGroup.DOFade(arg.End_Float, arg.Duration * (Duration)).From(arg.From_Float).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true).SetFrom(arg.From_Float).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2395,7 +2395,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CanvasGroup.alpha);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2403,10 +2403,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：当前 -> 结束
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = CanvasGroup.DOFade(arg.End_Float, arg.Duration * (Duration)).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2417,14 +2417,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CanvasGroup.alpha);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = CanvasGroup.DOFade(arg.End_Float, arg.Duration * (Duration)).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2435,7 +2435,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CanvasGroup.alpha);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2454,10 +2454,10 @@ namespace SevenStrikeModules.XHud.Hud
                 {
                     if (mod_Text != null)
                     {
-                        if (arg.Ease != Ease.Unset)
-                            tween = mod_Text.DOText(arg.Original_String, arg.Duration * Duration).From(arg.From_String, true).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        if (arg.Ease != EaseMode.Unset)
+                            tween = mod_Text.xt_FontText_To(false, " |", arg.Original_String, arg.Duration * Duration, true).SetFrom(arg.From_String).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2468,14 +2468,14 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_Text.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
                         else
-                            tween = mod_Text.DOText(arg.Original_String, arg.Duration * Duration).From(arg.From_String, true).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                            tween = mod_Text.xt_FontText_To(false, " |", arg.Original_String, arg.Duration * Duration, true).SetFrom(arg.From_String).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2486,17 +2486,17 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_Text.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
                     }
                     else if (mod_TmpText != null)
                     {
-                        if (arg.Ease != Ease.Unset)
-                            tween = mod_TmpText.DOText(arg.Original_String, arg.Duration * Duration).From(arg.From_String, true).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        if (arg.Ease != EaseMode.Unset)
+                            tween = mod_TmpText.xt_FontText_To(false, arg.Original_String, arg.Duration * Duration, true).SetFrom(arg.From_String).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2507,14 +2507,14 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_TmpText.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
                         else
-                            tween = mod_TmpText.DOText(arg.Original_String, arg.Duration * Duration).From(arg.From_String, true).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                            tween = mod_TmpText.xt_FontText_To(false, arg.Original_String, arg.Duration * Duration, true).SetFrom(arg.From_String).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2525,7 +2525,7 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_TmpText.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
@@ -2536,10 +2536,10 @@ namespace SevenStrikeModules.XHud.Hud
                 {
                     if (mod_Text != null)
                     {
-                        if (arg.Ease != Ease.Unset)
-                            tween = mod_Text.DOText(arg.End_String, arg.Duration * Duration).From(arg.Original_String, true).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        if (arg.Ease != EaseMode.Unset)
+                            tween = mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration).SetFrom(arg.Original_String).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2550,14 +2550,14 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_Text.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
                         else
-                            tween = mod_Text.DOText(arg.End_String, arg.Duration * Duration).From(arg.Original_String, true).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                            tween = mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration).SetFrom(arg.Original_String).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2568,17 +2568,17 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_Text.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
                     }
                     else if (mod_TmpText != null)
                     {
-                        if (arg.Ease != Ease.Unset)
-                            tween = mod_TmpText.DOText(arg.End_String, arg.Duration * Duration).From(arg.Original_String, true).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        if (arg.Ease != EaseMode.Unset)
+                            tween = mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true).SetFrom(arg.Original_String).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2589,14 +2589,14 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_TmpText.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
                         else
-                            tween = mod_TmpText.DOText(arg.End_String, arg.Duration * Duration).From(arg.Original_String, true).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                            tween = mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true).SetFrom(arg.Original_String).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2607,7 +2607,7 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_TmpText.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
@@ -2618,10 +2618,10 @@ namespace SevenStrikeModules.XHud.Hud
                 {
                     if (mod_Text != null)
                     {
-                        if (arg.Ease != Ease.Unset)
-                            tween = mod_Text.DOText(arg.End_String, arg.Duration * Duration).From(arg.From_String, true).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        if (arg.Ease != EaseMode.Unset)
+                            tween = mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true).SetFrom(arg.From_String).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2632,14 +2632,14 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_Text.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
                         else
-                            tween = mod_Text.DOText(arg.End_String, arg.Duration * Duration).From(arg.From_String, true).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                            tween = mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true).SetFrom(arg.From_String).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2650,17 +2650,17 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_Text.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
                     }
                     else if (mod_TmpText != null)
                     {
-                        if (arg.Ease != Ease.Unset)
-                            tween = mod_TmpText.DOText(arg.End_String, arg.Duration * Duration).From(arg.From_String, true).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        if (arg.Ease != EaseMode.Unset)
+                            tween = mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true).SetFrom(arg.From_String).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2671,14 +2671,14 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_TmpText.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
                         else
-                            tween = mod_TmpText.DOText(arg.End_String, arg.Duration * Duration).From(arg.From_String, true).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                            tween = mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true).SetFrom(arg.From_String).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2689,7 +2689,7 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_TmpText.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
@@ -2700,10 +2700,10 @@ namespace SevenStrikeModules.XHud.Hud
                 {
                     if (mod_Text != null)
                     {
-                        if (arg.Ease != Ease.Unset)
-                            tween = mod_Text.DOText(arg.End_String, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        if (arg.Ease != EaseMode.Unset)
+                            tween = mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2714,14 +2714,14 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_Text.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
                         else
-                            tween = mod_Text.DOText(arg.End_String, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                            tween = mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2732,17 +2732,17 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_Text.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
                     }
                     else if (mod_TmpText != null)
                     {
-                        if (arg.Ease != Ease.Unset)
-                            tween = mod_TmpText.DOText(arg.End_String, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        if (arg.Ease != EaseMode.Unset)
+                            tween = mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2753,14 +2753,14 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_TmpText.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
                         else
-                            tween = mod_TmpText.DOText(arg.End_String, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                            tween = mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
-                                if (tween.ElapsedPercentage() >= PercentageLimite)
+                                if (tween.CurrentEasedProgress >= PercentageLimite)
                                 {
                                     if (!sw)
                                     {
@@ -2771,7 +2771,7 @@ namespace SevenStrikeModules.XHud.Hud
                                 }
                                 if (arg.Act_On_Text_Changed != null)
                                     arg.Act_On_Text_Changed(mod_TmpText.text);
-                            }).OnComplete(() =>
+                            }).OnComplete((d) =>
                             {
                                 arg.Progress = 0;
                             });
@@ -2784,10 +2784,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 默认
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOSizeDelta(arg.Original_Vector2, arg.Duration * Duration).From(arg.From_Vector2).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_Size_To(arg.Original_Vector2, arg.Duration * Duration, false, true).SetFrom(arg.From_Vector2).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2798,14 +2798,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(mod_RectTransform.sizeDelta);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOSizeDelta(arg.Original_Vector2, arg.Duration * Duration).From(arg.From_Vector2).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_Size_To(arg.Original_Vector2, arg.Duration * Duration, false, true).SetFrom(arg.From_Vector2).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2816,7 +2816,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(mod_RectTransform.sizeDelta);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2824,10 +2824,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：默认 -> 结束
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOSizeDelta(arg.End_Vector2, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2838,14 +2838,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(mod_RectTransform.sizeDelta);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOSizeDelta(arg.End_Vector2, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2856,7 +2856,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(mod_RectTransform.sizeDelta);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2864,10 +2864,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 结束
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOSizeDelta(arg.End_Vector2, arg.Duration * Duration).From(arg.From_Vector2).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true).SetFrom(arg.From_Vector2).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2878,15 +2878,15 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(mod_RectTransform.sizeDelta);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
                     {
-                        tween = mod_RectTransform.DOSizeDelta(arg.End_Vector2, arg.Duration * Duration).From(arg.From_Vector2).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true).SetFrom(arg.From_Vector2).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2897,7 +2897,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(mod_RectTransform.sizeDelta);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2906,10 +2906,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：当前 -> 结束
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = mod_RectTransform.DOSizeDelta(arg.End_Vector2, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = mod_RectTransform.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2920,14 +2920,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(mod_RectTransform.sizeDelta);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = mod_RectTransform.DOSizeDelta(arg.End_Vector2, arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = mod_RectTransform.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2938,7 +2938,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(mod_RectTransform.sizeDelta);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2954,10 +2954,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 默认
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.Original_Float), arg.Duration * Duration).From(arg.From_Float).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.Original_Float), arg.Duration * Duration, true).SetFrom(arg.From_Float).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2968,14 +2968,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(mod_Image.fillAmount);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.Original_Float), arg.Duration * Duration).From(arg.From_Float).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.Original_Float), arg.Duration * Duration, true).SetFrom(arg.From_Float).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -2986,7 +2986,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(mod_Image.fillAmount);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -2994,10 +2994,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：默认 -> 结束
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3008,14 +3008,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(mod_Image.fillAmount);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3026,7 +3026,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(mod_Image.fillAmount);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3034,10 +3034,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 结束
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration).From(Mathf.Clamp01(arg.From_Float)).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, true).SetFrom(Mathf.Clamp01(arg.From_Float)).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3048,14 +3048,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(mod_Image.fillAmount);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration).From(Mathf.Clamp01(arg.From_Float)).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, true).SetFrom(Mathf.Clamp01(arg.From_Float)).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3066,7 +3066,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(mod_Image.fillAmount);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3074,10 +3074,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：当前 -> 结束
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3088,14 +3088,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(mod_Image.fillAmount);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration).SetRelative(false).SetOptions(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => mod_Image.fillAmount, x => mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3106,7 +3106,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(mod_Image.fillAmount);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3117,10 +3117,10 @@ namespace SevenStrikeModules.XHud.Hud
                 bool sw = false;
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.Original_Int, arg.Duration * Duration).From(arg.From_Int).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.Original_Int, arg.Duration * Duration, true).SetFrom(arg.From_Int).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<int>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3131,14 +3131,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Int_Changed != null)
                                 arg.Act_On_Int_Changed(CustomValue_Int);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.Original_Int, arg.Duration * Duration).From(arg.From_Int).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.Original_Int, arg.Duration * Duration, true).SetFrom(arg.From_Int).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<int>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3149,17 +3149,17 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Int_Changed != null)
                                 arg.Act_On_Int_Changed(CustomValue_Int);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                 }
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.End_Int, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.End_Int, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<int>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3170,14 +3170,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Int_Changed != null)
                                 arg.Act_On_Int_Changed(CustomValue_Int);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.End_Int, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.End_Int, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<int>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3188,17 +3188,17 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Int_Changed != null)
                                 arg.Act_On_Int_Changed(CustomValue_Int);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                 }
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.End_Int, arg.Duration * Duration).From(arg.From_Int).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.End_Int, arg.Duration * Duration, true).SetFrom(arg.From_Int).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<int>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3209,14 +3209,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Int_Changed != null)
                                 arg.Act_On_Int_Changed(CustomValue_Int);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.End_Int, arg.Duration * Duration).From(arg.From_Int).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.End_Int, arg.Duration * Duration, true).SetFrom(arg.From_Int).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<int>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3227,17 +3227,17 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Int_Changed != null)
                                 arg.Act_On_Int_Changed(CustomValue_Int);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                 }
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.End_Int, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.End_Int, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<int>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3248,14 +3248,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Int_Changed != null)
                                 arg.Act_On_Int_Changed(CustomValue_Int);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.End_Int, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Int, x => CustomValue_Int = x, arg.End_Int, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<int>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3266,7 +3266,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Int_Changed != null)
                                 arg.Act_On_Int_Changed(CustomValue_Int);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3278,10 +3278,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 默认
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.Original_Float, arg.Duration * Duration).From(arg.From_Float).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.Original_Float, arg.Duration * Duration, true).SetFrom(arg.From_Float).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3292,14 +3292,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CustomValue_Float);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.Original_Float, arg.Duration * Duration).From(arg.From_Float).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.Original_Float, arg.Duration * Duration, true).SetFrom(arg.From_Float).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3310,7 +3310,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CustomValue_Float);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3318,10 +3318,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：默认 -> 结束
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.End_Float, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.End_Float, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3332,14 +3332,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CustomValue_Float);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.End_Float, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.End_Float, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3350,7 +3350,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CustomValue_Float);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3358,10 +3358,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 结束
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.End_Float, arg.Duration * Duration).From(arg.From_Float).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.End_Float, arg.Duration * Duration, true).SetFrom(arg.From_Float).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3372,14 +3372,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CustomValue_Float);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.End_Float, arg.Duration * Duration).From(arg.From_Float).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.End_Float, arg.Duration * Duration, true).SetFrom(arg.From_Float).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3390,7 +3390,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CustomValue_Float);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3398,10 +3398,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：当前 -> 结束
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.End_Float, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.End_Float, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3412,14 +3412,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CustomValue_Float);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.End_Float, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Float, x => CustomValue_Float = x, arg.End_Float, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3430,7 +3430,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Float_Changed != null)
                                 arg.Act_On_Float_Changed(CustomValue_Float);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3442,10 +3442,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 默认
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.Original_Vector2, arg.Duration * Duration).From(arg.From_Vector2).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.Original_Vector2, arg.Duration * Duration, true).SetFrom(arg.From_Vector2).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3456,14 +3456,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(CustomValue_Vector2);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.Original_Vector2, arg.Duration * Duration).From(arg.From_Vector2).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.Original_Vector2, arg.Duration * Duration, true).SetFrom(arg.From_Vector2).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3474,7 +3474,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(CustomValue_Vector2);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3482,10 +3482,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：默认 -> 结束
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.End_Vector2, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.End_Vector2, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3496,14 +3496,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(CustomValue_Vector2);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.End_Vector2, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.End_Vector2, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3514,7 +3514,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(CustomValue_Vector2);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3522,10 +3522,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 结束
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.End_Vector2, arg.Duration * Duration).From(arg.From_Vector2).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.End_Vector2, arg.Duration * Duration, true).SetFrom(arg.From_Vector2).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3536,14 +3536,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(CustomValue_Vector2);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.End_Vector2, arg.Duration * Duration).From(arg.From_Vector2).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.End_Vector2, arg.Duration * Duration, true).SetFrom(arg.From_Vector2).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3554,7 +3554,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(CustomValue_Vector2);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3562,10 +3562,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：当前 -> 结束
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.End_Vector2, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.End_Vector2, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3576,14 +3576,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(CustomValue_Vector2);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.End_Vector2, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Vector2, x => CustomValue_Vector2 = x, arg.End_Vector2, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3594,7 +3594,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector2_Changed != null)
                                 arg.Act_On_Vector2_Changed(CustomValue_Vector2);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3606,10 +3606,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 默认
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.Original_Vector3, arg.Duration * Duration).From(arg.From_Vector3).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.Original_Vector3, arg.Duration * Duration, true).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3620,14 +3620,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(CustomValue_Vector3);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.Original_Vector3, arg.Duration * Duration).From(arg.From_Vector3).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.Original_Vector3, arg.Duration * Duration, true).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3638,7 +3638,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(CustomValue_Vector3);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3646,10 +3646,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：默认 -> 结束
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.End_Vector3, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.End_Vector3, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3660,14 +3660,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(CustomValue_Vector3);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.End_Vector3, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.End_Vector3, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3678,7 +3678,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(CustomValue_Vector3);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3686,10 +3686,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 结束
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.End_Vector3, arg.Duration * Duration).From(arg.From_Vector3).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.End_Vector3, arg.Duration * Duration, true).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3700,14 +3700,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(CustomValue_Vector3);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.End_Vector3, arg.Duration * Duration).From(arg.From_Vector3).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.End_Vector3, arg.Duration * Duration, true).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3718,7 +3718,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(CustomValue_Vector3);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3726,10 +3726,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：当前 -> 结束
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.End_Vector3, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.End_Vector3, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3740,14 +3740,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(CustomValue_Vector3);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.End_Vector3, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Vector3, x => CustomValue_Vector3 = x, arg.End_Vector3, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3758,7 +3758,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector3_Changed != null)
                                 arg.Act_On_Vector3_Changed(CustomValue_Vector3);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3770,10 +3770,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 默认
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.Original_Vector4, arg.Duration * Duration).From(arg.From_Vector4).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.Original_Vector4, arg.Duration * Duration, true).SetFrom(arg.From_Vector4).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector4>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3784,14 +3784,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector4_Changed != null)
                                 arg.Act_On_Vector4_Changed(CustomValue_Vector4);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.Original_Vector4, arg.Duration * Duration).From(arg.From_Vector4).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.Original_Vector4, arg.Duration * Duration, true).SetFrom(arg.From_Vector4).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector4>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3802,7 +3802,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector4_Changed != null)
                                 arg.Act_On_Vector4_Changed(CustomValue_Vector4);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3810,10 +3810,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：默认 -> 结束
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.End_Vector4, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.End_Vector4, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector4>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3824,14 +3824,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector4_Changed != null)
                                 arg.Act_On_Vector4_Changed(CustomValue_Vector4);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.End_Vector4, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.End_Vector4, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector4>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3842,7 +3842,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector4_Changed != null)
                                 arg.Act_On_Vector4_Changed(CustomValue_Vector4);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3850,10 +3850,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 结束
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.End_Vector4, arg.Duration * Duration).From(arg.From_Vector4).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.End_Vector4, arg.Duration * Duration, true).SetFrom(arg.From_Vector4).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector4>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3864,14 +3864,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector4_Changed != null)
                                 arg.Act_On_Vector4_Changed(CustomValue_Vector4);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.End_Vector4, arg.Duration * Duration).From(arg.From_Vector4).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.End_Vector4, arg.Duration * Duration, true).SetFrom(arg.From_Vector4).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector4>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3882,7 +3882,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector4_Changed != null)
                                 arg.Act_On_Vector4_Changed(CustomValue_Vector4);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3890,10 +3890,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：当前 -> 结束
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.End_Vector4, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.End_Vector4, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector4>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3904,14 +3904,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector4_Changed != null)
                                 arg.Act_On_Vector4_Changed(CustomValue_Vector4);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.End_Vector4, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Vector4, x => CustomValue_Vector4 = x, arg.End_Vector4, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector4>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3922,7 +3922,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Vector4_Changed != null)
                                 arg.Act_On_Vector4_Changed(CustomValue_Vector4);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3934,10 +3934,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 默认
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.Original_Color, arg.Duration * Duration).From(arg.From_Color).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.Original_Color, arg.Duration * Duration, true).SetFrom(arg.From_Color).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3948,14 +3948,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(CustomValue_Color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.Original_Color, arg.Duration * Duration).From(arg.From_Color).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.Original_Color, arg.Duration * Duration, true).SetFrom(arg.From_Color).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3966,7 +3966,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(CustomValue_Color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -3974,10 +3974,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：默认 -> 结束
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.End_Color, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.End_Color, arg.Duration * Duration).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -3988,14 +3988,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(CustomValue_Color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.End_Color, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.End_Color, arg.Duration * Duration).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -4006,7 +4006,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(CustomValue_Color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -4014,10 +4014,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：起始 -> 结束
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.End_Color, arg.Duration * Duration).From(arg.From_Color).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.End_Color, arg.Duration * Duration, true).SetFrom(arg.From_Color).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -4028,14 +4028,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(CustomValue_Color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.End_Color, arg.Duration * Duration).From(arg.From_Color).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.End_Color, arg.Duration * Duration, true).SetFrom(arg.From_Color).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -4046,7 +4046,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(CustomValue_Color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -4054,10 +4054,10 @@ namespace SevenStrikeModules.XHud.Hud
                 //方式：当前 -> 结束
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
-                    if (arg.Ease != Ease.Unset)
-                        tween = DOTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.End_Color, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                    if (arg.Ease != EaseMode.Unset)
+                        tween = XTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.End_Color, arg.Duration * Duration).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -4068,14 +4068,14 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(CustomValue_Color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
                     else
-                        tween = DOTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.End_Color, arg.Duration * Duration).SetRelative(false).SetAutoKill(true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoops(arg.LoopCount, arg.LoopType).OnUpdate(() =>
+                        tween = XTween.To(() => CustomValue_Color, x => CustomValue_Color = x, arg.End_Color, arg.Duration * Duration).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
-                            if (tween.ElapsedPercentage() >= PercentageLimite)
+                            if (tween.CurrentEasedProgress >= PercentageLimite)
                             {
                                 if (!sw)
                                 {
@@ -4086,7 +4086,7 @@ namespace SevenStrikeModules.XHud.Hud
                             }
                             if (arg.Act_On_Color_Changed != null)
                                 arg.Act_On_Color_Changed(CustomValue_Color);
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
                         });
@@ -4586,13 +4586,13 @@ namespace SevenStrikeModules.XHud.Hud
                 act_on_Animator_SoundPlay(clip);
             eve_on_Animator_SoundPlay.Invoke(clip);
             ///-------获取播放器
-            AudioSource player = xHud_Manager.Instance.hm_LibrarySounds_GetSounder();
+            AudioSource player = XHud_Manager.Instance.hm_LibrarySounds_GetSounder();
             if (player != null)
             {
                 ///-------获取声音剪辑
                 player.clip = clip;
-                player.volume = xHud_Manager.Instance.Volume * 0.01f * vol;
-                player.mute = xHud_Manager.Instance.VolumeMute;
+                player.volume = XHud_Manager.Instance.Volume * 0.01f * vol;
+                player.mute = XHud_Manager.Instance.VolumeMute;
                 player.pitch = Random.Range(pitch_min, pitch_max);
                 if (player.clip != null)
                 {

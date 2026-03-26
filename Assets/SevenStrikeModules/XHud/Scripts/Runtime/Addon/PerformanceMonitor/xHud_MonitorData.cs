@@ -16,11 +16,11 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 标题
         /// </summary>
-        public xHud_Module_TmpText tmp_title { get; set; }
+        public XHud_Module_TmpText tmp_title { get; set; }
         /// <summary>
         /// 数值
         /// </summary>
-        public xHud_Module_TmpText tmp_value { get; set; }
+        public XHud_Module_TmpText tmp_value { get; set; }
         /// <summary>
         /// 标题颜色
         /// </summary>

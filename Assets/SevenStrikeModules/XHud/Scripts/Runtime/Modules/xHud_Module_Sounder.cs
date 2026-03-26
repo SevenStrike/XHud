@@ -4,16 +4,15 @@ namespace SevenStrikeModules.XHud.Hud
     using SevenStrikeModules.XHud.Utilitys;
     using System.Collections;
     using UnityEngine;
-    using UnityEngine.UI;
 
-    public class xHud_Module_Sounder : MonoBehaviour
+    public class XHud_Module_Sounder : MonoBehaviour
     {
-        public xHud_Module_Element Element;
-        public xHud_Module_Toggle Toggle;
-        public xHud_Module_Slider Slider;
-        public xHud_Module_Progress Progress;
-        public xHud_Module_Option Option;
-        public xHud_Module_Button Button;
+        public XHud_Module_Element Element;
+        public XHud_Module_Toggle Toggle;
+        public XHud_Module_Slider Slider;
+        public XHud_Module_Progress Progress;
+        public XHud_Module_Option Option;
+        public XHud_Module_Button Button;
         public string SoundName;
         public float DelayTime;
         public string Indicator;
@@ -39,27 +38,27 @@ namespace SevenStrikeModules.XHud.Hud
         {
             if (Element == null)
             {
-                Element = GetComponent<xHud_Module_Element>();
+                Element = GetComponent<XHud_Module_Element>();
             }
             if (Toggle == null)
             {
-                Toggle = GetComponent<xHud_Module_Toggle>();
+                Toggle = GetComponent<XHud_Module_Toggle>();
             }
             if (Slider == null)
             {
-                Slider = GetComponent<xHud_Module_Slider>();
+                Slider = GetComponent<XHud_Module_Slider>();
             }
             if (Progress == null)
             {
-                Progress = GetComponent<xHud_Module_Progress>();
+                Progress = GetComponent<XHud_Module_Progress>();
             }
             if (Option == null)
             {
-                Option = GetComponent<xHud_Module_Option>();
+                Option = GetComponent<XHud_Module_Option>();
             }
             if (Button == null)
             {
-                Button = GetComponent<xHud_Module_Button>();
+                Button = GetComponent<XHud_Module_Button>();
             }
 
             RegisterAction();
@@ -79,7 +78,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Element.act_on_element_out_start += ele_act_on_element_out_start;
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("音效器通知", "已注册 - 元素 - 事件", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("音效器通知", "已注册 - 元素 - 事件", HudMsgState.通知);
                 }
             }
             if (Slider != null)
@@ -89,7 +88,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Slider.act_on_ValueChanged += sli_act_on_ValueChanged;
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("音效器通知", "已注册 - 滑动条控件 - 事件", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("音效器通知", "已注册 - 滑动条控件 - 事件", HudMsgState.通知);
                 }
             }
             if (Toggle != null)
@@ -101,7 +100,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Toggle.act_on_UnChecked += tog_act_on_UnChecked;
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("音效器通知", "已注册 - 开关控件 - 事件", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("音效器通知", "已注册 - 开关控件 - 事件", HudMsgState.通知);
                 }
             }
             if (Progress != null)
@@ -111,7 +110,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Progress.act_on_ValueChanged += pro_act_on_ValueChanged;
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("音效器通知", "已注册 - 进度条控件 - 事件", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("音效器通知", "已注册 - 进度条控件 - 事件", HudMsgState.通知);
                 }
             }
             if (Option != null)
@@ -122,7 +121,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Option.act_on_option_clicked += opt_act_on_option_clicked;
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("音效器通知", "已注册 - 选项器控件 - 事件", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("音效器通知", "已注册 - 选项器控件 - 事件", HudMsgState.通知);
                 }
             }
             if (Button != null)
@@ -137,7 +136,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Button.act_on_Select += btn_act_on_Select;
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("音效器通知", "已注册 - 按钮控件 - 事件", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("音效器通知", "已注册 - 按钮控件 - 事件", HudMsgState.通知);
                 }
             }
         }
@@ -151,7 +150,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Element.act_on_element_out_start -= ele_act_on_element_out_start;
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("音效器通知", "已注销 - 元素 - 事件", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("音效器通知", "已注销 - 元素 - 事件", HudMsgState.通知);
                 }
             }
             if (Slider != null)
@@ -161,7 +160,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Slider.act_on_ValueChanged -= sli_act_on_ValueChanged;
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("音效器通知", "已注销 - 滑动条控件 - 事件", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("音效器通知", "已注销 - 滑动条控件 - 事件", HudMsgState.通知);
                 }
             }
             if (Toggle != null)
@@ -173,7 +172,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Toggle.act_on_UnChecked -= tog_act_on_UnChecked;
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("音效器通知", "已注销 - 开关控件 - 事件", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("音效器通知", "已注销 - 开关控件 - 事件", HudMsgState.通知);
                 }
             }
             if (Progress != null)
@@ -183,7 +182,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Progress.act_on_ValueChanged -= pro_act_on_ValueChanged;
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("音效器通知", "已注销 - 进度条控件 - 事件", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("音效器通知", "已注销 - 进度条控件 - 事件", HudMsgState.通知);
                 }
             }
             if (Option != null)
@@ -194,7 +193,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Option.act_on_option_clicked -= opt_act_on_option_clicked;
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("音效器通知", "已注销 - 选项器控件 - 事件", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("音效器通知", "已注销 - 选项器控件 - 事件", HudMsgState.通知);
                 }
             }
             if (Button != null)
@@ -209,56 +208,56 @@ namespace SevenStrikeModules.XHud.Hud
                 Button.act_on_Select -= btn_act_on_Select;
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("音效器通知", "已注销 - 按钮控件 - 事件", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("音效器通知", "已注销 - 按钮控件 - 事件", HudMsgState.通知);
                 }
             }
         }
 
         #region Button
 
-        private void btn_act_on_Select(xHud_Module_Button btn, Hud_ButtonAction act)
+        private void btn_act_on_Select(XHud_Module_Button btn, Hud_ButtonAction act)
         {
             if (Timings == "鼠标选中")
                 PlaySound();
         }
 
-        private void btn_act_on_Release(xHud_Module_Button btn, Hud_ButtonAction act)
+        private void btn_act_on_Release(XHud_Module_Button btn, Hud_ButtonAction act)
         {
             if (Timings == "鼠标松开")
                 PlaySound();
         }
 
-        private void btn_act_on_Press(xHud_Module_Button btn, Hud_ButtonAction act)
+        private void btn_act_on_Press(XHud_Module_Button btn, Hud_ButtonAction act)
         {
             if (Timings == "鼠标按下")
                 PlaySound();
         }
 
-        private void btn_act_on_LongPressed(xHud_Module_Button btn, Hud_ButtonAction act)
+        private void btn_act_on_LongPressed(XHud_Module_Button btn, Hud_ButtonAction act)
         {
             if (Timings == "鼠标长按")
                 PlaySound();
         }
 
-        private void btn_act_on_Exit(xHud_Module_Button btn, Hud_ButtonAction act)
+        private void btn_act_on_Exit(XHud_Module_Button btn, Hud_ButtonAction act)
         {
             if (Timings == "鼠标退出")
                 PlaySound();
         }
 
-        private void btn_act_on_Enter(xHud_Module_Button btn, Hud_ButtonAction act)
+        private void btn_act_on_Enter(XHud_Module_Button btn, Hud_ButtonAction act)
         {
             if (Timings == "鼠标进入")
                 PlaySound();
         }
 
-        private void btn_act_on_DeSelect(xHud_Module_Button btn, Hud_ButtonAction act)
+        private void btn_act_on_DeSelect(XHud_Module_Button btn, Hud_ButtonAction act)
         {
             if (Timings == "鼠标取消选中")
                 PlaySound();
         }
 
-        private void btn_act_on_Clicked(xHud_Module_Button btn, Hud_ButtonAction act)
+        private void btn_act_on_Clicked(XHud_Module_Button btn, Hud_ButtonAction act)
         {
             if (Timings == "鼠标点击")
                 PlaySound();
@@ -372,19 +371,19 @@ namespace SevenStrikeModules.XHud.Hud
 
         #region Element
 
-        private void ele_act_on_element_out_start(xHud_Module_Element ele)
+        private void ele_act_on_element_out_start(XHud_Module_Element ele)
         {
             if (Timings == "元素退出时")
                 PlaySound();
         }
 
-        private void ele_act_on_element_in_end(xHud_Module_Element ele)
+        private void ele_act_on_element_in_end(XHud_Module_Element ele)
         {
             if (Timings == "元素进入后")
                 PlaySound();
         }
 
-        private void ele_act_on_element_in_start(xHud_Module_Element ele)
+        private void ele_act_on_element_in_start(XHud_Module_Element ele)
         {
             if (Timings == "元素进入时")
                 PlaySound();
@@ -451,13 +450,13 @@ namespace SevenStrikeModules.XHud.Hud
                 {
                     yield return new WaitForSeconds(DelayTime);
                     ///-------获取播放器
-                    AudioSource player = xHud_Manager.Instance.hm_LibrarySounds_GetSounder();
+                    AudioSource player = XHud_Manager.Instance.hm_LibrarySounds_GetSounder();
                     ///-------获取声音剪辑
                     if (player != null)
                     {
-                        player.clip = xHud_Manager.Instance.Hud_Sounds.SoundLibrary_GetSound(SoundName);
-                        player.volume = Volume * xHud_Manager.Instance.Volume;
-                        player.mute = xHud_Manager.Instance.VolumeMute;
+                        player.clip = XHud_Manager.Instance.Hud_Sounds.SoundLibrary_GetSound(SoundName);
+                        player.volume = Volume * XHud_Manager.Instance.Volume;
+                        player.mute = XHud_Manager.Instance.VolumeMute;
                         if (UseRandomPitch)
                         {
                             player.pitch = Random.Range(Pitch_Min, Pitch_Max);
@@ -474,13 +473,13 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 yield return new WaitForSeconds(DelayTime);
                 ///-------获取播放器
-                AudioSource player = xHud_Manager.Instance.hm_LibrarySounds_GetSounder();
+                AudioSource player = XHud_Manager.Instance.hm_LibrarySounds_GetSounder();
                 ///-------获取声音剪辑
                 if (player != null)
                 {
-                    player.clip = xHud_Manager.Instance.Hud_Sounds.SoundLibrary_GetSound(SoundName);
-                    player.volume = Volume * xHud_Manager.Instance.Volume;
-                    player.mute = xHud_Manager.Instance.VolumeMute;
+                    player.clip = XHud_Manager.Instance.Hud_Sounds.SoundLibrary_GetSound(SoundName);
+                    player.volume = Volume * XHud_Manager.Instance.Volume;
+                    player.mute = XHud_Manager.Instance.VolumeMute;
                     if (UseRandomPitch)
                     {
                         player.pitch = Random.Range(Pitch_Min, Pitch_Max);

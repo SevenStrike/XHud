@@ -8,7 +8,7 @@ namespace SevenStrikeModules.XHud
     using UnityEngine;
 
     [System.Serializable]
-    public class xHud_LibraryArg_Motion
+    public class XHud_LibraryArg_Motion
     {
         /// <summary>
         /// 参数模版名称
@@ -33,12 +33,12 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public Motion_Recycler Rec = new Motion_Recycler();
 
-        public xHud_LibraryArg_Motion()
+        public XHud_LibraryArg_Motion()
         {
 
         }
 
-        public xHud_LibraryArg_Motion(string name, int mode, string des, Motion_Creator crc, Motion_Recycler rec)
+        public XHud_LibraryArg_Motion(string name, int mode, string des, Motion_Creator crc, Motion_Recycler rec)
         {
             Name = name;
             Mode = mode;
@@ -47,7 +47,7 @@ namespace SevenStrikeModules.XHud
             Rec = rec;
         }
 
-        public xHud_LibraryArg_Motion(xHud_LibraryArg_Motion motion)
+        public XHud_LibraryArg_Motion(XHud_LibraryArg_Motion motion)
         {
             Name = motion.Name;
             Mode = motion.Mode;
@@ -79,7 +79,7 @@ namespace SevenStrikeModules.XHud
     }
 
     [CreateAssetMenu(fileName = "XHud_Library_ElementMotion", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-ElementMotion (元素动效库)", order = 0)]
-    public class xHud_Library_Motion : ScriptableObject
+    public class XHud_Library_Motion : ScriptableObject
     {
         public string LibraryName = "NewMotionLibrary";
 
@@ -122,7 +122,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素参数模版列表
         /// </summary>
-        public List<xHud_LibraryArg_Motion> ElementMotionList = new List<xHud_LibraryArg_Motion>();
+        public List<XHud_LibraryArg_Motion> ElementMotionList = new List<XHud_LibraryArg_Motion>();
 
         private void OnEnable()
         {
@@ -145,7 +145,7 @@ namespace SevenStrikeModules.XHud
 #endif
         }
 
-        public void ElementMotion_ReplaceMotion(int Index, xHud_LibraryArg_Motion motion)
+        public void ElementMotion_ReplaceMotion(int Index, XHud_LibraryArg_Motion motion)
         {
             ElementMotionList[Index] = motion;
         }
@@ -154,7 +154,7 @@ namespace SevenStrikeModules.XHud
         /// 增加一套参数模版
         /// </summary>
         /// <param tweenName="motion"></param>
-        public void ElementMotion_Add(xHud_LibraryArg_Motion motion)
+        public void ElementMotion_Add(XHud_LibraryArg_Motion motion)
         {
             ElementMotionList.Add(motion);
         }
@@ -237,9 +237,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="name"></param>
         /// <returns></returns>
-        public xHud_LibraryArg_Motion ElementMotion_GetMotion(string name, HudElementMotionType type)
+        public XHud_LibraryArg_Motion ElementMotion_GetMotion(string name, HudElementMotionType type)
         {
-            xHud_LibraryArg_Motion pi = null;
+            XHud_LibraryArg_Motion pi = null;
             for (int i = 0; i < ElementMotionList.Count; i++)
             {
                 if (ElementMotionList[i].Name == name && ElementMotionList[i].Mode == (int)type)
@@ -256,7 +256,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="index"></param>
         /// <returns></returns>
-        public xHud_LibraryArg_Motion ElementMotion_GetMotion(int index, HudElementMotionType type)
+        public XHud_LibraryArg_Motion ElementMotion_GetMotion(int index, HudElementMotionType type)
         {
             return ElementMotionList[index].Mode == (int)type ? ElementMotionList[index] : null;
         }
@@ -295,7 +295,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="name"></param>
         /// <returns></returns>
-        public xHud_LibraryArg_Motion[] ElementMotion_GetAllMotion()
+        public XHud_LibraryArg_Motion[] ElementMotion_GetAllMotion()
         {
             return ElementMotionList.ToArray();
         }
@@ -348,9 +348,9 @@ namespace SevenStrikeModules.XHud
         /// 获取参数模版中标为"生成类型"的所有参数集合体
         /// </summary>
         /// <returns></returns>
-        public xHud_LibraryArg_Motion[] ElementMotion_GetAllMotion_With_Create()
+        public XHud_LibraryArg_Motion[] ElementMotion_GetAllMotion_With_Create()
         {
-            List<xHud_LibraryArg_Motion> items = new List<xHud_LibraryArg_Motion>();
+            List<XHud_LibraryArg_Motion> items = new List<XHud_LibraryArg_Motion>();
             for (int i = 0; i < ElementMotionList.Count; i++)
             {
                 if (ElementMotionList[i].Mode == 0)
@@ -363,9 +363,9 @@ namespace SevenStrikeModules.XHud
         /// 获取参数模版中标为"回收类型"的所有参数集合体
         /// </summary>
         /// <returns></returns>
-        public xHud_LibraryArg_Motion[] ElementMotion_GetAllMotion_With_Recycle()
+        public XHud_LibraryArg_Motion[] ElementMotion_GetAllMotion_With_Recycle()
         {
-            List<xHud_LibraryArg_Motion> items = new List<xHud_LibraryArg_Motion>();
+            List<XHud_LibraryArg_Motion> items = new List<XHud_LibraryArg_Motion>();
             for (int i = 0; i < ElementMotionList.Count; i++)
             {
                 if (ElementMotionList[i].Mode == 1)

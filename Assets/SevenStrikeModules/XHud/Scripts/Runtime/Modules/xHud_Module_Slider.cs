@@ -8,7 +8,7 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEngine.EventSystems;
     using UnityEngine.UI;
 
-    public class xHud_Module_Slider : Slider, IPointerDownHandler, IPointerUpHandler
+    public class XHud_Module_Slider : Slider, IPointerDownHandler, IPointerUpHandler
     {
         public RectTransform Root;
         public RectTransform RectTransform;
@@ -33,25 +33,25 @@ namespace SevenStrikeModules.XHud.Hud
         /// -----------标题
         /// </summary>
         [SerializeField]
-        public xHud_Module_Text sli_Text_Title;
+        public XHud_Module_Text sli_Text_Title;
         [SerializeField]
-        public xHud_Module_TmpText sli_TmpText_Title;
+        public XHud_Module_TmpText sli_TmpText_Title;
 
         /// <summary>
         /// -----------副标题
         /// </summary>
         [SerializeField]
-        public xHud_Module_Text sli_Text_Subtitle;
+        public XHud_Module_Text sli_Text_Subtitle;
         [SerializeField]
-        public xHud_Module_TmpText sli_TmpText_Subtitle;
+        public XHud_Module_TmpText sli_TmpText_Subtitle;
 
         /// <summary>
         /// -----------数值
         /// </summary>
         [SerializeField]
-        public xHud_Module_Text sli_Text_Percent;
+        public XHud_Module_Text sli_Text_Percent;
         [SerializeField]
-        public xHud_Module_TmpText sli_TmpText_Percent;
+        public XHud_Module_TmpText sli_TmpText_Percent;
         #endregion
 
         #region 事件动作
@@ -92,7 +92,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动画器集合
         /// </summary>
-        public List<AnimatorNode> sli_AnimatorNodes = new List<AnimatorNode>();
+        public List<ElementNode_Animator> sli_AnimatorNodes = new List<ElementNode_Animator>();
 
         public HudElementAnimateState AnimateState;
 
@@ -158,9 +158,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="indicator">目标标识名称</param>
         /// <returns>返回一个匹配标识名称的HudAnimator动画器</returns>
-        public xHud_Module_Animator GetAnimator(string indicator)
+        public XHud_Module_Animator GetAnimator(string indicator)
         {
-            xHud_Module_Animator am = null;
+            XHud_Module_Animator am = null;
             for (int i = 0; i < sli_AnimatorNodes.Count; i++)
             {
                 if (sli_AnimatorNodes[i].Animator.GetIndicator() == indicator)
@@ -171,12 +171,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (am == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "未获取到标识名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "未获取到标识名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
             }
             return am;
         }
@@ -186,9 +186,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="name">目标物体名称</param>
         /// <returns>返回一个匹配物体名称名称的HudAnimator动画器</returns>
-        public xHud_Module_Animator GetAnimator_WithObjectName(string name)
+        public XHud_Module_Animator GetAnimator_WithObjectName(string name)
         {
-            xHud_Module_Animator am = null;
+            XHud_Module_Animator am = null;
             for (int i = 0; i < sli_AnimatorNodes.Count; i++)
             {
                 if (sli_AnimatorNodes[i].Animator.gameObject.name == name)
@@ -199,12 +199,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (am == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
             }
             return am;
         }
@@ -214,9 +214,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="id">目标动画器的ID</param>
         /// <returns>返回一个匹配ID的HudAnimator动画器</returns>
-        public xHud_Module_Animator GetAnimator(int id)
+        public XHud_Module_Animator GetAnimator(int id)
         {
-            xHud_Module_Animator am = null;
+            XHud_Module_Animator am = null;
             for (int i = 0; i < sli_AnimatorNodes.Count; i++)
             {
                 if (sli_AnimatorNodes[i].Animator.GetID() == id)
@@ -227,12 +227,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (am == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
             }
             return am;
         }
@@ -245,25 +245,25 @@ namespace SevenStrikeModules.XHud.Hud
         /// <returns></returns>
         public TweenNode GetAnimatorTween(string animator_indicator, int tween_id)
         {
-            xHud_Module_Animator anim = GetAnimator(animator_indicator);
+            XHud_Module_Animator anim = GetAnimator(animator_indicator);
             TweenNode node = anim.TweenNode_GetByID(tween_id);
 
             if (anim == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
                 }
             }
 
@@ -278,25 +278,25 @@ namespace SevenStrikeModules.XHud.Hud
         /// <returns></returns>
         public TweenNode GetAnimatorTween(int animator_id, int tween_id)
         {
-            xHud_Module_Animator anim = GetAnimator(animator_id);
+            XHud_Module_Animator anim = GetAnimator(animator_id);
             TweenNode node = anim.TweenNode_GetByID(tween_id);
 
             if (anim == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
                 }
             }
 
@@ -311,25 +311,25 @@ namespace SevenStrikeModules.XHud.Hud
         /// <returns></returns>
         public TweenNode GetAnimatorTween(string animator_indicator, string tween_indicator)
         {
-            xHud_Module_Animator anim = GetAnimator(animator_indicator);
+            XHud_Module_Animator anim = GetAnimator(animator_indicator);
             TweenNode node = anim.TweenNode_GetByIndicator(tween_indicator);
 
             if (anim == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
                 }
             }
 
@@ -382,12 +382,12 @@ namespace SevenStrikeModules.XHud.Hud
 
             for (int i = 0; i < sli_AnimatorNodes.Count; i++)
             {
-                xHud_Module_Animator animator = sli_AnimatorNodes[i].Animator;
+                XHud_Module_Animator animator = sli_AnimatorNodes[i].Animator;
                 animator.Play(tim, sli_AnimatorNodes[i].DelayTime, Slider_Animators_GlobalDuration * animator.Animator_GlobalDuration, true, null, null, 0.5f);
             }
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "播放所有动画器动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "播放所有动画器动画！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -407,12 +407,12 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (sli_AnimatorNodes[i].Animator.GetID() != id)
                     continue;
-                xHud_Module_Animator anim = sli_AnimatorNodes[i].Animator;
+                XHud_Module_Animator anim = sli_AnimatorNodes[i].Animator;
                 anim.Play(tim, sli_AnimatorNodes[i].DelayTime, Slider_Animators_GlobalDuration * anim.Animator_GlobalDuration);
             }
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -422,11 +422,11 @@ namespace SevenStrikeModules.XHud.Hud
         {
             for (int i = 0; i < sli_AnimatorNodes.Count; i++)
             {
-                xHud_Module_Animator anim = sli_AnimatorNodes[i].Animator;
+                XHud_Module_Animator anim = sli_AnimatorNodes[i].Animator;
                 anim.RewindAllTweenNode();
             }
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "复位按钮动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "复位按钮动画！", HudMsgState.确认);
         }
         #endregion       
 
@@ -442,7 +442,7 @@ namespace SevenStrikeModules.XHud.Hud
             eve_on_Released.RemoveAllListeners();
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "清空所有事件！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "清空所有事件！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -455,7 +455,7 @@ namespace SevenStrikeModules.XHud.Hud
             act_on_Released = null;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "清空所有委托！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "清空所有委托！", HudMsgState.通知);
         }
 
         #endregion
@@ -478,7 +478,7 @@ namespace SevenStrikeModules.XHud.Hud
             Animators_Rewind();
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已重置！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "已重置！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -500,12 +500,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "启用按钮交互", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "启用按钮交互", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "禁用按钮交互", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "禁用按钮交互", HudMsgState.通知);
             }
         }
         #endregion
@@ -558,7 +558,7 @@ namespace SevenStrikeModules.XHud.Hud
             eve_on_ValueChanged.Invoke(value);
 
             if (DebugState && Application.isPlaying)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条进度值为：" + val, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条进度值为：" + val, HudMsgState.通知);
         }
 
         /// <summary>
@@ -577,7 +577,7 @@ namespace SevenStrikeModules.XHud.Hud
             eve_on_ValueChanged.Invoke(value);
 
             if (DebugState && Application.isPlaying)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条进度值为：" + val, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条进度值为：" + val, HudMsgState.通知);
         }
 
         /// <summary>
@@ -590,7 +590,7 @@ namespace SevenStrikeModules.XHud.Hud
             maxValue = max;
 
             if (DebugState && Application.isPlaying)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", $"设置滑动条范围值为：{min} - {max}", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", $"设置滑动条范围值为：{min} - {max}", HudMsgState.通知);
         }
 
         /// <summary>
@@ -601,7 +601,7 @@ namespace SevenStrikeModules.XHud.Hud
             sli_Precision = count;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条精度：" + count, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条精度：" + count, HudMsgState.通知);
         }
 
         /// <summary>
@@ -612,7 +612,7 @@ namespace SevenStrikeModules.XHud.Hud
             sli_Unit = str;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条单位为：" + str, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条单位为：" + str, HudMsgState.通知);
         }
         #endregion
 
@@ -632,7 +632,7 @@ namespace SevenStrikeModules.XHud.Hud
                 sli_TmpText_Title.text = val;
 
             if (DebugState && Application.isPlaying)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置标题文字为：" + val, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置标题文字为：" + val, HudMsgState.通知);
 
             return val;
         }
@@ -652,7 +652,7 @@ namespace SevenStrikeModules.XHud.Hud
                 sli_TmpText_Subtitle.text = val;
 
             if (DebugState && Application.isPlaying)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置副标题文字为：" + val, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置副标题文字为：" + val, HudMsgState.通知);
 
             return val;
         }
@@ -701,7 +701,7 @@ namespace SevenStrikeModules.XHud.Hud
             con_subtitle = null;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "清空所有文字内容！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "清空所有文字内容！", HudMsgState.通知);
         }
         #endregion
 
@@ -715,7 +715,7 @@ namespace SevenStrikeModules.XHud.Hud
             sli_Handle.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条控制柄图形为：" + tex.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条控制柄图形为：" + tex.name, HudMsgState.通知);
         }
 
         /// <summary>
@@ -727,7 +727,7 @@ namespace SevenStrikeModules.XHud.Hud
             sli_Fore.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条前景图形为：" + tex.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条前景图形为：" + tex.name, HudMsgState.通知);
         }
 
         /// <summary>
@@ -739,7 +739,7 @@ namespace SevenStrikeModules.XHud.Hud
             sli_Bg.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条背景图形为：" + tex.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "设置滑动条背景图形为：" + tex.name, HudMsgState.通知);
         }
 
         /// <summary>
@@ -751,7 +751,7 @@ namespace SevenStrikeModules.XHud.Hud
             sli_Icon.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置滑动条图标图形为：" + tex.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置滑动条图标图形为：" + tex.name, HudMsgState.通知);
         }
 
         /// <summary>
@@ -763,7 +763,7 @@ namespace SevenStrikeModules.XHud.Hud
             sli_Icon.sprite = spr;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置滑动条图标图形为：" + spr.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置滑动条图标图形为：" + spr.name, HudMsgState.通知);
         }
 
         /// <summary>
@@ -902,7 +902,7 @@ namespace SevenStrikeModules.XHud.Hud
             Animators_Play("按下滑动条");
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "按住！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "按住！", HudMsgState.通知);
         }
 
         public override void OnPointerUp(PointerEventData eventData)
@@ -914,7 +914,7 @@ namespace SevenStrikeModules.XHud.Hud
             Animators_Play("松开滑动条");
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("滑动条控件通知", "松开！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("滑动条控件通知", "松开！", HudMsgState.通知);
         }
 
         #endregion

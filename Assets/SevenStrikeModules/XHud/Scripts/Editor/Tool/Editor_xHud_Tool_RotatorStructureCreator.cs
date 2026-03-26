@@ -6,9 +6,9 @@ namespace SevenStrikeModules.XHud.Utilitys
     using UnityEditor;
     using UnityEngine;
 
-    public class Editor_xHud_Tool_RotatorStructureCreator : EditorWindow
+    public class Editor_XHud_Tool_RotatorStructureCreator : EditorWindow
     {
-        private static Editor_xHud_Tool_RotatorStructureCreator Window;
+        private static Editor_XHud_Tool_RotatorStructureCreator Window;
 
         public RectTransform Rot_Center;
         public RectTransform[] Rot_Objects;
@@ -21,7 +21,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("Tools/XHud/RotatorStructureCreator #r")]
         static void Init()
         {
-            Window = (Editor_xHud_Tool_RotatorStructureCreator)EditorWindow.GetWindow(typeof(Editor_xHud_Tool_RotatorStructureCreator), false, "创建XHUD旋转性结构", true);
+            Window = (Editor_XHud_Tool_RotatorStructureCreator)EditorWindow.GetWindow(typeof(Editor_XHud_Tool_RotatorStructureCreator), false, "创建XHUD旋转性结构", true);
             Window.minSize = new Vector2(350, 500);
             Window.Show();
         }
@@ -42,15 +42,15 @@ namespace SevenStrikeModules.XHud.Utilitys
             sp_center = so.FindProperty("Rot_Center");
 
             so.Update();
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.无, HudColor.无);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.无, HudColor.无);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 元素动效模版名称
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Property_Field("旋转中心", sp_center, 60);
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("旋转中心", sp_center, 60);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
             #endregion
 
             #region 拖放操作
@@ -80,16 +80,16 @@ namespace SevenStrikeModules.XHud.Utilitys
                 }
             }
 
-            Editor_xHudGUI.Gui_Box_Style(drag, HudFilled.实体, HudColor.深空灰);
-            Editor_xHudGUI.Gui_Labelfield(drag, "拖放旋转图形到此处", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleCenter, new Vector2(0, 0), 11);
+            Editor_XHud_GUI.Gui_Box_Style(drag, HudFilled.实体, HudColor.深空灰);
+            Editor_XHud_GUI.Gui_Labelfield(drag, "拖放旋转图形到此处", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleCenter, new Vector2(0, 0), 11);
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(45);
+            Editor_XHud_GUI.Gui_Layout_Space(45);
 
             if (Rot_Objects != null)
             {
-                Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_xHudGUI.Gui_Layout_Space(10);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                Editor_XHud_GUI.Gui_Layout_Space(10);
                 // 创建滚动视图
                 ListScroll = GUILayout.BeginScrollView(ListScroll);
                 // 显示 Transform 列表
@@ -99,14 +99,14 @@ namespace SevenStrikeModules.XHud.Utilitys
                 }
 
                 GUILayout.EndScrollView();
-                Editor_xHudGUI.Gui_Layout_Space(10);
-                Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                Editor_XHud_GUI.Gui_Layout_Space(10);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
                 #region 创建按钮
-                Editor_xHudGUI.Gui_Layout_Space(10);
-                Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_xHudGUI.Gui_Layout_Space(10);
-                if (Editor_xHudGUI.Gui_Layout_Button("创建旋转结构", "将所有旋转图形以旋转中心为中心点创建UI旋转体结构", HudFilled.实体, HudColor.工业蓝, Color.black, 35, new RectOffset(), new Vector2(0, 0)))
+                Editor_XHud_GUI.Gui_Layout_Space(10);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                Editor_XHud_GUI.Gui_Layout_Space(10);
+                if (Editor_XHud_GUI.Gui_Layout_Button("创建旋转结构", "将所有旋转图形以旋转中心为中心点创建UI旋转体结构", HudFilled.实体, HudColor.工业蓝, Color.black, 35, new RectOffset(), new Vector2(0, 0)))
                 {
                     for (int i = 0; i < Rot_Objects.Length; i++)
                     {
@@ -125,26 +125,26 @@ namespace SevenStrikeModules.XHud.Utilitys
                         Rot_Objects[i].anchoredPosition = Vector3.zero;
                     }
                 }
-                Editor_xHudGUI.Gui_Layout_Space(10);
-                Editor_xHudGUI.Gui_Layout_Horizontal_End();
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(10);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+                Editor_XHud_GUI.Gui_Layout_Space(5);
                 #endregion
             }
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 选中信息
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Labelfield("提示： 请将旋转中心和所有旋转物体放在同一层级下", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleCenter, 11);
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Labelfield("提示： 请将旋转中心和所有旋转物体放在同一层级下", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleCenter, 11);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
 
             so.ApplyModifiedProperties();
             //this.Close();

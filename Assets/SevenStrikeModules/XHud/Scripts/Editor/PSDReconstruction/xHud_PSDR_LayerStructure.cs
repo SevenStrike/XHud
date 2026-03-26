@@ -5,7 +5,7 @@ namespace SevenStrikeModules.XHud
     /// <summary>
     /// 重建文字模式
     /// </summary>
-    public enum xHud_PSDR_TextLayerMode
+    public enum XHud_PSDR_TextLayerMode
     {
         文字像素化,
         文字组件化,
@@ -14,7 +14,7 @@ namespace SevenStrikeModules.XHud
     /// <summary>
     /// 重建文字类型
     /// </summary>
-    public enum xHud_PSDR_TextLayerTypes
+    public enum XHud_PSDR_TextLayerTypes
     {
         HudText,
         HudTmpText,
@@ -23,7 +23,7 @@ namespace SevenStrikeModules.XHud
     /// <summary>
     /// 重建图层类型
     /// </summary>
-    public enum xHud_PSDR_LayerType
+    public enum XHud_PSDR_LayerType
     {
         shp,
         smt,
@@ -433,7 +433,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 图层类型
         /// </summary>
-        public xHud_PSDR_LayerType type;
+        public XHud_PSDR_LayerType type;
 
         /// <summary>
         /// 是否为Mask遮罩图层

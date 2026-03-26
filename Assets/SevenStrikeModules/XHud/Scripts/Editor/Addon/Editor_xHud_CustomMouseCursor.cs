@@ -7,11 +7,11 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEngine;
     using UnityEngine.UI;
 
-    [CustomEditor(typeof(xHud_CustomMouseCursor), true)]
-    public class Editor_xHud_CustomMouseCursor : Editor
+    [CustomEditor(typeof(XHud_CustomMouseCursor), true)]
+    public class Editor_XHud_CustomMouseCursor : Editor
     {
         #region 组件 / 列表
-        private xHud_CustomMouseCursor BaseScript;
+        private XHud_CustomMouseCursor BaseScript;
         private ReorderableList StyleList;
         #endregion
 
@@ -28,23 +28,23 @@ namespace SevenStrikeModules.XHud.Hud
         #endregion
 
         #region 批量化操作
-        private xHud_CustomMouseCursor[] SelectedObjects;
+        private XHud_CustomMouseCursor[] SelectedObjects;
 
         private void GetAllTargets()
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new xHud_CustomMouseCursor[targets.Length];
+                SelectedObjects = new XHud_CustomMouseCursor[targets.Length];
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (xHud_CustomMouseCursor)t;
+                    SelectedObjects[i] = (XHud_CustomMouseCursor)t;
                 }
             }
             else
             {
-                SelectedObjects = new xHud_CustomMouseCursor[targets.Length];
-                SelectedObjects[0] = (xHud_CustomMouseCursor)target;
+                SelectedObjects = new XHud_CustomMouseCursor[targets.Length];
+                SelectedObjects[0] = (XHud_CustomMouseCursor)target;
             }
         }
 
@@ -65,7 +65,7 @@ namespace SevenStrikeModules.XHud.Hud
 
         void OnEnable()
         {
-            BaseScript = (xHud_CustomMouseCursor)target;
+            BaseScript = (XHud_CustomMouseCursor)target;
 
             #region 获取序列化属性
             CursorRect = serializedObject.FindProperty("CursorRect");
@@ -88,7 +88,7 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             #region 获取图标
-            icon_main = Editor_xHudGUI.GetIcon("Icons_Hud_MouseCursor/icon_main");
+            icon_main = Editor_XHud_GUI.GetIcon("Icons_Hud_MouseCursor/icon_main");
             #endregion
 
             BaseScript.CursorRect = BaseScript.GetComponent<RectTransform>();
@@ -145,10 +145,10 @@ namespace SevenStrikeModules.XHud.Hud
                     SerializedProperty pivot = MouseStyles.GetArrayElementAtIndex(index).FindPropertyRelative("Pivot");
 
                     #region 光标名称
-                    sp_name.stringValue = Editor_xHudGUI.Gui_TextField(new Rect(rect.width - (rect.width - 60), titleheight, 70, LineHeight), sp_name.stringValue);
+                    sp_name.stringValue = Editor_XHud_GUI.Gui_TextField(new Rect(rect.width - (rect.width - 60), titleheight, 70, LineHeight), sp_name.stringValue);
                     sp_name.serializedObject.ApplyModifiedProperties();
 
-                    Editor_xHudGUI.Gui_SerializePropertyWithObject(new Rect(rect.width - (rect.width - 57), titleheight + 30, 185, LineHeight), index_sprite);
+                    Editor_XHud_GUI.Gui_SerializePropertyWithObject(new Rect(rect.width - (rect.width - 57), titleheight + 30, 185, LineHeight), index_sprite);
 
                     if (spr != null)
                         sp_name.stringValue = spr.name;
@@ -156,7 +156,7 @@ namespace SevenStrikeModules.XHud.Hud
                     #endregion
 
                     #region 锚点位置
-                    pivot.vector2Value = Editor_xHudGUI.Gui_InputField_Vector2(new Rect(rect.width - (rect.width - 140), titleheight + 2.5f, 100, LineHeight), pivot.vector2Value);
+                    pivot.vector2Value = Editor_XHud_GUI.Gui_InputField_Vector2(new Rect(rect.width - (rect.width - 140), titleheight + 2.5f, 100, LineHeight), pivot.vector2Value);
                     pivot.serializedObject.ApplyModifiedProperties();
 
                     SerializedProperty cur_sprite = CurrentCursorStyle.FindPropertyRelative("Sprite");
@@ -176,7 +176,7 @@ namespace SevenStrikeModules.XHud.Hud
                     if (icon_spr != null)
                     {
                         tex = icon_spr.texture;
-                        Editor_xHudGUI.Gui_Icon(new Rect(rect.width + 30, titleheight + 15, 15, 15), tex);
+                        Editor_XHud_GUI.Gui_Icon(new Rect(rect.width + 30, titleheight + 15, 15, 15), tex);
                     }
                     #endregion
                 },
@@ -220,10 +220,10 @@ namespace SevenStrikeModules.XHud.Hud
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_xHudGUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 鼠标样式", Color.white);
+            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 鼠标样式", Color.white);
 
             #region 控制
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "控制", xHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "控制", XHud_Dashboard.Theme_Primary);
 
             if (!Application.isPlaying)
             {
@@ -243,8 +243,8 @@ namespace SevenStrikeModules.XHud.Hud
             if (UseCustomCursor.boolValue)
             {
                 #region 当前选择的光标图标
-                Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_xHudGUI.Gui_Layout_Space(10);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                Editor_XHud_GUI.Gui_Layout_Space(10);
                 GUILayout.FlexibleSpace();
 
                 SerializedProperty index_sprite = CurrentCursorStyle.FindPropertyRelative("Sprite");
@@ -252,55 +252,55 @@ namespace SevenStrikeModules.XHud.Hud
 
                 GUI.color = CursorColor.colorValue;
                 if (spr != null)
-                    Editor_xHudGUI.Gui_Layout_Icon(25, spr.texture, new Vector2(0, 0));
+                    Editor_XHud_GUI.Gui_Layout_Icon(25, spr.texture, new Vector2(0, 0));
                 GUI.color = Color.white;
 
                 GUILayout.FlexibleSpace();
-                Editor_xHudGUI.Gui_Layout_Space(10);
-                Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                Editor_XHud_GUI.Gui_Layout_Space(10);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 #endregion
             }
 
             #region 光标位置
             if (Application.isPlaying)
             {
-                Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_xHudGUI.Gui_Layout_Space(10);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                Editor_XHud_GUI.Gui_Layout_Space(10);
                 Vector3 mpos = Input.mousePosition;
-                Editor_xHudGUI.Gui_Layout_Labelfield("光标X轴：" + mpos.x, HudFilled.无, HudColor.无, Editor_xHudGUI.GetColor(HudColor.魅力红), TextAnchor.MiddleLeft);
-                Editor_xHudGUI.Gui_Layout_Space(10);
-                Editor_xHudGUI.Gui_Layout_Labelfield("光标Y轴：" + mpos.y, HudFilled.无, HudColor.无, Editor_xHudGUI.GetColor(HudColor.柠檬绿), TextAnchor.MiddleRight);
-                Editor_xHudGUI.Gui_Layout_Space(10);
-                Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                Editor_XHud_GUI.Gui_Layout_Labelfield("光标X轴：" + mpos.x, HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.魅力红), TextAnchor.MiddleLeft);
+                Editor_XHud_GUI.Gui_Layout_Space(10);
+                Editor_XHud_GUI.Gui_Layout_Labelfield("光标Y轴：" + mpos.y, HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.柠檬绿), TextAnchor.MiddleRight);
+                Editor_XHud_GUI.Gui_Layout_Space(10);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 选项
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_CustomMouseCursor>("自定义光标", new string[] { "禁用", "启用" }, ref UseCustomCursor, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_CustomMouseCursor>("自定义光标", new string[] { "禁用", "启用" }, ref UseCustomCursor, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
             string[] actionlist = System.Enum.GetNames(typeof(MouseType));
-            Editor_xHudGUI.Gui_Layout_Popup<string, xHud_CustomMouseCursor>("鼠标响应", actionlist, ref IndexMouseType, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
+            Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_CustomMouseCursor>("鼠标响应", actionlist, ref IndexMouseType, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
             {
                 BaseScript.MouseClickType = (MouseType)System.Enum.Parse(typeof(MouseType), res);
             });
 
             string[] smoothsizelist = new string[2] { "缓动模式", "差值模式" };
-            Editor_xHudGUI.Gui_Layout_Popup<string, xHud_CustomMouseCursor>("光标尺寸平滑方式", smoothsizelist, ref UseLerpCursorSize, HudFilled.实体, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_CustomMouseCursor>("光标尺寸平滑方式", smoothsizelist, ref UseLerpCursorSize, HudFilled.实体, 120, 22, SelectedObjects);
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 参数
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "参数", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "参数", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
             Image img_cursor = (Image)CursorImager.objectReferenceValue;
 
@@ -308,59 +308,59 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 img_cursor.enabled = true;
 
-                Editor_xHudGUI.Gui_Layout_Property_Field("焦点物体", CursorRect);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("焦点物体", CursorRect);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                Editor_xHudGUI.Gui_Layout_Property_Field("透明组件", CursorCanvasGroup);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("透明组件", CursorCanvasGroup);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                Editor_xHudGUI.Gui_Layout_Property_Field("光标组件", CursorImager);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("光标组件", CursorImager);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                Editor_xHudGUI.Gui_Layout_Property_Field("尺寸", CursorSize);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("尺寸", CursorSize);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 EditorGUI.BeginChangeCheck();
-                Editor_xHudGUI.Gui_Layout_Property_Field("颜色", CursorColor);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("颜色", CursorColor);
                 if (EditorGUI.EndChangeCheck())
                 {
                     BaseScript.CursorImager.color = CursorColor.colorValue;
                 }
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                Editor_xHudGUI.Gui_Layout_Property_Field("颜色平滑系数", CursorColorSmooth, 90);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("颜色平滑系数", CursorColorSmooth, 90);
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_xHudGUI.Gui_Layout_Space(5);
-                CursorOpacity.floatValue = Editor_xHudGUI.Gui_Layout_Slider("透明度", CursorOpacity.floatValue, 0, 1);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
+                CursorOpacity.floatValue = Editor_XHud_GUI.Gui_Layout_Slider("透明度", CursorOpacity.floatValue, 0, 1);
                 CursorOpacity.serializedObject.ApplyModifiedProperties();
-                Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-                Editor_xHudGUI.Gui_Layout_Space(5);
-                Editor_xHudGUI.Gui_Layout_Property_Field("透明度缓动方式", CursorOpacity_TweenEase, 120);
-                Editor_xHudGUI.Gui_Layout_Space(5);
-                Editor_xHudGUI.Gui_Layout_Property_Field("透明度变化耗时", CursorOpacity_TweenDuration, 120);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("透明度缓动方式", CursorOpacity_TweenEase, 120);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("透明度变化耗时", CursorOpacity_TweenDuration, 120);
 
 
                 if (UseLerpCursorSize.stringValue == "缓动模式")
                 {
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Property_Field("光标尺寸缓动耗时", CursorSize_TweenDuration, 120);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Property_Field("光标尺寸缓动耗时", CursorSize_TweenDuration, 120);
 
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Property_Field("光标尺寸缓动方式", CursorSize_TweenEase, 120);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Property_Field("光标尺寸缓动方式", CursorSize_TweenEase, 120);
                 }
                 else
                 {
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Property_Field("光标尺寸差值速率", CursorImagerSizeSmooth, 120);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Property_Field("光标尺寸差值速率", CursorImagerSizeSmooth, 120);
                 }
             }
             else
@@ -369,47 +369,47 @@ namespace SevenStrikeModules.XHud.Hud
                     img_cursor.enabled = false;
             }
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 光标样式表
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "光标样式表", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "光标样式表", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
             IsMouseStyles = EditorGUILayout.Foldout(IsMouseStyles, "光标样式表");
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
             if (IsMouseStyles)
                 StyleList.DoLayoutList();
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 源脚本
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 原始变量
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
             BasicVars = EditorGUILayout.Foldout(BasicVars, "变量/属性", true);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
             if (BasicVars)
                 DrawDefaultInspector();
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             serializedObject.ApplyModifiedProperties();

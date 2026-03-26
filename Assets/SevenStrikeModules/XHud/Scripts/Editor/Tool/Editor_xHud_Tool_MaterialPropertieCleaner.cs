@@ -3,7 +3,7 @@ namespace SevenStrikeModules.XHud.Utilitys
     using UnityEngine;
     using UnityEditor;
 
-    public class Editor_xHud_Tool_MaterialPropertieCleaner : EditorWindow
+    public class Editor_XHud_Tool_MaterialPropertieCleaner : EditorWindow
     {
         private Material m_selectedMaterial;
         private SerializedObject m_serializedObject;
@@ -21,7 +21,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("Assets/XHud/MaterialPropertieClean (材质清理器)", priority = 2000)]
         private static void Init()
         {
-            GetWindow<Editor_xHud_Tool_MaterialPropertieCleaner>("Ref. Cleaner");
+            GetWindow<Editor_XHud_Tool_MaterialPropertieCleaner>("Ref. Cleaner");
         }
 
         protected virtual void OnEnable()

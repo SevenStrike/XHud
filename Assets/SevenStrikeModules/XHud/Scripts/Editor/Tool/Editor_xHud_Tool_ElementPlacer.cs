@@ -6,14 +6,14 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEditor;
     using UnityEngine;
 
-    public class Editor_xHud_Tool_ElementPlacer : EditorWindow
+    public class Editor_XHud_Tool_ElementPlacer : EditorWindow
     {
         private static void SendObject(HudAnchor anchor)
         {
-            xHud_Manager manager = FindFirstObjectByType<xHud_Manager>();
+            XHud_Manager manager = FindFirstObjectByType<XHud_Manager>();
             if (manager == null)
             {
-                xHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", "未找到HudManager管理器！", HudMsgState.错误);
+                XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", "未找到HudManager管理器！", HudMsgState.错误);
                 return;
             }
             for (int i = 0; i < manager.Anchors_Layout_Screen.Count; i++)
@@ -106,10 +106,10 @@ namespace SevenStrikeModules.XHud.Hud
 
         private static void SendObject_World()
         {
-            xHud_Manager manager = FindFirstObjectByType<xHud_Manager>();
+            XHud_Manager manager = FindFirstObjectByType<XHud_Manager>();
             if (manager == null)
             {
-                xHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", "未找到HudManager管理器！", HudMsgState.错误);
+                XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", "未找到HudManager管理器！", HudMsgState.错误);
                 return;
             }
             UnityEngine.Object obj = Selection.activeObject;
@@ -133,7 +133,7 @@ namespace SevenStrikeModules.XHud.Hud
             GameObject selectedObject = Selection.activeObject as GameObject;
             if (selectedObject != null)
             {
-                xHud_Module_Element element = selectedObject.GetComponent<xHud_Module_Element>();
+                XHud_Module_Element element = selectedObject.GetComponent<XHud_Module_Element>();
                 if (element != null)
                 {
                     // 检查选中的对象是否为 Hud_Element 类型
@@ -153,7 +153,7 @@ namespace SevenStrikeModules.XHud.Hud
         [MenuItem("Assets/XHud/PlaceToAnchor (放置到锚点) /SendAuto(自动识别)", priority = 500)]
         private static void PlaceToAnchor_Auto()
         {
-            xHud_Manager manager = FindFirstObjectByType<xHud_Manager>();
+            XHud_Manager manager = FindFirstObjectByType<XHud_Manager>();
 
             Object[] obj = Selection.objects;
             List<Object> CreatedObjs = new List<Object>();
@@ -161,8 +161,8 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 GameObject obj_ele = PrefabUtility.InstantiatePrefab(obj[i], null) as GameObject;
                 Undo.RegisterCreatedObjectUndo(obj_ele, "CreateObjects");
-                xHud_Module_Element ele = obj_ele.GetComponent<xHud_Module_Element>();
-                OriginalLayoutInfo rms = ele.elelemt_RMS_Get(manager.hm_RMS_GetCurrentSolution());
+                XHud_Module_Element ele = obj_ele.GetComponent<XHud_Module_Element>();
+                Element_OriginalLayoutInfo rms = ele.elelemt_RMS_Get(manager.hm_RMS_GetCurrentSolution());
                 ele.RectTransform.SetParent(manager.hm_Layout_GetAnchor(rms.Anchor));
                 ele.RectTransform.pivot = rms.Pivot;
                 ele.RectTransform.anchorMin = rms.AnchorMin;
@@ -185,7 +185,7 @@ namespace SevenStrikeModules.XHud.Hud
             GameObject selectedObject = Selection.activeObject as GameObject;
             if (selectedObject != null)
             {
-                xHud_Module_Element element = selectedObject.GetComponent<xHud_Module_Element>();
+                XHud_Module_Element element = selectedObject.GetComponent<XHud_Module_Element>();
                 if (element != null)
                 {
                     // 检查选中的对象是否为 Hud_Element 类型
@@ -217,7 +217,7 @@ namespace SevenStrikeModules.XHud.Hud
             GameObject selectedObject = Selection.activeObject as GameObject;
             if (selectedObject != null)
             {
-                xHud_Module_Element element = selectedObject.GetComponent<xHud_Module_Element>();
+                XHud_Module_Element element = selectedObject.GetComponent<XHud_Module_Element>();
                 if (element != null)
                 {
                     // 检查选中的对象是否为 Hud_Element 类型
@@ -249,7 +249,7 @@ namespace SevenStrikeModules.XHud.Hud
             GameObject selectedObject = Selection.activeObject as GameObject;
             if (selectedObject != null)
             {
-                xHud_Module_Element element = selectedObject.GetComponent<xHud_Module_Element>();
+                XHud_Module_Element element = selectedObject.GetComponent<XHud_Module_Element>();
                 if (element != null)
                 {
                     // 检查选中的对象是否为 Hud_Element 类型
@@ -281,7 +281,7 @@ namespace SevenStrikeModules.XHud.Hud
             GameObject selectedObject = Selection.activeObject as GameObject;
             if (selectedObject != null)
             {
-                xHud_Module_Element element = selectedObject.GetComponent<xHud_Module_Element>();
+                XHud_Module_Element element = selectedObject.GetComponent<XHud_Module_Element>();
                 if (element != null)
                 {
                     // 检查选中的对象是否为 Hud_Element 类型
@@ -313,7 +313,7 @@ namespace SevenStrikeModules.XHud.Hud
             GameObject selectedObject = Selection.activeObject as GameObject;
             if (selectedObject != null)
             {
-                xHud_Module_Element element = selectedObject.GetComponent<xHud_Module_Element>();
+                XHud_Module_Element element = selectedObject.GetComponent<XHud_Module_Element>();
                 if (element != null)
                 {
                     // 检查选中的对象是否为 Hud_Element 类型
@@ -345,7 +345,7 @@ namespace SevenStrikeModules.XHud.Hud
             GameObject selectedObject = Selection.activeObject as GameObject;
             if (selectedObject != null)
             {
-                xHud_Module_Element element = selectedObject.GetComponent<xHud_Module_Element>();
+                XHud_Module_Element element = selectedObject.GetComponent<XHud_Module_Element>();
                 if (element != null)
                 {
                     // 检查选中的对象是否为 Hud_Element 类型
@@ -377,7 +377,7 @@ namespace SevenStrikeModules.XHud.Hud
             GameObject selectedObject = Selection.activeObject as GameObject;
             if (selectedObject != null)
             {
-                xHud_Module_Element element = selectedObject.GetComponent<xHud_Module_Element>();
+                XHud_Module_Element element = selectedObject.GetComponent<XHud_Module_Element>();
                 if (element != null)
                 {
                     // 检查选中的对象是否为 Hud_Element 类型
@@ -409,7 +409,7 @@ namespace SevenStrikeModules.XHud.Hud
             GameObject selectedObject = Selection.activeObject as GameObject;
             if (selectedObject != null)
             {
-                xHud_Module_Element element = selectedObject.GetComponent<xHud_Module_Element>();
+                XHud_Module_Element element = selectedObject.GetComponent<XHud_Module_Element>();
                 if (element != null)
                 {
                     // 检查选中的对象是否为 Hud_Element 类型
@@ -441,7 +441,7 @@ namespace SevenStrikeModules.XHud.Hud
             GameObject selectedObject = Selection.activeObject as GameObject;
             if (selectedObject != null)
             {
-                xHud_Module_Element element = selectedObject.GetComponent<xHud_Module_Element>();
+                XHud_Module_Element element = selectedObject.GetComponent<XHud_Module_Element>();
                 if (element != null)
                 {
                     // 检查选中的对象是否为 Hud_Element 类型
@@ -473,7 +473,7 @@ namespace SevenStrikeModules.XHud.Hud
             GameObject selectedObject = Selection.activeObject as GameObject;
             if (selectedObject != null)
             {
-                xHud_Module_Element element = selectedObject.GetComponent<xHud_Module_Element>();
+                XHud_Module_Element element = selectedObject.GetComponent<XHud_Module_Element>();
                 if (element != null)
                 {
                     // 检查选中的对象是否为 Hud_Element 类型
@@ -505,7 +505,7 @@ namespace SevenStrikeModules.XHud.Hud
             GameObject selectedObject = Selection.activeObject as GameObject;
             if (selectedObject != null)
             {
-                xHud_Module_Element element = selectedObject.GetComponent<xHud_Module_Element>();
+                XHud_Module_Element element = selectedObject.GetComponent<XHud_Module_Element>();
                 if (element != null)
                 {
                     // 检查选中的对象是否为 Hud_Element 类型
@@ -537,7 +537,7 @@ namespace SevenStrikeModules.XHud.Hud
             GameObject selectedObject = Selection.activeObject as GameObject;
             if (selectedObject != null)
             {
-                xHud_Module_Element element = selectedObject.GetComponent<xHud_Module_Element>();
+                XHud_Module_Element element = selectedObject.GetComponent<XHud_Module_Element>();
                 if (element != null)
                 {
                     // 检查选中的对象是否为 Hud_Element 类型

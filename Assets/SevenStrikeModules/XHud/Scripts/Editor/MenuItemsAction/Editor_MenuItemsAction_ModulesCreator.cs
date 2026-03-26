@@ -18,7 +18,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         {
             bool valid = false;
 
-            if (Transform.FindFirstObjectByType<xHud_Manager>() == null)
+            if (Transform.FindFirstObjectByType<XHud_Manager>() == null)
                 valid = true;
 
             return valid;
@@ -27,7 +27,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("GameObject/XHud/Manager (管理器)", priority = 0)]
         private static void Create_HudElement()
         {
-            xHud_Manager manager = Transform.FindFirstObjectByType<xHud_Manager>();
+            XHud_Manager manager = Transform.FindFirstObjectByType<XHud_Manager>();
             if (manager != null)
             {
                 EditorUtility.DisplayDialog("警告", "场景中已经存在HudManager,请勿重复创建!", "明白");
@@ -40,7 +40,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             obj.transform.localScale = Vector3.one;
             obj.transform.localEulerAngles = Vector3.zero;
             obj.transform.localPosition = Vector3.zero;
-            obj.AddComponent<xHud_Manager>();
+            obj.AddComponent<XHud_Manager>();
             Selection.activeTransform = obj.transform;
         }
         #endregion
@@ -57,7 +57,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 RectTransform rectTransform = selectedObject.GetComponent<RectTransform>();
                 if (rectTransform != null)
                 {
-                    if (!selectedObject.GetComponent<xHud_Module_Element>())
+                    if (!selectedObject.GetComponent<XHud_Module_Element>())
                         if (selectedObject.GetComponentInParent<Canvas>())
                         {
                             if (selectedObject.name.Contains("Anchor_"))
@@ -84,7 +84,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 Undo.RegisterCreatedObjectUndo(obj, "CreateElementObject");
                 obj.name = "NewElement";
                 obj.layer = LayerMask.NameToLayer("XHud");
-                xHud_Module_Element obj_ele = obj.AddComponent<xHud_Module_Element>();
+                XHud_Module_Element obj_ele = obj.AddComponent<XHud_Module_Element>();
                 obj_ele.Indicator = "NewElement";
                 RectTransform obj_ele_rect = obj.AddComponent<RectTransform>();
                 obj_ele_rect.transform.SetParent(actobj);
@@ -109,7 +109,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 RectTransform rectTransform = selectedObject.GetComponent<RectTransform>();
                 if (rectTransform != null)
                 {
-                    if (selectedObject.GetComponentInParent<xHud_Module_Element>() || selectedObject.GetComponentInParent<xHud_Module_Container>())
+                    if (selectedObject.GetComponentInParent<XHud_Module_Element>() || selectedObject.GetComponentInParent<XHud_Module_Container>())
                         valid = true;
                 }
             }
@@ -131,7 +131,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 obj_ele_rect.localEulerAngles = Vector3.zero;
                 obj_ele_rect.localScale = Vector3.one;
 
-                string res = Editor_xHudGUI.Open(xHudDialogType.帮助, "创建模组提示", "创建动画器", "您需要为创建的Animator动画器制定一个基础类型！", "暂不", "Image", "Text", "TmpText", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "创建动画器", "您需要为创建的Animator动画器制定一个基础类型！", "暂不", "Image", "Text", "TmpText", 0);
 
                 if (res == "暂不")
                     return;
@@ -145,19 +145,19 @@ namespace SevenStrikeModules.XHud.Utilitys
                 else if (res == "Text")
                 {
                     //创建Text
-                    xHud_Module_Text value = Mc_AddText(obj, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "XHud Text", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                    XHud_Module_Text value = Mc_AddText(obj, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "XHud Text", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
                     value.Indicator = "Text";
                     obj.name = "Animator ( Text )";
                 }
                 else if (res == "TmpText")
                 {
                     //创建TmpText
-                    xHud_Module_TmpText value = Mc_AddTmpText(obj, "TmpText", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "XHud Text", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                    XHud_Module_TmpText value = Mc_AddTmpText(obj, "TmpText", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "XHud Text", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
                     value.Indicator = "TmpText";
                     obj.name = "Animator ( TmpText )";
                 }
 
-                xHud_Module_Animator obj_anim = obj.AddComponent<xHud_Module_Animator>();
+                XHud_Module_Animator obj_anim = obj.AddComponent<XHud_Module_Animator>();
                 obj_anim.Indicator = "NewAnimator";
                 Selection.activeTransform = obj.transform;
             }
@@ -176,7 +176,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 RectTransform rectTransform = selectedObject.GetComponent<RectTransform>();
                 if (rectTransform != null)
                 {
-                    if (selectedObject.GetComponentInParent<xHud_Module_Element>() || selectedObject.GetComponentInParent<xHud_Module_Container>())
+                    if (selectedObject.GetComponentInParent<XHud_Module_Element>() || selectedObject.GetComponentInParent<XHud_Module_Container>())
                         valid = true;
                 }
             }
@@ -190,13 +190,13 @@ namespace SevenStrikeModules.XHud.Utilitys
             if (actobj != null)
             {
                 //创建Text
-                xHud_Module_Text value = Mc_AddText(actobj, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "XHud Text", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text value = Mc_AddText(actobj, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "XHud Text", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
                 value.Indicator = "Text";
 
-                string res = Editor_xHudGUI.Open(xHudDialogType.帮助, "创建模组提示", "创建动画器", "是否要为创建的Text创建一个Animator动画器？", "暂不", "添加", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "创建动画器", "是否要为创建的Text创建一个Animator动画器？", "暂不", "添加", 0);
                 if (res == "添加")
                 {
-                    xHud_Module_Animator anim = value.gameObject.AddComponent<xHud_Module_Animator>();
+                    XHud_Module_Animator anim = value.gameObject.AddComponent<XHud_Module_Animator>();
                     anim.OriginalColor = value.TextStyleInfo.tmp_color;
                 }
 
@@ -217,7 +217,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 RectTransform rectTransform = selectedObject.GetComponent<RectTransform>();
                 if (rectTransform != null)
                 {
-                    if (selectedObject.GetComponentInParent<xHud_Module_Element>() || selectedObject.GetComponentInParent<xHud_Module_Container>())
+                    if (selectedObject.GetComponentInParent<XHud_Module_Element>() || selectedObject.GetComponentInParent<XHud_Module_Container>())
                         valid = true;
                 }
             }
@@ -231,13 +231,13 @@ namespace SevenStrikeModules.XHud.Utilitys
             if (actobj != null)
             {
                 //创建TmpText
-                xHud_Module_TmpText value = Mc_AddTmpText(actobj, "TmpText", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "XHud Text", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText value = Mc_AddTmpText(actobj, "TmpText", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "XHud Text", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
                 value.Indicator = "TmpText";
 
-                string res = Editor_xHudGUI.Open(xHudDialogType.帮助, "创建模组提示", "创建动画器", "是否要为创建的TmpText创建一个Animator动画器？", "暂不", "添加", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "创建动画器", "是否要为创建的TmpText创建一个Animator动画器？", "暂不", "添加", 0);
                 if (res == "添加")
                 {
-                    xHud_Module_Animator anim = value.gameObject.AddComponent<xHud_Module_Animator>();
+                    XHud_Module_Animator anim = value.gameObject.AddComponent<XHud_Module_Animator>();
                     anim.OriginalColor = value.TextStyleInfo.tmp_color;
                 }
 
@@ -257,7 +257,7 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             if (selectedObject != null)
             {
-                if (!selectedObject.GetComponentInParent<xHud_Module_Element>() && selectedObject.name.Contains("Anchor_"))
+                if (!selectedObject.GetComponentInParent<XHud_Module_Element>() && selectedObject.name.Contains("Anchor_"))
                     valid = true;
             }
 
@@ -267,11 +267,11 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("GameObject/XHud/Module（模组）/Button (按钮)", priority = 1000)]
         private static void Create_HudButton()
         {
-            string res = Editor_xHudGUI.Open(xHudDialogType.帮助, "创建模组提示", "选择按钮风格", "您想创建什么样风格的按钮？", "文字", "图标", "图标 & 文字", 0);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择按钮风格", "您想创建什么样风格的按钮？", "文字", "图标", "图标 & 文字", 0);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Button)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
-            xHud_Module_Element btn_ele = Mc_AddHudElement(obj);
+            XHud_Module_Element btn_ele = Mc_AddHudElement(obj);
             if (res == "图标")
                 btn_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(45, 45));
             else if (res == "文字")
@@ -286,9 +286,9 @@ namespace SevenStrikeModules.XHud.Utilitys
             #endregion
 
             #region 创建Button
-            xHud_Module_Button btn = Mc_AddHudButton(btn_root, "Button", "XHud-Button");
+            XHud_Module_Button btn = Mc_AddHudButton(btn_root, "Button", "XHud-Button");
             ColorBlock colors = btn.colors;
-            colors.pressedColor = xHud_Dashboard.Theme_Primary;
+            colors.pressedColor = XHud_Dashboard.Theme_Primary;
             btn.colors = colors;
             #endregion
 
@@ -296,7 +296,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             {
                 #region 创建Button - 图标
                 GameObject btn_icon = Mc_CreateObject("Icon", "XHud", Vector3.zero, Vector3.zero, Vector3.one, btn_root_rect);
-                Sprite btn_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_Objective.png");
+                Sprite btn_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_Objective.png");
                 Image btn_img_icon = Mc_AddImage(btn_icon, Color.white, new Vector2(35, 35), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), true);
                 btn_img_icon.sprite = btn_icon_sprite;
                 btn.IconImage = btn_img_icon;
@@ -306,13 +306,13 @@ namespace SevenStrikeModules.XHud.Utilitys
             }
             else
             {
-                string res_bg = Editor_xHudGUI.Open(xHudDialogType.帮助, "创建模组提示", "选择背景类型", "您希望使用那种背景方式作为按钮背景使用？", "有背景", "无背景", 1);
+                string res_bg = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择背景类型", "您希望使用那种背景方式作为按钮背景使用？", "有背景", "无背景", 1);
 
                 if (res_bg == "有背景")
                 {
                     #region 创建Button - 背景
                     GameObject btn_bg = Mc_CreateObject("Bg", "XHud", Vector3.zero, Vector3.zero, Vector3.one, btn_root_rect);
-                    Sprite btn_bg_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/BtnRect_Wire_CrossSlice.png");
+                    Sprite btn_bg_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/BtnRect_Wire_CrossSlice.png");
                     Image btn_img_bg = Mc_AddImage(btn_bg, Color.white, new Vector2(0, 0), new Vector2(1, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), new Vector2(0, 0), true);
                     btn_img_bg.sprite = btn_bg_sprite;
                     btn_img_bg.type = Image.Type.Sliced;
@@ -321,20 +321,20 @@ namespace SevenStrikeModules.XHud.Utilitys
                     #endregion
                 }
 
-                string res_text = Editor_xHudGUI.Open(xHudDialogType.帮助, "创建模组提示", "选择文字类型", "您希望使用那种文字组件类型作为按钮文字使用？", "Text", "TmpText", 1);
+                string res_text = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择文字类型", "您希望使用那种文字组件类型作为按钮文字使用？", "Text", "TmpText", 1);
 
                 if (res == "文字")
                 {
                     if (res_text == "Text")
                     {
                         //创建Slider - 按钮文字
-                        xHud_Module_Text btn_text = Mc_AddText(btn_root_rect, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(128, 35), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, btn.ButtonName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, true);
+                        XHud_Module_Text btn_text = Mc_AddText(btn_root_rect, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(128, 35), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, btn.ButtonName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, true);
                         btn.ButtonText = btn_text;
                     }
                     else if (res_text == "TmpText")
                     {
                         //创建Slider - 按钮文字
-                        xHud_Module_TmpText btn_tmptext = Mc_AddTmpText(btn_root_rect, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(128, 35), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, $"{btn.ButtonName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, true);
+                        XHud_Module_TmpText btn_tmptext = Mc_AddTmpText(btn_root_rect, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(128, 35), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, $"{btn.ButtonName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, true);
                         btn.ButtonTmpText = btn_tmptext;
                     }
                     btn.TextColorSyncFade = true;
@@ -343,7 +343,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 {
                     #region 创建Button - 图标
                     GameObject btn_icon = Mc_CreateObject("Icon", "XHud", new Vector3(23, 0, 0), Vector3.zero, Vector3.one, btn_root_rect);
-                    Sprite btn_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_Objective.png");
+                    Sprite btn_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_Objective.png");
                     Image btn_img_icon = Mc_AddImage(btn_icon, Color.white, new Vector2(16, 16), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), true);
                     btn_img_icon.sprite = btn_icon_sprite;
                     btn.IconImage = btn_img_icon;
@@ -352,13 +352,13 @@ namespace SevenStrikeModules.XHud.Utilitys
                     if (res_text == "Text")
                     {
                         //创建Slider - 按钮文字
-                        xHud_Module_Text btn_text = Mc_AddText(btn_root_rect, "Text", new Vector3(-56, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(80, 25), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.右, TextAnchor.MiddleRight, btn.ButtonName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, true);
+                        XHud_Module_Text btn_text = Mc_AddText(btn_root_rect, "Text", new Vector3(-56, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(80, 25), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.右, TextAnchor.MiddleRight, btn.ButtonName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, true);
                         btn.ButtonText = btn_text;
                     }
                     else if (res_text == "TmpText")
                     {
                         //创建Slider - 按钮文字
-                        xHud_Module_TmpText btn_tmptext = Mc_AddTmpText(btn_root_rect, "Text", new Vector3(-56, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(80, 25), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{btn.ButtonName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, true);
+                        XHud_Module_TmpText btn_tmptext = Mc_AddTmpText(btn_root_rect, "Text", new Vector3(-56, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(80, 25), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{btn.ButtonName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, true);
                         btn.ButtonTmpText = btn_tmptext;
                     }
 
@@ -382,7 +382,7 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             if (selectedObject != null)
             {
-                if (selectedObject.GetComponentInParent<xHud_Manager>() && selectedObject.name.Contains("Anchor_"))
+                if (selectedObject.GetComponentInParent<XHud_Manager>() && selectedObject.name.Contains("Anchor_"))
                     valid = true;
             }
 
@@ -392,11 +392,11 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("GameObject/XHud/Module（模组）/Progress (进度条)", priority = 1000)]
         private static void Create_HudProgress()
         {
-            string res = Editor_xHudGUI.Open(xHudDialogType.帮助, "创建模组提示", "选择进度条类型", "您希望进度条的标题、副标题以及数值文字使用哪种文字组件类型？", "Text", "TmpText", 1);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择进度条类型", "您希望进度条的标题、副标题以及数值文字使用哪种文字组件类型？", "Text", "TmpText", 1);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Progress)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
-            xHud_Module_Element pro_ele = Mc_AddHudElement(obj);
+            XHud_Module_Element pro_ele = Mc_AddHudElement(obj);
             pro_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(300, 70));
             #endregion
 
@@ -406,20 +406,20 @@ namespace SevenStrikeModules.XHud.Utilitys
             #endregion
 
             #region 创建Progress
-            xHud_Module_Progress pro = Mc_AddHudProgress(pro_root, "Progress", 0.0f, "%", "XHud-Progress", "Progress Subtitle", 1);
+            XHud_Module_Progress pro = Mc_AddHudProgress(pro_root, "Progress", 0.0f, "%", "XHud-Progress", "Progress Subtitle", 1);
             #endregion
 
             #region 文字组件创建
             if (res == "Text")
             {
                 //创建Slider - 数值
-                xHud_Module_Text value = Mc_AddText(pro_root_rect, "Percentage", new Vector3(-35, 28, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(70, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.右, TextAnchor.MiddleRight, $"{pro.ProgressValue.ToString("F1")} %", 12, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text value = Mc_AddText(pro_root_rect, "Percentage", new Vector3(-35, 28, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(70, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.右, TextAnchor.MiddleRight, $"{pro.ProgressValue.ToString("F1")} %", 12, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 //创建Slider - 标题
-                xHud_Module_Text title = Mc_AddText(pro_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, pro.con_title, 18, xHud_Dashboard.Theme_Primary, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text title = Mc_AddText(pro_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, pro.con_title, 18, XHud_Dashboard.Theme_Primary, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 //创建Slider - 副标题
-                xHud_Module_Text subtitle = Mc_AddText(pro_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, pro.con_subtitle, 12, Color.white * 0.65f, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text subtitle = Mc_AddText(pro_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, pro.con_subtitle, 12, Color.white * 0.65f, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 pro.pro_Text_Percent = value;
                 pro.pro_Text_Title = title;
@@ -428,13 +428,13 @@ namespace SevenStrikeModules.XHud.Utilitys
             else
             {
                 //创建Slider - 数值
-                xHud_Module_TmpText value = Mc_AddTmpText(pro_root_rect, "Percentage", new Vector3(-35, 28, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(70, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{pro.ProgressValue.ToString("F1")} %", 12, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText value = Mc_AddTmpText(pro_root_rect, "Percentage", new Vector3(-35, 28, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(70, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{pro.ProgressValue.ToString("F1")} %", 12, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 //创建Slider - 标题
-                xHud_Module_TmpText title = Mc_AddTmpText(pro_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{pro.con_title}", 18, xHud_Dashboard.Theme_Primary, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText title = Mc_AddTmpText(pro_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{pro.con_title}", 18, XHud_Dashboard.Theme_Primary, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 //创建Slider - 副标题
-                xHud_Module_TmpText subtitle = Mc_AddTmpText(pro_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{pro.con_subtitle}", 12, Color.white * 0.65f, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText subtitle = Mc_AddTmpText(pro_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{pro.con_subtitle}", 12, Color.white * 0.65f, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 pro.pro_TmpText_Percent = value;
                 pro.pro_TmpText_Title = title;
@@ -444,7 +444,7 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             #region 创建Progress - 图标
             GameObject pro_icon = Mc_CreateObject("Icon", "XHud", new Vector3(15, -17.3f, 0), Vector3.zero, Vector3.one, pro_root_rect);
-            Sprite pro_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_XHud.png");
+            Sprite pro_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_XHud.png");
             Image pro_img_icon = Mc_AddImage(pro_icon, Color.white, new Vector2(30, 30), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), false);
             pro_img_icon.sprite = pro_icon_sprite;
             #endregion
@@ -464,12 +464,12 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             #region 创建Progress - 轨道区域 - 前景
             GameObject pro_structure_fg = Mc_CreateObject("Fg", "XHud", Vector3.zero, Vector3.zero, Vector3.one, pro_structure_rect);
-            Image pro_img_fg = Mc_AddImage(pro_structure_fg, xHud_Dashboard.Theme_Primary, new Vector2(0, 1), new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), false);
+            Image pro_img_fg = Mc_AddImage(pro_structure_fg, XHud_Dashboard.Theme_Primary, new Vector2(0, 1), new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), false);
             #endregion
 
             #region 创建Progress - 进度Mark
             GameObject pro_mark = Mc_CreateObject("Mark", "XHud", Vector3.zero, Vector3.zero, Vector3.one, pro_structure_fg.transform);
-            Sprite pro_mark_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Progress_Indicator.png");
+            Sprite pro_mark_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Progress_Indicator.png");
             Image pro_mark_icon = Mc_AddImage(pro_mark, Color.white, new Vector2(10, 4), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), false);
             pro_mark_icon.sprite = pro_mark_sprite;
             #endregion
@@ -496,7 +496,7 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             if (selectedObject != null)
             {
-                if (selectedObject.GetComponentInParent<xHud_Manager>() && selectedObject.name.Contains("Anchor_"))
+                if (selectedObject.GetComponentInParent<XHud_Manager>() && selectedObject.name.Contains("Anchor_"))
                     valid = true;
             }
 
@@ -506,11 +506,11 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("GameObject/XHud/Module（模组）/Slider (滑动条)", priority = 1000)]
         private static void Create_HudSlider()
         {
-            string res = Editor_xHudGUI.Open(xHudDialogType.通知, "创建模组提示", "选择滑动条类型", "您希望滑动条的标题、副标题以及数值文字使用哪种文字组件类型？", "Text", "TmpText", 1);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.通知, "创建模组提示", "选择滑动条类型", "您希望滑动条的标题、副标题以及数值文字使用哪种文字组件类型？", "Text", "TmpText", 1);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Slider)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
-            xHud_Module_Element sli_ele = Mc_AddHudElement(obj);
+            XHud_Module_Element sli_ele = Mc_AddHudElement(obj);
             sli_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(300, 70));
             #endregion
 
@@ -521,20 +521,20 @@ namespace SevenStrikeModules.XHud.Utilitys
             #endregion
 
             #region 创建Slider
-            xHud_Module_Slider sli = Mc_AddHudSlider(sli_root, "Slider", 0, 100, 0.0f, "%", "XHud-Slider", "Slider Subtitle", 1);
+            XHud_Module_Slider sli = Mc_AddHudSlider(sli_root, "Slider", 0, 100, 0.0f, "%", "XHud-Slider", "Slider Subtitle", 1);
             #endregion
 
             #region 文字组件创建
             if (res == "Text")
             {
                 //创建Slider - 数值
-                xHud_Module_Text value = Mc_AddText(sli_root_rect, "Percentage", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(50, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0.5f), new Vector2(0, 2), ContentAnchor.右, TextAnchor.MiddleRight, $"{sli.value.ToString("F1")} %", 12, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text value = Mc_AddText(sli_root_rect, "Percentage", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(50, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0.5f), new Vector2(0, 2), ContentAnchor.右, TextAnchor.MiddleRight, $"{sli.value.ToString("F1")} %", 12, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 //创建Slider - 标题
-                xHud_Module_Text title = Mc_AddText(sli_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, sli.con_title, 18, xHud_Dashboard.Theme_Primary, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text title = Mc_AddText(sli_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, sli.con_title, 18, XHud_Dashboard.Theme_Primary, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 //创建Slider - 副标题
-                xHud_Module_Text subtitle = Mc_AddText(sli_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, sli.con_subtitle, 12, Color.white * 0.65f, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text subtitle = Mc_AddText(sli_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, sli.con_subtitle, 12, Color.white * 0.65f, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 sli.sli_Text_Percent = value;
                 sli.sli_Text_Title = title;
@@ -543,13 +543,13 @@ namespace SevenStrikeModules.XHud.Utilitys
             else
             {
                 //创建Slider - 数值
-                xHud_Module_TmpText value = Mc_AddTmpText(sli_root_rect, "Percentage", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(50, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0.5f), new Vector2(0, 2), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{sli.value.ToString("F1")} %", 12, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText value = Mc_AddTmpText(sli_root_rect, "Percentage", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(50, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0.5f), new Vector2(0, 2), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{sli.value.ToString("F1")} %", 12, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 //创建Slider - 标题
-                xHud_Module_TmpText title = Mc_AddTmpText(sli_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{sli.con_title}", 18, xHud_Dashboard.Theme_Primary, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText title = Mc_AddTmpText(sli_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{sli.con_title}", 18, XHud_Dashboard.Theme_Primary, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 //创建Slider - 副标题
-                xHud_Module_TmpText subtitle = Mc_AddTmpText(sli_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{sli.con_subtitle}", 12, Color.white * 0.65f, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText subtitle = Mc_AddTmpText(sli_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{sli.con_subtitle}", 12, Color.white * 0.65f, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 sli.sli_TmpText_Percent = value;
                 sli.sli_TmpText_Title = title;
@@ -559,7 +559,7 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             #region 创建Slider - 图标
             GameObject sli_icon = Mc_CreateObject("Icon", "XHud", new Vector3(15, -17.3f, 0), Vector3.zero, Vector3.one, sli_root_rect);
-            Sprite sli_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_XHud.png");
+            Sprite sli_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_XHud.png");
             Image sli_img_icon = Mc_AddImage(sli_icon, Color.white, new Vector2(30, 30), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), false);
             sli_img_icon.sprite = sli_icon_sprite;
             #endregion
@@ -579,7 +579,7 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             #region 创建Slider - 滑动区域 - 前景
             GameObject sli_structure_fg = Mc_CreateObject("Fg", "XHud", Vector3.zero, Vector3.zero, Vector3.one, sli_structure_rect);
-            Image sli_img_fg = Mc_AddImage(sli_structure_fg, xHud_Dashboard.Theme_Primary, new Vector2(0, 0), new Vector2(1, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), new Vector2(0, 0), true);
+            Image sli_img_fg = Mc_AddImage(sli_structure_fg, XHud_Dashboard.Theme_Primary, new Vector2(0, 0), new Vector2(1, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), new Vector2(0, 0), true);
             #endregion
 
             #region 创建Slider - 控制柄限制器
@@ -594,7 +594,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             sli_handle_rect.sizeDelta = new Vector2(30, sli_handle_rect.sizeDelta.y);
             sli_handle_rect.anchoredPosition = new Vector2(0, sli_handle_rect.anchoredPosition.y);
 
-            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Slider_Handle.png");
+            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Slider_Handle.png");
             Image sli_img_handle = Mc_AddImage(sli_handle, Color.white, 1.5f, sprite, Image.Type.Sliced, true);
             #endregion
 
@@ -625,7 +625,7 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             if (selectedObject != null)
             {
-                if (selectedObject.GetComponentInParent<xHud_Manager>() && selectedObject.name.Contains("Anchor_"))
+                if (selectedObject.GetComponentInParent<XHud_Manager>() && selectedObject.name.Contains("Anchor_"))
                     valid = true;
             }
 
@@ -635,11 +635,11 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("GameObject/XHud/Module（模组）/Toggle (开关)", priority = 1000)]
         private static void Create_HudToggle()
         {
-            string res = Editor_xHudGUI.Open(xHudDialogType.帮助, "创建模组提示", "选择开关风格", "您想创建什么样风格的开关？", "文字", "图标", "图标 & 文字", "纯净", 2);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择开关风格", "您想创建什么样风格的开关？", "文字", "图标", "图标 & 文字", "纯净", 2);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Toggle)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
-            xHud_Module_Element btn_ele = Mc_AddHudElement(obj);
+            XHud_Module_Element btn_ele = Mc_AddHudElement(obj);
             if (res == "图标")
                 btn_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(80, 35));
             else if (res == "文字")
@@ -656,16 +656,16 @@ namespace SevenStrikeModules.XHud.Utilitys
             #endregion
 
             #region 创建Toggle
-            xHud_Module_Toggle tog = Mc_AddHudToggle(tog_root, "Toggle", "XHud-Toggle");
+            XHud_Module_Toggle tog = Mc_AddHudToggle(tog_root, "Toggle", "XHud-Toggle");
             ColorBlock colors = tog.colors;
-            colors.pressedColor = xHud_Dashboard.Theme_Primary;
+            colors.pressedColor = XHud_Dashboard.Theme_Primary;
             tog.colors = colors;
             tog.BgCanToggle = true;
             #endregion
 
             #region 设置Toggle 颜色
             tog.Tog_Color_Bg_Unchecked = new Color(0.282353f, 0.282353f, 0.282353f, 1);
-            tog.Tog_Color_Bg_Checked = xHud_Dashboard.Theme_Primary;
+            tog.Tog_Color_Bg_Checked = XHud_Dashboard.Theme_Primary;
             tog.Tog_Color_Handle_Unchecked = new Color(0.8392157f, 0.8392157f, 0.8392157f, 1);
             tog.Tog_Color_Handle_Checked = new Color(0.2156863f, 0.2156863f, 0.2156863f, 1);
             #endregion
@@ -674,7 +674,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             {
                 #region 创建Button - 图标
                 GameObject tog_icon = Mc_CreateObject("Icon", "XHud", new Vector3(8, 0, 0), Vector3.zero, Vector3.one, tog_root_rect);
-                Sprite tog_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_Objective.png");
+                Sprite tog_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_Objective.png");
                 Image tog_img_icon = Mc_AddImage(tog_icon, Color.white, new Vector2(16, 16), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), false);
                 tog_img_icon.sprite = tog_icon_sprite;
                 #endregion
@@ -683,20 +683,20 @@ namespace SevenStrikeModules.XHud.Utilitys
             }
             else if (res == "文字" || res == "图标 & 文字")
             {
-                string res_text = Editor_xHudGUI.Open(xHudDialogType.帮助, "创建模组提示", "选择文字类型", "您希望使用那种文字组件类型作为开关文字使用？", "Text", "TmpText", 1);
+                string res_text = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择文字类型", "您希望使用那种文字组件类型作为开关文字使用？", "Text", "TmpText", 1);
 
                 if (res == "文字")
                 {
                     if (res_text == "Text")
                     {
                         //创建Slider - 按钮文字
-                        xHud_Module_Text tog_text = Mc_AddText(tog_root_rect, "Title", new Vector3(50, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, tog.ToggleName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                        XHud_Module_Text tog_text = Mc_AddText(tog_root_rect, "Title", new Vector3(50, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, tog.ToggleName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
                         tog.ToggleText = tog_text;
                     }
                     else if (res_text == "TmpText")
                     {
                         //创建Slider - 按钮文字
-                        xHud_Module_TmpText tog_tmptext = Mc_AddTmpText(tog_root_rect, "Title", new Vector3(50, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{tog.ToggleName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                        XHud_Module_TmpText tog_tmptext = Mc_AddTmpText(tog_root_rect, "Title", new Vector3(50, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{tog.ToggleName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
                         tog.ToggleTmpText = tog_tmptext;
                     }
                 }
@@ -704,7 +704,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 {
                     #region 创建Button - 图标
                     GameObject tog_icon = Mc_CreateObject("Icon", "XHud", new Vector3(8, 0, 0), Vector3.zero, Vector3.one, tog_root_rect);
-                    Sprite tog_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_Objective.png");
+                    Sprite tog_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_Objective.png");
                     Image tog_img_icon = Mc_AddImage(tog_icon, Color.white, new Vector2(16, 16), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), false);
                     tog_img_icon.sprite = tog_icon_sprite;
                     #endregion
@@ -712,13 +712,13 @@ namespace SevenStrikeModules.XHud.Utilitys
                     if (res_text == "Text")
                     {
                         //创建Slider - 按钮文字
-                        xHud_Module_Text tog_text = Mc_AddText(tog_root_rect, "Title", new Vector3(82, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, tog.ToggleName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                        XHud_Module_Text tog_text = Mc_AddText(tog_root_rect, "Title", new Vector3(82, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, tog.ToggleName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
                         tog.ToggleText = tog_text;
                     }
                     else if (res_text == "TmpText")
                     {
                         //创建Slider - 按钮文字
-                        xHud_Module_TmpText tog_tmptext = Mc_AddTmpText(tog_root_rect, "Title", new Vector3(82, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{tog.ToggleName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                        XHud_Module_TmpText tog_tmptext = Mc_AddTmpText(tog_root_rect, "Title", new Vector3(82, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{tog.ToggleName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
                         tog.ToggleTmpText = tog_tmptext;
                     }
                 }
@@ -727,7 +727,7 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             #region 创建Toggle - Bg
             GameObject tog_bg = Mc_CreateObject("Bg", "XHud", Vector3.zero, Vector3.zero, Vector3.one, tog_root_rect);
-            Sprite tog_bg_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Toggle_Bg_False.png");
+            Sprite tog_bg_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Toggle_Bg_False.png");
             Image tog_img_bg = Mc_AddImage(tog_bg, tog.Tog_Color_Bg_Unchecked, new Vector2(44, 23), res == "纯净" ? new Vector2(0.5f, 0.5f) : new Vector2(1, 0.5f), res == "纯净" ? new Vector2(0.5f, 0.5f) : new Vector2(1, 0.5f), res == "纯净" ? new Vector2(0.5f, 0.5f) : new Vector2(1, 0.5f), true);
             tog_img_bg.sprite = tog_bg_sprite;
             tog.Tog_Bg = tog_img_bg;
@@ -735,7 +735,7 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             #region 创建Toggle - Handle
             GameObject tog_handle = Mc_CreateObject("Handle", "XHud", new Vector3(-11, 0, 0), Vector3.zero, Vector3.one, tog_img_bg.rectTransform);
-            Sprite tog_handle_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Toggle_Handle_False.png");
+            Sprite tog_handle_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Toggle_Handle_False.png");
             Image tog_img_handle = Mc_AddImage(tog_handle, tog.Tog_Color_Handle_Unchecked, new Vector2(18, 18), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), true);
             tog_img_handle.sprite = tog_handle_sprite;
             tog.Tog_Handle = tog_img_handle;
@@ -760,7 +760,7 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             if (selectedObject != null)
             {
-                if (selectedObject.GetComponentInParent<xHud_Manager>() && selectedObject.name.Contains("Anchor_"))
+                if (selectedObject.GetComponentInParent<XHud_Manager>() && selectedObject.name.Contains("Anchor_"))
                     valid = true;
             }
 
@@ -770,11 +770,11 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("GameObject/XHud/Module（模组）/Option (选项器)", priority = 1000)]
         private static void Create_HudOption()
         {
-            string res_type = Editor_xHudGUI.Open(xHudDialogType.帮助, "创建模组提示", "选择选项器风格", "您想创建什么样风格的选项器？", "文字", "图标", "图标 & 文字", 0);
+            string res_type = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择选项器风格", "您想创建什么样风格的选项器？", "文字", "图标", "图标 & 文字", 0);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Option)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
-            xHud_Module_Element opt_ele = Mc_AddHudElement(obj);
+            XHud_Module_Element opt_ele = Mc_AddHudElement(obj);
             opt_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(420, 75));
             #endregion
 
@@ -784,7 +784,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             #endregion
 
             #region 创建Option
-            xHud_Module_Option option = Mc_AddHudOption(opt_root, "Option");
+            XHud_Module_Option option = Mc_AddHudOption(opt_root, "Option");
             option.RepeatAnimatorPlay = true;
             option.UseBlinked = true;
             option.UseEaseMotion = true;
@@ -792,29 +792,29 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             #region 创建主图标
             GameObject opt_bg = Mc_CreateObject("Icon", "XHud", new Vector3(15, -15), Vector3.zero, Vector3.one, opt_root_rect);
-            Sprite opt_bg_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_XHud.png");
+            Sprite opt_bg_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_XHud.png");
             Image opt_img_bg = Mc_AddImage(opt_bg, Color.white, new Vector2(30, 30), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), false);
             opt_img_bg.sprite = opt_bg_sprite;
             #endregion
 
             #region 创建标题
-            string res = Editor_xHudGUI.Open(xHudDialogType.帮助, "创建模组提示", "选择标题文字类型", "您希望选项器的标题以及选项按钮标题文字使用哪种文字组件类型？", "Text", "TmpText", 1);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择标题文字类型", "您希望选项器的标题以及选项按钮标题文字使用哪种文字组件类型？", "Text", "TmpText", 1);
             if (res == "Text")
             {
                 //创建Slider - 标题
-                xHud_Module_Text title = Mc_AddText(opt_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, "XHud-Option", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text title = Mc_AddText(opt_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, "XHud-Option", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
             }
             else
             {
                 //创建Slider - 标题
-                xHud_Module_TmpText title = Mc_AddTmpText(opt_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, "XHud-Option", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText title = Mc_AddTmpText(opt_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, "XHud-Option", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
             }
             #endregion
 
             #region 创建 Selector 光标
             GameObject opt_selector = Mc_CreateObject("Selector", "XHud", new Vector3(-85, -22.5f), Vector3.zero, Vector3.one, opt_root_rect);
-            Sprite opt_selector_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Opt_Selector2.png");
-            Image opt_img_selector = Mc_AddImage(opt_selector, xHud_Dashboard.Theme_Primary, new Vector2(31, 31), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), false);
+            Sprite opt_selector_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Opt_Selector2.png");
+            Image opt_img_selector = Mc_AddImage(opt_selector, XHud_Dashboard.Theme_Primary, new Vector2(31, 31), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), false);
             opt_img_selector.sprite = opt_selector_sprite;
             option.SelectorMark = opt_img_selector.rectTransform;
             #endregion
@@ -836,9 +836,9 @@ namespace SevenStrikeModules.XHud.Utilitys
                 #endregion
 
                 #region 创建Button
-                xHud_Module_Button btn = Mc_AddHudButton(btn_root, ButtonText[i], "Item");
+                XHud_Module_Button btn = Mc_AddHudButton(btn_root, ButtonText[i], "Item");
                 ColorBlock colors = btn.colors;
-                colors.pressedColor = xHud_Dashboard.Theme_Primary;
+                colors.pressedColor = XHud_Dashboard.Theme_Primary;
                 btn.colors = colors;
                 btn.BgColorSyncFade = true;
                 btn.IsOptionButton = true;
@@ -847,7 +847,7 @@ namespace SevenStrikeModules.XHud.Utilitys
 
                 #region 创建Button Bg
                 GameObject opt_btn_bg = Mc_CreateObject("Bg", "XHud", Vector3.zero, Vector3.zero, Vector3.one, btn_root_rect);
-                Sprite opt_btn_bg_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Opt_Circle.png");
+                Sprite opt_btn_bg_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Opt_Circle.png");
                 Image opt_img_btn_bg = Mc_AddImage(opt_btn_bg, Color.white, new Vector2(18, 18), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), true);
                 opt_img_btn_bg.sprite = opt_btn_bg_sprite;
 
@@ -858,7 +858,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 {
                     #region 创建选项图标
                     GameObject opt_item_icon = Mc_CreateObject("Icon", "XHud", new Vector3(-30, -9), Vector3.zero, Vector3.one, opt_img_btn_bg.rectTransform);
-                    Sprite opt_item_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_Objective.png");
+                    Sprite opt_item_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_Objective.png");
                     Image opt_img_item_icon = Mc_AddImage(opt_item_icon, Color.white, new Vector2(16, 16), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), true);
                     opt_img_item_icon.sprite = opt_item_icon_sprite;
                     btn.IconImage = opt_img_item_icon;
@@ -873,7 +873,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                     {
                         #region 创建选项图标
                         GameObject opt_item_icon = Mc_CreateObject("Icon", "XHud", new Vector3(-88, -8), Vector3.zero, Vector3.one, opt_img_btn_bg.rectTransform);
-                        Sprite opt_item_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{xHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_Objective.png");
+                        Sprite opt_item_icon_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sprites/Others/Icon_Objective.png");
                         Image opt_img_item_icon = Mc_AddImage(opt_item_icon, Color.white, new Vector2(16, 16), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), true);
                         opt_img_item_icon.sprite = opt_item_icon_sprite;
                         btn.IconImage = opt_img_item_icon;
@@ -892,14 +892,14 @@ namespace SevenStrikeModules.XHud.Utilitys
                     if (res == "Text")
                     {
                         //创建Slider - 标题
-                        xHud_Module_Text title = Mc_AddText(opt_img_btn_bg.rectTransform, "Title", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(80, 35), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "Item " + ButtonText[i], 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, true);
+                        XHud_Module_Text title = Mc_AddText(opt_img_btn_bg.rectTransform, "Title", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(80, 35), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "Item " + ButtonText[i], 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, true);
 
                         btn.ButtonText = title;
                     }
                     else
                     {
                         //创建Slider - 标题
-                        xHud_Module_TmpText title = Mc_AddTmpText(opt_img_btn_bg.rectTransform, "Title", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(80, 35), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "Item " + ButtonText[i], 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, true);
+                        XHud_Module_TmpText title = Mc_AddTmpText(opt_img_btn_bg.rectTransform, "Title", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(80, 35), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "Item " + ButtonText[i], 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, true);
 
                         btn.ButtonTmpText = title;
                     }
@@ -908,12 +908,12 @@ namespace SevenStrikeModules.XHud.Utilitys
                 }
 
                 #region 添加到选项按钮列表中
-                OptionButtonNode node = new OptionButtonNode();
+                ElementNode_OptionButton node = new ElementNode_OptionButton();
                 node.Button = btn;
                 node.Indicator = ButtonText[i];
                 node.IsOptional = btn.IsOptionButton;
                 if (option.OptionButtonNodes == null)
-                    option.OptionButtonNodes = new List<OptionButtonNode>();
+                    option.OptionButtonNodes = new List<ElementNode_OptionButton>();
                 option.OptionButtonNodes.Add(node);
                 #endregion
             }
@@ -1079,9 +1079,9 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        private static xHud_Module_Element Mc_AddHudElement(GameObject obj)
+        private static XHud_Module_Element Mc_AddHudElement(GameObject obj)
         {
-            return obj.AddComponent<xHud_Module_Element>();
+            return obj.AddComponent<XHud_Module_Element>();
         }
 
         /// <summary>
@@ -1097,9 +1097,9 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <param name="subtitle"></param>
         /// <param name="precision"></param>
         /// <returns></returns>
-        private static xHud_Module_Slider Mc_AddHudSlider(GameObject obj, string indicator, float min, float max, float value, string unit, string title, string subtitle, int precision)
+        private static XHud_Module_Slider Mc_AddHudSlider(GameObject obj, string indicator, float min, float max, float value, string unit, string title, string subtitle, int precision)
         {
-            xHud_Module_Slider slider = obj.AddComponent<xHud_Module_Slider>();
+            XHud_Module_Slider slider = obj.AddComponent<XHud_Module_Slider>();
             slider.Indicator = indicator;
             slider.minValue = min;
             slider.maxValue = max;
@@ -1123,9 +1123,9 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <param name="subtitle"></param>
         /// <param name="precision"></param>
         /// <returns></returns>
-        private static xHud_Module_Progress Mc_AddHudProgress(GameObject obj, string indicator, float value, string unit, string title, string subtitle, int precision)
+        private static XHud_Module_Progress Mc_AddHudProgress(GameObject obj, string indicator, float value, string unit, string title, string subtitle, int precision)
         {
-            xHud_Module_Progress slider = obj.AddComponent<xHud_Module_Progress>();
+            XHud_Module_Progress slider = obj.AddComponent<XHud_Module_Progress>();
             slider.Indicator = indicator;
             slider.ProgressValue = value;
             slider.ProgressUnit = unit;
@@ -1143,9 +1143,9 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <param name="indicator"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        private static xHud_Module_Button Mc_AddHudButton(GameObject obj, string indicator, string name)
+        private static XHud_Module_Button Mc_AddHudButton(GameObject obj, string indicator, string name)
         {
-            xHud_Module_Button button = obj.AddComponent<xHud_Module_Button>();
+            XHud_Module_Button button = obj.AddComponent<XHud_Module_Button>();
             button.Indicator = indicator;
             button.ButtonName = name;
             return button;
@@ -1157,9 +1157,9 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <param name="obj"></param>
         /// <param name="indicator"></param>
         /// <returns></returns>
-        private static xHud_Module_Option Mc_AddHudOption(GameObject obj, string indicator)
+        private static XHud_Module_Option Mc_AddHudOption(GameObject obj, string indicator)
         {
-            xHud_Module_Option button = obj.AddComponent<xHud_Module_Option>();
+            XHud_Module_Option button = obj.AddComponent<XHud_Module_Option>();
             button.Indicator = indicator;
             return button;
         }
@@ -1171,9 +1171,9 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <param name="indicator"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        private static xHud_Module_Toggle Mc_AddHudToggle(GameObject obj, string indicator, string name)
+        private static XHud_Module_Toggle Mc_AddHudToggle(GameObject obj, string indicator, string name)
         {
-            xHud_Module_Toggle tog = obj.AddComponent<xHud_Module_Toggle>();
+            XHud_Module_Toggle tog = obj.AddComponent<XHud_Module_Toggle>();
             tog.Indicator = indicator;
             tog.ToggleName = name;
             return tog;
@@ -1204,7 +1204,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <param name="v_mode"></param>
         /// <param name="raycast"></param>
         /// <returns></returns>
-        private static xHud_Module_Text Mc_AddText(Transform parent, string name, Vector3 pos, Vector3 ang, Vector3 scale, string layer, string font_name, Vector2 text_size, Vector2 anchor_min, Vector2 anchor_max, Vector2 pivot, Vector2 anchor_pos, ContentAnchor anchor_content, TextAnchor anchor_text, string text, int font_size, Color font_color, FontStyle style, HorizontalWrapMode h_mode, VerticalWrapMode v_mode, bool raycast)
+        private static XHud_Module_Text Mc_AddText(Transform parent, string name, Vector3 pos, Vector3 ang, Vector3 scale, string layer, string font_name, Vector2 text_size, Vector2 anchor_min, Vector2 anchor_max, Vector2 pivot, Vector2 anchor_pos, ContentAnchor anchor_content, TextAnchor anchor_text, string text, int font_size, Color font_color, FontStyle style, HorizontalWrapMode h_mode, VerticalWrapMode v_mode, bool raycast)
         {
             GameObject obj = new GameObject();
             obj.transform.SetParent(parent);
@@ -1214,7 +1214,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             obj.transform.localPosition = pos;
             obj.layer = LayerMask.NameToLayer(layer);
 
-            Font font = AssetDatabase.LoadAssetAtPath<Font>($"{xHud_Dashboard.Get_XHudRoot_Path()}Fonts/Text/{font_name}");
+            Font font = AssetDatabase.LoadAssetAtPath<Font>($"{XHud_Dashboard.Get_XHudRoot_Path()}Fonts/Text/{font_name}");
 
             RectTransform rect = obj.AddComponent<RectTransform>();
             rect.sizeDelta = text_size;
@@ -1223,7 +1223,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             rect.pivot = pivot;
             rect.anchoredPosition = new Vector2(rect.anchoredPosition.x + anchor_pos.x, rect.anchoredPosition.y + anchor_pos.y);
 
-            xHud_Module_Text hud_text = obj.AddComponent<xHud_Module_Text>();
+            XHud_Module_Text hud_text = obj.AddComponent<XHud_Module_Text>();
             hud_text.TextStyleInfo.txt_Set_Alignment(anchor_content);
             hud_text.alignment = anchor_text;
             hud_text.text = text;
@@ -1264,9 +1264,9 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <param name="v_mode"></param>
         /// <param name="raycast"></param>
         /// <returns></returns>
-        private static xHud_Module_Text Mc_AddText(GameObject parent, string name, Vector3 pos, Vector3 ang, Vector3 scale, string layer, string font_name, Vector2 text_size, Vector2 anchor_min, Vector2 anchor_max, Vector2 pivot, Vector2 anchor_pos, ContentAnchor anchor_content, TextAnchor anchor_text, string text, int font_size, Color font_color, FontStyle style, HorizontalWrapMode h_mode, VerticalWrapMode v_mode, bool raycast)
+        private static XHud_Module_Text Mc_AddText(GameObject parent, string name, Vector3 pos, Vector3 ang, Vector3 scale, string layer, string font_name, Vector2 text_size, Vector2 anchor_min, Vector2 anchor_max, Vector2 pivot, Vector2 anchor_pos, ContentAnchor anchor_content, TextAnchor anchor_text, string text, int font_size, Color font_color, FontStyle style, HorizontalWrapMode h_mode, VerticalWrapMode v_mode, bool raycast)
         {
-            Font font = AssetDatabase.LoadAssetAtPath<Font>($"{xHud_Dashboard.Get_XHudRoot_Path()}Fonts/Text/{font_name}");
+            Font font = AssetDatabase.LoadAssetAtPath<Font>($"{XHud_Dashboard.Get_XHudRoot_Path()}Fonts/Text/{font_name}");
 
             RectTransform rect = parent.GetComponent<RectTransform>();
             if (rect == null)
@@ -1277,7 +1277,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             rect.pivot = pivot;
             rect.anchoredPosition = new Vector2(rect.anchoredPosition.x + anchor_pos.x, rect.anchoredPosition.y + anchor_pos.y);
 
-            xHud_Module_Text hud_text = parent.AddComponent<xHud_Module_Text>();
+            XHud_Module_Text hud_text = parent.AddComponent<XHud_Module_Text>();
             hud_text.TextStyleInfo.txt_Set_Alignment(anchor_content);
             hud_text.alignment = anchor_text;
             hud_text.text = text;
@@ -1318,7 +1318,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <param name="wrap"></param>
         /// <param name="raycast"></param>
         /// <returns></returns>
-        private static xHud_Module_TmpText Mc_AddTmpText(Transform parent, string name, Vector3 pos, Vector3 ang, Vector3 scale, string layer, string font_name, Vector2 text_size, Vector2 anchor_min, Vector2 anchor_max, Vector2 pivot, Vector2 anchor_pos, TmpContentAnchor anchor_content, TextAlignmentOptions anchor_text, string text, int font_size, Color font_color, FontStyles style, TextOverflowModes overflow, TextWrappingModes wrap
+        private static XHud_Module_TmpText Mc_AddTmpText(Transform parent, string name, Vector3 pos, Vector3 ang, Vector3 scale, string layer, string font_name, Vector2 text_size, Vector2 anchor_min, Vector2 anchor_max, Vector2 pivot, Vector2 anchor_pos, TmpContentAnchor anchor_content, TextAlignmentOptions anchor_text, string text, int font_size, Color font_color, FontStyles style, TextOverflowModes overflow, TextWrappingModes wrap
             , bool raycast)
         {
             GameObject obj = new GameObject();
@@ -1329,7 +1329,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             obj.transform.localPosition = pos;
             obj.layer = LayerMask.NameToLayer(layer);
 
-            TMP_FontAsset font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{xHud_Dashboard.Get_XHudRoot_Path()}Fonts/Tmp/{font_name}.asset");
+            TMP_FontAsset font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_XHudRoot_Path()}Fonts/Tmp/{font_name}.asset");
 
             RectTransform rect = obj.AddComponent<RectTransform>();
             rect.sizeDelta = text_size;
@@ -1338,7 +1338,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             rect.pivot = pivot;
             rect.anchoredPosition = new Vector2(rect.anchoredPosition.x + anchor_pos.x, rect.anchoredPosition.y + anchor_pos.y);
 
-            xHud_Module_TmpText hud_tmptext = obj.AddComponent<xHud_Module_TmpText>();
+            XHud_Module_TmpText hud_tmptext = obj.AddComponent<XHud_Module_TmpText>();
             hud_tmptext.TextStyleInfo.tmp_Set_Alignment(anchor_content);
             hud_tmptext.alignment = anchor_text;
             hud_tmptext.text = text;
@@ -1381,10 +1381,10 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <param name="wrap"></param>
         /// <param name="raycast"></param>
         /// <returns></returns>
-        private static xHud_Module_TmpText Mc_AddTmpText(GameObject parent, string name, Vector3 pos, Vector3 ang, Vector3 scale, string layer, string font_name, Vector2 text_size, Vector2 anchor_min, Vector2 anchor_max, Vector2 pivot, Vector2 anchor_pos, TmpContentAnchor anchor_content, TextAlignmentOptions anchor_text, string text, int font_size, Color font_color, FontStyles style, TextOverflowModes overflow, TextWrappingModes wrap
+        private static XHud_Module_TmpText Mc_AddTmpText(GameObject parent, string name, Vector3 pos, Vector3 ang, Vector3 scale, string layer, string font_name, Vector2 text_size, Vector2 anchor_min, Vector2 anchor_max, Vector2 pivot, Vector2 anchor_pos, TmpContentAnchor anchor_content, TextAlignmentOptions anchor_text, string text, int font_size, Color font_color, FontStyles style, TextOverflowModes overflow, TextWrappingModes wrap
             , bool raycast)
         {
-            TMP_FontAsset font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{xHud_Dashboard.Get_XHudRoot_Path()}Fonts/Tmp/{font_name}.asset");
+            TMP_FontAsset font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_XHudRoot_Path()}Fonts/Tmp/{font_name}.asset");
 
             RectTransform rect = parent.GetComponent<RectTransform>();
             if (rect == null)
@@ -1394,7 +1394,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             rect.pivot = pivot;
             rect.anchoredPosition = new Vector2(rect.anchoredPosition.x + anchor_pos.x, rect.anchoredPosition.y + anchor_pos.y);
 
-            xHud_Module_TmpText hud_tmptext = parent.AddComponent<xHud_Module_TmpText>();
+            XHud_Module_TmpText hud_tmptext = parent.AddComponent<XHud_Module_TmpText>();
             hud_tmptext.TextStyleInfo.tmp_Set_Alignment(anchor_content);
             hud_tmptext.alignment = anchor_text;
             hud_tmptext.text = text;

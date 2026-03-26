@@ -11,7 +11,7 @@ namespace SevenStrikeModules.XHud
     /// 预制体信息结构
     /// </summary>
     [System.Serializable]
-    public class Library_Element
+    public class XHud_LibraryArg_Element_Info
     {
         /// <summary>
         /// 是否正在使用
@@ -20,9 +20,9 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 预生成的元素
         /// </summary>
-        public xHud_Module_Element HudElement;
+        public XHud_Module_Element HudElement;
 
-        public Library_Element()
+        public XHud_LibraryArg_Element_Info()
         {
 
         }
@@ -45,7 +45,7 @@ namespace SevenStrikeModules.XHud
             }
         }
 
-        public void Copy(Library_Element ele)
+        public void Copy(XHud_LibraryArg_Element_Info ele)
         {
             Using = ele.Using;
             HudElement = ele.HudElement;
@@ -56,7 +56,7 @@ namespace SevenStrikeModules.XHud
     /// 预制体列表
     /// </summary>
     [System.Serializable]
-    public class Library_Item
+    public class XHud_LibraryArg_Element_Item
     {
         /// <summary>
         /// 标识
@@ -85,19 +85,19 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素
         /// </summary>
-        public xHud_Module_Element Target;
+        public XHud_Module_Element Target;
         [SerializeField]
         /// <summary>
         /// 预生成的元素信息列表
         /// </summary>
-        public List<Library_Element> PreloadElements = new List<Library_Element>();
+        public List<XHud_LibraryArg_Element_Info> PreloadElements = new List<XHud_LibraryArg_Element_Info>();
 
-        public Library_Item()
+        public XHud_LibraryArg_Element_Item()
         {
 
         }
 
-        public Library_Item(int initializeCount, xHud_Module_Element target)
+        public XHud_LibraryArg_Element_Item(int initializeCount, XHud_Module_Element target)
         {
             Name = target.name;
             InitializeCount = initializeCount;
@@ -106,7 +106,7 @@ namespace SevenStrikeModules.XHud
             NextIndex = 0;
             Root = null;
             Target = target;
-            PreloadElements = new List<Library_Element>();
+            PreloadElements = new List<XHud_LibraryArg_Element_Info>();
         }
 
 
@@ -143,7 +143,7 @@ namespace SevenStrikeModules.XHud
             RecycledCount = count;
         }
 
-        public void Copy(Library_Item item)
+        public void Copy(XHud_LibraryArg_Element_Item item)
         {
             Name = item.Name;
             InitializeCount = item.InitializeCount;
@@ -157,7 +157,7 @@ namespace SevenStrikeModules.XHud
     }
 
     [CreateAssetMenu(fileName = "XHud_Library_Element", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-Element (元素库)", order = 0)]
-    public class xHud_Library_Element : ScriptableObject
+    public class XHud_Library_Element : ScriptableObject
     {
         public string LibraryName = "NewElementsLibrary";
         public string LibraryDescription = "NewDescription";
@@ -192,7 +192,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public Vector2 ElementInfoList_Original_Scroller;
 
-        public List<Library_Item> ElementLibrary = new List<Library_Item>();
+        public List<XHud_LibraryArg_Element_Item> ElementLibrary = new List<XHud_LibraryArg_Element_Item>();
 
         private void OnEnable()
         {
@@ -220,7 +220,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="index"></param>
         /// <param tweenName="paramObject"></param>
-        public void ElementsLibrary_ReplaceElement(xHud_Module_Element paramObject)
+        public void ElementsLibrary_ReplaceElement(XHud_Module_Element paramObject)
         {
             for (int i = 0; i < ElementLibrary.Count; i++)
             {
@@ -237,7 +237,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="index"></param>
         /// <param tweenName="paramObject"></param>
-        public void ElementsLibrary_ReplaceElement(int index, Library_Item item)
+        public void ElementsLibrary_ReplaceElement(int index, XHud_LibraryArg_Element_Item item)
         {
             ElementLibrary[index] = item;
         }
@@ -247,9 +247,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="element">元素</param>
         /// <param tweenName="count">数量</param>
-        public void ElementsLibrary_Add(xHud_Module_Element element, int count)
+        public void ElementsLibrary_Add(XHud_Module_Element element, int count)
         {
-            Library_Item item = new Library_Item();
+            XHud_LibraryArg_Element_Item item = new XHud_LibraryArg_Element_Item();
             item.Target = element;
             item.InitializeCount = count;
             item.Name = element.transform.name;
@@ -261,7 +261,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="item">元素项</param>
         /// <param tweenName="count">数量</param>
-        public void ElementsLibrary_Add(Library_Item item)
+        public void ElementsLibrary_Add(XHud_LibraryArg_Element_Item item)
         {
             ElementLibrary.Add(item);
         }
@@ -361,9 +361,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="name">指定的标识名称</param>
         /// <returns>元素</returns>
-        public xHud_Module_Element ElementsLibrary_GetTargetElement(string name)
+        public XHud_Module_Element ElementsLibrary_GetTargetElement(string name)
         {
-            xHud_Module_Element ele = null;
+            XHud_Module_Element ele = null;
             for (int i = 0; i < ElementLibrary.Count; i++)
             {
                 if (ElementLibrary[i].Name == name)
@@ -378,9 +378,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="name">目标名称</param>
         /// <returns>元素</returns>
-        public Library_Item ElementsLibrary_GetTargetLibraryItem(string name)
+        public XHud_LibraryArg_Element_Item ElementsLibrary_GetTargetLibraryItem(string name)
         {
-            Library_Item item = null;
+            XHud_LibraryArg_Element_Item item = null;
             for (int i = 0; i < ElementLibrary.Count; i++)
             {
                 if (ElementLibrary[i].Name == name)
@@ -411,11 +411,11 @@ namespace SevenStrikeModules.XHud
         {
             for (int i = 0; i < ElementLibrary.Count; i++)
             {
-                Library_Item item = ElementLibrary[i];
+                XHud_LibraryArg_Element_Item item = ElementLibrary[i];
 
                 for (int s = 0; s < item.PreloadElements.Count; s++)
                 {
-                    xHud_Module_Element ele = item.PreloadElements[s].HudElement;
+                    XHud_Module_Element ele = item.PreloadElements[s].HudElement;
 
                     if (ele.CreateState == HudElementCreateState.Recycled)
                     {

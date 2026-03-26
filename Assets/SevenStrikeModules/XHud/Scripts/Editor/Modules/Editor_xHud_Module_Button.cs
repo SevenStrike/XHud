@@ -1,7 +1,6 @@
 namespace SevenStrikeModules.XHud.Hud
 {
-    using DG.DOTweenEditor;
-    using DG.Tweening;
+    using SevenStrikeModules.XTween;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
     using SevenStrikeModules.XHud.Utilitys;
@@ -14,7 +13,7 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEngine;
     using UnityEngine.UI;
 
-    public class xHud_ModuleArg_Button
+    public class XHud_ModuleArg_Button
     {
         public Color Color_Normal;
         public Color Color_Highlight;
@@ -36,11 +35,11 @@ namespace SevenStrikeModules.XHud.Hud
     }
 
     [CanEditMultipleObjects]
-    [CustomEditor(typeof(xHud_Module_Button), true)]
-    public class Editor_xHud_Module_Button : ButtonEditor
+    [CustomEditor(typeof(XHud_Module_Button), true)]
+    public class Editor_XHud_Module_Button : ButtonEditor
     {
         #region 组件 / 列表
-        private xHud_Module_Button BaseScript;
+        private XHud_Module_Button BaseScript;
         private ReorderableList BtnAnimatorList;
         #endregion
 
@@ -57,7 +56,7 @@ namespace SevenStrikeModules.XHud.Hud
 
         #region Preview - Animator
         private bool Preivew_Animator_PlayingState;
-        private List<Tweener> Preivew_Animator_TweenList = new List<Tweener>();
+        private List<XTween_Interface> Preivew_Animator_TweenList = new List<XTween_Interface>();
         private List<EditorCoroutine> Preivew_Animator_CoroutineList_Play = new List<EditorCoroutine>();
         private EditorCoroutine Preivew_Animator_Coroutine_Stop;
         #endregion
@@ -78,23 +77,23 @@ namespace SevenStrikeModules.XHud.Hud
         #endregion
 
         #region 批量化操作
-        xHud_Module_Button[] SelectedObjects;
+        XHud_Module_Button[] SelectedObjects;
 
         private void GetAllTargets()
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new xHud_Module_Button[targets.Length];
+                SelectedObjects = new XHud_Module_Button[targets.Length];
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (xHud_Module_Button)t;
+                    SelectedObjects[i] = (XHud_Module_Button)t;
                 }
             }
             else
             {
-                SelectedObjects = new xHud_Module_Button[targets.Length];
-                SelectedObjects[0] = (xHud_Module_Button)target;
+                SelectedObjects = new XHud_Module_Button[targets.Length];
+                SelectedObjects[0] = (XHud_Module_Button)target;
             }
         }
 
@@ -116,9 +115,9 @@ namespace SevenStrikeModules.XHud.Hud
         protected override void OnEnable()
         {
             base.OnEnable();
-            BaseScript = (xHud_Module_Button)target;
+            BaseScript = (XHud_Module_Button)target;
 
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             #region 获取序列化属性
             Indicator = serializedObject.FindProperty("Indicator");
@@ -165,24 +164,24 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             #region 获取图标
-            icon_main = Editor_xHudGUI.GetIcon("Icons_Hud_Button/icon_main");
-            find_r = Editor_xHudGUI.GetIcon("Icons_Hud_Button/find_r");
-            find_p = Editor_xHudGUI.GetIcon("Icons_Hud_Button/find_p");
-            play_r = Editor_xHudGUI.GetIcon("Icons_Hud_Button/play_r");
-            play_p = Editor_xHudGUI.GetIcon("Icons_Hud_Button/play_p");
-            stop_r = Editor_xHudGUI.GetIcon("Icons_Hud_Button/stop_r");
-            stop_p = Editor_xHudGUI.GetIcon("Icons_Hud_Button/stop_p");
-            clear_r = Editor_xHudGUI.GetIcon("Icons_Hud_Button/clear_r");
-            clear_p = Editor_xHudGUI.GetIcon("Icons_Hud_Button/clear_p");
-            icon_button = Editor_xHudGUI.GetIcon("Icons_Hud_Button/icon_button");
-            animstate = Editor_xHudGUI.GetIcon("Icons_Hud_Button/animstate");
-            dutation = Editor_xHudGUI.GetIcon("Icons_Hud_Button/dutation");
-            longpressmarker = Editor_xHudGUI.GetIcon("Icons_Hud_Button/longpressmarker");
-            left_arrow_r = Editor_xHudGUI.GetIcon("Icons_Hud_Button/left_arrow_r");
-            left_arrow_p = Editor_xHudGUI.GetIcon("Icons_Hud_Button/left_arrow_p");
-            right_arrow_r = Editor_xHudGUI.GetIcon("Icons_Hud_Button/right_arrow_r");
-            right_arrow_p = Editor_xHudGUI.GetIcon("Icons_Hud_Button/right_arrow_p");
-            icon_anim = Editor_xHudGUI.GetIcon("Icons_Hud_Button/icon_anim");
+            icon_main = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/icon_main");
+            find_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/find_r");
+            find_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/find_p");
+            play_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/play_r");
+            play_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/play_p");
+            stop_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/stop_r");
+            stop_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/stop_p");
+            clear_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/clear_r");
+            clear_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/clear_p");
+            icon_button = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/icon_button");
+            animstate = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/animstate");
+            dutation = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/dutation");
+            longpressmarker = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/longpressmarker");
+            left_arrow_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/left_arrow_r");
+            left_arrow_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/left_arrow_p");
+            right_arrow_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/right_arrow_r");
+            right_arrow_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/right_arrow_p");
+            icon_anim = Editor_XHud_GUI.GetIcon("Icons_Hud_Button/icon_anim");
             #endregion
 
             LineHeight = EditorGUIUtility.singleLineHeight;
@@ -206,7 +205,7 @@ namespace SevenStrikeModules.XHud.Hud
                     SerializedProperty sp_root = BtnAnimatorNodes.GetArrayElementAtIndex(index);
                     SerializedProperty sp_animator = sp_root.FindPropertyRelative("Animator");
                     SerializedProperty sp_delay = sp_root.FindPropertyRelative("DelayTime");
-                    xHud_Module_Animator animator = (xHud_Module_Animator)sp_animator.objectReferenceValue;
+                    XHud_Module_Animator animator = (XHud_Module_Animator)sp_animator.objectReferenceValue;
 
                     if (sp_animator.objectReferenceValue != null)
                     {
@@ -218,17 +217,17 @@ namespace SevenStrikeModules.XHud.Hud
                             title += indicator;
                         else
                             title += animator.gameObject.name;
-                        Editor_xHudGUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, 180, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
+                        Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, 180, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
                         #endregion
 
                         #region 类型图标         
-                        GUI.color = xHud_Dashboard.Theme_Primary;
-                        Editor_xHudGUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_anim);
+                        GUI.color = XHud_Dashboard.Theme_Primary;
+                        Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_anim);
                         GUI.color = Color.white;
                         #endregion
 
                         #region 延迟
-                        Editor_xHudGUI.Gui_Property_Field(new Rect(rect.width - 5, rect.y + 4, 30, 19), "D", sp_delay, 10, 40, LineHeight, 15);
+                        Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 5, rect.y + 4, 30, 19), "D", sp_delay, 10, 40, LineHeight, 15);
                         #endregion
 
                         #region 速率   
@@ -238,9 +237,9 @@ namespace SevenStrikeModules.XHud.Hud
                         SerializedProperty sp_glodur = so_anim.FindProperty("Animator_GlobalDuration");
                         SerializedProperty sp_maxdur = so_anim.FindProperty("MaxTimerWithGlobalDuration");
 
-                        Editor_xHudGUI.Gui_Property_Field(new Rect(rect.width - 50, rect.y + 4, 30, 19), "G", sp_glodur, 10, 40, LineHeight, 15);
+                        Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 50, rect.y + 4, 30, 19), "G", sp_glodur, 10, 40, LineHeight, 15);
 
-                        Editor_xHudGUI.Gui_Labelfield_Thin(new Rect(rect.width - 80, rect.y + 4, 30, 19), $"{sp_maxdur.floatValue.ToString()} s", HudFilled.无, HudColor.无, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, Vector2.zero, 11);
+                        Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect.width - 80, rect.y + 4, 30, 19), $"{sp_maxdur.floatValue.ToString()} s", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, Vector2.zero, 11);
                         #endregion
 
                         sp_animator.serializedObject.ApplyModifiedProperties();
@@ -294,22 +293,22 @@ namespace SevenStrikeModules.XHud.Hud
             serializedObject.Update();
 
             if (string.IsNullOrEmpty(BaseScript.Indicator))
-                Editor_xHudGUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 交互按钮", Color.white);
+                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 交互按钮", Color.white);
             else
-                Editor_xHudGUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 交互按钮 -> ( " + BaseScript.Indicator + " )", Color.white);
+                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 交互按钮 -> ( " + BaseScript.Indicator + " )", Color.white);
 
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             #region 快捷功能
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "快捷功能", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "快捷功能", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 扫描
             GUI.enabled = true;
-            if (Editor_xHudGUI.Gui_Layout_Button(14, "扫描动画组件", find_r, find_p))
+            if (Editor_XHud_GUI.Gui_Layout_Button(14, "扫描动画组件", find_r, find_p))
             {
                 GetAllAnimators();
 
@@ -326,7 +325,7 @@ namespace SevenStrikeModules.XHud.Hud
                 #region 预览动画
                 if (!Preivew_Animator_PlayingState)
                 {
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "播放所有动画器预览", play_r, play_p))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "播放所有动画器预览", play_r, play_p))
                     {
                         if (!Application.isPlaying)
                         {
@@ -337,7 +336,7 @@ namespace SevenStrikeModules.XHud.Hud
                 }
                 else
                 {
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "停止所有动画器预览", stop_r, stop_p))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "停止所有动画器预览", stop_r, stop_p))
                     {
                         if (!Application.isPlaying)
                         {
@@ -350,76 +349,76 @@ namespace SevenStrikeModules.XHud.Hud
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
             GUI.enabled = true;
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 选项
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_Module_Button>("原生参数", stroptions_hide, ref ToggleOriginalIsFold, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("原生参数", stroptions_hide, ref ToggleOriginalIsFold, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_Module_Button>("状态调试", stroptions_debug, ref DebugState, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("状态调试", stroptions_debug, ref DebugState, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_Module_Button>("自动停止预览", stroptions_enabled, ref AutoStopPreview, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("自动停止预览", stroptions_enabled, ref AutoStopPreview, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_Module_Button>("选项模式", stroptions_enabled, ref IsOptionButton, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("选项模式", stroptions_enabled, ref IsOptionButton, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
             if (IsOptionButton.boolValue)
-                Editor_xHudGUI.Gui_Layout_Popup<string, xHud_Module_Button>("作为选项按钮激活条件", str_clickthreadhold, ref ButtonActionTiming, HudFilled.实体, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Module_Button>("作为选项按钮激活条件", str_clickthreadhold, ref ButtonActionTiming, HudFilled.实体, 120, 22, SelectedObjects);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_Module_Button>("文字变色", stroptions_enabled, ref TextColorSyncFade, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("文字变色", stroptions_enabled, ref TextColorSyncFade, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_Module_Button>("图标变色", stroptions_enabled, ref IconColorSyncFade, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("图标变色", stroptions_enabled, ref IconColorSyncFade, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_Module_Button>("背景变色", stroptions_enabled, ref BgColorSyncFade, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("背景变色", stroptions_enabled, ref BgColorSyncFade, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_Module_Button>("长按回退机制", stroptions_threholdback, ref LongPress_UseRewind, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("长按回退机制", stroptions_threholdback, ref LongPress_UseRewind, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_Module_Button>("长按回退方式", stroptions_smoothback, ref LongPress_SmoothRewind, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("长按回退方式", stroptions_smoothback, ref LongPress_SmoothRewind, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 原生参数
             if (ToggleOriginalIsFold.boolValue)
             {
-                Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "原生", xHud_Dashboard.Theme_Primary);
+                Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "原生", XHud_Dashboard.Theme_Primary);
                 base.OnInspectorGUI();
-                Editor_xHudGUI.Gui_Layout_Vertical_End();
+                Editor_XHud_GUI.Gui_Layout_Vertical_End();
             }
             #endregion
 
             #region 长按指示器
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "长按进度指示器", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "长按进度指示器", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
             Rect rect_longpress = GUILayoutUtility.GetLastRect();
 
             EditorGUI.DrawRect(new Rect(rect_longpress.x + 5, rect_longpress.y + 22, (EditorGUIUtility.currentViewWidth - 65), 1), Color.black * 0.3f);
 
-            EditorGUI.DrawRect(new Rect(rect_longpress.x + 5, rect_longpress.y + 22, (EditorGUIUtility.currentViewWidth - 65) * LongPress_Percent.floatValue, 1), xHud_Dashboard.Theme_Primary);
+            EditorGUI.DrawRect(new Rect(rect_longpress.x + 5, rect_longpress.y + 22, (EditorGUIUtility.currentViewWidth - 65) * LongPress_Percent.floatValue, 1), XHud_Dashboard.Theme_Primary);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin(new Rect(rect_longpress.x + 5, rect_longpress.y + 8, 50, 6), "ClickArea", HudFilled.无, HudColor.无, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, new Vector2(0, 0), 9);
+            Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect_longpress.x + 5, rect_longpress.y + 8, 50, 6), "ClickArea", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, new Vector2(0, 0), 9);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin(new Rect(rect_longpress.x + (EditorGUIUtility.currentViewWidth - 110), rect_longpress.y + 8, 50, 6), "LongPress", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleRight, new Vector2(0, 0), 9);
+            Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect_longpress.x + (EditorGUIUtility.currentViewWidth - 110), rect_longpress.y + 8, 50, 6), "LongPress", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleRight, new Vector2(0, 0), 9);
 
             EditorGUI.DrawRect(new Rect((rect_longpress.x + 5), rect_longpress.y + 20, 1, 6), Color.gray);
 
             EditorGUI.DrawRect(new Rect((rect_longpress.x + (EditorGUIUtility.currentViewWidth - 60)), rect_longpress.y + 20, 1, 6), Color.gray);
 
-            Editor_xHudGUI.Gui_Icon(new Rect(((rect_longpress.x + 1) + (EditorGUIUtility.currentViewWidth - 65) * ClickDelayTimeThreadhold.floatValue), rect_longpress.y + 6, 8, 8), longpressmarker);
+            Editor_XHud_GUI.Gui_Icon(new Rect(((rect_longpress.x + 1) + (EditorGUIUtility.currentViewWidth - 65) * ClickDelayTimeThreadhold.floatValue), rect_longpress.y + 6, 8, 8), longpressmarker);
 
             EditorGUI.DrawRect(new Rect(((rect_longpress.x + 5) + (EditorGUIUtility.currentViewWidth - 65) * ClickDelayTimeThreadhold.floatValue), rect_longpress.y + 18, 1, 10), Color.red);
 
-            Editor_xHudGUI.Gui_Layout_Space(25);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(25);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
 
             if (Application.isPlaying)
             {
@@ -428,30 +427,30 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             #region 参数
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "参数", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Property_Field("背景组件", BgImage, 100);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "参数", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("背景组件", BgImage, 100);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("图标组件", IconImage, 100);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("图标组件", IconImage, 100);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("文本组件", ButtonText, 100);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("文本组件", ButtonText, 100);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("文本(TMP)组件", ButtonTmpText, 100);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("文本(TMP)组件", ButtonTmpText, 100);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("标识名称", Indicator, 100);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("标识名称", Indicator, 100);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Layout_Property_Field("按钮文字", ButtonName, 100);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("按钮文字", ButtonName, 100);
             if (EditorGUI.EndChangeCheck())
             {
                 if (IsMultiSelected())
@@ -467,13 +466,13 @@ namespace SevenStrikeModules.XHud.Hud
 
                         if (ele_sp_ButtonText.objectReferenceValue != null)
                         {
-                            xHud_Module_Text tt = (xHud_Module_Text)ele_sp_ButtonText.objectReferenceValue;
+                            XHud_Module_Text tt = (XHud_Module_Text)ele_sp_ButtonText.objectReferenceValue;
                             tt.text = ele_sp_ButtonName.stringValue;
                             ele_sp_ButtonText.serializedObject.ApplyModifiedProperties();
                         }
                         if (ele_sp_ButtonTmpText.objectReferenceValue != null)
                         {
-                            xHud_Module_TmpText tt = (xHud_Module_TmpText)ele_sp_ButtonTmpText.objectReferenceValue;
+                            XHud_Module_TmpText tt = (XHud_Module_TmpText)ele_sp_ButtonTmpText.objectReferenceValue;
                             tt.text = ele_sp_ButtonName.stringValue;
                             ele_sp_ButtonTmpText.serializedObject.ApplyModifiedProperties();
                         }
@@ -485,92 +484,92 @@ namespace SevenStrikeModules.XHud.Hud
                 {
                     if (ButtonText.objectReferenceValue != null)
                     {
-                        xHud_Module_Text tt = (xHud_Module_Text)ButtonText.objectReferenceValue;
+                        XHud_Module_Text tt = (XHud_Module_Text)ButtonText.objectReferenceValue;
                         tt.text = ButtonName.stringValue;
                     }
                     if (ButtonTmpText.objectReferenceValue != null)
                     {
-                        xHud_Module_TmpText tt = (xHud_Module_TmpText)ButtonTmpText.objectReferenceValue;
+                        XHud_Module_TmpText tt = (XHud_Module_TmpText)ButtonTmpText.objectReferenceValue;
                         tt.text = ButtonName.stringValue;
                     }
                 }
             }
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
             EditorGUILayout.HelpBox("点击动作阈值是指当用户进行长按操作时，如果 \"长按进度值\" 小于 \"此值\" 则判定为点击按钮，否则不执行按钮点击动作！）", MessageType.Info);
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("点击动作阈值", ClickDelayTimeThreadhold, 100);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("点击动作阈值", ClickDelayTimeThreadhold, 100);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("长按阈值", LongPress_Threshold, 100);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("长按阈值", LongPress_Threshold, 100);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("长按步进值", LongPress_Step, 100);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("长按步进值", LongPress_Step, 100);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("长按进度", LongPress_Percent, 100);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("长按进度", LongPress_Percent, 100);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Property_Field("速率倍增", Button_Animators_GlobalDuration, 100);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("速率倍增", Button_Animators_GlobalDuration, 100);
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 状态
             string statu_title = "状态";
             if (IsMultiSelected())
                 statu_title = "状态 - ( 批量模式 )";
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_title, xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_title, XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             if (!IsMultiSelected())
             {
                 #region 按钮状态
-                Editor_xHudGUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "点击状态", 12, ((Hud_ButtonAction)HudButtonState_Clicked.enumValueIndex).ToString(), xHud_Dashboard.Theme_Primary, 11);
-                Editor_xHudGUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选择状态", 12, ((Hud_ButtonAction)HudButtonState_Selector.enumValueIndex).ToString(), xHud_Dashboard.Theme_Primary, 11);
-                Editor_xHudGUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "按下状态", 12, ((Hud_ButtonAction)HudButtonState_Pressed.enumValueIndex).ToString(), xHud_Dashboard.Theme_Primary, 11);
-                Editor_xHudGUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "悬停状态", 12, ((Hud_ButtonAction)HudButtonState_Holder.enumValueIndex).ToString(), xHud_Dashboard.Theme_Primary, 11);
-                Editor_xHudGUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "长按状态", 12, ((Hud_ButtonAction)HudButtonState_LongPressed.enumValueIndex).ToString(), xHud_Dashboard.Theme_Primary, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "点击状态", 12, ((Hud_ButtonAction)HudButtonState_Clicked.enumValueIndex).ToString(), XHud_Dashboard.Theme_Primary, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选择状态", 12, ((Hud_ButtonAction)HudButtonState_Selector.enumValueIndex).ToString(), XHud_Dashboard.Theme_Primary, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "按下状态", 12, ((Hud_ButtonAction)HudButtonState_Pressed.enumValueIndex).ToString(), XHud_Dashboard.Theme_Primary, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "悬停状态", 12, ((Hud_ButtonAction)HudButtonState_Holder.enumValueIndex).ToString(), XHud_Dashboard.Theme_Primary, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "长按状态", 12, ((Hud_ButtonAction)HudButtonState_LongPressed.enumValueIndex).ToString(), XHud_Dashboard.Theme_Primary, 11);
                 #endregion
 
                 #region 动画相关
                 if (BtnAnimatorNodes != null && BtnAnimatorNodes.arraySize > 0)
                 {
                     #region 动画状态     
-                    Editor_xHudGUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, (HudElementAnimateState)AnimateState.enumValueIndex == HudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? xHud_Dashboard.Theme_Primary : Color.gray, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, (HudElementAnimateState)AnimateState.enumValueIndex == HudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                     #endregion
 
                     #region 最大耗时     
-                    Editor_xHudGUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, AnimatorsMaxDuration.floatValue.ToString() + "秒", xHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, AnimatorsMaxDuration.floatValue.ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
                     #endregion
 
                     #region 最大耗时        
-                    Editor_xHudGUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (mgr.DurationMultiply * AnimatorsMaxDuration.floatValue).ToString() + "秒", xHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (mgr.DurationMultiply * AnimatorsMaxDuration.floatValue).ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
                     #endregion
                 }
                 #endregion
 
-                Editor_xHudGUI.Gui_Layout_Space(10);
+                Editor_XHud_GUI.Gui_Layout_Space(10);
             }
             else
             {
                 #region 批量控件
-                Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_xHudGUI.Gui_Layout_Space(10);
-                if (Editor_xHudGUI.Gui_Layout_Button($"{SelectedObjects[ButtonStatu_Index].name} ( {SelectedObjects[ButtonStatu_Index].Indicator} )", "", HudFilled.透明, HudColor.无, Color.gray, 20))
+                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                Editor_XHud_GUI.Gui_Layout_Space(10);
+                if (Editor_XHud_GUI.Gui_Layout_Button($"{SelectedObjects[ButtonStatu_Index].name} ( {SelectedObjects[ButtonStatu_Index].Indicator} )", "", HudFilled.透明, HudColor.无, Color.gray, 20))
                 {
                     EditorGUIUtility.PingObject(SelectedObjects[ButtonStatu_Index]);
                 }
-                Editor_xHudGUI.Gui_Layout_FlexSpace();
-                if (Editor_xHudGUI.Gui_Layout_Button(12, "", left_arrow_r, left_arrow_p))
+                Editor_XHud_GUI.Gui_Layout_FlexSpace();
+                if (Editor_XHud_GUI.Gui_Layout_Button(12, "", left_arrow_r, left_arrow_p))
                 {
                     if (ButtonStatu_Index <= 0)
                     {
@@ -582,8 +581,8 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     EditorGUIUtility.PingObject(SelectedObjects[ButtonStatu_Index]);
                 }
-                Editor_xHudGUI.Gui_Layout_Space(16);
-                if (Editor_xHudGUI.Gui_Layout_Button(12, "", right_arrow_r, right_arrow_p))
+                Editor_XHud_GUI.Gui_Layout_Space(16);
+                if (Editor_XHud_GUI.Gui_Layout_Button(12, "", right_arrow_r, right_arrow_p))
                 {
                     if (ButtonStatu_Index >= SelectedObjects.Length - 1)
                     {
@@ -595,61 +594,61 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     EditorGUIUtility.PingObject(SelectedObjects[ButtonStatu_Index]);
                 }
-                Editor_xHudGUI.Gui_Layout_Space(5);
-                Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                Editor_XHud_GUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 #endregion
 
                 #region 按钮状态
-                Editor_xHudGUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "点击状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_Clicked.ToString(), xHud_Dashboard.Theme_Primary, 11);
-                Editor_xHudGUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选择状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_Selector.ToString(), xHud_Dashboard.Theme_Primary, 11);
-                Editor_xHudGUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "按下状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_Pressed.ToString(), xHud_Dashboard.Theme_Primary, 11);
-                Editor_xHudGUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "悬停状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_Holder.ToString(), xHud_Dashboard.Theme_Primary, 11);
-                Editor_xHudGUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "长按状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_LongPressed.ToString(), xHud_Dashboard.Theme_Primary, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "点击状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_Clicked.ToString(), XHud_Dashboard.Theme_Primary, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选择状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_Selector.ToString(), XHud_Dashboard.Theme_Primary, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "按下状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_Pressed.ToString(), XHud_Dashboard.Theme_Primary, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "悬停状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_Holder.ToString(), XHud_Dashboard.Theme_Primary, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "长按状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_LongPressed.ToString(), XHud_Dashboard.Theme_Primary, 11);
                 #endregion
 
                 #region 动画相关
                 if (SelectedObjects[ButtonStatu_Index].BtnAnimatorNodes != null && SelectedObjects[ButtonStatu_Index].BtnAnimatorNodes.Count > 0)
                 {
                     #region 动画状态     
-                    Editor_xHudGUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[ButtonStatu_Index].AnimateState == HudElementAnimateState.Animating ? "动画中" : "静止状态", SelectedObjects[ButtonStatu_Index].AnimateState == HudElementAnimateState.Animating ? xHud_Dashboard.Theme_Primary : Color.gray, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[ButtonStatu_Index].AnimateState == HudElementAnimateState.Animating ? "动画中" : "静止状态", SelectedObjects[ButtonStatu_Index].AnimateState == HudElementAnimateState.Animating ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                     #endregion
 
                     SelectedObjects[ButtonStatu_Index].AnimatorsMaxDuration = Animators_GetAnimatorsMaxDuration(SelectedObjects[ButtonStatu_Index].BtnAnimatorNodes, SelectedObjects[ButtonStatu_Index].Button_Animators_GlobalDuration);
 
                     #region 最大耗时     
-                    Editor_xHudGUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, SelectedObjects[ButtonStatu_Index].AnimatorsMaxDuration.ToString() + "秒", xHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, SelectedObjects[ButtonStatu_Index].AnimatorsMaxDuration.ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
                     #endregion
 
                     #region 最大耗时        
-                    Editor_xHudGUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (mgr.DurationMultiply * SelectedObjects[ButtonStatu_Index].AnimatorsMaxDuration).ToString() + "秒", xHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (mgr.DurationMultiply * SelectedObjects[ButtonStatu_Index].AnimatorsMaxDuration).ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
                     #endregion
                 }
                 #endregion
             }
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 统计
             string statu_statistic = "统计";
             if (IsMultiSelected())
                 statu_statistic = "统计 - ( 批量模式 )";
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_statistic, xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_statistic, XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             if (!IsMultiSelected())
             {
                 if (BtnAnimatorNodes.arraySize <= 0)
                 {
-                    Editor_xHudGUI.Gui_Layout_Labelfield("暂无统计数据", HudFilled.无, HudColor.无, Editor_xHudGUI.GetColor(HudColor.阴影灰), TextAnchor.MiddleCenter);
+                    Editor_XHud_GUI.Gui_Layout_Labelfield("暂无统计数据", HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.阴影灰), TextAnchor.MiddleCenter);
                 }
                 else
                 {
                     #region 组件数量 - 动画器
                     if (BtnAnimatorNodes.arraySize > 0)
                     {
-                        Editor_xHudGUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, BtnAnimatorNodes.arraySize.ToString() + " 个", xHud_Dashboard.Theme_Primary, 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, BtnAnimatorNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
                     }
                     #endregion
                 }
@@ -657,14 +656,14 @@ namespace SevenStrikeModules.XHud.Hud
             else
             {
                 #region 批量控件
-                Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_xHudGUI.Gui_Layout_Space(10);
-                if (Editor_xHudGUI.Gui_Layout_Button($"{SelectedObjects[ButtonStatistic_Index].name} ( {SelectedObjects[ButtonStatistic_Index].Indicator} )", "", HudFilled.透明, HudColor.无, Color.gray, 20))
+                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                Editor_XHud_GUI.Gui_Layout_Space(10);
+                if (Editor_XHud_GUI.Gui_Layout_Button($"{SelectedObjects[ButtonStatistic_Index].name} ( {SelectedObjects[ButtonStatistic_Index].Indicator} )", "", HudFilled.透明, HudColor.无, Color.gray, 20))
                 {
                     EditorGUIUtility.PingObject(SelectedObjects[ButtonStatistic_Index]);
                 }
-                Editor_xHudGUI.Gui_Layout_FlexSpace();
-                if (Editor_xHudGUI.Gui_Layout_Button(12, "", left_arrow_r, left_arrow_p))
+                Editor_XHud_GUI.Gui_Layout_FlexSpace();
+                if (Editor_XHud_GUI.Gui_Layout_Button(12, "", left_arrow_r, left_arrow_p))
                 {
                     if (ButtonStatistic_Index <= 0)
                     {
@@ -676,8 +675,8 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     EditorGUIUtility.PingObject(SelectedObjects[ButtonStatistic_Index]);
                 }
-                Editor_xHudGUI.Gui_Layout_Space(16);
-                if (Editor_xHudGUI.Gui_Layout_Button(12, "", right_arrow_r, right_arrow_p))
+                Editor_XHud_GUI.Gui_Layout_Space(16);
+                if (Editor_XHud_GUI.Gui_Layout_Button(12, "", right_arrow_r, right_arrow_p))
                 {
                     if (ButtonStatistic_Index >= SelectedObjects.Length - 1)
                     {
@@ -689,27 +688,27 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     EditorGUIUtility.PingObject(SelectedObjects[ButtonStatistic_Index]);
                 }
-                Editor_xHudGUI.Gui_Layout_Space(5);
-                Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                Editor_XHud_GUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 #endregion
 
                 if (SelectedObjects[ButtonStatistic_Index].BtnAnimatorNodes.Count <= 0)
                 {
-                    Editor_xHudGUI.Gui_Layout_Labelfield("暂无统计数据", HudFilled.无, HudColor.无, Editor_xHudGUI.GetColor(HudColor.阴影灰), TextAnchor.MiddleCenter);
+                    Editor_XHud_GUI.Gui_Layout_Labelfield("暂无统计数据", HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.阴影灰), TextAnchor.MiddleCenter);
                 }
                 else
                 {
                     #region 组件数量 - 动画器
                     if (SelectedObjects[ButtonStatistic_Index].BtnAnimatorNodes.Count > 0)
                     {
-                        Editor_xHudGUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, SelectedObjects[ButtonStatistic_Index].BtnAnimatorNodes.Count.ToString() + " 个", xHud_Dashboard.Theme_Primary, 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, SelectedObjects[ButtonStatistic_Index].BtnAnimatorNodes.Count.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
                     }
                     #endregion
                 }
             }
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 检查是否有无效的动画器
@@ -717,35 +716,35 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             #region 事件/列表
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "事件/列表", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "事件/列表", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 选择器动画列表
             if (BtnAnimatorNodes.arraySize > 0)
             {
                 if (IsMultiSelected())
                 {
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_xHudGUI.Gui_Layout_Space(10);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
                     EditorGUILayout.HelpBox("动画列表不支持多项操作", MessageType.Warning);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 }
                 else
                 {
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_xHudGUI.Gui_Layout_Space(10);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
 
                     AnimatorsIsFold.boolValue = EditorGUILayout.Foldout(AnimatorsIsFold.boolValue, "动画器", true);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                     if (AnimatorsIsFold.boolValue)
                         BtnAnimatorList.DoLayoutList();
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 }
             }
             #endregion
@@ -753,90 +752,90 @@ namespace SevenStrikeModules.XHud.Hud
             #region 按钮事件
             if (IsMultiSelected())
             {
-                Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_xHudGUI.Gui_Layout_Space(10);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                Editor_XHud_GUI.Gui_Layout_Space(10);
                 EditorGUILayout.HelpBox("按钮事件不支持多项操作", MessageType.Warning);
-                Editor_xHudGUI.Gui_Layout_Space(5);
-                Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                Editor_XHud_GUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
             }
             else
             {
-                Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_xHudGUI.Gui_Layout_Space(10);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                Editor_XHud_GUI.Gui_Layout_Space(10);
                 EventIsFold.boolValue = EditorGUILayout.Foldout(EventIsFold.boolValue, "事件", true);
-                Editor_xHudGUI.Gui_Layout_Space(5);
-                Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                Editor_XHud_GUI.Gui_Layout_Space(5);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
                 if (EventIsFold.boolValue)
                 {
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                     EditorGUILayout.PropertyField(eve_on_Deselect);
                     eve_on_Deselect.serializedObject.ApplyModifiedProperties();
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                     EditorGUILayout.PropertyField(eve_on_Select);
                     eve_on_Select.serializedObject.ApplyModifiedProperties();
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                     EditorGUILayout.PropertyField(eve_on_Click);
                     eve_on_Click.serializedObject.ApplyModifiedProperties();
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                     EditorGUILayout.PropertyField(eve_on_Press);
                     eve_on_Press.serializedObject.ApplyModifiedProperties();
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                     EditorGUILayout.PropertyField(eve_on_Enter);
                     eve_on_Enter.serializedObject.ApplyModifiedProperties();
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                     EditorGUILayout.PropertyField(eve_on_Exit);
                     eve_on_Exit.serializedObject.ApplyModifiedProperties();
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                     EditorGUILayout.PropertyField(eve_on_Release);
                     eve_on_Release.serializedObject.ApplyModifiedProperties();
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                     EditorGUILayout.PropertyField(eve_on_LongPressed);
                     eve_on_LongPressed.serializedObject.ApplyModifiedProperties();
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_xHudGUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
                     EditorGUILayout.PropertyField(eve_on_LongpressPer);
                     eve_on_LongpressPer.serializedObject.ApplyModifiedProperties();
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 }
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
@@ -867,7 +866,7 @@ namespace SevenStrikeModules.XHud.Hud
                 {
                     menu.AddItem(new GUIContent("C (拷贝)"), false, () =>
                     {
-                        xHud_ModuleArg_Button hbp = new xHud_ModuleArg_Button();
+                        XHud_ModuleArg_Button hbp = new XHud_ModuleArg_Button();
                         hbp.Color_Normal = sp_col_normal.colorValue;
                         hbp.Color_Highlight = sp_col_highlight.colorValue;
                         hbp.Color_Press = sp_col_press.colorValue;
@@ -889,12 +888,12 @@ namespace SevenStrikeModules.XHud.Hud
                         string json = JsonUtility.ToJson(hbp);
                         GUIUtility.systemCopyBuffer = json;
 
-                        Editor_xHudGUI.Open(xHudDialogType.通知, "HudButton按钮消息", "脚本参数操作", "已将HudButton脚本参数拷贝至剪贴板！", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.通知, "HudButton按钮消息", "脚本参数操作", "已将HudButton脚本参数拷贝至剪贴板！", "明白");
                     });
                 }
                 menu.AddItem(new GUIContent("V (粘贴)"), false, () =>
                 {
-                    xHud_ModuleArg_Button hbp = JsonUtility.FromJson<xHud_ModuleArg_Button>(GUIUtility.systemCopyBuffer);
+                    XHud_ModuleArg_Button hbp = JsonUtility.FromJson<XHud_ModuleArg_Button>(GUIUtility.systemCopyBuffer);
 
                     if (!IsMultiSelected())
                     {
@@ -996,7 +995,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                         }
                     }
-                    Editor_xHudGUI.Open(xHudDialogType.修改, "HudButton按钮消息", "脚本参数操作", "已将剪贴板的参数粘贴至当前HudButton脚本！", "明白");
+                    Editor_XHud_GUI.Open(XHud_DialogType.修改, "HudButton按钮消息", "脚本参数操作", "已将剪贴板的参数粘贴至当前HudButton脚本！", "明白");
                 });
                 menu.AddDisabledItem(new GUIContent("动画器"));
                 menu.AddItem(new GUIContent("X (扫描)"), false, () =>
@@ -1016,7 +1015,7 @@ namespace SevenStrikeModules.XHud.Hud
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
-                            xHud_Module_Button btn = SelectedObjects[i];
+                            XHud_Module_Button btn = SelectedObjects[i];
                             btn.Indicator = btn.gameObject.name;
                             EditorUtility.SetDirty(btn);
                         }
@@ -1025,7 +1024,7 @@ namespace SevenStrikeModules.XHud.Hud
                     {
                         Indicator.stringValue = BaseScript.gameObject.name;
                         Indicator.serializedObject.ApplyModifiedProperties();
-                        Editor_xHudGUI.Open(xHudDialogType.修改, "HudButton按钮消息", "标识自身", "将标识名称参数更改为物体的名称！", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.修改, "HudButton按钮消息", "标识自身", "将标识名称参数更改为物体的名称！", "明白");
                     }
                 });
                 menu.AddSeparator("");
@@ -1067,21 +1066,21 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             #region 源脚本
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 原始变量
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
             BasicVars = EditorGUILayout.Foldout(BasicVars, "变量/属性", true);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
             if (BasicVars)
                 DrawDefaultInspector();
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             CalculateAnimatorMaxDuration(BaseScript.BtnAnimatorNodes, Button_Animators_GlobalDuration.floatValue);
@@ -1144,7 +1143,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
         }
 
-        private void CalculateAnimatorMaxDuration(List<AnimatorNode> list, float globaldur)
+        private void CalculateAnimatorMaxDuration(List<ElementNode_Animator> list, float globaldur)
         {
             AnimatorsMaxDuration.floatValue = Animators_GetAnimatorsMaxDuration(list, globaldur);
             AnimatorsMaxDuration.serializedObject.ApplyModifiedProperties();
@@ -1154,7 +1153,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 从所有子动画器中获取最大耗时
         /// </summary>
         /// <returns></returns>
-        public float Animators_GetAnimatorsMaxDuration(List<AnimatorNode> list, float globaldur)
+        public float Animators_GetAnimatorsMaxDuration(List<ElementNode_Animator> list, float globaldur)
         {
             if (list.Count <= 0)
                 return 0;
@@ -1169,7 +1168,7 @@ namespace SevenStrikeModules.XHud.Hud
                 list[i].Animator.TweenNodeTimersGet();
                 x_list[i] = list[i].Animator.MaxTimerWithGlobalDuration + list[i].DelayTime;
             }
-            float v = xHud_Utilitys.Array_MaxValue(x_list);
+            float v = XHud_Utilitys.Array_MaxValue(x_list);
             return v * globaldur;
         }
 
@@ -1185,7 +1184,7 @@ namespace SevenStrikeModules.XHud.Hud
             for (int i = 0; i < BtnAnimatorNodes.arraySize; i++)
             {
                 SerializedProperty sp_animator = BtnAnimatorNodes.GetArrayElementAtIndex(i).FindPropertyRelative("Animator");
-                xHud_Module_Animator anim = (xHud_Module_Animator)sp_animator.objectReferenceValue;
+                XHud_Module_Animator anim = (XHud_Module_Animator)sp_animator.objectReferenceValue;
                 if (anim == null)
                 {
                     continue;
@@ -1236,7 +1235,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 还原Animator姿态
         /// </summary>
-        private void OriginalPoseState_Load(xHud_Module_Animator animator)
+        private void OriginalPoseState_Load(XHud_Module_Animator animator)
         {
             if (animator == null)
                 return;
@@ -1278,12 +1277,12 @@ namespace SevenStrikeModules.XHud.Hud
             }
             if (m_text.objectReferenceValue != null)
             {
-                ((xHud_Module_Text)m_text.objectReferenceValue).color = col.colorValue;
+                ((XHud_Module_Text)m_text.objectReferenceValue).color = col.colorValue;
                 m_text.serializedObject.ApplyModifiedProperties();
             }
             if (m_tmptext.objectReferenceValue != null)
             {
-                ((xHud_Module_TmpText)m_tmptext.objectReferenceValue).color = col.colorValue;
+                ((XHud_Module_TmpText)m_tmptext.objectReferenceValue).color = col.colorValue;
                 m_tmptext.serializedObject.ApplyModifiedProperties();
             }
 
@@ -1301,7 +1300,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             if (BtnAnimatorNodes.arraySize <= 0)
                 return;
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             Preivew_Animator_PlayingState = true;
             AnimateState.enumValueIndex = 1;
@@ -1313,7 +1312,7 @@ namespace SevenStrikeModules.XHud.Hud
             ///---动画逻辑
             for (int i = 0; i < BaseScript.BtnAnimatorNodes.Count; i++)
             {
-                AnimatorNode node = BaseScript.BtnAnimatorNodes[i];
+                ElementNode_Animator node = BaseScript.BtnAnimatorNodes[i];
                 ///---判断动画器是否为有效
                 if (node.Animator.AnimateTweenNodes == null || node.Animator.AnimateTweenNodes.Count <= 0)
                     continue;
@@ -1345,7 +1344,7 @@ namespace SevenStrikeModules.XHud.Hud
             ///---预备动画器
             for (int i = 0; i < BaseScript.BtnAnimatorNodes.Count; i++)
             {
-                AnimatorNode node = BaseScript.BtnAnimatorNodes[i];
+                ElementNode_Animator node = BaseScript.BtnAnimatorNodes[i];
                 ///---判断动画器是否为有效
                 if (node.Animator.AnimateTweenNodes == null || node.Animator.AnimateTweenNodes.Count <= 0)
                     continue;
@@ -1367,17 +1366,17 @@ namespace SevenStrikeModules.XHud.Hud
                     if (AutoStopPreview.boolValue)
                         Preivew_Animator_Coroutine_Stop = EditorCoroutineUtility.StartCoroutine(Preview_Animator_Coroutine_Stop(AnimatorsMaxDuration.floatValue), this);
                 }
-                DOTweenEditorPreview.Start();
+                //DOTweenEditorPreview.Start();
             }
         }
 
         /// <summary>
         /// 延迟预览指定动画
         /// </summary>
-        IEnumerator Preview_Animator_Coroutine_Play(Tweener tween, float delay)
+        IEnumerator Preview_Animator_Coroutine_Play(XTween_Interface tween, float delay)
         {
             yield return new EditorWaitForSeconds(delay);
-            DOTweenEditorPreview.PrepareTweenForPreview(tween, true, true, true);
+            //DOTweenEditorPreview.PrepareTweenForPreview(tween, true, true, true);
         }
 
         /// <summary>
@@ -1385,12 +1384,12 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         private void Preview_Animator_PlayAt(int index)
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             Preview_Animator_Stop();
 
-            AnimatorNode node = BaseScript.BtnAnimatorNodes[index];
-            xHud_Module_Animator anim = node.Animator;
+            ElementNode_Animator node = BaseScript.BtnAnimatorNodes[index];
+            XHud_Module_Animator anim = node.Animator;
 
             if (node.Animator == null)
                 return;
@@ -1448,7 +1447,7 @@ namespace SevenStrikeModules.XHud.Hud
                     if (AutoStopPreview.boolValue)
                         Preivew_Animator_Coroutine_Stop = EditorCoroutineUtility.StartCoroutine(Preview_Animator_Coroutine_Stop(anim.MaxTimerWithGlobalDuration + delaytime), this);
                 }
-                DOTweenEditorPreview.Start();
+                //DOTweenEditorPreview.Start();
             }
         }
 
@@ -1471,7 +1470,7 @@ namespace SevenStrikeModules.XHud.Hud
                     {
                         if (Preivew_Animator_TweenList[i] != null)
                         {
-                            Preivew_Animator_TweenList[i].Complete();
+                            //Preivew_Animator_TweenList[i].Complete();
                             Preivew_Animator_TweenList[i].Kill();
                             Preivew_Animator_TweenList[i].Rewind();
                         }
@@ -1484,7 +1483,7 @@ namespace SevenStrikeModules.XHud.Hud
                 {
                     for (int c = 0; c < BaseScript.BtnAnimatorNodes.Count; c++)
                     {
-                        xHud_Module_Animator animator = BaseScript.BtnAnimatorNodes[c].Animator;
+                        XHud_Module_Animator animator = BaseScript.BtnAnimatorNodes[c].Animator;
                         List<TweenNode> TwnNodes = animator.AnimateTweenNodes;
 
                         if (TwnNodes != null && TwnNodes.Count > 0)
@@ -1554,7 +1553,7 @@ namespace SevenStrikeModules.XHud.Hud
                 }
                 #endregion
             }
-            DOTweenEditorPreview.Stop();
+            //DOTweenEditorPreview.Stop();
         }
 
 
@@ -1563,7 +1562,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         IEnumerator Preview_Animator_Coroutine_Stop(float stopdelay)
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             yield return new EditorWaitForSeconds(stopdelay * mgr.DurationMultiply);
             if (!Application.isPlaying)
@@ -1586,18 +1585,18 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 for (int w = 0; w < BaseScript.BtnAnimatorNodes.Count; w++)
                 {
-                    AnimatorNode a_node = BaseScript.BtnAnimatorNodes[w];
+                    ElementNode_Animator a_node = BaseScript.BtnAnimatorNodes[w];
                     for (int i = 0; i < a_node.Animator.AnimateTweenNodes.Count; i++)
                     {
                         TweenNode tweenNode = a_node.Animator.AnimateTweenNodes[i];
-                        Tweener tweener = tweenNode.Tweener;
+                        XTween_Interface tweener = tweenNode.Tweener;
 
-                        if (tweener != null && tweener.IsActive() && tweener.IsPlaying())
+                        if (tweener != null && tweener.IsActive && tweener.IsPlaying)
                         {
                             if (tweenNode.Progress > 0.985f)
                                 tweenNode.Progress = 1;
                             else
-                                tweenNode.Progress = tweener.Elapsed(true) / tweener.Duration(true);
+                                tweenNode.Progress = tweener.ElapsedTime / tweener.Duration;
                         }
 
                         for (int s = 0; s < tweenNode.TweenSounds.Count; s++)
@@ -1665,7 +1664,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param name="clip"></param>
         public AudioSource Preview_AnimatorSound_Creator(AudioClip clip, float vol, float pitch_min, float pitch_max, bool ismute)
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             if (ismute)
                 return null;
@@ -1677,7 +1676,7 @@ namespace SevenStrikeModules.XHud.Hud
             au.pitch = Random.Range(pitch_min, pitch_max);
             au.clip = clip;
             au.Play();
-            xHud_AudioStoper sp = au.gameObject.AddComponent<xHud_AudioStoper>();
+            XHud_AudioStoper sp = au.gameObject.AddComponent<XHud_AudioStoper>();
             sp.SetAudioSource(au);
             return au;
         }
@@ -1753,7 +1752,7 @@ namespace SevenStrikeModules.XHud.Hud
                     SerializedProperty sp_nodes = so_ele.FindProperty("BtnAnimatorNodes");
                     so_ele.Update();
                     sp_nodes.ClearArray();
-                    xHud_Module_Animator[] gettedAnims = SelectedObjects[i].GetComponentsInChildren<xHud_Module_Animator>();
+                    XHud_Module_Animator[] gettedAnims = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Animator>();
                     for (int x = 0; x < gettedAnims.Length; x++)
                     {
                         bool repeat = false;
@@ -1764,7 +1763,7 @@ namespace SevenStrikeModules.XHud.Hud
                             {
                                 SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
                                 SerializedProperty sp_node_anim = sp_node.FindPropertyRelative("Animator");
-                                xHud_Module_Animator anim = (xHud_Module_Animator)sp_node_anim.objectReferenceValue;
+                                XHud_Module_Animator anim = (XHud_Module_Animator)sp_node_anim.objectReferenceValue;
                                 if (anim == gettedAnims[x])
                                     repeat = true;
                             }
@@ -1797,7 +1796,7 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 SerializedProperty sp_nodes = serializedObject.FindProperty("BtnAnimatorNodes");
                 sp_nodes.ClearArray();
-                xHud_Module_Animator[] gettedAnims = BaseScript.GetComponentsInChildren<xHud_Module_Animator>();
+                XHud_Module_Animator[] gettedAnims = BaseScript.GetComponentsInChildren<XHud_Module_Animator>();
                 for (int i = 0; i < gettedAnims.Length; i++)
                 {
                     bool repeat = false;
@@ -1808,7 +1807,7 @@ namespace SevenStrikeModules.XHud.Hud
                         {
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
                             SerializedProperty sp_node_anim = sp_node.FindPropertyRelative("Animator");
-                            xHud_Module_Animator sp_anim = (xHud_Module_Animator)sp_node_anim.objectReferenceValue;
+                            XHud_Module_Animator sp_anim = (XHud_Module_Animator)sp_node_anim.objectReferenceValue;
                             if (sp_anim == gettedAnims[i])
                                 repeat = true;
                         }
@@ -1842,18 +1841,18 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         private void GetAnimatorResults()
         {
-            List<xHudGUI_Dialog_ListDatas> Datas = new List<xHudGUI_Dialog_ListDatas>();
+            List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
             if (IsMultiSelected())
             {
                 var s = targets;
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
-                    xHud_Module_Button btn = SelectedObjects[i];
+                    XHud_Module_Button btn = SelectedObjects[i];
                     if (btn.BtnAnimatorNodes.Count > 0)
                     {
                         for (int c = 0; c < btn.BtnAnimatorNodes.Count; c++)
                         {
-                            xHudGUI_Dialog_ListDatas dataitem = new xHudGUI_Dialog_ListDatas();
+                            XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
 
                             dataitem.Title = $"{btn.name} ( {btn.Indicator} )";
                             dataitem.SubTitle = $"扫描到动画器";
@@ -1863,7 +1862,7 @@ namespace SevenStrikeModules.XHud.Hud
                         }
                     }
                 }
-                Editor_xHudGUI.Open(Datas.ToArray(), xHudDialogType.确认, "HudButton按钮消息", "批量扫描动画器组件", "以下是批量扫描到的所有动画器组件列表，请您检查核对：", "明白");
+                Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "HudButton按钮消息", "批量扫描动画器组件", "以下是批量扫描到的所有动画器组件列表，请您检查核对：", "明白");
             }
             else
             {
@@ -1871,18 +1870,18 @@ namespace SevenStrikeModules.XHud.Hud
                 {
                     for (int i = 0; i < BaseScript.BtnAnimatorNodes.Count; i++)
                     {
-                        xHudGUI_Dialog_ListDatas dataitem = new xHudGUI_Dialog_ListDatas();
+                        XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
 
                         dataitem.Title = $"{BaseScript.name} ( {BaseScript.Indicator} )";
                         dataitem.SubTitle = $"扫描到动画器";
                         dataitem.Message = $"{BaseScript.BtnAnimatorNodes[i].Animator.name} ( {BaseScript.BtnAnimatorNodes[i].Animator.Indicator} )";
                         Datas.Add(dataitem);
                     }
-                    Editor_xHudGUI.Open(Datas.ToArray(), xHudDialogType.确认, "HudButton按钮消息", "扫描动画器组件", "以下是扫描到的所有动画器组件列表，请您检查核对：", "明白");
+                    Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "HudButton按钮消息", "扫描动画器组件", "以下是扫描到的所有动画器组件列表，请您检查核对：", "明白");
                 }
                 else
                 {
-                    Editor_xHudGUI.Open(xHudDialogType.警告, "HudButton按钮消息", "扫描动画器组件", "未扫描到任何动画器组件！", "明白");
+                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudButton按钮消息", "扫描动画器组件", "未扫描到任何动画器组件！", "明白");
                 }
             }
         }

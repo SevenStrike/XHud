@@ -5,13 +5,13 @@ namespace SevenStrikeModules.XHud.GuiLib
     using UnityEngine;
     using UnityEngine.UIElements;
 
-    public class Editor_xHud_Tool_UnityBuiltinIconsCollector : EditorWindow
+    public class Editor_XHud_Tool_UnityBuiltinIconsCollector : EditorWindow
     {
 
         [MenuItem(("Tools/XHud/UnityBuiltinIconsGet"))]
         static void Init()
         {
-            EditorWindow.GetWindow<Editor_xHud_Tool_UnityBuiltinIconsCollector>("Unity内建图标合集获取器");
+            EditorWindow.GetWindow<Editor_XHud_Tool_UnityBuiltinIconsCollector>("Unity内建图标合集获取器");
         }
 
         Vector2 m_Scroll;

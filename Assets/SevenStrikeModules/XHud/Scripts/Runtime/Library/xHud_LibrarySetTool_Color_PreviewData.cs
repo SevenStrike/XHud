@@ -6,7 +6,7 @@ namespace SevenStrikeModules.XHud
     using UnityEngine;
 
     [CreateAssetMenu(fileName = "ColorSetterPreviewData", menuName = "XHud/CreateColorSetterPreviewData(创建Hud色卡编辑器预览资源文件)", order = 0)]
-    public class xHud_LibrarySetTool_Color_PreviewData : ScriptableObject
+    public class XHud_LibrarySetTool_Color_PreviewData : ScriptableObject
     {
         [SerializeField]
         public List<Texture2D> Textures = new List<Texture2D>();

@@ -24,12 +24,12 @@ namespace SevenStrikeModules.XHud.Hud
     /// <summary>
     /// 数据源类型 - Text
     /// </summary>
-    public class HudContainer_Text
+    public class XHud_Container_Text
     {
         /// <summary>
         /// 文字
         /// </summary>
-        public xHud_Module_Text Base;
+        public XHud_Module_Text Base;
         public void SetValue(string str)
         {
             if (Base == null)
@@ -42,12 +42,12 @@ namespace SevenStrikeModules.XHud.Hud
     /// <summary>
     /// 数据源类型 - TmpText
     /// </summary>
-    public class HudContainer_TmpText
+    public class XHud_Container_TmpText
     {
         /// <summary>
         /// TMP文字
         /// </summary>
-        public xHud_Module_TmpText Base;
+        public XHud_Module_TmpText Base;
         public void SetValue(string str)
         {
             if (Base == null)
@@ -60,7 +60,7 @@ namespace SevenStrikeModules.XHud.Hud
     /// <summary>
     /// 数据源类型 - Image组件
     /// </summary>
-    public class HudContainer_Image
+    public class XHud_Container_Image
     {
         /// <summary>
         /// 图形
@@ -106,7 +106,7 @@ namespace SevenStrikeModules.XHud.Hud
     /// <summary>
     /// 数据源类型 - RawImage
     /// </summary>
-    public class HudContainer_RawImage
+    public class XHud_Container_RawImage
     {
         /// <summary>
         /// Raw图形
@@ -129,7 +129,7 @@ namespace SevenStrikeModules.XHud.Hud
     /// <summary>
     /// 数据源项
     /// </summary>
-    public class HudContainerItem
+    public class XHud_ContainerItem
     {
         /// <summary>
         /// 类型
@@ -146,19 +146,19 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 文字
         /// </summary>
-        public HudContainer_Text Text;
+        public XHud_Container_Text Text;
         /// <summary>
         /// TMP文字
         /// </summary>
-        public HudContainer_TmpText TmpText;
+        public XHud_Container_TmpText TmpText;
         /// <summary>
         /// 图形
         /// </summary>
-        public HudContainer_Image Image;
+        public XHud_Container_Image Image;
         /// <summary>
         /// Raw图形
         /// </summary>
-        public HudContainer_RawImage RawImage;
+        public XHud_Container_RawImage RawImage;
         /// <summary>
         /// 动画器播放延迟
         /// </summary>
@@ -166,7 +166,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动画器
         /// </summary>
-        public xHud_Module_Animator Animator;
+        public XHud_Module_Animator Animator;
         public RectTransform Transform;
 
         /// <summary>
@@ -446,11 +446,11 @@ namespace SevenStrikeModules.XHud.Hud
         #endregion
     }
 
-    public class xHud_Module_Container : MonoBehaviour
+    public class XHud_Module_Container : MonoBehaviour
     {
         public string Indicator;
         public bool UseDebug;
-        public List<HudContainerItem> ContainerItems = new List<HudContainerItem>();
+        public List<XHud_ContainerItem> ContainerItems = new List<XHud_ContainerItem>();
         public float Animators_GlobalDuration = 1f;
         public float Animators_MaxDuration;
         public HudElementAnimateState AnimateState = HudElementAnimateState.Static;
@@ -466,15 +466,15 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动作 - 获取一个容器项
         /// </summary>
-        public UnityAction<HudContainerItem> act_on_item_get;
+        public UnityAction<XHud_ContainerItem> act_on_item_get;
         /// <summary>
         /// 动作 - 获取所有容器项
         /// </summary>
-        public UnityAction<HudContainerItem[]> act_on_items_get;
+        public UnityAction<XHud_ContainerItem[]> act_on_items_get;
         /// <summary>
         /// 动作 - 放入一个容器项
         /// </summary>
-        public UnityAction<HudContainerItem> act_on_item_add;
+        public UnityAction<XHud_ContainerItem> act_on_item_add;
         /// <summary>
         /// 动作 - 移除一个容器项
         /// </summary>
@@ -486,31 +486,31 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动作 - 容器动画播放（整体）
         /// </summary>
-        public UnityAction<HudContainerItem[]> act_on_animate_play_all;
+        public UnityAction<XHud_ContainerItem[]> act_on_animate_play_all;
         /// <summary>
         /// 动作 - 容器动画播放（每项）
         /// </summary>
-        public UnityAction<HudContainerItem, xHud_Module_Animator> act_on_animate_play_by_item;
+        public UnityAction<XHud_ContainerItem, XHud_Module_Animator> act_on_animate_play_by_item;
         /// <summary>
         /// 动作 - 容器动画复位（整体）
         /// </summary>
-        public UnityAction<HudContainerItem[]> act_on_animate_rewind_all;
+        public UnityAction<XHud_ContainerItem[]> act_on_animate_rewind_all;
         /// <summary>
         /// 动作 - 容器动画复位（每项）
         /// </summary>
-        public UnityAction<HudContainerItem, xHud_Module_Animator> act_on_animate_rewind_by_item;
+        public UnityAction<XHud_ContainerItem, XHud_Module_Animator> act_on_animate_rewind_by_item;
         /// <summary>
         /// 动作 - 容器动画就绪（整体）
         /// </summary>
-        public UnityAction<HudContainerItem[]> act_on_animate_ready_all;
+        public UnityAction<XHud_ContainerItem[]> act_on_animate_ready_all;
         /// <summary>
         /// 动作 - 容器动画就绪（每项）
         /// </summary>
-        public UnityAction<HudContainerItem, xHud_Module_Animator> act_on_animate_ready_by_item;
+        public UnityAction<XHud_ContainerItem, XHud_Module_Animator> act_on_animate_ready_by_item;
         /// <summary>
         /// 动作 - 修改容器项数值
         /// </summary>
-        public UnityAction<string, HudContainerItem> act_on_item_changevalue;
+        public UnityAction<string, XHud_ContainerItem> act_on_item_changevalue;
         #endregion
 
         #region UnityEvent        
@@ -521,15 +521,15 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 事件 - 获取一个容器项
         /// </summary>
-        public UnityEvent<HudContainerItem> eve_on_item_get;
+        public UnityEvent<XHud_ContainerItem> eve_on_item_get;
         /// <summary>
         /// 事件 - 获取所有容器项
         /// </summary>
-        public UnityEvent<HudContainerItem[]> eve_on_items_get;
+        public UnityEvent<XHud_ContainerItem[]> eve_on_items_get;
         /// <summary>
         /// 事件 - 放入一个容器项
         /// </summary>
-        public UnityEvent<HudContainerItem> eve_on_item_add;
+        public UnityEvent<XHud_ContainerItem> eve_on_item_add;
         /// <summary>
         /// 事件 - 移除一个容器项
         /// </summary>
@@ -541,31 +541,31 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 事件 - 容器动画播放（整体）
         /// </summary>
-        public UnityEvent<HudContainerItem[]> eve_on_animate_play_all;
+        public UnityEvent<XHud_ContainerItem[]> eve_on_animate_play_all;
         /// <summary>
         /// 事件 - 容器动画播放（每项）
         /// </summary>
-        public UnityEvent<HudContainerItem, xHud_Module_Animator> eve_on_animate_play_by_item;
+        public UnityEvent<XHud_ContainerItem, XHud_Module_Animator> eve_on_animate_play_by_item;
         /// <summary>
         /// 事件 - 容器动画复位（整体）
         /// </summary>
-        public UnityEvent<HudContainerItem[]> eve_on_animate_rewind_all;
+        public UnityEvent<XHud_ContainerItem[]> eve_on_animate_rewind_all;
         /// <summary>
         /// 事件 - 容器动画复位（每项）
         /// </summary>
-        public UnityEvent<HudContainerItem, xHud_Module_Animator> eve_on_animate_rewind_by_item;
+        public UnityEvent<XHud_ContainerItem, XHud_Module_Animator> eve_on_animate_rewind_by_item;
         /// <summary>
         /// 事件 - 容器动画就绪（整体）
         /// </summary>
-        public UnityEvent<HudContainerItem[]> eve_on_animate_ready_all;
+        public UnityEvent<XHud_ContainerItem[]> eve_on_animate_ready_all;
         /// <summary>
         /// 事件 - 容器动画就绪（每项）
         /// </summary>
-        public UnityEvent<HudContainerItem, xHud_Module_Animator> eve_on_animate_ready_by_item;
+        public UnityEvent<XHud_ContainerItem, XHud_Module_Animator> eve_on_animate_ready_by_item;
         /// <summary>
         /// 事件 - 修改容器项数值
         /// </summary>
-        public UnityEvent<string, HudContainerItem> eve_on_item_changevalue;
+        public UnityEvent<string, XHud_ContainerItem> eve_on_item_changevalue;
         #endregion
 
         public string AnimatorPlayTiming = "无";
@@ -597,9 +597,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="name"></param>
         /// <returns></returns>
-        public HudContainerItem Con_Get_Item(string name)
+        public XHud_ContainerItem Con_Get_Item(string name)
         {
-            HudContainerItem dat = new HudContainerItem();
+            XHud_ContainerItem dat = new XHud_ContainerItem();
 
             for (int i = 0; i < ContainerItems.Count; i++)
             {
@@ -619,9 +619,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="id"></param>
         /// <returns></returns>
-        public HudContainerItem Con_Get_Item(int id)
+        public XHud_ContainerItem Con_Get_Item(int id)
         {
-            HudContainerItem dat = new HudContainerItem();
+            XHud_ContainerItem dat = new XHud_ContainerItem();
 
             for (int i = 0; i < ContainerItems.Count; i++)
             {
@@ -641,9 +641,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="type"></param>
         /// <returns></returns>
-        public HudContainerItem Con_Get_Item(ContainerType type)
+        public XHud_ContainerItem Con_Get_Item(ContainerType type)
         {
-            HudContainerItem dat = new HudContainerItem();
+            XHud_ContainerItem dat = new XHud_ContainerItem();
 
             for (int i = 0; i < ContainerItems.Count; i++)
             {
@@ -663,9 +663,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="type"></param>
         /// <returns>返回指定类型的所有数据项</returns>
-        public HudContainerItem[] Con_Get_Items(ContainerType type)
+        public XHud_ContainerItem[] Con_Get_Items(ContainerType type)
         {
-            List<HudContainerItem> dats = new List<HudContainerItem>();
+            List<XHud_ContainerItem> dats = new List<XHud_ContainerItem>();
 
             for (int i = 0; i < ContainerItems.Count; i++)
             {
@@ -685,7 +685,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 获取所有数据项
         /// </summary>
         /// <returns>返回所有数据项</returns>
-        public HudContainerItem[] Con_Get_Items()
+        public XHud_ContainerItem[] Con_Get_Items()
         {
             if (act_on_items_get != null)
                 act_on_items_get(ContainerItems.ToArray());
@@ -745,12 +745,12 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="item"></param>
         /// <returns></returns>
-        public HudContainerItem Con_Add_Item(HudContainerItem item)
+        public XHud_ContainerItem Con_Add_Item(XHud_ContainerItem item)
         {
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
                 return null;
             }
             ///--------随机ID
@@ -793,19 +793,19 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param tweenName="text">Hud文字文字模块</param>
         /// <param tweenName="Indicator">标识名称</param>
         /// <returns></returns>
-        public HudContainerItem Con_Add_Item(xHud_Module_Text text, string Indicator)
+        public XHud_ContainerItem Con_Add_Item(XHud_Module_Text text, string Indicator)
         {
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
                 return null;
             }
-            HudContainerItem item = new HudContainerItem();
-            HudContainer_Text x_text = new HudContainer_Text();
+            XHud_ContainerItem item = new XHud_ContainerItem();
+            XHud_Container_Text x_text = new XHud_Container_Text();
             x_text.Base = text;
 
-            xHud_Module_Animator anim = text.GetComponent<xHud_Module_Animator>();
+            XHud_Module_Animator anim = text.GetComponent<XHud_Module_Animator>();
             if (anim != null)
                 item.Animator = anim;
 
@@ -830,19 +830,19 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param tweenName="tmptext">HudTmp文字模块</param>
         /// <param tweenName="Indicator">标识名称</param>
         /// <returns></returns>
-        public HudContainerItem Con_Add_Item(xHud_Module_TmpText tmptext, string Indicator)
+        public XHud_ContainerItem Con_Add_Item(XHud_Module_TmpText tmptext, string Indicator)
         {
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
                 return null;
             }
-            HudContainerItem item = new HudContainerItem();
-            HudContainer_TmpText x_text = new HudContainer_TmpText();
+            XHud_ContainerItem item = new XHud_ContainerItem();
+            XHud_Container_TmpText x_text = new XHud_Container_TmpText();
             x_text.Base = tmptext;
 
-            xHud_Module_Animator anim = tmptext.GetComponent<xHud_Module_Animator>();
+            XHud_Module_Animator anim = tmptext.GetComponent<XHud_Module_Animator>();
             if (anim != null)
                 item.Animator = anim;
 
@@ -867,19 +867,19 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param tweenName="img">Image图像模块</param>
         /// <param tweenName="Indicator">标识名称</param>
         /// <returns></returns>
-        public HudContainerItem Con_Add_Item(Image img, string Indicator)
+        public XHud_ContainerItem Con_Add_Item(Image img, string Indicator)
         {
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
                 return null;
             }
-            HudContainerItem item = new HudContainerItem();
-            HudContainer_Image x_img = new HudContainer_Image();
+            XHud_ContainerItem item = new XHud_ContainerItem();
+            XHud_Container_Image x_img = new XHud_Container_Image();
             x_img.Base = img;
 
-            xHud_Module_Animator anim = img.GetComponent<xHud_Module_Animator>();
+            XHud_Module_Animator anim = img.GetComponent<XHud_Module_Animator>();
             if (anim != null)
                 item.Animator = anim;
 
@@ -903,19 +903,19 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param tweenName="img">RawImage图像模块</param>
         /// <param tweenName="Indicator">标识名称</param>
         /// <returns></returns>
-        public HudContainerItem Con_Add_Item(RawImage img, string Indicator)
+        public XHud_ContainerItem Con_Add_Item(RawImage img, string Indicator)
         {
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
                 return null;
             }
-            HudContainerItem item = new HudContainerItem();
-            HudContainer_RawImage x_img = new HudContainer_RawImage();
+            XHud_ContainerItem item = new XHud_ContainerItem();
+            XHud_Container_RawImage x_img = new XHud_Container_RawImage();
             x_img.Base = img;
 
-            xHud_Module_Animator anim = img.GetComponent<xHud_Module_Animator>();
+            XHud_Module_Animator anim = img.GetComponent<XHud_Module_Animator>();
             if (anim != null)
                 item.Animator = anim;
 
@@ -945,7 +945,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法移除容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法移除容器项！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
@@ -971,7 +971,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法移除容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法移除容器项！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
@@ -996,7 +996,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法移除容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法移除容器项！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
@@ -1024,7 +1024,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1032,8 +1032,8 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (ContainerItems[i].Indicator == indicator)
                 {
-                    HudContainer_Text based_text = ContainerItems[i].GetType<HudContainer_Text>();
-                    HudContainer_TmpText based_tmp = ContainerItems[i].GetType<HudContainer_TmpText>();
+                    XHud_Container_Text based_text = ContainerItems[i].GetType<XHud_Container_Text>();
+                    XHud_Container_TmpText based_tmp = ContainerItems[i].GetType<XHud_Container_TmpText>();
 
                     if (based_text != null)
                     {
@@ -1059,7 +1059,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
 
                     if (UseDebug)
-                        xHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1076,7 +1076,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1084,7 +1084,7 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (ContainerItems[i].Indicator == indicator)
                 {
-                    HudContainer_Image based_image = ContainerItems[i].GetType<HudContainer_Image>();
+                    XHud_Container_Image based_image = ContainerItems[i].GetType<XHud_Container_Image>();
 
                     if (based_image != null)
                     {
@@ -1099,7 +1099,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
 
                     if (UseDebug)
-                        xHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1116,7 +1116,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1124,7 +1124,7 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (ContainerItems[i].Indicator == indicator)
                 {
-                    HudContainer_Image based_image = ContainerItems[i].GetType<HudContainer_Image>();
+                    XHud_Container_Image based_image = ContainerItems[i].GetType<XHud_Container_Image>();
 
                     if (based_image != null)
                     {
@@ -1139,7 +1139,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
 
                     if (UseDebug)
-                        xHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1156,7 +1156,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1164,8 +1164,8 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (ContainerItems[i].ID == id)
                 {
-                    HudContainer_Text based_text = ContainerItems[i].GetType<HudContainer_Text>();
-                    HudContainer_TmpText based_tmp = ContainerItems[i].GetType<HudContainer_TmpText>();
+                    XHud_Container_Text based_text = ContainerItems[i].GetType<XHud_Container_Text>();
+                    XHud_Container_TmpText based_tmp = ContainerItems[i].GetType<XHud_Container_TmpText>();
 
                     if (based_text != null)
                     {
@@ -1191,7 +1191,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
 
                     if (UseDebug)
-                        xHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1208,7 +1208,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1216,7 +1216,7 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (ContainerItems[i].ID == id)
                 {
-                    HudContainer_Image based_image = ContainerItems[i].GetType<HudContainer_Image>();
+                    XHud_Container_Image based_image = ContainerItems[i].GetType<XHud_Container_Image>();
 
                     if (based_image != null)
                     {
@@ -1231,7 +1231,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
 
                     if (UseDebug)
-                        xHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val.name + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val.name + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1248,7 +1248,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1256,7 +1256,7 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (ContainerItems[i].ID == id)
                 {
-                    HudContainer_Image based_image = ContainerItems[i].GetType<HudContainer_Image>();
+                    XHud_Container_Image based_image = ContainerItems[i].GetType<XHud_Container_Image>();
 
                     if (based_image != null)
                     {
@@ -1271,7 +1271,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
 
                     if (UseDebug)
-                        xHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val.name + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val.name + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1288,7 +1288,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1296,7 +1296,7 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (ContainerItems[i].Indicator == indicator)
                 {
-                    HudContainer_RawImage based_image = ContainerItems[i].GetType<HudContainer_RawImage>();
+                    XHud_Container_RawImage based_image = ContainerItems[i].GetType<XHud_Container_RawImage>();
 
                     if (based_image != null)
                     {
@@ -1311,7 +1311,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
 
                     if (UseDebug)
-                        xHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1328,7 +1328,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1336,7 +1336,7 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (ContainerItems[i].ID == id)
                 {
-                    HudContainer_RawImage based_image = ContainerItems[i].GetType<HudContainer_RawImage>();
+                    XHud_Container_RawImage based_image = ContainerItems[i].GetType<XHud_Container_RawImage>();
 
                     if (based_image != null)
                     {
@@ -1351,7 +1351,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
 
                     if (UseDebug)
-                        xHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val.name + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val.name + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1371,7 +1371,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法播放动画！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法播放动画！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
@@ -1382,7 +1382,7 @@ namespace SevenStrikeModules.XHud.Hud
                 act_on_animate_play_all(ContainerItems.ToArray());
             eve_on_animate_play_all.Invoke(ContainerItems.ToArray());
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("容器控件通知", "播放容器列表中的所有动画器动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("容器控件通知", "播放容器列表中的所有动画器动画！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -1395,14 +1395,14 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法播放动画！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法播放动画！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
             {
                 if (ContainerItems[i].Indicator == indicator)
                 {
-                    xHud_Module_Animator anim = ContainerItems[i].Animator;
+                    XHud_Module_Animator anim = ContainerItems[i].Animator;
                     float Delaytime = ContainerItems[i].DelayTime;
                     if (!usedelay)
                         Delaytime = 0;
@@ -1418,7 +1418,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("容器控件通知", "播放容器列表中指定标识的项的动画器动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("容器控件通知", "播放容器列表中指定标识的项的动画器动画！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -1431,14 +1431,14 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法播放动画！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法播放动画！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
             {
                 if (ContainerItems[i].ID == id)
                 {
-                    xHud_Module_Animator anim = ContainerItems[i].Animator;
+                    XHud_Module_Animator anim = ContainerItems[i].Animator;
                     float Delaytime = ContainerItems[i].DelayTime;
                     if (!usedelay)
                         Delaytime = 0;
@@ -1454,7 +1454,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("容器控件通知", "播放容器列表中指定ID的项的动画器动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("容器控件通知", "播放容器列表中指定ID的项的动画器动画！", HudMsgState.通知);
         }
 
         //------------Rewind
@@ -1468,12 +1468,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法复位动画！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法复位动画！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
             {
-                xHud_Module_Animator anim = ContainerItems[i].Animator;
+                XHud_Module_Animator anim = ContainerItems[i].Animator;
                 if (anim != null)
                     anim.RewindAllTweenNode();
             }
@@ -1482,7 +1482,7 @@ namespace SevenStrikeModules.XHud.Hud
                 act_on_animate_rewind_all(ContainerItems.ToArray());
             eve_on_animate_rewind_all.Invoke(ContainerItems.ToArray());
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("容器控件通知", "复位容器列表中的所有动画器动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("容器控件通知", "复位容器列表中的所有动画器动画！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -1494,14 +1494,14 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法复位动画！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法复位动画！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
             {
                 if (ContainerItems[i].Indicator == indicator)
                 {
-                    xHud_Module_Animator anim = ContainerItems[i].Animator;
+                    XHud_Module_Animator anim = ContainerItems[i].Animator;
                     if (anim != null)
                     {
                         anim.RewindAllTweenNode();
@@ -1513,7 +1513,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("容器控件通知", "复位容器列表中指定标识的项的动画器动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("容器控件通知", "复位容器列表中指定标识的项的动画器动画！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -1525,14 +1525,14 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    xHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法复位动画！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法复位动画！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
             {
                 if (ContainerItems[i].ID == id)
                 {
-                    xHud_Module_Animator anim = ContainerItems[i].Animator;
+                    XHud_Module_Animator anim = ContainerItems[i].Animator;
                     if (anim != null)
                     {
                         anim.RewindAllTweenNode();
@@ -1544,7 +1544,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("容器控件通知", "复位容器列表中指定ID的项的动画器动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("容器控件通知", "复位容器列表中指定ID的项的动画器动画！", HudMsgState.通知);
         }
 
         #endregion
@@ -1571,7 +1571,7 @@ namespace SevenStrikeModules.XHud.Hud
             act_on_item_changevalue = null;
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("容器控件通知", "清空所有委托！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("容器控件通知", "清空所有委托！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -1594,7 +1594,7 @@ namespace SevenStrikeModules.XHud.Hud
             eve_on_item_changevalue.RemoveAllListeners();
 
             if (UseDebug)
-                xHud_Utilitys.Func_PrintInfo("容器控件通知", "清空所有委托！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("容器控件通知", "清空所有委托！", HudMsgState.通知);
         }
 
         #endregion

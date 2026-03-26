@@ -1,7 +1,6 @@
 namespace SevenStrikeModules.XHud.Hud
 {
-    using DG.DOTweenEditor;
-    using DG.Tweening;
+    using SevenStrikeModules.XTween;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
     using System.Collections.Generic;
@@ -36,11 +35,11 @@ namespace SevenStrikeModules.XHud.Hud
         public List<CurveNode> Nodes;
     }
 
-    [CustomEditor(typeof(xHud_Library_Curves))]
-    public class Editor_xHud_Library_Curves : Editor
+    [CustomEditor(typeof(XHud_Library_Curves))]
+    public class Editor_XHud_Library_Curves : Editor
     {
         #region 组件 / 列表
-        private xHud_Library_Curves BaseScript;
+        private XHud_Library_Curves BaseScript;
         /// <summary>
         /// 曲线列表
         /// </summary>
@@ -80,7 +79,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动画预览 - 组件
         /// </summary>
-        private Tween CurveTween;
+        private XTween_Interface CurveTween;
         /// <summary>
         /// 动画预览 - 状态开关
         /// </summary>
@@ -102,7 +101,7 @@ namespace SevenStrikeModules.XHud.Hud
 
         private void OnEnable()
         {
-            BaseScript = (xHud_Library_Curves)target;
+            BaseScript = (XHud_Library_Curves)target;
 
             #region 获取序列化属性
             sp_CurveLibrary = serializedObject.FindProperty("CurveLibrary");
@@ -139,24 +138,24 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             #region 获取图标
-            import_p = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/import_p");
-            import_r = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/import_r");
-            export_p = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/export_p");
-            export_r = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/export_r");
-            clear_p = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/clear_p");
-            clear_r = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/clear_r");
-            create_p = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/create_p");
-            create_r = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/create_r");
-            delete_p = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/delete_p");
-            delete_r = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/delete_r");
-            play_p = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/play_p");
-            play_r = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/play_r");
-            leftarr_p = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/leftarr_p");
-            leftarr_r = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/leftarr_r");
-            rightarr_p = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/rightarr_p");
-            rightarr_r = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/rightarr_r");
-            stop_p = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/stop_p");
-            stop_r = Editor_xHudGUI.GetIcon("Icons_Hud_CurveLibrary/stop_r");
+            import_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/import_p");
+            import_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/import_r");
+            export_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/export_p");
+            export_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/export_r");
+            clear_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/clear_p");
+            clear_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/clear_r");
+            create_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/create_p");
+            create_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/create_r");
+            delete_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/delete_p");
+            delete_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/delete_r");
+            play_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/play_p");
+            play_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/play_r");
+            leftarr_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/leftarr_p");
+            leftarr_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/leftarr_r");
+            rightarr_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/rightarr_p");
+            rightarr_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/rightarr_r");
+            stop_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/stop_p");
+            stop_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/stop_r");
             #endregion
 
             //设定列表项高度值
@@ -226,19 +225,19 @@ namespace SevenStrikeModules.XHud.Hud
             SerializedProperty sp_curve = prop.FindPropertyRelative("Curve");
 
             drawelement_rect.Set(rect.x + 15, rect.y + 3, 30, 20);
-            Editor_xHudGUI.Gui_Labelfield(drawelement_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
+            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
 
             BlockGUI(sp_name.stringValue);
 
             drawelement_rect.Set(rect.x + 42, rect.y + 3, rect.width - 250, 20);
-            sp_name.stringValue = Editor_xHudGUI.Gui_InputField_String(drawelement_rect, sp_name.stringValue);
+            sp_name.stringValue = Editor_XHud_GUI.Gui_InputField_String(drawelement_rect, sp_name.stringValue);
             sp_name.serializedObject.ApplyModifiedProperties();
 
             BlockGUI(sp_name.stringValue);
 
             EditorGUI.BeginChangeCheck();
             drawelement_rect.Set(rect.width - 120, rect.y + 1, 100, 20);
-            sp_curve.animationCurveValue = Editor_xHudGUI.Gui_CurveField(drawelement_rect, sp_curve.animationCurveValue);
+            sp_curve.animationCurveValue = Editor_XHud_GUI.Gui_CurveField(drawelement_rect, sp_curve.animationCurveValue);
             sp_curve.serializedObject.ApplyModifiedProperties();
             if (EditorGUI.EndChangeCheck())
             {
@@ -283,7 +282,7 @@ namespace SevenStrikeModules.XHud.Hud
                     {
                         // 高亮标记表示选中
                         item_rect.Set(1, i * sp_itemHeight.floatValue + 10, 5, 5);
-                        EditorGUI.DrawRect(item_rect, xHud_Dashboard.Theme_Primary);
+                        EditorGUI.DrawRect(item_rect, XHud_Dashboard.Theme_Primary);
                         // 高亮背景表示选中
                         item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width + 20, sp_itemHeight.floatValue);
                         EditorGUI.DrawRect(item_rect, SelectedBg);
@@ -372,22 +371,22 @@ namespace SevenStrikeModules.XHud.Hud
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_xHudGUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "Hud - 曲线库", Color.black);
+            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "Hud - 曲线库", Color.black);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Property_Field("曲线库名称", sp_LibraryName);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("曲线库名称", sp_LibraryName);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Property_Field("过滤（包含）", sp_Highlight);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("过滤（包含）", sp_Highlight);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Layout_Property_Field("查找（精确）", sp_Find);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("查找（精确）", sp_Find);
             if (EditorGUI.EndChangeCheck())
             {
                 if (!string.IsNullOrEmpty(sp_Find.stringValue))
@@ -398,41 +397,41 @@ namespace SevenStrikeModules.XHud.Hud
                     sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
                 }
             }
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Property_Field("底色", sp_PreviewBGColor);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Property_Field("网格色", sp_PreviewGridColor);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("底色", sp_PreviewBGColor);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("网格色", sp_PreviewGridColor);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Seperator(1, xHud_Dashboard.Theme_SeperateLine);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_FlexSpace();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_FlexSpace();
             if (string.IsNullOrEmpty(sp_Highlight.stringValue))
             {
                 if (!Application.isPlaying)
                 {
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "读取曲线库", import_r, import_p, 4))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "读取曲线库", import_r, import_p, 4))
                     {
                         Curves_Import();
                     }
-                    Editor_xHudGUI.Gui_Layout_Space(35);
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "导出曲线库", export_r, export_p, 4))
+                    Editor_XHud_GUI.Gui_Layout_Space(35);
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "导出曲线库", export_r, export_p, 4))
                     {
                         Curves_Export();
                     }
-                    Editor_xHudGUI.Gui_Layout_Space(35);
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "清空曲线库", clear_r, clear_p, 4))
+                    Editor_XHud_GUI.Gui_Layout_Space(35);
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "清空曲线库", clear_r, clear_p, 4))
                     {
-                        string res = Editor_xHudGUI.Open(xHudDialogType.警告, "HudCurveLibrary 曲线库消息", "清空所有曲线", "是否清空所有曲线项？请注意！如果您的场景中或是预制体中的脚本用到了该曲线库中的曲线，清空后会导致动画器的曲线信息丢失，请谨慎操作！", "清空", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudCurveLibrary 曲线库消息", "清空所有曲线", "是否清空所有曲线项？请注意！如果您的场景中或是预制体中的脚本用到了该曲线库中的曲线，清空后会导致动画器的曲线信息丢失，请谨慎操作！", "清空", "暂不", 1);
                         if (res == "暂不")
                             return;
 
@@ -440,13 +439,13 @@ namespace SevenStrikeModules.XHud.Hud
                         sp_CurveLibrary.serializedObject.ApplyModifiedProperties();
                         return;
                     }
-                    Editor_xHudGUI.Gui_Layout_Space(35);
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "添加项", create_r, create_p, 4))
+                    Editor_XHud_GUI.Gui_Layout_Space(35);
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "添加项", create_r, create_p, 4))
                     {
                         CurveInfoList_Original_Add(CurveInfoList);
                     }
-                    Editor_xHudGUI.Gui_Layout_Space(35);
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "删除项", delete_r, delete_p, 4))
+                    Editor_XHud_GUI.Gui_Layout_Space(35);
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "删除项", delete_r, delete_p, 4))
                     {
                         CurveInfoList_Original_Remove(CurveInfoList);
                     }
@@ -454,22 +453,22 @@ namespace SevenStrikeModules.XHud.Hud
             }
             else
             {
-                Editor_xHudGUI.Gui_Layout_LabelfieldThin("当前为过滤筛选状态", HudFilled.无, HudColor.无, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12);
+                Editor_XHud_GUI.Gui_Layout_LabelfieldThin("当前为过滤筛选状态", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12);
             }
-            Editor_xHudGUI.Gui_Layout_FlexSpace();
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_FlexSpace();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Seperator(1, xHud_Dashboard.Theme_SeperateLine);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "曲线列表", Color.white);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "曲线列表", Color.white);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             DrawCurveInfoList_Original();
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -531,7 +530,7 @@ namespace SevenStrikeModules.XHud.Hud
         private void Curves_Import()
         {
             string path = "";
-            string res = Editor_xHudGUI.Open(xHudDialogType.警告, "HudCurveLibrary 曲线库消息", "读取曲线数据", "根据您的需要选择导入曲线数据的方式，如果是追加则会在当前曲线库的基础上后续叠加导入的曲线项，如果是替换则会完全替换当前曲线库的所有曲线项！", "追加", "替换", "暂不", 2);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudCurveLibrary 曲线库消息", "读取曲线数据", "根据您的需要选择导入曲线数据的方式，如果是追加则会在当前曲线库的基础上后续叠加导入的曲线项，如果是替换则会完全替换当前曲线库的所有曲线项！", "追加", "替换", "暂不", 2);
             if (res == "暂不")
             {
                 return;
@@ -647,9 +646,9 @@ namespace SevenStrikeModules.XHud.Hud
             float start = rect.x;
             float end = rect.width - (BaseScript.SelectedReferImage.width * mul);
             if (sp_UsePreviewLooped.boolValue)
-                CurveTween = DOTween.To(() => TweenValue, x => TweenValue = x, end, sp_PreviewDuration.floatValue).From(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true).SetLoops(-1, LoopType.Restart);
+                CurveTween = XTween.To(() => TweenValue, x => TweenValue = x, end, sp_PreviewDuration.floatValue).SetFrom(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true).SetLoop(-1, XTween_LoopType.Restart);
             else
-                CurveTween = DOTween.To(() => TweenValue, x => TweenValue = x, end, sp_PreviewDuration.floatValue).From(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true);
+                CurveTween = XTween.To(() => TweenValue, x => TweenValue = x, end, sp_PreviewDuration.floatValue).SetFrom(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true);
         }
 
         private void Tween_Rotater()
@@ -660,9 +659,9 @@ namespace SevenStrikeModules.XHud.Hud
             float start = 0;
             float end = 360;
             if (sp_UsePreviewLooped.boolValue)
-                CurveTween = DOTween.To(() => TweenDeg, x => TweenDeg = x, end, sp_PreviewDuration.floatValue).From(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true).SetLoops(-1, LoopType.Restart);
+                CurveTween = XTween.To(() => TweenDeg, x => TweenDeg = x, end, sp_PreviewDuration.floatValue).SetFrom(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true).SetLoop(-1, XTween_LoopType.Restart);
             else
-                CurveTween = DOTween.To(() => TweenDeg, x => TweenDeg = x, end, sp_PreviewDuration.floatValue).From(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true);
+                CurveTween = XTween.To(() => TweenDeg, x => TweenDeg = x, end, sp_PreviewDuration.floatValue).SetFrom(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true);
         }
 
         private void Tween_Scaler(float maxsize)
@@ -673,9 +672,9 @@ namespace SevenStrikeModules.XHud.Hud
             float start = 0;
             float end = maxsize;
             if (sp_UsePreviewLooped.boolValue)
-                CurveTween = DOTween.To(() => TweenScl, x => TweenScl = x, end, sp_PreviewDuration.floatValue).From(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true).SetLoops(-1, LoopType.Restart);
+                CurveTween = XTween.To(() => TweenScl, x => TweenScl = x, end, sp_PreviewDuration.floatValue).SetFrom(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true).SetLoop(-1, XTween_LoopType.Restart);
             else
-                CurveTween = DOTween.To(() => TweenScl, x => TweenScl = x, end, sp_PreviewDuration.floatValue).From(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true);
+                CurveTween = XTween.To(() => TweenScl, x => TweenScl = x, end, sp_PreviewDuration.floatValue).SetFrom(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true);
         }
 
         private void Tween_Alpha(float alpha)
@@ -686,9 +685,9 @@ namespace SevenStrikeModules.XHud.Hud
             float start = 0;
             float end = alpha;
             if (sp_UsePreviewLooped.boolValue)
-                CurveTween = DOTween.To(() => TweenAlpha, x => TweenAlpha = x, end, sp_PreviewDuration.floatValue).From(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true).SetLoops(-1, LoopType.Restart);
+                CurveTween = XTween.To(() => TweenAlpha, x => TweenAlpha = x, end, sp_PreviewDuration.floatValue).SetFrom(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true).SetLoop(-1, XTween_LoopType.Restart);
             else
-                CurveTween = DOTween.To(() => TweenAlpha, x => TweenAlpha = x, end, sp_PreviewDuration.floatValue).From(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true);
+                CurveTween = XTween.To(() => TweenAlpha, x => TweenAlpha = x, end, sp_PreviewDuration.floatValue).SetFrom(start).SetEase(sp_CurveLibrary.GetArrayElementAtIndex(sp_PreviewCurveIndex.intValue).FindPropertyRelative("Curve").animationCurveValue).SetAutoKill(true);
         }
 
         private void Tween_Stop()
@@ -697,7 +696,7 @@ namespace SevenStrikeModules.XHud.Hud
             CurveTween.Kill();
             CurveTween = null;
             TweenPlaying = false;
-            DOTweenEditorPreview.Stop();
+            //DOTweenEditorPreview.Stop();
         }
 
         /// <summary>
@@ -756,15 +755,15 @@ namespace SevenStrikeModules.XHud.Hud
             EditorGUILayout.LabelField("间距", GUILayout.Width(30));
             sp_PreviewGridSize.floatValue = Mathf.Clamp(EditorGUILayout.FloatField(sp_PreviewGridSize.floatValue, GUILayout.Width(25)), 10, 50);
             sp_PreviewGridSize.serializedObject.ApplyModifiedProperties();
-            Editor_xHudGUI.Gui_Layout_Space(8);
+            Editor_XHud_GUI.Gui_Layout_Space(8);
             EditorGUILayout.LabelField("耗时", GUILayout.Width(30));
             sp_PreviewDuration.floatValue = Mathf.Clamp(EditorGUILayout.FloatField(sp_PreviewDuration.floatValue, GUILayout.Width(25)), 0.1f, 10);
             sp_PreviewDuration.serializedObject.ApplyModifiedProperties();
-            Editor_xHudGUI.Gui_Layout_Space(8);
+            Editor_XHud_GUI.Gui_Layout_Space(8);
             EditorGUILayout.LabelField("尺寸", GUILayout.Width(30));
             sp_PreviewImageSize.floatValue = Mathf.Clamp(EditorGUILayout.FloatField(sp_PreviewImageSize.floatValue, GUILayout.Width(25)), 0.1f, 0.8f);
             sp_PreviewImageSize.serializedObject.ApplyModifiedProperties();
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
             if (EditorGUI.EndChangeCheck())
             {
                 Tween_Stop();
@@ -786,7 +785,7 @@ namespace SevenStrikeModules.XHud.Hud
         public override void OnInteractivePreviewGUI(Rect rect, GUIStyle background)
         {
             GUI.color = sp_PreviewBGColor.colorValue;
-            Editor_xHudGUI.Gui_Box(rect);
+            Editor_XHud_GUI.Gui_Box(rect);
 
             GUI.color = sp_PreviewGridColor.colorValue;
             float Div = rect.width / 2;
@@ -846,13 +845,13 @@ namespace SevenStrikeModules.XHud.Hud
             GUIUtility.RotateAroundPivot(TweenDeg, new Vector2((rect.width / 2), up + height / 2));
             GUIUtility.ScaleAroundPivot(new Vector2(TweenScl, TweenScl), new Vector2((rect.width / 2), up + height / 2));
             GUI.color = new Color(1, 1, 1, TweenAlpha);
-            Editor_xHudGUI.Gui_Icon(new Rect(TweenValue, up, width, height), BaseScript.SelectedReferImage);
+            Editor_XHud_GUI.Gui_Icon(new Rect(TweenValue, up, width, height), BaseScript.SelectedReferImage);
             GUI.matrix = matrix4X4;
             GUI.color = Color.white;
             #endregion
 
             #region 翻页切换
-            if (Editor_xHudGUI.Gui_Button(new Rect(rect.x + 15, (rect.height - 10), 14, 14), leftarr_r, leftarr_p, true, "", "", Color.white))
+            if (Editor_XHud_GUI.Gui_Button(new Rect(rect.x + 15, (rect.height - 10), 14, 14), leftarr_r, leftarr_p, true, "", "", Color.white))
             {
                 if (sp_ReferImgIndex.intValue == 0)
                     sp_ReferImgIndex.intValue = ReferImages.Length - 1;
@@ -864,7 +863,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Tween_Stop();
             }
 
-            if (Editor_xHudGUI.Gui_Button(new Rect(rect.width - 40, (rect.height - 10), 14, 14), rightarr_r, rightarr_p, true, "", "", Color.white))
+            if (Editor_XHud_GUI.Gui_Button(new Rect(rect.width - 40, (rect.height - 10), 14, 14), rightarr_r, rightarr_p, true, "", "", Color.white))
             {
                 if (sp_ReferImgIndex.intValue >= ReferImages.Length - 1)
                     sp_ReferImgIndex.intValue = 0;
@@ -880,7 +879,7 @@ namespace SevenStrikeModules.XHud.Hud
             #region 播放预览
             if (!TweenPlaying)
             {
-                if (Editor_xHudGUI.Gui_Button(new Rect((rect.width / 2) - 7, (rect.height - 10), 14, 14), play_r, play_p, true, "", "", Color.white))
+                if (Editor_XHud_GUI.Gui_Button(new Rect((rect.width / 2) - 7, (rect.height - 10), 14, 14), play_r, play_p, true, "", "", Color.white))
                 {
                     TweenPlaying = true;
 
@@ -899,8 +898,8 @@ namespace SevenStrikeModules.XHud.Hud
                             Tween_Alpha(TweenAlpha);
                             break;
                     }
-                    DOTweenEditorPreview.PrepareTweenForPreview(CurveTween);
-                    DOTweenEditorPreview.Start();
+                    //DOTweenEditorPreview.PrepareTweenForPreview(CurveTween);
+                    //DOTweenEditorPreview.Start();
 
                     if (sp_UsePreviewAutoStop.boolValue)
                         DelayPlay(sp_PreviewDuration.floatValue);
@@ -908,7 +907,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
             else
             {
-                if (Editor_xHudGUI.Gui_Button(new Rect((rect.width / 2) - 7, (rect.height - 10), 14, 14), stop_r, stop_p, true, "", "", Color.white))
+                if (Editor_XHud_GUI.Gui_Button(new Rect((rect.width / 2) - 7, (rect.height - 10), 14, 14), stop_r, stop_p, true, "", "", Color.white))
                 {
                     Tween_Stop();
                     TweenValue = 0;
@@ -920,7 +919,7 @@ namespace SevenStrikeModules.XHud.Hud
             #region 模式切换
             string[] options = new string[4] { "位移", "旋转", "缩放", "透明度" };
             EditorGUI.BeginChangeCheck();
-            sp_PreviewModeIndex.intValue = Editor_xHudGUI.Gui_Popup(new Rect((rect.width / 2) - 50, rect.y + 8, 100, 20), sp_PreviewModeIndex.intValue, options, HudFilled.实体, HudColor.警示黄, Color.black);
+            sp_PreviewModeIndex.intValue = Editor_XHud_GUI.Gui_Popup(new Rect((rect.width / 2) - 50, rect.y + 8, 100, 20), sp_PreviewModeIndex.intValue, options, HudFilled.实体, HudColor.警示黄, Color.black);
             sp_PreviewModeIndex.serializedObject.ApplyModifiedProperties();
             if (EditorGUI.EndChangeCheck())
             {
@@ -939,7 +938,7 @@ namespace SevenStrikeModules.XHud.Hud
                 autostop = " 手动停止";
             }
 
-            if (Editor_xHudGUI.Gui_Button(new Rect(rect.x + 10, rect.y + 8, 60, 20), null, null, false, autostop, "", Color.clear, xHud_Dashboard.Theme_Primary, HudFilled.透明))
+            if (Editor_XHud_GUI.Gui_Button(new Rect(rect.x + 10, rect.y + 8, 60, 20), null, null, false, autostop, "", Color.clear, XHud_Dashboard.Theme_Primary, HudFilled.透明))
             {
                 sp_UsePreviewAutoStop.boolValue = !sp_UsePreviewAutoStop.boolValue;
                 sp_UsePreviewAutoStop.serializedObject.ApplyModifiedProperties();
@@ -961,7 +960,7 @@ namespace SevenStrikeModules.XHud.Hud
                 cycle = "单次预览";
             }
 
-            if (Editor_xHudGUI.Gui_Button(new Rect(rect.width - 70, rect.y + 8, 60, 20), null, null, false, cycle, "", Color.clear, xHud_Dashboard.Theme_Primary, HudFilled.透明))
+            if (Editor_XHud_GUI.Gui_Button(new Rect(rect.width - 70, rect.y + 8, 60, 20), null, null, false, cycle, "", Color.clear, XHud_Dashboard.Theme_Primary, HudFilled.透明))
             {
                 sp_UsePreviewLooped.boolValue = !sp_UsePreviewLooped.boolValue;
                 if (sp_UsePreviewLooped.boolValue)

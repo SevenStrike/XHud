@@ -1,6 +1,6 @@
 namespace SevenStrikeModules.XHud.Hud
 {
-    using DG.Tweening;
+    using SevenStrikeModules.XTween;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.Events;
@@ -22,7 +22,7 @@ namespace SevenStrikeModules.XHud.Hud
     }
 
     [RequireComponent(typeof(CanvasGroup))]
-    public class xHud_CustomMouseCursor : MonoBehaviour
+    public class XHud_CustomMouseCursor : MonoBehaviour
     {
         /// <summary>
         /// 自定义鼠标样式
@@ -95,13 +95,13 @@ namespace SevenStrikeModules.XHud.Hud
 
         public string UseLerpCursorSize = "差值模式";
 
-        private Tweener Tween_CursorSize;
+        private XTween_Interface Tween_CursorSize;
         public float CursorSize_TweenDuration = 1;
-        public Ease CursorSize_TweenEase;
+        public EaseMode CursorSize_TweenEase;
 
-        private Tweener Tween_CursorOpacity;
+        private XTween_Interface Tween_CursorOpacity;
         public float CursorOpacity_TweenDuration = 1;
-        public Ease CursorOpacity_TweenEase;
+        public EaseMode CursorOpacity_TweenEase;
 
         void Start()
         {
@@ -211,7 +211,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             ///---同步样式到鼠标位置
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(xHud_Manager.Instance.HudCanvas_Screen.transform as RectTransform, Input.mousePosition, xHud_Manager.Instance.HudCamera, out CalaculatePos))
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(XHud_Manager.Instance.HudCanvas_Screen.transform as RectTransform, Input.mousePosition, XHud_Manager.Instance.HudCamera, out CalaculatePos))
             {
 
                 CursorRect.anchoredPosition = CalaculatePos;
@@ -280,15 +280,15 @@ namespace SevenStrikeModules.XHud.Hud
                 CursorSize = size;
             else
             {
-                if (Tween_CursorSize != null && Tween_CursorSize.active)
+                if (Tween_CursorSize != null && Tween_CursorSize.IsActive)
                 {
-                    if (Tween_CursorSize.IsPlaying())
+                    if (Tween_CursorSize.IsPlaying)
                     {
                         Tween_CursorSize.Rewind();
                     }
                 }
 
-                Tween_CursorSize = DOTween.To(() => CursorSize, x => CursorSize = x, size, CursorSize_TweenDuration * xHud_Manager.Instance.DurationMultiply).SetEase(CursorSize_TweenEase).SetAutoKill(true);
+                Tween_CursorSize = XTween.To(() => CursorSize, x => CursorSize = x, size, CursorSize_TweenDuration * XHud_Manager.Instance.DurationMultiply).SetEase(CursorSize_TweenEase).SetAutoKill(true);
             }
         }
 
@@ -325,15 +325,15 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param tweenName="opacity"></param>
         public void mc_CursorOpacitySet(float opacity)
         {
-            if (Tween_CursorOpacity != null && Tween_CursorOpacity.active)
+            if (Tween_CursorOpacity != null && Tween_CursorOpacity.IsActive)
             {
-                if (Tween_CursorOpacity.IsPlaying())
+                if (Tween_CursorOpacity.IsPlaying)
                 {
                     Tween_CursorOpacity.Rewind();
                 }
             }
 
-            Tween_CursorOpacity = DOTween.To(() => CursorOpacity, x => CursorOpacity = x, opacity, CursorOpacity_TweenDuration).SetEase(CursorOpacity_TweenEase).SetAutoKill(true);
+            Tween_CursorOpacity = XTween.To(() => CursorOpacity, x => CursorOpacity = x, opacity, CursorOpacity_TweenDuration).SetEase(CursorOpacity_TweenEase).SetAutoKill(true);
         }
 
         /// <summary>

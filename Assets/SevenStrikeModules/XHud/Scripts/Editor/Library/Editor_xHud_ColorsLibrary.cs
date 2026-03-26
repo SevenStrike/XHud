@@ -36,11 +36,11 @@ namespace SevenStrikeModules.XHud
         public List<ExportItem> ColorsInfo;
     }
 
-    [CustomEditor(typeof(xHud_Library_Colors))]
-    public class Editor_xHud_ColorsLibrary : Editor
+    [CustomEditor(typeof(XHud_Library_Colors))]
+    public class Editor_XHud_ColorsLibrary : Editor
     {
         #region 组件 / 列表
-        private xHud_Library_Colors BaseScript;
+        private XHud_Library_Colors BaseScript;
         /// <summary>
         /// 颜色列表
         /// </summary>
@@ -88,7 +88,7 @@ namespace SevenStrikeModules.XHud
 
         private void OnEnable()
         {
-            BaseScript = (xHud_Library_Colors)target;
+            BaseScript = (XHud_Library_Colors)target;
 
             #region 获取序列化属性
             sp_ColorLibrary_Original = serializedObject.FindProperty("ColorLibrary");
@@ -107,18 +107,18 @@ namespace SevenStrikeModules.XHud
             blocked_col = new Color(0, 0, 0, blocked_alp);
 
             #region 获取图标
-            import_p = Editor_xHudGUI.GetIcon("Icons_Hud_ColorsLibrary/import_p");
-            import_r = Editor_xHudGUI.GetIcon("Icons_Hud_ColorsLibrary/import_r");
-            export_p = Editor_xHudGUI.GetIcon("Icons_Hud_ColorsLibrary/export_p");
-            export_r = Editor_xHudGUI.GetIcon("Icons_Hud_ColorsLibrary/export_r");
-            clear_p = Editor_xHudGUI.GetIcon("Icons_Hud_ColorsLibrary/clear_p");
-            clear_r = Editor_xHudGUI.GetIcon("Icons_Hud_ColorsLibrary/clear_r");
-            create_p = Editor_xHudGUI.GetIcon("Icons_Hud_ColorsLibrary/create_p");
-            create_r = Editor_xHudGUI.GetIcon("Icons_Hud_ColorsLibrary/create_r");
-            delete_p = Editor_xHudGUI.GetIcon("Icons_Hud_ColorsLibrary/delete_p");
-            delete_r = Editor_xHudGUI.GetIcon("Icons_Hud_ColorsLibrary/delete_r");
-            random_p = Editor_xHudGUI.GetIcon("Icons_Hud_ColorsLibrary/random_p");
-            random_r = Editor_xHudGUI.GetIcon("Icons_Hud_ColorsLibrary/random_r");
+            import_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ColorsLibrary/import_p");
+            import_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ColorsLibrary/import_r");
+            export_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ColorsLibrary/export_p");
+            export_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ColorsLibrary/export_r");
+            clear_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ColorsLibrary/clear_p");
+            clear_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ColorsLibrary/clear_r");
+            create_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ColorsLibrary/create_p");
+            create_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ColorsLibrary/create_r");
+            delete_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ColorsLibrary/delete_p");
+            delete_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ColorsLibrary/delete_r");
+            random_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ColorsLibrary/random_p");
+            random_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ColorsLibrary/random_r");
             #endregion
 
             //设定列表项高度值
@@ -128,7 +128,7 @@ namespace SevenStrikeModules.XHud
             sp_visibleItemCount.intValue = 10;
             sp_visibleItemCount.serializedObject.ApplyModifiedProperties();
 
-            PalletIcon = Editor_xHudGUI.GetIcon("Icons_Hud_ColorsLibrary/palletmark");
+            PalletIcon = Editor_XHud_GUI.GetIcon("Icons_Hud_ColorsLibrary/palletmark");
 
             #region ReorderableList - ColorInfoList
             ColorInfoList_Original = new ReorderableList(serializedObject, sp_ColorLibrary_Original, true, true, true, true);
@@ -192,25 +192,25 @@ namespace SevenStrikeModules.XHud
             SerializedProperty sp_des = prop.FindPropertyRelative("Description");
 
             drawelement_rect.Set(rect.x + 15, rect.y + 3, 30, 20);
-            Editor_xHudGUI.Gui_Labelfield(drawelement_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
+            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
 
             GUI.backgroundColor = sp_color.colorValue;
             drawelement_rect.Set(rect.x + 15, rect.y + 25, 12, 12);
-            Editor_xHudGUI.Gui_Icon(drawelement_rect, PalletIcon);
+            Editor_XHud_GUI.Gui_Icon(drawelement_rect, PalletIcon);
             GUI.backgroundColor = Color.white;
 
             BlockGUI(sp_name.stringValue);
 
             drawelement_rect.Set(rect.x + 42, rect.y + 3, rect.width - 160, 20);
-            Editor_xHudGUI.Gui_Labelfield(drawelement_rect, sp_name.stringValue, HudFilled.无, HudColor.深空灰, sp_color.colorValue, TextAnchor.MiddleLeft, Vector2.zero, 13, true, TextClipping.Ellipsis, true);
+            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, sp_name.stringValue, HudFilled.无, HudColor.深空灰, sp_color.colorValue, TextAnchor.MiddleLeft, Vector2.zero, 13, true, TextClipping.Ellipsis, true);
 
             drawelement_rect.Set(rect.x + 42, rect.y + 25, rect.width - 200, 20);
-            Editor_xHudGUI.Gui_Labelfield_Thin_WithClipping(drawelement_rect, sp_des.stringValue, HudFilled.无, HudColor.无, Color.white * 0.65f, TextAnchor.MiddleLeft, Vector2.zero, 11, true, true, true, TextClipping.Ellipsis);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WithClipping(drawelement_rect, sp_des.stringValue, HudFilled.无, HudColor.无, Color.white * 0.65f, TextAnchor.MiddleLeft, Vector2.zero, 11, true, true, true, TextClipping.Ellipsis);
 
             BlockGUI(sp_name.stringValue);
 
             drawelement_rect.Set(rect.width - 80, rect.y + 5, 60, 20);
-            sp_color.colorValue = Editor_xHudGUI.Gui_ColorField(drawelement_rect, sp_color.colorValue);
+            sp_color.colorValue = Editor_XHud_GUI.Gui_ColorField(drawelement_rect, sp_color.colorValue);
             sp_color.serializedObject.ApplyModifiedProperties();
 
             GUI.enabled = true;
@@ -242,11 +242,11 @@ namespace SevenStrikeModules.XHud
                     chc.Type = "HudCopyColor";
                     string json = JsonConvert.SerializeObject(chc);
 
-                    Editor_xHudGUI.EditorData_Set_With_String("XED_ColorLibrary_Get_ColorInfo", json);
+                    Editor_XHud_GUI.EditorData_Set_With_String("XED_ColorLibrary_Get_ColorInfo", json);
 
-                    string hexcol = xHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true);
+                    string hexcol = XHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true);
 
-                    Editor_xHudGUI.Open(xHudDialogType.确认, "HudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>色卡信息已就绪！请选择需要识别的动画器后右键菜单点击识别色卡即可应用该色卡颜色！", "明白");
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>色卡信息已就绪！请选择需要识别的动画器后右键菜单点击识别色卡即可应用该色卡颜色！", "明白");
                 });
                 menu.AddItem(new GUIContent("E (修改色卡信息)"), false, () =>
                 {
@@ -266,46 +266,46 @@ namespace SevenStrikeModules.XHud
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("D (拷贝色卡的 Hex 颜色)"), false, () =>
                 {
-                    GUIUtility.systemCopyBuffer = xHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true).Split(new char[1] { '#' })[1];
+                    GUIUtility.systemCopyBuffer = XHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true).Split(new char[1] { '#' })[1];
 
-                    string hexcol = xHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true);
+                    string hexcol = XHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true);
 
-                    Editor_xHudGUI.Open(xHudDialogType.确认, "HudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>Hex 色卡信息 {hexcol} 已拷贝到系统剪贴板！", "明白");
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>Hex 色卡信息 {hexcol} 已拷贝到系统剪贴板！", "明白");
                 });
                 menu.AddItem(new GUIContent("A (拷贝色卡的 R G B 颜色)"), false, () =>
                 {
-                    string hexcol = xHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true);
+                    string hexcol = XHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true);
 
-                    string mode = Editor_xHudGUI.Open(xHudDialogType.帮助, "HudColorLibrary 色卡库消息", "获取色卡信息", $"请选择您要获取色卡 <color={hexcol}>{sp_name.stringValue} </color>的 R G B 信息的模式！", "色卡值", "代码块");
+                    string mode = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "HudColorLibrary 色卡库消息", "获取色卡信息", $"请选择您要获取色卡 <color={hexcol}>{sp_name.stringValue} </color>的 R G B 信息的模式！", "色卡值", "代码块");
                     if (mode == "代码块")
                     {
                         string color = $"Color col = new Color({sp_color.colorValue.r}f, {sp_color.colorValue.g}f, {sp_color.colorValue.b}f);";
                         GUIUtility.systemCopyBuffer = color;
-                        Editor_xHudGUI.Open(xHudDialogType.确认, "HudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B 色卡代码块 {color} 已拷贝到系统剪贴板！", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B 色卡代码块 {color} 已拷贝到系统剪贴板！", "明白");
                     }
                     else
                     {
                         string rgb = $"{sp_color.colorValue.r},{sp_color.colorValue.g},{sp_color.colorValue.b}";
                         GUIUtility.systemCopyBuffer = rgb;
-                        Editor_xHudGUI.Open(xHudDialogType.确认, "HudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B 色卡信息 {rgb} 已拷贝到系统剪贴板！", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B 色卡信息 {rgb} 已拷贝到系统剪贴板！", "明白");
                     }
                 });
                 menu.AddItem(new GUIContent("X (拷贝色卡的 R G B A 颜色)"), false, () =>
                 {
-                    string hexcol = xHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true);
+                    string hexcol = XHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true);
 
-                    string mode = Editor_xHudGUI.Open(xHudDialogType.帮助, "HudColorLibrary 色卡库消息", "获取色卡信息", $"请选择您要获取色卡 <color={hexcol}>{sp_name.stringValue} </color>的 R G B A 信息的模式！", "色卡值", "代码块");
+                    string mode = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "HudColorLibrary 色卡库消息", "获取色卡信息", $"请选择您要获取色卡 <color={hexcol}>{sp_name.stringValue} </color>的 R G B A 信息的模式！", "色卡值", "代码块");
                     if (mode == "代码块")
                     {
                         string color = $"Color col = new Color({sp_color.colorValue.r}f, {sp_color.colorValue.g}f, {sp_color.colorValue.b}f, {sp_color.colorValue.a}f);";
                         GUIUtility.systemCopyBuffer = color;
-                        Editor_xHudGUI.Open(xHudDialogType.确认, "HudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B A 色卡代码块 {color} 已拷贝到系统剪贴板！", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B A 色卡代码块 {color} 已拷贝到系统剪贴板！", "明白");
                     }
                     else
                     {
                         string rgba = $"{sp_color.colorValue.r},{sp_color.colorValue.g},{sp_color.colorValue.b},{sp_color.colorValue.a}";
                         GUIUtility.systemCopyBuffer = rgba;
-                        Editor_xHudGUI.Open(xHudDialogType.确认, "HudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B A 色卡信息 {rgba} 已拷贝到系统剪贴板！", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B A 色卡信息 {rgba} 已拷贝到系统剪贴板！", "明白");
                     }
                 });
                 // 显示右键菜单
@@ -324,7 +324,7 @@ namespace SevenStrikeModules.XHud
             if (index == sp_LocationSelectedIndex.intValue)
             {
                 drawelement_rect.Set(rect.width - 145, rect.y + 12, 50, 20);
-                Editor_xHudGUI.Gui_Labelfield(drawelement_rect, "已定位", HudFilled.无, HudColor.亮白, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, Vector2.zero, 11);
+                Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, "已定位", HudFilled.无, HudColor.亮白, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, Vector2.zero, 11);
             }
         }
 
@@ -355,7 +355,7 @@ namespace SevenStrikeModules.XHud
                     {
                         // 高亮标记表示选中
                         item_rect.Set(1, i * sp_itemHeight.floatValue + 12, 5, 5);
-                        EditorGUI.DrawRect(item_rect, xHud_Dashboard.Theme_Primary);
+                        EditorGUI.DrawRect(item_rect, XHud_Dashboard.Theme_Primary);
                         // 高亮背景表示选中
                         item_rect.Set(1, i * sp_itemHeight.floatValue, scrollview_rect.width + 20, sp_itemHeight.floatValue);
                         EditorGUI.DrawRect(item_rect, SelectedBg);
@@ -439,28 +439,28 @@ namespace SevenStrikeModules.XHud
         {
             serializedObject.Update();
 
-            Editor_xHudGUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "Hud - 色卡库", Color.black);
+            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "Hud - 色卡库", Color.black);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Property_Field("色卡库名称", sp_LibraryName);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("色卡库名称", sp_LibraryName);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Layout_Property_Field("过滤（包含）", sp_Highlight);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("过滤（包含）", sp_Highlight);
             if (EditorGUI.EndChangeCheck())
             {
                 sp_LocationSelectedIndex.intValue = -1;
                 sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
             }
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Layout_Property_Field("查找（精确）", sp_Find);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("查找（精确）", sp_Find);
             if (EditorGUI.EndChangeCheck())
             {
                 if (!string.IsNullOrEmpty(sp_Find.stringValue))
@@ -474,55 +474,55 @@ namespace SevenStrikeModules.XHud
                     sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
                 }
             }
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Seperator(1, xHud_Dashboard.Theme_SeperateLine);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_FlexSpace();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_FlexSpace();
 
             if (string.IsNullOrEmpty(sp_Highlight.stringValue))
             {
                 if (!Application.isPlaying)
                 {
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "读取色卡", import_r, import_p, 4))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "读取色卡", import_r, import_p, 4))
                     {
                         LoadPallets();
                     }
-                    Editor_xHudGUI.Gui_Layout_Space(35);
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "导出色卡", export_r, export_p, 4))
+                    Editor_XHud_GUI.Gui_Layout_Space(35);
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "导出色卡", export_r, export_p, 4))
                     {
                         ExportPallets();
                     }
-                    Editor_xHudGUI.Gui_Layout_Space(35);
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "清空色卡", clear_r, clear_p, 4))
+                    Editor_XHud_GUI.Gui_Layout_Space(35);
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "清空色卡", clear_r, clear_p, 4))
                     {
-                        string res = Editor_xHudGUI.Open(xHudDialogType.警告, "HudColorLibrary 色卡库消息", "清空所有色卡", "是否清空所有色卡项？请注意！如果您的场景中或是预制体中的动画器用到了该色卡库中的色卡，清空后会导致动画器的色卡信息丢失，请谨慎操作！", "清空", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudColorLibrary 色卡库消息", "清空所有色卡", "是否清空所有色卡项？请注意！如果您的场景中或是预制体中的动画器用到了该色卡库中的色卡，清空后会导致动画器的色卡信息丢失，请谨慎操作！", "清空", "暂不", 0);
                         if (res == "暂不")
                             return;
                         sp_ColorLibrary_Original.ClearArray();
                     }
-                    Editor_xHudGUI.Gui_Layout_Space(35);
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "添加色卡项", create_r, create_p, 4))
+                    Editor_XHud_GUI.Gui_Layout_Space(35);
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "添加色卡项", create_r, create_p, 4))
                     {
                         ColorInfoList_Original_Add(ColorInfoList_Original);
                     }
-                    Editor_xHudGUI.Gui_Layout_Space(35);
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "删除色卡项", delete_r, delete_p, 4))
+                    Editor_XHud_GUI.Gui_Layout_Space(35);
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "删除色卡项", delete_r, delete_p, 4))
                     {
                         ColorInfoList_Original_Remove(ColorInfoList_Original);
                     }
-                    Editor_xHudGUI.Gui_Layout_Space(35);
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "生成常用色卡颜色", random_r, random_p, 4))
+                    Editor_XHud_GUI.Gui_Layout_Space(35);
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "生成常用色卡颜色", random_r, random_p, 4))
                     {
-                        string res = Editor_xHudGUI.Open(xHudDialogType.警告, "HudColorLibrary 色卡库消息", "生成随机色卡", "是否要为色卡库随机生成一套颜色？生成后会覆盖当前的所有色卡项，请谨慎操作！", "暂不", "基础色", "高级灰", "通用色", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudColorLibrary 色卡库消息", "生成随机色卡", "是否要为色卡库随机生成一套颜色？生成后会覆盖当前的所有色卡项，请谨慎操作！", "暂不", "基础色", "高级灰", "通用色", 0);
                         if (res == "暂不")
                             return;
 
-                        string res_m = Editor_xHudGUI.Open(xHudDialogType.警告, "HudColorLibrary 色卡库消息", "生成随机色卡", "请选择生成模式！如果选择替换会覆盖当前的所有色卡项，请谨慎操作！", "追加", "替换", 1);
+                        string res_m = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudColorLibrary 色卡库消息", "生成随机色卡", "请选择生成模式！如果选择替换会覆盖当前的所有色卡项，请谨慎操作！", "追加", "替换", 1);
 
                         switch (res)
                         {
@@ -541,22 +541,22 @@ namespace SevenStrikeModules.XHud
             }
             else
             {
-                Editor_xHudGUI.Gui_Layout_LabelfieldThin("当前为过滤筛选状态", HudFilled.无, HudColor.无, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12);
+                Editor_XHud_GUI.Gui_Layout_LabelfieldThin("当前为过滤筛选状态", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12);
             }
-            Editor_xHudGUI.Gui_Layout_FlexSpace();
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_FlexSpace();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Seperator(1, xHud_Dashboard.Theme_SeperateLine);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "色卡列表", Color.white);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "色卡列表", Color.white);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             DrawColorInfoList_Original();
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -567,10 +567,10 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void OpenParameterSetter(xHud_LibraryArg_Color info, string originname, int index)
         {
-            Editor_xHud_LibrarySetTool_Color window = EditorWindow.GetWindow<Editor_xHud_LibrarySetTool_Color>(true);
+            Editor_XHud_LibrarySetTool_Color window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_Color>(true);
 
             window.titleContent = new GUIContent("XHud 色卡修改器");
-            Editor_xHudGUI.CenterEditorWindow(new Vector2Int(620, 530), window);
+            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(620, 530), window);
 
             window.SetTitle("XHud 色卡修改器");
             window.SetInfo(info.Name, info.Description, info.Color);
@@ -626,8 +626,8 @@ namespace SevenStrikeModules.XHud
                 for (int i = 0; i < BaseScript.ColorLibrary.Count; i++)
                 {
                     ExportItem item = new ExportItem();
-                    item.color = xHud_Utilitys.Color_To_String(BaseScript.ColorLibrary[i].Color);
-                    item.hex = xHud_Utilitys.Color_To_HexColor(BaseScript.ColorLibrary[i].Color);
+                    item.color = XHud_Utilitys.Color_To_String(BaseScript.ColorLibrary[i].Color);
+                    item.hex = XHud_Utilitys.Color_To_HexColor(BaseScript.ColorLibrary[i].Color);
                     item.name = BaseScript.ColorLibrary[i].Name;
                     item.description = BaseScript.ColorLibrary[i].Description;
 
@@ -649,7 +649,7 @@ namespace SevenStrikeModules.XHud
         {
             string path = "";
 
-            string res = Editor_xHudGUI.Open(xHudDialogType.警告, "HudColorLibrary 色卡库消息", "读取色卡数据", "根据您的需要选择导入色卡数据的方式，如果是追加则会在当前色卡库的基础上后续叠加导入的色卡项，如果是替换则会完全替换当前色卡库的所有色卡项！", "追加", "替换", "暂不", 2);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudColorLibrary 色卡库消息", "读取色卡数据", "根据您的需要选择导入色卡数据的方式，如果是追加则会在当前色卡库的基础上后续叠加导入的色卡项，如果是替换则会完全替换当前色卡库的所有色卡项！", "追加", "替换", "暂不", 2);
             if (res == "暂不")
             {
                 return;
@@ -679,7 +679,7 @@ namespace SevenStrikeModules.XHud
                             SerializedProperty sp_des = sp_item.FindPropertyRelative("Description");
 
                             sp_name.stringValue = lib.ColorsInfo[i].name;
-                            sp_color.colorValue = xHud_Utilitys.Color_From_String(lib.ColorsInfo[i].color, false);
+                            sp_color.colorValue = XHud_Utilitys.Color_From_String(lib.ColorsInfo[i].color, false);
                             sp_des.stringValue = lib.ColorsInfo[i].description;
 
                             sp_name.serializedObject.ApplyModifiedProperties();
@@ -711,7 +711,7 @@ namespace SevenStrikeModules.XHud
                             SerializedProperty sp_des = sp_item.FindPropertyRelative("Description");
 
                             sp_name.stringValue = lib.ColorsInfo[i].name;
-                            sp_color.colorValue = xHud_Utilitys.Color_From_String(lib.ColorsInfo[i].color, false);
+                            sp_color.colorValue = XHud_Utilitys.Color_From_String(lib.ColorsInfo[i].color, false);
                             sp_des.stringValue = lib.ColorsInfo[i].description;
                             sp_name.serializedObject.ApplyModifiedProperties();
                             sp_color.serializedObject.ApplyModifiedProperties();

@@ -1,16 +1,15 @@
 namespace SevenStrikeModules.XHud.Hud
 {
-    using UnityEngine;
     using System.IO;
-    using UnityEngine.Rendering.Universal;
-    using UnityEngine.Events;
     using System.Text;
+    using UnityEngine;
+    using UnityEngine.Events;
+    using UnityEngine.Rendering.Universal;
     using Random = System.Random;
 #if UNITY_EDITOR
-    using UnityEditor;
 #endif
 
-    public class xHud_CameraCapture : MonoBehaviour
+    public class XHud_CameraCapture : MonoBehaviour
     {
         /// <summary>
         /// 截图格式
@@ -108,7 +107,7 @@ namespace SevenStrikeModules.XHud.Hud
                 TargetCamera.clearFlags = CameraClearFlags.SolidColor;
                 x_UICamera_Bgcolor_Original = TargetCamera.backgroundColor;
                 TargetCamera.backgroundColor = x_UICamera_bgcolor;
-                xHud_Dashboard.HudManagerGet().BlurMask.enabled = false;
+                XHud_Dashboard.HudManagerGet().BlurMask.enabled = false;
             }
 
             if (x_mode == CaptureCameraType.场景相机)
@@ -141,7 +140,7 @@ namespace SevenStrikeModules.XHud.Hud
                     universal.renderType = CameraRenderType.Overlay;
                     TargetCamera.backgroundColor = x_UICamera_Bgcolor_Original;
                     TargetCamera.clearFlags = CameraClearFlags.Depth;
-                    xHud_Dashboard.HudManagerGet().BlurMask.enabled = true;
+                    XHud_Dashboard.HudManagerGet().BlurMask.enabled = true;
                 }
                 if (x_mode == CaptureCameraType.场景相机)
                 {

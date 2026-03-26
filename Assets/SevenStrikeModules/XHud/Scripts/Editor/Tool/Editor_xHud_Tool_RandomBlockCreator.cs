@@ -3,7 +3,7 @@ namespace SevenStrikeModules.XHud.Utilitys
     using UnityEngine;
     using UnityEditor;
 
-    public class Editor_xHud_Tool_RandomBlockCreator : EditorWindow
+    public class Editor_XHud_Tool_RandomBlockCreator : EditorWindow
     {
         // 生成的 Cube 数量
         public int cubeCount = 20;
@@ -19,7 +19,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("Tools/XHud/RandomBlockCreator")]
         public static void ShowWindow()
         {
-            GetWindow<Editor_xHud_Tool_RandomBlockCreator>("Random Group Generator");
+            GetWindow<Editor_XHud_Tool_RandomBlockCreator>("Random Group Generator");
         }
 
         private void OnGUI()

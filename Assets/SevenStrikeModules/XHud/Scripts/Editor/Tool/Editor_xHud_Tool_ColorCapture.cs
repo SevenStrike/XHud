@@ -12,7 +12,7 @@ namespace SevenStrikeModules.XHud.Utilitys
     using RangeAttribute = UnityEngine.RangeAttribute;
 
     [System.Serializable]
-    public class xHud_Tool_ColorCaptureNode
+    public class XHud_Tool_ColorCaptureNode
     {
         [SerializeField]
         public Color color_theme;
@@ -47,7 +47,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         高级灰
     }
 
-    public class Editor_xHud_Tool_ColorCapture : EditorWindow
+    public class Editor_XHud_Tool_ColorCapture : EditorWindow
     {
         private SerializedObject BaseObject;
         private SerializedProperty sp_ReferImage, sp_ColorCaptureNode, sp_TargetColors, sp_MaxIterations, sp_ConvergenceThreshold, sp_SampleInterval, sp_ColorSimilarityThreshold, sp_ApproximateOffset, sp_AnalogousOffset, sp_GrayOffset, sp_GrayBright;
@@ -57,9 +57,9 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// </summary>
         public ReorderableList ReorderableList_ExtrctionColors;
 
-        private static Editor_xHud_Tool_ColorCapture window;
+        private static Editor_XHud_Tool_ColorCapture window;
 
-        public List<xHud_Tool_ColorCaptureNode> ColorCaptureNode = new List<xHud_Tool_ColorCaptureNode>();
+        public List<XHud_Tool_ColorCaptureNode> ColorCaptureNode = new List<XHud_Tool_ColorCaptureNode>();
 
         #region 主题色
         public int TargetColors = 30; // 目标颜色数量
@@ -142,8 +142,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("Tools/XHud/ColorCaptureTools #x")]
         static void Init()
         {
-            window = (Editor_xHud_Tool_ColorCapture)EditorWindow.GetWindow(typeof(Editor_xHud_Tool_ColorCapture), true, "XHUD图片色调提取工具", true);
-            Editor_xHudGUI.CenterEditorWindow(new Vector2Int(800, 620), window);
+            window = (Editor_XHud_Tool_ColorCapture)EditorWindow.GetWindow(typeof(Editor_XHud_Tool_ColorCapture), true, "XHUD图片色调提取工具", true);
+            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(800, 620), window);
             window.Show();
         }
 
@@ -167,25 +167,25 @@ namespace SevenStrikeModules.XHud.Utilitys
             sp_GrayOffset = BaseObject.FindProperty("GrayOffset");
             sp_GrayBright = BaseObject.FindProperty("GrayBright");
 
-            logo = Editor_xHudGUI.GetIcon("Icons_ColorCaptureTool/logo");
-            btn_ext_color_r = Editor_xHudGUI.GetIcon("Icons_ColorCaptureTool/btn_ext_color_r");
-            btn_ext_color_p = Editor_xHudGUI.GetIcon("Icons_ColorCaptureTool/btn_ext_color_p");
-            btn_save_r = Editor_xHudGUI.GetIcon("Icons_ColorCaptureTool/btn_save_r");
-            btn_save_p = Editor_xHudGUI.GetIcon("Icons_ColorCaptureTool/btn_save_p");
+            logo = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/logo");
+            btn_ext_color_r = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/btn_ext_color_r");
+            btn_ext_color_p = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/btn_ext_color_p");
+            btn_save_r = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/btn_save_r");
+            btn_save_p = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/btn_save_p");
 
-            left_arrow_r = Editor_xHudGUI.GetIcon("Icons_ColorCaptureTool/left_arrow_r");
-            left_arrow_p = Editor_xHudGUI.GetIcon("Icons_ColorCaptureTool/left_arrow_p");
-            right_arrow_r = Editor_xHudGUI.GetIcon("Icons_ColorCaptureTool/right_arrow_r");
-            right_arrow_p = Editor_xHudGUI.GetIcon("Icons_ColorCaptureTool/right_arrow_p");
+            left_arrow_r = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/left_arrow_r");
+            left_arrow_p = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/left_arrow_p");
+            right_arrow_r = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/right_arrow_r");
+            right_arrow_p = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/right_arrow_p");
 
 
-            Font_Bold = Editor_xHudGUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_xHudGUI.GetFont("SS_Editor_Dialog");
+            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
+            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
 
             ReferImages = new Texture2D[10];
             for (int i = 0; i < ReferImages.Length; i++)
             {
-                ReferImages[i] = AssetDatabase.LoadAssetAtPath<Texture2D>($"{xHud_Dashboard.Get_GUIStyle_Path()}Icon/Icons_ColorCaptureTool/ReferImages/ReferImg_{i}.png");
+                ReferImages[i] = AssetDatabase.LoadAssetAtPath<Texture2D>($"{XHud_Dashboard.Get_GUIStyle_Path()}Icon/Icons_ColorCaptureTool/ReferImages/ReferImg_{i}.png");
             }
 
             ReferImage = ReferImages[referIndex];
@@ -230,15 +230,15 @@ namespace SevenStrikeModules.XHud.Utilitys
             SerializedProperty sp_color_advancedgray = prop.FindPropertyRelative("color_advancedgray");
 
 
-            Editor_xHudGUI.Gui_Labelfield(index_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
+            Editor_XHud_GUI.Gui_Labelfield(index_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
 
             float interval = 35;
 
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 40, rect.y, 45, 20), "", "", sp_color_theme);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 80 + interval, rect.y, 45, 20), "", "", sp_color_complementary);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 120 + interval * 2, rect.y, 45, 20), "", "", sp_color_approximate);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 160 + interval * 3, rect.y, 45, 20), "", "", sp_color_analogous);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 200 + interval * 4, rect.y, 45, 20), "", "", sp_color_advancedgray);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 40, rect.y, 45, 20), "", "", sp_color_theme);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 80 + interval, rect.y, 45, 20), "", "", sp_color_complementary);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 120 + interval * 2, rect.y, 45, 20), "", "", sp_color_approximate);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 160 + interval * 3, rect.y, 45, 20), "", "", sp_color_analogous);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 200 + interval * 4, rect.y, 45, 20), "", "", sp_color_advancedgray);
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 {
                     itemmark_rect = new Rect(item_rect.x + 1, item_rect.y + 11, 5, 5);
                     // 高亮标记表示选中
-                    EditorGUI.DrawRect(itemmark_rect, xHud_Dashboard.Theme_Primary);
+                    EditorGUI.DrawRect(itemmark_rect, XHud_Dashboard.Theme_Primary);
                     itemmarkBg_rect = new Rect(item_rect.x, item_rect.y, item_rect.width + 20, item_rect.height);
                     // 高亮背景表示选中
                     EditorGUI.DrawRect(itemmarkBg_rect, new Color(0, 0, 0, 0.2f));
@@ -294,7 +294,7 @@ namespace SevenStrikeModules.XHud.Utilitys
 
         private void OnGUI()
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             BaseObject.Update();
 
@@ -303,22 +303,22 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             Icon_rect = new Rect(15, 15, 48, 48);
 
-            Editor_xHudGUI.Gui_Icon(Icon_rect, logo);
+            Editor_XHud_GUI.Gui_Icon(Icon_rect, logo);
 
             Title_rect = new Rect(rect.x + 85, rect.y + 15, rect.width - 80, 30);
-            Editor_xHudGUI.Gui_Labelfield(Title_rect, "XHUD图片色调提取工具", HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
+            Editor_XHud_GUI.Gui_Labelfield(Title_rect, "XHUD图片色调提取工具", HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
 
             Sepline_rect = new Rect(rect.x + 85, rect.y + 60, 200, 1);
-            Editor_xHudGUI.Gui_Box(Sepline_rect, SepLineColor);
+            Editor_XHud_GUI.Gui_Box(Sepline_rect, SepLineColor);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 18, rect.y + 80, rect.width - 38, rect.height), "此工具可根据指定的图片来分析出主题色调，并且通过主题色调分离并拓展出：互补色、近似色、类似色和高级灰色来提供颜色创意，按键：G 再次生成", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 18, rect.y + 80, rect.width - 38, rect.height), "此工具可根据指定的图片来分析出主题色调，并且通过主题色调分离并拓展出：互补色、近似色、类似色和高级灰色来提供颜色创意，按键：G 再次生成", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
             #endregion
 
             #region 参考图片 / 参数
-            Editor_xHudGUI.Gui_Icon(new Rect(rect.x + 18, rect.y + 140, 320, 190), ReferImage);
+            Editor_XHud_GUI.Gui_Icon(new Rect(rect.x + 18, rect.y + 140, 320, 190), ReferImage);
 
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 340, 320, 20), "参考图片", sp_ReferImage, 0, 110);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 340, 320, 20), "参考图片", sp_ReferImage, 0, 110);
             if (EditorGUI.EndChangeCheck())
             {
                 UseCustomTexture = true;
@@ -327,7 +327,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             if (!UseCustomTexture)
             {
                 #region 图片控件
-                if (Editor_xHudGUI.Gui_Button(new Rect(rect.x + 20, rect.y + 290, 32, 32), left_arrow_r, left_arrow_p, true, "", "", Color.white))
+                if (Editor_XHud_GUI.Gui_Button(new Rect(rect.x + 20, rect.y + 290, 32, 32), left_arrow_r, left_arrow_p, true, "", "", Color.white))
                 {
                     if (referIndex <= 0)
                         referIndex = ReferImages.Length - 1;
@@ -338,7 +338,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                     TextureColors_Get();
                 }
 
-                if (Editor_xHudGUI.Gui_Button(new Rect(rect.x + 300, rect.y + 290, 32, 32), right_arrow_r, right_arrow_p, true, "", "", Color.white))
+                if (Editor_XHud_GUI.Gui_Button(new Rect(rect.x + 300, rect.y + 290, 32, 32), right_arrow_r, right_arrow_p, true, "", "", Color.white))
                 {
                     if (referIndex >= ReferImages.Length - 1)
                         referIndex = 0;
@@ -350,27 +350,27 @@ namespace SevenStrikeModules.XHud.Utilitys
                 #endregion
             }
 
-            Editor_xHudGUI.Gui_Box(new Rect(rect.x + 18, rect.y + 375, 320, 1), Color.gray * 0.75f);
+            Editor_XHud_GUI.Gui_Box(new Rect(rect.x + 18, rect.y + 375, 320, 1), Color.gray * 0.75f);
 
             float Added = 30;
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 365 + Added, 150, 20), "提取数量上限", sp_TargetColors, 0, 90);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 188, rect.y + 365 + Added, 150, 20), "最大迭代色", sp_MaxIterations, 0, 80);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 390 + Added, 320, 20), "收敛阈值", sp_ConvergenceThreshold, 0, 110);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 415 + Added, 320, 20), "采样间隔", sp_SampleInterval, 0, 110);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 440 + Added, 320, 20), "颜色相似阈值", sp_ColorSimilarityThreshold, 0, 110);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 465 + Added, 320, 20), "近似色偏移", sp_ApproximateOffset, 0, 110);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 490 + Added, 320, 20), "类似色偏移", sp_AnalogousOffset, 0, 110);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 515 + Added, 320, 20), "高级灰浓度", sp_GrayOffset, 0, 110);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 540 + Added, 320, 20), "高级灰明度", sp_GrayBright, 0, 110);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 365 + Added, 150, 20), "提取数量上限", sp_TargetColors, 0, 90);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 188, rect.y + 365 + Added, 150, 20), "最大迭代色", sp_MaxIterations, 0, 80);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 390 + Added, 320, 20), "收敛阈值", sp_ConvergenceThreshold, 0, 110);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 415 + Added, 320, 20), "采样间隔", sp_SampleInterval, 0, 110);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 440 + Added, 320, 20), "颜色相似阈值", sp_ColorSimilarityThreshold, 0, 110);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 465 + Added, 320, 20), "近似色偏移", sp_ApproximateOffset, 0, 110);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 490 + Added, 320, 20), "类似色偏移", sp_AnalogousOffset, 0, 110);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 515 + Added, 320, 20), "高级灰浓度", sp_GrayOffset, 0, 110);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 540 + Added, 320, 20), "高级灰明度", sp_GrayBright, 0, 110);
             #endregion
 
             #region 计算按钮
-            if (Editor_xHudGUI.Gui_Button(new Rect(rect.width - 60, rect.y + 20, 18, 18), btn_ext_color_r, btn_ext_color_p, true, "", "", Color.white))
+            if (Editor_XHud_GUI.Gui_Button(new Rect(rect.width - 60, rect.y + 20, 18, 18), btn_ext_color_r, btn_ext_color_p, true, "", "", Color.white))
             {
                 TextureColors_Get();
             }
 
-            if (Editor_xHudGUI.Gui_Button(new Rect(rect.width - 110, rect.y + 20, 18, 18), btn_save_r, btn_save_p, true, "", "", Color.white))
+            if (Editor_XHud_GUI.Gui_Button(new Rect(rect.width - 110, rect.y + 20, 18, 18), btn_save_r, btn_save_p, true, "", "", Color.white))
             {
                 SaveColors();
             }
@@ -380,15 +380,15 @@ namespace SevenStrikeModules.XHud.Utilitys
             float baseoffset = rect.x + 385;
             float interval = 75.5f;
 
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(new Rect(baseoffset, rect.y + 120, 60, 25), "主题色", HudFilled.无, HudColor.无, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(baseoffset, rect.y + 120, 60, 25), "主题色", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12, true, Font_Light);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(new Rect(baseoffset + interval, rect.y + 120, 60, 25), "互补色", HudFilled.无, HudColor.无, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(baseoffset + interval, rect.y + 120, 60, 25), "互补色", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12, true, Font_Light);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(new Rect(baseoffset + interval * 2, rect.y + 120, 60, 25), "近似色", HudFilled.无, HudColor.无, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(baseoffset + interval * 2, rect.y + 120, 60, 25), "近似色", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12, true, Font_Light);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(new Rect(baseoffset + interval * 3, rect.y + 120, 60, 25), "类似色", HudFilled.无, HudColor.无, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(baseoffset + interval * 3, rect.y + 120, 60, 25), "类似色", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12, true, Font_Light);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(new Rect(baseoffset + interval * 4, rect.y + 120, 60, 25), "高级灰", HudFilled.无, HudColor.无, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(baseoffset + interval * 4, rect.y + 120, 60, 25), "高级灰", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12, true, Font_Light);
             #endregion
 
             ExtrctionColors_Drawer();
@@ -470,7 +470,7 @@ namespace SevenStrikeModules.XHud.Utilitys
 
             for (int i = 0; i < finalcols.Count; i++)
             {
-                xHud_Tool_ColorCaptureNode s_color = new xHud_Tool_ColorCaptureNode();
+                XHud_Tool_ColorCaptureNode s_color = new XHud_Tool_ColorCaptureNode();
                 s_color.color_theme = finalcols[i];
                 s_color.color_complementary = Complementary_Creator(finalcols[i]);
                 s_color.color_approximate = Approximate_Creator(finalcols[i], ApproximateOffset);
@@ -663,30 +663,30 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <param name="folder"></param>
         private void SaveColors()
         {
-            string hexcol = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
-            string state = Editor_xHudGUI.Open(xHudDialogType.帮助, "ColorCaptureTool颜色提取工具通知", "导出为套系色卡库", $"是否要为当前图片<color={hexcol}>提取的套系色调</color>创建套装色板？选定文件夹后即会在该文件夹中创建<color={hexcol}>整套色板</color>，包含：<color={hexcol}>主题色</color> Theme、<color={hexcol}>互补色</color> Complementary、<color={hexcol}>近似色</color> Approximate、<color={hexcol}>类似色</color> Analogous、<color={hexcol}>高级灰</color> AdvanceGray", "创建", "暂不", 0);
+            string state = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "ColorCaptureTool颜色提取工具通知", "导出为套系色卡库", $"是否要为当前图片<color={hexcol}>提取的套系色调</color>创建套装色板？选定文件夹后即会在该文件夹中创建<color={hexcol}>整套色板</color>，包含：<color={hexcol}>主题色</color> Theme、<color={hexcol}>互补色</color> Complementary、<color={hexcol}>近似色</color> Approximate、<color={hexcol}>类似色</color> Analogous、<color={hexcol}>高级灰</color> AdvanceGray", "创建", "暂不", 0);
 
             if (state == "创建")
             {
                 //创建颜色库 - Theme
-                xHud_Library_Colors lib_color_theme = ScriptableObject.CreateInstance<xHud_Library_Colors>();
+                XHud_Library_Colors lib_color_theme = ScriptableObject.CreateInstance<XHud_Library_Colors>();
                 lib_color_theme.LibraryName = $"{ReferImage.name}_ColorsLibrary_Theme";
 
                 //创建颜色库 - Complementary
-                xHud_Library_Colors lib_color_complementary = ScriptableObject.CreateInstance<xHud_Library_Colors>();
+                XHud_Library_Colors lib_color_complementary = ScriptableObject.CreateInstance<XHud_Library_Colors>();
                 lib_color_complementary.LibraryName = $"{ReferImage.name}_ColorsLibrary_Complementary";
 
                 //创建颜色库 - Approximate
-                xHud_Library_Colors lib_color_approximate = ScriptableObject.CreateInstance<xHud_Library_Colors>();
+                XHud_Library_Colors lib_color_approximate = ScriptableObject.CreateInstance<XHud_Library_Colors>();
                 lib_color_approximate.LibraryName = $"{ReferImage.name}_ColorsLibrary_Approximate";
 
                 //创建颜色库 - Analogous
-                xHud_Library_Colors lib_color_analogous = ScriptableObject.CreateInstance<xHud_Library_Colors>();
+                XHud_Library_Colors lib_color_analogous = ScriptableObject.CreateInstance<XHud_Library_Colors>();
                 lib_color_analogous.LibraryName = $"{ReferImage.name}_ColorsLibrary_Analogous";
 
                 //创建颜色库 - AdvanceGray
-                xHud_Library_Colors lib_color_advanceGray = ScriptableObject.CreateInstance<xHud_Library_Colors>();
+                XHud_Library_Colors lib_color_advanceGray = ScriptableObject.CreateInstance<XHud_Library_Colors>();
                 lib_color_advanceGray.LibraryName = $"{ReferImage.name}_ColorsLibrary_AdvanceGray";
 
                 List<Color> colors = new List<Color>();
@@ -694,7 +694,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 //加入颜色到各个类型的色板中
                 for (int i = 0; i < ColorCaptureNode.Count; i++)
                 {
-                    xHud_Tool_ColorCaptureNode node = ColorCaptureNode[i];
+                    XHud_Tool_ColorCaptureNode node = ColorCaptureNode[i];
                     lib_color_theme.ColorsLibrary_AddColor("Theme_" + i, node.color_theme, "-");
                     lib_color_complementary.ColorsLibrary_AddColor("Complementary_" + i, node.color_complementary, "-");
                     lib_color_approximate.ColorsLibrary_AddColor("Approximate_" + i, node.color_approximate, "-");

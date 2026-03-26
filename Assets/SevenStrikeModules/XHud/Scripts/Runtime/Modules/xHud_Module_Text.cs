@@ -6,7 +6,7 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEngine.Events;
     using UnityEngine.UI;
 
-    public class xHud_Module_Text : Text
+    public class XHud_Module_Text : Text
     {
         [SerializeField]
         /// <summary>
@@ -47,25 +47,25 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// Hud管理器
         /// </summary>
-        private xHud_Manager mgr;
+        private XHud_Manager mgr;
 
         [SerializeField]
         /// <summary>
         /// 字体样式 - 本地
         /// </summary>
-        public xHud_LibraryArg_TextStyle TextStyleInfo = new xHud_LibraryArg_TextStyle();
+        public XHud_LibraryArg_TextStyle TextStyleInfo = new XHud_LibraryArg_TextStyle();
         [SerializeField]
         /// <summary>
         /// 字体样式 - 库
         /// </summary>
-        public xHud_LibraryArg_TextStyle TextStyleInfo_Library = new xHud_LibraryArg_TextStyle();
+        public XHud_LibraryArg_TextStyle TextStyleInfo_Library = new XHud_LibraryArg_TextStyle();
 
         protected override void OnEnable()
         {
             base.OnEnable();
             if (!Application.isPlaying)
                 if (mgr == null)
-                    mgr = FindFirstObjectByType<xHud_Manager>();
+                    mgr = FindFirstObjectByType<XHud_Manager>();
         }
 
         protected override void Start()
@@ -121,7 +121,7 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (mgr == null)
                 {
-                    mgr = FindFirstObjectByType<xHud_Manager>();
+                    mgr = FindFirstObjectByType<XHud_Manager>();
                 }
             }
 
@@ -140,7 +140,7 @@ namespace SevenStrikeModules.XHud.Hud
                 #region 从库中获取字体样式资源到 TextStyleInfo
                 if (Application.isPlaying)
                 {
-                    TextStyleInfo_Library = xHud_Manager.Instance.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(StyleName);
+                    TextStyleInfo_Library = XHud_Manager.Instance.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(StyleName);
                 }
                 else
                 {
@@ -328,7 +328,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     else
                     {
-                        TextStyleInfo.Size_GlobalScaled = xHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.Size;
+                        TextStyleInfo.Size_GlobalScaled = XHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.Size;
                     }
 
                     if (TextStyleInfo.Size_GlobalScaled != fontSize)
@@ -355,7 +355,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     else
                     {
-                        TextStyleInfo.Fit_Min_GlobalScaled = xHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.Fit_Min;
+                        TextStyleInfo.Fit_Min_GlobalScaled = XHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.Fit_Min;
                     }
 
                     if (TextStyleInfo.Fit_Min_GlobalScaled != resizeTextMinSize)
@@ -380,7 +380,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     else
                     {
-                        TextStyleInfo.Fit_Max_GlobalScaled = xHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.Fit_Max;
+                        TextStyleInfo.Fit_Max_GlobalScaled = XHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.Fit_Max;
                     }
 
                     if (TextStyleInfo.Fit_Max_GlobalScaled != resizeTextMaxSize)
@@ -453,7 +453,7 @@ namespace SevenStrikeModules.XHud.Hud
         public void txt_Set_Content(string content, bool ParseEscape = true)
         {
             if (ParseEscape)
-                base.text = xHud_Utilitys.ProcessEscapeSequences(content);
+                base.text = XHud_Utilitys.ProcessEscapeSequences(content);
             else
                 base.text = content;
         }
@@ -462,7 +462,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 从文字样式添加器反向更新文字样式
         /// </summary>
         /// <param tweenName="styleinfo"></param>
-        public void txt_Set_Style_ForSetter(xHud_LibraryArg_TextStyle styleinfo)
+        public void txt_Set_Style_ForSetter(XHud_LibraryArg_TextStyle styleinfo)
         {
             TextStyleInfo = styleinfo;
             //Text_Set_Alignment(styleinfo.ContentAnchor);

@@ -34,7 +34,7 @@ namespace SevenStrikeModules.XHud
     }
 
     [CreateAssetMenu(fileName = "XHud_Library_Curves", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-Curve (曲线库)", order = 0)]
-    public class xHud_Library_Curves : ScriptableObject
+    public class XHud_Library_Curves : ScriptableObject
     {
         public string LibraryName = "NewCurveLibrary";
         public List<xHud_LibraryArg_Curve> CurveLibrary = new List<xHud_LibraryArg_Curve>();

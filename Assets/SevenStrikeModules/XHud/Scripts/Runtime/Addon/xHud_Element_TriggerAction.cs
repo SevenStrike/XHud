@@ -1,52 +1,51 @@
 namespace SevenStrikeModules.XHud.Hud
 {
-    using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.EventSystems;
     using UnityEngine.UI;
 
-    public class xHud_Element_TriggerAction : EventTrigger
+    public class XHud_Element_TriggerAction : EventTrigger
     {
         public Image TriggerImage;
-        public xHud_Module_Element HudElement;
+        public XHud_Module_Element HudElement;
         public bool AutoClearActionsAndEvents;
 
         /// <summary>
         /// 动作 - 当 - 鼠标点击时
         /// </summary>
-        public UnityAction<xHud_Module_Element, PointerEventData> act_on_Clicked;
+        public UnityAction<XHud_Module_Element, PointerEventData> act_on_Clicked;
         /// <summary>
         /// 动作 - 当 - 鼠标按下时
         /// </summary>
-        public UnityAction<xHud_Module_Element, PointerEventData> act_on_Press;
+        public UnityAction<XHud_Module_Element, PointerEventData> act_on_Press;
         /// <summary>
         /// 动作 - 当 - 鼠标进入时
         /// </summary>
-        public UnityAction<xHud_Module_Element, PointerEventData> act_on_Enter;
+        public UnityAction<XHud_Module_Element, PointerEventData> act_on_Enter;
         /// <summary>
         /// 动作 - 当 - 鼠标退出时
         /// </summary>
-        public UnityAction<xHud_Module_Element, PointerEventData> act_on_Exit;
+        public UnityAction<XHud_Module_Element, PointerEventData> act_on_Exit;
         /// <summary>
         /// 动作 - 当 - 鼠标抬起时
         /// </summary>
-        public UnityAction<xHud_Module_Element, PointerEventData> act_on_Release;
+        public UnityAction<XHud_Module_Element, PointerEventData> act_on_Release;
         /// <summary>
         /// 动作 - 当 - 鼠标选中时
         /// </summary>
-        public UnityAction<xHud_Module_Element, BaseEventData> act_on_Select;
+        public UnityAction<XHud_Module_Element, BaseEventData> act_on_Select;
         /// <summary>
         /// 动作 - 当 - 鼠标取消选中时
         /// </summary>
-        public UnityAction<xHud_Module_Element, BaseEventData> act_on_Unselect;
+        public UnityAction<XHud_Module_Element, BaseEventData> act_on_Unselect;
         /// <summary>
         /// 动作 - 当 - 鼠标拖拽时
         /// </summary>
-        public UnityAction<xHud_Module_Element, BaseEventData> act_on_Drag;
+        public UnityAction<XHud_Module_Element, BaseEventData> act_on_Drag;
         /// <summary>
         /// 动作 - 当 - 鼠标放下时
         /// </summary>
-        public UnityAction<xHud_Module_Element, BaseEventData> act_on_Drop;
+        public UnityAction<XHud_Module_Element, BaseEventData> act_on_Drop;
 
         /// <summary>
         /// 事件 - 当 - 鼠标点击时
@@ -88,7 +87,7 @@ namespace SevenStrikeModules.XHud.Hud
         void Start()
         {
             if (HudElement == null)
-                HudElement = GetComponent<xHud_Module_Element>();
+                HudElement = GetComponent<XHud_Module_Element>();
             if (TriggerImage == null)
                 TriggerImage = GetComponent<Image>();
         }

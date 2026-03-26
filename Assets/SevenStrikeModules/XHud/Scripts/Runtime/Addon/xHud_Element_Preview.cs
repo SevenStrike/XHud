@@ -6,9 +6,9 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEngine;
     using UnityEngine.Events;
 
-    public class xHud_Element_Preview : MonoBehaviour
+    public class XHud_Element_Preview : MonoBehaviour
     {
-        public xHud_Module_Element HudElement;
+        public XHud_Module_Element HudElement;
 
         public bool IsEnable = true;
         public bool DebugState = false;
@@ -84,7 +84,7 @@ namespace SevenStrikeModules.XHud.Hud
         private void Awake()
         {
             if (HudElement == null)
-                HudElement = GetComponent<xHud_Module_Element>();
+                HudElement = GetComponent<XHud_Module_Element>();
             OriginalPosition = HudElement.RectTransform.anchoredPosition3D;
         }
 
@@ -96,7 +96,7 @@ namespace SevenStrikeModules.XHud.Hud
                 HudElement.element_AlphaSet(0);
                 HudElement.element_Reset(false, false, false);
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素预览器通知", "预览前初始化元素透明度为0！ ", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素预览器通知", "预览前初始化元素透明度为0！ ", HudMsgState.通知);
             }
             else
             {
@@ -151,14 +151,14 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnable)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素预览器通知", "预览开关已关闭！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素预览器通知", "预览开关已关闭！ ", HudMsgState.错误);
                 return;
             }
             if (HudElement.AnimateState == HudElementAnimateState.Animating)
                 return;
             StartCoroutine(Preview_Delay_In());
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素预览器通知", "预览 - 元素进入！ ", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素预览器通知", "预览 - 元素进入！ ", HudMsgState.通知);
         }
 
         /// <summary>
@@ -177,14 +177,14 @@ namespace SevenStrikeModules.XHud.Hud
             if (!IsEnable)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素预览器通知", "预览开关已关闭！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素预览器通知", "预览开关已关闭！ ", HudMsgState.错误);
                 return;
             }
             if (HudElement.AnimateState == HudElementAnimateState.Animating)
                 return;
             StartCoroutine(Preview_Delay_Out());
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素预览器通知", "预览 - 元素退出！ ", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素预览器通知", "预览 - 元素退出！ ", HudMsgState.通知);
         }
 
         IEnumerator Preview_Delay_In()
@@ -203,7 +203,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                         HudElement.element_PositionSet(OriginalPosition);
                         HudElement.element_AlphaSet(0);
-                        xHud_Manager.Instance.hm_HudElement_Initialize_ByDesignLayout_For_Screen(HudElement, 0, Vector3.zero, RMS_Name, true);
+                        XHud_Manager.Instance.hm_HudElement_Initialize_ByDesignLayout_For_Screen(HudElement, 0, Vector3.zero, RMS_Name, true);
                         HudElement.Animators_Rewind();
                         HudElement.element_In(CreateArgs, () =>
                         {

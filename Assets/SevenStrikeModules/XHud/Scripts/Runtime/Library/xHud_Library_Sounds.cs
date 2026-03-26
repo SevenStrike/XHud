@@ -10,7 +10,7 @@ namespace SevenStrikeModules.XHud
     /// <summary>
     /// Hud配色信息
     /// </summary>
-    public class xHud_LibraryArg_Sound
+    public class XHud_LibraryArg_Sound
     {
         public string Name;
         public AudioClip Clip;
@@ -18,7 +18,7 @@ namespace SevenStrikeModules.XHud
         public int Channel;
         public float Length;
 
-        public xHud_LibraryArg_Sound()
+        public XHud_LibraryArg_Sound()
         {
         }
 
@@ -27,7 +27,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="name">新增名称</param>
         /// <param tweenName="clip">新增配色</param>
-        public xHud_LibraryArg_Sound(string name, AudioClip clip)
+        public XHud_LibraryArg_Sound(string name, AudioClip clip)
         {
             Name = name;
             Clip = clip;
@@ -38,7 +38,7 @@ namespace SevenStrikeModules.XHud
     }
 
     [CreateAssetMenu(fileName = "XHud_Library_Sounds", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-Sound (音效库)", order = 0)]
-    public class xHud_Library_Sounds : ScriptableObject
+    public class XHud_Library_Sounds : ScriptableObject
     {
         /// <summary>
         /// 音效库名称
@@ -96,7 +96,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public int LocationSelectedIndex = -1;
 
-        public List<xHud_LibraryArg_Sound> SoundLibrary = new List<xHud_LibraryArg_Sound>();
+        public List<XHud_LibraryArg_Sound> SoundLibrary = new List<XHud_LibraryArg_Sound>();
         public UnityAction act_on_SoundChanged;
         public UnityAction<string, AudioClip> act_on_SoundAdded;
         public UnityAction act_on_SoundRemoved;
@@ -127,9 +127,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>        
         /// <param tweenName="name">目标音效名称</param>
         /// <returns></returns>
-        public xHud_LibraryArg_Sound SoundLibrary_GetSoundInfo(string name)
+        public XHud_LibraryArg_Sound SoundLibrary_GetSoundInfo(string name)
         {
-            xHud_LibraryArg_Sound info = null;
+            XHud_LibraryArg_Sound info = null;
             for (int x = 0; x < SoundLibrary.Count; x++)
             {
                 if (SoundLibrary[x].Name == name)
@@ -185,7 +185,7 @@ namespace SevenStrikeModules.XHud
                 }
             }
             if (!sw)
-                SoundLibrary.Add(new xHud_LibraryArg_Sound(name, sound));
+                SoundLibrary.Add(new XHud_LibraryArg_Sound(name, sound));
             if (act_on_SoundAdded != null)
                 act_on_SoundAdded(name, sound);
         }
@@ -307,7 +307,7 @@ namespace SevenStrikeModules.XHud
         /// 获取音效列表
         /// </summary>
         /// <returns></returns>
-        public xHud_LibraryArg_Sound[] SoundLibrary_GetSoundLibrary()
+        public XHud_LibraryArg_Sound[] SoundLibrary_GetSoundLibrary()
         {
             return SoundLibrary.ToArray();
         }

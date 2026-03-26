@@ -1,20 +1,19 @@
 namespace SevenStrikeModules.XHud.Utilitys
 {
     using SevenStrikeModules.XHud.GuiLib;
-    using SevenStrikeModules.XHud.Hud;
     using System.IO;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.UI;
 
     [CustomEditor(typeof(Image))]
-    public class Editor_xHud_Tool_ConvertSpriteToPureStyle : UnityEditor.UI.ImageEditor
+    public class Editor_XHud_Tool_ConvertSpriteToPureStyle : UnityEditor.UI.ImageEditor
     {
         // 在Image组件的上下文菜单中添加一个自定义选项
         [MenuItem("CONTEXT/Image/ConvertToPureSprite", priority = 100)]
         private static void ConvertPureSprite(MenuCommand command)
         {
-            string res = Editor_xHudGUI.Open(xHudDialogType.警告, "XHud PSD Reconstruction消息", "RMS残留信息", "是否需要为当前Image中的Sprite创建纯净Sprite并指定？", "创建", "暂不", 1);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud PSD Reconstruction消息", "RMS残留信息", "是否需要为当前Image中的Sprite创建纯净Sprite并指定？", "创建", "暂不", 1);
             if (res == "暂不")
             {
                 return;

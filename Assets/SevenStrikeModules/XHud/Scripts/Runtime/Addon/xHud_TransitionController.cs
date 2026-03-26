@@ -14,7 +14,7 @@ namespace SevenStrikeModules.XHud.Hud
         出场 = 1
     }
 
-    public class xHud_TransitionController : MonoBehaviour
+    public class XHud_TransitionController : MonoBehaviour
     {
         /// <summary>
         /// 转场图形组件
@@ -97,7 +97,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 用于预览的转场节点
         /// </summary>
-        public xHud_LibraryArg_Transition CurrentTransitionNode = new xHud_LibraryArg_Transition();
+        public XHud_LibraryArg_Transition CurrentTransitionNode = new XHud_LibraryArg_Transition();
 
         public KeyCode TransitionPlayKey = KeyCode.T;
         public KeyCode TransitionFlip_H_Key = KeyCode.H;
@@ -190,7 +190,7 @@ namespace SevenStrikeModules.XHud.Hud
                 return;
             }
 
-            xHud_LibraryArg_Transition node = xHud_Manager.Instance.Hud_TransitionLib.TransitionLibrary_Get(name);
+            XHud_LibraryArg_Transition node = XHud_Manager.Instance.Hud_TransitionLib.TransitionLibrary_Get(name);
             CurrentTransitionNode = node;
             if (mode == TransitionMode.入场)
             {
@@ -219,7 +219,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Transition_Set_ChannelInvert(false);
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("转场器通知", "开始转场 -> 入场！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("转场器通知", "开始转场 -> 入场！", HudMsgState.通知);
                 }
             }
             else
@@ -227,7 +227,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Transition_Set_ChannelInvert(true);
                 if (DebugState)
                 {
-                    xHud_Utilitys.Func_PrintInfo("转场器通知", "开始转场 -> 出场！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("转场器通知", "开始转场 -> 出场！", HudMsgState.通知);
                 }
             }
 
@@ -266,7 +266,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param tweenName="node"></param>
         /// <param tweenName="time"></param>
         /// <returns></returns>
-        IEnumerator TransitionPlayer(xHud_LibraryArg_Transition node, float time)
+        IEnumerator TransitionPlayer(XHud_LibraryArg_Transition node, float time)
         {
             int frameLimite_start = (int)Mathf.Floor(CurrentTransitionNode.Frames.Count * LimiteFramePer_Start);
             int frameLimite_end = (int)Mathf.Floor(CurrentTransitionNode.Frames.Count * LimiteFramePer_End);

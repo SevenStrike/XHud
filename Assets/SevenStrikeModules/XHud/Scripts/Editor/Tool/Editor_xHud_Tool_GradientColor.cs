@@ -8,7 +8,7 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEditorInternal;
     using UnityEngine;
 
-    public class Editor_xHud_Tool_GradientColor : EditorWindow
+    public class Editor_XHud_Tool_GradientColor : EditorWindow
     {
         private SerializedObject BaseObject;
         private SerializedProperty sp_ColorGradient, sp_Step, sp_Color_Start, sp_Color_End;
@@ -18,7 +18,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         public ReorderableList ReorderableList_GradientColors;
 
-        private static Editor_xHud_Tool_GradientColor window;
+        private static Editor_XHud_Tool_GradientColor window;
 
         [SerializeField]
         public List<Color> ColorGradient = new List<Color>();
@@ -28,7 +28,7 @@ namespace SevenStrikeModules.XHud.Hud
         [SerializeField]
         private int Step = 20;
         [SerializeField]
-        Color Color_Start = xHud_Dashboard.Theme_Primary;
+        Color Color_Start = XHud_Dashboard.Theme_Primary;
         [SerializeField]
         Color Color_End = Color.black;
 
@@ -69,8 +69,8 @@ namespace SevenStrikeModules.XHud.Hud
         [MenuItem("Tools/XHud/ColorGradientTools #g")]
         static void Init()
         {
-            window = (Editor_xHud_Tool_GradientColor)EditorWindow.GetWindow(typeof(Editor_xHud_Tool_GradientColor), true, "XHUD渐变色卡生成工具", true);
-            Editor_xHudGUI.CenterEditorWindow(new Vector2Int(360, 800), window);
+            window = (Editor_XHud_Tool_GradientColor)EditorWindow.GetWindow(typeof(Editor_XHud_Tool_GradientColor), true, "XHUD渐变色卡生成工具", true);
+            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(360, 800), window);
             window.Show();
         }
 
@@ -87,12 +87,12 @@ namespace SevenStrikeModules.XHud.Hud
             sp_Color_Start = BaseObject.FindProperty("Color_Start");
             sp_Color_End = BaseObject.FindProperty("Color_End");
 
-            logo = Editor_xHudGUI.GetIcon("Icons_ColorCaptureTool/logo");
-            btn_save_r = Editor_xHudGUI.GetIcon("Icons_ColorCaptureTool/btn_save_r");
-            btn_save_p = Editor_xHudGUI.GetIcon("Icons_ColorCaptureTool/btn_save_p");
+            logo = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/logo");
+            btn_save_r = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/btn_save_r");
+            btn_save_p = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/btn_save_p");
 
-            Font_Bold = Editor_xHudGUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_xHudGUI.GetFont("SS_Editor_Dialog");
+            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
+            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
 
             #region ReorderableList - 色表
             ReorderableList_GradientColors = new ReorderableList(BaseObject, sp_ColorGradient, false, false, false, false);
@@ -128,8 +128,8 @@ namespace SevenStrikeModules.XHud.Hud
 
             SerializedProperty prop = sp_ColorGradient.GetArrayElementAtIndex(index);
 
-            Editor_xHudGUI.Gui_Labelfield(index_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 40, rect.y + 3, rect.width - 40 - 20, 20), "", "", prop);
+            Editor_XHud_GUI.Gui_Labelfield(index_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 40, rect.y + 3, rect.width - 40 - 20, 20), "", "", prop);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace SevenStrikeModules.XHud.Hud
                 {
                     itemmark_rect = new Rect(item_rect.x + 1, item_rect.y + 11, 5, 5);
                     // 高亮标记表示选中
-                    EditorGUI.DrawRect(itemmark_rect, xHud_Dashboard.Theme_Primary);
+                    EditorGUI.DrawRect(itemmark_rect, XHud_Dashboard.Theme_Primary);
                     itemmarkBg_rect = new Rect(item_rect.x, item_rect.y, item_rect.width + 20, item_rect.height);
                     // 高亮背景表示选中
                     EditorGUI.DrawRect(itemmarkBg_rect, new Color(0, 0, 0, 0.2f));
@@ -185,7 +185,7 @@ namespace SevenStrikeModules.XHud.Hud
 
         private void OnGUI()
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             BaseObject.Update();
 
@@ -194,26 +194,26 @@ namespace SevenStrikeModules.XHud.Hud
 
             Icon_rect = new Rect(15, 15, 48, 48);
 
-            Editor_xHudGUI.Gui_Icon(Icon_rect, logo);
+            Editor_XHud_GUI.Gui_Icon(Icon_rect, logo);
 
             Title_rect = new Rect(rect.x + 85, rect.y + 15, rect.width - 80, 30);
-            Editor_xHudGUI.Gui_Labelfield(Title_rect, "XHUD渐变色卡生成工具", HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
+            Editor_XHud_GUI.Gui_Labelfield(Title_rect, "XHUD渐变色卡生成工具", HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
 
             Sepline_rect = new Rect(rect.x + 85, rect.y + 60, 200, 1);
-            Editor_xHudGUI.Gui_Box(Sepline_rect, SepLineColor);
+            Editor_XHud_GUI.Gui_Box(Sepline_rect, SepLineColor);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 18, rect.y + 80, rect.width - 38, rect.height), "此工具可根据指定的颜色来生成双色渐变色，并保存为色卡库来使用！", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 18, rect.y + 80, rect.width - 38, rect.height), "此工具可根据指定的颜色来生成双色渐变色，并保存为色卡库来使用！", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
             #endregion
 
             #region 参数
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 140, 100, 20), "起始色", sp_Color_Start, 0, 45);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 140, rect.y + 140, 100, 20), "结束色", sp_Color_End, 0, 45);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 175, 320, 20), "渐变步数", sp_Step, 0, 60);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 140, 100, 20), "起始色", sp_Color_Start, 0, 45);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 140, rect.y + 140, 100, 20), "结束色", sp_Color_End, 0, 45);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 18, rect.y + 175, 320, 20), "渐变步数", sp_Step, 0, 60);
             #endregion
 
             #region 计算按钮
 
-            if (Editor_xHudGUI.Gui_Button(new Rect(rect.width - 45, rect.y + 140, 18, 18), btn_save_r, btn_save_p, true, "", "", Color.white))
+            if (Editor_XHud_GUI.Gui_Button(new Rect(rect.width - 45, rect.y + 140, 18, 18), btn_save_r, btn_save_p, true, "", "", Color.white))
             {
                 SaveColors();
             }
@@ -285,39 +285,39 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param name="folder"></param>
         private void SaveColors()
         {
-            string hexcol = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
-            string state = Editor_xHudGUI.Open(xHudDialogType.帮助, "ColorCaptureTool颜色提取工具通知", "导出为渐变色色卡库", $"是否要为当前的<color={hexcol}>渐变色列表</color>创建色卡库？", "创建", "暂不", 0);
+            string state = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "ColorCaptureTool颜色提取工具通知", "导出为渐变色色卡库", $"是否要为当前的<color={hexcol}>渐变色列表</color>创建色卡库？", "创建", "暂不", 0);
 
             if (state == "创建")
             {
-                string mode = Editor_xHudGUI.Open(xHudDialogType.帮助, "ColorCaptureTool颜色提取工具通知", "请选保存模式", $"如果选择替换模式，会将目标色卡库的所有色卡项全部清空替换！请谨慎操作！", "替换", "追加", "新增", 2);
+                string mode = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "ColorCaptureTool颜色提取工具通知", "请选保存模式", $"如果选择替换模式，会将目标色卡库的所有色卡项全部清空替换！请谨慎操作！", "替换", "追加", "新增", 2);
 
                 switch (mode)
                 {
                     case "替换":
                         string path_op = EditorUtility.OpenFilePanel("选择需要替换的色卡库文件", Application.dataPath, "asset");
                         string path_op_folder = path_op.Substring(Application.dataPath.Length - 6);
-                        xHud_Library_Colors lib_op = AssetDatabase.LoadAssetAtPath<xHud_Library_Colors>(path_op_folder);
+                        XHud_Library_Colors lib_op = AssetDatabase.LoadAssetAtPath<XHud_Library_Colors>(path_op_folder);
                         lib_op.ColorLibrary.Clear();
 
                         for (int i = 0; i < ColorGradient.Count; i++)
                         {
-                            lib_op.ColorsLibrary_AddColor(xHud_Utilitys.Color_To_HexColor(ColorGradient[i]), ColorGradient[i], "-");
+                            lib_op.ColorsLibrary_AddColor(XHud_Utilitys.Color_To_HexColor(ColorGradient[i]), ColorGradient[i], "-");
                         }
                         break;
                     case "追加":
                         string path_add = EditorUtility.OpenFilePanel("选择需要追加的色卡库文件", Application.dataPath, "asset");
                         string path_add_folder = path_add.Substring(Application.dataPath.Length - 6);
-                        xHud_Library_Colors lib_add = AssetDatabase.LoadAssetAtPath<xHud_Library_Colors>(path_add_folder);
+                        XHud_Library_Colors lib_add = AssetDatabase.LoadAssetAtPath<XHud_Library_Colors>(path_add_folder);
 
                         for (int i = 0; i < ColorGradient.Count; i++)
                         {
-                            lib_add.ColorsLibrary_AddColor(xHud_Utilitys.Color_To_HexColor(ColorGradient[i]), ColorGradient[i], "-");
+                            lib_add.ColorsLibrary_AddColor(XHud_Utilitys.Color_To_HexColor(ColorGradient[i]), ColorGradient[i], "-");
                         }
                         break;
                     case "新增":
-                        xHud_Library_Colors lib_color_gradient = ScriptableObject.CreateInstance<xHud_Library_Colors>();
+                        XHud_Library_Colors lib_color_gradient = ScriptableObject.CreateInstance<XHud_Library_Colors>();
                         lib_color_gradient.LibraryName = $"ColorsLibrary_Gradient";
 
                         //加入颜色到各个类型的色板中

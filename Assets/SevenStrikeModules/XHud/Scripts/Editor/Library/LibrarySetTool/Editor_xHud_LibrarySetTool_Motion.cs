@@ -7,7 +7,7 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEditor;
     using UnityEngine;
 
-    public class Editor_xHud_LibrarySetTool_Motion : EditorWindow
+    public class Editor_XHud_LibrarySetTool_Motion : EditorWindow
     {
         private SerializedObject BaseObject;
         private SerializedProperty sp_LibName, sp_Description, sp_CreateArgs, sp_RecycleArgs, sp_OriginLibName, sp_motiontype, sp_OriginType;
@@ -78,7 +78,7 @@ namespace SevenStrikeModules.XHud.Hud
         public Motion_Recycler RecycleArgs;
 
         public int ModifiedIndex;
-        private xHud_Library_Motion Target_Hud_MotionLibrary;
+        private XHud_Library_Motion Target_Hud_MotionLibrary;
         string Title;
 
         float prop_margin = 10;
@@ -99,18 +99,18 @@ namespace SevenStrikeModules.XHud.Hud
             sp_motiontype = BaseObject.FindProperty("Motiontype");
             sp_OriginType = BaseObject.FindProperty("OriginType");
 
-            icon_libsetter_motion = Editor_xHudGUI.GetIcon("LibSetter/icon_libsetter_motion");
+            icon_libsetter_motion = Editor_XHud_GUI.GetIcon("LibSetter/icon_libsetter_motion");
 
-            icon_libsetter_motion_movement_r = Editor_xHudGUI.GetIcon("LibSetter/icon_libsetter_motion_movement_r");
-            icon_libsetter_motion_rotator_r = Editor_xHudGUI.GetIcon("LibSetter/icon_libsetter_motion_rotator_r");
-            icon_libsetter_motion_alpha_r = Editor_xHudGUI.GetIcon("LibSetter/icon_libsetter_motion_alpha_r");
-            icon_libsetter_motion_movement_p = Editor_xHudGUI.GetIcon("LibSetter/icon_libsetter_motion_movement_p");
-            icon_libsetter_motion_rotator_p = Editor_xHudGUI.GetIcon("LibSetter/icon_libsetter_motion_rotator_p");
-            icon_libsetter_motion_alpha_p = Editor_xHudGUI.GetIcon("LibSetter/icon_libsetter_motion_alpha_p");
-            icon_motionstoptim_refer = Editor_xHudGUI.GetIcon("LibSetter/icon_motionstoptim_refer");
+            icon_libsetter_motion_movement_r = Editor_XHud_GUI.GetIcon("LibSetter/icon_libsetter_motion_movement_r");
+            icon_libsetter_motion_rotator_r = Editor_XHud_GUI.GetIcon("LibSetter/icon_libsetter_motion_rotator_r");
+            icon_libsetter_motion_alpha_r = Editor_XHud_GUI.GetIcon("LibSetter/icon_libsetter_motion_alpha_r");
+            icon_libsetter_motion_movement_p = Editor_XHud_GUI.GetIcon("LibSetter/icon_libsetter_motion_movement_p");
+            icon_libsetter_motion_rotator_p = Editor_XHud_GUI.GetIcon("LibSetter/icon_libsetter_motion_rotator_p");
+            icon_libsetter_motion_alpha_p = Editor_XHud_GUI.GetIcon("LibSetter/icon_libsetter_motion_alpha_p");
+            icon_motionstoptim_refer = Editor_XHud_GUI.GetIcon("LibSetter/icon_motionstoptim_refer");
 
-            Font_Bold = Editor_xHudGUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_xHudGUI.GetFont("SS_Editor_Dialog");
+            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
+            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
 
             Description = "动效参数说明内容";
             LibName = "动效名称";
@@ -171,22 +171,22 @@ namespace SevenStrikeModules.XHud.Hud
 
             Icon_rect = new Rect(26, 15, 48, 48);
 
-            Editor_xHudGUI.Gui_Icon(Icon_rect, icon_libsetter_motion);
+            Editor_XHud_GUI.Gui_Icon(Icon_rect, icon_libsetter_motion);
 
             Title_rect = new Rect(rect.x + 100, rect.y + 15, rect.width - 80, 30);
-            Editor_xHudGUI.Gui_Labelfield(Title_rect, Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold, TextClipping.Ellipsis, true);
+            Editor_XHud_GUI.Gui_Labelfield(Title_rect, Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold, TextClipping.Ellipsis, true);
 
             Sepline_rect = new Rect(rect.x + 102, rect.y + 60, 200, 1);
-            Editor_xHudGUI.Gui_Box(Sepline_rect, SepLineColor);
+            Editor_XHud_GUI.Gui_Box(Sepline_rect, SepLineColor);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 26, rect.y + 80, rect.width - 45, rect.height), "以下为待入库的动效参数概览，您可以检查每项参数是否符合您的要求，每项参数均可手动校正调整！", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 26, rect.y + 80, rect.width - 45, rect.height), "以下为待入库的动效参数概览，您可以检查每项参数是否符合您的要求，每项参数均可手动校正调整！", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
 
             DateTimes = DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss:ff");
             Date_rect = new Rect(rect.x + 150, rect.y + 15, rect.width - 180, rect.height);
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(Date_rect, DateTimes, HudFilled.无, HudColor.无, DateTimeColor, TextAnchor.UpperRight, new Vector2(0, 0), 13, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(Date_rect, DateTimes, HudFilled.无, HudColor.无, DateTimeColor, TextAnchor.UpperRight, new Vector2(0, 0), 13, true, Font_Light);
 
             #region 动效信息
-            string colorhex = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
             string typetext = Type == HudElementMotionType.Creator ? "生成" : "回收";
             float panel_verticle = 110;
             float panel_height = 270;
@@ -208,7 +208,7 @@ namespace SevenStrikeModules.XHud.Hud
             float iconoffset = 30;
 
             #region 图标
-            if (Editor_xHudGUI.Gui_Button(new Rect(rect_movement.x + (rect_movement.width / 2) - (IconSize / 2) + iconoffset, rect_movement.y + 15, IconSize, IconSize), icon_libsetter_motion_movement_r, icon_libsetter_motion_movement_p, true, "", "", xHud_Dashboard.Theme_Primary))
+            if (Editor_XHud_GUI.Gui_Button(new Rect(rect_movement.x + (rect_movement.width / 2) - (IconSize / 2) + iconoffset, rect_movement.y + 15, IconSize, IconSize), icon_libsetter_motion_movement_r, icon_libsetter_motion_movement_p, true, "", "", XHud_Dashboard.Theme_Primary))
             {
                 if (Type == HudElementMotionType.Creator)
                 {
@@ -225,7 +225,7 @@ namespace SevenStrikeModules.XHud.Hud
                 sp_RecycleArgs.serializedObject.ApplyModifiedProperties();
             }
 
-            if (Editor_xHudGUI.Gui_Button(new Rect(rect_rotator.x + (rect_rotator.width / 2) - (IconSize / 2) + iconoffset, rect_rotator.y + 15, IconSize, IconSize), icon_libsetter_motion_rotator_r, icon_libsetter_motion_rotator_p, true, "", "", xHud_Dashboard.Theme_Primary))
+            if (Editor_XHud_GUI.Gui_Button(new Rect(rect_rotator.x + (rect_rotator.width / 2) - (IconSize / 2) + iconoffset, rect_rotator.y + 15, IconSize, IconSize), icon_libsetter_motion_rotator_r, icon_libsetter_motion_rotator_p, true, "", "", XHud_Dashboard.Theme_Primary))
             {
                 if (Type == HudElementMotionType.Creator)
                 {
@@ -242,7 +242,7 @@ namespace SevenStrikeModules.XHud.Hud
                 sp_RecycleArgs.serializedObject.ApplyModifiedProperties();
             }
 
-            if (Editor_xHudGUI.Gui_Button(new Rect(rect_alpha.x + (rect_alpha.width / 2) - (IconSize / 2) + iconoffset, rect_alpha.y + 15, IconSize, IconSize), icon_libsetter_motion_alpha_r, icon_libsetter_motion_alpha_p, true, "", "", xHud_Dashboard.Theme_Primary))
+            if (Editor_XHud_GUI.Gui_Button(new Rect(rect_alpha.x + (rect_alpha.width / 2) - (IconSize / 2) + iconoffset, rect_alpha.y + 15, IconSize, IconSize), icon_libsetter_motion_alpha_r, icon_libsetter_motion_alpha_p, true, "", "", XHud_Dashboard.Theme_Primary))
             {
                 if (Type == HudElementMotionType.Creator)
                 {
@@ -292,7 +292,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             Rect anc = new Rect(mase_offset.x, mase_offset.y, 12, 12);
-            Editor_xHudGUI.Gui_Icon(anc, icon_motionstoptim_refer);
+            Editor_XHud_GUI.Gui_Icon(anc, icon_motionstoptim_refer);
 
             GUI.backgroundColor = Color.white;
             #endregion
@@ -355,7 +355,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             string[] str_motiontype = new string[2] { "生成", "回收" };
             EditorGUI.BeginChangeCheck();
-            sp_motiontype.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect.width - 160, rect.y + 300, 142, 50), false, str_motiontype, sp_motiontype.boolValue, HudFilled.无, HudColor.亮白, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, Color.black);
+            sp_motiontype.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect.width - 160, rect.y + 300, 142, 50), false, str_motiontype, sp_motiontype.boolValue, HudFilled.无, HudColor.亮白, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, Color.black);
             sp_motiontype.serializedObject.ApplyModifiedProperties();
             if (EditorGUI.EndChangeCheck())
             {
@@ -387,7 +387,7 @@ namespace SevenStrikeModules.XHud.Hud
                         LibName_color = Color.white;
                 }
 
-                sp_LibName.stringValue = Editor_xHudGUI.Gui_TextField(LibName_Rect, sp_LibName.stringValue, LibName_color, 12);
+                sp_LibName.stringValue = Editor_XHud_GUI.Gui_TextField(LibName_Rect, sp_LibName.stringValue, LibName_color, 12);
                 sp_LibName.serializedObject.ApplyModifiedProperties();
                 #endregion
 
@@ -406,7 +406,7 @@ namespace SevenStrikeModules.XHud.Hud
                         Description_Color = Color.white;
                 }
 
-                sp_Description.stringValue = Editor_xHudGUI.Gui_TextField(Description_Rect, sp_Description.stringValue, Description_Color, 12);
+                sp_Description.stringValue = Editor_XHud_GUI.Gui_TextField(Description_Rect, sp_Description.stringValue, Description_Color, 12);
                 sp_Description.serializedObject.ApplyModifiedProperties();
 
                 #endregion
@@ -420,34 +420,34 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (Type == HudElementMotionType.Creator)
                 {
-                    Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 15, rect.height - 100, 250, 20), "回收动效结束时机", sp_MotionAnimateEndState_crc, 10, 110);
+                    Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 15, rect.height - 100, 250, 20), "回收动效结束时机", sp_MotionAnimateEndState_crc, 10, 110);
                 }
                 else
                 {
-                    Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 15, rect.height - 100, 250, 20), "生成动效结束时机", sp_MotionAnimateEndState_rec, 10, 110);
+                    Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 15, rect.height - 100, 250, 20), "生成动效结束时机", sp_MotionAnimateEndState_rec, 10, 110);
                 }
             }
             else
             {
                 if (Type == HudElementMotionType.Creator)
                 {
-                    Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 15, rect.height - 96, 200, 20), "生成动效结束时机", sp_MotionAnimateEndState_crc, 10, 110);
+                    Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 15, rect.height - 96, 200, 20), "生成动效结束时机", sp_MotionAnimateEndState_crc, 10, 110);
                 }
                 else
                 {
-                    Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x + 15, rect.height - 96, 200, 20), "回收动效结束时机", sp_MotionAnimateEndState_rec, 10, 110);
+                    Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x + 15, rect.height - 96, 200, 20), "回收动效结束时机", sp_MotionAnimateEndState_rec, 10, 110);
                 }
             }
 
-            Editor_xHudGUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 70, 200, 15), $"动效类型：<color={colorhex}>{Type.ToString()}  ( {typetext} )</color>", HudFilled.无, HudColor.无, Color.white, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 16, Font_Bold);
+            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 70, 200, 15), $"动效类型：<color={colorhex}>{Type.ToString()}  ( {typetext} )</color>", HudFilled.无, HudColor.无, Color.white, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 16, Font_Bold);
 
             if (Type == HudElementMotionType.Creator)
-                Editor_xHudGUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 40, 200, 15), "该参数用于元素被生成时的进入动效", HudFilled.无, HudColor.无, Color.white * 0.7f, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 12, Font_Light);
+                Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 40, 200, 15), "该参数用于元素被生成时的进入动效", HudFilled.无, HudColor.无, Color.white * 0.7f, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 12, Font_Light);
             else
-                Editor_xHudGUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 40, 200, 15), "该参数用于元素被回收时的离开动效", HudFilled.无, HudColor.无, Color.white * 0.7f, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 12, Font_Light);
+                Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 40, 200, 15), "该参数用于元素被回收时的离开动效", HudFilled.无, HudColor.无, Color.white * 0.7f, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 12, Font_Light);
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(476);
+            Editor_XHud_GUI.Gui_Layout_Space(476);
 
             Repaint();
 
@@ -487,7 +487,7 @@ namespace SevenStrikeModules.XHud.Hud
         private void PorpertyDrawer(SerializedProperty prop, string propname, Rect rect, string Title, float offset, float margin, float TitleWidth)
         {
             SerializedProperty sp_prop = prop.FindPropertyRelative(propname);
-            Editor_xHudGUI.Gui_Property_Field(new Rect(rect.x, rect.y + prop_margin + offset, rect.width, 20), Title, sp_prop, TitleWidth, rect.width - TitleWidth, 20);
+            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.x, rect.y + prop_margin + offset, rect.width, 20), Title, sp_prop, TitleWidth, rect.width - TitleWidth, 20);
             prop_margin += margin;
         }
 
@@ -496,21 +496,21 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         private void SendToLibrary()
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             if (sp_LibName.stringValue == "动效名称")
             {
-                Editor_xHudGUI.Open(xHudDialogType.警告, "XHud 动效库采集器消息", "未填写名称", "请为动效模版添加一个名称！", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 动效库采集器消息", "未填写名称", "请为动效模版添加一个名称！", "明白");
                 return;
             }
 
-            string colorhex = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
             bool exist = Target_Hud_MotionLibrary.ElementMotion_IsExist(sp_LibName.stringValue, Type);
 
             if (exist)
             {
-                string res = Editor_xHudGUI.Open(xHudDialogType.警告, "XHud 动效库采集器消息", "存在重复动效名称", $"名称为<color={colorhex}> {sp_LibName.stringValue} </color>的已经存在于动效库中！", "重命名", 1);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 动效库采集器消息", "存在重复动效名称", $"名称为<color={colorhex}> {sp_LibName.stringValue} </color>的已经存在于动效库中！", "重命名", 1);
                 if (res == "重命名")
                 {
                     return;
@@ -518,7 +518,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
             else
             {
-                XHud.xHud_LibraryArg_Motion motion = new XHud.xHud_LibraryArg_Motion();
+                XHud.XHud_LibraryArg_Motion motion = new XHud.XHud_LibraryArg_Motion();
                 motion.Name = sp_LibName.stringValue;
                 motion.Crc = CreateArgs;
                 motion.Rec = RecycleArgs;
@@ -526,7 +526,7 @@ namespace SevenStrikeModules.XHud.Hud
                 motion.Mode = (int)Type;
                 Target_Hud_MotionLibrary.ElementMotion_Add(motion);
 
-                Editor_xHudGUI.Open(xHudDialogType.确认, "XHud 动效库采集器消息", "已添加到动效库", $"已将名称为<color={colorhex}> {sp_LibName.stringValue} </color>的动效参数添加到动效库中！", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud 动效库采集器消息", "已添加到动效库", $"已将名称为<color={colorhex}> {sp_LibName.stringValue} </color>的动效参数添加到动效库中！", "明白");
                 Close();
             }
         }
@@ -536,9 +536,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         private void UpdateToLibrary()
         {
-            string colorhex = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
-            XHud.xHud_LibraryArg_Motion motion = new XHud.xHud_LibraryArg_Motion(sp_LibName.stringValue, (int)Type, sp_Description.stringValue, CreateArgs, RecycleArgs);
+            XHud.XHud_LibraryArg_Motion motion = new XHud.XHud_LibraryArg_Motion(sp_LibName.stringValue, (int)Type, sp_Description.stringValue, CreateArgs, RecycleArgs);
             Target_Hud_MotionLibrary.ElementMotion_ReplaceMotion(ModifiedIndex, motion);
 
             Close();
@@ -629,19 +629,19 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         private void DialogType_Buttons()
         {
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_FlexSpace();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_FlexSpace();
 
             if (LibrarySetterMode != LibrarySetterMode.修改生成器项参数)
             {
-                if (Editor_xHudGUI.Gui_Layout_Button(ButtonText_Cancel, "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Cancel))
+                if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Cancel, "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Cancel))
                 {
                     Close();
                 }
-                Editor_xHudGUI.Gui_Layout_Space(ButtonDistance);
+                Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
             }
-            GUI.backgroundColor = xHud_Dashboard.Theme_Primary;
-            if (Editor_xHudGUI.Gui_Layout_Button(ButtonText_Ok, "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Ok))
+            GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+            if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Ok, "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Ok))
             {
                 if (LibrarySetterMode == LibrarySetterMode.添加到库)
                 {
@@ -659,8 +659,8 @@ namespace SevenStrikeModules.XHud.Hud
             }
             GUI.backgroundColor = Color.white;
 
-            Editor_xHudGUI.Gui_Layout_Space(25);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(25);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
         }
 
         public void SetOriginLibName(string name)
@@ -673,7 +673,7 @@ namespace SevenStrikeModules.XHud.Hud
             OriginType = type;
         }
 
-        public void SetTarget_Hud_MotionLibrary(xHud_Library_Motion lib)
+        public void SetTarget_Hud_MotionLibrary(XHud_Library_Motion lib)
         {
             Target_Hud_MotionLibrary = lib;
         }

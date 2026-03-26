@@ -8,15 +8,15 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEditor;
     using UnityEngine;
 
-    public class Editor_xHud_LibrarySetTool_TextStyle : EditorWindow
+    public class Editor_XHud_LibrarySetTool_TextStyle : EditorWindow
     {
         private SerializedObject BaseObject;
         private SerializedProperty sp_LibName, sp_Description, sp_StyleInfo;
 
         [SerializeField]
-        private xHud_LibraryArg_TextStyle StyleInfo;
+        private XHud_LibraryArg_TextStyle StyleInfo;
         [SerializeField]
-        private xHud_LibraryArg_TextStyle OriginStyleInfo;
+        private XHud_LibraryArg_TextStyle OriginStyleInfo;
 
         private Texture2D icon_libsetter_text;
 
@@ -66,8 +66,8 @@ namespace SevenStrikeModules.XHud.Hud
         public string ButtonText_Ok;
         public string ButtonText_Cancel;
 
-        public xHud_Module_Text Component_Text;
-        public xHud_Module_TmpText Component_TmpText;
+        public XHud_Module_Text Component_Text;
+        public XHud_Module_TmpText Component_TmpText;
 
         Color SepLineColor = new Color(1, 1, 1, 0.15f);
         Color MessageColor = new Color(1, 1, 1, 0.62f);
@@ -97,7 +97,7 @@ namespace SevenStrikeModules.XHud.Hud
         string[] optnames_g = new string[] { "单色", "水平", "垂直", "四角" };
         string[] optnames_h = new string[] { "正常", "翻转" };
 
-        private xHud_Library_TextStyle Target_Hud_TextStyleLibrary;
+        private XHud_Library_TextStyle Target_Hud_TextStyleLibrary;
 
         private void OnDisable()
         {
@@ -111,10 +111,10 @@ namespace SevenStrikeModules.XHud.Hud
             sp_StyleInfo = BaseObject.FindProperty("StyleInfo");
             sp_Description = BaseObject.FindProperty("Description");
 
-            icon_libsetter_text = Editor_xHudGUI.GetIcon("LibSetter/icon_libsetter_textstyle");
+            icon_libsetter_text = Editor_XHud_GUI.GetIcon("LibSetter/icon_libsetter_textstyle");
 
-            Font_Bold = Editor_xHudGUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_xHudGUI.GetFont("SS_Editor_Dialog");
+            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
+            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
 
             Description = "文字样式参数说明内容";
             LibName = "文字样式名称";
@@ -129,7 +129,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                 if (!EqualsData)
                 {
-                    string res = Editor_xHudGUI.Open(xHudDialogType.警告, "XHud 文字样式库采集器消息", "恢复原有样式", "检测到您修正了样式参数，是否要恢复原有样式或者保持现有样式效果？", "保持", "恢复", 0);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 文字样式库采集器消息", "恢复原有样式", "检测到您修正了样式参数，是否要恢复原有样式或者保持现有样式效果？", "保持", "恢复", 0);
                     if (res == "恢复")
                     {
                         if (Component_Text != null)
@@ -156,22 +156,22 @@ namespace SevenStrikeModules.XHud.Hud
 
             Icon_rect = new Rect(26, 15, 48, 48);
 
-            Editor_xHudGUI.Gui_Icon(Icon_rect, icon_libsetter_text);
+            Editor_XHud_GUI.Gui_Icon(Icon_rect, icon_libsetter_text);
 
             Title_rect = new Rect(rect.x + 100, rect.y + 15, rect.width - 80, 30);
-            Editor_xHudGUI.Gui_Labelfield(Title_rect, Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
+            Editor_XHud_GUI.Gui_Labelfield(Title_rect, Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
 
             Sepline_rect = new Rect(rect.x + 102, rect.y + 60, 200, 1);
-            Editor_xHudGUI.Gui_Box(Sepline_rect, SepLineColor);
+            Editor_XHud_GUI.Gui_Box(Sepline_rect, SepLineColor);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 26, rect.y + 80, rect.width - 45, rect.height), "以下为待入库的文字样式参数概览，您可以检查每项参数是否符合您的要求，每项参数均可手动校正调整！", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 26, rect.y + 80, rect.width - 45, rect.height), "以下为待入库的文字样式参数概览，您可以检查每项参数是否符合您的要求，每项参数均可手动校正调整！", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
 
             DateTimes = DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss:ff");
             Date_rect = new Rect(rect.x + 150, rect.y + 15, rect.width - 180, rect.height);
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(Date_rect, DateTimes, HudFilled.无, HudColor.无, DateTimeColor, TextAnchor.UpperRight, new Vector2(0, 0), 13, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(Date_rect, DateTimes, HudFilled.无, HudColor.无, DateTimeColor, TextAnchor.UpperRight, new Vector2(0, 0), 13, true, Font_Light);
 
             #region 样式信息
-            string colorhex = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
             #region 参数
 
@@ -226,7 +226,7 @@ namespace SevenStrikeModules.XHud.Hud
             SerializedProperty prop_gra_ColorModeName = sp_StyleInfo.FindPropertyRelative("gra_ColorModeName");
             #endregion
 
-            Color se_color = xHud_Utilitys.GetBrightnessLimite(xHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
+            Color se_color = XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
 
             xHud_TextType textType = (xHud_TextType)prop_Type.enumValueIndex;
 
@@ -237,69 +237,69 @@ namespace SevenStrikeModules.XHud.Hud
 
                 #region 样式参数 - 类型
                 rect_group.Set(rect.x + 25, rect.y + 145, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "类型", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_Type.enumValueIndex = Editor_xHudGUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_a, prop_Type.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "类型", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_Type.enumValueIndex = Editor_XHud_GUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_a, prop_Type.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 颜色接管
                 rect_group.Set(rect.x + 25, rect.y + 210, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "颜色接管", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_SyncAnimatorColor.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_b, prop_SyncAnimatorColor.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "颜色接管", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_SyncAnimatorColor.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_b, prop_SyncAnimatorColor.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 水平溢出
                 rect_group.Set(rect.x + 25, rect.y + 275, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "水平溢出", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_overflow_h.enumValueIndex = Editor_xHudGUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_d, prop_overflow_h.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "水平溢出", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_overflow_h.enumValueIndex = Editor_XHud_GUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_d, prop_overflow_h.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 垂直溢出
                 rect_group.Set(rect.x + 25, rect.y + 340, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "垂直溢出", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_overflow_v.enumValueIndex = Editor_xHudGUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_e, prop_overflow_v.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "垂直溢出", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_overflow_v.enumValueIndex = Editor_XHud_GUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_e, prop_overflow_v.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 自动尺寸
                 rect_group.Set(rect.x + 25, rect.y + 405, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "自动尺寸", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_autosize.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_autosize.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "自动尺寸", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_autosize.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_autosize.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 射线检测
                 rect_group.Set(rect.x + 190, rect.y + 145, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "射线检测", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_Raycast.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_Raycast.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "射线检测", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_Raycast.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_Raycast.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 遮罩
                 rect_group.Set(rect.x + 190, rect.y + 210, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "遮罩", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_Maskable.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_Maskable.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "遮罩", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_Maskable.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_Maskable.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 富文本
                 rect_group.Set(rect.x + 190, rect.y + 275, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "富文本", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_rich.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_rich.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "富文本", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_rich.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_rich.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 几何对齐
                 rect_group.Set(rect.x + 190, rect.y + 340, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "几何对齐", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_alignGEO.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_alignGEO.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "几何对齐", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_alignGEO.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_alignGEO.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 样式
                 rect_group.Set(rect.x + 190, rect.y + 405, rect.width - 190 - 25, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "字体样式", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_style.enumValueIndex = Editor_xHudGUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_f, prop_style.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "字体样式", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_style.enumValueIndex = Editor_XHud_GUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_f, prop_style.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 参数
                 float offset = 18;
                 float lineheight = 30;
                 rect_group.Set(rect.x + 355, rect.y + 145, rect.width - 355 - 25, 245);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "参数", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "参数", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
 
                 rect_param = rect_group;
                 ParamDisplayer(rect_param, prop_Font, "字体", 10, 210, 40, offset);
@@ -309,12 +309,12 @@ namespace SevenStrikeModules.XHud.Hud
                 ParamDisplayer(rect_param, prop_Size, "尺寸", 10, 210, 40, offset);
                 offset += lineheight;
                 if (!prop_autosize.boolValue)
-                    Editor_xHudGUI.SetEnabled(false);
+                    Editor_XHud_GUI.SetEnabled(false);
                 ParamDisplayer(rect_param, prop_Fit_Min, "最小尺寸", 10, 210, 60, offset);
                 offset += lineheight;
                 ParamDisplayer(rect_param, prop_Fit_Max, "最大尺寸", 10, 210, 60, offset);
                 offset += lineheight;
-                Editor_xHudGUI.SetEnabled(true);
+                Editor_XHud_GUI.SetEnabled(true);
                 ParamDisplayer(rect_param, prop_LineHeight, "行高", 10, 210, 40, offset);
                 offset += lineheight;
                 ParamDisplayer(rect_param, prop_FontColor, "颜色", 10, 210, 40, offset);
@@ -330,62 +330,62 @@ namespace SevenStrikeModules.XHud.Hud
 
                 #region 样式参数 - 类型
                 rect_group.Set(rect.x + 25, rect.y + 145, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "类型", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_Type.enumValueIndex = Editor_xHudGUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_a, prop_Type.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "类型", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_Type.enumValueIndex = Editor_XHud_GUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_a, prop_Type.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 颜色接管
                 rect_group.Set(rect.x + 25, rect.y + 210, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "颜色接管", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_SyncAnimatorColor.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_b, prop_SyncAnimatorColor.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "颜色接管", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_SyncAnimatorColor.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_b, prop_SyncAnimatorColor.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 自动尺寸
                 rect_group.Set(rect.x + 25, rect.y + 275, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "自动尺寸", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_tmp_EnableAutoSizing.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_tmp_EnableAutoSizing.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "自动尺寸", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_tmp_EnableAutoSizing.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_tmp_EnableAutoSizing.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 渐变色方向
                 rect_group.Set(rect.x + 25, rect.y + 340, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "渐变色方向", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "渐变色方向", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
                 if (!prop_gra_Used.boolValue)
-                    Editor_xHudGUI.SetEnabled(false);
-                prop_gra_Invert.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_h, prop_gra_Invert.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, se_color);
-                Editor_xHudGUI.SetEnabled(true);
+                    Editor_XHud_GUI.SetEnabled(false);
+                prop_gra_Invert.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_h, prop_gra_Invert.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
+                Editor_XHud_GUI.SetEnabled(true);
                 #endregion
 
                 #region 样式参数 - 射线检测
                 rect_group.Set(rect.x + 190, rect.y + 145, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "射线检测", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_Raycast.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_Raycast.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "射线检测", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_Raycast.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_Raycast.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 遮罩
                 rect_group.Set(rect.x + 190, rect.y + 210, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "遮罩", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_Maskable.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_Maskable.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "遮罩", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_Maskable.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_Maskable.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 富文本
                 rect_group.Set(rect.x + 190, rect.y + 275, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "富文本", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_tmp_rich.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_tmp_rich.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "富文本", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_tmp_rich.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_tmp_rich.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 渐变色支持
                 rect_group.Set(rect.x + 190, rect.y + 340, 160, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "渐变色支持", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
-                prop_gra_Used.boolValue = Editor_xHudGUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_gra_Used.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, xHud_Dashboard.Theme_Primary, Color.white, se_color);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "渐变色支持", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
+                prop_gra_Used.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_gra_Used.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 渐变色模式
                 rect_group.Set(rect.x + 25, rect.y + 405, 325, 50);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "渐变色模式", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "渐变色模式", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
                 if (!prop_gra_Used.boolValue)
-                    Editor_xHudGUI.SetEnabled(false);
-                prop_gra_ColorMode.enumValueIndex = Editor_xHudGUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_g, prop_gra_ColorMode.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
-                Editor_xHudGUI.SetEnabled(true);
+                    Editor_XHud_GUI.SetEnabled(false);
+                prop_gra_ColorMode.enumValueIndex = Editor_XHud_GUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_g, prop_gra_ColorMode.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
+                Editor_XHud_GUI.SetEnabled(true);
                 ColorMode gra_mode = (ColorMode)prop_gra_ColorMode.enumValueIndex;
                 switch (gra_mode)
                 {
@@ -409,7 +409,7 @@ namespace SevenStrikeModules.XHud.Hud
                 float lineheight = 28;
 
                 rect_group.Set(rect.x + 355, rect.y + 145, rect.width - 355 - 20, 310);
-                Editor_xHudGUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "参数", new Vector2(25, -8), xHud_Dashboard.Theme_Primary, Font_Light);
+                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "参数", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
 
                 rect_param = rect_group;
                 ParamDisplayer(rect_param, prop_tmp_font, "字体", 10, 150, 40, offset);
@@ -429,7 +429,7 @@ namespace SevenStrikeModules.XHud.Hud
                 ParamDisplayer(rect_param, prop_tmp_WrappingRatios, "包裹比例", 10, 150, 65, offset);
                 offset += lineheight;
                 if (!prop_tmp_EnableAutoSizing.boolValue)
-                    Editor_xHudGUI.SetEnabled(false);
+                    Editor_XHud_GUI.SetEnabled(false);
                 ParamDisplayer(rect_param, prop_tmp_FontSizeMin, "最小尺寸", 10, 150, 65, offset);
                 offset += lineheight;
                 ParamDisplayer(rect_param, prop_tmp_FontSizeMax, "最大尺寸", 10, 150, 65, offset);
@@ -437,7 +437,7 @@ namespace SevenStrikeModules.XHud.Hud
                 ParamDisplayer(rect_param, prop_tmp_CharWidthMaxAdj, "最大字符宽度", 175, 150, 90, offset);
                 offset += lineheight;
                 ParamDisplayer(rect_param, prop_tmp_LineSpacingMax, "最大行高", 175, 150, 65, offset);
-                Editor_xHudGUI.SetEnabled(true);
+                Editor_XHud_GUI.SetEnabled(true);
                 offset += lineheight;
                 ParamDisplayer(rect_param, prop_tmp_space_character, "字符间距", 175, 150, 65, offset);
                 offset += lineheight;
@@ -463,35 +463,35 @@ namespace SevenStrikeModules.XHud.Hud
                 {
                     CreateGradientTexture((ColorMode)prop_gra_ColorMode.enumValueIndex, prop_gra_Invert.boolValue, prop_gra_A.colorValue, prop_gra_B.colorValue, prop_gra_C.colorValue, prop_gra_D.colorValue);
                     rect_group.Set(rect.width - 145, rect.y + 163, gra_TexWidth, gra_TexHeight);
-                    Editor_xHudGUI.Gui_Icon(rect_group, GradientTexture);
+                    Editor_XHud_GUI.Gui_Icon(rect_group, GradientTexture);
 
                     switch (prop_gra_ColorModeName.stringValue)
                     {
                         case "单色":
                             rect_group.Set(rect.width - 145, rect.y + 300, gra_TexWidth, 20);
-                            Editor_xHudGUI.Gui_ColorField(rect_group, prop_gra_A);
+                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_A);
                             break;
                         case "水平渐变":
                             rect_group.Set(rect.width - 145, rect.y + 300, gra_TexWidth, 20);
-                            Editor_xHudGUI.Gui_ColorField(rect_group, prop_gra_A);
+                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_A);
                             rect_group.Set(rect.width - 145, rect.y + 330, gra_TexWidth, 20);
-                            Editor_xHudGUI.Gui_ColorField(rect_group, prop_gra_B);
+                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_B);
                             break;
                         case "垂直渐变":
                             rect_group.Set(rect.width - 145, rect.y + 300, gra_TexWidth, 20);
-                            Editor_xHudGUI.Gui_ColorField(rect_group, prop_gra_A);
+                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_A);
                             rect_group.Set(rect.width - 145, rect.y + 330, gra_TexWidth, 20);
-                            Editor_xHudGUI.Gui_ColorField(rect_group, prop_gra_B);
+                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_B);
                             break;
                         case "四角渐变":
                             rect_group.Set(rect.width - 145, rect.y + 300, gra_TexWidth, 20);
-                            Editor_xHudGUI.Gui_ColorField(rect_group, prop_gra_A);
+                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_A);
                             rect_group.Set(rect.width - 145, rect.y + 330, gra_TexWidth, 20);
-                            Editor_xHudGUI.Gui_ColorField(rect_group, prop_gra_B);
+                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_B);
                             rect_group.Set(rect.width - 145, rect.y + 360, gra_TexWidth, 20);
-                            Editor_xHudGUI.Gui_ColorField(rect_group, prop_gra_C);
+                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_C);
                             rect_group.Set(rect.width - 145, rect.y + 390, gra_TexWidth, 20);
-                            Editor_xHudGUI.Gui_ColorField(rect_group, prop_gra_D);
+                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_D);
                             break;
                     }
                 }
@@ -525,7 +525,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             Rect LibName_Rect = new Rect(rect.x + 25, rect.height - 155, (rect.width / 2) - 100, 70);
-            sp_LibName.stringValue = Editor_xHudGUI.Gui_TextField(LibName_Rect, sp_LibName.stringValue, LibName_color, 12);
+            sp_LibName.stringValue = Editor_XHud_GUI.Gui_TextField(LibName_Rect, sp_LibName.stringValue, LibName_color, 12);
             sp_LibName.serializedObject.ApplyModifiedProperties();
             #endregion
 
@@ -545,25 +545,25 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             Rect Description_Rect = new Rect((rect.width / 2) - 65, rect.height - 155, (rect.width / 2) + 45, 70);
-            sp_Description.stringValue = Editor_xHudGUI.Gui_TextField(Description_Rect, sp_Description.stringValue, Description_Color, 12);
+            sp_Description.stringValue = Editor_XHud_GUI.Gui_TextField(Description_Rect, sp_Description.stringValue, Description_Color, 12);
             sp_Description.serializedObject.ApplyModifiedProperties();
 
             #endregion
 
             #region 样式类型
-            Editor_xHudGUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 70, 200, 15), $"文字样式类型：<color={colorhex}>{textType.ToString()}</color>", HudFilled.无, HudColor.无, Color.white, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 16, Font_Bold);
+            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 70, 200, 15), $"文字样式类型：<color={colorhex}>{textType.ToString()}</color>", HudFilled.无, HudColor.无, Color.white, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 16, Font_Bold);
 
             if (textType == xHud_TextType.Text)
-                Editor_xHudGUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 40, 200, 15), "该参数用于HudText的文字样式", HudFilled.无, HudColor.无, Color.white * 0.7f, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 12, Font_Light);
+                Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 40, 200, 15), "该参数用于HudText的文字样式", HudFilled.无, HudColor.无, Color.white * 0.7f, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 12, Font_Light);
             else
-                Editor_xHudGUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 40, 200, 15), "该参数用于HudTmpText的文字样式", HudFilled.无, HudColor.无, Color.white * 0.7f, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 12, Font_Light);
+                Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 40, 200, 15), "该参数用于HudTmpText的文字样式", HudFilled.无, HudColor.无, Color.white * 0.7f, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 12, Font_Light);
             #endregion
 
             BaseObject.ApplyModifiedProperties();
 
             Repaint();
 
-            Editor_xHudGUI.Gui_Layout_Space(580);
+            Editor_XHud_GUI.Gui_Layout_Space(580);
 
             DialogType_Buttons();
 
@@ -617,7 +617,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             rect.Set(rect_group.x + x_margin, rect_group.y + offset, width, 20);
 
-            Editor_xHudGUI.Gui_Property_Field(rect, Title, prop, 10, label_distance);
+            Editor_XHud_GUI.Gui_Property_Field(rect, Title, prop, 10, label_distance);
         }
 
         /// <summary>
@@ -727,33 +727,33 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         private void SendToLibrary()
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
-            xHud_LibraryArg_TextStyle info = new xHud_LibraryArg_TextStyle();
+            XHud_LibraryArg_TextStyle info = new XHud_LibraryArg_TextStyle();
             info.CopyData(StyleInfo);
             info.Name = sp_LibName.stringValue;
             info.Description = sp_Description.stringValue;
 
             if (sp_LibName.stringValue == "文字样式名称")
             {
-                Editor_xHudGUI.Open(xHudDialogType.警告, "XHud 文字样式库采集器消息", "未填写名称", "请为文字样式模版添加一个名称！", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 文字样式库采集器消息", "未填写名称", "请为文字样式模版添加一个名称！", "明白");
                 return;
             }
 
-            string colorhex = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
             bool exist = Target_Hud_TextStyleLibrary.TextStyle_Library_NameIsValid(sp_LibName.stringValue, info.Type);
 
             if (exist)
             {
-                string res = Editor_xHudGUI.Open(xHudDialogType.警告, "XHud 文字样式库采集器消息", "存在重复文字样式名称", $"名称为<color={colorhex}> {sp_LibName.stringValue} </color>的已经存在于文字样式库中！", "重命名", 1);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 文字样式库采集器消息", "存在重复文字样式名称", $"名称为<color={colorhex}> {sp_LibName.stringValue} </color>的已经存在于文字样式库中！", "重命名", 1);
                 return;
             }
             else
             {
                 Target_Hud_TextStyleLibrary.TextStyle_Library_Add(info);
 
-                Editor_xHudGUI.Open(xHudDialogType.确认, "XHud 文字样式库采集器消息", "已添加到文字样式库", $"已将名称为<color={colorhex}> {sp_LibName.stringValue} </color>的文字样式参数添加到文字样式库中！", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud 文字样式库采集器消息", "已添加到文字样式库", $"已将名称为<color={colorhex}> {sp_LibName.stringValue} </color>的文字样式参数添加到文字样式库中！", "明白");
                 Close();
             }
         }
@@ -763,12 +763,12 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         private void UpdateToLibrary()
         {
-            string colorhex = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
-            string res = Editor_xHudGUI.Open(xHudDialogType.警告, "XHud 文字样式库修改器消息", "更新文字样式模版", $"即将更新文字样式库中名称为： <color={colorhex}> {OriginStyleInfo.Name} </color> 且类型为： {OriginStyleInfo.Type} 的文字样式模版参数，确认更新参数吗？", "更新", "暂不", 1);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 文字样式库修改器消息", "更新文字样式模版", $"即将更新文字样式库中名称为： <color={colorhex}> {OriginStyleInfo.Name} </color> 且类型为： {OriginStyleInfo.Type} 的文字样式模版参数，确认更新参数吗？", "更新", "暂不", 1);
             if (res == "更新")
             {
-                xHud_LibraryArg_TextStyle info = new xHud_LibraryArg_TextStyle();
+                XHud_LibraryArg_TextStyle info = new XHud_LibraryArg_TextStyle();
                 info.CopyData_Ignored_LibraryToggle(StyleInfo);
                 info.Name = sp_LibName.stringValue;
                 info.Type = StyleInfo.Type;
@@ -805,7 +805,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 设置模版样式信息
         /// </summary>
         /// <param name="info"></param>        
-        public void SetStyle(xHud_LibraryArg_TextStyle info)
+        public void SetStyle(XHud_LibraryArg_TextStyle info)
         {
             StyleInfo.CopyData(info);
         }
@@ -814,7 +814,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 设置模版样式信息
         /// </summary>
         /// <param name="info"></param>        
-        public void SetOriginStyle(xHud_LibraryArg_TextStyle info)
+        public void SetOriginStyle(XHud_LibraryArg_TextStyle info)
         {
             OriginStyleInfo.CopyData(info);
         }
@@ -823,7 +823,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 设置组件
         /// </summary>
         /// <param name="info"></param>        
-        public void SetComponent(xHud_Module_Text com)
+        public void SetComponent(XHud_Module_Text com)
         {
             Component_Text = com;
         }
@@ -832,7 +832,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 设置组件
         /// </summary>
         /// <param name="info"></param>        
-        public void SetComponent(xHud_Module_TmpText com)
+        public void SetComponent(XHud_Module_TmpText com)
         {
             Component_TmpText = com;
         }
@@ -855,7 +855,7 @@ namespace SevenStrikeModules.XHud.Hud
             LibrarySetterMode = mode;
         }
 
-        public void Set_Target_Hud_TextStyleLibrary(xHud_Library_TextStyle lib)
+        public void Set_Target_Hud_TextStyleLibrary(XHud_Library_TextStyle lib)
         {
             Target_Hud_TextStyleLibrary = lib;
         }
@@ -865,17 +865,17 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         private void DialogType_Buttons()
         {
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_FlexSpace();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_FlexSpace();
 
-            if (Editor_xHudGUI.Gui_Layout_Button(ButtonText_Cancel, "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Cancel))
+            if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Cancel, "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Cancel))
             {
                 Close();
                 return;
             }
-            Editor_xHudGUI.Gui_Layout_Space(ButtonDistance);
-            GUI.backgroundColor = xHud_Dashboard.Theme_Primary;
-            if (Editor_xHudGUI.Gui_Layout_Button(ButtonText_Ok, "", HudFilled.实体, HudColor.亮白, xHud_Utilitys.GetBrightnessLimite(xHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Ok))
+            Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
+            GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+            if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Ok, "", HudFilled.实体, HudColor.亮白, XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Ok))
             {
                 if (LibrarySetterMode == LibrarySetterMode.添加到库)
                 {
@@ -889,8 +889,8 @@ namespace SevenStrikeModules.XHud.Hud
             }
             GUI.backgroundColor = Color.white;
 
-            Editor_xHudGUI.Gui_Layout_Space(25);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(25);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
         }
         #endregion
 

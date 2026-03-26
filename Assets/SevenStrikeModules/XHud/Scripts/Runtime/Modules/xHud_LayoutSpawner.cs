@@ -7,10 +7,10 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEngine.Events;
 
     [System.Serializable]
-    public class HudLayoutSpawnerParams
+    public class XHud_LayoutSpawner_Args
     {
         public string libname;
-        public List<LayoutSpawnerItem> SpawnItemList = new List<LayoutSpawnerItem>();
+        public List<XHud_LayoutSpawner_Item> SpawnItemList = new List<XHud_LayoutSpawner_Item>();
         public string SpawnerIndicator;
 
         public Motion_Creator CreateArgs;
@@ -36,7 +36,7 @@ namespace SevenStrikeModules.XHud.Hud
     }
 
     [System.Serializable]
-    public class LayoutSpawnerItem
+    public class XHud_LayoutSpawner_Item
     {
         /// <summary>
         /// 生成的元素名称
@@ -126,13 +126,13 @@ namespace SevenStrikeModules.XHud.Hud
         /// 是否启用
         /// </summary>
         public bool isEnabled = true;
-        public UnityAction<xHud_Module_Element> act_on_element_in_start;
-        public UnityAction<xHud_Module_Element> act_on_element_in_end;
-        public UnityAction<xHud_Module_Element> act_on_element_out_start;
-        public UnityAction<xHud_Module_Element> act_on_element_out_end;
+        public UnityAction<XHud_Module_Element> act_on_element_in_start;
+        public UnityAction<XHud_Module_Element> act_on_element_in_end;
+        public UnityAction<XHud_Module_Element> act_on_element_out_start;
+        public UnityAction<XHud_Module_Element> act_on_element_out_end;
     }
 
-    public class xHud_LayoutSpawner : MonoBehaviour
+    public class XHud_LayoutSpawner : MonoBehaviour
     {
         public string LibName;
 
@@ -145,8 +145,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         public bool IsLoadedLayout_World;
 
-        public List<LayoutSpawnerItem> SpawnItemList_Screen = new List<LayoutSpawnerItem>();
-        public List<LayoutSpawnerItem> SpawnItemList_World = new List<LayoutSpawnerItem>();
+        public List<XHud_LayoutSpawner_Item> SpawnItemList_Screen = new List<XHud_LayoutSpawner_Item>();
+        public List<XHud_LayoutSpawner_Item> SpawnItemList_World = new List<XHud_LayoutSpawner_Item>();
 
         public string SpawnerIndicator;
 
@@ -370,7 +370,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             for (int i = 0; i < SpawnItemList_Screen.Count; i++)
             {
-                LayoutSpawnerItem item = SpawnItemList_Screen[i];
+                XHud_LayoutSpawner_Item item = SpawnItemList_Screen[i];
                 if (!item.InMotion && !item.Spawned)
                     StartCoroutine(hsp_Create(item, HudSpace.屏幕空间));
             }
@@ -388,7 +388,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             for (int i = 0; i < SpawnItemList_Screen.Count; i++)
             {
-                LayoutSpawnerItem item = SpawnItemList_Screen[i];
+                XHud_LayoutSpawner_Item item = SpawnItemList_Screen[i];
                 if (!item.InMotion && item.Spawned)
                     StartCoroutine(hsp_Recycle(item));
             }
@@ -408,7 +408,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             for (int i = 0; i < SpawnItemList_World.Count; i++)
             {
-                LayoutSpawnerItem item = SpawnItemList_World[i];
+                XHud_LayoutSpawner_Item item = SpawnItemList_World[i];
                 if (!item.InMotion && !item.Spawned)
                     StartCoroutine(hsp_Create(item, HudSpace.世界空间));
             }
@@ -426,7 +426,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             for (int i = 0; i < SpawnItemList_World.Count; i++)
             {
-                LayoutSpawnerItem item = SpawnItemList_World[i];
+                XHud_LayoutSpawner_Item item = SpawnItemList_World[i];
                 if (!item.InMotion && item.Spawned)
                     StartCoroutine(hsp_Recycle(item));
             }
@@ -496,7 +496,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param tweenName="item"></param>
         /// <param tweenName="space"></param>
         /// <returns></returns>
-        private IEnumerator hsp_Create(LayoutSpawnerItem item, HudSpace space)
+        private IEnumerator hsp_Create(XHud_LayoutSpawner_Item item, HudSpace space)
         {
             //---延迟创建
             yield return new WaitForSeconds(item.Delay_Spawn);
@@ -505,7 +505,7 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 case HudSpace.屏幕空间:
 
-                    item.SpawnedElementNode = xHud_Manager.Instance.hm_HudElement_Create_Screen(
+                    item.SpawnedElementNode = XHud_Manager.Instance.hm_HudElement_Create_Screen(
                         LibName,
                         item.Indicator,
                         item.SpawnName,
@@ -568,7 +568,7 @@ namespace SevenStrikeModules.XHud.Hud
                     break;
                 case HudSpace.世界空间:
 
-                    item.SpawnedElementNode = xHud_Manager.Instance.hm_HudElement_Create_World(
+                    item.SpawnedElementNode = XHud_Manager.Instance.hm_HudElement_Create_World(
                         LibName,
                         item.Indicator,
                         item.SpawnName,
@@ -637,12 +637,12 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="item"></param>
         /// <returns></returns>
-        private IEnumerator hsp_Recycle(LayoutSpawnerItem item)
+        private IEnumerator hsp_Recycle(XHud_LayoutSpawner_Item item)
         {
             //---延迟回收
             yield return new WaitForSeconds(item.Delay_Despawn);
             //---回收元素
-            xHud_Manager.Instance.hm_HudElement_RecycleAt(
+            XHud_Manager.Instance.hm_HudElement_RecycleAt(
                 item.SpawnedElementNode.Element,
                 item.UseSpawnerMotion == "自身动效" ? item.RecycleArgs : RecycleArgs,
                 (element) =>/*动作委托：元素 Out 开始*/
@@ -688,12 +688,12 @@ namespace SevenStrikeModules.XHud.Hud
                 case HudSpace.屏幕空间:
                     for (int i = 0; i < SpawnItemList_Screen.Count; i++)
                     {
-                        LayoutSpawnerItem item = SpawnItemList_Screen[i];
+                        XHud_LayoutSpawner_Item item = SpawnItemList_Screen[i];
                         if (!item.InMotion && !item.Spawned)
                         {
                             //---延迟创建
                             yield return new WaitForSeconds(item.Delay_Spawn + DelayOrder_Spawn_Screen);
-                            item.SpawnedElementNode = xHud_Manager.Instance.hm_HudElement_Create_Screen(
+                            item.SpawnedElementNode = XHud_Manager.Instance.hm_HudElement_Create_Screen(
                                 LibName,
                                 item.Indicator,
                                 item.SpawnName,
@@ -759,12 +759,12 @@ namespace SevenStrikeModules.XHud.Hud
                 case HudSpace.世界空间:
                     for (int i = 0; i < SpawnItemList_World.Count; i++)
                     {
-                        LayoutSpawnerItem item = SpawnItemList_World[i];
+                        XHud_LayoutSpawner_Item item = SpawnItemList_World[i];
                         if (!item.InMotion && !item.Spawned)
                         {
                             //---延迟创建
                             yield return new WaitForSeconds(item.Delay_Spawn + DelayOrder_Spawn_World);
-                            item.SpawnedElementNode = xHud_Manager.Instance.hm_HudElement_Create_World(
+                            item.SpawnedElementNode = XHud_Manager.Instance.hm_HudElement_Create_World(
                                 LibName,
                                 item.Indicator,
                                 item.SpawnName,
@@ -842,7 +842,7 @@ namespace SevenStrikeModules.XHud.Hud
                 case HudSpace.屏幕空间:
                     for (int i = 0; i < SpawnItemList_Screen.Count; i++)
                     {
-                        LayoutSpawnerItem item = SpawnItemList_Screen[i];
+                        XHud_LayoutSpawner_Item item = SpawnItemList_Screen[i];
 
                         if (!item.InMotion && item.Spawned)
                         {
@@ -850,7 +850,7 @@ namespace SevenStrikeModules.XHud.Hud
                             yield return new WaitForSeconds(item.Delay_Despawn + DelayOrder_Despawn_Screen);
 
                             //---回收元素
-                            xHud_Manager.Instance.hm_HudElement_RecycleAt(
+                            XHud_Manager.Instance.hm_HudElement_RecycleAt(
                                 item.SpawnedElementNode.Element,
                                 item.UseSpawnerMotion == "自身动效" ? item.RecycleArgs : RecycleArgs,
                                 (element) =>/*动作委托：元素 Out 开始*/
@@ -884,7 +884,7 @@ namespace SevenStrikeModules.XHud.Hud
                 case HudSpace.世界空间:
                     for (int i = 0; i < SpawnItemList_World.Count; i++)
                     {
-                        LayoutSpawnerItem item = SpawnItemList_World[i];
+                        XHud_LayoutSpawner_Item item = SpawnItemList_World[i];
 
                         if (!item.InMotion && item.Spawned)
                         {
@@ -892,7 +892,7 @@ namespace SevenStrikeModules.XHud.Hud
                             yield return new WaitForSeconds(item.Delay_Despawn + DelayOrder_Despawn_World);
 
                             //---回收元素
-                            xHud_Manager.Instance.hm_HudElement_RecycleAt(
+                            XHud_Manager.Instance.hm_HudElement_RecycleAt(
                                 item.SpawnedElementNode.Element,
                                 item.UseSpawnerMotion == "自身动效" ? item.RecycleArgs : RecycleArgs,
                                 (element) =>/*动作委托：元素 Out 开始*/
@@ -936,7 +936,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             bool isEmpty = false;
 
-            if (xHud_Manager.Instance.Hud_ElementLibrarys == null)
+            if (XHud_Manager.Instance.Hud_ElementLibrarys == null)
                 isEmpty = true;
 
             return isEmpty;

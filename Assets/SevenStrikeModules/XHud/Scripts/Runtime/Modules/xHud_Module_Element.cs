@@ -1,8 +1,8 @@
 namespace SevenStrikeModules.XHud.Hud
 {
-    using DG.Tweening;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XTween;
     using System;
     using System.Collections.Generic;
     using UnityEngine;
@@ -15,25 +15,25 @@ namespace SevenStrikeModules.XHud.Hud
     /// 元素音效器的结构类
     /// </summary>
     [System.Serializable]
-    public class SounderNode
+    public class ElementNode_Sound
     {
         /// <summary>
         /// 音效器
         /// </summary>
-        public xHud_Module_Sounder Sounder;
+        public XHud_Module_Sounder Sounder;
     }
 
     /// <summary>
     /// 动画器的结构类
     /// </summary>
     [System.Serializable]
-    public class AnimatorNode
+    public class ElementNode_Animator
     {
         [SerializeField]
         /// <summary>
         /// 动画器
         /// </summary>
-        public xHud_Module_Animator Animator;
+        public XHud_Module_Animator Animator;
         [SerializeField]
         /// <summary>
         /// 动画器的动画总计时间
@@ -50,24 +50,24 @@ namespace SevenStrikeModules.XHud.Hud
     /// 数据源的结构类
     /// </summary>
     [System.Serializable]
-    public class ContainerNode
+    public class ElementNode_Container
     {
         /// <summary>
         /// Hud容器
         /// </summary>
-        public xHud_Module_Container Container;
+        public XHud_Module_Container Container;
     }
 
     /// <summary>
     /// 按钮的结构类
     /// </summary>
     [System.Serializable]
-    public class ButtonNode
+    public class ElementNode_Button
     {
         /// <summary>
         /// 按钮组件
         /// </summary>
-        public xHud_Module_Button Button;
+        public XHud_Module_Button Button;
         /// <summary>
         /// 用于选项按钮
         /// </summary>
@@ -78,12 +78,12 @@ namespace SevenStrikeModules.XHud.Hud
     /// 选项按钮的结构类
     /// </summary>
     [System.Serializable]
-    public class OptionButtonNode
+    public class ElementNode_OptionButton
     {
         /// <summary>
         /// 按钮组件
         /// </summary>
-        public xHud_Module_Button Button;
+        public XHud_Module_Button Button;
         /// <summary>
         /// 选项按钮标识
         /// </summary>
@@ -98,76 +98,76 @@ namespace SevenStrikeModules.XHud.Hud
     /// 选项的结构类
     /// </summary>
     [System.Serializable]
-    public class OptionNode
+    public class ElementNode_Option
     {
         /// <summary>
         /// 按钮组件
         /// </summary>
-        public xHud_Module_Option Option;
+        public XHud_Module_Option Option;
     }
 
     /// <summary>
     /// 文字的结构类
     /// </summary>
     [System.Serializable]
-    public class TextNode
+    public class ElementNode_Text
     {
         /// <summary>
         /// 文字组件
         /// </summary>
-        public xHud_Module_Text Text;
+        public XHud_Module_Text Text;
     }
 
     /// <summary>
     /// Tmp文字的结构类
     /// </summary>
     [System.Serializable]
-    public class TmpTextNode
+    public class ElementNode_TmpText
     {
         /// <summary>
         /// 文字组件
         /// </summary>
-        public xHud_Module_TmpText TmpText;
+        public XHud_Module_TmpText TmpText;
     }
 
     /// <summary>
     /// 滑动条的结构类
     /// </summary>
     [System.Serializable]
-    public class SliderNode
+    public class ElementNode_Slider
     {
         /// <summary>
         /// 滑动条组件
         /// </summary>
-        public xHud_Module_Slider Slider;
+        public XHud_Module_Slider Slider;
     }
 
     /// <summary>
     /// 进度条的结构类
     /// </summary>
     [System.Serializable]
-    public class ProgressNode
+    public class ElementNode_Progress
     {
         /// <summary>
         /// 进度条组件
         /// </summary>
-        public xHud_Module_Progress Progress;
+        public XHud_Module_Progress Progress;
     }
 
     /// <summary>
     /// 开关的结构类
     /// </summary>
     [System.Serializable]
-    public class ToggleNode
+    public class ElementNode_Toggle
     {
         /// <summary>
         /// 开关组件
         /// </summary>
-        public xHud_Module_Toggle Toggle;
+        public XHud_Module_Toggle Toggle;
     }
 
     [System.Serializable]
-    public class OriginalLayoutInfo
+    public class Element_OriginalLayoutInfo
     {
         public string LayoutName;
         public HudAnchor Anchor;
@@ -186,7 +186,7 @@ namespace SevenStrikeModules.XHud.Hud
     /// Hud元素
     /// </summary>    
     [RequireComponent(typeof(CanvasGroup))]
-    public class xHud_Module_Element : MonoBehaviour
+    public class XHud_Module_Element : MonoBehaviour
     {
         [SerializeField]
         /// <summary>
@@ -266,7 +266,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动作 - 动画播放 - 入场 - 开始
         /// </summary>
-        public UnityAction<xHud_Module_Element> act_on_element_in_start;
+        public UnityAction<XHud_Module_Element> act_on_element_in_start;
         /// <summary>
         /// 动作 - 动画播放 - 入场 - 进度中
         /// </summary>
@@ -274,11 +274,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动作 - 动画播放 - 入场 - 结束
         /// </summary>
-        public UnityAction<xHud_Module_Element> act_on_element_in_end;
+        public UnityAction<XHud_Module_Element> act_on_element_in_end;
         /// <summary>
         /// 动作 - 动画播放 - 出场 - 开始
         /// </summary>
-        public UnityAction<xHud_Module_Element> act_on_element_out_start;
+        public UnityAction<XHud_Module_Element> act_on_element_out_start;
         /// <summary>
         /// 动作 - 动画播放 - 出场 - 进度中
         /// </summary>
@@ -286,7 +286,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动作 - 动画播放 - 出场 - 结束
         /// </summary>
-        public UnityAction<xHud_Module_Element> act_on_element_out_end;
+        public UnityAction<XHud_Module_Element> act_on_element_out_end;
 
         /// <summary>
         /// 动作 - 动画播放 - 入场 - 开始
@@ -308,17 +308,17 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动作器
         /// </summary>
-        public xHud_Element_TriggerAction TriggerAction;
+        public XHud_Element_TriggerAction TriggerAction;
 
         /// <summary>
         /// 物体跟踪器
         /// </summary>
-        public xHud_ObjectTracker ObjectTracker;
+        public XHud_ObjectTracker ObjectTracker;
 
         /// <summary>
         /// 元素音效容器
         /// </summary>
-        public List<SounderNode> SounderNodes;
+        public List<ElementNode_Sound> SounderNodes;
 
         /// <summary>
         /// 动画状态
@@ -328,47 +328,47 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 数据源容器
         /// </summary>
-        public List<ContainerNode> ContainerNodes;
+        public List<ElementNode_Container> ContainerNodes;
 
         /// <summary>
         /// 动画器容器
         /// </summary>
-        public List<AnimatorNode> AnimatorNodes;
+        public List<ElementNode_Animator> AnimatorNodes;
 
         /// <summary>
         /// 按钮容器
         /// </summary>
-        public List<ButtonNode> ButtonNodes;
+        public List<ElementNode_Button> ButtonNodes;
 
         /// <summary>
         /// 选项容器
         /// </summary>
-        public List<OptionNode> OptionNodes;
+        public List<ElementNode_Option> OptionNodes;
 
         /// <summary>
         /// 文字容器
         /// </summary>
-        public List<TextNode> TextNodes;
+        public List<ElementNode_Text> TextNodes;
 
         /// <summary>
         /// Tmp文字容器
         /// </summary>
-        public List<TmpTextNode> TmpTextNodes;
+        public List<ElementNode_TmpText> TmpTextNodes;
 
         /// <summary>
         /// 滑动条容器
         /// </summary>
-        public List<SliderNode> SliderNodes;
+        public List<ElementNode_Slider> SliderNodes;
 
         /// <summary>
         /// 进度条容器
         /// </summary>
-        public List<ProgressNode> ProgressNodes;
+        public List<ElementNode_Progress> ProgressNodes;
 
         /// <summary>
         /// 开关容器
         /// </summary>
-        public List<ToggleNode> ToggleNodes;
+        public List<ElementNode_Toggle> ToggleNodes;
 
         /// <summary>
         /// 源自元素池的名称
@@ -378,17 +378,17 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动画模组 - 透明度_Alpha
         /// </summary>
-        private Tweener Tween_Alpha;
+        private XTween_Interface Tween_Alpha;
 
         /// <summary>
         /// 动画模组 - 位移
         /// </summary>
-        private Tweener Tween_Move;
+        private XTween_Interface Tween_Move;
 
         /// <summary>
         /// 动画模组 - 旋转_Rotation
         /// </summary>
-        private Tweener Tween_Rotation;
+        private XTween_Interface Tween_Rotation;
 
         public bool AnimatorsIsFold;
         public bool ButtonIsFold;
@@ -418,7 +418,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         ///  布局匹配方案列表
         /// </summary>
-        public List<OriginalLayoutInfo> RMS_InfoList;
+        public List<Element_OriginalLayoutInfo> RMS_InfoList;
 
         [SerializeField]
         /// <summary>
@@ -433,7 +433,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (CanvasGroup == null)
                 CanvasGroup = GetComponent<CanvasGroup>();
             if (TriggerAction == null)
-                TriggerAction = GetComponent<xHud_Element_TriggerAction>();
+                TriggerAction = GetComponent<XHud_Element_TriggerAction>();
         }
 
         public virtual void OnEnable()
@@ -447,12 +447,12 @@ namespace SevenStrikeModules.XHud.Hud
 
         public virtual void Start()
         {
-            xHud_Manager.Instance.Act_ScreenResolution_Changed += ScreenResolution_Changed;
+            XHud_Manager.Instance.Act_ScreenResolution_Changed += ScreenResolution_Changed;
         }
 
         private void ScreenResolution_Changed(string Indicator, Vector2 Res)
         {
-            xHud_Manager.Instance.hm_HudElement_Initialize_ByDesignLayout_For_Screen(this, Alpha, Vector3.zero, RMS_Name, true);
+            XHud_Manager.Instance.hm_HudElement_Initialize_ByDesignLayout_For_Screen(this, Alpha, Vector3.zero, RMS_Name, true);
         }
 
         public virtual void Update()
@@ -464,11 +464,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取一个动画器
         /// </summary>
-        /// <param tweenName="indicator">目标名称</param>
+        /// <param name="indicator">目标名称</param>
         /// <returns>返回一个匹配名称的HudAnimator动画器</returns>
-        public xHud_Module_Animator GetAnimator(string indicator)
+        public XHud_Module_Animator GetAnimator(string indicator)
         {
-            xHud_Module_Animator am = null;
+            XHud_Module_Animator am = null;
             for (int i = 0; i < AnimatorNodes.Count; i++)
             {
                 if (AnimatorNodes[i].Animator.GetIndicator() == indicator)
@@ -479,12 +479,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (am == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未获取到名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未获取到名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
             }
             return am;
         }
@@ -492,11 +492,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取一个动画器
         /// </summary>
-        /// <param tweenName="name">目标物体名称</param>
+        /// <param name="name">目标物体名称</param>
         /// <returns>返回一个匹配物体名称名称的HudAnimator动画器</returns>
-        public xHud_Module_Animator GetAnimator_WithObjectName(string name)
+        public XHud_Module_Animator GetAnimator_WithObjectName(string name)
         {
-            xHud_Module_Animator am = null;
+            XHud_Module_Animator am = null;
             for (int i = 0; i < AnimatorNodes.Count; i++)
             {
                 if (AnimatorNodes[i].Animator.gameObject.name == name)
@@ -507,12 +507,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (am == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
             }
             return am;
         }
@@ -520,11 +520,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// Hud元素 - 获取一个动画器
         /// </summary>
-        /// <param tweenName="id">目标ID</param>
+        /// <param name="id">目标ID</param>
         /// <returns>返回一个匹配ID的HudAnimator动画器</returns>
-        public xHud_Module_Animator GetAnimator(int id)
+        public XHud_Module_Animator GetAnimator(int id)
         {
-            xHud_Module_Animator am = null;
+            XHud_Module_Animator am = null;
             for (int i = 0; i < AnimatorNodes.Count; i++)
             {
                 if (AnimatorNodes[i].Animator.GetID() == id)
@@ -535,12 +535,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (am == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
             }
             return am;
         }
@@ -548,30 +548,30 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取一个目标动画器上的目标动画节点
         /// </summary>
-        /// <param tweenName="animator_indicator">目标动画器名称</param>
-        /// <param tweenName="tween_id">目标动画节点的ID</param>
+        /// <param name="animator_indicator">目标动画器名称</param>
+        /// <param name="tween_id">目标动画节点的ID</param>
         /// <returns></returns>
         public TweenNode GetAnimatorTween(string animator_indicator, int tween_id)
         {
-            xHud_Module_Animator anim = GetAnimator(animator_indicator);
+            XHud_Module_Animator anim = GetAnimator(animator_indicator);
             TweenNode node = anim.TweenNode_GetByID(tween_id);
 
             if (anim == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
                 }
             }
 
@@ -581,30 +581,30 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取一个目标动画器上的目标动画节点
         /// </summary>
-        /// <param tweenName="animator_id">目标动画器ID</param>
-        /// <param tweenName="tween_id">目标动画节点的ID</param>
+        /// <param name="animator_id">目标动画器ID</param>
+        /// <param name="tween_id">目标动画节点的ID</param>
         /// <returns></returns>
         public TweenNode GetAnimatorTween(int animator_id, int tween_id)
         {
-            xHud_Module_Animator anim = GetAnimator(animator_id);
+            XHud_Module_Animator anim = GetAnimator(animator_id);
             TweenNode node = anim.TweenNode_GetByID(tween_id);
 
             if (anim == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
                 }
             }
 
@@ -614,30 +614,30 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取一个目标动画器上的目标动画节点
         /// </summary>
-        /// <param tweenName="animator_indicator">目标动画器名称</param>
-        /// <param tweenName="tween_indicator">目标动画节点的名称</param>
+        /// <param name="animator_indicator">目标动画器名称</param>
+        /// <param name="tween_indicator">目标动画节点的名称</param>
         /// <returns></returns>
         public TweenNode GetAnimatorTween(string animator_indicator, string tween_indicator)
         {
-            xHud_Module_Animator anim = GetAnimator(animator_indicator);
+            XHud_Module_Animator anim = GetAnimator(animator_indicator);
             TweenNode node = anim.TweenNode_GetByIndicator(tween_indicator);
 
             if (anim == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
                 }
             }
 
@@ -690,18 +690,18 @@ namespace SevenStrikeModules.XHud.Hud
                 return;
             for (int i = 0; i < AnimatorNodes.Count; i++)
             {
-                xHud_Module_Animator anim = AnimatorNodes[i].Animator;
+                XHud_Module_Animator anim = AnimatorNodes[i].Animator;
                 anim.Play(tim, AnimatorNodes[i].DelayTime, Element_Animators_GlobalDuration * anim.Animator_GlobalDuration);
             }
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放动画器列表中的所有动画！播放时机为：" + tim.ToString(), HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放动画器列表中的所有动画！播放时机为：" + tim.ToString(), HudMsgState.通知);
         }
 
         /// <summary>
         /// 播放按钮子级中的指定ID的动画
         /// </summary>
-        /// <param tweenName="id">动画节点的ID</param>
-        /// <param tweenName="tim">触发动画的时机</param>
+        /// <param name="id">动画节点的ID</param>
+        /// <param name="tim">触发动画的时机</param>
         private void Animators_PlayAt(int id, string tim)
         {
             if (AnimatorNodes == null || AnimatorNodes.Count <= 0)
@@ -714,12 +714,12 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (AnimatorNodes[i].Animator.GetID() != id)
                     continue;
-                xHud_Module_Animator anim = AnimatorNodes[i].Animator;
+                XHud_Module_Animator anim = AnimatorNodes[i].Animator;
                 anim.Play(tim, AnimatorNodes[i].DelayTime, Element_Animators_GlobalDuration * anim.Animator_GlobalDuration);
             }
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -730,12 +730,12 @@ namespace SevenStrikeModules.XHud.Hud
         {
             for (int i = 0; i < AnimatorNodes.Count; i++)
             {
-                xHud_Module_Animator anim = AnimatorNodes[i].Animator;
+                XHud_Module_Animator anim = AnimatorNodes[i].Animator;
                 anim.RewindAllTweenNode();
             }
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "倒退复位动画器列表中的所有动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "倒退复位动画器列表中的所有动画！", HudMsgState.通知);
         }
         #endregion
 
@@ -744,7 +744,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// Hud元素 - 交互总开关
         /// </summary>
-        /// <param tweenName="treeState">交互开关状态</param>
+        /// <param name="treeState">交互开关状态</param>
         public virtual void element_SetInteractable(bool state)
         {
             CanvasGroup.interactable = state;
@@ -756,19 +756,19 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "将所有下级控件的交互开启！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "将所有下级控件的交互开启！", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "将所有下级控件的交互禁用！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "将所有下级控件的交互禁用！", HudMsgState.通知);
             }
         }
 
         /// <summary>
         /// Hud元素 - 生成后自动播放动画的开关
         /// </summary>
-        /// <param tweenName="treeState">开关状态</param>
+        /// <param name="treeState">开关状态</param>
         public virtual void element_SetAutoAnimator(bool state)
         {
             AutoPlayAnimators = state;
@@ -777,7 +777,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// Hud元素 - 重置状态
         /// </summary>
-        /// <param tweenName="Hidden">重置后是否隐藏物体</param>
+        /// <param name="Hidden">重置后是否隐藏物体</param>
         public virtual void element_Reset(bool Hidden = true, bool ClearEvents = true, bool ClearActions = true)
         {
             ID = 0;
@@ -829,7 +829,7 @@ namespace SevenStrikeModules.XHud.Hud
             gameObject.SetActive(!Hidden);
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "已重置！", HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "已重置！", HudMsgState.警告);
         }
 
         /// <summary>
@@ -844,45 +844,45 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// Hud元素 - 设置透明度
         /// </summary>
-        /// <param tweenName="alpha"></param>
+        /// <param name="alpha"></param>
         public virtual void element_AlphaSet(float alpha)
         {
             Alpha = alpha;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "透明度设置为：" + alpha, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "透明度设置为：" + alpha, HudMsgState.通知);
         }
 
         /// <summary>
         /// Hud元素 - 设置CanvasGroup透明度
         /// </summary>
-        /// <param tweenName="alpha"></param>
+        /// <param name="alpha"></param>
         public virtual void element_CanvasAlphaSet(float alpha)
         {
             if (CanvasGroup != null)
                 CanvasGroup.alpha = alpha;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "透明度设置为：" + alpha, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "透明度设置为：" + alpha, HudMsgState.通知);
         }
 
         /// <summary>
         /// Hud元素 - 设置锚点
         /// </summary>
-        /// <param tweenName="pivot"></param>
+        /// <param name="pivot"></param>
         public virtual void element_PivotSet(Vector2 pivot)
         {
             CurrentPivot = pivot;
             RectTransform.pivot = pivot;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的锚点设置为：" + pivot, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的锚点设置为：" + pivot, HudMsgState.通知);
         }
 
         /// <summary>
         /// Hud元素 - 设置锚点
         /// </summary>
-        /// <param tweenName="type"></param>
+        /// <param name="type"></param>
         public virtual void element_PivotSet(HudAnchor type)
         {
             switch (type)
@@ -924,14 +924,14 @@ namespace SevenStrikeModules.XHud.Hud
             RectTransform.pivot = CurrentPivot;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的锚点设置为：" + type.ToString(), HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的锚点设置为：" + type.ToString(), HudMsgState.通知);
         }
 
         /// <summary>
         /// Hud元素 - 设置锚点区域范围
         /// </summary>
-        /// <param tweenName="AnchorMin"></param>
-        /// <param tweenName="AnchorMax"></param>
+        /// <param name="AnchorMin"></param>
+        /// <param name="AnchorMax"></param>
         public virtual void element_AnchorRangeSet(Vector2 AnchorMin, Vector2 AnchorMax)
         {
             RectTransform.anchorMin = AnchorMin;
@@ -946,7 +946,7 @@ namespace SevenStrikeModules.XHud.Hud
             RectTransform.anchoredPosition3D = Vector3.zero;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的3D锚点位置归零！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的3D锚点位置归零！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -957,49 +957,49 @@ namespace SevenStrikeModules.XHud.Hud
             RectTransform.localEulerAngles = Vector3.zero;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的旋转归零！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的旋转归零！", HudMsgState.通知);
         }
 
         /// <summary>
         /// Hud元素 - 位置设置
         /// </summary>
-        /// <param tweenName="pos">锚点位置_AnchoredPosition</param>
+        /// <param name="pos">锚点位置_AnchoredPosition</param>
         public virtual void element_PositionSet(Vector3 pos)
         {
             RectTransform.anchoredPosition3D = pos;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的锚点位置设置为：" + pos, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的锚点位置设置为：" + pos, HudMsgState.通知);
         }
 
         /// <summary>
         /// Hud元素 - 尺寸设置
         /// </summary>
-        /// <param tweenName="size">尺寸_Size</param>
+        /// <param name="size">尺寸_Size</param>
         public virtual void element_SizeSet(Vector2 size)
         {
             RectTransform.sizeDelta = size;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的尺寸设置为：" + size, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的尺寸设置为：" + size, HudMsgState.通知);
         }
 
         /// <summary>
         /// Hud元素 - 位置设置 - 世界
         /// </summary>
-        /// <param tweenName="pos">世界位置</param>
+        /// <param name="pos">世界位置</param>
         public virtual void element_WorldPositionSet(Vector3 pos)
         {
             RectTransform.position = pos;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的世界位置设置为：" + pos, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的世界位置设置为：" + pos, HudMsgState.通知);
         }
 
         /// <summary>
         /// Hud元素 - 旋转设置
         /// </summary>
-        /// <param tweenName="rot">本地旋转角度</param>
+        /// <param name="rot">本地旋转角度</param>
         public virtual void element_RotationSet(Vector3 rot)
         {
             RectTransform.localEulerAngles = rot;
@@ -1008,35 +1008,35 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// Hud元素 - 旋转设置 - 世界
         /// </summary>
-        /// <param tweenName="rot">世界旋转角度</param>
+        /// <param name="rot">世界旋转角度</param>
         public virtual void element_WorldRotationSet(Quaternion rot)
         {
             RectTransform.rotation = rot;
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的世界旋转设置为：" + rot, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的世界旋转设置为：" + rot, HudMsgState.通知);
         }
 
         /// <summary>
         /// Hud元素 - 位置偏移设置
         /// </summary>
-        /// <param tweenName="offset">空间偏移</param>
+        /// <param name="offset">空间偏移</param>
         public virtual void element_PositionOffset(Vector3 offset)
         {
             RectTransform.anchoredPosition3D += offset;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的3D锚点位置偏移设置为：" + offset, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的3D锚点位置偏移设置为：" + offset, HudMsgState.通知);
         }
 
         /// <summary>
         /// Hud元素 - 缩放设置
         /// </summary>
-        /// <param tweenName="sca">缩放大小</param>
+        /// <param name="sca">缩放大小</param>
         public virtual void element_ScaleSet(Vector3 sca)
         {
             RectTransform.localScale = sca;
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的缩放设置为：" + sca, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的缩放设置为：" + sca, HudMsgState.通知);
         }
 
         /// <summary>
@@ -1051,7 +1051,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// Hud元素 - 创建ID编号
         /// </summary>
-        /// <param tweenName="IDList"></param>
+        /// <param name="IDList"></param>
         /// <returns></returns>
         public virtual int element_CreateID(HudElementNode[] ElementNodes)
         {
@@ -1076,7 +1076,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "生成的随机ID为：" + ran_id, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "生成的随机ID为：" + ran_id, HudMsgState.通知);
             return ran_id;
         }
 
@@ -1087,10 +1087,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 根据方案名称获取RMS节点参数
         /// </summary>
-        /// <param tweenName="solution"></param>
-        public OriginalLayoutInfo elelemt_RMS_Get(string solution)
+        /// <param name="solution"></param>
+        public Element_OriginalLayoutInfo elelemt_RMS_Get(string solution)
         {
-            OriginalLayoutInfo info = null;
+            Element_OriginalLayoutInfo info = null;
             for (int i = 0; i < RMS_InfoList.Count; i++)
             {
                 if (solution == RMS_InfoList[i].LayoutName)
@@ -1120,13 +1120,18 @@ namespace SevenStrikeModules.XHud.Hud
         public virtual void element_In(Motion_Creator args = null, UnityAction act_InComplete = null)
         {
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "杀死元素自身（透明度、位移、旋转）动画！", HudMsgState.警告);
-            Tween_Alpha.Kill();
-            Tween_Move.Kill();
-            Tween_Rotation.Kill();
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "杀死元素自身（透明度、位移、旋转）动画！", HudMsgState.警告);
+
+            if (Tween_Alpha != null)
+                Tween_Alpha.Kill();
+            if (Tween_Move != null)
+                Tween_Move.Kill();
+            if (Tween_Rotation != null)
+                Tween_Rotation.Kill();
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "进入动画开始！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "进入动画开始！", HudMsgState.通知);
+
             #region 动作 - 动画开始
             if (act_on_element_in_start != null)
             {
@@ -1139,18 +1144,18 @@ namespace SevenStrikeModules.XHud.Hud
 
             #region 动作 - 透明度动画
             ///---动画 - 透明度_Alpha（Ease）
-            if (args.Alpha.Ease != Ease.Unset)
+            if (args.Alpha.Ease != EaseMode.Unset)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放透明度动画 - 根据缓动参数", HudMsgState.通知);
-                Tween_Alpha = DOTween.To(() => Alpha, x => Alpha = x, 1, args.Alpha.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetEase(args.Alpha.Ease).SetDelay(args.Alpha.Delay).SetAutoKill(true).OnUpdate(() =>
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放透明度动画 - 根据缓动参数", HudMsgState.通知);
+                Tween_Alpha = XTween.To(() => Alpha, x => Alpha = x, 1, args.Alpha.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetEase(args.Alpha.Ease).SetDelay(args.Alpha.Delay).SetAutoKill(true).OnUpdate<float>((v, d, t) =>
                 {
                     if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                     {
                         if (act_on_element_in_progress != null)
-                            act_on_element_in_progress(Tween_Alpha.ElapsedPercentage());
+                            act_on_element_in_progress(Tween_Alpha.CurrentEasedProgress);
                     }
-                }).OnComplete(() =>
+                }).OnComplete((d) =>
                 {
                     if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                     {
@@ -1166,18 +1171,18 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             ///---动画 - 透明度_Alpha（Curve）
-            if (args.Alpha.Ease == Ease.Unset)
+            if (args.Alpha.Ease == EaseMode.Unset)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放透明度动画 - 根据曲线参数", HudMsgState.通知);
-                Tween_Alpha = DOTween.To(() => Alpha, x => Alpha = x, 1, args.Alpha.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetEase(args.Alpha.Curve).SetDelay(args.Alpha.Delay).SetAutoKill(true).OnUpdate(() =>
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放透明度动画 - 根据曲线参数", HudMsgState.通知);
+                Tween_Alpha = XTween.To(() => Alpha, x => Alpha = x, 1, args.Alpha.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetEase(args.Alpha.Curve).SetDelay(args.Alpha.Delay).SetAutoKill(true).OnUpdate<float>((v, d, t) =>
                 {
                     if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                     {
                         if (act_on_element_in_progress != null)
-                            act_on_element_in_progress(Tween_Alpha.ElapsedPercentage());
+                            act_on_element_in_progress(Tween_Alpha.CurrentEasedProgress);
                     }
-                }).OnComplete(() =>
+                }).OnComplete((d) =>
                  {
                      if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                      {
@@ -1290,20 +1295,20 @@ namespace SevenStrikeModules.XHud.Hud
                 }
 
                 ///---动画 - 位移（Ease）
-                if (args.Movement.Ease != Ease.Unset)
+                if (args.Movement.Ease != EaseMode.Unset)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放运动动画 - 根据缓动参数", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放运动动画 - 根据缓动参数", HudMsgState.通知);
                     if (args.Movement.Movement == HudMotion_Movement.W_中心缩放)
                     {
-                        Tween_Move = RectTransform.DOScale(endvalue, args.Movement.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).From(fromvalue).SetDelay(args.Movement.Delay).SetEase(args.Movement.Ease).SetAutoKill(true).OnUpdate(() =>
+                        Tween_Move = RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetFrom(fromvalue).SetDelay(args.Movement.Delay).SetEase(args.Movement.Ease).SetAutoKill(true).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                             {
                                 if (act_on_element_in_progress != null)
-                                    act_on_element_in_progress(Tween_Move.ElapsedPercentage());
+                                    act_on_element_in_progress(Tween_Move.CurrentEasedProgress);
                             }
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                          {
                              if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                              {
@@ -1319,14 +1324,14 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     else
                     {
-                        Tween_Move = RectTransform.DOLocalMove(endvalue, args.Movement.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).From(fromvalue, true, true).SetRelative(true).SetDelay(args.Movement.Delay).SetEase(args.Movement.Ease).SetAutoKill(true).OnUpdate(() =>
+                        Tween_Move = RectTransform.xt_AnchoredPosition3D_To(endvalue, args.Movement.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetFrom(fromvalue).SetRelative(true).SetDelay(args.Movement.Delay).SetEase(args.Movement.Ease).SetAutoKill(true).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                             {
                                 if (act_on_element_in_progress != null)
-                                    act_on_element_in_progress(Tween_Move.ElapsedPercentage());
+                                    act_on_element_in_progress(Tween_Move.CurrentEasedProgress);
                             }
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                           {
                               if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                               {
@@ -1343,20 +1348,20 @@ namespace SevenStrikeModules.XHud.Hud
                 }
 
                 ///---动画 - 位移（Curve）
-                if (args.Movement.Ease == Ease.Unset)
+                if (args.Movement.Ease == EaseMode.Unset)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放运动动画 - 根据曲线参数", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放运动动画 - 根据曲线参数", HudMsgState.通知);
                     if (args.Movement.Movement == HudMotion_Movement.W_中心缩放)
                     {
-                        Tween_Move = RectTransform.DOScale(endvalue, args.Movement.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).From(fromvalue).SetDelay(args.Movement.Delay).SetEase(args.Movement.Curve).SetAutoKill(true).OnUpdate(() =>
+                        Tween_Move = RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetFrom(fromvalue).SetDelay(args.Movement.Delay).SetEase(args.Movement.Curve).SetAutoKill(true).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                             {
                                 if (act_on_element_in_progress != null)
-                                    act_on_element_in_progress(Tween_Move.ElapsedPercentage());
+                                    act_on_element_in_progress(Tween_Move.CurrentEasedProgress);
                             }
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                           {
                               if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                               {
@@ -1372,14 +1377,14 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     else
                     {
-                        Tween_Move = RectTransform.DOLocalMove(endvalue, args.Movement.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).From(fromvalue, true, true).SetRelative(true).SetDelay(args.Movement.Delay).SetEase(args.Movement.Curve).SetAutoKill(true).OnUpdate(() =>
+                        Tween_Move = RectTransform.xt_AnchoredPosition3D_To(endvalue, args.Movement.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetFrom(fromvalue).SetRelative(true).SetDelay(args.Movement.Delay).SetEase(args.Movement.Curve).SetAutoKill(true).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                             {
                                 if (act_on_element_in_progress != null)
-                                    act_on_element_in_progress(Tween_Move.ElapsedPercentage());
+                                    act_on_element_in_progress(Tween_Move.CurrentEasedProgress);
                             }
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                           {
                               if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                               {
@@ -1435,18 +1440,18 @@ namespace SevenStrikeModules.XHud.Hud
                         break;
                 }
 
-                if (args.Rotation.Ease != Ease.Unset)
+                if (args.Rotation.Ease != EaseMode.Unset)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放旋转动画 - 根据缓动参数", HudMsgState.通知);
-                    Tween_Rotation = RectTransform.DOLocalRotate(endvalue, args.Rotation.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).From(fromvalue, true, true).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Ease).SetAutoKill(true).OnUpdate(() =>
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放旋转动画 - 根据缓动参数", HudMsgState.通知);
+                    Tween_Rotation = RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration, true, true, XTweenRotationSpace.绝对, XTweenRotationMode.Normal).SetFrom(fromvalue).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Ease).SetAutoKill(true).OnUpdate<Vector3>((v, d, t) =>
                     {
                         if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                         {
                             if (act_on_element_in_progress != null)
-                                act_on_element_in_progress(Tween_Rotation.ElapsedPercentage());
+                                act_on_element_in_progress(Tween_Rotation.CurrentEasedProgress);
                         }
-                    }).OnComplete(() =>
+                    }).OnComplete((d) =>
                     {
                         if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                         {
@@ -1461,18 +1466,18 @@ namespace SevenStrikeModules.XHud.Hud
                     });
                 }
 
-                if (args.Rotation.Ease == Ease.Unset)
+                if (args.Rotation.Ease == EaseMode.Unset)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放旋转动画 - 根据曲线参数", HudMsgState.通知);
-                    Tween_Rotation = RectTransform.DOLocalRotate(endvalue, args.Rotation.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).From(fromvalue, true, true).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Curve).SetAutoKill(true).OnUpdate(() =>
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放旋转动画 - 根据曲线参数", HudMsgState.通知);
+                    Tween_Rotation = RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration, true, true, XTweenRotationSpace.绝对, XTweenRotationMode.Normal).SetFrom(fromvalue).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Curve).SetAutoKill(true).OnUpdate<Vector3>((v, d, t) =>
                     {
                         if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                         {
                             if (act_on_element_in_progress != null)
-                                act_on_element_in_progress(Tween_Rotation.ElapsedPercentage());
+                                act_on_element_in_progress(Tween_Rotation.CurrentEasedProgress);
                         }
-                    }).OnComplete(() =>
+                    }).OnComplete((d) =>
                       {
                           if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                           {
@@ -1497,13 +1502,13 @@ namespace SevenStrikeModules.XHud.Hud
         public virtual void element_In_Start()
         {
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "元素进入前逻辑调用", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素进入前逻辑调用", HudMsgState.通知);
             AnimateState = HudElementAnimateState.Animating;
 
             Animating = true;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用Canvas像素对齐！", HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用Canvas像素对齐！", HudMsgState.警告);
 
             if (AutoPlayAnimators)
             {
@@ -1527,13 +1532,13 @@ namespace SevenStrikeModules.XHud.Hud
         public virtual void element_In_End()
         {
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "元素进入后逻辑调用", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素进入后逻辑调用", HudMsgState.通知);
             AnimateState = HudElementAnimateState.Static;
 
             Animating = false;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "恢复Canvas像素对齐！", HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "恢复Canvas像素对齐！", HudMsgState.警告);
 
             if (AutoPlayAnimators)
             {
@@ -1561,13 +1566,13 @@ namespace SevenStrikeModules.XHud.Hud
         public virtual void element_Out(Motion_Recycler args = null, UnityAction act_OutComplete = null)
         {
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "杀死元素自身（透明度、位移、旋转）动画！", HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "杀死元素自身（透明度、位移、旋转）动画！", HudMsgState.警告);
             Tween_Alpha.Kill();
             Tween_Move.Kill();
             Tween_Rotation.Kill();
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "退出动画开始！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "退出动画开始！", HudMsgState.通知);
 
             #region 动作 - 动画开始
             if (act_on_element_out_start != null)
@@ -1579,18 +1584,18 @@ namespace SevenStrikeModules.XHud.Hud
 
             #region 动作 - 透明度动画
             ///---动画 - 透明度_Alpha（Ease）
-            if (args.Alpha.Ease != Ease.Unset)
+            if (args.Alpha.Ease != EaseMode.Unset)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放透明度动画 - 根据缓动参数", HudMsgState.通知);
-                Tween_Alpha = DOTween.To(() => Alpha, x => Alpha = x, 0, args.Alpha.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetEase(args.Alpha.Ease).SetDelay(args.Alpha.Delay).SetAutoKill(true).OnUpdate(() =>
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放透明度动画 - 根据缓动参数", HudMsgState.通知);
+                Tween_Alpha = XTween.To(() => Alpha, x => Alpha = x, 0, args.Alpha.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetEase(args.Alpha.Ease).SetDelay(args.Alpha.Delay).SetAutoKill(true).OnUpdate<float>((v, d, t) =>
                 {
                     if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                     {
                         if (act_on_element_out_progress != null)
-                            act_on_element_out_progress(Tween_Alpha.ElapsedPercentage());
+                            act_on_element_out_progress(Tween_Alpha.CurrentEasedProgress);
                     }
-                }).OnComplete(() =>
+                }).OnComplete((d) =>
                  {
                      if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                      {
@@ -1606,18 +1611,18 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             ///---动画 - 透明度_Alpha（Curve）
-            if (args.Alpha.Ease == Ease.Unset)
+            if (args.Alpha.Ease == EaseMode.Unset)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放透明度动画 - 根据曲线参数", HudMsgState.通知);
-                Tween_Alpha = DOTween.To(() => Alpha, x => Alpha = x, 0, args.Alpha.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetEase(args.Alpha.Curve).SetDelay(args.Alpha.Delay).SetAutoKill(true).OnUpdate(() =>
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放透明度动画 - 根据曲线参数", HudMsgState.通知);
+                Tween_Alpha = XTween.To(() => Alpha, x => Alpha = x, 0, args.Alpha.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetEase(args.Alpha.Curve).SetDelay(args.Alpha.Delay).SetAutoKill(true).OnUpdate<float>((v, d, t) =>
                 {
                     if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                     {
                         if (act_on_element_out_progress != null)
-                            act_on_element_out_progress(Tween_Alpha.ElapsedPercentage());
+                            act_on_element_out_progress(Tween_Alpha.CurrentEasedProgress);
                     }
-                }).OnComplete(() =>
+                }).OnComplete((d) =>
                   {
                       if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                       {
@@ -1696,20 +1701,20 @@ namespace SevenStrikeModules.XHud.Hud
                 }
 
                 ///---动画 - 位移（Ease）
-                if (args.Movement.Ease != Ease.Unset)
+                if (args.Movement.Ease != EaseMode.Unset)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放运动动画 - 根据缓动参数", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放运动动画 - 根据缓动参数", HudMsgState.通知);
                     if (args.Movement.Movement == HudMotion_Movement.W_中心缩放)
                     {
-                        Tween_Move = RectTransform.DOScale(endvalue, args.Movement.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetDelay(args.Movement.Delay).SetEase(args.Movement.Ease).SetAutoKill(true).OnUpdate(() =>
+                        Tween_Move = RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetDelay(args.Movement.Delay).SetEase(args.Movement.Ease).SetAutoKill(true).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                             {
                                 if (act_on_element_out_progress != null)
-                                    act_on_element_out_progress(Tween_Move.ElapsedPercentage());
+                                    act_on_element_out_progress(Tween_Move.CurrentEasedProgress);
                             }
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                             {
@@ -1725,14 +1730,14 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     else
                     {
-                        Tween_Move = RectTransform.DOLocalMove(endvalue, args.Movement.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetRelative(true).SetDelay(args.Movement.Delay).SetEase(args.Movement.Ease).SetAutoKill(true).OnUpdate(() =>
+                        Tween_Move = RectTransform.xt_AnchoredPosition3D_To(endvalue, args.Movement.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetRelative(true).SetDelay(args.Movement.Delay).SetEase(args.Movement.Ease).SetAutoKill(true).OnUpdate<Vector3>((v, d, t) =>
                 {
                     if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                     {
                         if (act_on_element_out_progress != null)
-                            act_on_element_out_progress(Tween_Move.ElapsedPercentage());
+                            act_on_element_out_progress(Tween_Move.CurrentEasedProgress);
                     }
-                }).OnComplete(() =>
+                }).OnComplete((d) =>
                           {
                               if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                               {
@@ -1749,20 +1754,20 @@ namespace SevenStrikeModules.XHud.Hud
                 }
 
                 ///---动画 - 位移（Curve）
-                if (args.Movement.Ease == Ease.Unset)
+                if (args.Movement.Ease == EaseMode.Unset)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放运动动画 - 根据曲线参数", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放运动动画 - 根据曲线参数", HudMsgState.通知);
                     if (args.Movement.Movement == HudMotion_Movement.W_中心缩放)
                     {
-                        Tween_Move = RectTransform.DOScale(endvalue, args.Movement.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetDelay(args.Movement.Delay).SetEase(args.Movement.Curve).SetAutoKill(true).OnUpdate(() =>
+                        Tween_Move = RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetDelay(args.Movement.Delay).SetEase(args.Movement.Curve).SetAutoKill(true).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                             {
                                 if (act_on_element_out_progress != null)
-                                    act_on_element_out_progress(Tween_Move.ElapsedPercentage());
+                                    act_on_element_out_progress(Tween_Move.CurrentEasedProgress);
                             }
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                           {
                               if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                               {
@@ -1778,14 +1783,14 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     else
                     {
-                        Tween_Move = RectTransform.DOLocalMove(endvalue, args.Movement.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetRelative(true).SetDelay(args.Movement.Delay).SetEase(args.Movement.Curve).SetAutoKill(true).OnUpdate(() =>
+                        Tween_Move = RectTransform.xt_AnchoredPosition3D_To(endvalue, args.Movement.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetRelative(true).SetDelay(args.Movement.Delay).SetEase(args.Movement.Curve).SetAutoKill(true).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                             {
                                 if (act_on_element_out_progress != null)
-                                    act_on_element_out_progress(Tween_Move.ElapsedPercentage());
+                                    act_on_element_out_progress(Tween_Move.CurrentEasedProgress);
                             }
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                             {
@@ -1832,18 +1837,18 @@ namespace SevenStrikeModules.XHud.Hud
                         break;
                 }
 
-                if (args.Rotation.Ease != Ease.Unset)
+                if (args.Rotation.Ease != EaseMode.Unset)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放旋转动画 - 根据缓动参数", HudMsgState.通知);
-                    Tween_Rotation = RectTransform.DOLocalRotate(endvalue, args.Rotation.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Ease).SetAutoKill(true).OnUpdate(() =>
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放旋转动画 - 根据缓动参数", HudMsgState.通知);
+                    Tween_Rotation = RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration, true, true, XTweenRotationSpace.绝对, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Ease).SetAutoKill(true).OnUpdate<Vector3>((v, d, t) =>
                     {
                         if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                         {
                             if (act_on_element_out_progress != null)
-                                act_on_element_out_progress(Tween_Rotation.ElapsedPercentage());
+                                act_on_element_out_progress(Tween_Rotation.CurrentEasedProgress);
                         }
-                    }).OnComplete(() =>
+                    }).OnComplete((d) =>
                       {
                           if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                           {
@@ -1858,18 +1863,18 @@ namespace SevenStrikeModules.XHud.Hud
                       });
                 }
 
-                if (args.Rotation.Ease == Ease.Unset)
+                if (args.Rotation.Ease == EaseMode.Unset)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "播放旋转动画 - 根据曲线参数", HudMsgState.通知);
-                    Tween_Rotation = RectTransform.DOLocalRotate(endvalue, args.Rotation.Duration * xHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Curve).SetAutoKill(true).OnUpdate(() =>
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放旋转动画 - 根据曲线参数", HudMsgState.通知);
+                    Tween_Rotation = RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * XHud_Manager.Instance.DurationMultiply * Element_Animators_GlobalDuration, true, true, XTweenRotationSpace.绝对, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Curve).SetAutoKill(true).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                             {
                                 if (act_on_element_out_progress != null)
-                                    act_on_element_out_progress(Tween_Rotation.ElapsedPercentage());
+                                    act_on_element_out_progress(Tween_Rotation.CurrentEasedProgress);
                             }
-                        }).OnComplete(() =>
+                        }).OnComplete((d) =>
                       {
                           if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                           {
@@ -1893,16 +1898,16 @@ namespace SevenStrikeModules.XHud.Hud
         public virtual void element_Out_Start()
         {
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "退出前逻辑调用", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "退出前逻辑调用", HudMsgState.通知);
 
             ///---元素动画状态变为动画中
             AnimateState = HudElementAnimateState.Animating;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用Canvas像素对齐！", HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用Canvas像素对齐！", HudMsgState.警告);
 
-            if (xHud_Manager.Instance.UseAutoPerfectPixel)
-                xHud_Manager.Instance.hm_UsePixelPerfect(false);
+            if (XHud_Manager.Instance.UseAutoPerfectPixel)
+                XHud_Manager.Instance.hm_UsePixelPerfect(false);
 
             Animating = true;
 
@@ -1928,17 +1933,17 @@ namespace SevenStrikeModules.XHud.Hud
         public virtual void element_Out_End(Motion_Recycler args = null)
         {
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "退出后逻辑调用", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "退出后逻辑调用", HudMsgState.通知);
 
             ///---元素动画状态变为静态
             AnimateState = HudElementAnimateState.Static;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "恢复Canvas像素对齐！", HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "恢复Canvas像素对齐！", HudMsgState.警告);
 
             ///---像素对齐开启
-            if (xHud_Manager.Instance.UseAutoPerfectPixel)
-                xHud_Manager.Instance.hm_UsePixelPerfect(true);
+            if (XHud_Manager.Instance.UseAutoPerfectPixel)
+                XHud_Manager.Instance.hm_UsePixelPerfect(true);
 
             ///---元素动画开关为关
             Animating = false;
@@ -1950,7 +1955,7 @@ namespace SevenStrikeModules.XHud.Hud
             Animators_Rewind();
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "将所有子节点中的Animator的动画都立即杀死！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "将所有子节点中的Animator的动画都立即杀死！", HudMsgState.通知);
             for (int i = 0; i < AnimatorNodes.Count; i++)
             {
                 for (int s = 0; s < AnimatorNodes[i].Animator.AnimateTweenNodes.Count; s++)
@@ -1960,25 +1965,25 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "从HudManager的布局列表中移除！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "从HudManager的布局列表中移除！", HudMsgState.通知);
             ///---从管理器的布局中移除元素项以便于下一次使用（元素生成后会在HudManager中的LayoutAnchors中记录赋值）
-            for (int i = 0; i < xHud_Manager.Instance.Anchors_Layout_Screen.Count; i++)
+            for (int i = 0; i < XHud_Manager.Instance.Anchors_Layout_Screen.Count; i++)
             {
-                for (int s = 0; s < xHud_Manager.Instance.Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
+                for (int s = 0; s < XHud_Manager.Instance.Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
                 {
-                    if (this.ID == xHud_Manager.Instance.Anchors_Layout_Screen[i].HudElementInfos[s].ID)
+                    if (this.ID == XHud_Manager.Instance.Anchors_Layout_Screen[i].HudElementInfos[s].ID)
                     {
-                        xHud_Manager.Instance.Anchors_Layout_Screen[i].HudElementInfos.RemoveAt(s);
+                        XHud_Manager.Instance.Anchors_Layout_Screen[i].HudElementInfos.RemoveAt(s);
                     }
                 }
             }
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "回收到元素池！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "回收到元素池！", HudMsgState.通知);
             if (CreateState == HudElementCreateState.Created)
             {
                 ///---回收元素
-                xHud_Manager.Instance.hm_ElementLibrary_Despawn(this);
+                XHud_Manager.Instance.hm_ElementLibrary_Despawn(this);
             }
         }
 
@@ -2002,7 +2007,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 获取元素动作器
         /// </summary>
         /// <returns></returns>
-        public xHud_Element_TriggerAction element_GetTriggerAction()
+        public XHud_Element_TriggerAction element_GetTriggerAction()
         {
             if (element_TriggerActionIsExist())
                 return TriggerAction;
@@ -2017,7 +2022,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 启用或禁用所有按钮的交互
         /// </summary>
-        /// <param tweenName="treeState">状态</param>
+        /// <param name="treeState">状态</param>
         public void element_Button_InteractableSetAll(bool state)
         {
             if (ButtonNodes.Count <= 0)
@@ -2029,19 +2034,19 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有按钮交互！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有按钮交互！", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有按钮交互！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有按钮交互！", HudMsgState.通知);
             }
         }
 
         /// <summary>
         /// 启用或禁用所有按钮
         /// </summary>
-        /// <param tweenName="treeState">状态</param>
+        /// <param name="treeState">状态</param>
         public void element_Button_EnableSetAll(bool state)
         {
             for (int i = 0; i < ButtonNodes.Count; i++)
@@ -2051,22 +2056,22 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有按钮脚本！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有按钮脚本！", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有按钮脚本！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有按钮脚本！", HudMsgState.通知);
             }
         }
 
         /// <summary>
         /// 获取目标按钮
         /// </summary>
-        /// <param tweenName="indicator">标识名称</param>
-        public xHud_Module_Button element_Button_Get(string indicator)
+        /// <param name="indicator">标识名称</param>
+        public XHud_Module_Button element_Button_Get(string indicator)
         {
-            xHud_Module_Button btn = null;
+            XHud_Module_Button btn = null;
             for (int i = 0; i < ButtonNodes.Count; i++)
             {
                 if (ButtonNodes[i].Button.Indicator == indicator)
@@ -2077,12 +2082,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (btn == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的按钮！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的按钮！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的按钮！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的按钮！", HudMsgState.通知);
             }
             return btn;
         }
@@ -2090,9 +2095,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取所有按钮
         /// </summary>
-        public xHud_Module_Button[] element_Button_GetAll(bool IgnoreOptionBtn = true)
+        public XHud_Module_Button[] element_Button_GetAll(bool IgnoreOptionBtn = true)
         {
-            List<xHud_Module_Button> btnlist = new List<xHud_Module_Button>();
+            List<XHud_Module_Button> btnlist = new List<XHud_Module_Button>();
             for (int i = 0; i < ButtonNodes.Count; i++)
             {
                 if (IgnoreOptionBtn)
@@ -2103,12 +2108,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (btnlist.Count <= 0)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的按钮列表为空！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的按钮列表为空！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + ButtonNodes.Count + " 个按钮！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + ButtonNodes.Count + " 个按钮！", HudMsgState.通知);
             }
             return btnlist.ToArray();
         }
@@ -2144,8 +2149,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 清空目标按钮的所有委托
         /// </summary>
-        /// <param tweenName="btn"></param>
-        public void element_Button_Target_ActionsClear(xHud_Module_Button btn, bool IgnoreOptionBtn = true)
+        /// <param name="btn"></param>
+        public void element_Button_Target_ActionsClear(XHud_Module_Button btn, bool IgnoreOptionBtn = true)
         {
             if (IgnoreOptionBtn)
                 if (btn.IsOptionButton)
@@ -2156,8 +2161,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 清空目标按钮的所有事件
         /// </summary>
-        /// <param tweenName="btn"></param>
-        public void element_Button_Target_EventsClear(xHud_Module_Button btn, bool IgnoreOptionBtn = true)
+        /// <param name="btn"></param>
+        public void element_Button_Target_EventsClear(XHud_Module_Button btn, bool IgnoreOptionBtn = true)
         {
             if (IgnoreOptionBtn)
                 if (btn.IsOptionButton)
@@ -2172,7 +2177,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 启用或禁用所有选项的交互
         /// </summary>
-        /// <param tweenName="treeState">状态</param>
+        /// <param name="treeState">状态</param>
         public void element_Option_InteractableSetAll(bool state)
         {
             if (OptionNodes.Count <= 0)
@@ -2187,19 +2192,19 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有选项交互！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有选项交互！", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有选项交互！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有选项交互！", HudMsgState.通知);
             }
         }
 
         /// <summary>
         /// 启用或禁用所有选项
         /// </summary>
-        /// <param tweenName="treeState">状态</param>
+        /// <param name="treeState">状态</param>
         public void element_Option_EnableSetAll(bool state)
         {
             for (int i = 0; i < OptionNodes.Count; i++)
@@ -2209,22 +2214,22 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有选项脚本！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有选项脚本！", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有选项脚本！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有选项脚本！", HudMsgState.通知);
             }
         }
 
         /// <summary>
         /// 获取目标选项
         /// </summary>
-        /// <param tweenName="indicator">标识名称</param>
-        public xHud_Module_Option element_Option_Get(string indicator)
+        /// <param name="indicator">标识名称</param>
+        public XHud_Module_Option element_Option_Get(string indicator)
         {
-            xHud_Module_Option opt = null;
+            XHud_Module_Option opt = null;
             for (int i = 0; i < OptionNodes.Count; i++)
             {
                 if (OptionNodes[i].Option.Indicator == indicator)
@@ -2235,12 +2240,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (opt == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的选项！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的选项！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的选项！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的选项！", HudMsgState.通知);
             }
             return opt;
         }
@@ -2248,9 +2253,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取所有选项
         /// </summary>
-        public xHud_Module_Option[] element_Option_GetAll()
+        public XHud_Module_Option[] element_Option_GetAll()
         {
-            List<xHud_Module_Option> optlist = new List<xHud_Module_Option>();
+            List<XHud_Module_Option> optlist = new List<XHud_Module_Option>();
             for (int i = 0; i < OptionNodes.Count; i++)
             {
                 optlist.Add(OptionNodes[i].Option);
@@ -2258,12 +2263,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (optlist.Count <= 0)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的选项列表为空！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的选项列表为空！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + OptionNodes.Count + " 个选项！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + OptionNodes.Count + " 个选项！", HudMsgState.通知);
             }
             return optlist.ToArray();
         }
@@ -2293,8 +2298,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 清空目标选项的所有委托
         /// </summary>
-        /// <param tweenName="opt"></param>
-        public void element_Option_Target_ActionsClear(xHud_Module_Option opt)
+        /// <param name="opt"></param>
+        public void element_Option_Target_ActionsClear(XHud_Module_Option opt)
         {
             opt.opt_ClearActions();
         }
@@ -2302,8 +2307,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 清空目标选项的所有事件
         /// </summary>
-        /// <param tweenName="opt"></param>
-        public void element_Option_Target_EventsClear(xHud_Module_Option opt)
+        /// <param name="opt"></param>
+        public void element_Option_Target_EventsClear(XHud_Module_Option opt)
         {
             opt.opt_ClearEvents();
         }
@@ -2315,10 +2320,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取目标文字
         /// </summary>
-        /// <param tweenName="indicator">标识名称</param>
-        public xHud_Module_Text element_Text_Get(string indicator)
+        /// <param name="indicator">标识名称</param>
+        public XHud_Module_Text element_Text_Get(string indicator)
         {
-            xHud_Module_Text tex = null;
+            XHud_Module_Text tex = null;
             for (int i = 0; i < TextNodes.Count; i++)
             {
                 if (TextNodes[i].Text.Indicator == indicator)
@@ -2329,12 +2334,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (tex == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的文字！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的文字！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的文字组件！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的文字组件！", HudMsgState.通知);
             }
             return tex;
         }
@@ -2342,9 +2347,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取所有文字
         /// </summary>
-        public xHud_Module_Text[] element_Text_GetAll()
+        public XHud_Module_Text[] element_Text_GetAll()
         {
-            List<xHud_Module_Text> textlist = new List<xHud_Module_Text>();
+            List<XHud_Module_Text> textlist = new List<XHud_Module_Text>();
             for (int i = 0; i < TextNodes.Count; i++)
             {
                 textlist.Add(TextNodes[i].Text);
@@ -2352,12 +2357,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (textlist.Count <= 0)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的文字列表为空！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的文字列表为空！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + TextNodes.Count + " 个文字组件！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + TextNodes.Count + " 个文字组件！", HudMsgState.通知);
             }
             return textlist.ToArray();
         }
@@ -2369,10 +2374,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取目标Tmp文字
         /// </summary>
-        /// <param tweenName="indicator">标识名称</param>
-        public xHud_Module_TmpText element_TmpText_Get(string indicator)
+        /// <param name="indicator">标识名称</param>
+        public XHud_Module_TmpText element_TmpText_Get(string indicator)
         {
-            xHud_Module_TmpText tex = null;
+            XHud_Module_TmpText tex = null;
             for (int i = 0; i < TmpTextNodes.Count; i++)
             {
                 if (TmpTextNodes[i].TmpText.Indicator == indicator)
@@ -2383,12 +2388,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (tex == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的文字！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的文字！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的Tmp文字！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的Tmp文字！", HudMsgState.通知);
             }
             return tex;
         }
@@ -2396,9 +2401,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取所有Tmp文字
         /// </summary>
-        public xHud_Module_TmpText[] element_TmpText_GetAll()
+        public XHud_Module_TmpText[] element_TmpText_GetAll()
         {
-            List<xHud_Module_TmpText> textlist = new List<xHud_Module_TmpText>();
+            List<XHud_Module_TmpText> textlist = new List<XHud_Module_TmpText>();
             for (int i = 0; i < TmpTextNodes.Count; i++)
             {
                 textlist.Add(TmpTextNodes[i].TmpText);
@@ -2406,12 +2411,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (textlist.Count <= 0)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的文字列表为空！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的文字列表为空！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + TmpTextNodes.Count + " 个文字组件！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + TmpTextNodes.Count + " 个文字组件！", HudMsgState.通知);
             }
             return textlist.ToArray();
         }
@@ -2423,7 +2428,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 启用或禁用所有滑动条的交互
         /// </summary>
-        /// <param tweenName="treeState">状态</param>
+        /// <param name="treeState">状态</param>
         public void element_Slider_InteractableSetAll(bool state)
         {
             if (SliderNodes.Count <= 0)
@@ -2435,19 +2440,19 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有滑动条交互！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有滑动条交互！", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有滑动条交互！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有滑动条交互！", HudMsgState.通知);
             }
         }
 
         /// <summary>
         /// 启用或禁用所有滑动条
         /// </summary>
-        /// <param tweenName="treeState">状态</param>
+        /// <param name="treeState">状态</param>
         public void element_Slider_EnableSetAll(bool state)
         {
             for (int i = 0; i < SliderNodes.Count; i++)
@@ -2457,22 +2462,22 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有滑动条脚本！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有滑动条脚本！", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有滑动条脚本！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有滑动条脚本！", HudMsgState.通知);
             }
         }
 
         /// <summary>
         /// 获取目标滑动条
         /// </summary>
-        /// <param tweenName="indicator">标识名称</param>
-        public xHud_Module_Slider element_Slider_Get(string indicator)
+        /// <param name="indicator">标识名称</param>
+        public XHud_Module_Slider element_Slider_Get(string indicator)
         {
-            xHud_Module_Slider sli = null;
+            XHud_Module_Slider sli = null;
             for (int i = 0; i < SliderNodes.Count; i++)
             {
                 if (SliderNodes[i].Slider.Indicator == indicator)
@@ -2483,12 +2488,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (sli == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的滑动条！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的滑动条！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的滑动条！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的滑动条！", HudMsgState.通知);
             }
             return sli;
         }
@@ -2496,9 +2501,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取所有滑动条
         /// </summary>
-        public xHud_Module_Slider[] element_Slider_GetAll()
+        public XHud_Module_Slider[] element_Slider_GetAll()
         {
-            List<xHud_Module_Slider> sliderlist = new List<xHud_Module_Slider>();
+            List<XHud_Module_Slider> sliderlist = new List<XHud_Module_Slider>();
             for (int i = 0; i < SliderNodes.Count; i++)
             {
                 sliderlist.Add(SliderNodes[i].Slider);
@@ -2506,12 +2511,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (sliderlist.Count <= 0)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的滑动条列表为空！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的滑动条列表为空！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + SliderNodes.Count + " 个滑动条！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + SliderNodes.Count + " 个滑动条！", HudMsgState.通知);
             }
             return sliderlist.ToArray();
         }
@@ -2541,8 +2546,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 清空目标滑动条的所有委托
         /// </summary>
-        /// <param tweenName="slider"></param>
-        public void element_Slider_Target_ActionsClear(xHud_Module_Slider slider)
+        /// <param name="slider"></param>
+        public void element_Slider_Target_ActionsClear(XHud_Module_Slider slider)
         {
             slider.sli_ActionsClear();
         }
@@ -2550,8 +2555,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 清空目标滑动条的所有事件
         /// </summary>
-        /// <param tweenName="slider"></param>
-        public void element_Slider_Target_EventsClear(xHud_Module_Slider slider)
+        /// <param name="slider"></param>
+        public void element_Slider_Target_EventsClear(XHud_Module_Slider slider)
         {
             slider.sli_EventsClear();
         }
@@ -2562,7 +2567,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 启用或禁用所有进度条
         /// </summary>
-        /// <param tweenName="treeState">状态</param>
+        /// <param name="treeState">状态</param>
         public void element_Progress_EnableSetAll(bool state)
         {
             if (ProgressNodes.Count <= 0)
@@ -2574,22 +2579,22 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有进度条脚本！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有进度条脚本！", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有进度条脚本！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有进度条脚本！", HudMsgState.通知);
             }
         }
 
         /// <summary>
         /// 获取目标进度条
         /// </summary>
-        /// <param tweenName="indicator">标识名称</param>
-        public xHud_Module_Progress element_Progress_Get(string indicator)
+        /// <param name="indicator">标识名称</param>
+        public XHud_Module_Progress element_Progress_Get(string indicator)
         {
-            xHud_Module_Progress progress = null;
+            XHud_Module_Progress progress = null;
             for (int i = 0; i < ProgressNodes.Count; i++)
             {
                 if (ProgressNodes[i].Progress.Indicator == indicator)
@@ -2600,12 +2605,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (progress == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的进度条！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的进度条！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的进度条！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的进度条！", HudMsgState.通知);
             }
             return progress;
         }
@@ -2613,9 +2618,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取所有进度条
         /// </summary>
-        public xHud_Module_Progress[] element_Progress_GetAll()
+        public XHud_Module_Progress[] element_Progress_GetAll()
         {
-            List<xHud_Module_Progress> progresslist = new List<xHud_Module_Progress>();
+            List<XHud_Module_Progress> progresslist = new List<XHud_Module_Progress>();
             for (int i = 0; i < ProgressNodes.Count; i++)
             {
                 progresslist.Add(ProgressNodes[i].Progress);
@@ -2623,12 +2628,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (progresslist.Count <= 0)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的进度条列表为空！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的进度条列表为空！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + ProgressNodes.Count + " 个进度条！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + ProgressNodes.Count + " 个进度条！", HudMsgState.通知);
             }
             return progresslist.ToArray();
         }
@@ -2639,7 +2644,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 启用或禁用所有开关的交互
         /// </summary>
-        /// <param tweenName="treeState">状态</param>
+        /// <param name="treeState">状态</param>
         public void element_Toggle_InteractableSetAll(bool state)
         {
             if (ToggleNodes.Count <= 0)
@@ -2651,19 +2656,19 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有开关交互！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有开关交互！", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有开关交互！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有开关交互！", HudMsgState.通知);
             }
         }
 
         /// <summary>
         /// 启用或禁用所有开关
         /// </summary>
-        /// <param tweenName="treeState">状态</param>
+        /// <param name="treeState">状态</param>
         public void element_Toggle_EnableSet(bool state)
         {
             for (int i = 0; i < ToggleNodes.Count; i++)
@@ -2673,22 +2678,22 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有开关脚本！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有开关脚本！", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有开关脚本！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有开关脚本！", HudMsgState.通知);
             }
         }
 
         /// <summary>
         /// 获取目标开关
         /// </summary>
-        /// <param tweenName="indicator">标识名称</param>
-        public xHud_Module_Toggle element_Toggle_Get(string indicator)
+        /// <param name="indicator">标识名称</param>
+        public XHud_Module_Toggle element_Toggle_Get(string indicator)
         {
-            xHud_Module_Toggle toggle = null;
+            XHud_Module_Toggle toggle = null;
             for (int i = 0; i < ToggleNodes.Count; i++)
             {
                 if (ToggleNodes[i].Toggle.Indicator == indicator)
@@ -2699,12 +2704,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (toggle == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的开关！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的开关！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的开关！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的开关！", HudMsgState.通知);
             }
             return toggle;
         }
@@ -2712,9 +2717,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取所有开关
         /// </summary>
-        public xHud_Module_Toggle[] element_Toggle_GetAll()
+        public XHud_Module_Toggle[] element_Toggle_GetAll()
         {
-            List<xHud_Module_Toggle> togglelist = new List<xHud_Module_Toggle>();
+            List<XHud_Module_Toggle> togglelist = new List<XHud_Module_Toggle>();
             for (int i = 0; i < ToggleNodes.Count; i++)
             {
                 togglelist.Add(ToggleNodes[i].Toggle);
@@ -2722,12 +2727,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (togglelist.Count <= 0)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的开关列表为空！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的开关列表为空！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + ToggleNodes.Count + " 个开关！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + ToggleNodes.Count + " 个开关！", HudMsgState.通知);
             }
             return togglelist.ToArray();
         }
@@ -2757,8 +2762,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 清空目标开关的所有委托
         /// </summary>
-        /// <param tweenName="toggle"></param>
-        public void element_Toggle_Target_ActionsClear(xHud_Module_Toggle toggle)
+        /// <param name="toggle"></param>
+        public void element_Toggle_Target_ActionsClear(XHud_Module_Toggle toggle)
         {
             toggle.ActionsClear();
         }
@@ -2766,8 +2771,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 清空目标开关的所有事件
         /// </summary>
-        /// <param tweenName="toggle"></param>
-        public void element_Toggle_Target_EventsClear(xHud_Module_Toggle toggle)
+        /// <param name="toggle"></param>
+        public void element_Toggle_Target_EventsClear(XHud_Module_Toggle toggle)
         {
             toggle.EventsClear();
         }
@@ -2778,7 +2783,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 启用或禁用所有容器的交互
         /// </summary>
-        /// <param tweenName="treeState">状态</param>
+        /// <param name="treeState">状态</param>
         public void element_Container_InteractableSetAll(bool state)
         {
             if (ContainerNodes.Count <= 0)
@@ -2792,25 +2797,25 @@ namespace SevenStrikeModules.XHud.Hud
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "失效的容器项！索引号：" + i, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "失效的容器项！索引号：" + i, HudMsgState.通知);
                 }
             }
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有容器功能！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有容器功能！", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有容器功能！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有容器功能！", HudMsgState.通知);
             }
         }
 
         /// <summary>
         /// 启用或禁用所有容器
         /// </summary>
-        /// <param tweenName="treeState">状态</param>
+        /// <param name="treeState">状态</param>
         public void element_Container_EnableSetAll(bool state)
         {
             if (ContainerNodes.Count <= 0)
@@ -2824,28 +2829,28 @@ namespace SevenStrikeModules.XHud.Hud
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("元素控件通知", "失效的容器项！索引号：" + i, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "失效的容器项！索引号：" + i, HudMsgState.通知);
                 }
             }
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有容器脚本！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "启用元素下所有容器脚本！", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有容器脚本！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用元素下所有容器脚本！", HudMsgState.通知);
             }
         }
 
         /// <summary>
         /// 获取目标容器
         /// </summary>
-        /// <param tweenName="indicator">标识名称</param>
-        public xHud_Module_Container element_Container_Get(string indicator)
+        /// <param name="indicator">标识名称</param>
+        public XHud_Module_Container element_Container_Get(string indicator)
         {
-            xHud_Module_Container con = null;
+            XHud_Module_Container con = null;
             for (int i = 0; i < ContainerNodes.Count; i++)
             {
                 if (ContainerNodes[i].Container.Indicator == indicator)
@@ -2856,12 +2861,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (con == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的容器！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "未找到对应标识的容器！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的容器！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到标识为 " + indicator + " 的容器！", HudMsgState.通知);
             }
             return con;
         }
@@ -2869,9 +2874,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 获取所有容器
         /// </summary>
-        public xHud_Module_Container[] element_Container_GetAll()
+        public XHud_Module_Container[] element_Container_GetAll()
         {
-            List<xHud_Module_Container> conlist = new List<xHud_Module_Container>();
+            List<XHud_Module_Container> conlist = new List<XHud_Module_Container>();
             for (int i = 0; i < ContainerNodes.Count; i++)
             {
                 conlist.Add(ContainerNodes[i].Container);
@@ -2879,12 +2884,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (conlist.Count <= 0)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的容器列表为空！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "获取的容器列表为空！", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + ContainerNodes.Count + " 个容器！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "已获取到" + ContainerNodes.Count + " 个容器！", HudMsgState.通知);
             }
             return conlist.ToArray();
         }
@@ -2894,7 +2899,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 播放容器动画
         /// </summary>
-        /// <param tweenName="usedelay">播放延迟</param>
+        /// <param name="usedelay">播放延迟</param>
         public void element_Container_Animators_PlayAll(bool usedelay = true)
         {
             for (int i = 0; i < ContainerNodes.Count; i++)
@@ -2906,8 +2911,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 播放容器动画
         /// </summary>
-        /// <param tweenName="con_indicator">容器标识名称</param>
-        /// <param tweenName="usedelay">播放延迟</param>
+        /// <param name="con_indicator">容器标识名称</param>
+        /// <param name="usedelay">播放延迟</param>
         public void element_Container_Animators_PlayAt(string con_indicator, bool usedelay = true)
         {
             for (int i = 0; i < ContainerNodes.Count; i++)
@@ -2920,9 +2925,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 播放容器动画
         /// </summary>
-        /// <param tweenName="con_indicator">容器标识名称</param>
-        /// <param tweenName="item_indicator">项标识名称</param>
-        /// <param tweenName="usedelay">播放延迟</param>
+        /// <param name="con_indicator">容器标识名称</param>
+        /// <param name="item_indicator">项标识名称</param>
+        /// <param name="usedelay">播放延迟</param>
         public void element_Container_Animators_PlayAt(string con_indicator, string item_indicator, bool usedelay = true)
         {
             for (int i = 0; i < ContainerNodes.Count; i++)
@@ -2943,9 +2948,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 播放容器动画
         /// </summary>
-        /// <param tweenName="con_indicator">容器标识名称</param>
-        /// <param tweenName="item_id">项标识ID</param>
-        /// <param tweenName="usedelay">播放延迟</param>
+        /// <param name="con_indicator">容器标识名称</param>
+        /// <param name="item_id">项标识ID</param>
+        /// <param name="usedelay">播放延迟</param>
         public void element_Container_Animators_PlayAt(string con_indicator, int item_id, bool usedelay = true)
         {
             for (int i = 0; i < ContainerNodes.Count; i++)
@@ -2979,7 +2984,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 就绪容器动画
         /// </summary>
-        /// <param tweenName="con_indicator">容器标识名称</param>
+        /// <param name="con_indicator">容器标识名称</param>
         //public void element_Container_Animators_ReadyAt(string con_indicator)
         //{
         //    for (int i = 0; i < ContainerNodes.Count; i++)
@@ -2992,8 +2997,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 就绪容器动画
         /// </summary>
-        /// <param tweenName="con_indicator">容器标识名称</param>
-        /// <param tweenName="item_indicator">项标识名称</param>
+        /// <param name="con_indicator">容器标识名称</param>
+        /// <param name="item_indicator">项标识名称</param>
         //public void element_Container_Animators_ReadyAt(string con_indicator, string item_indicator)
         //{
         //    for (int i = 0; i < ContainerNodes.Count; i++)
@@ -3014,8 +3019,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 就绪容器动画
         /// </summary>
-        /// <param tweenName="con_indicator">容器标识名称</param>
-        /// <param tweenName="item_id">项标识ID</param>
+        /// <param name="con_indicator">容器标识名称</param>
+        /// <param name="item_id">项标识ID</param>
         //public void element_Container_Animators_ReadyAt(string con_indicator, int item_id)
         //{
         //    for (int i = 0; i < ContainerNodes.Count; i++)
@@ -3049,7 +3054,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 复位容器动画
         /// </summary>
-        /// <param tweenName="con_indicator">容器标识名称</param>
+        /// <param name="con_indicator">容器标识名称</param>
         public void element_Container_Animators_RewindAt(string con_indicator)
         {
             for (int i = 0; i < ContainerNodes.Count; i++)
@@ -3062,8 +3067,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 复位容器动画
         /// </summary>
-        /// <param tweenName="con_indicator">容器标识名称</param>
-        /// <param tweenName="item_indicator">项标识名称</param>
+        /// <param name="con_indicator">容器标识名称</param>
+        /// <param name="item_indicator">项标识名称</param>
         public void element_Container_Animators_RewindAt(string con_indicator, string item_indicator)
         {
             for (int i = 0; i < ContainerNodes.Count; i++)
@@ -3084,8 +3089,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 复位容器动画
         /// </summary>
-        /// <param tweenName="con_indicator">容器标识名称</param>
-        /// <param tweenName="item_id">项标识ID</param>
+        /// <param name="con_indicator">容器标识名称</param>
+        /// <param name="item_id">项标识ID</param>
         public void element_Container_Animators_RewindAt(string con_indicator, int item_id)
         {
             for (int i = 0; i < ContainerNodes.Count; i++)
@@ -3130,8 +3135,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 清空目标开关的所有委托
         /// </summary>
-        /// <param tweenName="toggle"></param>
-        public void element_Container_Target_ActionsClear(xHud_Module_Container container)
+        /// <param name="toggle"></param>
+        public void element_Container_Target_ActionsClear(XHud_Module_Container container)
         {
             container.ActionsClear();
         }
@@ -3139,8 +3144,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 清空目标开关的所有事件
         /// </summary>
-        /// <param tweenName="toggle"></param>
-        public void element_Container_Target_EventsClear(xHud_Module_Container container)
+        /// <param name="toggle"></param>
+        public void element_Container_Target_EventsClear(XHud_Module_Container container)
         {
             container.EventsClear();
         }
@@ -3151,10 +3156,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 修改目标容器项内容
         /// </summary>
-        /// <param tweenName="container">目标容器</param>
-        /// <param tweenName="indicator">目标项</param>
-        /// <param tweenName="value">字符串内容</param>
-        public void element_Container_SetValue(xHud_Module_Container container, string indicator, string value)
+        /// <param name="container">目标容器</param>
+        /// <param name="indicator">目标项</param>
+        /// <param name="value">字符串内容</param>
+        public void element_Container_SetValue(XHud_Module_Container container, string indicator, string value)
         {
             container.Con_ChangeItemValue(indicator, value);
         }
@@ -3162,10 +3167,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 修改目标容器项内容
         /// </summary>
-        /// <param tweenName="container">目标容器</param>
-        /// <param tweenName="indicator">目标项</param>
-        /// <param tweenName="value">图片精灵内容</param>
-        public void element_Container_SetValue(xHud_Module_Container container, string indicator, Sprite value)
+        /// <param name="container">目标容器</param>
+        /// <param name="indicator">目标项</param>
+        /// <param name="value">图片精灵内容</param>
+        public void element_Container_SetValue(XHud_Module_Container container, string indicator, Sprite value)
         {
             container.Con_ChangeItemValue(indicator, value);
         }
@@ -3173,10 +3178,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 修改目标容器项内容
         /// </summary>
-        /// <param tweenName="container">目标容器</param>
-        /// <param tweenName="indicator">目标项</param>
-        /// <param tweenName="value">图片内容</param>
-        public void element_Container_SetValue(xHud_Module_Container container, string indicator, Texture2D value)
+        /// <param name="container">目标容器</param>
+        /// <param name="indicator">目标项</param>
+        /// <param name="value">图片内容</param>
+        public void element_Container_SetValue(XHud_Module_Container container, string indicator, Texture2D value)
         {
             container.Con_ChangeItemValue(indicator, value);
         }
@@ -3184,10 +3189,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 修改目标容器项内容
         /// </summary>
-        /// <param tweenName="container">目标容器</param>
-        /// <param tweenName="id">目标项ID</param>
-        /// <param tweenName="value">字符串内容</param>
-        public void element_Container_SetValue(xHud_Module_Container container, int id, string value)
+        /// <param name="container">目标容器</param>
+        /// <param name="id">目标项ID</param>
+        /// <param name="value">字符串内容</param>
+        public void element_Container_SetValue(XHud_Module_Container container, int id, string value)
         {
             container.Con_ChangeItemValue(id, value);
         }
@@ -3195,10 +3200,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 修改目标容器项内容
         /// </summary>
-        /// <param tweenName="container">目标容器</param>
-        /// <param tweenName="id">目标项ID</param>
-        /// <param tweenName="value">图片精灵内容</param>
-        public void element_Container_SetValue(xHud_Module_Container container, int id, Sprite value)
+        /// <param name="container">目标容器</param>
+        /// <param name="id">目标项ID</param>
+        /// <param name="value">图片精灵内容</param>
+        public void element_Container_SetValue(XHud_Module_Container container, int id, Sprite value)
         {
             container.Con_ChangeItemValue(id, value);
         }
@@ -3206,10 +3211,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 修改目标容器项内容
         /// </summary>
-        /// <param tweenName="container">目标容器</param>
-        /// <param tweenName="id">目标项ID</param>
-        /// <param tweenName="value">图片内容</param>
-        public void element_Container_SetValue(xHud_Module_Container container, int id, Texture2D value)
+        /// <param name="container">目标容器</param>
+        /// <param name="id">目标项ID</param>
+        /// <param name="value">图片内容</param>
+        public void element_Container_SetValue(XHud_Module_Container container, int id, Texture2D value)
         {
             container.Con_ChangeItemValue(id, value);
         }
@@ -3217,10 +3222,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 修改目标容器项内容
         /// </summary>
-        /// <param tweenName="container">目标容器</param>
-        /// <param tweenName="id">目标项ID</param>
-        /// <param tweenName="value">图片内容</param>
-        public void element_Container_SetValue_RawImage(xHud_Module_Container container, int id, Texture2D value)
+        /// <param name="container">目标容器</param>
+        /// <param name="id">目标项ID</param>
+        /// <param name="value">图片内容</param>
+        public void element_Container_SetValue_RawImage(XHud_Module_Container container, int id, Texture2D value)
         {
             container.Con_ChangeItemValue_RawImage(id, value);
         }
@@ -3228,10 +3233,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 修改目标容器项内容
         /// </summary>
-        /// <param tweenName="container">目标容器</param>
-        /// <param tweenName="id">目标项ID</param>
-        /// <param tweenName="value">图片内容</param>
-        public void element_Container_SetValue_RawImage(xHud_Module_Container container, string indicator, Texture2D value)
+        /// <param name="container">目标容器</param>
+        /// <param name="id">目标项ID</param>
+        /// <param name="value">图片内容</param>
+        public void element_Container_SetValue_RawImage(XHud_Module_Container container, string indicator, Texture2D value)
         {
             container.Con_ChangeItemValue_RawImage(indicator, value);
         }
@@ -3244,12 +3249,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// Hud跟踪器 - 在ScreenCamera模式下设定跟踪目标
         /// </summary>
-        /// <param tweenName="self">跟踪目标</param>
-        /// <param tweenName="relative">相对父物体</param>
-        /// <param tweenName="target">被跟踪目标</param>
-        /// <param tweenName="offset">偏移</param>
-        /// <param tweenName="smoottraker">平滑跟踪</param>
-        /// <param tweenName="smoottime">平滑事件</param>
+        /// <param name="self">跟踪目标</param>
+        /// <param name="target">被跟踪目标</param>
+        /// <param name="offset">偏移</param>
+        /// <param name="smoottraker">平滑跟踪</param>
+        /// <param name="smoottime">平滑事件</param>
         public void element_ObjectTracker_Create(RectTransform self, Transform target, bool smoottraker = false, float smoottime = 5, Vector3 offset = default)
         {
             ///---设定跟踪器的参数
@@ -3266,13 +3270,13 @@ namespace SevenStrikeModules.XHud.Hud
             ObjectTracker.Tracker_SetTrackerArgs(info);
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "创建场景物体跟踪器！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "创建场景物体跟踪器！", HudMsgState.通知);
         }
 
         /// <summary>
         /// Hud跟踪器 - 创建
         /// </summary>
-        /// <param tweenName="info">跟踪通知</param>
+        /// <param name="info">跟踪通知</param>
         public void element_ObjectTracker_Create(TrackerArgs info)
         {
             ///---创建跟踪器
@@ -3281,18 +3285,18 @@ namespace SevenStrikeModules.XHud.Hud
             ObjectTracker.Tracker_SetTrackerArgs(info);
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "创建场景物体跟踪器！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "创建场景物体跟踪器！", HudMsgState.通知);
         }
 
         /// <summary>
         /// 创建物体跟踪器
         /// </summary>
         /// <returns></returns>
-        private xHud_ObjectTracker element_ObjectTracker_Create()
+        private XHud_ObjectTracker element_ObjectTracker_Create()
         {
-            ObjectTracker = gameObject.AddComponent<xHud_ObjectTracker>();
+            ObjectTracker = gameObject.AddComponent<XHud_ObjectTracker>();
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "创建场景物体跟踪器！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "创建场景物体跟踪器！", HudMsgState.通知);
             return ObjectTracker;
         }
 
@@ -3306,7 +3310,7 @@ namespace SevenStrikeModules.XHud.Hud
             ObjectTracker = null;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("元素控件通知", "移除场景物体跟踪器！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("元素控件通知", "移除场景物体跟踪器！", HudMsgState.通知);
         }
 
         #endregion

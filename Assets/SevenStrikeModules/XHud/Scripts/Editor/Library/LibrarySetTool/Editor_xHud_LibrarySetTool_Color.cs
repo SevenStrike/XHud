@@ -27,7 +27,7 @@ namespace SevenStrikeModules.XHud.Hud
     }
 
     [System.Serializable]
-    public class Emotions
+    public class XHud_Emotions
     {
         // 积极情绪列表
         public string Pos { get; set; }
@@ -37,7 +37,7 @@ namespace SevenStrikeModules.XHud.Hud
     }
 
     [System.Serializable]
-    public class ColorEmotionNode
+    public class XHud_ColorEmotionNode
     {
         // 颜色名称
         public string ColorName { get; set; }
@@ -53,13 +53,13 @@ namespace SevenStrikeModules.XHud.Hud
     }
 
     [System.Serializable]
-    public class ColorEmotions
+    public class XHud_ColorEmotions
     {
         // 颜色情绪列表
-        public List<ColorEmotionNode> Colors { get; set; }
+        public List<XHud_ColorEmotionNode> Colors { get; set; }
     }
 
-    public class Editor_xHud_LibrarySetTool_Color : EditorWindow
+    public class Editor_XHud_LibrarySetTool_Color : EditorWindow
     {
         private SerializedObject BaseObject;
         private SerializedProperty
@@ -91,8 +91,8 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         Font Font_Light;
 
-        public ColorEmotions ColorEmotions;
-        public xHud_Module_Animator SourceAnimator;
+        public XHud_ColorEmotions ColorEmotions;
+        public XHud_Module_Animator SourceAnimator;
         [SerializeField]
         public string ColorName;
         [SerializeField]
@@ -137,9 +137,9 @@ namespace SevenStrikeModules.XHud.Hud
 
         string Title;
 
-        public xHud_LibrarySetTool_Color_PreviewData[] PreviewDatas;
+        public XHud_LibrarySetTool_Color_PreviewData[] PreviewDatas;
 
-        private xHud_Library_Colors Target_Hud_ColorsLibrary;
+        private XHud_Library_Colors Target_Hud_ColorsLibrary;
 
         private void OnDisable()
         {
@@ -154,23 +154,23 @@ namespace SevenStrikeModules.XHud.Hud
             sp_Color = BaseObject.FindProperty("Color");
             sp_OriginColorName = BaseObject.FindProperty("OriginColorName");
 
-            icon_libsetter_color = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Color_Setter/logo");
+            icon_libsetter_color = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/logo");
 
-            Font_Bold = Editor_xHudGUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_xHudGUI.GetFont("SS_Editor_Dialog");
+            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
+            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
 
-            leftarr_p = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Color_Setter/leftarr_p");
-            leftarr_r = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Color_Setter/leftarr_r");
-            rightarr_p = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Color_Setter/rightarr_p");
-            rightarr_r = Editor_xHudGUI.GetIcon("Icons_Hud_Library_Color_Setter/rightarr_r");
+            leftarr_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/leftarr_p");
+            leftarr_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/leftarr_r");
+            rightarr_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/rightarr_p");
+            rightarr_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/rightarr_r");
 
             ColorDescription = "颜色说明内容";
             ColorName = "颜色名称";
 
-            TextAsset emotions = AssetDatabase.LoadAssetAtPath<TextAsset>($"{xHud_Dashboard.Get_GUIRoot_Path()}XHudColorEmotions.json");
-            ColorEmotions = JsonConvert.DeserializeObject<ColorEmotions>(emotions.text);
+            TextAsset emotions = AssetDatabase.LoadAssetAtPath<TextAsset>($"{XHud_Dashboard.Get_GUIRoot_Path()}XHudColorEmotions.json");
+            ColorEmotions = JsonConvert.DeserializeObject<XHud_ColorEmotions>(emotions.text);
 
-            PreviewData_Index = Editor_xHudGUI.EditorData_Get_With_Int("XED_HudAnimator_Set_previewtexs_index");
+            PreviewData_Index = Editor_XHud_GUI.EditorData_Get_With_Int("XED_HudAnimator_Set_previewtexs_index");
 
             StartPreviewUpdate();
         }
@@ -182,7 +182,7 @@ namespace SevenStrikeModules.XHud.Hud
 
         private void OnGUI()
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             BaseObject.Update();
 
@@ -190,48 +190,48 @@ namespace SevenStrikeModules.XHud.Hud
             draw_rect.Set(0, 0, position.width, position.height);
 
             draw_rect.Set(26, 15, 48, 48);
-            Editor_xHudGUI.Gui_Icon(draw_rect, icon_libsetter_color);
+            Editor_XHud_GUI.Gui_Icon(draw_rect, icon_libsetter_color);
 
             draw_rect.Set(rect.x + 100, rect.y + 15, rect.width - 80, 30);
-            Editor_xHudGUI.Gui_Labelfield(draw_rect, Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
+            Editor_XHud_GUI.Gui_Labelfield(draw_rect, Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
 
             draw_rect.Set(rect.x + 102, rect.y + 60, 200, 1);
-            Editor_xHudGUI.Gui_Box(draw_rect, SepLineColor);
+            Editor_XHud_GUI.Gui_Box(draw_rect, SepLineColor);
 
             draw_rect.Set(rect.x + 26, rect.y + 80, rect.width - 45, rect.height);
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(draw_rect, "以下为待入库的颜色参数与效果的预览，您可以检查即将入库的颜色是否符合您的要求，同时您可以再次调整即将入库的颜色！", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(draw_rect, "以下为待入库的颜色参数与效果的预览，您可以检查即将入库的颜色是否符合您的要求，同时您可以再次调整即将入库的颜色！", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
 
             DateTimes = DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss:ff");
             draw_rect.Set(rect.x + 150, rect.y + 15, rect.width - 180, rect.height);
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(draw_rect, DateTimes, HudFilled.无, HudColor.无, DateTimeColor, TextAnchor.UpperRight, new Vector2(0, 0), 13, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(draw_rect, DateTimes, HudFilled.无, HudColor.无, DateTimeColor, TextAnchor.UpperRight, new Vector2(0, 0), 13, true, Font_Light);
 
             #region 颜色入库信息
-            string colorhex = xHud_Utilitys.Color_To_HexColor(sp_Color.colorValue, true);
+            string colorhex = XHud_Utilitys.Color_To_HexColor(sp_Color.colorValue, true);
 
             draw_rect.Set(rect.width - 280, rect.y + 150, (rect.width / 2) - 55, 20);
-            sp_Color.colorValue = Editor_xHudGUI.Gui_ColorField(draw_rect, sp_Color.colorValue);
+            sp_Color.colorValue = Editor_XHud_GUI.Gui_ColorField(draw_rect, sp_Color.colorValue);
 
-            string col_string = xHud_Utilitys.Color_To_String(sp_Color.colorValue);
-            string col_hex = xHud_Utilitys.Color_To_HexColor(sp_Color.colorValue, true);
-            float[] col_array = xHud_Utilitys.Color_To_FloatArray(sp_Color.colorValue);
+            string col_string = XHud_Utilitys.Color_To_String(sp_Color.colorValue);
+            string col_hex = XHud_Utilitys.Color_To_HexColor(sp_Color.colorValue, true);
+            float[] col_array = XHud_Utilitys.Color_To_FloatArray(sp_Color.colorValue);
 
             draw_rect.Set(rect.width - 278, rect.y + 190, (rect.width / 2) - 55, 20);
-            Editor_xHudGUI.Gui_Labelfield(draw_rect, $"颜色字符串 ：{col_string}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true);
+            Editor_XHud_GUI.Gui_Labelfield(draw_rect, $"颜色字符串 ：{col_string}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true);
             draw_rect.Set(rect.width - 278, rect.y + 220, (rect.width / 2) - 55, 20);
-            Editor_xHudGUI.Gui_Labelfield(draw_rect, $"16进制颜色 ：{col_hex}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true);
+            Editor_XHud_GUI.Gui_Labelfield(draw_rect, $"16进制颜色 ：{col_hex}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true);
             draw_rect.Set(rect.width - 278, rect.y + 250, (rect.width / 2) - 55, 20);
-            Editor_xHudGUI.Gui_Labelfield(draw_rect, "通道颜色 ：", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true);
+            Editor_XHud_GUI.Gui_Labelfield(draw_rect, "通道颜色 ：", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true);
             draw_rect.Set(rect.width - 265, rect.y + 275, (rect.width / 2) - 55, 15);
-            Editor_xHudGUI.Gui_Labelfield(draw_rect, $"R: {col_array[0].ToString("F2")}        G: {col_array[1].ToString("F2")}        B: {col_array[2].ToString("F2")}        A: {col_array[3].ToString("F2")}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true);
+            Editor_XHud_GUI.Gui_Labelfield(draw_rect, $"R: {col_array[0].ToString("F2")}        G: {col_array[1].ToString("F2")}        B: {col_array[2].ToString("F2")}        A: {col_array[3].ToString("F2")}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true);
 
             draw_rect.Set(rect.width - 278, rect.y + 275, 4, 12);
-            Editor_xHudGUI.Gui_Box(draw_rect, new Color(col_array[0], 0, 0));
+            Editor_XHud_GUI.Gui_Box(draw_rect, new Color(col_array[0], 0, 0));
             draw_rect.Set(rect.width - 215, rect.y + 275, 4, 12);
-            Editor_xHudGUI.Gui_Box(draw_rect, new Color(0, col_array[1], 0));
+            Editor_XHud_GUI.Gui_Box(draw_rect, new Color(0, col_array[1], 0));
             draw_rect.Set(rect.width - 148, rect.y + 275, 4, 12);
-            Editor_xHudGUI.Gui_Box(draw_rect, new Color(0, 0, col_array[2]));
+            Editor_XHud_GUI.Gui_Box(draw_rect, new Color(0, 0, col_array[2]));
             draw_rect.Set(rect.width - 85, rect.y + 275, 4, 12);
-            Editor_xHudGUI.Gui_Box(draw_rect, new Color(1, 1, 1, col_array[3]));
+            Editor_XHud_GUI.Gui_Box(draw_rect, new Color(1, 1, 1, col_array[3]));
 
             #region 入库名称
             Color LibName_color = Color.white;
@@ -249,7 +249,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             draw_rect.Set(rect.width - 280, rect.height - 230, (rect.width / 2) - 55, 50);
-            sp_ColorName.stringValue = Editor_xHudGUI.Gui_TextField(draw_rect, sp_ColorName.stringValue, LibName_color, 12);
+            sp_ColorName.stringValue = Editor_XHud_GUI.Gui_TextField(draw_rect, sp_ColorName.stringValue, LibName_color, 12);
             sp_ColorName.serializedObject.ApplyModifiedProperties();
             #endregion
 
@@ -268,7 +268,7 @@ namespace SevenStrikeModules.XHud.Hud
                     Description_Color = Color.white;
             }
             draw_rect.Set(rect.width - 280, rect.height - 175, (rect.width / 2) - 55, 60);
-            sp_ColorDescription.stringValue = Editor_xHudGUI.Gui_TextField(draw_rect, sp_ColorDescription.stringValue, Description_Color, 12);
+            sp_ColorDescription.stringValue = Editor_XHud_GUI.Gui_TextField(draw_rect, sp_ColorDescription.stringValue, Description_Color, 12);
             sp_ColorDescription.serializedObject.ApplyModifiedProperties();
 
             #endregion
@@ -277,24 +277,24 @@ namespace SevenStrikeModules.XHud.Hud
 
             #region 情绪说明
             string tone = GetColorTone(sp_Color.colorValue);
-            Emotions emo = GetEmotions(tone);
-            Editor_xHudGUI.Gui_Labelfield(new Rect(rect.x + 30, rect.height - 100, 200, 15), $"色系：<color={colorhex}> {tone} </color>", HudFilled.无, HudColor.无, Color.white, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 15, Font_Bold);
+            XHud_Emotions emo = GetEmotions(tone);
+            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 30, rect.height - 100, 200, 15), $"色系：<color={colorhex}> {tone} </color>", HudFilled.无, HudColor.无, Color.white, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 15, Font_Bold);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin(new Rect(rect.x + 30, rect.height - 75, 200, 15), $"+ ：{emo.Pos}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, false, false, true);
+            Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect.x + 30, rect.height - 75, 200, 15), $"+ ：{emo.Pos}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, false, false, true);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin(new Rect(rect.x + 30, rect.height - 45, 200, 15), $"- ：{emo.Neg}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, false, false, true);
+            Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect.x + 30, rect.height - 45, 200, 15), $"- ：{emo.Neg}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, false, false, true);
             #endregion
 
             #region 预览
             Rect rect_preview = new Rect(rect.x + 25, rect.y + 150, 300, 265);
-            Editor_xHudGUI.Gui_Group(rect_preview, HudFilled.纯色边框, HudColor.亮白, "着色效果预览", new Vector2(25, -8), Color.white, Font_Light);
+            Editor_XHud_GUI.Gui_Group(rect_preview, HudFilled.纯色边框, HudColor.亮白, "着色效果预览", new Vector2(25, -8), Color.white, Font_Light);
             float margin = 10;
 
             draw_rect.Set(rect_preview.x + 10, rect_preview.y + 10, rect_preview.width - 20, rect_preview.height - 20);
             if (UseBg)
             {
                 #region 预览背景
-                if (xHud_Utilitys.GetBrightnessLimite(sp_Color.colorValue, 0.2f))
+                if (XHud_Utilitys.GetBrightnessLimite(sp_Color.colorValue, 0.2f))
                 {
                     PreviewBgColor = Color.black;
                 }
@@ -302,13 +302,13 @@ namespace SevenStrikeModules.XHud.Hud
                 {
                     PreviewBgColor = Color.white * 0.88f;
                 }
-                Editor_xHudGUI.Gui_Box(draw_rect, PreviewBgColor);
+                Editor_XHud_GUI.Gui_Box(draw_rect, PreviewBgColor);
                 #endregion
 
             }
             #region 预览图片（尺寸300 x 265）
             GUI.backgroundColor = sp_Color.colorValue;
-            Editor_xHudGUI.Gui_Icon(draw_rect, PreviewTex);
+            Editor_XHud_GUI.Gui_Icon(draw_rect, PreviewTex);
             GUI.backgroundColor = Color.white;
             #endregion
 
@@ -323,7 +323,7 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 bgstatu = "无背景";
             }
-            if (Editor_xHudGUI.Gui_Button(draw_rect, null, null, TextAnchor.MiddleCenter, false, bgstatu, "", Color.clear, Color.white, HudFilled.透明, 12))
+            if (Editor_XHud_GUI.Gui_Button(draw_rect, null, null, TextAnchor.MiddleCenter, false, bgstatu, "", Color.clear, Color.white, HudFilled.透明, 12))
             {
                 UseBg = !UseBg;
             }
@@ -331,7 +331,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             #region 翻页按钮           
             draw_rect.Set(rect_preview.x + 5, rect_preview.y + 198 + margin, 64, 64);
-            if (Editor_xHudGUI.Gui_Button(draw_rect, leftarr_r, leftarr_p, true, "", "", Color.white))
+            if (Editor_XHud_GUI.Gui_Button(draw_rect, leftarr_r, leftarr_p, true, "", "", Color.white))
             {
                 if (PreviewData_Index <= 0)
                 {
@@ -344,11 +344,11 @@ namespace SevenStrikeModules.XHud.Hud
                 }
                 StopPreviewUpdate();
                 StartPreviewUpdate();
-                Editor_xHudGUI.EditorData_Set_With_Int("XED_HudAnimator_Set_previewtexs_index", PreviewData_Index);
+                Editor_XHud_GUI.EditorData_Set_With_Int("XED_HudAnimator_Set_previewtexs_index", PreviewData_Index);
             }
 
             draw_rect.Set(rect_preview.width - 45, rect_preview.y + 198 + margin, 64, 64);
-            if (Editor_xHudGUI.Gui_Button(draw_rect, rightarr_r, rightarr_p, true, "", "", Color.white))
+            if (Editor_XHud_GUI.Gui_Button(draw_rect, rightarr_r, rightarr_p, true, "", "", Color.white))
             {
                 if (PreviewData_Index >= PreviewDatas.Length - 1)
                 {
@@ -361,7 +361,7 @@ namespace SevenStrikeModules.XHud.Hud
                 }
                 StopPreviewUpdate();
                 StartPreviewUpdate();
-                Editor_xHudGUI.EditorData_Set_With_Int("XED_HudAnimator_Set_previewtexs_index", PreviewData_Index);
+                Editor_XHud_GUI.EditorData_Set_With_Int("XED_HudAnimator_Set_previewtexs_index", PreviewData_Index);
             }
             #endregion
 
@@ -372,7 +372,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             Repaint();
 
-            Editor_xHudGUI.Gui_Layout_Space(480);
+            Editor_XHud_GUI.Gui_Layout_Space(480);
 
             DialogType_Buttons();
 
@@ -411,17 +411,17 @@ namespace SevenStrikeModules.XHud.Hud
         {
             if (sp_ColorName.stringValue == "颜色名称")
             {
-                Editor_xHudGUI.Open(xHudDialogType.警告, "XHud 色卡库采集器消息", "未填写名称", "请为色卡添加一个名称！", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 色卡库采集器消息", "未填写名称", "请为色卡添加一个名称！", "明白");
                 return;
             }
 
-            string colorhex = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
             bool exist = Target_Hud_ColorsLibrary.ColorsLibrary_IsExist(sp_ColorName.stringValue);
 
             if (exist)
             {
-                string res = Editor_xHudGUI.Open(xHudDialogType.警告, "XHud 色卡库采集器消息", "存在重复色卡名称", $"名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡已经存在于色卡库中！", "重命名", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 色卡库采集器消息", "存在重复色卡名称", $"名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡已经存在于色卡库中！", "重命名", 0);
                 if (res == "重命名")
                 {
                     return;
@@ -435,10 +435,10 @@ namespace SevenStrikeModules.XHud.Hud
                 info.Color = sp_Color.colorValue;
                 Target_Hud_ColorsLibrary.ColorsLibrary_AddColor(info);
 
-                Editor_xHudGUI.Open(xHudDialogType.确认, "XHud 色卡库采集器消息", "已添加到色卡库", $"已将名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡添加到色卡库中！", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud 色卡库采集器消息", "已添加到色卡库", $"已将名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡添加到色卡库中！", "明白");
                 Close();
 
-                string res = Editor_xHudGUI.Open(xHudDialogType.确认, "XHud 色卡库采集器消息", "存入色卡库", "色卡存入完成，是否要打开色卡库进行查看？", "不用", "查看色卡库", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud 色卡库采集器消息", "存入色卡库", "色卡存入完成，是否要打开色卡库进行查看？", "不用", "查看色卡库", 0);
                 if (res == "查看色卡库")
                 {
                     EditorUtility.OpenPropertyEditor(Target_Hud_ColorsLibrary);
@@ -447,7 +447,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             string indicator = SourceAnimator.GetIndicator();
 
-            string res_saved_turnon = Editor_xHudGUI.Open(xHudDialogType.警告, "XHud 色卡库采集器消息", "色卡库模式设定", $"是否要将 {(string.IsNullOrEmpty(indicator) ? SourceAnimator.transform.name : indicator)} 色卡模式开启？", "开启", "暂不", 0);
+            string res_saved_turnon = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 色卡库采集器消息", "色卡库模式设定", $"是否要将 {(string.IsNullOrEmpty(indicator) ? SourceAnimator.transform.name : indicator)} 色卡模式开启？", "开启", "暂不", 0);
             if (res_saved_turnon == "开启")
             {
                 SourceAnimator.SyncLibraryColor = true;
@@ -459,7 +459,7 @@ namespace SevenStrikeModules.XHud.Hud
 
         private void UpdateToLibrary()
         {
-            string colorhex = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
             xHud_LibraryArg_Color info = new xHud_LibraryArg_Color();
             info.Name = sp_ColorName.stringValue;
@@ -561,7 +561,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 设置源
         /// </summary>
         /// <param name="animator"></param>
-        public void SetAnimator(xHud_Module_Animator animator)
+        public void SetAnimator(XHud_Module_Animator animator)
         {
             SourceAnimator = animator;
         }
@@ -570,7 +570,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// 设置目标库
         /// </summary>
         /// <param name="lib"></param>
-        public void SetTarget_Hud_ColorsLibrary(xHud_Library_Colors lib)
+        public void SetTarget_Hud_ColorsLibrary(XHud_Library_Colors lib)
         {
             Target_Hud_ColorsLibrary = lib;
         }
@@ -580,16 +580,16 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         private void DialogType_Buttons()
         {
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_FlexSpace();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_FlexSpace();
 
-            if (Editor_xHudGUI.Gui_Layout_Button(ButtonText_Cancel, "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Cancel))
+            if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Cancel, "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Cancel))
             {
                 Close();
             }
-            Editor_xHudGUI.Gui_Layout_Space(ButtonDistance);
-            GUI.backgroundColor = xHud_Dashboard.Theme_Primary;
-            if (Editor_xHudGUI.Gui_Layout_Button(ButtonText_Ok, "", HudFilled.实体, HudColor.亮白, xHud_Utilitys.GetBrightnessLimite(xHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Ok))
+            Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
+            GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+            if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Ok, "", HudFilled.实体, HudColor.亮白, XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Ok))
             {
                 if (LibrarySetterMode == LibrarySetterMode.添加到库)
                 {
@@ -603,8 +603,8 @@ namespace SevenStrikeModules.XHud.Hud
             }
             GUI.backgroundColor = Color.white;
 
-            Editor_xHudGUI.Gui_Layout_Space(25);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(25);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
         }
 
         // 将 RGB 转换为 HSV
@@ -696,9 +696,9 @@ namespace SevenStrikeModules.XHud.Hud
             return "未知色";
         }
 
-        public Emotions GetEmotions(string col)
+        public XHud_Emotions GetEmotions(string col)
         {
-            Emotions emo = new Emotions();
+            XHud_Emotions emo = new XHud_Emotions();
             for (int i = 0; i < ColorEmotions.Colors.Count; i++)
             {
                 if (col == ColorEmotions.Colors[i].ColorName)
@@ -741,10 +741,10 @@ namespace SevenStrikeModules.XHud.Hud
 
         IEnumerator PreviewUpdater()
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             //获取预览序列帧
-            PreviewDatas = LoadAllAssetsAtPathWithIO<xHud_LibrarySetTool_Color_PreviewData>("SevenStrikeModules/XHud/GUI/HudGuiStyle/Icon/Icons_Hud_Library_Color_Setter/samples", ".asset").ToArray();
+            PreviewDatas = LoadAllAssetsAtPathWithIO<XHud_LibrarySetTool_Color_PreviewData>("SevenStrikeModules/XHud/GUI/HudGuiStyle/Icon/Icons_Hud_Library_Color_Setter/samples", ".asset").ToArray();
 
             var waitForOneSecond = new EditorWaitForSeconds(PreviewDataDuration);
             while (true)

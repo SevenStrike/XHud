@@ -4,7 +4,7 @@ namespace SevenStrikeModules.XHud
     using UnityEditor;
     using UnityEngine;
 
-    public class xHud_PerfomanceMonitor_Node : MonoBehaviour, xHud_MonitorData
+    public class XHud_PerfomanceMonitor_Node : MonoBehaviour, xHud_MonitorData
     {
         #region 接口成员实现
         public string title
@@ -32,7 +32,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 标题
         /// </summary>
-        public xHud_Module_TmpText tmp_title
+        public XHud_Module_TmpText tmp_title
         {
             get
             {
@@ -46,7 +46,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 数值
         /// </summary>
-        public xHud_Module_TmpText tmp_value
+        public XHud_Module_TmpText tmp_value
         {
             get
             {
@@ -102,16 +102,16 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 标题
         /// </summary>
-        [SerializeField] public xHud_Module_TmpText _tmp_title;
+        [SerializeField] public XHud_Module_TmpText _tmp_title;
         /// <summary>
         /// 数值
         /// </summary>
-        [SerializeField] public xHud_Module_TmpText _tmp_value;
+        [SerializeField] public XHud_Module_TmpText _tmp_value;
 
         [SerializeField] public Color _col_title = Color.white;
-        [SerializeField] public Color _col_value = xHud_Dashboard.Theme_Primary;
+        [SerializeField] public Color _col_value = XHud_Dashboard.Theme_Primary;
 
-        [SerializeField] public Color _col_value_normal = xHud_Dashboard.Theme_Primary;
+        [SerializeField] public Color _col_value_normal = XHud_Dashboard.Theme_Primary;
         [SerializeField] public Color _col_value_limited = new Color(1f, 0.3820755f, 0.3865624f, 1);
         /// <summary>
         /// Fps指标阈值

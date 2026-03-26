@@ -1,11 +1,9 @@
 namespace SevenStrikeModules.XHud.Hud
 {
-    using DG.Tweening;
+    using SevenStrikeModules.XTween;
     using System.Collections;
-    using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.Events;
-    using UnityEngine.Rendering.Universal;
 
     /// <summary>
     /// 跟踪参数
@@ -37,7 +35,7 @@ namespace SevenStrikeModules.XHud.Hud
     /// <summary>
     /// 物体跟踪器，适用于在屏幕空间模式下将元素跟踪位置到场景物体的方法
     /// </summary>
-    public class xHud_ObjectTracker : MonoBehaviour
+    public class XHud_ObjectTracker : MonoBehaviour
     {
         [SerializeField]
         /// <summary>
@@ -69,7 +67,7 @@ namespace SevenStrikeModules.XHud.Hud
         private Vector2 GameScreen;
         private Vector2 PositionWithConvert;
 
-        public Tweener twn_Offset;
+        public XTween_Interface twn_Offset;
 
         void Start()
         {
@@ -90,7 +88,7 @@ namespace SevenStrikeModules.XHud.Hud
                 return;
 
             GameScreen = Camera.main.WorldToScreenPoint(TargetObject.transform.position);
-            bool isRect = RectTransformUtility.ScreenPointToLocalPointInRectangle(RelativeObject, GameScreen, xHud_Manager.Instance.HudCamera, out PositionWithConvert);
+            bool isRect = RectTransformUtility.ScreenPointToLocalPointInRectangle(RelativeObject, GameScreen, XHud_Manager.Instance.HudCamera, out PositionWithConvert);
 
             if (!UseSmoothTracker)
                 SelfObject.anchoredPosition = PositionWithConvert + TrackerOffset;
@@ -173,16 +171,16 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param tweenName="delay">延迟</param>
         /// <param tweenName="action_start">委托 - 开始时</param>
         /// <param tweenName="action_end">委托 - 结束时</param>
-        public void Tracker_SetSmoothOffset(Vector2 val, float dur, Ease ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
+        public void Tracker_SetSmoothOffset(Vector2 val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_Offset != null && twn_Offset.active)
-                if (twn_Offset.IsPlaying())
+            if (twn_Offset != null && twn_Offset.IsActive)
+                if (twn_Offset.IsPlaying)
                     twn_Offset.Kill();
-            twn_Offset = DOTween.To(() => TrackerOffset, x => TrackerOffset = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            twn_Offset = XTween.To(() => TrackerOffset, x => TrackerOffset = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
-            }).OnComplete(() =>
+            }).OnComplete((d) =>
             {
                 if (action_end != null)
                     action_end();

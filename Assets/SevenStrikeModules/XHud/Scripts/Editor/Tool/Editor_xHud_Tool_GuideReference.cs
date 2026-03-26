@@ -6,11 +6,11 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEditor;
     using UnityEngine;
 
-    public class Editor_xHud_Tool_GuideReference : EditorWindow
+    public class Editor_XHud_Tool_GuideReference : EditorWindow
     {
         private SerializedObject BaseObject;
 
-        private static Editor_xHud_Tool_GuideReference window;
+        private static Editor_XHud_Tool_GuideReference window;
 
         private Texture2D logo, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p;
 
@@ -45,15 +45,15 @@ namespace SevenStrikeModules.XHud.Hud
         {
             BaseObject = new SerializedObject(this);
 
-            logo = Editor_xHudGUI.GetIcon("Icons_GuideRefDescription/logo");
+            logo = Editor_XHud_GUI.GetIcon("Icons_GuideRefDescription/logo");
 
-            left_arrow_r = Editor_xHudGUI.GetIcon("Icons_GuideRefDescription/left_arrow_r");
-            left_arrow_p = Editor_xHudGUI.GetIcon("Icons_GuideRefDescription/left_arrow_p");
-            right_arrow_r = Editor_xHudGUI.GetIcon("Icons_GuideRefDescription/right_arrow_r");
-            right_arrow_p = Editor_xHudGUI.GetIcon("Icons_GuideRefDescription/right_arrow_p");
+            left_arrow_r = Editor_XHud_GUI.GetIcon("Icons_GuideRefDescription/left_arrow_r");
+            left_arrow_p = Editor_XHud_GUI.GetIcon("Icons_GuideRefDescription/left_arrow_p");
+            right_arrow_r = Editor_XHud_GUI.GetIcon("Icons_GuideRefDescription/right_arrow_r");
+            right_arrow_p = Editor_XHud_GUI.GetIcon("Icons_GuideRefDescription/right_arrow_p");
 
-            Font_Bold = Editor_xHudGUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_xHudGUI.GetFont("SS_Editor_Dialog");
+            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
+            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
         }
 
         private void OnDestroy()
@@ -63,26 +63,26 @@ namespace SevenStrikeModules.XHud.Hud
 
         private void OnGUI()
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             BaseObject.Update();
 
-            string hexcol = xHud_Utilitys.Color_To_HexColor(xHud_Dashboard.Theme_Primary, true);
+            string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
             #region 抬头
             Rect rect = new Rect(0, 0, position.width, position.height);
 
             Icon_rect = new Rect(15, 15, 48, 48);
 
-            Editor_xHudGUI.Gui_Icon(Icon_rect, logo);
+            Editor_XHud_GUI.Gui_Icon(Icon_rect, logo);
 
             Title_rect = new Rect(rect.x + 85, rect.y + 15, rect.width - 80, 30);
-            Editor_xHudGUI.Gui_Labelfield(Title_rect, $"XHud 构图参考说明书", HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
+            Editor_XHud_GUI.Gui_Labelfield(Title_rect, $"XHud 构图参考说明书", HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
 
             Sepline_rect = new Rect(rect.x + 85, rect.y + 60, 200, 1);
-            Editor_xHudGUI.Gui_Box(Sepline_rect, SepLineColor);
+            Editor_XHud_GUI.Gui_Box(Sepline_rect, SepLineColor);
 
-            Editor_xHudGUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 18, rect.y + 80, rect.width - 38, rect.height), "此窗口提供了各种构图参考线的具体解释，用户可根据每种构图线的释义来选择适合您的构图参考类型！", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 18, rect.y + 80, rect.width - 38, rect.height), "此窗口提供了各种构图参考线的具体解释，用户可根据每种构图线的释义来选择适合您的构图参考类型！", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
             #endregion
 
             if (ReferImages == null)
@@ -90,15 +90,15 @@ namespace SevenStrikeModules.XHud.Hud
                 ReferImages = new Texture2D[5];
                 for (int i = 0; i < ReferImages.Length; i++)
                 {
-                    ReferImages[i] = AssetDatabase.LoadAssetAtPath<Texture2D>($"{xHud_Dashboard.Get_GUIStyle_Path()}Icon/Icons_GuideRefDescription/ReferImages/{GuideType}/ReferImg_{i}.png");
+                    ReferImages[i] = AssetDatabase.LoadAssetAtPath<Texture2D>($"{XHud_Dashboard.Get_GUIStyle_Path()}Icon/Icons_GuideRefDescription/ReferImages/{GuideType}/ReferImg_{i}.png");
                 }
             }
 
             #region 参考图片 / 参数
-            Editor_xHudGUI.Gui_Icon(new Rect(rect.x + 18, rect.y + 130, 500, 500), ReferImages[referIndex]);
+            Editor_XHud_GUI.Gui_Icon(new Rect(rect.x + 18, rect.y + 130, 500, 500), ReferImages[referIndex]);
 
             #region 图片控件
-            if (Editor_xHudGUI.Gui_Button(new Rect(rect.x + 20, rect.y + 580, 32, 32), left_arrow_r, left_arrow_p, true, "", "", Color.white))
+            if (Editor_XHud_GUI.Gui_Button(new Rect(rect.x + 20, rect.y + 580, 32, 32), left_arrow_r, left_arrow_p, true, "", "", Color.white))
             {
                 if (referIndex <= 0)
                     referIndex = ReferImages.Length - 1;
@@ -106,7 +106,7 @@ namespace SevenStrikeModules.XHud.Hud
                     referIndex--;
             }
 
-            if (Editor_xHudGUI.Gui_Button(new Rect(rect.x + 480, rect.y + 580, 32, 32), right_arrow_r, right_arrow_p, true, "", "", Color.white))
+            if (Editor_XHud_GUI.Gui_Button(new Rect(rect.x + 480, rect.y + 580, 32, 32), right_arrow_r, right_arrow_p, true, "", "", Color.white))
             {
                 if (referIndex >= ReferImages.Length - 1)
                     referIndex = 0;
@@ -115,7 +115,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Box(new Rect(rect.x + 545, rect.y + 150, 1, 350), Color.gray * 0.65f);
+            Editor_XHud_GUI.Gui_Box(new Rect(rect.x + 545, rect.y + 150, 1, 350), Color.gray * 0.65f);
 
             string abbr = "";
             string des = "";
@@ -195,9 +195,9 @@ namespace SevenStrikeModules.XHud.Hud
                     break;
             }
 
-            Editor_xHudGUI.Gui_Labelfield(new Rect(rect.x + 570, rect.y + 130, 448, 20), $"{GuideType}  <size=14>( <color={hexcol}>{abbr}</color> )</size>", HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, 25, true, Font_Bold);
+            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 570, rect.y + 130, 448, 20), $"{GuideType}  <size=14>( <color={hexcol}>{abbr}</color> )</size>", HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, 25, true, Font_Bold);
 
-            Editor_xHudGUI.Gui_Labelfield(new Rect(rect.x + 570, rect.y + 180, 345, 20), des, HudFilled.无, HudColor.无, Color.white * 0.75f, TextAnchor.UpperLeft, 13, Font_Light, true);
+            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 570, rect.y + 180, 345, 20), des, HudFilled.无, HudColor.无, Color.white * 0.75f, TextAnchor.UpperLeft, 13, Font_Light, true);
             #endregion
 
             BaseObject.ApplyModifiedProperties();

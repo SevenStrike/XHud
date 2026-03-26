@@ -1,8 +1,8 @@
 namespace SevenStrikeModules.XHud.Hud
 {
-    using DG.Tweening;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XTween;
     using System;
     using System.Collections.Generic;
     using UnityEngine;
@@ -10,7 +10,7 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEngine.EventSystems;
     using UnityEngine.UI;
 
-    public class xHud_Module_Toggle : Toggle
+    public class XHud_Module_Toggle : Toggle
     {
         public RectTransform RectTransform;
         [SerializeField]
@@ -20,9 +20,9 @@ namespace SevenStrikeModules.XHud.Hud
         [SerializeField]
         public string ToggleName = "ToggleName";
         [SerializeField]
-        public xHud_Module_Text ToggleText;
+        public XHud_Module_Text ToggleText;
         [SerializeField]
-        public xHud_Module_TmpText ToggleTmpText;
+        public XHud_Module_TmpText ToggleTmpText;
 
         /// <summary>
         /// 动作 - 当 - 开关按下时
@@ -82,12 +82,12 @@ namespace SevenStrikeModules.XHud.Hud
         public Color Tog_Color_Handle_Unchecked = new Color(0.8392157f, 0.8392157f, 0.8392157f, 1);
         public Color Tog_Color_Handle_Checked = new Color(0.2156863f, 0.2156863f, 0.2156863f, 1);
 
-        private Tweener Tog_HandleTweener;
-        private Tweener Tog_HandleColorTweener;
-        private Tweener Tog_BgColorTweener;
+        private XTween_Interface Tog_HandleTweener;
+        private XTween_Interface Tog_HandleColorTweener;
+        private XTween_Interface Tog_BgColorTweener;
 
         public float Toggle_Animators_GlobalDuration = 1f;
-        public List<AnimatorNode> ToggleAnimatorNodes = new List<AnimatorNode>();
+        public List<ElementNode_Animator> ToggleAnimatorNodes = new List<ElementNode_Animator>();
 
         public bool EaseMotion = true;
         public bool ToggleIsChecked = false;
@@ -101,8 +101,8 @@ namespace SevenStrikeModules.XHud.Hud
         public float HandleProgress = 0;
         public float HandleProgressDuration = 0.3f;
         public float ColorDuration = 0.3f;
-        public Ease ProgressEase = Ease.OutQuart;
-        public Ease ColorEase = Ease.OutQuart;
+        public EaseMode ProgressEase = EaseMode.OutQuart;
+        public EaseMode ColorEase = EaseMode.OutQuart;
 
         public HudElementAnimateState AnimateState;
         public float ToggleAnimatorMaxDuration;
@@ -165,9 +165,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="indicator">目标标识名称</param>
         /// <returns>返回一个匹配标识名称的HudAnimator动画器</returns>
-        public xHud_Module_Animator GetAnimator(string indicator)
+        public XHud_Module_Animator GetAnimator(string indicator)
         {
-            xHud_Module_Animator am = null;
+            XHud_Module_Animator am = null;
             for (int i = 0; i < ToggleAnimatorNodes.Count; i++)
             {
                 if (ToggleAnimatorNodes[i].Animator.GetIndicator() == indicator)
@@ -178,12 +178,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (am == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("开关控件通知", "未获取到标识名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("开关控件通知", "未获取到标识名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
             }
             return am;
         }
@@ -193,9 +193,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="name">目标物体名称</param>
         /// <returns>返回一个匹配物体名称名称的HudAnimator动画器</returns>
-        public xHud_Module_Animator GetAnimator_WithObjectName(string name)
+        public XHud_Module_Animator GetAnimator_WithObjectName(string name)
         {
-            xHud_Module_Animator am = null;
+            XHud_Module_Animator am = null;
             for (int i = 0; i < ToggleAnimatorNodes.Count; i++)
             {
                 if (ToggleAnimatorNodes[i].Animator.gameObject.name == name)
@@ -206,12 +206,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (am == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("开关控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("开关控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
             }
             return am;
         }
@@ -221,9 +221,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <param tweenName="id">目标动画器的ID</param>
         /// <returns>返回一个匹配ID的HudAnimator动画器</returns>
-        public xHud_Module_Animator GetAnimator(int id)
+        public XHud_Module_Animator GetAnimator(int id)
         {
-            xHud_Module_Animator am = null;
+            XHud_Module_Animator am = null;
             for (int i = 0; i < ToggleAnimatorNodes.Count; i++)
             {
                 if (ToggleAnimatorNodes[i].Animator.GetID() == id)
@@ -234,12 +234,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (am == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("开关控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("开关控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
             }
             return am;
         }
@@ -252,25 +252,25 @@ namespace SevenStrikeModules.XHud.Hud
         /// <returns></returns>
         public TweenNode GetAnimatorTween(string animator_indicator, int tween_id)
         {
-            xHud_Module_Animator anim = GetAnimator(animator_indicator);
+            XHud_Module_Animator anim = GetAnimator(animator_indicator);
             TweenNode node = anim.TweenNode_GetByID(tween_id);
 
             if (anim == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("开关控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("开关控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
                 }
             }
 
@@ -285,25 +285,25 @@ namespace SevenStrikeModules.XHud.Hud
         /// <returns></returns>
         public TweenNode GetAnimatorTween(int animator_id, int tween_id)
         {
-            xHud_Module_Animator anim = GetAnimator(animator_id);
+            XHud_Module_Animator anim = GetAnimator(animator_id);
             TweenNode node = anim.TweenNode_GetByID(tween_id);
 
             if (anim == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("开关控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("开关控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
                 }
             }
 
@@ -318,25 +318,25 @@ namespace SevenStrikeModules.XHud.Hud
         /// <returns></returns>
         public TweenNode GetAnimatorTween(string animator_indicator, string tween_indicator)
         {
-            xHud_Module_Animator anim = GetAnimator(animator_indicator);
+            XHud_Module_Animator anim = GetAnimator(animator_indicator);
             TweenNode node = anim.TweenNode_GetByIndicator(tween_indicator);
 
             if (anim == null)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("开关控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("开关控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        xHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("开关控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
                 }
             }
 
@@ -389,12 +389,12 @@ namespace SevenStrikeModules.XHud.Hud
 
             for (int i = 0; i < ToggleAnimatorNodes.Count; i++)
             {
-                xHud_Module_Animator animator = ToggleAnimatorNodes[i].Animator;
+                XHud_Module_Animator animator = ToggleAnimatorNodes[i].Animator;
                 animator.Play(tim, ToggleAnimatorNodes[i].DelayTime, Toggle_Animators_GlobalDuration * animator.Animator_GlobalDuration, true, null, null, 0.5f);
             }
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "播放所有动画器动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "播放所有动画器动画！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -414,12 +414,12 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (ToggleAnimatorNodes[i].Animator.GetID() != id)
                     continue;
-                xHud_Module_Animator anim = ToggleAnimatorNodes[i].Animator;
+                XHud_Module_Animator anim = ToggleAnimatorNodes[i].Animator;
                 anim.Play(tim, ToggleAnimatorNodes[i].DelayTime, Toggle_Animators_GlobalDuration * anim.Animator_GlobalDuration);
             }
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -429,11 +429,11 @@ namespace SevenStrikeModules.XHud.Hud
         {
             for (int i = 0; i < ToggleAnimatorNodes.Count; i++)
             {
-                xHud_Module_Animator anim = ToggleAnimatorNodes[i].Animator;
+                XHud_Module_Animator anim = ToggleAnimatorNodes[i].Animator;
                 anim.RewindAllTweenNode();
             }
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "复位按钮动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "复位按钮动画！", HudMsgState.确认);
         }
         #endregion       
 
@@ -446,7 +446,7 @@ namespace SevenStrikeModules.XHud.Hud
                 act_on_Press();
             eve_on_Press.Invoke();
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "按下开关！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "按下开关！", HudMsgState.通知);
         }
 
         public override void OnPointerUp(PointerEventData eventData)
@@ -456,7 +456,7 @@ namespace SevenStrikeModules.XHud.Hud
                 act_on_Released();
             eve_on_Released.Invoke();
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "松开开关！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "松开开关！", HudMsgState.通知);
         }
 
         #endregion
@@ -476,7 +476,7 @@ namespace SevenStrikeModules.XHud.Hud
             eve_on_Released.RemoveAllListeners();
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "清空所有事件！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "清空所有事件！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -492,7 +492,7 @@ namespace SevenStrikeModules.XHud.Hud
             act_on_Released = null;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "清空所有委托！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "清空所有委托！", HudMsgState.通知);
         }
 
         #endregion
@@ -556,7 +556,7 @@ namespace SevenStrikeModules.XHud.Hud
             tog_HandleColorTo(Tog_Color_Handle_Checked);
             tog_BgColorTo(Tog_Color_Bg_Checked);
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "打开开关！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "打开开关！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -569,7 +569,7 @@ namespace SevenStrikeModules.XHud.Hud
             tog_HandleColorTo(Tog_Color_Handle_Unchecked);
             tog_BgColorTo(Tog_Color_Bg_Unchecked);
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "关闭开关！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "关闭开关！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -601,12 +601,12 @@ namespace SevenStrikeModules.XHud.Hud
             if (state)
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("开关控件通知", "启用开关交互", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("开关控件通知", "启用开关交互", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    xHud_Utilitys.Func_PrintInfo("开关控件通知", "禁用开关交互", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("开关控件通知", "禁用开关交互", HudMsgState.通知);
             }
         }
 
@@ -618,7 +618,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             if (EaseMotion)
             {
-                Tog_HandleTweener = DOTween.To(() => HandleProgress, x => HandleProgress = x, value, HandleProgressDuration * xHud_Manager.Instance.DurationMultiply).SetEase(ProgressEase).SetAutoKill(true).OnUpdate(() =>
+                Tog_HandleTweener = XTween.To(() => HandleProgress, x => HandleProgress = x, value, HandleProgressDuration * XHud_Manager.Instance.DurationMultiply).SetEase(ProgressEase).SetAutoKill(true).OnUpdate<float>((v, d, t) =>
                 {
                     ChangingTimer += Time.deltaTime;
                     if (ChangingTimer >= ChangingInterval)
@@ -637,7 +637,7 @@ namespace SevenStrikeModules.XHud.Hud
 
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "开关值到：" + HandleProgress, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "开关值到：" + HandleProgress, HudMsgState.通知);
         }
 
         /// <summary>
@@ -662,7 +662,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             Animators_Rewind();
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "开关已重置！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "开关已重置！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -695,7 +695,7 @@ namespace SevenStrikeModules.XHud.Hud
                 ToggleText.text = content;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "设置开关显示名：" + val, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "设置开关显示名：" + val, HudMsgState.通知);
             return content;
         }
 
@@ -713,7 +713,7 @@ namespace SevenStrikeModules.XHud.Hud
                 ToggleText.text = null;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "清空开关显示名！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "清空开关显示名！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -726,7 +726,7 @@ namespace SevenStrikeModules.XHud.Hud
             HandlePosRange = new Vector2(start, end);
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "设置开关控制柄运动范围为：左极限 - " + start + " 右极限 - " + end, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "设置开关控制柄运动范围为：左极限 - " + start + " 右极限 - " + end, HudMsgState.通知);
         }
 
         /// <summary>
@@ -738,7 +738,7 @@ namespace SevenStrikeModules.XHud.Hud
             HandleProgress = val;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "设置开关控制柄运动进度值为：" + val, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "设置开关控制柄运动进度值为：" + val, HudMsgState.通知);
         }
         #endregion
 
@@ -756,13 +756,13 @@ namespace SevenStrikeModules.XHud.Hud
             else
             {
                 if (EaseMotion)
-                    Tog_HandleColorTweener = Tog_Handle.DOColor(value, ColorDuration * xHud_Manager.Instance.DurationMultiply).SetEase(ColorEase).SetAutoKill(true);
+                    Tog_HandleColorTweener = Tog_Handle.xt_Color_To(value, ColorDuration * XHud_Manager.Instance.DurationMultiply, true).SetEase(ColorEase).SetAutoKill(true);
                 else
                     Tog_Handle.color = value;
             }
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "开关控制柄颜色到：" + value, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "开关控制柄颜色到：" + value, HudMsgState.通知);
         }
 
         /// <summary>
@@ -777,12 +777,12 @@ namespace SevenStrikeModules.XHud.Hud
             else
             {
                 if (EaseMotion)
-                    Tog_BgColorTweener = Tog_Bg.DOColor(value, ColorDuration * xHud_Manager.Instance.DurationMultiply).SetEase(ColorEase).SetAutoKill(true);
+                    Tog_BgColorTweener = Tog_Bg.xt_Color_To(value, ColorDuration * XHud_Manager.Instance.DurationMultiply, true).SetEase(ColorEase).SetAutoKill(true);
                 else
                     Tog_Bg.color = value;
             }
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "开关背景颜色到：" + value, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "开关背景颜色到：" + value, HudMsgState.通知);
         }
 
         /// <summary>
@@ -793,7 +793,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             Tog_Handle.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "已设置开关控制柄图像为：" + tex.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "已设置开关控制柄图像为：" + tex.name, HudMsgState.通知);
         }
 
         /// <summary>
@@ -804,7 +804,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             Tog_Handle.sprite = sprite;
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "已设置开关控制柄精灵图集图像为：" + sprite.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "已设置开关控制柄精灵图集图像为：" + sprite.name, HudMsgState.通知);
         }
 
         /// <summary>
@@ -816,7 +816,7 @@ namespace SevenStrikeModules.XHud.Hud
             Tog_Bg.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "设置开关背景图像为：" + tex.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "设置开关背景图像为：" + tex.name, HudMsgState.通知);
         }
 
         /// <summary>
@@ -828,7 +828,7 @@ namespace SevenStrikeModules.XHud.Hud
             Tog_Bg.sprite = sprite;
 
             if (DebugState)
-                xHud_Utilitys.Func_PrintInfo("开关控件通知", "设置开关背景精灵图集图像为：" + sprite.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("开关控件通知", "设置开关背景精灵图集图像为：" + sprite.name, HudMsgState.通知);
         }
 
         #endregion

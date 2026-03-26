@@ -6,11 +6,11 @@
     using UnityEngine;
     using UnityEngine.UI;
 
-    [CustomEditor(typeof(xHud_TransitionController))]
-    public class Editor_xHud_TransitionController : Editor
+    [CustomEditor(typeof(XHud_TransitionController))]
+    public class Editor_XHud_TransitionController : Editor
     {
         #region 组件
-        private xHud_TransitionController BaseScript;
+        private XHud_TransitionController BaseScript;
         #endregion
 
         private bool BasicVars;
@@ -28,23 +28,23 @@
         #endregion
 
         #region 批量化操作
-        xHud_TransitionController[] SelectedObjects;
+        XHud_TransitionController[] SelectedObjects;
 
         private void GetAllTargets()
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new xHud_TransitionController[targets.Length];
+                SelectedObjects = new XHud_TransitionController[targets.Length];
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (xHud_TransitionController)t;
+                    SelectedObjects[i] = (XHud_TransitionController)t;
                 }
             }
             else
             {
-                SelectedObjects = new xHud_TransitionController[targets.Length];
-                SelectedObjects[0] = (xHud_TransitionController)target;
+                SelectedObjects = new XHud_TransitionController[targets.Length];
+                SelectedObjects[0] = (XHud_TransitionController)target;
             }
         }
 
@@ -65,7 +65,7 @@
 
         void OnEnable()
         {
-            BaseScript = (xHud_TransitionController)target;
+            BaseScript = (XHud_TransitionController)target;
 
             #region 获取序列化属性
             TransitionImage = serializedObject.FindProperty("TransitionImage");
@@ -94,20 +94,20 @@
             Flip_Ver = serializedObject.FindProperty("Flip_Ver");
             UseKeyControl = serializedObject.FindProperty("UseKeyControl");
 
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
             #endregion
 
             #region 获取图标
-            icon_main = Editor_xHudGUI.GetIcon("Icons_Hud_TransitionController/icon_main");
-            trans_state = Editor_xHudGUI.GetIcon("Icons_Hud_TransitionController/trans_state");
-            trans_first_frame = Editor_xHudGUI.GetIcon("Icons_Hud_TransitionController/trans_first_frame");
-            trans_end_frame = Editor_xHudGUI.GetIcon("Icons_Hud_TransitionController/trans_end_frame");
-            openlib_r = Editor_xHudGUI.GetIcon("Icons_Hud_TransitionController/openlib_r");
-            openlib_p = Editor_xHudGUI.GetIcon("Icons_Hud_TransitionController/openlib_p");
-            update_r = Editor_xHudGUI.GetIcon("Icons_Hud_TransitionController/update_r");
-            update_p = Editor_xHudGUI.GetIcon("Icons_Hud_TransitionController/update_p");
-            locate_r = Editor_xHudGUI.GetIcon("Icons_Hud_TransitionController/locate_r");
-            locate_p = Editor_xHudGUI.GetIcon("Icons_Hud_TransitionController/locate_p");
+            icon_main = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/icon_main");
+            trans_state = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/trans_state");
+            trans_first_frame = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/trans_first_frame");
+            trans_end_frame = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/trans_end_frame");
+            openlib_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/openlib_r");
+            openlib_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/openlib_p");
+            update_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/update_r");
+            update_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/update_p");
+            locate_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/locate_r");
+            locate_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/locate_p");
             #endregion
 
             GetAllTargets();
@@ -120,7 +120,7 @@
 
             if (TransitionMat.objectReferenceValue == null)
             {
-                TransitionMat.objectReferenceValue = (Material)AssetDatabase.LoadAssetAtPath($"{xHud_Dashboard.Get_Materials_Path()}Transitions/Transition.mat", typeof(Material));
+                TransitionMat.objectReferenceValue = (Material)AssetDatabase.LoadAssetAtPath($"{XHud_Dashboard.Get_Materials_Path()}Transitions/Transition.mat", typeof(Material));
             }
 
             if (TransitionMat.objectReferenceValue != null)
@@ -150,20 +150,20 @@
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_xHudGUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 转场控制器", Color.white);
+            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 转场控制器", Color.white);
 
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
 
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "快捷功能", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "快捷功能", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 查看转场库
             GUI.enabled = true;
-            if (Editor_xHudGUI.Gui_Layout_Button(14, "查看当前转场库", openlib_r, openlib_p))
+            if (Editor_XHud_GUI.Gui_Layout_Button(14, "查看当前转场库", openlib_r, openlib_p))
             {
                 Editor_MenuItemsAction_OpenLibrary.open_transition();
             }
@@ -172,7 +172,7 @@
             GUILayout.FlexibleSpace();
 
             #region 快速刷新转场资源
-            if (Editor_xHudGUI.Gui_Layout_Button(14, "快速刷新转场资源", update_r, update_p))
+            if (Editor_XHud_GUI.Gui_Layout_Button(14, "快速刷新转场资源", update_r, update_p))
             {
                 if (mgr.Hud_TransitionLib == null)
                     return;
@@ -187,7 +187,7 @@
                 SerializedProperty sp_Res = CurrentTransitionNode.FindPropertyRelative("Res");
                 SerializedProperty sp_x_frames = CurrentTransitionNode.FindPropertyRelative("Frames");
 
-                xHud_LibraryArg_Transition node = mgr.Hud_TransitionLib.TransitionLibrary_Get(TransitionName.stringValue);
+                XHud_LibraryArg_Transition node = mgr.Hud_TransitionLib.TransitionLibrary_Get(TransitionName.stringValue);
 
                 sp_Name.stringValue = node.Name;
                 sp_TotalFramesCount.intValue = node.TotalFramesCount;
@@ -208,23 +208,23 @@
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
 
             #region 选项
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 按键控制
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_TransitionController>("按键控制", stroptions_enabled, ref UseKeyControl, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_TransitionController>("按键控制", stroptions_enabled, ref UseKeyControl, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             #endregion
 
             #region 转场方式
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_TransitionController>("转场方式", stroptions_transmode, ref ModeSwitch, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_TransitionController>("转场方式", stroptions_transmode, ref ModeSwitch, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
                 if (ModeSwitch.boolValue)
@@ -239,7 +239,7 @@
             #endregion
 
             #region 水平翻转
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_TransitionController>("水平翻转", stroptions_flip, ref Flip_Hor, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects, null, (res) =>
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_TransitionController>("水平翻转", stroptions_flip, ref Flip_Hor, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects, null, (res) =>
             {
                 Material mat = (Material)TransitionMat.objectReferenceValue;
                 mat.SetInt("_Flip_Hor", Flip_Hor.boolValue ? 1 : 0);
@@ -248,7 +248,7 @@
             #endregion
 
             #region 垂直翻转
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_TransitionController>("垂直翻转", stroptions_flip, ref Flip_Ver, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects, null, (res) =>
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_TransitionController>("垂直翻转", stroptions_flip, ref Flip_Ver, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects, null, (res) =>
             {
                 Material mat = (Material)TransitionMat.objectReferenceValue;
                 mat.SetInt("_Flip_Ver", Flip_Ver.boolValue ? 1 : 0);
@@ -257,16 +257,16 @@
             #endregion         
 
             #region 调试模式
-            Editor_xHudGUI.Gui_Layout_Toggle<bool, xHud_TransitionController>("调试模式", stroptions_debug, ref DebugState, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_TransitionController>("调试模式", stroptions_debug, ref DebugState, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             #endregion         
 
             #region 快速获取转场效果
             if (mgr != null && mgr.Hud_TransitionLib != null)
             {
                 string[] TransLibNames = mgr.Hud_TransitionLib.TransitionLibrary_GetAllNames();
-                Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
 
-                Editor_xHudGUI.Gui_Layout_Popup<string, xHud_TransitionController>("转场资源库", TransLibNames, ref TransitionName, HudFilled.实体, 94, 22, SelectedObjects, (comps) => { }, (res) =>
+                Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_TransitionController>("转场资源库", TransLibNames, ref TransitionName, HudFilled.实体, 94, 22, SelectedObjects, (comps) => { }, (res) =>
                 {
                     SerializedProperty sp_Name = CurrentTransitionNode.FindPropertyRelative("Name");
                     SerializedProperty sp_TotalFramesCount = CurrentTransitionNode.FindPropertyRelative("TotalFramesCount");
@@ -275,7 +275,7 @@
                     SerializedProperty sp_Res = CurrentTransitionNode.FindPropertyRelative("Res");
                     SerializedProperty sp_x_frames = CurrentTransitionNode.FindPropertyRelative("Frames");
 
-                    xHud_LibraryArg_Transition node = mgr.Hud_TransitionLib.TransitionLibrary_Get(res);
+                    XHud_LibraryArg_Transition node = mgr.Hud_TransitionLib.TransitionLibrary_Get(res);
                     sp_Name.stringValue = node.Name;
                     sp_TotalFramesCount.intValue = node.TotalFramesCount;
                     sp_LastFrameIndex.intValue = node.LastFrameIndex;
@@ -295,9 +295,9 @@
 
                 if (!IsMultiSelected())
                 {
-                    Editor_xHudGUI.Gui_Layout_Space(10);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
 
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "定位到转场库", locate_r, locate_p, 4))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "定位到转场库", locate_r, locate_p, 4))
                     {
                         //获取目标转场的索引号
                         int index = 0;
@@ -315,52 +315,52 @@
                         mgr.Hud_TransitionLib.TransitionLibrary_Location(TransLibNames[index]);
                     }
                 }
-                Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 状态
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "状态", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "状态", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 转场状态
-            Editor_xHudGUI.StatuDisplayer_text(trans_state, 12, new Vector2(0, 7), "转场状态", 12, IsTransiting.boolValue ? "正在转场中" : "等待转场", xHud_Dashboard.Theme_Primary, 11);
+            Editor_XHud_GUI.StatuDisplayer_text(trans_state, 12, new Vector2(0, 7), "转场状态", 12, IsTransiting.boolValue ? "正在转场中" : "等待转场", XHud_Dashboard.Theme_Primary, 11);
             #endregion
 
             #region 接近首帧状态
             SerializedProperty sp_frames_co = CurrentTransitionNode.FindPropertyRelative("Frames");
             int frameLimite_start = (int)Mathf.Floor(sp_frames_co.arraySize * LimiteFramePer_Start.floatValue);
 
-            Editor_xHudGUI.StatuDisplayer_text(trans_first_frame, 12, new Vector2(0, 7), "接近首帧状态", 12, IsTransiting_WithStart.boolValue ? $"接近首帧状态 ({frameLimite_start})" : $"等待转场 ({frameLimite_start})", xHud_Dashboard.Theme_Primary, 11);
+            Editor_XHud_GUI.StatuDisplayer_text(trans_first_frame, 12, new Vector2(0, 7), "接近首帧状态", 12, IsTransiting_WithStart.boolValue ? $"接近首帧状态 ({frameLimite_start})" : $"等待转场 ({frameLimite_start})", XHud_Dashboard.Theme_Primary, 11);
             #endregion
 
             #region 接近尾帧状态
             int frameLimite_end = (int)Mathf.Floor(sp_frames_co.arraySize * LimiteFramePer_End.floatValue);
 
-            Editor_xHudGUI.StatuDisplayer_text(trans_end_frame, 12, new Vector2(0, 7), "接近尾帧状态", 12, IsTransiting_WithEnd.boolValue ? $"接近尾帧状态 ({frameLimite_end})" : $"等待转场 ({frameLimite_end})", xHud_Dashboard.Theme_Primary, 11);
+            Editor_XHud_GUI.StatuDisplayer_text(trans_end_frame, 12, new Vector2(0, 7), "接近尾帧状态", 12, IsTransiting_WithEnd.boolValue ? $"接近尾帧状态 ({frameLimite_end})" : $"等待转场 ({frameLimite_end})", XHud_Dashboard.Theme_Primary, 11);
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 参数
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.阴影灰, 5, "参数", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.阴影灰, 5, "参数", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 转场组件
-            Editor_xHudGUI.Gui_Layout_Property_Field("转场组件", TransitionImage);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("转场组件", TransitionImage);
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 转场材质
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Layout_Property_Field("转场材质", TransitionMat);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("转场材质", TransitionMat);
             if (EditorGUI.EndChangeCheck())
             {
                 Image img = (Image)TransitionImage.objectReferenceValue;
@@ -369,11 +369,11 @@
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 转场叠加颜色
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Layout_Property_Field("叠加颜色", TransitionOverlayColor);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("叠加颜色", TransitionOverlayColor);
             if (EditorGUI.EndChangeCheck())
             {
                 Image img = (Image)TransitionImage.objectReferenceValue;
@@ -384,13 +384,13 @@
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 转场参数
-            Editor_xHudGUI.Gui_Layout_Property_Field("转场参数", CurrentTransitionNode);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("转场参数", CurrentTransitionNode);
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 转场进度
             SerializedProperty sp_frames = CurrentTransitionNode.FindPropertyRelative("Frames");
@@ -398,7 +398,7 @@
             if (sp_frames != null && sp_frames.arraySize > 0)
             {
                 EditorGUI.BeginChangeCheck();
-                Editor_xHudGUI.Gui_Layout_Property_Field("转场进度", TransitionProgress);
+                Editor_XHud_GUI.Gui_Layout_Property_Field("转场进度", TransitionProgress);
                 if (EditorGUI.EndChangeCheck())
                 {
                     UpdateTransition(sp_frames, sp_lastframeindex);
@@ -406,13 +406,13 @@
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 转场透明度            
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
             EditorGUI.BeginChangeCheck();
-            TransitionAlpha.floatValue = Editor_xHudGUI.Gui_Layout_Slider("透明度", TransitionAlpha.floatValue, 0, 1);
+            TransitionAlpha.floatValue = Editor_XHud_GUI.Gui_Layout_Slider("透明度", TransitionAlpha.floatValue, 0, 1);
             TransitionAlpha.serializedObject.ApplyModifiedProperties();
             if (EditorGUI.EndChangeCheck())
             {
@@ -424,72 +424,72 @@
                     TransitionOverlayColor.serializedObject.ApplyModifiedProperties();
                 }
             }
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 当前帧
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Layout_Property_Field("当前帧", CurrentFrame);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("当前帧", CurrentFrame);
             if (EditorGUI.EndChangeCheck())
             {
 
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 帧间隔速率
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Layout_Property_Field("帧间隔速率", TransitionTime);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("帧间隔速率", TransitionTime);
             if (EditorGUI.EndChangeCheck())
             {
 
             }
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 接近开始帧
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_SliderMinMax("接近转场", ref BaseScript.LimiteFramePer_Start, ref BaseScript.LimiteFramePer_End, 0, 1);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_SliderMinMax("接近转场", ref BaseScript.LimiteFramePer_Start, ref BaseScript.LimiteFramePer_End, 0, 1);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 测试按键
-            Editor_xHudGUI.Gui_Layout_Property_Field("转场模式", TransitionMod_Key);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Property_Field("按键转场", TransitionPlayKey);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Property_Field("水平翻转", TransitionFlip_H_Key);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Property_Field("垂直翻转", TransitionFlip_V_Key);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("转场模式", TransitionMod_Key);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("按键转场", TransitionPlayKey);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("水平翻转", TransitionFlip_H_Key);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("垂直翻转", TransitionFlip_V_Key);
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 源脚本
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", xHud_Dashboard.Theme_Primary);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 原始变量
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
             BasicVars = EditorGUILayout.Foldout(BasicVars, "变量/属性", true);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
             if (BasicVars)
                 DrawDefaultInspector();
             #endregion
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             serializedObject.ApplyModifiedProperties();

@@ -11,7 +11,7 @@ namespace SevenStrikeModules.XHud.Hud
         Shift = 3,
     }
 
-    public class xHud_Spawner : MonoBehaviour
+    public class XHud_Spawner : MonoBehaviour
     {
         public string LibName;
 
@@ -19,7 +19,7 @@ namespace SevenStrikeModules.XHud.Hud
         public string SpawnIndicator;
 
         public string SpawnerIndicator;
-        public xHud_Module_Element SpawnElement;
+        public XHud_Module_Element SpawnElement;
         public Motion_Creator CreateArgs;
         public string CreateParamName;
 
@@ -91,11 +91,11 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 动作 - 生成元素
         /// </summary>
-        public UnityAction<xHud_Module_Element> act_on_element_spawn;
+        public UnityAction<XHud_Module_Element> act_on_element_spawn;
         /// <summary>
         /// 动作 - 回收元素
         /// </summary>
-        public UnityAction<xHud_Module_Element> act_on_element_despawn;
+        public UnityAction<XHud_Module_Element> act_on_element_despawn;
 
         /// <summary>
         /// 动作 - 生成元素 - 进入 - 开始
@@ -149,7 +149,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             if (Opt_VisuallerCreate)
             {
-                if (xHud_Manager.Instance == null)
+                if (XHud_Manager.Instance == null)
                     return;
                 if (CheckElementLibraryIsEmpty())
                     return;
@@ -207,9 +207,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param tweenName="IndicatorName">标识名称，如果不填则使用脚本自带的标识名称</param>
         /// <param tweenName="CreateParam">创建参数，如果不填则使用脚本自带的创建参数</param>
         /// <returns></returns>
-        public xHud_Module_Element hsp_Spawn(string IndicatorName = "", Motion_Creator CreateParam = null)
+        public XHud_Module_Element hsp_Spawn(string IndicatorName = "", Motion_Creator CreateParam = null)
         {
-            xHud_Module_Element element = null;
+            XHud_Module_Element element = null;
 
             ///---如果UI渲染模式为世界空间则使用世界空间专用的方法
             if (Opt_WorldCreate)
@@ -217,7 +217,7 @@ namespace SevenStrikeModules.XHud.Hud
                 ///---如果参考物体存在则生成的UI的坐标信息则参考这个物体的坐标信息
                 if (ReferObject != null)
                 {
-                    element = xHud_Manager.Instance.hm_HudElement_Create_World(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, ElementSize, ReferObject.position, ReferObject.eulerAngles, ReferObject.localScale, ElementOffset, CreateParam == null ? this.CreateArgs : CreateParam, null, (wrap) =>
+                    element = XHud_Manager.Instance.hm_HudElement_Create_World(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, ElementSize, ReferObject.position, ReferObject.eulerAngles, ReferObject.localScale, ElementOffset, CreateParam == null ? this.CreateArgs : CreateParam, null, (wrap) =>
                     {
                         ///--------当元素 - 进入 - 开始时
                         if (act_on_element_in_start != null)
@@ -233,7 +233,7 @@ namespace SevenStrikeModules.XHud.Hud
                 }
                 else
                 {
-                    element = xHud_Manager.Instance.hm_HudElement_Create_World(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, ElementSize, WorldPosition, WorldRotation, WorldScale, ElementOffset, CreateParam == null ? this.CreateArgs : CreateParam, null, (wrap) =>
+                    element = XHud_Manager.Instance.hm_HudElement_Create_World(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, ElementSize, WorldPosition, WorldRotation, WorldScale, ElementOffset, CreateParam == null ? this.CreateArgs : CreateParam, null, (wrap) =>
                     {
                         ///--------当元素 - 进入 - 开始时
                         if (act_on_element_in_start != null)
@@ -250,7 +250,7 @@ namespace SevenStrikeModules.XHud.Hud
             }
             else
             {
-                element = xHud_Manager.Instance.hm_HudElement_Create_Screen(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, ElementOffset, ElementScale, ElementSize, Opt_WorldCreate ? false : Opt_RMSEnabled, RMS_SelctedName, CreateParam == null ? this.CreateArgs : CreateParam, (wrap) =>
+                element = XHud_Manager.Instance.hm_HudElement_Create_Screen(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, ElementOffset, ElementScale, ElementSize, Opt_WorldCreate ? false : Opt_RMSEnabled, RMS_SelctedName, CreateParam == null ? this.CreateArgs : CreateParam, (wrap) =>
                 {
                     ///--------当元素 - 进入 - 开始时
                     if (act_on_element_in_start != null)
@@ -279,9 +279,9 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param tweenName="RecycleParam">回收参数</param>
         /// <param tweenName="actionstart">事件 - 回收开始</param>
         /// <param tweenName="actionend">事件 - 回收结束</param>
-        public void hsp_Despawn(Motion_Recycler RecycleParam = null, UnityAction<xHud_Module_Element> actionstart = null, UnityAction<xHud_Module_Element> actionend = null)
+        public void hsp_Despawn(Motion_Recycler RecycleParam = null, UnityAction<XHud_Module_Element> actionstart = null, UnityAction<XHud_Module_Element> actionend = null)
         {
-            xHud_Manager.Instance.hm_HudElement_RecycleAt(SpawnElement, RecycleParam == null ? this.RecycleArgs : RecycleParam, actionstart == null ? (wrap) =>
+            XHud_Manager.Instance.hm_HudElement_RecycleAt(SpawnElement, RecycleParam == null ? this.RecycleArgs : RecycleParam, actionstart == null ? (wrap) =>
             {
                 if (act_on_element_out_start != null)
                     act_on_element_out_start();
@@ -310,7 +310,7 @@ namespace SevenStrikeModules.XHud.Hud
             bool sw = false;
             if (!Application.isPlaying)
             {
-                xHud_Manager mgr = FindFirstObjectByType<xHud_Manager>();
+                XHud_Manager mgr = FindFirstObjectByType<XHud_Manager>();
 
                 if (mgr.Hud_ElementLibrarys == null)
                     sw = true;
@@ -319,9 +319,9 @@ namespace SevenStrikeModules.XHud.Hud
             }
             else
             {
-                if (xHud_Manager.Instance.Hud_ElementLibrarys == null)
+                if (XHud_Manager.Instance.Hud_ElementLibrarys == null)
                     sw = true;
-                if (xHud_Manager.Instance.Hud_ElementLibrarys.Count <= 0)
+                if (XHud_Manager.Instance.Hud_ElementLibrarys.Count <= 0)
                     sw = true;
             }
             return sw;

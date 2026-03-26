@@ -3,7 +3,7 @@ namespace SevenStrikeModules.XHud.Utilitys
     using UnityEngine;
 
     [ExecuteInEditMode]
-    public class xHud_AudioStoper : MonoBehaviour
+    public class XHud_AudioStoper : MonoBehaviour
     {
         public AudioSource AudioSource;
 

@@ -7,11 +7,11 @@ namespace SevenStrikeModules.XHud.Hud
     using UnityEditorInternal;
     using UnityEngine;
 
-    [CustomEditor(typeof(xHud_Library_Element))]
-    public class Editor_xHud_Library_Element : Editor
+    [CustomEditor(typeof(XHud_Library_Element))]
+    public class Editor_XHud_Library_Element : Editor
     {
         #region 组件 / 列表
-        private xHud_Library_Element BaseScript;
+        private XHud_Library_Element BaseScript;
         #endregion
 
         #region 序列化属性
@@ -38,9 +38,9 @@ namespace SevenStrikeModules.XHud.Hud
 
         private void OnEnable()
         {
-            BaseScript = (xHud_Library_Element)target;
+            BaseScript = (XHud_Library_Element)target;
 
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             #region 获取序列化属性
             sp_ElementLibrary = serializedObject.FindProperty("ElementLibrary");
@@ -66,17 +66,17 @@ namespace SevenStrikeModules.XHud.Hud
 
             #region 获取图标
             warnIcon = EditorGUIUtility.IconContent("console.warnicon").image as Texture2D;
-            Icon_Using = Editor_xHudGUI.GetIcon("Icons_Hud_ElementLibrary/Icon_ele_using");
-            btn_icon_details_released = Editor_xHudGUI.GetIcon("Icons_Hud_ElementLibrary/detail_r");
-            btn_icon_details_press = Editor_xHudGUI.GetIcon("Icons_Hud_ElementLibrary/detail_p");
-            clean_p = Editor_xHudGUI.GetIcon("Icons_Hud_ElementLibrary/clean_p");
-            clean_r = Editor_xHudGUI.GetIcon("Icons_Hud_ElementLibrary/clean_r");
-            clear_p = Editor_xHudGUI.GetIcon("Icons_Hud_ElementLibrary/clear_p");
-            clear_r = Editor_xHudGUI.GetIcon("Icons_Hud_ElementLibrary/clear_r");
-            create_p = Editor_xHudGUI.GetIcon("Icons_Hud_ElementLibrary/create_p");
-            create_r = Editor_xHudGUI.GetIcon("Icons_Hud_ElementLibrary/create_r");
-            delete_p = Editor_xHudGUI.GetIcon("Icons_Hud_ElementLibrary/delete_p");
-            delete_r = Editor_xHudGUI.GetIcon("Icons_Hud_ElementLibrary/delete_r");
+            Icon_Using = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/Icon_ele_using");
+            btn_icon_details_released = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/detail_r");
+            btn_icon_details_press = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/detail_p");
+            clean_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/clean_p");
+            clean_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/clean_r");
+            clear_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/clear_p");
+            clear_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/clear_r");
+            create_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/create_p");
+            create_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/create_r");
+            delete_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/delete_p");
+            delete_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/delete_r");
             #endregion
 
             #region ReorderableList - ElementInfoList
@@ -136,7 +136,7 @@ namespace SevenStrikeModules.XHud.Hud
         /// <param name="isFocused"></param>
         private void ElementInfoList_Original_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
-            xHud_Manager mgr = xHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             SerializedProperty prop = sp_ElementLibrary.GetArrayElementAtIndex(index);
             SerializedProperty sp_name = prop.FindPropertyRelative("Name");
@@ -152,14 +152,14 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             drawelement_rect.Set(rect.x + 15, rect.y + 5, 30, 20);
-            Editor_xHudGUI.Gui_Labelfield(drawelement_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
+            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
 
             #region 标识名称
             drawelement_rect.Set(rect.x + 39, rect.y + 5, 35, 20);
-            Editor_xHudGUI.Gui_Labelfield(drawelement_rect, "元素：", HudFilled.无, HudColor.无, Editor_xHudGUI.GetColor(HudColor.亮白), TextAnchor.MiddleLeft, Vector2.zero, 12);
+            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, "元素：", HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.亮白), TextAnchor.MiddleLeft, Vector2.zero, 12);
             drawelement_rect.Set(rect.x + 77, rect.y + 5, rect.width - 140, 20);
 
-            Editor_xHudGUI.Gui_Labelfield(drawelement_rect, sp_name.stringValue, HudFilled.无, HudColor.无, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 12, TextClipping.Ellipsis);
+            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, sp_name.stringValue, HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 12, TextClipping.Ellipsis);
             #endregion
 
             #region 是否正在使用中图标           
@@ -169,19 +169,19 @@ namespace SevenStrikeModules.XHud.Hud
                 content_used.image = Icon_Using;
                 content_used.tooltip = "正在使用";
                 drawelement_rect.Set(rect.width - 90, rect.y + 14, 22, 22);
-                Editor_xHudGUI.Gui_Icon(drawelement_rect, content_used);
+                Editor_XHud_GUI.Gui_Icon(drawelement_rect, content_used);
             }
             #endregion
 
             #region 元素库状态概要
             drawelement_rect.Set(rect.x + 39, rect.y + 28, 40, 20);
-            Editor_xHudGUI.Gui_Labelfield_Thin(drawelement_rect, $"<b>I</b>  <color=#ffffff>{sp_initalcount.intValue}</color>", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
+            Editor_XHud_GUI.Gui_Labelfield_Thin(drawelement_rect, $"<b>I</b>  <color=#ffffff>{sp_initalcount.intValue}</color>", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
             drawelement_rect.Set(rect.x + 94, rect.y + 28, 40, 20);
-            Editor_xHudGUI.Gui_Labelfield_Thin(drawelement_rect, $"<b>U</b>  <color=#ffffff>{sp_usedcount.intValue}</color>", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
+            Editor_XHud_GUI.Gui_Labelfield_Thin(drawelement_rect, $"<b>U</b>  <color=#ffffff>{sp_usedcount.intValue}</color>", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
             drawelement_rect.Set(rect.x + 149, rect.y + 28, 40, 20);
-            Editor_xHudGUI.Gui_Labelfield_Thin(drawelement_rect, $"<b>R</b>  <color=#ffffff>{sp_recyclecount.intValue}</color>", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
+            Editor_XHud_GUI.Gui_Labelfield_Thin(drawelement_rect, $"<b>R</b>  <color=#ffffff>{sp_recyclecount.intValue}</color>", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
             drawelement_rect.Set(rect.x + 204, rect.y + 28, 40, 20);
-            Editor_xHudGUI.Gui_Labelfield_Thin(drawelement_rect, $"<b>D</b>  <color=#ffffff>{sp_Index.intValue}</color>", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
+            Editor_XHud_GUI.Gui_Labelfield_Thin(drawelement_rect, $"<b>D</b>  <color=#ffffff>{sp_Index.intValue}</color>", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
 
             if (sp_target.objectReferenceValue == null)
             {
@@ -189,7 +189,7 @@ namespace SevenStrikeModules.XHud.Hud
                 content.image = warnIcon;
                 content.tooltip = "已丢失元素源物体";
                 drawelement_rect.Set(rect.x + 15, rect.y + 28, 15, 15);
-                Editor_xHudGUI.Gui_Icon(drawelement_rect, content);
+                Editor_XHud_GUI.Gui_Icon(drawelement_rect, content);
             }
             #endregion
 
@@ -214,20 +214,20 @@ namespace SevenStrikeModules.XHud.Hud
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("E (修改元素项)"), false, () =>
                 {
-                    Library_Item item = BaseScript.ElementLibrary[sp_SelectedIndex.intValue];
+                    XHud_LibraryArg_Element_Item item = BaseScript.ElementLibrary[sp_SelectedIndex.intValue];
                     Open_Hud_Library_Element_Setter(item, index);
                 });
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("S (根据自身布局参数发送到场景锚点)"), false, () =>
                 {
-                    xHud_Module_Element source_ele = BaseScript.ElementLibrary[index].Target;
+                    XHud_Module_Element source_ele = BaseScript.ElementLibrary[index].Target;
                     if (source_ele.RMS_Enabled)
                     {
                         GameObject obj_ele = (GameObject)PrefabUtility.InstantiatePrefab(BaseScript.ElementLibrary[index].Target.gameObject, null);
                         Undo.RegisterCreatedObjectUndo(obj_ele, "CreateElement");
-                        xHud_Module_Element ele = obj_ele.GetComponent<xHud_Module_Element>();
+                        XHud_Module_Element ele = obj_ele.GetComponent<XHud_Module_Element>();
 
-                        OriginalLayoutInfo rms = ele.elelemt_RMS_Get(mgr.hm_RMS_GetCurrentSolution());
+                        Element_OriginalLayoutInfo rms = ele.elelemt_RMS_Get(mgr.hm_RMS_GetCurrentSolution());
                         ele.RectTransform.SetParent(mgr.hm_Layout_GetAnchor(rms.Anchor));
                         ele.RectTransform.pivot = rms.Pivot;
                         ele.RectTransform.anchorMin = rms.AnchorMin;
@@ -239,7 +239,7 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                     else
                     {
-                        Editor_xHudGUI.Open(xHudDialogType.警告, "HudElementLibrary元素库消息", "目标元素RMS未开启", "您选择的目标元素并未开启 R M S 功能，无法执行此操作！", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudElementLibrary元素库消息", "目标元素RMS未开启", "您选择的目标元素并未开启 R M S 功能，无法执行此操作！", "明白", 0);
                     }
                 });
                 menu.AddSeparator("");
@@ -261,9 +261,9 @@ namespace SevenStrikeModules.XHud.Hud
 
             #region 查看详细信息
             drawelement_rect.Set(rect.width - 50, rect.y + 14, 22, 22);
-            if (Editor_xHudGUI.Gui_Button(drawelement_rect, btn_icon_details_released, btn_icon_details_press, true, "", "", Color.white))
+            if (Editor_XHud_GUI.Gui_Button(drawelement_rect, btn_icon_details_released, btn_icon_details_press, true, "", "", Color.white))
             {
-                Library_Item item = BaseScript.ElementLibrary[index];
+                XHud_LibraryArg_Element_Item item = BaseScript.ElementLibrary[index];
                 Open_Hud_Library_Element_Setter(item, index);
             }
             #endregion
@@ -279,7 +279,7 @@ namespace SevenStrikeModules.XHud.Hud
             if (index == sp_LocationSelectedIndex.intValue)
             {
                 drawelement_rect.Set(rect.width - 150, rect.y + 15, 50, 20);
-                Editor_xHudGUI.Gui_Labelfield(drawelement_rect, "已定位", HudFilled.无, HudColor.亮白, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleRight, Vector2.zero, 11);
+                Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, "已定位", HudFilled.无, HudColor.亮白, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleRight, Vector2.zero, 11);
             }
         }
 
@@ -311,7 +311,7 @@ namespace SevenStrikeModules.XHud.Hud
                     {
                         // 高亮标记表示选中
                         item_rect.Set(1, i * sp_itemHeight.floatValue + 12, 5, 5);
-                        EditorGUI.DrawRect(item_rect, xHud_Dashboard.Theme_Primary);
+                        EditorGUI.DrawRect(item_rect, XHud_Dashboard.Theme_Primary);
                         // 高亮背景表示选中
                         item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
                         EditorGUI.DrawRect(item_rect, SelectedBg);
@@ -385,35 +385,35 @@ namespace SevenStrikeModules.XHud.Hud
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_xHudGUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "Hud - 元素库", Color.black);
+            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "Hud - 元素库", Color.black);
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Property_Field("元素库名称", sp_LibraryName);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("元素库名称", sp_LibraryName);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_xHudGUI.Gui_Layout_Property_Field("元素库说明", sp_LibraryDescription);
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("元素库说明", sp_LibraryDescription);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Layout_Property_Field("过滤（包含）", sp_Highlight);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("过滤（包含）", sp_Highlight);
             if (EditorGUI.EndChangeCheck())
             {
                 sp_LocationSelectedIndex.intValue = -1;
                 sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
             }
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
             EditorGUI.BeginChangeCheck();
-            Editor_xHudGUI.Gui_Layout_Property_Field("查找（精确）", sp_Find);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("查找（精确）", sp_Find);
             if (EditorGUI.EndChangeCheck())
             {
                 if (!string.IsNullOrEmpty(sp_Find.stringValue))
@@ -427,21 +427,21 @@ namespace SevenStrikeModules.XHud.Hud
                     sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
                 }
             }
-            Editor_xHudGUI.Gui_Layout_Space(5);
-            Editor_xHudGUI.Gui_Layout_Horizontal_End();
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             if (string.IsNullOrEmpty(sp_Highlight.stringValue))
             {
                 if (!Application.isPlaying)
                 {
-                    Editor_xHudGUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_xHudGUI.Gui_Layout_FlexSpace();
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+                    Editor_XHud_GUI.Gui_Layout_FlexSpace();
 
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "清理所有元素的队列", clean_r, clean_p, 4))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "清理所有元素的队列", clean_r, clean_p, 4))
                     {
-                        string res = Editor_xHudGUI.Open(xHudDialogType.警告, "HudElementLibrary元素库消息", "清空队列元素", "您是否确认要清空所有元素项下的预生成队列元素？", "暂不", "清空", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudElementLibrary元素库消息", "清空队列元素", "您是否确认要清空所有元素项下的预生成队列元素？", "暂不", "清空", 1);
                         if (res == "暂不")
                             return;
                         for (int i = 0; i < sp_ElementLibrary.arraySize; i++)
@@ -461,10 +461,10 @@ namespace SevenStrikeModules.XHud.Hud
                             prop.serializedObject.ApplyModifiedProperties();
                         }
                     }
-                    Editor_xHudGUI.Gui_Layout_Space(35);
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "清空所有元素项", clear_r, clear_p, 4))
+                    Editor_XHud_GUI.Gui_Layout_Space(35);
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "清空所有元素项", clear_r, clear_p, 4))
                     {
-                        string res = Editor_xHudGUI.Open(xHudDialogType.警告, "HudElementLibrary元素库消息", "清空元素项", "您是否确认要清空所有元素项？", "暂不", "清空", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudElementLibrary元素库消息", "清空元素项", "您是否确认要清空所有元素项？", "暂不", "清空", 0);
                         if (res == "暂不")
                             return;
 
@@ -478,23 +478,23 @@ namespace SevenStrikeModules.XHud.Hud
                         sp_ElementLibrary.ClearArray();
                         sp_ElementLibrary.serializedObject.ApplyModifiedProperties();
                     }
-                    Editor_xHudGUI.Gui_Layout_Space(35);
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "添加项", create_r, create_p, 4))
+                    Editor_XHud_GUI.Gui_Layout_Space(35);
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "添加项", create_r, create_p, 4))
                     {
                         ElementInfoList_Original_Add(ElementInfoList);
                     }
-                    Editor_xHudGUI.Gui_Layout_Space(35);
-                    if (Editor_xHudGUI.Gui_Layout_Button(14, "删除项", delete_r, delete_p, 4))
+                    Editor_XHud_GUI.Gui_Layout_Space(35);
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "删除项", delete_r, delete_p, 4))
                     {
                         ElementInfoList_Original_Remove(ElementInfoList);
                     }
                     GUILayout.FlexibleSpace();
-                    Editor_xHudGUI.Gui_Layout_Horizontal_End();
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-                    Editor_xHudGUI.Gui_Layout_Space(5);
-                    Editor_xHudGUI.Gui_Layout_Seperator(1, xHud_Dashboard.Theme_SeperateLine);
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+                    Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
                     x_dragarea = GUILayoutUtility.GetLastRect();
-                    Editor_xHudGUI.Gui_Layout_Space(10);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
 
                     #region 拖放操作
 
@@ -513,8 +513,8 @@ namespace SevenStrikeModules.XHud.Hud
                             foreach (var item in dropobjs)
                             {
                                 GameObject el = (GameObject)item;
-                                Library_Item it = new Library_Item();
-                                it.Target = el.GetComponent<xHud_Module_Element>();
+                                XHud_LibraryArg_Element_Item it = new XHud_LibraryArg_Element_Item();
+                                it.Target = el.GetComponent<XHud_Module_Element>();
                                 if (it.Target != null)
                                 {
                                     bool isExist = false;
@@ -557,25 +557,25 @@ namespace SevenStrikeModules.XHud.Hud
                         }
                     }
 
-                    Editor_xHudGUI.Gui_Box_Style(dragarea, HudFilled.实体, HudColor.深空灰);
-                    Editor_xHudGUI.Gui_Labelfield(dragarea, "拖放Hud元素到此处快速创建", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleCenter, new Vector2(0, 0), 11);
+                    Editor_XHud_GUI.Gui_Box_Style(dragarea, HudFilled.实体, HudColor.深空灰);
+                    Editor_XHud_GUI.Gui_Labelfield(dragarea, "拖放Hud元素到此处快速创建", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleCenter, new Vector2(0, 0), 11);
                     #endregion
                 }
             }
             else
             {
-                Editor_xHudGUI.Gui_Layout_LabelfieldThin("当前为过滤筛选状态", HudFilled.无, HudColor.无, xHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12);
+                Editor_XHud_GUI.Gui_Layout_LabelfieldThin("当前为过滤筛选状态", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12);
             }
 
-            Editor_xHudGUI.Gui_Layout_Space(30);
+            Editor_XHud_GUI.Gui_Layout_Space(30);
 
-            Editor_xHudGUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "元素库列表", Color.white);
-            Editor_xHudGUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "元素库列表", Color.white);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             DrawElementInfoList_Original();
 
-            Editor_xHudGUI.Gui_Layout_Space(10);
-            Editor_xHudGUI.Gui_Layout_Vertical_End();
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -584,12 +584,12 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 打开元素库项修改器
         /// </summary>
-        public void Open_Hud_Library_Element_Setter(Library_Item item, int index)
+        public void Open_Hud_Library_Element_Setter(XHud_LibraryArg_Element_Item item, int index)
         {
-            Editor_xHud_LibrarySetTool_Element window = EditorWindow.GetWindow<Editor_xHud_LibrarySetTool_Element>(true);
+            Editor_XHud_LibrarySetTool_Element window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_Element>(true);
 
             window.titleContent = new GUIContent("XHud 元素库修改器");
-            Editor_xHudGUI.CenterEditorWindow(new Vector2Int(500, 450), window);
+            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(500, 450), window);
             window.SetLibraryItem(item);
             window.SetTargetLibName(sp_LibraryName.stringValue);
             window.SetTargetLib(BaseScript);

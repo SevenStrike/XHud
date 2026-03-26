@@ -9,7 +9,7 @@ namespace SevenStrikeModules.XHud
     /// <summary>
     /// Hud转场信息
     /// </summary>
-    public class xHud_LibraryArg_Transition
+    public class XHud_LibraryArg_Transition
     {
         public string Name = "新转场";
         public string Description = "描述转场效果的文字";
@@ -19,7 +19,7 @@ namespace SevenStrikeModules.XHud
         public Vector2Int Res;
         public List<Texture2D> Frames = new List<Texture2D>();
 
-        public void CopyData(xHud_LibraryArg_Transition node)
+        public void CopyData(XHud_LibraryArg_Transition node)
         {
             Name = node.Name;
             Description = node.Description;
@@ -35,12 +35,12 @@ namespace SevenStrikeModules.XHud
     }
 
     [CreateAssetMenu(fileName = "XHud_Library_Transition", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-Transition (转场库)", order = 0)]
-    public class xHud_Library_Transition : ScriptableObject
+    public class XHud_Library_Transition : ScriptableObject
     {
         public string LibraryName = "NewTransitionLibrary";
         public ScaleMode PreviewScaleMode = ScaleMode.ScaleToFit;
         public float PreviewSpeed = 1;
-        public List<xHud_LibraryArg_Transition> TransitionLibrary = new List<xHud_LibraryArg_Transition>();
+        public List<XHud_LibraryArg_Transition> TransitionLibrary = new List<XHud_LibraryArg_Transition>();
 
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace SevenStrikeModules.XHud
         /// <param tweenName="skipframe"></param>
         public void TransitionLibrary_Add(string name, Texture2D[] texs, int skipframe)
         {
-            xHud_LibraryArg_Transition node = new xHud_LibraryArg_Transition();
+            XHud_LibraryArg_Transition node = new XHud_LibraryArg_Transition();
             List<Texture2D> texlist = new List<Texture2D>();
             for (int i = 0; i < texs.Length; i++)
             {
@@ -147,9 +147,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="name"></param>
         /// <returns></returns>
-        public xHud_LibraryArg_Transition TransitionLibrary_Get(string name)
+        public XHud_LibraryArg_Transition TransitionLibrary_Get(string name)
         {
-            xHud_LibraryArg_Transition node = new xHud_LibraryArg_Transition();
+            XHud_LibraryArg_Transition node = new XHud_LibraryArg_Transition();
             for (int i = 0; i < TransitionLibrary.Count; i++)
             {
                 if (TransitionLibrary[i].Name == name)
@@ -271,7 +271,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="index">替换的转场索引号</param>
         /// <param tweenName="node">替换转场</param>
-        public void TransitionsLibrary_Replace(int index, xHud_LibraryArg_Transition node)
+        public void TransitionsLibrary_Replace(int index, XHud_LibraryArg_Transition node)
         {
             TransitionLibrary[index] = node;
         }
