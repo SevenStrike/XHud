@@ -1,7 +1,6 @@
 namespace SevenStrikeModules.XHud.GuiLib
 {
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Hud;
     using SevenStrikeModules.XHud.Utilitys;
     using System;
     using System.Linq;
@@ -56,7 +55,7 @@ namespace SevenStrikeModules.XHud.GuiLib
         /// </summary>
         public static void Gui_Layout_Initia()
         {
-            GUISkin guiskin = GUICreator = AssetDatabase.LoadAssetAtPath<GUISkin>($"{XHud_Dashboard.Get_GUIStyle_Path()}HudEditorStyle.guiskin");
+            GUISkin guiskin = GUICreator = AssetDatabase.LoadAssetAtPath<GUISkin>($"{XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path()}HudEditorStyle.guiskin");
         }
 
         #region GUI样式
@@ -75,11 +74,11 @@ namespace SevenStrikeModules.XHud.GuiLib
 
             if (IsHalf)
             {
-                tex = AssetDatabase.LoadAssetAtPath<Texture2D>(XHud_Dashboard.Get_GUIStyle_Path() + $"EditorUI/Group/Group_缺口{Mode}_{Color.ToString()}.png");
+                tex = AssetDatabase.LoadAssetAtPath<Texture2D>(XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path() + $"EditorUI/Group/Group_缺口{Mode}_{Color.ToString()}.png");
             }
             else
             {
-                tex = AssetDatabase.LoadAssetAtPath<Texture2D>(XHud_Dashboard.Get_GUIStyle_Path() + $"EditorUI/Group/Group_{Mode}_{Color.ToString()}.png");
+                tex = AssetDatabase.LoadAssetAtPath<Texture2D>(XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path() + $"EditorUI/Group/Group_{Mode}_{Color.ToString()}.png");
             }
             return tex;
         }
@@ -95,9 +94,9 @@ namespace SevenStrikeModules.XHud.GuiLib
             }
 
             if (Mode == HudFilled.透明)
-                return AssetDatabase.LoadAssetAtPath<Texture2D>(XHud_Dashboard.Get_GUIStyle_Path() + $"EditorUI/Button/Btn_{Mode}.png");
+                return AssetDatabase.LoadAssetAtPath<Texture2D>(XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path() + $"EditorUI/Button/Btn_{Mode}.png");
             else
-                return AssetDatabase.LoadAssetAtPath<Texture2D>(XHud_Dashboard.Get_GUIStyle_Path() + $"EditorUI/Button/Btn_{Mode}_{Color}.png");
+                return AssetDatabase.LoadAssetAtPath<Texture2D>(XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path() + $"EditorUI/Button/Btn_{Mode}_{Color}.png");
         }
         /// <summary>
         /// 获取内建图标
@@ -203,7 +202,7 @@ namespace SevenStrikeModules.XHud.GuiLib
                 Gui_Layout_Initia();
             }
 
-            return AssetDatabase.LoadAssetAtPath<Texture2D>(XHud_Dashboard.Get_GUIStyle_Path() + $"Icon/{str}.png");
+            return AssetDatabase.LoadAssetAtPath<Texture2D>(XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path() + $"Icon/{str}.png");
         }
         /// <summary>
         /// 获取自定义图标
@@ -216,7 +215,7 @@ namespace SevenStrikeModules.XHud.GuiLib
                 Gui_Layout_Initia();
             }
 
-            return AssetDatabase.LoadAssetAtPath<Texture2D>(XHud_Dashboard.Get_GUIStyle_Path() + $"{str}.png");
+            return AssetDatabase.LoadAssetAtPath<Texture2D>(XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path() + $"{str}.png");
         }
         /// <summary>
         /// Logo样式
@@ -521,9 +520,9 @@ namespace SevenStrikeModules.XHud.GuiLib
                 Gui_Layout_Initia();
             }
 
-            Font f_ttf = AssetDatabase.LoadAssetAtPath<Font>(XHud_Dashboard.Get_GUIStyle_Path() + $"EditorFonts/{FontName}.ttf");
+            Font f_ttf = AssetDatabase.LoadAssetAtPath<Font>(XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path() + $"EditorFonts/{FontName}.ttf");
 
-            Font f_otf = AssetDatabase.LoadAssetAtPath<Font>(XHud_Dashboard.Get_GUIStyle_Path() + $"EditorFonts/{FontName}.otf");
+            Font f_otf = AssetDatabase.LoadAssetAtPath<Font>(XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path() + $"EditorFonts/{FontName}.otf");
 
             if (f_ttf != null)
                 return f_ttf;
@@ -1101,6 +1100,22 @@ namespace SevenStrikeModules.XHud.GuiLib
         /// 创造一个Gui标签框 - 字符串内容
         /// </summary>
         /// <param name="Text">输入框标题</param>
+        public static void Gui_Labelfield(Rect Rect, string Text, HudFilled FillStyle, HudColor Color, Color ButtonTextColor, TextAnchor Align, int FontSize = 12, Font font = null, bool WordWrap = true, TextClipping clip = TextClipping.Overflow)
+        {
+            GUIStyle Style = new GUIStyle(Style_LabelfieldBoldText);
+            Style.normal.background = GetFillTexture(FillStyle, Color);
+            Style.normal.textColor = ButtonTextColor;
+            Style.fontSize = FontSize;
+            Style.alignment = Align;
+            Style.font = font;
+            Style.wordWrap = WordWrap;
+            Style.clipping = clip;
+            GUI.Label(Rect, Text, Style);
+        }
+        /// <summary>
+        /// 创造一个Gui标签框 - 字符串内容
+        /// </summary>
+        /// <param name="Text">输入框标题</param>
         public static void Gui_Labelfield(Rect Rect, string Text, HudFilled FillStyle, HudColor Color, Color ButtonTextColor, TextAnchor Align, Vector2 Offset, int FontSize = 12, Font font = null)
         {
             GUIStyle Style = new GUIStyle(Style_LabelfieldBoldText);
@@ -1383,6 +1398,8 @@ namespace SevenStrikeModules.XHud.GuiLib
             GUIStyle TitleStyle = new GUIStyle(Style_LabelfieldBoldText);
             TitleStyle.contentOffset = Vector2.up * 3f;
             TitleStyle.fontSize = 12;
+            TitleStyle.wordWrap = false;
+            TitleStyle.clipping = TextClipping.Overflow;
 
             GUIStyle BannerLogo = new GUIStyle(Style_Logo);
             BannerLogo.normal.textColor = TextColor;

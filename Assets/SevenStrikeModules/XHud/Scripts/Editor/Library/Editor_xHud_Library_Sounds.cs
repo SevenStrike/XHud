@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
@@ -118,16 +118,16 @@ namespace SevenStrikeModules.XHud.Hud
             sp_visibleItemCount.serializedObject.ApplyModifiedProperties();
 
             #region 获取图标
-            scan_p = Editor_XHud_GUI.GetIcon("Icons_Hud_SoundLibrary/scan_p");
-            scan_r = Editor_XHud_GUI.GetIcon("Icons_Hud_SoundLibrary/scan_r");
-            stoppreview_p = Editor_XHud_GUI.GetIcon("Icons_Hud_SoundLibrary/stoppreview_p");
-            stoppreview_r = Editor_XHud_GUI.GetIcon("Icons_Hud_SoundLibrary/stoppreview_r");
-            clear_p = Editor_XHud_GUI.GetIcon("Icons_Hud_SoundLibrary/clear_p");
-            clear_r = Editor_XHud_GUI.GetIcon("Icons_Hud_SoundLibrary/clear_r");
-            create_p = Editor_XHud_GUI.GetIcon("Icons_Hud_SoundLibrary/create_p");
-            create_r = Editor_XHud_GUI.GetIcon("Icons_Hud_SoundLibrary/create_r");
-            delete_p = Editor_XHud_GUI.GetIcon("Icons_Hud_SoundLibrary/delete_p");
-            delete_r = Editor_XHud_GUI.GetIcon("Icons_Hud_SoundLibrary/delete_r");
+            scan_p = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/scan_p");
+            scan_r = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/scan_r");
+            stoppreview_p = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/stoppreview_p");
+            stoppreview_r = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/stoppreview_r");
+            clear_p = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/clear_p");
+            clear_r = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/clear_r");
+            create_p = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/create_p");
+            create_r = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/create_r");
+            delete_p = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/delete_p");
+            delete_r = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/delete_r");
             #endregion
 
             blocked_col = new Color(0, 0, 0, blocked_alp);

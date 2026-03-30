@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
@@ -88,7 +88,7 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             #region 获取图标
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_Hud_MouseCursor/icon_main");
+            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_MouseCursor/icon_main");
             #endregion
 
             BaseScript.CursorRect = BaseScript.GetComponent<RectTransform>();
@@ -220,7 +220,7 @@ namespace SevenStrikeModules.XHud.Hud
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 鼠标样式", Color.white);
+            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 鼠标样式", Color.white);
 
             #region 控制
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "控制", XHud_Dashboard.Theme_Primary);

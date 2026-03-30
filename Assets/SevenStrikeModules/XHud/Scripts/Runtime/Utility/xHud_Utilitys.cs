@@ -187,6 +187,20 @@ namespace SevenStrikeModules.XHud.Utilitys
         }
         #endregion
 
+        /// <summary>
+        /// 去除数据左右小括号
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string TrimParentheses(string str)
+        {
+            if (str.StartsWith("(") && str.EndsWith(")"))
+            {
+                return str.Substring(1, str.Length - 2);
+            }
+            return str;
+        }
+
         #region 字符串 -> 颜色
         /// <summary>
         /// 根据RGBA值转换到Color类型

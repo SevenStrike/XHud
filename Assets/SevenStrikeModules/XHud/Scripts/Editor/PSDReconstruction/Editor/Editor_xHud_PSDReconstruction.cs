@@ -1,10 +1,8 @@
-namespace SevenStrikeModules.XHud
+namespace SevenStrikeModules.XHud.Utilitys
 {
     using Newtonsoft.Json;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
-    using SevenStrikeModules.XHud.Hud;
-    using SevenStrikeModules.XHud.Utilitys;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -26,7 +24,7 @@ namespace SevenStrikeModules.XHud
     using TextAsset = UnityEngine.TextAsset;
 
     [System.Serializable]
-    public class XHud_PSDR_FontDataComparer : IEqualityComparer<XHud_PSDR_FontData>
+    public class Editor_XHud_PSDR_FontDataComparer : IEqualityComparer<XHud_PSDR_FontData>
     {
         public bool Equals(XHud_PSDR_FontData x, XHud_PSDR_FontData y)
         {
@@ -173,12 +171,12 @@ namespace SevenStrikeModules.XHud
             #endregion
 
             #region 获取图标
-            Icon_sprites = Editor_XHud_GUI.GetIcon("Icons_Hud_Reconstruction/Icon_sprites");
-            Icon_debug = Editor_XHud_GUI.GetIcon("Icons_Hud_Reconstruction/Icon_debug");
-            Icon_json = Editor_XHud_GUI.GetIcon("Icons_Hud_Reconstruction/Icon_json");
-            Icon_consmode = Editor_XHud_GUI.GetIcon("Icons_Hud_Reconstruction/Icon_consmode");
-            Icon_textmode = Editor_XHud_GUI.GetIcon("Icons_Hud_Reconstruction/Icon_textmode");
-            Icon_texttype = Editor_XHud_GUI.GetIcon("Icons_Hud_Reconstruction/Icon_texttype");
+            Icon_sprites = Editor_XHud_GUI.GetIcon("Icons_XHud_Reconstruction/Icon_sprites");
+            Icon_debug = Editor_XHud_GUI.GetIcon("Icons_XHud_Reconstruction/Icon_debug");
+            Icon_json = Editor_XHud_GUI.GetIcon("Icons_XHud_Reconstruction/Icon_json");
+            Icon_consmode = Editor_XHud_GUI.GetIcon("Icons_XHud_Reconstruction/Icon_consmode");
+            Icon_textmode = Editor_XHud_GUI.GetIcon("Icons_XHud_Reconstruction/Icon_textmode");
+            Icon_texttype = Editor_XHud_GUI.GetIcon("Icons_XHud_Reconstruction/Icon_texttype");
             #endregion           
         }
 
@@ -1067,7 +1065,7 @@ namespace SevenStrikeModules.XHud
                 GameObject structure = new GameObject();
                 structure.name = StructureName;
                 RectTransform struct_rect = structure.AddComponent<RectTransform>();
-                struct_rect.SetParent(mgr.hm_Layout_GetAnchor(HudAnchor.中心));
+                struct_rect.SetParent(mgr.hm_Layout_GetAnchor(XHudAnchor.中心));
                 struct_rect.anchoredPosition3D = Vector3.zero;
                 struct_rect.localEulerAngles = Vector3.zero;
                 struct_rect.localScale = Vector3.one;
@@ -1524,7 +1522,7 @@ namespace SevenStrikeModules.XHud
         {
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
-            Transform parent = mgr.hm_Layout_GetAnchor(HudAnchor.中心);
+            Transform parent = mgr.hm_Layout_GetAnchor(XHudAnchor.中心);
 
             Transform rect = null;
             for (int i = 0; i < parent.childCount; i++)
@@ -1567,7 +1565,7 @@ namespace SevenStrikeModules.XHud
         private XHud_PSDR_FontData[] GetLayerFontNames()
         {
             /// 使用自定义比较器
-            HashSet<XHud_PSDR_FontData> uniqueDatas = new HashSet<XHud_PSDR_FontData>(new XHud_PSDR_FontDataComparer());
+            HashSet<XHud_PSDR_FontData> uniqueDatas = new HashSet<XHud_PSDR_FontData>(new Editor_XHud_PSDR_FontDataComparer());
 
             for (int i = 0; i < LayerStructure.structure.layers.Count; i++)
             {

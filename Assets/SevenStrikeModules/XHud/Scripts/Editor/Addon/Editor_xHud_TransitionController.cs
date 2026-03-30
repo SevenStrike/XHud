@@ -1,7 +1,8 @@
-﻿namespace SevenStrikeModules.XHud.Hud
+﻿namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
+    using SevenStrikeModules.XHud.Utilitys;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.UI;
@@ -98,16 +99,16 @@
             #endregion
 
             #region 获取图标
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/icon_main");
-            trans_state = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/trans_state");
-            trans_first_frame = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/trans_first_frame");
-            trans_end_frame = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/trans_end_frame");
-            openlib_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/openlib_r");
-            openlib_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/openlib_p");
-            update_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/update_r");
-            update_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/update_p");
-            locate_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/locate_r");
-            locate_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionController/locate_p");
+            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionController/icon_main");
+            trans_state = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionController/trans_state");
+            trans_first_frame = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionController/trans_first_frame");
+            trans_end_frame = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionController/trans_end_frame");
+            openlib_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionController/openlib_r");
+            openlib_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionController/openlib_p");
+            update_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionController/update_r");
+            update_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionController/update_p");
+            locate_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionController/locate_r");
+            locate_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionController/locate_p");
             #endregion
 
             GetAllTargets();
@@ -120,7 +121,7 @@
 
             if (TransitionMat.objectReferenceValue == null)
             {
-                TransitionMat.objectReferenceValue = (Material)AssetDatabase.LoadAssetAtPath($"{XHud_Dashboard.Get_Materials_Path()}Transitions/Transition.mat", typeof(Material));
+                TransitionMat.objectReferenceValue = (Material)AssetDatabase.LoadAssetAtPath($"{XHud_Dashboard.Get_Path_XHUD_MATERIALS_Path()}Transitions/Transition.mat", typeof(Material));
             }
 
             if (TransitionMat.objectReferenceValue != null)
@@ -165,7 +166,7 @@
             GUI.enabled = true;
             if (Editor_XHud_GUI.Gui_Layout_Button(14, "查看当前转场库", openlib_r, openlib_p))
             {
-                Editor_MenuItemsAction_OpenLibrary.open_transition();
+                Editor_XHud_MenuItemsAction_OpenLibrary.open_transition();
             }
             #endregion
 
@@ -311,7 +312,7 @@
                         }
                         //定位到元素库中的对应当前资源
                         //打开目标转场库
-                        Editor_MenuItemsAction_OpenLibrary.open_transition();
+                        Editor_XHud_MenuItemsAction_OpenLibrary.open_transition();
                         mgr.Hud_TransitionLib.TransitionLibrary_Location(TransLibNames[index]);
                     }
                 }

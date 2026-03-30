@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 625154532556286919}
   - component: {fileID: 2489660342967352836}
-  - component: {fileID: 5639770725388097412}
+  - component: {fileID: 7317941196341520880}
   m_Layer: 8
   m_Name: Corners
   m_TagString: Untagged
@@ -38,8 +38,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -393, y: -12.999991}
+  m_SizeDelta: {x: 666.03, y: 261.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &2489660342967352836
 CanvasGroup:
@@ -53,7 +53,7 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &5639770725388097412
+--- !u!114 &7317941196341520880
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -62,21 +62,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 1562945292182721275}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2790344287be5bc4ea7d9ed376739967, type: 3}
+  m_Script: {fileID: 11500000, guid: 427992cb4fdf0d4488fb77d4e7ae18af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Indicator: NewElement
+  Indicator: 
   OriginalName: 
+  OriginPoolName: 
   DebugState: 0
+  RectTransform: {fileID: 625154532556286919}
   CanvasGroup: {fileID: 2489660342967352836}
   CreateState: 0
   AnimateState: 0
   ElementSpaceType: 0
-  RectTransform: {fileID: 625154532556286919}
-  Alpha: 1
   AnimatorsMaxDuration: 0
   Element_Animators_GlobalDuration: 1
   CurrentPivot: {x: 0, y: 0}
+  Alpha: 1
+  TriggerAction: {fileID: 0}
+  ObjectTracker: {fileID: 0}
+  SounderNodes: []
+  ContainerNodes: []
+  AnimatorNodes: []
+  ButtonNodes: []
+  OptionNodes: []
+  TextNodes: []
+  TmpTextNodes: []
+  SliderNodes: []
+  ProgressNodes: []
+  ToggleNodes: []
   eve_on_element_in_start:
     m_PersistentCalls:
       m_Calls: []
@@ -89,32 +102,7 @@ MonoBehaviour:
   eve_on_element_out_end:
     m_PersistentCalls:
       m_Calls: []
-  TriggerAction: {fileID: 0}
-  ObjectTracker: {fileID: 0}
-  SounderNodes: []
   Animating: 0
-  ContainerNodes: []
-  AnimatorNodes:
-  - Animator: {fileID: 6751645942483732121}
-    TotalTime: 0
-    DelayTime: 0
-  - Animator: {fileID: 756885228879242157}
-    TotalTime: 0
-    DelayTime: 0
-  - Animator: {fileID: 3006906982614247924}
-    TotalTime: 0
-    DelayTime: 0
-  - Animator: {fileID: 8714034179411272956}
-    TotalTime: 0
-    DelayTime: 0
-  ButtonNodes: []
-  OptionNodes: []
-  TextNodes: []
-  TmpTextNodes: []
-  SliderNodes: []
-  ProgressNodes: []
-  ToggleNodes: []
-  OriginPoolName: 
   AnimatorsIsFold: 0
   ButtonIsFold: 0
   OptionIsFold: 0
@@ -145,8 +133,6 @@ GameObject:
   - component: {fileID: 9124512078436916975}
   - component: {fileID: 7619265101982039602}
   - component: {fileID: 2686424755318043252}
-  - component: {fileID: 7582340632788982618}
-  - component: {fileID: 756885228879242157}
   m_Layer: 8
   m_Name: R_U
   m_TagString: Untagged
@@ -223,94 +209,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &7582340632788982618
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1854339070811253062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aac0878c718d63439b665b6f7d32721, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &756885228879242157
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1854339070811253062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81d96acaa8fe5b0448541929e42fdc47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OriginalAnimatorPoser:
-    Position: {x: -50, y: -50, z: 0}
-    Euler: {x: -0, y: 0, z: 90}
-    Scale: {x: 1, y: 1, z: 1}
-    Alpha: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Size: {x: 60, y: 60}
-    Fill: 1
-  ID: 0
-  Indicator: NewAnimator
-  AnimatorModuleType: 3
-  AnimateTweenNodes: []
-  MainTweenNode: 
-  mod_RectTransform: {fileID: 2377581129493479544}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 7619265101982039602}
-  mod_RawImage: {fileID: 0}
-  CanvasGroup: {fileID: 2686424755318043252}
-  mod_HudButton: {fileID: 0}
-  CustomValue_Int: 0
-  CustomValue_Float: 0
-  CustomValue_Vector4: {x: 0, y: 0, z: 0, w: 0}
-  CustomValue_Vector3: {x: 0, y: 0, z: 0}
-  CustomValue_Vector2: {x: 0, y: 0}
-  CustomValue_Color: {r: 0, g: 0, b: 0, a: 0}
-  Animator_GlobalDuration: 1
-  MinTimer: 0
-  MaxTimer: 0
-  MinTimerWithGlobalDuration: 0
-  MaxTimerWithGlobalDuration: 0
-  OriginalColor: {r: 1, g: 1, b: 1, a: 1}
-  ColoriseName: 
-  DebugState: 0
-  SyncLibraryColor: 0
-  MutePlay: 0
-  AnimatingBreakState: 0
-  IgnoreElementAnimationPlay: 0
-  FirstCreateRecordOriginalState: 1
-  TweenIsPreviewing: 0
-  eve_on_Animator_Play:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_PlayAt:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Rewind:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Ready:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Complete:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Initialized:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_SoundPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_AnimatingState:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &2710223063816996198
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,8 +221,6 @@ GameObject:
   - component: {fileID: 1827464700315666958}
   - component: {fileID: 4472989301061118665}
   - component: {fileID: 9210943988994116815}
-  - component: {fileID: 4230107988914762224}
-  - component: {fileID: 3006906982614247924}
   m_Layer: 8
   m_Name: L_D
   m_TagString: Untagged
@@ -401,94 +297,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &4230107988914762224
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2710223063816996198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aac0878c718d63439b665b6f7d32721, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3006906982614247924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2710223063816996198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81d96acaa8fe5b0448541929e42fdc47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OriginalAnimatorPoser:
-    Position: {x: 50, y: 50, z: 0}
-    Euler: {x: -0, y: 0, z: 270.00305}
-    Scale: {x: 1, y: 1, z: 1}
-    Alpha: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Size: {x: 60, y: 60}
-    Fill: 1
-  ID: 0
-  Indicator: NewAnimator
-  AnimatorModuleType: 3
-  AnimateTweenNodes: []
-  MainTweenNode: 
-  mod_RectTransform: {fileID: 7572616708354755394}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 4472989301061118665}
-  mod_RawImage: {fileID: 0}
-  CanvasGroup: {fileID: 9210943988994116815}
-  mod_HudButton: {fileID: 0}
-  CustomValue_Int: 0
-  CustomValue_Float: 0
-  CustomValue_Vector4: {x: 0, y: 0, z: 0, w: 0}
-  CustomValue_Vector3: {x: 0, y: 0, z: 0}
-  CustomValue_Vector2: {x: 0, y: 0}
-  CustomValue_Color: {r: 0, g: 0, b: 0, a: 0}
-  Animator_GlobalDuration: 1
-  MinTimer: 0
-  MaxTimer: 0
-  MinTimerWithGlobalDuration: 0
-  MaxTimerWithGlobalDuration: 0
-  OriginalColor: {r: 1, g: 1, b: 1, a: 1}
-  ColoriseName: 
-  DebugState: 0
-  SyncLibraryColor: 0
-  MutePlay: 0
-  AnimatingBreakState: 0
-  IgnoreElementAnimationPlay: 0
-  FirstCreateRecordOriginalState: 1
-  TweenIsPreviewing: 0
-  eve_on_Animator_Play:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_PlayAt:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Rewind:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Ready:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Complete:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Initialized:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_SoundPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_AnimatingState:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &3717521819506174997
 GameObject:
   m_ObjectHideFlags: 0
@@ -501,8 +309,6 @@ GameObject:
   - component: {fileID: 4600823628864632348}
   - component: {fileID: 1048627031166353027}
   - component: {fileID: 7665875593772163514}
-  - component: {fileID: 5660343912837547384}
-  - component: {fileID: 8714034179411272956}
   m_Layer: 8
   m_Name: R_D
   m_TagString: Untagged
@@ -579,94 +385,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &5660343912837547384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3717521819506174997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aac0878c718d63439b665b6f7d32721, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8714034179411272956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3717521819506174997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81d96acaa8fe5b0448541929e42fdc47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OriginalAnimatorPoser:
-    Position: {x: -50, y: 50, z: 0}
-    Euler: {x: -0, y: 0, z: 0}
-    Scale: {x: 1, y: 1, z: 1}
-    Alpha: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Size: {x: 60, y: 60}
-    Fill: 1
-  ID: 0
-  Indicator: NewAnimator
-  AnimatorModuleType: 3
-  AnimateTweenNodes: []
-  MainTweenNode: 
-  mod_RectTransform: {fileID: 8413944070968492136}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 1048627031166353027}
-  mod_RawImage: {fileID: 0}
-  CanvasGroup: {fileID: 7665875593772163514}
-  mod_HudButton: {fileID: 0}
-  CustomValue_Int: 0
-  CustomValue_Float: 0
-  CustomValue_Vector4: {x: 0, y: 0, z: 0, w: 0}
-  CustomValue_Vector3: {x: 0, y: 0, z: 0}
-  CustomValue_Vector2: {x: 0, y: 0}
-  CustomValue_Color: {r: 0, g: 0, b: 0, a: 0}
-  Animator_GlobalDuration: 1
-  MinTimer: 0
-  MaxTimer: 0
-  MinTimerWithGlobalDuration: 0
-  MaxTimerWithGlobalDuration: 0
-  OriginalColor: {r: 1, g: 1, b: 1, a: 1}
-  ColoriseName: 
-  DebugState: 0
-  SyncLibraryColor: 0
-  MutePlay: 0
-  AnimatingBreakState: 0
-  IgnoreElementAnimationPlay: 0
-  FirstCreateRecordOriginalState: 1
-  TweenIsPreviewing: 0
-  eve_on_Animator_Play:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_PlayAt:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Rewind:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Ready:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Complete:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Initialized:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_SoundPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_AnimatingState:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &5172191624212857858
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,8 +397,6 @@ GameObject:
   - component: {fileID: 6262032592299572989}
   - component: {fileID: 1385268439536139093}
   - component: {fileID: 450280301635402080}
-  - component: {fileID: 3208527361038019252}
-  - component: {fileID: 6751645942483732121}
   m_Layer: 8
   m_Name: L_U
   m_TagString: Untagged
@@ -757,91 +473,3 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &3208527361038019252
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5172191624212857858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aac0878c718d63439b665b6f7d32721, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6751645942483732121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5172191624212857858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81d96acaa8fe5b0448541929e42fdc47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OriginalAnimatorPoser:
-    Position: {x: 50, y: -50, z: 0}
-    Euler: {x: -0, y: 0, z: 180.00322}
-    Scale: {x: 1, y: 1, z: 1}
-    Alpha: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Size: {x: 60, y: 60}
-    Fill: 1
-  ID: 0
-  Indicator: NewAnimator
-  AnimatorModuleType: 3
-  AnimateTweenNodes: []
-  MainTweenNode: 
-  mod_RectTransform: {fileID: 1887095969310974140}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 1385268439536139093}
-  mod_RawImage: {fileID: 0}
-  CanvasGroup: {fileID: 450280301635402080}
-  mod_HudButton: {fileID: 0}
-  CustomValue_Int: 0
-  CustomValue_Float: 0
-  CustomValue_Vector4: {x: 0, y: 0, z: 0, w: 0}
-  CustomValue_Vector3: {x: 0, y: 0, z: 0}
-  CustomValue_Vector2: {x: 0, y: 0}
-  CustomValue_Color: {r: 0, g: 0, b: 0, a: 0}
-  Animator_GlobalDuration: 1
-  MinTimer: 0
-  MaxTimer: 0
-  MinTimerWithGlobalDuration: 0
-  MaxTimerWithGlobalDuration: 0
-  OriginalColor: {r: 1, g: 1, b: 1, a: 1}
-  ColoriseName: 
-  DebugState: 0
-  SyncLibraryColor: 0
-  MutePlay: 0
-  AnimatingBreakState: 0
-  IgnoreElementAnimationPlay: 0
-  FirstCreateRecordOriginalState: 1
-  TweenIsPreviewing: 0
-  eve_on_Animator_Play:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_PlayAt:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Rewind:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Ready:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Complete:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_Initialized:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_SoundPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  eve_on_Animator_AnimatingState:
-    m_PersistentCalls:
-      m_Calls: []

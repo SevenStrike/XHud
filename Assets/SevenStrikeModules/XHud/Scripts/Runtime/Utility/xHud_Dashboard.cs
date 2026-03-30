@@ -1,6 +1,5 @@
 namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XHud.Hud;
     using SevenStrikeModules.XHud.Utilitys;
 #if UNITY_EDITOR
     using UnityEditor.Callbacks;
@@ -83,9 +82,9 @@ namespace SevenStrikeModules.XHud
         #endregion
 
         #region 公共路径
-        public static string path_GUISTYLE = "Assets/SevenStrikeModules/XHud/GUI/HudGuiStyle/";
-        public static string path_GUIROOT = "Assets/SevenStrikeModules/XHud/GUI/";
         public static string path_XHUD_ROOT = "Assets/SevenStrikeModules/XHud/";
+        public static string path_XHUD_GUIROOT = "Assets/SevenStrikeModules/XHud/GUI/";
+        public static string path_XHUD_GUISTYLE = "Assets/SevenStrikeModules/XHud/GUI/HudGuiStyle/";
         public static string path_XHUD_MATERIAL = "Assets/SevenStrikeModules/XHud/Materials/";
         public static string path_XHUD_PREFABS = "Assets/SevenStrikeModules/XHud/Prefabs/";
         public static string path_XHUD_SHADERS = "Assets/SevenStrikeModules/XHud/Shaders/";
@@ -94,13 +93,14 @@ namespace SevenStrikeModules.XHud
         public static string path_XHUD_TEXTURES = "Assets/SevenStrikeModules/XHud/Textures/";
         public static string path_XHUD_FONTS = "Assets/SevenStrikeModules/XHud/Fonts/";
         public static string path_XHUD_SCRIPTS = "Assets/SevenStrikeModules/XHud/Scripts/";
+        public static string path_XHUD_CONFIG = "Assets/SevenStrikeModules/XHud/Config/";
 
         #region 路径获取
         /// <summary>
         /// 获取XHUD XHUDROOT路径，根目录：SevenStrikeModules/XHud/
         /// </summary>
         /// <returns></returns>
-        public static string Get_XHudRoot_Path()
+        public static string Get_Path_XHUD_ROOT()
         {
             return path_XHUD_ROOT;
         }
@@ -108,23 +108,23 @@ namespace SevenStrikeModules.XHud
         /// 获取XHUD GUIROOT路径，根目录：SevenStrikeModules/XHud/GUI/
         /// </summary>
         /// <returns></returns>
-        public static string Get_GUIRoot_Path()
+        public static string Get_Path_XHUD_GUIROOT_Path()
         {
-            return path_GUIROOT;
+            return path_XHUD_GUIROOT;
         }
         /// <summary>
-        /// 获取XHUD GUISTYLE路径，根目录：SevenStrikeModules/XHud/GUI/HudGuiStyle
+        /// 获取XHUD GUISTYLE路径，根目录：SevenStrikeModules/XHud/GUI/HudGuiStyle/
         /// </summary>
         /// <returns></returns>
-        public static string Get_GUIStyle_Path()
+        public static string Get_Path_XHUD_GUISTYLE_Path()
         {
-            return path_GUISTYLE;
+            return path_XHUD_GUISTYLE;
         }
         /// <summary>
         /// 获取XHUD 材质路径，根目录：SevenStrikeModules/XHud/Materials/
         /// </summary>
         /// <returns></returns>
-        public static string Get_Materials_Path()
+        public static string Get_Path_XHUD_MATERIALS_Path()
         {
             return path_XHUD_MATERIAL;
         }
@@ -132,7 +132,7 @@ namespace SevenStrikeModules.XHud
         /// 获取XHUD 预制体路径，根目录：SevenStrikeModules/XHud/Prefabs/
         /// </summary>
         /// <returns></returns>
-        public static string Get_path_XHUD_PREFABS_Path()
+        public static string Get_Path_XHUD_PREFABS_Path()
         {
             return path_XHUD_PREFABS;
         }
@@ -140,7 +140,7 @@ namespace SevenStrikeModules.XHud
         /// 获取XHUD 着色器路径，根目录：SevenStrikeModules/XHud/Shaders/
         /// </summary>
         /// <returns></returns>
-        public static string Get_path_XHUD_SHADERS_Path()
+        public static string Get_Path_XHUD_SHADERS_Path()
         {
             return path_XHUD_SHADERS;
         }
@@ -148,7 +148,7 @@ namespace SevenStrikeModules.XHud
         /// 获取XHUD 声音路径，根目录：SevenStrikeModules/XHud/Sound/
         /// </summary>
         /// <returns></returns>
-        public static string Get_path_XHUD_SOUND_Path()
+        public static string Get_Path_XHUD_SOUND_Path()
         {
             return path_XHUD_SOUND;
         }
@@ -156,7 +156,7 @@ namespace SevenStrikeModules.XHud
         /// 获取XHUD 精灵路径，根目录：SevenStrikeModules/XHud/Sprites/
         /// </summary>
         /// <returns></returns>
-        public static string Get_path_XHUD_SPRITES_Path()
+        public static string Get_Path_XHUD_SPRITES_Path()
         {
             return path_XHUD_SPRITES;
         }
@@ -164,7 +164,7 @@ namespace SevenStrikeModules.XHud
         /// 获取XHUD 贴图路径，根目录：SevenStrikeModules/XHud/Textures/
         /// </summary>
         /// <returns></returns>
-        public static string Get_path_XHUD_TEXTURES_Path()
+        public static string Get_Path_XHUD_TEXTURES_Path()
         {
             return path_XHUD_TEXTURES;
         }
@@ -172,7 +172,7 @@ namespace SevenStrikeModules.XHud
         /// 获取XHUD 字体路径，根目录：SevenStrikeModules/XHud/Fonts/
         /// </summary>
         /// <returns></returns>
-        public static string Get_path_XHUD_FONTS_Path()
+        public static string Get_Path_XHUD_FONTS_Path()
         {
             return path_XHUD_FONTS;
         }
@@ -180,9 +180,17 @@ namespace SevenStrikeModules.XHud
         /// 获取XHUD 字体路径，根目录：SevenStrikeModules/XHud/Scripts/
         /// </summary>
         /// <returns></returns>
-        public static string Get_path_XHUD_SCRIPTS_Path()
+        public static string Get_Path_XHUD_SCRIPTS_Path()
         {
             return path_XHUD_SCRIPTS;
+        }
+        /// <summary>
+        /// 获取XHUD 配置路径，根目录：SevenStrikeModules/XHud/Config/
+        /// </summary>
+        /// <returns></returns>
+        public static string Get_Path_XHUD_CONFIG_Path()
+        {
+            return path_XHUD_CONFIG;
         }
         #endregion
         #endregion

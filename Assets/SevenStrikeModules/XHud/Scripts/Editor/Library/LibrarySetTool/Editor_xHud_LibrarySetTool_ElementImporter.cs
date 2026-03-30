@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;

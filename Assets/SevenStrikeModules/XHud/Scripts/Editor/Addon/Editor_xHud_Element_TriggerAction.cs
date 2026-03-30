@@ -1,4 +1,4 @@
-﻿namespace SevenStrikeModules.XHud.Hud
+﻿namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
@@ -72,7 +72,7 @@
             if (BaseScript.HudElement == null)
                 BaseScript.HudElement = BaseScript.GetComponent<XHud_Module_Element>();
 
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementTriggerAction/icon_main");
+            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementTriggerAction/icon_main");
 
             Vector2 ButtonSize = new Vector2(18, 18);
 
@@ -88,7 +88,7 @@
         {
             serializedObject.Update();
 
-            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 元素动作器", Color.white);
+            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 元素动作器", Color.white);
 
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "参数", XHud_Dashboard.Theme_Primary);
 

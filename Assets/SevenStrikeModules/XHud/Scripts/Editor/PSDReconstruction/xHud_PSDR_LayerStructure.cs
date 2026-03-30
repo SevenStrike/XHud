@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud
+namespace SevenStrikeModules.XHud.Utilitys
 {
     using System.Collections.Generic;
 

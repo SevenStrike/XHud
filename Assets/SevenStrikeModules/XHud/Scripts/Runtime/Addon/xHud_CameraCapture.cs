@@ -1,55 +1,15 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XHud.Enums;
     using System.IO;
     using System.Text;
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.Rendering.Universal;
     using Random = System.Random;
-#if UNITY_EDITOR
-#endif
 
     public class XHud_CameraCapture : MonoBehaviour
     {
-        /// <summary>
-        /// 截图格式
-        /// </summary>
-        public enum CaptureType
-        {
-            JPG = 0,
-            PNG = 1,
-            TGA = 2
-        }
-
-        /// <summary>
-        /// 截图尺寸
-        /// </summary>
-        public enum CaptureSize
-        {
-            相机尺寸 = 0,
-            屏幕分辨率 = 1,
-            固定尺寸 = 2
-        }
-
-        /// <summary>
-        /// 截图背景
-        /// </summary>
-        public enum CaptureBgType
-        {
-            天空盒 = 0,
-            颜色 = 1,
-            透明 = 2,
-        }
-
-        /// <summary>
-        /// 相机类型
-        /// </summary>
-        public enum CaptureCameraType
-        {
-            场景相机 = 0,
-            UI相机 = 1
-        }
-
         // 目标摄像机
         public Camera TargetCamera;
         // 截图尺寸

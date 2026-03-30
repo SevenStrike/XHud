@@ -1,11 +1,10 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.Rendering.Universal;
-    using static SevenStrikeModules.XHud.Hud.XHud_CameraCapture;
 
     [CanEditMultipleObjects]
     [CustomEditor(typeof(XHud_CameraCapture))]
@@ -105,13 +104,13 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             #region 获取图标
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_Hud_CameraCapture/icon_main");
-            opt_0_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CameraCapture/opt_0_r");
-            opt_0_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CameraCapture/opt_0_p");
-            opt_1_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CameraCapture/opt_1_r");
-            opt_1_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CameraCapture/opt_1_p");
-            opt_2_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CameraCapture/opt_2_r");
-            opt_2_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CameraCapture/opt_2_p");
+            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_CameraCapture/icon_main");
+            opt_0_r = Editor_XHud_GUI.GetIcon("Icons_XHud_CameraCapture/opt_0_r");
+            opt_0_p = Editor_XHud_GUI.GetIcon("Icons_XHud_CameraCapture/opt_0_p");
+            opt_1_r = Editor_XHud_GUI.GetIcon("Icons_XHud_CameraCapture/opt_1_r");
+            opt_1_p = Editor_XHud_GUI.GetIcon("Icons_XHud_CameraCapture/opt_1_p");
+            opt_2_r = Editor_XHud_GUI.GetIcon("Icons_XHud_CameraCapture/opt_2_r");
+            opt_2_p = Editor_XHud_GUI.GetIcon("Icons_XHud_CameraCapture/opt_2_p");
             #endregion
         }
 
@@ -120,7 +119,7 @@ namespace SevenStrikeModules.XHud.Hud
             serializedObject.Update();
 
             #region 标题
-            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 相机截图捕捉", Color.white);
+            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 相机截图捕捉", Color.white);
             #endregion
 
             Editor_XHud_GUI.Gui_Layout_Space(5);

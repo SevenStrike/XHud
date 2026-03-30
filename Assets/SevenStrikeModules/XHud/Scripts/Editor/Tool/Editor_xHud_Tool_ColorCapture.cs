@@ -2,7 +2,6 @@ namespace SevenStrikeModules.XHud.Utilitys
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
-    using SevenStrikeModules.XHud.Hud;
     using System;
     using System.Collections.Generic;
     using UnityEditor;
@@ -167,16 +166,16 @@ namespace SevenStrikeModules.XHud.Utilitys
             sp_GrayOffset = BaseObject.FindProperty("GrayOffset");
             sp_GrayBright = BaseObject.FindProperty("GrayBright");
 
-            logo = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/logo");
-            btn_ext_color_r = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/btn_ext_color_r");
-            btn_ext_color_p = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/btn_ext_color_p");
-            btn_save_r = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/btn_save_r");
-            btn_save_p = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/btn_save_p");
+            logo = Editor_XHud_GUI.GetIcon("Icons_XHud_ColorCaptureTool/logo");
+            btn_ext_color_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ColorCaptureTool/btn_ext_color_r");
+            btn_ext_color_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ColorCaptureTool/btn_ext_color_p");
+            btn_save_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ColorCaptureTool/btn_save_r");
+            btn_save_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ColorCaptureTool/btn_save_p");
 
-            left_arrow_r = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/left_arrow_r");
-            left_arrow_p = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/left_arrow_p");
-            right_arrow_r = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/right_arrow_r");
-            right_arrow_p = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/right_arrow_p");
+            left_arrow_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ColorCaptureTool/left_arrow_r");
+            left_arrow_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ColorCaptureTool/left_arrow_p");
+            right_arrow_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ColorCaptureTool/right_arrow_r");
+            right_arrow_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ColorCaptureTool/right_arrow_p");
 
 
             Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
@@ -185,7 +184,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             ReferImages = new Texture2D[10];
             for (int i = 0; i < ReferImages.Length; i++)
             {
-                ReferImages[i] = AssetDatabase.LoadAssetAtPath<Texture2D>($"{XHud_Dashboard.Get_GUIStyle_Path()}Icon/Icons_ColorCaptureTool/ReferImages/ReferImg_{i}.png");
+                ReferImages[i] = AssetDatabase.LoadAssetAtPath<Texture2D>($"{XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path()}Icon/Icons_XHud_ColorCaptureTool/ReferImages/ReferImg_{i}.png");
             }
 
             ReferImage = ReferImages[referIndex];

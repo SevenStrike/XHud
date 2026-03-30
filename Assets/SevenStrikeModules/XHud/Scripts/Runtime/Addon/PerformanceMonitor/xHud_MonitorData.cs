@@ -1,6 +1,5 @@
 namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XHud.Hud;
     using UnityEngine;
 
     public interface xHud_MonitorData

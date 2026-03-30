@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
@@ -54,19 +54,19 @@ namespace SevenStrikeModules.XHud.Hud
 
             #region 获取图标
             warnIcon = EditorGUIUtility.IconContent("console.warnicon").image as Texture2D;
-            btn_icon_details_released = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionLibrary/detail_r");
-            btn_icon_details_press = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionLibrary/detail_p");
-            analyze_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionLibrary/analyze_p");
-            analyze_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionLibrary/analyze_r");
-            clear_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionLibrary/clear_p");
-            clear_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionLibrary/clear_r");
-            create_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionLibrary/create_p");
-            create_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionLibrary/create_r");
-            delete_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionLibrary/delete_p");
-            delete_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionLibrary/delete_r");
-            skip = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionLibrary/skip");
-            total = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionLibrary/total");
-            last = Editor_XHud_GUI.GetIcon("Icons_Hud_TransitionLibrary/last");
+            btn_icon_details_released = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/detail_r");
+            btn_icon_details_press = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/detail_p");
+            analyze_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/analyze_p");
+            analyze_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/analyze_r");
+            clear_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/clear_p");
+            clear_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/clear_r");
+            create_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/create_p");
+            create_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/create_r");
+            delete_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/delete_p");
+            delete_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/delete_r");
+            skip = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/skip");
+            total = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/total");
+            last = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/last");
             #endregion
 
             //设定列表项高度值

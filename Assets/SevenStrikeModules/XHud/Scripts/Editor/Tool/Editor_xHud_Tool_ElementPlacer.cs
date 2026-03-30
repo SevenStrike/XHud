@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
@@ -8,7 +8,7 @@ namespace SevenStrikeModules.XHud.Hud
 
     public class Editor_XHud_Tool_ElementPlacer : EditorWindow
     {
-        private static void SendObject(HudAnchor anchor)
+        private static void SendObject(XHudAnchor anchor)
         {
             XHud_Manager manager = FindFirstObjectByType<XHud_Manager>();
             if (manager == null)
@@ -26,7 +26,7 @@ namespace SevenStrikeModules.XHud.Hud
                     RectTransform rect = objins.GetComponent<RectTransform>();
                     switch (anchor)
                     {
-                        case HudAnchor.底层:
+                        case XHudAnchor.底层:
                             rect.pivot = new Vector2(0.5f, 0.5f);
                             rect.anchorMin = new Vector2(0f, 0f);
                             rect.anchorMax = new Vector2(1f, 1f);
@@ -34,61 +34,61 @@ namespace SevenStrikeModules.XHud.Hud
                             rect.offsetMax = new Vector2(0, 0);
                             rect.anchoredPosition = Vector2.zero;
                             break;
-                        case HudAnchor.上:
+                        case XHudAnchor.上:
                             rect.pivot = new Vector2(0.5f, 1f);
                             rect.anchorMin = new Vector2(0.5f, 1f);
                             rect.anchorMax = new Vector2(0.5f, 1f);
                             rect.anchoredPosition = Vector2.zero;
                             break;
-                        case HudAnchor.下:
+                        case XHudAnchor.下:
                             rect.pivot = new Vector2(0.5f, 0f);
                             rect.anchorMin = new Vector2(0.5f, 0f);
                             rect.anchorMax = new Vector2(0.5f, 0f);
                             rect.anchoredPosition = Vector2.zero;
                             break;
-                        case HudAnchor.左:
+                        case XHudAnchor.左:
                             rect.pivot = new Vector2(0f, 0.5f);
                             rect.anchorMin = new Vector2(0f, 0.5f);
                             rect.anchorMax = new Vector2(0f, 0.5f);
                             rect.anchoredPosition = Vector2.zero;
                             break;
-                        case HudAnchor.右:
+                        case XHudAnchor.右:
                             rect.pivot = new Vector2(1f, 0.5f);
                             rect.anchorMin = new Vector2(1f, 0.5f);
                             rect.anchorMax = new Vector2(1f, 0.5f);
                             rect.anchoredPosition = Vector2.zero;
                             break;
-                        case HudAnchor.中心:
+                        case XHudAnchor.中心:
                             rect.pivot = new Vector2(0.5f, 0.5f);
                             rect.anchorMin = new Vector2(0.5f, 0.5f);
                             rect.anchorMax = new Vector2(0.5f, 0.5f);
                             rect.anchoredPosition = Vector2.zero;
                             break;
-                        case HudAnchor.左上:
+                        case XHudAnchor.左上:
                             rect.pivot = new Vector2(0f, 1f);
                             rect.anchorMin = new Vector2(0f, 1f);
                             rect.anchorMax = new Vector2(0f, 1f);
                             rect.anchoredPosition = Vector2.zero;
                             break;
-                        case HudAnchor.左下:
+                        case XHudAnchor.左下:
                             rect.pivot = new Vector2(0f, 0f);
                             rect.anchorMin = new Vector2(0f, 0f);
                             rect.anchorMax = new Vector2(0f, 0f);
                             rect.anchoredPosition = Vector2.zero;
                             break;
-                        case HudAnchor.右上:
+                        case XHudAnchor.右上:
                             rect.pivot = new Vector2(1f, 1f);
                             rect.anchorMin = new Vector2(1f, 1f);
                             rect.anchorMax = new Vector2(1f, 1f);
                             rect.anchoredPosition = Vector2.zero;
                             break;
-                        case HudAnchor.右下:
+                        case XHudAnchor.右下:
                             rect.pivot = new Vector2(1f, 0f);
                             rect.anchorMin = new Vector2(1f, 0f);
                             rect.anchorMax = new Vector2(1f, 0f);
                             rect.anchoredPosition = Vector2.zero;
                             break;
-                        case HudAnchor.顶层:
+                        case XHudAnchor.顶层:
                             rect.pivot = new Vector2(0.5f, 0.5f);
                             rect.anchorMin = new Vector2(0.5f, 0.5f);
                             rect.anchorMax = new Vector2(0.5f, 0.5f);
@@ -162,7 +162,7 @@ namespace SevenStrikeModules.XHud.Hud
                 GameObject obj_ele = PrefabUtility.InstantiatePrefab(obj[i], null) as GameObject;
                 Undo.RegisterCreatedObjectUndo(obj_ele, "CreateObjects");
                 XHud_Module_Element ele = obj_ele.GetComponent<XHud_Module_Element>();
-                Element_OriginalLayoutInfo rms = ele.elelemt_RMS_Get(manager.hm_RMS_GetCurrentSolution());
+                Element_RMS_LayoutData rms = ele.elelemt_RMS_Get(manager.hm_RMS_GetCurrentSolution());
                 ele.RectTransform.SetParent(manager.hm_Layout_GetAnchor(rms.Anchor));
                 ele.RectTransform.pivot = rms.Pivot;
                 ele.RectTransform.anchorMin = rms.AnchorMin;
@@ -205,7 +205,7 @@ namespace SevenStrikeModules.XHud.Hud
         [MenuItem("Assets/XHud/PlaceToAnchor (放置到锚点) /Top(顶层)", priority = 500)]
         private static void PlaceToAnchor_T()
         {
-            SendObject(HudAnchor.顶层);
+            SendObject(XHudAnchor.顶层);
         }
 
         ///-------------------------------------------------------------Back
@@ -237,7 +237,7 @@ namespace SevenStrikeModules.XHud.Hud
         [MenuItem("Assets/XHud/PlaceToAnchor (放置到锚点) /Back(底层)", priority = 500)]
         private static void PlaceToAnchor_B()
         {
-            SendObject(HudAnchor.底层);
+            SendObject(XHudAnchor.底层);
         }
 
         ///-------------------------------------------------------------Center
@@ -269,7 +269,7 @@ namespace SevenStrikeModules.XHud.Hud
         [MenuItem("Assets/XHud/PlaceToAnchor (放置到锚点) /Center(中心)", priority = 500)]
         private static void PlaceToAnchor_C()
         {
-            SendObject(HudAnchor.中心);
+            SendObject(XHudAnchor.中心);
         }
 
         ///-------------------------------------------------------------Up
@@ -301,7 +301,7 @@ namespace SevenStrikeModules.XHud.Hud
         [MenuItem("Assets/XHud/PlaceToAnchor (放置到锚点) /Up(上)", priority = 500)]
         private static void PlaceToAnchor_U()
         {
-            SendObject(HudAnchor.上);
+            SendObject(XHudAnchor.上);
         }
 
         ///-------------------------------------------------------------Down
@@ -333,7 +333,7 @@ namespace SevenStrikeModules.XHud.Hud
         [MenuItem("Assets/XHud/PlaceToAnchor (放置到锚点) /Down(下)", priority = 500)]
         private static void PlaceToAnchor_D()
         {
-            SendObject(HudAnchor.下);
+            SendObject(XHudAnchor.下);
         }
 
         ///-------------------------------------------------------------Left
@@ -365,7 +365,7 @@ namespace SevenStrikeModules.XHud.Hud
         [MenuItem("Assets/XHud/PlaceToAnchor (放置到锚点) /Left(左)", priority = 500)]
         private static void PlaceToAnchor_L()
         {
-            SendObject(HudAnchor.左);
+            SendObject(XHudAnchor.左);
         }
 
         ///-------------------------------------------------------------Right
@@ -397,7 +397,7 @@ namespace SevenStrikeModules.XHud.Hud
         [MenuItem("Assets/XHud/PlaceToAnchor (放置到锚点) /Right(右)", priority = 500)]
         private static void PlaceToAnchor_R()
         {
-            SendObject(HudAnchor.右);
+            SendObject(XHudAnchor.右);
         }
 
         ///-------------------------------------------------------------LeftUp
@@ -429,7 +429,7 @@ namespace SevenStrikeModules.XHud.Hud
         [MenuItem("Assets/XHud/PlaceToAnchor (放置到锚点) /LeftUp(左上)", priority = 500)]
         private static void PlaceToAnchor_LU()
         {
-            SendObject(HudAnchor.左上);
+            SendObject(XHudAnchor.左上);
         }
 
         ///-------------------------------------------------------------LeftDown
@@ -461,7 +461,7 @@ namespace SevenStrikeModules.XHud.Hud
         [MenuItem("Assets/XHud/PlaceToAnchor (放置到锚点) /LeftDown(左下)", priority = 500)]
         private static void PlaceToAnchor_LD()
         {
-            SendObject(HudAnchor.左下);
+            SendObject(XHudAnchor.左下);
         }
 
         ///-------------------------------------------------------------RightUp
@@ -493,7 +493,7 @@ namespace SevenStrikeModules.XHud.Hud
         [MenuItem("Assets/XHud/PlaceToAnchor (放置到锚点) /RightUp(右上)", priority = 500)]
         private static void PlaceToAnchor_RU()
         {
-            SendObject(HudAnchor.右上);
+            SendObject(XHudAnchor.右上);
         }
 
         ///-------------------------------------------------------------RightDown
@@ -525,7 +525,7 @@ namespace SevenStrikeModules.XHud.Hud
         [MenuItem("Assets/XHud/PlaceToAnchor (放置到锚点) /RightDown(右下)", priority = 500)]
         private static void PlaceToAnchor_RD()
         {
-            SendObject(HudAnchor.右下);
+            SendObject(XHudAnchor.右下);
         }
 
         ///-------------------------------------------------------------World

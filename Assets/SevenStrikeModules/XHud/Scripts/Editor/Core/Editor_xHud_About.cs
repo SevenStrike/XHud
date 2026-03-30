@@ -76,7 +76,7 @@ namespace SevenStrikeModules.XHud
         private void OnEnable()
         {
             #region 读取Json数据
-            Infos = AssetDatabase.LoadAssetAtPath<TextAsset>(XHud_Dashboard.Get_GUIRoot_Path() + "/XHudDevsInfo.json").text;
+            Infos = AssetDatabase.LoadAssetAtPath<TextAsset>(XHud_Dashboard.Get_Path_XHUD_CONFIG_Path() + "/XHudDevsInfo.json").text;
             #endregion
 
             #region 解析Json类

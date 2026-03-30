@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
@@ -92,18 +92,18 @@ namespace SevenStrikeModules.XHud.Hud
             blocked_col = new Color(0, 0, 0, blocked_alp);
 
             #region 获取图标
-            btn_icon_details_released = Editor_XHud_GUI.GetIcon("Icons_Hud_TextStyleLibrary/detail_r");
-            btn_icon_details_press = Editor_XHud_GUI.GetIcon("Icons_Hud_TextStyleLibrary/detail_p");
-            import_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TextStyleLibrary/import_p");
-            import_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TextStyleLibrary/import_r");
-            export_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TextStyleLibrary/export_p");
-            export_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TextStyleLibrary/export_r");
-            clear_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TextStyleLibrary/clear_p");
-            clear_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TextStyleLibrary/clear_r");
-            create_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TextStyleLibrary/create_p");
-            create_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TextStyleLibrary/create_r");
-            delete_p = Editor_XHud_GUI.GetIcon("Icons_Hud_TextStyleLibrary/delete_p");
-            delete_r = Editor_XHud_GUI.GetIcon("Icons_Hud_TextStyleLibrary/delete_r");
+            btn_icon_details_released = Editor_XHud_GUI.GetIcon("Icons_XHud_TextStyleLibrary/detail_r");
+            btn_icon_details_press = Editor_XHud_GUI.GetIcon("Icons_XHud_TextStyleLibrary/detail_p");
+            import_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TextStyleLibrary/import_p");
+            import_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TextStyleLibrary/import_r");
+            export_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TextStyleLibrary/export_p");
+            export_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TextStyleLibrary/export_r");
+            clear_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TextStyleLibrary/clear_p");
+            clear_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TextStyleLibrary/clear_r");
+            create_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TextStyleLibrary/create_p");
+            create_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TextStyleLibrary/create_r");
+            delete_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TextStyleLibrary/delete_p");
+            delete_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TextStyleLibrary/delete_r");
             Font_Bold = Editor_XHud_GUI.GetFont("MotionMarkFont");
             Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Light");
             warnIcon = EditorGUIUtility.IconContent("console.warnicon").image as Texture2D;

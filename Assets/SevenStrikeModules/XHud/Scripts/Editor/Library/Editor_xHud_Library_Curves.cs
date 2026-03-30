@@ -1,8 +1,8 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XTween;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
+    using SevenStrikeModules.XTween;
     using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
@@ -132,30 +132,30 @@ namespace SevenStrikeModules.XHud.Hud
                 BaseScript.SelectedReferImage = null;
                 BaseScript.SelectedReferImage = tex;
             }
-            ReferImages = LoadAllAssetsAtPathWithIO<Texture2D>($"SevenStrikeModules/XHud/GUI/HudGuiStyle/CurvePreviewImgs/", ".png").ToArray();
+            ReferImages = LoadAllAssetsAtPathWithPattern<Texture2D>($"{XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path()}CurvePreviewImgs/", ".png").ToArray();
             sp_ReferImgIndex.intValue = 0;
             BaseScript.SelectedReferImage = ReferImages[sp_ReferImgIndex.intValue];
             #endregion
 
             #region 获取图标
-            import_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/import_p");
-            import_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/import_r");
-            export_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/export_p");
-            export_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/export_r");
-            clear_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/clear_p");
-            clear_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/clear_r");
-            create_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/create_p");
-            create_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/create_r");
-            delete_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/delete_p");
-            delete_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/delete_r");
-            play_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/play_p");
-            play_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/play_r");
-            leftarr_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/leftarr_p");
-            leftarr_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/leftarr_r");
-            rightarr_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/rightarr_p");
-            rightarr_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/rightarr_r");
-            stop_p = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/stop_p");
-            stop_r = Editor_XHud_GUI.GetIcon("Icons_Hud_CurveLibrary/stop_r");
+            import_p = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/import_p");
+            import_r = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/import_r");
+            export_p = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/export_p");
+            export_r = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/export_r");
+            clear_p = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/clear_p");
+            clear_r = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/clear_r");
+            create_p = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/create_p");
+            create_r = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/create_r");
+            delete_p = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/delete_p");
+            delete_r = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/delete_r");
+            play_p = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/play_p");
+            play_r = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/play_r");
+            leftarr_p = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/leftarr_p");
+            leftarr_r = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/leftarr_r");
+            rightarr_p = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/rightarr_p");
+            rightarr_r = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/rightarr_r");
+            stop_p = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/stop_p");
+            stop_r = Editor_XHud_GUI.GetIcon("Icons_XHud_CurveLibrary/stop_r");
             #endregion
 
             //设定列表项高度值
@@ -692,9 +692,12 @@ namespace SevenStrikeModules.XHud.Hud
 
         private void Tween_Stop()
         {
-            CurveTween.Rewind();
-            CurveTween.Kill();
-            CurveTween = null;
+            if (CurveTween != null)
+                CurveTween.Rewind();
+            if (CurveTween != null)
+                CurveTween.Kill();
+            if (CurveTween != null)
+                CurveTween = null;
             TweenPlaying = false;
             //DOTweenEditorPreview.Stop();
         }
@@ -715,14 +718,13 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
-        /// <param name="Pattern"></param>
+        /// <param name="pattern"></param>
         /// <returns></returns>
-        List<T> LoadAllAssetsAtPathWithIO<T>(string path, string Pattern) where T : UnityEngine.Object
+        List<T> LoadAllAssetsAtPathWithPattern<T>(string path, string pattern) where T : UnityEngine.Object
         {
             List<T> _out = new();
 
-            string root_path = Application.dataPath + "/" + path;
-            //sp_DebugMode.Log(root_path);
+            string root_path = Directory.GetParent(Application.dataPath) + "/" + path;
 
             if (!Directory.Exists(root_path))
             {
@@ -730,13 +732,12 @@ namespace SevenStrikeModules.XHud.Hud
                 return _out;
             }
 
-            string[] fileEntries = Directory.GetFiles(root_path, $"*{Pattern}");
+            string[] fileEntries = Directory.GetFiles(root_path, $"*{pattern}");
 
             foreach (string FileName in fileEntries)
             {
-                string[] filepath = FileName.Split(Application.dataPath);
-                //sp_DebugMode.Log("Assets" + filepath[1]);
-                _out.Add(AssetDatabase.LoadAssetAtPath<T>("Assets" + filepath[1]));
+                string[] filepath = FileName.Split(Directory.GetParent(Application.dataPath).FullName + "/");
+                _out.Add(AssetDatabase.LoadAssetAtPath<T>(filepath[1]));
             }
 
             return _out;

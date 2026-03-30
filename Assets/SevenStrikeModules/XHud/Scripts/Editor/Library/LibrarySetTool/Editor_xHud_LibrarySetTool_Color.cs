@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using Newtonsoft.Json;
     using SevenStrikeModules.XHud.Enums;
@@ -92,7 +92,10 @@ namespace SevenStrikeModules.XHud.Hud
         Font Font_Light;
 
         public XHud_ColorEmotions ColorEmotions;
-        public XHud_Module_Animator SourceAnimator;
+        /// <summary>
+        /// 源配色器
+        /// </summary>
+        public XHud_Module_Primitive_Painting SourcePainting;
         [SerializeField]
         public string ColorName;
         [SerializeField]
@@ -154,20 +157,20 @@ namespace SevenStrikeModules.XHud.Hud
             sp_Color = BaseObject.FindProperty("Color");
             sp_OriginColorName = BaseObject.FindProperty("OriginColorName");
 
-            icon_libsetter_color = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/logo");
+            icon_libsetter_color = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/logo");
 
             Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
             Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
 
-            leftarr_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/leftarr_p");
-            leftarr_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/leftarr_r");
-            rightarr_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/rightarr_p");
-            rightarr_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/rightarr_r");
+            leftarr_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/leftarr_p");
+            leftarr_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/leftarr_r");
+            rightarr_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/rightarr_p");
+            rightarr_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/rightarr_r");
 
             ColorDescription = "颜色说明内容";
             ColorName = "颜色名称";
 
-            TextAsset emotions = AssetDatabase.LoadAssetAtPath<TextAsset>($"{XHud_Dashboard.Get_GUIRoot_Path()}XHudColorEmotions.json");
+            TextAsset emotions = AssetDatabase.LoadAssetAtPath<TextAsset>($"{XHud_Dashboard.Get_Path_XHUD_CONFIG_Path()}XHudColorEmotions.json");
             ColorEmotions = JsonConvert.DeserializeObject<XHud_ColorEmotions>(emotions.text);
 
             PreviewData_Index = Editor_XHud_GUI.EditorData_Get_With_Int("XED_HudAnimator_Set_previewtexs_index");
@@ -416,7 +419,6 @@ namespace SevenStrikeModules.XHud.Hud
             }
 
             string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
-
             bool exist = Target_Hud_ColorsLibrary.ColorsLibrary_IsExist(sp_ColorName.stringValue);
 
             if (exist)
@@ -445,14 +447,14 @@ namespace SevenStrikeModules.XHud.Hud
                 }
             }
 
-            string indicator = SourceAnimator.GetIndicator();
+            string indicator = SourcePainting.controller.GetIndicator();
 
-            string res_saved_turnon = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 色卡库采集器消息", "色卡库模式设定", $"是否要将 {(string.IsNullOrEmpty(indicator) ? SourceAnimator.transform.name : indicator)} 色卡模式开启？", "开启", "暂不", 0);
+            string res_saved_turnon = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 色卡库采集器消息", "色卡库模式设定", $"是否要将 {(string.IsNullOrEmpty(indicator) ? SourcePainting.transform.name : indicator)} 色卡模式开启？", "开启", "暂不", 0);
             if (res_saved_turnon == "开启")
             {
-                SourceAnimator.SyncLibraryColor = true;
+                SourcePainting.SyncLibraryColor = true;
                 int id = Target_Hud_ColorsLibrary.ColorsLibrary_GetColorCount() - 1;
-                SourceAnimator.ColoriseName = Target_Hud_ColorsLibrary.ColorsLibrary_GetColorNames()[id];
+                SourcePainting.ColoriseName = Target_Hud_ColorsLibrary.ColorsLibrary_GetColorNames()[id];
             }
             this.Close();
         }
@@ -475,14 +477,13 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
-        /// <param name="Pattern"></param>
+        /// <param name="pattern"></param>
         /// <returns></returns>
-        List<T> LoadAllAssetsAtPathWithIO<T>(string path, string Pattern) where T : UnityEngine.Object
+        List<T> LoadAllAssetsAtPathWithPattern<T>(string path, string pattern) where T : UnityEngine.Object
         {
             List<T> _out = new();
 
-            string root_path = Application.dataPath + "/" + path;
-            //sp_DebugMode.Log(root_path);
+            string root_path = Directory.GetParent(Application.dataPath) + "/" + path;
 
             if (!Directory.Exists(root_path))
             {
@@ -490,13 +491,12 @@ namespace SevenStrikeModules.XHud.Hud
                 return _out;
             }
 
-            string[] fileEntries = Directory.GetFiles(root_path, $"*{Pattern}");
+            string[] fileEntries = Directory.GetFiles(root_path, $"*{pattern}");
 
             foreach (string FileName in fileEntries)
             {
-                string[] filepath = FileName.Split(Application.dataPath);
-                //sp_DebugMode.Log("Assets" + filepath[1]);
-                _out.Add(AssetDatabase.LoadAssetAtPath<T>("Assets" + filepath[1]));
+                string[] filepath = FileName.Split(Directory.GetParent(Application.dataPath).FullName + "/");
+                _out.Add(AssetDatabase.LoadAssetAtPath<T>(filepath[1]));
             }
 
             return _out;
@@ -560,10 +560,10 @@ namespace SevenStrikeModules.XHud.Hud
         /// <summary>
         /// 设置源
         /// </summary>
-        /// <param name="animator"></param>
-        public void SetAnimator(XHud_Module_Animator animator)
+        /// <param name="painting"></param>
+        public void SetPainting(XHud_Module_Primitive_Painting painting)
         {
-            SourceAnimator = animator;
+            SourcePainting = painting;
         }
 
         /// <summary>
@@ -743,8 +743,9 @@ namespace SevenStrikeModules.XHud.Hud
         {
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
+            string path = $"{XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path()}Icon/Icons_XHud_Library_Color_Setter/samples";
             //获取预览序列帧
-            PreviewDatas = LoadAllAssetsAtPathWithIO<XHud_LibrarySetTool_Color_PreviewData>("SevenStrikeModules/XHud/GUI/HudGuiStyle/Icon/Icons_Hud_Library_Color_Setter/samples", ".asset").ToArray();
+            PreviewDatas = LoadAllAssetsAtPathWithPattern<XHud_LibrarySetTool_Color_PreviewData>(path, ".asset").ToArray();
 
             var waitForOneSecond = new EditorWaitForSeconds(PreviewDataDuration);
             while (true)

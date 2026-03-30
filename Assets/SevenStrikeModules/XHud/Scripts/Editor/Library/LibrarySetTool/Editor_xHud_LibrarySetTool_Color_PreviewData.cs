@@ -1,6 +1,5 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XHud;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
     using System.Collections.Generic;
@@ -20,16 +19,16 @@ namespace SevenStrikeModules.XHud.Hud
         private void OnEnable()
         {
             BaseScript = (XHud.XHud_LibrarySetTool_Color_PreviewData)target;
-            collect_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/collect_r");
-            collect_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/collect_p");
-            clear_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/clear_r");
-            clear_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/clear_p");
+            collect_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/collect_r");
+            collect_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/collect_p");
+            clear_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/clear_r");
+            clear_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/clear_p");
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Color_Setter/preview_data"), HudFilled.实体, HudColor.深空灰, "色卡编辑器预览视觉", Color.white);
+            Editor_XHud_GUI.Gui_Layout_Banner(Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/preview_data"), HudFilled.实体, HudColor.深空灰, "色卡编辑器预览视觉", Color.white);
 
             #region 快捷功能
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "收集序列帧", XHud_Dashboard.Theme_Primary);

@@ -30,7 +30,7 @@ namespace SevenStrikeModules.XTween
         /// <summary>
         /// 弹跳曲线缓动进入然后退出
         /// </summary>
-        Unset = 0,
+        None = 0,
         /// <summary>
         /// 线性缓动（无缓动）
         /// </summary>

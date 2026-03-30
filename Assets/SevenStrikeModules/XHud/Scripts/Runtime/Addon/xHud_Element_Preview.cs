@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
@@ -196,9 +196,9 @@ namespace SevenStrikeModules.XHud.Hud
 
             if (RMS_Enabled)
             {
-                for (int i = 0; i < HudElement.RMS_InfoList.Count; i++)
+                for (int i = 0; i < HudElement.RMS_LayoutDatas.Count; i++)
                 {
-                    if (HudElement.RMS_InfoList[i].LayoutName == RMS_Name)
+                    if (HudElement.RMS_LayoutDatas[i].LayoutName == RMS_Name)
                     {
 
                         HudElement.element_PositionSet(OriginalPosition);

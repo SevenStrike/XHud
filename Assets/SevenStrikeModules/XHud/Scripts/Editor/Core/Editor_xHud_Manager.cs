@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using Newtonsoft.Json;
     using SevenStrikeModules.XHud.Enums;
@@ -29,7 +29,7 @@ namespace SevenStrikeModules.XHud.Hud
         private ReorderableList
             List_ElementLib,
             List_RMM,
-            List_SoundsLib;
+            List_SoundsPool;
         #endregion
 
         private float LineHeight;
@@ -38,7 +38,182 @@ namespace SevenStrikeModules.XHud.Hud
         static object gameViewSizesInstance;
 
         #region 序列化属性
-        SerializedProperty IsInitialized, Lib_ElementLibrarys, SoundLibrary, SounderPoolCount, Anchors_Layout_Screen, HudCanvas_ScreenAnchor, Lib_Color, Lib_Curve, Lib_Sound, Lib_TextStyleLibrary, Lib_ElementMotion, Lib_Transition, HudCamera, FontSizeMultiply, CanvasScalerModeIndex, CanvasScalerScreenSize, CanvasMatchDir, HudCanvas_Screen, HudCanvas_World, HudCanvasScaler, HudCanvas_WorldAnchor, Mask, HudCanvasGroup_Screen, HudCanvasGroup_World, UseInstanceMode, UseDebug, UseSafeFrame, UseAutoPerfectPixel, UsePerfectPixelUpdate, SafeFrameStructureDisplayer, CameraOthograpicMode, CustomCursor, CustomTransition, SupportWorldUI, Safe_Frame, Margins, MarginHorizontal, MarginMultiply, MarginVertical, MarkSize, Color_LayoutAnchorMark, Color_FrameLine, ScreenRes, Safe_FrameLine_Width, Safe_FrameLine_Margins, Color_SeperaterLine, Safe_Seperater_Length, Safe_CenterMarkLength, Safe_CenterMarkWidth, Color_CenterMark, Safe_CenterMarkDistance, CameraOrthographicSize, CameraFov, CameraCutter_Near, CameraCutter_Far, HudCanvasAnchor, CanvasDistance, HudCanvasAnchorIndex, MaskAlpha, MaskTexture, MaskRaycastAlphaThreshold, MaskRaycastEnabled, MaskColor, BlurMask, BlurMaskAlpha, BlurMaskColor, BlurMaskTexture, BlurMaskRaycastAlphaThreshold, BlurMaskRaycastEnabled, ContentAlpha_Screen, ContentAlpha_World, DurationMultiply, Hud_MouseCursor, Hud_TransitionController, RecycleArgs_Default, CreateArgs_Default, SceneCamera, Volume, VolumeMute, BluePrint_root, BluePrintMode, BluePrint_grid_size, BluePrint_grid_color, BluePrint_bg_color, BluePrint_bg_decal_color, BluePrint_mark_size, BluePrint_mark_opacity, BluePrint_linewidth, BluePrint_title_content, BluePrint_subtitle_content, BluePrint_marktitle_color, BluePrint_marksubtitle_color, BluePrint_mark_margin, BluePrint_MarkAnchors, BluePrint_mark_space, BluePrint_opacity, BluePrint_AnimationDuration, BluePrint_Displayed, BluePrint_OnStartHide, BluePrint_Grid_AnimationEase, BluePrint_grid_Opacity, BluePrint_Grid_AnimationDuration, BluePrint_Bg_AnimationEase_In, BluePrint_Bg_AnimationEase_Out, BluePrint_bg_opacity, BluePrint_Bg_FadeAnimationDelay, BluePrint_Grid_LengthPercentage, BluePrint_Grid_LevelHeight, BluePrint_GridEnd, BluePrint_bg_tilling, BluePrint_bg_name, BluePrint_bg_usetilling_index, BluePrint_bg_usesquareratio_index, BluePrint_bg_mapOpacity, UniversalFeature_Blur_Intensity, Eft_Grid, Eft_GridFade, Eft_Bg, Eft_Mark, RMS_Enabled, RMS_CurrentSolution, RMS_Nodes, theme_color, theme_color_gp, theme_color_sep, EnabledLedEffect, ThemeSolution, ThemeEdgeSolution, Hud_EventSystem, Hud_InputSystemUIInputModule, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, Crc_Lib_Name, Rec_Lib_Name, UseLocalization, sp_PhysicsScreenSize, sp_Reference_Image, UseRatioReference, RatioReferenceIsPart, sp_Reference_Image_Color, sp_Res_Full, sp_Res_Part, sp_ReferShape_RatioSize, sp_ReferShape_RatioTolerance, FoldAllPanelWithDisabled, CompGuide_Anchors, CompGuide_AnchorRoot, UseCompGuide, CompGuideMode, GuideColor, GuidePointColor, GuideParam_Mirror_LR_Offset, GuideParam_Mirror_UD_Offset, GuideParam_Mirror_LR_GoldenMode, GuideParam_Mirror_UD_GoldenMode, GuideParam_Fibonacci_Mode, GuideParam_CornerLookat_Offset_H, GuideParam_CornerLookat_Offset_V, GuideParam_Three_Offset_H, GuideParam_Three_Offset_Coverage, GuideParam_Three_Offset_V, GuideParam_GuideLine_BaseHeight, GuideParam_GuideLine_Offset_Near, GuideParam_GuideLine_Offset_Far, GuideParam_GuideLine_Offset_NearHeight, GuideParam_Triangle_BaseHeight, GuideParam_Triangle_BottomHeight, GuideParam_Triangle_Offset_Left, GuideParam_Triangle_Offset_Right, GuideParam_Triangle_TopOffset, GuideParam_CenterPointSize, GuideParam_IShape_TopHeight, GuideParam_IShape_BottomHeight, GuideParam_IShape_Offset_Left, GuideParam_IShape_Offset_Right, GuideParam_GuideLine_BaseOffset;
+        SerializedProperty
+            IsInitialized,
+            Lib_ElementLibrarys,
+            SoundLibrary,
+            SounderPoolCount,
+            Anchors_Layout_Screen,
+            HudCanvas_ScreenAnchor,
+            Lib_Color,
+            Lib_Curve,
+            Lib_Sound,
+            Lib_TextStyleLibrary,
+            Lib_ElementMotion,
+            Lib_Transition,
+            HudCamera,
+            FontSizeMultiply,
+            CanvasScalerModeIndex,
+            CanvasScalerScreenSize,
+            CanvasMatchDir,
+            HudCanvas_Screen,
+            HudCanvas_World,
+            HudCanvasScaler,
+            HudCanvas_WorldAnchor,
+            Mask,
+            HudCanvasGroup_Screen,
+            HudCanvasGroup_World,
+            UseInstanceMode,
+            UseDebug,
+            UseSafeFrame,
+            UseAutoPerfectPixel,
+            UsePerfectPixelUpdate,
+            SafeFrameStructureDisplayer,
+            CameraOthograpicMode,
+            CustomCursor,
+            CustomTransition,
+            SupportWorldUI,
+            Safe_Frame,
+            Margins,
+            MarginHorizontal,
+            MarginMultiply,
+            MarginVertical,
+            MarkSize,
+            Color_LayoutAnchorMark,
+            Color_FrameLine,
+            ScreenRes,
+            Safe_FrameLine_Width,
+            Safe_FrameLine_Margins,
+            Color_SeperaterLine,
+            Safe_Seperater_Length,
+            Safe_CenterMarkLength,
+            Safe_CenterMarkWidth,
+            Color_CenterMark,
+            Safe_CenterMarkDistance,
+            CameraOrthographicSize,
+            CameraFov,
+            CameraCutter_Near,
+            CameraCutter_Far,
+            HudCanvasAnchor,
+            CanvasDistance,
+            HudCanvasAnchorIndex,
+            MaskAlpha,
+            MaskTexture,
+            MaskRaycastAlphaThreshold,
+            MaskRaycastEnabled,
+            MaskColor,
+            BlurMask,
+            BlurMaskAlpha,
+            BlurMaskColor,
+            BlurMaskTexture,
+            BlurMaskRaycastAlphaThreshold,
+            BlurMaskRaycastEnabled,
+            ContentOpacity_Screen,
+            ContentOpacity_World,
+            DurationMultiply,
+            Hud_MouseCursor,
+            Hud_TransitionController,
+            RecycleArgs_Default,
+            CreateArgs_Default,
+            SceneCamera,
+            Volume,
+            VolumeMute,
+            BluePrint_root,
+            BluePrintMode,
+            BluePrint_grid_size,
+            BluePrint_grid_color,
+            BluePrint_bg_color,
+            BluePrint_bg_decal_color,
+            BluePrint_mark_size,
+            BluePrint_mark_opacity,
+            BluePrint_linewidth,
+            BluePrint_title_content,
+            BluePrint_subtitle_content,
+            BluePrint_marktitle_color,
+            BluePrint_marksubtitle_color,
+            BluePrint_mark_margin,
+            BluePrint_MarkAnchors,
+            BluePrint_mark_space,
+            BluePrint_opacity,
+            BluePrint_AnimationDuration,
+            BluePrint_Displayed,
+            BluePrint_OnStartHide,
+            BluePrint_Grid_AnimationEase,
+            BluePrint_grid_Opacity,
+            BluePrint_Grid_AnimationDuration,
+            BluePrint_Bg_AnimationEase_In,
+            BluePrint_Bg_AnimationEase_Out,
+            BluePrint_bg_opacity,
+            BluePrint_Bg_FadeAnimationDelay,
+            BluePrint_Grid_LengthPercentage,
+            BluePrint_Grid_LevelHeight,
+            BluePrint_GridEnd,
+            BluePrint_bg_tilling,
+            BluePrint_bg_name,
+            BluePrint_bg_usetilling_index,
+            BluePrint_bg_usesquareratio_index,
+            BluePrint_bg_mapOpacity,
+            UniversalFeature_Blur_Intensity,
+            Eft_Grid,
+            Eft_GridFade,
+            Eft_Bg,
+            Eft_Mark,
+            RMS_Enabled,
+            RMS_CurrentSolution,
+            RMS_Nodes,
+            theme_color,
+            theme_color_gp,
+            theme_color_sep,
+            EnabledLedEffect,
+            ThemeSolution,
+            ThemeEdgeSolution,
+            Hud_EventSystem,
+            Hud_InputSystemUIInputModule,
+            CreateArgs_MotionAnimateEndState,
+            RecycleArgs_MotionAnimateEndState,
+            Crc_Lib_Name,
+            Rec_Lib_Name,
+            sp_PhysicsScreenSize,
+            sp_Reference_Image,
+            UseRatioReference,
+            RatioReferenceIsPart,
+            sp_Reference_Image_Color,
+            sp_Res_Full,
+            sp_Res_Part,
+            sp_ReferShape_RatioSize,
+            sp_ReferShape_RatioTolerance,
+            FoldAllPanelWithDisabled,
+            CompGuide_Anchors,
+            CompGuide_AnchorRoot,
+            UseCompGuide,
+            CompGuideMode,
+            GuideColor,
+            GuidePointColor,
+            GuideParam_Mirror_LR_Offset,
+            GuideParam_Mirror_UD_Offset,
+            GuideParam_Mirror_LR_GoldenMode,
+            GuideParam_Mirror_UD_GoldenMode,
+            GuideParam_Fibonacci_Mode,
+            GuideParam_CornerLookat_Offset_H,
+            GuideParam_CornerLookat_Offset_V,
+            GuideParam_Three_Offset_H,
+            GuideParam_Three_Offset_Coverage,
+            GuideParam_Three_Offset_V,
+            GuideParam_GuideLine_BaseHeight,
+            GuideParam_GuideLine_Offset_Near,
+            GuideParam_GuideLine_Offset_Far,
+            GuideParam_GuideLine_Offset_NearHeight,
+            GuideParam_Triangle_BaseHeight,
+            GuideParam_Triangle_BottomHeight,
+            GuideParam_Triangle_Offset_Left,
+            GuideParam_Triangle_Offset_Right,
+            GuideParam_Triangle_TopOffset,
+            GuideParam_CenterPointSize,
+            GuideParam_IShape_TopHeight,
+            GuideParam_IShape_BottomHeight,
+            GuideParam_IShape_Offset_Left,
+            GuideParam_IShape_Offset_Right,
+            GuideParam_GuideLine_BaseOffset;
         #endregion
 
         #region 图标
@@ -46,7 +221,7 @@ namespace SevenStrikeModules.XHud.Hud
         #endregion
 
         #region 开关
-        private bool FrameColors, FrameStyles, def_recycle_fold_move, def_recycle_fold_rotate, def_recycle_fold_alpha, def_create_fold_move, def_create_fold_rotate, def_create_fold_alpha, BasicVars;
+        private bool FrameColors, FrameStyles, def_recycle_fold_move, def_recycle_fold_rotate, def_recycle_fold_alpha, def_create_fold_move, def_create_fold_rotate, def_create_fold_alpha, OriginalDisplay;
         #endregion
 
         #region 蓝图
@@ -55,7 +230,7 @@ namespace SevenStrikeModules.XHud.Hud
         #endregion
 
         #region 键
-        private string PrefsKeyFold_Option = "XHUD-MANAGER-FOLD-OPTION", PrefsKeyFold_CanvasCamera = "XHUD-MANAGER-FOLD-CANVAS", PrefsKeyFold_Camera = "XHUD-MANAGER-FOLD-CAMERA", PrefsKeyFold_Libs = "XHUD-MANAGER-FOLD-LIBRARYS", PrefsKeyFold_FrameLayout = "XHUD-MANAGER-FOLD-FRAMELAYOUT", PrefsKeyFold_Assist = "XHUD-MANAGER-FOLD-ASSIST", PrefsKeyFold_BluePrint = "XHUD-MANAGER-FOLD-BLUEPRINT", PrefsKeyFold_LayoutMatchRes = "XHUD-MANAGER-FOLD-LAYOUTMATCHRESOLUTION", PrefsKeyFold_ElementLibs = "XHUD-MANAGER-FOLD-ELEMENTLIBS", PrefsKeyFold_Audios = "XHUD-MANAGER-FOLD-AUDIOS", PrefsKeyFold_Mask = "XHUD-MANAGER-FOLD-MASK", PrefsKeyFold_BlurMask = "XHUD-MANAGER-FOLD-BLURMASK", PrefsKeyFold_Global = "XHUD-MANAGER-FOLD-GLOBAL", PrefsKeyFold_Tools = "XHUD-MANAGER-FOLD-TOOLS", PrefsKeyFold_PhysicsRatio = "XHUD-MANAGER-FOLD-PHYSICS", PrefsKeyFold_ElementParam_DefaultMotion = "XHUD-MANAGER-FOLD-ELEMENTPARAM_DEFAULTCREATOR", PrefsKeyFold_Theme = "XHUD-MANAGER-FOLD-THEME", PrefsKeyFold_Localized = "XHUD-MANAGER-FOLD-LOCALIZED", PrefsKeyFold_Comp_Guide = "XHUD-MANAGER-FOLD-COMPGUIDE";
+        private string PrefsKeyFold_Option = "XHUD-MANAGER-FOLD-OPTION", PrefsKeyFold_CanvasCamera = "XHUD-MANAGER-FOLD-CANVAS", PrefsKeyFold_Camera = "XHUD-MANAGER-FOLD-CAMERA", PrefsKeyFold_Libs = "XHUD-MANAGER-FOLD-LIBRARYS", PrefsKeyFold_FrameLayout = "XHUD-MANAGER-FOLD-FRAMELAYOUT", PrefsKeyFold_Assist = "XHUD-MANAGER-FOLD-ASSIST", PrefsKeyFold_BluePrint = "XHUD-MANAGER-FOLD-BLUEPRINT", PrefsKeyFold_LayoutMatchRes = "XHUD-MANAGER-FOLD-LAYOUTMATCHRESOLUTION", PrefsKeyFold_ElementLibs = "XHUD-MANAGER-FOLD-ELEMENTLIBS", PrefsKeyFold_Audios = "XHUD-MANAGER-FOLD-AUDIOS", PrefsKeyFold_Mask = "XHUD-MANAGER-FOLD-MASK", PrefsKeyFold_BlurMask = "XHUD-MANAGER-FOLD-BLURMASK", PrefsKeyFold_Global = "XHUD-MANAGER-FOLD-GLOBAL", PrefsKeyFold_Tools = "XHUD-MANAGER-FOLD-TOOLS", PrefsKeyFold_PhysicsRatio = "XHUD-MANAGER-FOLD-PHYSICS", PrefsKeyFold_ElementParam_DefaultMotion = "XHUD-MANAGER-FOLD-ELEMENTPARAM_DEFAULTCREATOR", PrefsKeyFold_Theme = "XHUD-MANAGER-FOLD-THEME", PrefsKeyFold_Comp_Guide = "XHUD-MANAGER-FOLD-COMPGUIDE";
 
         private static string PrefsKeyColor_Theme = "XHUD-MANAGER-COLOR-THEME";
         private static string PrefsKeyColor_Theme_GP = "XHUD-MANAGER-COLOR-THEME-GROUP";
@@ -85,7 +260,7 @@ namespace SevenStrikeModules.XHud.Hud
         #endregion
 
         #region 选项文字
-        string[] stroptions_enabled = new string[2] { "关闭", "开启" }, stroptions_debug = new string[2] { "关闭", "调试" }, stroptions_hide = new string[2] { "隐藏", "显示" }, stroptions_align = new string[2] { "关闭", "对齐" }, stroptions_useful = new string[2] { "关闭", "使用" }, stroptions_refertype = new string[2] { "整体", "局部" }, stroptions_perspective = new string[2] { "透视", "正交" }, stroptions_mute = new string[2] { "关闭", "静音" }, stroptions_mouse = new string[2] { "原生", "自定" }, stroptions_world = new string[2] { "禁用", "支持" }, stroptions_support = new string[2] { "禁用", "支持" }, stroptions_effect = new string[2] { "关闭", "影响" }, stroptions_canvassize = new string[3] { "固定像素尺寸", "屏幕尺寸", "固定物理尺寸" }, stroptions_canvasanchor = System.Enum.GetNames(typeof(CanvasAnchor)), ThemeSolutionNames = new string[] { "默认", "白色", "黑色", "乳白", "浅灰", "沙漠灰", "科幻青", "液晶绿", "橄榄绿", "湖蓝", "天蓝", "胭脂粉", "灵动粉", "秋叶黄", "警示黄", "高亮橘", "烈焰红", }, ThemeEdgeSolutionNames = new string[] { "默认", "白色", "浅灰", "深灰", "黑色", "极简", "珊瑚红", "落叶黄", "烟灰蓝", "青苔绿", "荧光绿", "淡粉" };
+        string[] stroptions_enabled = new string[2] { "关闭", "开启" }, stroptions_debug = new string[2] { "关闭", "调试" }, stroptions_hide = new string[2] { "隐藏", "显示" }, stroptions_align = new string[2] { "关闭", "对齐" }, stroptions_useful = new string[2] { "关闭", "使用" }, stroptions_refertype = new string[2] { "整体", "局部" }, stroptions_perspective = new string[2] { "透视", "正交" }, stroptions_mute = new string[2] { "关闭", "静音" }, stroptions_mouse = new string[2] { "原生", "自定" }, stroptions_world = new string[2] { "禁用", "支持" }, stroptions_effect = new string[2] { "关闭", "影响" }, stroptions_canvassize = new string[3] { "固定像素尺寸", "屏幕尺寸", "固定物理尺寸" }, stroptions_canvasanchor = System.Enum.GetNames(typeof(CanvasAnchor)), ThemeSolutionNames = new string[] { "默认", "白色", "黑色", "乳白", "浅灰", "沙漠灰", "科幻青", "液晶绿", "橄榄绿", "湖蓝", "天蓝", "胭脂粉", "灵动粉", "秋叶黄", "警示黄", "高亮橘", "烈焰红", }, ThemeEdgeSolutionNames = new string[] { "默认", "白色", "浅灰", "深灰", "黑色", "极简", "珊瑚红", "落叶黄", "烟灰蓝", "青苔绿", "荧光绿", "淡粉" };
         #endregion
 
         #region 字体
@@ -148,58 +323,58 @@ namespace SevenStrikeModules.XHud.Hud
             Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
             Font_Thin = Editor_XHud_GUI.GetFont("SS_Editor_Thin");
 
-            var infos = AssetDatabase.LoadAssetAtPath<TextAsset>(XHud_Dashboard.Get_GUIRoot_Path() + "/XHudDevsInfo.json");
+            var infos = AssetDatabase.LoadAssetAtPath<TextAsset>(XHud_Dashboard.Get_Path_XHUD_CONFIG_Path() + "/XHudDevsInfo.json");
             XHudDevInfos info = JsonConvert.DeserializeObject<XHudDevInfos>(infos.ToString());
 
             Ver = info.ver;
             Sub = info.sub;
 
             #region 获取图标       
-            icon_MC_Use = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/Icon_Anchor_MC_Use");
-            icon_MC_None = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/Icon_Anchor_MC_None");
-            status = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/status");
-            rmsicon = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/rmsicon");
-            soundplaying = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/soundplaying");
-            save_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/save_r");
-            save_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/save_p");
-            locate_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/locate_r");
-            locate_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/locate_p");
-            reset_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/reset_r");
-            reset_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/reset_p");
+            icon_MC_Use = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/Icon_Anchor_MC_Use");
+            icon_MC_None = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/Icon_Anchor_MC_None");
+            status = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/status");
+            rmsicon = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/rmsicon");
+            soundplaying = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/soundplaying");
+            save_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/save_r");
+            save_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/save_p");
+            locate_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/locate_r");
+            locate_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/locate_p");
+            reset_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/reset_r");
+            reset_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/reset_p");
 
             #region 标题图标
-            panel_option = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_option");
-            panel_canvas = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_canvas");
-            panel_camera = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_camera");
-            panel_libs = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_libs");
-            panel_elementlibs = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_elementlibs");
-            panel_frame = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_frame");
-            panel_assist = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_assist");
-            panel_bulueprint = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_bulueprint");
-            panel_matchres = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_matchres");
-            panel_audios = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_audios");
-            panel_mask = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_mask");
-            panel_global = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_global");
-            panel_tools = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_tools");
-            panel_eleparamrecycle_auto = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_eleparamrecycle_auto");
-            panel_eleparammotion_default = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_eleparammotion_default");
-            panel_localized = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_localized");
-            panel_theme = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_theme");
-            panel_physicsratio = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_physics");
-            panel_comp_guide = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/panel_CompGuide");
+            panel_option = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_option");
+            panel_canvas = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_canvas");
+            panel_camera = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_camera");
+            panel_libs = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_libs");
+            panel_elementlibs = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_elementlibs");
+            panel_frame = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_frame");
+            panel_assist = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_assist");
+            panel_bulueprint = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_bulueprint");
+            panel_matchres = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_matchres");
+            panel_audios = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_audios");
+            panel_mask = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_mask");
+            panel_global = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_global");
+            panel_tools = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_tools");
+            panel_eleparamrecycle_auto = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_eleparamrecycle_auto");
+            panel_eleparammotion_default = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_eleparammotion_default");
+            panel_localized = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_localized");
+            panel_theme = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_theme");
+            panel_physicsratio = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_physics");
+            panel_comp_guide = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/panel_CompGuide");
             #endregion
 
-            icon_initia_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/icon_initia_r");
-            icon_initia_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/icon_initia_p");
-            icon_fastmaskswitch_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/icon_fastmaskswitch_r");
-            icon_fastmaskswitch_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/icon_fastmaskswitch_p");
-            icon_safeframevisual_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/icon_safeframevisual_r");
-            icon_safeframevisual_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/icon_safeframevisual_p");
-            icon_checkstate_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/icon_checkstate_r");
-            icon_checkstate_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/icon_checkstate_p");
+            icon_initia_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/icon_initia_r");
+            icon_initia_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/icon_initia_p");
+            icon_fastmaskswitch_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/icon_fastmaskswitch_r");
+            icon_fastmaskswitch_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/icon_fastmaskswitch_p");
+            icon_safeframevisual_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/icon_safeframevisual_r");
+            icon_safeframevisual_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/icon_safeframevisual_p");
+            icon_checkstate_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/icon_checkstate_r");
+            icon_checkstate_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/icon_checkstate_p");
 
-            GuideHelp_Released = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/GuideHelp_Released");
-            GuideHelp_Press = Editor_XHud_GUI.GetIcon("Icons_Hud_Manager/GuideHelp_Press");
+            GuideHelp_Released = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/GuideHelp_Released");
+            GuideHelp_Press = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/GuideHelp_Press");
 
             #endregion
 
@@ -345,15 +520,15 @@ namespace SevenStrikeModules.XHud.Hud
             };
             #endregion
 
-            #region 音效库
-            List_SoundsLib = new ReorderableList(serializedObject, SoundLibrary)
+            #region 音效池
+            List_SoundsPool = new ReorderableList(serializedObject, SoundLibrary)
             {
                 draggable = !Application.isPlaying,
                 displayAdd = !Application.isPlaying,
                 displayRemove = !Application.isPlaying,
                 drawHeaderCallback = rect =>
                 {
-                    EditorGUI.LabelField(rect, "音效库列表");
+                    EditorGUI.LabelField(rect, "音效池列表");
                 },
                 drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
                 {
@@ -395,7 +570,7 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             #region 获取所有蓝图背景贴图
-            Texture2D[] AllTextures = LoadAllAssetsAtPathWithIO<Texture2D>("SevenStrikeModules/XHud/Textures/BluePrints/", ".png").ToArray();
+            Texture2D[] AllTextures = LoadAllAssetsAtPathWithPattern<Texture2D>($"{XHud_Dashboard.Get_Path_XHUD_TEXTURES_Path()}BluePrints/", ".png").ToArray();
 
             BluePrintBgs_Name = new string[AllTextures.Length];
             for (int i = 0; i < AllTextures.Length; i++)
@@ -539,16 +714,16 @@ namespace SevenStrikeModules.XHud.Hud
                 //创建音效库
                 XHud_Library_Sounds lib_sound = ScriptableObject.CreateInstance<XHud_Library_Sounds>();
                 lib_sound.LibraryName = $"NewSoundLibrary";
-                lib_sound.SoundLibrary_AddSound("DefaultSound", AssetDatabase.LoadAssetAtPath<AudioClip>($"{XHud_Dashboard.Get_XHudRoot_Path()}Sound/hud_sound_1.wav"));
+                lib_sound.SoundLibrary_AddSound("DefaultSound", AssetDatabase.LoadAssetAtPath<AudioClip>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Sound/hud_sound_1.wav"));
 
                 //创建元素库
                 XHud_Library_Element lib_element = ScriptableObject.CreateInstance<XHud_Library_Element>();
                 lib_element.LibraryName = $"NewElementLibrary";
 
-                Transform obj_Corners = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_XHudRoot_Path()}Prefabs/Corners.prefab");
-                Transform obj_Dots = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_XHudRoot_Path()}Prefabs/Dots.prefab");
-                Transform obj_Clicker = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_XHudRoot_Path()}Prefabs/Clicker.prefab");
-                Transform obj_Logo = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_XHudRoot_Path()}Prefabs/Logo.prefab");
+                Transform obj_Corners = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Prefabs/Corners.prefab");
+                Transform obj_Dots = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Prefabs/Dots.prefab");
+                Transform obj_Clicker = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Prefabs/Clicker.prefab");
+                Transform obj_Logo = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Prefabs/Logo.prefab");
 
                 lib_element.ElementsLibrary_Add(new XHud_LibraryArg_Element_Item(1, obj_Corners.GetComponent<XHud_Module_Element>()));
                 lib_element.ElementsLibrary_Add(new XHud_LibraryArg_Element_Item(1, obj_Dots.GetComponent<XHud_Module_Element>()));
@@ -567,7 +742,7 @@ namespace SevenStrikeModules.XHud.Hud
                 info_text.SyncAnimatorColor = false;
                 info_text.BestFit = false;
                 info_text.GeometreAlign = false;
-                info_text.Font = AssetDatabase.LoadAssetAtPath<Font>($"{XHud_Dashboard.Get_XHudRoot_Path()}Fonts/Text/SevenBlack-Light.ttf");
+                info_text.Font = AssetDatabase.LoadAssetAtPath<Font>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Fonts/Text/SevenBlack-Light.ttf");
                 info_text.FontColor = Color.white;
                 info_text.Size = 50;
                 info_text.LineHeight = 1;
@@ -585,7 +760,7 @@ namespace SevenStrikeModules.XHud.Hud
                 info_tmptext.Raycast = false;
                 info_tmptext.SyncAnimatorColor = false;
                 info_tmptext.tmp_EnableAutoSizing = false;
-                info_tmptext.tmp_font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_XHudRoot_Path()}Fonts/Tmp/SevenBlack-Light SDF.asset");
+                info_tmptext.tmp_font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Fonts/Tmp/SevenBlack-Light SDF.asset");
                 info_tmptext.tmp_color = Color.white;
                 info_tmptext.Size = 50;
                 info_tmptext.tmp_overflow = TextOverflowModes.Overflow;
@@ -605,7 +780,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                 #region 预制动效
                 Motion_Creator crc = new Motion_Creator();
-                crc.anchor = HudAnchor.中心;
+                crc.anchor = XHudAnchor.中心;
                 crc.Movement = new MotionNode_Movement();
                 crc.Movement.Movement = HudMotion_Movement.S_从下至上;
                 crc.Movement.Distance = 100f;
@@ -674,7 +849,7 @@ namespace SevenStrikeModules.XHud.Hud
                 //创建转场库
                 XHud_Library_Transition lib_transition = ScriptableObject.CreateInstance<XHud_Library_Transition>();
                 lib_transition.LibraryName = $"NewTransitionLibrary";
-                List<Texture2D> texs_list = LoadAllAssetsAtPathWithIO<Texture2D>($"{XHud_Dashboard.Get_path_XHUD_TEXTURES_Path()}Transitions/Ink/", ".jpg");
+                List<Texture2D> texs_list = LoadAllAssetsAtPathWithPattern<Texture2D>($"{XHud_Dashboard.Get_Path_XHUD_TEXTURES_Path()}Transitions/Ink/", ".jpg");
                 // 调用排序方法
                 xHud_SortTexturesByNameSuffix(texs_list);
                 lib_transition.TransitionLibrary_Add("InkPaint", texs_list.ToArray(), 1);
@@ -722,7 +897,7 @@ namespace SevenStrikeModules.XHud.Hud
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
 
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "资源库引用", "是否要将创建的资源库全部指定到管理器中？", "暂不", "指定", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "资源库引用", "是否要将创建的资源库全部指定到管理器中？", "暂不", "指定", 0);
                 if (res == "指定")
                 {
                     XHud_Dashboard.HudManagerGet().Hud_Colors = lib_color;
@@ -750,7 +925,7 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 if (SceneCamera.objectReferenceValue == null)
                 {
-                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "辅助视觉", "当前未指定场景相机，无法启用辅助视觉！！", "明白", 0);
+                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "辅助视觉", "当前未指定场景相机，无法启用辅助视觉！！", "明白", 0);
                     return;
                 }
 
@@ -847,7 +1022,7 @@ namespace SevenStrikeModules.XHud.Hud
                             {
                                 UseSafeFrame.boolValue = false;
                                 UseSafeFrame.serializedObject.ApplyModifiedProperties();
-                                Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "辅助视觉", "当前未指定场景相机，无法启用辅助视觉！！", "明白", 0);
+                                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "辅助视觉", "当前未指定场景相机，无法启用辅助视觉！！", "明白", 0);
                                 return;
                             }
                             if (!UseSafeFrame.boolValue)
@@ -896,7 +1071,7 @@ namespace SevenStrikeModules.XHud.Hud
                     {
                         if (!BluePrintMode.boolValue)
                         {
-                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "蓝图模式", "此操作会退出蓝图模式，请确实是否继续该操作？", "退出", "暂不", 0);
+                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "蓝图模式", "此操作会退出蓝图模式，请确实是否继续该操作？", "退出", "暂不", 0);
                             if (res == "退出")
                             {
                                 BluePrintMode.boolValue = false;
@@ -912,9 +1087,9 @@ namespace SevenStrikeModules.XHud.Hud
                         }
                         else
                         {
-                            Material mat = AssetDatabase.LoadAssetAtPath<Material>($"{XHud_Dashboard.Get_XHudRoot_Path()}Materials/BluePrints/BluePrint.mat");
-                            TMP_FontAsset title = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_XHudRoot_Path()}Fonts/Tmp/SevenBlack-Bold SDF.asset");
-                            TMP_FontAsset subtitle = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_XHudRoot_Path()}Fonts/Tmp/SevenBlack-Light SDF.asset");
+                            Material mat = AssetDatabase.LoadAssetAtPath<Material>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Materials/BluePrints/BluePrint.mat");
+                            TMP_FontAsset title = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Fonts/Tmp/SevenBlack-Bold SDF.asset");
+                            TMP_FontAsset subtitle = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Fonts/Tmp/SevenBlack-Light SDF.asset");
                             #region 指定叠加背景
                             if (string.IsNullOrEmpty(BluePrint_bg_name.stringValue))
                                 BluePrint_bg_name.stringValue = BluePrintBgs_Name[BluePrintBgs_Name.Length - 1];
@@ -979,7 +1154,7 @@ namespace SevenStrikeModules.XHud.Hud
                             {
                                 XHud_CustomMouseCursor mouseCursor = (XHud_CustomMouseCursor)Hud_MouseCursor.objectReferenceValue;
 
-                                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "自定义光标", "当前已经存在自定义鼠标样式器，如果选择禁用，那么将会立即移除它，并且您为其配置好的参数也将一并丢失，确认要这样操作吗？", "是的", "暂不", 0);
+                                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "自定义光标", "当前已经存在自定义鼠标样式器，如果选择禁用，那么将会立即移除它，并且您为其配置好的参数也将一并丢失，确认要这样操作吗？", "是的", "暂不", 0);
                                 if (res == "是的")
                                 {
                                     DestroyImmediate(mouseCursor.gameObject, true);
@@ -1027,7 +1202,7 @@ namespace SevenStrikeModules.XHud.Hud
                             {
                                 XHud_TransitionController transition = (XHud_TransitionController)Hud_TransitionController.objectReferenceValue;
 
-                                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "转场器", "当前已经存在转场器，如果选择禁用，那么将会立即移除它，并且您为其配置好的参数也将一并丢失，确认要这样操作吗？", "禁用", "暂不", 0);
+                                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "转场器", "当前已经存在转场器，如果选择禁用，那么将会立即移除它，并且您为其配置好的参数也将一并丢失，确认要这样操作吗？", "禁用", "暂不", 0);
                                 if (res == "禁用")
                                 {
                                     transition.Transition_Set_MaskTexture(null);
@@ -1069,7 +1244,7 @@ namespace SevenStrikeModules.XHud.Hud
                             rect.sizeDelta = Vector2.one * 4;
                             rect.anchoredPosition3D = Vector3.zero;
 
-                            Material mat = AssetDatabase.LoadAssetAtPath<Material>($"{XHud_Dashboard.Get_XHudRoot_Path()}Materials/Transitions/Transition.mat");
+                            Material mat = AssetDatabase.LoadAssetAtPath<Material>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Materials/Transitions/Transition.mat");
                             Image img = NewTransition.AddComponent<Image>();
                             img.raycastTarget = false;
                             img.color = Color.white;
@@ -1093,7 +1268,7 @@ namespace SevenStrikeModules.XHud.Hud
                         {
                             if (HudCanvas_World.objectReferenceValue == null)
                                 return;
-                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "支持世界元素", "此操作会移除World节点以及其下所有物体并禁用支持世界UI的特性，请确实是否继续该操作？", "继续", "暂不", 0);
+                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "支持世界元素", "此操作会移除World节点以及其下所有物体并禁用支持世界UI的特性，请确实是否继续该操作？", "继续", "暂不", 0);
                             if (res == "继续")
                             {
                                 Canvas cav_w = (Canvas)HudCanvas_World.objectReferenceValue;
@@ -1320,7 +1495,7 @@ namespace SevenStrikeModules.XHud.Hud
                         if (EditorGUI.EndChangeCheck())
                         {
                             Camera cam = (Camera)SceneCamera.objectReferenceValue;
-                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "指定场景相机", $"确认要将 {cam.name} 相机指定为XHud的主场景相机吗？ 如果不指定场景主相机则您将无法正常使用XHud！", "暂不", "指定", 0);
+                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "指定场景相机", $"确认要将 {cam.name} 相机指定为XHud的主场景相机吗？ 如果不指定场景主相机则您将无法正常使用XHud！", "暂不", "指定", 0);
                             if (res == "指定")
                             {
 
@@ -1340,7 +1515,7 @@ namespace SevenStrikeModules.XHud.Hud
                                 // 取消勾选 "XHUD" 图层
                                 cam.cullingMask &= ~xhudMask;
 
-                                Editor_XHud_GUI.Open(XHud_DialogType.确认, "xHud 管理器消息", "指定场景相机", "已取消勾选主场景相机的 CullingMask 中的 'XHud' 图层！", "明白");
+                                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 管理器消息", "指定场景相机", "已取消勾选主场景相机的 CullingMask 中的 'XHud' 图层！", "明白");
                             }
                             else
                             {
@@ -1837,7 +2012,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                     Editor_XHud_GUI.Gui_Layout_Space(10);
 
-                    List_SoundsLib.DoLayoutList();
+                    List_SoundsPool.DoLayoutList();
                     #endregion
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(5);
@@ -1884,14 +2059,14 @@ namespace SevenStrikeModules.XHud.Hud
                     #region 内容
                     Editor_XHud_GUI.Gui_Layout_Space(10);
 
-                    #region 内容透明度     
-                    Editor_XHud_GUI.Gui_Layout_Property_Field("透明度-屏幕", ContentAlpha_Screen, 80);
+                    #region 内容透明度 - 屏幕
+                    Editor_XHud_GUI.Gui_Layout_Property_Field("透明度-屏幕", ContentOpacity_Screen, 80);
                     #endregion
 
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                    #region 内容透明度     
-                    Editor_XHud_GUI.Gui_Layout_Property_Field("透明度-世界", ContentAlpha_World, 80);
+                    #region 内容透明度 - 世界
+                    Editor_XHud_GUI.Gui_Layout_Property_Field("透明度-世界", ContentOpacity_World, 80);
                     #endregion
 
                     #endregion
@@ -1999,8 +2174,8 @@ namespace SevenStrikeModules.XHud.Hud
                         }
                         else
                         {
-                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "创建截屏工具", "场景中已存在CameraCapture！", "定位", "暂不", 0);
-                            if (res == "定位")
+                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "创建截屏工具", "场景中已存在CameraCapture！", "创建", "暂不", 0);
+                            if (res == "创建")
                                 Selection.activeGameObject = cc.gameObject;
                         }
                         return;
@@ -2056,7 +2231,7 @@ namespace SevenStrikeModules.XHud.Hud
                             rect_header_bg.anchoredPosition3D = Vector3.zero;
                             rect_header_bg.localEulerAngles = Vector3.zero;
                             rect_header_bg.localScale = Vector3.one;
-                            img_header_bg.sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_path_XHUD_SPRITES_Path()}Others/BtnRect_Pure.png");
+                            img_header_bg.sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_Path_XHUD_SPRITES_Path()}Others/BtnRect_Pure.png");
                             img_header_bg.raycastTarget = false;
                             img_header_bg.color = XHud_Dashboard.Theme_Primary;
                             img_header_bg.type = Image.Type.Sliced;
@@ -2076,7 +2251,7 @@ namespace SevenStrikeModules.XHud.Hud
                             rect_header_icon.anchoredPosition3D = Vector3.right * 40;
                             rect_header_icon.localEulerAngles = Vector3.zero;
                             rect_header_icon.localScale = Vector3.one;
-                            img_header_icon.sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_path_XHUD_SPRITES_Path()}Others/Eye.png");
+                            img_header_icon.sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_Path_XHUD_SPRITES_Path()}Others/Eye.png");
                             img_header_icon.raycastTarget = false;
                             img_header_icon.color = Color.black;
                             img_header_icon.type = Image.Type.Simple;
@@ -2096,7 +2271,7 @@ namespace SevenStrikeModules.XHud.Hud
                             rect_header_title.anchoredPosition3D = Vector3.zero;
                             rect_header_title.localEulerAngles = Vector3.zero;
                             rect_header_title.localScale = Vector3.one;
-                            txt_header_title.TextStyleInfo.tmp_Set_FontAsset(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_path_XHUD_FONTS_Path()}Tmp/SevenStrikeFont_Bold_PerformanceMonitor_ SDF.asset"));
+                            txt_header_title.TextStyleInfo.tmp_Set_FontAsset(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Tmp/SevenStrikeFont_Bold_PerformanceMonitor_ SDF.asset"));
                             txt_header_title.TextStyleInfo.gen_RayCastSet(false);
                             txt_header_title.raycastTarget = false;
                             txt_header_title.color = Color.black;
@@ -2202,7 +2377,7 @@ namespace SevenStrikeModules.XHud.Hud
                                 rect_monitornode.localScale = Vector3.one;
 
                                 Image monitornode_bg = obj_Header_ListNode.AddComponent<Image>();
-                                monitornode_bg.sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_path_XHUD_SPRITES_Path()}Others/BtnRect_3Dot.png");
+                                monitornode_bg.sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_Path_XHUD_SPRITES_Path()}Others/BtnRect_3Dot.png");
                                 monitornode_bg.color = new Color(0.099f, 0.099f, 0.099f, 0.5960785f);
                                 monitornode_bg.type = Image.Type.Sliced;
                                 XHud_PerfomanceMonitor_Node monitornode = obj_Header_ListNode.AddComponent<XHud_PerfomanceMonitor_Node>();
@@ -2225,7 +2400,7 @@ namespace SevenStrikeModules.XHud.Hud
                                 rect_node_title.offsetMax = new Vector2(-25, -10); // Right:50px
                                 rect_node_title.localEulerAngles = Vector3.zero;
                                 rect_node_title.localScale = Vector3.one;
-                                txt_node_title.TextStyleInfo.tmp_Set_FontAsset(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_path_XHUD_FONTS_Path()}Tmp/SevenBlack-Bold SDF.asset"));
+                                txt_node_title.TextStyleInfo.tmp_Set_FontAsset(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Tmp/SevenBlack-Bold SDF.asset"));
                                 txt_node_title.TextStyleInfo.gen_RayCastSet(false);
                                 txt_node_title.TextStyleInfo.gen_Set_MaskableSet(true);
                                 txt_node_title.maskable = true;
@@ -2262,7 +2437,7 @@ namespace SevenStrikeModules.XHud.Hud
                                 rect_node_value.offsetMax = new Vector2(-20, -30); // Right:50px
                                 rect_node_value.localEulerAngles = Vector3.zero;
                                 rect_node_value.localScale = Vector3.one;
-                                txt_node_value.TextStyleInfo.tmp_Set_FontAsset(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_path_XHUD_FONTS_Path()}Tmp/SevenBlack-Regular SDF.asset"));
+                                txt_node_value.TextStyleInfo.tmp_Set_FontAsset(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Tmp/SevenBlack-Regular SDF.asset"));
                                 txt_node_value.TextStyleInfo.gen_RayCastSet(false);
                                 txt_node_value.TextStyleInfo.gen_Set_MaskableSet(true);
                                 txt_node_value.maskable = true;
@@ -2306,7 +2481,7 @@ namespace SevenStrikeModules.XHud.Hud
                         }
                         else
                         {
-                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "创建效能面板", "场景中已存在效能面板！无需重复添加！", "定位", "暂不", 0);
+                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "创建效能面板", "场景中已存在效能面板！无需重复添加！", "定位", "暂不", 0);
                             if (res == "定位")
                                 Selection.activeGameObject = cc.gameObject;
                         }
@@ -2533,7 +2708,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                             BluePrint_bg_name.stringValue = texName;
                             BluePrint_bg_name.serializedObject.ApplyModifiedProperties();
-                            Texture2D texselected = AssetDatabase.LoadAssetAtPath<Texture2D>($"{XHud_Dashboard.Get_XHudRoot_Path()}Textures/BluePrints/{texName}.png");
+                            Texture2D texselected = AssetDatabase.LoadAssetAtPath<Texture2D>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Textures/BluePrints/{texName}.png");
                             if (texselected != null)
                             {
                                 BaseScript.hm_BluePrint_SetBgTexture(texselected);
@@ -2572,9 +2747,9 @@ namespace SevenStrikeModules.XHud.Hud
                             {
                                 BaseScript.hm_BluePrint_Remove();
 
-                                Material mat = AssetDatabase.LoadAssetAtPath<Material>($"{XHud_Dashboard.Get_Materials_Path()}BluePrints/Mat/BluePrint.mat");
-                                TMP_FontAsset title = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_path_XHUD_FONTS_Path()}Fonts/Tmp/SevenBlack-Bold SDF.asset");
-                                TMP_FontAsset subtitle = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_path_XHUD_FONTS_Path()}Fonts/Tmp/SevenBlack-Light SDF.asset");
+                                Material mat = AssetDatabase.LoadAssetAtPath<Material>($"{XHud_Dashboard.Get_Path_XHUD_MATERIALS_Path()}BluePrints/Mat/BluePrint.mat");
+                                TMP_FontAsset title = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Fonts/Tmp/SevenBlack-Bold SDF.asset");
+                                TMP_FontAsset subtitle = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Fonts/Tmp/SevenBlack-Light SDF.asset");
                                 BaseScript.hm_BluePrint_Create(true, mat, title, subtitle);
                             }
                         }
@@ -2698,7 +2873,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                         if (Editor_XHud_GUI.Gui_Layout_Button("清空列表", "清空分辨率列表", HudFilled.实体, HudColor.深空灰, Color.white, 25, new RectOffset(), new Vector2(0, 0)))
                         {
-                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "RMS列表", "如果清空该列表可能会导致元素匹配分辨率数据异常！请确定是否继续该操作？！", "定位", "暂不", 0);
+                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "RMS列表", "如果清空该列表可能会导致元素匹配分辨率数据异常！请确定是否继续该操作？！", "清空", "暂不", 0);
                             if (res == "暂不")
                                 return;
 
@@ -2772,7 +2947,7 @@ namespace SevenStrikeModules.XHud.Hud
                             {
                                 if (!BaseScript.Hud_ElementMotion.ElementMotion_IsExist(Crc_Lib_Name.stringValue))
                                     return;
-                                Editor_MenuItemsAction_OpenLibrary.open_elementmotion();
+                                Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
                                 BaseScript.Hud_ElementMotion.ElementMotionLibrary_Location(Crc_Lib_Name.stringValue);
                                 return;
                             }
@@ -2781,7 +2956,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                             if (Editor_XHud_GUI.Gui_Layout_Button(14, "重置", reset_r, reset_p, 2))
                             {
-                                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "重置动效参数", "确定要将动效参数重置吗？您将丢失当前的动效参数！", "重置", "暂不", 0);
+                                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "重置动效参数", "确定要将动效参数重置吗？您将丢失当前的动效参数！", "重置", "暂不", 0);
                                 if (res == "重置")
                                     ResetMotionParams("CreateArgs");
                                 return;
@@ -2925,7 +3100,7 @@ namespace SevenStrikeModules.XHud.Hud
                                 HudMotion_Movement m = (HudMotion_Movement)CreateArgs_Default.FindPropertyRelative("Movement.Movement").enumValueIndex;
                                 if (m == HudMotion_Movement.A_无运动)
                                 {
-                                    Editor_XHud_GUI.Open(XHud_DialogType.警告, $"xHud 管理器消息", "设定动画结束时机", $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！", "明白", 0);
+                                    Editor_XHud_GUI.Open(XHud_DialogType.警告, $"XHud - 管理器消息", "设定动画结束时机", $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！", "明白", 0);
                                     CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                                 }
                                 break;
@@ -2933,7 +3108,7 @@ namespace SevenStrikeModules.XHud.Hud
                                 HudMotion_Rotation r = (HudMotion_Rotation)CreateArgs_Default.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
                                 if (r == HudMotion_Rotation.A_无旋转)
                                 {
-                                    Editor_XHud_GUI.Open(XHud_DialogType.警告, $"xHud 管理器消息", "设定动画结束时机", $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！", "明白", 0);
+                                    Editor_XHud_GUI.Open(XHud_DialogType.警告, $"XHud - 管理器消息", "设定动画结束时机", $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！", "明白", 0);
                                     CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                                 }
                                 break;
@@ -2998,7 +3173,7 @@ namespace SevenStrikeModules.XHud.Hud
                             {
                                 if (!BaseScript.Hud_ElementMotion.ElementMotion_IsExist(Rec_Lib_Name.stringValue))
                                     return;
-                                Editor_MenuItemsAction_OpenLibrary.open_elementmotion();
+                                Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
                                 BaseScript.Hud_ElementMotion.ElementMotionLibrary_Location(Rec_Lib_Name.stringValue);
                                 return;
                             }
@@ -3007,7 +3182,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                             if (Editor_XHud_GUI.Gui_Layout_Button(14, "重置", reset_r, reset_p, 2))
                             {
-                                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "重置动效参数", "确定要将动效参数重置吗？您将丢失当前的动效参数！", "重置", "暂不", 0);
+                                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "重置动效参数", "确定要将动效参数重置吗？您将丢失当前的动效参数！", "重置", "暂不", 0);
                                 if (res == "重置")
                                     ResetMotionParams("RecycleArgs");
                                 return;
@@ -3148,7 +3323,7 @@ namespace SevenStrikeModules.XHud.Hud
                                 HudMotion_Movement m = (HudMotion_Movement)RecycleArgs_Default.FindPropertyRelative("Movement.Movement").enumValueIndex;
                                 if (m == HudMotion_Movement.A_无运动)
                                 {
-                                    Editor_XHud_GUI.Open(XHud_DialogType.警告, $"xHud 管理器消息", "设定动画结束时机", $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！", "明白", 0);
+                                    Editor_XHud_GUI.Open(XHud_DialogType.警告, $"XHud - 管理器消息", "设定动画结束时机", $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！", "明白", 0);
                                     RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                                 }
                                 break;
@@ -3156,7 +3331,7 @@ namespace SevenStrikeModules.XHud.Hud
                                 HudMotion_Rotation r = (HudMotion_Rotation)RecycleArgs_Default.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
                                 if (r == HudMotion_Rotation.A_无旋转)
                                 {
-                                    Editor_XHud_GUI.Open(XHud_DialogType.警告, $"xHud 管理器消息", "设定动画结束时机", $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！", "明白", 0);
+                                    Editor_XHud_GUI.Open(XHud_DialogType.警告, $"XHud - 管理器消息", "设定动画结束时机", $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！", "明白", 0);
                                     RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                                 }
                                 break;
@@ -3164,18 +3339,6 @@ namespace SevenStrikeModules.XHud.Hud
                     }
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(10);
-                Editor_XHud_GUI.Gui_Layout_Vertical_End();
-                #endregion
-
-                #region 多语言
-                bool sw_localized = xHud_FunctionGroup("多语言", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Localized, panel_localized);
-                if (sw_localized)
-                {
-                    #region 单例模式
-                    Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Manager>("支持多语言", stroptions_support, ref UseLocalization, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-                    #endregion
-                }
-                Editor_XHud_GUI.Gui_Layout_Space(5);
                 Editor_XHud_GUI.Gui_Layout_Vertical_End();
                 #endregion
 
@@ -3423,10 +3586,10 @@ namespace SevenStrikeModules.XHud.Hud
                 #region 原始变量
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
-                BasicVars = EditorGUILayout.Foldout(BasicVars, "变量/属性", true);
+                OriginalDisplay = EditorGUILayout.Foldout(OriginalDisplay, "变量/属性", true);
                 Editor_XHud_GUI.Gui_Layout_Space(5);
                 Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-                if (BasicVars)
+                if (OriginalDisplay)
                     DrawDefaultInspector();
                 #endregion
 
@@ -3708,9 +3871,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             BaseScript.hm_TransitionTopView();
 
-            BaseScript.hm_ContentAlpha_Update();
-
-            BaseScript.hm_Layout_CanvasDistance(BaseScript.HudCanvasAnchor);
+            BaseScript.hm_ContentOpacity_Update();
 
             BaseScript.hm_CameraCutterRange(BaseScript.CameraCutter_Near, BaseScript.CameraCutter_Far);
 
@@ -3719,8 +3880,6 @@ namespace SevenStrikeModules.XHud.Hud
             BaseScript.hm_CameraOrthographicSize(BaseScript.CameraOrthographicSize);
 
             BaseScript.hm_CameraPerspectiveFov(BaseScript.CameraFov);
-
-            BaseScript.hm_Layout_CanvasDistance_Update();
 
             Canvas canvas_s = (Canvas)HudCanvas_Screen.objectReferenceValue;
             if (canvas_s != null)
@@ -3814,10 +3973,6 @@ namespace SevenStrikeModules.XHud.Hud
             {
                 XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(PrefsKeyFold_PhysicsRatio, false);
             }
-            if (!XHud_Utilitys.PlayerPrefs_KeyIsExist_ForEditor(PrefsKeyFold_Localized))
-            {
-                XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(PrefsKeyFold_Localized, false);
-            }
             if (!XHud_Utilitys.PlayerPrefs_KeyIsExist_ForEditor(PrefsKeyFold_Comp_Guide))
             {
                 XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(PrefsKeyFold_Comp_Guide, false);
@@ -3864,7 +4019,6 @@ namespace SevenStrikeModules.XHud.Hud
             XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(PrefsKeyFold_Global, state);
             XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(PrefsKeyFold_Tools, state);
             XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(PrefsKeyFold_PhysicsRatio, state);
-            XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(PrefsKeyFold_Localized, state);
             XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(PrefsKeyFold_Comp_Guide, state);
             XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(PrefsKeyFold_ElementParam_DefaultMotion, state);
             XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(PrefsKeyFold_Theme, state);
@@ -3949,8 +4103,8 @@ namespace SevenStrikeModules.XHud.Hud
             BlurMaskTexture = xHud_GetSerializedProperty("BlurMaskTexture");
             BlurMaskRaycastAlphaThreshold = xHud_GetSerializedProperty("BlurMaskRaycastAlphaThreshold");
             BlurMaskRaycastEnabled = xHud_GetSerializedProperty("BlurMaskRaycastEnabled");
-            ContentAlpha_Screen = xHud_GetSerializedProperty("ContentAlpha_Screen");
-            ContentAlpha_World = xHud_GetSerializedProperty("ContentAlpha_World");
+            ContentOpacity_Screen = xHud_GetSerializedProperty("ContentOpacity_Screen");
+            ContentOpacity_World = xHud_GetSerializedProperty("ContentOpacity_World");
             DurationMultiply = xHud_GetSerializedProperty("DurationMultiply");
             CustomCursor = xHud_GetSerializedProperty("CustomCursor");
             CustomTransition = xHud_GetSerializedProperty("CustomTransition");
@@ -4070,8 +4224,6 @@ namespace SevenStrikeModules.XHud.Hud
 
             Crc_Lib_Name = xHud_GetSerializedProperty("Crc_Lib_Name");
             Rec_Lib_Name = xHud_GetSerializedProperty("Rec_Lib_Name");
-
-            UseLocalization = xHud_GetSerializedProperty("UseLocalization");
         }
         #endregion
 
@@ -4361,7 +4513,7 @@ namespace SevenStrikeModules.XHud.Hud
             RenderPipelineAsset currentPipelineAsset = GraphicsSettings.currentRenderPipeline;
             if (currentPipelineAsset == null)
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "渲染管线异常", "请先指定URP渲染管线资源后再试！", "明白", 0);
+                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "渲染管线异常", "请先指定URP渲染管线资源后再试！", "明白", 0);
                 return;
             }
 
@@ -4380,14 +4532,14 @@ namespace SevenStrikeModules.XHud.Hud
             }
             else
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "渲染管线异常", "请确认当前渲染管线资源文件的渲染器列表的有效性！", "明白", 0);
+                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "渲染管线异常", "请确认当前渲染管线资源文件的渲染器列表的有效性！", "明白", 0);
             }
 
             EditorApplication.delayCall += () =>
             {
                 if (IsInitialized.boolValue)
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "xHud 管理器消息", "初始化XHud管理器", "接下来会自动创建HudManager的所有子结构组成，在这之前会先清空所有现存的子物体，请确定是否继续该操作？", "初始化", "暂不", 0);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "初始化XHud管理器", "接下来会自动创建HudManager的所有子结构组成，在这之前会先清空所有现存的子物体，请确定是否继续该操作？", "初始化", "暂不", 0);
                     if (res == "暂不")
                     {
                         return;
@@ -4723,13 +4875,13 @@ namespace SevenStrikeModules.XHud.Hud
 
                 SerializedProperty sp_res_full_sprite = sp_Res_Full.FindPropertyRelative("sprite");
                 SerializedProperty sp_res_full_size = sp_Res_Full.FindPropertyRelative("size");
-                sp_res_full_sprite.objectReferenceValue = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_GUIStyle_Path()}Icon/Icons_Hud_Manager/HumanRefer/Body_Solid.png");
+                sp_res_full_sprite.objectReferenceValue = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path()}Icon/Icons_XHud_Manager/HumanRefer/Body_Solid.png");
                 sp_res_full_size.vector2Value = new Vector2(47, 172);
                 sp_Res_Full.serializedObject.ApplyModifiedProperties();
 
                 SerializedProperty sp_res_part_sprite = sp_Res_Part.FindPropertyRelative("sprite");
                 SerializedProperty sp_res_part_size = sp_Res_Part.FindPropertyRelative("size");
-                sp_res_part_sprite.objectReferenceValue = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_GUIStyle_Path()}Icon/Icons_Hud_Manager/HumanRefer/Head_Solid.png");
+                sp_res_part_sprite.objectReferenceValue = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path()}Icon/Icons_XHud_Manager/HumanRefer/Head_Solid.png");
                 sp_res_part_size.vector2Value = new Vector2(19, 30);
                 sp_Res_Part.serializedObject.ApplyModifiedProperties();
 
@@ -4769,14 +4921,13 @@ namespace SevenStrikeModules.XHud.Hud
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
-        /// <param name="Pattern"></param>
+        /// <param name="pattern"></param>
         /// <returns></returns>
-        List<T> LoadAllAssetsAtPathWithIO<T>(string path, string Pattern) where T : UnityEngine.Object
+        List<T> LoadAllAssetsAtPathWithPattern<T>(string path, string pattern) where T : UnityEngine.Object
         {
             List<T> _out = new();
 
-            string root_path = Application.dataPath + "/" + path;
-            //sp_DebugMode.Log(root_path);
+            string root_path = Directory.GetParent(Application.dataPath) + "/" + path;
 
             if (!Directory.Exists(root_path))
             {
@@ -4784,13 +4935,12 @@ namespace SevenStrikeModules.XHud.Hud
                 return _out;
             }
 
-            string[] fileEntries = Directory.GetFiles(root_path, $"*{Pattern}");
+            string[] fileEntries = Directory.GetFiles(root_path, $"*{pattern}");
 
             foreach (string FileName in fileEntries)
             {
-                string[] filepath = FileName.Split(Application.dataPath);
-                //sp_DebugMode.Log("Assets" + filepath[1]);
-                _out.Add(AssetDatabase.LoadAssetAtPath<T>("Assets" + filepath[1]));
+                string[] filepath = FileName.Split(Directory.GetParent(Application.dataPath).FullName + "/");
+                _out.Add(AssetDatabase.LoadAssetAtPath<T>(filepath[1]));
             }
 
             return _out;
@@ -4802,7 +4952,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             if (state == "CreateArgs")
             {
-                CreateArgs_Default.FindPropertyRelative("anchor").enumValueIndex = (int)HudAnchor.中心;
+                CreateArgs_Default.FindPropertyRelative("anchor").enumValueIndex = (int)XHudAnchor.中心;
                 CreateArgs_Default.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)HudMotion_Movement.S_从下至上;
                 CreateArgs_Default.FindPropertyRelative("Movement.Distance").floatValue = 100;
                 CreateArgs_Default.FindPropertyRelative("Movement.Duration").floatValue = 1;
@@ -5232,7 +5382,7 @@ namespace SevenStrikeModules.XHud.Hud
             XHud_Module_Element obj_ele = obj.AddComponent<XHud_Module_Element>();
             obj_ele.Indicator = "RealWorldReferShape";
             UnityEngine.RectTransform obj_ele_rect = obj.AddComponent<UnityEngine.RectTransform>();
-            obj_ele_rect.transform.SetParent(BaseScript.hm_Layout_GetAnchor(HudAnchor.顶层));
+            obj_ele_rect.transform.SetParent(BaseScript.hm_Layout_GetAnchor(XHudAnchor.顶层));
             obj_ele_rect.anchoredPosition3D = Vector3.zero;
             obj_ele_rect.localEulerAngles = Vector3.zero;
             obj_ele_rect.localScale = Vector3.one;
@@ -5242,7 +5392,7 @@ namespace SevenStrikeModules.XHud.Hud
             Image img = image.AddComponent<Image>();
             img.raycastTarget = false;
             img.maskable = false;
-            img.sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_GUIStyle_Path()}Icon/Icons_Hud_Manager/ReferShapeBG.png");
+            img.sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path()}Icon/Icons_XHud_Manager/ReferShapeBG.png");
             img.type = Image.Type.Tiled;
             img.color = Color.white * 0.48f;
             img.pixelsPerUnitMultiplier = 1;
@@ -5261,7 +5411,7 @@ namespace SevenStrikeModules.XHud.Hud
             textobj.transform.localPosition = Vector3.zero;
             textobj.layer = LayerMask.NameToLayer("XHud");
 
-            Font font = AssetDatabase.LoadAssetAtPath<Font>($"{XHud_Dashboard.Get_XHudRoot_Path()}Fonts/Text/SevenBlack-Light.ttf");
+            Font font = AssetDatabase.LoadAssetAtPath<Font>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Fonts/Text/SevenBlack-Light.ttf");
 
             UnityEngine.RectTransform rect = textobj.AddComponent<UnityEngine.RectTransform>();
             rect.sizeDelta = new Vector2(120, 30);

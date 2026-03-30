@@ -1,6 +1,5 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
-    using NUnit.Framework;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
     using UnityEditor;
@@ -66,17 +65,17 @@ namespace SevenStrikeModules.XHud.Hud
 
             #region 获取图标
             warnIcon = EditorGUIUtility.IconContent("console.warnicon").image as Texture2D;
-            Icon_Using = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/Icon_ele_using");
-            btn_icon_details_released = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/detail_r");
-            btn_icon_details_press = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/detail_p");
-            clean_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/clean_p");
-            clean_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/clean_r");
-            clear_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/clear_p");
-            clear_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/clear_r");
-            create_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/create_p");
-            create_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/create_r");
-            delete_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/delete_p");
-            delete_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementLibrary/delete_r");
+            Icon_Using = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/Icon_ele_using");
+            btn_icon_details_released = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/detail_r");
+            btn_icon_details_press = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/detail_p");
+            clean_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/clean_p");
+            clean_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/clean_r");
+            clear_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/clear_p");
+            clear_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/clear_r");
+            create_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/create_p");
+            create_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/create_r");
+            delete_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/delete_p");
+            delete_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/delete_r");
             #endregion
 
             #region ReorderableList - ElementInfoList
@@ -227,7 +226,7 @@ namespace SevenStrikeModules.XHud.Hud
                         Undo.RegisterCreatedObjectUndo(obj_ele, "CreateElement");
                         XHud_Module_Element ele = obj_ele.GetComponent<XHud_Module_Element>();
 
-                        Element_OriginalLayoutInfo rms = ele.elelemt_RMS_Get(mgr.hm_RMS_GetCurrentSolution());
+                        Element_RMS_LayoutData rms = ele.elelemt_RMS_Get(mgr.hm_RMS_GetCurrentSolution());
                         ele.RectTransform.SetParent(mgr.hm_Layout_GetAnchor(rms.Anchor));
                         ele.RectTransform.pivot = rms.Pivot;
                         ele.RectTransform.anchorMin = rms.AnchorMin;
@@ -385,7 +384,7 @@ namespace SevenStrikeModules.XHud.Hud
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "Hud - 元素库", Color.black);
+            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "XHud - 元素库", Color.black);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 

@@ -2,7 +2,6 @@ namespace SevenStrikeModules.XHud.Utilitys
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
-    using SevenStrikeModules.XHud.Hud;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;

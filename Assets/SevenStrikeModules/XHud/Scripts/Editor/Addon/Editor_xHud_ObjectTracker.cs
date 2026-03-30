@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
@@ -68,7 +68,7 @@ namespace SevenStrikeModules.XHud.Hud
             SmoothTime = serializedObject.FindProperty("SmoothTime");
             TrackerOffset = serializedObject.FindProperty("TrackerOffset");
 
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_Hud_ObjectTracker/icon_main");
+            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_ObjectTracker/icon_main");
 
             GetAllTargets();
         }
@@ -76,7 +76,7 @@ namespace SevenStrikeModules.XHud.Hud
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 物体追踪器", Color.white);
+            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 物体追踪器", Color.white);
 
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "参数", XHud_Dashboard.Theme_Primary);
 
@@ -86,11 +86,11 @@ namespace SevenStrikeModules.XHud.Hud
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Property_Field("Hud元素", SelfObject, 90);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("XHud元素", SelfObject, 90);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Property_Field("Hud元素父物体", RelativeObject, 90);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("XHud元素父物体", RelativeObject, 90);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 

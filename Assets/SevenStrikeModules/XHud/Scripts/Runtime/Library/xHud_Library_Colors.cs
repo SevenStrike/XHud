@@ -1,6 +1,5 @@
 namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XHud.Hud;
     using SevenStrikeModules.XHud.Utilitys;
     using System.Collections.Generic;
     using System.IO;
@@ -14,7 +13,7 @@ namespace SevenStrikeModules.XHud
     /// </summary>
     public class xHud_LibraryArg_Color
     {
-        public XHud_Module_Animator Animator;
+        public XHud_Module_Primitive_Painting Painting;
         public string Name;
         public Color Color;
         public string Description;

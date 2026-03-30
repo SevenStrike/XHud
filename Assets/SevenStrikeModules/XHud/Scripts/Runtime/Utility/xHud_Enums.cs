@@ -225,7 +225,7 @@
     /// 定义UI元素在父容器中的锚定位置
     /// 用于控制元素的布局参照点、对齐方式以及动态定位时的基准点
     /// </summary>
-    public enum HudAnchor
+    public enum XHudAnchor
     {
         /// <summary>
         /// 底层
@@ -305,7 +305,6 @@
         /// </summary>
         顶层 = 10
     }
-
     /// <summary>
     /// 布局构图锚点
     /// 用于构图引导时的锚点参照
@@ -378,7 +377,6 @@
         /// </summary>
         右下 = 8
     }
-
     /// <summary>
     /// 边距方向
     /// 定义UI元素的外边距（Margin）或内边距（Padding）方向
@@ -455,7 +453,6 @@
         修改库源参数,
         修改生成器项参数,
     }
-
     /// <summary>
     /// 内容锚点
     /// 定义文本、图像或其他内容在容器内的对齐方式
@@ -766,7 +763,6 @@
         绝对坐标 = 0,
         参考物体坐标 = 1
     }
-
     /// <summary>
     /// Canvas锚定方式
     /// 定义Canvas在相机空间中的附着位置
@@ -1010,7 +1006,6 @@
         Recycled,
         Created
     }
-
     /// <summary>
     /// 元素的动效类型
     /// 定义动效触发的时机（创建时/回收时）
@@ -1080,7 +1075,6 @@
         /// </summary>
         Recycler = 1
     }
-
     /// <summary>
     /// 元素的动画状态
     /// 定义UI元素当前的动画播放状态
@@ -1231,5 +1225,44 @@
         /// 使用指定的像素宽度和高度，不进行比例适配
         /// </summary>
         FixedResolution
+    }
+
+    /// <summary>
+    /// 截图格式
+    /// </summary>
+    public enum CaptureType
+    {
+        JPG = 0,
+        PNG = 1,
+        TGA = 2
+    }
+
+    /// <summary>
+    /// 截图尺寸
+    /// </summary>
+    public enum CaptureSize
+    {
+        相机尺寸 = 0,
+        屏幕分辨率 = 1,
+        固定尺寸 = 2
+    }
+
+    /// <summary>
+    /// 截图背景
+    /// </summary>
+    public enum CaptureBgType
+    {
+        天空盒 = 0,
+        颜色 = 1,
+        透明 = 2,
+    }
+
+    /// <summary>
+    /// 相机类型
+    /// </summary>
+    public enum CaptureCameraType
+    {
+        场景相机 = 0,
+        UI相机 = 1
     }
 }

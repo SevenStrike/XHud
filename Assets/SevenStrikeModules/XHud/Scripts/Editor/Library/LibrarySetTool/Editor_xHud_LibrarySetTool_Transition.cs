@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
@@ -191,20 +191,20 @@ namespace SevenStrikeModules.XHud.Hud
             sp_BgGrid_Color_B.serializedObject.ApplyModifiedProperties();
             sp_BgGrid_Tilling_multiply.serializedObject.ApplyModifiedProperties();
 
-            icon_libsetter_transition = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/logo");
+            icon_libsetter_transition = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/logo");
 
             Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
             Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
 
-            leftarr_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/left_arrow_p");
-            leftarr_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/left_arrow_r");
-            rightarr_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/right_arrow_p");
-            rightarr_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/right_arrow_r");
+            leftarr_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/left_arrow_p");
+            leftarr_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/left_arrow_r");
+            rightarr_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/right_arrow_p");
+            rightarr_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/right_arrow_r");
 
-            stop_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/prw_stop_r");
-            stop_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/prw_stop_p");
-            play_r = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/prw_play_r");
-            play_p = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/prw_play_p");
+            stop_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/prw_stop_r");
+            stop_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/prw_stop_p");
+            play_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/prw_play_r");
+            play_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/prw_play_p");
 
             TransitionDescription = "转场说明内容";
             TransitionName = "转场名称";
@@ -958,7 +958,7 @@ namespace SevenStrikeModules.XHud.Hud
             string path = Editor_XHud_GUI.EditorData_Get_With_String("XED_Transition_Bg_Path");
             Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
             if (tex == null)
-                sp_Preview_Texture_Bg.objectReferenceValue = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_Transition_Setter/defaultbg");
+                sp_Preview_Texture_Bg.objectReferenceValue = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/defaultbg");
             else
                 sp_Preview_Texture_Bg.objectReferenceValue = tex;
         }

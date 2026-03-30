@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 261e6fe8ca61c2745b8fa316eda9b51d, type: 3}
+  m_Name: Lib_Transition
+  m_EditorClassIdentifier: 
+  LibraryName: NewTransitionLibrary
+  PreviewScaleMode: 2
+  PreviewSpeed: 1
+  TransitionLibrary:
+  - Name: InkPaint
+    Description: "\u63CF\u8FF0\u8F6C\u573A\u6548\u679C\u7684\u6587\u5B57"
+    TotalFramesCount: 0
+    LastFrameIndex: 0
+    SkipFrame: 1
+    Res: {x: 0, y: 0}
+    Frames: []
+  itemHeight: 75
+  visibleItemCount: 8
+  Find: 
+  Highlight: 
+  SelectedIndex: -1
+  LocationSelectedIndex: -1
+  TransitionInfoList_Original_Scroller: {x: 0, y: 0}

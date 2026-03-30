@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 242527064116200395}
   - component: {fileID: 4779157961638007765}
-  - component: {fileID: 4238605633356128023}
+  - component: {fileID: 5328948571359890616}
   m_Layer: 8
   m_Name: Text
   m_TagString: Untagged
@@ -45,7 +45,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1298231552182830171}
   m_CullTransparentMesh: 1
---- !u!114 &4238605633356128023
+--- !u!114 &5328948571359890616
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,93 +54,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 1298231552182830171}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bdd90f3c93c9af44fae6fe15d3486c07, type: 3}
+  m_Script: {fileID: 11500000, guid: 78af43a34b99de548ad91fd218ac2c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: XHud-Button
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: db49732efa942dc4cba2ba81357bf48f, type: 2}
-  m_sharedMaterial: {fileID: -2106773393067785483, guid: db49732efa942dc4cba2ba81357bf48f, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 0
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontSize: 18
-  m_fontSizeBase: 18
-  m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
-  m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 0
-  m_wordWrappingRatios: 0
-  m_overflowMode: 0
-  m_linkedTextComponent: {fileID: 0}
-  parentLinkedComponent: {fileID: 0}
-  m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 0
-  m_EmojiFallbackSupport: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_IsTextObjectScaleStatic: 0
-  m_VertexBufferAutoSizeReduction: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 27
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 55
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 0
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: ClickMe
   Indicator: 
-  StyleName: NewTextStyle_1_TmpText
+  StyleName: 
   StyleLibSynching: 0
-  PreviousText: XHud-Button
-  TextIsChanged: 0
+  PreviousText: C
+  TextIsChanged: 1
   SyncGlobalFontSize: 1
   mgr: {fileID: 0}
   TextStyleInfo:
@@ -151,7 +94,7 @@ MonoBehaviour:
     ContentAnchor: 4
     Font: {fileID: 0}
     Font_AssetPath: 
-    Size: 13
+    Size: 27
     LineHeight: 1
     Overflow_Horizon: 0
     Overflow_Vertical: 0
@@ -162,17 +105,17 @@ MonoBehaviour:
     Fit_Min_GlobalScaled: 0
     Fit_Max: 50
     Fit_Max_GlobalScaled: 0
-    Size_GlobalScaled: 0
+    Size_GlobalScaled: 27
     FontColor: {r: 1, g: 1, b: 1, a: 1}
     tmp_rich: 0
     tmp_contentwrap: 0
     tmp_overflow: 0
     tmp_style: 0
     tmp_anchor: 14
-    tmp_font: {fileID: 11400000, guid: db49732efa942dc4cba2ba81357bf48f, type: 2}
+    tmp_font: {fileID: 0}
     tmp_fontasset_assetpath: 
-    tmp_size: 18
-    tmp_size_globalscaled: 18
+    tmp_size: 13
+    tmp_size_globalscaled: 0
     tmp_space_character: 0
     tmp_space_word: 0
     tmp_space_lineheight: 0
@@ -194,7 +137,7 @@ MonoBehaviour:
     gra_Invert: 0
     gra_Used: 0
     gra_ColorMode: 0
-    gra_ColorModeName: "\u5355\u8272"
+    gra_ColorModeName: 
     LibStyle_Effect_geometre_align: 0
     LibStyle_Effect_align: 0
     LibStyle_Effect_font: 0
@@ -215,7 +158,7 @@ MonoBehaviour:
     LibStyle_Effect_autosizing: 0
     LibStyle_Effect_raycast: 0
     LibStyle_Effect_maskable: 0
-    Raycast: 1
+    Raycast: 0
     Maskable: 0
     SyncAnimatorColor: 0
   TextStyleInfo_Library:
@@ -378,7 +321,7 @@ GameObject:
   m_Component:
   - component: {fileID: 978058948983524943}
   - component: {fileID: 9012127900853279682}
-  - component: {fileID: 4876617780444444740}
+  - component: {fileID: 5267480849696101963}
   m_Layer: 8
   m_Name: Clicker
   m_TagString: Untagged
@@ -403,7 +346,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -289}
+  m_AnchoredPosition: {x: -393, y: -302}
   m_SizeDelta: {x: 281.07, y: 97.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &9012127900853279682
@@ -418,7 +361,7 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &4876617780444444740
+--- !u!114 &5267480849696101963
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -427,21 +370,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 4515873267942223214}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2790344287be5bc4ea7d9ed376739967, type: 3}
+  m_Script: {fileID: 11500000, guid: 427992cb4fdf0d4488fb77d4e7ae18af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Indicator: NewElement
+  Indicator: 
   OriginalName: 
+  OriginPoolName: 
   DebugState: 0
+  RectTransform: {fileID: 978058948983524943}
   CanvasGroup: {fileID: 9012127900853279682}
   CreateState: 0
   AnimateState: 0
   ElementSpaceType: 0
-  RectTransform: {fileID: 978058948983524943}
-  Alpha: 1
   AnimatorsMaxDuration: 0
   Element_Animators_GlobalDuration: 1
   CurrentPivot: {x: 0, y: 0}
+  Alpha: 1
+  TriggerAction: {fileID: 0}
+  ObjectTracker: {fileID: 0}
+  SounderNodes: []
+  ContainerNodes: []
+  AnimatorNodes: []
+  ButtonNodes: []
+  OptionNodes: []
+  TextNodes: []
+  TmpTextNodes: []
+  SliderNodes: []
+  ProgressNodes: []
+  ToggleNodes: []
   eve_on_element_in_start:
     m_PersistentCalls:
       m_Calls: []
@@ -454,22 +410,7 @@ MonoBehaviour:
   eve_on_element_out_end:
     m_PersistentCalls:
       m_Calls: []
-  TriggerAction: {fileID: 0}
-  ObjectTracker: {fileID: 0}
-  SounderNodes: []
   Animating: 0
-  ContainerNodes: []
-  AnimatorNodes: []
-  ButtonNodes:
-  - Button: {fileID: 480071142658809797}
-    IsOptional: 0
-  OptionNodes: []
-  TextNodes: []
-  TmpTextNodes: []
-  SliderNodes: []
-  ProgressNodes: []
-  ToggleNodes: []
-  OriginPoolName: 
   AnimatorsIsFold: 0
   ButtonIsFold: 0
   OptionIsFold: 0
@@ -579,7 +520,7 @@ MonoBehaviour:
   ButtonText: {fileID: 0}
   IconImage: {fileID: 0}
   BgImage: {fileID: 7129542422775088441}
-  ButtonTmpText: {fileID: 4238605633356128023}
+  ButtonTmpText: {fileID: 0}
   HudButtonState: 8
   HudButtonState_Clicked: 8
   HudButtonState_Selector: 8

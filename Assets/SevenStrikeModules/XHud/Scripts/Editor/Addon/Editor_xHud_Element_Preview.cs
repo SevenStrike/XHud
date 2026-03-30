@@ -1,10 +1,10 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XTween;
     using Newtonsoft.Json;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
     using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XTween;
     using UnityEditor;
     using UnityEngine;
 
@@ -128,18 +128,18 @@ namespace SevenStrikeModules.XHud.Hud
             #endregion
 
             #region 获取图标
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/icon_main");
-            save_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/save_r");
-            save_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/save_p");
-            locate_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/locate_r");
-            locate_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/locate_p");
-            rms_move = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/rms_move");
-            rms_rotate = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/rms_rotate");
-            rms_anchor = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/rms_anchor");
-            rms_scale = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/rms_scale");
-            rms_anchor_center = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/rms_anchor_center");
-            reset_r = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/reset_r");
-            reset_p = Editor_XHud_GUI.GetIcon("Icons_Hud_ElementPreview/reset_p");
+            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/icon_main");
+            save_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/save_r");
+            save_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/save_p");
+            locate_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/locate_r");
+            locate_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/locate_p");
+            rms_move = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/rms_move");
+            rms_rotate = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/rms_rotate");
+            rms_anchor = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/rms_anchor");
+            rms_scale = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/rms_scale");
+            rms_anchor_center = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/rms_anchor_center");
+            reset_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/reset_r");
+            reset_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/reset_p");
             #endregion
 
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
@@ -171,7 +171,7 @@ namespace SevenStrikeModules.XHud.Hud
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 元素预览器", Color.white);
+            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 元素预览器", Color.white);
 
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
@@ -268,7 +268,7 @@ namespace SevenStrikeModules.XHud.Hud
                     string[] nodesName = mgr.hm_RMS_GetResolutionNodeNames();
                     Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Element_Preview>("RMS 方案", nodesName, ref RMS_Name, HudFilled.实体, 100, 22, SelectedObjects);
 
-                    Element_OriginalLayoutInfo info = BaseScript.HudElement.elelemt_RMS_Get(RMS_Name.stringValue);
+                    Element_RMS_LayoutData info = BaseScript.HudElement.elelemt_RMS_Get(RMS_Name.stringValue);
 
                     if (info != null)
                     {
@@ -362,7 +362,7 @@ namespace SevenStrikeModules.XHud.Hud
                     {
                         if (!mgr.Hud_ElementMotion.ElementMotion_IsExist(Crc_Lib_Name.stringValue))
                             return;
-                        Editor_MenuItemsAction_OpenLibrary.open_elementmotion();
+                        Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
                         mgr.Hud_ElementMotion.ElementMotionLibrary_Location(Crc_Lib_Name.stringValue);
                         return;
                     }
@@ -428,7 +428,7 @@ namespace SevenStrikeModules.XHud.Hud
                 SerializedProperty sp_move_ease = CreateArgs.FindPropertyRelative("Movement.Ease");
                 Editor_XHud_GUI.Gui_Layout_Property_Field("缓动", sp_move_ease);
 
-                if ((EaseMode)sp_move_ease.enumValueIndex == EaseMode.Unset)
+                if ((EaseMode)sp_move_ease.enumValueIndex == EaseMode.None)
                 {
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
@@ -503,7 +503,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Editor_XHud_GUI.Gui_Layout_Space(5);
 
 
-                if ((EaseMode)sp_rot_ease.enumValueIndex == EaseMode.Unset)
+                if ((EaseMode)sp_rot_ease.enumValueIndex == EaseMode.None)
                 {
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
@@ -568,7 +568,7 @@ namespace SevenStrikeModules.XHud.Hud
                 Editor_XHud_GUI.Gui_Layout_Space(5);
 
 
-                if ((EaseMode)sp_alpha_ease.enumValueIndex == EaseMode.Unset)
+                if ((EaseMode)sp_alpha_ease.enumValueIndex == EaseMode.None)
                 {
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
@@ -691,7 +691,7 @@ namespace SevenStrikeModules.XHud.Hud
                     {
                         if (!mgr.Hud_ElementMotion.ElementMotion_IsExist(Rec_Lib_Name.stringValue, HudElementMotionType.Recycler))
                             return;
-                        Editor_MenuItemsAction_OpenLibrary.open_elementmotion();
+                        Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
                         mgr.Hud_ElementMotion.ElementMotionLibrary_Location(Rec_Lib_Name.stringValue);
                         return;
                     }
@@ -757,7 +757,7 @@ namespace SevenStrikeModules.XHud.Hud
                 SerializedProperty sp_move_ease = RecycleArgs.FindPropertyRelative("Movement.Ease");
                 Editor_XHud_GUI.Gui_Layout_Property_Field("缓动", sp_move_ease);
 
-                if ((EaseMode)sp_move_ease.enumValueIndex == EaseMode.Unset)
+                if ((EaseMode)sp_move_ease.enumValueIndex == EaseMode.None)
                 {
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
@@ -829,7 +829,7 @@ namespace SevenStrikeModules.XHud.Hud
                 SerializedProperty sp_rot_ease = RecycleArgs.FindPropertyRelative("Rotation.Ease");
                 Editor_XHud_GUI.Gui_Layout_Property_Field("缓动", sp_rot_ease);
 
-                if ((EaseMode)sp_rot_ease.enumValueIndex == EaseMode.Unset)
+                if ((EaseMode)sp_rot_ease.enumValueIndex == EaseMode.None)
                 {
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
@@ -893,7 +893,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                 Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                if ((EaseMode)sp_alpha_ease.enumValueIndex == EaseMode.Unset)
+                if ((EaseMode)sp_alpha_ease.enumValueIndex == EaseMode.None)
                 {
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
@@ -987,7 +987,7 @@ namespace SevenStrikeModules.XHud.Hud
 
                     #region CreateArgs
                     Motion_Creator crc = new Motion_Creator();
-                    crc.anchor = (HudAnchor)sp_CreateArgs.FindPropertyRelative("anchor").enumValueIndex;
+                    crc.anchor = (XHudAnchor)sp_CreateArgs.FindPropertyRelative("anchor").enumValueIndex;
 
                     MotionNode_Movement hm_m = new MotionNode_Movement();
                     hm_m.Movement = (HudMotion_Movement)sp_CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex;
@@ -1156,7 +1156,7 @@ namespace SevenStrikeModules.XHud.Hud
                     {
                         case "生成"://生成
                             Motion_Creator crc = new Motion_Creator();
-                            crc.anchor = (HudAnchor)sp_CreateArgs.FindPropertyRelative("anchor").enumValueIndex;
+                            crc.anchor = (XHudAnchor)sp_CreateArgs.FindPropertyRelative("anchor").enumValueIndex;
 
                             M = new MotionNode_Movement();
                             M.Movement = (HudMotion_Movement)sp_CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex;
@@ -1376,7 +1376,7 @@ namespace SevenStrikeModules.XHud.Hud
         {
             if (state == "CreateArgs")
             {
-                CreateArgs.FindPropertyRelative("anchor").enumValueIndex = (int)HudAnchor.中心;
+                CreateArgs.FindPropertyRelative("anchor").enumValueIndex = (int)XHudAnchor.中心;
                 CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)HudMotion_Movement.S_从下至上;
                 CreateArgs.FindPropertyRelative("Movement.Distance").floatValue = 100;
                 CreateArgs.FindPropertyRelative("Movement.Duration").floatValue = 1;

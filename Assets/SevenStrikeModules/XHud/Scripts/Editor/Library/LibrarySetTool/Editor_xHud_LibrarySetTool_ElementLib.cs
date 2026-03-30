@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.GuiLib;
@@ -112,7 +112,7 @@ namespace SevenStrikeModules.XHud.Hud
 
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
-            icon_logo = Editor_XHud_GUI.GetIcon("Icons_Hud_Library_ElementLib_Selector/icon");
+            icon_logo = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_ElementLib_Selector/icon");
 
             #region 获取字体
             Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");

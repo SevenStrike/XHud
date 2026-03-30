@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Hud
+namespace SevenStrikeModules.XHud
 {
     using UnityEngine.Events;
     using UnityEngine.EventSystems;
