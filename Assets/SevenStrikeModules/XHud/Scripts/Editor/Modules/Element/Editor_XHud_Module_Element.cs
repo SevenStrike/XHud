@@ -9,7 +9,6 @@ namespace SevenStrikeModules.XHud
     using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEditor.SceneManagement;
-    using UnityEditorInternal;
     using UnityEngine;
     using UnityEngine.UI;
     using Color = UnityEngine.Color;
@@ -41,11 +40,11 @@ namespace SevenStrikeModules.XHud
 
         #region 序列化属性
         private SerializedProperty
-            CanvasGroup, SounderNodes, AnimatorNodes, ContainerNodes, OptionNodes, ButtonNodes, TextIsFold, TmpTextIsFold, SliderNodes, TextNodes, TmpTextNodes, DebugState, ProgressNodes, ToggleNodes, Indicator, AnimatorsMaxDuration, RectTransform, TriggerAction, ObjectTracker, CreateState, AnimateState, Element_Animators_GlobalDuration, OriginPoolName, AnimatorsIsFold, ButtonIsFold, OptionIsFold, SliderIsFold, SounderIsFold, ProgressIsFold, ContainerIsFold, ToggleIsFold, EventIsFold, AutoPlayAnimators, AutoPlayContainersAnimators, Tween_Preview_AutoStop, Alpha, RMS_Enabled, RMS_LayoutDatas, RMS_Name, CurrentPivot, OriginalName, eve_on_element_in_start, eve_on_element_in_end, eve_on_element_out_start, eve_on_element_out_end;
+            CanvasGroup, SounderNodes, AnimatorNodes, ContainerNodes, OptionNodes, ButtonNodes, TextIsFold, TmpTextIsFold, SliderNodes, TextNodes, TmpTextNodes, DebugState, PreviewPrimitivesTween, ProgressNodes, ToggleNodes, Indicator, AnimatorsMaxDuration, RectTransform, TriggerAction, ObjectTracker, CreateState, AnimateState, Element_Animators_GlobalDuration, OriginPoolName, AnimatorsIsFold, ButtonIsFold, OptionIsFold, SliderIsFold, SounderIsFold, ProgressIsFold, ContainerIsFold, ToggleIsFold, EventIsFold, AutoPlayAnimators, AutoPlayContainersAnimators, Tween_Preview_AutoStop, Alpha, RMS_Enabled, RMS_LayoutDatas, RMS_Name, CurrentPivot, OriginalName, eve_on_element_in_start, eve_on_element_in_end, eve_on_element_out_start, eve_on_element_out_end, TweensPreivew_In_State, TweensPreivew_Out_State, PrimitivePreivew_State;
         #endregion
 
         #region Preview - Animator
-        private bool Preivew_Animator_PlayingState;
+        private bool Tween_Preivewing_Animators;
         private List<XTween_Interface> Preivew_Animator_TweenList = new List<XTween_Interface>();
         private List<EditorCoroutine> Preivew_Animator_CoroutineList_Play = new List<EditorCoroutine>();
         private EditorCoroutine Preivew_Animator_Coroutine_Stop;
@@ -63,7 +62,7 @@ namespace SevenStrikeModules.XHud
         #endregion
 
         #region 图标
-        private Texture2D icon_main, icon_sound, icon_anim, icon_button, icon_option, icon_slider, icon_progress, icon_container, icon_toggle, icon_text, icon_tmptext, icon_scan_r, icon_scan_p, icon_record_rms_r, icon_record_rms_p, resetanchorpos_r, resetanchorpos_p, prw_play_r, prw_play_p, prw_stop_r, prw_stop_p, usestate, animstate, dutation, comp_tracking, elelibsource, locate_r, locate_p, rms_move, rms_rotate, rms_anchor, rms_anchor_center, rms_scale, comp_alpha, comp_transform, comp_trigger, status, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p;
+        private Texture2D icon_main, icon_sound, icon_anim, icon_button, icon_option, icon_slider, icon_progress, icon_container, icon_toggle, icon_text, icon_tmptext, icon_scan_r, icon_scan_p, icon_record_rms_r, icon_record_rms_p, resetanchorpos_r, resetanchorpos_p, prw_play_r, prw_play_p, prw_stop_r, prw_stop_p, usestate, animstate, dutation, comp_tracking, elelibsource, locate_r, locate_p, rms_move, rms_rotate, rms_anchor, rms_anchor_center, rms_scale, comp_alpha, comp_transform, comp_trigger, status, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, prw_play_out_r, prw_play_out_p, prw_play_in_p, prw_play_in_r;
         #endregion
 
         #region 批量模式查看索引
@@ -72,7 +71,7 @@ namespace SevenStrikeModules.XHud
         #endregion
 
         #region 选项文字
-        string[] stroptions_enabled = new string[2] { "关闭", "开启" }, stroptions_debug = new string[2] { "关闭", "调试" }, stroptions_auto = new string[2] { "手动", "自动" };
+        string[] stroptions_enabled = new string[2] { "关闭", "开启" }, stroptions_debug = new string[2] { "关闭", "调试" }, stroptions_auto = new string[2] { "手动", "自动" }, stroptions_tweenmode = new string[2] { "元素", "图元" };
         #endregion
 
         #region 批量化操作
@@ -170,6 +169,11 @@ namespace SevenStrikeModules.XHud
             left_arrow_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/left_arrow_p");
             right_arrow_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/right_arrow_r");
             right_arrow_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/right_arrow_p");
+            prw_play_out_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/prw_play_out_r");
+            prw_play_out_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/prw_play_out_p");
+            prw_play_in_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/prw_play_in_p");
+            prw_play_in_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/prw_play_in_r");
+
             #endregion
 
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
@@ -216,6 +220,8 @@ namespace SevenStrikeModules.XHud
                     Preview_AnimatorSound_CoroutineList_Stop();
 
                     Preview_HudSounder_Coroutine_Stop();
+
+                    StopAllPreviewState();
                 }
             }
         }
@@ -264,14 +270,6 @@ namespace SevenStrikeModules.XHud
 
             GUILayout.FlexibleSpace();
 
-            //GUI.enabled = true;
-            //if (Editor_XHud_GUI.Gui_Layout_Button(15, "预览动画", icon_scan_r, icon_scan_p))
-            //{
-
-            //}
-
-            //GUILayout.FlexibleSpace();
-
             #region 记录设计布局
             GUI.enabled = true;
             if (RMS_Enabled.boolValue)
@@ -308,43 +306,112 @@ namespace SevenStrikeModules.XHud
             }
             #endregion
 
-            #region 预览元素自身动画
-            if ((GetPrefabStatus(BaseScript.gameObject) == ElementStatu.InScene || GetPrefabStatus(BaseScript.gameObject) == ElementStatu.InSceneNotPrefab))
-            {
-                GUILayout.FlexibleSpace();
-
-                if (!Preivew_Animator_PlayingState)
-                {
-                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "播放所有动画器预览", prw_play_r, prw_play_p))
-                    {
-                        if (Application.isPlaying)
-                        {
-                            Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
-                            return;
-                        }
-                        Preview_Animator_Play();
-                    }
-                }
-                else
-                {
-                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "停止所有动画器预览", prw_stop_r, prw_stop_p))
-                    {
-                        if (Application.isPlaying)
-                        {
-                            Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "停止预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
-                            return;
-                        }
-                        Preview_Animator_Stop();
-                    }
-                }
-            }
-            #endregion
-
             Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Horizontal_End();
             GUI.enabled = true;
 
             Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            #endregion
+
+            #region 预览
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "预览", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+
+            if (!PreviewPrimitivesTween.boolValue)
+            {
+                // 动画预览按钮
+                if (!TweensPreivew_In_State.boolValue)
+                {
+                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "元素 - 进入 - 播放", prw_play_in_r, prw_play_in_p))
+                    {
+                        ElementTweens_Preview_In_Play();
+                    }
+                }
+                else
+                {
+                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "元素 - 进入 - 停止", prw_play_in_p, prw_play_in_p))
+                    {
+                        ElementTweens_Preview_In_Stop();
+                    }
+                }
+
+                Editor_XHud_GUI.Gui_Layout_Space(30);
+
+                // 动画预览按钮
+                if (!TweensPreivew_Out_State.boolValue)
+                {
+                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "元素 - 退出 - 播放", prw_play_out_r, prw_play_out_p))
+                    {
+                        ElementTweens_Preview_Out_Play();
+                    }
+                }
+                else
+                {
+                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "元素 - 退出 - 停止", prw_play_out_p, prw_play_out_p))
+                    {
+                        ElementTweens_Preview_Out_Stop();
+                    }
+                }
+                Editor_XHud_GUI.Gui_Layout_Space(20);
+            }
+            else
+            {
+                // 动画预览按钮
+                if (!PrimitivePreivew_State.boolValue)
+                {
+                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "图元 - 播放", prw_play_r, prw_play_p))
+                    {
+                        PrimitiveTweens_Preview_Play();
+                    }
+                }
+                else
+                {
+                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "图元 - 停止", prw_stop_r, prw_stop_p))
+                    {
+                        PrimitiveTweens_Preview_Stop();
+                    }
+                }
+                Editor_XHud_GUI.Gui_Layout_Space(65);
+            }
+
+            TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
+            TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
+            PrimitivePreivew_State.serializedObject.ApplyModifiedProperties();
+
+            // 动画预览模式选择
+            EditorGUI.BeginChangeCheck();
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Element>("", stroptions_tweenmode, ref PreviewPrimitivesTween, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            if (EditorGUI.EndChangeCheck())
+            {
+                if (Targets_Selected())
+                {
+                    for (int i = 0; i < SelectedObjects.Length; i++)
+                    {
+                        SelectedObjects[i].TweensPreivew_In_State = false;
+                        SelectedObjects[i].TweensPreivew_Out_State = false;
+                        SelectedObjects[i].PrimitivePreivew_State = false;
+                    }
+                }
+                else
+                {
+                    TweensPreivew_In_State.boolValue = false;
+                    TweensPreivew_Out_State.boolValue = false;
+                    PrimitivePreivew_State.boolValue = false;
+
+                    TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
+                    TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
+                    PrimitivePreivew_State.serializedObject.ApplyModifiedProperties();
+                }
+            }
+
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+
+            Editor_XHud_GUI.Gui_Layout_Space(5);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
@@ -1443,27 +1510,27 @@ namespace SevenStrikeModules.XHud
                 if (!Targets_Selected())
                 {
                     menu.AddSeparator("");
-                    menu.AddDisabledItem(new GUIContent("预览"));
-                    if (!Preivew_Animator_PlayingState)
-                        menu.AddItem(new GUIContent("S (开始)"), false, () =>
-                        {
-                            if (Application.isPlaying)
-                            {
-                                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
-                                return;
-                            }
-                            Preview_Animator_Play();
-                        });
-                    else
-                        menu.AddItem(new GUIContent("S (停止)"), false, () =>
-                        {
-                            if (Application.isPlaying)
-                            {
-                                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "停止预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
-                                return;
-                            }
-                            Preview_Animator_Stop();
-                        });
+                    //menu.AddDisabledItem(new GUIContent("预览"));
+                    //if (!Tween_Preivewing_Element)
+                    //    menu.AddItem(new GUIContent("S (开始)"), false, () =>
+                    //    {
+                    //        if (Application.isPlaying)
+                    //        {
+                    //            Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
+                    //            return;
+                    //        }
+                    //        Preview_Animator_Play();
+                    //    });
+                    //else
+                    //    menu.AddItem(new GUIContent("S (停止)"), false, () =>
+                    //    {
+                    //        if (Application.isPlaying)
+                    //        {
+                    //            Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "停止预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
+                    //            return;
+                    //        }
+                    //        Preview_Animator_Stop();
+                    //    });
                 }
 
                 if (PrefabUtility.IsAnyPrefabInstanceRoot(BaseScript.gameObject))
@@ -2275,6 +2342,7 @@ namespace SevenStrikeModules.XHud
             CanvasGroup = serializedObject.FindProperty("CanvasGroup");
             Alpha = serializedObject.FindProperty("Alpha");
             RectTransform = serializedObject.FindProperty("RectTransform");
+            PreviewPrimitivesTween = serializedObject.FindProperty("PreviewPrimitivesTween");
             TriggerAction = serializedObject.FindProperty("TriggerAction");
             ObjectTracker = serializedObject.FindProperty("ObjectTracker");
             AutoPlayAnimators = serializedObject.FindProperty("AutoPlayAnimators");
@@ -2306,6 +2374,9 @@ namespace SevenStrikeModules.XHud
             RMS_Enabled = serializedObject.FindProperty("RMS_Enabled");
             RMS_LayoutDatas = serializedObject.FindProperty("RMS_LayoutDatas");
             RMS_Name = serializedObject.FindProperty("RMS_Name");
+            TweensPreivew_In_State = serializedObject.FindProperty("TweensPreivew_In_State");
+            TweensPreivew_Out_State = serializedObject.FindProperty("TweensPreivew_Out_State");
+            PrimitivePreivew_State = serializedObject.FindProperty("PrimitivePreivew_State");
         }
         #endregion
 
@@ -2319,7 +2390,7 @@ namespace SevenStrikeModules.XHud
         {
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
-            Preivew_Animator_PlayingState = true;
+            Tween_Preivewing_Animators = true;
             AnimateState.enumValueIndex = 1;
             AnimateState.serializedObject.ApplyModifiedProperties();
 
@@ -2413,7 +2484,7 @@ namespace SevenStrikeModules.XHud
             if (anim.TweenNode_GetCount() <= 0)
                 return;
 
-            Preivew_Animator_PlayingState = true;
+            Tween_Preivewing_Animators = true;
             AnimateState.enumValueIndex = 1;
             AnimateState.serializedObject.ApplyModifiedProperties();
 
@@ -2473,7 +2544,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void Preview_Animator_Stop()
         {
-            Preivew_Animator_PlayingState = false;
+            Tween_Preivewing_Animators = false;
 
             if (target != null)
             {

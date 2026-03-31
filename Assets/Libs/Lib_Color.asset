@@ -92,7 +92,7 @@ MonoBehaviour:
     Description: "\u949B\u91D1\u6709\u4E00\u79CD\u660E\u4EAE\u7684\u5149\u6CFD\u548C\u6E29\u6696\u7684\u8272\u8C03\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u73B0\u4EE3\u827A\u672F\u6216\u5962\u534E\u7684\u6C1B\u56F4\u3002"
   - Painting: {fileID: 0}
     Name: "\u96FE\u973E\u84DD(Haze Blue)"
-    Color: {r: 0.6, g: 0.7, b: 0.8, a: 1}
+    Color: {r: 1, g: 0, b: 0.10890055, a: 1}
     Description: "\u96FE\u973E\u84DD\u6709\u4E00\u79CD\u67D4\u548C\u7684\u8D28\u611F\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u68A6\u5E7B\u6216\u5B81\u9759\u7684\u573A\u666F"
   - Painting: {fileID: 0}
     Name: ddsd

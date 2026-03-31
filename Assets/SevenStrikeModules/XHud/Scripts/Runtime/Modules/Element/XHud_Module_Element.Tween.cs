@@ -14,6 +14,27 @@ namespace SevenStrikeModules.XHud
         /// 标识当前元素是否正在播放动画
         /// </summary>
         public bool Animating;
+        [SerializeField]
+        /// <summary>
+        /// 元素动画预览状态 - In
+        /// </summary>
+        public bool TweensPreivew_In_State;
+        [SerializeField]
+        /// <summary>
+        /// 元素动画预览状态 - Out
+        /// </summary>
+        public bool TweensPreivew_Out_State;
+        [SerializeField]
+        /// <summary>
+        /// 图元动画预览状态
+        /// </summary>
+        public bool PrimitivePreivew_State;
+        [SerializeField]
+        /// <summary>
+        /// 预览动画目标状态
+        /// 标识预览的是当前元素的进入退出动画还是子级的所有图元的动画
+        /// </summary>
+        public bool PreviewPrimitivesTween;
 
         #region 元素自身基础动画节点
         /// <summary>
@@ -31,7 +52,6 @@ namespace SevenStrikeModules.XHud
         #endregion
 
         #region 元素自身进入动画
-
         /// <summary>
         /// 元素动画 - 进入
         /// </summary>
@@ -493,7 +513,6 @@ namespace SevenStrikeModules.XHud
 
             #endregion
         }
-
         /// <summary>
         /// 元素动画 - 进入 - 前
         /// </summary>
@@ -523,7 +542,6 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         /// <summary>
         /// 元素动画 - 进入 - 后
         /// </summary>
@@ -553,11 +571,9 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         #endregion
 
         #region 元素自身退出动画
-
         /// <summary>
         /// 元素动画 - 退出
         /// </summary>
@@ -965,7 +981,6 @@ namespace SevenStrikeModules.XHud
             }
             #endregion
         }
-
         /// <summary>
         /// 元素动画 - 退出 - 前
         /// </summary>
@@ -1000,7 +1015,6 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         /// <summary>
         /// 元素动画 - 退出 - 后
         /// </summary>
@@ -1060,7 +1074,6 @@ namespace SevenStrikeModules.XHud
                 XHud_Manager.Instance.hm_ElementLibrary_Despawn(this);
             }
         }
-
         #endregion
     }
 }

@@ -1360,6 +1360,8 @@ namespace SevenStrikeModules.XHud.GuiLib
             TitleStyle.contentOffset = Vector2.up * 3f;
             TitleStyle.fontSize = 12;
             TitleStyle.alignment = TextAnchor.MiddleLeft;
+            TitleStyle.wordWrap = false;
+            TitleStyle.clipping = TextClipping.Overflow;
 
             GUIStyle BannerLogo = new GUIStyle(Style_Logo);
             BannerLogo.normal.textColor = TextColor;
