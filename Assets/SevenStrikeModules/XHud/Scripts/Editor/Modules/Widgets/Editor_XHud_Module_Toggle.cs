@@ -91,7 +91,7 @@ namespace SevenStrikeModules.XHud
         #region 批量化操作
         XHud_Module_Toggle[] SelectedObjects;
 
-        private void GetAllTargets()
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
@@ -109,7 +109,7 @@ namespace SevenStrikeModules.XHud
             }
         }
 
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -129,43 +129,8 @@ namespace SevenStrikeModules.XHud
             base.OnEnable();
             BaseScript = (XHud_Module_Toggle)target;
 
-            #region 获取序列化属性
-            sp_Indicator = serializedObject.FindProperty("Indicator");
-            sp_debugstate = serializedObject.FindProperty("DebugState");
-            eve_on_Checked = serializedObject.FindProperty("eve_on_Checked");
-            eve_on_UnChecked = serializedObject.FindProperty("eve_on_UnChecked");
-            eve_on_ValueChanged = serializedObject.FindProperty("eve_on_ValueChanged");
-            eve_on_Press = serializedObject.FindProperty("eve_on_Press");
-            eve_on_Released = serializedObject.FindProperty("eve_on_Released");
-            ToggleName = serializedObject.FindProperty("ToggleName");
-            ToggleText = serializedObject.FindProperty("ToggleText");
-            ToggleTmpText = serializedObject.FindProperty("ToggleTmpText");
-            Tog_Bg = serializedObject.FindProperty("Tog_Bg");
-            Tog_Handle = serializedObject.FindProperty("Tog_Handle");
-            Tog_Color_Bg_Unchecked = serializedObject.FindProperty("Tog_Color_Bg_Unchecked");
-            Tog_Color_Bg_Checked = serializedObject.FindProperty("Tog_Color_Bg_Checked");
-            Tog_Color_Handle_Unchecked = serializedObject.FindProperty("Tog_Color_Handle_Unchecked");
-            Tog_Color_Handle_Checked = serializedObject.FindProperty("Tog_Color_Handle_Checked");
-            Toggle_Animators_GlobalDuration = serializedObject.FindProperty("Toggle_Animators_GlobalDuration");
-            ToggleAnimatorNodes = serializedObject.FindProperty("ToggleAnimatorNodes");
-            HandlePosRange = serializedObject.FindProperty("HandlePosRange");
-            HandleProgress = serializedObject.FindProperty("HandleProgress");
-            HandleProgressDuration = serializedObject.FindProperty("HandleProgressDuration");
-            ProgressEase = serializedObject.FindProperty("ProgressEase");
-            ColorEase = serializedObject.FindProperty("ColorEase");
-            EaseMotion = serializedObject.FindProperty("EaseMotion");
-            BgCanToggle = serializedObject.FindProperty("BgCanToggle");
-            TitleCanToggle = serializedObject.FindProperty("TitleCanToggle");
-            ColorDuration = serializedObject.FindProperty("ColorDuration");
-            ToggleAnimatorMaxDuration = serializedObject.FindProperty("ToggleAnimatorMaxDuration");
-            AnimateState = serializedObject.FindProperty("AnimateState");
-            ToggleAnimatorListIsFold = serializedObject.FindProperty("ToggleAnimatorListIsFold");
-            ToggleEventIsFold = serializedObject.FindProperty("ToggleEventIsFold");
-            ToggleOriginalIsFold = serializedObject.FindProperty("ToggleOriginalIsFold");
-            ChangingInterval = serializedObject.FindProperty("ChangingInterval");
-            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
-            ToggleIsChecked = serializedObject.FindProperty("ToggleIsChecked");
-            #endregion
+            // 获取序列化属性
+            GetSerializeFields();
 
             #region 获取图标
             icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Toggle/icon_main");
@@ -277,7 +242,7 @@ namespace SevenStrikeModules.XHud
             };
             #endregion
 
-            GetAllTargets();
+            Targets_Get();
         }
 
         protected override void OnDisable()
@@ -323,7 +288,7 @@ namespace SevenStrikeModules.XHud
             #endregion
 
             #region 预览
-            if (!IsMultiSelected() && ToggleAnimatorNodes.arraySize > 0)
+            if (!Targets_Selected() && ToggleAnimatorNodes.arraySize > 0)
             {
                 GUILayout.FlexibleSpace();
 
@@ -422,7 +387,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Property_Field("开关文字", ToggleName, 100);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -520,12 +485,12 @@ namespace SevenStrikeModules.XHud
 
             #region 状态
             string statu_title = "状态";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_title = "状态 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_title, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 #region 按钮状态              
                 Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "开关状态", 12, ToggleIsChecked.boolValue ? "开启" : "关闭", XHud_Dashboard.Theme_Primary, 11);
@@ -619,12 +584,12 @@ namespace SevenStrikeModules.XHud
 
             #region 统计
             string statu_statistic = "统计";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_statistic = "统计 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_statistic, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 if (ToggleAnimatorNodes.arraySize <= 0)
                 {
@@ -709,7 +674,7 @@ namespace SevenStrikeModules.XHud
             #region 动画器列表
             if (ToggleAnimatorNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -738,7 +703,7 @@ namespace SevenStrikeModules.XHud
             #endregion
 
             #region 事件列表
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -856,7 +821,7 @@ namespace SevenStrikeModules.XHud
                 // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
                 menu.AddDisabledItem(new GUIContent("脚本参数"));
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddItem(new GUIContent("C (拷贝)"), false, () =>
                     {
@@ -897,7 +862,7 @@ namespace SevenStrikeModules.XHud
                 {
                     XHud_ModuleArg_Toggle htp = JsonUtility.FromJson<XHud_ModuleArg_Toggle>(GUIUtility.systemCopyBuffer);
 
-                    if (!IsMultiSelected())
+                    if (!Targets_Selected())
                     {
                         sp_col_normal.colorValue = htp.Color_Normal;
                         sp_col_highlight.colorValue = htp.Color_Highlight;
@@ -1050,7 +1015,7 @@ namespace SevenStrikeModules.XHud
                 menu.AddDisabledItem(new GUIContent("基础"));
                 menu.AddItem(new GUIContent("A (自动标识)"), false, () =>
                 {
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -1075,7 +1040,7 @@ namespace SevenStrikeModules.XHud
                 {
                     AllListFoldState(true);
                 });
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddSeparator("");
                     menu.AddDisabledItem(new GUIContent("预览"));
@@ -1143,13 +1108,11 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         private void CalculateAnimatorMaxDuration(List<ElementNode_Animator> list, float globaldur)
         {
             ToggleAnimatorMaxDuration.floatValue = Animators_GetAnimatorsMaxDuration(list, globaldur);
             ToggleAnimatorMaxDuration.serializedObject.ApplyModifiedProperties();
         }
-
         /// <summary>
         /// 从所有子动画器中获取最大耗时
         /// </summary>
@@ -1172,7 +1135,6 @@ namespace SevenStrikeModules.XHud
             float v = XHud_Utilitys.Array_MaxValue(x_list);
             return v * globaldur;
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -1213,7 +1175,6 @@ namespace SevenStrikeModules.XHud
             }
             return hasLoop;
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -1232,10 +1193,9 @@ namespace SevenStrikeModules.XHud
             }
             return hasLoop;
         }
-
         private void AllListFoldState(bool state)
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -1273,7 +1233,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void GetAllAnimators()
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -1371,7 +1331,7 @@ namespace SevenStrikeModules.XHud
         private void GetAnimatorResults()
         {
             List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 var s = targets;
                 for (int i = 0; i < SelectedObjects.Length; i++)
@@ -1472,6 +1432,47 @@ namespace SevenStrikeModules.XHud
             }
 
             so.ApplyModifiedProperties();
+        }
+        /// <summary>
+        /// 获取序列化属性
+        /// </summary>
+        private void GetSerializeFields()
+        {
+            sp_Indicator = serializedObject.FindProperty("Indicator");
+            sp_debugstate = serializedObject.FindProperty("DebugState");
+            eve_on_Checked = serializedObject.FindProperty("eve_on_Checked");
+            eve_on_UnChecked = serializedObject.FindProperty("eve_on_UnChecked");
+            eve_on_ValueChanged = serializedObject.FindProperty("eve_on_ValueChanged");
+            eve_on_Press = serializedObject.FindProperty("eve_on_Press");
+            eve_on_Released = serializedObject.FindProperty("eve_on_Released");
+            ToggleName = serializedObject.FindProperty("ToggleName");
+            ToggleText = serializedObject.FindProperty("ToggleText");
+            ToggleTmpText = serializedObject.FindProperty("ToggleTmpText");
+            Tog_Bg = serializedObject.FindProperty("Tog_Bg");
+            Tog_Handle = serializedObject.FindProperty("Tog_Handle");
+            Tog_Color_Bg_Unchecked = serializedObject.FindProperty("Tog_Color_Bg_Unchecked");
+            Tog_Color_Bg_Checked = serializedObject.FindProperty("Tog_Color_Bg_Checked");
+            Tog_Color_Handle_Unchecked = serializedObject.FindProperty("Tog_Color_Handle_Unchecked");
+            Tog_Color_Handle_Checked = serializedObject.FindProperty("Tog_Color_Handle_Checked");
+            Toggle_Animators_GlobalDuration = serializedObject.FindProperty("Toggle_Animators_GlobalDuration");
+            ToggleAnimatorNodes = serializedObject.FindProperty("ToggleAnimatorNodes");
+            HandlePosRange = serializedObject.FindProperty("HandlePosRange");
+            HandleProgress = serializedObject.FindProperty("HandleProgress");
+            HandleProgressDuration = serializedObject.FindProperty("HandleProgressDuration");
+            ProgressEase = serializedObject.FindProperty("ProgressEase");
+            ColorEase = serializedObject.FindProperty("ColorEase");
+            EaseMotion = serializedObject.FindProperty("EaseMotion");
+            BgCanToggle = serializedObject.FindProperty("BgCanToggle");
+            TitleCanToggle = serializedObject.FindProperty("TitleCanToggle");
+            ColorDuration = serializedObject.FindProperty("ColorDuration");
+            ToggleAnimatorMaxDuration = serializedObject.FindProperty("ToggleAnimatorMaxDuration");
+            AnimateState = serializedObject.FindProperty("AnimateState");
+            ToggleAnimatorListIsFold = serializedObject.FindProperty("ToggleAnimatorListIsFold");
+            ToggleEventIsFold = serializedObject.FindProperty("ToggleEventIsFold");
+            ToggleOriginalIsFold = serializedObject.FindProperty("ToggleOriginalIsFold");
+            ChangingInterval = serializedObject.FindProperty("ChangingInterval");
+            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
+            ToggleIsChecked = serializedObject.FindProperty("ToggleIsChecked");
         }
         #endregion
 

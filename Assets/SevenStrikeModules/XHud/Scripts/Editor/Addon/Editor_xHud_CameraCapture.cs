@@ -119,7 +119,7 @@ namespace SevenStrikeModules.XHud
             serializedObject.Update();
 
             #region 标题
-            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 相机截图捕捉", Color.white);
+            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 相机截图器", Color.white);
             #endregion
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
@@ -225,7 +225,7 @@ namespace SevenStrikeModules.XHud
             {
                 if (TargetCamera.objectReferenceValue == null)
                 {
-                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "CameraCapture消息", "相机缺失", "您是否忘了指定目标相机了？", "明白");
+                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 相机截图器消息", "相机缺失", "您是否忘了指定目标相机了？", "明白");
                     return;
                 }
 
@@ -234,7 +234,7 @@ namespace SevenStrikeModules.XHud
                 UniversalAdditionalCameraData universal = cam.GetComponent<UniversalAdditionalCameraData>();
                 if (universal.renderType == CameraRenderType.Base && x_mode.enumValueIndex == (int)CaptureCameraType.UI相机)
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "CameraCapture消息", "类型匹配错误", "目标相机和您选择的要进行截图的相机类型选项不匹配！目标相机模式为 \"Base\" 基础态，但是您选择的 \"相机类型\" 是 \"UI相机\"，这就是矛盾的地方...", "暂不", "快速修正", 1);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 相机截图器消息", "类型匹配错误", "目标相机和您选择的要进行截图的相机类型选项不匹配！目标相机模式为 \"Base\" 基础态，但是您选择的 \"相机类型\" 是 \"UI相机\"，这就是矛盾的地方...", "暂不", "快速修正", 1);
                     if (res == "快速修正")
                     {
                         x_mode.enumValueIndex = (int)CaptureCameraType.场景相机;
@@ -247,7 +247,7 @@ namespace SevenStrikeModules.XHud
                 }
                 if (universal.renderType == CameraRenderType.Overlay && x_mode.enumValueIndex == (int)CaptureCameraType.场景相机)
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "CameraCapture消息", "类型匹配错误", "目标相机和您选择的要进行截图的相机类型选项不匹配！目标相机模式为 \"Overlay\" 叠加态，但是您选择的 \"相机类型\" 是 \"场景相机\"，这就是矛盾的地方...", "暂不", "快速修正", 1);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 相机截图器消息", "类型匹配错误", "目标相机和您选择的要进行截图的相机类型选项不匹配！目标相机模式为 \"Overlay\" 叠加态，但是您选择的 \"相机类型\" 是 \"场景相机\"，这就是矛盾的地方...", "暂不", "快速修正", 1);
                     if (res == "快速修正")
                     {
                         x_mode.enumValueIndex = (int)CaptureCameraType.UI相机;
@@ -261,7 +261,7 @@ namespace SevenStrikeModules.XHud
 
                 BaseScript.CaptureNow();
 
-                Editor_XHud_GUI.Open(XHud_DialogType.通知, "CameraCapture消息", "截图捕捉完成", $"已将 {str_x_mode[x_mode.intValue]} 的画面数据按照 {str_x_size[x_sizemode.intValue]} 模式保存格式为 {str_x_type[x_type.intValue]} 图片到路径： {x_path.stringValue}", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.通知, "XHud - 相机截图器消息", "截图捕捉完成", $"已将 {str_x_mode[x_mode.intValue]} 的画面数据按照 {str_x_size[x_sizemode.intValue]} 模式保存格式为 {str_x_type[x_type.intValue]} 图片到路径： {x_path.stringValue}", "明白");
             }
             #endregion           
 

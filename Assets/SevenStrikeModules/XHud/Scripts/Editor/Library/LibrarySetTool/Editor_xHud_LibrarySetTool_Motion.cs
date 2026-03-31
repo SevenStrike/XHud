@@ -500,7 +500,7 @@ namespace SevenStrikeModules.XHud
 
             if (sp_LibName.stringValue == "动效名称")
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 动效库采集器消息", "未填写名称", "请为动效模版添加一个名称！", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动效库采集器消息", "未填写名称", "请为动效模版添加一个名称！", "明白");
                 return;
             }
 
@@ -510,7 +510,7 @@ namespace SevenStrikeModules.XHud
 
             if (exist)
             {
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 动效库采集器消息", "存在重复动效名称", $"名称为<color={colorhex}> {sp_LibName.stringValue} </color>的已经存在于动效库中！", "重命名", 1);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动效库采集器消息", "存在重复动效名称", $"名称为<color={colorhex}> {sp_LibName.stringValue} </color>的已经存在于动效库中！", "重命名", 1);
                 if (res == "重命名")
                 {
                     return;
@@ -526,7 +526,7 @@ namespace SevenStrikeModules.XHud
                 motion.Mode = (int)Type;
                 Target_Hud_MotionLibrary.ElementMotion_Add(motion);
 
-                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud 动效库采集器消息", "已添加到动效库", $"已将名称为<color={colorhex}> {sp_LibName.stringValue} </color>的动效参数添加到动效库中！", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动效库采集器消息", "已添加到动效库", $"已将名称为<color={colorhex}> {sp_LibName.stringValue} </color>的动效参数添加到动效库中！", "明白");
                 Close();
             }
         }

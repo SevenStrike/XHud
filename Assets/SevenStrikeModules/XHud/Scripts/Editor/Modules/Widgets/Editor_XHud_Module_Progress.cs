@@ -77,7 +77,7 @@ namespace SevenStrikeModules.XHud
         #region 批量化操作
         XHud_Module_Progress[] SelectedObjects;
 
-        private void GetAllTargets()
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
@@ -95,7 +95,7 @@ namespace SevenStrikeModules.XHud
             }
         }
 
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -121,44 +121,8 @@ namespace SevenStrikeModules.XHud
                 RectTransform.serializedObject.ApplyModifiedProperties();
             }
 
-            #region 获取序列化属性
-            sp_Indicator = serializedObject.FindProperty("Indicator");
-            sp_debugstate = serializedObject.FindProperty("DebugState");
-            eve_on_ValueChanged = serializedObject.FindProperty("eve_on_ValueChanged");
-            eve_on_ValueStart = serializedObject.FindProperty("eve_on_ValueStart");
-            eve_on_ValueEnd = serializedObject.FindProperty("eve_on_ValueEnd");
-            pro_Text_Title = serializedObject.FindProperty("pro_Text_Title");
-            pro_TmpText_Title = serializedObject.FindProperty("pro_TmpText_Title");
-            pro_Text_Subtitle = serializedObject.FindProperty("pro_Text_Subtitle");
-            pro_TmpText_Subtitle = serializedObject.FindProperty("pro_TmpText_Subtitle");
-            pro_Text_Percent = serializedObject.FindProperty("pro_Text_Percent");
-            pro_TmpText_Percent = serializedObject.FindProperty("pro_TmpText_Percent");
-            pro_Bg = serializedObject.FindProperty("pro_Bg");
-            pro_Fore = serializedObject.FindProperty("pro_Fore");
-            pro_Icon = serializedObject.FindProperty("pro_Icon");
-            pro_Handle = serializedObject.FindProperty("pro_Handle");
-            ProgressValue = serializedObject.FindProperty("ProgressValue");
-            ProgressValueDuration = serializedObject.FindProperty("ProgressValueDuration");
-            ProgressPrecision = serializedObject.FindProperty("ProgressPrecision");
-            con_title = serializedObject.FindProperty("con_title");
-            con_subtitle = serializedObject.FindProperty("con_subtitle");
-            LerpMotion = serializedObject.FindProperty("LerpMotion");
-            ProgressUnit = serializedObject.FindProperty("ProgressUnit");
-            ProgressAnimatorListIsFold = serializedObject.FindProperty("ProgressAnimatorListIsFold");
-            EventIsFold = serializedObject.FindProperty("EventIsFold");
-            ProgressAnimatorNodes = serializedObject.FindProperty("ProgressAnimatorNodes");
-            AnimateState = serializedObject.FindProperty("AnimateState");
-            ProgressAnimatorMaxDuration = serializedObject.FindProperty("ProgressAnimatorMaxDuration");
-            Progress_Animators_GlobalDuration = serializedObject.FindProperty("Progress_Animators_GlobalDuration");
-            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
-            Display_ProgressRect_Fore = serializedObject.FindProperty("Display_ProgressRect_Fore");
-            Display_ProgressRect_Bg = serializedObject.FindProperty("Display_ProgressRect_Bg");
-            Display_ProgressRect_Handle = serializedObject.FindProperty("Display_ProgressRect_Handle");
-            Display_Icon = serializedObject.FindProperty("Display_Icon");
-            Display_Title = serializedObject.FindProperty("Display_Title");
-            Display_SubTitle = serializedObject.FindProperty("Display_SubTitle");
-            Display_Value = serializedObject.FindProperty("Display_Value");
-            #endregion
+            // 获取序列化属性
+            GetSerializeFields();
 
             #region 获取图标
             icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Progress/icon_main");
@@ -270,7 +234,7 @@ namespace SevenStrikeModules.XHud
             };
             #endregion
 
-            GetAllTargets();
+            Targets_Get();
         }
 
         void OnDisable()
@@ -311,7 +275,7 @@ namespace SevenStrikeModules.XHud
             #endregion
 
             #region 预览动画
-            if (!IsMultiSelected() && ProgressAnimatorNodes.arraySize > 0)
+            if (!Targets_Selected() && ProgressAnimatorNodes.arraySize > 0)
             {
                 GUILayout.FlexibleSpace();
 
@@ -465,7 +429,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("前景", stroptions_enabled, ref Display_ProgressRect_Fore, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -482,7 +446,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("背景", stroptions_enabled, ref Display_ProgressRect_Bg, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -499,7 +463,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("标记", stroptions_enabled, ref Display_ProgressRect_Handle, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -516,7 +480,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("图标", stroptions_enabled, ref Display_Icon, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -533,7 +497,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("标题", stroptions_enabled, ref Display_Title, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -550,7 +514,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("副标题", stroptions_enabled, ref Display_SubTitle, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -567,7 +531,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("进度值", stroptions_enabled, ref Display_Value, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -586,12 +550,12 @@ namespace SevenStrikeModules.XHud
 
             #region 状态
             string statu_title = "状态";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_title = "状态 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_title, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 #region 进度状态
                 Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "进度状态", 12, ProgressValue.floatValue.ToString(), XHud_Dashboard.Theme_Primary, 11);
@@ -685,12 +649,12 @@ namespace SevenStrikeModules.XHud
 
             #region 统计
             string statu_statistic = "统计";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_statistic = "统计 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_statistic, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 if (ProgressAnimatorNodes.arraySize <= 0)
                 {
@@ -774,7 +738,7 @@ namespace SevenStrikeModules.XHud
             #region 动画器列表
             if (ProgressAnimatorNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -856,7 +820,7 @@ namespace SevenStrikeModules.XHud
                 // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
                 menu.AddDisabledItem(new GUIContent("脚本参数"));
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddItem(new GUIContent("C (拷贝)"), false, () =>
                     {
@@ -917,7 +881,7 @@ namespace SevenStrikeModules.XHud
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("A (自动标识)"), false, () =>
                 {
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -941,7 +905,7 @@ namespace SevenStrikeModules.XHud
                 {
                     AllListFoldState(true);
                 });
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddSeparator("");
                     menu.AddDisabledItem(new GUIContent("预览"));
@@ -995,7 +959,7 @@ namespace SevenStrikeModules.XHud
         #region 辅助
         private void UpdateProgress()
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -1010,7 +974,6 @@ namespace SevenStrikeModules.XHud
                 BaseScript.UpdateProgressValueDisplay(true);
             }
         }
-
         /// <summary>
         /// 检查是否存在无效的动画器
         /// </summary>
@@ -1027,7 +990,6 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         /// <summary>
         /// 还原Animator姿态
         /// </summary>
@@ -1084,10 +1046,9 @@ namespace SevenStrikeModules.XHud
 
             so.ApplyModifiedProperties();
         }
-
         private void AllListFoldState(bool state)
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -1117,13 +1078,11 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         private void CalculateAnimatorMaxDuration(List<ElementNode_Animator> list, float globaldur)
         {
             ProgressAnimatorMaxDuration.floatValue = Animators_GetAnimatorsMaxDuration(list, globaldur);
             ProgressAnimatorMaxDuration.serializedObject.ApplyModifiedProperties();
         }
-
         /// <summary>
         /// 从所有子动画器中获取最大耗时
         /// </summary>
@@ -1146,7 +1105,6 @@ namespace SevenStrikeModules.XHud
             float v = XHud_Utilitys.Array_MaxValue(x_list);
             return v * globaldur;
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -1187,7 +1145,6 @@ namespace SevenStrikeModules.XHud
             }
             return hasLoop;
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -1206,13 +1163,12 @@ namespace SevenStrikeModules.XHud
             }
             return hasLoop;
         }
-
         /// <summary>
         /// 扫描所有Animator动画
         /// </summary>
         private void GetAllAnimators()
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -1302,14 +1258,13 @@ namespace SevenStrikeModules.XHud
                 sp_nodes.serializedObject.ApplyModifiedProperties();
             }
         }
-
         /// <summary>
         /// 扫描动画器的结果报告
         /// </summary>
         private void GetAnimatorResults()
         {
             List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 var s = targets;
                 for (int i = 0; i < SelectedObjects.Length; i++)
@@ -1352,7 +1307,6 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         /// <summary>
         /// 动画器 - 创建ID编号
         /// </summary>
@@ -1379,6 +1333,48 @@ namespace SevenStrikeModules.XHud
                     return ran_id;
                 }
             }
+        }
+        /// <summary>
+        /// 获取序列化属性
+        /// </summary>
+        private void GetSerializeFields()
+        {
+            sp_Indicator = serializedObject.FindProperty("Indicator");
+            sp_debugstate = serializedObject.FindProperty("DebugState");
+            eve_on_ValueChanged = serializedObject.FindProperty("eve_on_ValueChanged");
+            eve_on_ValueStart = serializedObject.FindProperty("eve_on_ValueStart");
+            eve_on_ValueEnd = serializedObject.FindProperty("eve_on_ValueEnd");
+            pro_Text_Title = serializedObject.FindProperty("pro_Text_Title");
+            pro_TmpText_Title = serializedObject.FindProperty("pro_TmpText_Title");
+            pro_Text_Subtitle = serializedObject.FindProperty("pro_Text_Subtitle");
+            pro_TmpText_Subtitle = serializedObject.FindProperty("pro_TmpText_Subtitle");
+            pro_Text_Percent = serializedObject.FindProperty("pro_Text_Percent");
+            pro_TmpText_Percent = serializedObject.FindProperty("pro_TmpText_Percent");
+            pro_Bg = serializedObject.FindProperty("pro_Bg");
+            pro_Fore = serializedObject.FindProperty("pro_Fore");
+            pro_Icon = serializedObject.FindProperty("pro_Icon");
+            pro_Handle = serializedObject.FindProperty("pro_Handle");
+            ProgressValue = serializedObject.FindProperty("ProgressValue");
+            ProgressValueDuration = serializedObject.FindProperty("ProgressValueDuration");
+            ProgressPrecision = serializedObject.FindProperty("ProgressPrecision");
+            con_title = serializedObject.FindProperty("con_title");
+            con_subtitle = serializedObject.FindProperty("con_subtitle");
+            LerpMotion = serializedObject.FindProperty("LerpMotion");
+            ProgressUnit = serializedObject.FindProperty("ProgressUnit");
+            ProgressAnimatorListIsFold = serializedObject.FindProperty("ProgressAnimatorListIsFold");
+            EventIsFold = serializedObject.FindProperty("EventIsFold");
+            ProgressAnimatorNodes = serializedObject.FindProperty("ProgressAnimatorNodes");
+            AnimateState = serializedObject.FindProperty("AnimateState");
+            ProgressAnimatorMaxDuration = serializedObject.FindProperty("ProgressAnimatorMaxDuration");
+            Progress_Animators_GlobalDuration = serializedObject.FindProperty("Progress_Animators_GlobalDuration");
+            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
+            Display_ProgressRect_Fore = serializedObject.FindProperty("Display_ProgressRect_Fore");
+            Display_ProgressRect_Bg = serializedObject.FindProperty("Display_ProgressRect_Bg");
+            Display_ProgressRect_Handle = serializedObject.FindProperty("Display_ProgressRect_Handle");
+            Display_Icon = serializedObject.FindProperty("Display_Icon");
+            Display_Title = serializedObject.FindProperty("Display_Title");
+            Display_SubTitle = serializedObject.FindProperty("Display_SubTitle");
+            Display_Value = serializedObject.FindProperty("Display_Value");
         }
         #endregion      
 

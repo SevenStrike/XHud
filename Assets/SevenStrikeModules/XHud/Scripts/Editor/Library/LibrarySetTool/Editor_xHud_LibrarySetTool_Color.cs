@@ -414,7 +414,7 @@ namespace SevenStrikeModules.XHud
         {
             if (sp_ColorName.stringValue == "颜色名称")
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 色卡库采集器消息", "未填写名称", "请为色卡添加一个名称！", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 色卡库采集器消息", "未填写名称", "请为色卡添加一个名称！", "明白");
                 return;
             }
 
@@ -423,7 +423,7 @@ namespace SevenStrikeModules.XHud
 
             if (exist)
             {
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 色卡库采集器消息", "存在重复色卡名称", $"名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡已经存在于色卡库中！", "重命名", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 色卡库采集器消息", "存在重复色卡名称", $"名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡已经存在于色卡库中！", "重命名", 0);
                 if (res == "重命名")
                 {
                     return;
@@ -437,10 +437,10 @@ namespace SevenStrikeModules.XHud
                 info.Color = sp_Color.colorValue;
                 Target_Hud_ColorsLibrary.ColorsLibrary_AddColor(info);
 
-                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud 色卡库采集器消息", "已添加到色卡库", $"已将名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡添加到色卡库中！", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 色卡库采集器消息", "已添加到色卡库", $"已将名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡添加到色卡库中！", "明白");
                 Close();
 
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud 色卡库采集器消息", "存入色卡库", "色卡存入完成，是否要打开色卡库进行查看？", "不用", "查看色卡库", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 色卡库采集器消息", "存入色卡库", "色卡存入完成，是否要打开色卡库进行查看？", "不用", "查看色卡库", 0);
                 if (res == "查看色卡库")
                 {
                     EditorUtility.OpenPropertyEditor(Target_Hud_ColorsLibrary);
@@ -449,7 +449,7 @@ namespace SevenStrikeModules.XHud
 
             string indicator = SourcePainting.controller.GetIndicator();
 
-            string res_saved_turnon = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 色卡库采集器消息", "色卡库模式设定", $"是否要将 {(string.IsNullOrEmpty(indicator) ? SourcePainting.transform.name : indicator)} 色卡模式开启？", "开启", "暂不", 0);
+            string res_saved_turnon = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 色卡库采集器消息", "色卡库模式设定", $"是否要将 {(string.IsNullOrEmpty(indicator) ? SourcePainting.transform.name : indicator)} 色卡模式开启？", "开启", "暂不", 0);
             if (res_saved_turnon == "开启")
             {
                 SourcePainting.SyncLibraryColor = true;

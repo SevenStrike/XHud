@@ -130,7 +130,7 @@ namespace SevenStrikeModules.XHud
 
             if (mgr == null)
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 元素库添加器消息", "寻找Hud管理器", "场景中未找到HudManager管理器！", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素库添加器消息", "寻找Hud管理器", "场景中未找到HudManager管理器！", "明白");
                 return;
             }
             Transform[] sel_ele_objs = Selection.GetTransforms(SelectionMode.Unfiltered);
@@ -143,7 +143,7 @@ namespace SevenStrikeModules.XHud
 
                 if (mgr.hm_ElementLibrary_GetCount() <= 0)
                 {
-                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 元素库添加器消息", "元素库未配置", "您未在HudManager中配置元素库！请先至少指定一个元素库后再执行此操作！ ", "明白");
+                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素库添加器消息", "元素库未配置", "您未在HudManager中配置元素库！请先至少指定一个元素库后再执行此操作！ ", "明白");
                     return;
                 }
 
@@ -425,7 +425,7 @@ namespace SevenStrikeModules.XHud
 
                 if (target_library.ElementLibrary_IsExist(ReadySaveElementList[s].Element.name))
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 元素库添加器消息", "存在重复元素名称", $"名称为<color={colorhex}> {ReadySaveElementList[s].Element.transform.name} </color>的元素已经存在于<color={colorhex}> \" {sp_LibName.stringValue} \" </color>元素库中，是否以当前元素更新替换库中的元素？", "更新替换", "跳过", 1);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素库添加器消息", "存在重复元素名称", $"名称为<color={colorhex}> {ReadySaveElementList[s].Element.transform.name} </color>的元素已经存在于<color={colorhex}> \" {sp_LibName.stringValue} \" </color>元素库中，是否以当前元素更新替换库中的元素？", "更新替换", "跳过", 1);
                     if (res == "更新替换")
                     {
                         target_library.ElementsLibrary_ReplaceElement(ReadySaveElementList[s].Element);
@@ -449,7 +449,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (Datas.Count > 0)
-                Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud 元素库添加器消息", "元素入库", "以下是已被新增入库和被替换已有的元素列表，请您检查核对：", "明白");
+                Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 元素库添加器消息", "元素入库", "以下是已被新增入库和被替换已有的元素列表，请您检查核对：", "明白");
         }
 
         /// <summary>

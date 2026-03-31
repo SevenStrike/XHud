@@ -664,7 +664,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         {
             string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
-            string state = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "ColorCaptureTool颜色提取工具通知", "导出为套系色卡库", $"是否要为当前图片<color={hexcol}>提取的套系色调</color>创建套装色板？选定文件夹后即会在该文件夹中创建<color={hexcol}>整套色板</color>，包含：<color={hexcol}>主题色</color> Theme、<color={hexcol}>互补色</color> Complementary、<color={hexcol}>近似色</color> Approximate、<color={hexcol}>类似色</color> Analogous、<color={hexcol}>高级灰</color> AdvanceGray", "创建", "暂不", 0);
+            string state = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 颜色提取工具消息", "导出为套系色卡库", $"是否要为当前图片<color={hexcol}>提取的套系色调</color>创建套装色板？选定文件夹后即会在该文件夹中创建<color={hexcol}>整套色板</color>，包含：<color={hexcol}>主题色</color> Theme、<color={hexcol}>互补色</color> Complementary、<color={hexcol}>近似色</color> Approximate、<color={hexcol}>类似色</color> Analogous、<color={hexcol}>高级灰</color> AdvanceGray", "创建", "暂不", 0);
 
             if (state == "创建")
             {

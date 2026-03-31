@@ -130,7 +130,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 obj_ele_rect.localEulerAngles = Vector3.zero;
                 obj_ele_rect.localScale = Vector3.one;
 
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "创建动画器", "您需要为创建的Animator动画器制定一个基础类型！", "暂不", "Image", "Text", "TmpText", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "创建动画器", "您需要为创建的Animator动画器制定一个基础类型！", "暂不", "Image", "Text", "TmpText", 0);
 
                 if (res == "暂不")
                     return;
@@ -192,7 +192,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 XHud_Module_Text value = Mc_AddText(actobj, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "XHud Text", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
                 value.Indicator = "Text";
 
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "创建动画器", "是否要为创建的Text创建一个Animator动画器？", "暂不", "添加", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "创建动画器", "是否要为创建的Text创建一个Animator动画器？", "暂不", "添加", 0);
                 if (res == "添加")
                 {
                     XHud_Module_Animator anim = value.gameObject.AddComponent<XHud_Module_Animator>();
@@ -233,7 +233,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 XHud_Module_TmpText value = Mc_AddTmpText(actobj, "TmpText", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "XHud Text", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
                 value.Indicator = "TmpText";
 
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "创建动画器", "是否要为创建的TmpText创建一个Animator动画器？", "暂不", "添加", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "创建动画器", "是否要为创建的TmpText创建一个Animator动画器？", "暂不", "添加", 0);
                 if (res == "添加")
                 {
                     XHud_Module_Animator anim = value.gameObject.AddComponent<XHud_Module_Animator>();
@@ -266,7 +266,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("GameObject/XHud/Module（模组）/Button (按钮)", priority = 1000)]
         private static void Create_HudButton()
         {
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择按钮风格", "您想创建什么样风格的按钮？", "文字", "图标", "图标 & 文字", 0);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择按钮风格", "您想创建什么样风格的按钮？", "文字", "图标", "图标 & 文字", 0);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Button)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -305,7 +305,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             }
             else
             {
-                string res_bg = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择背景类型", "您希望使用那种背景方式作为按钮背景使用？", "有背景", "无背景", 1);
+                string res_bg = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择背景类型", "您希望使用那种背景方式作为按钮背景使用？", "有背景", "无背景", 1);
 
                 if (res_bg == "有背景")
                 {
@@ -320,7 +320,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                     #endregion
                 }
 
-                string res_text = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择文字类型", "您希望使用那种文字组件类型作为按钮文字使用？", "Text", "TmpText", 1);
+                string res_text = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择文字类型", "您希望使用那种文字组件类型作为按钮文字使用？", "Text", "TmpText", 1);
 
                 if (res == "文字")
                 {
@@ -391,7 +391,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("GameObject/XHud/Module（模组）/Progress (进度条)", priority = 1000)]
         private static void Create_HudProgress()
         {
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择进度条类型", "您希望进度条的标题、副标题以及数值文字使用哪种文字组件类型？", "Text", "TmpText", 1);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择进度条类型", "您希望进度条的标题、副标题以及数值文字使用哪种文字组件类型？", "Text", "TmpText", 1);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Progress)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -505,7 +505,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("GameObject/XHud/Module（模组）/Slider (滑动条)", priority = 1000)]
         private static void Create_HudSlider()
         {
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.通知, "创建模组提示", "选择滑动条类型", "您希望滑动条的标题、副标题以及数值文字使用哪种文字组件类型？", "Text", "TmpText", 1);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.通知, "XHud - 创建模组消息", "选择滑动条类型", "您希望滑动条的标题、副标题以及数值文字使用哪种文字组件类型？", "Text", "TmpText", 1);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Slider)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -634,7 +634,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("GameObject/XHud/Module（模组）/Toggle (开关)", priority = 1000)]
         private static void Create_HudToggle()
         {
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择开关风格", "您想创建什么样风格的开关？", "文字", "图标", "图标 & 文字", "纯净", 2);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择开关风格", "您想创建什么样风格的开关？", "文字", "图标", "图标 & 文字", "纯净", 2);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Toggle)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -682,7 +682,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             }
             else if (res == "文字" || res == "图标 & 文字")
             {
-                string res_text = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择文字类型", "您希望使用那种文字组件类型作为开关文字使用？", "Text", "TmpText", 1);
+                string res_text = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择文字类型", "您希望使用那种文字组件类型作为开关文字使用？", "Text", "TmpText", 1);
 
                 if (res == "文字")
                 {
@@ -769,7 +769,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         [MenuItem("GameObject/XHud/Module（模组）/Option (选项器)", priority = 1000)]
         private static void Create_HudOption()
         {
-            string res_type = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择选项器风格", "您想创建什么样风格的选项器？", "文字", "图标", "图标 & 文字", 0);
+            string res_type = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择选项器风格", "您想创建什么样风格的选项器？", "文字", "图标", "图标 & 文字", 0);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Option)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -797,7 +797,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             #endregion
 
             #region 创建标题
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "创建模组提示", "选择标题文字类型", "您希望选项器的标题以及选项按钮标题文字使用哪种文字组件类型？", "Text", "TmpText", 1);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择标题文字类型", "您希望选项器的标题以及选项按钮标题文字使用哪种文字组件类型？", "Text", "TmpText", 1);
             if (res == "Text")
             {
                 //创建Slider - 标题

@@ -344,7 +344,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                                 {
                                     if (prop_Font.objectReferenceValue != null)
                                     {
-                                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud PSD Reconstruction消息", "指定字体", $"确认指定 {prop_Name.stringValue} 字体资源吗？指定后会自动更正字体资源名称！", "指定", "暂不", 1);
+                                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - PSD Reconstruction消息", "指定字体", $"确认指定 {prop_Name.stringValue} 字体资源吗？指定后会自动更正字体资源名称！", "指定", "暂不", 1);
                                         if (res == "指定")
                                         {
                                             RenameFontAsset(prop_Font.objectReferenceValue, prop_Name.stringValue);
@@ -371,7 +371,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                                 {
                                     if (prop_FontAsset.objectReferenceValue != null)
                                     {
-                                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud PSD Reconstruction消息", "指定字体", $"确认指定 {prop_Name.stringValue} Tmp字体资源吗？指定后会自动更正字体资源名称！", "指定", "暂不", 1);
+                                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - PSD Reconstruction消息", "指定字体", $"确认指定 {prop_Name.stringValue} Tmp字体资源吗？指定后会自动更正字体资源名称！", "指定", "暂不", 1);
                                         if (res == "指定")
                                         {
                                             RenameFontAsset(prop_FontAsset.objectReferenceValue, prop_Name.stringValue);
@@ -672,7 +672,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
                 XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", "已指定图层文件夹目录： " + folder.name, HudMsgState.确认);
 
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud PSD Reconstruction消息", "提取图层色卡", "是否需要为您根据所有图元来创建一个颜色库作为备用资源？", "创建", "暂不", 1);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - PSD Reconstruction消息", "提取图层色卡", "是否需要为您根据所有图元来创建一个颜色库作为备用资源？", "创建", "暂不", 1);
             if (res == "创建")
             {
                 CreateColorLibWithSprites(folder);
@@ -1429,7 +1429,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                     }
                 }
 
-                Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "XHud PSD Reconstruction消息", "重建特殊化警告", "因为在PS中未涂层添加了Mask遮罩而并未栅格化图层，可能导致列表中的这些图层的位置会有些许偏移，请手动矫正或者在PS中栅格化他们！", "明白", 0, false);
+                Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "XHud - PSD Reconstruction消息", "重建特殊化警告", "因为在PS中未涂层添加了Mask遮罩而并未栅格化图层，可能导致列表中的这些图层的位置会有些许偏移，请手动矫正或者在PS中栅格化他们！", "明白", 0, false);
 
                 Undo.RegisterCreatedObjectUndo(structure, "CreateReconstruction");
             });

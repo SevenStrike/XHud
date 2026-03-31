@@ -4,6 +4,16 @@ namespace SevenStrikeModules.XHud
     using SevenStrikeModules.XHud.Utilitys;
     using UnityEngine;
 
+    /// <summary>
+    /// 音效播放器
+    /// </summary>
+    [System.Serializable]
+    public class AudioPlayer
+    {
+        public AudioSource Player;
+        public bool IsPlaying;
+    }
+
     public partial class XHud_Manager : MonoBehaviour
     {
         [Tooltip("音效池")]

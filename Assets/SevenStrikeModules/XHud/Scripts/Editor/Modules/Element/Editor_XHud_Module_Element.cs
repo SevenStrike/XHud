@@ -27,11 +27,10 @@ namespace SevenStrikeModules.XHud
 
     [CanEditMultipleObjects]
     [CustomEditor(typeof(XHud_Module_Element), true)]
-    public class Editor_XHud_Module_Element : Editor
+    public partial class Editor_XHud_Module_Element : Editor
     {
         #region 组件 / 列表
         private XHud_Module_Element BaseScript;
-        private ReorderableList SounderList, AnimatorsList, ButtonList, OptionList, SliderList, ProgressList, ContainerList, ToggleList, TextList, TmpTextList;
         #endregion
 
         private float LineHeight;
@@ -42,51 +41,7 @@ namespace SevenStrikeModules.XHud
 
         #region 序列化属性
         private SerializedProperty
-            CanvasGroup,
-            SounderNodes,
-            AnimatorNodes,
-            ContainerNodes,
-            OptionNodes,
-            ButtonNodes,
-            TextIsFold,
-            TmpTextIsFold,
-            SliderNodes,
-            TextNodes,
-            TmpTextNodes,
-            DebugState,
-            ProgressNodes,
-            ToggleNodes,
-            Indicator,
-            AnimatorsMaxDuration,
-            RectTransform,
-            TriggerAction,
-            ObjectTracker,
-            CreateState,
-            AnimateState,
-            Element_Animators_GlobalDuration,
-            OriginPoolName,
-            AnimatorsIsFold,
-            ButtonIsFold,
-            OptionIsFold,
-            SliderIsFold,
-            SounderIsFold,
-            ProgressIsFold,
-            ContainerIsFold,
-            ToggleIsFold,
-            EventIsFold,
-            AutoPlayAnimators,
-            AutoPlayContainersAnimators,
-            Tween_Preview_AutoStop,
-            Alpha,
-            RMS_Enabled,
-            RMS_LayoutDatas,
-            RMS_Name,
-            CurrentPivot,
-            OriginalName,
-            eve_on_element_in_start,
-            eve_on_element_in_end,
-            eve_on_element_out_start,
-            eve_on_element_out_end;
+            CanvasGroup, SounderNodes, AnimatorNodes, ContainerNodes, OptionNodes, ButtonNodes, TextIsFold, TmpTextIsFold, SliderNodes, TextNodes, TmpTextNodes, DebugState, ProgressNodes, ToggleNodes, Indicator, AnimatorsMaxDuration, RectTransform, TriggerAction, ObjectTracker, CreateState, AnimateState, Element_Animators_GlobalDuration, OriginPoolName, AnimatorsIsFold, ButtonIsFold, OptionIsFold, SliderIsFold, SounderIsFold, ProgressIsFold, ContainerIsFold, ToggleIsFold, EventIsFold, AutoPlayAnimators, AutoPlayContainersAnimators, Tween_Preview_AutoStop, Alpha, RMS_Enabled, RMS_LayoutDatas, RMS_Name, CurrentPivot, OriginalName, eve_on_element_in_start, eve_on_element_in_end, eve_on_element_out_start, eve_on_element_out_end;
         #endregion
 
         #region Preview - Animator
@@ -124,7 +79,7 @@ namespace SevenStrikeModules.XHud
 
         private XHud_Module_Element[] SelectedObjects;
 
-        private void GetAllTargets()
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
@@ -142,7 +97,7 @@ namespace SevenStrikeModules.XHud
             }
         }
 
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -161,15 +116,17 @@ namespace SevenStrikeModules.XHud
         {
             BaseScript = (XHud_Module_Element)target;
 
+            // 获取序列化字段
             GetSerializeFields();
 
+            // 获取组件
             GetComponents();
 
             LineHeight = EditorGUIUtility.singleLineHeight;
 
             Vector2 ButtonSize = new Vector2(14, 14);
 
-            ClearEmptys();
+            ClearEmptyNodes();
 
             #region 图标获取
             icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/icon_main");
@@ -217,605 +174,19 @@ namespace SevenStrikeModules.XHud
 
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
-            #region ReorderableList - Sounder
-            SounderList = new ReorderableList(serializedObject, SounderNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "元素音效列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 6;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = SounderNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_sounder = sp_root.FindPropertyRelative("Sounder");
-                        XHud_Element_Sounder sounder = (XHud_Element_Sounder)sp_sounder.objectReferenceValue;
-                        if (sounder != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(sounder.Indicator))
-                                title += sounder.Indicator;
-                            else
-                                title += sounder.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight, 10, 10), icon_sound);
-
-                            SerializedObject so_sounder = new SerializedObject(sounder);
-
-                            SerializedProperty sp_PitchMin = so_sounder.FindProperty("Pitch_Min");
-                            SerializedProperty sp_PitchMax = so_sounder.FindProperty("Pitch_Max");
-                            SerializedProperty sp_Delay = so_sounder.FindProperty("DelayTime");
-                            SerializedProperty sp_Vol = so_sounder.FindProperty("Volume");
-                            SerializedProperty sp_SoundName = so_sounder.FindProperty("SoundName");
-
-                            so_sounder.Update();
-
-                            GUI.color = Color.white;
-
-                            #region 最小音高
-                            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 40, rect.y + 4, 30, 19), "音高", sp_PitchMin, 0, 60, LineHeight, 30);
-                            #endregion
-
-                            #region 最大音高                         
-                            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width + 25, rect.y + 4, 30, 19), "", sp_PitchMax, 0, 25, LineHeight, 5);
-                            #endregion
-
-                            #region 音量          
-                            float fieldwidth = EditorGUIUtility.fieldWidth;
-                            EditorGUIUtility.fieldWidth = 40;
-                            EditorGUI.Slider(new Rect(rect.x + 5, rect.y + 30, 120, 19), sp_Vol, 0, 1, "");
-                            EditorGUIUtility.fieldWidth = fieldwidth;
-                            so_sounder.ApplyModifiedProperties();
-                            #endregion
-
-                            #region 延迟                         
-                            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 40, rect.y + 30, 30, 19), "延迟", sp_Delay, 0, 60, LineHeight, 30);
-                            #endregion
-
-                            #region 音效列表
-                            if (mgr.Hud_Sounds != null)
-                            {
-                                string[] collist = mgr.Hud_Sounds.SoundLibrary_GetSoundNames();
-                                Color bgcol = GUI.color;
-                                GUI.color = XHud_Dashboard.Theme_Primary;
-                                Editor_XHud_GUI.Gui_PopupWithString(new Rect(rect.width + 25, rect.y + 30, 30, 19), ref sp_SoundName, collist, HudFilled.实体, HudColor.亮白, Color.black);
-                                GUI.color = bgcol;
-                            }
-                            #endregion
-
-                            so_sounder.ApplyModifiedProperties();
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_sounder = SounderNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Sounder");
-                    EditorGUIUtility.PingObject(sp_sounder.objectReferenceValue);
-
-                    #region 播放音效
-                    SerializedObject so_sod = new SerializedObject((XHud_Element_Sounder)sp_sounder.objectReferenceValue);
-                    SerializedProperty sp_name = so_sod.FindProperty("SoundName");
-                    SerializedProperty sp_vol = so_sod.FindProperty("Volume");
-                    SerializedProperty sp_delay = so_sod.FindProperty("DelayTime");
-                    SerializedProperty sp_pit_min = so_sod.FindProperty("Pitch_Min");
-                    SerializedProperty sp_pit_max = so_sod.FindProperty("Pitch_Max");
-                    SerializedProperty sp_userandom = so_sod.FindProperty("UseRandomPitch");
-
-                    float x_vol = sp_vol.floatValue;
-                    float x_pit_min = sp_pit_min.floatValue;
-                    float x_pit_max = sp_pit_max.floatValue;
-                    float x_delay = sp_delay.floatValue;
-                    bool x_userandom = false;
-                    if (sp_userandom.intValue == 1)
-                        x_userandom = true;
-
-                    AudioClip x_clip = mgr.Hud_Sounds.SoundLibrary_GetSound(sp_name.stringValue);
-                    Preivew_HudSounder_CoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_HudSounder_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
-                    #endregion
-                },
-                elementHeightCallback = index =>
-                {
-                    return 2.8f * LineHeight;
-                }
-            };
-            #endregion
-
-            #region ReorderableList - Animator
-            AnimatorsList = new ReorderableList(serializedObject, AnimatorNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "动画器列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    if (AnimatorNodes == null)
-                        return;
-                    if (AnimatorNodes.arraySize <= 0)
-                        return;
-                    SerializedProperty sp_root = AnimatorNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_animator = sp_root.FindPropertyRelative("Animator");
-                        SerializedProperty sp_delay = sp_root.FindPropertyRelative("DelayTime");
-                        XHud_Module_Animator animator = (XHud_Module_Animator)sp_animator.objectReferenceValue;
-
-                        if (animator != null)
-                        {
-                            float titleheight = rect.y + 7;
-                            float baseheight = rect.y + 25;
-
-                            #region 类型图标         
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_anim);
-                            GUI.color = Color.white;
-                            #endregion
-
-                            #region 标题文字
-                            string title = "";
-                            string indicator = animator.GetIndicator();
-                            if (!string.IsNullOrEmpty(indicator))
-                                title += indicator;
-                            else
-                                title += animator.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-                            #endregion
-
-                            #region 延迟
-                            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 5, rect.y + 4, 30, 19), "D", sp_delay, 10, 40, LineHeight, 15);
-                            #endregion
-
-                            #region 速率                         
-                            SerializedObject so_anim = new SerializedObject(animator);
-                            so_anim.Update();
-
-                            SerializedProperty sp_glodur = so_anim.FindProperty("Animator_GlobalDuration");
-                            SerializedProperty sp_maxdur = so_anim.FindProperty("MaxTimerWithGlobalDuration");
-
-                            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 50, rect.y + 4, 30, 19), "G", sp_glodur, 10, 40, LineHeight, 15);
-
-                            Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect.width - 80, rect.y + 4, 30, 19), $"{sp_maxdur.floatValue.ToString()} s", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, Vector2.zero, 11);
-
-                            so_anim.ApplyModifiedProperties();
-                            #endregion
-
-                            sp_animator.serializedObject.ApplyModifiedProperties();
-                            sp_root.serializedObject.ApplyModifiedProperties();
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    if (!Application.isPlaying)
-                    {
-                        Preview_Animator_Stop();
-                    }
-
-                    Preview_Animator_PlayAt(list.index);
-                    SerializedProperty sp_root = AnimatorNodes.GetArrayElementAtIndex(list.index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_animator = sp_root.FindPropertyRelative("Animator");
-                        EditorGUIUtility.PingObject(sp_animator.objectReferenceValue);
-                    }
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-            #endregion
-
-            #region ReorderableList - Button
-            ButtonList = new ReorderableList(serializedObject, ButtonNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "按钮列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = ButtonNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_btn = sp_root.FindPropertyRelative("Button");
-                        XHud_Module_Button btn = (XHud_Module_Button)sp_btn.objectReferenceValue;
-                        if (btn != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(btn.Indicator))
-                                title += btn.Indicator;
-                            else
-                                title += btn.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_button);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_btn = ButtonNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Button");
-                    //Hud_Button btn = (Hud_Button)sp_btn.objectReferenceValue;
-                    EditorGUIUtility.PingObject(sp_btn.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-            #endregion
-
-            #region ReorderableList - Option
-            OptionList = new ReorderableList(serializedObject, OptionNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "选项列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = OptionNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_opt = sp_root.FindPropertyRelative("Option");
-                        XHud_Module_Option opt = (XHud_Module_Option)sp_opt.objectReferenceValue;
-                        if (opt != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(opt.Indicator))
-                                title += opt.Indicator;
-                            else
-                                title += opt.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_option);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_opt = OptionNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Option");
-                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-            #endregion
-
-            #region ReorderableList - Slider
-            SliderList = new ReorderableList(serializedObject, SliderNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "滑动条列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = SliderNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_sli = sp_root.FindPropertyRelative("Slider");
-                        XHud_Module_Slider sli = (XHud_Module_Slider)sp_sli.objectReferenceValue;
-                        if (sli != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(sli.Indicator))
-                                title += sli.Indicator;
-                            else
-                                title += sli.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_slider);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_opt = SliderNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Slider");
-                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-            #endregion
-
-            #region ReorderableList - Progress
-            ProgressList = new ReorderableList(serializedObject, ProgressNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "进度条列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = ProgressNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_pro = sp_root.FindPropertyRelative("Progress");
-                        XHud_Module_Progress pro = (XHud_Module_Progress)sp_pro.objectReferenceValue;
-                        if (pro != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(pro.Indicator))
-                                title += pro.Indicator;
-                            else
-                                title += pro.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_progress);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_opt = ProgressNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Progress");
-                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-            #endregion
-
-            #region ReorderableList - Container
-            ContainerList = new ReorderableList(serializedObject, ContainerNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "容器列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = ContainerNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_con = sp_root.FindPropertyRelative("Container");
-                        XHud_Module_Container con = (XHud_Module_Container)sp_con.objectReferenceValue;
-                        if (con != null)
-                        {
-                            int count = con.Con_Get_ItemsCount();
-                            string title = "";
-                            if (!string.IsNullOrEmpty(con.Indicator))
-                                title += con.Indicator;
-                            else
-                                title += con.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_container);
-
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - 20, titleheight - 2, 60, LineHeight), count.ToString() + " 项", HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleRight, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_con = ContainerNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Container");
-                    EditorGUIUtility.PingObject(sp_con.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-            #endregion
-
-            #region ReorderableList - Toggle
-            ToggleList = new ReorderableList(serializedObject, ToggleNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "开关列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = ToggleNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_tog = sp_root.FindPropertyRelative("Toggle");
-                        XHud_Module_Toggle tog = (XHud_Module_Toggle)sp_tog.objectReferenceValue;
-                        if (tog != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(tog.Indicator))
-                                title += tog.Indicator;
-                            else
-                                title += tog.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_toggle);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_opt = ToggleNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Toggle");
-                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-            #endregion
-
-            #region ReorderableList - Text
-            TextList = new ReorderableList(serializedObject, TextNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "文字列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = TextNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_text = sp_root.FindPropertyRelative("Text");
-                        XHud_Module_Text txt = (XHud_Module_Text)sp_text.objectReferenceValue;
-                        if (txt != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(txt.Indicator))
-                                title += txt.Indicator;
-                            else
-                                title += txt.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_text);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_text = TextNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Text");
-                    EditorGUIUtility.PingObject(sp_text.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-            #endregion
-
-            #region ReorderableList - TmpText
-            TmpTextList = new ReorderableList(serializedObject, TmpTextNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "Tmp文字列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = TmpTextNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_text = sp_root.FindPropertyRelative("TmpText");
-                        XHud_Module_TmpText txt = (XHud_Module_TmpText)sp_text.objectReferenceValue;
-                        if (txt != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(txt.Indicator))
-                                title += txt.Indicator;
-                            else
-                                title += txt.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_tmptext);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_text = TmpTextNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("TmpText");
-                    EditorGUIUtility.PingObject(sp_text.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-            #endregion
-
+            // 控件列表绘制
+            ReorderableList_Draw_Sounder(mgr);
+            ReorderableList_Draw_Animator(mgr);
+            ReorderableList_Draw_Button(mgr);
+            ReorderableList_Draw_Option(mgr);
+            ReorderableList_Draw_Slider(mgr);
+            ReorderableList_Draw_Progress(mgr);
+            ReorderableList_Draw_Container(mgr);
+            ReorderableList_Draw_Toggle(mgr);
+            ReorderableList_Draw_Text(mgr);
+            ReorderableList_Draw_TmpText(mgr);
+
+            // RMS 残留信息清理
             if (mgr != null)
             {
                 if (mgr.hm_RMS_GetResolutionNodes().Length <= 0 && RMS_LayoutDatas.arraySize > 0)
@@ -829,7 +200,7 @@ namespace SevenStrikeModules.XHud
                 }
             }
 
-            GetAllTargets();
+            Targets_Get();
         }
 
         private void OnDisable()
@@ -853,10 +224,10 @@ namespace SevenStrikeModules.XHud
         {
             serializedObject.Update();
 
-            if (string.IsNullOrEmpty(BaseScript.Indicator))
-                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 元素", Color.white, 20, 20);
+            if (string.IsNullOrEmpty(Indicator.stringValue))
+                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 元素", Color.white);
             else
-                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, Indicator.stringValue, Color.white, 20, 20);
+                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 元素 -> ( " + Indicator.stringValue + " )", Color.white);
 
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
@@ -893,6 +264,14 @@ namespace SevenStrikeModules.XHud
 
             GUILayout.FlexibleSpace();
 
+            //GUI.enabled = true;
+            //if (Editor_XHud_GUI.Gui_Layout_Button(15, "预览动画", icon_scan_r, icon_scan_p))
+            //{
+
+            //}
+
+            //GUILayout.FlexibleSpace();
+
             #region 记录设计布局
             GUI.enabled = true;
             if (RMS_Enabled.boolValue)
@@ -919,7 +298,7 @@ namespace SevenStrikeModules.XHud
             {
                 if (Application.isPlaying)
                 {
-                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudElement消息", "锚点初始化", "程序正在运行，无法在运行期间执行此功能！", "明白");
+                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "锚点初始化", "程序正在运行，无法在运行期间执行此功能！", "明白");
                     return;
                 }
 
@@ -929,21 +308,11 @@ namespace SevenStrikeModules.XHud
             }
             #endregion
 
-            if (!IsMultiSelected() && AnimatorNodes.arraySize > 0 &&
-                (GetPrefabStatus(BaseScript.gameObject) == ElementStatu.InScene ||
-                GetPrefabStatus(BaseScript.gameObject) == ElementStatu.InSceneNotPrefab))
+            #region 预览元素自身动画
+            if ((GetPrefabStatus(BaseScript.gameObject) == ElementStatu.InScene || GetPrefabStatus(BaseScript.gameObject) == ElementStatu.InSceneNotPrefab))
             {
                 GUILayout.FlexibleSpace();
 
-                #region 预览动画
-                if (!IsMultiSelected())
-                {
-                    Editor_XHud_GUI.SetEnabled(true);
-                }
-                else
-                {
-                    Editor_XHud_GUI.SetEnabled(false);
-                }
                 if (!Preivew_Animator_PlayingState)
                 {
                     if (Editor_XHud_GUI.Gui_Layout_Button(15, "播放所有动画器预览", prw_play_r, prw_play_p))
@@ -968,9 +337,9 @@ namespace SevenStrikeModules.XHud
                         Preview_Animator_Stop();
                     }
                 }
-                Editor_XHud_GUI.SetEnabled(true);
-                #endregion
             }
+            #endregion
+
             Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Horizontal_End();
             GUI.enabled = true;
@@ -988,7 +357,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Property_Field("标识名称", Indicator);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -1056,12 +425,12 @@ namespace SevenStrikeModules.XHud
 
             #region 状态
             string statu_title = "状态";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_title = "状态 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_title, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 #region 使用状态     
                 Editor_XHud_GUI.StatuDisplayer_text(usestate, 12, new Vector2(0, 7), "使用状态", 12, (HudElementCreateState)CreateState.enumValueIndex == HudElementCreateState.Created ? "已被生成" : "已被回收", CreateState.boolValue ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
@@ -1276,7 +645,7 @@ namespace SevenStrikeModules.XHud
 
                         #region RMS方案信息查看
 
-                        if (IsMultiSelected())
+                        if (Targets_Selected())
                         {
                             Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                             Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1372,7 +741,7 @@ namespace SevenStrikeModules.XHud
                         {
                             if (!Application.isPlaying)
                             {
-                                if (IsMultiSelected())
+                                if (Targets_Selected())
                                 {
                                     for (int i = 0; i < SelectedObjects.Length; i++)
                                     {
@@ -1408,7 +777,7 @@ namespace SevenStrikeModules.XHud
             #region 音效列表
             if (SounderNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1437,7 +806,7 @@ namespace SevenStrikeModules.XHud
             #region 动画器列表
             if (AnimatorNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1470,7 +839,7 @@ namespace SevenStrikeModules.XHud
             #region 按钮列表
             if (ButtonNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1499,7 +868,7 @@ namespace SevenStrikeModules.XHud
             #region 文字列表
             if (TextNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1528,7 +897,7 @@ namespace SevenStrikeModules.XHud
             #region Tmp文字列表
             if (TmpTextNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1557,7 +926,7 @@ namespace SevenStrikeModules.XHud
             #region 选项列表
             if (OptionNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1586,7 +955,7 @@ namespace SevenStrikeModules.XHud
             #region 滑动条列表
             if (SliderNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1615,7 +984,7 @@ namespace SevenStrikeModules.XHud
             #region 进度条列表
             if (ProgressNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1644,7 +1013,7 @@ namespace SevenStrikeModules.XHud
             #region 容器列表
             if (ContainerNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1673,7 +1042,7 @@ namespace SevenStrikeModules.XHud
             #region 开关列表
             if (ToggleNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1700,7 +1069,7 @@ namespace SevenStrikeModules.XHud
             #endregion
 
             #region 事件列表
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1756,12 +1125,12 @@ namespace SevenStrikeModules.XHud
 
             #region 统计
             string statu_statistic = "统计";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_statistic = "统计 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_statistic, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 if (SounderNodes.arraySize <= 0 && AnimatorNodes.arraySize <= 0 && ButtonNodes.arraySize <= 0 && OptionNodes.arraySize <= 0 &&
                     SliderNodes.arraySize <= 0 && ProgressNodes.arraySize <= 0 && ToggleNodes.arraySize <= 0 && ContainerNodes.arraySize <= 0 &&
@@ -1969,7 +1338,7 @@ namespace SevenStrikeModules.XHud
 
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "组件", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(10);
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -2071,7 +1440,7 @@ namespace SevenStrikeModules.XHud
                 {
                     AllListFoldState(true);
                 });
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddSeparator("");
                     menu.AddDisabledItem(new GUIContent("预览"));
@@ -2153,245 +1522,6 @@ namespace SevenStrikeModules.XHud
             serializedObject.ApplyModifiedProperties();
         }
 
-        #region RMS
-
-        /// <summary>
-        /// 根据当前元素所选定的布局方案进行布局重绘
-        /// </summary>
-        private void RMS_Redraw()
-        {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
-            //--判断当前元素是否在场景中
-            if (!IsInPrefabStageMode())
-            {
-                if (!string.IsNullOrEmpty(BaseScript.gameObject.scene.name))
-                {
-                    if (RMS_Enabled.boolValue)
-                    {
-                        #region 以Hud管理器中指定的RMS布局方案来对此元素进行坐标信息复位
-
-                        string solution = mgr.hm_RMS_GetCurrentSolution();
-
-                        if (IsMultiSelected())
-                        {
-                            for (int i = 0; i < SelectedObjects.Length; i++)
-                            {
-                                RMS_Preview(SelectedObjects[i], SelectedObjects[i].Alpha, Vector3.zero, solution, true);
-                            }
-                        }
-                        else
-                        {
-                            RMS_Preview(BaseScript, Alpha.floatValue, Vector3.zero, solution, true);
-                        }
-                        #endregion
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 布局信息是否存在
-        /// </summary>
-        /// <returns></returns>
-        private bool RMS_IsExist()
-        {
-            bool isExist = false;
-            for (int i = 0; i < RMS_LayoutDatas.arraySize; i++)
-            {
-                SerializedProperty sp_name = RMS_LayoutDatas.GetArrayElementAtIndex(i).FindPropertyRelative("LayoutName");
-
-                if (sp_name.stringValue == RMS_Name.stringValue)
-                {
-                    isExist = true;
-                    break;
-                }
-            }
-            return isExist;
-        }
-
-        /// <summary>
-        /// 获取当前元素的RMS状态信息
-        /// </summary>
-        /// <returns></returns>
-        private Element_RMS_LayoutData RMS_GetCurrentInfo()
-        {
-            Element_RMS_LayoutData info = new Element_RMS_LayoutData();
-
-            XHudAnchor anchor = XHudAnchor.中心;
-            string ParentName = BaseScript.transform.parent.name;
-
-            if (ParentName == "Anchor_B")
-            {
-                anchor = XHudAnchor.底层;
-            }
-            if (ParentName == "Anchor_C")
-            {
-                anchor = XHudAnchor.中心;
-            }
-            if (ParentName == "Anchor_L")
-            {
-                anchor = XHudAnchor.左;
-            }
-            if (ParentName == "Anchor_R")
-            {
-                anchor = XHudAnchor.右;
-            }
-            if (ParentName == "Anchor_U")
-            {
-                anchor = XHudAnchor.上;
-            }
-            if (ParentName == "Anchor_D")
-            {
-                anchor = XHudAnchor.下;
-            }
-            if (ParentName == "Anchor_L_U")
-            {
-                anchor = XHudAnchor.左上;
-            }
-            if (ParentName == "Anchor_L_D")
-            {
-                anchor = XHudAnchor.左下;
-            }
-            if (ParentName == "Anchor_R_U")
-            {
-                anchor = XHudAnchor.右上;
-            }
-            if (ParentName == "Anchor_R_D")
-            {
-                anchor = XHudAnchor.右下;
-            }
-            if (ParentName == "Anchor_T")
-            {
-                anchor = XHudAnchor.顶层;
-            }
-
-            info.Anchor = anchor;
-            info.AnchorMin = BaseScript.RectTransform.anchorMin;
-            info.AnchorMax = BaseScript.RectTransform.anchorMax;
-            info.Pivot = BaseScript.RectTransform.pivot;
-            info.Position = BaseScript.RectTransform.anchoredPosition3D;
-            info.Euler = BaseScript.RectTransform.localEulerAngles;
-            info.Scale = BaseScript.RectTransform.localScale;
-
-            return info;
-        }
-
-        /// <summary>
-        /// RMS设置
-        /// </summary>
-        /// <param name="property"></param>
-        private void RMS_Set(SerializedProperty property)
-        {
-            SerializedProperty sp_Anchor = property.FindPropertyRelative("Anchor");
-            SerializedProperty sp_Position = property.FindPropertyRelative("Position");
-            SerializedProperty sp_Euler = property.FindPropertyRelative("Euler");
-            SerializedProperty sp_Scale = property.FindPropertyRelative("Scale");
-            SerializedProperty sp_AnchorMin = property.FindPropertyRelative("AnchorMin");
-            SerializedProperty sp_AnchorMax = property.FindPropertyRelative("AnchorMax");
-            SerializedProperty sp_Pivot = property.FindPropertyRelative("Pivot");
-            SerializedProperty sp_LayoutName = property.FindPropertyRelative("LayoutName");
-
-            Element_RMS_LayoutData layout_info = RMS_GetCurrentInfo();
-
-            sp_Anchor.enumValueIndex = (int)layout_info.Anchor;
-            sp_Position.vector3Value = layout_info.Position;
-            sp_Euler.vector3Value = layout_info.Euler;
-            sp_Scale.vector3Value = layout_info.Scale;
-            sp_AnchorMin.vector2Value = layout_info.AnchorMin;
-            sp_AnchorMax.vector2Value = layout_info.AnchorMax;
-            sp_Pivot.vector2Value = layout_info.Pivot;
-            sp_LayoutName.stringValue = RMS_Name.stringValue;
-
-            property.serializedObject.ApplyModifiedProperties();
-        }
-
-        /// <summary>
-        /// RMS记录
-        /// </summary>
-        private void RMS_Record()
-        {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
-            if (!mgr.RMS_Enabled)
-            {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "RMS记录布局", "Hud管理器中RMS未开启！无法执行记录布局信息操作！", "明白");
-                return;
-            }
-
-            if (mgr.hm_RMS_IsEmpty())
-            {
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudElement消息", "RMS记录布局", "并未发现您在HudManager里配置RMS信息！请先配置RMS列表！", "去配置", "暂不", 0);
-                if (res == "去配置")
-                {
-                    Selection.activeGameObject = mgr.gameObject;
-                    EditorGUIUtility.PingObject(mgr);
-                    return;
-                }
-                if (res == "暂不")
-                {
-                    return;
-                }
-            }
-
-            if (IsMultiSelected())
-            {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudElement消息", "RMS批量记录", "因为考虑到每个元素当前设计布局可能不一致，因此不支持批量记录设计布局信息！", "明白");
-                return;
-            }
-            else
-            {
-                if (!mgr.RMS_Enabled)
-                    return;
-
-                if (RMS_LayoutDatas.arraySize <= 0)
-                {
-                    RMS_LayoutDatas.InsertArrayElementAtIndex(RMS_LayoutDatas.arraySize);
-                    SerializedProperty newLayoutInfo = RMS_LayoutDatas.GetArrayElementAtIndex(RMS_LayoutDatas.arraySize - 1);
-                    RMS_Set(newLayoutInfo);
-                }
-                else
-                {
-                    bool IsExist = false;
-                    for (int i = 0; i < RMS_LayoutDatas.arraySize; i++)
-                    {
-                        SerializedProperty sp_list_cur_solution = RMS_LayoutDatas.GetArrayElementAtIndex(i);
-                        SerializedProperty sp_list_cur_solution_name = sp_list_cur_solution.FindPropertyRelative("LayoutName");
-
-                        if (sp_list_cur_solution_name.stringValue == RMS_Name.stringValue)
-                        {
-                            RMS_Set(sp_list_cur_solution);
-                            IsExist = true;
-                            break;
-                        }
-                    }
-                    if (!IsExist)
-                    {
-                        RMS_LayoutDatas.InsertArrayElementAtIndex(RMS_LayoutDatas.arraySize);
-                        SerializedProperty newLayoutInfo = RMS_LayoutDatas.GetArrayElementAtIndex(RMS_LayoutDatas.arraySize - 1);
-                        RMS_Set(newLayoutInfo);
-                    }
-                }
-            }
-
-            Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素消息", "RMS记录布局", "已记录  \"" + RMS_Name.stringValue + "\"  设计布局信息！", "明白");
-        }
-
-        /// <summary>
-        /// RMS 预览
-        /// </summary>
-        /// <param name="element"></param>
-        /// <param name="alpha"></param>
-        /// <param name="offset"></param>
-        /// <param name="solution"></param>
-        /// <param name="DontCreateID"></param>
-        private void RMS_Preview(XHud_Module_Element element, float alpha, Vector3 offset, string solution, bool DontCreateID)
-        {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-            mgr.hm_HudElement_Initialize_ByDesignLayout_For_Screen(element, alpha, offset, solution, DontCreateID);
-        }
-        #endregion
-
         #region 辅助
         /// <summary>
         /// 元素回到锚点初始位置
@@ -2403,7 +1533,7 @@ namespace SevenStrikeModules.XHud
             {
                 return;
             }
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -2422,7 +1552,6 @@ namespace SevenStrikeModules.XHud
                 BaseScript.element_PositionResetZero();
             }
         }
-
         /// <summary>
         /// 判断模组列表是否存在
         /// </summary>
@@ -2556,14 +1685,13 @@ namespace SevenStrikeModules.XHud
             }
             #endregion
         }
-
         /// <summary>
         /// 弹窗显示获取组件结果
         /// </summary>
         private void GetModulesResult()
         {
             List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int s = 0; s < SelectedObjects.Length; s++)
                 {
@@ -2784,7 +1912,6 @@ namespace SevenStrikeModules.XHud
                     Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 元素消息", "扫描元素子组件", "以下是扫描到的元素所有子组件列表，请您检查核对：", "明白");
             }
         }
-
         /// <summary>
         /// 获取组件
         /// </summary>
@@ -2811,13 +1938,12 @@ namespace SevenStrikeModules.XHud
                 ObjectTracker.serializedObject.ApplyModifiedProperties();
             }
         }
-
         /// <summary>
         /// 改变元素透明度
         /// </summary>
         private void ChangeAlpha()
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -2848,14 +1974,13 @@ namespace SevenStrikeModules.XHud
                 CanvasGroup.serializedObject.ApplyModifiedProperties();
             }
         }
-
         /// <summary>
         /// 折叠列表
         /// </summary>
         /// <param name="state"></param>
         private void AllListFoldState(bool state)
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -2935,13 +2060,11 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         private void CalculateAnimatorMaxDuration(List<ElementNode_Animator> list, float globaldur)
         {
             AnimatorsMaxDuration.floatValue = Animators_GetAnimatorsMaxDuration(list, globaldur);
             AnimatorsMaxDuration.serializedObject.ApplyModifiedProperties();
         }
-
         /// <summary>
         /// 从所有子动画器中获取最大耗时
         /// </summary>
@@ -2964,7 +2087,6 @@ namespace SevenStrikeModules.XHud
             float v = XHud_Utilitys.Array_MaxValue(x_list);
             return v * globaldur;
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -3005,7 +2127,6 @@ namespace SevenStrikeModules.XHud
             }
             return hasLoop;
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -3024,7 +2145,6 @@ namespace SevenStrikeModules.XHud
             }
             return hasLoop;
         }
-
         /// <summary>
         /// 判断当前物体及是否处于预制体独立场景模式中
         /// </summary>
@@ -3047,7 +2167,6 @@ namespace SevenStrikeModules.XHud
 
             return IsInPrefabStage;
         }
-
         /// <summary>
         /// 还原Animator姿态
         /// </summary>
@@ -3122,30 +2241,6 @@ namespace SevenStrikeModules.XHud
 
             so.ApplyModifiedProperties();
         }
-
-        private void ClearEmptys()
-        {
-            for (int i = 0; i < BaseScript.TmpTextNodes.Count; i++)
-            {
-                // 检查是否为 null 或类型不匹配
-                if (BaseScript.TmpTextNodes[i].TmpText == null)
-                {
-                    TmpTextNodes.DeleteArrayElementAtIndex(i);
-                }
-            }
-            TmpTextNodes.serializedObject.ApplyModifiedProperties();
-
-            for (int i = 0; i < BaseScript.TextNodes.Count; i++)
-            {
-                // 检查是否为 null 或类型不匹配
-                if (BaseScript.TextNodes[i].Text == null)
-                {
-                    TextNodes.DeleteArrayElementAtIndex(i);
-                }
-            }
-            TextNodes.serializedObject.ApplyModifiedProperties();
-        }
-
         public ElementStatu GetPrefabStatus(GameObject gameObject)
         {
             if (PrefabUtility.IsPartOfPrefabAsset(gameObject))
@@ -3160,6 +2255,57 @@ namespace SevenStrikeModules.XHud
             {
                 return ElementStatu.InSceneNotPrefab;
             }
+        }
+        /// <summary>
+        /// 获取序列化变量
+        /// </summary>
+        private void GetSerializeFields()
+        {
+            SounderNodes = serializedObject.FindProperty("SounderNodes");
+            AnimatorNodes = serializedObject.FindProperty("AnimatorNodes");
+            ButtonNodes = serializedObject.FindProperty("ButtonNodes");
+            OptionNodes = serializedObject.FindProperty("OptionNodes");
+            SliderNodes = serializedObject.FindProperty("SliderNodes");
+            ProgressNodes = serializedObject.FindProperty("ProgressNodes");
+            TextNodes = serializedObject.FindProperty("TextNodes");
+            TmpTextNodes = serializedObject.FindProperty("TmpTextNodes");
+            ToggleNodes = serializedObject.FindProperty("ToggleNodes");
+            ContainerNodes = serializedObject.FindProperty("ContainerNodes");
+            DebugState = serializedObject.FindProperty("DebugState");
+            CanvasGroup = serializedObject.FindProperty("CanvasGroup");
+            Alpha = serializedObject.FindProperty("Alpha");
+            RectTransform = serializedObject.FindProperty("RectTransform");
+            TriggerAction = serializedObject.FindProperty("TriggerAction");
+            ObjectTracker = serializedObject.FindProperty("ObjectTracker");
+            AutoPlayAnimators = serializedObject.FindProperty("AutoPlayAnimators");
+            AutoPlayContainersAnimators = serializedObject.FindProperty("AutoPlayContainersAnimators");
+            Tween_Preview_AutoStop = serializedObject.FindProperty("Tween_Preview_AutoStop");
+            eve_on_element_in_start = serializedObject.FindProperty("eve_on_element_in_start");
+            eve_on_element_in_end = serializedObject.FindProperty("eve_on_element_in_end");
+            eve_on_element_out_start = serializedObject.FindProperty("eve_on_element_out_start");
+            eve_on_element_out_end = serializedObject.FindProperty("eve_on_element_out_end");
+            TextIsFold = serializedObject.FindProperty("TextIsFold");
+            TmpTextIsFold = serializedObject.FindProperty("TmpTextIsFold");
+            Indicator = serializedObject.FindProperty("Indicator");
+            AnimatorsMaxDuration = serializedObject.FindProperty("AnimatorsMaxDuration");
+            CreateState = serializedObject.FindProperty("CreateState");
+            AnimateState = serializedObject.FindProperty("AnimateState");
+            OriginPoolName = serializedObject.FindProperty("OriginPoolName");
+            OriginalName = serializedObject.FindProperty("OriginalName");
+            CurrentPivot = serializedObject.FindProperty("CurrentPivot");
+            Element_Animators_GlobalDuration = serializedObject.FindProperty("Element_Animators_GlobalDuration");
+            AnimatorsIsFold = serializedObject.FindProperty("AnimatorsIsFold");
+            ButtonIsFold = serializedObject.FindProperty("ButtonIsFold");
+            OptionIsFold = serializedObject.FindProperty("OptionIsFold");
+            SliderIsFold = serializedObject.FindProperty("SliderIsFold");
+            ProgressIsFold = serializedObject.FindProperty("ProgressIsFold");
+            ContainerIsFold = serializedObject.FindProperty("ContainerIsFold");
+            ToggleIsFold = serializedObject.FindProperty("ToggleIsFold");
+            EventIsFold = serializedObject.FindProperty("EventIsFold");
+            SounderIsFold = serializedObject.FindProperty("SounderIsFold");
+            RMS_Enabled = serializedObject.FindProperty("RMS_Enabled");
+            RMS_LayoutDatas = serializedObject.FindProperty("RMS_LayoutDatas");
+            RMS_Name = serializedObject.FindProperty("RMS_Name");
         }
         #endregion
 
@@ -3706,1385 +2852,5 @@ namespace SevenStrikeModules.XHud
 
         #endregion
 
-        #region 获取组件
-
-        /// <summary>
-        /// 获取所有动画器
-        /// </summary>
-        private void GetAllAnimators()
-        {
-            if (IsMultiSelected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("AnimatorNodes");
-                    so_ele.Update();
-                    sp_nodes.ClearArray();
-                    #region 获取所有Animator并过滤条件
-                    XHud_Module_Animator[] animators = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Animator>();
-
-                    List<XHud_Module_Animator> animators_fillter = new List<XHud_Module_Animator>();
-                    for (int g = 0; g < animators.Length; g++)
-                    {
-                        XHud_Module_Button hud_Button = animators[g].GetComponentInParent<XHud_Module_Button>();
-                        XHud_Module_Progress hud_Progress = animators[g].GetComponentInParent<XHud_Module_Progress>();
-                        XHud_Module_Slider hud_Slider = animators[g].GetComponentInParent<XHud_Module_Slider>();
-                        XHud_Module_Option hud_optselector = animators[g].GetComponentInParent<XHud_Module_Option>();
-                        XHud_Module_Toggle hud_tog = animators[g].GetComponentInParent<XHud_Module_Toggle>();
-                        XHud_Module_Container hud_dat = animators[g].GetComponentInParent<XHud_Module_Container>();
-                        if (hud_Button != null)
-                            continue;
-                        if (hud_Progress != null)
-                            continue;
-                        if (hud_Slider != null)
-                            continue;
-                        if (hud_optselector != null)
-                            continue;
-                        if (hud_tog != null)
-                            continue;
-                        if (hud_dat != null)
-                            continue;
-                        if (animators[g].IgnoreElementAnimationPlay)
-                            continue;
-                        animators_fillter.Add(animators[g]);
-                    }
-
-                    #endregion
-
-                    XHud_Module_Animator[] animators_confirm = animators_fillter.ToArray();
-                    for (int m = 0; m < animators_confirm.Length; m++)
-                    {
-                        #region 判断是否已存在Animator
-                        bool isrepeat = false;
-
-                        for (int s = 0; s < sp_nodes.arraySize; s++)
-                        {
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_anim = sp_node.FindPropertyRelative("Animator");
-                            XHud_Module_Animator sp_anim = (XHud_Module_Animator)sp_node_anim.objectReferenceValue;
-                            if (animators_confirm[m] == sp_anim)
-                            {
-                                isrepeat = true;
-                            }
-                        }
-
-                        if (!isrepeat)
-                        {
-                            int index = 0;
-
-                            if (sp_nodes.arraySize <= 0)
-                                index = 0;
-                            else
-                                index = sp_nodes.arraySize;
-
-                            sp_nodes.InsertArrayElementAtIndex(index);
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-
-                            #region 赋值Animator
-                            SerializedProperty sp_Animator = sp_node.FindPropertyRelative("Animator");
-                            sp_Animator.objectReferenceValue = animators_confirm[m];
-                            sp_Animator.serializedObject.ApplyModifiedProperties();
-                            #endregion
-
-                            sp_node.serializedObject.ApplyModifiedProperties();
-                        }
-                        #endregion
-                    }
-
-                    sp_nodes.serializedObject.ApplyModifiedProperties();
-                    so_ele.ApplyModifiedProperties();
-                }
-            }
-            else
-            {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("AnimatorNodes");
-                sp_nodes.ClearArray();
-                #region 获取所有Animator并过滤条件
-                XHud_Module_Animator[] animators = BaseScript.GetComponentsInChildren<XHud_Module_Animator>();
-
-                List<XHud_Module_Animator> animators_fillter = new List<XHud_Module_Animator>();
-                for (int i = 0; i < animators.Length; i++)
-                {
-                    XHud_Module_Button hud_Button = animators[i].GetComponentInParent<XHud_Module_Button>();
-                    XHud_Module_Progress hud_Progress = animators[i].GetComponentInParent<XHud_Module_Progress>();
-                    XHud_Module_Slider hud_Slider = animators[i].GetComponentInParent<XHud_Module_Slider>();
-                    XHud_Module_Option hud_optselector = animators[i].GetComponentInParent<XHud_Module_Option>();
-                    XHud_Module_Toggle hud_tog = animators[i].GetComponentInParent<XHud_Module_Toggle>();
-                    XHud_Module_Container hud_dat = animators[i].GetComponentInParent<XHud_Module_Container>();
-                    if (hud_Button != null)
-                        continue;
-                    if (hud_Progress != null)
-                        continue;
-                    if (hud_Slider != null)
-                        continue;
-                    if (hud_optselector != null)
-                        continue;
-                    if (hud_tog != null)
-                        continue;
-                    if (hud_dat != null)
-                        continue;
-                    if (animators[i].IgnoreElementAnimationPlay)
-                        continue;
-                    animators_fillter.Add(animators[i]);
-                }
-
-                #endregion
-
-                XHud_Module_Animator[] animators_confirm = animators_fillter.ToArray();
-                for (int i = 0; i < animators_confirm.Length; i++)
-                {
-                    #region 判断是否已存在Animator
-                    bool isrepeat = false;
-
-                    for (int s = 0; s < sp_nodes.arraySize; s++)
-                    {
-                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                        SerializedProperty sp_node_anim = sp_node.FindPropertyRelative("Animator");
-                        XHud_Module_Animator sp_anim = (XHud_Module_Animator)sp_node_anim.objectReferenceValue;
-                        if (animators_confirm[i] == sp_anim)
-                        {
-                            isrepeat = true;
-                        }
-                    }
-
-                    if (!isrepeat)
-                    {
-                        int index = 0;
-
-                        if (sp_nodes.arraySize <= 0)
-                            index = 0;
-                        else
-                            index = sp_nodes.arraySize;
-
-                        sp_nodes.InsertArrayElementAtIndex(index);
-                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-
-                        #region 赋值Animator
-                        SerializedProperty sp_Animator = sp_node.FindPropertyRelative("Animator");
-                        sp_Animator.objectReferenceValue = animators_confirm[i];
-                        sp_Animator.serializedObject.ApplyModifiedProperties();
-                        #endregion
-
-                        sp_node.serializedObject.ApplyModifiedProperties();
-                    }
-                    #endregion
-                }
-                sp_nodes.serializedObject.ApplyModifiedProperties();
-            }
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        /// <summary>
-        /// 获取所有文字
-        /// </summary>
-        private void GetAllText()
-        {
-            if (IsMultiSelected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("TextNodes");
-                    so_ele.Update();
-
-                    #region 获取所有Animator并过滤条件
-                    XHud_Module_Text[] texts = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Text>();
-
-                    List<XHud_Module_Text> texts_fillter = new List<XHud_Module_Text>();
-                    for (int g = 0; g < texts.Length; g++)
-                    {
-                        XHud_Module_Button hud_Button = texts[g].GetComponentInParent<XHud_Module_Button>();
-                        XHud_Module_Progress hud_Progress = texts[g].GetComponentInParent<XHud_Module_Progress>();
-                        XHud_Module_Slider hud_Slider = texts[g].GetComponentInParent<XHud_Module_Slider>();
-                        XHud_Module_Option hud_optselector = texts[g].GetComponentInParent<XHud_Module_Option>();
-                        XHud_Module_Toggle hud_tog = texts[g].GetComponentInParent<XHud_Module_Toggle>();
-                        XHud_Module_Container hud_dat = texts[g].GetComponentInParent<XHud_Module_Container>();
-                        if (hud_Button != null)
-                            continue;
-                        if (hud_Progress != null)
-                            continue;
-                        if (hud_Slider != null)
-                            continue;
-                        if (hud_optselector != null)
-                            continue;
-                        if (hud_tog != null)
-                            continue;
-                        if (hud_dat != null)
-                            continue;
-                        texts_fillter.Add(texts[g]);
-                    }
-
-                    #endregion
-
-                    XHud_Module_Text[] texts_confirm = texts_fillter.ToArray();
-                    for (int m = 0; m < texts_confirm.Length; m++)
-                    {
-                        #region 判断是否已存在Text
-                        bool isrepeat = false;
-
-                        for (int s = 0; s < sp_nodes.arraySize; s++)
-                        {
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_text = sp_node.FindPropertyRelative("Text");
-                            XHud_Module_Text sp_text = (XHud_Module_Text)sp_node_text.objectReferenceValue;
-                            if (texts_confirm[m] == sp_text)
-                            {
-                                isrepeat = true;
-                            }
-                        }
-
-                        if (!isrepeat)
-                        {
-                            int index = 0;
-
-                            if (sp_nodes.arraySize <= 0)
-                                index = 0;
-                            else
-                                index = sp_nodes.arraySize;
-
-                            sp_nodes.InsertArrayElementAtIndex(index);
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-
-                            #region 赋值Animator
-                            SerializedProperty sp_Text = sp_node.FindPropertyRelative("Text");
-                            sp_Text.objectReferenceValue = texts_confirm[m];
-                            sp_Text.serializedObject.ApplyModifiedProperties();
-                            #endregion
-
-                            sp_node.serializedObject.ApplyModifiedProperties();
-                        }
-                        #endregion
-                    }
-
-                    sp_nodes.serializedObject.ApplyModifiedProperties();
-                    so_ele.ApplyModifiedProperties();
-                }
-            }
-            else
-            {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("TextNodes");
-
-                #region 获取所有Animator并过滤条件
-                XHud_Module_Text[] texts = BaseScript.GetComponentsInChildren<XHud_Module_Text>();
-
-                List<XHud_Module_Text> texts_fillter = new List<XHud_Module_Text>();
-                for (int i = 0; i < texts.Length; i++)
-                {
-                    XHud_Module_Button hud_Button = texts[i].GetComponentInParent<XHud_Module_Button>();
-                    XHud_Module_Progress hud_Progress = texts[i].GetComponentInParent<XHud_Module_Progress>();
-                    XHud_Module_Slider hud_Slider = texts[i].GetComponentInParent<XHud_Module_Slider>();
-                    XHud_Module_Option hud_optselector = texts[i].GetComponentInParent<XHud_Module_Option>();
-                    XHud_Module_Toggle hud_tog = texts[i].GetComponentInParent<XHud_Module_Toggle>();
-                    XHud_Module_Container hud_dat = texts[i].GetComponentInParent<XHud_Module_Container>();
-                    if (hud_Button != null)
-                        continue;
-                    if (hud_Progress != null)
-                        continue;
-                    if (hud_Slider != null)
-                        continue;
-                    if (hud_optselector != null)
-                        continue;
-                    if (hud_tog != null)
-                        continue;
-                    if (hud_dat != null)
-                        continue;
-                    texts_fillter.Add(texts[i]);
-                }
-
-                #endregion
-
-                XHud_Module_Text[] texts_confirm = texts_fillter.ToArray();
-                for (int i = 0; i < texts_confirm.Length; i++)
-                {
-                    #region 判断是否已存在Text
-                    bool isrepeat = false;
-
-                    for (int s = 0; s < sp_nodes.arraySize; s++)
-                    {
-                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                        SerializedProperty sp_node_text = sp_node.FindPropertyRelative("Text");
-                        XHud_Module_Text sp_text = (XHud_Module_Text)sp_node_text.objectReferenceValue;
-                        if (texts_confirm[i] == sp_text)
-                        {
-                            isrepeat = true;
-                        }
-                    }
-
-                    if (!isrepeat)
-                    {
-                        int index = 0;
-
-                        if (sp_nodes.arraySize <= 0)
-                            index = 0;
-                        else
-                            index = sp_nodes.arraySize;
-
-                        sp_nodes.InsertArrayElementAtIndex(index);
-                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-
-                        #region 赋值Text
-                        SerializedProperty sp_text = sp_node.FindPropertyRelative("Text");
-                        sp_text.objectReferenceValue = texts_confirm[i];
-                        sp_text.serializedObject.ApplyModifiedProperties();
-                        #endregion
-
-                        sp_node.serializedObject.ApplyModifiedProperties();
-                    }
-                    #endregion
-                }
-                sp_nodes.serializedObject.ApplyModifiedProperties();
-            }
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        /// <summary>
-        /// 获取所有Tmp文字
-        /// </summary>
-        private void GetAllTmpText()
-        {
-            if (IsMultiSelected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("TmpTextNodes");
-                    so_ele.Update();
-
-                    #region 获取所有Animator并过滤条件
-                    XHud_Module_TmpText[] texts = SelectedObjects[i].GetComponentsInChildren<XHud_Module_TmpText>();
-
-                    List<XHud_Module_TmpText> texts_fillter = new List<XHud_Module_TmpText>();
-                    for (int g = 0; g < texts.Length; g++)
-                    {
-                        XHud_Module_Button hud_Button = texts[g].GetComponentInParent<XHud_Module_Button>();
-                        XHud_Module_Progress hud_Progress = texts[g].GetComponentInParent<XHud_Module_Progress>();
-                        XHud_Module_Slider hud_Slider = texts[g].GetComponentInParent<XHud_Module_Slider>();
-                        XHud_Module_Option hud_optselector = texts[g].GetComponentInParent<XHud_Module_Option>();
-                        XHud_Module_Toggle hud_tog = texts[g].GetComponentInParent<XHud_Module_Toggle>();
-                        XHud_Module_Container hud_dat = texts[g].GetComponentInParent<XHud_Module_Container>();
-                        if (hud_Button != null)
-                            continue;
-                        if (hud_Progress != null)
-                            continue;
-                        if (hud_Slider != null)
-                            continue;
-                        if (hud_optselector != null)
-                            continue;
-                        if (hud_tog != null)
-                            continue;
-                        if (hud_dat != null)
-                            continue;
-                        texts_fillter.Add(texts[g]);
-                    }
-
-                    #endregion
-
-                    XHud_Module_TmpText[] texts_confirm = texts_fillter.ToArray();
-                    for (int m = 0; m < texts_confirm.Length; m++)
-                    {
-                        #region 判断是否已存在Text
-                        bool isrepeat = false;
-
-                        for (int s = 0; s < sp_nodes.arraySize; s++)
-                        {
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_text = sp_node.FindPropertyRelative("TmpText");
-                            XHud_Module_TmpText sp_text = (XHud_Module_TmpText)sp_node_text.objectReferenceValue;
-                            if (texts_confirm[m] == sp_text)
-                            {
-                                isrepeat = true;
-                            }
-                        }
-
-                        if (!isrepeat)
-                        {
-                            int index = 0;
-
-                            if (sp_nodes.arraySize <= 0)
-                                index = 0;
-                            else
-                                index = sp_nodes.arraySize;
-
-                            sp_nodes.InsertArrayElementAtIndex(index);
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-
-                            #region 赋值Animator
-                            SerializedProperty sp_Text = sp_node.FindPropertyRelative("TmpText");
-                            sp_Text.objectReferenceValue = texts_confirm[m];
-                            sp_Text.serializedObject.ApplyModifiedProperties();
-                            #endregion
-
-                            sp_node.serializedObject.ApplyModifiedProperties();
-                        }
-                        #endregion
-                    }
-
-                    sp_nodes.serializedObject.ApplyModifiedProperties();
-                    so_ele.ApplyModifiedProperties();
-                }
-            }
-            else
-            {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("TmpTextNodes");
-
-                #region 获取所有Animator并过滤条件
-                XHud_Module_TmpText[] texts = BaseScript.GetComponentsInChildren<XHud_Module_TmpText>();
-
-                List<XHud_Module_TmpText> texts_fillter = new List<XHud_Module_TmpText>();
-                for (int i = 0; i < texts.Length; i++)
-                {
-                    XHud_Module_Button hud_Button = texts[i].GetComponentInParent<XHud_Module_Button>();
-                    XHud_Module_Progress hud_Progress = texts[i].GetComponentInParent<XHud_Module_Progress>();
-                    XHud_Module_Slider hud_Slider = texts[i].GetComponentInParent<XHud_Module_Slider>();
-                    XHud_Module_Option hud_optselector = texts[i].GetComponentInParent<XHud_Module_Option>();
-                    XHud_Module_Toggle hud_tog = texts[i].GetComponentInParent<XHud_Module_Toggle>();
-                    XHud_Module_Container hud_dat = texts[i].GetComponentInParent<XHud_Module_Container>();
-                    if (hud_Button != null)
-                        continue;
-                    if (hud_Progress != null)
-                        continue;
-                    if (hud_Slider != null)
-                        continue;
-                    if (hud_optselector != null)
-                        continue;
-                    if (hud_tog != null)
-                        continue;
-                    if (hud_dat != null)
-                        continue;
-                    texts_fillter.Add(texts[i]);
-                }
-
-                #endregion
-
-                XHud_Module_TmpText[] texts_confirm = texts_fillter.ToArray();
-                for (int i = 0; i < texts_confirm.Length; i++)
-                {
-                    #region 判断是否已存在Text
-                    bool isrepeat = false;
-
-                    for (int s = 0; s < sp_nodes.arraySize; s++)
-                    {
-                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                        SerializedProperty sp_node_text = sp_node.FindPropertyRelative("TmpText");
-                        XHud_Module_TmpText sp_text = (XHud_Module_TmpText)sp_node_text.objectReferenceValue;
-                        if (texts_confirm[i] == sp_text)
-                        {
-                            isrepeat = true;
-                        }
-                    }
-
-                    if (!isrepeat)
-                    {
-                        int index = 0;
-
-                        if (sp_nodes.arraySize <= 0)
-                            index = 0;
-                        else
-                            index = sp_nodes.arraySize;
-
-                        sp_nodes.InsertArrayElementAtIndex(index);
-                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-
-                        #region 赋值Text
-                        SerializedProperty sp_text = sp_node.FindPropertyRelative("TmpText");
-                        sp_text.objectReferenceValue = texts_confirm[i];
-                        sp_text.serializedObject.ApplyModifiedProperties();
-                        #endregion
-
-                        sp_node.serializedObject.ApplyModifiedProperties();
-                    }
-                    #endregion
-                }
-                sp_nodes.serializedObject.ApplyModifiedProperties();
-            }
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        /// <summary>
-        /// 获取所有选项
-        /// </summary>
-        private void GetAllOptions()
-        {
-            if (IsMultiSelected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("OptionNodes");
-                    so_ele.Update();
-
-                    XHud_Module_Option[] allopts = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Option>();
-
-                    List<XHud_Module_Option> Filter = new List<XHud_Module_Option>();
-                    for (int s = 0; s < allopts.Length; s++)
-                    {
-                        Filter.Add(allopts[s]);
-                    }
-
-                    XHud_Module_Option[] gettedOpts = Filter.ToArray();
-
-                    for (int x = 0; x < gettedOpts.Length; x++)
-                    {
-                        bool repeat = false;
-
-                        if (sp_nodes.arraySize > 0)
-                        {
-                            for (int s = 0; s < sp_nodes.arraySize; s++)
-                            {
-                                SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_opt = sp_node.FindPropertyRelative("Option");
-                                XHud_Module_Option sp_opt = (XHud_Module_Option)sp_node_opt.objectReferenceValue;
-                                if (sp_opt == gettedOpts[x])
-                                    repeat = true;
-                            }
-                        }
-
-                        if (!repeat)
-                        {
-                            int index = 0;
-
-                            if (sp_nodes.arraySize <= 0)
-                                index = 0;
-                            else
-                                index = sp_nodes.arraySize - 1;
-
-                            sp_nodes.InsertArrayElementAtIndex(index);
-
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_opt = sp_node.FindPropertyRelative("Option");
-                            sp_opt.objectReferenceValue = gettedOpts[x];
-
-                            sp_opt.serializedObject.ApplyModifiedProperties();
-                            sp_node.serializedObject.ApplyModifiedProperties();
-                        }
-                    }
-                    sp_nodes.serializedObject.ApplyModifiedProperties();
-                    so_ele.ApplyModifiedProperties();
-                }
-            }
-            else
-            {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("OptionNodes");
-
-                XHud_Module_Option[] allanimators = BaseScript.GetComponentsInChildren<XHud_Module_Option>();
-
-                List<XHud_Module_Option> Filter = new List<XHud_Module_Option>();
-                for (int i = 0; i < allanimators.Length; i++)
-                {
-                    Filter.Add(allanimators[i]);
-                }
-
-                XHud_Module_Option[] gettedOpts = Filter.ToArray();
-
-                for (int i = 0; i < gettedOpts.Length; i++)
-                {
-                    bool repeat = false;
-
-                    if (sp_nodes.arraySize > 0)
-                    {
-                        for (int s = 0; s < sp_nodes.arraySize; s++)
-                        {
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_opt = sp_node.FindPropertyRelative("Option");
-                            XHud_Module_Option sp_opt = (XHud_Module_Option)sp_node_opt.objectReferenceValue;
-                            if (sp_opt == gettedOpts[i])
-                                repeat = true;
-                        }
-                    }
-
-                    if (!repeat)
-                    {
-                        int index = 0;
-
-                        if (sp_nodes.arraySize <= 0)
-                            index = 0;
-                        else
-                            index = sp_nodes.arraySize - 1;
-
-                        sp_nodes.InsertArrayElementAtIndex(index);
-
-                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_Option = sp_node.FindPropertyRelative("Option");
-                        sp_Option.objectReferenceValue = gettedOpts[i];
-
-                        sp_Option.serializedObject.ApplyModifiedProperties();
-                        sp_node.serializedObject.ApplyModifiedProperties();
-                    }
-                }
-                sp_nodes.serializedObject.ApplyModifiedProperties();
-            }
-        }
-
-        /// <summary>
-        /// 获取所有滑动条
-        /// </summary>
-        private void GetAllSliders()
-        {
-            if (IsMultiSelected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("SliderNodes");
-                    so_ele.Update();
-
-                    XHud_Module_Slider[] allSliders = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Slider>();
-
-                    List<XHud_Module_Slider> Filter = new List<XHud_Module_Slider>();
-                    for (int s = 0; s < allSliders.Length; s++)
-                    {
-                        Filter.Add(allSliders[s]);
-                    }
-
-                    XHud_Module_Slider[] gettedSliders = Filter.ToArray();
-
-                    for (int x = 0; x < gettedSliders.Length; x++)
-                    {
-                        bool repeat = false;
-
-                        if (sp_nodes.arraySize > 0)
-                        {
-                            for (int s = 0; s < sp_nodes.arraySize; s++)
-                            {
-                                SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_Slider = sp_node.FindPropertyRelative("Slider");
-                                XHud_Module_Slider sp_opt = (XHud_Module_Slider)sp_node_Slider.objectReferenceValue;
-                                if (sp_opt == gettedSliders[x])
-                                    repeat = true;
-                            }
-                        }
-
-                        if (!repeat)
-                        {
-                            int index = 0;
-
-                            if (sp_nodes.arraySize <= 0)
-                                index = 0;
-                            else
-                                index = sp_nodes.arraySize - 1;
-
-                            sp_nodes.InsertArrayElementAtIndex(index);
-
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_Slider = sp_node.FindPropertyRelative("Slider");
-                            sp_Slider.objectReferenceValue = gettedSliders[x];
-
-                            sp_Slider.serializedObject.ApplyModifiedProperties();
-                            sp_node.serializedObject.ApplyModifiedProperties();
-                        }
-                    }
-                    sp_nodes.serializedObject.ApplyModifiedProperties();
-                    so_ele.ApplyModifiedProperties();
-                }
-            }
-            else
-            {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("SliderNodes");
-
-                XHud_Module_Slider[] allslider = BaseScript.GetComponentsInChildren<XHud_Module_Slider>();
-
-                List<XHud_Module_Slider> Filter = new List<XHud_Module_Slider>();
-                for (int i = 0; i < allslider.Length; i++)
-                {
-                    Filter.Add(allslider[i]);
-                }
-
-                XHud_Module_Slider[] gettedSliders = Filter.ToArray();
-
-                for (int i = 0; i < gettedSliders.Length; i++)
-                {
-                    bool repeat = false;
-
-                    if (sp_nodes.arraySize > 0)
-                    {
-                        for (int s = 0; s < sp_nodes.arraySize; s++)
-                        {
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_sli = sp_node.FindPropertyRelative("Slider");
-                            XHud_Module_Slider sp_opt = (XHud_Module_Slider)sp_node_sli.objectReferenceValue;
-                            if (sp_opt == gettedSliders[i])
-                                repeat = true;
-                        }
-                    }
-
-                    if (!repeat)
-                    {
-                        int index = 0;
-
-                        if (sp_nodes.arraySize <= 0)
-                            index = 0;
-                        else
-                            index = sp_nodes.arraySize - 1;
-
-                        sp_nodes.InsertArrayElementAtIndex(index);
-
-                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_Slider = sp_node.FindPropertyRelative("Slider");
-                        sp_Slider.objectReferenceValue = gettedSliders[i];
-
-                        sp_Slider.serializedObject.ApplyModifiedProperties();
-                        sp_node.serializedObject.ApplyModifiedProperties();
-                    }
-                }
-                sp_nodes.serializedObject.ApplyModifiedProperties();
-            }
-        }
-
-        /// <summary>
-        /// 获取所有按钮
-        /// </summary>
-        private void GetAllButtons()
-        {
-            if (IsMultiSelected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("ButtonNodes");
-                    so_ele.Update();
-
-                    XHud_Module_Button[] allbtns = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Button>();
-
-                    List<XHud_Module_Button> Filter = new List<XHud_Module_Button>();
-                    for (int s = 0; s < allbtns.Length; s++)
-                    {
-                        XHud_Module_Option hud_optselector = allbtns[s].GetComponentInParent<XHud_Module_Option>();
-                        if (hud_optselector != null)
-                            continue;
-                        Filter.Add(allbtns[s]);
-                    }
-
-                    XHud_Module_Button[] gettedBtns = Filter.ToArray();
-
-                    for (int x = 0; x < gettedBtns.Length; x++)
-                    {
-                        bool repeat = false;
-
-                        if (sp_nodes.arraySize > 0)
-                        {
-                            for (int s = 0; s < sp_nodes.arraySize; s++)
-                            {
-                                SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_btn = sp_node.FindPropertyRelative("Button");
-                                XHud_Module_Button sp_btn = (XHud_Module_Button)sp_node_btn.objectReferenceValue;
-                                if (sp_btn == gettedBtns[x])
-                                    repeat = true;
-                            }
-                        }
-
-                        if (!repeat)
-                        {
-                            int index = 0;
-
-                            if (sp_nodes.arraySize <= 0)
-                                index = 0;
-                            else
-                                index = sp_nodes.arraySize - 1;
-
-                            sp_nodes.InsertArrayElementAtIndex(index);
-
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_btn = sp_node.FindPropertyRelative("Button");
-                            sp_btn.objectReferenceValue = gettedBtns[x];
-
-                            sp_btn.serializedObject.ApplyModifiedProperties();
-                            sp_node.serializedObject.ApplyModifiedProperties();
-                        }
-                    }
-                    sp_nodes.serializedObject.ApplyModifiedProperties();
-                    so_ele.ApplyModifiedProperties();
-                }
-            }
-            else
-            {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("ButtonNodes");
-
-                XHud_Module_Button[] allanimators = BaseScript.GetComponentsInChildren<XHud_Module_Button>();
-
-                List<XHud_Module_Button> Filter = new List<XHud_Module_Button>();
-                for (int i = 0; i < allanimators.Length; i++)
-                {
-                    XHud_Module_Option hud_optselector = allanimators[i].GetComponentInParent<XHud_Module_Option>();
-                    if (hud_optselector != null)
-                        continue;
-                    Filter.Add(allanimators[i]);
-                }
-
-                XHud_Module_Button[] gettedBtns = Filter.ToArray();
-
-                for (int i = 0; i < gettedBtns.Length; i++)
-                {
-                    bool repeat = false;
-
-                    if (sp_nodes.arraySize > 0)
-                    {
-                        for (int s = 0; s < sp_nodes.arraySize; s++)
-                        {
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_btn = sp_node.FindPropertyRelative("Button");
-                            XHud_Module_Button sp_btn = (XHud_Module_Button)sp_node_btn.objectReferenceValue;
-                            if (sp_btn == gettedBtns[i])
-                                repeat = true;
-                        }
-                    }
-
-                    if (!repeat)
-                    {
-                        int index = 0;
-
-                        if (sp_nodes.arraySize <= 0)
-                            index = 0;
-                        else
-                            index = sp_nodes.arraySize - 1;
-
-                        sp_nodes.InsertArrayElementAtIndex(index);
-
-                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_Animator = sp_node.FindPropertyRelative("Button");
-                        sp_Animator.objectReferenceValue = gettedBtns[i];
-
-                        sp_Animator.serializedObject.ApplyModifiedProperties();
-                        sp_node.serializedObject.ApplyModifiedProperties();
-                    }
-                }
-                sp_nodes.serializedObject.ApplyModifiedProperties();
-            }
-        }
-
-        /// <summary>
-        /// 获取所有进度条
-        /// </summary>
-        private void GetAllProgress()
-        {
-            if (IsMultiSelected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("ProgressNodes");
-                    so_ele.Update();
-
-                    XHud_Module_Progress[] allpros = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Progress>();
-
-                    List<XHud_Module_Progress> Filter = new List<XHud_Module_Progress>();
-                    for (int s = 0; s < allpros.Length; s++)
-                    {
-                        Filter.Add(allpros[s]);
-                    }
-
-                    XHud_Module_Progress[] gettedPros = Filter.ToArray();
-
-                    for (int x = 0; x < gettedPros.Length; x++)
-                    {
-                        bool repeat = false;
-
-                        if (sp_nodes.arraySize > 0)
-                        {
-                            for (int s = 0; s < sp_nodes.arraySize; s++)
-                            {
-                                SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_pro = sp_node.FindPropertyRelative("Progress");
-                                XHud_Module_Progress sp_pro = (XHud_Module_Progress)sp_node_pro.objectReferenceValue;
-                                if (sp_pro == gettedPros[x])
-                                    repeat = true;
-                            }
-                        }
-
-                        if (!repeat)
-                        {
-                            int index = 0;
-
-                            if (sp_nodes.arraySize <= 0)
-                                index = 0;
-                            else
-                                index = sp_nodes.arraySize - 1;
-
-                            sp_nodes.InsertArrayElementAtIndex(index);
-
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_pro = sp_node.FindPropertyRelative("Progress");
-                            sp_pro.objectReferenceValue = gettedPros[x];
-
-                            sp_pro.serializedObject.ApplyModifiedProperties();
-                            sp_node.serializedObject.ApplyModifiedProperties();
-                        }
-                    }
-                    sp_nodes.serializedObject.ApplyModifiedProperties();
-                    so_ele.ApplyModifiedProperties();
-                }
-            }
-            else
-            {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("ProgressNodes");
-
-                XHud_Module_Progress[] allpros = BaseScript.GetComponentsInChildren<XHud_Module_Progress>();
-
-                List<XHud_Module_Progress> Filter = new List<XHud_Module_Progress>();
-                for (int i = 0; i < allpros.Length; i++)
-                {
-                    Filter.Add(allpros[i]);
-                }
-
-                XHud_Module_Progress[] gettedPros = Filter.ToArray();
-
-                for (int i = 0; i < gettedPros.Length; i++)
-                {
-                    bool repeat = false;
-
-                    if (sp_nodes.arraySize > 0)
-                    {
-                        for (int s = 0; s < sp_nodes.arraySize; s++)
-                        {
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_pro = sp_node.FindPropertyRelative("Progress");
-                            XHud_Module_Progress sp_pro = (XHud_Module_Progress)sp_node_pro.objectReferenceValue;
-                            if (sp_pro == gettedPros[i])
-                                repeat = true;
-                        }
-                    }
-
-                    if (!repeat)
-                    {
-                        int index = 0;
-
-                        if (sp_nodes.arraySize <= 0)
-                            index = 0;
-                        else
-                            index = sp_nodes.arraySize - 1;
-
-                        sp_nodes.InsertArrayElementAtIndex(index);
-
-                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_pro = sp_node.FindPropertyRelative("Progress");
-                        sp_pro.objectReferenceValue = gettedPros[i];
-
-                        sp_pro.serializedObject.ApplyModifiedProperties();
-                        sp_node.serializedObject.ApplyModifiedProperties();
-                    }
-                }
-                sp_nodes.serializedObject.ApplyModifiedProperties();
-            }
-        }
-
-        /// <summary>
-        /// 获取所有容器
-        /// </summary>
-        private void GetAllContainer()
-        {
-            if (IsMultiSelected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("ContainerNodes");
-                    so_ele.Update();
-
-                    XHud_Module_Container[] allcons = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Container>();
-
-                    List<XHud_Module_Container> Filter = new List<XHud_Module_Container>();
-                    for (int s = 0; s < allcons.Length; s++)
-                    {
-                        Filter.Add(allcons[s]);
-                    }
-
-                    XHud_Module_Container[] gettedCons = Filter.ToArray();
-
-                    for (int x = 0; x < gettedCons.Length; x++)
-                    {
-                        bool repeat = false;
-
-                        if (sp_nodes.arraySize > 0)
-                        {
-                            for (int s = 0; s < sp_nodes.arraySize; s++)
-                            {
-                                SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Container");
-                                XHud_Module_Container sp_con = (XHud_Module_Container)sp_node_con.objectReferenceValue;
-                                if (sp_con == gettedCons[x])
-                                    repeat = true;
-                            }
-                        }
-
-                        if (!repeat)
-                        {
-                            int index = 0;
-
-                            if (sp_nodes.arraySize <= 0)
-                                index = 0;
-                            else
-                                index = sp_nodes.arraySize - 1;
-
-                            sp_nodes.InsertArrayElementAtIndex(index);
-
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_con = sp_node.FindPropertyRelative("Container");
-                            sp_con.objectReferenceValue = gettedCons[x];
-
-                            sp_con.serializedObject.ApplyModifiedProperties();
-                            sp_node.serializedObject.ApplyModifiedProperties();
-                        }
-                    }
-                    sp_nodes.serializedObject.ApplyModifiedProperties();
-                    so_ele.ApplyModifiedProperties();
-                }
-            }
-            else
-            {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("ContainerNodes");
-
-                XHud_Module_Container[] allcons = BaseScript.GetComponentsInChildren<XHud_Module_Container>();
-
-                List<XHud_Module_Container> Filter = new List<XHud_Module_Container>();
-                for (int i = 0; i < allcons.Length; i++)
-                {
-                    Filter.Add(allcons[i]);
-                }
-
-                XHud_Module_Container[] gettedCons = Filter.ToArray();
-
-                for (int i = 0; i < gettedCons.Length; i++)
-                {
-                    bool repeat = false;
-
-                    if (sp_nodes.arraySize > 0)
-                    {
-                        for (int s = 0; s < sp_nodes.arraySize; s++)
-                        {
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Container");
-                            XHud_Module_Container sp_con = (XHud_Module_Container)sp_node_con.objectReferenceValue;
-                            if (sp_con == gettedCons[i])
-                                repeat = true;
-                        }
-                    }
-
-                    if (!repeat)
-                    {
-                        int index = 0;
-
-                        if (sp_nodes.arraySize <= 0)
-                            index = 0;
-                        else
-                            index = sp_nodes.arraySize - 1;
-
-                        sp_nodes.InsertArrayElementAtIndex(index);
-
-                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_con = sp_node.FindPropertyRelative("Container");
-                        sp_con.objectReferenceValue = gettedCons[i];
-
-                        sp_con.serializedObject.ApplyModifiedProperties();
-                        sp_node.serializedObject.ApplyModifiedProperties();
-                    }
-                }
-                sp_nodes.serializedObject.ApplyModifiedProperties();
-            }
-        }
-
-        /// <summary>
-        /// 获取所有开关
-        /// </summary>
-        private void GetAllToggle()
-        {
-            if (IsMultiSelected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("ToggleNodes");
-                    so_ele.Update();
-
-                    XHud_Module_Toggle[] alltog = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Toggle>();
-
-                    List<XHud_Module_Toggle> Filter = new List<XHud_Module_Toggle>();
-                    for (int s = 0; s < alltog.Length; s++)
-                    {
-                        Filter.Add(alltog[s]);
-                    }
-
-                    XHud_Module_Toggle[] gettedtogs = Filter.ToArray();
-
-                    for (int x = 0; x < gettedtogs.Length; x++)
-                    {
-                        bool repeat = false;
-
-                        if (sp_nodes.arraySize > 0)
-                        {
-                            for (int s = 0; s < sp_nodes.arraySize; s++)
-                            {
-                                SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_tog = sp_node.FindPropertyRelative("Toggle");
-                                XHud_Module_Toggle sp_tog = (XHud_Module_Toggle)sp_node_tog.objectReferenceValue;
-                                if (sp_tog == gettedtogs[x])
-                                    repeat = true;
-                            }
-                        }
-
-                        if (!repeat)
-                        {
-                            int index = 0;
-
-                            if (sp_nodes.arraySize <= 0)
-                                index = 0;
-                            else
-                                index = sp_nodes.arraySize - 1;
-
-                            sp_nodes.InsertArrayElementAtIndex(index);
-
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_tog = sp_node.FindPropertyRelative("Toggle");
-                            sp_tog.objectReferenceValue = gettedtogs[x];
-
-                            sp_tog.serializedObject.ApplyModifiedProperties();
-                            sp_node.serializedObject.ApplyModifiedProperties();
-                        }
-                    }
-                    sp_nodes.serializedObject.ApplyModifiedProperties();
-                    so_ele.ApplyModifiedProperties();
-                }
-            }
-            else
-            {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("ToggleNodes");
-
-                XHud_Module_Toggle[] alltog = BaseScript.GetComponentsInChildren<XHud_Module_Toggle>();
-
-                List<XHud_Module_Toggle> Filter = new List<XHud_Module_Toggle>();
-                for (int i = 0; i < alltog.Length; i++)
-                {
-                    Filter.Add(alltog[i]);
-                }
-
-                XHud_Module_Toggle[] gettedtogs = Filter.ToArray();
-
-                for (int i = 0; i < gettedtogs.Length; i++)
-                {
-                    bool repeat = false;
-
-                    if (sp_nodes.arraySize > 0)
-                    {
-                        for (int s = 0; s < sp_nodes.arraySize; s++)
-                        {
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_tog = sp_node.FindPropertyRelative("Toggle");
-                            XHud_Module_Toggle sp_tog = (XHud_Module_Toggle)sp_node_tog.objectReferenceValue;
-                            if (sp_tog == gettedtogs[i])
-                                repeat = true;
-                        }
-                    }
-
-                    if (!repeat)
-                    {
-                        int index = 0;
-
-                        if (sp_nodes.arraySize <= 0)
-                            index = 0;
-                        else
-                            index = sp_nodes.arraySize - 1;
-
-                        sp_nodes.InsertArrayElementAtIndex(index);
-
-                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_tog = sp_node.FindPropertyRelative("Toggle");
-                        sp_tog.objectReferenceValue = gettedtogs[i];
-
-                        sp_tog.serializedObject.ApplyModifiedProperties();
-                        sp_node.serializedObject.ApplyModifiedProperties();
-                    }
-                }
-                sp_nodes.serializedObject.ApplyModifiedProperties();
-            }
-        }
-
-        /// <summary>
-        /// 获取所有音效器
-        /// </summary>
-        private void GetAllSounder()
-        {
-            if (IsMultiSelected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("SounderNodes");
-                    so_ele.Update();
-
-                    XHud_Element_Sounder[] allsod = SelectedObjects[i].GetComponentsInChildren<XHud_Element_Sounder>();
-
-                    List<XHud_Element_Sounder> Filter = new List<XHud_Element_Sounder>();
-                    for (int s = 0; s < allsod.Length; s++)
-                    {
-                        Filter.Add(allsod[s]);
-                    }
-
-                    XHud_Element_Sounder[] gettedsods = Filter.ToArray();
-
-                    for (int x = 0; x < gettedsods.Length; x++)
-                    {
-                        bool repeat = false;
-
-                        if (sp_nodes.arraySize > 0)
-                        {
-                            for (int s = 0; s < sp_nodes.arraySize; s++)
-                            {
-                                SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_sod = sp_node.FindPropertyRelative("Sounder");
-                                XHud_Element_Sounder sp_sod = (XHud_Element_Sounder)sp_node_sod.objectReferenceValue;
-                                if (sp_sod == gettedsods[x])
-                                    repeat = true;
-                            }
-                        }
-
-                        if (!repeat)
-                        {
-                            int index = 0;
-
-                            if (sp_nodes.arraySize <= 0)
-                                index = 0;
-                            else
-                                index = sp_nodes.arraySize;
-
-                            sp_nodes.InsertArrayElementAtIndex(index);
-
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_tog = sp_node.FindPropertyRelative("Sounder");
-                            sp_tog.objectReferenceValue = gettedsods[x];
-
-                            sp_tog.serializedObject.ApplyModifiedProperties();
-                            sp_node.serializedObject.ApplyModifiedProperties();
-                        }
-                    }
-                    sp_nodes.serializedObject.ApplyModifiedProperties();
-                    so_ele.ApplyModifiedProperties();
-                }
-            }
-            else
-            {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("SounderNodes");
-
-                XHud_Element_Sounder[] allsod = BaseScript.GetComponentsInChildren<XHud_Element_Sounder>();
-
-                List<XHud_Element_Sounder> Filter = new List<XHud_Element_Sounder>();
-                for (int i = 0; i < allsod.Length; i++)
-                {
-                    XHud_Module_Button hud_Button = allsod[i].GetComponentInParent<XHud_Module_Button>();
-                    XHud_Module_Progress hud_Progress = allsod[i].GetComponentInParent<XHud_Module_Progress>();
-                    XHud_Module_Slider hud_Slider = allsod[i].GetComponentInParent<XHud_Module_Slider>();
-                    XHud_Module_Option hud_optselector = allsod[i].GetComponentInParent<XHud_Module_Option>();
-                    XHud_Module_Toggle hud_tog = allsod[i].GetComponentInParent<XHud_Module_Toggle>();
-                    XHud_Module_Container hud_dat = allsod[i].GetComponentInParent<XHud_Module_Container>();
-                    if (hud_Button != null)
-                        continue;
-                    if (hud_Progress != null)
-                        continue;
-                    if (hud_Slider != null)
-                        continue;
-                    if (hud_optselector != null)
-                        continue;
-                    if (hud_tog != null)
-                        continue;
-                    if (hud_dat != null)
-                        continue;
-
-                    Filter.Add(allsod[i]);
-                }
-
-                XHud_Element_Sounder[] gettedsods = Filter.ToArray();
-
-                for (int i = 0; i < gettedsods.Length; i++)
-                {
-                    bool repeat = false;
-
-                    if (sp_nodes.arraySize > 0)
-                    {
-                        for (int s = 0; s < sp_nodes.arraySize; s++)
-                        {
-                            SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_sod = sp_node.FindPropertyRelative("Sounder");
-                            XHud_Element_Sounder sp_tog = (XHud_Element_Sounder)sp_node_sod.objectReferenceValue;
-                            if (sp_tog == gettedsods[i])
-                                repeat = true;
-                        }
-                    }
-
-                    if (!repeat)
-                    {
-                        int index = 0;
-
-                        if (sp_nodes.arraySize <= 0)
-                            index = 0;
-                        else
-                            index = sp_nodes.arraySize;
-
-                        sp_nodes.InsertArrayElementAtIndex(index);
-
-                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_sod = sp_node.FindPropertyRelative("Sounder");
-                        sp_sod.objectReferenceValue = gettedsods[i];
-
-                        sp_sod.serializedObject.ApplyModifiedProperties();
-                        sp_node.serializedObject.ApplyModifiedProperties();
-                    }
-                }
-                sp_nodes.serializedObject.ApplyModifiedProperties();
-            }
-        }
-
-        #endregion
-
-        #region 获取序列化字段
-        /// <summary>
-        /// 获取序列化变量
-        /// </summary>
-        private void GetSerializeFields()
-        {
-            SounderNodes = serializedObject.FindProperty("SounderNodes");
-            AnimatorNodes = serializedObject.FindProperty("AnimatorNodes");
-            ButtonNodes = serializedObject.FindProperty("ButtonNodes");
-            OptionNodes = serializedObject.FindProperty("OptionNodes");
-            SliderNodes = serializedObject.FindProperty("SliderNodes");
-            ProgressNodes = serializedObject.FindProperty("ProgressNodes");
-            TextNodes = serializedObject.FindProperty("TextNodes");
-            TmpTextNodes = serializedObject.FindProperty("TmpTextNodes");
-            ToggleNodes = serializedObject.FindProperty("ToggleNodes");
-            ContainerNodes = serializedObject.FindProperty("ContainerNodes");
-            DebugState = serializedObject.FindProperty("DebugState");
-            CanvasGroup = serializedObject.FindProperty("CanvasGroup");
-            Alpha = serializedObject.FindProperty("Alpha");
-            RectTransform = serializedObject.FindProperty("RectTransform");
-            TriggerAction = serializedObject.FindProperty("TriggerAction");
-            ObjectTracker = serializedObject.FindProperty("ObjectTracker");
-            AutoPlayAnimators = serializedObject.FindProperty("AutoPlayAnimators");
-            AutoPlayContainersAnimators = serializedObject.FindProperty("AutoPlayContainersAnimators");
-            Tween_Preview_AutoStop = serializedObject.FindProperty("Tween_Preview_AutoStop");
-            eve_on_element_in_start = serializedObject.FindProperty("eve_on_element_in_start");
-            eve_on_element_in_end = serializedObject.FindProperty("eve_on_element_in_end");
-            eve_on_element_out_start = serializedObject.FindProperty("eve_on_element_out_start");
-            eve_on_element_out_end = serializedObject.FindProperty("eve_on_element_out_end");
-            TextIsFold = serializedObject.FindProperty("TextIsFold");
-            TmpTextIsFold = serializedObject.FindProperty("TmpTextIsFold");
-            Indicator = serializedObject.FindProperty("Indicator");
-            AnimatorsMaxDuration = serializedObject.FindProperty("AnimatorsMaxDuration");
-            CreateState = serializedObject.FindProperty("CreateState");
-            AnimateState = serializedObject.FindProperty("AnimateState");
-            OriginPoolName = serializedObject.FindProperty("OriginPoolName");
-            OriginalName = serializedObject.FindProperty("OriginalName");
-            CurrentPivot = serializedObject.FindProperty("CurrentPivot");
-            Element_Animators_GlobalDuration = serializedObject.FindProperty("Element_Animators_GlobalDuration");
-            AnimatorsIsFold = serializedObject.FindProperty("AnimatorsIsFold");
-            ButtonIsFold = serializedObject.FindProperty("ButtonIsFold");
-            OptionIsFold = serializedObject.FindProperty("OptionIsFold");
-            SliderIsFold = serializedObject.FindProperty("SliderIsFold");
-            ProgressIsFold = serializedObject.FindProperty("ProgressIsFold");
-            ContainerIsFold = serializedObject.FindProperty("ContainerIsFold");
-            ToggleIsFold = serializedObject.FindProperty("ToggleIsFold");
-            EventIsFold = serializedObject.FindProperty("EventIsFold");
-            SounderIsFold = serializedObject.FindProperty("SounderIsFold");
-            RMS_Enabled = serializedObject.FindProperty("RMS_Enabled");
-            RMS_LayoutDatas = serializedObject.FindProperty("RMS_LayoutDatas");
-            RMS_Name = serializedObject.FindProperty("RMS_Name");
-        }
-        #endregion
     }
 }

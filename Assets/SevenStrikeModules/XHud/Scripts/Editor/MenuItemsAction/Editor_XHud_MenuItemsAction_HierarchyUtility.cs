@@ -14,7 +14,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             GameObject seleobject = Selection.activeGameObject;
             string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
-            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"XHud实用工具消息", "获取子物体数量", $"当前物体的子物体数量为： <color={hexcol}> {seleobject.transform.childCount} </color>", "明白", 0);
+            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"XHud - 实用工具消息", "获取子物体数量", $"当前物体的子物体数量为： <color={hexcol}> {seleobject.transform.childCount} </color>", "明白", 0);
 
         }
         [MenuItem("GameObject/XHud/Utilitys (实用工具)/SelectedAllChild (选中所有子物体)", priority = -10)]
@@ -71,7 +71,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         private static void CreateMaskable()
         {
             RectTransform obj = Selection.activeTransform.GetComponent<RectTransform>();
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "HudMaskable 消息", "创建遮罩体", $"确定要为 {obj.name} 创建遮罩体吗？", "创建", "暂不", 0);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 遮罩体消息", "创建遮罩体", $"确定要为 {obj.name} 创建遮罩体吗？", "创建", "暂不", 0);
             if (res == "暂不")
                 return;
             GameObject obj_maskRoot = new GameObject();

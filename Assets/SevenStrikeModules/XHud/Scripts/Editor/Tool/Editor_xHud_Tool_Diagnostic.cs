@@ -208,7 +208,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             #region 资源库 - 动效库
             if (mgr != null)
             {
-                if (mgr.Hud_ElementMotion == null)
+                if (mgr.Hud_Motions == null)
                     Editor_XHud_GUI.StatuDisplayer_icon(null, 12, new Vector2(0, 7), "动效库   -   未部署", 12, war, dot, 12, new Vector2(0, 4), false);
                 else
                     Editor_XHud_GUI.StatuDisplayer_icon(null, 12, new Vector2(0, 7), "动效库   -   已部署", 12, nor, dot, 12, new Vector2(0, 4), false);
@@ -246,25 +246,25 @@ namespace SevenStrikeModules.XHud.Utilitys
             if (XHud_Dashboard.HudManagerGet().Hud_Colors != null)
                 count_col = XHud_Dashboard.HudManagerGet().Hud_Colors.ColorLibrary.Count;
             int count_cur = 0;
-            if (XHud_Dashboard.HudManagerGet().Hud_Colors != null)
+            if (XHud_Dashboard.HudManagerGet().Hud_Curves != null)
                 count_cur = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary.Count;
             int count_sod = 0;
-            if (XHud_Dashboard.HudManagerGet().Hud_Colors != null)
+            if (XHud_Dashboard.HudManagerGet().Hud_Sounds != null)
                 count_sod = XHud_Dashboard.HudManagerGet().Hud_Sounds.SoundLibrary.Count;
             int count_fontstyle = 0;
-            if (XHud_Dashboard.HudManagerGet().Hud_Colors != null)
+            if (XHud_Dashboard.HudManagerGet().Hud_TextStyleLibrary != null)
                 count_fontstyle = XHud_Dashboard.HudManagerGet().Hud_TextStyleLibrary.TextStyleLibrary.Count;
             int count_motion = 0;
-            if (XHud_Dashboard.HudManagerGet().Hud_Colors != null)
-                count_motion = XHud_Dashboard.HudManagerGet().Hud_ElementMotion.ElementMotionList.Count;
+            if (XHud_Dashboard.HudManagerGet().Hud_Motions != null)
+                count_motion = XHud_Dashboard.HudManagerGet().Hud_Motions.ElementMotionList.Count;
             int count_transition = 0;
-            if (XHud_Dashboard.HudManagerGet().Hud_Colors != null)
+            if (XHud_Dashboard.HudManagerGet().Hud_TransitionLib != null)
                 count_transition = XHud_Dashboard.HudManagerGet().Hud_TransitionLib.TransitionLibrary.Count;
             int count_elelibs = 0;
-            if (XHud_Dashboard.HudManagerGet().Hud_Colors != null)
+            if (XHud_Dashboard.HudManagerGet().Hud_ElementLibrarys != null)
                 count_elelibs = XHud_Dashboard.HudManagerGet().Hud_ElementLibrarys.Count;
             int count_sodlist = 0;
-            if (XHud_Dashboard.HudManagerGet().Hud_Colors != null)
+            if (XHud_Dashboard.HudManagerGet().Pool_Sounder != null)
                 count_sodlist = XHud_Dashboard.HudManagerGet().Pool_Sounder.Length;
 
             Editor_XHud_GUI.StatuDisplayer_text(null, 12, new Vector2(0, 8), "色卡库", 12, $"{count_col}", XHud_Dashboard.Theme_Primary, 11, false);
@@ -292,7 +292,7 @@ namespace SevenStrikeModules.XHud.Utilitys
             #region 正在使用的组件状态检测
             Editor_XHud_GUI.Gui_Labelfield(new Rect(re.x + 260, re.y + 140, 200, 20), "正在使用的组件数量统计（包含世界空间）", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.MiddleLeft, 13, Font_Light);
 
-            XHudComponentStatistic statistic = mgr.hm_GetXHudComponentsCount();
+            XHudElementsStatistic statistic = mgr.hm_GetElementsStatistic();
 
             float startpos = 260;
             float distance = 75;

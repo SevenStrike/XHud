@@ -3,6 +3,15 @@ namespace SevenStrikeModules.XHud
     using UnityEngine;
     using UnityEngine.UI;
 
+    [System.Serializable]
+    public struct XHUdRatioReferenceRes
+    {
+        [SerializeField]
+        public Vector2 size;
+        [SerializeField]
+        public Sprite sprite;
+    }
+
     public partial class XHud_Manager : MonoBehaviour
     {
         [SerializeField]

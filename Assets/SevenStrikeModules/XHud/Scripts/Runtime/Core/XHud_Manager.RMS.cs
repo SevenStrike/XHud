@@ -3,6 +3,16 @@ namespace SevenStrikeModules.XHud
     using System.Collections.Generic;
     using UnityEngine;
 
+    /// <summary>
+    /// 布局匹配分辨率类
+    /// </summary>
+    [System.Serializable]
+    public class ScreenResolutionNode
+    {
+        public string Indicator;
+        public Vector2 Res;
+    }
+
     public partial class XHud_Manager : MonoBehaviour
     {
         /// <summary>

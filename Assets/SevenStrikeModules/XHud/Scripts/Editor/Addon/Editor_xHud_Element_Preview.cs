@@ -309,20 +309,20 @@ namespace SevenStrikeModules.XHud
 
             #region 模版库                             
             //确保动效库存在
-            if (mgr.Hud_ElementMotion != null)
+            if (mgr.Hud_Motions != null)
             {
                 //确保动效库不是空的
-                if (mgr.Hud_ElementMotion.ElementMotionList != null && mgr.Hud_ElementMotion.ElementMotionList.Count > 0)
+                if (mgr.Hud_Motions.ElementMotionList != null && mgr.Hud_Motions.ElementMotionList.Count > 0)
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
 
                     //动效列表
-                    string[] motnames = mgr.Hud_ElementMotion.ElementMotion_GetAllName_With_Create();
+                    string[] motnames = mgr.Hud_Motions.ElementMotion_GetAllName_With_Create();
                     EditorGUI.BeginChangeCheck();
                     Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Element_Preview>("生成", motnames, ref Crc_Lib_Name, HudFilled.实体, 120, 22, SelectedObjects);
                     if (EditorGUI.EndChangeCheck())
                     {
-                        Motion_Creator crc = mgr.Hud_ElementMotion.ElementMotion_GetElementCreator_At_Create(Crc_Lib_Name.stringValue);
+                        Motion_Creator crc = mgr.Hud_Motions.ElementMotion_GetElementCreator_At_Create(Crc_Lib_Name.stringValue);
 
                         CreateArgs.FindPropertyRelative("anchor").enumValueIndex = (int)crc.anchor;
                         CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)crc.Movement.Movement;
@@ -360,10 +360,10 @@ namespace SevenStrikeModules.XHud
 
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "定位", locate_r, locate_p, 2))
                     {
-                        if (!mgr.Hud_ElementMotion.ElementMotion_IsExist(Crc_Lib_Name.stringValue))
+                        if (!mgr.Hud_Motions.ElementMotion_IsExist(Crc_Lib_Name.stringValue))
                             return;
                         Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
-                        mgr.Hud_ElementMotion.ElementMotionLibrary_Location(Crc_Lib_Name.stringValue);
+                        mgr.Hud_Motions.ElementMotionLibrary_Location(Crc_Lib_Name.stringValue);
                         return;
                     }
 
@@ -371,7 +371,7 @@ namespace SevenStrikeModules.XHud
 
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "重置", reset_r, reset_p, 2))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "ElementPreview元素预览器通知", "重置动效参数", "确定要将动效参数重置吗？您将丢失当前的动效参数！", "重置", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素预览器消息", "重置动效参数", "确定要将动效参数重置吗？您将丢失当前的动效参数！", "重置", "暂不", 0);
                         if (res == "重置")
                             ResetMotionParams("CreateArgs");
                         return;
@@ -618,7 +618,7 @@ namespace SevenStrikeModules.XHud
                         HudMotion_Movement m = (HudMotion_Movement)CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex;
                         if (m == HudMotion_Movement.A_无运动)
                         {
-                            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"ElementPreview元素预览器通知", "设定动画结束时机", $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！", "明白", 0);
+                            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"XHud - 元素预览器消息", "设定动画结束时机", $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！", "明白", 0);
                             CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                         }
                         break;
@@ -626,7 +626,7 @@ namespace SevenStrikeModules.XHud
                         HudMotion_Rotation r = (HudMotion_Rotation)CreateArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
                         if (r == HudMotion_Rotation.A_无旋转)
                         {
-                            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"ElementPreview元素预览器通知", "设定动画结束时机", $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！", "明白", 0);
+                            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"XHud - 元素预览器消息", "设定动画结束时机", $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！", "明白", 0);
                             CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                         }
                         break;
@@ -639,20 +639,20 @@ namespace SevenStrikeModules.XHud
 
             #region 模版库                             
             //确保动效库存在
-            if (mgr.Hud_ElementMotion != null)
+            if (mgr.Hud_Motions != null)
             {
                 //确保动效库不是空的
-                if (mgr.Hud_ElementMotion.ElementMotionList != null && mgr.Hud_ElementMotion.ElementMotionList.Count > 0)
+                if (mgr.Hud_Motions.ElementMotionList != null && mgr.Hud_Motions.ElementMotionList.Count > 0)
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
 
                     //动效列表
-                    string[] motnames = mgr.Hud_ElementMotion.ElementMotion_GetAllName_With_Recycle();
+                    string[] motnames = mgr.Hud_Motions.ElementMotion_GetAllName_With_Recycle();
                     EditorGUI.BeginChangeCheck();
                     Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Element_Preview>("回收", motnames, ref Rec_Lib_Name, HudFilled.实体, 120, 22, SelectedObjects);
                     if (EditorGUI.EndChangeCheck())
                     {
-                        Motion_Recycler rec = mgr.Hud_ElementMotion.ElementMotion_GetElementCreator_At_Recycle(Rec_Lib_Name.stringValue);
+                        Motion_Recycler rec = mgr.Hud_Motions.ElementMotion_GetElementCreator_At_Recycle(Rec_Lib_Name.stringValue);
 
                         RecycleArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)rec.Movement.Movement;
                         RecycleArgs.FindPropertyRelative("Movement.Distance").floatValue = rec.Movement.Distance;
@@ -689,10 +689,10 @@ namespace SevenStrikeModules.XHud
 
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "定位", locate_r, locate_p, 2))
                     {
-                        if (!mgr.Hud_ElementMotion.ElementMotion_IsExist(Rec_Lib_Name.stringValue, HudElementMotionType.Recycler))
+                        if (!mgr.Hud_Motions.ElementMotion_IsExist(Rec_Lib_Name.stringValue, HudElementMotionType.Recycler))
                             return;
                         Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
-                        mgr.Hud_ElementMotion.ElementMotionLibrary_Location(Rec_Lib_Name.stringValue);
+                        mgr.Hud_Motions.ElementMotionLibrary_Location(Rec_Lib_Name.stringValue);
                         return;
                     }
 
@@ -700,7 +700,7 @@ namespace SevenStrikeModules.XHud
 
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "重置", reset_r, reset_p, 2))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "ElementPreview元素预览器通知", "重置动效参数", "确定要将动效参数重置吗？您将丢失当前的动效参数！", "重置", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素预览器消息", "重置动效参数", "确定要将动效参数重置吗？您将丢失当前的动效参数！", "重置", "暂不", 0);
                         if (res == "重置")
                             ResetMotionParams("RecycleArgs");
                         return;
@@ -943,7 +943,7 @@ namespace SevenStrikeModules.XHud
                         HudMotion_Movement m = (HudMotion_Movement)RecycleArgs.FindPropertyRelative("Movement.Movement").enumValueIndex;
                         if (m == HudMotion_Movement.A_无运动)
                         {
-                            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"ElementPreview元素预览器通知", "设定动画结束时机", $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！", "明白", 0);
+                            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"XHud - 元素预览器消息", "设定动画结束时机", $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！", "明白", 0);
                             RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                         }
                         break;
@@ -951,7 +951,7 @@ namespace SevenStrikeModules.XHud
                         HudMotion_Rotation r = (HudMotion_Rotation)RecycleArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
                         if (r == HudMotion_Rotation.A_无旋转)
                         {
-                            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"ElementPreview元素预览器通知", "设定动画结束时机", $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！", "明白", 0);
+                            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"XHud - 元素预览器消息", "设定动画结束时机", $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！", "明白", 0);
                             RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                         }
                         break;
@@ -1143,7 +1143,7 @@ namespace SevenStrikeModules.XHud
                 menu.AddDisabledItem(new GUIContent("动效快速操作"));
                 menu.AddItem(new GUIContent("E (复制动效)"), false, () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "ElementPreview元素预览器通知", "复制动效", "请选择动效参数复制模式！", "取消", "生成", "回收", 0);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 元素预览器消息", "复制动效", "请选择动效参数复制模式！", "取消", "生成", "回收", 0);
                     if (res == "取消")
                         return;
 
@@ -1234,14 +1234,14 @@ namespace SevenStrikeModules.XHud
                     else if (res == "回收")
                         mode = "回收动效参数";
 
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "ElementPreview元素预览器通知", "复制动效", $"已复制 \" {mode} \" 到系统剪贴板 ！", "明白", 0);
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素预览器消息", "复制动效", $"已复制 \" {mode} \" 到系统剪贴板 ！", "明白", 0);
                 });
                 menu.AddItem(new GUIContent("R (粘贴动效)"), false, () =>
                 {
                     string buffer = GUIUtility.systemCopyBuffer;
                     if (buffer.Contains("anchor"))//粘贴生成参数
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "ElementPreview元素预览器通知", "粘贴动效", "检测到动效参数类型为： \"生成动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 元素预览器消息", "粘贴动效", "检测到动效参数类型为： \"生成动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
                         if (res == "暂不")
                             return;
 
@@ -1273,11 +1273,11 @@ namespace SevenStrikeModules.XHud
 
                         sp_CreateArgs.serializedObject.ApplyModifiedProperties();
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "ElementPreview元素预览器通知", "粘贴动效", "已更新 \"生成\" 动效参数!", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素预览器消息", "粘贴动效", "已更新 \"生成\" 动效参数!", "明白", 0);
                     }
                     else//粘贴回收参数
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "ElementPreview元素预览器通知", "粘贴动效", "检测到动效参数类型为： \"回收动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 元素预览器消息", "粘贴动效", "检测到动效参数类型为： \"回收动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
                         if (res == "暂不")
                             return;
 
@@ -1307,7 +1307,7 @@ namespace SevenStrikeModules.XHud
 
                         sp_RecycleArgs.serializedObject.ApplyModifiedProperties();
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "ElementPreview元素预览器通知", "粘贴动效", "已更新 \"回收\" 动效参数!", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素预览器消息", "粘贴动效", "已更新 \"回收\" 动效参数!", "明白", 0);
                     }
                 });
                 menu.AddSeparator("");
@@ -1490,7 +1490,7 @@ namespace SevenStrikeModules.XHud
             window.SetLibrarySetterMode(LibrarySetterMode.添加到库);
             window.SetButtonText("添加", "取消");
             window.SetTitle("XHud 动效库采集器");
-            window.SetTarget_Hud_MotionLibrary(XHud_Dashboard.HudManagerGet().Hud_ElementMotion);
+            window.SetTarget_Hud_MotionLibrary(XHud_Dashboard.HudManagerGet().Hud_Motions);
             //window.ShowModal();
             window.Show();
         }

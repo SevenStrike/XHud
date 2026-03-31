@@ -22,7 +22,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         {
             Object FontAsset = Selection.activeObject;
 
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud TmpFontAssets清理器消息", "清理TmpFontAssetAtlas", $"您确认要将 {FontAsset.name} 图集内容清空吗？清空后字体图集将保持纯净状态！此操作不可逆，请谨慎操作！", "清空", "暂不", 1);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - TmpFontAssets清理器消息", "清理TmpFontAssetAtlas", $"您确认要将 {FontAsset.name} 图集内容清空吗？清空后字体图集将保持纯净状态！此操作不可逆，请谨慎操作！", "清空", "暂不", 1);
             if (res == "暂不")
             {
                 return;
@@ -37,7 +37,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 }
                 catch (System.Exception err)
                 {
-                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud TmpFontAssets清理器消息", "清理TmpFontAssetAtlas", $"您选中的物体 {FontAsset.name} 并非是TmpFontAsset类型！,详细信息： {err.Message}", "明白");
+                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - TmpFontAssets清理器消息", "清理TmpFontAssetAtlas", $"您选中的物体 {FontAsset.name} 并非是TmpFontAsset类型！,详细信息： {err.Message}", "明白");
                 }
             }
         }
@@ -95,8 +95,8 @@ namespace SevenStrikeModules.XHud.Utilitys
                 }
                 else if (type == "SevenStrikeModules.XHud.Hud_MotionLibrary")
                 {
-                    manager.Hud_ElementMotion = obj as XHud_Library_Motion;
-                    XHud_Utilitys.Func_PrintInfo("XHud库通知", "已将名称为： " + manager.Hud_ElementMotion.name + " 的动效库设为当前使用！", HudMsgState.通知);
+                    manager.Hud_Motions = obj as XHud_Library_Motion;
+                    XHud_Utilitys.Func_PrintInfo("XHud库通知", "已将名称为： " + manager.Hud_Motions.name + " 的动效库设为当前使用！", HudMsgState.通知);
                 }
                 else if (type == "SevenStrikeModules.XHud.Hud_ElementLibrary")
                 {

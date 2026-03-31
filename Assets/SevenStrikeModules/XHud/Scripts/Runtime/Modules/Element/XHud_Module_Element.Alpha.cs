@@ -20,12 +20,20 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public virtual void element_AlphaSyncUpdate()
         {
+            // 浮点数边界值钳位与容差处理
+            // 防止浮点数精度问题导致的值无法精确到达边界（0 或 1），主动将其钳位到精确的边界值
             if (CanvasGroup != null)
             {
-                if (Alpha > 0.9999f)
+                if (Alpha >= 0.9999f)
+                {
                     CanvasGroup.alpha = 1;
+                    Alpha = 1;
+                }
                 else if (Alpha <= 0.0001f)
+                {
                     CanvasGroup.alpha = 0;
+                    Alpha = 0;
+                }
                 else
                     CanvasGroup.alpha = Alpha;
             }

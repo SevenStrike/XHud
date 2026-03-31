@@ -36,7 +36,7 @@ namespace SevenStrikeModules.XHud
         #region 批量化操作
         private XHud_Module_Text[] SelectedObjects;
 
-        private void GetAllTargets()
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
@@ -54,7 +54,7 @@ namespace SevenStrikeModules.XHud
             }
         }
 
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -74,12 +74,8 @@ namespace SevenStrikeModules.XHud
             base.OnEnable();
             BaseScript = (XHud_Module_Text)target;
 
-            sp_Indicator = serializedObject.FindProperty("Indicator");
-            sp_StyleName = serializedObject.FindProperty("StyleName");
-            sp_StyleLibSynching = serializedObject.FindProperty("StyleLibSynching");
-            sp_SyncGlobalFontSize = serializedObject.FindProperty("SyncGlobalFontSize");
-            sp_TextStyleInfo = serializedObject.FindProperty("TextStyleInfo");
-            sp_Text = serializedObject.FindProperty("m_Text");
+            // 获取序列化变量
+            GetSerializeFields();
 
             locate_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Text/locate_r");
             locate_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Text/locate_p");
@@ -91,7 +87,7 @@ namespace SevenStrikeModules.XHud
             update_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Text/update_r");
             update_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Text/update_p");
 
-            GetAllTargets();
+            Targets_Get();
 
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
@@ -164,7 +160,7 @@ namespace SevenStrikeModules.XHud
             #region 按钮
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "快捷功能", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(10);
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -355,7 +351,7 @@ namespace SevenStrikeModules.XHud
                         }
                     });
 
-                    if (!IsMultiSelected())
+                    if (!Targets_Selected())
                     {
                         Editor_XHud_GUI.Gui_Layout_Space(10);
 
@@ -473,7 +469,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Property_Field("文字内容", sp_Text);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -492,7 +488,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Property_Field("标识", sp_Indicator);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -520,7 +516,7 @@ namespace SevenStrikeModules.XHud
                 Editor_XHud_GUI.Gui_Layout_Property_Field("锚点", sp_txt_content_anchor);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -546,7 +542,7 @@ namespace SevenStrikeModules.XHud
                 Editor_XHud_GUI.Gui_Layout_Property_Field("水平溢出", sp_txt_overflow_h);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -572,7 +568,7 @@ namespace SevenStrikeModules.XHud
                 Editor_XHud_GUI.Gui_Layout_Property_Field("垂直溢出", sp_txt_overflow_v);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -662,7 +658,7 @@ namespace SevenStrikeModules.XHud
                 {
                     XHud_LibraryArg_TextStyle info = JsonUtility.FromJson<XHud_LibraryArg_TextStyle>(Editor_XHud_GUI.EditorData_Get_With_String("XED_HudText_Get_TextStyle"));
 
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -689,7 +685,7 @@ namespace SevenStrikeModules.XHud
                 {
                     XHud_LibraryArg_TextStyle info = JsonUtility.FromJson<XHud_LibraryArg_TextStyle>(Editor_XHud_GUI.EditorData_Get_With_String("XED_HudTextStyleLibrary_Get_TextStyle"));
 
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         List<XHud_GUI_Dialog_ListDatas> datas = new List<XHud_GUI_Dialog_ListDatas>();
 
@@ -827,7 +823,6 @@ namespace SevenStrikeModules.XHud
         }
 
         #region 辅助
-
         /// <summary>
         /// 根据文字样式名称索引刷新文字样式
         /// </summary>
@@ -836,7 +831,7 @@ namespace SevenStrikeModules.XHud
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             XHud_LibraryArg_TextStyle s_info = null;
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 var s = targets;
                 foreach (var t in s)
@@ -949,11 +944,21 @@ namespace SevenStrikeModules.XHud
                 return;
             }
         }
-
+        /// <summary>
+        /// 获取序列化变量
+        /// </summary>
+        private void GetSerializeFields()
+        {
+            sp_Indicator = serializedObject.FindProperty("Indicator");
+            sp_StyleName = serializedObject.FindProperty("StyleName");
+            sp_StyleLibSynching = serializedObject.FindProperty("StyleLibSynching");
+            sp_SyncGlobalFontSize = serializedObject.FindProperty("SyncGlobalFontSize");
+            sp_TextStyleInfo = serializedObject.FindProperty("TextStyleInfo");
+            sp_Text = serializedObject.FindProperty("m_Text");
+        }
         #endregion
 
         #region 打开字体样式添加器
-
         /// <summary>
         /// 字体库添加器
         /// </summary>

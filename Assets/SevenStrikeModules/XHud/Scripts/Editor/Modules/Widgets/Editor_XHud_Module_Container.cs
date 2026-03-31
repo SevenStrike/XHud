@@ -74,7 +74,7 @@ namespace SevenStrikeModules.XHud
         #region 批量化操作
         private XHud_Module_Container[] SelectedObjects;
 
-        private void GetAllTargets()
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
@@ -92,7 +92,7 @@ namespace SevenStrikeModules.XHud
             }
         }
 
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -111,30 +111,7 @@ namespace SevenStrikeModules.XHud
         {
             BaseScript = (XHud_Module_Container)target;
 
-            #region 属性获取
-            ContainerItems = serializedObject.FindProperty("ContainerItems");
-            Indicator = serializedObject.FindProperty("Indicator");
-            UseDebug = serializedObject.FindProperty("UseDebug");
-            Animators_GlobalDuration = serializedObject.FindProperty("Animators_GlobalDuration");
-            AnimateState = serializedObject.FindProperty("AnimateState");
-            Animators_MaxDuration = serializedObject.FindProperty("Animators_MaxDuration");
-            EventIsFold = serializedObject.FindProperty("EventIsFold");
-            eve_on_itemcount_get = serializedObject.FindProperty("eve_on_itemcount_get");
-            eve_on_item_get = serializedObject.FindProperty("eve_on_item_get");
-            eve_on_items_get = serializedObject.FindProperty("eve_on_items_get");
-            eve_on_item_add = serializedObject.FindProperty("eve_on_item_add");
-            eve_on_item_remove = serializedObject.FindProperty("eve_on_item_remove");
-            eve_on_items_remove = serializedObject.FindProperty("eve_on_items_remove");
-            eve_on_animate_play_all = serializedObject.FindProperty("eve_on_animate_play_all");
-            eve_on_animate_play_by_item = serializedObject.FindProperty("eve_on_animate_play_by_item");
-            eve_on_animate_rewind_all = serializedObject.FindProperty("eve_on_animate_rewind_all");
-            eve_on_animate_rewind_by_item = serializedObject.FindProperty("eve_on_animate_rewind_by_item");
-            eve_on_animate_ready_all = serializedObject.FindProperty("eve_on_animate_ready_all");
-            eve_on_animate_ready_by_item = serializedObject.FindProperty("eve_on_animate_ready_by_item");
-            eve_on_item_changevalue = serializedObject.FindProperty("eve_on_item_changevalue");
-            AnimatorPlayTiming = serializedObject.FindProperty("AnimatorPlayTiming");
-            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
-            #endregion
+            GetSerializeFields();
 
             LineHeight = EditorGUIUtility.singleLineHeight;
 
@@ -437,7 +414,7 @@ namespace SevenStrikeModules.XHud
 
             GetContainTypes();
 
-            GetAllTargets();
+            Targets_Get();
         }
 
         private void OnDisable()
@@ -525,9 +502,9 @@ namespace SevenStrikeModules.XHud
             #endregion
 
             #region 预览动画
-            if (!IsMultiSelected() && ContainerItems.arraySize > 0)
+            if (!Targets_Selected() && ContainerItems.arraySize > 0)
             {
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     GUILayout.FlexibleSpace();
 
@@ -613,7 +590,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 容器项列表
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -637,12 +614,12 @@ namespace SevenStrikeModules.XHud
 
             #region 状态
             string statu_title = "状态";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_title = "状态 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.阴影灰, 5, statu_title, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 #region 动画状态     
                 Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, (HudElementAnimateState)AnimateState.enumValueIndex == HudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
@@ -758,7 +735,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 事件列表
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -907,7 +884,7 @@ namespace SevenStrikeModules.XHud
                     RegenerateID();
                 });
 
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddSeparator("");
                     menu.AddDisabledItem(new GUIContent("预览"));
@@ -1004,7 +981,6 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         /// <summary>
         /// 清空数据项
         /// </summary>
@@ -1014,7 +990,7 @@ namespace SevenStrikeModules.XHud
 
             if (res == "清空")
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int s = 0; s < SelectedObjects.Length; s++)
                     {
@@ -1034,7 +1010,6 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         /// <summary>
         /// 重复项检测
         /// </summary>
@@ -1056,7 +1031,6 @@ namespace SevenStrikeModules.XHud
             }
             return isRepeat;
         }
-
         /// <summary>
         /// 自动收集元素
         /// </summary>
@@ -1064,7 +1038,7 @@ namespace SevenStrikeModules.XHud
         {
             List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
 
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int s = 0; s < SelectedObjects.Length; s++)
                 {
@@ -1405,13 +1379,12 @@ namespace SevenStrikeModules.XHud
                     Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 容器消息", "扫描元素组件", "未扫描到任何有效容器元素组件！", "明白");
             }
         }
-
         /// <summary>
         /// 重新生成ID
         /// </summary>
         private void RegenerateID()
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int s = 0; s < SelectedObjects.Length; s++)
                 {
@@ -1448,7 +1421,6 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         /// <summary>
         /// 折叠
         /// </summary>
@@ -1460,7 +1432,6 @@ namespace SevenStrikeModules.XHud
             EventIsFold.boolValue = state;
             EventIsFold.serializedObject.ApplyModifiedProperties();
         }
-
         /// <summary>
         /// 数据可视化 - 创建ID编号
         /// </summary>
@@ -1488,7 +1459,6 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         /// <summary>
         /// 还原Animator姿态
         /// </summary>
@@ -1545,13 +1515,11 @@ namespace SevenStrikeModules.XHud
 
             so.ApplyModifiedProperties();
         }
-
         private void CalculateAnimatorMaxDuration(List<XHud_ContainerItem> list, float globaldur)
         {
             Animators_MaxDuration.floatValue = Animators_GetAnimatorsMaxDuration(list, globaldur);
             Animators_MaxDuration.serializedObject.ApplyModifiedProperties();
         }
-
         /// <summary>
         /// 从所有子动画器中获取最大耗时
         /// </summary>
@@ -1584,7 +1552,6 @@ namespace SevenStrikeModules.XHud
             float v = XHud_Utilitys.Array_MaxValue(x_list);
             return v * globaldur;
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -1603,7 +1570,6 @@ namespace SevenStrikeModules.XHud
             }
             return hasLoop;
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -1643,7 +1609,9 @@ namespace SevenStrikeModules.XHud
             }
             return hasLoop;
         }
-
+        /// <summary>
+        /// 获取容器类型
+        /// </summary>
         private void GetContainTypes()
         {
             ImageCount = 0;
@@ -1679,6 +1647,34 @@ namespace SevenStrikeModules.XHud
                     AnimatorCount++;
                 }
             }
+        }
+        /// <summary>
+        /// 获取序列化字段
+        /// </summary>
+        private void GetSerializeFields()
+        {
+            ContainerItems = serializedObject.FindProperty("ContainerItems");
+            Indicator = serializedObject.FindProperty("Indicator");
+            UseDebug = serializedObject.FindProperty("UseDebug");
+            Animators_GlobalDuration = serializedObject.FindProperty("Animators_GlobalDuration");
+            AnimateState = serializedObject.FindProperty("AnimateState");
+            Animators_MaxDuration = serializedObject.FindProperty("Animators_MaxDuration");
+            EventIsFold = serializedObject.FindProperty("EventIsFold");
+            eve_on_itemcount_get = serializedObject.FindProperty("eve_on_itemcount_get");
+            eve_on_item_get = serializedObject.FindProperty("eve_on_item_get");
+            eve_on_items_get = serializedObject.FindProperty("eve_on_items_get");
+            eve_on_item_add = serializedObject.FindProperty("eve_on_item_add");
+            eve_on_item_remove = serializedObject.FindProperty("eve_on_item_remove");
+            eve_on_items_remove = serializedObject.FindProperty("eve_on_items_remove");
+            eve_on_animate_play_all = serializedObject.FindProperty("eve_on_animate_play_all");
+            eve_on_animate_play_by_item = serializedObject.FindProperty("eve_on_animate_play_by_item");
+            eve_on_animate_rewind_all = serializedObject.FindProperty("eve_on_animate_rewind_all");
+            eve_on_animate_rewind_by_item = serializedObject.FindProperty("eve_on_animate_rewind_by_item");
+            eve_on_animate_ready_all = serializedObject.FindProperty("eve_on_animate_ready_all");
+            eve_on_animate_ready_by_item = serializedObject.FindProperty("eve_on_animate_ready_by_item");
+            eve_on_item_changevalue = serializedObject.FindProperty("eve_on_item_changevalue");
+            AnimatorPlayTiming = serializedObject.FindProperty("AnimatorPlayTiming");
+            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
         }
         #endregion
 

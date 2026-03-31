@@ -1,5 +1,7 @@
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XHud.Utilitys;
     using UnityEngine;
     using UnityEngine.Rendering.Universal;
 
@@ -172,6 +174,21 @@ namespace SevenStrikeModules.XHud
             // 确保 UI 相机与场景相机叠加渲染
             // 场景相机先渲染场景，UI 相机后渲染 UI
             hm_SceneCam_CheckStack(SceneCamera);
+        }
+
+        /// <summary>
+        /// 为指定的相机堆栈添加Hud叠加层
+        /// </summary>
+        /// <param name="uac"></param>
+        public void hm_AssignedCameraStack(UniversalAdditionalCameraData uac)
+        {
+            if (HudCamera == null)
+                if (UseDebug)
+                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "当前HudCamera为空，无法为指定的相机堆栈添加Hud叠加层", HudMsgState.警告);
+            if (!uac.cameraStack.Contains(HudCamera))
+            {
+                uac.cameraStack.Add(HudCamera);
+            }
         }
     }
 }

@@ -45,7 +45,7 @@ namespace SevenStrikeModules.XHud
         #region 批量化操作
         private XHud_Module_TmpText[] SelectedObjects;
 
-        private void GetAllTargets()
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
@@ -63,7 +63,7 @@ namespace SevenStrikeModules.XHud
             }
         }
 
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -83,15 +83,8 @@ namespace SevenStrikeModules.XHud
             base.OnEnable();
             BaseScript = (XHud_Module_TmpText)target;
 
-            sp_RaycastTargetProp = serializedObject.FindProperty("m_RaycastTarget");
-            sp_MaskableProp = serializedObject.FindProperty("m_Maskable");
-
-            sp_Indicator = serializedObject.FindProperty("Indicator");
-            sp_StyleName = serializedObject.FindProperty("StyleName");
-            sp_StyleLibSynching = serializedObject.FindProperty("StyleLibSynching");
-            sp_SyncGlobalFontSize = serializedObject.FindProperty("SyncGlobalFontSize");
-            sp_TextStyleInfo = serializedObject.FindProperty("TextStyleInfo");
-            sp_Text = serializedObject.FindProperty("m_text");
+            // 获取序列化变量
+            GetSerializeFields();
 
             locate_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TmpText/locate_r");
             locate_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TmpText/locate_p");
@@ -103,7 +96,7 @@ namespace SevenStrikeModules.XHud
             update_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TmpText/update_r");
             update_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TmpText/update_p");
 
-            GetAllTargets();
+            Targets_Get();
 
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
@@ -199,7 +192,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "快捷功能", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -347,7 +340,7 @@ namespace SevenStrikeModules.XHud
             {
                 Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Module_TmpText>("渐变色模式", stroptions_gramode, ref sp_gra_ColorModeName, HudFilled.实体, 120, 22, SelectedObjects);
 
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -456,7 +449,7 @@ namespace SevenStrikeModules.XHud
                         }
                     });
 
-                    if (!IsMultiSelected())
+                    if (!Targets_Selected())
                     {
                         Editor_XHud_GUI.Gui_Layout_Space(10);
 
@@ -674,7 +667,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Property_Field("文字内容", sp_Text);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -693,7 +686,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Property_Field("标识", sp_Indicator);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -720,7 +713,7 @@ namespace SevenStrikeModules.XHud
                 Editor_XHud_GUI.Gui_Layout_Property_Field("锚点", sp_tmp_anchor);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -874,7 +867,7 @@ namespace SevenStrikeModules.XHud
                     XHud_LibraryArg_TextStyle info = JsonUtility.FromJson<XHud_LibraryArg_TextStyle>(Editor_XHud_GUI.EditorData_Get_With_String("XED_HudTmpText_Get_TextStyle"));
                     BaseScript.TextStyleInfo.CopyData(info);
 
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -898,7 +891,7 @@ namespace SevenStrikeModules.XHud
                 {
                     XHud_LibraryArg_TextStyle info = JsonUtility.FromJson<XHud_LibraryArg_TextStyle>(Editor_XHud_GUI.EditorData_Get_With_String("XED_HudTextStyleLibrary_Get_TextStyle"));
 
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         List<XHud_GUI_Dialog_ListDatas> datas = new List<XHud_GUI_Dialog_ListDatas>();
 
@@ -1151,7 +1144,6 @@ namespace SevenStrikeModules.XHud
             // 应用修改并压缩贴图
             GradientTexture.Apply();
         }
-
         /// <summary>
         /// 根据文字样式名称索引刷新文字样式
         /// </summary>
@@ -1160,7 +1152,7 @@ namespace SevenStrikeModules.XHud
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             XHud_LibraryArg_TextStyle s_info = null;
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 var s = targets;
                 foreach (var t in s)
@@ -1273,7 +1265,21 @@ namespace SevenStrikeModules.XHud
                 return;
             }
         }
+        /// <summary>
+        /// 获取序列化变量
+        /// </summary>
+        private void GetSerializeFields()
+        {
+            sp_RaycastTargetProp = serializedObject.FindProperty("m_RaycastTarget");
+            sp_MaskableProp = serializedObject.FindProperty("m_Maskable");
 
+            sp_Indicator = serializedObject.FindProperty("Indicator");
+            sp_StyleName = serializedObject.FindProperty("StyleName");
+            sp_StyleLibSynching = serializedObject.FindProperty("StyleLibSynching");
+            sp_SyncGlobalFontSize = serializedObject.FindProperty("SyncGlobalFontSize");
+            sp_TextStyleInfo = serializedObject.FindProperty("TextStyleInfo");
+            sp_Text = serializedObject.FindProperty("m_text");
+        }
         #endregion
 
         #region 打开字体样式添加器

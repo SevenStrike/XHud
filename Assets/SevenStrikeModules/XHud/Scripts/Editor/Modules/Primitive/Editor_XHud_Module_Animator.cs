@@ -633,7 +633,7 @@ namespace SevenStrikeModules.XHud
                                         nav = $"该动向模式较为特殊，是指一个<color={hexcol}>  目标值  <color>从<color={hexcol}>  自身当前值  <color>开始向<color={hexcol}>  结束值  <color>进行变化，在该动向模式下如果<color={hexcol}>  调用Rewind方法  <color>则不会影响任何数值变化的状态！\n\n<color={hexcol}>变化方向：</color>自身当前值  -->  结束值\n<color={hexcol}>适用场景：</color>动态指定数值的变化状态";
                                         break;
                                 }
-                                Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudAnimator动画器消息", "动向模式解释", nav, "明白", 0, false);
+                                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动画器消息", "动向模式解释", nav, "明白", 0, false);
 
                                 return;
                             }
@@ -1146,10 +1146,10 @@ namespace SevenStrikeModules.XHud
                             Datas.Add(data);
                         }
 
-                        string res_x = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "HudAnimator动画器消息", "批量切换颜色模式", "是否需要批量切换以下列表中的动画器物体的颜色模式？", "暂不", "切换", 0);
+                        string res_x = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "XHud - 动画器消息", "批量切换颜色模式", "是否需要批量切换以下列表中的动画器物体的颜色模式？", "暂不", "切换", 0);
                         if (res_x == "切换")
                         {
-                            string res_y = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudAnimator动画器消息", "切换颜色模式", "需要切换为那种模式？", "色卡库", "原始色", 1);
+                            string res_y = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动画器消息", "切换颜色模式", "需要切换为那种模式？", "色卡库", "原始色", 1);
                             if (res_y == "原始色")
                             {
                                 for (int i = 0; i < SelectedObjects.Length; i++)
@@ -1189,7 +1189,7 @@ namespace SevenStrikeModules.XHud
                     }
                     else
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudAnimator动画器消息", "切换颜色模式", $"需要将 {(string.IsNullOrEmpty(BaseScript.Indicator) ? BaseScript.name : BaseScript.Indicator)} 颜色显示切换为那种模式？", "色卡库", "原始色", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动画器消息", "切换颜色模式", $"需要将 {(string.IsNullOrEmpty(BaseScript.Indicator) ? BaseScript.name : BaseScript.Indicator)} 颜色显示切换为那种模式？", "色卡库", "原始色", 1);
                         if (res == "原始色")
                         {
                             SyncLibraryColor.boolValue = false;
@@ -1834,7 +1834,7 @@ namespace SevenStrikeModules.XHud
                                 {
                                     if (!SelectedObjects[i].SyncLibraryColor)
                                     {
-                                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudAnimator动画器消息", "批量识别色卡信息", $"侦测到 {SelectedObjects[i].name} ( {SelectedObjects[i].Indicator} ) 处于原始色模式！是否将其转换为色卡模式？", "跳过", "转换", 1);
+                                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动画器消息", "批量识别色卡信息", $"侦测到 {SelectedObjects[i].name} ( {SelectedObjects[i].Indicator} ) 处于原始色模式！是否将其转换为色卡模式？", "跳过", "转换", 1);
                                         if (res == "跳过")
                                             continue;
                                         else
@@ -1852,26 +1852,26 @@ namespace SevenStrikeModules.XHud
                                     Datas.Add(dataitem);
                                 }
 
-                                Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "HudAnimator动画器消息", "批量识别色卡信息", "以下是已应用识别的色卡参数的动画器列表，请您检查核对：", "明白");
+                                Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 动画器消息", "批量识别色卡信息", "以下是已应用识别的色卡参数的动画器列表，请您检查核对：", "明白");
                             }
                             else
                             {
                                 BaseScript.ColoriseName = copyHudColor.Name;
-                                Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudAnimator动画器消息", "识别色卡信息", $"已识别 XHudEditorData (XED) 中的色卡信息！您从色卡库中获取的色卡名称为： <color={hexcol}>{copyHudColor.Name} </color>", "没错");
+                                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动画器消息", "识别色卡信息", $"已识别 XHudEditorData (XED) 中的色卡信息！您从色卡库中获取的色卡名称为： <color={hexcol}>{copyHudColor.Name} </color>", "没错");
                             }
                         }
                     }
                     catch (System.Exception e)
                     {
                         string msg = e.Message;
-                        Editor_XHud_GUI.Open(XHud_DialogType.错误, "HudAnimator动画器消息", "识别色卡信息", "未能识别的参数！请在色卡库的其中一项上点击右键并选择 \"获取色卡信息\" 后再试！", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.错误, "XHud - 动画器消息", "识别色卡信息", "未能识别的参数！请在色卡库的其中一项上点击右键并选择 \"获取色卡信息\" 后再试！", "明白", 0);
                     }
                 });
                 menu.AddItem(new GUIContent("D (拷贝色卡)"), false, () =>
                 {
                     Editor_XHud_GUI.EditorData_Set_With_String("XED_HudAnimator_Get_ColoriseName", BaseScript.ColoriseName);
                     string hexcol = XHud_Utilitys.Color_To_HexColor(OriginalColor.colorValue, true);
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudAnimator动画器消息", "色板信息拷贝", $"已将当前动画器的色卡信息<color={hexcol}> {BaseScript.ColoriseName} </color>XHudEditorData (XED)！", "好的");
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动画器消息", "色板信息拷贝", $"已将当前动画器的色卡信息<color={hexcol}> {BaseScript.ColoriseName} </color>XHudEditorData (XED)！", "好的");
                 });
                 menu.AddItem(new GUIContent("W (粘贴色卡)"), false, () =>
                 {
@@ -1888,7 +1888,7 @@ namespace SevenStrikeModules.XHud
                             dataitem.Message = $"{SelectedObjects[i].name} ({SelectedObjects[i].Indicator})";
                             Datas.Add(dataitem);
                         }
-                        string res_mul = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "HudAnimator动画器消息", "批量色卡信息粘贴", $"确认要将 XHudEditorData (XED) 中的色卡信息粘贴到列表中的动画器中吗？", "粘贴", "暂不", 1);
+                        string res_mul = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "XHud - 动画器消息", "批量色卡信息粘贴", $"确认要将 XHudEditorData (XED) 中的色卡信息粘贴到列表中的动画器中吗？", "粘贴", "暂不", 1);
                         if (res_mul == "暂不")
                             return;
                         #endregion
@@ -1906,20 +1906,20 @@ namespace SevenStrikeModules.XHud
 
                             Datas.Add(dataitem);
                         }
-                        Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "HudAnimator动画器消息", "批量色卡信息粘贴", "以下是已粘贴色卡信息的动画器列表，请您检查核对：", "明白");
+                        Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 动画器消息", "批量色卡信息粘贴", "以下是已粘贴色卡信息的动画器列表，请您检查核对：", "明白");
                         #endregion
                     }
                     else
                     {
                         #region 询问
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudAnimator动画器消息", "粘贴色卡信息", $"确认要将 XHudEditorData (XED) 中的色卡信息粘贴到  {BaseScript.name} ( {BaseScript.Indicator} ) 动画器中吗？", "粘贴", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动画器消息", "粘贴色卡信息", $"确认要将 XHudEditorData (XED) 中的色卡信息粘贴到  {BaseScript.name} ( {BaseScript.Indicator} ) 动画器中吗？", "粘贴", "暂不", 1);
                         if (res == "暂不")
                             return;
                         #endregion
 
                         #region 粘贴色卡信息
                         BaseScript.ColoriseName = data;
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudAnimator动画器消息", "粘贴色卡信息", $"已将色卡信息粘贴到动画器 {BaseScript.name} ({BaseScript.Indicator}) ！", "好的");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动画器消息", "粘贴色卡信息", $"已将色卡信息粘贴到动画器 {BaseScript.name} ({BaseScript.Indicator}) ！", "好的");
                         #endregion
                     }
                 });
@@ -1927,7 +1927,7 @@ namespace SevenStrikeModules.XHud
                 menu.AddDisabledItem(new GUIContent("基础"));
                 menu.AddItem(new GUIContent("F (自动标识)"), false, () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudAnimator动画器消息", "自动标识名称", "根据物体自身名称快速进行标识，如果执行此操作选中的所有动画器的标识名称即将会被修改，是否需要继续？请谨慎此操作！因为如果您在程序中调用是通过标识名称作为基准的话请记得同步修改您的程序！", "标识", "暂不", 1);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动画器消息", "自动标识名称", "根据物体自身名称快速进行标识，如果执行此操作选中的所有动画器的标识名称即将会被修改，是否需要继续？请谨慎此操作！因为如果您在程序中调用是通过标识名称作为基准的话请记得同步修改您的程序！", "标识", "暂不", 1);
                     if (res == "暂不")
                     {
                         return;
@@ -1949,12 +1949,12 @@ namespace SevenStrikeModules.XHud
                             Datas.Add(dataitem);
                         }
 
-                        Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "HudAnimator动画器消息", "批量识别标识名称", "以下是已识别的动画器标识名称列表，请您检查核对：", "明白");
+                        Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 动画器消息", "批量识别标识名称", "以下是已识别的动画器标识名称列表，请您检查核对：", "明白");
                     }
                     else
                     {
                         BaseScript.Indicator = BaseScript.name;
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudAnimator动画器消息", "识别标识名称", $"已自动识别 {BaseScript.name} ( {BaseScript.Indicator} ) 动画器的标识名称为：{BaseScript.Indicator}", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动画器消息", "识别标识名称", $"已自动识别 {BaseScript.name} ( {BaseScript.Indicator} ) 动画器的标识名称为：{BaseScript.Indicator}", "明白");
                     }
                 });
                 menu.AddItem(new GUIContent("X (记录姿态)"), false, () =>
@@ -1974,12 +1974,12 @@ namespace SevenStrikeModules.XHud
                             Datas.Add(dataitem);
                         }
 
-                        Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "HudAnimator动画器消息", "批量记录动画器姿态", "以下是批量已记录姿态的所有动画器列表，请您检查核对：", "明白");
+                        Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 动画器消息", "批量记录动画器姿态", "以下是批量已记录姿态的所有动画器列表，请您检查核对：", "明白");
                     }
                     else
                     {
                         AnimatorFeatures_Save(BaseScript);
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudAnimator动画器消息", "动画器姿态记录", "已记录动画器的姿态参数！", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动画器消息", "动画器姿态记录", "已记录动画器的姿态参数！", "明白");
                     }
                 });
                 menu.AddSeparator("");
@@ -1999,7 +1999,7 @@ namespace SevenStrikeModules.XHud
                         string json = JsonUtility.ToJson(tnc);
 
                         Editor_XHud_GUI.EditorData_Set_With_String("XED_HudAnimator_Copied_TweenNodes", json);
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudAnimator动画器消息", "动画节点数据", $"已拷贝  {BaseScript.name} ( {BaseScript.Indicator} ) 动画器的动画节点数据！", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动画器消息", "动画节点数据", $"已拷贝  {BaseScript.name} ( {BaseScript.Indicator} ) 动画器的动画节点数据！", "明白");
                     });
                 }
                 menu.AddItem(new GUIContent("C (粘贴)"), false, () =>
@@ -2019,7 +2019,7 @@ namespace SevenStrikeModules.XHud
                             dataitem.Message = $"{SelectedObjects[i].name} ({SelectedObjects[i].Indicator})";
                             Datas.Add(dataitem);
                         }
-                        string res_mul = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "HudAnimator动画器消息", "批量粘贴动画节点数据", $"确认要将 XHudEditorData (XED) 中的动画节点数据粘贴到列表中的动画器中吗？", "粘贴", "暂不", 1);
+                        string res_mul = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "XHud - 动画器消息", "批量粘贴动画节点数据", $"确认要将 XHudEditorData (XED) 中的动画节点数据粘贴到列表中的动画器中吗？", "粘贴", "暂不", 1);
                         if (res_mul == "暂不")
                             return;
                         #endregion
@@ -2037,26 +2037,26 @@ namespace SevenStrikeModules.XHud
 
                             Datas.Add(dataitem);
                         }
-                        Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "HudAnimator动画器消息", "批量粘贴动画节点数据", "以下是已粘贴动画节点数据的动画器列表，请您检查核对：", "明白");
+                        Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 动画器消息", "批量粘贴动画节点数据", "以下是已粘贴动画节点数据的动画器列表，请您检查核对：", "明白");
                         #endregion
                     }
                     else
                     {
                         #region 询问
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudAnimator动画器消息", "粘贴动画节点数据", $"确认要将 XHudEditorData (XED) 中的动画节点数据粘贴到  {BaseScript.name} ( {BaseScript.Indicator} ) 动画器中吗？", "粘贴", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动画器消息", "粘贴动画节点数据", $"确认要将 XHudEditorData (XED) 中的动画节点数据粘贴到  {BaseScript.name} ( {BaseScript.Indicator} ) 动画器中吗？", "粘贴", "暂不", 1);
                         if (res == "暂不")
                             return;
                         #endregion
 
                         #region 粘贴动画节点数据
                         BaseScript.AnimateTweenNodes = tnc.TweenNodesCopyList;
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudAnimator动画器消息", "粘贴动画节点", $"已将动画节点粘贴到： {BaseScript.name} ( {BaseScript.Indicator} )", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动画器消息", "粘贴动画节点", $"已将动画节点粘贴到： {BaseScript.name} ( {BaseScript.Indicator} )", "明白");
                         #endregion
                     }
                 });
                 menu.AddItem(new GUIContent("E (清空)"), false, () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudAnimator动画器消息", "清空动画效果列表", "快速清空动画效果列表此操作不可逆，是否需要清空？清空后您为此动画器做的动画效果参数将全部丢失，请谨慎此操作！", "清空", "暂不", 1);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动画器消息", "清空动画效果列表", "快速清空动画效果列表此操作不可逆，是否需要清空？清空后您为此动画器做的动画效果参数将全部丢失，请谨慎此操作！", "清空", "暂不", 1);
                     if (res == "暂不")
                     {
                         return;
@@ -2080,13 +2080,13 @@ namespace SevenStrikeModules.XHud
                                 Datas.Add(dataitem);
                             }
                         }
-                        Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "HudAnimator动画器消息", "批量清空动画效果列表", "以下是已清空动画效果列表的动画器列表，请您检查核对：", "明白");
+                        Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 动画器消息", "批量清空动画效果列表", "以下是已清空动画效果列表的动画器列表，请您检查核对：", "明白");
                     }
                     else
                     {
                         BaseScript.AnimateTweenNodes.Clear();
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudAnimator动画器消息", "清空动画效果列表", $"已将  {BaseScript.name} ( {BaseScript.Indicator} ) 动画器的动画效果列表清空！", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动画器消息", "清空动画效果列表", $"已将  {BaseScript.name} ( {BaseScript.Indicator} ) 动画器的动画效果列表清空！", "明白");
                     }
                 });
                 if (!IsMultiSelected())

@@ -6,12 +6,10 @@ namespace SevenStrikeModules.XHud
     using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
     using TMPro;
-    using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -49,7 +47,7 @@ namespace SevenStrikeModules.XHud
             Lib_Curve,
             Lib_Sound,
             Lib_TextStyleLibrary,
-            Lib_ElementMotion,
+            Lib_Motions,
             Lib_Transition,
             HudCamera,
             FontSizeMultiply,
@@ -164,7 +162,6 @@ namespace SevenStrikeModules.XHud
             theme_color,
             theme_color_gp,
             theme_color_sep,
-            EnabledLedEffect,
             ThemeSolution,
             ThemeEdgeSolution,
             Hud_EventSystem,
@@ -235,29 +232,7 @@ namespace SevenStrikeModules.XHud
         private static string PrefsKeyColor_Theme = "XHUD-MANAGER-COLOR-THEME";
         private static string PrefsKeyColor_Theme_GP = "XHUD-MANAGER-COLOR-THEME-GROUP";
         private static string PrefsKeyColor_Theme_SEP = "XHUD-MANAGER-COLOR-THEME-SEPERATE";
-        #endregion
-
-        #region Led参数
-        private EditorCoroutine Coroutine_LedBlink;
-        // 增加速度
-        public float increaseSpeed = 0.3f;
-        // 减少速度
-        public float decreaseSpeed = 0.1f;
-        // 亮度上限
-        public float led_higher = 1.2f;
-        // 亮度下限
-        public float led_lower = -0.2f;
-        // 亮度刷新速度
-        public float led_rate = 0.05f;
-        // Led亮度值
-        private float LedAlpha;
-        // 贴图 - 开启
-        public Texture2D icon_led_on;
-        // 贴图 - 关闭
-        public Texture2D icon_led_off;
-        // 贴图 - 光晕
-        public Texture2D icon_led_halo;
-        #endregion
+        #endregion     
 
         #region 选项文字
         string[] stroptions_enabled = new string[2] { "关闭", "开启" }, stroptions_debug = new string[2] { "关闭", "调试" }, stroptions_hide = new string[2] { "隐藏", "显示" }, stroptions_align = new string[2] { "关闭", "对齐" }, stroptions_useful = new string[2] { "关闭", "使用" }, stroptions_refertype = new string[2] { "整体", "局部" }, stroptions_perspective = new string[2] { "透视", "正交" }, stroptions_mute = new string[2] { "关闭", "静音" }, stroptions_mouse = new string[2] { "原生", "自定" }, stroptions_world = new string[2] { "禁用", "支持" }, stroptions_effect = new string[2] { "关闭", "影响" }, stroptions_canvassize = new string[3] { "固定像素尺寸", "屏幕尺寸", "固定物理尺寸" }, stroptions_canvasanchor = System.Enum.GetNames(typeof(CanvasAnchor)), ThemeSolutionNames = new string[] { "默认", "白色", "黑色", "乳白", "浅灰", "沙漠灰", "科幻青", "液晶绿", "橄榄绿", "湖蓝", "天蓝", "胭脂粉", "灵动粉", "秋叶黄", "警示黄", "高亮橘", "烈焰红", }, ThemeEdgeSolutionNames = new string[] { "默认", "白色", "浅灰", "深灰", "黑色", "极简", "珊瑚红", "落叶黄", "烟灰蓝", "青苔绿", "荧光绿", "淡粉" };
@@ -376,12 +351,6 @@ namespace SevenStrikeModules.XHud
             GuideHelp_Released = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/GuideHelp_Released");
             GuideHelp_Press = Editor_XHud_GUI.GetIcon("Icons_XHud_Manager/GuideHelp_Press");
 
-            #endregion
-
-            #region 获取Led图标
-            icon_led_on = Editor_XHud_GUI.GetIcon("Led/led_on");
-            icon_led_off = Editor_XHud_GUI.GetIcon("Led/led_off");
-            icon_led_halo = Editor_XHud_GUI.GetIcon("Led/led_halo");
             #endregion
 
             xHud_SerializedAllVariables();
@@ -599,9 +568,6 @@ namespace SevenStrikeModules.XHud
             //设置XHud管理器图层为XHud
             BaseScript.gameObject.layer = LayerMask.NameToLayer("XHud");
 
-            //启动Led闪烁效果
-            Coroutine_LedBlink = EditorCoroutineUtility.StartCoroutine(LedBlinker(), this);
-
             xHud_RatioReference_Update();
         }
 
@@ -614,9 +580,6 @@ namespace SevenStrikeModules.XHud
 
             if (FoldAllPanelWithDisabled.boolValue)
                 xHud_FunctionGroupPrefsSet(false);
-
-            //停止Led闪烁效果
-            EditorCoroutineUtility.StopCoroutine(Coroutine_LedBlink);
         }
 
         private void OnDestroy()
@@ -656,9 +619,6 @@ namespace SevenStrikeModules.XHud
                     GUI.backgroundColor = Color.white;
                 }
             }
-
-            if (EnabledLedEffect.boolValue)
-                LedBlink(rect_logo);
 
             Editor_XHud_GUI.Gui_Layout_Space(90);
 
@@ -904,7 +864,7 @@ namespace SevenStrikeModules.XHud
                     XHud_Dashboard.HudManagerGet().Hud_Curves = lib_curve;
                     XHud_Dashboard.HudManagerGet().Hud_Sounds = lib_sound;
                     XHud_Dashboard.HudManagerGet().Hud_TextStyleLibrary = lib_textstyle;
-                    XHud_Dashboard.HudManagerGet().Hud_ElementMotion = lib_motion;
+                    XHud_Dashboard.HudManagerGet().Hud_Motions = lib_motion;
                     XHud_Dashboard.HudManagerGet().Hud_TransitionLib = lib_transition;
                     XHud_Dashboard.HudManagerGet().Hud_ElementLibrarys.Add(lib_element);
                 }
@@ -1101,10 +1061,6 @@ namespace SevenStrikeModules.XHud
                             return;
                         }
                     }
-                    #endregion
-
-                    #region Led闪烁效果
-                    Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Manager>("LED 星闪特效", stroptions_enabled, ref EnabledLedEffect, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
                     #endregion
 
                     #region 关闭面板后是否折叠所有选项卡
@@ -1967,7 +1923,7 @@ namespace SevenStrikeModules.XHud
                     #endregion
 
                     #region 动效模版库     
-                    Editor_XHud_GUI.StatuDisplayer_Object(null, 12, new Vector2(0, 1), "动效库", 12, new Vector2(0, -7), status, new Vector2(0, 3), Lib_ElementMotion.objectReferenceValue == null ? false : true, XHud_Dashboard.Theme_Primary, Color.black * 0.7f, Lib_ElementMotion, false);
+                    Editor_XHud_GUI.StatuDisplayer_Object(null, 12, new Vector2(0, 1), "动效库", 12, new Vector2(0, -7), status, new Vector2(0, 3), Lib_Motions.objectReferenceValue == null ? false : true, XHud_Dashboard.Theme_Primary, Color.black * 0.7f, Lib_Motions, false);
                     #endregion
 
                     #region 转场特效库     
@@ -2894,20 +2850,20 @@ namespace SevenStrikeModules.XHud
                 {
                     #region 模版库                             
                     //确保动效库存在
-                    if (BaseScript.Hud_ElementMotion != null)
+                    if (BaseScript.Hud_Motions != null)
                     {
                         //确保动效库不是空的
-                        if (BaseScript.Hud_ElementMotion.ElementMotionList != null && BaseScript.Hud_ElementMotion.ElementMotionList.Count > 0)
+                        if (BaseScript.Hud_Motions.ElementMotionList != null && BaseScript.Hud_Motions.ElementMotionList.Count > 0)
                         {
                             Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
 
                             //动效列表
-                            string[] motnames = BaseScript.Hud_ElementMotion.ElementMotion_GetAllName_With_Create();
+                            string[] motnames = BaseScript.Hud_Motions.ElementMotion_GetAllName_With_Create();
                             EditorGUI.BeginChangeCheck();
                             Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Manager>("生成", motnames, ref Crc_Lib_Name, HudFilled.实体, 120, 22, SelectedObjects);
                             if (EditorGUI.EndChangeCheck())
                             {
-                                Motion_Creator crc = BaseScript.Hud_ElementMotion.ElementMotion_GetElementCreator_At_Create(Crc_Lib_Name.stringValue);
+                                Motion_Creator crc = BaseScript.Hud_Motions.ElementMotion_GetElementCreator_At_Create(Crc_Lib_Name.stringValue);
 
                                 CreateArgs_Default.FindPropertyRelative("anchor").enumValueIndex = (int)crc.anchor;
                                 CreateArgs_Default.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)crc.Movement.Movement;
@@ -2945,10 +2901,10 @@ namespace SevenStrikeModules.XHud
 
                             if (Editor_XHud_GUI.Gui_Layout_Button(14, "定位", locate_r, locate_p, 2))
                             {
-                                if (!BaseScript.Hud_ElementMotion.ElementMotion_IsExist(Crc_Lib_Name.stringValue))
+                                if (!BaseScript.Hud_Motions.ElementMotion_IsExist(Crc_Lib_Name.stringValue))
                                     return;
                                 Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
-                                BaseScript.Hud_ElementMotion.ElementMotionLibrary_Location(Crc_Lib_Name.stringValue);
+                                BaseScript.Hud_Motions.ElementMotionLibrary_Location(Crc_Lib_Name.stringValue);
                                 return;
                             }
 
@@ -3121,20 +3077,20 @@ namespace SevenStrikeModules.XHud
 
                     #region 模版库                             
                     //确保动效库存在
-                    if (BaseScript.Hud_ElementMotion != null)
+                    if (BaseScript.Hud_Motions != null)
                     {
                         //确保动效库不是空的
-                        if (BaseScript.Hud_ElementMotion.ElementMotionList != null && BaseScript.Hud_ElementMotion.ElementMotionList.Count > 0)
+                        if (BaseScript.Hud_Motions.ElementMotionList != null && BaseScript.Hud_Motions.ElementMotionList.Count > 0)
                         {
                             Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
 
                             //动效列表
-                            string[] motnames = BaseScript.Hud_ElementMotion.ElementMotion_GetAllName_With_Recycle();
+                            string[] motnames = BaseScript.Hud_Motions.ElementMotion_GetAllName_With_Recycle();
                             EditorGUI.BeginChangeCheck();
                             Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Manager>("回收", motnames, ref Rec_Lib_Name, HudFilled.实体, 120, 22, SelectedObjects);
                             if (EditorGUI.EndChangeCheck())
                             {
-                                Motion_Recycler rec = BaseScript.Hud_ElementMotion.ElementMotion_GetElementCreator_At_Recycle(Rec_Lib_Name.stringValue);
+                                Motion_Recycler rec = BaseScript.Hud_Motions.ElementMotion_GetElementCreator_At_Recycle(Rec_Lib_Name.stringValue);
 
                                 RecycleArgs_Default.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)rec.Movement.Movement;
                                 RecycleArgs_Default.FindPropertyRelative("Movement.Distance").floatValue = rec.Movement.Distance;
@@ -3171,10 +3127,10 @@ namespace SevenStrikeModules.XHud
 
                             if (Editor_XHud_GUI.Gui_Layout_Button(14, "定位", locate_r, locate_p, 2))
                             {
-                                if (!BaseScript.Hud_ElementMotion.ElementMotion_IsExist(Rec_Lib_Name.stringValue))
+                                if (!BaseScript.Hud_Motions.ElementMotion_IsExist(Rec_Lib_Name.stringValue))
                                     return;
                                 Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
-                                BaseScript.Hud_ElementMotion.ElementMotionLibrary_Location(Rec_Lib_Name.stringValue);
+                                BaseScript.Hud_Motions.ElementMotionLibrary_Location(Rec_Lib_Name.stringValue);
                                 return;
                             }
 
@@ -3739,85 +3695,7 @@ namespace SevenStrikeModules.XHud
         {
             xHud_EditorUpdate();
         }
-        #endregion
-
-        #region Led 闪烁效果
-        /// <summary>
-        /// LED闪烁效果
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator LedBlinker()
-        {
-            // 控制是否增加或减少
-            bool isIncreasing = true;
-
-            while (true)
-            {
-                if (EnabledLedEffect.boolValue)
-                {
-                    if (!Application.isPlaying)
-                    {
-                        if (isIncreasing)
-                        {
-                            // 增加阶段
-                            LedAlpha += increaseSpeed;
-                            if (LedAlpha >= led_higher)
-                            {
-                                LedAlpha = led_higher; // 确保不超过1
-                                isIncreasing = false; // 切换到减少阶段
-                            }
-                        }
-                        else
-                        {
-                            // 减少阶段
-                            LedAlpha -= decreaseSpeed;
-                            if (LedAlpha <= led_lower)
-                            {
-                                LedAlpha = led_lower; // 确保不超过0
-                                isIncreasing = true; // 切换到增加阶段
-                            }
-                        }
-                        Repaint();
-                    }
-                    else
-                    {
-                        isIncreasing = true;
-                        LedAlpha = 1;
-                    }
-                }
-                else
-                {
-                    isIncreasing = true;
-                    LedAlpha = 1;
-                }
-                yield return new EditorWaitForSeconds(led_rate);
-            }
-        }
-        /// <summary>
-        /// Led闪烁布局
-        /// </summary>
-        private void LedBlink(Rect rect)
-        {
-            Editor_XHud_GUI.Gui_Icon(new Rect(rect.x + 112, rect.y - 5, 32, 32), icon_led_off);
-            if (!Application.isPlaying)
-            {
-                GUI.backgroundColor = new Color(XHud_Dashboard.Theme_Primary.r, XHud_Dashboard.Theme_Primary.g, XHud_Dashboard.Theme_Primary.b, LedAlpha);
-            }
-            else
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
-            Editor_XHud_GUI.Gui_Icon(new Rect(rect.x + 112, rect.y - 5, 32, 32), icon_led_halo);
-
-            if (!Application.isPlaying)
-            {
-                GUI.backgroundColor = new Color(1, 1, 1, LedAlpha);
-            }
-            else
-                GUI.backgroundColor = Color.white;
-            Editor_XHud_GUI.Gui_Icon(new Rect(rect.x + 112, rect.y - 5, 32, 32), icon_led_on);
-
-            GUI.backgroundColor = Color.white;
-        }
-        #endregion
+        #endregion       
 
         #region GUI
         /// <summary>
@@ -4053,7 +3931,7 @@ namespace SevenStrikeModules.XHud
             Lib_Curve = xHud_GetSerializedProperty("Hud_Curves");
             Lib_Sound = xHud_GetSerializedProperty("Hud_Sounds");
             Lib_TextStyleLibrary = xHud_GetSerializedProperty("Hud_TextStyleLibrary");
-            Lib_ElementMotion = xHud_GetSerializedProperty("Hud_ElementMotion");
+            Lib_Motions = xHud_GetSerializedProperty("Hud_Motions");
             Lib_Transition = xHud_GetSerializedProperty("Hud_TransitionLib");
             SoundLibrary = xHud_GetSerializedProperty("Pool_Sounder");
             SounderPoolCount = xHud_GetSerializedProperty("SounderPoolCount");
@@ -4165,7 +4043,6 @@ namespace SevenStrikeModules.XHud
             theme_color = xHud_GetSerializedProperty("theme_color");
             theme_color_gp = xHud_GetSerializedProperty("theme_color_gp");
             theme_color_sep = xHud_GetSerializedProperty("theme_color_sep");
-            EnabledLedEffect = xHud_GetSerializedProperty("EnabledLedEffect");
             ThemeSolution = xHud_GetSerializedProperty("ThemeSolution");
             ThemeEdgeSolution = xHud_GetSerializedProperty("ThemeEdgeSolution");
             Hud_EventSystem = xHud_GetSerializedProperty("Hud_EventSystem");
@@ -5140,7 +5017,7 @@ namespace SevenStrikeModules.XHud
             window.SetLibrarySetterMode(LibrarySetterMode.添加到库);
             window.SetButtonText("添加", "取消");
             window.SetTitle("XHud 动效库采集器");
-            window.SetTarget_Hud_MotionLibrary(XHud_Dashboard.HudManagerGet().Hud_ElementMotion);
+            window.SetTarget_Hud_MotionLibrary(XHud_Dashboard.HudManagerGet().Hud_Motions);
             //window.ShowModal();
             window.Show();
         }
@@ -5213,7 +5090,7 @@ namespace SevenStrikeModules.XHud
                 hasDiagnostic = true;
             }
 
-            if (Lib_ElementMotion.objectReferenceValue == null)
+            if (Lib_Motions.objectReferenceValue == null)
             {
                 hasDiagnostic = true;
             }

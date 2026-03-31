@@ -83,7 +83,7 @@ namespace SevenStrikeModules.XHud
         #region 批量化操作
         XHud_Module_Button[] SelectedObjects;
 
-        private void GetAllTargets()
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
@@ -101,7 +101,7 @@ namespace SevenStrikeModules.XHud
             }
         }
 
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -123,49 +123,8 @@ namespace SevenStrikeModules.XHud
 
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
-            #region 获取序列化属性
-            Indicator = serializedObject.FindProperty("Indicator");
-            DebugState = serializedObject.FindProperty("DebugState");
-            IsOptionButton = serializedObject.FindProperty("IsOptionButton");
-            ClickDelayTimeThreadhold = serializedObject.FindProperty("ClickDelayTimeThreadhold");
-            eve_on_Deselect = serializedObject.FindProperty("eve_on_Deselect");
-            eve_on_Select = serializedObject.FindProperty("eve_on_Select");
-            eve_on_Click = serializedObject.FindProperty("eve_on_Click");
-            eve_on_Press = serializedObject.FindProperty("eve_on_Press");
-            eve_on_Enter = serializedObject.FindProperty("eve_on_Enter");
-            eve_on_Exit = serializedObject.FindProperty("eve_on_Exit");
-            eve_on_Release = serializedObject.FindProperty("eve_on_Release");
-            eve_on_LongPressed = serializedObject.FindProperty("eve_on_Longpressed");
-            eve_on_LongpressPer = serializedObject.FindProperty("eve_on_LongpressPer");
-            LongPress_Threshold = serializedObject.FindProperty("LongPress_Threshold");
-            LongPress_Percent = serializedObject.FindProperty("LongPress_Percent");
-            ButtonName = serializedObject.FindProperty("ButtonName");
-            ButtonText = serializedObject.FindProperty("ButtonText");
-            ButtonTmpText = serializedObject.FindProperty("ButtonTmpText");
-            LongPress_SmoothRewind = serializedObject.FindProperty("LongPress_SmoothRewind");
-            LongPress_UseRewind = serializedObject.FindProperty("LongPress_UseRewind");
-            TextColorSyncFade = serializedObject.FindProperty("TextColorSyncFade");
-            IconColorSyncFade = serializedObject.FindProperty("IconColorSyncFade");
-            BtnAnimatorNodes = serializedObject.FindProperty("BtnAnimatorNodes");
-            IconImage = serializedObject.FindProperty("IconImage");
-            Button_Animators_GlobalDuration = serializedObject.FindProperty("Button_Animators_GlobalDuration");
-            AnimatorsMaxDuration = serializedObject.FindProperty("AnimatorsMaxDuration");
-            AnimateState = serializedObject.FindProperty("AnimateState");
-            AnimatorsIsFold = serializedObject.FindProperty("AnimatorsIsFold");
-            EventIsFold = serializedObject.FindProperty("EventIsFold");
-            ToggleOriginalIsFold = serializedObject.FindProperty("ToggleOriginalIsFold");
-            LongPress_Step = serializedObject.FindProperty("LongPress_Step");
-            ButtonActionTiming = serializedObject.FindProperty("ButtonActionTiming");
-            HudButtonState_Clicked = serializedObject.FindProperty("HudButtonState_Clicked");
-            HudButtonState_Selector = serializedObject.FindProperty("HudButtonState_Selector");
-            HudButtonState_Holder = serializedObject.FindProperty("HudButtonState_Holder");
-            HudButtonState_Pressed = serializedObject.FindProperty("HudButtonState_Pressed");
-            HudButtonState_LongPressed = serializedObject.FindProperty("HudButtonState_LongPressed");
-            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
-            BgColorSyncFade = serializedObject.FindProperty("BgColorSyncFade");
-            BgImage = serializedObject.FindProperty("BgImage");
-
-            #endregion
+            // 获取序列化属性
+            GetSerializeFields();
 
             #region 获取图标
             icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Button/icon_main");
@@ -278,7 +237,7 @@ namespace SevenStrikeModules.XHud
             };
             #endregion
 
-            GetAllTargets();
+            Targets_Get();
         }
 
         protected override void OnDisable()
@@ -322,7 +281,7 @@ namespace SevenStrikeModules.XHud
             #endregion
 
             #region 预览
-            if (!IsMultiSelected() && BtnAnimatorNodes.arraySize > 0)
+            if (!Targets_Selected() && BtnAnimatorNodes.arraySize > 0)
             {
                 GUILayout.FlexibleSpace();
 
@@ -457,7 +416,7 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Property_Field("按钮文字", ButtonName, 100);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -529,12 +488,12 @@ namespace SevenStrikeModules.XHud
 
             #region 状态
             string statu_title = "状态";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_title = "状态 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_title, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 #region 按钮状态
                 Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "点击状态", 12, ((Hud_ButtonAction)HudButtonState_Clicked.enumValueIndex).ToString(), XHud_Dashboard.Theme_Primary, 11);
@@ -636,12 +595,12 @@ namespace SevenStrikeModules.XHud
 
             #region 统计
             string statu_statistic = "统计";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_statistic = "统计 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_statistic, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 if (BtnAnimatorNodes.arraySize <= 0)
                 {
@@ -726,7 +685,7 @@ namespace SevenStrikeModules.XHud
             #region 选择器动画列表
             if (BtnAnimatorNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -754,7 +713,7 @@ namespace SevenStrikeModules.XHud
             #endregion
 
             #region 按钮事件
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -866,7 +825,7 @@ namespace SevenStrikeModules.XHud
                 GenericMenu menu = new GenericMenu();
 
                 menu.AddDisabledItem(new GUIContent("脚本参数"));
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddItem(new GUIContent("C (拷贝)"), false, () =>
                     {
@@ -899,7 +858,7 @@ namespace SevenStrikeModules.XHud
                 {
                     XHud_ModuleArg_Button hbp = JsonUtility.FromJson<XHud_ModuleArg_Button>(GUIUtility.systemCopyBuffer);
 
-                    if (!IsMultiSelected())
+                    if (!Targets_Selected())
                     {
                         sp_col_normal.colorValue = hbp.Color_Normal;
                         sp_col_highlight.colorValue = hbp.Color_Highlight;
@@ -1015,7 +974,7 @@ namespace SevenStrikeModules.XHud
                 menu.AddDisabledItem(new GUIContent("基础"));
                 menu.AddItem(new GUIContent("A (自动标识)"), false, () =>
                 {
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -1041,7 +1000,7 @@ namespace SevenStrikeModules.XHud
                     AllListFoldState(true);
                 });
                 menu.AddSeparator("");
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddSeparator("");
                     menu.AddDisabledItem(new GUIContent("预览"));
@@ -1109,14 +1068,13 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         /// <summary>
         /// 折叠列表
         /// </summary>
         /// <param name="state"></param>
         private void AllListFoldState(bool state)
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -1146,13 +1104,16 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
+        /// <summary>
+        /// 计算最大耗时
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="globaldur"></param>
         private void CalculateAnimatorMaxDuration(List<ElementNode_Animator> list, float globaldur)
         {
             AnimatorsMaxDuration.floatValue = Animators_GetAnimatorsMaxDuration(list, globaldur);
             AnimatorsMaxDuration.serializedObject.ApplyModifiedProperties();
         }
-
         /// <summary>
         /// 从所有子动画器中获取最大耗时
         /// </summary>
@@ -1175,7 +1136,6 @@ namespace SevenStrikeModules.XHud
             float v = XHud_Utilitys.Array_MaxValue(x_list);
             return v * globaldur;
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -1216,7 +1176,6 @@ namespace SevenStrikeModules.XHud
             }
             return hasLoop;
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -1235,7 +1194,6 @@ namespace SevenStrikeModules.XHud
             }
             return hasLoop;
         }
-
         /// <summary>
         /// 还原Animator姿态
         /// </summary>
@@ -1292,7 +1250,52 @@ namespace SevenStrikeModules.XHud
 
             so.ApplyModifiedProperties();
         }
-
+        /// <summary>
+        /// 获取序列化字段
+        /// </summary>
+        private void GetSerializeFields()
+        {
+            Indicator = serializedObject.FindProperty("Indicator");
+            DebugState = serializedObject.FindProperty("DebugState");
+            IsOptionButton = serializedObject.FindProperty("IsOptionButton");
+            ClickDelayTimeThreadhold = serializedObject.FindProperty("ClickDelayTimeThreadhold");
+            eve_on_Deselect = serializedObject.FindProperty("eve_on_Deselect");
+            eve_on_Select = serializedObject.FindProperty("eve_on_Select");
+            eve_on_Click = serializedObject.FindProperty("eve_on_Click");
+            eve_on_Press = serializedObject.FindProperty("eve_on_Press");
+            eve_on_Enter = serializedObject.FindProperty("eve_on_Enter");
+            eve_on_Exit = serializedObject.FindProperty("eve_on_Exit");
+            eve_on_Release = serializedObject.FindProperty("eve_on_Release");
+            eve_on_LongPressed = serializedObject.FindProperty("eve_on_Longpressed");
+            eve_on_LongpressPer = serializedObject.FindProperty("eve_on_LongpressPer");
+            LongPress_Threshold = serializedObject.FindProperty("LongPress_Threshold");
+            LongPress_Percent = serializedObject.FindProperty("LongPress_Percent");
+            ButtonName = serializedObject.FindProperty("ButtonName");
+            ButtonText = serializedObject.FindProperty("ButtonText");
+            ButtonTmpText = serializedObject.FindProperty("ButtonTmpText");
+            LongPress_SmoothRewind = serializedObject.FindProperty("LongPress_SmoothRewind");
+            LongPress_UseRewind = serializedObject.FindProperty("LongPress_UseRewind");
+            TextColorSyncFade = serializedObject.FindProperty("TextColorSyncFade");
+            IconColorSyncFade = serializedObject.FindProperty("IconColorSyncFade");
+            BtnAnimatorNodes = serializedObject.FindProperty("BtnAnimatorNodes");
+            IconImage = serializedObject.FindProperty("IconImage");
+            Button_Animators_GlobalDuration = serializedObject.FindProperty("Button_Animators_GlobalDuration");
+            AnimatorsMaxDuration = serializedObject.FindProperty("AnimatorsMaxDuration");
+            AnimateState = serializedObject.FindProperty("AnimateState");
+            AnimatorsIsFold = serializedObject.FindProperty("AnimatorsIsFold");
+            EventIsFold = serializedObject.FindProperty("EventIsFold");
+            ToggleOriginalIsFold = serializedObject.FindProperty("ToggleOriginalIsFold");
+            LongPress_Step = serializedObject.FindProperty("LongPress_Step");
+            ButtonActionTiming = serializedObject.FindProperty("ButtonActionTiming");
+            HudButtonState_Clicked = serializedObject.FindProperty("HudButtonState_Clicked");
+            HudButtonState_Selector = serializedObject.FindProperty("HudButtonState_Selector");
+            HudButtonState_Holder = serializedObject.FindProperty("HudButtonState_Holder");
+            HudButtonState_Pressed = serializedObject.FindProperty("HudButtonState_Pressed");
+            HudButtonState_LongPressed = serializedObject.FindProperty("HudButtonState_LongPressed");
+            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
+            BgColorSyncFade = serializedObject.FindProperty("BgColorSyncFade");
+            BgImage = serializedObject.FindProperty("BgImage");
+        }
         #endregion
 
         #region Animator 动画预览
@@ -1748,7 +1751,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void GetAllAnimators()
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -1846,7 +1849,7 @@ namespace SevenStrikeModules.XHud
         private void GetAnimatorResults()
         {
             List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 var s = targets;
                 for (int i = 0; i < SelectedObjects.Length; i++)

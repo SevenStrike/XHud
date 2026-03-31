@@ -238,7 +238,7 @@ namespace SevenStrikeModules.XHud
                     }
                     else
                     {
-                        Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudElementLibrary元素库消息", "目标元素RMS未开启", "您选择的目标元素并未开启 R M S 功能，无法执行此操作！", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素库消息", "目标元素RMS未开启", "您选择的目标元素并未开启 R M S 功能，无法执行此操作！", "明白", 0);
                     }
                 });
                 menu.AddSeparator("");
@@ -440,7 +440,7 @@ namespace SevenStrikeModules.XHud
 
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "清理所有元素的队列", clean_r, clean_p, 4))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudElementLibrary元素库消息", "清空队列元素", "您是否确认要清空所有元素项下的预生成队列元素？", "暂不", "清空", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素库消息", "清空队列元素", "您是否确认要清空所有元素项下的预生成队列元素？", "暂不", "清空", 1);
                         if (res == "暂不")
                             return;
                         for (int i = 0; i < sp_ElementLibrary.arraySize; i++)
@@ -463,7 +463,7 @@ namespace SevenStrikeModules.XHud
                     Editor_XHud_GUI.Gui_Layout_Space(35);
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "清空所有元素项", clear_r, clear_p, 4))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudElementLibrary元素库消息", "清空元素项", "您是否确认要清空所有元素项？", "暂不", "清空", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素库消息", "清空元素项", "您是否确认要清空所有元素项？", "暂不", "清空", 0);
                         if (res == "暂不")
                             return;
 

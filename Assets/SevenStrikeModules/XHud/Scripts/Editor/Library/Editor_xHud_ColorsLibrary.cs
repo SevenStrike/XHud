@@ -245,7 +245,7 @@ namespace SevenStrikeModules.XHud
 
                     string hexcol = XHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true);
 
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>色卡信息已就绪！请选择需要识别的动画器后右键菜单点击识别色卡即可应用该色卡颜色！", "明白");
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>色卡信息已就绪！请选择需要识别的动画器后右键菜单点击识别色卡即可应用该色卡颜色！", "明白");
                 });
                 menu.AddItem(new GUIContent("E (修改色卡信息)"), false, () =>
                 {
@@ -269,42 +269,42 @@ namespace SevenStrikeModules.XHud
 
                     string hexcol = XHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true);
 
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>Hex 色卡信息 {hexcol} 已拷贝到系统剪贴板！", "明白");
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>Hex 色卡信息 {hexcol} 已拷贝到系统剪贴板！", "明白");
                 });
                 menu.AddItem(new GUIContent("A (拷贝色卡的 R G B 颜色)"), false, () =>
                 {
                     string hexcol = XHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true);
 
-                    string mode = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHudColorLibrary 色卡库消息", "获取色卡信息", $"请选择您要获取色卡 <color={hexcol}>{sp_name.stringValue} </color>的 R G B 信息的模式！", "色卡值", "代码块");
+                    string mode = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 色卡库消息", "获取色卡信息", $"请选择您要获取色卡 <color={hexcol}>{sp_name.stringValue} </color>的 R G B 信息的模式！", "色卡值", "代码块");
                     if (mode == "代码块")
                     {
                         string color = $"Color col = new Color({sp_color.colorValue.r}f, {sp_color.colorValue.g}f, {sp_color.colorValue.b}f);";
                         GUIUtility.systemCopyBuffer = color;
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B 色卡代码块 {color} 已拷贝到系统剪贴板！", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B 色卡代码块 {color} 已拷贝到系统剪贴板！", "明白");
                     }
                     else
                     {
                         string rgb = $"{sp_color.colorValue.r},{sp_color.colorValue.g},{sp_color.colorValue.b}";
                         GUIUtility.systemCopyBuffer = rgb;
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B 色卡信息 {rgb} 已拷贝到系统剪贴板！", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B 色卡信息 {rgb} 已拷贝到系统剪贴板！", "明白");
                     }
                 });
                 menu.AddItem(new GUIContent("X (拷贝色卡的 R G B A 颜色)"), false, () =>
                 {
                     string hexcol = XHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true);
 
-                    string mode = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHudColorLibrary 色卡库消息", "获取色卡信息", $"请选择您要获取色卡 <color={hexcol}>{sp_name.stringValue} </color>的 R G B A 信息的模式！", "色卡值", "代码块");
+                    string mode = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 色卡库消息", "获取色卡信息", $"请选择您要获取色卡 <color={hexcol}>{sp_name.stringValue} </color>的 R G B A 信息的模式！", "色卡值", "代码块");
                     if (mode == "代码块")
                     {
                         string color = $"Color col = new Color({sp_color.colorValue.r}f, {sp_color.colorValue.g}f, {sp_color.colorValue.b}f, {sp_color.colorValue.a}f);";
                         GUIUtility.systemCopyBuffer = color;
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B A 色卡代码块 {color} 已拷贝到系统剪贴板！", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B A 色卡代码块 {color} 已拷贝到系统剪贴板！", "明白");
                     }
                     else
                     {
                         string rgba = $"{sp_color.colorValue.r},{sp_color.colorValue.g},{sp_color.colorValue.b},{sp_color.colorValue.a}";
                         GUIUtility.systemCopyBuffer = rgba;
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHudColorLibrary 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B A 色卡信息 {rgba} 已拷贝到系统剪贴板！", "明白");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>R G B A 色卡信息 {rgba} 已拷贝到系统剪贴板！", "明白");
                     }
                 });
                 // 显示右键菜单
@@ -499,7 +499,7 @@ namespace SevenStrikeModules.XHud
                     Editor_XHud_GUI.Gui_Layout_Space(35);
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "清空色卡", clear_r, clear_p, 4))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHudColorLibrary 色卡库消息", "清空所有色卡", "是否清空所有色卡项？请注意！如果您的场景中或是预制体中的动画器用到了该色卡库中的色卡，清空后会导致动画器的色卡信息丢失，请谨慎操作！", "清空", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 色卡库消息", "清空所有色卡", "是否清空所有色卡项？请注意！如果您的场景中或是预制体中的动画器用到了该色卡库中的色卡，清空后会导致动画器的色卡信息丢失，请谨慎操作！", "清空", "暂不", 0);
                         if (res == "暂不")
                             return;
                         sp_ColorLibrary_Original.ClearArray();
@@ -517,11 +517,11 @@ namespace SevenStrikeModules.XHud
                     Editor_XHud_GUI.Gui_Layout_Space(35);
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "生成常用色卡颜色", random_r, random_p, 4))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHudColorLibrary 色卡库消息", "生成随机色卡", "是否要为色卡库随机生成一套颜色？生成后会覆盖当前的所有色卡项，请谨慎操作！", "暂不", "基础色", "高级灰", "通用色", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 色卡库消息", "生成随机色卡", "是否要为色卡库随机生成一套颜色？生成后会覆盖当前的所有色卡项，请谨慎操作！", "暂不", "基础色", "高级灰", "通用色", 0);
                         if (res == "暂不")
                             return;
 
-                        string res_m = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHudColorLibrary 色卡库消息", "生成随机色卡", "请选择生成模式！如果选择替换会覆盖当前的所有色卡项，请谨慎操作！", "追加", "替换", 1);
+                        string res_m = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 色卡库消息", "生成随机色卡", "请选择生成模式！如果选择替换会覆盖当前的所有色卡项，请谨慎操作！", "追加", "替换", 1);
 
                         switch (res)
                         {
@@ -648,7 +648,7 @@ namespace SevenStrikeModules.XHud
         {
             string path = "";
 
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHudColorLibrary 色卡库消息", "读取色卡数据", "根据您的需要选择导入色卡数据的方式，如果是追加则会在当前色卡库的基础上后续叠加导入的色卡项，如果是替换则会完全替换当前色卡库的所有色卡项！", "追加", "替换", "暂不", 2);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 色卡库消息", "读取色卡数据", "根据您的需要选择导入色卡数据的方式，如果是追加则会在当前色卡库的基础上后续叠加导入的色卡项，如果是替换则会完全替换当前色卡库的所有色卡项！", "追加", "替换", "暂不", 2);
             if (res == "暂不")
             {
                 return;

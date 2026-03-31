@@ -129,7 +129,7 @@ namespace SevenStrikeModules.XHud
 
                 if (!EqualsData)
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 文字样式库采集器消息", "恢复原有样式", "检测到您修正了样式参数，是否要恢复原有样式或者保持现有样式效果？", "保持", "恢复", 0);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字样式库采集器消息", "恢复原有样式", "检测到您修正了样式参数，是否要恢复原有样式或者保持现有样式效果？", "保持", "恢复", 0);
                     if (res == "恢复")
                     {
                         if (Component_Text != null)
@@ -736,7 +736,7 @@ namespace SevenStrikeModules.XHud
 
             if (sp_LibName.stringValue == "文字样式名称")
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 文字样式库采集器消息", "未填写名称", "请为文字样式模版添加一个名称！", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字样式库采集器消息", "未填写名称", "请为文字样式模版添加一个名称！", "明白");
                 return;
             }
 
@@ -746,14 +746,14 @@ namespace SevenStrikeModules.XHud
 
             if (exist)
             {
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 文字样式库采集器消息", "存在重复文字样式名称", $"名称为<color={colorhex}> {sp_LibName.stringValue} </color>的已经存在于文字样式库中！", "重命名", 1);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字样式库采集器消息", "存在重复文字样式名称", $"名称为<color={colorhex}> {sp_LibName.stringValue} </color>的已经存在于文字样式库中！", "重命名", 1);
                 return;
             }
             else
             {
                 Target_Hud_TextStyleLibrary.TextStyle_Library_Add(info);
 
-                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud 文字样式库采集器消息", "已添加到文字样式库", $"已将名称为<color={colorhex}> {sp_LibName.stringValue} </color>的文字样式参数添加到文字样式库中！", "明白");
+                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字样式库采集器消息", "已添加到文字样式库", $"已将名称为<color={colorhex}> {sp_LibName.stringValue} </color>的文字样式参数添加到文字样式库中！", "明白");
                 Close();
             }
         }
@@ -765,7 +765,7 @@ namespace SevenStrikeModules.XHud
         {
             string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 文字样式库修改器消息", "更新文字样式模版", $"即将更新文字样式库中名称为： <color={colorhex}> {OriginStyleInfo.Name} </color> 且类型为： {OriginStyleInfo.Type} 的文字样式模版参数，确认更新参数吗？", "更新", "暂不", 1);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字样式库采集器消息", "更新文字样式模版", $"即将更新文字样式库中名称为： <color={colorhex}> {OriginStyleInfo.Name} </color> 且类型为： {OriginStyleInfo.Type} 的文字样式模版参数，确认更新参数吗？", "更新", "暂不", 1);
             if (res == "更新")
             {
                 XHud_LibraryArg_TextStyle info = new XHud_LibraryArg_TextStyle();

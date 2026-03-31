@@ -16934,6 +16934,7 @@ MonoBehaviour:
   UseAutoPerfectPixel: 0
   HudCanvas_ScreenAnchor: {fileID: 1261817883}
   HudCanvas_WorldAnchor: {fileID: 0}
+  SupportWorldUI: 0
   Anchors_Layout_World: []
   Anchors_Layout_Screen:
   - Name: Anchor_B
@@ -17031,18 +17032,25 @@ MonoBehaviour:
   GuideParam_IShape_Offset_Right: 0.5
   GuideColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.2}
   GuidePointColor: {r: 0.23137261, g: 0.9960784, b: 0.6078433, a: 1}
-  Hud_ElementLibrarys:
-  - {fileID: 11400000, guid: 0688f34b3cf5b42409a28472bedee0ef, type: 2}
   Hud_Curves: {fileID: 11400000, guid: 3e5040adaf191b14e973a416583d589e, type: 2}
   Hud_Colors: {fileID: 11400000, guid: d6e5e787037b6c94fb07c70da34cb6cd, type: 2}
   Hud_Sounds: {fileID: 11400000, guid: 18a6ce1fac9e5a54f93cdbd6548fb517, type: 2}
   Hud_TextStyleLibrary: {fileID: 11400000, guid: d0106796d894d424eb7231b7ba8494b3, type: 2}
   Hud_TransitionLib: {fileID: 11400000, guid: 05d0f2258a559a14aae66fcf838d3edd, type: 2}
-  Hud_ElementMotion: {fileID: 11400000, guid: cad7a07c3438d514f9890ad137cc22fc, type: 2}
+  Hud_Motions: {fileID: 11400000, guid: cad7a07c3438d514f9890ad137cc22fc, type: 2}
   DurationMultiply: 1
   Hud_EventSystem: {fileID: 403600545}
   Hud_InputSystemUIInputModule: {fileID: 403600543}
   XTweenManager: {fileID: 0}
+  UseDebug: 0
+  IsInitialized: 1
+  FoldAllPanelWithDisabled: 0
+  Hud_MouseCursor: {fileID: 0}
+  CustomCursor: 0
+  Hud_TransitionController: {fileID: 0}
+  CustomTransition: 0
+  Hud_ElementLibrarys:
+  - {fileID: 11400000, guid: 0688f34b3cf5b42409a28472bedee0ef, type: 2}
   CreateArgs_Default:
     anchor: 0
     MotionAnimateEndState: 0
@@ -17232,15 +17240,6 @@ MonoBehaviour:
       Ease: 12
   Crc_Lib_Name: 
   Rec_Lib_Name: 
-  UseDebug: 0
-  IsInitialized: 1
-  SupportWorldUI: 0
-  EnabledLedEffect: 0
-  FoldAllPanelWithDisabled: 0
-  Hud_MouseCursor: {fileID: 0}
-  CustomCursor: 0
-  Hud_TransitionController: {fileID: 0}
-  CustomTransition: 0
   FontSizeMultiply: 1
   PhysicsScreenSize: {x: 59.6, y: 33.7}
   PhysicsReferenceSize: {x: 0, y: 0}
@@ -20282,10 +20281,10 @@ MonoBehaviour:
   Element_Animators_GlobalDuration: 1
   AutoPlayAnimators: 1
   AnimatorsIsFold: 0
-  Indicator: 
+  Indicator: dddasdasda
   OriginalName: 
   OriginPoolName: 
-  DebugState: 1
+  DebugState: 0
   RectTransform: {fileID: 1902390738}
   CurrentPivot: {x: 0, y: 0}
   CreateState: 0
@@ -20293,7 +20292,7 @@ MonoBehaviour:
   ElementSpaceType: 0
   Tween_Preview_AutoStop: 1
   Tween_Preview_IsPlaying: 0
-  EventIsFold: 1
+  EventIsFold: 0
   eve_on_element_in_start:
     m_PersistentCalls:
       m_Calls: []
@@ -20357,7 +20356,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HudElement: {fileID: 1902390739}
   IsEnable: 1
-  DebugState: 1
+  DebugState: 0
   key_Element_In: 292
   key_Element_Out: 293
   CreateArgs:
@@ -20393,7 +20392,7 @@ MonoBehaviour:
       CurveName: 
       Ease: 10
     Movement:
-      Movement: 0
+      Movement: 1
       Distance: 100
       Duration: 1
       Delay: 0
@@ -20422,7 +20421,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       CurveName: 
-      Ease: 12
+      Ease: 10
     Rotation:
       Rotation: 0
       Degree: 0
@@ -20486,7 +20485,7 @@ MonoBehaviour:
       CurveName: 
       Ease: 10
     Movement:
-      Movement: 0
+      Movement: 2
       Distance: 100
       Duration: 1
       Delay: 0
@@ -20515,7 +20514,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       CurveName: 
-      Ease: 12
+      Ease: 10
     Rotation:
       Rotation: 0
       Degree: 0
@@ -20555,10 +20554,10 @@ MonoBehaviour:
   Rec_Lib_Name: 
   DelayWithIn: 0
   DelayWithOut: 0
-  create_fold_move: 0
-  create_fold_rotate: 0
+  create_fold_move: 1
+  create_fold_rotate: 1
   create_fold_alpha: 1
-  recycle_fold_move: 0
+  recycle_fold_move: 1
   recycle_fold_rotate: 0
   recycle_fold_alpha: 1
   RMS_Enabled: 0

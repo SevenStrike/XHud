@@ -86,9 +86,9 @@ namespace SevenStrikeModules.XHud.Utilitys
             sp_Color_Start = BaseObject.FindProperty("Color_Start");
             sp_Color_End = BaseObject.FindProperty("Color_End");
 
-            logo = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/logo");
-            btn_save_r = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/btn_save_r");
-            btn_save_p = Editor_XHud_GUI.GetIcon("Icons_ColorCaptureTool/btn_save_p");
+            logo = Editor_XHud_GUI.GetIcon("Icons_XHud_ColorCaptureTool/logo");
+            btn_save_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ColorCaptureTool/btn_save_r");
+            btn_save_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ColorCaptureTool/btn_save_p");
 
             Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
             Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
@@ -286,11 +286,11 @@ namespace SevenStrikeModules.XHud.Utilitys
         {
             string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
-            string state = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "ColorCaptureTool颜色提取工具通知", "导出为渐变色色卡库", $"是否要为当前的<color={hexcol}>渐变色列表</color>创建色卡库？", "创建", "暂不", 0);
+            string state = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 渐变色提取工具消息", "导出为渐变色色卡库", $"是否要为当前的<color={hexcol}>渐变色列表</color>创建色卡库？", "创建", "暂不", 0);
 
             if (state == "创建")
             {
-                string mode = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "ColorCaptureTool颜色提取工具通知", "请选保存模式", $"如果选择替换模式，会将目标色卡库的所有色卡项全部清空替换！请谨慎操作！", "替换", "追加", "新增", 2);
+                string mode = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 渐变色提取工具消息", "请选保存模式", $"如果选择替换模式，会将目标色卡库的所有色卡项全部清空替换！请谨慎操作！", "替换", "追加", "新增", 2);
 
                 switch (mode)
                 {

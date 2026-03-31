@@ -348,7 +348,7 @@ namespace SevenStrikeModules.XHud
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "Hud - 音效库", Color.black);
+            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "XHud - 音效库", Color.black);
 
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
@@ -446,7 +446,7 @@ namespace SevenStrikeModules.XHud
                     Editor_XHud_GUI.Gui_Layout_Space(35);
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "移除所有音效项", clear_r, clear_p, 4))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudSoundLibrary 音效库消息", "清空所有音效项", "是否确认要清空当前音效库的所有音效项？", "清空", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 音效库消息", "清空所有音效项", "是否确认要清空当前音效库的所有音效项？", "清空", "暂不", 1);
                         if (res == "暂不")
                         {
                             return;
@@ -505,7 +505,7 @@ namespace SevenStrikeModules.XHud
                                     }
                                     if (isExist)
                                     {
-                                        Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudSoundLibrary 音效库消息", "重复添加音效", $"此音效已存在于该库中！请勿重复添加！重复音效名称： {it.Clip.name}", "明白");
+                                        Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 音效库消息", "重复添加音效", $"此音效已存在于该库中！请勿重复添加！重复音效名称： {it.Clip.name}", "明白");
                                         continue;
                                     }
                                     else
@@ -534,7 +534,7 @@ namespace SevenStrikeModules.XHud
                             }
 
                             if (!string.IsNullOrEmpty(names))
-                                Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudSoundLibrary 音效库消息", "添加音效完成", $"所选有效音效 : {names}已添加到音效库中！", "明白");
+                                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 音效库消息", "添加音效完成", $"所选有效音效 : {names}已添加到音效库中！", "明白");
                         }
                     }
 

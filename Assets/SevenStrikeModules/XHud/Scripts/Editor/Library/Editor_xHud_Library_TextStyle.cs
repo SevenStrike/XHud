@@ -341,7 +341,7 @@ namespace SevenStrikeModules.XHud
                     string json = JsonUtility.ToJson(BaseScript.TextStyleLibrary[index]);
                     Editor_XHud_GUI.EditorData_Set_With_String("XED_HudTextStyleLibrary_Get_TextStyle", json);
 
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudTextStyleLibrary 文字样式库消息", "文字样式复制", $"已将当前文字样式 {sp_name.stringValue} 存入 XHudEditorData (XED)！", "好的");
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字样式库消息", "文字样式复制", $"已将当前文字样式 {sp_name.stringValue} 存入 XHudEditorData (XED)！", "好的");
                 });
                 menu.AddItem(new GUIContent("V (粘贴样式)"), false, () =>
                 {
@@ -352,7 +352,7 @@ namespace SevenStrikeModules.XHud
 
                     BaseScript.TextStyleLibrary[index].CopyData_Ignored_LibraryToggle(info);
 
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "HudTextStyleLibrary 文字样式库消息", "文字样式粘贴", $"已从 XHudEditorData (XED) 中获取文字样式并覆盖到当前文字样式项！", "好的");
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字样式库消息", "文字样式粘贴", $"已从 XHudEditorData (XED) 中获取文字样式并覆盖到当前文字样式项！", "好的");
                 });
 
                 menu.AddSeparator("");
@@ -492,7 +492,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="list"></param>
         private void TextStyleInfoList_Original_Add(ReorderableList list)
         {
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudTextStyleLibrary 字体样式库消息", "创建样式类型", "您希望创建那种文字样式模版？", "Text", "TmpText", 1, true);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字样式库消息", "创建样式类型", "您希望创建那种文字样式模版？", "Text", "TmpText", 1, true);
             SerializedProperty prop = null;
             if (list.count <= 0)
             {
@@ -595,7 +595,7 @@ namespace SevenStrikeModules.XHud
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "Hud - 字体样式库", Color.black);
+            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "XHud - 字体样式库", Color.black);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
@@ -662,7 +662,7 @@ namespace SevenStrikeModules.XHud
                     Editor_XHud_GUI.Gui_Layout_Space(35);
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "清空所有文字样式模版", clear_r, clear_p, 4))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudTextStyleLibrary 字体样式库消息", "清空所有字体样式", "是否清空所有字体样式项？请注意！如果您的场景中或是预制体中的文字组件用到了该字体样式库中的字体样式，清空后会导致组件的字体样式信息丢失，请谨慎操作！", "清空", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字样式库消息", "清空所有字体样式", "是否清空所有字体样式项？请注意！如果您的场景中或是预制体中的文字组件用到了该字体样式库中的字体样式，清空后会导致组件的字体样式信息丢失，请谨慎操作！", "清空", "暂不", 1);
                         if (res == "暂不")
                             return;
 
@@ -760,7 +760,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void ImportTextStyles()
         {
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudTextStyleLibrary 字体样式库消息", "读取字体样式数据", "根据您的需要选择导入字体样式数据的方式，如果是追加则会在当前字体样式库的基础上后续叠加导入的字体样式项，如果是替换则会完全替换当前字体样式库的所有字体样式项！", "追加", "替换", "暂不", 2);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字样式库消息", "读取字体样式数据", "根据您的需要选择导入字体样式数据的方式，如果是追加则会在当前字体样式库的基础上后续叠加导入的字体样式项，如果是替换则会完全替换当前字体样式库的所有字体样式项！", "追加", "替换", "暂不", 2);
             if (res == "暂不")
             {
                 return;
@@ -802,7 +802,7 @@ namespace SevenStrikeModules.XHud
                     break;
             }
 
-            string res_tp = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudTextStyleLibrary 字体样式库消息", "导入字体", "是否需要导入文字样式附带的Dynamic字体文件或者是Tmp字体资源？", "不需要", "导入", 2);
+            string res_tp = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字样式库消息", "导入字体", "是否需要导入文字样式附带的Dynamic字体文件或者是Tmp字体资源？", "不需要", "导入", 2);
             if (res_tp == "不需要")
             {
                 return;

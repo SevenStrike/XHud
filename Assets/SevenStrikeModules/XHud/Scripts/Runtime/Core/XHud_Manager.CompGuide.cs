@@ -1,8 +1,27 @@
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using UnityEngine;
+
+    /// <summary>
+    /// 锚点结构 - 布局构图节点
+    /// </summary>
+    [System.Serializable]
+    public class AuxiliaryAnchor_Layout
+    {
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name;
+        /// <summary>
+        /// 锚点
+        /// </summary>
+        public RectTransform Anchor;
+        /// <summary>
+        /// 锚点类型
+        /// </summary>
+        public HudAnchors_CompGuide Type;
+    }
 
     public partial class XHud_Manager : MonoBehaviour
     {

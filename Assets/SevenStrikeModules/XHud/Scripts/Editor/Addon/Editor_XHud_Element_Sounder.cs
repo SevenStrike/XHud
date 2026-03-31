@@ -216,10 +216,11 @@
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            if (string.IsNullOrEmpty(Indicator.stringValue))
-                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 元素音效器", Color.white);
+
+            if (string.IsNullOrEmpty(BaseScript.Indicator))
+                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 元素音效器", Color.white);
             else
-                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, Indicator.stringValue, Color.white);
+                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 元素音效器 -> ( " + BaseScript.Indicator + " )", Color.white);
 
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
@@ -592,7 +593,7 @@
             {
                 EditorApplication.delayCall += () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud资源库消息", "未指定音效库", "未在HudManager中配置音效库！请先前往XHud管理器指定一个音效库！", "明白", "前往", 1);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 音效消息", "未指定音效库", "未在HudManager中配置音效库！请先前往XHud管理器指定一个音效库！", "明白", "前往", 1);
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;

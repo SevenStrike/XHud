@@ -5,6 +5,87 @@ namespace SevenStrikeModules.XHud
     using UnityEngine;
     using UnityEngine.UI;
 
+    /// <summary>
+    /// 锚点结构 - 布局
+    /// </summary>
+    [System.Serializable]
+    public class Anchor_Layout
+    {
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name;
+        /// <summary>
+        /// 锚点
+        /// </summary>
+        public RectTransform Anchor;
+        /// <summary>
+        /// 锚点类型
+        /// </summary>
+        public XHudAnchor Type;
+        /// <summary>
+        /// 标记物
+        /// </summary>
+        public Image Mark;
+        /// <summary>
+        /// 元素项
+        /// </summary>
+        public List<HudElementNode> HudElementInfos;
+
+        /// <summary>
+        /// 实例化锚点节点
+        /// </summary>
+        /// <param name="Name"></param>
+        public Anchor_Layout(string Name)
+        {
+            switch (Name)
+            {
+                case "Anchor_U":
+                    Type = XHudAnchor.上;
+                    break;
+                case "Anchor_D":
+                    Type = XHudAnchor.下;
+                    break;
+                case "Anchor_L":
+                    Type = XHudAnchor.左;
+                    break;
+                case "Anchor_R":
+                    Type = XHudAnchor.右;
+                    break;
+                case "Anchor_C":
+                    Type = XHudAnchor.中心;
+                    break;
+                case "Anchor_L_U":
+                    Type = XHudAnchor.左上;
+                    break;
+                case "Anchor_L_D":
+                    Type = XHudAnchor.左下;
+                    break;
+                case "Anchor_R_U":
+                    Type = XHudAnchor.右上;
+                    break;
+                case "Anchor_R_D":
+                    Type = XHudAnchor.右下;
+                    break;
+                case "Anchor_B":
+                    Type = XHudAnchor.底层;
+                    break;
+                case "Anchor_T":
+                    Type = XHudAnchor.顶层;
+                    break;
+            }
+            this.Name = "锚点： " + Type.ToString();
+        }
+
+        /// <summary>
+        /// 实例化锚点节点
+        /// </summary>
+        public Anchor_Layout()
+        {
+            this.Name = "锚点： " + Type.ToString();
+        }
+    }
+
     public partial class XHud_Manager : MonoBehaviour
     {
         [Tooltip("XHud画布 - 屏幕空间缩放器")]
@@ -48,6 +129,11 @@ namespace SevenStrikeModules.XHud
         /// XHud画布-世界锚点
         /// </summary>
         public RectTransform HudCanvas_WorldAnchor;
+        [SerializeField]
+        /// <summary>
+        /// 支持世界UI
+        /// </summary>
+        public bool SupportWorldUI;
         [Tooltip("世界锚点列表")]
         /// <summary>
         /// 世界锚点列表
@@ -322,6 +408,40 @@ namespace SevenStrikeModules.XHud
             if (HudCanvas_Screen == null)
                 return;
             HudCanvas_Screen.planeDistance = CanvasDistance;
+        }
+        /// <summary>
+        /// 画布像素对齐开关
+        /// </summary>
+        /// <param name="treeState">是否开启像素对齐</param>
+        public void hm_UsePixelPerfect(bool state)
+        {
+            if (!UsePerfectPixelUpdate)
+                return;
+            HudCanvas_Screen.pixelPerfect = state;
+        }
+        /// <summary>
+        /// 获取屏幕分辨率
+        /// </summary>
+        public Vector2 hm_GetScreenResolution()
+        {
+            return ScreenRes;
+        }
+        /// <summary>
+        /// 获取画布分辨率
+        /// </summary>
+        public Vector2 hm_GetCanvasScalerScreenSize()
+        {
+            return CanvasScalerScreenSize;
+        }
+        /// <summary>
+        /// 启动时根据配置开关，设置屏幕画布（Canvas）的像素完美对齐模式，避免模糊。
+        /// </summary>
+        public void hm_CanvasPixelPerfect_InitializeMode()
+        {
+            if (HudCanvas_Screen != null)
+            {
+                HudCanvas_Screen.pixelPerfect = UsePerfectPixelUpdate;
+            }
         }
     }
 }

@@ -59,7 +59,7 @@
                 {
                     EditorApplication.delayCall += () =>
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud 管理器消息", "未找到管理器", $"抱歉未在场景列表中找到 <color=#{XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary)}>XHud Manager</color>！", "明白", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 快速视图工具消息", "未找到管理器", $"抱歉未在场景列表中找到 <color=#{XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary)}>XHud Manager</color>！", "明白", 0);
                     };
                 }
             }

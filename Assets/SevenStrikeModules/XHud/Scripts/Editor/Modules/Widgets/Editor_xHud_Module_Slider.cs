@@ -86,7 +86,7 @@
         #region 批量化操作
         XHud_Module_Slider[] SelectedObjects;
 
-        private void GetAllTargets()
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
@@ -104,7 +104,7 @@
             }
         }
 
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -127,57 +127,8 @@
 
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
-            #region 获取序列化属性
-            Root = serializedObject.FindProperty("Root");
-            if (Root.objectReferenceValue == null)
-            {
-                Root.objectReferenceValue = BaseScript.transform.parent.GetComponent<RectTransform>();
-                Root.serializedObject.ApplyModifiedProperties();
-            }
-            RectTransform = serializedObject.FindProperty("RectTransform");
-            if (RectTransform.objectReferenceValue == null)
-            {
-                RectTransform.objectReferenceValue = BaseScript.GetComponent<RectTransform>();
-                RectTransform.serializedObject.ApplyModifiedProperties();
-            }
-            sp_Indicator = serializedObject.FindProperty("Indicator");
-            sp_debugstate = serializedObject.FindProperty("DebugState");
-            eve_on_ValueChanged = serializedObject.FindProperty("eve_on_ValueChanged");
-            eve_on_Press = serializedObject.FindProperty("eve_on_Press");
-            eve_on_Released = serializedObject.FindProperty("eve_on_Released");
-            sli_Text_Title = serializedObject.FindProperty("sli_Text_Title");
-            sli_TmpText_Title = serializedObject.FindProperty("sli_TmpText_Title");
-            sli_Text_Percent = serializedObject.FindProperty("sli_Text_Percent");
-            sli_TmpText_Percent = serializedObject.FindProperty("sli_TmpText_Percent");
-            sli_Bg = serializedObject.FindProperty("sli_Bg");
-            sli_Fore = serializedObject.FindProperty("sli_Fore");
-            sli_Icon = serializedObject.FindProperty("sli_Icon");
-            sli_Handle = serializedObject.FindProperty("sli_Handle");
-            Slider_Animators_GlobalDuration = serializedObject.FindProperty("Slider_Animators_GlobalDuration");
-            sli_AnimatorNodes = serializedObject.FindProperty("sli_AnimatorNodes");
-            sli_Precision = serializedObject.FindProperty("sli_Precision");
-            con_title = serializedObject.FindProperty("con_title");
-            sli_Unit = serializedObject.FindProperty("sli_Unit");
-            AnimatorsMaxDuration = serializedObject.FindProperty("AnimatorsMaxDuration");
-            SliderAnimatorListIsFold = serializedObject.FindProperty("SliderAnimatorListIsFold");
-            AnimateState = serializedObject.FindProperty("AnimateState");
-            ToggleOriginalIsFold = serializedObject.FindProperty("ToggleOriginalIsFold");
-            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
-            con_subtitle = serializedObject.FindProperty("con_subtitle");
-            sli_Text_Subtitle = serializedObject.FindProperty("sli_Text_Subtitle");
-            sli_TmpText_Subtitle = serializedObject.FindProperty("sli_TmpText_Subtitle");
-            Display_Rect_Fore = serializedObject.FindProperty("Display_Rect_Fore");
-            Display_Rect_Bg = serializedObject.FindProperty("Display_Rect_Bg");
-            Display_Rect_Handle = serializedObject.FindProperty("Display_Rect_Handle");
-            Display_Icon = serializedObject.FindProperty("Display_Icon");
-            Display_Title = serializedObject.FindProperty("Display_Title");
-            Display_SubTitle = serializedObject.FindProperty("Display_SubTitle");
-            Display_Value = serializedObject.FindProperty("Display_Value");
-            SliderValue = serializedObject.FindProperty("m_Value");
-            MinValue = serializedObject.FindProperty("m_MinValue");
-            MaxValue = serializedObject.FindProperty("m_MaxValue");
-
-            #endregion
+            // 获取序列化属性
+            GetSerializeFields();
 
             #region 获取图标
             icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Slider/icon_main");
@@ -289,7 +240,7 @@
             };
             #endregion
 
-            GetAllTargets();
+            Targets_Get();
         }
 
         protected override void OnDisable()
@@ -333,7 +284,7 @@
             GUILayout.FlexibleSpace();
 
             #region 预览动画
-            if (!IsMultiSelected() && sli_AnimatorNodes.arraySize > 0)
+            if (!Targets_Selected() && sli_AnimatorNodes.arraySize > 0)
             {
                 GUILayout.FlexibleSpace();
 
@@ -500,7 +451,7 @@
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Slider>("前景", stroptions_enabled, ref Display_Rect_Fore, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -517,7 +468,7 @@
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Slider>("背景", stroptions_enabled, ref Display_Rect_Bg, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -534,7 +485,7 @@
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Slider>("标记", stroptions_enabled, ref Display_Rect_Handle, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -551,7 +502,7 @@
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Slider>("图标", stroptions_enabled, ref Display_Icon, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -568,7 +519,7 @@
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Slider>("标题", stroptions_enabled, ref Display_Title, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -585,7 +536,7 @@
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Slider>("副标题", stroptions_enabled, ref Display_SubTitle, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -602,7 +553,7 @@
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Slider>("滑动值", stroptions_enabled, ref Display_Value, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -621,12 +572,12 @@
 
             #region 状态
             string statu_title = "状态";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_title = "状态 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_title, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "进度状态", 12, SliderValue.floatValue.ToString(), XHud_Dashboard.Theme_Primary, 11);
                 Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "最小值", 12, MinValue.floatValue.ToString(), XHud_Dashboard.Theme_Primary, 11);
@@ -722,12 +673,12 @@
 
             #region 统计
             string statu_statistic = "统计";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_statistic = "统计 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_statistic, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 if (sli_AnimatorNodes.arraySize <= 0)
                 {
@@ -812,7 +763,7 @@
             #region 动画器列表
             if (sli_AnimatorNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -839,7 +790,7 @@
             #endregion
 
             #region 事件列表
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -910,7 +861,7 @@
                 // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
                 menu.AddDisabledItem(new GUIContent("脚本参数"));
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddItem(new GUIContent("C (拷贝)"), false, () =>
                     {
@@ -998,7 +949,7 @@
                 {
                     AllListFoldState(true);
                 });
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddSeparator("");
                     menu.AddDisabledItem(new GUIContent("预览"));
@@ -1052,7 +1003,7 @@
         #region 辅助
         private void UpdateProgress()
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -1067,7 +1018,6 @@
                 BaseScript.UpdateSliderValueDisplay();
             }
         }
-
         /// <summary>
         /// 检查是否存在无效的动画器
         /// </summary>
@@ -1084,10 +1034,9 @@
                 }
             }
         }
-
         private void AllListFoldState(bool state)
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -1113,13 +1062,11 @@
                 }
             }
         }
-
         private void CalculateAnimatorMaxDuration(List<ElementNode_Animator> list, float globaldur)
         {
             AnimatorsMaxDuration.floatValue = Animators_GetAnimatorsMaxDuration(list, globaldur);
             AnimatorsMaxDuration.serializedObject.ApplyModifiedProperties();
         }
-
         /// <summary>
         /// 从所有子动画器中获取最大耗时
         /// </summary>
@@ -1142,7 +1089,6 @@
             float v = XHud_Utilitys.Array_MaxValue(x_list);
             return v * globaldur;
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -1161,7 +1107,6 @@
             }
             return hasLoop;
         }
-
         /// <summary>
         /// 还原Animator姿态
         /// </summary>
@@ -1218,7 +1163,6 @@
 
             so.ApplyModifiedProperties();
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -1259,7 +1203,6 @@
             }
             return hasLoop;
         }
-
         /// <summary>
         /// 动画器 - 创建ID编号
         /// </summary>
@@ -1286,6 +1229,60 @@
                     return ran_id;
                 }
             }
+        }
+        /// <summary>
+        /// 获取序列化属性
+        /// </summary>
+        private void GetSerializeFields()
+        {
+            Root = serializedObject.FindProperty("Root");
+            if (Root.objectReferenceValue == null)
+            {
+                Root.objectReferenceValue = BaseScript.transform.parent.GetComponent<RectTransform>();
+                Root.serializedObject.ApplyModifiedProperties();
+            }
+            RectTransform = serializedObject.FindProperty("RectTransform");
+            if (RectTransform.objectReferenceValue == null)
+            {
+                RectTransform.objectReferenceValue = BaseScript.GetComponent<RectTransform>();
+                RectTransform.serializedObject.ApplyModifiedProperties();
+            }
+            sp_Indicator = serializedObject.FindProperty("Indicator");
+            sp_debugstate = serializedObject.FindProperty("DebugState");
+            eve_on_ValueChanged = serializedObject.FindProperty("eve_on_ValueChanged");
+            eve_on_Press = serializedObject.FindProperty("eve_on_Press");
+            eve_on_Released = serializedObject.FindProperty("eve_on_Released");
+            sli_Text_Title = serializedObject.FindProperty("sli_Text_Title");
+            sli_TmpText_Title = serializedObject.FindProperty("sli_TmpText_Title");
+            sli_Text_Percent = serializedObject.FindProperty("sli_Text_Percent");
+            sli_TmpText_Percent = serializedObject.FindProperty("sli_TmpText_Percent");
+            sli_Bg = serializedObject.FindProperty("sli_Bg");
+            sli_Fore = serializedObject.FindProperty("sli_Fore");
+            sli_Icon = serializedObject.FindProperty("sli_Icon");
+            sli_Handle = serializedObject.FindProperty("sli_Handle");
+            Slider_Animators_GlobalDuration = serializedObject.FindProperty("Slider_Animators_GlobalDuration");
+            sli_AnimatorNodes = serializedObject.FindProperty("sli_AnimatorNodes");
+            sli_Precision = serializedObject.FindProperty("sli_Precision");
+            con_title = serializedObject.FindProperty("con_title");
+            sli_Unit = serializedObject.FindProperty("sli_Unit");
+            AnimatorsMaxDuration = serializedObject.FindProperty("AnimatorsMaxDuration");
+            SliderAnimatorListIsFold = serializedObject.FindProperty("SliderAnimatorListIsFold");
+            AnimateState = serializedObject.FindProperty("AnimateState");
+            ToggleOriginalIsFold = serializedObject.FindProperty("ToggleOriginalIsFold");
+            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
+            con_subtitle = serializedObject.FindProperty("con_subtitle");
+            sli_Text_Subtitle = serializedObject.FindProperty("sli_Text_Subtitle");
+            sli_TmpText_Subtitle = serializedObject.FindProperty("sli_TmpText_Subtitle");
+            Display_Rect_Fore = serializedObject.FindProperty("Display_Rect_Fore");
+            Display_Rect_Bg = serializedObject.FindProperty("Display_Rect_Bg");
+            Display_Rect_Handle = serializedObject.FindProperty("Display_Rect_Handle");
+            Display_Icon = serializedObject.FindProperty("Display_Icon");
+            Display_Title = serializedObject.FindProperty("Display_Title");
+            Display_SubTitle = serializedObject.FindProperty("Display_SubTitle");
+            Display_Value = serializedObject.FindProperty("Display_Value");
+            SliderValue = serializedObject.FindProperty("m_Value");
+            MinValue = serializedObject.FindProperty("m_MinValue");
+            MaxValue = serializedObject.FindProperty("m_MaxValue");
         }
         #endregion
 
@@ -1740,7 +1737,7 @@
         /// </summary>
         private void GetAllAnimators()
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -1838,7 +1835,7 @@
         private void GetAnimatorResults()
         {
             List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 var s = targets;
                 for (int i = 0; i < SelectedObjects.Length; i++)

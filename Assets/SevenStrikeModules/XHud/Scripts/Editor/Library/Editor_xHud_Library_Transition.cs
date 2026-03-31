@@ -354,7 +354,7 @@ namespace SevenStrikeModules.XHud
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "Hud - 转场库", Color.black);
+            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "XHud - 转场库", Color.black);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
@@ -441,7 +441,7 @@ namespace SevenStrikeModules.XHud
                     Editor_XHud_GUI.Gui_Layout_Space(35);
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "清空所有转场项", clear_r, clear_p, 4))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudTransitionLibrary 转场库消息", "清空所有转场", "是否清空所有转场项？请注意！如果您的场景中转场组件用到了该转场库中的转场效果项，清空后会导致转场信息丢失，请谨慎操作！", "清空", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 转场库消息", "清空所有转场", "是否清空所有转场项？请注意！如果您的场景中转场组件用到了该转场库中的转场效果项，清空后会导致转场信息丢失，请谨慎操作！", "清空", "暂不", 1);
                         if (res == "暂不")
                             return;
 

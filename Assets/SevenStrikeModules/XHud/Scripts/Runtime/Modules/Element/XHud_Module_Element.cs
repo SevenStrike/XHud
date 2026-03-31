@@ -4,19 +4,6 @@ namespace SevenStrikeModules.XHud
     using UnityEngine;
 
     [System.Serializable]
-    public class Element_RMS_LayoutData
-    {
-        public string LayoutName;
-        public XHudAnchor Anchor;
-        public Vector3 Position;
-        public Vector3 Euler;
-        public Vector3 Scale;
-        public Vector2 AnchorMin;
-        public Vector2 AnchorMax;
-        public Vector2 Pivot;
-    }
-
-    [System.Serializable]
     [RequireComponent(typeof(CanvasGroup))]
     public partial class XHud_Module_Element : MonoBehaviour
     {
@@ -105,13 +92,14 @@ namespace SevenStrikeModules.XHud
         /// 用于编辑器模式下的动画预览控制
         /// </summary>
         public bool Tween_Preview_IsPlaying = false;
-        #endregion       
+        #endregion
 
         private void Awake()
         {
             // 获取自身的 RectTransform
             if (RectTransform == null)
                 RectTransform = GetComponent<RectTransform>();
+
             // 获取自身的 TriggerAction
             if (TriggerAction == null)
                 TriggerAction = GetComponent<XHud_Element_TriggerAction>();

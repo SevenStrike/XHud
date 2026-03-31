@@ -340,7 +340,7 @@ namespace SevenStrikeModules.XHud
                     }
                     GUIUtility.systemCopyBuffer = str_codeblock;
 
-                    Editor_XHud_GUI.Open(XHud_DialogType.通知, "HudMotion动效模板库通知", "拷贝动效代码块", $"已拷贝元素代码块 {Mode} 到系统剪贴板 ！", "明白", 0, true);
+                    Editor_XHud_GUI.Open(XHud_DialogType.通知, "XHud - 动效库消息", "拷贝动效代码块", $"已拷贝元素代码块 {Mode} 到系统剪贴板 ！", "明白", 0, true);
                 });
                 menu.AddItem(new GUIContent("E (修改动效)"), false, () =>
                 {
@@ -366,7 +366,7 @@ namespace SevenStrikeModules.XHud
                     }
 
                     GUIUtility.systemCopyBuffer = str_jsons;
-                    Editor_XHud_GUI.Open(XHud_DialogType.通知, "HudMotion动效模板库通知", "拷贝动效代码块", $"已拷贝 {Mode} - {sp_name.stringValue} 到系统剪贴板 ！", "明白", 0, true);
+                    Editor_XHud_GUI.Open(XHud_DialogType.通知, "XHud - 动效库消息", "拷贝动效代码块", $"已拷贝 {Mode} - {sp_name.stringValue} 到系统剪贴板 ！", "明白", 0, true);
                 });
                 menu.AddItem(new GUIContent("R (粘贴动效)"), false, () =>
                 {
@@ -374,7 +374,7 @@ namespace SevenStrikeModules.XHud
                     string buffer = GUIUtility.systemCopyBuffer;
                     if (buffer.Contains("anchor"))//粘贴生成参数
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudMotion动效模板库通知", "粘贴生成动效", $"是否确定要将生成动效粘贴到该动效项？", "粘贴", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动效库消息", "粘贴生成动效", $"是否确定要将生成动效粘贴到该动效项？", "粘贴", "暂不", 1);
                         if (res == "暂不")
                         {
                             return;
@@ -416,11 +416,11 @@ namespace SevenStrikeModules.XHud
                         else
                             tip = $"已将原始为 \"回收\" 参数的 {sp_name.stringValue} 动效类型更新为粘贴的 \"生成\" 动效参数!";
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.通知, "HudMotion动效模板库通知", "粘贴动效", tip, "明白", 0, true);
+                        Editor_XHud_GUI.Open(XHud_DialogType.通知, "XHud - 动效库消息", "粘贴动效", tip, "明白", 0, true);
                     }
                     else//粘贴回收参数
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudMotion动效模板库通知", "粘贴回收动效", $"是否确定要将回收动效粘贴到该动效项？", "粘贴", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动效库消息", "粘贴回收动效", $"是否确定要将回收动效粘贴到该动效项？", "粘贴", "暂不", 1);
                         if (res == "暂不")
                         {
                             return;
@@ -459,7 +459,7 @@ namespace SevenStrikeModules.XHud
                         else
                             tip = $"已将原始为 \"生成\" 参数的 {sp_name.stringValue} 动效类型更新为粘贴的 \"回收\" 动效参数!";
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.通知, "HudMotion动效模板库通知", "粘贴回收动效", tip, "明白", 0, true);
+                        Editor_XHud_GUI.Open(XHud_DialogType.通知, "XHud - 动效库消息", "粘贴回收动效", tip, "明白", 0, true);
                     }
                 });
                 menu.AddSeparator("");
@@ -488,11 +488,11 @@ namespace SevenStrikeModules.XHud
 
                             if (!string.IsNullOrEmpty(path))
                             {
-                                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudMotion动效模板库通知", "导出生成动效", $"是否确定要将回收动效参数导出到该目录下？", "导出", "暂不", 0);
+                                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动效库消息", "导出生成动效", $"是否确定要将回收动效参数导出到该目录下？", "导出", "暂不", 0);
                                 if (res == "导出")
                                 {
                                     File.WriteAllText(path, json);
-                                    Editor_XHud_GUI.Open(XHud_DialogType.通知, "HudMotion动效模板库通知", "导出生成动效", $"已导出 {Mode} - {sp_name.stringValue} 到Json文件", "明白", 0, true);
+                                    Editor_XHud_GUI.Open(XHud_DialogType.通知, "XHud - 动效库消息", "导出生成动效", $"已导出 {Mode} - {sp_name.stringValue} 到Json文件", "明白", 0, true);
                                 }
                             }
                             break;
@@ -513,11 +513,11 @@ namespace SevenStrikeModules.XHud
 
                             if (!string.IsNullOrEmpty(path))
                             {
-                                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudMotion动效模板库通知", "导出回收动效", $"是否确定要将回收动效参数导出到该目录下？", "导出", "暂不", 0);
+                                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动效库消息", "导出回收动效", $"是否确定要将回收动效参数导出到该目录下？", "导出", "暂不", 0);
                                 if (res == "导出")
                                 {
                                     File.WriteAllText(path, json);
-                                    Editor_XHud_GUI.Open(XHud_DialogType.通知, "HudMotion动效模板库通知", "导出回收动效", $"已导出 {Mode} - {sp_name.stringValue} 到Json文件", "明白", 0, true);
+                                    Editor_XHud_GUI.Open(XHud_DialogType.通知, "XHud - 动效库消息", "导出回收动效", $"已导出 {Mode} - {sp_name.stringValue} 到Json文件", "明白", 0, true);
                                 }
                             }
                             break;
@@ -814,7 +814,7 @@ namespace SevenStrikeModules.XHud
                     Editor_XHud_GUI.Gui_Layout_Space(35);
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "移除所有动效模版", clear_r, clear_p, 4))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHudMotionLibrary 动效库消息", "清空动效项", $"此操作会清空所有动效模版，确认要这样做吗？", "暂不", "移除", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动效库消息", "清空动效项", $"此操作会清空所有动效模版，确认要这样做吗？", "暂不", "移除", 0);
                         if (res == "暂不")
                         {
                             return;
@@ -885,7 +885,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void ImportMotions()
         {
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHudMotionLibrary 动效库消息", "读取动效数据", "根据您的需要选择导入动效数据的方式，如果是追加则会在当前动效库的基础上后续叠加导入的动效项，如果是替换则会完全替换当前动效库的所有动效项！", "追加", "替换", "暂不", 2);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动效库消息", "读取动效数据", "根据您的需要选择导入动效数据的方式，如果是追加则会在当前动效库的基础上后续叠加导入的动效项，如果是替换则会完全替换当前动效库的所有动效项！", "追加", "替换", "暂不", 2);
             if (res == "暂不")
             {
                 return;
@@ -936,7 +936,7 @@ namespace SevenStrikeModules.XHud
             {
                 return;
             }
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHudMotionLibrary 动效库消息", "导出动效模板", $"是否确定要将动效参数导出到该目录下？", "暂不", "导出", 0);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动效库消息", "导出动效模板", $"是否确定要将动效参数导出到该目录下？", "暂不", "导出", 0);
             if (res == "暂不")
                 return;
 
@@ -946,7 +946,7 @@ namespace SevenStrikeModules.XHud
             string json = JsonConvert.SerializeObject(eem);
             File.WriteAllText(path_rec, json);
 
-            Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHudMotionLibrary 动效库消息", "导出动效模板", $"已导出动效列表 ！", "明白", 0);
+            Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动效库消息", "导出动效模板", $"已导出动效列表 ！", "明白", 0);
         }
 
         /// <summary>

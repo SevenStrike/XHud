@@ -125,7 +125,7 @@ namespace SevenStrikeModules.XHud
             reset_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Spawner/reset_r");
             reset_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Spawner/reset_p");
 
-            SerializedAllVariables();
+            GetSerializeFields();
 
             GetAllTargets();
 
@@ -399,20 +399,20 @@ namespace SevenStrikeModules.XHud
 
             #region 模版库                             
             //确保动效库存在
-            if (mgr.Hud_ElementMotion != null)
+            if (mgr.Hud_Motions != null)
             {
                 //确保动效库不是空的
-                if (mgr.Hud_ElementMotion.ElementMotionList != null && mgr.Hud_ElementMotion.ElementMotionList.Count > 0)
+                if (mgr.Hud_Motions.ElementMotionList != null && mgr.Hud_Motions.ElementMotionList.Count > 0)
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
 
                     //动效列表
-                    string[] motnames = mgr.Hud_ElementMotion.ElementMotion_GetAllName_With_Create();
+                    string[] motnames = mgr.Hud_Motions.ElementMotion_GetAllName_With_Create();
                     EditorGUI.BeginChangeCheck();
                     Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Spawner>("生成", motnames, ref Crc_Lib_Name, HudFilled.实体, 120, 22, SelectedObjects);
                     if (EditorGUI.EndChangeCheck())
                     {
-                        Motion_Creator crc = mgr.Hud_ElementMotion.ElementMotion_GetElementCreator_At_Create(Crc_Lib_Name.stringValue);
+                        Motion_Creator crc = mgr.Hud_Motions.ElementMotion_GetElementCreator_At_Create(Crc_Lib_Name.stringValue);
 
                         CreateArgs.FindPropertyRelative("anchor").enumValueIndex = (int)crc.anchor;
                         CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)crc.Movement.Movement;
@@ -450,10 +450,10 @@ namespace SevenStrikeModules.XHud
 
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "定位", locate_r, locate_p, 2))
                     {
-                        if (!mgr.Hud_ElementMotion.ElementMotion_IsExist(Crc_Lib_Name.stringValue))
+                        if (!mgr.Hud_Motions.ElementMotion_IsExist(Crc_Lib_Name.stringValue))
                             return;
                         Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
-                        mgr.Hud_ElementMotion.ElementMotionLibrary_Location(Crc_Lib_Name.stringValue);
+                        mgr.Hud_Motions.ElementMotionLibrary_Location(Crc_Lib_Name.stringValue);
                         return;
                     }
 
@@ -729,20 +729,20 @@ namespace SevenStrikeModules.XHud
 
             #region 模版库                             
             //确保动效库存在
-            if (mgr.Hud_ElementMotion != null)
+            if (mgr.Hud_Motions != null)
             {
                 //确保动效库不是空的
-                if (mgr.Hud_ElementMotion.ElementMotionList != null && mgr.Hud_ElementMotion.ElementMotionList.Count > 0)
+                if (mgr.Hud_Motions.ElementMotionList != null && mgr.Hud_Motions.ElementMotionList.Count > 0)
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
 
                     //动效列表
-                    string[] motnames = mgr.Hud_ElementMotion.ElementMotion_GetAllName_With_Recycle();
+                    string[] motnames = mgr.Hud_Motions.ElementMotion_GetAllName_With_Recycle();
                     EditorGUI.BeginChangeCheck();
                     Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Spawner>("回收", motnames, ref Rec_Lib_Name, HudFilled.实体, 120, 22, SelectedObjects);
                     if (EditorGUI.EndChangeCheck())
                     {
-                        Motion_Recycler rec = mgr.Hud_ElementMotion.ElementMotion_GetElementCreator_At_Recycle(Rec_Lib_Name.stringValue);
+                        Motion_Recycler rec = mgr.Hud_Motions.ElementMotion_GetElementCreator_At_Recycle(Rec_Lib_Name.stringValue);
 
                         RecycleArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)rec.Movement.Movement;
                         RecycleArgs.FindPropertyRelative("Movement.Distance").floatValue = rec.Movement.Distance;
@@ -779,10 +779,10 @@ namespace SevenStrikeModules.XHud
 
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "定位", locate_r, locate_p, 2))
                     {
-                        if (!mgr.Hud_ElementMotion.ElementMotion_IsExist(Rec_Lib_Name.stringValue, HudElementMotionType.Recycler))
+                        if (!mgr.Hud_Motions.ElementMotion_IsExist(Rec_Lib_Name.stringValue, HudElementMotionType.Recycler))
                             return;
                         Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
-                        mgr.Hud_ElementMotion.ElementMotionLibrary_Location(Rec_Lib_Name.stringValue);
+                        mgr.Hud_Motions.ElementMotionLibrary_Location(Rec_Lib_Name.stringValue);
                         return;
                     }
 
@@ -1523,14 +1523,14 @@ namespace SevenStrikeModules.XHud
                     else if (res == "回收")
                         mode = "回收动效参数";
 
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "Spawner元素生成器通知", "复制动效", $"已复制 \" {mode} \" 到系统剪贴板 ！", "明白", 0);
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素生成器消息", "复制动效", $"已复制 \" {mode} \" 到系统剪贴板 ！", "明白", 0);
                 });
                 menu.AddItem(new GUIContent("R (粘贴动效)"), false, () =>
                 {
                     string buffer = Editor_XHud_GUI.EditorData_Get_With_String("XED_HudSpawner_Copy_MotionArgs");
                     if (buffer.Contains("anchor"))//粘贴生成参数
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "Spawner元素生成器通知", "粘贴动效", "检测到动效参数类型为： \"生成动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 元素生成器消息", "粘贴动效", "检测到动效参数类型为： \"生成动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
                         if (res == "暂不")
                             return;
 
@@ -1562,7 +1562,7 @@ namespace SevenStrikeModules.XHud
 
                         sp_CreateArgs.serializedObject.ApplyModifiedProperties();
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "Spawner元素生成器通知", "粘贴动效", "已更新 \"生成\" 动效参数!", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素生成器消息", "粘贴动效", "已更新 \"生成\" 动效参数!", "明白", 0);
                     }
                     else//粘贴回收参数
                     {
@@ -1717,54 +1717,46 @@ namespace SevenStrikeModules.XHud
         }
 
         /// <summary>
-        /// 序列化变量
-        /// </summary>
-        private SerializedProperty GetSerializedProperty(string name)
-        {
-            return serializedObject.FindProperty(name);
-        }
-
-        /// <summary>
         /// 获取序列化变量
         /// </summary>
-        private void SerializedAllVariables()
+        private void GetSerializeFields()
         {
-            recycle_fold_move = GetSerializedProperty("recycle_fold_move");
-            recycle_fold_rotate = GetSerializedProperty("recycle_fold_rotate");
-            recycle_fold_alpha = GetSerializedProperty("recycle_fold_alpha");
-            ElementSize = GetSerializedProperty("ElementSize");
-            create_fold_move = GetSerializedProperty("create_fold_move");
-            create_fold_rotate = GetSerializedProperty("create_fold_rotate");
-            create_fold_alpha = GetSerializedProperty("create_fold_alpha");
-            Opt_VisuallerCreate = GetSerializedProperty("Opt_VisuallerCreate");
-            Opt_ManullyCreate = GetSerializedProperty("Opt_ManullyCreate");
-            Opt_WorldCreate = GetSerializedProperty("Opt_WorldCreate");
-            opt_IsRunning = GetSerializedProperty("opt_IsRunning");
-            Opt_RMSEnabled = GetSerializedProperty("Opt_RMSEnabled");
-            Opt_AutoIn = GetSerializedProperty("Opt_AutoIn");
-            SpawnName = GetSerializedProperty("SpawnName");
-            SpawnIndicator = GetSerializedProperty("SpawnIndicator");
-            SpawnerIndicator = GetSerializedProperty("SpawnerIndicator");
-            CreateArgs = GetSerializedProperty("CreateArgs");
+            recycle_fold_move = serializedObject.FindProperty("recycle_fold_move");
+            recycle_fold_rotate = serializedObject.FindProperty("recycle_fold_rotate");
+            recycle_fold_alpha = serializedObject.FindProperty("recycle_fold_alpha");
+            ElementSize = serializedObject.FindProperty("ElementSize");
+            create_fold_move = serializedObject.FindProperty("create_fold_move");
+            create_fold_rotate = serializedObject.FindProperty("create_fold_rotate");
+            create_fold_alpha = serializedObject.FindProperty("create_fold_alpha");
+            Opt_VisuallerCreate = serializedObject.FindProperty("Opt_VisuallerCreate");
+            Opt_ManullyCreate = serializedObject.FindProperty("Opt_ManullyCreate");
+            Opt_WorldCreate = serializedObject.FindProperty("Opt_WorldCreate");
+            opt_IsRunning = serializedObject.FindProperty("opt_IsRunning");
+            Opt_RMSEnabled = serializedObject.FindProperty("Opt_RMSEnabled");
+            Opt_AutoIn = serializedObject.FindProperty("Opt_AutoIn");
+            SpawnName = serializedObject.FindProperty("SpawnName");
+            SpawnIndicator = serializedObject.FindProperty("SpawnIndicator");
+            SpawnerIndicator = serializedObject.FindProperty("SpawnerIndicator");
+            CreateArgs = serializedObject.FindProperty("CreateArgs");
             CreateArgs_MotionAnimateEndState = CreateArgs.FindPropertyRelative("MotionAnimateEndState");
-            RecycleArgs = GetSerializedProperty("RecycleArgs");
+            RecycleArgs = serializedObject.FindProperty("RecycleArgs");
             RecycleArgs_MotionAnimateEndState = RecycleArgs.FindPropertyRelative("MotionAnimateEndState");
-            RMS_SelctedName = GetSerializedProperty("RMS_SelctedName");
-            CreateParamName = GetSerializedProperty("CreateParamName");
-            RecycleParamName = GetSerializedProperty("RecycleParamName");
-            LibName = GetSerializedProperty("LibName");
-            ElementOffset = GetSerializedProperty("ElementOffset");
-            ElementScale = GetSerializedProperty("ElementScale");
-            Key_Create = GetSerializedProperty("Key_Create");
-            Key_Recycle = GetSerializedProperty("Key_Recycle");
-            Crc_Lib_Name = GetSerializedProperty("Crc_Lib_Name");
-            Rec_Lib_Name = GetSerializedProperty("Rec_Lib_Name");
-            WorldPosition = GetSerializedProperty("WorldPosition");
-            WorldRotation = GetSerializedProperty("WorldRotation");
-            WorldScale = GetSerializedProperty("WorldScale");
-            ReferObject = GetSerializedProperty("ReferObject");
-            SpawnFunctionKey_Primary = GetSerializedProperty("SpawnFunctionKey_Primary");
-            SpawnFunctionKey_Secondary = GetSerializedProperty("SpawnFunctionKey_Secondary");
+            RMS_SelctedName = serializedObject.FindProperty("RMS_SelctedName");
+            CreateParamName = serializedObject.FindProperty("CreateParamName");
+            RecycleParamName = serializedObject.FindProperty("RecycleParamName");
+            LibName = serializedObject.FindProperty("LibName");
+            ElementOffset = serializedObject.FindProperty("ElementOffset");
+            ElementScale = serializedObject.FindProperty("ElementScale");
+            Key_Create = serializedObject.FindProperty("Key_Create");
+            Key_Recycle = serializedObject.FindProperty("Key_Recycle");
+            Crc_Lib_Name = serializedObject.FindProperty("Crc_Lib_Name");
+            Rec_Lib_Name = serializedObject.FindProperty("Rec_Lib_Name");
+            WorldPosition = serializedObject.FindProperty("WorldPosition");
+            WorldRotation = serializedObject.FindProperty("WorldRotation");
+            WorldScale = serializedObject.FindProperty("WorldScale");
+            ReferObject = serializedObject.FindProperty("ReferObject");
+            SpawnFunctionKey_Primary = serializedObject.FindProperty("SpawnFunctionKey_Primary");
+            SpawnFunctionKey_Secondary = serializedObject.FindProperty("SpawnFunctionKey_Secondary");
         }
 
         /// <summary>
@@ -1815,7 +1807,7 @@ namespace SevenStrikeModules.XHud
             window.SetLibrarySetterMode(LibrarySetterMode.添加到库);
             window.SetButtonText("添加", "取消");
             window.SetTitle("XHud 动效库采集器");
-            window.SetTarget_Hud_MotionLibrary(XHud_Dashboard.HudManagerGet().Hud_ElementMotion);
+            window.SetTarget_Hud_MotionLibrary(XHud_Dashboard.HudManagerGet().Hud_Motions);
             //window.ShowModal();
             window.Show();
         }

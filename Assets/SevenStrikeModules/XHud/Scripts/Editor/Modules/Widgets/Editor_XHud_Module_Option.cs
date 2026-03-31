@@ -78,7 +78,7 @@ namespace SevenStrikeModules.XHud
         #region 批量化操作
         XHud_Module_Option[] SelectedObjects;
 
-        private void GetAllTargets()
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
@@ -96,7 +96,7 @@ namespace SevenStrikeModules.XHud
             }
         }
 
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -115,42 +115,8 @@ namespace SevenStrikeModules.XHud
         {
             BaseScript = (XHud_Module_Option)target;
 
-            #region 获取序列化属性
-            OptionButtonNodes = serializedObject.FindProperty("OptionButtonNodes");
-            SelectorAnimatorNodes = serializedObject.FindProperty("SelectorAnimatorNodes");
-            UseEaseMotion = serializedObject.FindProperty("UseEaseMotion");
-            LerpSpeed = serializedObject.FindProperty("LerpSpeed");
-            SelectorTweenMotion = serializedObject.FindProperty("SelectorTweenMotion");
-            SelectorOffset = serializedObject.FindProperty("SelectorOffset");
-            SelectorOffsetAdded = serializedObject.FindProperty("SelectorOffsetAdded");
-            RepeatAnimatorPlay = serializedObject.FindProperty("RepeatAnimatorPlay");
-            TweenSpeed = serializedObject.FindProperty("TweenSpeed");
-            OptionSelector = serializedObject.FindProperty("SelectorMark");
-            CurrentOptionName = serializedObject.FindProperty("CurrentOptionName");
-            OptionIndex = serializedObject.FindProperty("OptionIndex");
-            SelectorMark = serializedObject.FindProperty("SelectorMark");
-            OptionSelector_Animators_GlobalDuration = serializedObject.FindProperty("OptionSelector_Animators_GlobalDuration");
-            Pos_Destination = serializedObject.FindProperty("Pos_Destination");
-            OptionRoot = serializedObject.FindProperty("OptionRoot");
-            sm_Pos_Destination = serializedObject.FindProperty("sm_Pos_Destination");
-            UseBlinked = serializedObject.FindProperty("UseBlinked");
-            eve_on_option_clicked = serializedObject.FindProperty("eve_on_option_clicked");
-            eve_on_option_clicked_with_indicator = serializedObject.FindProperty("eve_on_option_clicked_with_indicator");
-            eve_on_option_clicked_with_index = serializedObject.FindProperty("eve_on_option_clicked_with_index");
-            eve_on_option_clicked_with_position = serializedObject.FindProperty("eve_on_option_clicked_with_position");
-            eve_on_selector_position_changed = serializedObject.FindProperty("eve_on_selector_position_changed");
-            eve_on_selector_position_started = serializedObject.FindProperty("eve_on_selector_position_started");
-            eve_on_selector_position_complete = serializedObject.FindProperty("eve_on_selector_position_complete");
-            AnimatorsMaxDuration = serializedObject.FindProperty("AnimatorsMaxDuration");
-            AnimateState = serializedObject.FindProperty("AnimateState");
-            Indicator = serializedObject.FindProperty("Indicator");
-            AnimatorsIsFold = serializedObject.FindProperty("AnimatorsIsFold");
-            ButtonIsFold = serializedObject.FindProperty("ButtonIsFold");
-            EventIsFold = serializedObject.FindProperty("EventIsFold");
-            DebugState = serializedObject.FindProperty("DebugState");
-            ChangingInterval = serializedObject.FindProperty("ChangingInterval");
-            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
-            #endregion
+            // 获取序列化属性
+            GetSerializeFields();
 
             #region 获取图标
             icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Option/icon_main");
@@ -380,8 +346,10 @@ namespace SevenStrikeModules.XHud
             };
             #endregion
 
-            GetAllTargets();
+            Targets_Get();
         }
+
+
 
         private void OnDisable()
         {
@@ -430,7 +398,7 @@ namespace SevenStrikeModules.XHud
             GUILayout.FlexibleSpace();
 
             #region 预览
-            if (!IsMultiSelected() && SelectorAnimatorNodes.arraySize > 0)
+            if (!Targets_Selected() && SelectorAnimatorNodes.arraySize > 0)
             {
                 GUILayout.FlexibleSpace();
 
@@ -523,7 +491,7 @@ namespace SevenStrikeModules.XHud
             SelectorOffset.serializedObject.ApplyModifiedProperties();
             if (EditorGUI.EndChangeCheck())
             {
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     RectTransform selectorMarksel = (RectTransform)SelectorMark.objectReferenceValue;
                     selectorMarksel.anchoredPosition3D = SelectorOffsetAdded.vector3Value + SelectorOffset.vector3Value;
@@ -566,12 +534,12 @@ namespace SevenStrikeModules.XHud
 
             #region 状态
             string statu_title = "状态";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_title = "状态 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_title, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 #region 选项状态
                 Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选项状态", 12, CurrentOptionName.stringValue, XHud_Dashboard.Theme_Primary, 11);
@@ -690,12 +658,12 @@ namespace SevenStrikeModules.XHud
 
             #region 统计
             string statu_statistic = "统计";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_statistic = "统计 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_statistic, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 if (SelectorAnimatorNodes.arraySize <= 0)
                 {
@@ -790,7 +758,7 @@ namespace SevenStrikeModules.XHud
             #region 动画器列表
             if (SelectorAnimatorNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -819,7 +787,7 @@ namespace SevenStrikeModules.XHud
             #region 按钮列表
             if (OptionButtonNodes.arraySize > 0)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -846,7 +814,7 @@ namespace SevenStrikeModules.XHud
             #endregion
 
             #region 事件列表
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -933,7 +901,7 @@ namespace SevenStrikeModules.XHud
                 // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
                 menu.AddDisabledItem(new GUIContent("脚本参数"));
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddItem(new GUIContent("C (拷贝)"), false, () =>
                     {
@@ -955,7 +923,7 @@ namespace SevenStrikeModules.XHud
                 {
                     XHud_ModuleArg_Option hop = JsonUtility.FromJson<XHud_ModuleArg_Option>(GUIUtility.systemCopyBuffer);
 
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -1027,7 +995,7 @@ namespace SevenStrikeModules.XHud
                 menu.AddDisabledItem(new GUIContent("基础"));
                 menu.AddItem(new GUIContent("A (自动标识)"), false, () =>
                 {
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -1052,7 +1020,7 @@ namespace SevenStrikeModules.XHud
                 {
                     AllListFoldState(true);
                 });
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddSeparator("");
                     menu.AddDisabledItem(new GUIContent("预览"));
@@ -1175,7 +1143,6 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         /// <summary>
         /// 检查是否存在无效的选项按钮
         /// </summary>
@@ -1192,10 +1159,9 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         private void AllListFoldState(bool state)
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -1229,7 +1195,6 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         /// <summary>
         /// 还原Animator姿态
         /// </summary>
@@ -1286,7 +1251,6 @@ namespace SevenStrikeModules.XHud
 
             so.ApplyModifiedProperties();
         }
-
         /// <summary>
         /// 记录Animator姿态
         /// </summary>
@@ -1350,13 +1314,11 @@ namespace SevenStrikeModules.XHud
 
             so.ApplyModifiedProperties();
         }
-
         private void CalculateAnimatorMaxDuration(List<ElementNode_Animator> list, float globaldur)
         {
             AnimatorsMaxDuration.floatValue = Animators_GetAnimatorsMaxDuration(list, globaldur);
             AnimatorsMaxDuration.serializedObject.ApplyModifiedProperties();
         }
-
         /// <summary>
         /// 从所有子动画器中获取最大耗时
         /// </summary>
@@ -1379,7 +1341,6 @@ namespace SevenStrikeModules.XHud
             float v = XHud_Utilitys.Array_MaxValue(x_list);
             return v * globaldur;
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -1420,7 +1381,6 @@ namespace SevenStrikeModules.XHud
             }
             return hasLoop;
         }
-
         /// <summary>
         /// 获取动画器中是否存在循环模式
         /// </summary>
@@ -1439,7 +1399,46 @@ namespace SevenStrikeModules.XHud
             }
             return hasLoop;
         }
-
+        /// <summary>
+        /// 获取序列化字段
+        /// </summary>
+        private void GetSerializeFields()
+        {
+            OptionButtonNodes = serializedObject.FindProperty("OptionButtonNodes");
+            SelectorAnimatorNodes = serializedObject.FindProperty("SelectorAnimatorNodes");
+            UseEaseMotion = serializedObject.FindProperty("UseEaseMotion");
+            LerpSpeed = serializedObject.FindProperty("LerpSpeed");
+            SelectorTweenMotion = serializedObject.FindProperty("SelectorTweenMotion");
+            SelectorOffset = serializedObject.FindProperty("SelectorOffset");
+            SelectorOffsetAdded = serializedObject.FindProperty("SelectorOffsetAdded");
+            RepeatAnimatorPlay = serializedObject.FindProperty("RepeatAnimatorPlay");
+            TweenSpeed = serializedObject.FindProperty("TweenSpeed");
+            OptionSelector = serializedObject.FindProperty("SelectorMark");
+            CurrentOptionName = serializedObject.FindProperty("CurrentOptionName");
+            OptionIndex = serializedObject.FindProperty("OptionIndex");
+            SelectorMark = serializedObject.FindProperty("SelectorMark");
+            OptionSelector_Animators_GlobalDuration = serializedObject.FindProperty("OptionSelector_Animators_GlobalDuration");
+            Pos_Destination = serializedObject.FindProperty("Pos_Destination");
+            OptionRoot = serializedObject.FindProperty("OptionRoot");
+            sm_Pos_Destination = serializedObject.FindProperty("sm_Pos_Destination");
+            UseBlinked = serializedObject.FindProperty("UseBlinked");
+            eve_on_option_clicked = serializedObject.FindProperty("eve_on_option_clicked");
+            eve_on_option_clicked_with_indicator = serializedObject.FindProperty("eve_on_option_clicked_with_indicator");
+            eve_on_option_clicked_with_index = serializedObject.FindProperty("eve_on_option_clicked_with_index");
+            eve_on_option_clicked_with_position = serializedObject.FindProperty("eve_on_option_clicked_with_position");
+            eve_on_selector_position_changed = serializedObject.FindProperty("eve_on_selector_position_changed");
+            eve_on_selector_position_started = serializedObject.FindProperty("eve_on_selector_position_started");
+            eve_on_selector_position_complete = serializedObject.FindProperty("eve_on_selector_position_complete");
+            AnimatorsMaxDuration = serializedObject.FindProperty("AnimatorsMaxDuration");
+            AnimateState = serializedObject.FindProperty("AnimateState");
+            Indicator = serializedObject.FindProperty("Indicator");
+            AnimatorsIsFold = serializedObject.FindProperty("AnimatorsIsFold");
+            ButtonIsFold = serializedObject.FindProperty("ButtonIsFold");
+            EventIsFold = serializedObject.FindProperty("EventIsFold");
+            DebugState = serializedObject.FindProperty("DebugState");
+            ChangingInterval = serializedObject.FindProperty("ChangingInterval");
+            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
+        }
         #endregion
 
         #region Animator 动画预览
@@ -1896,7 +1895,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void GetAllAnimators()
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -1993,7 +1992,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void GetAllOptionsButton()
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -2156,7 +2155,7 @@ namespace SevenStrikeModules.XHud
         private void GetAnimatorAndButtonResults()
         {
             List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int s = 0; s < SelectedObjects.Length; s++)
                 {

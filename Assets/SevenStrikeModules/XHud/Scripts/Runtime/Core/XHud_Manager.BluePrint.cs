@@ -1153,6 +1153,6 @@ namespace SevenStrikeModules.XHud
             {
                 BluePrint_Displayed = true;
             }
-        }
+        }      
     }
 }

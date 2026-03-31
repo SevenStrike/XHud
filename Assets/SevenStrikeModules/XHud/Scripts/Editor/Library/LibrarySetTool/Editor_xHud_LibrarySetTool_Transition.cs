@@ -812,7 +812,7 @@ namespace SevenStrikeModules.XHud
             info.Description = sp_TransitionDescription.stringValue;
             Target_Hud_TransitionLibrary.TransitionsLibrary_Replace(ModifiedIndex, info);
 
-            Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud 转场资源修改器消息", "更新完成", $"转场资源已更新完成！", "明白");
+            Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 转场资源修改器消息", "更新完成", $"转场资源已更新完成！", "明白");
 
             Close();
         }

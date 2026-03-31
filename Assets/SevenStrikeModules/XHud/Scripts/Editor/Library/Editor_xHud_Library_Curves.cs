@@ -371,7 +371,7 @@ namespace SevenStrikeModules.XHud
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "Hud - 曲线库", Color.black);
+            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "XHud - 曲线库", Color.black);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
@@ -431,7 +431,7 @@ namespace SevenStrikeModules.XHud
                     Editor_XHud_GUI.Gui_Layout_Space(35);
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "清空曲线库", clear_r, clear_p, 4))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudCurveLibrary 曲线库消息", "清空所有曲线", "是否清空所有曲线项？请注意！如果您的场景中或是预制体中的脚本用到了该曲线库中的曲线，清空后会导致动画器的曲线信息丢失，请谨慎操作！", "清空", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 曲线库消息", "清空所有曲线", "是否清空所有曲线项？请注意！如果您的场景中或是预制体中的脚本用到了该曲线库中的曲线，清空后会导致动画器的曲线信息丢失，请谨慎操作！", "清空", "暂不", 1);
                         if (res == "暂不")
                             return;
 
@@ -530,7 +530,7 @@ namespace SevenStrikeModules.XHud
         private void Curves_Import()
         {
             string path = "";
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "HudCurveLibrary 曲线库消息", "读取曲线数据", "根据您的需要选择导入曲线数据的方式，如果是追加则会在当前曲线库的基础上后续叠加导入的曲线项，如果是替换则会完全替换当前曲线库的所有曲线项！", "追加", "替换", "暂不", 2);
+            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 曲线库消息", "读取曲线数据", "根据您的需要选择导入曲线数据的方式，如果是追加则会在当前曲线库的基础上后续叠加导入的曲线项，如果是替换则会完全替换当前曲线库的所有曲线项！", "追加", "替换", "暂不", 2);
             if (res == "暂不")
             {
                 return;

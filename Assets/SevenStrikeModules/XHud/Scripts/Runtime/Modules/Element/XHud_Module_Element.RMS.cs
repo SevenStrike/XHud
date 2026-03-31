@@ -5,6 +5,19 @@ namespace SevenStrikeModules.XHud
     using System.Collections.Generic;
     using UnityEngine;
 
+    [System.Serializable]
+    public class Element_RMS_LayoutData
+    {
+        public string LayoutName;
+        public XHudAnchor Anchor;
+        public Vector3 Position;
+        public Vector3 Euler;
+        public Vector3 Scale;
+        public Vector2 AnchorMin;
+        public Vector2 AnchorMax;
+        public Vector2 Pivot;
+    }
+
     public partial class XHud_Module_Element : MonoBehaviour
     {
         [SerializeField]
