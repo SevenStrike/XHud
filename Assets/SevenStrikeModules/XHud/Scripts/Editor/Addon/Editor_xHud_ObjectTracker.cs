@@ -1,7 +1,6 @@
-namespace SevenStrikeModules.XHud
+namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.GuiLib;
     using UnityEditor;
     using UnityEngine;
 
@@ -18,7 +17,7 @@ namespace SevenStrikeModules.XHud
             UseSmoothTracker,
             TrackerOffset,
             SmoothTime;
-
+        private bool OriginalDisplay;
         private Texture2D icon_main;
 
         #region 批量化操作
@@ -108,6 +107,23 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
 
+            #region 源脚本
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+
+            #region 原始变量
+            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            OriginalDisplay = EditorGUILayout.Foldout(OriginalDisplay, "变量/属性", true);
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+            if (OriginalDisplay)
+                DrawDefaultInspector();
+            #endregion
+
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            #endregion
 
             serializedObject.ApplyModifiedProperties();
         }

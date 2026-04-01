@@ -1,8 +1,7 @@
-namespace SevenStrikeModules.XHud
+namespace SevenStrikeModules.XHud.Editor
 {
     using Newtonsoft.Json;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.GuiLib;
     using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
     using System;

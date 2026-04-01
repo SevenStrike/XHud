@@ -75,15 +75,7 @@ namespace SevenStrikeModules.XHud
         /// 判定元素是屏幕类型还是世界空间类型
         /// </summary>
         public ElementSpaceType ElementSpaceType = ElementSpaceType.None;
-        [SerializeField]
-        /// <summary>
-        /// 自动停止预览开关
-        /// true表示动画预览结束后自动停止
-        /// false表示需要手动停止预览
-        /// 仅用于编辑器预览模式，不影响运行时行为
-        /// 默认值为true
-        /// </summary>
-        public bool Tween_Preview_AutoStop = true;
+
         [SerializeField]
         /// <summary>
         /// Tween动画预览状态

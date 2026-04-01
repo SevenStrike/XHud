@@ -1,6 +1,6 @@
-namespace SevenStrikeModules.XHud.Utilitys
+namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.GuiLib;
+    using SevenStrikeModules.XHud.Utilitys;
     using SoftMasking;
     using UnityEditor;
     using UnityEngine;

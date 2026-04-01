@@ -1,13 +1,39 @@
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XTween;
+    using System;
+    using System.IO;
+    using UnityEditor;
 #if UNITY_EDITOR
     using UnityEditor.Callbacks;
 #endif
     using UnityEngine;
 
+    [Serializable]
+    /// <summary>
+    /// XHudElementPreviewConfig 预览配置
+    /// </summary>
+    public class XHudElementPreviewConfig
+    {
+        /// <summary>
+        /// 预览选项 - 自动杀死预览
+        /// </summary>
+        public bool PreviewOption_AutoKillPreviewTweens;
+        /// <summary>
+        /// 预览选项 - 杀死后自动倒退
+        /// </summary>
+        public bool PreviewOption_RewindPreviewTweensWithKill;
+        /// <summary>
+        /// 预览选项 - 杀死后清除预览
+        /// </summary>
+        public bool PreviewOption_ClearPreviewTweensWithKill;
+    }
+
     public static class XHud_Dashboard
     {
+        public static XHudElementPreviewConfig XHudElementPreviewConfig;
+
         #region ThemeColor 主题色
 #pragma warning disable CS0414
         private static readonly string PrefsKeyColor_Theme = "XHUD-MANAGER-COLOR-THEME";
@@ -193,6 +219,112 @@ namespace SevenStrikeModules.XHud
             return path_XHUD_CONFIG;
         }
         #endregion
+        #endregion
+
+#if UNITY_EDITOR
+        [DidReloadScripts]
+        /// <summary>
+        /// 读取XHud元素的动画预览配置数据
+        /// </summary>
+        public static void LoadXHudElementPreviewConfig()
+        {
+            ElementPreviewOptionsConfig_Get();
+        }
+#endif
+
+        /// <summary>
+        /// 读取XHud元素的动画预览配置数据
+        /// </summary>
+        public static XHudElementPreviewConfig ElementPreviewOptionsConfig_Get()
+        {
+            string json = null;
+#if UNITY_EDITOR
+            //获取配置文件
+            json = AssetDatabase.LoadAssetAtPath<TextAsset>(Get_Path_XHUD_CONFIG_Path() + $"XHudElementPreviewConfig.json").text;
+#endif
+            XHudElementPreviewConfig = JsonUtility.FromJson<XHudElementPreviewConfig>(json);
+
+            //Debug.Log(ConfigData);
+            return XHudElementPreviewConfig;
+        }
+        /// <summary>
+        /// 保存XHud元素的动画预览配置数据
+        /// </summary>
+        public static void ElementPreviewOptionsConfig_Save()
+        {
+#if UNITY_EDITOR
+            // 保存预览选项参数
+            string json = JsonUtility.ToJson(XHudElementPreviewConfig);
+            // 使用StreamWriter写入文件
+            using (StreamWriter writer = new StreamWriter(Get_Path_XHUD_CONFIG_Path() + $"XHudElementPreviewConfig.json"))
+            {
+                writer.Write(json);
+            }
+            AssetDatabase.Refresh();
+#endif
+        }
+
+        #region 动画预览选项
+        /// <summary>
+        /// 获取状态 - 自动杀死预览动画
+        /// </summary>
+        /// <returns></returns>
+        public static bool Get_PreviewOption_AutoKillPreviewTweens()
+        {
+            if (XHudElementPreviewConfig == null)
+                ElementPreviewOptionsConfig_Get();
+
+            // 额外容错：避免加载配置失败后仍为null
+            return XHudElementPreviewConfig?.PreviewOption_AutoKillPreviewTweens ?? false;
+        }
+        /// <summary>
+        /// 获取状态 - 预览杀死前重置动画
+        /// </summary>
+        /// <returns></returns>
+        public static bool Get_PreviewOption_RewindPreviewTweensWithKill()
+        {
+            if (XHudElementPreviewConfig == null)
+            {
+                ElementPreviewOptionsConfig_Get();
+            }
+            return XHudElementPreviewConfig?.PreviewOption_RewindPreviewTweensWithKill ?? false;
+        }
+        /// <summary>
+        /// 获取状态 - 预览杀死后清空预览列表
+        /// </summary>
+        /// <returns></returns>
+        public static bool Get_PreviewOption_ClearPreviewTweensWithKill()
+        {
+            if (XHudElementPreviewConfig == null)
+            {
+                ElementPreviewOptionsConfig_Get();
+            }
+            return XHudElementPreviewConfig?.PreviewOption_ClearPreviewTweensWithKill ?? false;
+        }
+        /// <summary>
+        /// 设置状态 - 自动杀死预览动画
+        /// </summary>
+        /// <returns></returns>
+        public static void Set_PreviewOption_AutoKillPreviewTweens(bool state)
+        {
+            XHudElementPreviewConfig.PreviewOption_AutoKillPreviewTweens = state;
+        }
+        /// <summary>
+        /// 设置状态 - 预览杀死前重置动画
+        /// </summary>
+        /// <returns></returns>
+        public static void Set_PreviewOption_RewindPreviewTweensWithKill(bool state)
+        {
+            XHudElementPreviewConfig.PreviewOption_RewindPreviewTweensWithKill = state;
+        }
+        /// <summary>
+        /// 设置状态 - 预览杀死后清空预览列表
+        /// </summary>
+        /// <returns></returns>
+        public static void Set_PreviewOption_ClearPreviewTweensWithKill(bool state)
+        {
+            XHudElementPreviewConfig.PreviewOption_ClearPreviewTweensWithKill = state;
+        }
         #endregion
     }
 }

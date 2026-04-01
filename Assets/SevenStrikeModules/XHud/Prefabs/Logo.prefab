@@ -242,31 +242,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427992cb4fdf0d4488fb77d4e7ae18af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Alpha: 1
+  CanvasGroup: {fileID: 8411562341160551919}
+  AnimatorNodes: []
+  AnimatorsMaxDuration: 0
+  Element_Animators_GlobalDuration: 1
+  AutoPlayAnimators: 1
+  AnimatorsIsFold: 0
   Indicator: 
   OriginalName: 
   OriginPoolName: 
   DebugState: 0
   RectTransform: {fileID: 3792840371338341496}
-  CanvasGroup: {fileID: 8411562341160551919}
+  CurrentPivot: {x: 0, y: 0}
   CreateState: 0
   AnimateState: 0
   ElementSpaceType: 0
-  AnimatorsMaxDuration: 0
-  Element_Animators_GlobalDuration: 1
-  CurrentPivot: {x: 0, y: 0}
-  Alpha: 1
-  TriggerAction: {fileID: 0}
-  ObjectTracker: {fileID: 0}
-  SounderNodes: []
-  ContainerNodes: []
-  AnimatorNodes: []
-  ButtonNodes: []
-  OptionNodes: []
-  TextNodes: []
-  TmpTextNodes: []
-  SliderNodes: []
-  ProgressNodes: []
-  ToggleNodes: []
+  Tween_Preview_IsPlaying: 0
+  EventIsFold: 0
   eve_on_element_in_start:
     m_PersistentCalls:
       m_Calls: []
@@ -279,25 +272,234 @@ MonoBehaviour:
   eve_on_element_out_end:
     m_PersistentCalls:
       m_Calls: []
-  Animating: 0
-  AnimatorsIsFold: 0
+  ButtonNodes: []
   ButtonIsFold: 0
-  OptionIsFold: 0
-  SliderIsFold: 0
-  ProgressIsFold: 0
-  ToggleIsFold: 0
-  EventIsFold: 0
-  SounderIsFold: 0
-  ContainerIsFold: 0
-  TextIsFold: 0
-  TmpTextIsFold: 0
-  AutoPlayAnimators: 1
+  ContainerNodes: []
   AutoPlayContainersAnimators: 1
-  AutoStopPreview: 1
-  TweenIsPreviewing: 0
+  ContainerIsFold: 0
+  ObjectTracker: {fileID: 0}
+  OptionNodes: []
+  OptionIsFold: 0
+  ProgressNodes: []
+  ProgressIsFold: 0
+  SliderNodes: []
+  SliderIsFold: 0
+  SounderNodes: []
+  SounderIsFold: 0
+  TextNodes: []
+  TextIsFold: 0
+  TmpTextNodes: []
+  TmpTextIsFold: 0
+  ToggleNodes: []
+  ToggleIsFold: 0
   RMS_Enabled: 0
-  RMS_InfoList: []
+  RMS_LayoutDatas: []
   RMS_Name: 
+  TriggerAction: {fileID: 0}
+  Animating: 0
+  TweensPreivew_In_State: 0
+  TweensPreivew_Out_State: 0
+  PrimitivePreivew_State: 0
+  PreviewPrimitivesTween: 0
+  AutoKillPreviewTweens: 1
+  RewindPreviewTweensWithKill: 1
+  ClearPreviewTweensWithKill: 1
+  Crc_Lib_Name: 
+  Rec_Lib_Name: 
+  CreateArgs:
+    anchor: 5
+    MotionAnimateEndState: 0
+    Alpha:
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+    Movement:
+      Movement: 1
+      Distance: 100
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+    Rotation:
+      Rotation: 0
+      Degree: 0
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+  RecycleArgs:
+    MotionAnimateEndState: 0
+    Alpha:
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+    Movement:
+      Movement: 2
+      Distance: 100
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+    Rotation:
+      Rotation: 0
+      Degree: 0
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+  preview_motionArgs_fold: 0
+  create_fold_move: 0
+  create_fold_rotate: 0
+  create_fold_alpha: 0
+  recycle_fold_move: 0
+  recycle_fold_rotate: 0
+  recycle_fold_alpha: 0
 --- !u!1 &8027028408687757617
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,9 +578,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: dasdasdsadsadsad
+  m_Text: XHUD 4.0
   Indicator: 
-  StyleName: 
+  StyleName: NewTextStyle_HudText
   StyleLibSynching: 0
   PreviousText: d
   TextIsChanged: 1
@@ -612,9 +814,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: dasdsadasdasdsad
+  m_Text: Versatility Frames
   Indicator: 
-  StyleName: 
+  StyleName: NewTextStyle_HudText
   StyleLibSynching: 0
   PreviousText: da
   TextIsChanged: 1

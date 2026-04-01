@@ -1,7 +1,7 @@
-namespace SevenStrikeModules.XHud.Utilitys
+namespace SevenStrikeModules.XHud.Editor
 {
-    using UnityEngine;
     using UnityEditor;
+    using UnityEngine;
 
     public class Editor_XHud_Tool_MaterialPropertieCleaner : EditorWindow
     {

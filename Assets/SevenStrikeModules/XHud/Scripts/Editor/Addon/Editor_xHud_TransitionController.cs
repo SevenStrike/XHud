@@ -1,8 +1,6 @@
-﻿namespace SevenStrikeModules.XHud
+﻿namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.GuiLib;
-    using SevenStrikeModules.XHud.Utilitys;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.UI;
@@ -14,7 +12,7 @@
         private XHud_TransitionController BaseScript;
         #endregion
 
-        private bool BasicVars;
+        private bool OriginalDisplay;
 
         #region 序列化属性
         private SerializedProperty TransitionImage, TransitionMat, Mode, ModeSwitch, DebugState, TransitionTime, TransitionName, IsTransiting, TransitionProgress, CurrentTransitionNode, TransitionPlayKey, TransitionFlip_H_Key, TransitionFlip_V_Key, TransitionMod_Key, TransitionOverlayColor, LimiteFramePer_Start, LimiteFramePer_End, IsTransiting_WithEnd, IsTransiting_WithStart, TransitionAlpha, CurrentFrame, Flip_Hor, Flip_Ver, UseKeyControl;
@@ -482,10 +480,10 @@
             #region 原始变量
             Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
             Editor_XHud_GUI.Gui_Layout_Space(10);
-            BasicVars = EditorGUILayout.Foldout(BasicVars, "变量/属性", true);
+            OriginalDisplay = EditorGUILayout.Foldout(OriginalDisplay, "变量/属性", true);
             Editor_XHud_GUI.Gui_Layout_Space(5);
             Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-            if (BasicVars)
+            if (OriginalDisplay)
                 DrawDefaultInspector();
             #endregion
 

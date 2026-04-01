@@ -159,7 +159,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 位移运动缓动参数
         /// </summary>
-        public EaseMode Ease = EaseMode.OutQuart;
+        public EaseMode Ease = EaseMode.InOutCubic;
 
         public void CopyData(MotionNode_Movement original)
         {
@@ -203,7 +203,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 旋转运动缓动参数
         /// </summary>
-        public EaseMode Ease = EaseMode.OutQuart;
+        public EaseMode Ease = EaseMode.InOutCubic;
 
         public void CopyData(MotionNode_Rotation original)
         {
@@ -239,7 +239,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 透明度变化缓动参数
         /// </summary>
-        public EaseMode Ease = EaseMode.OutQuart;
+        public EaseMode Ease = EaseMode.InOutCubic;
 
         public void CopyData(MotionNode_Alpha original)
         {

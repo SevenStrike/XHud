@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.GuiLib
+namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;

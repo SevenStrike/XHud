@@ -1,8 +1,7 @@
-namespace SevenStrikeModules.XHud
+namespace SevenStrikeModules.XHud.Editor
 {
     using Newtonsoft.Json;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.GuiLib;
     using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
     using System;
@@ -31,7 +30,7 @@ namespace SevenStrikeModules.XHud
         #endregion
 
         private float LineHeight;
-        private bool BasicVars;
+        private bool OriginalDisplay;
         private bool EventIsFold;
         Rect draw_rect;
 
@@ -2121,10 +2120,10 @@ namespace SevenStrikeModules.XHud
             #region 原始变量
             Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
             Editor_XHud_GUI.Gui_Layout_Space(10);
-            BasicVars = EditorGUILayout.Foldout(BasicVars, "变量/属性", true);
+            OriginalDisplay = EditorGUILayout.Foldout(OriginalDisplay, "变量/属性", true);
             Editor_XHud_GUI.Gui_Layout_Space(5);
             Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-            if (BasicVars)
+            if (OriginalDisplay)
                 DrawDefaultInspector();
             #endregion
 

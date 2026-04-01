@@ -1,6 +1,5 @@
-namespace SevenStrikeModules.XHud.Utilitys
+namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.GuiLib;
     using System.IO;
     using UnityEditor;
     using UnityEngine;

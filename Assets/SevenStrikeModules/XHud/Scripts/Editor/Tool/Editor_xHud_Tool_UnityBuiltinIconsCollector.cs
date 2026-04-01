@@ -1,4 +1,4 @@
-namespace SevenStrikeModules.XHud.Utilitys
+namespace SevenStrikeModules.XHud.Editor
 {
     using System.Collections.Generic;
     using UnityEditor;

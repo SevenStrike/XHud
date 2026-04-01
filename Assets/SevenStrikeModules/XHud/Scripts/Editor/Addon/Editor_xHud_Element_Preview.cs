@@ -1,8 +1,7 @@
-namespace SevenStrikeModules.XHud
+namespace SevenStrikeModules.XHud.Editor
 {
     using Newtonsoft.Json;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.GuiLib;
     using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
     using UnityEditor;
@@ -32,10 +31,10 @@ namespace SevenStrikeModules.XHud
         private XHud_Element_Preview BaseScript;
         #endregion
 
-        public bool BasicVars;
+        public bool OriginalDisplay;
 
         #region 序列化属性
-        SerializedProperty IsEnable, DebugState, DurationScaler, OriginalPosition, create_fold_move, create_fold_rotate, create_fold_alpha, recycle_fold_move, recycle_fold_rotate, recycle_fold_alpha, key_Element_In, key_Element_Out, HideWithStart, Crc_Lib_Name, Rec_Lib_Name, CreateArgs, RecycleArgs, DelayWithIn, DelayWithOut, RMS_Enabled, RMS_Name, HudElement, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, previewIsRunning;
+        SerializedProperty IsEnable, DebugState, DurationScaler, OriginalPosition, OriginalEuler, create_fold_move, create_fold_rotate, create_fold_alpha, recycle_fold_move, recycle_fold_rotate, recycle_fold_alpha, key_Element_In, key_Element_Out, HideWithStart, Crc_Lib_Name, Rec_Lib_Name, CreateArgs, RecycleArgs, DelayWithIn, DelayWithOut, RMS_Enabled, RMS_Name, HudElement, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, previewIsRunning;
         #endregion
 
         #region 图标
@@ -62,7 +61,7 @@ namespace SevenStrikeModules.XHud
         #region 批量化操作
         private XHud_Element_Preview[] SelectedObjects;
 
-        private void GetAllTargets()
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
@@ -80,7 +79,7 @@ namespace SevenStrikeModules.XHud
             }
         }
 
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -119,6 +118,7 @@ namespace SevenStrikeModules.XHud
             recycle_fold_rotate = serializedObject.FindProperty("recycle_fold_rotate");
             recycle_fold_alpha = serializedObject.FindProperty("recycle_fold_alpha");
             OriginalPosition = serializedObject.FindProperty("OriginalPosition");
+            OriginalEuler = serializedObject.FindProperty("OriginalEuler");
             DurationScaler = serializedObject.FindProperty("DurationScaler");
             RMS_Enabled = serializedObject.FindProperty("RMS_Enabled");
             RMS_Name = serializedObject.FindProperty("RMS_Name");
@@ -142,25 +142,43 @@ namespace SevenStrikeModules.XHud
             reset_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/reset_p");
             #endregion
 
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            Targets_Get();
 
-            if (HudElement.objectReferenceValue == null)
+            CheckRmsNameValid();
+
+            if (Targets_Selected())
             {
-                HudElement.objectReferenceValue = BaseScript.GetComponent<XHud_Module_Element>();
-                HudElement.serializedObject.ApplyModifiedProperties();
+                for (int i = 0; i < SelectedObjects.Length; i++)
+                {
+                    if (SelectedObjects[i].HudElement == null)
+                    {
+                        SelectedObjects[i].HudElement = SelectedObjects[i].GetComponent<XHud_Module_Element>();
+                    }
+                    else
+                    {
+                        if (SelectedObjects[i].HudElement.GetInstanceID() != SelectedObjects[i].GetInstanceID())
+                        {
+                            SelectedObjects[i].HudElement = SelectedObjects[i].GetComponent<XHud_Module_Element>();
+                        }
+                    }
+                }
             }
             else
             {
-                if (HudElement.objectReferenceValue.GetInstanceID() != BaseScript.GetInstanceID())
+                if (HudElement.objectReferenceValue == null)
                 {
                     HudElement.objectReferenceValue = BaseScript.GetComponent<XHud_Module_Element>();
                     HudElement.serializedObject.ApplyModifiedProperties();
                 }
+                else
+                {
+                    if (HudElement.objectReferenceValue.GetInstanceID() != BaseScript.GetInstanceID())
+                    {
+                        HudElement.objectReferenceValue = BaseScript.GetComponent<XHud_Module_Element>();
+                        HudElement.serializedObject.ApplyModifiedProperties();
+                    }
+                }
             }
-
-            GetAllTargets();
-
-            CheckRmsNameValid();
         }
 
         private void OnDisable()
@@ -247,9 +265,35 @@ namespace SevenStrikeModules.XHud
             Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            #region 原始位置     
+            #region 原始变换参数
             Editor_XHud_GUI.Gui_Layout_Property_Field("原始位置", OriginalPosition);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("原始角度", OriginalEuler);
             #endregion
+
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+
+            if (Editor_XHud_GUI.Gui_Layout_Button("记录当前位置 & 角度", "", HudFilled.实体, HudColor.亮橘红, Color.black, 20))
+            {
+                if (Targets_Selected())
+                {
+                    for (int i = 0; i < SelectedObjects.Length; i++)
+                    {
+                        if (SelectedObjects[i].HudElement == null)
+                            continue;
+                        SelectedObjects[i].OriginalPosition = SelectedObjects[i].HudElement.RectTransform.anchoredPosition3D;
+                        SelectedObjects[i].OriginalEuler = SelectedObjects[i].HudElement.RectTransform.localEulerAngles;
+                    }
+                }
+                else
+                {
+                    if (BaseScript.HudElement == null)
+                        return;
+                    OriginalPosition.vector3Value = BaseScript.HudElement.RectTransform.anchoredPosition3D;
+                    OriginalEuler.vector3Value = BaseScript.HudElement.RectTransform.localEulerAngles;
+                    OriginalPosition.serializedObject.ApplyModifiedProperties();
+                    OriginalEuler.serializedObject.ApplyModifiedProperties();
+                }
+            }
 
             Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
@@ -965,7 +1009,7 @@ namespace SevenStrikeModules.XHud
             #region 菜单
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                     return;
 
                 SerializedProperty sp_DelayWithIn = serializedObject.FindProperty("DelayWithIn");
@@ -1354,10 +1398,10 @@ namespace SevenStrikeModules.XHud
             #region 原始变量
             Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
             Editor_XHud_GUI.Gui_Layout_Space(10);
-            BasicVars = EditorGUILayout.Foldout(BasicVars, "变量/属性", true);
+            OriginalDisplay = EditorGUILayout.Foldout(OriginalDisplay, "变量/属性", true);
             Editor_XHud_GUI.Gui_Layout_Space(5);
             Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-            if (BasicVars)
+            if (OriginalDisplay)
                 DrawDefaultInspector();
             #endregion
 
@@ -1436,6 +1480,8 @@ namespace SevenStrikeModules.XHud
             if (string.IsNullOrEmpty(RMS_Name.stringValue))
             {
                 string[] nodes = mgr.hm_RMS_GetResolutionNodeNames();
+                if (nodes.Length <= 0)
+                    return;
                 RMS_Name.stringValue = nodes[0];
                 RMS_Name.serializedObject.ApplyModifiedProperties();
             }

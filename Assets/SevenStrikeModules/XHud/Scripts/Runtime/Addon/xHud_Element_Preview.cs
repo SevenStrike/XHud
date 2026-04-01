@@ -8,18 +8,20 @@ namespace SevenStrikeModules.XHud
 
     public class XHud_Element_Preview : MonoBehaviour
     {
+        [SerializeField]
         public XHud_Module_Element HudElement;
 
         public bool IsEnable = true;
         public bool DebugState = false;
 
-        public KeyCode key_Element_In = KeyCode.F11;
-        public KeyCode key_Element_Out = KeyCode.F12;
+        public KeyCode key_Element_In = KeyCode.C;
+        public KeyCode key_Element_Out = KeyCode.V;
 
         public Motion_Creator CreateArgs;
         public Motion_Recycler RecycleArgs;
-        public bool HideWithStart;
+        public bool HideWithStart = true;
         public Vector3 OriginalPosition;
+        public Vector3 OriginalEuler;
         public float DurationScaler = 1;
 
         [SerializeField]
@@ -85,7 +87,20 @@ namespace SevenStrikeModules.XHud
         {
             if (HudElement == null)
                 HudElement = GetComponent<XHud_Module_Element>();
+
+            // 原始姿态数据收集
+            OriginalDataCollect();
+        }
+
+        /// <summary>
+        /// 收集原始姿态数据
+        /// </summary>
+        public void OriginalDataCollect()
+        {
+            // 原始姿态数据收集：获取位置
             OriginalPosition = HudElement.RectTransform.anchoredPosition3D;
+            // 原始姿态数据收集：获取角度
+            OriginalEuler = HudElement.RectTransform.localEulerAngles;
         }
 
         private void Start()
@@ -200,7 +215,7 @@ namespace SevenStrikeModules.XHud
                 {
                     if (HudElement.RMS_LayoutDatas[i].LayoutName == RMS_Name)
                     {
-
+                        Debug.Log(OriginalPosition);
                         HudElement.element_PositionSet(OriginalPosition);
                         HudElement.element_AlphaSet(0);
                         XHud_Manager.Instance.hm_HudElement_Initialize_ByDesignLayout_For_Screen(HudElement, 0, Vector3.zero, RMS_Name, true);
@@ -218,9 +233,15 @@ namespace SevenStrikeModules.XHud
             }
             else
             {
+                // 进入前先强制设置位置：原始位置
                 HudElement.element_PositionSet(OriginalPosition);
+                // 进入前强制透明度 0
                 HudElement.element_AlphaSet(0);
+                // 进入前强制设置角度：原始角度
+                HudElement.element_RotationSet(OriginalEuler);
+                // 保险操作：倒退动画
                 HudElement.Animators_Rewind();
+                // 开始进入
                 HudElement.element_In(CreateArgs, () =>
                 {
                     PreviewIsRunning = false;
