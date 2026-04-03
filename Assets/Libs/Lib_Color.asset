@@ -20,7 +20,7 @@ MonoBehaviour:
     Description: "\u739B\u7459\u7EA2\u5E26\u6709\u4E00\u79CD\u6DF1\u6C89\u800C\u795E\u79D8\u7684\u6C14\u8D28\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u5F3A\u70C8\u7684\u611F\u60C5\u6216\u91CD\u8981\u65F6\u523B\u3002"
   - Painting: {fileID: 0}
     Name: "\u7FE1\u7FE0\u7EFF(Jade Green)"
-    Color: {r: 0, g: 0.5, b: 0.2, a: 1}
+    Color: {r: 0.14195444, g: 0.5471698, b: 0.15974021, a: 1}
     Description: "\u7FE1\u7FE0\u7EFF\u5E26\u6709\u9AD8\u8D35\u548C\u6E05\u65B0\u7684\u611F\u89C9\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u81EA\u7136\u4E4B\u7F8E\u6216\u5E73\u9759\u7684\u6C1B\u56F4\u3002"
   - Painting: {fileID: 0}
     Name: "\u591C\u5E55\u84DD(Nightshade Blue)"

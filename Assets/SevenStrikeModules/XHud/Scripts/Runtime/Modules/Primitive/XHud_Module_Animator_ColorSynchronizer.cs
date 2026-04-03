@@ -20,12 +20,11 @@
  */
 namespace SevenStrikeModules.XHud
 {
-    using UnityEditor;
     using UnityEngine;
 
     [ExecuteInEditMode]
 #if UNITY_EDITOR
-    [CanEditMultipleObjects]
+    [UnityEditor.CanEditMultipleObjects]
 #endif
     public class XHud_Module_Animator_ColorSynchronizer : MonoBehaviour
     {

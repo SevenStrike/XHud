@@ -21,8 +21,6 @@
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
-    using System;
-    using UnityEditor.MemoryProfiler;
     using UnityEngine;
     using UnityEngine.UI;
 

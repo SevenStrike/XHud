@@ -1,0 +1,22 @@
+{
+    "name": "XHud.Runtime",
+    "rootNamespace": "SevenStrikeModules.XHud",
+    "references": [
+        "UnityEngine.UI",
+        "Unity.TextMeshPro",
+        "Unity.RenderPipelines.Universal.Runtime" ,
+        "Unity.RenderPipelines.Core.Runtime",
+        "XTween.Runtime",
+        "Unified.Universal.Blur",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
