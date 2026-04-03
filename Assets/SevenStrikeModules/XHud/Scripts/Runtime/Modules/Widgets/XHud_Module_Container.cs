@@ -1,3 +1,23 @@
+/*
+ * ============================================================================
+ * ⚠ 版权声明（禁止删除、禁止修改、衍生作品必须保留此注释）⚠
+ * ============================================================================
+ * 版权声明 Copyright (C) 2025-Present Nanjing SevenStrike Media Co., Ltd.
+ * 中文名称：南京塞维斯传媒有限公司
+ * 英文名称：SevenStrikeMedia
+ * 项目作者：徐寅智
+ * 项目名称：XHud - Unity UGUI 高级管理架构插件
+ * 项目启动：2025年8月
+ * 官方网站：http://sevenstrike.com/
+ * 授权协议：GNU Affero General Public License Version 3 (AGPL 3.0)
+ * 协议说明：
+ * 1. 你可以自由使用、修改、分发本插件的源代码，但必须保留此版权注释
+ * 2. 基于本插件修改后的衍生作品，必须同样遵循 AGPL 3.0 授权协议
+ * 3. 若将本插件用于网络服务（如云端Unity编辑器、在线动效生成工具），必须公开修改后的完整源代码
+ * 4. 完整协议文本可查阅：https://www.gnu.org/licenses/agpl-3.0.html
+ * ============================================================================
+ * 违反本注释保留要求，将违反 AGPL 3.0 授权协议，需承担相应法律责任
+ */
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
@@ -750,7 +770,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
                 return null;
             }
             ///--------随机ID
@@ -798,7 +818,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
                 return null;
             }
             XHud_ContainerItem item = new XHud_ContainerItem();
@@ -835,7 +855,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
                 return null;
             }
             XHud_ContainerItem item = new XHud_ContainerItem();
@@ -872,7 +892,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
                 return null;
             }
             XHud_ContainerItem item = new XHud_ContainerItem();
@@ -908,7 +928,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法新增容器项！", HudMsgState.警告);
                 return null;
             }
             XHud_ContainerItem item = new XHud_ContainerItem();
@@ -945,7 +965,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法移除容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法移除容器项！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
@@ -971,7 +991,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法移除容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法移除容器项！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
@@ -996,7 +1016,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法移除容器项！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法移除容器项！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
@@ -1024,7 +1044,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1059,7 +1079,7 @@ namespace SevenStrikeModules.XHud
                     }
 
                     if (UseDebug)
-                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1076,7 +1096,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1099,7 +1119,7 @@ namespace SevenStrikeModules.XHud
                     }
 
                     if (UseDebug)
-                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1116,7 +1136,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1139,7 +1159,7 @@ namespace SevenStrikeModules.XHud
                     }
 
                     if (UseDebug)
-                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1156,7 +1176,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1191,7 +1211,7 @@ namespace SevenStrikeModules.XHud
                     }
 
                     if (UseDebug)
-                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1208,7 +1228,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1231,7 +1251,7 @@ namespace SevenStrikeModules.XHud
                     }
 
                     if (UseDebug)
-                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val.name + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val.name + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1248,7 +1268,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1271,7 +1291,7 @@ namespace SevenStrikeModules.XHud
                     }
 
                     if (UseDebug)
-                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val.name + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val.name + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1288,7 +1308,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1311,7 +1331,7 @@ namespace SevenStrikeModules.XHud
                     }
 
                     if (UseDebug)
-                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "修改了标识为：" + indicator + "的容器项的值为:" + val + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1328,7 +1348,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法修改数值！", HudMsgState.警告);
                 return;
             }
 
@@ -1351,7 +1371,7 @@ namespace SevenStrikeModules.XHud
                     }
 
                     if (UseDebug)
-                        XHud_Utilitys.Func_PrintInfo("容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val.name + "！", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "修改了ID为：" + id + "的容器项的值为:" + val.name + "！", HudMsgState.通知);
                 }
             }
         }
@@ -1371,7 +1391,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法播放动画！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法播放动画！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
@@ -1382,7 +1402,7 @@ namespace SevenStrikeModules.XHud
                 act_on_animate_play_all(ContainerItems.ToArray());
             eve_on_animate_play_all.Invoke(ContainerItems.ToArray());
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("容器控件通知", "播放容器列表中的所有动画器动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "播放容器列表中的所有动画器动画！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -1395,7 +1415,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法播放动画！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法播放动画！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
@@ -1418,7 +1438,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("容器控件通知", "播放容器列表中指定标识的项的动画器动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "播放容器列表中指定标识的项的动画器动画！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -1431,7 +1451,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法播放动画！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法播放动画！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
@@ -1454,7 +1474,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("容器控件通知", "播放容器列表中指定ID的项的动画器动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "播放容器列表中指定ID的项的动画器动画！", HudMsgState.通知);
         }
 
         //------------Rewind
@@ -1468,7 +1488,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法复位动画！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法复位动画！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
@@ -1482,7 +1502,7 @@ namespace SevenStrikeModules.XHud
                 act_on_animate_rewind_all(ContainerItems.ToArray());
             eve_on_animate_rewind_all.Invoke(ContainerItems.ToArray());
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("容器控件通知", "复位容器列表中的所有动画器动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "复位容器列表中的所有动画器动画！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -1494,7 +1514,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法复位动画！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法复位动画！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
@@ -1513,7 +1533,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("容器控件通知", "复位容器列表中指定标识的项的动画器动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "复位容器列表中指定标识的项的动画器动画！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -1525,7 +1545,7 @@ namespace SevenStrikeModules.XHud
             if (!IsEnabled)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("容器控件通知", "因功能被禁用无法复位动画！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "因功能被禁用无法复位动画！", HudMsgState.警告);
                 return;
             }
             for (int i = 0; i < ContainerItems.Count; i++)
@@ -1544,7 +1564,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("容器控件通知", "复位容器列表中指定ID的项的动画器动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "复位容器列表中指定ID的项的动画器动画！", HudMsgState.通知);
         }
 
         #endregion
@@ -1571,7 +1591,7 @@ namespace SevenStrikeModules.XHud
             act_on_item_changevalue = null;
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("容器控件通知", "清空所有委托！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "清空所有委托！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -1594,7 +1614,7 @@ namespace SevenStrikeModules.XHud
             eve_on_item_changevalue.RemoveAllListeners();
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("容器控件通知", "清空所有委托！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 容器控件通知", "清空所有委托！", HudMsgState.通知);
         }
 
         #endregion

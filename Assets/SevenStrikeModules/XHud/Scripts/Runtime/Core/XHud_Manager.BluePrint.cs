@@ -1,3 +1,23 @@
+/*
+ * ============================================================================
+ * ⚠️ 版权声明（禁止删除、禁止修改、衍生作品必须保留此注释）⚠️
+ * ============================================================================
+ * 版权声明 Copyright (C) 2025-Present Nanjing SevenStrike Media Co., Ltd.
+ * 中文名称：南京塞维斯传媒有限公司
+ * 英文名称：SevenStrikeMedia
+ * 项目作者：徐寅智
+ * 项目名称：XHud - Unity UGUI 高级管理架构插件
+ * 项目启动：2025年8月
+ * 官方网站：http://sevenstrike.com/
+ * 授权协议：GNU Affero General Public License Version 3 (AGPL 3.0)
+ * 协议说明：
+ * 1. 你可以自由使用、修改、分发本插件的源代码，但必须保留此版权注释
+ * 2. 基于本插件修改后的衍生作品，必须同样遵循 AGPL 3.0 授权协议
+ * 3. 若将本插件用于网络服务（如云端Unity编辑器、在线动效生成工具），必须公开修改后的完整源代码
+ * 4. 完整协议文本可查阅：https://www.gnu.org/licenses/agpl-3.0.html
+ * ============================================================================
+ * 违反本注释保留要求，将违反 AGPL 3.0 授权协议，需承担相应法律责任
+ */
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
@@ -283,7 +303,7 @@ namespace SevenStrikeModules.XHud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
@@ -301,7 +321,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格入场", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格入场", HudMsgState.设置);
         }
         /// <summary>
         /// 蓝图入场
@@ -314,14 +334,14 @@ namespace SevenStrikeModules.XHud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
             if (BluePrint_Displayed)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格入场，无需重复入场！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格入场，无需重复入场！", HudMsgState.设置);
                 return;
             }
 
@@ -347,7 +367,7 @@ namespace SevenStrikeModules.XHud
                 Act_BluePrint_In();
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格入场", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格入场", HudMsgState.设置);
         }
         /// <summary>
         /// 蓝图入场
@@ -360,14 +380,14 @@ namespace SevenStrikeModules.XHud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
             if (BluePrint_Displayed)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格入场，无需重复入场！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格入场，无需重复入场！", HudMsgState.设置);
                 return;
             }
 
@@ -388,7 +408,7 @@ namespace SevenStrikeModules.XHud
                 Act_BluePrint_In();
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格入场", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格入场", HudMsgState.设置);
         }
         /// <summary>
         /// 蓝图退场
@@ -398,14 +418,14 @@ namespace SevenStrikeModules.XHud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
             if (!BluePrint_Displayed)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格已经退场，无需重复退场！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格已经退场，无需重复退场！", HudMsgState.设置);
                 return;
             }
 
@@ -422,7 +442,7 @@ namespace SevenStrikeModules.XHud
                 Act_BluePrint_Out();
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格退场", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格退场", HudMsgState.设置);
         }
         /// <summary>
         /// 蓝图动画清空重置
@@ -432,7 +452,7 @@ namespace SevenStrikeModules.XHud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
@@ -442,7 +462,7 @@ namespace SevenStrikeModules.XHud
             hm_BluePrint_StopTweener(BluePrint_GridLengthTweener);
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格清空并停止动画", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格清空并停止动画", HudMsgState.设置);
         }
         /// <summary>
         /// 停止动画器
@@ -461,7 +481,7 @@ namespace SevenStrikeModules.XHud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
@@ -470,7 +490,7 @@ namespace SevenStrikeModules.XHud
             BluePrint_mark_opacity = 0;
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图网格快速到隐藏状态", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格快速到隐藏状态", HudMsgState.设置);
         }
         /// <summary>
         /// 将蓝图设为图层级的最底层
@@ -561,7 +581,7 @@ namespace SevenStrikeModules.XHud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "蓝图模式已关闭！", HudMsgState.设置);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
                 return;
             }
 
@@ -578,7 +598,7 @@ namespace SevenStrikeModules.XHud
             cg.interactable = false;
             BluePrint_canvasgroup = cg;
 
-            trs_root.SetParent(hm_Layout_GetAnchor(XHudAnchor.底层));
+            trs_root.SetParent(hm_ScreenElement_GetAnchored_RectTransform(XHudAnchor.底层));
             trs_root.anchorMin = new Vector2(0, 0);
             trs_root.anchorMax = new Vector2(1, 1);
             trs_root.pivot = new Vector2(0.5f, 0.5f);
@@ -755,7 +775,7 @@ namespace SevenStrikeModules.XHud
             hm_BluePrint_Update();
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "已创建蓝图网格", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "已创建蓝图网格", HudMsgState.设置);
         }
         /// <summary>
         /// 蓝图移除网格线
@@ -785,11 +805,11 @@ namespace SevenStrikeModules.XHud
             hm_BluePrint_ClearHidden();
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("xHud Manager管理器消息", "已移除蓝图网格", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "已移除蓝图网格", HudMsgState.设置);
         }
         private void hm_BluePrint_ClearHidden()
         {
-            RectTransform rect_back = hm_Layout_GetAnchor(XHudAnchor.底层);
+            RectTransform rect_back = hm_ScreenElement_GetAnchored_RectTransform(XHudAnchor.底层);
             if (rect_back.childCount > 0)
             {
                 for (int i = 0; i < rect_back.childCount; i++)
@@ -1153,6 +1173,6 @@ namespace SevenStrikeModules.XHud
             {
                 BluePrint_Displayed = true;
             }
-        }      
+        }
     }
 }

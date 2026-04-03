@@ -162,10 +162,10 @@ MonoBehaviour:
     Raycast: 0
     Maskable: 0
     SyncAnimatorColor: 0
-  Preview_Font: {fileID: 0}
+  Preview_Font: {fileID: 12800000, guid: 04aab7cee3241a3428b78bdef8ce2efc, type: 3}
   PreviewFontColor: {r: 1, g: 1, b: 1, a: 1}
   PreviewContent: XHud Sample Fonts
-  PreviewTypeText: Text
+  PreviewTypeText: 
   PreviewStyle: 0
   Find: 
   itemHeight: 60
@@ -173,4 +173,4 @@ MonoBehaviour:
   ColorInfoList_Original_Scroller: {x: 0, y: 0}
   Highlight: 
   LocationSelectedIndex: -1
-  SelectedIndex: 0
+  SelectedIndex: -1

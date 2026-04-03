@@ -1,6 +1,25 @@
+/*
+ * ============================================================================
+ * ⚠ 版权声明（禁止删除、禁止修改、衍生作品必须保留此注释）⚠
+ * ============================================================================
+ * 版权声明 Copyright (C) 2025-Present Nanjing SevenStrike Media Co., Ltd.
+ * 中文名称：南京塞维斯传媒有限公司
+ * 英文名称：SevenStrikeMedia
+ * 项目作者：徐寅智
+ * 项目名称：XHud - Unity UGUI 高级管理架构插件
+ * 项目启动：2025年8月
+ * 官方网站：http://sevenstrike.com/
+ * 授权协议：GNU Affero General Public License Version 3 (AGPL 3.0)
+ * 协议说明：
+ * 1. 你可以自由使用、修改、分发本插件的源代码，但必须保留此版权注释
+ * 2. 基于本插件修改后的衍生作品，必须同样遵循 AGPL 3.0 授权协议
+ * 3. 若将本插件用于网络服务（如云端Unity编辑器、在线动效生成工具），必须公开修改后的完整源代码
+ * 4. 完整协议文本可查阅：https://www.gnu.org/licenses/agpl-3.0.html
+ * ============================================================================
+ * 违反本注释保留要求，将违反 AGPL 3.0 授权协议，需承担相应法律责任
+ */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using Newtonsoft.Json;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
@@ -34,6 +53,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         private float LineHeight;
+        [SerializeField]
         /// <summary>
         /// 原始脚本参数显示开关
         /// </summary>
@@ -2272,7 +2292,7 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddDisabledItem(new GUIContent("动效快速操作"));
                 menu.AddItem(new GUIContent("E (复制动效)"), false, () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 元素预览器消息", "复制动效", "请选择动效参数复制模式！", "取消", "生成", "回收", 0);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 元素预览器消息", "复制预览动效", "请选择动效参数复制模式！", "取消", "生成", "回收", 0);
                     if (res == "取消")
                         return;
 
@@ -2316,7 +2336,7 @@ namespace SevenStrikeModules.XHud.Editor
                             crc.Rotation = R;
                             crc.Alpha = A;
 
-                            json = JsonConvert.SerializeObject(crc);
+                            json = JsonUtility.ToJson(crc);
                             GUIUtility.systemCopyBuffer = json;
                             break;
                         case "回收"://回收
@@ -2351,7 +2371,7 @@ namespace SevenStrikeModules.XHud.Editor
                             rec.Rotation = R;
                             rec.Alpha = A;
 
-                            json = JsonConvert.SerializeObject(rec);
+                            json = JsonUtility.ToJson(rec);
                             GUIUtility.systemCopyBuffer = json;
                             break;
                     }
@@ -2363,18 +2383,18 @@ namespace SevenStrikeModules.XHud.Editor
                     else if (res == "回收")
                         mode = "回收动效参数";
 
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素预览器消息", "复制动效", $"已复制 \" {mode} \" 到系统剪贴板 ！", "明白", 0);
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素预览器消息", "复制预览动效", $"已复制 \" {mode} \" 到系统剪贴板 ！", "明白", 0);
                 });
                 menu.AddItem(new GUIContent("R (粘贴动效)"), false, () =>
                 {
                     string buffer = GUIUtility.systemCopyBuffer;
                     if (buffer.Contains("anchor"))//粘贴生成参数
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 元素预览器消息", "粘贴动效", "检测到动效参数类型为： \"生成动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 元素预览器消息", "粘贴预览动效", "检测到动效参数类型为： \"生成动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
                         if (res == "暂不")
                             return;
 
-                        Motion_Creator crc = JsonConvert.DeserializeObject<Motion_Creator>(GUIUtility.systemCopyBuffer);
+                        Motion_Creator crc = JsonUtility.FromJson<Motion_Creator>(GUIUtility.systemCopyBuffer);
 
                         CreateArgs.FindPropertyRelative("anchor").enumValueIndex = (int)crc.anchor;
 
@@ -2402,15 +2422,15 @@ namespace SevenStrikeModules.XHud.Editor
 
                         CreateArgs.serializedObject.ApplyModifiedProperties();
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素预览器消息", "粘贴动效", "已更新 \"生成\" 动效参数!", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素预览器消息", "粘贴预览动效", "已更新 \"生成\" 动效参数!", "明白", 0);
                     }
                     else//粘贴回收参数
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 元素预览器消息", "粘贴动效", "检测到动效参数类型为： \"回收动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 元素预览器消息", "粘贴预览动效", "检测到动效参数类型为： \"回收动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
                         if (res == "暂不")
                             return;
 
-                        Motion_Recycler rec = JsonConvert.DeserializeObject<Motion_Recycler>(buffer);
+                        Motion_Recycler rec = JsonUtility.FromJson<Motion_Recycler>(buffer);
 
                         RecycleArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)rec.Movement.Movement;
                         RecycleArgs.FindPropertyRelative("Movement.Distance").floatValue = rec.Movement.Distance;
@@ -2436,10 +2456,9 @@ namespace SevenStrikeModules.XHud.Editor
 
                         RecycleArgs.serializedObject.ApplyModifiedProperties();
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素预览器消息", "粘贴动效", "已更新 \"回收\" 动效参数!", "明白", 0);
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素预览器消息", "粘贴预览动效", "已更新 \"回收\" 动效参数!", "明白", 0);
                     }
                 });
-                menu.AddSeparator("");
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("F (折叠组件列表)"), false, () =>
                 {

@@ -1,3 +1,23 @@
+/*
+ * ============================================================================
+ * ⚠ 版权声明（禁止删除、禁止修改、衍生作品必须保留此注释）⚠
+ * ============================================================================
+ * 版权声明 Copyright (C) 2025-Present Nanjing SevenStrike Media Co., Ltd.
+ * 中文名称：南京塞维斯传媒有限公司
+ * 英文名称：SevenStrikeMedia
+ * 项目作者：徐寅智
+ * 项目名称：XHud - Unity UGUI 高级管理架构插件
+ * 项目启动：2025年8月
+ * 官方网站：http://sevenstrike.com/
+ * 授权协议：GNU Affero General Public License Version 3 (AGPL 3.0)
+ * 协议说明：
+ * 1. 你可以自由使用、修改、分发本插件的源代码，但必须保留此版权注释
+ * 2. 基于本插件修改后的衍生作品，必须同样遵循 AGPL 3.0 授权协议
+ * 3. 若将本插件用于网络服务（如云端Unity编辑器、在线动效生成工具），必须公开修改后的完整源代码
+ * 4. 完整协议文本可查阅：https://www.gnu.org/licenses/agpl-3.0.html
+ * ============================================================================
+ * 违反本注释保留要求，将违反 AGPL 3.0 授权协议，需承担相应法律责任
+ */
 namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XHud.Enums;
@@ -491,6 +511,10 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
+            #region 菜单功能
+            ContextMenu(rect);
+            #endregion
+
             #region 源脚本
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
@@ -510,6 +534,160 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        /// <summary>
+        /// 右键菜单
+        /// </summary>
+        /// <param name="rect"></param>
+        private void ContextMenu(Rect rect)
+        {
+            Rect rect_MenuArea = new Rect(0, rect.y, EditorGUIUtility.currentViewWidth, 260);
+
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 1 && rect_MenuArea.Contains(Event.current.mousePosition))
+            {
+                // 创建右键菜单
+                GenericMenu menu = new GenericMenu();
+                menu.AddDisabledItem(new GUIContent("色卡操作"));
+                menu.AddItem(new GUIContent("R (识别色卡)"), false, () =>
+                {
+                    string buff = Editor_XHud_GUI.EditorData_Get_With_String("XED_ColorLibrary_Get_ColorInfo");
+
+                    CopyHudColor copyHudColor = JsonUtility.FromJson<CopyHudColor>(buff);
+                    string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Utilitys.Color_From_String(copyHudColor.Color, false), true);
+
+                    try
+                    {
+                        if (copyHudColor != null)
+                        {
+                            if (Targets_Selected())
+                            {
+                                List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
+                                for (int i = 0; i < SelectedObjects.Length; i++)
+                                {
+                                    // 如果不是色卡库模式，则询问是否要转换为色卡库模式，否则就是接赋值原始颜色值
+                                    if (!SelectedObjects[i].SyncLibraryColor)
+                                    {
+                                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图元配色器消息", "批量识别色卡信息", $"侦测到 {SelectedObjects[i].name} ( {SelectedObjects[i].controller.Indicator} ) 处于原始色模式！是否将其转换为色卡模式？", "直接赋值原始颜色", "转换", 1);
+                                        if (res == "直接赋值原始颜色")
+                                        {
+                                            SelectedObjects[i].OriginalColor = XHud_Utilitys.Color_From_String(copyHudColor.Color, false);
+                                        }
+                                        else
+                                        {
+                                            SelectedObjects[i].SyncLibraryColor = true;
+                                            SelectedObjects[i].ColoriseName = copyHudColor.Name;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        SelectedObjects[i].SyncLibraryColor = true;
+                                        SelectedObjects[i].ColoriseName = copyHudColor.Name;
+                                    }
+
+                                    XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
+
+                                    dataitem.Title = $"色卡 <color={hexcol}>{SelectedObjects[i].ColoriseName} </color>";
+                                    dataitem.SubTitle = "已应用到图元配色器";
+                                    dataitem.Message = $"{SelectedObjects[i].name} ( {SelectedObjects[i].controller.Indicator} )";
+
+                                    Datas.Add(dataitem);
+                                }
+
+                                Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 图元配色器消息", "批量识别色卡信息", "以下是已应用识别的色卡参数的动画器列表，请您检查核对：", "明白");
+                            }
+                            else
+                            {
+                                if (sp_SyncLibraryColor.boolValue)
+                                {
+                                    sp_ColoriseName.stringValue = copyHudColor.Name;
+                                    sp_ColoriseName.serializedObject.ApplyModifiedProperties();
+                                }
+                                else
+                                {
+                                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图元配色器消息", "识别色卡信息", $"侦测到 {BaseScript.gameObject.name} ( {BaseScript.controller.Indicator} ) 处于原始色模式！是否将其转换为色卡模式？", "直接赋值原始颜色", "转换", 1);
+                                    if (res == "直接赋值原始颜色")
+                                    {
+                                        sp_OriginalColor.colorValue = XHud_Utilitys.Color_From_String(copyHudColor.Color, false);
+                                        sp_OriginalColor.serializedObject.ApplyModifiedProperties();
+                                    }
+                                    else
+                                    {
+                                        sp_SyncLibraryColor.boolValue = true;
+                                        sp_SyncLibraryColor.serializedObject.ApplyModifiedProperties();
+                                        sp_ColoriseName.stringValue = copyHudColor.Name;
+                                        sp_ColoriseName.serializedObject.ApplyModifiedProperties();
+                                    }
+                                }
+                                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 图元配色器消息", "识别色卡信息", $"已识别 XHudEditorData (XED) 中的色卡信息！您从色卡库中获取的色卡名称为： <color={hexcol}>{copyHudColor.Name} </color>", "没错");
+                            }
+                        }
+                    }
+                    catch (System.Exception e)
+                    {
+                        string msg = e.Message;
+                        Editor_XHud_GUI.Open(XHud_DialogType.错误, "XHud - 图元配色器消息", "识别色卡信息", "未能识别的参数！请在色卡库的其中一项上点击右键并选择 \"获取色卡信息\" 后再试！", "明白", 0);
+                    }
+                });
+                menu.AddSeparator("");
+                menu.AddItem(new GUIContent("D (拷贝色卡)"), false, () =>
+                {
+                    Editor_XHud_GUI.EditorData_Set_With_String("XED_PrimitivePainting_Get_ColoriseName", BaseScript.ColoriseName);
+                    string hexcol = XHud_Utilitys.Color_To_HexColor(sp_OriginalColor.colorValue, true);
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 图元配色器消息", "色板信息拷贝", $"已将当前动画器的色卡信息<color={hexcol}> {BaseScript.ColoriseName} </color>XHudEditorData (XED)！", "好的");
+                });
+                menu.AddItem(new GUIContent("W (粘贴色卡)"), false, () =>
+                {
+                    string data = Editor_XHud_GUI.EditorData_Get_With_String("XED_PrimitivePainting_Get_ColoriseName");
+                    if (Targets_Selected())
+                    {
+                        #region 询问
+                        List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
+                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        {
+                            XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
+                            dataitem.Title = $"色卡信息 {data}";
+                            dataitem.SubTitle = "即将粘贴到";
+                            dataitem.Message = $"{SelectedObjects[i].name} ({SelectedObjects[i].controller.Indicator})";
+                            Datas.Add(dataitem);
+                        }
+                        string res_mul = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "XHud - 图元配色器消息", "批量色卡信息粘贴", $"确认要将 XHudEditorData (XED) 中的色卡信息粘贴到列表中的图元配色器中吗？", "粘贴", "暂不", 1);
+                        if (res_mul == "暂不")
+                            return;
+                        #endregion
+
+                        #region 粘贴色卡信息
+                        Datas.Clear();
+                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        {
+                            SelectedObjects[i].ColoriseName = data;
+
+                            XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
+                            dataitem.Title = "色卡参数";
+                            dataitem.SubTitle = "已粘贴到";
+                            dataitem.Message = $"{BaseScript.name} ({BaseScript.controller.Indicator})";
+
+                            Datas.Add(dataitem);
+                        }
+                        Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 图元配色器消息", "批量色卡信息粘贴", "以下是已粘贴色卡信息的图元配色器列表，请您检查核对：", "明白");
+                        #endregion
+                    }
+                    else
+                    {
+                        #region 询问
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图元配色器消息", "粘贴色卡信息", $"确认要将 XHudEditorData (XED) 中的色卡信息粘贴到  {BaseScript.name} ( {BaseScript.controller.Indicator} ) 图元配色器中吗？", "粘贴", "暂不", 1);
+                        if (res == "暂不")
+                            return;
+                        #endregion
+
+                        #region 粘贴色卡信息
+                        BaseScript.ColoriseName = data;
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 图元配色器消息", "粘贴色卡信息", $"已将色卡信息粘贴到图元配色器 {BaseScript.name} ({BaseScript.controller.Indicator}) ！", "好的");
+                        #endregion
+                    }
+                });
+                menu.ShowAsContext(); // 在鼠标位置显示右键菜单
+            }
         }
 
         /// <summary>

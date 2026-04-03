@@ -1,6 +1,27 @@
+/*
+ * ============================================================================
+ * ⚠ 版权声明（禁止删除、禁止修改、衍生作品必须保留此注释）⚠
+ * ============================================================================
+ * 版权声明 Copyright (C) 2025-Present Nanjing SevenStrike Media Co., Ltd.
+ * 中文名称：南京塞维斯传媒有限公司
+ * 英文名称：SevenStrikeMedia
+ * 项目作者：徐寅智
+ * 项目名称：XHud - Unity UGUI 高级管理架构插件
+ * 项目启动：2025年8月
+ * 官方网站：http://sevenstrike.com/
+ * 授权协议：GNU Affero General Public License Version 3 (AGPL 3.0)
+ * 协议说明：
+ * 1. 你可以自由使用、修改、分发本插件的源代码，但必须保留此版权注释
+ * 2. 基于本插件修改后的衍生作品，必须同样遵循 AGPL 3.0 授权协议
+ * 3. 若将本插件用于网络服务（如云端Unity编辑器、在线动效生成工具），必须公开修改后的完整源代码
+ * 4. 完整协议文本可查阅：https://www.gnu.org/licenses/agpl-3.0.html
+ * ============================================================================
+ * 违反本注释保留要求，将违反 AGPL 3.0 授权协议，需承担相应法律责任
+ */
 namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XHud.Utilitys;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -17,7 +38,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 图标
-        private Texture2D warnIcon, Icon_Using, btn_icon_details_released, btn_icon_details_press, clean_p, clean_r, clear_p, clear_r, create_p, create_r, delete_p, delete_r;
+        private Texture2D warnIcon, Icon_Using, btn_icon_details_released, btn_icon_details_press, clean_p, clean_r, clear_p, clear_r, create_p, create_r, delete_p, delete_r, tip_r, tip_p;
         #endregion
 
         /// <summary>
@@ -75,6 +96,9 @@ namespace SevenStrikeModules.XHud.Editor
             create_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/create_r");
             delete_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/delete_p");
             delete_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/delete_r");
+            tip_r = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/tip_r");
+            tip_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementLibrary/tip_p");
+
             #endregion
 
             #region ReorderableList - ElementInfoList
@@ -153,7 +177,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
 
             #region 标识名称
-            drawelement_rect.Set(rect.x + 39, rect.y + 5, 35, 20);
+            drawelement_rect.Set(rect.x + 39, rect.y + 5, 45, 20);
             Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, "元素：", HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.亮白), TextAnchor.MiddleLeft, Vector2.zero, 12);
             drawelement_rect.Set(rect.x + 77, rect.y + 5, rect.width - 140, 20);
 
@@ -179,7 +203,7 @@ namespace SevenStrikeModules.XHud.Editor
             drawelement_rect.Set(rect.x + 149, rect.y + 28, 40, 20);
             Editor_XHud_GUI.Gui_Labelfield_Thin(drawelement_rect, $"<b>R</b>  <color=#ffffff>{sp_recyclecount.intValue}</color>", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
             drawelement_rect.Set(rect.x + 204, rect.y + 28, 40, 20);
-            Editor_XHud_GUI.Gui_Labelfield_Thin(drawelement_rect, $"<b>D</b>  <color=#ffffff>{sp_Index.intValue}</color>", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
+            Editor_XHud_GUI.Gui_Labelfield_Thin(drawelement_rect, $"<b>N</b>  <color=#ffffff>{sp_Index.intValue}</color>", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
 
             if (sp_target.objectReferenceValue == null)
             {
@@ -226,7 +250,7 @@ namespace SevenStrikeModules.XHud.Editor
                         XHud_Module_Element ele = obj_ele.GetComponent<XHud_Module_Element>();
 
                         Element_RMS_LayoutData rms = ele.elelemt_RMS_Get(mgr.hm_RMS_GetCurrentSolution());
-                        ele.RectTransform.SetParent(mgr.hm_Layout_GetAnchor(rms.Anchor));
+                        ele.RectTransform.SetParent(mgr.hm_ScreenElement_GetAnchored_RectTransform(rms.Anchor));
                         ele.RectTransform.pivot = rms.Pivot;
                         ele.RectTransform.anchorMin = rms.AnchorMin;
                         ele.RectTransform.anchorMax = rms.AnchorMax;
@@ -486,6 +510,20 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         ElementInfoList_Original_Remove(ElementInfoList);
                     }
+                    Editor_XHud_GUI.Gui_Layout_Space(35);
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "帮助", tip_r, tip_p, 4))
+                    {
+                        string h_color = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+                        string msg = $"<b><color={h_color}>I</color></b>  -  在对象池初始化时，会预先实例化这么多个元素放入池中 \n" +
+                            $"<b><color={h_color}>U</color></b>  -  已使用的数量（正在活跃使用的元素数） \n" +
+                            $"<b><color={h_color}>R</color></b>  -  已回收的数量（空闲可重新被分配使用的元素数） \n" +
+                            $"<b><color={h_color}>N</color></b>  -  一个要分配的元素的索引，每次从池中获取元素时，指向下一个要分配的元素位置";
+
+                        EditorApplication.delayCall += () =>
+                        {
+                            Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素库消息", "状态标记说明", msg, "明白", 0);
+                        };
+                    }
                     GUILayout.FlexibleSpace();
                     Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
@@ -572,8 +610,25 @@ namespace SevenStrikeModules.XHud.Editor
 
             DrawElementInfoList_Original();
 
+
             Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
+
+            //Editor_XHud_GUI.Gui_Layout_Space(10);
+
+            //Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
+            //EditorGUI.BeginChangeCheck();
+
+            //Editor_XHud_GUI.Gui_Layout_Labelfield("I: (预加载) Intial", HudFilled.实体, HudColor.深空灰, Color.white, new RectOffset(5, 5, 0, 0), TextAnchor.MiddleCenter, 12);
+            //Editor_XHud_GUI.Gui_Layout_Labelfield("U: (已使用) Created", HudFilled.实体, HudColor.深空灰, Color.white, new RectOffset(5, 5, 0, 0), TextAnchor.MiddleCenter, 12);
+            //Editor_XHud_GUI.Gui_Layout_Labelfield("R: (已回收) Recycled", HudFilled.实体, HudColor.深空灰, Color.white, new RectOffset(5, 5, 0, 0), TextAnchor.MiddleCenter, 12);
+            //Editor_XHud_GUI.Gui_Layout_Labelfield("N: (索引号) Index", HudFilled.实体, HudColor.深空灰, Color.white, new RectOffset(5, 5, 0, 0), TextAnchor.MiddleCenter, 12);
+
+            //Editor_XHud_GUI.Gui_Layout_Space(10);
+            //Editor_XHud_GUI.Gui_Layout_Vertical_End();
+
+            //EditorGUILayout.HelpBox("元素库项状态概要说明：I :  (预加载) Intial | U :  (已使用) Created | R :  (已回收) Recycled | N :  (索引) NextIndex", MessageType.Info);
+
             serializedObject.ApplyModifiedProperties();
         }
 

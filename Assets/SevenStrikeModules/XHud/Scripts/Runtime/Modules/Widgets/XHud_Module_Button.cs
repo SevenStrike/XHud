@@ -1,3 +1,23 @@
+/*
+ * ============================================================================
+ * ⚠ 版权声明（禁止删除、禁止修改、衍生作品必须保留此注释）⚠
+ * ============================================================================
+ * 版权声明 Copyright (C) 2025-Present Nanjing SevenStrike Media Co., Ltd.
+ * 中文名称：南京塞维斯传媒有限公司
+ * 英文名称：SevenStrikeMedia
+ * 项目作者：徐寅智
+ * 项目名称：XHud - Unity UGUI 高级管理架构插件
+ * 项目启动：2025年8月
+ * 官方网站：http://sevenstrike.com/
+ * 授权协议：GNU Affero General Public License Version 3 (AGPL 3.0)
+ * 协议说明：
+ * 1. 你可以自由使用、修改、分发本插件的源代码，但必须保留此版权注释
+ * 2. 基于本插件修改后的衍生作品，必须同样遵循 AGPL 3.0 授权协议
+ * 3. 若将本插件用于网络服务（如云端Unity编辑器、在线动效生成工具），必须公开修改后的完整源代码
+ * 4. 完整协议文本可查阅：https://www.gnu.org/licenses/agpl-3.0.html
+ * ============================================================================
+ * 违反本注释保留要求，将违反 AGPL 3.0 授权协议，需承担相应法律责任
+ */
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
@@ -267,12 +287,12 @@ namespace SevenStrikeModules.XHud
             if (am == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到标识名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "未获取到标识名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
             }
             return am;
         }
@@ -295,12 +315,12 @@ namespace SevenStrikeModules.XHud
             if (am == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
             }
             return am;
         }
@@ -323,12 +343,12 @@ namespace SevenStrikeModules.XHud
             if (am == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
             }
             return am;
         }
@@ -347,19 +367,19 @@ namespace SevenStrikeModules.XHud
             if (anim == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
                 }
             }
 
@@ -380,19 +400,19 @@ namespace SevenStrikeModules.XHud
             if (anim == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
                 }
             }
 
@@ -413,19 +433,19 @@ namespace SevenStrikeModules.XHud
             if (anim == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
                 }
             }
 
@@ -484,7 +504,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "播放所有动画器动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "播放所有动画器动画！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -509,7 +529,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -523,7 +543,7 @@ namespace SevenStrikeModules.XHud
                 anim.RewindAllTweenNode();
             }
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "复位按钮动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "复位按钮动画！", HudMsgState.确认);
         }
         #endregion       
 
@@ -545,7 +565,7 @@ namespace SevenStrikeModules.XHud
             act_on_LongPressPer = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "清空所有委托！", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "清空所有委托！", HudMsgState.设置);
         }
 
         /// <summary>
@@ -564,7 +584,7 @@ namespace SevenStrikeModules.XHud
             eve_on_LongpressPer.RemoveAllListeners();
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "清空所有事件！", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "清空所有事件！", HudMsgState.设置);
         }
 
         #endregion
@@ -591,7 +611,7 @@ namespace SevenStrikeModules.XHud
                 act_on_DeSelect(this, HudButtonState);
             eve_on_Deselect.Invoke();
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "取消选中！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "取消选中！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -613,7 +633,7 @@ namespace SevenStrikeModules.XHud
                 act_on_Select(this, HudButtonState);
             eve_on_Select.Invoke();
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "选中！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "选中！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -640,7 +660,7 @@ namespace SevenStrikeModules.XHud
                 act_on_Clicked(this, HudButtonState);
             eve_on_Click.Invoke();
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "点击！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "点击！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -662,7 +682,7 @@ namespace SevenStrikeModules.XHud
                 act_on_Enter(this, HudButtonState);
             eve_on_Enter.Invoke();
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "鼠标进入！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "鼠标进入！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -685,7 +705,7 @@ namespace SevenStrikeModules.XHud
             eve_on_Exit.Invoke();
             IsLongPress = false;
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "鼠标退出！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "鼠标退出！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -744,7 +764,7 @@ namespace SevenStrikeModules.XHud
             eve_on_Press.Invoke();
             IsLongPress = true;
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "按住！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "按住！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -804,7 +824,7 @@ namespace SevenStrikeModules.XHud
             eve_on_Release.Invoke();
             IsLongPress = false;
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "松开！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "松开！", HudMsgState.确认);
         }
 
         #endregion
@@ -861,12 +881,12 @@ namespace SevenStrikeModules.XHud
             if (state)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "启用按钮交互", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "启用按钮交互", HudMsgState.警告);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "禁用按钮交互", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "禁用按钮交互", HudMsgState.警告);
             }
         }
 
@@ -886,7 +906,7 @@ namespace SevenStrikeModules.XHud
         public float btn_GetLongPressPercent()
         {
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "获取到长按百分比：" + LongPress_Percent, HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "获取到长按百分比：" + LongPress_Percent, HudMsgState.警告);
             return LongPress_Percent;
         }
 
@@ -900,12 +920,12 @@ namespace SevenStrikeModules.XHud
             if (state)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "长按松开平滑回退启用！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "长按松开平滑回退启用！", HudMsgState.警告);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("按钮控件通知", "长按松开平滑回退禁用！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "长按松开平滑回退禁用！", HudMsgState.通知);
             }
         }
 
@@ -918,7 +938,7 @@ namespace SevenStrikeModules.XHud
             LongPress_Threshold = value;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "设置长按阈值为：" + value, HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "设置长按阈值为：" + value, HudMsgState.警告);
         }
 
         /// <summary>
@@ -941,7 +961,7 @@ namespace SevenStrikeModules.XHud
                 ButtonText.text = content;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "设置按钮显示文字为：" + content, HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "设置按钮显示文字为：" + content, HudMsgState.设置);
             return content;
         }
 
@@ -973,7 +993,7 @@ namespace SevenStrikeModules.XHud
             LongPress_Percent = 0;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已停止长按逻辑检测协程！", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "已停止长按逻辑检测协程！", HudMsgState.设置);
         }
 
         public float ClickDelayTime;
@@ -987,7 +1007,7 @@ namespace SevenStrikeModules.XHud
         IEnumerator LongPress()
         {
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "已启动长按逻辑检测协程！", HudMsgState.设置);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "已启动长按逻辑检测协程！", HudMsgState.设置);
             while (true)
             {
                 if (IsLongPress)
@@ -1009,7 +1029,7 @@ namespace SevenStrikeModules.XHud
                             eve_on_Longpressed.Invoke();
 
                             if (DebugState)
-                                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "长按动作完成！", HudMsgState.设置);
+                                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "长按动作完成！", HudMsgState.设置);
                         }
                         if (LongPress_UseRewind)
                             IsLongPress = false;
@@ -1058,7 +1078,7 @@ namespace SevenStrikeModules.XHud
                 if (HudOption == null)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("按钮控件通知", "未发现此按钮处于选项层级中！", HudMsgState.错误);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "未发现此按钮处于选项层级中！", HudMsgState.错误);
                     return;
                 }
                 for (int i = 0; i < HudOption.OptionButtonNodes.Count; i++)
@@ -1069,7 +1089,7 @@ namespace SevenStrikeModules.XHud
                         //HudOption.opt_Clicked(i);
                         HudOption.opt_Select(Indicator);
                         if (DebugState)
-                            XHud_Utilitys.Func_PrintInfo("按钮控件通知", "选项点击！", HudMsgState.确认);
+                            XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "选项点击！", HudMsgState.确认);
                     }
                 }
             }
@@ -1087,7 +1107,7 @@ namespace SevenStrikeModules.XHud
                 ButtonText.text = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("按钮控件通知", "清空显示文字！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "清空显示文字！", HudMsgState.通知);
         }
 
         #endregion

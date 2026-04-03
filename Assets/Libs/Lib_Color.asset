@@ -68,7 +68,7 @@ MonoBehaviour:
     Description: "\u73CD\u73E0\u7070\u5E26\u6709\u4E00\u79CD\u67D4\u548C\u7684\u5149\u6CFD\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u4F4E\u8C03\u7684\u5962\u534E\u6216\u5E73\u8861\u7684\u6C1B\u56F4\u3002"
   - Painting: {fileID: 0}
     Name: "\u7FE0\u9E1F\u84DD(Kingfisher Blue)"
-    Color: {r: 0, g: 0.7, b: 0.9, a: 1}
+    Color: {r: 0.7264151, g: 0.2612698, b: 0.25013348, a: 1}
     Description: "\u7FE0\u9E1F\u84DD\u6709\u4E00\u79CD\u81EA\u7136\u7684\u6D3B\u529B\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u751F\u52A8\u7684\u573A\u666F\u6216\u6E05\u65B0\u7684\u6C1B\u56F4\u3002"
   - Painting: {fileID: 0}
     Name: "\u73AB\u7470\u91D1(Rose Gold)"

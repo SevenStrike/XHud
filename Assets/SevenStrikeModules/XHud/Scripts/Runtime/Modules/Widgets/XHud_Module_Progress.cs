@@ -1,3 +1,23 @@
+/*
+ * ============================================================================
+ * ⚠ 版权声明（禁止删除、禁止修改、衍生作品必须保留此注释）⚠
+ * ============================================================================
+ * 版权声明 Copyright (C) 2025-Present Nanjing SevenStrike Media Co., Ltd.
+ * 中文名称：南京塞维斯传媒有限公司
+ * 英文名称：SevenStrikeMedia
+ * 项目作者：徐寅智
+ * 项目名称：XHud - Unity UGUI 高级管理架构插件
+ * 项目启动：2025年8月
+ * 官方网站：http://sevenstrike.com/
+ * 授权协议：GNU Affero General Public License Version 3 (AGPL 3.0)
+ * 协议说明：
+ * 1. 你可以自由使用、修改、分发本插件的源代码，但必须保留此版权注释
+ * 2. 基于本插件修改后的衍生作品，必须同样遵循 AGPL 3.0 授权协议
+ * 3. 若将本插件用于网络服务（如云端Unity编辑器、在线动效生成工具），必须公开修改后的完整源代码
+ * 4. 完整协议文本可查阅：https://www.gnu.org/licenses/agpl-3.0.html
+ * ============================================================================
+ * 违反本注释保留要求，将违反 AGPL 3.0 授权协议，需承担相应法律责任
+ */
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
@@ -172,12 +192,12 @@ namespace SevenStrikeModules.XHud
             if (am == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("进度条控件通知", "未获取到标识名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到标识名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("进度条控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
             }
             return am;
         }
@@ -200,12 +220,12 @@ namespace SevenStrikeModules.XHud
             if (am == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("进度条控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("进度条控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
             }
             return am;
         }
@@ -228,12 +248,12 @@ namespace SevenStrikeModules.XHud
             if (am == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("进度条控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("进度条控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
             }
             return am;
         }
@@ -252,19 +272,19 @@ namespace SevenStrikeModules.XHud
             if (anim == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("进度条控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("进度条控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("进度条控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
                 }
             }
 
@@ -285,19 +305,19 @@ namespace SevenStrikeModules.XHud
             if (anim == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("进度条控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("进度条控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("进度条控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
                 }
             }
 
@@ -318,19 +338,19 @@ namespace SevenStrikeModules.XHud
             if (anim == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("进度条控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("进度条控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("进度条控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
                 }
             }
 
@@ -388,7 +408,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "播放所有动画器动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "播放所有动画器动画！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -413,7 +433,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
         }
 
         /// <summary>
@@ -427,7 +447,7 @@ namespace SevenStrikeModules.XHud
                 anim.RewindAllTweenNode();
             }
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "复位按钮动画！", HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "复位按钮动画！", HudMsgState.确认);
         }
         #endregion 
 
@@ -443,7 +463,7 @@ namespace SevenStrikeModules.XHud
             eve_on_ValueChanged.RemoveAllListeners();
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "清空所有事件！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "清空所有事件！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -456,7 +476,7 @@ namespace SevenStrikeModules.XHud
             act_on_ValueEnd = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "清空所有委托！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "清空所有委托！", HudMsgState.通知);
         }
 
         #endregion
@@ -569,7 +589,7 @@ namespace SevenStrikeModules.XHud
             eve_on_ValueChanged.Invoke(ProgressValue);
 
             if (DebugState && Application.isPlaying)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置进度条进度值为：" + val, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条进度值为：" + val, HudMsgState.通知);
         }
 
         /// <summary>
@@ -580,7 +600,7 @@ namespace SevenStrikeModules.XHud
             ProgressPrecision = count;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置进度条精度：" + count, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条精度：" + count, HudMsgState.通知);
         }
 
         /// <summary>
@@ -591,7 +611,7 @@ namespace SevenStrikeModules.XHud
             ProgressUnit = str;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置进度条单位为：" + str, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条单位为：" + str, HudMsgState.通知);
         }
 
         /// <summary>
@@ -615,7 +635,7 @@ namespace SevenStrikeModules.XHud
             Animators_Rewind();
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "已重置！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已重置！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -636,7 +656,7 @@ namespace SevenStrikeModules.XHud
             sm_ProgressValue = 0;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "已重置进度条数值！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已重置进度条数值！", HudMsgState.通知);
         }
 
         /// <summary>
@@ -665,7 +685,7 @@ namespace SevenStrikeModules.XHud
                 pro_TmpText_Title.text = val;
 
             if (DebugState && Application.isPlaying)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置进度条标题为：" + val, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条标题为：" + val, HudMsgState.通知);
 
             return val;
         }
@@ -684,7 +704,7 @@ namespace SevenStrikeModules.XHud
                 pro_TmpText_Subtitle.text = val;
 
             if (DebugState && Application.isPlaying)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置进度条副标题为：" + val, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条副标题为：" + val, HudMsgState.通知);
 
             return val;
         }
@@ -732,7 +752,7 @@ namespace SevenStrikeModules.XHud
             con_title = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "已清空所有内容显示！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已清空所有内容显示！", HudMsgState.通知);
         }
         #endregion
 
@@ -746,7 +766,7 @@ namespace SevenStrikeModules.XHud
             pro_Handle.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置进度条飞梭图形为：" + tex.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条飞梭图形为：" + tex.name, HudMsgState.通知);
         }
 
         /// <summary>
@@ -758,7 +778,7 @@ namespace SevenStrikeModules.XHud
             pro_Fore.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置进度条前景图形为：" + tex.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条前景图形为：" + tex.name, HudMsgState.通知);
         }
 
         /// <summary>
@@ -770,7 +790,7 @@ namespace SevenStrikeModules.XHud
             pro_Bg.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置进度条背景图形为：" + tex.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条背景图形为：" + tex.name, HudMsgState.通知);
         }
 
         /// <summary>
@@ -782,7 +802,7 @@ namespace SevenStrikeModules.XHud
             pro_Icon.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置进度条图标图形为：" + tex.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条图标图形为：" + tex.name, HudMsgState.通知);
         }
 
         /// <summary>
@@ -794,7 +814,7 @@ namespace SevenStrikeModules.XHud
             pro_Icon.sprite = spr;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("进度条控件通知", "设置进度条图标图形为：" + spr.name, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条图标图形为：" + spr.name, HudMsgState.通知);
         }
 
         /// <summary>

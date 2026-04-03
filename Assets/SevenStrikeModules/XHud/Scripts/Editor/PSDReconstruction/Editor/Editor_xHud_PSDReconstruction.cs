@@ -1,6 +1,25 @@
+/*
+ * ============================================================================
+ * ⚠ 版权声明（禁止删除、禁止修改、衍生作品必须保留此注释）⚠
+ * ============================================================================
+ * 版权声明 Copyright (C) 2025-Present Nanjing SevenStrike Media Co., Ltd.
+ * 中文名称：南京塞维斯传媒有限公司
+ * 英文名称：SevenStrikeMedia
+ * 项目作者：徐寅智
+ * 项目名称：XHud - Unity UGUI 高级管理架构插件
+ * 项目启动：2025年8月
+ * 官方网站：http://sevenstrike.com/
+ * 授权协议：GNU Affero General Public License Version 3 (AGPL 3.0)
+ * 协议说明：
+ * 1. 你可以自由使用、修改、分发本插件的源代码，但必须保留此版权注释
+ * 2. 基于本插件修改后的衍生作品，必须同样遵循 AGPL 3.0 授权协议
+ * 3. 若将本插件用于网络服务（如云端Unity编辑器、在线动效生成工具），必须公开修改后的完整源代码
+ * 4. 完整协议文本可查阅：https://www.gnu.org/licenses/agpl-3.0.html
+ * ============================================================================
+ * 违反本注释保留要求，将违反 AGPL 3.0 授权协议，需承担相应法律责任
+ */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using Newtonsoft.Json;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
     using System;
@@ -670,7 +689,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (folder == null)
                 return;
             if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
-                XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", "已指定图层文件夹目录： " + folder.name, HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - PSD Reconstruction 通知", "已指定图层文件夹目录： " + folder.name, HudMsgState.确认);
 
             string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - PSD Reconstruction消息", "提取图层色卡", "是否需要为您根据所有图元来创建一个颜色库作为备用资源？", "创建", "暂不", 1);
             if (res == "创建")
@@ -752,13 +771,13 @@ namespace SevenStrikeModules.XHud.Editor
                 return;
             if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
             {
-                XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", "已指定图层数据文件： " + file.name, HudMsgState.确认);
+                XHud_Utilitys.Func_PrintInfo("XHud - PSD Reconstruction 通知", "已指定图层数据文件： " + file.name, HudMsgState.确认);
             }
 
             LayerDataPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(file));
 
             TextAsset data = file as TextAsset;
-            LayerStructure = JsonConvert.DeserializeObject<PSDR_Root>(data.text);
+            LayerStructure = JsonUtility.FromJson<PSDR_Root>(data.text);
             LayerFontDatas = GetLayerFontNames();
 
             #region 获取Fonts文件夹下所有字体文件完整路径以及名称和后缀类型
@@ -781,7 +800,7 @@ namespace SevenStrikeModules.XHud.Editor
                 for (int i = 0; i < fontFiles.Length; i++)
                 {
                     if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
-                        XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", $"已获取字体文件完整路径:  {fontFiles[i]}", HudMsgState.确认);
+                        XHud_Utilitys.Func_PrintInfo("XHud - PSD Reconstruction 通知", $"已获取字体文件完整路径:  {fontFiles[i]}", HudMsgState.确认);
 
                     XHud_PSDR_FontsFontPathInfo info = new XHud_PSDR_FontsFontPathInfo();
                     info.FileName = Path.GetFileNameWithoutExtension(fontFiles[i]);
@@ -994,7 +1013,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (sp_LayersFolder.objectReferenceValue == null || sp_LayersData.objectReferenceValue == null)
             {
                 if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
-                    XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", "请检查图元目录和重建数据是否正确指定了？ ", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - PSD Reconstruction 通知", "请检查图元目录和重建数据是否正确指定了？ ", HudMsgState.警告);
                 return;
             }
 
@@ -1065,7 +1084,7 @@ namespace SevenStrikeModules.XHud.Editor
                 GameObject structure = new GameObject();
                 structure.name = StructureName;
                 RectTransform struct_rect = structure.AddComponent<RectTransform>();
-                struct_rect.SetParent(mgr.hm_Layout_GetAnchor(XHudAnchor.中心));
+                struct_rect.SetParent(mgr.hm_ScreenElement_GetAnchored_RectTransform(XHudAnchor.中心));
                 struct_rect.anchoredPosition3D = Vector3.zero;
                 struct_rect.localEulerAngles = Vector3.zero;
                 struct_rect.localScale = Vector3.one;
@@ -1479,7 +1498,7 @@ namespace SevenStrikeModules.XHud.Editor
                 AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
             }
             if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
-                XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", "已将目标文件夹中的图元转换为Sprite图形！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - PSD Reconstruction 通知", "已将目标文件夹中的图元转换为Sprite图形！", HudMsgState.通知);
             Repaint();
             AssetDatabase.Refresh();
             callback?.Invoke();
@@ -1522,7 +1541,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
-            Transform parent = mgr.hm_Layout_GetAnchor(XHudAnchor.中心);
+            Transform parent = mgr.hm_ScreenElement_GetAnchored_RectTransform(XHudAnchor.中心);
 
             Transform rect = null;
             for (int i = 0; i < parent.childCount; i++)
@@ -1608,12 +1627,12 @@ namespace SevenStrikeModules.XHud.Editor
             if (string.IsNullOrEmpty(result))
             {
                 if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
-                    XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", "资源已成功重命名为： " + newname, HudMsgState.确认);
+                    XHud_Utilitys.Func_PrintInfo("XHud - PSD Reconstruction 通知", "资源已成功重命名为： " + newname, HudMsgState.确认);
             }
             else
             {
                 if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
-                    XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", "重命名失败： " + result, HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - PSD Reconstruction 通知", "重命名失败： " + result, HudMsgState.错误);
             }
 
             // 刷新资源数据库
@@ -1640,7 +1659,7 @@ namespace SevenStrikeModules.XHud.Editor
             catch (Exception ex)
             {
                 if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
-                    XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", $"打开字体文件夹错误！ {ex.Message}", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - PSD Reconstruction 通知", $"打开字体文件夹错误！ {ex.Message}", HudMsgState.错误);
             }
         }
 
@@ -1654,7 +1673,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (font == null)
             {
                 if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
-                    XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", "请先制定一个Font字体！ ", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - PSD Reconstruction 通知", "请先制定一个Font字体！ ", HudMsgState.错误);
                 return null;
             }
 
@@ -1663,7 +1682,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (!File.Exists(fullPath))
             {
                 if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
-                    XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", $"在 {fullPath} 路径下未找到 {font.name} 字体！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - PSD Reconstruction 通知", $"在 {fullPath} 路径下未找到 {font.name} 字体！", HudMsgState.错误);
                 return null;
             }
 
@@ -1676,7 +1695,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (fontAsset == null)
             {
                 if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
-                    XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", "创建FontAsset 失败！", HudMsgState.错误);
+                    XHud_Utilitys.Func_PrintInfo("XHud - PSD Reconstruction 通知", "创建FontAsset 失败！", HudMsgState.错误);
                 return null;
             }
 
@@ -1718,12 +1737,12 @@ namespace SevenStrikeModules.XHud.Editor
             if (success)
             {
                 if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
-                    XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", $"已将字符串内容 {customCharacters} 添加到 {fontAsset.name} TMP字体资源图集中！", HudMsgState.确认);
+                    XHud_Utilitys.Func_PrintInfo("XHud - PSD Reconstruction 通知", $"已将字符串内容 {customCharacters} 添加到 {fontAsset.name} TMP字体资源图集中！", HudMsgState.确认);
             }
             else
             {
                 if ((XHud_PSDR__UseDebug)sp_DebugMode.enumValueIndex == XHud_PSDR__UseDebug.启用)
-                    XHud_Utilitys.Func_PrintInfo("XHud PSD Reconstruction 通知", $"未能将字符串内容 {missingCharacters} 添加到 {fontAsset.name} TMP字体资源图集中！", HudMsgState.警告);
+                    XHud_Utilitys.Func_PrintInfo("XHud - PSD Reconstruction 通知", $"未能将字符串内容 {missingCharacters} 添加到 {fontAsset.name} TMP字体资源图集中！", HudMsgState.警告);
             }
 
             // 刷新资源数据库

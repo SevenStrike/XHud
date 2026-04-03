@@ -1,3 +1,23 @@
+/*
+ * ============================================================================
+ * ⚠️ 版权声明（禁止删除、禁止修改、衍生作品必须保留此注释）⚠️
+ * ============================================================================
+ * 版权声明 Copyright (C) 2025-Present Nanjing SevenStrike Media Co., Ltd.
+ * 中文名称：南京塞维斯传媒有限公司
+ * 英文名称：SevenStrikeMedia
+ * 项目作者：徐寅智
+ * 项目名称：XHud - Unity UGUI 高级管理架构插件
+ * 项目启动：2025年8月
+ * 官方网站：http://sevenstrike.com/
+ * 授权协议：GNU Affero General Public License Version 3 (AGPL 3.0)
+ * 协议说明：
+ * 1. 你可以自由使用、修改、分发本插件的源代码，但必须保留此版权注释
+ * 2. 基于本插件修改后的衍生作品，必须同样遵循 AGPL 3.0 授权协议
+ * 3. 若将本插件用于网络服务（如云端Unity编辑器、在线动效生成工具），必须公开修改后的完整源代码
+ * 4. 完整协议文本可查阅：https://www.gnu.org/licenses/agpl-3.0.html
+ * ============================================================================
+ * 违反本注释保留要求，将违反 AGPL 3.0 授权协议，需承担相应法律责任
+ */
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
@@ -22,12 +42,12 @@ namespace SevenStrikeModules.XHud
             if (state)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "将所有下级控件的交互开启！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "将所有下级控件的交互开启！", HudMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "将所有下级控件的交互禁用！", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "将所有下级控件的交互禁用！", HudMsgState.通知);
             }
         }
         /// <summary>
@@ -94,7 +114,7 @@ namespace SevenStrikeModules.XHud
             gameObject.SetActive(!Hidden);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "已重置！", HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "已重置！", HudMsgState.警告);
         }
         /// <summary>
         /// XHud元素 - 设置锚点
@@ -106,7 +126,7 @@ namespace SevenStrikeModules.XHud
             RectTransform.pivot = pivot;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的锚点设置为：" + pivot, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素的锚点设置为：" + pivot, HudMsgState.通知);
         }
         /// <summary>
         /// XHud元素 - 设置锚点
@@ -153,7 +173,7 @@ namespace SevenStrikeModules.XHud
             RectTransform.pivot = CurrentPivot;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的锚点设置为：" + type.ToString(), HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素的锚点设置为：" + type.ToString(), HudMsgState.通知);
         }
         /// <summary>
         /// XHud元素 - 设置锚点区域范围
@@ -173,7 +193,7 @@ namespace SevenStrikeModules.XHud
             RectTransform.anchoredPosition3D = Vector3.zero;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的3D锚点位置归零！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素的3D锚点位置归零！", HudMsgState.通知);
         }
         /// <summary>
         /// XHud元素 - 旋转归零
@@ -183,7 +203,7 @@ namespace SevenStrikeModules.XHud
             RectTransform.localEulerAngles = Vector3.zero;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的旋转归零！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素的旋转归零！", HudMsgState.通知);
         }
         /// <summary>
         /// XHud元素 - 位置设置
@@ -194,7 +214,7 @@ namespace SevenStrikeModules.XHud
             RectTransform.anchoredPosition3D = pos;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的锚点位置设置为：" + pos, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素的锚点位置设置为：" + pos, HudMsgState.通知);
         }
         /// <summary>
         /// XHud元素 - 尺寸设置
@@ -205,7 +225,7 @@ namespace SevenStrikeModules.XHud
             RectTransform.sizeDelta = size;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的尺寸设置为：" + size, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素的尺寸设置为：" + size, HudMsgState.通知);
         }
         /// <summary>
         /// XHud元素 - 位置设置 - 世界
@@ -216,7 +236,7 @@ namespace SevenStrikeModules.XHud
             RectTransform.position = pos;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的世界位置设置为：" + pos, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素的世界位置设置为：" + pos, HudMsgState.通知);
         }
         /// <summary>
         /// XHud元素 - 旋转设置
@@ -234,7 +254,7 @@ namespace SevenStrikeModules.XHud
         {
             RectTransform.rotation = rot;
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的世界旋转设置为：" + rot, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素的世界旋转设置为：" + rot, HudMsgState.通知);
         }
         /// <summary>
         /// XHud元素 - 位置偏移设置
@@ -245,7 +265,7 @@ namespace SevenStrikeModules.XHud
             RectTransform.anchoredPosition3D += offset;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的3D锚点位置偏移设置为：" + offset, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素的3D锚点位置偏移设置为：" + offset, HudMsgState.通知);
         }
         /// <summary>
         /// XHud元素 - 缩放设置
@@ -255,7 +275,7 @@ namespace SevenStrikeModules.XHud
         {
             RectTransform.localScale = sca;
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素的缩放设置为：" + sca, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素的缩放设置为：" + sca, HudMsgState.通知);
         }
         /// <summary>
         /// XHud元素 - 检查自身是否已从对象池生成或者为启用/禁用
@@ -293,7 +313,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "生成的随机ID为：" + ran_id, HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "生成的随机ID为：" + ran_id, HudMsgState.通知);
             return ran_id;
         }
     }

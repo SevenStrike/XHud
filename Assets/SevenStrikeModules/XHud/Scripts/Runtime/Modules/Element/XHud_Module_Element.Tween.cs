@@ -1,3 +1,23 @@
+/*
+ * ============================================================================
+ * ⚠️ 版权声明（禁止删除、禁止修改、衍生作品必须保留此注释）⚠️
+ * ============================================================================
+ * 版权声明 Copyright (C) 2025-Present Nanjing SevenStrike Media Co., Ltd.
+ * 中文名称：南京塞维斯传媒有限公司
+ * 英文名称：SevenStrikeMedia
+ * 项目作者：徐寅智
+ * 项目名称：XHud - Unity UGUI 高级管理架构插件
+ * 项目启动：2025年8月
+ * 官方网站：http://sevenstrike.com/
+ * 授权协议：GNU Affero General Public License Version 3 (AGPL 3.0)
+ * 协议说明：
+ * 1. 你可以自由使用、修改、分发本插件的源代码，但必须保留此版权注释
+ * 2. 基于本插件修改后的衍生作品，必须同样遵循 AGPL 3.0 授权协议
+ * 3. 若将本插件用于网络服务（如云端Unity编辑器、在线动效生成工具），必须公开修改后的完整源代码
+ * 4. 完整协议文本可查阅：https://www.gnu.org/licenses/agpl-3.0.html
+ * ============================================================================
+ * 违反本注释保留要求，将违反 AGPL 3.0 授权协议，需承担相应法律责任
+ */
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
@@ -263,10 +283,10 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素动画 - 进入
         /// </summary>
-        public virtual void element_In(Motion_Creator args = null, UnityAction act_InComplete = null)
+        public virtual void Element_In(Motion_Creator args = null, UnityAction act_InComplete = null)
         {
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "杀死元素自身（透明度、位移、旋转）动画！", HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "杀死元素自身（透明度、位移、旋转）动画！", HudMsgState.警告);
 
             if (Tween_Alpha != null)
             {
@@ -282,7 +302,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "进入动画开始！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "进入动画开始！", HudMsgState.通知);
 
             #region 动作 - 动画开始
             if (act_on_element_in_start != null)
@@ -291,7 +311,7 @@ namespace SevenStrikeModules.XHud
             }
             if (eve_on_element_in_start != null)
                 eve_on_element_in_start.Invoke();
-            element_In_Start();
+            Element_In_Start();
             #endregion
 
             // 剥离的独立动画单元：生成
@@ -300,16 +320,16 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素动画 - 进入 - 前
         /// </summary>
-        public virtual void element_In_Start()
+        public virtual void Element_In_Start()
         {
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素进入前逻辑调用", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素进入前逻辑调用", HudMsgState.通知);
             AnimateState = HudElementAnimateState.Animating;
 
             Animating = true;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用Canvas像素对齐！", HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "禁用Canvas像素对齐！", HudMsgState.警告);
 
             if (AutoPlayAnimators)
             {
@@ -329,16 +349,16 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素动画 - 进入 - 后
         /// </summary>
-        public virtual void element_In_End()
+        public virtual void Element_In_End()
         {
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "元素进入后逻辑调用", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素进入后逻辑调用", HudMsgState.通知);
             AnimateState = HudElementAnimateState.Static;
 
             Animating = false;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "恢复Canvas像素对齐！", HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "恢复Canvas像素对齐！", HudMsgState.警告);
 
             if (AutoPlayAnimators)
             {
@@ -361,10 +381,10 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素动画 - 退出
         /// </summary>
-        public virtual void element_Out(Motion_Recycler args = null, UnityAction act_OutComplete = null)
+        public virtual void Element_Out(Motion_Recycler args = null, UnityAction act_OutComplete = null)
         {
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "杀死元素自身（透明度、位移、旋转）动画！", HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "杀死元素自身（透明度、位移、旋转）动画！", HudMsgState.警告);
 
             if (Tween_Alpha != null)
             {
@@ -380,14 +400,14 @@ namespace SevenStrikeModules.XHud
             }
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "退出动画开始！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "退出动画开始！", HudMsgState.通知);
 
             #region 动作 - 动画开始
             if (act_on_element_out_start != null)
                 act_on_element_out_start(this);
             if (eve_on_element_out_start != null)
                 eve_on_element_out_start.Invoke();
-            element_Out_Start();
+            Element_Out_Start();
             #endregion
 
             // 剥离的独立动画单元：回收
@@ -396,16 +416,16 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素动画 - 退出 - 前
         /// </summary>
-        public virtual void element_Out_Start()
+        public virtual void Element_Out_Start()
         {
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "退出前逻辑调用", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "退出前逻辑调用", HudMsgState.通知);
 
             ///---元素动画状态变为动画中
             AnimateState = HudElementAnimateState.Animating;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "禁用Canvas像素对齐！", HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "禁用Canvas像素对齐！", HudMsgState.警告);
 
             if (XHud_Manager.Instance.UseAutoPerfectPixel)
                 XHud_Manager.Instance.hm_UsePixelPerfect(false);
@@ -430,16 +450,16 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素动画 - 退出 - 后
         /// </summary>
-        public virtual void element_Out_End(Motion_Recycler args = null)
+        public virtual void Element_Out_End(Motion_Recycler args = null)
         {
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "退出后逻辑调用", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "退出后逻辑调用", HudMsgState.通知);
 
             ///---元素动画状态变为静态
             AnimateState = HudElementAnimateState.Static;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "恢复Canvas像素对齐！", HudMsgState.警告);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "恢复Canvas像素对齐！", HudMsgState.警告);
 
             ///---像素对齐开启
             if (Application.isPlaying)
@@ -463,7 +483,7 @@ namespace SevenStrikeModules.XHud
             Animators_Rewind();
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "将所有子节点中的Animator的动画都立即杀死！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "将所有子节点中的Animator的动画都立即杀死！", HudMsgState.通知);
             for (int i = 0; i < AnimatorNodes.Count; i++)
             {
                 for (int s = 0; s < AnimatorNodes[i].Animator.AnimateTweenNodes.Count; s++)
@@ -473,7 +493,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "从HudManager的布局列表中移除！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "从HudManager的布局列表中移除！", HudMsgState.通知);
             ///---从管理器的布局中移除元素项以便于下一次使用（元素生成后会在HudManager中的LayoutAnchors中记录赋值）
             if (Application.isPlaying)
             {
@@ -490,7 +510,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("元素控件通知", "回收到元素池！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "回收到元素池！", HudMsgState.通知);
             if (CreateState == HudElementCreateState.Created)
             {
                 ///---回收元素
@@ -521,7 +541,7 @@ namespace SevenStrikeModules.XHud
             if (args.Alpha.Ease != EaseMode.None)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放透明度动画 - 根据缓动参数", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放透明度动画 - 根据缓动参数", HudMsgState.通知);
                 Tween_Alpha = XTween.To(() => Alpha, x => Alpha = x, 1, args.Alpha.Duration * duration, isPreview ? false : true).SetEase(args.Alpha.Ease).SetDelay(args.Alpha.Delay).OnUpdate<float>((v, d, t) =>
                 {
                     if (isPreview)
@@ -541,7 +561,7 @@ namespace SevenStrikeModules.XHud
                             eve_on_element_in_end.Invoke();
                         if (act_InComplete != null)
                             act_InComplete();
-                        element_In_End();
+                        Element_In_End();
                     }
                 }).OnKill(() =>
                 {
@@ -556,7 +576,7 @@ namespace SevenStrikeModules.XHud
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放透明度动画 - 根据曲线参数", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放透明度动画 - 根据曲线参数", HudMsgState.通知);
                 Tween_Alpha = XTween.To(() => Alpha, x => Alpha = x, 1, args.Alpha.Duration * duration, isPreview ? false : true).SetEase(args.Alpha.Curve).SetDelay(args.Alpha.Delay).OnUpdate<float>((v, d, t) =>
                 {
                     if (isPreview)
@@ -576,7 +596,7 @@ namespace SevenStrikeModules.XHud
                             eve_on_element_in_end.Invoke();
                         if (act_InComplete != null)
                             act_InComplete();
-                        element_In_End();
+                        Element_In_End();
                     }
                 }).OnKill(() =>
                 {
@@ -699,7 +719,7 @@ namespace SevenStrikeModules.XHud
                 if (args.Movement.Ease != EaseMode.None)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放运动动画 - 根据缓动参数", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放运动动画 - 根据缓动参数", HudMsgState.通知);
                     if (args.Movement.Movement == HudMotion_Movement.W_中心缩放)
                     {
                         Tween_Move = RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * duration).SetAutoKill(isPreview ? false : true).SetFrom(fromvalue).SetDelay(args.Movement.Delay).SetEase(args.Movement.Ease).OnUpdate<Vector3>((v, d, t) =>
@@ -723,7 +743,7 @@ namespace SevenStrikeModules.XHud
                                     eve_on_element_in_end.Invoke();
                                 if (act_InComplete != null)
                                     act_InComplete();
-                                element_In_End();
+                                Element_In_End();
                             }
                         }).Play();
                     }
@@ -746,7 +766,7 @@ namespace SevenStrikeModules.XHud
                                     eve_on_element_in_end.Invoke();
                                 if (act_InComplete != null)
                                     act_InComplete();
-                                element_In_End();
+                                Element_In_End();
                             }
                         }).OnKill(() =>
                         {
@@ -759,7 +779,7 @@ namespace SevenStrikeModules.XHud
                 if (args.Movement.Ease == EaseMode.None)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放运动动画 - 根据曲线参数", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放运动动画 - 根据曲线参数", HudMsgState.通知);
                     if (args.Movement.Movement == HudMotion_Movement.W_中心缩放)
                     {
                         Tween_Move = RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * duration).SetAutoKill(isPreview ? false : true).SetFrom(fromvalue).SetDelay(args.Movement.Delay).SetEase(args.Movement.Curve).OnUpdate<Vector3>((v, d, t) =>
@@ -783,7 +803,7 @@ namespace SevenStrikeModules.XHud
                                     eve_on_element_in_end.Invoke();
                                 if (act_InComplete != null)
                                     act_InComplete();
-                                element_In_End();
+                                Element_In_End();
                             }
                         }).Play();
                     }
@@ -806,7 +826,7 @@ namespace SevenStrikeModules.XHud
                                     eve_on_element_in_end.Invoke();
                                 if (act_InComplete != null)
                                     act_InComplete();
-                                element_In_End();
+                                Element_In_End();
                             }
                         }).OnKill(() =>
                         {
@@ -854,7 +874,7 @@ namespace SevenStrikeModules.XHud
                 if (args.Rotation.Ease != EaseMode.None)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放旋转动画 - 根据缓动参数", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放旋转动画 - 根据缓动参数", HudMsgState.通知);
                     Tween_Rotation = RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * duration, true, false, XTweenRotationSpace.相对, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Ease).SetAutoKill(isPreview ? false : true).OnUpdate<Vector3>((v, d, t) =>
                     {
                         if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
@@ -872,7 +892,7 @@ namespace SevenStrikeModules.XHud
                                 eve_on_element_in_end.Invoke();
                             if (act_InComplete != null)
                                 act_InComplete();
-                            element_In_End();
+                            Element_In_End();
                         }
                     }).OnKill(() =>
                     {
@@ -885,7 +905,7 @@ namespace SevenStrikeModules.XHud
                 if (args.Rotation.Ease == EaseMode.None)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放旋转动画 - 根据曲线参数", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放旋转动画 - 根据曲线参数", HudMsgState.通知);
                     Tween_Rotation = RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * duration, true, false, XTweenRotationSpace.绝对, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Curve).SetAutoKill(isPreview ? false : true).OnUpdate<Vector3>((v, d, t) =>
                     {
                         if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
@@ -903,7 +923,7 @@ namespace SevenStrikeModules.XHud
                                 eve_on_element_in_end.Invoke();
                             if (act_InComplete != null)
                                 act_InComplete();
-                            element_In_End();
+                            Element_In_End();
                         }
                     }).OnKill(() =>
                     {
@@ -935,7 +955,7 @@ namespace SevenStrikeModules.XHud
             if (args.Alpha.Ease != EaseMode.None)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放透明度动画 - 根据缓动参数", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放透明度动画 - 根据缓动参数", HudMsgState.通知);
                 Tween_Alpha = XTween.To(() => Alpha, x => Alpha = x, 0, args.Alpha.Duration * duration, isPreview ? false : true).SetEase(args.Alpha.Ease).SetDelay(args.Alpha.Delay).OnUpdate<float>((v, d, t) =>
                     {
                         if (isPreview)
@@ -955,7 +975,7 @@ namespace SevenStrikeModules.XHud
                                 eve_on_element_out_end.Invoke();
                             if (act_OutComplete != null)
                                 act_OutComplete();
-                            element_Out_End(args);
+                            Element_Out_End(args);
                         }
                     }).OnKill(() =>
                     {
@@ -971,7 +991,7 @@ namespace SevenStrikeModules.XHud
             if (args.Alpha.Ease == EaseMode.None)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放透明度动画 - 根据曲线参数", HudMsgState.通知);
+                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放透明度动画 - 根据曲线参数", HudMsgState.通知);
                 Tween_Alpha = XTween.To(() => Alpha, x => Alpha = x, 0, args.Alpha.Duration * duration, isPreview ? false : true).SetEase(args.Alpha.Curve).SetDelay(args.Alpha.Delay).OnUpdate<float>((v, d, t) =>
                     {
                         if (isPreview)
@@ -991,7 +1011,7 @@ namespace SevenStrikeModules.XHud
                                 eve_on_element_out_end.Invoke();
                             if (act_OutComplete != null)
                                 act_OutComplete();
-                            element_Out_End(args);
+                            Element_Out_End(args);
                         }
                     }).OnKill(() =>
                     {
@@ -1080,7 +1100,7 @@ namespace SevenStrikeModules.XHud
                 if (args.Movement.Ease != EaseMode.None)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放运动动画 - 根据缓动参数", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放运动动画 - 根据缓动参数", HudMsgState.通知);
                     if (args.Movement.Movement == HudMotion_Movement.W_中心缩放)
                     {
                         Tween_Move = RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * duration).SetDelay(args.Movement.Delay).SetEase(args.Movement.Ease).SetAutoKill(isPreview ? false : true).OnUpdate<Vector3>((v, d, t) =>
@@ -1100,7 +1120,7 @@ namespace SevenStrikeModules.XHud
                                     eve_on_element_out_end.Invoke();
                                 if (act_OutComplete != null)
                                     act_OutComplete();
-                                element_Out_End(args);
+                                Element_Out_End(args);
                             }
                         }).OnKill(() =>
                         {
@@ -1129,7 +1149,7 @@ namespace SevenStrikeModules.XHud
                                         eve_on_element_out_end.Invoke();
                                     if (act_OutComplete != null)
                                         act_OutComplete();
-                                    element_Out_End(args);
+                                    Element_Out_End(args);
                                 }
                             }).OnKill(() =>
                             {
@@ -1142,7 +1162,7 @@ namespace SevenStrikeModules.XHud
                 if (args.Movement.Ease == EaseMode.None)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放运动动画 - 根据曲线参数", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放运动动画 - 根据曲线参数", HudMsgState.通知);
                     if (args.Movement.Movement == HudMotion_Movement.W_中心缩放)
                     {
                         Tween_Move = RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * duration).SetDelay(args.Movement.Delay).SetEase(args.Movement.Curve).SetAutoKill(isPreview ? false : true).OnUpdate<Vector3>((v, d, t) =>
@@ -1162,7 +1182,7 @@ namespace SevenStrikeModules.XHud
                                         eve_on_element_out_end.Invoke();
                                     if (act_OutComplete != null)
                                         act_OutComplete();
-                                    element_Out_End(args);
+                                    Element_Out_End(args);
                                 }
                             }).OnKill(() =>
                             {
@@ -1188,7 +1208,7 @@ namespace SevenStrikeModules.XHud
                                         eve_on_element_out_end.Invoke();
                                     if (act_OutComplete != null)
                                         act_OutComplete();
-                                    element_Out_End(args);
+                                    Element_Out_End(args);
                                 }
                             }).OnKill(() =>
                             {
@@ -1235,7 +1255,7 @@ namespace SevenStrikeModules.XHud
                 if (args.Rotation.Ease != EaseMode.None)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放旋转动画 - 根据缓动参数", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放旋转动画 - 根据缓动参数", HudMsgState.通知);
                     Tween_Rotation = RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * duration, true, isPreview ? false : true, XTweenRotationSpace.相对, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Ease).SetAutoKill(isPreview ? false : true).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
@@ -1253,7 +1273,7 @@ namespace SevenStrikeModules.XHud
                                     eve_on_element_out_end.Invoke();
                                 if (act_OutComplete != null)
                                     act_OutComplete();
-                                element_Out_End(args);
+                                Element_Out_End(args);
                             }
                         }).OnKill(() =>
                         {
@@ -1265,7 +1285,7 @@ namespace SevenStrikeModules.XHud
                 if (args.Rotation.Ease == EaseMode.None)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("元素控件通知", "播放旋转动画 - 根据曲线参数", HudMsgState.通知);
+                        XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放旋转动画 - 根据曲线参数", HudMsgState.通知);
                     Tween_Rotation = RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * duration, true, isPreview ? false : true, XTweenRotationSpace.相对, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Curve).SetAutoKill(isPreview ? false : true).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
@@ -1283,7 +1303,7 @@ namespace SevenStrikeModules.XHud
                                     eve_on_element_out_end.Invoke();
                                 if (act_OutComplete != null)
                                     act_OutComplete();
-                                element_Out_End(args);
+                                Element_Out_End(args);
                             }
                         }).OnKill(() =>
                         {
