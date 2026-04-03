@@ -4802,6 +4802,13 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 #endregion
 
+                #region 初始化动效
+                // 元素生成动效
+                ResetMotionParams("CreateArgs");
+                // 元素回收动效
+                ResetMotionParams("RecycleArgs");
+                #endregion
+
                 #endregion
 
                 IsInitialized.boolValue = true;
@@ -4854,19 +4861,19 @@ namespace SevenStrikeModules.XHud.Editor
                 CreateArgs_Default.FindPropertyRelative("Movement.Delay").floatValue = 0;
                 CreateArgs_Default.FindPropertyRelative("Movement.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 CreateArgs_Default.FindPropertyRelative("Movement.CurveName").stringValue = "";
-                CreateArgs_Default.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)EaseMode.OutQuart;
+                CreateArgs_Default.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 CreateArgs_Default.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)HudMotion_Rotation.A_无旋转;
                 CreateArgs_Default.FindPropertyRelative("Rotation.Degree").floatValue = 0;
                 CreateArgs_Default.FindPropertyRelative("Rotation.Duration").floatValue = 1;
                 CreateArgs_Default.FindPropertyRelative("Rotation.Delay").floatValue = 0;
                 CreateArgs_Default.FindPropertyRelative("Rotation.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 CreateArgs_Default.FindPropertyRelative("Rotation.CurveName").stringValue = "";
-                CreateArgs_Default.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)EaseMode.OutQuart;
+                CreateArgs_Default.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 CreateArgs_Default.FindPropertyRelative("Alpha.Duration").floatValue = 1;
                 CreateArgs_Default.FindPropertyRelative("Alpha.Delay").floatValue = 0;
                 CreateArgs_Default.FindPropertyRelative("Alpha.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 CreateArgs_Default.FindPropertyRelative("Alpha.CurveName").stringValue = "";
-                CreateArgs_Default.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.OutQuart;
+                CreateArgs_Default.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                 CreateArgs_Default.serializedObject.ApplyModifiedProperties();
             }
@@ -4878,19 +4885,19 @@ namespace SevenStrikeModules.XHud.Editor
                 RecycleArgs_Default.FindPropertyRelative("Movement.Delay").floatValue = 0;
                 RecycleArgs_Default.FindPropertyRelative("Movement.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 RecycleArgs_Default.FindPropertyRelative("Movement.CurveName").stringValue = "";
-                RecycleArgs_Default.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)EaseMode.OutQuart;
+                RecycleArgs_Default.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 RecycleArgs_Default.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)HudMotion_Rotation.A_无旋转;
                 RecycleArgs_Default.FindPropertyRelative("Rotation.Degree").floatValue = 0;
                 RecycleArgs_Default.FindPropertyRelative("Rotation.Duration").floatValue = 1;
                 RecycleArgs_Default.FindPropertyRelative("Rotation.Delay").floatValue = 0;
                 RecycleArgs_Default.FindPropertyRelative("Rotation.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 RecycleArgs_Default.FindPropertyRelative("Rotation.CurveName").stringValue = "";
-                RecycleArgs_Default.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)EaseMode.OutQuart;
+                RecycleArgs_Default.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 RecycleArgs_Default.FindPropertyRelative("Alpha.Duration").floatValue = 1;
                 RecycleArgs_Default.FindPropertyRelative("Alpha.Delay").floatValue = 0;
                 RecycleArgs_Default.FindPropertyRelative("Alpha.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 RecycleArgs_Default.FindPropertyRelative("Alpha.CurveName").stringValue = "";
-                RecycleArgs_Default.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.OutQuart;
+                RecycleArgs_Default.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                 RecycleArgs_Default.serializedObject.ApplyModifiedProperties();
             }
@@ -4939,7 +4946,10 @@ namespace SevenStrikeModules.XHud.Editor
                 //sp_DebugMode.Log($"Layer '{layerName}' already exists.");
             }
         }
-        // 公共方法，用于对List<Texture2D>进行排序
+        /// <summary>
+        /// 公共方法，用于对List<Texture2D>进行排序
+        /// </summary>
+        /// <param name="textures"></param>
         public static void xHud_SortTexturesByNameSuffix(List<Texture2D> textures)
         {
             // 使用Sort方法，并传入自定义的比较器
@@ -4957,7 +4967,12 @@ namespace SevenStrikeModules.XHud.Editor
                 return num1.CompareTo(num2);
             });
         }
-        // 辅助方法：从贴图名称中提取数字后缀
+        /// <summary>
+        /// 从贴图名称中提取数字后缀
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         private static int xHud_ExtractNumberFromName(string name)
         {
             // 假设名称格式为 "Ink_数字"
@@ -4971,7 +4986,6 @@ namespace SevenStrikeModules.XHud.Editor
 
             return number;
         }
-
         #endregion
 
         #region 打开辅助窗口

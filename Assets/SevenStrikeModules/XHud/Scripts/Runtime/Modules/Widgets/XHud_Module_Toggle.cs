@@ -124,7 +124,7 @@ namespace SevenStrikeModules.XHud
         public EaseMode ProgressEase = EaseMode.OutQuart;
         public EaseMode ColorEase = EaseMode.OutQuart;
 
-        public HudElementAnimateState AnimateState;
+        public XHudElementAnimateState AnimateState;
         public float ToggleAnimatorMaxDuration;
 
         public bool ToggleAnimatorListIsFold;

@@ -37,7 +37,7 @@ namespace SevenStrikeModules.XHud
         [SerializeField]
         public bool DebugState;
 
-        public HudElementAnimateState AnimateState;
+        public XHudElementAnimateState AnimateState;
 
         public float ProgressAnimatorMaxDuration;
         public float Progress_Animators_GlobalDuration = 1;

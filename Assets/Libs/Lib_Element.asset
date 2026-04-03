@@ -55,3 +55,11 @@ MonoBehaviour:
     Root: {fileID: 0}
     Target: {fileID: 6119741072749758716, guid: 6cafd8c6e9fe15943b4875472defd33b, type: 3}
     PreloadElements: []
+  - Name: Image
+    InitializeCount: 1
+    UsedCount: 0
+    RecycledCount: 0
+    NextIndex: 0
+    Root: {fileID: 0}
+    Target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
+    PreloadElements: []

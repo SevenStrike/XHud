@@ -2607,7 +2607,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     XHud_Module_Element ele = mgr.Hud_ElementLibrarys[i].ElementsLibrary_GetTargetElement(item.SpawnName);
                     XHud_Module_Element Element = (XHud_Module_Element)PrefabUtility.InstantiatePrefab(ele);
-                    RectTransform Root = mgr.hm_GetAnchorRoot(HudSpace.世界空间);
+                    RectTransform Root = mgr.hm_GetAnchorRoot(XHudSpace.世界空间);
                     Element.RectTransform.SetParent(Root);
                     Element.RectTransform.position = item.Position + item.Offset;
                     Element.RectTransform.localScale = item.Scale;

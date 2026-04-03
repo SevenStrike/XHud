@@ -162,7 +162,6 @@ namespace SevenStrikeModules.XHud.Enums
         /// </summary>
         Y_从中心到后 = 21,
     }
-
     /// <summary>
     /// 运动样式 - 旋转
     /// 定义UI元素的旋转动画方向与轴向
@@ -219,7 +218,6 @@ namespace SevenStrikeModules.XHud.Enums
         /// </summary>
         G_逆向_倾角 = 6
     }
-
     /// <summary>
     /// 元素动效完成判定依据
     /// 用于决定在哪种动画完成后触发后续回调
@@ -239,7 +237,6 @@ namespace SevenStrikeModules.XHud.Enums
         /// </summary>
         以_旋转为准 = 2
     }
-
     /// <summary>
     /// 锚点定位
     /// 定义UI元素在父容器中的锚定位置
@@ -462,7 +459,6 @@ namespace SevenStrikeModules.XHud.Enums
         /// </summary>
         右 = 3,
     }
-
     /// <summary>
     /// 库设置器模式
     /// 定义库操作的行为类型
@@ -595,7 +591,6 @@ namespace SevenStrikeModules.XHud.Enums
         /// </summary>
         右下 = 8,
     }
-
     /// <summary>
     /// TextMeshPro内容锚点
     /// 定义TMP文本在容器内的详细对齐方式
@@ -630,7 +625,6 @@ namespace SevenStrikeModules.XHud.Enums
         中线左右填充 = 25,
         中线左右均分 = 26
     }
-
     /// <summary>
     /// 颜色样式
     /// 预定义的UI配色方案
@@ -707,7 +701,6 @@ namespace SevenStrikeModules.XHud.Enums
         浅灰 = 16,
         无 = 17
     }
-
     /// <summary>
     /// 填充类型
     /// 定义UI元素的渲染样式（实体/边框/透明等）
@@ -720,7 +713,6 @@ namespace SevenStrikeModules.XHud.Enums
         无 = 3,
         透明 = 4
     }
-
     /// <summary>
     /// 开关状态
     /// </summary>
@@ -729,7 +721,6 @@ namespace SevenStrikeModules.XHud.Enums
         开启 = 0,
         关闭 = 1
     }
-
     /// <summary>
     /// 连接状态
     /// </summary>
@@ -738,7 +729,6 @@ namespace SevenStrikeModules.XHud.Enums
         已连接 = 0,
         已断开 = 1
     }
-
     /// <summary>
     /// 通知消息类型
     /// 定义消息弹窗的样式类别
@@ -752,7 +742,6 @@ namespace SevenStrikeModules.XHud.Enums
         设置 = 4,
         未开启消息模块功能 = 5
     }
-
     /// <summary>
     /// 目录路径定位
     /// 定义文件读写时的路径参考基准
@@ -763,17 +752,15 @@ namespace SevenStrikeModules.XHud.Enums
         项目工程根目录 = 1,
         自定义 = 2
     }
-
     /// <summary>
     /// 坐标空间
     /// 定义UI元素所处的空间类型
     /// </summary>
-    public enum HudSpace
+    public enum XHudSpace
     {
         屏幕空间 = 0,
         世界空间 = 1
     }
-
     /// <summary>
     /// 坐标定位模式
     /// 定义位置坐标的计算方式
@@ -936,7 +923,6 @@ namespace SevenStrikeModules.XHud.Enums
         /// </summary>
         Custom = 2
     }
-
     /// <summary>
     /// 按钮交互动作类型
     /// 定义UI按钮可响应的输入事件
@@ -953,18 +939,16 @@ namespace SevenStrikeModules.XHud.Enums
         长按 = 7,
         待命 = 8
     }
-
     /// <summary>
     /// 元素空间类型
     /// 定义UI元素所属的空间属性
     /// </summary>
-    public enum ElementSpaceType
+    public enum XHudElementSpaceType
     {
         None = 0,
         Screen = 1,
         World = 2
     }
-
     /// <summary>
     /// 缓动动画节点类型
     /// 定义补间动画可操作的目标属性类型
@@ -986,7 +970,6 @@ namespace SevenStrikeModules.XHud.Enums
         自定义4维向量 = 12,
         自定义颜色 = 13
     }
-
     /// <summary>
     /// 动画器目标模块类型
     /// 定义动画所作用的UI组件类型
@@ -999,7 +982,6 @@ namespace SevenStrikeModules.XHud.Enums
         Image = 3,
         RawImage = 4
     }
-
     /// <summary>
     /// 隔离视觉模式标记锚点
     /// 用于调试或视觉隔离时的定位参照
@@ -1016,12 +998,11 @@ namespace SevenStrikeModules.XHud.Enums
         上 = 7,
         下 = 8
     }
-
     /// <summary>
     /// 元素的生成状态
     /// 定义UI元素在对象池中的生命周期状态
     /// </summary>
-    public enum HudElementCreateState
+    public enum XHudElementCreateState
     {
         Recycled,
         Created
@@ -1101,7 +1082,7 @@ namespace SevenStrikeModules.XHud.Enums
     /// 用于状态机管理，控制UI元素在动画播放期间的行为表现
     /// 配合 HudElementMotionType 和 HudElementCreateState 使用，实现完整的UI元素生命周期管理
     /// </summary>
-    public enum HudElementAnimateState
+    public enum XHudElementAnimateState
     {
         /// <summary>
         /// 静态状态
@@ -1228,7 +1209,15 @@ namespace SevenStrikeModules.XHud.Enums
         /// </summary>
         Animating
     }
-
+    /// <summary>
+    /// 元素的获取源类型
+    /// 某些情况需要自定义实例化元素，而非使用元素池生成，这就需要使用该标记来标识元素源类型
+    /// </summary>
+    public enum XHudElementCreatedSourceType
+    {
+        Library,
+        Instantiate
+    }
     /// <summary>
     /// 游戏视图尺寸类型
     /// 用于定义游戏窗口或相机视野的缩放/适配方式
@@ -1246,7 +1235,6 @@ namespace SevenStrikeModules.XHud.Enums
         /// </summary>
         FixedResolution
     }
-
     /// <summary>
     /// 截图格式
     /// </summary>
@@ -1256,7 +1244,6 @@ namespace SevenStrikeModules.XHud.Enums
         PNG = 1,
         TGA = 2
     }
-
     /// <summary>
     /// 截图尺寸
     /// </summary>
@@ -1266,7 +1253,6 @@ namespace SevenStrikeModules.XHud.Enums
         屏幕分辨率 = 1,
         固定尺寸 = 2
     }
-
     /// <summary>
     /// 截图背景
     /// </summary>
@@ -1276,7 +1262,6 @@ namespace SevenStrikeModules.XHud.Enums
         颜色 = 1,
         透明 = 2,
     }
-
     /// <summary>
     /// 相机类型
     /// </summary>

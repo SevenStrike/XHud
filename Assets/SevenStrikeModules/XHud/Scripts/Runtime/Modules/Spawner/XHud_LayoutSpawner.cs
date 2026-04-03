@@ -246,11 +246,11 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 动作 - 生成元素
         /// </summary>
-        public UnityAction<HudSpace> act_on_spawn;
+        public UnityAction<XHudSpace> act_on_spawn;
         /// <summary>
         /// 动作 - 回收元素
         /// </summary>
-        public UnityAction<HudSpace> act_on_despawn;
+        public UnityAction<XHudSpace> act_on_despawn;
         /// <summary>
         /// 动作 - 元素动效状态改变
         /// </summary>
@@ -280,11 +280,11 @@ namespace SevenStrikeModules.XHud
                             return;
                         if (ControlScreen)
                         {
-                            Spawn(HudSpace.屏幕空间);
+                            Spawn(XHudSpace.屏幕空间);
                         }
                         if (ControlWorld)
                         {
-                            Spawn(HudSpace.世界空间);
+                            Spawn(XHudSpace.世界空间);
                         }
                     }
 
@@ -294,11 +294,11 @@ namespace SevenStrikeModules.XHud
                             return;
                         if (ControlScreen)
                         {
-                            Despawn(HudSpace.屏幕空间);
+                            Despawn(XHudSpace.屏幕空间);
                         }
                         if (ControlWorld)
                         {
-                            Despawn(HudSpace.世界空间);
+                            Despawn(XHudSpace.世界空间);
                         }
                     }
                 }
@@ -309,14 +309,14 @@ namespace SevenStrikeModules.XHud
         /// 根据空间类型生成元素
         /// </summary>
         /// <param tweenName="space"></param>
-        public void Spawn(HudSpace space)
+        public void Spawn(XHudSpace space)
         {
             if (!UseManullyKey)
                 return;
 
             switch (space)
             {
-                case HudSpace.屏幕空间:
+                case XHudSpace.屏幕空间:
                     if (DelayOrder_Spawn_Screen > 0)
                     {
                         //顺序生成 - 屏幕
@@ -328,7 +328,7 @@ namespace SevenStrikeModules.XHud
                         hsp_Screen_Spawn();
                     }
                     break;
-                case HudSpace.世界空间:
+                case XHudSpace.世界空间:
                     if (DelayOrder_Spawn_World > 0)
                     {
                         //顺序生成 - 世界
@@ -347,11 +347,11 @@ namespace SevenStrikeModules.XHud
         /// 根据空间类型回收元素
         /// </summary>
         /// <param tweenName="space"></param>
-        public void Despawn(HudSpace space)
+        public void Despawn(XHudSpace space)
         {
             switch (space)
             {
-                case HudSpace.屏幕空间:
+                case XHudSpace.屏幕空间:
                     if (DelayOrder_Despawn_Screen > 0)
                     {
                         //顺序回收 - 屏幕
@@ -363,7 +363,7 @@ namespace SevenStrikeModules.XHud
                         hsp_Screen_Despawn();
                     }
                     break;
-                case HudSpace.世界空间:
+                case XHudSpace.世界空间:
                     if (DelayOrder_Despawn_World > 0)
                     {
                         //顺序回收 - 世界
@@ -392,10 +392,10 @@ namespace SevenStrikeModules.XHud
             {
                 XHud_LayoutSpawner_Item item = SpawnItemList_Screen[i];
                 if (!item.InMotion && !item.Spawned)
-                    StartCoroutine(hsp_Create(item, HudSpace.屏幕空间));
+                    StartCoroutine(hsp_Create(item, XHudSpace.屏幕空间));
             }
             if (act_on_spawn != null)
-                act_on_spawn(HudSpace.屏幕空间);
+                act_on_spawn(XHudSpace.屏幕空间);
         }
 
         /// <summary>
@@ -413,7 +413,7 @@ namespace SevenStrikeModules.XHud
                     StartCoroutine(hsp_Recycle(item));
             }
             if (act_on_despawn != null)
-                act_on_despawn(HudSpace.屏幕空间);
+                act_on_despawn(XHudSpace.屏幕空间);
         }
         #endregion
 
@@ -430,10 +430,10 @@ namespace SevenStrikeModules.XHud
             {
                 XHud_LayoutSpawner_Item item = SpawnItemList_World[i];
                 if (!item.InMotion && !item.Spawned)
-                    StartCoroutine(hsp_Create(item, HudSpace.世界空间));
+                    StartCoroutine(hsp_Create(item, XHudSpace.世界空间));
             }
             if (act_on_spawn != null)
-                act_on_spawn(HudSpace.世界空间);
+                act_on_spawn(XHudSpace.世界空间);
         }
 
         /// <summary>
@@ -451,7 +451,7 @@ namespace SevenStrikeModules.XHud
                     StartCoroutine(hsp_Recycle(item));
             }
             if (act_on_despawn != null)
-                act_on_despawn(HudSpace.世界空间);
+                act_on_despawn(XHudSpace.世界空间);
         }
         #endregion
 
@@ -463,9 +463,9 @@ namespace SevenStrikeModules.XHud
         {
             if (CheckElementLibrary_IsEmpty())
                 return;
-            StartCoroutine(hsp_OrderDelay_Create(HudSpace.屏幕空间));
+            StartCoroutine(hsp_OrderDelay_Create(XHudSpace.屏幕空间));
             if (act_on_spawn != null)
-                act_on_spawn(HudSpace.屏幕空间);
+                act_on_spawn(XHudSpace.屏幕空间);
         }
 
         /// <summary>
@@ -475,9 +475,9 @@ namespace SevenStrikeModules.XHud
         {
             if (CheckElementLibrary_IsEmpty())
                 return;
-            StartCoroutine(hsp_OrderDelay_Recycle(HudSpace.屏幕空间));
+            StartCoroutine(hsp_OrderDelay_Recycle(XHudSpace.屏幕空间));
             if (act_on_despawn != null)
-                act_on_despawn(HudSpace.屏幕空间);
+                act_on_despawn(XHudSpace.屏幕空间);
         }
         #endregion
 
@@ -489,9 +489,9 @@ namespace SevenStrikeModules.XHud
         {
             if (CheckElementLibrary_IsEmpty())
                 return;
-            StartCoroutine(hsp_OrderDelay_Create(HudSpace.世界空间));
+            StartCoroutine(hsp_OrderDelay_Create(XHudSpace.世界空间));
             if (act_on_spawn != null)
-                act_on_spawn(HudSpace.世界空间);
+                act_on_spawn(XHudSpace.世界空间);
         }
 
         /// <summary>
@@ -501,9 +501,9 @@ namespace SevenStrikeModules.XHud
         {
             if (CheckElementLibrary_IsEmpty())
                 return;
-            StartCoroutine(hsp_OrderDelay_Recycle(HudSpace.世界空间));
+            StartCoroutine(hsp_OrderDelay_Recycle(XHudSpace.世界空间));
             if (act_on_despawn != null)
-                act_on_despawn(HudSpace.世界空间);
+                act_on_despawn(XHudSpace.世界空间);
         }
         #endregion
 
@@ -516,25 +516,26 @@ namespace SevenStrikeModules.XHud
         /// <param tweenName="item"></param>
         /// <param tweenName="space"></param>
         /// <returns></returns>
-        private IEnumerator hsp_Create(XHud_LayoutSpawner_Item item, HudSpace space)
+        private IEnumerator hsp_Create(XHud_LayoutSpawner_Item item, XHudSpace space)
         {
             //---延迟创建
             yield return new WaitForSeconds(item.Delay_Spawn);
             //---生成元素
             switch (space)
             {
-                case HudSpace.屏幕空间:
+                case XHudSpace.屏幕空间:
 
                     item.SpawnedElementNode = XHud_Manager.Instance.hm_ScreenElement_Create(
                         LibName,
                         item.Indicator,
                         item.SpawnName,
+                        item.UseSpawnerMotion == "自身动效" ? item.CreateArgs : CreateArgs,
+                        item.AutoIn == "自动 In" ? true : false,
                         item.Position + item.Offset,
                         item.Scale,
                         item.Size,
                         false,
                         null,
-                        item.UseSpawnerMotion == "自身动效" ? item.CreateArgs : CreateArgs,
                        (element) =>/*动作委托：元素 In 开始*/
                        {
                            item.InMotion = true;
@@ -583,21 +584,21 @@ namespace SevenStrikeModules.XHud
                                item.act_on_element_out_end(element);
                            };
                            item.SpawnedElementNode = null;
-                       },
-                        item.AutoIn == "自动 In" ? true : false);
+                       });
                     break;
-                case HudSpace.世界空间:
+                case XHudSpace.世界空间:
 
                     item.SpawnedElementNode = XHud_Manager.Instance.hm_WorldElement_Create(
                         LibName,
                         item.Indicator,
                         item.SpawnName,
+                        item.UseSpawnerMotion == "自身动效" ? item.CreateArgs : CreateArgs,
+                        item.AutoIn == "自动 In" ? true : false,
                         item.Size,
                         item.Position,
                         item.Euler,
                         item.Scale,
                         item.Offset,
-                        item.UseSpawnerMotion == "自身动效" ? item.CreateArgs : CreateArgs,
                         (element) =>/*动作委托：元素 In 开始*/
                         {
                             item.InMotion = true;
@@ -646,8 +647,7 @@ namespace SevenStrikeModules.XHud
                                 item.act_on_element_out_end(element);
                             };
                             item.SpawnedElementNode = null;
-                        },
-                        item.AutoIn == "自动 In" ? true : false);
+                        });
                     break;
             }
         }
@@ -700,12 +700,12 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="space"></param>
         /// <returns></returns>
-        private IEnumerator hsp_OrderDelay_Create(HudSpace space)
+        private IEnumerator hsp_OrderDelay_Create(XHudSpace space)
         {
             //---生成元素
             switch (space)
             {
-                case HudSpace.屏幕空间:
+                case XHudSpace.屏幕空间:
                     for (int i = 0; i < SpawnItemList_Screen.Count; i++)
                     {
                         XHud_LayoutSpawner_Item item = SpawnItemList_Screen[i];
@@ -717,12 +717,13 @@ namespace SevenStrikeModules.XHud
                                 LibName,
                                 item.Indicator,
                                 item.SpawnName,
+                                item.UseSpawnerMotion == "自身动效" ? item.CreateArgs : CreateArgs,
+                                item.AutoIn == "自动 In" ? true : false,
                                 item.Position + item.Offset,
                                 item.Scale,
                                 item.Size,
                                 false,
                                 null,
-                                item.UseSpawnerMotion == "自身动效" ? item.CreateArgs : CreateArgs,
                                 (element) =>/*动作委托：元素 In 开始*/
                                 {
                                     item.InMotion = true;
@@ -771,12 +772,11 @@ namespace SevenStrikeModules.XHud
                                         item.act_on_element_out_end(element);
                                     };
                                     item.SpawnedElementNode = null;
-                                },
-                                item.AutoIn == "自动 In" ? true : false);
+                                });
                         }
                     }
                     break;
-                case HudSpace.世界空间:
+                case XHudSpace.世界空间:
                     for (int i = 0; i < SpawnItemList_World.Count; i++)
                     {
                         XHud_LayoutSpawner_Item item = SpawnItemList_World[i];
@@ -788,12 +788,13 @@ namespace SevenStrikeModules.XHud
                                 LibName,
                                 item.Indicator,
                                 item.SpawnName,
+                                item.UseSpawnerMotion == "自身动效" ? item.CreateArgs : CreateArgs,
+                                item.AutoIn == "自动 In" ? true : false,
                                 item.Size,
                                 item.Position,
                                 item.Euler,
                                 item.Scale,
                                 item.Offset,
-                                item.UseSpawnerMotion == "自身动效" ? item.CreateArgs : CreateArgs,
                                 (element) =>/*动作委托：元素 In 开始*/
                                 {
                                     item.InMotion = true;
@@ -842,8 +843,7 @@ namespace SevenStrikeModules.XHud
                                         item.act_on_element_out_end(element);
                                     };
                                     item.SpawnedElementNode = null;
-                                },
-                                item.AutoIn == "自动 In" ? true : false);
+                                });
                         }
                     }
                     break;
@@ -855,11 +855,11 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param tweenName="space"></param>
         /// <returns></returns>
-        private IEnumerator hsp_OrderDelay_Recycle(HudSpace space)
+        private IEnumerator hsp_OrderDelay_Recycle(XHudSpace space)
         {
             switch (space)
             {
-                case HudSpace.屏幕空间:
+                case XHudSpace.屏幕空间:
                     for (int i = 0; i < SpawnItemList_Screen.Count; i++)
                     {
                         XHud_LayoutSpawner_Item item = SpawnItemList_Screen[i];
@@ -901,7 +901,7 @@ namespace SevenStrikeModules.XHud
                         }
                     }
                     break;
-                case HudSpace.世界空间:
+                case XHudSpace.世界空间:
                     for (int i = 0; i < SpawnItemList_World.Count; i++)
                     {
                         XHud_LayoutSpawner_Item item = SpawnItemList_World[i];

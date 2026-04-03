@@ -110,7 +110,7 @@ namespace SevenStrikeModules.XHud
             }
 
             Animators_Rewind();
-            CreateState = HudElementCreateState.Recycled;
+            CreateState = XHudElementCreateState.Recycled;
             gameObject.SetActive(!Hidden);
 
             if (DebugState)
@@ -276,6 +276,16 @@ namespace SevenStrikeModules.XHud
             RectTransform.localScale = sca;
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素的缩放设置为：" + sca, HudMsgState.通知);
+        }
+        /// <summary>
+        /// XHud元素 - 生成源类型设置
+        /// </summary>
+        /// <param name="type">生成源类型</param>
+        public virtual void element_CreatedSourceTypeSet(XHudElementCreatedSourceType type)
+        {
+            CreatedSourceType = type;
+            if (DebugState)
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素的生成源类型设置为：" + type, HudMsgState.通知);
         }
         /// <summary>
         /// XHud元素 - 检查自身是否已从对象池生成或者为启用/禁用

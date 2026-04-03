@@ -38,7 +38,7 @@ namespace SevenStrikeModules.XHud
         public RectTransform OptionRoot;
         #endregion
 
-        public HudElementAnimateState AnimateState;
+        public XHudElementAnimateState AnimateState;
 
         public Vector3 Pos_Destination;
         public Vector3 Prev_Pos_Destination;

@@ -84,18 +84,22 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素的生成状态
         /// </summary>
-        public HudElementCreateState CreateState = HudElementCreateState.Recycled;
+        public XHudElementCreateState CreateState = XHudElementCreateState.Recycled;
         [SerializeField]
         /// <summary>
         /// 元素的动画状态
         /// </summary>
-        public HudElementAnimateState AnimateState = HudElementAnimateState.Static;
+        public XHudElementAnimateState AnimateState = XHudElementAnimateState.Static;
         [SerializeField]
         /// <summary>
         /// 判定元素是屏幕类型还是世界空间类型
         /// </summary>
-        public ElementSpaceType ElementSpaceType = ElementSpaceType.None;
-
+        public XHudElementSpaceType ElementSpaceType = XHudElementSpaceType.None;
+        [SerializeField]
+        /// <summary>
+        /// 判定元素生成源是从元素库还是自定义实例化
+        /// </summary>
+        public XHudElementCreatedSourceType CreatedSourceType = XHudElementCreatedSourceType.Library;
         [SerializeField]
         /// <summary>
         /// Tween动画预览状态

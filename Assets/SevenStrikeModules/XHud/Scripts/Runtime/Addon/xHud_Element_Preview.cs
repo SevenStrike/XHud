@@ -188,7 +188,7 @@
                     XHud_Utilitys.Func_PrintInfo("XHud - 元素预览器通知", "预览开关已关闭！ ", HudMsgState.错误);
                 return;
             }
-            if (HudElement.AnimateState == HudElementAnimateState.Animating)
+            if (HudElement.AnimateState == XHudElementAnimateState.Animating)
                 return;
             StartCoroutine(Preview_Delay_In());
             if (DebugState)
@@ -214,7 +214,7 @@
                     XHud_Utilitys.Func_PrintInfo("XHud - 元素预览器通知", "预览开关已关闭！ ", HudMsgState.错误);
                 return;
             }
-            if (HudElement.AnimateState == HudElementAnimateState.Animating)
+            if (HudElement.AnimateState == XHudElementAnimateState.Animating)
                 return;
             StartCoroutine(Preview_Delay_Out());
             if (DebugState)

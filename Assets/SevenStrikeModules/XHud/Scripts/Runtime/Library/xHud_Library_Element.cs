@@ -54,7 +54,7 @@ namespace SevenStrikeModules.XHud
             if (HudElement == null)
                 return;
 
-            if (HudElement.CreateState == HudElementCreateState.Recycled)
+            if (HudElement.CreateState == XHudElementCreateState.Recycled)
             {
                 Using = false;
             }
@@ -436,7 +436,7 @@ namespace SevenStrikeModules.XHud
                 {
                     XHud_Module_Element ele = item.PreloadElements[s].HudElement;
 
-                    if (ele.CreateState == HudElementCreateState.Recycled)
+                    if (ele.CreateState == XHudElementCreateState.Recycled)
                     {
                         continue;
                     }

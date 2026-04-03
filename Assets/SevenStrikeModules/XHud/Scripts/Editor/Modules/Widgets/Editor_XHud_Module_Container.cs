@@ -641,7 +641,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (!Targets_Selected())
             {
                 #region 动画状态     
-                Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, (HudElementAnimateState)AnimateState.enumValueIndex == HudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, (XHudElementAnimateState)AnimateState.enumValueIndex == XHudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                 #endregion
 
                 #region 最大耗时 
@@ -692,7 +692,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 动画状态     
-                Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[Containner_Status_Index].AnimateState == HudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[Containner_Status_Index].AnimateState == XHudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                 #endregion
 
                 SelectedObjects[Containner_Status_Index].Animators_MaxDuration = Animators_GetAnimatorsMaxDuration(SelectedObjects[Containner_Status_Index].ContainerItems, SelectedObjects[Containner_Status_Index].Animators_GlobalDuration);
@@ -1987,7 +1987,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns></returns>
         IEnumerator Preview_AnimatorSound_Play()
         {
-            while (BaseScript.AnimateState == HudElementAnimateState.Animating)
+            while (BaseScript.AnimateState == XHudElementAnimateState.Animating)
             {
                 for (int w = 0; w < BaseScript.ContainerItems.Count; w++)
                 {

@@ -1,0 +1,27 @@
+﻿{
+    "name": "XHud.Editor",
+    "rootNamespace": "SevenStrikeModules.XHud.Editor",
+    "references": [
+        "UnityEditor.UI",
+        "Unity.TextMeshPro",
+        "XHud.Runtime",
+        "Unity.EditorCoroutines.Editor",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "XTween.Runtime",
+        "XTween.Editor",
+        "Unity.InputSystem",
+        "SoftMask",
+        "Unity.TextMeshPro.Editor",
+        "Unified.Universal.Blur"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

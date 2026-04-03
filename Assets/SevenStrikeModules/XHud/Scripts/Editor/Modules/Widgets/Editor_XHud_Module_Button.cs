@@ -526,7 +526,7 @@ namespace SevenStrikeModules.XHud.Editor
                 if (BtnAnimatorNodes != null && BtnAnimatorNodes.arraySize > 0)
                 {
                     #region 动画状态     
-                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, (HudElementAnimateState)AnimateState.enumValueIndex == HudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, (XHudElementAnimateState)AnimateState.enumValueIndex == XHudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                     #endregion
 
                     #region 最大耗时     
@@ -592,7 +592,7 @@ namespace SevenStrikeModules.XHud.Editor
                 if (SelectedObjects[ButtonStatu_Index].BtnAnimatorNodes != null && SelectedObjects[ButtonStatu_Index].BtnAnimatorNodes.Count > 0)
                 {
                     #region 动画状态     
-                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[ButtonStatu_Index].AnimateState == HudElementAnimateState.Animating ? "动画中" : "静止状态", SelectedObjects[ButtonStatu_Index].AnimateState == HudElementAnimateState.Animating ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[ButtonStatu_Index].AnimateState == XHudElementAnimateState.Animating ? "动画中" : "静止状态", SelectedObjects[ButtonStatu_Index].AnimateState == XHudElementAnimateState.Animating ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                     #endregion
 
                     SelectedObjects[ButtonStatu_Index].AnimatorsMaxDuration = Animators_GetAnimatorsMaxDuration(SelectedObjects[ButtonStatu_Index].BtnAnimatorNodes, SelectedObjects[ButtonStatu_Index].Button_Animators_GlobalDuration);
@@ -1607,7 +1607,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns></returns>
         IEnumerator Preview_AnimatorSound_Play()
         {
-            while (BaseScript.AnimateState == HudElementAnimateState.Animating)
+            while (BaseScript.AnimateState == XHudElementAnimateState.Animating)
             {
                 for (int w = 0; w < BaseScript.BtnAnimatorNodes.Count; w++)
                 {

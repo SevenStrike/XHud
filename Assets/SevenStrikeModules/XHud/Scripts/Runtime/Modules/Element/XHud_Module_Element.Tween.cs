@@ -324,7 +324,7 @@ namespace SevenStrikeModules.XHud
         {
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素进入前逻辑调用", HudMsgState.通知);
-            AnimateState = HudElementAnimateState.Animating;
+            AnimateState = XHudElementAnimateState.Animating;
 
             Animating = true;
 
@@ -353,7 +353,7 @@ namespace SevenStrikeModules.XHud
         {
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "元素进入后逻辑调用", HudMsgState.通知);
-            AnimateState = HudElementAnimateState.Static;
+            AnimateState = XHudElementAnimateState.Static;
 
             Animating = false;
 
@@ -422,7 +422,7 @@ namespace SevenStrikeModules.XHud
                 XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "退出前逻辑调用", HudMsgState.通知);
 
             ///---元素动画状态变为动画中
-            AnimateState = HudElementAnimateState.Animating;
+            AnimateState = XHudElementAnimateState.Animating;
 
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "禁用Canvas像素对齐！", HudMsgState.警告);
@@ -456,7 +456,7 @@ namespace SevenStrikeModules.XHud
                 XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "退出后逻辑调用", HudMsgState.通知);
 
             ///---元素动画状态变为静态
-            AnimateState = HudElementAnimateState.Static;
+            AnimateState = XHudElementAnimateState.Static;
 
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "恢复Canvas像素对齐！", HudMsgState.警告);
@@ -511,10 +511,17 @@ namespace SevenStrikeModules.XHud
 
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "回收到元素池！", HudMsgState.通知);
-            if (CreateState == HudElementCreateState.Created)
+            if (CreateState == XHudElementCreateState.Created)
             {
-                ///---回收元素
-                XHud_Manager.Instance.hm_ElementLibrary_Despawn(this);
+                if (this.CreatedSourceType == XHudElementCreatedSourceType.Library)
+                {
+                    ///---回收元素
+                    XHud_Manager.Instance.hm_ElementLibrary_Despawn(this);
+                }
+                else
+                {
+                    Destroy(this.gameObject);
+                }
             }
         }
         #endregion

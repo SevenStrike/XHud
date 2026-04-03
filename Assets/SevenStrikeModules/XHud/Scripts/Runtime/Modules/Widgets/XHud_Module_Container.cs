@@ -473,7 +473,7 @@ namespace SevenStrikeModules.XHud
         public List<XHud_ContainerItem> ContainerItems = new List<XHud_ContainerItem>();
         public float Animators_GlobalDuration = 1f;
         public float Animators_MaxDuration;
-        public HudElementAnimateState AnimateState = HudElementAnimateState.Static;
+        public XHudElementAnimateState AnimateState = XHudElementAnimateState.Static;
         public bool IsEnabled;
         public bool EventIsFold;
         public bool AutoStopPreview = true;

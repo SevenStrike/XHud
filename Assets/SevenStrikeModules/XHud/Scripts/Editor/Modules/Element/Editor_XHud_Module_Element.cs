@@ -1291,14 +1291,14 @@ namespace SevenStrikeModules.XHud.Editor
             if (!Targets_Selected())
             {
                 #region 使用状态     
-                Editor_XHud_GUI.StatuDisplayer_text(usestate, 12, new Vector2(0, 7), "使用状态", 12, (HudElementCreateState)CreateState.enumValueIndex == HudElementCreateState.Created ? "已被生成" : "已被回收", CreateState.boolValue ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(usestate, 12, new Vector2(0, 7), "使用状态", 12, (XHudElementCreateState)CreateState.enumValueIndex == XHudElementCreateState.Created ? "已被生成" : "已被回收", CreateState.boolValue ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                 #endregion
 
                 #region 动画相关
                 if (AnimatorNodes != null && AnimatorNodes.arraySize > 0)
                 {
                     #region 动画状态     
-                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, (HudElementAnimateState)AnimateState.enumValueIndex == HudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, (XHudElementAnimateState)AnimateState.enumValueIndex == XHudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                     #endregion
 
                     #region 最大耗时     
@@ -1405,14 +1405,14 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 使用状态     
-                Editor_XHud_GUI.StatuDisplayer_text(usestate, 12, new Vector2(0, 7), "使用状态", 12, SelectedObjects[ElementStatu_Index].CreateState == HudElementCreateState.Created ? "已被生成" : "已被回收", CreateState.boolValue ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(usestate, 12, new Vector2(0, 7), "使用状态", 12, SelectedObjects[ElementStatu_Index].CreateState == XHudElementCreateState.Created ? "已被生成" : "已被回收", CreateState.boolValue ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                 #endregion
 
                 #region 动画相关
                 if (SelectedObjects[ElementStatu_Index].AnimatorNodes != null && SelectedObjects[ElementStatu_Index].AnimatorNodes.Count > 0)
                 {
                     #region 动画状态     
-                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[ElementStatu_Index].AnimateState == HudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[ElementStatu_Index].AnimateState == XHudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                     #endregion
 
                     SelectedObjects[ElementStatu_Index].AnimatorsMaxDuration = Animators_GetAnimatorsMaxDuration(SelectedObjects[ElementStatu_Index].AnimatorNodes, SelectedObjects[ElementStatu_Index].Element_Animators_GlobalDuration);
@@ -3682,7 +3682,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns></returns>
         IEnumerator Preview_AnimatorSound_Play()
         {
-            while (BaseScript.AnimateState == HudElementAnimateState.Animating)
+            while (BaseScript.AnimateState == XHudElementAnimateState.Animating)
             {
                 for (int w = 0; w < BaseScript.AnimatorNodes.Count; w++)
                 {

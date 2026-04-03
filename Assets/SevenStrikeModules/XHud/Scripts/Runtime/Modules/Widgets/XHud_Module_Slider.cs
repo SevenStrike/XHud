@@ -114,7 +114,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public List<ElementNode_Animator> sli_AnimatorNodes = new List<ElementNode_Animator>();
 
-        public HudElementAnimateState AnimateState;
+        public XHudElementAnimateState AnimateState;
 
         [SerializeField]
         public bool ToggleOriginalIsFold;

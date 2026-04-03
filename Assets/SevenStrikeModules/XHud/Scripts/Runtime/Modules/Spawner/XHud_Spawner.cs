@@ -527,7 +527,7 @@ namespace SevenStrikeModules.XHud
                 ///---如果参考物体存在则生成的UI的坐标信息则参考这个物体的坐标信息
                 if (ReferObject != null)
                 {
-                    element = XHud_Manager.Instance.hm_WorldElement_Create(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, ElementSize, ReferObject.position, ReferObject.eulerAngles, ReferObject.localScale, ElementOffset, CreateParam == null ? this.CreateArgs : CreateParam, null, (wrap) =>
+                    element = XHud_Manager.Instance.hm_WorldElement_Create(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, CreateParam == null ? this.CreateArgs : CreateParam, Opt_AutoIn, ElementSize, ReferObject.position, ReferObject.eulerAngles, ReferObject.localScale, ElementOffset, null, (wrap) =>
                     {
                         ///--------当元素 - 进入 - 开始时
                         if (act_on_element_in_start != null)
@@ -543,7 +543,7 @@ namespace SevenStrikeModules.XHud
                 }
                 else
                 {
-                    element = XHud_Manager.Instance.hm_WorldElement_Create(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, ElementSize, WorldPosition, WorldRotation, WorldScale, ElementOffset, CreateParam == null ? this.CreateArgs : CreateParam, null, (wrap) =>
+                    element = XHud_Manager.Instance.hm_WorldElement_Create(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, CreateParam == null ? this.CreateArgs : CreateParam, Opt_AutoIn, ElementSize, WorldPosition, WorldRotation, WorldScale, ElementOffset, null, (wrap) =>
                     {
                         ///--------当元素 - 进入 - 开始时
                         if (act_on_element_in_start != null)
@@ -560,7 +560,7 @@ namespace SevenStrikeModules.XHud
             }
             else
             {
-                element = XHud_Manager.Instance.hm_ScreenElement_Create(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, ElementOffset, ElementScale, ElementSize, Opt_WorldCreate ? false : Opt_RMSEnabled, RMS_SelctedName, CreateParam == null ? this.CreateArgs : CreateParam, (wrap) =>
+                element = XHud_Manager.Instance.hm_ScreenElement_Create(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, CreateParam == null ? this.CreateArgs : CreateParam, Opt_AutoIn, ElementOffset, ElementScale, ElementSize, Opt_WorldCreate ? false : Opt_RMSEnabled, RMS_SelctedName, (wrap) =>
                 {
                     ///--------当元素 - 进入 - 开始时
                     if (act_on_element_in_start != null)
@@ -574,7 +574,7 @@ namespace SevenStrikeModules.XHud
                         act_on_element_in_end();
                     eve_on_element_spawn_end.Invoke();
                     Opt_IsRunning = false;
-                }, null, null, null, Opt_AutoIn).Element;
+                }, null, null, null).Element;
             }
 
             if (act_on_element_spawn != null)

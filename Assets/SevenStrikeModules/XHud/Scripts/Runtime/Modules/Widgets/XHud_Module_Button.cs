@@ -180,7 +180,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 动画状态
         /// </summary>
-        public HudElementAnimateState AnimateState = HudElementAnimateState.Static;
+        public XHudElementAnimateState AnimateState = XHudElementAnimateState.Static;
         bool LongPressIsInvoke;
         public float Button_Animators_GlobalDuration = 1;
         public List<ElementNode_Animator> BtnAnimatorNodes = new List<ElementNode_Animator>();
