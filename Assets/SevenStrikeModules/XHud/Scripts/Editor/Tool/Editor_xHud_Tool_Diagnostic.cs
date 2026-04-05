@@ -310,7 +310,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Box(new Rect(rect.x + 220, rect.y + 160, 1, 560), Color.gray * 0.75f);
 
             #region 正在使用的组件状态检测
-            Editor_XHud_GUI.Gui_Labelfield(new Rect(re.x + 260, re.y + 140, 200, 20), "正在使用的组件数量统计（包含世界空间）", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.MiddleLeft, 13, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield(new Rect(re.x + 260, re.y + 140, 250, 20), "正在使用的组件数量统计（包含世界空间）", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.MiddleLeft, 13, Font_Light);
 
             XHudElementsStatistic statistic = mgr.hm_Element_GetStatistic();
 
@@ -320,19 +320,19 @@ namespace SevenStrikeModules.XHud.Editor
             float distance_row = 55;
             float areawidth = 120;
 
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos, distance_row_start), icon_element, "元素", "Element", statistic.elements.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + areawidth + distance, distance_row_start), icon_animator, "动画器", "Animator", statistic.animators.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 2) + (distance * 2), distance_row_start), icon_sounder, "音效器", "Sounder", statistic.sounders.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 3) + (distance * 3), distance_row_start), icon_container, "容器", "Container", statistic.containers.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos, distance_row_start), icon_element, "元素", "Element", statistic.count_elements.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + areawidth + distance, distance_row_start), icon_animator, "动画器", "Animator", statistic.count_animators.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 2) + (distance * 2), distance_row_start), icon_sounder, "音效器", "Sounder", statistic.count_sounders.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 3) + (distance * 3), distance_row_start), icon_container, "容器", "Container", statistic.count_containers.ToString());
 
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos, distance_row_start + distance_row), icon_button, "按钮", "Button", statistic.buttons.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + areawidth + distance, distance_row_start + distance_row), icon_toggle, "开关", "Toggle", statistic.toggles.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 2) + (distance * 2), distance_row_start + distance_row), icon_progress, "进度条", "Progress", statistic.elements.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 3) + (distance * 3), distance_row_start + distance_row), icon_slider, "滑动条", "Slider", statistic.animators.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos, distance_row_start + distance_row), icon_button, "按钮", "Button", statistic.count_buttons.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + areawidth + distance, distance_row_start + distance_row), icon_toggle, "开关", "Toggle", statistic.count_toggles.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 2) + (distance * 2), distance_row_start + distance_row), icon_progress, "进度条", "Progress", statistic.count_elements.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 3) + (distance * 3), distance_row_start + distance_row), icon_slider, "滑动条", "Slider", statistic.count_animators.ToString());
 
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos, distance_row_start + (distance_row * 2)), icon_option, "选项器", "Option", statistic.sounders.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + areawidth + distance, distance_row_start + (distance_row * 2)), icon_text, "文字", "Text", statistic.containers.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 2) + (distance * 2), distance_row_start + (distance_row * 2)), icon_tmptext, "文字", "TmpText", statistic.buttons.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos, distance_row_start + (distance_row * 2)), icon_option, "选项器", "Option", statistic.count_sounders.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + areawidth + distance, distance_row_start + (distance_row * 2)), icon_text, "文字", "Text", statistic.count_containers.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 2) + (distance * 2), distance_row_start + (distance_row * 2)), icon_tmptext, "文字", "TmpText", statistic.count_buttons.ToString());
             #endregion
 
             Editor_XHud_GUI.Gui_Box(new Rect(rect.x + 260, rect.y + 343, 705, 1), Color.gray * 0.75f);
@@ -389,7 +389,7 @@ namespace SevenStrikeModules.XHud.Editor
                 Editor_XHud_GUI.Gui_Icon(new Rect(res.x + targetWidth - sizemark_v_u.width + 25, res.y + res.height - 30, sizemark_v_d.width, 30), sizemark_v_d, new RectOffset(0, 0, 4, 15), Color.gray * 0.75f);
             }
 
-            Editor_XHud_GUI.Gui_Labelfield(new Rect(res.x + targetWidth + 10, res.y + res.height / 2 - 10, 50, 20), $"高：{mgr.ScreenRes.y}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.MiddleLeft, 12, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield(new Rect(res.x + targetWidth + 10, res.y + res.height / 2 - 10, 80, 20), $"高：{mgr.ScreenRes.y}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.MiddleLeft, 12, Font_Light);
 
             Editor_XHud_GUI.Gui_Icon(res, Editor_XHud_GUI.GetFillTexture(HudFilled.纯色边框, HudColor.亮白), new RectOffset(15, 15, 15, 15), Color.gray);
 
@@ -423,7 +423,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 当前使用的光标
             Rect curso = new Rect(re.x + 260, re.y + 670, 30, 30);
 
-            Editor_XHud_GUI.Gui_Labelfield(new Rect(curso.x, curso.y, 100, 20), "正在使用的光标样式", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.MiddleLeft, 13, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield(new Rect(curso.x, curso.y, 160, 20), "正在使用的光标样式", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.MiddleLeft, 13, Font_Light);
             Editor_XHud_GUI.Gui_Icon(new Rect(curso.x, curso.y + 35, 30, 30), cursobg, Color.white * 0.15f);
             if (mgr.Hud_MouseCursor != null && mgr.Hud_MouseCursor.UseCustomCursor)
             {

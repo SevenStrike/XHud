@@ -50,7 +50,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素项
         /// </summary>
-        public List<HudElementNode> HudElementInfos;
+        public List<XHudElementNode> HudElementInfos;
 
         /// <summary>
         /// 实例化锚点节点
@@ -158,7 +158,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 世界锚点列表
         /// </summary>
-        public List<HudElementNode> Anchors_Layout_World = new List<HudElementNode>();
+        public List<XHudElementNode> Anchors_Layout_World = new List<XHudElementNode>();
         [Tooltip("屏幕锚点列表")]
         /// <summary>
         /// 屏幕锚点列表

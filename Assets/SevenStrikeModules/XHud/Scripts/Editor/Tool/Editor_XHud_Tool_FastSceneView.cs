@@ -23,6 +23,7 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XHud;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
+    using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
 
@@ -60,7 +61,6 @@ namespace SevenStrikeModules.XHud.Editor
             // 第二个按钮的 Y 坐标 = 第一个按钮 Y 坐标 - 按钮高度 - 按钮间距
             float btn2_y = btn1_y - BUTTON_HEIGHT - BUTTON_SPACING;
 
-            // ========== 按钮1：XHud 管理器（底部右侧） ==========
             Rect btn_rect_mgr = new Rect(btn2_x, btn2_y, BUTTON_WIDTH, BUTTON_HEIGHT);
             if (Editor_XHud_GUI.Gui_Button(btn_rect_mgr, null, null, false, "XHud 管理器", "快速选中XHudManager物体", Editor_XHud_GUI.GetColor(HudColor.深空灰), Color.white, HudFilled.实体))
             {
@@ -84,53 +84,69 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
 
-            // ========== 按钮2：XHud 快速操作（位于按钮1上方） ==========
             Rect btn_rect_faster = new Rect(btn1_x, btn1_y, BUTTON_WIDTH, BUTTON_HEIGHT);
             if (Editor_XHud_GUI.Gui_Button(btn_rect_faster, null, null, false, "XHud 快速操作", "", Editor_XHud_GUI.GetColor(HudColor.深空灰), Color.white, HudFilled.实体))
             {
                 GenericMenu menu = new GenericMenu();
 
-                // 添加带图标的菜单项
-                menu.AddItem(new GUIContent("S 选中所有模块", EditorGUIUtility.IconContent("d_Rigidbody2D Icon").image), false, () =>
+                XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+                if (mgr != null)
                 {
-                    //var modules = Object.FindObjectsByType<XHud_Manager>(
-                    //    FindObjectsSortMode.None
-                    //);
+                    for (int i = 0; i < mgr.Anchors_Layout_Screen.Count; i++)
+                    {
+                        Anchor_Layout anchor = mgr.Anchors_Layout_Screen[i];
+                        menu.AddItem(new GUIContent($"S 选择锚点/{anchor.Name}（{anchor.Type}）"), false, () =>
+                        {
+                            Selection.activeGameObject = anchor.Anchor.gameObject;
+                        });
+                    }
+                }
 
-                    //if (modules.Length > 0)
-                    //{
-                    //    GameObject[] gameObjects = new GameObject[modules.Length];
-                    //    for (int i = 0; i < modules.Length; i++)
-                    //    {
-                    //        gameObjects[i] = modules[i].gameObject;
-                    //    }
-                    //    Selection.objects = gameObjects;
-                    //    Debug.Log($"已选中 {modules.Length} 个物体");
-                    //}
-                });
+                menu.AddSeparator("");
 
-                menu.AddItem(new GUIContent("F 聚焦第一个模块", EditorGUIUtility.IconContent("d_Rigidbody2D Icon").image), false, () =>
+                if (mgr.HudCanvas_Screen != null)
                 {
-                    //var modules = Object.FindObjectsByType<XHud_Manager>(
-                    //    FindObjectsSortMode.None
-                    //);
+                    menu.AddItem(new GUIContent("F 选中屏幕画布"), false, () =>
+                    {
+                        Selection.activeGameObject = mgr.HudCanvas_Screen.gameObject;
+                    });
+                }
 
-                    //if (modules.Length > 0)
-                    //{
-                    //    Selection.activeGameObject = modules[0].gameObject;
-                    //    SceneView.lastActiveSceneView.FrameSelected();
-                    //}
+                if (mgr.HudCanvas_Screen != null)
+                {
+                    menu.AddItem(new GUIContent("W 选中世界画布"), false, () =>
+                    {
+                        Selection.activeGameObject = mgr.HudCanvas_World.gameObject;
+                    });
+                }
+
+                menu.AddItem(new GUIContent("E 选中所有元素"), false, () =>
+                {
+                    var modules = Object.FindObjectsByType<XHud_Module_Element>(
+                        FindObjectsSortMode.None
+                    );
+
+                    List<GameObject> objs = new List<GameObject>();
+                    for (int i = 0; i < modules.Length; i++)
+                    {
+                        objs.Add(modules[i].gameObject);
+                    }
+
+                    if (objs.Count > 0)
+                    {
+                        Selection.objects = objs.ToArray();
+                    }
                 });
 
                 menu.AddSeparator("");
 
-                menu.AddItem(new GUIContent("A 刷新场景", EditorGUIUtility.IconContent("d_Rigidbody2D Icon").image), false, () =>
+                menu.AddItem(new GUIContent("A 刷新场景"), false, () =>
                 {
                     UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
                     Debug.Log("场景已刷新");
                 });
 
-                menu.AddItem(new GUIContent("C 清除控制台", EditorGUIUtility.IconContent("d_Rigidbody2D Icon").image), false, () =>
+                menu.AddItem(new GUIContent("C 清除控制台"), false, () =>
                 {
                     var logEntries = System.Type.GetType("UnityEditor.LogEntries,UnityEditor.dll");
                     var clearMethod = logEntries.GetMethod("Clear", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);

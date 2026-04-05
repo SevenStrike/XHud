@@ -1270,4 +1270,13 @@ namespace SevenStrikeModules.XHud.Enums
         场景相机 = 0,
         UI相机 = 1
     }
+    /// <summary>
+    /// XHud 图元动画状态控制模式
+    /// </summary>
+    public enum XHudPrimitiveTweenMode
+    {
+        倒退 = 0,
+        播放 = 1,
+        杀死 = 2
+    }
 }

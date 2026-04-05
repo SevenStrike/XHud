@@ -60,7 +60,7 @@ namespace SevenStrikeModules.XHud.Editor
         private bool OriginalDisplay;
 
         #region 序列化属性
-        private SerializedProperty LibName, IsLoadedLayout_Screen, IsLoadedLayout_World, SpawnItemList_Screen, SpawnItemList_World, SpawnerIndicator, CreateArgs, RecycleArgs, Key_Create, Key_Recycle, UseManullyKey, IsSpawning, create_fold_move, create_fold_rotate, create_fold_alpha, recycle_fold_move, recycle_fold_rotate, recycle_fold_alpha, Crc_Lib_Name, Rec_Lib_Name, SpawnFunctionKey_Primary, SpawnFunctionKey_Secondary, DelayOrder_Spawn_Screen, DelayOrder_Spawn_World, DelayOrder_Despawn_Screen, DelayOrder_Despawn_World, ControlScreen, ControlWorld, FoldScreen, FoldWorld, ProtectedAction, inMotion, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState;
+        private SerializedProperty LibName, IsLoadedLayout_Screen, IsLoadedLayout_World, SpawnItemList_Screen, SpawnItemList_World, SpawnerIndicator, CreateArgs, RecycleArgs, Key_Create, Key_Recycle, UseManullyKey, IsSpawning, create_fold_move, create_fold_rotate, create_fold_alpha, recycle_fold_move, recycle_fold_rotate, recycle_fold_alpha, Crc_Lib_Name, Rec_Lib_Name, SpawnFunctionKey_Primary, SpawnFunctionKey_Secondary, Sequence_Spawn_Screen, Sequence_Spawn_World, Sequence_Despawn_Screen, Sequence_Despawn_World, ControlScreen, ControlWorld, FoldScreen, FoldWorld, ProtectedAction, inMotion, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState;
         #endregion
 
         #region 选项文字
@@ -87,7 +87,7 @@ namespace SevenStrikeModules.XHud.Editor
         #region 批量化操作
         XHud_LayoutSpawner[] SelectedObjects;
 
-        private void GetAllTargets()
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
@@ -105,7 +105,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
 
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -155,7 +155,7 @@ namespace SevenStrikeModules.XHud.Editor
             reset_p = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementPreview/reset_p");
             #endregion
 
-            GetAllTargets();
+            Targets_Get();
 
             #region 用于第一次加载脚本判断库名是否是空的
             if (!Application.isPlaying && XHud_Dashboard.HudManagerGet() != null)
@@ -726,11 +726,11 @@ namespace SevenStrikeModules.XHud.Editor
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Property_Field("生成间隔  (屏幕空间)", DelayOrder_Spawn_Screen, 170);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("生成间隔  (屏幕空间)", Sequence_Spawn_Screen, 170);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Property_Field("回收间隔  (屏幕空间)", DelayOrder_Despawn_Screen, 170);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("回收间隔  (屏幕空间)", Sequence_Despawn_Screen, 170);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
             Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
@@ -744,13 +744,20 @@ namespace SevenStrikeModules.XHud.Editor
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Property_Field("生成间隔  (世界空间)", DelayOrder_Spawn_World, 170);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("生成间隔  (世界空间)", Sequence_Spawn_World, 170);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Property_Field("回收间隔  (世界空间)", DelayOrder_Despawn_World, 170);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("回收间隔  (世界空间)", Sequence_Despawn_World, 170);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
+            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+
+            SerializedProperty sp_anchor_type = CreateArgs.FindPropertyRelative("anchor");
+            Editor_XHud_GUI.Gui_Layout_Property_Field("锚点", sp_anchor_type);
+
+            Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
@@ -758,7 +765,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
-            #region 屏幕UI
+            #region 屏幕空间
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "元素项 - 屏幕空间", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
@@ -1011,7 +1018,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
-            #region 世界UI
+            #region 世界空间
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "元素项 - 世界空间", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
@@ -2272,10 +2279,10 @@ namespace SevenStrikeModules.XHud.Editor
             IsLoadedLayout_World = serializedObject.FindProperty("IsLoadedLayout_World");
             SpawnFunctionKey_Primary = serializedObject.FindProperty("SpawnFunctionKey_Primary");
             SpawnFunctionKey_Secondary = serializedObject.FindProperty("SpawnFunctionKey_Secondary");
-            DelayOrder_Spawn_Screen = serializedObject.FindProperty("DelayOrder_Spawn_Screen");
-            DelayOrder_Spawn_World = serializedObject.FindProperty("DelayOrder_Spawn_World");
-            DelayOrder_Despawn_Screen = serializedObject.FindProperty("DelayOrder_Despawn_Screen");
-            DelayOrder_Despawn_World = serializedObject.FindProperty("DelayOrder_Despawn_World");
+            Sequence_Spawn_Screen = serializedObject.FindProperty("Sequence_Spawn_Screen");
+            Sequence_Spawn_World = serializedObject.FindProperty("Sequence_Spawn_World");
+            Sequence_Despawn_Screen = serializedObject.FindProperty("Sequence_Despawn_Screen");
+            Sequence_Despawn_World = serializedObject.FindProperty("Sequence_Despawn_World");
             ControlScreen = serializedObject.FindProperty("ControlScreen");
             ControlWorld = serializedObject.FindProperty("ControlWorld");
             FoldScreen = serializedObject.FindProperty("FoldScreen");
@@ -2474,9 +2481,10 @@ namespace SevenStrikeModules.XHud.Editor
                     Element.RectTransform.pivot = item.Pivot;
                     Element.RectTransform.anchorMin = item.Anchor_Min;
                     Element.RectTransform.anchorMax = item.Anchor_Max;
+                    Element.element_AlphaSet(1);
 
                     Element.RectTransform.sizeDelta = item.Size;
-                    item.SpawnedElementNode = new HudElementNode();
+                    item.SpawnedElementNode = new XHudElementNode();
                     item.SpawnedElementNode.Element = Element;
                     item.SpawnedElementNode.ID = 0;
                     item.SpawnedElementNode.Indicator = Element.Indicator;
@@ -2613,7 +2621,7 @@ namespace SevenStrikeModules.XHud.Editor
                     Element.RectTransform.localScale = item.Scale;
                     Element.RectTransform.localEulerAngles = item.Euler;
                     Element.RectTransform.sizeDelta = item.Size;
-                    item.SpawnedElementNode = new HudElementNode();
+                    item.SpawnedElementNode = new XHudElementNode();
                     item.SpawnedElementNode.Element = Element;
                     item.SpawnedElementNode.ID = 0;
                     item.SpawnedElementNode.Indicator = Element.Indicator;

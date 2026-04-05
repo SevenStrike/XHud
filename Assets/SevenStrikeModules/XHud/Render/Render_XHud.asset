@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   iterations: 6
-  intensity: 0.837
+  intensity: 0
   downsample: 1
   scale: 3.79
   offset: 10

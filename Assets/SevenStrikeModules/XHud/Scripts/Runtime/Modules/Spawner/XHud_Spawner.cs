@@ -233,50 +233,50 @@ namespace SevenStrikeModules.XHud
         /// 手动生成开关
         /// 是否允许通过快捷键手动生成和回收元素
         /// </summary>
-        public bool Opt_ManullyCreate = true;
+        public bool ManullyCreate = true;
         /// <summary>
         /// 可视化生成开关
         /// 是否在编辑器模式下自动生成元素进行可视化预览
         /// </summary>
-        public bool Opt_VisuallerCreate;
+        public bool VisuallerCreate;
         /// <summary>
         /// 世界空间生成模式
         /// true：在世界空间生成 UI 元素（3D UI）；false：在屏幕空间生成 UI 元素
         /// </summary>
-        public bool Opt_WorldCreate;
+        public bool WorldCreate;
         /// <summary>
         /// RMS 布局适配开关
         /// 是否启用响应式布局系统（Responsive Layout System）
         /// </summary>
-        public bool Opt_RMSEnabled;
+        public bool RMSEnabled;
         /// <summary>
         /// 自动播放进入动画
         /// 元素生成后是否自动播放进入动画
         /// </summary>
-        public bool Opt_AutoIn = true;
+        public bool AutoIn = true;
         #endregion
 
         #region 运行时状态
 
         [SerializeField]
-        private bool opt_IsRunning;
+        private bool m_SpawnerRunning;
         [SerializeField]
         /// <summary>
         /// 操作运行状态
         /// 标识当前生成器是否正在执行生成或回收操作（播放动画中）
         /// 当值为 true 时，新的操作将被阻止，防止动画冲突
         /// </summary>
-        public bool Opt_IsRunning
+        public bool SpawnerRunning
         {
             get
             {
-                return opt_IsRunning;
+                return m_SpawnerRunning;
             }
             set
             {
-                if (value != opt_IsRunning)
+                if (value != m_SpawnerRunning)
                 {
-                    opt_IsRunning = value;
+                    m_SpawnerRunning = value;
 
                     if (act_on_element_state_changed != null)
                         act_on_element_state_changed(value);
@@ -446,7 +446,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void OnEnable()
         {
-            if (Opt_VisuallerCreate)
+            if (VisuallerCreate)
             {
                 if (XHud_Manager.Instance == null)
                     return;
@@ -463,7 +463,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void OnDisable()
         {
-            if (Opt_VisuallerCreate)
+            if (VisuallerCreate)
             {
                 if (CheckElementLibraryIsEmpty())
                     return;
@@ -484,9 +484,9 @@ namespace SevenStrikeModules.XHud
                 {
                     if (CheckElementLibraryIsEmpty())
                         return;
-                    if (!Opt_ManullyCreate)
+                    if (!ManullyCreate)
                         return;
-                    if (Opt_IsRunning)
+                    if (SpawnerRunning)
                         return;
                     if (SpawnElement != null)
                         return;
@@ -497,9 +497,9 @@ namespace SevenStrikeModules.XHud
                 {
                     if (CheckElementLibraryIsEmpty())
                         return;
-                    if (!Opt_ManullyCreate)
+                    if (!ManullyCreate)
                         return;
-                    if (Opt_IsRunning)
+                    if (SpawnerRunning)
                         return;
                     if (SpawnElement == null)
                         return;
@@ -512,69 +512,104 @@ namespace SevenStrikeModules.XHud
 
         #region 公共方法
         /// <summary>
-        /// 从池中取出一个 Hud 元素并生成到场景中
+        /// 从池中取出一个 XHud 元素并生成到场景中
         /// </summary>
         /// <param name="IndicatorName">元素标识名称，用于区分同一预制体的不同实例，为空时使用脚本自带的 SpawnIndicator</param>
         /// <param name="CreateParam">生成动效参数，为空时使用脚本自带的 CreateArgs</param>
-        /// <returns>生成成功的 Hud 元素实例，失败时返回 null</returns>
+        /// <returns>生成成功的 XHud 元素实例，失败时返回 null</returns>
         public XHud_Module_Element hsp_Spawn(string IndicatorName = "", Motion_Creator CreateParam = null)
         {
             XHud_Module_Element element = null;
 
+            Motion_Creator arg = CreateParam == null ? this.CreateArgs : CreateParam;
+            string indicator = string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName;
+
             ///---如果UI渲染模式为世界空间则使用世界空间专用的方法
-            if (Opt_WorldCreate)
+            if (WorldCreate)
             {
                 ///---如果参考物体存在则生成的UI的坐标信息则参考这个物体的坐标信息
                 if (ReferObject != null)
                 {
-                    element = XHud_Manager.Instance.hm_WorldElement_Create(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, CreateParam == null ? this.CreateArgs : CreateParam, Opt_AutoIn, ElementSize, ReferObject.position, ReferObject.eulerAngles, ReferObject.localScale, ElementOffset, null, (wrap) =>
-                    {
-                        ///--------当元素 - 进入 - 开始时
-                        if (act_on_element_in_start != null)
-                            act_on_element_in_start();
-                        Opt_IsRunning = true;
-                    }, null, (wrap) =>
-                    {
-                        ///--------当元素 - 进入 - 结束时
-                        if (act_on_element_in_end != null)
-                            act_on_element_in_end();
-                        Opt_IsRunning = false;
-                    }, null, null).Element;
+                    element = XHud_Manager.Instance.hm_WorldElement_Create(LibName, SpawnName)
+                      .SetAlpha(0)
+                      .SetAnchored_World(indicator)
+                      .SetPosition_World(ReferObject.position)
+                      .SetRotation_World(Quaternion.Euler(ReferObject.eulerAngles))
+                      .SetOffset(ElementOffset)
+                      .SetScale(ReferObject.localScale)
+                      .SetSize(ElementSize)
+                      .On_In_Start((e) =>
+                      {
+                          ///--------当元素 - 进入 - 开始时
+                          if (act_on_element_in_start != null)
+                              act_on_element_in_start();
+                          eve_on_element_spawn_start.Invoke();
+                          SpawnerRunning = true;
+                      }).On_In_End((e) =>
+                      {
+                          ///--------当元素 - 进入 - 结束时
+                          if (act_on_element_in_end != null)
+                              act_on_element_in_end();
+                          eve_on_element_spawn_end.Invoke();
+                          SpawnerRunning = false;
+                      }).Element;
                 }
                 else
                 {
-                    element = XHud_Manager.Instance.hm_WorldElement_Create(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, CreateParam == null ? this.CreateArgs : CreateParam, Opt_AutoIn, ElementSize, WorldPosition, WorldRotation, WorldScale, ElementOffset, null, (wrap) =>
+                    element = XHud_Manager.Instance.hm_WorldElement_Create(LibName, SpawnName)
+                        .SetAlpha(0)
+                        .SetAnchored_World(indicator)
+                        .SetPosition_World(WorldPosition)
+                        .SetRotation_World(Quaternion.Euler(WorldRotation))
+                        .SetOffset(ElementOffset)
+                        .SetScale(WorldScale)
+                        .SetSize(ElementSize)
+                        .On_In_Start((e) =>
+                        {
+                            ///--------当元素 - 进入 - 开始时
+                            if (act_on_element_in_start != null)
+                                act_on_element_in_start();
+                            eve_on_element_spawn_start.Invoke();
+                            SpawnerRunning = true;
+                        }).On_In_End((e) =>
+                        {
+                            ///--------当元素 - 进入 - 结束时
+                            if (act_on_element_in_end != null)
+                                act_on_element_in_end();
+                            eve_on_element_spawn_end.Invoke();
+                            SpawnerRunning = false;
+                        }).Element;
+                }
+                if (AutoIn)
+                    element.Element_In(arg);
+            }
+            else
+            {
+                element = XHud_Manager.Instance.hm_ScreenElement_Create(LibName, SpawnName)
+                    .SetAlpha(0)
+                    .SetAnchored_Screen(arg.anchor, indicator)
+                    .SetOffset(ElementOffset)
+                    .SetScale(ElementScale)
+                    .SetSize(ElementSize)
+                    .SetRMS(RMSEnabled, RMS_SelctedName)
+                    .On_In_Start((e) =>
                     {
                         ///--------当元素 - 进入 - 开始时
                         if (act_on_element_in_start != null)
                             act_on_element_in_start();
-                        Opt_IsRunning = true;
-                    }, null, (wrap) =>
+                        eve_on_element_spawn_start.Invoke();
+                        SpawnerRunning = true;
+                    }).On_In_End((e) =>
                     {
                         ///--------当元素 - 进入 - 结束时
                         if (act_on_element_in_end != null)
                             act_on_element_in_end();
-                        Opt_IsRunning = false;
-                    }, null, null).Element;
-                }
-            }
-            else
-            {
-                element = XHud_Manager.Instance.hm_ScreenElement_Create(LibName, string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName, SpawnName, CreateParam == null ? this.CreateArgs : CreateParam, Opt_AutoIn, ElementOffset, ElementScale, ElementSize, Opt_WorldCreate ? false : Opt_RMSEnabled, RMS_SelctedName, (wrap) =>
-                {
-                    ///--------当元素 - 进入 - 开始时
-                    if (act_on_element_in_start != null)
-                        act_on_element_in_start();
-                    eve_on_element_spawn_start.Invoke();
-                    Opt_IsRunning = true;
-                }, null, (wrap) =>
-                {
-                    ///--------当元素 - 进入 - 结束时
-                    if (act_on_element_in_end != null)
-                        act_on_element_in_end();
-                    eve_on_element_spawn_end.Invoke();
-                    Opt_IsRunning = false;
-                }, null, null, null).Element;
+                        eve_on_element_spawn_end.Invoke();
+                        SpawnerRunning = false;
+                    }).Element;
+
+                if (AutoIn)
+                    element.Element_In(arg);
             }
 
             if (act_on_element_spawn != null)
@@ -583,7 +618,7 @@ namespace SevenStrikeModules.XHud
             return element;
         }
         /// <summary>
-        /// 回收一个 Hud 元素到对象池中
+        /// 回收一个 XHud 元素到对象池中
         /// </summary>
         /// <param name="RecycleParam">回收动效参数，为空时使用脚本自带的 RecycleArgs</param>
         /// <param name="actionstart">回收开始时的回调事件，用于覆盖默认的动画开始处理</param>
@@ -595,7 +630,7 @@ namespace SevenStrikeModules.XHud
                 if (act_on_element_out_start != null)
                     act_on_element_out_start();
                 eve_on_element_despawn_start.Invoke();
-                Opt_IsRunning = true;
+                SpawnerRunning = true;
             }
             : actionstart, null, actionend == null ? (wrap) =>
             {
@@ -605,7 +640,7 @@ namespace SevenStrikeModules.XHud
                     act_on_element_despawn(SpawnElement);
                 eve_on_element_despawn_end.Invoke();
                 SpawnElement = null;
-                Opt_IsRunning = false;
+                SpawnerRunning = false;
             }
             : actionend);
         }

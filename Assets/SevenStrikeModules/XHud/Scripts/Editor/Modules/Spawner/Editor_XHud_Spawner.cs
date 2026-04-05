@@ -58,7 +58,6 @@ namespace SevenStrikeModules.XHud.Editor
         public bool worldcreate;
         public bool visuallercreate;
         public bool manullycreate;
-        public bool loopcreate;
         public bool rmsenabled;
 
         public SpawnFunctionKey SpawnFunctionKey_Primary;
@@ -83,7 +82,7 @@ namespace SevenStrikeModules.XHud.Editor
         private bool OriginalDisplay;
 
         #region 序列化属性
-        private SerializedProperty recycle_fold_move, recycle_fold_rotate, recycle_fold_alpha, create_fold_move, create_fold_rotate, create_fold_alpha, Opt_VisuallerCreate, Opt_ManullyCreate, Opt_WorldCreate, opt_IsRunning, Opt_RMSEnabled, Opt_AutoIn, SpawnName, SpawnIndicator, SpawnerIndicator, CreateArgs, RecycleArgs, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, RMS_SelctedName, CreateParamName, RecycleParamName, LibName, ElementOffset, ElementScale, Key_Create, Key_Recycle, SpawnFunctionKey_Primary, SpawnFunctionKey_Secondary, Crc_Lib_Name, Rec_Lib_Name, ElementSize, WorldPosition, WorldRotation, WorldScale, ReferObject;
+        private SerializedProperty recycle_fold_move, recycle_fold_rotate, recycle_fold_alpha, create_fold_move, create_fold_rotate, create_fold_alpha, sp_VisuallerCreate, sp_ManullyCreate, sp_WorldCreate, SpawnerRunning, sp_RMSEnabled, sp_AutoIn, SpawnName, SpawnIndicator, SpawnerIndicator, CreateArgs, RecycleArgs, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, RMS_SelctedName, CreateParamName, RecycleParamName, LibName, ElementOffset, ElementScale, Key_Create, Key_Recycle, SpawnFunctionKey_Primary, SpawnFunctionKey_Secondary, Crc_Lib_Name, Rec_Lib_Name, ElementSize, WorldPosition, WorldRotation, WorldScale, ReferObject;
         #endregion
 
         #region 选项文字
@@ -252,26 +251,26 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
 
             #region 生成状态     
-            Editor_XHud_GUI.StatuDisplayer_text(null, 12, new Vector2(0, 7), "生成状态", 12, opt_IsRunning.boolValue ? "生成中" : "待命中", opt_IsRunning.boolValue ? XHud_Dashboard.Theme_Primary : Color.gray, 11, false);
+            Editor_XHud_GUI.StatuDisplayer_text(null, 12, new Vector2(0, 7), "生成状态", 12, SpawnerRunning.boolValue ? "生成中" : "待命中", SpawnerRunning.boolValue ? XHud_Dashboard.Theme_Primary : Color.gray, 11, false);
             #endregion
 
             Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 根据脚本可见性自动创建与回收
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Spawner>("可见性创建与回收", stroptions_enabled, ref Opt_VisuallerCreate, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Spawner>("可见性创建与回收", stroptions_enabled, ref sp_VisuallerCreate, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             #endregion
 
             #region 手动创建与回收
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Spawner>("手动创建与回收", stroptions_enabled, ref Opt_ManullyCreate, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Spawner>("手动创建与回收", stroptions_enabled, ref sp_ManullyCreate, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             #endregion
 
             #region 生成空间
             EditorGUI.BeginChangeCheck();
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Spawner>("生成的空间模式", stroptions_world, ref Opt_WorldCreate, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Spawner>("生成的空间模式", stroptions_world, ref sp_WorldCreate, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             if (EditorGUI.EndChangeCheck())
             {
-                if (Opt_WorldCreate.intValue == 0)
+                if (sp_WorldCreate.intValue == 0)
                     CreateArgs.FindPropertyRelative("anchor").enumValueIndex = 5;
                 else
                     CreateArgs.FindPropertyRelative("anchor").enumValueIndex = 10;
@@ -279,14 +278,14 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 生成时使用布局模式
-            if (!Opt_WorldCreate.boolValue)
+            if (!sp_WorldCreate.boolValue)
             {
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Spawner>("R M S 布局模式", stroptions_enabled, ref Opt_RMSEnabled, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Spawner>("R M S 布局模式", stroptions_enabled, ref sp_RMSEnabled, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             }
             #endregion
 
             #region 自动激活元素进入动作
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Spawner>("元素自动播放", stroptions_enabled, ref Opt_AutoIn, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Spawner>("元素自动播放", stroptions_enabled, ref sp_AutoIn, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             #endregion
 
             Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -301,7 +300,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Property_Field("生成器标识", SpawnerIndicator);
             #endregion
 
-            if (Opt_ManullyCreate.boolValue)
+            if (sp_ManullyCreate.boolValue)
             {
                 Editor_XHud_GUI.Gui_Layout_Space(5);
                 Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
@@ -337,7 +336,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!Opt_WorldCreate.boolValue)
+            if (!sp_WorldCreate.boolValue)
             {
                 Editor_XHud_GUI.Gui_Layout_Property_Field("缩放", ElementScale);
 
@@ -351,7 +350,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region RMS 布局信息
-            if (!Opt_WorldCreate.boolValue && Opt_RMSEnabled.boolValue)
+            if (!sp_WorldCreate.boolValue && sp_RMSEnabled.boolValue)
             {
                 Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.阴影灰, 5, "RMS 布局信息", Color.white);
                 Editor_XHud_GUI.Gui_Layout_Space(5);
@@ -371,7 +370,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 生成坐标
-            if (Opt_WorldCreate.boolValue)
+            if (sp_WorldCreate.boolValue)
             {
                 Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "生成坐标", XHud_Dashboard.Theme_Primary);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -392,7 +391,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 参考坐标
-            if (Opt_WorldCreate.intValue == 1)
+            if (sp_WorldCreate.intValue == 1)
             {
 
                 Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "参考坐标物体", XHud_Dashboard.Theme_Primary);
@@ -1092,13 +1091,12 @@ namespace SevenStrikeModules.XHud.Editor
                 SerializedProperty sp_AutoCreateInterval = serializedObject.FindProperty("AutoCreateInterval");
                 SerializedProperty sp_Crc_Lib_Name = serializedObject.FindProperty("Crc_Lib_Name");
                 SerializedProperty sp_Rec_Lib_Name = serializedObject.FindProperty("Rec_Lib_Name");
-                SerializedProperty sp_opt_IsRunning = serializedObject.FindProperty("opt_IsRunning");
-                SerializedProperty sp_Opt_ManullyCreate = serializedObject.FindProperty("Opt_ManullyCreate");
-                SerializedProperty sp_Opt_VisuallerCreate = serializedObject.FindProperty("Opt_VisuallerCreate");
-                SerializedProperty sp_Opt_WorldCreate = serializedObject.FindProperty("Opt_WorldCreate");
-                SerializedProperty sp_Opt_LoopCreate = serializedObject.FindProperty("Opt_LoopCreate");
-                SerializedProperty sp_Opt_RMSEnabled = serializedObject.FindProperty("Opt_RMSEnabled");
-                SerializedProperty sp_Opt_AutoIn = serializedObject.FindProperty("Opt_AutoIn");
+                SerializedProperty sp_spawner_running = serializedObject.FindProperty("m_SpawnerRunning");
+                SerializedProperty sp_ManullyCreate = serializedObject.FindProperty("ManullyCreate");
+                SerializedProperty sp_VisuallerCreate = serializedObject.FindProperty("VisuallerCreate");
+                SerializedProperty sp_WorldCreate = serializedObject.FindProperty("WorldCreate");
+                SerializedProperty sp_RMSEnabled = serializedObject.FindProperty("RMSEnabled");
+                SerializedProperty sp_AutoIn = serializedObject.FindProperty("AutoIn");
                 SerializedProperty sp_SpawnFunctionKey_Primary = serializedObject.FindProperty("SpawnFunctionKey_Primary");
                 SerializedProperty sp_SpawnFunctionKey_Secondary = serializedObject.FindProperty("SpawnFunctionKey_Secondary");
                 SerializedProperty sp_ElementSize = serializedObject.FindProperty("ElementSize");
@@ -1206,13 +1204,12 @@ namespace SevenStrikeModules.XHud.Editor
                         hsp.autocreate_hold = sp_AutoCreateHold.floatValue;
                         hsp.autocreate_interval = sp_AutoCreateInterval.floatValue;
 
-                        hsp.iscreating = sp_opt_IsRunning.boolValue;
-                        hsp.visuallercreate = sp_Opt_VisuallerCreate.boolValue;
-                        hsp.manullycreate = sp_Opt_ManullyCreate.boolValue;
-                        hsp.loopcreate = sp_Opt_LoopCreate.boolValue;
-                        hsp.rmsenabled = sp_Opt_RMSEnabled.boolValue;
-                        hsp.worldcreate = sp_Opt_WorldCreate.boolValue;
-                        hsp.autoin = sp_Opt_AutoIn.boolValue;
+                        hsp.iscreating = sp_spawner_running.boolValue;
+                        hsp.visuallercreate = sp_VisuallerCreate.boolValue;
+                        hsp.manullycreate = sp_ManullyCreate.boolValue;
+                        hsp.rmsenabled = sp_RMSEnabled.boolValue;
+                        hsp.worldcreate = sp_WorldCreate.boolValue;
+                        hsp.autoin = sp_AutoIn.boolValue;
 
                         hsp.crc_lib_name = sp_Crc_Lib_Name.stringValue;
                         hsp.rec_lib_name = sp_Rec_Lib_Name.stringValue;
@@ -1254,13 +1251,12 @@ namespace SevenStrikeModules.XHud.Editor
                             SerializedProperty m_sp_AutoCreateInterval = so_pre.FindProperty("AutoCreateInterval");
                             SerializedProperty m_sp_Crc_Lib_Name = so_pre.FindProperty("Crc_Lib_Name");
                             SerializedProperty m_sp_Rec_Lib_Name = so_pre.FindProperty("Rec_Lib_Name");
-                            SerializedProperty m_sp_opt_IsRunning = so_pre.FindProperty("opt_IsRunning");
-                            SerializedProperty m_sp_Opt_ManullyCreate = so_pre.FindProperty("Opt_ManullyCreate");
-                            SerializedProperty m_sp_Opt_VisuallerCreate = so_pre.FindProperty("Opt_VisuallerCreate");
-                            SerializedProperty m_sp_Opt_WorldCreate = so_pre.FindProperty("Opt_WorldCreate");
-                            SerializedProperty m_sp_Opt_LoopCreate = so_pre.FindProperty("Opt_LoopCreate");
-                            SerializedProperty m_sp_Opt_RMSEnabled = so_pre.FindProperty("Opt_RMSEnabled");
-                            SerializedProperty m_sp_Opt_AutoIn = so_pre.FindProperty("Opt_AutoIn");
+                            SerializedProperty m_sp_spawner_running = so_pre.FindProperty("m_SpawnerRunning");
+                            SerializedProperty m_sp_ManullyCreate = so_pre.FindProperty("ManullyCreate");
+                            SerializedProperty m_sp_VisuallerCreate = so_pre.FindProperty("VisuallerCreate");
+                            SerializedProperty m_sp_WorldCreate = so_pre.FindProperty("WorldCreate");
+                            SerializedProperty m_sp_RMSEnabled = so_pre.FindProperty("RMSEnabled");
+                            SerializedProperty m_sp_AutoIn = so_pre.FindProperty("AutoIn");
                             SerializedProperty m_SpawnFunctionKey_Primary = so_pre.FindProperty("SpawnFunctionKey_Primary");
                             SerializedProperty m_SpawnFunctionKey_Secondary = so_pre.FindProperty("SpawnFunctionKey_Secondary");
 
@@ -1344,13 +1340,12 @@ namespace SevenStrikeModules.XHud.Editor
                             m_sp_Crc_Lib_Name.stringValue = hsp.crc_lib_name;
                             m_sp_Rec_Lib_Name.stringValue = hsp.rec_lib_name;
 
-                            m_sp_opt_IsRunning.boolValue = hsp.iscreating;
-                            m_sp_Opt_ManullyCreate.boolValue = hsp.manullycreate;
-                            m_sp_Opt_VisuallerCreate.boolValue = hsp.visuallercreate;
-                            m_sp_Opt_WorldCreate.boolValue = hsp.worldcreate;
-                            m_sp_Opt_LoopCreate.boolValue = hsp.loopcreate;
-                            m_sp_Opt_RMSEnabled.boolValue = hsp.rmsenabled;
-                            m_sp_Opt_AutoIn.boolValue = hsp.autoin;
+                            m_sp_spawner_running.boolValue = hsp.iscreating;
+                            m_sp_ManullyCreate.boolValue = hsp.manullycreate;
+                            m_sp_VisuallerCreate.boolValue = hsp.visuallercreate;
+                            m_sp_WorldCreate.boolValue = hsp.worldcreate;
+                            m_sp_RMSEnabled.boolValue = hsp.rmsenabled;
+                            m_sp_AutoIn.boolValue = hsp.autoin;
 
                             so_pre.ApplyModifiedProperties();
                         }
@@ -1435,13 +1430,12 @@ namespace SevenStrikeModules.XHud.Editor
                         sp_Crc_Lib_Name.stringValue = hsp.crc_lib_name;
                         sp_Rec_Lib_Name.stringValue = hsp.rec_lib_name;
 
-                        sp_opt_IsRunning.boolValue = hsp.iscreating;
-                        sp_Opt_ManullyCreate.boolValue = hsp.manullycreate;
-                        sp_Opt_VisuallerCreate.boolValue = hsp.visuallercreate;
-                        sp_Opt_WorldCreate.boolValue = hsp.worldcreate;
-                        sp_Opt_LoopCreate.boolValue = hsp.loopcreate;
-                        sp_Opt_RMSEnabled.boolValue = hsp.rmsenabled;
-                        sp_Opt_AutoIn.boolValue = hsp.autoin;
+                        sp_spawner_running.boolValue = hsp.iscreating;
+                        sp_ManullyCreate.boolValue = hsp.manullycreate;
+                        sp_VisuallerCreate.boolValue = hsp.visuallercreate;
+                        sp_WorldCreate.boolValue = hsp.worldcreate;
+                        sp_RMSEnabled.boolValue = hsp.rmsenabled;
+                        sp_AutoIn.boolValue = hsp.autoin;
 
                         serializedObject.ApplyModifiedProperties();
                     }
@@ -1746,12 +1740,12 @@ namespace SevenStrikeModules.XHud.Editor
             create_fold_move = serializedObject.FindProperty("create_fold_move");
             create_fold_rotate = serializedObject.FindProperty("create_fold_rotate");
             create_fold_alpha = serializedObject.FindProperty("create_fold_alpha");
-            Opt_VisuallerCreate = serializedObject.FindProperty("Opt_VisuallerCreate");
-            Opt_ManullyCreate = serializedObject.FindProperty("Opt_ManullyCreate");
-            Opt_WorldCreate = serializedObject.FindProperty("Opt_WorldCreate");
-            opt_IsRunning = serializedObject.FindProperty("opt_IsRunning");
-            Opt_RMSEnabled = serializedObject.FindProperty("Opt_RMSEnabled");
-            Opt_AutoIn = serializedObject.FindProperty("Opt_AutoIn");
+            sp_VisuallerCreate = serializedObject.FindProperty("VisuallerCreate");
+            sp_ManullyCreate = serializedObject.FindProperty("ManullyCreate");
+            sp_WorldCreate = serializedObject.FindProperty("WorldCreate");
+            SpawnerRunning = serializedObject.FindProperty("m_SpawnerRunning");
+            sp_RMSEnabled = serializedObject.FindProperty("RMSEnabled");
+            sp_AutoIn = serializedObject.FindProperty("AutoIn");
             SpawnName = serializedObject.FindProperty("SpawnName");
             SpawnIndicator = serializedObject.FindProperty("SpawnIndicator");
             SpawnerIndicator = serializedObject.FindProperty("SpawnerIndicator");

@@ -259,7 +259,7 @@ namespace SevenStrikeModules.XHud.Editor
         private void RMS_Preview(XHud_Module_Element element, float alpha, Vector3 offset, string solution, bool DontCreateID)
         {
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-            mgr.hm_ScreenElement_Initialize_By_RMS(element, alpha, offset, solution, DontCreateID);
+            mgr.hm_ScreenElement_Initialize_By_RMS(element, solution, DontCreateID);
         }
     }
 }

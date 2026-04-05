@@ -56,7 +56,7 @@ MonoBehaviour:
     Target: {fileID: 6119741072749758716, guid: 6cafd8c6e9fe15943b4875472defd33b, type: 3}
     PreloadElements: []
   - Name: Image
-    InitializeCount: 1
+    InitializeCount: 12
     UsedCount: 0
     RecycledCount: 0
     NextIndex: 0

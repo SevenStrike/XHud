@@ -99,7 +99,7 @@ namespace SevenStrikeModules.XHud
                 return;
             }
 
-            XHud_Manager.Instance.hm_ScreenElement_Initialize_By_RMS(this, Alpha, Vector3.zero, RMS_Name, true);
+            XHud_Manager.Instance.hm_ScreenElement_Initialize_By_RMS(this, RMS_Name, true);
         }
     }
 }

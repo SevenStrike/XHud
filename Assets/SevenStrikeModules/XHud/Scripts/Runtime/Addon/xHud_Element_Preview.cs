@@ -234,10 +234,10 @@
                 {
                     if (HudElement.RMS_LayoutDatas[i].LayoutName == RMS_Name)
                     {
-                        Debug.Log(OriginalPosition);
+                        //Debug.Log(OriginalPosition);
                         HudElement.element_PositionSet(OriginalPosition);
                         HudElement.element_AlphaSet(0);
-                        XHud_Manager.Instance.hm_ScreenElement_Initialize_By_RMS(HudElement, 0, Vector3.zero, RMS_Name, true);
+                        XHud_Manager.Instance.hm_ScreenElement_Initialize_By_RMS(HudElement, RMS_Name, true);
                         HudElement.Animators_Rewind();
                         HudElement.Element_In(CreateArgs, () =>
                         {

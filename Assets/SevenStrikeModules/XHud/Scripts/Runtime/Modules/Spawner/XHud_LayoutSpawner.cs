@@ -21,10 +21,12 @@
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XTween;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.Events;
+    using static UnityEngine.Rendering.GPUSort;
 
     [System.Serializable]
     public class XHud_LayoutSpawner_Args
@@ -121,7 +123,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 生成的元素节点
         /// </summary>
-        public HudElementNode SpawnedElementNode;
+        public XHudElementNode SpawnedElementNode;
         /// <summary>
         /// 使用全局动效
         /// </summary>
@@ -170,19 +172,83 @@ namespace SevenStrikeModules.XHud
 
         public string SpawnerIndicator;
 
-        public Motion_Creator CreateArgs;
+        public Motion_Creator CreateArgs = new Motion_Creator
+        {
+            // 创建HudManager 的时候初始化动效参数
+            anchor = XHudAnchor.中心,
+            Movement = new MotionNode_Movement()
+            {
+                Movement = HudMotion_Movement.S_从下至上,
+                Distance = 100,
+                Duration = 1,
+                Delay = 0,
+                Curve = AnimationCurve.EaseInOut(0, 0, 1, 1),
+                CurveName = "",
+                Ease = EaseMode.InOutCubic,
+            },
+            Rotation = new MotionNode_Rotation()
+            {
+                Rotation = HudMotion_Rotation.A_无旋转,
+                Degree = 0,
+                Duration = 1,
+                Delay = 0,
+                Curve = AnimationCurve.EaseInOut(0, 0, 1, 1),
+                CurveName = "",
+                Ease = EaseMode.InOutCubic,
+            },
+            Alpha = new MotionNode_Alpha()
+            {
+                Duration = 1,
+                Delay = 0,
+                Curve = AnimationCurve.EaseInOut(0, 0, 1, 1),
+                CurveName = "",
+                Ease = EaseMode.InOutCubic,
+            }
+        };
         public string CreateParamName;
         public string Crc_Lib_Name;
 
-        public Motion_Recycler RecycleArgs;
+        public Motion_Recycler RecycleArgs = new Motion_Recycler
+        {
+            // 创建HudManager 的时候初始化动效参数
+            MotionAnimateEndState = MotionAnimateEndState.以_透明度为准,
+            Movement = new MotionNode_Movement()
+            {
+                Movement = HudMotion_Movement.D_从上至下,
+                Distance = 100,
+                Duration = 1,
+                Delay = 0,
+                Curve = AnimationCurve.EaseInOut(0, 0, 1, 1),
+                CurveName = "",
+                Ease = EaseMode.InOutCubic
+            },
+            Rotation = new MotionNode_Rotation()
+            {
+                Rotation = HudMotion_Rotation.A_无旋转,
+                Degree = 0,
+                Duration = 1,
+                Delay = 0,
+                Curve = AnimationCurve.EaseInOut(0, 0, 1, 1),
+                CurveName = "",
+                Ease = EaseMode.InOutCubic
+            },
+            Alpha = new MotionNode_Alpha()
+            {
+                Duration = 1,
+                Delay = 0,
+                Curve = AnimationCurve.EaseInOut(0, 0, 1, 1),
+                CurveName = "",
+                Ease = EaseMode.InOutCubic
+            }
+        };
         public string RecycleParamName;
         public string Rec_Lib_Name;
 
         public SpawnFunctionKey SpawnFunctionKey_Primary = SpawnFunctionKey.Shift;
         public SpawnFunctionKey SpawnFunctionKey_Secondary = SpawnFunctionKey.None;
 
-        public KeyCode Key_Create = KeyCode.F7;
-        public KeyCode Key_Recycle = KeyCode.F8;
+        public KeyCode Key_Create = KeyCode.S;
+        public KeyCode Key_Recycle = KeyCode.D;
 
         public bool UseManullyKey;
 
@@ -222,19 +288,19 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表元素生成间隔延迟时间 - 屏幕
         /// </summary>
-        public float DelayOrder_Spawn_Screen = 0;
+        public float Sequence_Spawn_Screen = 0;
         /// <summary>
         /// 列表元素生成间隔延迟时间 - 世界
         /// </summary>
-        public float DelayOrder_Spawn_World = 0;
+        public float Sequence_Spawn_World = 0;
         /// <summary>
         /// 列表元素回收间隔延迟时间 - 屏幕
         /// </summary>
-        public float DelayOrder_Despawn_Screen = 0;
+        public float Sequence_Despawn_Screen = 0;
         /// <summary>
         /// 列表元素回收间隔延迟时间 - 世界
         /// </summary>
-        public float DelayOrder_Despawn_World = 0;
+        public float Sequence_Despawn_World = 0;
 
         public bool create_fold_move;
         public bool create_fold_rotate;
@@ -317,27 +383,35 @@ namespace SevenStrikeModules.XHud
             switch (space)
             {
                 case XHudSpace.屏幕空间:
-                    if (DelayOrder_Spawn_Screen > 0)
+                    if (SpawnItemList_Screen.Count <= 0)
+                        return;
+
+                    // 如果设置了根据序列间隔时间生成元素（屏幕空间）
+                    if (Sequence_Spawn_Screen > 0)
                     {
                         //顺序生成 - 屏幕
-                        hsp_Screen_OrderDelay_Spawn();
+                        hsp_Spawn_Sequence_Screen();
                     }
                     else
                     {
                         //并发生成 - 屏幕
-                        hsp_Screen_Spawn();
+                        hsp_Spawn_Concurrent_Screen();
                     }
                     break;
                 case XHudSpace.世界空间:
-                    if (DelayOrder_Spawn_World > 0)
+                    if (SpawnItemList_World.Count <= 0)
+                        return;
+
+                    // 如果设置了根据序列间隔时间生成元素（世界空间）
+                    if (Sequence_Spawn_World > 0)
                     {
                         //顺序生成 - 世界
-                        hsp_World_OrderDelay_Spawn();
+                        hsp_Spawn_Sequence_World();
                     }
                     else
                     {
                         //并发生成 - 世界
-                        hsp_World_Spawn();
+                        hsp_Spawn_Concurrent_World();
                     }
                     break;
             }
@@ -352,42 +426,49 @@ namespace SevenStrikeModules.XHud
             switch (space)
             {
                 case XHudSpace.屏幕空间:
-                    if (DelayOrder_Despawn_Screen > 0)
+                    if (SpawnItemList_Screen.Count <= 0)
+                        return;
+                    // 如果设置了根据序列间隔时间回收元素（屏幕空间）
+                    if (Sequence_Despawn_Screen > 0)
                     {
                         //顺序回收 - 屏幕
-                        hsp_Screen_OrderDelay_Despawn();
+                        hsp_Despawn_Sequence_Screen();
                     }
                     else
                     {
                         //并发回收 - 屏幕
-                        hsp_Screen_Despawn();
+                        hsp_Despawn_Concurrent_Screen();
                     }
                     break;
                 case XHudSpace.世界空间:
-                    if (DelayOrder_Despawn_World > 0)
+                    if (SpawnItemList_World.Count <= 0)
+                        return;
+                    // 如果设置了根据序列间隔时间回收元素（世界空间）
+                    if (Sequence_Despawn_World > 0)
                     {
                         //顺序回收 - 世界
-                        hsp_World_OrderDelay_Despawn();
+                        hsp_Despawn_Sequence_World();
                     }
                     else
                     {
                         //并发回收 - 世界
-                        hsp_World_Despawn();
+                        hsp_Despawn_Concurrent_World();
                     }
                     break;
             }
         }
         #endregion
 
-        #region Screen 生成 / 回收 - 并发
+        #region  并发
+        // --------------------------------------------------------------------生成
         /// <summary>
         /// 从池中取出Hud元素 - 屏幕级别 - 并发生成
         /// </summary>
-        private void hsp_Screen_Spawn()
+        private void hsp_Spawn_Concurrent_Screen()
         {
             if (CheckElementLibrary_IsEmpty())
                 return;
-
+            // 启动多个协程同时并发执行元素生成逻辑
             for (int i = 0; i < SpawnItemList_Screen.Count; i++)
             {
                 XHud_LayoutSpawner_Item item = SpawnItemList_Screen[i];
@@ -397,11 +478,29 @@ namespace SevenStrikeModules.XHud
             if (act_on_spawn != null)
                 act_on_spawn(XHudSpace.屏幕空间);
         }
+        /// <summary>
+        /// 从池中取出Hud元素 - 世界级别 - 并发生成
+        /// </summary>
+        private void hsp_Spawn_Concurrent_World()
+        {
+            if (CheckElementLibrary_IsEmpty())
+                return;
 
+            // 启动多个协程同时并发执行元素生成逻辑
+            for (int i = 0; i < SpawnItemList_World.Count; i++)
+            {
+                XHud_LayoutSpawner_Item item = SpawnItemList_World[i];
+                if (!item.InMotion && !item.Spawned)
+                    StartCoroutine(hsp_Create(item, XHudSpace.世界空间));
+            }
+            if (act_on_spawn != null)
+                act_on_spawn(XHudSpace.世界空间);
+        }
+        // --------------------------------------------------------------------回收
         /// <summary>
         /// 回收Hud元素到池中 - 屏幕级别 - 并发回收
         /// </summary>
-        private void hsp_Screen_Despawn()
+        private void hsp_Despawn_Concurrent_Screen()
         {
             if (CheckElementLibrary_IsEmpty())
                 return;
@@ -415,31 +514,10 @@ namespace SevenStrikeModules.XHud
             if (act_on_despawn != null)
                 act_on_despawn(XHudSpace.屏幕空间);
         }
-        #endregion
-
-        #region World 生成 / 回收 - 并发
-        /// <summary>
-        /// 从池中取出Hud元素 - 世界级别 - 并发生成
-        /// </summary>
-        private void hsp_World_Spawn()
-        {
-            if (CheckElementLibrary_IsEmpty())
-                return;
-
-            for (int i = 0; i < SpawnItemList_World.Count; i++)
-            {
-                XHud_LayoutSpawner_Item item = SpawnItemList_World[i];
-                if (!item.InMotion && !item.Spawned)
-                    StartCoroutine(hsp_Create(item, XHudSpace.世界空间));
-            }
-            if (act_on_spawn != null)
-                act_on_spawn(XHudSpace.世界空间);
-        }
-
         /// <summary>
         /// 回收Hud元素到池中 - 世界级别 - 并发回收
         /// </summary>
-        private void hsp_World_Despawn()
+        private void hsp_Despawn_Concurrent_World()
         {
             if (CheckElementLibrary_IsEmpty())
                 return;
@@ -453,205 +531,20 @@ namespace SevenStrikeModules.XHud
             if (act_on_despawn != null)
                 act_on_despawn(XHudSpace.世界空间);
         }
-        #endregion
-
-        #region Screen 生成 / 回收 - 顺序
+        // --------------------------------------------------------------------并发协程
         /// <summary>
-        /// 从池中取出Hud元素 - 屏幕级别 - 顺序生成
+        /// 协程逻辑
         /// </summary>
-        private void hsp_Screen_OrderDelay_Spawn()
-        {
-            if (CheckElementLibrary_IsEmpty())
-                return;
-            StartCoroutine(hsp_OrderDelay_Create(XHudSpace.屏幕空间));
-            if (act_on_spawn != null)
-                act_on_spawn(XHudSpace.屏幕空间);
-        }
-
-        /// <summary>
-        /// 回收Hud元素到池中 - 屏幕级别 - 顺序回收
-        /// </summary>
-        private void hsp_Screen_OrderDelay_Despawn()
-        {
-            if (CheckElementLibrary_IsEmpty())
-                return;
-            StartCoroutine(hsp_OrderDelay_Recycle(XHudSpace.屏幕空间));
-            if (act_on_despawn != null)
-                act_on_despawn(XHudSpace.屏幕空间);
-        }
-        #endregion
-
-        #region World 生成 / 回收 - 顺序
-        /// <summary>
-        /// 从池中取出Hud元素 - 世界级别 - 顺序生成
-        /// </summary>
-        private void hsp_World_OrderDelay_Spawn()
-        {
-            if (CheckElementLibrary_IsEmpty())
-                return;
-            StartCoroutine(hsp_OrderDelay_Create(XHudSpace.世界空间));
-            if (act_on_spawn != null)
-                act_on_spawn(XHudSpace.世界空间);
-        }
-
-        /// <summary>
-        /// 回收Hud元素到池中 - 世界级别 - 顺序回收
-        /// </summary>
-        private void hsp_World_OrderDelay_Despawn()
-        {
-            if (CheckElementLibrary_IsEmpty())
-                return;
-            StartCoroutine(hsp_OrderDelay_Recycle(XHudSpace.世界空间));
-            if (act_on_despawn != null)
-                act_on_despawn(XHudSpace.世界空间);
-        }
-        #endregion
-
-        //---------------------- 主要修改逻辑在这
-
-        #region 并发生成 / 回收
-        /// <summary>
-        /// 生成
-        /// </summary>
-        /// <param tweenName="item"></param>
-        /// <param tweenName="space"></param>
+        /// <param name="item"></param>
+        /// <param name="space"></param>
         /// <returns></returns>
         private IEnumerator hsp_Create(XHud_LayoutSpawner_Item item, XHudSpace space)
         {
             //---延迟创建
             yield return new WaitForSeconds(item.Delay_Spawn);
-            //---生成元素
-            switch (space)
-            {
-                case XHudSpace.屏幕空间:
 
-                    item.SpawnedElementNode = XHud_Manager.Instance.hm_ScreenElement_Create(
-                        LibName,
-                        item.Indicator,
-                        item.SpawnName,
-                        item.UseSpawnerMotion == "自身动效" ? item.CreateArgs : CreateArgs,
-                        item.AutoIn == "自动 In" ? true : false,
-                        item.Position + item.Offset,
-                        item.Scale,
-                        item.Size,
-                        false,
-                        null,
-                       (element) =>/*动作委托：元素 In 开始*/
-                       {
-                           item.InMotion = true;
-
-                           item.Spawned = true;
-
-                           if (item.act_on_element_in_start != null)
-                           {
-                               item.act_on_element_in_start(element);
-                           }
-                       },
-                       (progress) =>/*动作委托：元素 In 进度*/
-                       {
-                           item.MotionPercentage = progress;
-                       },
-                       (element) =>/*动作委托：元素 In 结束*/
-                       {
-                           item.InMotion = false;
-
-                           if (item.act_on_element_in_end != null)
-                           {
-                               item.act_on_element_in_end(element);
-                           }
-                       },
-                       (element) =>/*动作委托：元素 Out 开始*/
-                       {
-                           item.InMotion = true;
-
-                           if (item.act_on_element_out_start != null)
-                           {
-                               item.act_on_element_out_start(element);
-                           };
-                       },
-                       (progress) =>/*动作委托：元素 Out 进度*/
-                       {
-                           item.MotionPercentage = progress;
-                       },
-                       (element) =>/*动作委托：元素 Out 结束*/
-                       {
-                           item.InMotion = false;
-
-                           item.Spawned = false;
-
-                           if (item.act_on_element_out_end != null)
-                           {
-                               item.act_on_element_out_end(element);
-                           };
-                           item.SpawnedElementNode = null;
-                       });
-                    break;
-                case XHudSpace.世界空间:
-
-                    item.SpawnedElementNode = XHud_Manager.Instance.hm_WorldElement_Create(
-                        LibName,
-                        item.Indicator,
-                        item.SpawnName,
-                        item.UseSpawnerMotion == "自身动效" ? item.CreateArgs : CreateArgs,
-                        item.AutoIn == "自动 In" ? true : false,
-                        item.Size,
-                        item.Position,
-                        item.Euler,
-                        item.Scale,
-                        item.Offset,
-                        (element) =>/*动作委托：元素 In 开始*/
-                        {
-                            item.InMotion = true;
-
-                            item.Spawned = true;
-
-                            if (item.act_on_element_in_start != null)
-                            {
-                                item.act_on_element_in_start(element);
-                            }
-                        },
-                        (progress) =>/*动作委托：元素 In  进度*/
-                        {
-                            item.MotionPercentage = progress;
-                        },
-                        (element) =>/*动作委托：元素 In 结束*/
-                        {
-                            item.InMotion = false;
-
-                            if (item.act_on_element_in_end != null)
-                            {
-                                item.act_on_element_in_end(element);
-                            }
-                        },
-                        (element) =>/*动作委托：元素 Out 开始*/
-                        {
-                            item.InMotion = true;
-
-                            if (item.act_on_element_out_start != null)
-                            {
-                                item.act_on_element_out_start(element);
-                            };
-                        },
-                        (progres) =>/*动作委托：元素 Out 进度*/
-                        {
-                            item.MotionPercentage = 1 - progres;
-                        },
-                        (element) =>/*动作委托：元素 Out 结束*/
-                        {
-                            item.InMotion = false;
-
-                            item.Spawned = false;
-
-                            if (item.act_on_element_out_end != null)
-                            {
-                                item.act_on_element_out_end(element);
-                            };
-                            item.SpawnedElementNode = null;
-                        });
-                    break;
-            }
+            CommonSpawn(item, space);
         }
-
         /// <summary>
         /// 回收
         /// </summary>
@@ -694,13 +587,60 @@ namespace SevenStrikeModules.XHud
         }
         #endregion
 
-        #region 顺序生成 / 回收
+        #region 顺序
+        // --------------------------------------------------------------------生成
+        /// <summary>
+        /// 从池中取出Hud元素 - 屏幕级别 - 顺序生成
+        /// </summary>
+        private void hsp_Spawn_Sequence_Screen()
+        {
+            if (CheckElementLibrary_IsEmpty())
+                return;
+            StartCoroutine(hsp_Sequence_Create(XHudSpace.屏幕空间));
+            if (act_on_spawn != null)
+                act_on_spawn(XHudSpace.屏幕空间);
+        }
+        /// <summary>
+        /// 从池中取出Hud元素 - 世界级别 - 顺序生成
+        /// </summary>
+        private void hsp_Spawn_Sequence_World()
+        {
+            if (CheckElementLibrary_IsEmpty())
+                return;
+            StartCoroutine(hsp_Sequence_Create(XHudSpace.世界空间));
+            if (act_on_spawn != null)
+                act_on_spawn(XHudSpace.世界空间);
+        }
+        // --------------------------------------------------------------------回收
+        /// <summary>
+        /// 回收Hud元素到池中 - 屏幕级别 - 顺序回收
+        /// </summary>
+        private void hsp_Despawn_Sequence_Screen()
+        {
+            if (CheckElementLibrary_IsEmpty())
+                return;
+            StartCoroutine(hsp_Sequence_Recycle(XHudSpace.屏幕空间));
+            if (act_on_despawn != null)
+                act_on_despawn(XHudSpace.屏幕空间);
+        }
+        /// <summary>
+        /// 回收Hud元素到池中 - 世界级别 - 顺序回收
+        /// </summary>
+        private void hsp_Despawn_Sequence_World()
+        {
+            if (CheckElementLibrary_IsEmpty())
+                return;
+            StartCoroutine(hsp_Sequence_Recycle(XHudSpace.世界空间));
+            if (act_on_despawn != null)
+                act_on_despawn(XHudSpace.世界空间);
+        }
+        // --------------------------------------------------------------------顺序协程
         /// <summary>
         /// 生成 - 按列表顺序延迟模式
         /// </summary>
         /// <param tweenName="space"></param>
         /// <returns></returns>
-        private IEnumerator hsp_OrderDelay_Create(XHudSpace space)
+        private IEnumerator hsp_Sequence_Create(XHudSpace space)
         {
             //---生成元素
             switch (space)
@@ -712,67 +652,8 @@ namespace SevenStrikeModules.XHud
                         if (!item.InMotion && !item.Spawned)
                         {
                             //---延迟创建
-                            yield return new WaitForSeconds(item.Delay_Spawn + DelayOrder_Spawn_Screen);
-                            item.SpawnedElementNode = XHud_Manager.Instance.hm_ScreenElement_Create(
-                                LibName,
-                                item.Indicator,
-                                item.SpawnName,
-                                item.UseSpawnerMotion == "自身动效" ? item.CreateArgs : CreateArgs,
-                                item.AutoIn == "自动 In" ? true : false,
-                                item.Position + item.Offset,
-                                item.Scale,
-                                item.Size,
-                                false,
-                                null,
-                                (element) =>/*动作委托：元素 In 开始*/
-                                {
-                                    item.InMotion = true;
-
-                                    item.Spawned = true;
-
-                                    if (item.act_on_element_in_start != null)
-                                    {
-                                        item.act_on_element_in_start(element);
-                                    }
-                                },
-                                (progress) =>/*动作委托：元素In  进度*/
-                                {
-                                    item.MotionPercentage = progress;
-                                },
-                                (element) =>/*动作委托：元素 In 结束*/
-                                {
-                                    item.InMotion = false;
-
-                                    if (item.act_on_element_in_end != null)
-                                    {
-                                        item.act_on_element_in_end(element);
-                                    }
-                                },
-                                (element) =>/*动作委托：元素 Out 开始*/
-                                {
-                                    item.InMotion = true;
-
-                                    if (item.act_on_element_out_start != null)
-                                    {
-                                        item.act_on_element_out_start(element);
-                                    };
-                                },
-                                (progres) =>/*动作委托：元素 Out 进度*/
-                                {
-                                    item.MotionPercentage = 1 - progres;
-                                },
-                                (element) =>/*动作委托：元素 Out 结束*/
-                                {
-                                    item.InMotion = false;
-
-                                    item.Spawned = false;
-
-                                    if (item.act_on_element_out_end != null)
-                                    {
-                                        item.act_on_element_out_end(element);
-                                    };
-                                    item.SpawnedElementNode = null;
-                                });
+                            yield return new WaitForSeconds(item.Delay_Spawn + Sequence_Spawn_Screen);
+                            CommonSpawn(item, space);
                         }
                     }
                     break;
@@ -783,79 +664,19 @@ namespace SevenStrikeModules.XHud
                         if (!item.InMotion && !item.Spawned)
                         {
                             //---延迟创建
-                            yield return new WaitForSeconds(item.Delay_Spawn + DelayOrder_Spawn_World);
-                            item.SpawnedElementNode = XHud_Manager.Instance.hm_WorldElement_Create(
-                                LibName,
-                                item.Indicator,
-                                item.SpawnName,
-                                item.UseSpawnerMotion == "自身动效" ? item.CreateArgs : CreateArgs,
-                                item.AutoIn == "自动 In" ? true : false,
-                                item.Size,
-                                item.Position,
-                                item.Euler,
-                                item.Scale,
-                                item.Offset,
-                                (element) =>/*动作委托：元素 In 开始*/
-                                {
-                                    item.InMotion = true;
-
-                                    item.Spawned = true;
-
-                                    if (item.act_on_element_in_start != null)
-                                    {
-                                        item.act_on_element_in_start(element);
-                                    }
-                                },
-                                (progress) =>/*动作委托：元素 In 进度*/
-                                {
-                                    item.MotionPercentage = progress;
-                                },
-                                (element) =>/*动作委托：元素 In 结束*/
-                                {
-                                    item.InMotion = false;
-
-                                    if (item.act_on_element_in_end != null)
-                                    {
-                                        item.act_on_element_in_end(element);
-                                    }
-                                },
-                                (element) =>/*动作委托：元素 Out 开始*/
-                                {
-                                    item.InMotion = true;
-
-                                    if (item.act_on_element_out_start != null)
-                                    {
-                                        item.act_on_element_out_start(element);
-                                    };
-                                },
-                                 (progres) =>/*动作委托：元素 Out 进度*/
-                                 {
-                                     item.MotionPercentage = 1 - progres;
-                                 },
-                                (element) =>/*动作委托：元素 Out 结束*/
-                                {
-                                    item.InMotion = false;
-
-                                    item.Spawned = false;
-
-                                    if (item.act_on_element_out_end != null)
-                                    {
-                                        item.act_on_element_out_end(element);
-                                    };
-                                    item.SpawnedElementNode = null;
-                                });
+                            yield return new WaitForSeconds(item.Delay_Spawn + Sequence_Spawn_World);
+                            CommonSpawn(item, space);
                         }
                     }
                     break;
             }
         }
-
         /// <summary>
         /// 回收 - 按列表顺序延迟模式
         /// </summary>
         /// <param tweenName="space"></param>
         /// <returns></returns>
-        private IEnumerator hsp_OrderDelay_Recycle(XHudSpace space)
+        private IEnumerator hsp_Sequence_Recycle(XHudSpace space)
         {
             switch (space)
             {
@@ -867,7 +688,7 @@ namespace SevenStrikeModules.XHud
                         if (!item.InMotion && item.Spawned)
                         {
                             //---延迟回收
-                            yield return new WaitForSeconds(item.Delay_Despawn + DelayOrder_Despawn_Screen);
+                            yield return new WaitForSeconds(item.Delay_Despawn + Sequence_Despawn_Screen);
 
                             //---回收元素
                             XHud_Manager.Instance.hm_HudElement_RecycleAt(
@@ -884,7 +705,7 @@ namespace SevenStrikeModules.XHud
                                 },
                                  (progres) =>/*动作委托：元素 Out 进度*/
                                  {
-                                     item.MotionPercentage = 1 - progres;
+                                     item.MotionPercentage = progres;
                                  },
                                 (element) =>/*动作委托：元素 Out 结束*/
                                 {
@@ -909,7 +730,7 @@ namespace SevenStrikeModules.XHud
                         if (!item.InMotion && item.Spawned)
                         {
                             //---延迟回收
-                            yield return new WaitForSeconds(item.Delay_Despawn + DelayOrder_Despawn_World);
+                            yield return new WaitForSeconds(item.Delay_Despawn + Sequence_Despawn_World);
 
                             //---回收元素
                             XHud_Manager.Instance.hm_HudElement_RecycleAt(
@@ -926,7 +747,7 @@ namespace SevenStrikeModules.XHud
                                 },
                                  (progres) =>/*动作委托：元素 Out 进度*/
                                  {
-                                     item.MotionPercentage = 1 - progres;
+                                     item.MotionPercentage = progres;
                                  },
                                 (element) =>/*动作委托：元素 Out 结束*/
                                 {
@@ -946,6 +767,141 @@ namespace SevenStrikeModules.XHud
             }
         }
         #endregion
+
+        /// <summary>
+        /// 通用生成元素逻辑
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="space"></param>
+        private void CommonSpawn(XHud_LayoutSpawner_Item item, XHudSpace space)
+        {
+            // 动效源选择
+            Motion_Creator arg = item.UseSpawnerMotion == "自身动效" ? item.CreateArgs : CreateArgs;
+
+            if (space == XHudSpace.屏幕空间)
+            {
+                item.SpawnedElementNode = XHud_Manager.Instance.hm_ScreenElement_Create(LibName, item.SpawnName)
+                    .SetAlpha(0)
+                    .SetAnchored_Screen(arg.anchor, item.Indicator)
+                    .SetPosition_Screen(item.Position)
+                    .SetRotation_Screen(item.Euler)
+                    .SetOffset(item.Offset)
+                    .SetSize(item.Size)
+                    .SetScale(item.Scale)
+                    .On_In_Start((e) =>
+                    {
+                        item.InMotion = true;
+
+                        item.Spawned = true;
+
+                        if (item.act_on_element_in_start != null)
+                        {
+                            item.act_on_element_in_start(e);
+                        }
+                    })
+                    .On_In_Progress((progress) =>
+                    {
+                        item.MotionPercentage = progress;
+                    })
+                    .On_In_End((e) =>
+                    {
+                        item.InMotion = false;
+
+                        if (item.act_on_element_in_end != null)
+                        {
+                            item.act_on_element_in_end(e);
+                        }
+                    })
+                    .On_Out_Start((e) =>
+                    {
+                        item.InMotion = true;
+
+                        if (item.act_on_element_out_start != null)
+                        {
+                            item.act_on_element_out_start(e);
+                        };
+                    })
+                    .On_Out_Progress((progress) =>
+                    {
+                        item.MotionPercentage = progress;
+                    })
+                    .On_Out_End((e) =>
+                    {
+                        item.InMotion = false;
+
+                        item.Spawned = false;
+
+                        if (item.act_on_element_out_end != null)
+                        {
+                            item.act_on_element_out_end(e);
+                        };
+                        item.SpawnedElementNode = null;
+                    });
+            }
+            else
+            {
+                item.SpawnedElementNode = XHud_Manager.Instance.hm_WorldElement_Create(LibName, item.SpawnName)
+                    .SetAlpha(0)
+                    .SetAnchored_World(item.Indicator)
+                    .SetPosition_World(item.Position)
+                    .SetRotation_World(Quaternion.Euler(item.Euler))
+                    .SetOffset(item.Offset)
+                    .SetSize(item.Size)
+                    .SetScale(item.Scale)
+                    .On_In_Start((e) =>
+                    {
+                        item.InMotion = true;
+
+                        item.Spawned = true;
+
+                        if (item.act_on_element_in_start != null)
+                        {
+                            item.act_on_element_in_start(e);
+                        }
+                    })
+                    .On_In_Progress((progress) =>
+                    {
+                        item.MotionPercentage = progress;
+                    })
+                    .On_In_End((e) =>
+                    {
+                        item.InMotion = false;
+
+                        if (item.act_on_element_in_end != null)
+                        {
+                            item.act_on_element_in_end(e);
+                        }
+                    })
+                    .On_Out_Start((e) =>
+                    {
+                        item.InMotion = true;
+
+                        if (item.act_on_element_out_start != null)
+                        {
+                            item.act_on_element_out_start(e);
+                        };
+                    })
+                    .On_Out_Progress((progress) =>
+                    {
+                        item.MotionPercentage = 1 - progress;
+                    })
+                    .On_Out_End((e) =>
+                    {
+                        item.InMotion = false;
+
+                        item.Spawned = false;
+
+                        if (item.act_on_element_out_end != null)
+                        {
+                            item.act_on_element_out_end(e);
+                        };
+                        item.SpawnedElementNode = null;
+                    });
+            }
+
+            if (item.AutoIn == "自动 In")
+                item.SpawnedElementNode.Element_In(arg);
+        }
 
         #region 辅助
         /// <summary>

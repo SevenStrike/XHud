@@ -300,7 +300,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param name="ElementNodes"></param>
         /// <returns></returns>
-        public virtual int element_CreateID(HudElementNode[] ElementNodes)
+        public virtual int element_CreateID(XHudElementNode[] ElementNodes)
         {
             List<int> ids = new List<int>();
             for (int i = 0; i < ElementNodes.Length; i++)
