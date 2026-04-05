@@ -2144,19 +2144,19 @@ namespace SevenStrikeModules.XHud.Editor
                 CreateArgs.FindPropertyRelative("Movement.Delay").floatValue = 0;
                 CreateArgs.FindPropertyRelative("Movement.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 CreateArgs.FindPropertyRelative("Movement.CurveName").stringValue = "";
-                CreateArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)EaseMode.OutQuart;
+                CreateArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 CreateArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)HudMotion_Rotation.A_无旋转;
                 CreateArgs.FindPropertyRelative("Rotation.Degree").floatValue = 0;
                 CreateArgs.FindPropertyRelative("Rotation.Duration").floatValue = 1;
                 CreateArgs.FindPropertyRelative("Rotation.Delay").floatValue = 0;
                 CreateArgs.FindPropertyRelative("Rotation.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 CreateArgs.FindPropertyRelative("Rotation.CurveName").stringValue = "";
-                CreateArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)EaseMode.OutQuart;
+                CreateArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 CreateArgs.FindPropertyRelative("Alpha.Duration").floatValue = 1;
                 CreateArgs.FindPropertyRelative("Alpha.Delay").floatValue = 0;
                 CreateArgs.FindPropertyRelative("Alpha.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 CreateArgs.FindPropertyRelative("Alpha.CurveName").stringValue = "";
-                CreateArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.OutQuart;
+                CreateArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                 CreateArgs.serializedObject.ApplyModifiedProperties();
             }
@@ -2168,19 +2168,19 @@ namespace SevenStrikeModules.XHud.Editor
                 RecycleArgs.FindPropertyRelative("Movement.Delay").floatValue = 0;
                 RecycleArgs.FindPropertyRelative("Movement.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 RecycleArgs.FindPropertyRelative("Movement.CurveName").stringValue = "";
-                RecycleArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)EaseMode.OutQuart;
+                RecycleArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 RecycleArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)HudMotion_Rotation.A_无旋转;
                 RecycleArgs.FindPropertyRelative("Rotation.Degree").floatValue = 0;
                 RecycleArgs.FindPropertyRelative("Rotation.Duration").floatValue = 1;
                 RecycleArgs.FindPropertyRelative("Rotation.Delay").floatValue = 0;
                 RecycleArgs.FindPropertyRelative("Rotation.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 RecycleArgs.FindPropertyRelative("Rotation.CurveName").stringValue = "";
-                RecycleArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)EaseMode.OutQuart;
+                RecycleArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 RecycleArgs.FindPropertyRelative("Alpha.Duration").floatValue = 1;
                 RecycleArgs.FindPropertyRelative("Alpha.Delay").floatValue = 0;
                 RecycleArgs.FindPropertyRelative("Alpha.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
                 RecycleArgs.FindPropertyRelative("Alpha.CurveName").stringValue = "";
-                RecycleArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.OutQuart;
+                RecycleArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                 RecycleArgs.serializedObject.ApplyModifiedProperties();
             }
