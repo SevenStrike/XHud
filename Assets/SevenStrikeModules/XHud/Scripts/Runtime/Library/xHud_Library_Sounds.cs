@@ -45,8 +45,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 新增配色信息
         /// </summary>
-        /// <param tweenName="name">新增名称</param>
-        /// <param tweenName="clip">新增配色</param>
+        /// <param name="name">新增名称</param>
+        /// <param name="clip">新增配色</param>
         public XHud_LibraryArg_Sound(string name, AudioClip clip)
         {
             Name = name;
@@ -145,7 +145,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标音效
         /// </summary>        
-        /// <param tweenName="name">目标音效名称</param>
+        /// <param name="name">目标音效名称</param>
         /// <returns></returns>
         public XHud_LibraryArg_Sound SoundLibrary_GetSoundInfo(string name)
         {
@@ -163,7 +163,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标音效
         /// </summary>        
-        /// <param tweenName="name">目标音效名称</param>
+        /// <param name="name">目标音效名称</param>
         /// <returns></returns>
         public AudioClip SoundLibrary_GetSound(string name)
         {
@@ -181,7 +181,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标音效
         /// </summary>        
-        /// <param tweenName="index">目标音效序号</param>
+        /// <param name="index">目标音效序号</param>
         /// <returns></returns>
         public AudioClip SoundLibrary_GetSound(int index)
         {
@@ -191,8 +191,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 新增音效
         /// </summary>
-        /// <param tweenName="name">新增的配色名称</param>
-        /// <param tweenName="sound">新增配色</param>
+        /// <param name="name">新增的配色名称</param>
+        /// <param name="sound">新增配色</param>
         public void SoundLibrary_AddSound(string name, AudioClip sound)
         {
             bool sw = false;
@@ -213,7 +213,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 移除音效
         /// </summary>
-        /// <param tweenName="name">移除的音效名称</param>
+        /// <param name="name">移除的音效名称</param>
         public void SoundLibrary_AddSound(string name)
         {
             for (int i = 0; i < SoundLibrary.Count; i++)
@@ -359,7 +359,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标声音的索引号
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public int SoundLibrary_GetIndexWithName(string name)
         {
@@ -378,7 +378,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 检查是否已存在该名称的声音
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public bool SoundLibrary_NameIsValid(string name)
         {
@@ -397,7 +397,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 定位
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void SoundLibrary_Location(string name)
         {
             int index = SoundLibrary_GetIndexWithName(name);
@@ -430,7 +430,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 查找
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void SoundLibrary_Location_Find(string name)
         {
             int index = SoundLibrary_GetIndexWithName(name);

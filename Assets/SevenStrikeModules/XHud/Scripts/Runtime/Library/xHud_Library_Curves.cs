@@ -44,8 +44,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 新增曲线信息
         /// </summary>
-        /// <param tweenName="name">新增名称</param>
-        /// <param tweenName="curve">新增曲线</param>
+        /// <param name="name">新增名称</param>
+        /// <param name="curve">新增曲线</param>
         public xHud_LibraryArg_Curve(string name = null, AnimationCurve curve = null)
         {
             Name = name;
@@ -122,7 +122,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标曲线
         /// </summary>
-        /// <param tweenName="name">目标曲线名称</param>
+        /// <param name="name">目标曲线名称</param>
         /// <returns></returns>
         public AnimationCurve CurveLibrary_GetCurve(string name)
         {
@@ -138,7 +138,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标曲线
         /// </summary>
-        /// <param tweenName="index">目标曲线序号</param>
+        /// <param name="index">目标曲线序号</param>
         /// <returns></returns>
         public AnimationCurve CurveLibrary_GetCurve(int index)
         {
@@ -154,8 +154,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置目标曲线
         /// </summary>
-        /// <param tweenName="name"></param>
-        /// <param tweenName="curve"></param>
+        /// <param name="name"></param>
+        /// <param name="curve"></param>
         public void CurveLibrary_SetCurve(string name, AnimationCurve curve)
         {
             for (int i = 0; i < CurveLibrary.Count; i++)
@@ -173,8 +173,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 新增目标曲线
         /// </summary>
-        /// <param tweenName="name">新增的曲线名称</param>
-        /// <param tweenName="curve">新增曲线</param>
+        /// <param name="name">新增的曲线名称</param>
+        /// <param name="curve">新增曲线</param>
         public void CurveLibrary_AddCurve(string name, AnimationCurve curve)
         {
             xHud_LibraryArg_Curve info = new xHud_LibraryArg_Curve(name, curve);
@@ -186,7 +186,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 移除目标曲线
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void CurveLibrary_RemoveCurve(string name)
         {
             for (int i = 0; i < CurveLibrary.Count; i++)
@@ -227,7 +227,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标曲线的索引号
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public int CurveLibrary_GetIndexWithName(string name)
         {
@@ -297,7 +297,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 定位
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void CurveLibrary_Location(string name)
         {
             int index = CurveLibrary_GetIndexWithName(name);
@@ -329,7 +329,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 查找
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void CurveLibrary_Location_Find(string name)
         {
             int index = CurveLibrary_GetIndexWithName(name);

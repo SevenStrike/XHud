@@ -131,7 +131,7 @@ namespace SevenStrikeModules.XHud
 
         public virtual void OnDisable()
         {
-
+            PrimitiveTween_Rewind();
         }
 
         public virtual void Start()

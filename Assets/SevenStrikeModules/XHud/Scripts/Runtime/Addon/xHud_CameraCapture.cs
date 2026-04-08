@@ -133,7 +133,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 相机截图
         /// </summary>
-        /// <param tweenName="camera">目标相机</param>
+        /// <param name="camera">目标相机</param>
         /// <returns></returns>
         public static Texture2D CameraCaptureTool(Camera camera)
         {
@@ -143,9 +143,9 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 相机截图
         /// </summary>
-        /// <param tweenName="camera">相机</param>
-        /// <param tweenName="width">截图宽度</param>
-        /// <param tweenName="height">截图高度</param>
+        /// <param name="camera">相机</param>
+        /// <param name="width">截图宽度</param>
+        /// <param name="height">截图高度</param>
         /// <returns></returns>
         public static Texture2D CameraCaptureTool(Camera camera, int width, int height)
         {
@@ -170,10 +170,10 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 保存截图
         /// </summary>
-        /// <param tweenName="path">路径</param>
-        /// <param tweenName="texture">贴图</param>
-        /// <param tweenName="filetype">文件类型</param>
-        /// <param tweenName="act_captured">动作事件回调</param>
+        /// <param name="path">路径</param>
+        /// <param name="texture">贴图</param>
+        /// <param name="filetype">文件类型</param>
+        /// <param name="act_captured">动作事件回调</param>
         public static void ExportTexture(string path, Texture2D texture, CaptureType filetype, UnityAction act_captured)
         {
             switch (filetype)
@@ -197,7 +197,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 生成随机码
         /// </summary>
-        /// <param tweenName="length">随机码长度</param>
+        /// <param name="length">随机码长度</param>
         /// <returns></returns>
         static string RandomCode(int length)
         {

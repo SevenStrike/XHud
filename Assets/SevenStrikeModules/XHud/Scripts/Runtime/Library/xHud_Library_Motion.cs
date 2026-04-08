@@ -172,7 +172,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 增加一套参数模版
         /// </summary>
-        /// <param tweenName="motion"></param>
+        /// <param name="motion"></param>
         public void ElementMotion_Add(XHud_LibraryArg_Motion motion)
         {
             ElementMotionList.Add(motion);
@@ -181,7 +181,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 移除一套参数模版
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void ElementMotion_Remove(string name)
         {
             for (int i = 0; i < ElementMotionList.Count; i++)
@@ -202,7 +202,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 判断目标名称是否存在
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public bool ElementMotion_IsExist(string name)
         {
@@ -228,7 +228,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 判断目标名称是否存在
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public bool ElementMotion_IsExist(string name, HudElementMotionType type)
         {
@@ -254,7 +254,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标名称的参数模版
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public XHud_LibraryArg_Motion ElementMotion_GetMotion(string name, HudElementMotionType type)
         {
@@ -273,7 +273,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标索引号的参数模版
         /// </summary>
-        /// <param tweenName="index"></param>
+        /// <param name="index"></param>
         /// <returns></returns>
         public XHud_LibraryArg_Motion ElementMotion_GetMotion(int index, HudElementMotionType type)
         {
@@ -283,7 +283,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标名称的参数模版索引号
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public int ElementMotion_GetIndexWithName(string name)
         {
@@ -302,7 +302,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标索引号的参数模版名称
         /// </summary>
-        /// <param tweenName="index"></param>
+        /// <param name="index"></param>
         /// <returns></returns>
         public string ElementMotion_GetNameWithIndex(int index)
         {
@@ -312,7 +312,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取参数模版的所有模版项
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public XHud_LibraryArg_Motion[] ElementMotion_GetAllMotion()
         {
@@ -478,7 +478,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 定位
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void ElementMotionLibrary_Location(string name)
         {
             int index = ElementMotion_GetIndexWithName(name);
@@ -511,7 +511,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 查找
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void ElementMotionLibrary_Location_Find(string name)
         {
             int index = ElementMotion_GetIndexWithName(name);

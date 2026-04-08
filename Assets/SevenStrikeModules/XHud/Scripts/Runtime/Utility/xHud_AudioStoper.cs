@@ -30,7 +30,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 设置播放器
         /// </summary>
-        /// <param tweenName="au"></param>
+        /// <param name="au"></param>
         public void SetAudioSource(AudioSource au)
         {
             AudioSource = au;

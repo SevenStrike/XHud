@@ -35,7 +35,7 @@ namespace SevenStrikeModules.XHud.Editor
         [SerializeField]
         public List<Color> ColorGradient = new List<Color>();
 
-        private Texture2D logo, dot, icon_element, icon_animator, icon_sounder, icon_container, icon_button, icon_toggle, icon_progress, icon_slider, icon_option, icon_text, icon_tmptext, sizemark_h_r, sizemark_h_l, sizemark_v_u, sizemark_v_d, sizebg, perspective, orthorgrphic, cursobg, falseicon, systemcursor;
+        private Texture2D logo, dot, icon_element, icon_primitive, icon_sounder, icon_button, icon_toggle, icon_progress, icon_slider, icon_option, icon_text, icon_tmptext, sizemark_h_r, sizemark_h_l, sizemark_v_u, sizemark_v_d, sizebg, perspective, orthorgrphic, cursobg, falseicon, systemcursor;
 
         Color SepLineColor = new Color(1, 1, 1, 0.15f);
         Color MessageColor = new Color(1, 1, 1, 0.62f);
@@ -93,9 +93,8 @@ namespace SevenStrikeModules.XHud.Editor
             logo = Editor_XHud_GUI.GetIcon("Icons_XHudDiagnostic/logo");
             dot = Editor_XHud_GUI.GetIcon("Icons_XHudDiagnostic/dot");
             icon_element = Editor_XHud_GUI.GetIcon("Icons_XHudDiagnostic/icon_element");
-            icon_animator = Editor_XHud_GUI.GetIcon("Icons_XHudDiagnostic/icon_animator");
+            icon_primitive = Editor_XHud_GUI.GetIcon("Icons_XHudDiagnostic/icon_primitive");
             icon_sounder = Editor_XHud_GUI.GetIcon("Icons_XHudDiagnostic/icon_sounder");
-            icon_container = Editor_XHud_GUI.GetIcon("Icons_XHudDiagnostic/icon_container");
             icon_button = Editor_XHud_GUI.GetIcon("Icons_XHudDiagnostic/icon_button");
             icon_toggle = Editor_XHud_GUI.GetIcon("Icons_XHudDiagnostic/icon_toggle");
             icon_progress = Editor_XHud_GUI.GetIcon("Icons_XHudDiagnostic/icon_progress");
@@ -321,18 +320,17 @@ namespace SevenStrikeModules.XHud.Editor
             float areawidth = 120;
 
             ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos, distance_row_start), icon_element, "元素", "Element", statistic.count_elements.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + areawidth + distance, distance_row_start), icon_animator, "动画器", "Animator", statistic.count_animators.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + areawidth + distance, distance_row_start), icon_primitive, "图元", "Primitive", statistic.count_primitives.ToString());
             ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 2) + (distance * 2), distance_row_start), icon_sounder, "音效器", "Sounder", statistic.count_sounders.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 3) + (distance * 3), distance_row_start), icon_container, "容器", "Container", statistic.count_containers.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 3) + (distance * 3), distance_row_start), icon_option, "选项器", "Option", statistic.count_options.ToString());
 
             ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos, distance_row_start + distance_row), icon_button, "按钮", "Button", statistic.count_buttons.ToString());
             ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + areawidth + distance, distance_row_start + distance_row), icon_toggle, "开关", "Toggle", statistic.count_toggles.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 2) + (distance * 2), distance_row_start + distance_row), icon_progress, "进度条", "Progress", statistic.count_elements.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 3) + (distance * 3), distance_row_start + distance_row), icon_slider, "滑动条", "Slider", statistic.count_animators.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 2) + (distance * 2), distance_row_start + distance_row), icon_progress, "进度条", "Progress", statistic.count_progresses.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 3) + (distance * 3), distance_row_start + distance_row), icon_slider, "滑动条", "Slider", statistic.count_sliders.ToString());
 
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos, distance_row_start + (distance_row * 2)), icon_option, "选项器", "Option", statistic.count_sounders.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + areawidth + distance, distance_row_start + (distance_row * 2)), icon_text, "文字", "Text", statistic.count_containers.ToString());
-            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + (areawidth * 2) + (distance * 2), distance_row_start + (distance_row * 2)), icon_tmptext, "文字", "TmpText", statistic.count_buttons.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos, distance_row_start + (distance_row * 2)), icon_text, "文字", "Text", statistic.count_texts.ToString());
+            ComponentStatistic(re, new Vector2(areawidth, 50), new Vector2(startpos + areawidth + distance, distance_row_start + (distance_row * 2)), icon_tmptext, "文字", "TmpText", statistic.count_tmptexts.ToString());
             #endregion
 
             Editor_XHud_GUI.Gui_Box(new Rect(rect.x + 260, rect.y + 343, 705, 1), Color.gray * 0.75f);

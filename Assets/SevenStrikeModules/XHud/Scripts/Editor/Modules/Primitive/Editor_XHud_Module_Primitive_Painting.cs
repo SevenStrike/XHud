@@ -39,7 +39,8 @@ namespace SevenStrikeModules.XHud.Editor
             sp_OriginalColor,
             sp_ColoriseName,
             sp_Debug,
-            sp_SyncLibraryColor;
+            sp_SyncLibraryColor,
+            sp_SyncImageColor;
         #endregion
 
         #region GUI 参数
@@ -66,6 +67,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 选项文字
         string[] stroptions_debug = new string[2] { "关闭", "调试" };
+        string[] stroptions_sync = new string[2] { "关闭", "接管" };
         #endregion
 
         #region 图标
@@ -505,6 +507,10 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Primitive_Painting>("接管状态", stroptions_sync, ref sp_SyncImageColor, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Primitive_Painting>("调试", stroptions_debug, ref sp_Debug, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
@@ -699,6 +705,7 @@ namespace SevenStrikeModules.XHud.Editor
             sp_ColoriseName = serializedObject.FindProperty("ColoriseName");
             sp_Debug = serializedObject.FindProperty("Debug");
             sp_SyncLibraryColor = serializedObject.FindProperty("SyncLibraryColor");
+            sp_SyncImageColor = serializedObject.FindProperty("SyncImageColor");
         }
 
         /// <summary>

@@ -27,38 +27,49 @@ namespace SevenStrikeModules.XHud
     using UnityEngine;
     using UnityEngine.Events;
 
-    public class XHud_Module_Option : MonoBehaviour
+    public partial class XHud_Module_Option : MonoBehaviour
     {
+        [SerializeField]
         public bool DebugState;
-        public float AnimatorsMaxDuration;
+        [SerializeField]
         public string Indicator;
 
         #region 节点组件
+        [SerializeField]
         public RectTransform SelectorMark;
+        [SerializeField]
         public RectTransform OptionRoot;
         #endregion
 
+        [SerializeField]
         public XHudElementAnimateState AnimateState;
 
+        [SerializeField]
         public Vector3 Pos_Destination;
+        [SerializeField]
         public Vector3 Prev_Pos_Destination;
+        [SerializeField]
         public Vector3 sm_Pos_Destination;
 
+        [SerializeField]
         public bool RepeatAnimatorPlay = true;
 
         #region 运动动态参数
+        [SerializeField]
         public bool UseBlinked;
+        [SerializeField]
         private XTween_Interface Tween_Motion;
+        [SerializeField]
         public float TweenSpeed = 1;
+        [SerializeField]
         public EaseMode SelectorTweenMotion;
+        [SerializeField]
         public bool UseEaseMotion = true;
+        [SerializeField]
         public float LerpSpeed = 1;
         #endregion
 
-        /// <summary>
-        /// 动画器集合
-        /// </summary>
-        public List<ElementNode_Animator> SelectorAnimatorNodes = new List<ElementNode_Animator>();
+        [SerializeField]
         /// <summary>
         /// 选项按钮集合
         /// </summary>
@@ -124,26 +135,27 @@ namespace SevenStrikeModules.XHud
         public UnityEvent<Vector3> eve_on_option_clicked_with_position;
         #endregion
 
-        /// <summary>
-        /// 所有动画器的动画速度倍乘系数
-        /// </summary>
-        public float OptionSelector_Animators_GlobalDuration = 1;
-
         #region 选中的信息
+        [SerializeField]
         public int OptionIndex;
+        [SerializeField]
         public string CurrentOptionName;
         #endregion
 
-        public bool AnimatorsIsFold;
+        [SerializeField]
         public bool ButtonIsFold;
+        [SerializeField]
         public bool EventIsFold;
+        [SerializeField]
         public bool AutoStopPreview = true;
 
         #region 光标偏移
+        [SerializeField]
         /// <summary>
         /// 实际的光标偏移
         /// </summary>
         public Vector3 SelectorOffset;
+        [SerializeField]
         /// <summary>
         /// 用于编辑器调试的光标偏移
         /// </summary>
@@ -154,13 +166,13 @@ namespace SevenStrikeModules.XHud
         {
             if (Tween_Motion != null)
                 Tween_Motion.Kill();
-            Animators_Rewind();
+            PrimitiveTween_Rewind();
             opt_ClearIndexInfo();
         }
 
         private void OnEnable()
         {
-            Animators_Play();
+            PrimitiveTween_Play();
         }
 
         private void Start()
@@ -227,7 +239,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 选择选项并调用委托
         /// </summary>
-        /// <param tweenName="index"></param>
+        /// <param name="index"></param>
         public void opt_Select(int index)
         {
             if (SelectorMark == null)
@@ -246,7 +258,7 @@ namespace SevenStrikeModules.XHud
             Vector3 pos = OptionRoot.parent.InverseTransformPoint(OptionButtonNodes[index].Button.RectTransform.position);
 
             Selector_Animators_Play("点击选项");
-            Animators_Play("点击选项");
+            PrimitiveTween_Play("点击选项");
 
             opt_SetSelectorPosition(pos);
 
@@ -273,7 +285,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 选择选项并调用委托
         /// </summary>
-        /// <param tweenName="index"></param>
+        /// <param name="index"></param>
         public void opt_Select(string indicator)
         {
             if (SelectorMark == null)
@@ -293,7 +305,7 @@ namespace SevenStrikeModules.XHud
             Vector3 pos = OptionRoot.parent.InverseTransformPoint(opt_GetRectTransform_WithButtonIndicator(indicator).position);
 
             Selector_Animators_Play("点击选项");
-            Animators_Play("点击选项");
+            PrimitiveTween_Play("点击选项");
 
             opt_SetSelectorPosition(pos);
 
@@ -320,7 +332,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 只设置选项的光标的位置和当前选项器的选中信息
         /// </summary>
-        /// <param tweenName="indicator"></param>
+        /// <param name="indicator"></param>
         public void opt_Select(string indicator, bool playanimator = true)
         {
             if (SelectorMark == null)
@@ -341,7 +353,7 @@ namespace SevenStrikeModules.XHud
             #endregion
 
             if (playanimator)
-                Animators_Play("光标位置改变");
+                PrimitiveTween_Play("光标位置改变");
 
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "已将光标移动到标识为：" + indicator + " 的选项按钮上！", HudMsgState.通知);
@@ -364,7 +376,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置选项器的光标切换方式
         /// </summary>
-        /// <param tweenName="treeState">True为闪现，False为平滑运动</param>
+        /// <param name="treeState">True为闪现，False为平滑运动</param>
         public void opt_SetBlinkedMode(bool state)
         {
             UseBlinked = state;
@@ -373,7 +385,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置选项器的光标运动方式
         /// </summary>
-        /// <param tweenName="treeState">True为Ease缓动，False为差值平滑运动</param>
+        /// <param name="treeState">True为Ease缓动，False为差值平滑运动</param>
         public void opt_SetMotionType(bool state)
         {
             UseEaseMotion = state;
@@ -382,7 +394,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 当选项器的运动方式为缓动时，此方法设置缓动方式和耗时
         /// </summary>
-        /// <param tweenName="treeState">True为Ease缓动，False为差值平滑运动</param>
+        /// <param name="treeState">True为Ease缓动，False为差值平滑运动</param>
         public void opt_SetMotionEase(EaseMode ease, float dur)
         {
             SelectorTweenMotion = ease;
@@ -392,7 +404,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 当选项器的运动方式为差值平滑时，此方法设置差值平滑耗时
         /// </summary>
-        /// <param tweenName="treeState">True为Ease缓动，False为差值平滑运动</param>
+        /// <param name="treeState">True为Ease缓动，False为差值平滑运动</param>
         public void opt_SetMotionLerp(float dur)
         {
             LerpSpeed = dur;
@@ -401,7 +413,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置光标位置
         /// </summary>
-        /// <param tweenName="pos"></param>
+        /// <param name="pos"></param>
         private void opt_SetSelectorPosition(Vector3 pos)
         {
             if (!UseBlinked)
@@ -423,13 +435,13 @@ namespace SevenStrikeModules.XHud
                         if (act_on_selector_position_started != null)
                             act_on_selector_position_started(Pos_Destination, SelectorMark);
                         eve_on_selector_position_started.Invoke(Pos_Destination, SelectorMark);
-                        Animators_Play("光标移动开始");
+                        PrimitiveTween_Play("光标移动开始");
                     }).OnComplete((d) =>
                     {
                         if (act_on_selector_position_complete != null)
                             act_on_selector_position_complete(pos, SelectorMark);
                         eve_on_selector_position_complete.Invoke(pos, SelectorMark);
-                        Animators_Play("光标移动结束");
+                        PrimitiveTween_Play("光标移动结束");
                     });
                     sm_Pos_Destination = pos;
                     #endregion
@@ -441,7 +453,7 @@ namespace SevenStrikeModules.XHud
                 eve_on_selector_position_changed.Invoke(pos, SelectorMark);
                 #endregion
 
-                Animators_Play("光标位置改变");
+                PrimitiveTween_Play("光标位置改变");
 
                 if (DebugState)
                     XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "更改了光标位置（平滑移动）", HudMsgState.通知);
@@ -457,7 +469,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 快速设置光标位置
         /// </summary>
-        /// <param tweenName="pos"></param>
+        /// <param name="pos"></param>
         private void opt_SetSelectorPosition_Fast(Vector3 pos)
         {
             #region 设置
@@ -471,7 +483,7 @@ namespace SevenStrikeModules.XHud
             eve_on_selector_position_changed.Invoke(pos, SelectorMark);
             #endregion
 
-            Animators_Play("光标位置改变");
+            PrimitiveTween_Play("光标位置改变");
 
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "快速更改光标位置！", HudMsgState.通知);
@@ -540,7 +552,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 根据标识名称获取对应的按钮索引号
         /// </summary>
-        /// <param tweenName="indicator"></param>
+        /// <param name="indicator"></param>
         /// <returns></returns>
         private int opt_GetIndex_WithButtonIndicator(string indicator)
         {
@@ -562,7 +574,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 根据标识名称获取对应的按钮的RectTransform
         /// </summary>
-        /// <param tweenName="indicator"></param>
+        /// <param name="indicator"></param>
         /// <returns></returns>
         private RectTransform opt_GetRectTransform_WithButtonIndicator(string indicator)
         {
@@ -582,338 +594,46 @@ namespace SevenStrikeModules.XHud
         }
         #endregion
 
-        #region 获取动画器和动画节点
-
-        /// <summary>
-        /// 获取一个动画器
-        /// </summary>
-        /// <param tweenName="indicator">目标标识名称</param>
-        /// <returns>返回一个匹配标识名称的HudAnimator动画器</returns>
-        public XHud_Module_Animator GetAnimator(string indicator)
-        {
-            XHud_Module_Animator am = null;
-            for (int i = 0; i < SelectorAnimatorNodes.Count; i++)
-            {
-                if (SelectorAnimatorNodes[i].Animator.GetIndicator() == indicator)
-                {
-                    am = SelectorAnimatorNodes[i].Animator;
-                }
-            }
-            if (am == null)
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "未获取到标识名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
-            }
-            else
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
-            }
-            return am;
-        }
-
-        /// <summary>
-        /// 获取一个动画器
-        /// </summary>
-        /// <param tweenName="name">目标物体名称</param>
-        /// <returns>返回一个匹配物体名称名称的HudAnimator动画器</returns>
-        public XHud_Module_Animator GetAnimator_WithObjectName(string name)
-        {
-            XHud_Module_Animator am = null;
-            for (int i = 0; i < SelectorAnimatorNodes.Count; i++)
-            {
-                if (SelectorAnimatorNodes[i].Animator.gameObject.name == name)
-                {
-                    am = SelectorAnimatorNodes[i].Animator;
-                }
-            }
-            if (am == null)
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
-            }
-            else
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
-            }
-            return am;
-        }
-
-        /// <summary>
-        /// 获取一个动画器
-        /// </summary>
-        /// <param tweenName="id">目标动画器的ID</param>
-        /// <returns>返回一个匹配ID的HudAnimator动画器</returns>
-        public XHud_Module_Animator GetAnimator(int id)
-        {
-            XHud_Module_Animator am = null;
-            for (int i = 0; i < SelectorAnimatorNodes.Count; i++)
-            {
-                if (SelectorAnimatorNodes[i].Animator.GetID() == id)
-                {
-                    am = SelectorAnimatorNodes[i].Animator;
-                }
-            }
-            if (am == null)
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
-            }
-            else
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
-            }
-            return am;
-        }
-
-        /// <summary>
-        /// 获取一个目标动画器上的目标动画节点
-        /// </summary>
-        /// <param tweenName="animator_indicator">目标动画器名称</param>
-        /// <param tweenName="tween_id">目标动画节点的ID</param>
-        /// <returns></returns>
-        public TweenNode GetAnimatorTween(string animator_indicator, int tween_id)
-        {
-            XHud_Module_Animator anim = GetAnimator(animator_indicator);
-            TweenNode node = anim.TweenNode_GetByID(tween_id);
-
-            if (anim == null)
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
-            }
-            else
-            {
-                if (node == null)
-                {
-                    if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
-                }
-                else
-                {
-                    if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
-                }
-            }
-
-            return node;
-        }
-
-        /// <summary>
-        /// 获取一个目标动画器上的目标动画节点
-        /// </summary>
-        /// <param tweenName="animator_id">目标动画器ID</param>
-        /// <param tweenName="tween_id">目标动画节点的ID</param>
-        /// <returns></returns>
-        public TweenNode GetAnimatorTween(int animator_id, int tween_id)
-        {
-            XHud_Module_Animator anim = GetAnimator(animator_id);
-            TweenNode node = anim.TweenNode_GetByID(tween_id);
-
-            if (anim == null)
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
-            }
-            else
-            {
-                if (node == null)
-                {
-                    if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
-                }
-                else
-                {
-                    if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
-                }
-            }
-
-            return node;
-        }
-
-        /// <summary>
-        /// 获取一个目标动画器上的目标动画节点
-        /// </summary>
-        /// <param tweenName="animator_indicator">目标动画器名称</param>
-        /// <param tweenName="tween_indicator">目标动画节点的名称</param>
-        /// <returns></returns>
-        public TweenNode GetAnimatorTween(string animator_indicator, string tween_indicator)
-        {
-            XHud_Module_Animator anim = GetAnimator(animator_indicator);
-            TweenNode node = anim.TweenNode_GetByIndicator(tween_indicator);
-
-            if (anim == null)
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
-            }
-            else
-            {
-                if (node == null)
-                {
-                    if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
-                }
-                else
-                {
-                    if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
-                }
-            }
-
-            return node;
-        }
-
-        #endregion
-
-        #region 动画器播放与倒退
-        /// <summary>
-        /// 验证是否存在指定ID的动画器
-        /// </summary>
-        /// <returns></returns>
-        public bool AnimatorIsExist(int ID)
-        {
-            bool isExist = false;
-            for (int i = 0; i < SelectorAnimatorNodes.Count; i++)
-            {
-                if (SelectorAnimatorNodes[i].Animator.GetID() == ID)
-                {
-                    isExist = true;
-                }
-            }
-            return isExist;
-        }
-
-        /// <summary>
-        /// 验证是否存在指定昵称的动画器
-        /// </summary>
-        /// <returns></returns>
-        public bool AnimatorIsExist(string Indicator)
-        {
-            bool isExist = false;
-            for (int i = 0; i < SelectorAnimatorNodes.Count; i++)
-            {
-                if (SelectorAnimatorNodes[i].Animator.GetIndicator() == Indicator)
-                {
-                    isExist = true;
-                }
-            }
-            return isExist;
-        }
-
-        /// <summary>
-        /// 播放选项器子级中的所有动画，不包含光标动画
-        /// </summary>
-        /// <param tweenName="tim">点击选项 | 光标移动开始 | 光标移动结束 | 光标位置改变</param>
-        public void Animators_Play(string tim = "无")
-        {
-            if (SelectorAnimatorNodes == null || SelectorAnimatorNodes.Count <= 0)
-                return;
-            for (int i = 0; i < SelectorAnimatorNodes.Count; i++)
-            {
-                ElementNode_Animator node = SelectorAnimatorNodes[i];
-                int v = node.Animator.mod_RectTransform.GetInstanceID();
-                int x = SelectorMark.GetInstanceID();
-                if (v == x)
-                {
-                    continue;
-                }
-                node.Animator.Play(tim, node.DelayTime, node.Animator.Animator_GlobalDuration * OptionSelector_Animators_GlobalDuration);
-            }
-            if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "播放选项的子级动画！", HudMsgState.通知);
-        }
-
-        /// <summary>
-        /// 播放按钮子级中的指定ID的动画
-        /// </summary>
-        /// <param tweenName="id">动画节点的ID</param>
-        /// <param tweenName="tim">触发动画的时机</param>
-        private void Animators_PlayAt(int id, string tim)
-        {
-            if (SelectorAnimatorNodes == null || SelectorAnimatorNodes.Count <= 0)
-                return;
-
-            if (!AnimatorIsExist(id))
-                return;
-
-            for (int i = 0; i < SelectorAnimatorNodes.Count; i++)
-            {
-                if (SelectorAnimatorNodes[i].Animator.GetID() != id)
-                    continue;
-                XHud_Module_Animator anim = SelectorAnimatorNodes[i].Animator;
-                anim.Play(tim, SelectorAnimatorNodes[i].DelayTime, OptionSelector_Animators_GlobalDuration * anim.Animator_GlobalDuration);
-            }
-
-            if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
-        }
-
-        /// <summary>
-        /// 倒退选项器子级中的所有动画，不包含光标动画
-        /// </summary>
-        /// <param tweenName="IncludeSelectorMark">忽略光标的动画倒退</param>
-        public void Animators_Rewind()
-        {
-            for (int i = 0; i < SelectorAnimatorNodes.Count; i++)
-            {
-                ElementNode_Animator node = SelectorAnimatorNodes[i];
-                int v = node.Animator.mod_RectTransform.GetInstanceID();
-                int x = SelectorMark.GetInstanceID();
-                if (v == x)
-                {
-                    continue;
-                }
-                node.Animator.RewindAllTweenNode();
-            }
-            if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "倒退复位选项的子级动画！", HudMsgState.通知);
-        }
-
         //--------------光标动画独立控制
 
         /// <summary>
         /// 播放光标动画
         /// </summary>
-        /// <param tweenName="tim">点击选项 | 光标移动开始 | 光标移动结束 | 光标位置改变</param>
+        /// <param name="tim">点击选项 | 光标移动开始 | 光标移动结束 | 光标位置改变</param>
         public void Selector_Animators_Play(string tim)
         {
-            for (int i = 0; i < SelectorAnimatorNodes.Count; i++)
+            for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
-                int v = SelectorAnimatorNodes[i].Animator.mod_RectTransform.GetInstanceID();
+                int v = PrimitiveControllerNodes[i].Controller.mod_Rect.GetInstanceID();
                 int x = SelectorMark.GetInstanceID();
                 if (v == x)
                 {
-                    SelectorAnimatorNodes[i].Animator.Play(tim, SelectorAnimatorNodes[i].DelayTime, SelectorAnimatorNodes[i].Animator.Animator_GlobalDuration * OptionSelector_Animators_GlobalDuration);
+                    PrimitiveControllerNodes[i].Controller.pt_Tween.Tween_PlayAll_WithDelay(PrimitiveControllerNodes[i].DelayTime, PrimitivesTweenGlobalDuration, true, tim);
                     break;
                 }
             }
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "倒退复位选项的光标动画！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "播放选项的光标动画！", HudMsgState.通知);
         }
 
         /// <summary>
         /// 倒退光标动画
         /// </summary>
-        /// <param tweenName="IncludeSelectorMark">忽略光标的动画倒退</param>
+        /// <param name="IncludeSelectorMark">忽略光标的动画倒退</param>
         public void Selector_Animators_Rewind()
         {
-            for (int i = 0; i < SelectorAnimatorNodes.Count; i++)
+            for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
-                int v = SelectorAnimatorNodes[i].Animator.mod_RectTransform.GetInstanceID();
+                int v = PrimitiveControllerNodes[i].Controller.mod_Rect.GetInstanceID();
                 int x = SelectorMark.GetInstanceID();
                 if (v == x)
                 {
-                    SelectorAnimatorNodes[i].Animator.RewindAllTweenNode();
+                    PrimitiveControllerNodes[i].Controller.pt_Tween.Tween_RewindAll();
                     break;
                 }
             }
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "倒退复位选项的光标动画！", HudMsgState.通知);
         }
-        #endregion       
     }
 }

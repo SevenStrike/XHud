@@ -56,7 +56,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="state">开关状态</param>
         public virtual void element_SetAutoAnimator(bool state)
         {
-            AutoPlayAnimators = state;
+            AutoPlayPrimitivesTween = state;
         }
         /// <summary>
         /// XHud元素 - 重置状态
@@ -109,7 +109,7 @@ namespace SevenStrikeModules.XHud
                 Tween_Rotation = null;
             }
 
-            Animators_Rewind();
+            PrimitiveTween_Rewind();
             CreateState = XHudElementCreateState.Recycled;
             gameObject.SetActive(!Hidden);
 

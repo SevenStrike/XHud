@@ -374,7 +374,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 根据空间类型生成元素
         /// </summary>
-        /// <param tweenName="space"></param>
+        /// <param name="space"></param>
         public void Spawn(XHudSpace space)
         {
             if (!UseManullyKey)
@@ -420,7 +420,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 根据空间类型回收元素
         /// </summary>
-        /// <param tweenName="space"></param>
+        /// <param name="space"></param>
         public void Despawn(XHudSpace space)
         {
             switch (space)
@@ -548,7 +548,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 回收
         /// </summary>
-        /// <param tweenName="item"></param>
+        /// <param name="item"></param>
         /// <returns></returns>
         private IEnumerator hsp_Recycle(XHud_LayoutSpawner_Item item)
         {
@@ -638,7 +638,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 生成 - 按列表顺序延迟模式
         /// </summary>
-        /// <param tweenName="space"></param>
+        /// <param name="space"></param>
         /// <returns></returns>
         private IEnumerator hsp_Sequence_Create(XHudSpace space)
         {
@@ -674,7 +674,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 回收 - 按列表顺序延迟模式
         /// </summary>
-        /// <param tweenName="space"></param>
+        /// <param name="space"></param>
         /// <returns></returns>
         private IEnumerator hsp_Sequence_Recycle(XHudSpace space)
         {

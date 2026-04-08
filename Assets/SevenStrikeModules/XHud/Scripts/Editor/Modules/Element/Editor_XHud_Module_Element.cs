@@ -52,29 +52,20 @@ namespace SevenStrikeModules.XHud.Editor
         private XHud_Module_Element BaseScript;
         #endregion
 
+        #region GUI 参数
+        /// <summary>
+        /// 系统默认GUI行高
+        /// </summary>
         private float LineHeight;
-        [SerializeField]
         /// <summary>
         /// 原始脚本参数显示开关
         /// </summary>
         private bool OriginalDisplay;
+        #endregion
 
         #region 序列化属性
         private SerializedProperty
-            CanvasGroup, SounderNodes, AnimatorNodes, ContainerNodes, OptionNodes, ButtonNodes, TextIsFold, TmpTextIsFold, SliderNodes, TextNodes, TmpTextNodes, DebugState, PreviewPrimitivesTween, ProgressNodes, ToggleNodes, Indicator, AnimatorsMaxDuration, RectTransform, TriggerAction, ObjectTracker, CreateState, AnimateState, Element_Animators_GlobalDuration, OriginPoolName, AnimatorsIsFold, ButtonIsFold, OptionIsFold, SliderIsFold, SounderIsFold, ProgressIsFold, ContainerIsFold, ToggleIsFold, EventIsFold, AutoPlayAnimators, AutoPlayContainersAnimators, AutoKillPreviewTweens, Alpha, RMS_Enabled, RMS_LayoutDatas, RMS_Name, CurrentPivot, OriginalName, eve_on_element_in_start, eve_on_element_in_end, eve_on_element_out_start, eve_on_element_out_end, TweensPreivew_In_State, TweensPreivew_Out_State, PrimitivePreivew_State, RewindPreviewTweensWithKill, ClearPreviewTweensWithKill, CreateArgs, RecycleArgs, Crc_Lib_Name, Rec_Lib_Name, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, create_fold_move, create_fold_rotate, create_fold_alpha, recycle_fold_move, recycle_fold_rotate, recycle_fold_alpha;
-        #endregion
-
-        #region Preview - Animator
-        private bool Tween_Preivewing_Animators;
-        private List<XTween_Interface> Preivew_Animator_TweenList = new List<XTween_Interface>();
-        private List<EditorCoroutine> Preivew_Animator_CoroutineList_Play = new List<EditorCoroutine>();
-        private EditorCoroutine Preivew_Animator_Coroutine_Stop;
-        #endregion
-
-        #region Preview - AnimatorSound
-        public List<AudioSource> Preivew_AnimatorSound_SoundList = new List<AudioSource>();
-        private EditorCoroutine Preivew_AnimatorSound_Coroutine_Play;
-        private List<EditorCoroutine> Preivew_AnimatorSound_CoroutineList_Stop = new List<EditorCoroutine>();
+            CanvasGroup, SounderNodes, PrimitiveControllerNodes, OptionNodes, ButtonNodes, TextIsFold, TmpTextIsFold, SliderNodes, TextNodes, TmpTextNodes, DebugState, PreviewPrimitivesTween, ProgressNodes, ToggleNodes, Indicator, PrimitivesTweenMaxDuration, RectTransform, TriggerAction, ObjectTracker, CreateState, AnimateState, PrimitivesTweenGlobalDuration, OriginPoolName, PrimitivesIsFold, ButtonIsFold, OptionIsFold, SliderIsFold, SounderIsFold, ProgressIsFold, ToggleIsFold, EventIsFold, AutoPlayPrimitivesTween, AutoKillPreviewTweens, Alpha, RMS_Enabled, RMS_LayoutDatas, RMS_Name, CurrentPivot, OriginalName, eve_on_element_in_start, eve_on_element_in_end, eve_on_element_out_start, eve_on_element_out_end, TweensPreivew_In_State, TweensPreivew_Out_State, PrimitivePreivew_State, RewindPreviewTweensWithKill, ClearPreviewTweensWithKill, CreateArgs, RecycleArgs, Crc_Lib_Name, Rec_Lib_Name, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, create_fold_move, create_fold_rotate, create_fold_alpha, recycle_fold_move, recycle_fold_rotate, recycle_fold_alpha;
         #endregion
 
         #region Preview - HudSounder
@@ -83,7 +74,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 图标
-        private Texture2D icon_main, icon_sound, icon_anim, icon_button, icon_option, icon_slider, icon_progress, icon_container, icon_toggle, icon_text, icon_tmptext, icon_scan_r, icon_scan_p, icon_record_rms_r, icon_record_rms_p, resetanchorpos_r, resetanchorpos_p, prw_play_r, prw_play_p, prw_stop_r, prw_stop_p, usestate, animstate, dutation, comp_tracking, elelibsource, locate_r, locate_p, rms_move, rms_rotate, rms_anchor, rms_anchor_center, rms_scale, comp_alpha, comp_transform, comp_trigger, status, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, prw_play_out_r, prw_play_out_p, prw_play_in_p, prw_play_in_r, save_r, save_p, reset_r, reset_p;
+        private Texture2D icon_main, icon_sound, icon_anim, icon_button, icon_option, icon_slider, icon_progress, icon_toggle, icon_text, icon_tmptext, icon_scan_r, icon_scan_p, icon_record_rms_r, icon_record_rms_p, resetanchorpos_r, resetanchorpos_p, prw_play_r, prw_play_p, prw_stop_r, prw_stop_p, usestate, animstate, dutation, comp_tracking, elelibsource, locate_r, locate_p, rms_move, rms_rotate, rms_anchor, rms_anchor_center, rms_scale, comp_alpha, comp_transform, comp_trigger, status, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, prw_play_out_r, prw_play_out_p, prw_play_in_p, prw_play_in_r, save_r, save_p, reset_r, reset_p;
 
         #endregion
 
@@ -158,7 +149,6 @@ namespace SevenStrikeModules.XHud.Editor
             icon_option = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/icon_option");
             icon_slider = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/icon_slider");
             icon_progress = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/icon_progress");
-            icon_container = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/icon_container");
             icon_toggle = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/icon_toggle");
             icon_text = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/icon_text");
             icon_tmptext = Editor_XHud_GUI.GetIcon("Icons_XHud_Element/icon_tmptext");
@@ -208,12 +198,11 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 控件列表绘制
             ReorderableList_Draw_Sounder(mgr);
-            ReorderableList_Draw_Animator(mgr);
+            ReorderableList_Draw_PrimitiveControllerNodes(mgr);
             ReorderableList_Draw_Button(mgr);
             ReorderableList_Draw_Option(mgr);
             ReorderableList_Draw_Slider(mgr);
             ReorderableList_Draw_Progress(mgr);
-            ReorderableList_Draw_Container(mgr);
             ReorderableList_Draw_Toggle(mgr);
             ReorderableList_Draw_Text(mgr);
             ReorderableList_Draw_TmpText(mgr);
@@ -244,13 +233,7 @@ namespace SevenStrikeModules.XHud.Editor
                 if (BaseScript != null)
                 {
                     RMS_Redraw();
-
-                    Preview_Animator_Stop();
-
-                    Preview_AnimatorSound_CoroutineList_Stop();
-
                     Preview_HudSounder_Coroutine_Stop();
-
                     Preview_Kill();
                 }
             }
@@ -283,7 +266,7 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "扫描子元素", "程序正在运行，无法在运行期间执行此功能！", "明白");
                     return;
                 }
-                GetAllAnimators();
+                GetPrimitivesTween();
                 GetAllText();
                 GetAllTmpText();
                 GetAllSounder();
@@ -291,7 +274,6 @@ namespace SevenStrikeModules.XHud.Editor
                 GetAllOptions();
                 GetAllSliders();
                 GetAllProgress();
-                GetAllContainer();
                 GetAllToggle();
                 GetModulesResult();
                 return;
@@ -1170,7 +1152,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             ///---动画倍乘系数     
-            Editor_XHud_GUI.Gui_Layout_Property_Field("速率倍增", Element_Animators_GlobalDuration);
+            Editor_XHud_GUI.Gui_Layout_Property_Field("速率倍增", PrimitivesTweenGlobalDuration);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
@@ -1266,11 +1248,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 元素下动画器自动播放
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Element>("动画器自动播放", stroptions_auto, ref AutoPlayAnimators, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-            #endregion
-
-            #region 元素下容器动画自动播放
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Element>("容器动画自动播放", stroptions_auto, ref AutoPlayContainersAnimators, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Element>("动画器自动播放", stroptions_auto, ref AutoPlayPrimitivesTween, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             #endregion
 
             #region 生成时使用设计布局
@@ -1295,19 +1273,19 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 动画相关
-                if (AnimatorNodes != null && AnimatorNodes.arraySize > 0)
+                if (PrimitiveControllerNodes != null && PrimitiveControllerNodes.arraySize > 0)
                 {
                     #region 动画状态     
                     Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, (XHudElementAnimateState)AnimateState.enumValueIndex == XHudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                     #endregion
 
                     #region 最大耗时     
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, AnimatorsMaxDuration.floatValue.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, PrimitivesTweenMaxDuration.floatValue.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
                     #endregion
 
                     #region 最大耗时        
                     if (mgr != null)
-                        Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (mgr.DurationMultiply * AnimatorsMaxDuration.floatValue).ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (mgr.DurationMultiply * PrimitivesTweenMaxDuration.floatValue).ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
                     #endregion
                 }
                 #endregion
@@ -1409,20 +1387,20 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 动画相关
-                if (SelectedObjects[ElementStatu_Index].AnimatorNodes != null && SelectedObjects[ElementStatu_Index].AnimatorNodes.Count > 0)
+                if (SelectedObjects[ElementStatu_Index].PrimitiveControllerNodes != null && SelectedObjects[ElementStatu_Index].PrimitiveControllerNodes.Count > 0)
                 {
                     #region 动画状态     
                     Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[ElementStatu_Index].AnimateState == XHudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                     #endregion
 
-                    SelectedObjects[ElementStatu_Index].AnimatorsMaxDuration = Animators_GetAnimatorsMaxDuration(SelectedObjects[ElementStatu_Index].AnimatorNodes, SelectedObjects[ElementStatu_Index].Element_Animators_GlobalDuration);
+                    SelectedObjects[ElementStatu_Index].PrimitivesTweenMaxDuration = Animators_GetAnimatorsMaxDuration(SelectedObjects[ElementStatu_Index].PrimitiveControllerNodes, SelectedObjects[ElementStatu_Index].PrimitivesTweenGlobalDuration);
 
                     #region 最大耗时     
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（元素倍增）</color>", 12, SelectedObjects[ElementStatu_Index].AnimatorsMaxDuration.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（元素倍增）</color>", 12, SelectedObjects[ElementStatu_Index].PrimitivesTweenMaxDuration.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
                     #endregion
 
                     #region 最大耗时        
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (mgr.DurationMultiply * SelectedObjects[ElementStatu_Index].AnimatorsMaxDuration).ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (mgr.DurationMultiply * SelectedObjects[ElementStatu_Index].PrimitivesTweenMaxDuration).ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
                     #endregion
                 }
                 #endregion
@@ -1662,7 +1640,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 动画器列表
-            if (AnimatorNodes.arraySize > 0)
+            if (PrimitiveControllerNodes.arraySize > 0)
             {
                 if (Targets_Selected())
                 {
@@ -1677,16 +1655,16 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
-                    AnimatorsIsFold.boolValue = EditorGUILayout.Foldout(AnimatorsIsFold.boolValue, "动画器", true);
-                    AnimatorsIsFold.serializedObject.ApplyModifiedProperties();
+                    PrimitivesIsFold.boolValue = EditorGUILayout.Foldout(PrimitivesIsFold.boolValue, "动画器", true);
+                    PrimitivesIsFold.serializedObject.ApplyModifiedProperties();
                     Editor_XHud_GUI.Gui_Layout_Space(5);
                     Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                    if (AnimatorsIsFold.boolValue)
-                        AnimatorsList.DoLayoutList();
+                    if (PrimitivesIsFold.boolValue)
+                        PrimitivesTweenList.DoLayoutList();
 
                     Editor_XHud_GUI.Gui_Layout_Space(5);
                     Editor_XHud_GUI.Gui_Layout_Horizontal_End();
@@ -1868,35 +1846,6 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
-            #region 容器列表
-            if (ContainerNodes.arraySize > 0)
-            {
-                if (Targets_Selected())
-                {
-                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_XHud_GUI.Gui_Layout_Space(10);
-                    EditorGUILayout.HelpBox("容器列表不支持多项操作", MessageType.Warning);
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-                }
-                else
-                {
-                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_XHud_GUI.Gui_Layout_Space(10);
-                    ContainerIsFold.boolValue = EditorGUILayout.Foldout(ContainerIsFold.boolValue, "容器", true);
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-
-                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-                    if (ContainerIsFold.boolValue)
-                        ContainerList.DoLayoutList();
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-                }
-            }
-            #endregion
-
             #region 开关列表
             if (ToggleNodes.arraySize > 0)
             {
@@ -1990,9 +1939,8 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (!Targets_Selected())
             {
-                if (SounderNodes.arraySize <= 0 && AnimatorNodes.arraySize <= 0 && ButtonNodes.arraySize <= 0 && OptionNodes.arraySize <= 0 &&
-                    SliderNodes.arraySize <= 0 && ProgressNodes.arraySize <= 0 && ToggleNodes.arraySize <= 0 && ContainerNodes.arraySize <= 0 &&
-                    TextNodes.arraySize <= 0 && TmpTextNodes.arraySize <= 0)
+                if (SounderNodes.arraySize <= 0 && PrimitiveControllerNodes.arraySize <= 0 && ButtonNodes.arraySize <= 0 && OptionNodes.arraySize <= 0 &&
+                    SliderNodes.arraySize <= 0 && ProgressNodes.arraySize <= 0 && ToggleNodes.arraySize <= 0 && TextNodes.arraySize <= 0 && TmpTextNodes.arraySize <= 0)
                 {
                     Editor_XHud_GUI.Gui_Layout_Labelfield("暂无统计数据", HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.阴影灰), TextAnchor.MiddleCenter);
                 }
@@ -2006,9 +1954,9 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 组件数量 - 动画器
-                    if (AnimatorNodes.arraySize > 0)
+                    if (PrimitiveControllerNodes.arraySize > 0)
                     {
-                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, AnimatorNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, PrimitiveControllerNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
                     }
                     #endregion
 
@@ -2037,13 +1985,6 @@ namespace SevenStrikeModules.XHud.Editor
                     if (ProgressNodes.arraySize > 0)
                     {
                         Editor_XHud_GUI.StatuDisplayer_text(icon_progress, 12, new Vector2(0, 7), "进度条", 12, ProgressNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
-                    }
-                    #endregion
-
-                    #region 组件数量 - 容器
-                    if (ContainerNodes.arraySize > 0)
-                    {
-                        Editor_XHud_GUI.StatuDisplayer_text(icon_container, 12, new Vector2(0, 7), "容器", 12, ContainerNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
                     }
                     #endregion
 
@@ -2108,9 +2049,8 @@ namespace SevenStrikeModules.XHud.Editor
                 Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 #endregion
 
-                if (SelectedObjects[ElementStatistic_Index].SounderNodes.Count <= 0 && SelectedObjects[ElementStatistic_Index].AnimatorNodes.Count <= 0 && SelectedObjects[ElementStatistic_Index].ButtonNodes.Count <= 0 && OptionNodes.arraySize <= 0 &&
-                   SelectedObjects[ElementStatistic_Index].SliderNodes.Count <= 0 && SelectedObjects[ElementStatistic_Index].ProgressNodes.Count <= 0 && SelectedObjects[ElementStatistic_Index].ToggleNodes.Count <= 0 && ContainerNodes.arraySize <= 0 &&
-                   SelectedObjects[ElementStatistic_Index].TextNodes.Count <= 0 && SelectedObjects[ElementStatistic_Index].TmpTextNodes.Count <= 0)
+                if (SelectedObjects[ElementStatistic_Index].SounderNodes.Count <= 0 && SelectedObjects[ElementStatistic_Index].PrimitiveControllerNodes.Count <= 0 && SelectedObjects[ElementStatistic_Index].ButtonNodes.Count <= 0 && OptionNodes.arraySize <= 0 &&
+                   SelectedObjects[ElementStatistic_Index].SliderNodes.Count <= 0 && SelectedObjects[ElementStatistic_Index].ProgressNodes.Count <= 0 && SelectedObjects[ElementStatistic_Index].ToggleNodes.Count <= 0 && SelectedObjects[ElementStatistic_Index].TextNodes.Count <= 0 && SelectedObjects[ElementStatistic_Index].TmpTextNodes.Count <= 0)
                 {
                     Editor_XHud_GUI.Gui_Layout_Labelfield("暂无统计数据", HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.阴影灰), TextAnchor.MiddleCenter);
                 }
@@ -2124,9 +2064,9 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 组件数量 - 动画器
-                    if (SelectedObjects[ElementStatistic_Index].AnimatorNodes.Count > 0)
+                    if (SelectedObjects[ElementStatistic_Index].PrimitiveControllerNodes.Count > 0)
                     {
-                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, SelectedObjects[ElementStatistic_Index].AnimatorNodes.Count.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, SelectedObjects[ElementStatistic_Index].PrimitiveControllerNodes.Count.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
                     }
                     #endregion
 
@@ -2155,13 +2095,6 @@ namespace SevenStrikeModules.XHud.Editor
                     if (SelectedObjects[ElementStatistic_Index].ProgressNodes.Count > 0)
                     {
                         Editor_XHud_GUI.StatuDisplayer_text(icon_progress, 12, new Vector2(0, 7), "进度条", 12, SelectedObjects[ElementStatistic_Index].ProgressNodes.Count.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
-                    }
-                    #endregion
-
-                    #region 组件数量 - 容器
-                    if (SelectedObjects[ElementStatistic_Index].ContainerNodes.Count > 0)
-                    {
-                        Editor_XHud_GUI.StatuDisplayer_text(icon_container, 12, new Vector2(0, 7), "容器", 12, SelectedObjects[ElementStatistic_Index].ContainerNodes.Count.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
                     }
                     #endregion
 
@@ -2235,7 +2168,7 @@ namespace SevenStrikeModules.XHud.Editor
                         Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "扫描元素", "程序正在运行，无法在运行期间执行此功能！", "明白");
                         return;
                     }
-                    GetAllAnimators();
+                    GetPrimitivesTween();
                     GetAllText();
                     GetAllTmpText();
                     GetAllSounder();
@@ -2243,7 +2176,6 @@ namespace SevenStrikeModules.XHud.Editor
                     GetAllOptions();
                     GetAllSliders();
                     GetAllProgress();
-                    GetAllContainer();
                     GetAllToggle();
                     GetModulesResult();
                     return;
@@ -2545,7 +2477,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
-            CalculateAnimatorMaxDuration(BaseScript.AnimatorNodes, Element_Animators_GlobalDuration.floatValue);
+            CalculateAnimatorMaxDuration(BaseScript.PrimitiveControllerNodes, PrimitivesTweenGlobalDuration.floatValue);
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -2585,22 +2517,6 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void CheckModulesValid()
         {
-            #region Container
-            for (int i = 0; i < ContainerNodes.arraySize; i++)
-            {
-                SerializedProperty sp_root = ContainerNodes.GetArrayElementAtIndex(i);
-                if (sp_root != null)
-                {
-                    SerializedProperty sp_con = sp_root.FindPropertyRelative("Container");
-                    XHud_Module_Container con = (XHud_Module_Container)sp_con.objectReferenceValue;
-                    if (con == null)
-                    {
-                        ContainerNodes.DeleteArrayElementAtIndex(i);
-                    }
-                }
-            }
-            #endregion
-
             #region Button
             for (int i = 0; i < ButtonNodes.arraySize; i++)
             {
@@ -2697,17 +2613,17 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
-            #region Animator
-            for (int i = 0; i < AnimatorNodes.arraySize; i++)
+            #region PrimitiveControllers
+            for (int i = 0; i < PrimitiveControllerNodes.arraySize; i++)
             {
-                SerializedProperty sp_root = AnimatorNodes.GetArrayElementAtIndex(i);
-                if (sp_root != null)
+                SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(i);
+                if (sp_node != null)
                 {
-                    SerializedProperty sp_con = sp_root.FindPropertyRelative("Animator");
-                    XHud_Module_Animator con = (XHud_Module_Animator)sp_con.objectReferenceValue;
-                    if (con == null)
+                    SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                    XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
+                    if (sp_con == null)
                     {
-                        AnimatorNodes.DeleteArrayElementAtIndex(i);
+                        PrimitiveControllerNodes.DeleteArrayElementAtIndex(i);
                     }
                 }
             }
@@ -2727,12 +2643,12 @@ namespace SevenStrikeModules.XHud.Editor
 
                     XHud_Module_Element ele = SelectedObjects[s];
                     //-扫描 - 动画器 
-                    for (int i = 0; i < ele.AnimatorNodes.Count; i++)
+                    for (int i = 0; i < ele.PrimitiveControllerNodes.Count; i++)
                     {
                         XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
                         dataitem.Title = $"{SelectedObjects[s].name} ( {SelectedObjects[s].Indicator} )";
                         dataitem.SubTitle = "已收集 / 动画器";
-                        dataitem.Message = $"{ele.AnimatorNodes[i].Animator.name} ( {ele.AnimatorNodes[i].Animator.Indicator} )";
+                        dataitem.Message = $"{ele.PrimitiveControllerNodes[i].Controller.name} ( {ele.PrimitiveControllerNodes[i].Controller.Indicator} )";
                         Datas.Add(dataitem);
                         existcomp = true;
                     }
@@ -2796,16 +2712,6 @@ namespace SevenStrikeModules.XHud.Editor
                         Datas.Add(dataitem);
                         existcomp = true;
                     }
-                    //-扫描 - 容器
-                    for (int i = 0; i < ele.ContainerNodes.Count; i++)
-                    {
-                        XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
-                        dataitem.Title = $"{SelectedObjects[s].name} ( {SelectedObjects[s].Indicator} )";
-                        dataitem.SubTitle = "已收集 / 容器";
-                        dataitem.Message = $"{ele.ContainerNodes[i].Container.name} ( {ele.ContainerNodes[i].Container.Indicator} )";
-                        Datas.Add(dataitem);
-                        existcomp = true;
-                    }
                     //-扫描 - Text文字
                     for (int i = 0; i < ele.TextNodes.Count; i++)
                     {
@@ -2841,12 +2747,12 @@ namespace SevenStrikeModules.XHud.Editor
             else
             {
                 //-扫描 - 动画器
-                for (int i = 0; i < BaseScript.AnimatorNodes.Count; i++)
+                for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
                 {
                     XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
                     dataitem.Title = $"{BaseScript.name} ({BaseScript.Indicator} )";
                     dataitem.SubTitle = "已收集 / 动画器";
-                    dataitem.Message = $"{BaseScript.AnimatorNodes[i].Animator.name} ({BaseScript.AnimatorNodes[i].Animator.Indicator} )";
+                    dataitem.Message = $"{BaseScript.PrimitiveControllerNodes[i].Controller.name} ({BaseScript.PrimitiveControllerNodes[i].Controller.Indicator} )";
                     Datas.Add(dataitem);
                 }
                 //-扫描 - 按钮
@@ -2903,15 +2809,6 @@ namespace SevenStrikeModules.XHud.Editor
                     dataitem.Message = $"{BaseScript.SounderNodes[i].Sounder.name} ({BaseScript.SounderNodes[i].Sounder.Indicator} )";
                     Datas.Add(dataitem);
                 }
-                //-扫描 - 容器
-                for (int i = 0; i < BaseScript.ContainerNodes.Count; i++)
-                {
-                    XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
-                    dataitem.Title = $"{BaseScript.name} ({BaseScript.Indicator} )";
-                    dataitem.SubTitle = "已收集 / 容器";
-                    dataitem.Message = $"{BaseScript.ContainerNodes[i].Container.name} ({BaseScript.ContainerNodes[i].Container.Indicator} )";
-                    Datas.Add(dataitem);
-                }
                 //-扫描 - Text文字
                 for (int i = 0; i < BaseScript.TextNodes.Count; i++)
                 {
@@ -2931,10 +2828,10 @@ namespace SevenStrikeModules.XHud.Editor
                     Datas.Add(dataitem);
                 }
 
-                if (BaseScript.AnimatorNodes.Count <= 0 && BaseScript.ButtonNodes.Count <= 0 && BaseScript.OptionNodes.Count <= 0 && BaseScript.SliderNodes.Count <= 0 && BaseScript.ProgressNodes.Count <= 0 && BaseScript.ToggleNodes.Count <= 0 && BaseScript.SounderNodes.Count <= 0 && BaseScript.ContainerNodes.Count <= 0 && BaseScript.TextNodes.Count <= 0 && BaseScript.TmpTextNodes.Count <= 0)
+                if (BaseScript.PrimitiveControllerNodes.Count <= 0 && BaseScript.ButtonNodes.Count <= 0 && BaseScript.OptionNodes.Count <= 0 && BaseScript.SliderNodes.Count <= 0 && BaseScript.ProgressNodes.Count <= 0 && BaseScript.ToggleNodes.Count <= 0 && BaseScript.SounderNodes.Count <= 0 && BaseScript.TextNodes.Count <= 0 && BaseScript.TmpTextNodes.Count <= 0)
                 {
                     string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
-                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "扫描元素子组件", $"未扫描到任何子元素，请您检查子物体中是否有物体包含以下组件： <color={hexcol}>Hud_Animator、Hud_Button、Hud_Progress、Hud_Slider、Hud_Option、HudSound、Hud_Container、Hud_Text、Hud_TmpText、HudToggle</color>", "明白");
+                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "扫描元素子组件", $"未扫描到任何子元素，请您检查子物体中是否有物体包含以下组件： <color={hexcol}>Hud_Animator、Hud_Button、Hud_Progress、Hud_Slider、Hud_Option、HudSound、Hud_Text、Hud_TmpText、HudToggle</color>", "明白");
                 }
                 else
                     Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 元素消息", "扫描元素子组件", "以下是扫描到的元素所有子组件列表，请您检查核对：", "明白");
@@ -3018,7 +2915,6 @@ namespace SevenStrikeModules.XHud.Editor
                     SerializedProperty sp_anim_isfold = so_ele.FindProperty("AnimatorsIsFold");
                     SerializedProperty sp_btn_isfold = so_ele.FindProperty("ButtonIsFold");
                     SerializedProperty sp_progress_isfold = so_ele.FindProperty("ProgressIsFold");
-                    SerializedProperty sp_container_isfold = so_ele.FindProperty("ContainerIsFold");
                     SerializedProperty sp_tog_isfold = so_ele.FindProperty("ToggleIsFold");
                     SerializedProperty sp_txt_isfold = so_ele.FindProperty("TextIsFold");
                     SerializedProperty sp_tmp_txt_isfold = so_ele.FindProperty("TmpTextIsFold");
@@ -3038,7 +2934,6 @@ namespace SevenStrikeModules.XHud.Editor
                     sp_txt_isfold.boolValue = state;
                     sp_tmp_txt_isfold.boolValue = state;
                     sp_progress_isfold.boolValue = state;
-                    sp_container_isfold.boolValue = state;
                     sp_tog_isfold.boolValue = state;
 
                     sp_anim_isfold.serializedObject.ApplyModifiedProperties();
@@ -3050,7 +2945,6 @@ namespace SevenStrikeModules.XHud.Editor
                     sp_txt_isfold.serializedObject.ApplyModifiedProperties();
                     sp_tmp_txt_isfold.serializedObject.ApplyModifiedProperties();
                     sp_progress_isfold.serializedObject.ApplyModifiedProperties();
-                    sp_container_isfold.serializedObject.ApplyModifiedProperties();
                     sp_tog_isfold.serializedObject.ApplyModifiedProperties();
 
                     so_ele.ApplyModifiedProperties();
@@ -3060,7 +2954,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 if (target != null)
                 {
-                    AnimatorsIsFold.boolValue = state;
+                    PrimitivesIsFold.boolValue = state;
                     ButtonIsFold.boolValue = state;
                     OptionIsFold.boolValue = state;
                     SliderIsFold.boolValue = state;
@@ -3070,9 +2964,8 @@ namespace SevenStrikeModules.XHud.Editor
                     TextIsFold.boolValue = state;
                     TmpTextIsFold.boolValue = state;
                     ProgressIsFold.boolValue = state;
-                    ContainerIsFold.boolValue = state;
 
-                    AnimatorsIsFold.serializedObject.ApplyModifiedProperties();
+                    PrimitivesIsFold.serializedObject.ApplyModifiedProperties();
                     ButtonIsFold.serializedObject.ApplyModifiedProperties();
                     OptionIsFold.serializedObject.ApplyModifiedProperties();
                     SliderIsFold.serializedObject.ApplyModifiedProperties();
@@ -3082,35 +2975,34 @@ namespace SevenStrikeModules.XHud.Editor
                     TextIsFold.serializedObject.ApplyModifiedProperties();
                     TmpTextIsFold.serializedObject.ApplyModifiedProperties();
                     ProgressIsFold.serializedObject.ApplyModifiedProperties();
-                    ContainerIsFold.serializedObject.ApplyModifiedProperties();
 
                     serializedObject.ApplyModifiedProperties();
                 }
             }
         }
-        private void CalculateAnimatorMaxDuration(List<ElementNode_Animator> list, float globaldur)
+        private void CalculateAnimatorMaxDuration(List<PrimitiveControllerNode> list, float globaldur)
         {
-            AnimatorsMaxDuration.floatValue = Animators_GetAnimatorsMaxDuration(list, globaldur);
-            AnimatorsMaxDuration.serializedObject.ApplyModifiedProperties();
+            PrimitivesTweenMaxDuration.floatValue = Animators_GetAnimatorsMaxDuration(list, globaldur);
+            PrimitivesTweenMaxDuration.serializedObject.ApplyModifiedProperties();
         }
         /// <summary>
         /// 从所有子动画器中获取最大耗时
         /// </summary>
         /// <returns></returns>
-        public float Animators_GetAnimatorsMaxDuration(List<ElementNode_Animator> list, float globaldur)
+        public float Animators_GetAnimatorsMaxDuration(List<PrimitiveControllerNode> list, float globaldur)
         {
             if (list.Count <= 0)
                 return 0;
             float[] x_list = new float[list.Count];
             for (int i = 0; i < list.Count; i++)
             {
-                if (list[i].Animator == null)
+                if (list[i].Controller == null)
                 {
                     x_list[i] = 0;
                     continue;
                 }
-                list[i].Animator.TweenNodeTimersGet();
-                x_list[i] = list[i].Animator.MaxTimerWithGlobalDuration + list[i].DelayTime;
+                list[i].Controller.pt_Tween.TweenNode_GetTimers();
+                x_list[i] = list[i].Controller.pt_Tween.MaxTimerWithGlobalDuration + list[i].DelayTime;
             }
             float v = XHud_Utilitys.Array_MaxValue(x_list);
             return v * globaldur;
@@ -3124,23 +3016,23 @@ namespace SevenStrikeModules.XHud.Editor
             bool hasLoop = false;
 
             List<int> loops = new List<int>();
-            for (int i = 0; i < AnimatorNodes.arraySize; i++)
+            for (int i = 0; i < PrimitiveControllerNodes.arraySize; i++)
             {
-                SerializedProperty sp_animator = AnimatorNodes.GetArrayElementAtIndex(i).FindPropertyRelative("Animator");
-                XHud_Module_Animator anim = (XHud_Module_Animator)sp_animator.objectReferenceValue;
-                if (anim == null)
+                SerializedProperty sp_node_con = PrimitiveControllerNodes.GetArrayElementAtIndex(i).FindPropertyRelative("Controller");
+                XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
+                if (sp_con == null)
                 {
                     continue;
                 }
-                if (anim == null && anim.AnimateTweenNodes == null || anim.AnimateTweenNodes.Count <= 0)
+                if (sp_con == null && sp_con.pt_Tween.PrimitiveTweenNodes == null || sp_con.pt_Tween.PrimitiveTweenNodes.Count <= 0)
                 {
                     continue;
                 }
                 else
                 {
-                    for (int s = 0; s < anim.AnimateTweenNodes.Count; s++)
+                    for (int s = 0; s < sp_con.pt_Tween.PrimitiveTweenNodes.Count; s++)
                     {
-                        loops.Add(anim.AnimateTweenNodes[s].LoopCount);
+                        loops.Add(sp_con.pt_Tween.PrimitiveTweenNodes[s].LoopCount);
                     }
                 }
             }
@@ -3219,80 +3111,6 @@ namespace SevenStrikeModules.XHud.Editor
             XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(key, sw_option);
             return sw_option;
         }
-        /// <summary>
-        /// 还原Animator姿态
-        /// </summary>
-        private void AnimatorFeature_Load(XHud_Module_Animator animator)
-        {
-            if (animator == null)
-                return;
-
-            SerializedObject so = new SerializedObject(animator);
-            so.Update();
-            SerializedProperty feature = so.FindProperty("AnimatorFeature");
-            SerializedProperty m_rect = so.FindProperty("mod_RectTransform");
-            SerializedProperty m_img = so.FindProperty("mod_Image");
-            SerializedProperty m_rawimg = so.FindProperty("mod_RawImage");
-            SerializedProperty m_text = so.FindProperty("mod_Text");
-            SerializedProperty m_tmptext = so.FindProperty("mod_TmpText");
-
-            SerializedProperty pos = feature.FindPropertyRelative("Position");
-            SerializedProperty eur = feature.FindPropertyRelative("Euler");
-            SerializedProperty sca = feature.FindPropertyRelative("Scale");
-            SerializedProperty size = feature.FindPropertyRelative("Size");
-            SerializedProperty alp = feature.FindPropertyRelative("Alpha");
-            SerializedProperty col = feature.FindPropertyRelative("Color");
-            SerializedProperty fil = feature.FindPropertyRelative("Fill");
-
-            RectTransform rect = m_rect.objectReferenceValue as RectTransform;
-            Image image = m_img.objectReferenceValue as Image;
-            RawImage rawimage = m_rawimg.objectReferenceValue as RawImage;
-            XHud_Module_Text text = m_text.objectReferenceValue as XHud_Module_Text;
-            XHud_Module_TmpText tmp = m_tmptext.objectReferenceValue as XHud_Module_TmpText;
-
-            if (rect != null)
-            {
-                rect.anchoredPosition3D = pos.vector3Value;
-                rect.localEulerAngles = eur.vector3Value;
-                rect.localScale = sca.vector3Value;
-                rect.sizeDelta = size.vector2Value;
-                //m_rect.serializedObject.ApplyModifiedProperties();
-            }
-
-            if (image != null)
-            {
-                //Image img = (Image)m_img.objectReferenceValue;
-                image.color = col.colorValue;
-                image.fillAmount = fil.floatValue;
-                Color cc = image.color;
-                cc.a = alp.floatValue;
-                image.color = cc;
-
-                //m_img.serializedObject.ApplyModifiedProperties();
-            }
-            else if (text != null)
-            {
-                text.color = col.colorValue;
-                //m_text.serializedObject.ApplyModifiedProperties();
-            }
-            else if (tmp != null)
-            {
-                tmp.color = col.colorValue;
-                //m_tmptext.serializedObject.ApplyModifiedProperties();
-            }
-            else if (rawimage != null)
-            {
-                //RawImage rawimg = (RawImage)m_rawimg.objectReferenceValue;
-                rawimage.color = col.colorValue;
-                Color cc = rawimage.color;
-                cc.a = alp.floatValue;
-                rawimage.color = cc;
-
-                //m_img.serializedObject.ApplyModifiedProperties();
-            }
-
-            so.ApplyModifiedProperties();
-        }
         public ElementStatu GetPrefabStatus(GameObject gameObject)
         {
             if (PrefabUtility.IsPartOfPrefabAsset(gameObject))
@@ -3314,7 +3132,6 @@ namespace SevenStrikeModules.XHud.Editor
         private void GetSerializeFields()
         {
             SounderNodes = serializedObject.FindProperty("SounderNodes");
-            AnimatorNodes = serializedObject.FindProperty("AnimatorNodes");
             ButtonNodes = serializedObject.FindProperty("ButtonNodes");
             OptionNodes = serializedObject.FindProperty("OptionNodes");
             SliderNodes = serializedObject.FindProperty("SliderNodes");
@@ -3322,16 +3139,12 @@ namespace SevenStrikeModules.XHud.Editor
             TextNodes = serializedObject.FindProperty("TextNodes");
             TmpTextNodes = serializedObject.FindProperty("TmpTextNodes");
             ToggleNodes = serializedObject.FindProperty("ToggleNodes");
-            ContainerNodes = serializedObject.FindProperty("ContainerNodes");
             DebugState = serializedObject.FindProperty("DebugState");
             CanvasGroup = serializedObject.FindProperty("CanvasGroup");
             Alpha = serializedObject.FindProperty("Alpha");
             RectTransform = serializedObject.FindProperty("RectTransform");
-            PreviewPrimitivesTween = serializedObject.FindProperty("PreviewPrimitivesTween");
             TriggerAction = serializedObject.FindProperty("TriggerAction");
             ObjectTracker = serializedObject.FindProperty("ObjectTracker");
-            AutoPlayAnimators = serializedObject.FindProperty("AutoPlayAnimators");
-            AutoPlayContainersAnimators = serializedObject.FindProperty("AutoPlayContainersAnimators");
             AutoKillPreviewTweens = serializedObject.FindProperty("AutoKillPreviewTweens");
             eve_on_element_in_start = serializedObject.FindProperty("eve_on_element_in_start");
             eve_on_element_in_end = serializedObject.FindProperty("eve_on_element_in_end");
@@ -3340,19 +3153,15 @@ namespace SevenStrikeModules.XHud.Editor
             TextIsFold = serializedObject.FindProperty("TextIsFold");
             TmpTextIsFold = serializedObject.FindProperty("TmpTextIsFold");
             Indicator = serializedObject.FindProperty("Indicator");
-            AnimatorsMaxDuration = serializedObject.FindProperty("AnimatorsMaxDuration");
             CreateState = serializedObject.FindProperty("CreateState");
             AnimateState = serializedObject.FindProperty("AnimateState");
             OriginPoolName = serializedObject.FindProperty("OriginPoolName");
             OriginalName = serializedObject.FindProperty("OriginalName");
             CurrentPivot = serializedObject.FindProperty("CurrentPivot");
-            Element_Animators_GlobalDuration = serializedObject.FindProperty("Element_Animators_GlobalDuration");
-            AnimatorsIsFold = serializedObject.FindProperty("AnimatorsIsFold");
             ButtonIsFold = serializedObject.FindProperty("ButtonIsFold");
             OptionIsFold = serializedObject.FindProperty("OptionIsFold");
             SliderIsFold = serializedObject.FindProperty("SliderIsFold");
             ProgressIsFold = serializedObject.FindProperty("ProgressIsFold");
-            ContainerIsFold = serializedObject.FindProperty("ContainerIsFold");
             ToggleIsFold = serializedObject.FindProperty("ToggleIsFold");
             EventIsFold = serializedObject.FindProperty("EventIsFold");
             SounderIsFold = serializedObject.FindProperty("SounderIsFold");
@@ -3361,7 +3170,6 @@ namespace SevenStrikeModules.XHud.Editor
             RMS_Name = serializedObject.FindProperty("RMS_Name");
             TweensPreivew_In_State = serializedObject.FindProperty("TweensPreivew_In_State");
             TweensPreivew_Out_State = serializedObject.FindProperty("TweensPreivew_Out_State");
-            PrimitivePreivew_State = serializedObject.FindProperty("PrimitivePreivew_State");
             RewindPreviewTweensWithKill = serializedObject.FindProperty("RewindPreviewTweensWithKill");
             ClearPreviewTweensWithKill = serializedObject.FindProperty("ClearPreviewTweensWithKill");
             CreateArgs = serializedObject.FindProperty("CreateArgs");
@@ -3376,470 +3184,18 @@ namespace SevenStrikeModules.XHud.Editor
             recycle_fold_move = serializedObject.FindProperty("recycle_fold_move");
             recycle_fold_rotate = serializedObject.FindProperty("recycle_fold_rotate");
             recycle_fold_alpha = serializedObject.FindProperty("recycle_fold_alpha");
-        }
-        #endregion
 
-        #region 预览
-
-        #region Animator 动画预览
-        /// <summary>
-        /// 预览动画
-        /// </summary>
-        private void Preview_Animator_Play()
-        {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
-            Tween_Preivewing_Animators = true;
-            AnimateState.enumValueIndex = 1;
-            AnimateState.serializedObject.ApplyModifiedProperties();
-
-            ///---用来存放调用动画器的动画效果的延迟时间
-            List<float> delaytimes = new List<float>();
-
-            ///---动画逻辑
-            for (int i = 0; i < BaseScript.AnimatorNodes.Count; i++)
-            {
-                ElementNode_Animator node = BaseScript.AnimatorNodes[i];
-                ///---判断动画器是否为有效
-                if (node.Animator.AnimateTweenNodes == null || node.Animator.AnimateTweenNodes.Count <= 0)
-                    continue;
-
-                ///---循环第 i 个动画器节点的第 s 个动画效果是否开启
-                for (int s = 0; s < node.Animator.AnimateTweenNodes.Count; s++)
-                {
-                    TweenNode twnnode = node.Animator.AnimateTweenNodes[s];
-                    ///---如果动画效果未开启则跳过
-                    if (twnnode.Enabled)
-                    {
-                        if (twnnode.ActivateOnlyToEnd)
-                            continue;
-
-                        if (mgr == null)
-                            Preivew_Animator_TweenList.Add(node.Animator.Tweener_Play(twnnode, 1 * Element_Animators_GlobalDuration.floatValue * node.Animator.Animator_GlobalDuration));
-                        else
-                            Preivew_Animator_TweenList.Add(node.Animator.Tweener_Play(twnnode, mgr.DurationMultiply * Element_Animators_GlobalDuration.floatValue * node.Animator.Animator_GlobalDuration));
-                        delaytimes.Add(node.DelayTime);
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-            }
-
-            ///---预备动画器
-            for (int i = 0; i < BaseScript.AnimatorNodes.Count; i++)
-            {
-                ElementNode_Animator node = BaseScript.AnimatorNodes[i];
-                ///---判断动画器是否为有效
-                if (node.Animator.AnimateTweenNodes == null || node.Animator.AnimateTweenNodes.Count <= 0)
-                    continue;
-                node.Animator.RewindAllTweenNode();
-            }
-
-            //同步启动所有Animator的所有音效播放
-            Preivew_AnimatorSound_Coroutine_Play = EditorCoroutineUtility.StartCoroutineOwnerless(Preview_AnimatorSound_Play());
-
-            ///---播放预览动画
-            if (Preivew_Animator_TweenList != null && Preivew_Animator_TweenList.Count > 0)
-            {
-                for (int i = 0; i < Preivew_Animator_TweenList.Count; i++)
-                {
-                    Preivew_Animator_CoroutineList_Play.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_Animator_Coroutine_Play(Preivew_Animator_TweenList[i], delaytimes[i])));
-                }
-                if (!Animators_HasLoopMode())
-                {
-                    if (AutoKillPreviewTweens.boolValue)
-                        Preivew_Animator_Coroutine_Stop = EditorCoroutineUtility.StartCoroutine(Preview_Animator_Coroutine_Stop(AnimatorsMaxDuration.floatValue), this);
-                }
-                //DOTweenEditorPreview.Start();
-            }
-        }
-
-        /// <summary>
-        /// 延迟预览指定动画
-        /// </summary>
-        IEnumerator Preview_Animator_Coroutine_Play(XTween_Interface tween, float delay)
-        {
-            yield return new EditorWaitForSeconds(delay);
-            //DOTweenEditorPreview.PrepareTweenForPreview(tween, true, true, true);
-        }
-
-        /// <summary>
-        /// 预览指定Animator的动画
-        /// </summary>
-        private void Preview_Animator_PlayAt(int index)
-        {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
-            Preview_Animator_Stop();
-
-            ElementNode_Animator node = BaseScript.AnimatorNodes[index];
-            XHud_Module_Animator anim = node.Animator;
-
-            if (anim == null)
-                return;
-
-            if (anim.TweenNode_GetCount() <= 0)
-                return;
-
-            Tween_Preivewing_Animators = true;
-            AnimateState.enumValueIndex = 1;
-            AnimateState.serializedObject.ApplyModifiedProperties();
-
-            ///---用来存放调用动画器的动画效果的延迟时间
-            float delaytime = 0;
-
-            if (anim.AnimateTweenNodes == null || anim.AnimateTweenNodes.Count <= 0)
-                return;
-
-            for (int i = 0; i < anim.AnimateTweenNodes.Count; i++)
-            {
-                if (anim.AnimateTweenNodes[i].Enabled)
-                {
-                    TweenNode twnnode = anim.AnimateTweenNodes[i];
-                    if (twnnode.ActivateOnlyToEnd)
-                        continue;
-
-                    Preivew_Animator_TweenList.Add(anim.Tweener_Play(twnnode, mgr.DurationMultiply * anim.Animator_GlobalDuration));
-                    delaytime = node.DelayTime;
-
-                    //播放动画节点包含的音效
-                    for (int k = 0; k < twnnode.TweenSounds.Count; k++)
-                    {
-                        TweenSound sod = twnnode.TweenSounds[k];
-                        #region 播放音效
-                        AudioClip x_clip = sod.Sound;
-                        //此处考虑到延迟计算 / 音效占动画耗时的百分比
-                        float delay = sod.Percentage * ((twnnode.Duration * anim.Animator_GlobalDuration)) + twnnode.Delay + node.DelayTime;
-
-                        Preivew_AnimatorSound_CoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_AnimatorSound_Play_At(x_clip, sod.Volume, sod.MinPitch, sod.MaxPitch, anim.MutePlay, delay)));
-                        #endregion
-                    }
-                }
-                else
-                {
-                    continue;
-                }
-            }
-
-            if (Preivew_Animator_TweenList != null && Preivew_Animator_TweenList.Count > 0)
-            {
-                for (int i = 0; i < Preivew_Animator_TweenList.Count; i++)
-                {
-                    Preivew_Animator_CoroutineList_Play.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_Animator_Coroutine_Play(Preivew_Animator_TweenList[i], delaytime)));
-                }
-                if (!AnimatorTweenNodes_HasLoopMode(anim.AnimateTweenNodes))
-                {
-                    if (AutoKillPreviewTweens.boolValue)
-                        Preivew_Animator_Coroutine_Stop = EditorCoroutineUtility.StartCoroutine(Preview_Animator_Coroutine_Stop(anim.MaxTimerWithGlobalDuration + delaytime), this);
-                }
-                //DOTweenEditorPreview.Start();
-            }
-        }
-
-        /// <summary>
-        /// 停止预览动画
-        /// </summary>
-        private void Preview_Animator_Stop()
-        {
-            Tween_Preivewing_Animators = false;
-
-            if (target != null)
-            {
-                AnimateState.enumValueIndex = 0;
-                AnimateState.serializedObject.ApplyModifiedProperties();
-
-                #region 杀死所有预览的节点的动画
-                if (Preivew_Animator_TweenList != null && Preivew_Animator_TweenList.Count > 0)
-                {
-                    for (int i = 0; i < Preivew_Animator_TweenList.Count; i++)
-                    {
-                        if (Preivew_Animator_TweenList[i] != null)
-                        {
-                            //Preivew_Animator_TweenList[i].Complete();
-                            Preivew_Animator_TweenList[i].Kill();
-                            Preivew_Animator_TweenList[i].Rewind();
-                        }
-                    }
-                }
-                #endregion
-
-                #region 复位所有节点的动画
-                if (BaseScript.AnimatorNodes != null && BaseScript.AnimatorNodes.Count > 0)
-                {
-                    for (int c = 0; c < BaseScript.AnimatorNodes.Count; c++)
-                    {
-                        XHud_Module_Animator animator = BaseScript.AnimatorNodes[c].Animator;
-                        List<TweenNode> TwnNodes = animator.AnimateTweenNodes;
-
-                        if (TwnNodes != null && TwnNodes.Count > 0)
-                        {
-                            for (int i = 0; i < TwnNodes.Count; i++)
-                            {
-                                TweenNode twnnode = TwnNodes[i];
-                                if (!twnnode.Enabled)
-                                    continue;
-                                else
-                                {
-                                    if (twnnode.ActivateOnlyToEnd)
-                                        continue;
-                                    animator.Tweener_Rewind(twnnode);
-                                }
-                            }
-                        }
-
-                        ///---还原姿态
-                        AnimatorFeature_Load(animator);
-                    }
-                }
-                #endregion
-
-                #region 清空 Animator 动画预览列表
-                Preivew_Animator_TweenList.Clear();
-                for (int i = 0; i < Preivew_Animator_CoroutineList_Play.Count; i++)
-                {
-                    EditorCoroutineUtility.StopCoroutine(Preivew_Animator_CoroutineList_Play[i]);
-                }
-                Preivew_Animator_CoroutineList_Play.Clear();
-                #endregion
-
-                #region 停止协程 - Animator 动画停止预览
-                if (Preivew_Animator_Coroutine_Stop != null)
-                {
-                    EditorCoroutineUtility.StopCoroutine(Preivew_Animator_Coroutine_Stop);
-                    Preivew_Animator_Coroutine_Stop = null;
-                }
-                #endregion
-
-                #region 停止协程 - AnimatorSound 音效预览播放
-                if (Preivew_AnimatorSound_Coroutine_Play != null)
-                {
-                    EditorCoroutineUtility.StopCoroutine(Preivew_AnimatorSound_Coroutine_Play);
-                    Preivew_AnimatorSound_Coroutine_Play = null;
-                }
-                #endregion
-
-                #region 停止播放并清空 AnimatorSound 预览列表与生成的音效物体
-                if (Preivew_AnimatorSound_SoundList != null)
-                {
-                    for (int i = 0; i < Preivew_AnimatorSound_SoundList.Count; i++)
-                    {
-                        if (Preivew_AnimatorSound_SoundList[i] != null)
-                        {
-                            //因为考虑到音效长度如果大于动画长度，那么得由生成的音效自己决定音效播放完后销毁的动作，否会出现动画放完而音效未放完被强行终止而销毁的BUG，所以这里只要清空音效预览列表即可，但如果你需要在动画放完时音效也都跟着一起销毁就取消注释下面得代码块
-
-                            //Preivew_AnimatorSound_SoundList[i].Stop();
-                            //DestroyImmediate(Preivew_AnimatorSound_SoundList[i].gameObject, true);
-                            Preivew_AnimatorSound_SoundList[i] = null;
-                        }
-                    }
-                    Preivew_AnimatorSound_SoundList.Clear();
-                }
-                #endregion
-
-                #region 停止播放并清空 HudSounder 预览列表与生成的音效物体
-                if (Preivew_HudSounder_SoundList != null)
-                {
-                    for (int i = 0; i < Preivew_HudSounder_SoundList.Count; i++)
-                    {
-                        if (Preivew_HudSounder_SoundList[i] != null)
-                        {
-                            //因为考虑到音效长度如果大于动画长度，那么得由生成的音效自己决定音效播放完后销毁的动作，否会出现动画放完而音效未放完被强行终止而销毁的BUG，所以这里只要清空音效预览列表即可，但如果你需要在动画放完时音效也都跟着一起销毁就取消注释下面得代码块
-
-                            //Preivew_HudSounder_SoundList[i].Stop();
-                            //DestroyImmediate(Preivew_HudSounder_SoundList[i].gameObject, true);
-                            Preivew_HudSounder_SoundList[i] = null;
-                        }
-                    }
-                    Preivew_HudSounder_SoundList.Clear();
-                }
-                #endregion
-            }
-            //DOTweenEditorPreview.Stop();
-        }
-
-        /// <summary>
-        /// 延迟停止
-        /// </summary>
-        IEnumerator Preview_Animator_Coroutine_Stop(float stopdelay)
-        {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
-            yield return new EditorWaitForSeconds(stopdelay * mgr.DurationMultiply);
-            if (!Application.isPlaying)
-            {
-                Preview_Animator_Stop();
-                Repaint();
-            }
-        }
-        #endregion
-
-        #region Animator 音效预览
-        /// <summary>
-        /// Animator 音效预览
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator Preview_AnimatorSound_Play()
-        {
-            while (BaseScript.AnimateState == XHudElementAnimateState.Animating)
-            {
-                for (int w = 0; w < BaseScript.AnimatorNodes.Count; w++)
-                {
-                    ElementNode_Animator a_node = BaseScript.AnimatorNodes[w];
-                    for (int i = 0; i < a_node.Animator.AnimateTweenNodes.Count; i++)
-                    {
-                        TweenNode tweenNode = a_node.Animator.AnimateTweenNodes[i];
-                        XTween_Interface tweener = tweenNode.Tweener;
-
-                        if (tweener != null && tweener.IsActive && tweener.IsPlaying)
-                        {
-                            if (tweenNode.Progress > 0.985f)
-                                tweenNode.Progress = 1;
-                            else
-                                tweenNode.Progress = tweener.ElapsedTime / tweener.Duration;
-                        }
-
-                        for (int s = 0; s < tweenNode.TweenSounds.Count; s++)
-                        {
-                            ///---如果动画是循环模式则不会播放音效，以为初始化时动画的Progress为0，此时程序会判定已到达播放音效的触点位置，则会误判发出音效
-                            if (tweenNode.LoopCount == -1)
-                                continue;
-
-                            TweenSound tweenSound = tweenNode.TweenSounds[s];
-
-                            if (tweenSound.Sound == null)
-                                continue;
-
-                            if (tweenSound.Percentage >= 1)
-                            {
-                                if (tweenNode.Progress >= tweenSound.Percentage)
-                                {
-                                    if (!tweenSound.IsPlayed)
-                                    {
-                                        tweenSound.IsPlayed = true;
-
-                                        AudioClip clip = tweenSound.Sound;
-                                        float vol = tweenSound.Volume;
-                                        float pitch_min = tweenSound.MinPitch;
-                                        float pitch_max = tweenSound.MaxPitch;
-                                        Preivew_AnimatorSound_SoundList.Add(Preview_AnimatorSound_Creator(clip, vol, pitch_min, pitch_max, a_node.Animator.MutePlay));
-                                    }
-                                }
-                                else
-                                {
-                                    tweenSound.IsPlayed = false;
-                                }
-                            }
-                            else if (tweenSound.Percentage < 1)
-                            {
-                                if (tweenNode.Progress > tweenSound.Percentage)
-                                {
-                                    if (!tweenSound.IsPlayed)
-                                    {
-                                        tweenSound.IsPlayed = true;
-
-                                        AudioClip clip = tweenSound.Sound;
-                                        float vol = tweenSound.Volume;
-                                        float pitch_min = tweenSound.MinPitch;
-                                        float pitch_max = tweenSound.MaxPitch;
-                                        Preivew_AnimatorSound_SoundList.Add(Preview_AnimatorSound_Creator(clip, vol, pitch_min, pitch_max, a_node.Animator.MutePlay));
-                                    }
-                                }
-                                else
-                                {
-                                    tweenSound.IsPlayed = false;
-                                }
-                            }
-                        }
-                    }
-                }
-                Repaint();
-                yield return null;
-            }
-        }
-
-        /// <summary>
-        /// 创建 Animator 预览声音
-        /// </summary>
-        /// <param name="clip"></param>
-        public AudioSource Preview_AnimatorSound_Creator(AudioClip clip, float vol, float pitch_min, float pitch_max, bool ismute)
-        {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
-            if (ismute)
-                return null;
-            GameObject obj = new GameObject();
-            obj.name = "AnimatorSound_Previewer-" + "[" + clip.length.ToString("F2") + " s]-" + "[" + clip.channels + " ch]-" + "[" + clip.frequency + " hz]";
-            AudioSource au = obj.AddComponent<AudioSource>();
-            au.volume = mgr.Volume * 0.01f * vol;
-            au.mute = mgr.VolumeMute;
-            au.pitch = Random.Range(pitch_min, pitch_max);
-            au.clip = clip;
-            au.Play();
-            XHud_AudioStoper sp = au.gameObject.AddComponent<XHud_AudioStoper>();
-            sp.SetAudioSource(au);
-            return au;
-        }
-
-        /// <summary>
-        /// 创建 Animator 预览指定声音协程
-        /// </summary>
-        /// <param name="clip"></param>
-        /// <param name="sp_vol"></param>
-        /// <param name="sp_pitch_min"></param>
-        /// <param name="sp_pitch_max"></param>
-        /// <param name="sp_ismute"></param>
-        /// <param name="delay"></param>
-        /// <returns></returns>
-        IEnumerator Preview_AnimatorSound_Play_At(AudioClip clip, float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_ismute, float delay)
-        {
-            yield return new EditorWaitForSeconds(delay);
-            Preivew_AnimatorSound_SoundList.Add(Preview_AnimatorSound_Creator(clip, sp_vol, sp_pitch_min, sp_pitch_max, sp_ismute));
-            AudioSource au = Preivew_AnimatorSound_SoundList[Preivew_AnimatorSound_SoundList.Count - 1];
-            while (true)
-            {
-                if (au != null && !au.isPlaying)
-                {
-                    break;
-                }
-                yield return null;
-            }
-            DestroyImmediate(au.gameObject, true);
-        }
-
-        /// <summary>
-        ///  停止协程列表 - AnimatorSound 音效预览播放 / 停止播放并清空 AnimatorSound 预览列表与生成的音效物体
-        /// </summary>
-        private void Preview_AnimatorSound_CoroutineList_Stop()
-        {
-            for (int i = 0; i < Preivew_AnimatorSound_CoroutineList_Stop.Count; i++)
-            {
-                if (Preivew_AnimatorSound_CoroutineList_Stop[i] != null)
-                    EditorCoroutineUtility.StopCoroutine(Preivew_AnimatorSound_CoroutineList_Stop[i]);
-            }
-            Preivew_AnimatorSound_CoroutineList_Stop.Clear();
-
-            if (Preivew_AnimatorSound_SoundList != null)
-            {
-                for (int i = 0; i < Preivew_AnimatorSound_SoundList.Count; i++)
-                {
-                    if (Preivew_AnimatorSound_SoundList[i] != null)
-                    {
-                        Preivew_AnimatorSound_SoundList[i].Stop();
-                        DestroyImmediate(Preivew_AnimatorSound_SoundList[i].gameObject, true);
-                        Preivew_AnimatorSound_SoundList[i] = null;
-                    }
-                }
-                Preivew_AnimatorSound_SoundList.Clear();
-            }
-
-            SceneView.RepaintAll();
+            PreviewPrimitivesTween = serializedObject.FindProperty("PreviewPrimitivesTween");
+            AutoPlayPrimitivesTween = serializedObject.FindProperty("AutoPlayPrimitivesTween");
+            PrimitivesTweenMaxDuration = serializedObject.FindProperty("PrimitivesTweenMaxDuration");
+            PrimitivesTweenGlobalDuration = serializedObject.FindProperty("PrimitivesTweenGlobalDuration");
+            PrimitivesIsFold = serializedObject.FindProperty("PrimitivesIsFold");
+            PrimitivePreivew_State = serializedObject.FindProperty("PrimitivePreivew_State");
+            PrimitiveControllerNodes = serializedObject.FindProperty("PrimitiveControllerNodes");
         }
         #endregion
 
         #region HudSounder 音效器 音效预览
-
         /// <summary>
         ///  HudSounder 音效预览
         /// </summary>
@@ -3858,7 +3214,6 @@ namespace SevenStrikeModules.XHud.Editor
             }
             DestroyImmediate(au.gameObject, true);
         }
-
         /// <summary>
         /// 创建 HudSounder 预览指定声音
         /// </summary>
@@ -3888,7 +3243,6 @@ namespace SevenStrikeModules.XHud.Editor
             sp.SetAudioSource(au);
             return au;
         }
-
         /// <summary>
         ///  停止协程列表 - HudSounder 音效预览播放 / 停止播放并清空 HudSounder 预览列表与生成的音效物体
         /// </summary>
@@ -3917,10 +3271,6 @@ namespace SevenStrikeModules.XHud.Editor
 
             SceneView.RepaintAll();
         }
-
         #endregion
-
-        #endregion
-
     }
 }

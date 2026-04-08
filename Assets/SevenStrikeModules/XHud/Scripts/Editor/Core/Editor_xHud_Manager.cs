@@ -53,6 +53,15 @@ namespace SevenStrikeModules.XHud.Editor
         static MethodInfo getGroup;
         static object gameViewSizesInstance;
 
+        // 频率更新
+        private double _lastSceneUpdate;
+        private double _lastHierarchyUpdate;
+        private double _lastUserActionTime;
+        private double UPDATE_KEEPTIME = 0.6f; // 自动降频阈值
+        private double UPDATE_INTERVAL = 1; // 每秒最1次
+        private double UPDATE_INTERVAL_Low = 1f; // 低频
+        private double UPDATE_INTERVAL_High = 0.005f; // 高频
+
         #region 序列化属性
         SerializedProperty
             IsInitialized,
@@ -271,7 +280,7 @@ namespace SevenStrikeModules.XHud.Editor
         XHud_Manager[] SelectedObjects;
 
 
-        private void GetAllTargets()
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
@@ -289,7 +298,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
 
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -306,12 +315,14 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnEnable()
         {
+            Undo.undoRedoPerformed += OnUndoRedoPerformed;
+
             xHud_FunctionGroupPrefsCheck();
 
             BaseScript = (XHud_Manager)target;
             LineHeight = EditorGUIUtility.singleLineHeight;
 
-            GetAllTargets();
+            Targets_Get();
 
             Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
             Font_Thin = Editor_XHud_GUI.GetFont("SS_Editor_Thin");
@@ -591,6 +602,8 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnDisable()
         {
+            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+
             // 目录图标视觉刷新
             HierarachyVisualUpdate();
 
@@ -603,6 +616,22 @@ namespace SevenStrikeModules.XHud.Editor
         private void OnDestroy()
         {
             EditorApplication.hierarchyChanged -= EditorApplication_EditorManagerUpdate;
+        }
+
+        private void OnUndoRedoPerformed()
+        {
+            // 重新同步序列化属性
+            serializedObject.Update();
+
+            xHud_EditorUpdate_HelperVisual();
+            xHud_EditorUpdate_Canvas_Camera();
+            xHud_EditorUpdate_Mask();
+            xHud_EditorUpdate_ContentOpacity();
+            xHud_EditorUpdate_BlurMask();
+            xHud_EditorUpdate_CameraArgs();
+
+            // 重绘 Inspector
+            Repaint();
         }
 
         public override void OnInspectorGUI()
@@ -1418,25 +1447,25 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 相机设定
-
                 bool sw_camera = xHud_FunctionGroup("相机", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 5), PrefsKeyFold_Camera, panel_camera);
                 if (sw_camera)
                 {
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                    #region 正交尺寸                                             
+                    EditorGUI.BeginChangeCheck();
+                    #region 正交尺寸      
                     Editor_XHud_GUI.Gui_Layout_Property_Field("正交尺寸", CameraOrthographicSize);
                     #endregion
 
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                    #region 近距剪切                                             
+                    #region 近距剪切                
                     Editor_XHud_GUI.Gui_Layout_Property_Field("近距剪切", CameraCutter_Near);
                     #endregion
 
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                    #region 远距剪切                                             
+                    #region 远距剪切        
                     Editor_XHud_GUI.Gui_Layout_Property_Field("远距剪切", CameraCutter_Far);
                     #endregion
 
@@ -1503,6 +1532,12 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     #endregion
+
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        SetHighFrequencyMode();
+                        xHud_EditorUpdate_CameraArgs();
+                    }
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(5);
                 Editor_XHud_GUI.Gui_Layout_Vertical_End();
@@ -1995,11 +2030,11 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 遮罩/内容可见度  
-
                 bool sw_mask = xHud_FunctionGroup("遮罩/内容", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Mask, panel_mask);
                 if (sw_mask)
                 {
                     #region 遮罩
+                    EditorGUI.BeginChangeCheck();
 
                     #region 射线遮挡阈值状态     
                     Editor_XHud_GUI.StatuDisplayer_icon(null, 12, new Vector2(0, 7), MaskRaycastEnabled.boolValue ? "射线阻挡" : "射线穿透", 12, MaskRaycastEnabled.boolValue ? Color.red : XHud_Dashboard.Theme_Primary, status, 12, new Vector2(0, 4), false);
@@ -2025,12 +2060,19 @@ namespace SevenStrikeModules.XHud.Editor
 
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                    #region 图形     
+                    #region 图形  
                     Editor_XHud_GUI.Gui_Layout_Property_Field("图形", MaskTexture, 80);
                     #endregion
+
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        SetHighFrequencyMode();
+                        xHud_EditorUpdate_Mask();
+                    }
                     #endregion
 
                     #region 内容
+                    EditorGUI.BeginChangeCheck();
                     Editor_XHud_GUI.Gui_Layout_Space(10);
 
                     #region 内容透明度 - 屏幕
@@ -2043,32 +2085,30 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.Gui_Layout_Property_Field("透明度-世界", ContentOpacity_World, 80);
                     #endregion
 
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        SetHighFrequencyMode();
+                        xHud_EditorUpdate_ContentOpacity();
+                    }
                     #endregion
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(10);
                 Editor_XHud_GUI.Gui_Layout_Vertical_End();
-
                 #endregion
 
                 #region 散焦遮罩
-
                 bool sw_blurmask = xHud_FunctionGroup("散焦遮罩", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_BlurMask, panel_mask);
                 if (sw_blurmask)
                 {
+                    EditorGUI.BeginChangeCheck();
+
                     #region 射线遮挡阈值状态     
                     Editor_XHud_GUI.StatuDisplayer_icon(null, 12, new Vector2(0, 7), BlurMaskRaycastEnabled.boolValue ? "射线阻挡" : "射线穿透", 12, BlurMaskRaycastEnabled.boolValue ? Color.red : XHud_Dashboard.Theme_Primary, status, 12, new Vector2(0, 4), false);
                     #endregion
 
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
-                    EditorGUI.BeginChangeCheck();
                     Editor_XHud_GUI.Gui_Layout_Property_Field("强度", UniversalFeature_Blur_Intensity, 85);
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        BaseScript.hm_UniversalFeature_Blur_FastTo_ForEditor(UniversalFeature_Blur_Intensity.floatValue);
-
-                        EditorUtility.SetDirty(BaseScript.UniversalFeature_Blur);
-                    }
 
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
@@ -2089,10 +2129,14 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     Editor_XHud_GUI.Gui_Layout_Property_Field("图形", BlurMaskTexture, 85);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        SetHighFrequencyMode();
+                        xHud_EditorUpdate_BlurMask();
+                    }
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(10);
                 Editor_XHud_GUI.Gui_Layout_Vertical_End();
-
                 #endregion
 
                 #region 全局         
@@ -2521,6 +2565,7 @@ namespace SevenStrikeModules.XHud.Editor
                     bool sw_assist = xHud_FunctionGroup("辅助", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Assist, panel_assist);
                     if (sw_assist)
                     {
+                        EditorGUI.BeginChangeCheck();
                         Editor_XHud_GUI.Gui_Layout_Space(5);
 
                         #region 颜色
@@ -2605,6 +2650,14 @@ namespace SevenStrikeModules.XHud.Editor
                             Safe_CenterMarkDistance.floatValue = 40f;
                             Safe_CenterMarkWidth.floatValue = 1f;
                             Safe_CenterMarkLength.floatValue = 12f;
+
+                            xHud_EditorUpdate_HelperVisual();
+                            xHud_EditorUpdate_Canvas_Camera();
+                        }
+
+                        if (EditorGUI.EndChangeCheck())
+                        {
+                            SetHighFrequencyMode();
                         }
                     }
                     Editor_XHud_GUI.Gui_Layout_Space(5);
@@ -3572,17 +3625,14 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
             }
 
-            // 刷新
-            xHud_EditorUpdate();
-
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
             {
                 // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
                 menu.AddItem(new GUIContent("F (折叠所有项)"), false, () =>
-                            {
-                                xHud_FunctionGroupPrefsSet(false);
-                            });
+                {
+                    xHud_FunctionGroupPrefsSet(false);
+                });
                 menu.ShowAsContext(); // 在鼠标位置显示右键菜单
                 Event.current.Use();
             }
@@ -3592,8 +3642,20 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnSceneGUI()
         {
+            // 用户操作后保持高频 0.8 秒，然后降回低频
+            if (EditorApplication.timeSinceStartup - _lastUserActionTime > UPDATE_KEEPTIME)
+            {
+                UPDATE_INTERVAL = UPDATE_INTERVAL_Low;
+            }
+
+            // 频率限制
+            if (EditorApplication.timeSinceStartup - _lastSceneUpdate < UPDATE_INTERVAL)
+                return;
+            _lastSceneUpdate = EditorApplication.timeSinceStartup;
+
             // 刷新
-            xHud_EditorUpdate();
+            xHud_EditorUpdate_HelperVisual();
+            xHud_EditorUpdate_Canvas_Camera();
         }
 
         #region 主题颜色
@@ -3711,7 +3773,18 @@ namespace SevenStrikeModules.XHud.Editor
         #region 委托事件
         private void EditorApplication_EditorManagerUpdate()
         {
-            xHud_EditorUpdate();
+            // 用户操作后保持高频 0.8 秒，然后降回低频
+            if (EditorApplication.timeSinceStartup - _lastUserActionTime > UPDATE_KEEPTIME)
+            {
+                UPDATE_INTERVAL = UPDATE_INTERVAL_Low;
+            }
+
+            if (EditorApplication.timeSinceStartup - _lastHierarchyUpdate < UPDATE_INTERVAL)
+                return;
+            _lastHierarchyUpdate = EditorApplication.timeSinceStartup;
+
+            xHud_EditorUpdate_HelperVisual();
+            xHud_EditorUpdate_Canvas_Camera();
         }
         #endregion       
 
@@ -3746,10 +3819,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 主逻辑更新
-        /// <summary>
-        /// 主逻辑更新
-        /// </summary>
-        private void xHud_EditorUpdate()
+        private void xHud_EditorUpdate_HelperVisual()
         {
             if (Application.isPlaying)
                 return;
@@ -3761,21 +3831,12 @@ namespace SevenStrikeModules.XHud.Editor
 
             BaseScript.hm_SafeFrameUpdate();
 
-            BaseScript.hm_MaskUpdate();
-
-            BaseScript.hm_BlurMaskUpdate();
-
             BaseScript.hm_TransitionTopView();
-
-            BaseScript.hm_ContentOpacity_Update();
-
-            BaseScript.hm_CameraCutterRange(BaseScript.CameraCutter_Near, BaseScript.CameraCutter_Far);
-
-            BaseScript.hm_CameraOrthographicProjection(CameraOthograpicMode.boolValue);
-
-            BaseScript.hm_CameraOrthographicSize(BaseScript.CameraOrthographicSize);
-
-            BaseScript.hm_CameraPerspectiveFov(BaseScript.CameraFov);
+        }
+        private void xHud_EditorUpdate_Canvas_Camera()
+        {
+            if (Application.isPlaying)
+                return;
 
             Canvas canvas_s = (Canvas)HudCanvas_Screen.objectReferenceValue;
             if (canvas_s != null)
@@ -3800,6 +3861,28 @@ namespace SevenStrikeModules.XHud.Editor
                     canvas_w.worldCamera = cam;
                 }
             }
+        }
+        private void xHud_EditorUpdate_CameraArgs()
+        {
+            BaseScript.hm_CameraCutterRange(BaseScript.CameraCutter_Near, BaseScript.CameraCutter_Far);
+            BaseScript.hm_CameraOrthographicProjection(CameraOthograpicMode.boolValue);
+            BaseScript.hm_CameraOrthographicSize(BaseScript.CameraOrthographicSize);
+            BaseScript.hm_CameraPerspectiveFov(BaseScript.CameraFov);
+        }
+        private void xHud_EditorUpdate_Mask()
+        {
+            BaseScript.hm_MaskUpdate();
+        }
+        private void xHud_EditorUpdate_ContentOpacity()
+        {
+            BaseScript.hm_Screen_ContentOpacity_Update();
+            BaseScript.hm_World_ContentOpacity_Update();
+        }
+        private void xHud_EditorUpdate_BlurMask()
+        {
+            BaseScript.hm_BlurMaskUpdate();
+            BaseScript.hm_UniversalFeature_Blur_FastTo_ForEditor(UniversalFeature_Blur_Intensity.floatValue);
+            EditorUtility.SetDirty(BaseScript.UniversalFeature_Blur);
         }
         #endregion
 
@@ -4660,7 +4743,7 @@ namespace SevenStrikeModules.XHud.Editor
                 obj_Mask.layer = LayerMask.NameToLayer("XHud");
                 UnityEngine.RectTransform m_Mask = obj_Mask.AddComponent<UnityEngine.RectTransform>();
                 Image Mask_img = obj_Mask.AddComponent<Image>();
-                Mask_img.color = Color.black;
+                Mask_img.color = Color.clear;
                 m_Mask.name = "Mask";
                 m_Mask.SetParent(cav.transform);
                 m_Mask.localPosition = Vector3.zero;
@@ -4985,6 +5068,11 @@ namespace SevenStrikeModules.XHud.Editor
             }
 
             return number;
+        }
+        private void SetHighFrequencyMode()
+        {
+            UPDATE_INTERVAL = UPDATE_INTERVAL_High;
+            _lastUserActionTime = EditorApplication.timeSinceStartup;
         }
         #endregion
 
@@ -5383,7 +5471,7 @@ namespace SevenStrikeModules.XHud.Editor
                         Debug.Log("不存在目标分辨率项！");
                     }
                 }
-                xHud_EditorUpdate();
+                xHud_EditorUpdate_HelperVisual();
             }
         }
         public static Vector2 xHud_GetMainGameViewSize()

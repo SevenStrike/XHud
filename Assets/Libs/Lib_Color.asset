@@ -20,7 +20,7 @@ MonoBehaviour:
     Description: "\u739B\u7459\u7EA2\u5E26\u6709\u4E00\u79CD\u6DF1\u6C89\u800C\u795E\u79D8\u7684\u6C14\u8D28\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u5F3A\u70C8\u7684\u611F\u60C5\u6216\u91CD\u8981\u65F6\u523B\u3002"
   - Painting: {fileID: 0}
     Name: "\u7FE1\u7FE0\u7EFF(Jade Green)"
-    Color: {r: 0.14195444, g: 0.5471698, b: 0.15974021, a: 1}
+    Color: {r: 0, g: 0.5, b: 0.2, a: 1}
     Description: "\u7FE1\u7FE0\u7EFF\u5E26\u6709\u9AD8\u8D35\u548C\u6E05\u65B0\u7684\u611F\u89C9\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u81EA\u7136\u4E4B\u7F8E\u6216\u5E73\u9759\u7684\u6C1B\u56F4\u3002"
   - Painting: {fileID: 0}
     Name: "\u591C\u5E55\u84DD(Nightshade Blue)"
@@ -29,10 +29,10 @@ MonoBehaviour:
   - Painting: {fileID: 0}
     Name: "\u7425\u73C0\u9EC4(Amber Yellow)"
     Color: {r: 1, g: 0.75, b: 0, a: 1}
-    Description: "\u7425\u73C0\u9EC4\u5E26\u6709\u6E29\u6696\u548C\u590D\u53E4\u7684\u611F\u89C9\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u6E29\u99A8\u6216\u6000\u65E7\u7684\u6C1B\u56F4\u3002ddddd"
+    Description: "\u7425\u73C0\u9EC4\u5E26\u6709\u6E29\u6696\u548C\u590D\u53E4\u7684\u611F\u89C9\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u6E29\u99A8\u6216\u6000\u65E7\u7684\u6C1B\u56F4\u3002"
   - Painting: {fileID: 0}
     Name: "\u73AB\u7470\u7C89(Rose Pink)"
-    Color: {r: 1, g: 0.5, b: 0.5, a: 1}
+    Color: {r: 0.5019608, g: 1, b: 0.96725255, a: 1}
     Description: "\u7470\u7C89\u5E26\u6709\u5973\u6027\u7684\u67D4\u7F8E\u548C\u751C\u871C\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u6D6A\u6F2B\u7684\u7231\u60C5\u6216\u6E29\u99A8\u7684\u573A\u666F\u3002"
   - Painting: {fileID: 0}
     Name: "\u7D2B\u6C34\u6676\u7D2B(Amethyst Purple)"
@@ -52,7 +52,7 @@ MonoBehaviour:
     Description: "\u6A44\u6984\u7EFF\u6709\u4E00\u79CD\u8D28\u6734\u548C\u7A33\u91CD\u7684\u611F\u89C9\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u81EA\u7136\u666F\u89C2\u6216\u5B81\u9759\u7684\u6C1B\u56F4\u3002"
   - Painting: {fileID: 0}
     Name: "\u73CA\u745A\u6A59(Coral Orange)"
-    Color: {r: 0.9056604, g: 0.5937661, b: 0.3033108, a: 1}
+    Color: {r: 1, g: 0.5, b: 0.3, a: 1}
     Description: "\u73CA\u745A\u6A59\u5E26\u6709\u6D77\u6D0B\u7684\u6E05\u65B0\u611F\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u6D3B\u529B\u56DB\u6EA2\u7684\u573A\u666F\u6216\u6E29\u6696\u7684\u60C5\u611F\u3002"
   - Painting: {fileID: 0}
     Name: "\u94BB\u77F3\u84DD(Diamond Blue)"
@@ -68,7 +68,7 @@ MonoBehaviour:
     Description: "\u73CD\u73E0\u7070\u5E26\u6709\u4E00\u79CD\u67D4\u548C\u7684\u5149\u6CFD\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u4F4E\u8C03\u7684\u5962\u534E\u6216\u5E73\u8861\u7684\u6C1B\u56F4\u3002"
   - Painting: {fileID: 0}
     Name: "\u7FE0\u9E1F\u84DD(Kingfisher Blue)"
-    Color: {r: 0.7264151, g: 0.2612698, b: 0.25013348, a: 1}
+    Color: {r: 0, g: 0.7, b: 0.9, a: 1}
     Description: "\u7FE0\u9E1F\u84DD\u6709\u4E00\u79CD\u81EA\u7136\u7684\u6D3B\u529B\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u751F\u52A8\u7684\u573A\u666F\u6216\u6E05\u65B0\u7684\u6C1B\u56F4\u3002"
   - Painting: {fileID: 0}
     Name: "\u73AB\u7470\u91D1(Rose Gold)"
@@ -76,7 +76,7 @@ MonoBehaviour:
     Description: "\u73AB\u7470\u91D1\u6709\u4E00\u79CD\u67D4\u548C\u7684\u5149\u6CFD\u548C\u6E29\u6696\u7684\u8272\u8C03\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u9AD8\u8D35\u7684\u6C1B\u56F4\u6216\u6D6A\u6F2B\u7684\u60C5\u611F\u3002"
   - Painting: {fileID: 0}
     Name: "\u7D2B\u7F57\u5170(Violet)"
-    Color: {r: 0.20496617, g: 0.9118628, b: 0.9245283, a: 1}
+    Color: {r: 0.9, g: 0.5, b: 0.9, a: 1}
     Description: "\u7D2B\u7F57\u5170\u6709\u4E00\u79CD\u67D4\u548C\u800C\u6DF1\u9083\u7684\u6C14\u8D28\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u68A6\u5E7B\u6216\u4F18\u96C5\u7684\u573A\u666F\u3002"
   - Painting: {fileID: 0}
     Name: "\u96EA\u677E\u7EFF(Cedar Green)"
@@ -92,12 +92,8 @@ MonoBehaviour:
     Description: "\u949B\u91D1\u6709\u4E00\u79CD\u660E\u4EAE\u7684\u5149\u6CFD\u548C\u6E29\u6696\u7684\u8272\u8C03\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u73B0\u4EE3\u827A\u672F\u6216\u5962\u534E\u7684\u6C1B\u56F4\u3002"
   - Painting: {fileID: 0}
     Name: "\u96FE\u973E\u84DD(Haze Blue)"
-    Color: {r: 1, g: 0, b: 0.10890055, a: 1}
+    Color: {r: 0.6, g: 0.7, b: 0.8, a: 1}
     Description: "\u96FE\u973E\u84DD\u6709\u4E00\u79CD\u67D4\u548C\u7684\u8D28\u611F\uFF0C\u5E38\u7528\u4E8E\u8868\u73B0\u68A6\u5E7B\u6216\u5B81\u9759\u7684\u573A\u666F"
-  - Painting: {fileID: 0}
-    Name: ddsd
-    Color: {r: 0.7263489, g: 0, b: 1, a: 1}
-    Description: fffffffffffff
   Find: 
   itemHeight: 60
   visibleItemCount: 10

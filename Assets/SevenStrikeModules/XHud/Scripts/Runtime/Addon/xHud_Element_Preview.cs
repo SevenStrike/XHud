@@ -166,7 +166,7 @@
             }
 
             if (IsEnable)
-                HudElement.Element_Animators_GlobalDuration = DurationScaler;
+                HudElement.PrimitivesTweenGlobalDuration = DurationScaler;
         }
 
         /// <summary>
@@ -238,7 +238,7 @@
                         HudElement.element_PositionSet(OriginalPosition);
                         HudElement.element_AlphaSet(0);
                         XHud_Manager.Instance.hm_ScreenElement_Initialize_By_RMS(HudElement, RMS_Name, true);
-                        HudElement.Animators_Rewind();
+                        HudElement.PrimitiveTween_Rewind();
                         HudElement.Element_In(CreateArgs, () =>
                         {
                             PreviewIsRunning = false;
@@ -259,7 +259,7 @@
                 // 进入前强制设置角度：原始角度
                 HudElement.element_RotationSet(OriginalEuler);
                 // 保险操作：倒退动画
-                HudElement.Animators_Rewind();
+                HudElement.PrimitiveTween_Rewind();
                 // 开始进入
                 HudElement.Element_In(CreateArgs, () =>
                 {

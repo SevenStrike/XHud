@@ -168,8 +168,10 @@ namespace SevenStrikeModules.XHud
             hm_TransitionUpdate();
             // 更新散焦模糊特性强度
             hm_UniversalFeature_Blur_Update();
-            // 同步屏幕空间和世界空间 UI 内容的整体透明度，并触发相应的状态变化事件
-            hm_ContentOpacity_Update();
+            // 同步屏幕空间 UI 内容的整体透明度，并触发相应的状态变化事件
+            hm_Screen_ContentOpacity_Update();
+            // 同步世界空间 UI 内容的整体透明度，并触发相应的状态变化事件
+            hm_World_ContentOpacity_Update();
             // 同步音效池中每个 AudioSource 的播放状态到对应的 AudioPlayer 记录中
             hm_LibrarySounds_Update();
             // 遍历所有元素库，更新每个预生成元素的使用状态、使用计数和回收计数

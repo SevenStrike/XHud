@@ -57,7 +57,6 @@ namespace SevenStrikeModules.XHud.Editor
         private XHud_Module_Text HudText;
         private XHud_Module_TmpText HudTmpText;
         private XHud_Module_Button HudButton;
-        private XHud_Module_Container HudContainer;
         private XHud_Module_Progress HudProgress;
         private XHud_Module_Toggle HudToggle;
         private XHud_Module_Slider HudSlider;
@@ -67,7 +66,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 音效设置器
         /// </summary>
-        private Editor_XHud_AnimatorSoundSetTool Editor_Hud_Animator_SounderViewer;
+        private Editor_XHud_PrimitiveTweenSoundSetTool Editor_Hud_Animator_SounderViewer;
 
         #region 预览动画
         private List<EditorCoroutine> Preivew_Animator_CoroutineList_Play = new List<EditorCoroutine>();
@@ -125,7 +124,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
 
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -265,7 +264,6 @@ namespace SevenStrikeModules.XHud.Editor
             HudText = BaseScript.GetComponentInParent<XHud_Module_Text>();
             HudTmpText = BaseScript.GetComponentInParent<XHud_Module_TmpText>();
             HudButton = BaseScript.GetComponentInParent<XHud_Module_Button>();
-            HudContainer = BaseScript.GetComponentInParent<XHud_Module_Container>();
             HudProgress = BaseScript.GetComponentInParent<XHud_Module_Progress>();
             HudToggle = BaseScript.GetComponentInParent<XHud_Module_Toggle>();
             HudSlider = BaseScript.GetComponentInParent<XHud_Module_Slider>();
@@ -392,24 +390,6 @@ namespace SevenStrikeModules.XHud.Editor
                             break;
                         case TweenNodeType.尺寸:
                             typeicon = anim_type_size;
-                            break;
-                        case TweenNodeType.自定义整数:
-                            typeicon = anim_type_custom_int;
-                            break;
-                        case TweenNodeType.自定义浮点数:
-                            typeicon = anim_type_custom_float;
-                            break;
-                        case TweenNodeType.自定义2维向量:
-                            typeicon = anim_type_custom_vector2;
-                            break;
-                        case TweenNodeType.自定义3维向量:
-                            typeicon = anim_type_custom_vector3;
-                            break;
-                        case TweenNodeType.自定义4维向量:
-                            typeicon = anim_type_custom_vector4;
-                            break;
-                        case TweenNodeType.自定义颜色:
-                            typeicon = anim_type_custom_color;
                             break;
                     }
                     GUI.color = Color.white;
@@ -551,10 +531,6 @@ namespace SevenStrikeModules.XHud.Editor
                             {
                                 TimingType = new string[5] { "无", "点击选项", "光标移动开始", "光标移动结束", "光标位置改变" };
                             }
-                            else if (HudContainer != null)
-                            {
-                                TimingType = new string[1] { "容器调用" };
-                            }
                             else
                             {
                                 TimingType = new string[4] { "元素进入时", "元素进入后", "元素退出时", "自定义" };
@@ -673,12 +649,12 @@ namespace SevenStrikeModules.XHud.Editor
                                 draw_rect.Set(rect.width - 10, baseheight - 29, 15, 15);
                                 if (Editor_XHud_GUI.Gui_Button(draw_rect, anim_sound_r, anim_sound_p, true, "", "", Color.white))
                                 {
-                                    Editor_Hud_Animator_SounderViewer = (Editor_XHud_AnimatorSoundSetTool)EditorWindow.GetWindow(typeof(Editor_XHud_AnimatorSoundSetTool), false, "Hud动画器节点音效设置器", true);
+                                    Editor_Hud_Animator_SounderViewer = (Editor_XHud_PrimitiveTweenSoundSetTool)EditorWindow.GetWindow(typeof(Editor_XHud_PrimitiveTweenSoundSetTool), false, "Hud动画器节点音效设置器", true);
                                     Editor_Hud_Animator_SounderViewer.minSize = new Vector2(360, 500);
                                     Editor_Hud_Animator_SounderViewer.maxSize = Editor_Hud_Animator_SounderViewer.minSize;
                                     Editor_Hud_Animator_SounderViewer.Show();
-                                    AnimateSoundNode node = new AnimateSoundNode();
-                                    node.Animator = BaseScript;
+                                    PrimitiveTweenSoundNode node = new PrimitiveTweenSoundNode();
+                                    //node.Tween = BaseScript;
                                     node.Index = index;
                                     node.Name = sp_Name.stringValue;
                                     node.Type = nodetype;
@@ -694,7 +670,7 @@ namespace SevenStrikeModules.XHud.Editor
                                         ts.MinPitch = sp_tweensounds.GetArrayElementAtIndex(i).FindPropertyRelative("MinPitch").floatValue;
                                         node.TweenSounds.Add(ts);
                                     }
-                                    Editor_Hud_Animator_SounderViewer.AnimateSoundNode = node;
+                                    Editor_Hud_Animator_SounderViewer.PrimitiveTweenSoundNode = node;
                                     Editor_Hud_Animator_SounderViewer.Repaint();
                                 }
                             }
@@ -758,42 +734,6 @@ namespace SevenStrikeModules.XHud.Editor
                                     SerializedProperty sp_size_from = sp_Root.FindPropertyRelative("From_Vector2");
                                     SerializedProperty sp_size_end = sp_Root.FindPropertyRelative("End_Vector2");
                                     Param_Size(rect_valuepanel, dir_index, sp_size_ori, sp_size_from, sp_size_end, nodetype, sp_dir_onlyend.boolValue);
-                                    break;
-                                case TweenNodeType.自定义整数:
-                                    SerializedProperty sp_custom_int_ori = sp_Root.FindPropertyRelative("Original_Int");
-                                    SerializedProperty sp_custom_int_from = sp_Root.FindPropertyRelative("From_Int");
-                                    SerializedProperty sp_custom_int_end = sp_Root.FindPropertyRelative("End_Int");
-                                    Param_Custom_Int(rect_valuepanel, dir_index, sp_custom_int_ori, sp_custom_int_from, sp_custom_int_end, nodetype, sp_dir_onlyend.boolValue);
-                                    break;
-                                case TweenNodeType.自定义浮点数:
-                                    SerializedProperty sp_custom_float_ori = sp_Root.FindPropertyRelative("Original_Float");
-                                    SerializedProperty sp_custom_float_from = sp_Root.FindPropertyRelative("From_Float");
-                                    SerializedProperty sp_custom_float_end = sp_Root.FindPropertyRelative("End_Float");
-                                    Param_Custom_Float(rect_valuepanel, dir_index, sp_custom_float_ori, sp_custom_float_from, sp_custom_float_end, nodetype, sp_dir_onlyend.boolValue);
-                                    break;
-                                case TweenNodeType.自定义2维向量:
-                                    SerializedProperty sp_custom_vector2_ori = sp_Root.FindPropertyRelative("Original_Vector2");
-                                    SerializedProperty sp_custom_vector2_from = sp_Root.FindPropertyRelative("From_Vector2");
-                                    SerializedProperty sp_custom_vector2_end = sp_Root.FindPropertyRelative("End_Vector2");
-                                    Param_Custom_Vector2(rect_valuepanel, dir_index, sp_custom_vector2_ori, sp_custom_vector2_from, sp_custom_vector2_end, nodetype, sp_dir_onlyend.boolValue);
-                                    break;
-                                case TweenNodeType.自定义3维向量:
-                                    SerializedProperty sp_custom_vector3_ori = sp_Root.FindPropertyRelative("Original_Vector3");
-                                    SerializedProperty sp_custom_vector3_from = sp_Root.FindPropertyRelative("From_Vector3");
-                                    SerializedProperty sp_custom_vector3_end = sp_Root.FindPropertyRelative("End_Vector3");
-                                    Param_Custom_Vector3(rect_valuepanel, dir_index, sp_custom_vector3_ori, sp_custom_vector3_from, sp_custom_vector3_end, nodetype, sp_dir_onlyend.boolValue);
-                                    break;
-                                case TweenNodeType.自定义4维向量:
-                                    SerializedProperty sp_custom_vector4_ori = sp_Root.FindPropertyRelative("Original_Vector4");
-                                    SerializedProperty sp_custom_vector4_from = sp_Root.FindPropertyRelative("From_Vector4");
-                                    SerializedProperty sp_custom_vector4_end = sp_Root.FindPropertyRelative("End_Vector4");
-                                    Param_Custom_Vector4(rect_valuepanel, dir_index, sp_custom_vector4_ori, sp_custom_vector4_from, sp_custom_vector4_end, nodetype, sp_dir_onlyend.boolValue);
-                                    break;
-                                case TweenNodeType.自定义颜色:
-                                    SerializedProperty sp_custom_color_ori = sp_Root.FindPropertyRelative("Original_Color");
-                                    SerializedProperty sp_custom_color_from = sp_Root.FindPropertyRelative("From_Color");
-                                    SerializedProperty sp_custom_color_end = sp_Root.FindPropertyRelative("End_Color");
-                                    Param_Custom_Color(rect_valuepanel, dir_index, sp_custom_color_ori, sp_custom_color_from, sp_custom_color_end, nodetype, sp_dir_onlyend.boolValue);
                                     break;
                             }
                             #endregion
@@ -955,42 +895,6 @@ namespace SevenStrikeModules.XHud.Editor
                             else
                                 height = 16.2f + add;
                             break;
-                        case TweenNodeType.自定义整数:
-                            if (sp_dir_onlyend.boolValue)
-                                height = 15f + add;
-                            else
-                                height = 17.5f + add;
-                            break;
-                        case TweenNodeType.自定义浮点数:
-                            if (sp_dir_onlyend.boolValue)
-                                height = 15f + add;
-                            else
-                                height = 17.5f + add;
-                            break;
-                        case TweenNodeType.自定义2维向量:
-                            if (sp_dir_onlyend.boolValue)
-                                height = 15f + add;
-                            else
-                                height = 17.5f + add;
-                            break;
-                        case TweenNodeType.自定义3维向量:
-                            if (sp_dir_onlyend.boolValue)
-                                height = 15f + add;
-                            else
-                                height = 17.5f + add;
-                            break;
-                        case TweenNodeType.自定义4维向量:
-                            if (sp_dir_onlyend.boolValue)
-                                height = 15f + add;
-                            else
-                                height = 17.5f + add;
-                            break;
-                        case TweenNodeType.自定义颜色:
-                            if (sp_dir_onlyend.boolValue)
-                                height = 15f + add;
-                            else
-                                height = 17.5f + add;
-                            break;
                     }
                     #endregion
 
@@ -1018,7 +922,7 @@ namespace SevenStrikeModules.XHud.Editor
                 Preview_Animator_Stop(TweenIsPreviewing.boolValue);
 
                 #region 记录原始形态（将形态信息记录下来）
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -1091,7 +995,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             bool AllModeSame = true;
             bool firstmode = SelectedObjects[0].SyncLibraryColor;
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -1151,7 +1055,7 @@ namespace SevenStrikeModules.XHud.Editor
                         return;
                     }
 
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
 
@@ -1248,7 +1152,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 Editor_XHud_GUI.Gui_Layout_FlexSpace();
 
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     Editor_XHud_GUI.SetEnabled(true);
                 }
@@ -1322,7 +1226,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         Editor_XHud_GUI.Gui_Layout_Space(5);
                         GUILayout.BeginHorizontal();
-                        if (!IsMultiSelected())
+                        if (!Targets_Selected())
                         {
                             Editor_XHud_GUI.Gui_Layout_Space(10);
                             if (Editor_XHud_GUI.Gui_Layout_Button(14, "将当前颜色添加到色卡库中", Add_r, Add_p, 4))
@@ -1348,7 +1252,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 Editor_XHud_GUI.Gui_Layout_Space(5);
                                 GUILayout.BeginHorizontal();
 
-                                if (!IsMultiSelected())
+                                if (!Targets_Selected())
                                 {
                                     Editor_XHud_GUI.Gui_Layout_Space(10);
                                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "定位色卡", locate_r, locate_p, 0))
@@ -1383,7 +1287,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 Color cc = Color.white;
                                 bool SameColor = true;
                                 string FirstColoriseName = SelectedObjects[0].ColoriseName;
-                                if (!IsMultiSelected())
+                                if (!Targets_Selected())
                                 {
                                     cc = mgr.Hud_Colors.ColorsLibrary_GetColor(ColoriseName.stringValue);
                                 }
@@ -1409,7 +1313,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 }
                                 #endregion
 
-                                if (IsMultiSelected())
+                                if (Targets_Selected())
                                 {
                                     for (int i = 0; i < SelectedObjects.Length; i++)
                                     {
@@ -1482,7 +1386,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 动画节点列表
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "动画节点列表", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(10);
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1502,12 +1406,12 @@ namespace SevenStrikeModules.XHud.Editor
             #region 原始姿态
 
             string info_title = "原始姿态";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 info_title = "原始姿态 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, info_title, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 SerializedProperty pos = sp_AnimatorFeature.FindPropertyRelative("Position");
                 SerializedProperty eur = sp_AnimatorFeature.FindPropertyRelative("Euler");
@@ -1564,13 +1468,13 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 状态
             string statu_title = "状态";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statu_title = "状态 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_title, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 使用状态     
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 Editor_XHud_GUI.StatuDisplayer_text(statu, 12, new Vector2(0, 8), "动画状态", 12, TweenIsPreviewing.boolValue ? "运动" : "静止", XHud_Dashboard.Theme_Primary, 12);
             }
@@ -1623,14 +1527,14 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 统计
             string statistic_title = "统计";
-            if (IsMultiSelected())
+            if (Targets_Selected())
                 statistic_title = "统计 - ( 批量模式 )";
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statistic_title, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             AnimationsTimerStatistic();
 
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 #region 组件数量 - 动画节点
                 if (AnimateTweenNodes.arraySize <= 0)
@@ -1727,7 +1631,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 事件列表
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1845,7 +1749,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         if (copyHudColor != null)
                         {
-                            if (IsMultiSelected())
+                            if (Targets_Selected())
                             {
                                 List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
                                 for (int i = 0; i < SelectedObjects.Length; i++)
@@ -1894,7 +1798,7 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddItem(new GUIContent("W (粘贴色卡)"), false, () =>
                 {
                     string data = Editor_XHud_GUI.EditorData_Get_With_String("XED_HudAnimator_Get_ColoriseName");
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         #region 询问
                         List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
@@ -1951,7 +1855,7 @@ namespace SevenStrikeModules.XHud.Editor
                         return;
                     }
 
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
                         for (int i = 0; i < SelectedObjects.Length; i++)
@@ -1977,7 +1881,7 @@ namespace SevenStrikeModules.XHud.Editor
                 });
                 menu.AddItem(new GUIContent("X (记录姿态)"), false, () =>
                 {
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
 
@@ -2002,16 +1906,16 @@ namespace SevenStrikeModules.XHud.Editor
                 });
                 menu.AddSeparator("");
                 menu.AddDisabledItem(new GUIContent("动画效果"));
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddItem(new GUIContent("A (拷贝)"), false, () =>
                     {
-                        TweenNodesCopy tnc = new TweenNodesCopy();
-                        tnc.TweenNodesCopyList = new List<TweenNode>();
+                        TweenNodeArray tnc = new TweenNodeArray();
+                        tnc.TweenNodeList = new List<TweenNode>();
 
                         for (int i = 0; i < BaseScript.AnimateTweenNodes.Count; i++)
                         {
-                            tnc.TweenNodesCopyList.Add(BaseScript.AnimateTweenNodes[i]);
+                            tnc.TweenNodeList.Add(BaseScript.AnimateTweenNodes[i]);
                         }
 
                         string json = JsonUtility.ToJson(tnc);
@@ -2023,9 +1927,9 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddItem(new GUIContent("C (粘贴)"), false, () =>
                 {
                     string json = Editor_XHud_GUI.EditorData_Get_With_String("XED_HudAnimator_Copied_TweenNodes");
-                    TweenNodesCopy tnc = JsonUtility.FromJson<TweenNodesCopy>(json);
+                    TweenNodeArray tnc = JsonUtility.FromJson<TweenNodeArray>(json);
 
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         #region 询问
                         List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
@@ -2046,7 +1950,7 @@ namespace SevenStrikeModules.XHud.Editor
                         Datas.Clear();
                         for (int s = 0; s < SelectedObjects.Length; s++)
                         {
-                            SelectedObjects[s].AnimateTweenNodes = tnc.TweenNodesCopyList;
+                            SelectedObjects[s].AnimateTweenNodes = tnc.TweenNodeList;
 
                             XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
                             dataitem.Title = "动画节点数据";
@@ -2067,7 +1971,7 @@ namespace SevenStrikeModules.XHud.Editor
                         #endregion
 
                         #region 粘贴动画节点数据
-                        BaseScript.AnimateTweenNodes = tnc.TweenNodesCopyList;
+                        BaseScript.AnimateTweenNodes = tnc.TweenNodeList;
                         Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动画器消息", "粘贴动画节点", $"已将动画节点粘贴到： {BaseScript.name} ( {BaseScript.Indicator} )", "明白");
                         #endregion
                     }
@@ -2080,7 +1984,7 @@ namespace SevenStrikeModules.XHud.Editor
                         return;
                     }
 
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
                         for (int s = 0; s < SelectedObjects.Length; s++)
@@ -2107,7 +2011,7 @@ namespace SevenStrikeModules.XHud.Editor
                         Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动画器消息", "清空动画效果列表", $"已将  {BaseScript.name} ( {BaseScript.Indicator} ) 动画器的动画效果列表清空！", "明白");
                     }
                 });
-                if (!IsMultiSelected())
+                if (!Targets_Selected())
                 {
                     menu.AddSeparator("");
                     menu.AddDisabledItem(new GUIContent("预览"));
@@ -2159,7 +2063,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void CheckFirstCreatedAnimator()
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -2232,7 +2136,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void RecognizeElementType()
         {
-            if (IsMultiSelected())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -2339,7 +2243,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void AnimationsTimerStatistic()
         {
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 BaseScript.TweenNodeTimersGet();
             }
@@ -3324,48 +3228,6 @@ namespace SevenStrikeModules.XHud.Editor
                             RectTransform trs = (RectTransform)mod_RectTransform.objectReferenceValue;
                             trs.sizeDelta = prop.vector2Value;
                             AnimatorFeatures_Save(BaseScript);
-                        }
-                        break;
-                    case TweenNodeType.自定义整数:
-                        if (eve.button == 2)
-                        {
-                            prop.intValue = 0;
-                            prop.serializedObject.ApplyModifiedProperties();
-                        }
-                        break;
-                    case TweenNodeType.自定义浮点数:
-                        if (eve.button == 2)
-                        {
-                            prop.floatValue = 0;
-                            prop.serializedObject.ApplyModifiedProperties();
-                        }
-                        break;
-                    case TweenNodeType.自定义2维向量:
-                        if (eve.button == 2)
-                        {
-                            prop.vector2Value = Vector2.zero;
-                            prop.serializedObject.ApplyModifiedProperties();
-                        }
-                        break;
-                    case TweenNodeType.自定义3维向量:
-                        if (eve.button == 2)
-                        {
-                            prop.vector3Value = Vector3.zero;
-                            prop.serializedObject.ApplyModifiedProperties();
-                        }
-                        break;
-                    case TweenNodeType.自定义4维向量:
-                        if (eve.button == 2)
-                        {
-                            prop.vector4Value = Vector4.zero;
-                            prop.serializedObject.ApplyModifiedProperties();
-                        }
-                        break;
-                    case TweenNodeType.自定义颜色:
-                        if (eve.button == 2)
-                        {
-                            prop.colorValue = Color.white;
-                            prop.serializedObject.ApplyModifiedProperties();
                         }
                         break;
                 }

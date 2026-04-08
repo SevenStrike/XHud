@@ -49,6 +49,10 @@ namespace SevenStrikeModules.XHud
         /// 同步库颜色
         /// </summary>
         [SerializeField] public bool SyncLibraryColor;
+        /// <summary>
+        /// 同步Image颜色
+        /// </summary>
+        [SerializeField] public bool SyncImageColor;
         #endregion
 
 
@@ -74,22 +78,22 @@ namespace SevenStrikeModules.XHud
         /// <param name="color"></param>
         public void UpdateColor(Color color)
         {
-            ////如果Animator存在于上级按钮物体下
-            //if (mod_HudButton != null)
-            //{
-            //    //--如果 - 此Animator类型为TmpText并作为Button下挂的组件且按钮控制  文字变色  则不同步颜色
-            //    if (mod_HudButton.TextColorSyncFade && mod_HudButton.ButtonTmpText != null && mod_HudButton.ButtonTmpText == mod_TmpText)
-            //        return;
-            //    //--如果 - 此Animator类型为Text并作为Button下挂的组件且按钮控制  文字变色  则不同步颜色
-            //    if (mod_HudButton.TextColorSyncFade && mod_HudButton.ButtonText != null && mod_HudButton.ButtonText == mod_Text)
-            //        return;
-            //    //--如果 - 此Animator类型为Image并作为Button下挂的组件且按钮控制  图标变色  则不同步颜色
-            //    if (mod_HudButton.IconColorSyncFade && mod_HudButton.IconImage == mod_Image)
-            //        return;
-            //    //--如果 - 此Animator类型为Image并作为Button下挂的组件且按钮控制  背景变色  则不同步颜色
-            //    if (mod_HudButton.BgColorSyncFade && mod_HudButton.BgImage == mod_Image)
-            //        return;
-            //}
+            //如果Animator存在于上级按钮物体下
+            if (controller.mod_HudButton != null)
+            {
+                //--如果 - 此Animator类型为TmpText并作为Button下挂的组件且按钮控制  文字变色  则不同步颜色
+                if (controller.mod_HudButton.TextColorSyncFade && controller.mod_HudButton.ButtonTmpText != null && controller.mod_HudButton.ButtonTmpText == controller.mod_TmpText)
+                    return;
+                //--如果 - 此Animator类型为Text并作为Button下挂的组件且按钮控制  文字变色  则不同步颜色
+                if (controller.mod_HudButton.TextColorSyncFade && controller.mod_HudButton.ButtonText != null && controller.mod_HudButton.ButtonText == controller.mod_Text)
+                    return;
+                //--如果 - 此Animator类型为Image并作为Button下挂的组件且按钮控制  图标变色  则不同步颜色
+                if (controller.mod_HudButton.IconColorSyncFade && controller.mod_HudButton.IconImage == controller.mod_Image)
+                    return;
+                //--如果 - 此Animator类型为Image并作为Button下挂的组件且按钮控制  背景变色  则不同步颜色
+                if (controller.mod_HudButton.BgColorSyncFade && controller.mod_HudButton.BgImage == controller.mod_Image)
+                    return;
+            }
 
             //--如果 - 图像组件存在则使用color覆盖图像组件的颜色
             if (controller.mod_Image != null)
@@ -141,8 +145,9 @@ namespace SevenStrikeModules.XHud
             }
             else
             {
-                //--设置组件颜色为原始色
-                UpdateColor(OriginalColor);
+                if (SyncImageColor)
+                    //--设置组件颜色为原始色
+                    UpdateColor(OriginalColor);
             }
         }
         /// <summary>
@@ -160,6 +165,14 @@ namespace SevenStrikeModules.XHud
         public void SetOriginalColor(Color color)
         {
             OriginalColor = color;
+        }
+        /// <summary>
+        /// 设置接管 Image 颜色
+        /// </summary>
+        /// <param name="name"></param>
+        public void SetSyncImageColor(bool state)
+        {
+            SyncImageColor = state;
         }
         #endregion
 

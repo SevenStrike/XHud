@@ -130,7 +130,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 跟踪物体 -  设置跟踪 /  SelfObject =Hud元素，TargetObject = 场景物体，RelativeObject = Hud元素的父物体
         /// </summary>
-        /// <param tweenName="info">跟踪信息</param>
+        /// <param name="info">跟踪信息</param>
         public void Tracker_SetTrackerArgs(TrackerArgs info)
         {
             SelfObject = info.SelfObject;
@@ -145,10 +145,10 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 跟踪物体 -  设置跟踪
         /// </summary>
-        /// <param tweenName="self">Hud元素</param>
-        /// <param tweenName="target">场景物体</param>
-        /// <param tweenName="relative">Hud元素的父物体</param>
-        /// <param tweenName="offset">偏移值</param>
+        /// <param name="self">Hud元素</param>
+        /// <param name="target">场景物体</param>
+        /// <param name="relative">Hud元素的父物体</param>
+        /// <param name="offset">偏移值</param>
         public void Tracker_SetTrackerArgs(RectTransform self, Transform target, RectTransform relative, Vector2 offset)
         {
             TrackerArgs arg = new TrackerArgs();
@@ -176,7 +176,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置偏移
         /// </summary>
-        /// <param tweenName="offset">偏移值</param>
+        /// <param name="offset">偏移值</param>
         public void Tracker_SetOffset(Vector2 offset)
         {
             TrackerOffset = offset;
@@ -185,12 +185,12 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 偏移值平滑到
         /// </summary>
-        /// <param tweenName="val">目标偏移值</param>
-        /// <param tweenName="dur">耗时</param>
-        /// <param tweenName="ease">缓动</param>
-        /// <param tweenName="delay">延迟</param>
-        /// <param tweenName="action_start">委托 - 开始时</param>
-        /// <param tweenName="action_end">委托 - 结束时</param>
+        /// <param name="val">目标偏移值</param>
+        /// <param name="dur">耗时</param>
+        /// <param name="ease">缓动</param>
+        /// <param name="delay">延迟</param>
+        /// <param name="action_start">委托 - 开始时</param>
+        /// <param name="action_end">委托 - 结束时</param>
         public void Tracker_SetSmoothOffset(Vector2 val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
             if (twn_Offset != null && twn_Offset.IsActive)

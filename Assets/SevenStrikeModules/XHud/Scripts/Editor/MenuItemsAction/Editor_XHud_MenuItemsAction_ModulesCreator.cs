@@ -115,9 +115,9 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        #region 模组创建 - 动画器
-        [MenuItem("GameObject/XHud/Animator (动画器)", priority = 50, validate = true)]
-        private static bool Validate_Create_HudAnimator()
+        #region 模组创建 - 图元控制器
+        [MenuItem("GameObject/XHud/PrimitiveController (图元控制器)", priority = 50, validate = true)]
+        private static bool Validate_Create_HudPrimitiveController()
         {
             bool valid = false;
             if (Selection.activeGameObject != null)
@@ -127,21 +127,21 @@ namespace SevenStrikeModules.XHud.Editor
                 RectTransform rectTransform = selectedObject.GetComponent<RectTransform>();
                 if (rectTransform != null)
                 {
-                    if (selectedObject.GetComponentInParent<XHud_Module_Element>() || selectedObject.GetComponentInParent<XHud_Module_Container>())
+                    if (selectedObject.GetComponentInParent<XHud_Module_Element>())
                         valid = true;
                 }
             }
             return valid;
         }
 
-        [MenuItem("GameObject/XHud/Animator (动画器)", priority = 50)]
-        private static void Create_HudAnimator()
+        [MenuItem("GameObject/XHud/PrimitiveController (图元控制器)", priority = 50)]
+        private static void Create_HudPrimitiveController()
         {
             Transform actobj = Selection.activeTransform;
             if (actobj != null)
             {
                 GameObject obj = new GameObject();
-                Undo.RegisterCreatedObjectUndo(obj, "CreateAnimatorObject");
+                Undo.RegisterCreatedObjectUndo(obj, "CreatePrimitiveController");
                 obj.layer = LayerMask.NameToLayer("XHud");
                 RectTransform obj_ele_rect = obj.AddComponent<RectTransform>();
                 obj_ele_rect.transform.SetParent(actobj);
@@ -149,7 +149,7 @@ namespace SevenStrikeModules.XHud.Editor
                 obj_ele_rect.localEulerAngles = Vector3.zero;
                 obj_ele_rect.localScale = Vector3.one;
 
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "创建动画器", "您需要为创建的Animator动画器制定一个基础类型！", "暂不", "Image", "Text", "TmpText", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "创建图元控制器", "您需要为创建的 PrimitiveController 图元控制器指定一个基础类型！", "暂不", "RawImage", "Image", "Text", "TmpText", 2);
 
                 if (res == "暂不")
                     return;
@@ -157,7 +157,13 @@ namespace SevenStrikeModules.XHud.Editor
                 if (res == "Image")
                 {
                     obj.AddComponent<Image>();
-                    obj.name = "Animator ( Image )";
+                    obj.name = "PrimitiveController ( Image )";
+                    obj_ele_rect.sizeDelta = new Vector2(100, 100);
+                }
+                else if (res == "RawImage")
+                {
+                    obj.AddComponent<RawImage>();
+                    obj.name = "PrimitiveController ( RawImage )";
                     obj_ele_rect.sizeDelta = new Vector2(100, 100);
                 }
                 else if (res == "Text")
@@ -165,18 +171,18 @@ namespace SevenStrikeModules.XHud.Editor
                     //创建Text
                     XHud_Module_Text value = Mc_AddText(obj, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "XHud Text", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
                     value.Indicator = "Text";
-                    obj.name = "Animator ( Text )";
+                    obj.name = "PrimitiveController ( Text )";
                 }
                 else if (res == "TmpText")
                 {
                     //创建TmpText
                     XHud_Module_TmpText value = Mc_AddTmpText(obj, "TmpText", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "XHud Text", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
                     value.Indicator = "TmpText";
-                    obj.name = "Animator ( TmpText )";
+                    obj.name = "PrimitiveController ( TmpText )";
                 }
 
-                XHud_Module_Animator obj_anim = obj.AddComponent<XHud_Module_Animator>();
-                obj_anim.Indicator = "NewAnimator";
+                XHud_Module_Primitive_Controller obj_con = obj.AddComponent<XHud_Module_Primitive_Controller>();
+                obj_con.Indicator = "NewPrimitiveController";
                 Selection.activeTransform = obj.transform;
             }
         }
@@ -194,7 +200,7 @@ namespace SevenStrikeModules.XHud.Editor
                 RectTransform rectTransform = selectedObject.GetComponent<RectTransform>();
                 if (rectTransform != null)
                 {
-                    if (selectedObject.GetComponentInParent<XHud_Module_Element>() || selectedObject.GetComponentInParent<XHud_Module_Container>())
+                    if (selectedObject.GetComponentInParent<XHud_Module_Element>())
                         valid = true;
                 }
             }
@@ -235,7 +241,7 @@ namespace SevenStrikeModules.XHud.Editor
                 RectTransform rectTransform = selectedObject.GetComponent<RectTransform>();
                 if (rectTransform != null)
                 {
-                    if (selectedObject.GetComponentInParent<XHud_Module_Element>() || selectedObject.GetComponentInParent<XHud_Module_Container>())
+                    if (selectedObject.GetComponentInParent<XHud_Module_Element>())
                         valid = true;
                 }
             }

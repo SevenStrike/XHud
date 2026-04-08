@@ -113,13 +113,14 @@ namespace SevenStrikeModules.XHud
                 }
                 else
                 {
-                    Painting.UpdateColor(Painting.OriginalColor);
+                    if (Painting.SyncImageColor)
+                        Painting.UpdateColor(Painting.OriginalColor);
                 }
 
-                //做缩放并还原动作来激活颜色变化
-                ActivateScale = Painting.transform.localScale;
-                Painting.transform.localScale = Vector3.zero;
-                Painting.transform.localScale = ActivateScale;
+                ////做缩放并还原动作来激活颜色变化
+                //ActivateScale = Painting.transform.localScale;
+                //Painting.transform.localScale = Vector3.zero;
+                //Painting.transform.localScale = ActivateScale;
             }
             else
             {

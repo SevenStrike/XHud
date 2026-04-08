@@ -426,7 +426,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置循环模式
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void SetLoop(bool state)
         {
             IsLoop = state;
@@ -444,7 +444,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置音效信息
         /// </summary>
-        /// <param tweenName="soundname">目标音效名称</param>
+        /// <param name="soundname">目标音效名称</param>
         public void SetSoundInfo(string soundname)
         {
             SoundName = soundname;

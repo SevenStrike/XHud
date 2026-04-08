@@ -199,9 +199,9 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 播放自定义转场
         /// </summary>
-        /// <param tweenName="mode"></param>
-        /// <param tweenName="name"></param>
-        /// <param tweenName="time"></param>
+        /// <param name="mode"></param>
+        /// <param name="name"></param>
+        /// <param name="time"></param>
         public void TransitionPlay_Custom(TransitionMode mode, string name, float time)
         {
             if (IsTransiting)
@@ -257,7 +257,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 根据指定的转场模式进行转场
         /// </summary>
-        /// <param tweenName="mode"></param>
+        /// <param name="mode"></param>
         public void TransitionPlay(TransitionMode mode)
         {
             if (IsTransiting)
@@ -283,8 +283,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 转场逻辑
         /// </summary>
-        /// <param tweenName="node"></param>
-        /// <param tweenName="time"></param>
+        /// <param name="node"></param>
+        /// <param name="time"></param>
         /// <returns></returns>
         IEnumerator TransitionPlayer(XHud_LibraryArg_Transition node, float time)
         {
@@ -324,7 +324,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置Mask图片
         /// </summary>
-        /// <param tweenName="tex"></param>
+        /// <param name="tex"></param>
         public void Transition_Set_MaskTexture(Texture2D tex)
         {
             TransitionMat.SetTexture("_Mask", tex);
@@ -333,7 +333,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置图片
         /// </summary>
-        /// <param tweenName="tex"></param>
+        /// <param name="tex"></param>
         public void Transition_Set_BaseTexture(Texture2D tex)
         {
             TransitionMat.SetTexture("_Texture", tex);
@@ -342,7 +342,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置叠加颜色
         /// </summary>
-        /// <param tweenName="col"></param>
+        /// <param name="col"></param>
         public void Transition_Set_OverlayColor(Color col)
         {
             TransitionOverlayColor = col;
@@ -359,7 +359,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置转场透明度
         /// </summary>
-        /// <param tweenName="val"></param>
+        /// <param name="val"></param>
         public void Transition_Set_Alpha(float val)
         {
             TransitionAlpha = val;
@@ -368,7 +368,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 刷新转场透明度
         /// </summary>
-        /// <param tweenName="val"></param>
+        /// <param name="val"></param>
         public void Transition_Update_Alpha()
         {
             TransitionMat.SetFloat("_Alpha", TransitionAlpha);
@@ -377,7 +377,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置通道翻转
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void Transition_Set_ChannelInvert(bool state)
         {
             if (state)
@@ -390,8 +390,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置画面镜像翻转
         /// </summary>
-        /// <param tweenName="flip_h">水平</param>
-        /// <param tweenName="flip_v">垂直</param>
+        /// <param name="flip_h">水平</param>
+        /// <param name="flip_v">垂直</param>
         public void Transition_Set_Flip(bool flip_h, bool flip_v)
         {
             Flip_Hor = flip_h;
@@ -404,7 +404,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置画面垂直镜像翻转
         /// </summary>
-        /// <param tweenName="flip_toggle">垂直</param>
+        /// <param name="flip_toggle">垂直</param>
         public void Transition_Set_Flip_V(bool flip)
         {
             Flip_Ver = flip;
@@ -414,7 +414,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置画面水平镜像翻转
         /// </summary>
-        /// <param tweenName="flip_toggle">水平</param>
+        /// <param name="flip_toggle">水平</param>
         public void Transition_Set_Flip_H(bool flip)
         {
             Flip_Hor = flip;
@@ -424,7 +424,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置转场方式
         /// </summary>
-        /// <param tweenName="treeState">如果为True就是出场，否则就是入场</param>
+        /// <param name="treeState">如果为True就是出场，否则就是入场</param>
         public void Transition_Set_Mode(bool state)
         {
             ModeSwitch = state;

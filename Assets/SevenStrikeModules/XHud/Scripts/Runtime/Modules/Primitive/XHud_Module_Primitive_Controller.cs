@@ -72,6 +72,13 @@ namespace SevenStrikeModules.XHud
         [SerializeField] public RawImage mod_RawImage;
         #endregion
 
+        #region 成员 - 特殊组件
+        /// <summary>
+        /// 组件 - 按钮
+        /// </summary>
+        [SerializeField] public XHud_Module_Button mod_HudButton;
+        #endregion
+
         #region 状态开关
         /// <summary>
         /// 调试开关
@@ -88,6 +95,10 @@ namespace SevenStrikeModules.XHud
         /// 姿态基准
         /// </summary>
         [SerializeField] public XHud_Module_Primitive_Feature pt_Feature;
+        /// <summary>
+        /// 动画
+        /// </summary>
+        [SerializeField] public XHud_Module_Primitive_Tween pt_Tween;
         #endregion
 
         void Awake()
@@ -125,8 +136,8 @@ namespace SevenStrikeModules.XHud
                 mod_Text = GetComponent<XHud_Module_Text>();
             if (mod_TmpText == null)
                 mod_TmpText = GetComponent<XHud_Module_TmpText>();
-            //if (mod_HudButton == null)
-            //    mod_HudButton = GetComponentInParent<XHud_Module_Button>();
+            if (mod_HudButton == null)
+                mod_HudButton = GetComponentInParent<XHud_Module_Button>();
         }
         /// <summary>
         /// 获取被控组件基类类型
@@ -187,7 +198,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置动画器ID
         /// </summary>
-        /// <param tweenName="id"></param>
+        /// <param name="id"></param>
         public void SetID(int id)
         {
             ID = id;
@@ -203,7 +214,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置动画器标识名称
         /// </summary>
-        /// <param tweenName="indicator"></param>
+        /// <param name="indicator"></param>
         public void SetIndicator(string indicator)
         {
             Indicator = indicator;

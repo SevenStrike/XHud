@@ -29,3 +29,8 @@ MonoBehaviour:
     Frequency: 22050
     Channel: 1
     Length: 0.5885714
+  - Name: Cat
+    Clip: {fileID: 8300000, guid: 98542864717bc5d47b8a03236e38c1d0, type: 3}
+    Frequency: 44100
+    Channel: 2
+    Length: 0.8097959

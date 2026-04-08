@@ -23,28 +23,29 @@ namespace SevenStrikeModules.XHud
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
     using System;
-    using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.UI;
 
-    public class XHud_Module_Progress : MonoBehaviour
+    public partial class XHud_Module_Progress : MonoBehaviour
     {
+        [SerializeField]
         public RectTransform OrbitWrapper;
+        [SerializeField]
         public RectTransform RectTransform;
         [SerializeField]
         public string Indicator;
         [SerializeField]
         public bool DebugState;
-
+        [SerializeField]
         public XHudElementAnimateState AnimateState;
 
-        public float ProgressAnimatorMaxDuration;
-        public float Progress_Animators_GlobalDuration = 1;
-
         #region 内容信息
+        [SerializeField]
         public string con_title;
+        [SerializeField]
         public string con_subtitle;
+        [SerializeField]
         public string ProgressUnit = "%";
         #endregion
 
@@ -87,6 +88,10 @@ namespace SevenStrikeModules.XHud
         /// 动作 - 当 - 进度条结束时
         /// </summary>
         public UnityAction act_on_ValueEnd;
+        /// <summary>
+        /// 动作 - 当 - 进度条重置时
+        /// </summary>
+        public UnityAction act_on_Reset;
 
         /// <summary>
         /// 事件 - 当 - 进度条开始时
@@ -100,44 +105,67 @@ namespace SevenStrikeModules.XHud
         /// 事件 - 当 - 进度条结束时
         /// </summary>
         public UnityEvent eve_on_ValueEnd;
+        /// <summary>
+        /// 事件 - 当 - 进度条重置时
+        /// </summary>
+        public UnityEvent eve_on_Reset;
         #endregion
 
         #region 可视化组件
+        [SerializeField]
         public Image pro_Bg;
+        [SerializeField]
         public Image pro_Fore;
+        [SerializeField]
         public Image pro_Handle;
+        [SerializeField]
         public Image pro_Icon;
         #endregion
 
         #region 进度条值
+        [SerializeField]
         [Range(0, 1)]
         public float ProgressValue = 0;
+        [SerializeField]
         public float Prev_ProgressValue = 0;
+        [SerializeField]
         public float sm_ProgressValue = 0;
+        [SerializeField]
         public float ProgressValueDuration = 1f;
+        [SerializeField]
         public int ProgressPrecision = 0;
-        #endregion
+        #endregion      
 
-        public List<ElementNode_Animator> ProgressAnimatorNodes;
-
+        [SerializeField]
         public bool LerpMotion = true;
+        [SerializeField]
         public bool ProgressIsFinished = false;
+        [SerializeField]
         public bool AutoStopPreview = true;
+        [SerializeField]
         public bool EventIsFold;
-        public bool ProgressAnimatorListIsFold;
 
         #region 是否显示进度条各种可视化组件
+        [SerializeField]
         public bool Display_ProgressRect_Fore = true;
+        [SerializeField]
         public bool Display_ProgressRect_Bg = true;
+        [SerializeField]
         public bool Display_ProgressRect_Handle = true;
+        [SerializeField]
         public bool Display_Icon = true;
+        [SerializeField]
         public bool Display_Title = true;
+        [SerializeField]
         public bool Display_SubTitle = true;
+        [SerializeField]
         public bool Display_Value = true;
         #endregion
 
         #region 进度条状态
+        [SerializeField]
         public bool IsStarted;
+        [SerializeField]
         public bool IsEnded;
         #endregion
 
@@ -156,15 +184,14 @@ namespace SevenStrikeModules.XHud
         {
             pro_Reset();
         }
-
         private void OnDisable()
         {
             if (Application.isPlaying)
             {
-                Animators_Rewind();
+                PrimitiveTween_Rewind();
                 pro_EventsClear();
                 pro_ActionsClear();
-                pro_Reset(false, true, true, true);
+                pro_Reset(false, true, true, true, false);
             }
         }
 
@@ -173,286 +200,7 @@ namespace SevenStrikeModules.XHud
             pro_Update();
         }
 
-        #region 获取动画器和动画节点
-        /// <summary>
-        /// 获取一个动画器
-        /// </summary>
-        /// <param tweenName="indicator">目标标识名称</param>
-        /// <returns>返回一个匹配标识名称的HudAnimator动画器</returns>
-        public XHud_Module_Animator GetAnimator(string indicator)
-        {
-            XHud_Module_Animator am = null;
-            for (int i = 0; i < ProgressAnimatorNodes.Count; i++)
-            {
-                if (ProgressAnimatorNodes[i].Animator.GetIndicator() == indicator)
-                {
-                    am = ProgressAnimatorNodes[i].Animator;
-                }
-            }
-            if (am == null)
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到标识名为 " + indicator + " 的子级动画器！ ", HudMsgState.错误);
-            }
-            else
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级动画器 " + indicator, HudMsgState.通知);
-            }
-            return am;
-        }
-
-        /// <summary>
-        /// 获取一个动画器
-        /// </summary>
-        /// <param tweenName="name">目标物体名称</param>
-        /// <returns>返回一个匹配物体名称名称的HudAnimator动画器</returns>
-        public XHud_Module_Animator GetAnimator_WithObjectName(string name)
-        {
-            XHud_Module_Animator am = null;
-            for (int i = 0; i < ProgressAnimatorNodes.Count; i++)
-            {
-                if (ProgressAnimatorNodes[i].Animator.gameObject.name == name)
-                {
-                    am = ProgressAnimatorNodes[i].Animator;
-                }
-            }
-            if (am == null)
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到名为 " + name + " 的子级动画器！ ", HudMsgState.错误);
-            }
-            else
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级动画器 " + name, HudMsgState.通知);
-            }
-            return am;
-        }
-
-        /// <summary>
-        /// 获取一个动画器
-        /// </summary>
-        /// <param tweenName="id">目标动画器的ID</param>
-        /// <returns>返回一个匹配ID的HudAnimator动画器</returns>
-        public XHud_Module_Animator GetAnimator(int id)
-        {
-            XHud_Module_Animator am = null;
-            for (int i = 0; i < ProgressAnimatorNodes.Count; i++)
-            {
-                if (ProgressAnimatorNodes[i].Animator.GetID() == id)
-                {
-                    am = ProgressAnimatorNodes[i].Animator;
-                }
-            }
-            if (am == null)
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到索引号为 " + id + " 的子级动画器！ ", HudMsgState.错误);
-            }
-            else
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取索引号为 " + id + " 子级动画器！", HudMsgState.通知);
-            }
-            return am;
-        }
-
-        /// <summary>
-        /// 获取一个目标动画器上的目标动画节点
-        /// </summary>
-        /// <param tweenName="animator_indicator">目标动画器名称</param>
-        /// <param tweenName="tween_id">目标动画节点的ID</param>
-        /// <returns></returns>
-        public TweenNode GetAnimatorTween(string animator_indicator, int tween_id)
-        {
-            XHud_Module_Animator anim = GetAnimator(animator_indicator);
-            TweenNode node = anim.TweenNode_GetByID(tween_id);
-
-            if (anim == null)
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
-            }
-            else
-            {
-                if (node == null)
-                {
-                    if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
-                }
-                else
-                {
-                    if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
-                }
-            }
-
-            return node;
-        }
-
-        /// <summary>
-        /// 获取一个目标动画器上的目标动画节点
-        /// </summary>
-        /// <param tweenName="animator_id">目标动画器ID</param>
-        /// <param tweenName="tween_id">目标动画节点的ID</param>
-        /// <returns></returns>
-        public TweenNode GetAnimatorTween(int animator_id, int tween_id)
-        {
-            XHud_Module_Animator anim = GetAnimator(animator_id);
-            TweenNode node = anim.TweenNode_GetByID(tween_id);
-
-            if (anim == null)
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到ID为 " + animator_id + " 的子级动画器！ ", HudMsgState.错误);
-            }
-            else
-            {
-                if (node == null)
-                {
-                    if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取ID为 " + animator_id + " 子级动画器", HudMsgState.通知);
-                }
-                else
-                {
-                    if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取ID为 " + animator_id + " 子级动画器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
-                }
-            }
-
-            return node;
-        }
-
-        /// <summary>
-        /// 获取一个目标动画器上的目标动画节点
-        /// </summary>
-        /// <param tweenName="animator_indicator">目标动画器名称</param>
-        /// <param tweenName="tween_indicator">目标动画节点的名称</param>
-        /// <returns></returns>
-        public TweenNode GetAnimatorTween(string animator_indicator, string tween_indicator)
-        {
-            XHud_Module_Animator anim = GetAnimator(animator_indicator);
-            TweenNode node = anim.TweenNode_GetByIndicator(tween_indicator);
-
-            if (anim == null)
-            {
-                if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到名为 " + animator_indicator + " 的子级动画器！ ", HudMsgState.错误);
-            }
-            else
-            {
-                if (node == null)
-                {
-                    if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级动画器 " + animator_indicator, HudMsgState.通知);
-                }
-                else
-                {
-                    if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级动画器 " + animator_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
-                }
-            }
-
-            return node;
-        }
-        #endregion
-
-        #region 动画器播放与倒退
-        /// <summary>
-        /// 验证是否存在指定ID的动画器
-        /// </summary>
-        /// <returns></returns>
-        public bool AnimatorIsExist(int ID)
-        {
-            bool isExist = false;
-            for (int i = 0; i < ProgressAnimatorNodes.Count; i++)
-            {
-                if (ProgressAnimatorNodes[i].Animator.GetID() == ID)
-                {
-                    isExist = true;
-                }
-            }
-            return isExist;
-        }
-
-        /// <summary>
-        /// 验证是否存在指定昵称的动画器
-        /// </summary>
-        /// <returns></returns>
-        public bool AnimatorIsExist(string Indicator)
-        {
-            bool isExist = false;
-            for (int i = 0; i < ProgressAnimatorNodes.Count; i++)
-            {
-                if (ProgressAnimatorNodes[i].Animator.GetIndicator() == Indicator)
-                {
-                    isExist = true;
-                }
-            }
-            return isExist;
-        }
-
-        /// <summary>
-        /// 播放按钮子级中的所有动画
-        /// </summary>
-        private void Animators_Play(string tim)
-        {
-            if (ProgressAnimatorNodes == null || ProgressAnimatorNodes.Count <= 0)
-                return;
-
-            for (int i = 0; i < ProgressAnimatorNodes.Count; i++)
-            {
-                XHud_Module_Animator animator = ProgressAnimatorNodes[i].Animator;
-                animator.Play(tim, ProgressAnimatorNodes[i].DelayTime, Progress_Animators_GlobalDuration * animator.Animator_GlobalDuration, true, null, null, 0.5f);
-            }
-
-            if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "播放所有动画器动画！", HudMsgState.确认);
-        }
-
-        /// <summary>
-        /// 播放按钮子级中的指定ID的动画
-        /// </summary>
-        /// <param tweenName="id">动画节点的ID</param>
-        /// <param tweenName="tim">触发动画的时机</param>
-        private void Animators_PlayAt(int id, string tim)
-        {
-            if (ProgressAnimatorNodes == null || ProgressAnimatorNodes.Count <= 0)
-                return;
-
-            if (!AnimatorIsExist(id))
-                return;
-
-            for (int i = 0; i < ProgressAnimatorNodes.Count; i++)
-            {
-                if (ProgressAnimatorNodes[i].Animator.GetID() != id)
-                    continue;
-                XHud_Module_Animator anim = ProgressAnimatorNodes[i].Animator;
-                anim.Play(tim, ProgressAnimatorNodes[i].DelayTime, Progress_Animators_GlobalDuration * anim.Animator_GlobalDuration);
-            }
-
-            if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "播放指定ID的动画器的动画！", HudMsgState.确认);
-        }
-
-        /// <summary>
-        /// 倒退按钮子级中的所有动画
-        /// </summary>
-        private void Animators_Rewind()
-        {
-            for (int i = 0; i < ProgressAnimatorNodes.Count; i++)
-            {
-                XHud_Module_Animator anim = ProgressAnimatorNodes[i].Animator;
-                anim.RewindAllTweenNode();
-            }
-            if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "复位按钮动画！", HudMsgState.确认);
-        }
-        #endregion 
-
         #region 事件动作
-
         /// <summary>
         /// 移除所有事件
         /// </summary>
@@ -461,11 +209,11 @@ namespace SevenStrikeModules.XHud
             eve_on_ValueStart.RemoveAllListeners();
             eve_on_ValueEnd.RemoveAllListeners();
             eve_on_ValueChanged.RemoveAllListeners();
+            eve_on_Reset.RemoveAllListeners();
 
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "清空所有事件！", HudMsgState.通知);
         }
-
         /// <summary>
         /// 移除所有事件
         /// </summary>
@@ -474,11 +222,11 @@ namespace SevenStrikeModules.XHud
             act_on_ValueChanged = null;
             act_on_ValueStart = null;
             act_on_ValueEnd = null;
+            act_on_Reset = null;
 
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "清空所有委托！", HudMsgState.通知);
         }
-
         #endregion
 
         #region 更新
@@ -501,7 +249,8 @@ namespace SevenStrikeModules.XHud
                     if (act_on_ValueStart != null)
                         act_on_ValueStart();
                     eve_on_ValueStart.Invoke();
-                    Animators_Play("进度开始时");
+                    PrimitiveTween_Rewind();
+                    PrimitiveTween_Play("进度开始时");
                 }
             }
 
@@ -513,7 +262,7 @@ namespace SevenStrikeModules.XHud
                     if (act_on_ValueEnd != null)
                         act_on_ValueEnd();
                     eve_on_ValueEnd.Invoke();
-                    Animators_Play("进度结束时");
+                    PrimitiveTween_Play("进度结束时");
                 }
             }
 
@@ -521,11 +270,10 @@ namespace SevenStrikeModules.XHud
 
             Prev_ProgressValue = ProgressValue;
         }
-
         /// <summary>
         /// 更新可视化显示
         /// </summary>
-        /// <param tweenName="ForEditorPreview"></param>
+        /// <param name="ForEditorPreview"></param>
         public void UpdateProgressValueDisplay(bool ForEditorPreview = false)
         {
             float prs = 0;
@@ -560,38 +308,37 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
         #endregion
 
         #region 进度条属性控制
         /// <summary>
         /// 设置进度值
         /// </summary>
-        /// <param tweenName="val">进度值</param>
+        /// <param name="val">进度值</param>
         public void pro_SetProgressValue(float val)
         {
             if (val >= 1)
             {
                 ProgressValue = 1;
-                return;
             }
             else if (val <= 0)
             {
                 ProgressValue = 0;
-                return;
             }
             else
                 ProgressValue = val;
 
+            PrimitiveTween_Play("进度变化时");
+
             if (act_on_ValueChanged != null)
                 act_on_ValueChanged(ProgressValue);
-
             eve_on_ValueChanged.Invoke(ProgressValue);
+
+            Debug.Log("进度变化时");
 
             if (DebugState && Application.isPlaying)
                 XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条进度值为：" + val, HudMsgState.通知);
         }
-
         /// <summary>
         /// 进度值精度设置
         /// </summary>
@@ -602,7 +349,6 @@ namespace SevenStrikeModules.XHud
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条精度：" + count, HudMsgState.通知);
         }
-
         /// <summary>
         /// 单位后缀设置
         /// </summary>
@@ -613,15 +359,21 @@ namespace SevenStrikeModules.XHud
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条单位为：" + str, HudMsgState.通知);
         }
-
         /// <summary>
         /// 重置状态
         /// </summary>
-        public void pro_Reset(bool SmoothValueRewind = false, bool ClearEvent = false, bool ClearActions = false, bool ClearText = false)
+        public void pro_Reset(bool SmoothValueRewind = false, bool ClearEvent = false, bool ClearActions = false, bool ClearText = false, bool PlayTween = true)
         {
             ProgressValue = 0;
             if (!SmoothValueRewind)
                 sm_ProgressValue = 0;
+
+            if (PlayTween)
+                PrimitiveTween_Play("进度变化时");
+
+            if (act_on_ValueChanged != null)
+                act_on_ValueChanged(ProgressValue);
+            eve_on_ValueChanged.Invoke(ProgressValue);
 
             if (ClearText)
                 pro_TextsClear();
@@ -630,39 +382,50 @@ namespace SevenStrikeModules.XHud
             if (ClearActions)
                 pro_ActionsClear();
 
-            pro_ResetStartEndActions();
-
-            Animators_Rewind();
+            pro_ResetStartEndActions(PlayTween);
 
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已重置！", HudMsgState.通知);
         }
-
-        /// <summary>
-        /// 重置进度条首帧开始与尾帧结束委托状态
-        /// </summary>
-        private void pro_ResetStartEndActions()
-        {
-            IsStarted = false;
-            IsEnded = false;
-        }
-
         /// <summary>
         /// 重置进度数值状态
         /// </summary>
-        public void pro_ProgressValueReset()
+        public void pro_ProgressValueReset(bool PlayTween = true)
         {
             ProgressValue = 0;
             sm_ProgressValue = 0;
 
+            if (PlayTween)
+                PrimitiveTween_Play("进度变化时");
+
+            if (act_on_ValueChanged != null)
+                act_on_ValueChanged(ProgressValue);
+            eve_on_ValueChanged.Invoke(ProgressValue);
+
+            pro_ResetStartEndActions(PlayTween);
+
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已重置进度条数值！", HudMsgState.通知);
         }
+        /// <summary>
+        /// 重置进度条首帧开始与尾帧结束委托状态
+        /// </summary>
+        private void pro_ResetStartEndActions(bool PlayTween = false)
+        {
+            IsStarted = false;
+            IsEnded = false;
 
+            if (PlayTween)
+                PrimitiveTween_Play("进度重置时");
+
+            if (act_on_Reset != null)
+                act_on_Reset();
+            eve_on_Reset.Invoke();
+        }
         /// <summary>
         /// 设置进度条的运动方式
         /// </summary>
-        /// <param tweenName="smooth"></param>
+        /// <param name="smooth"></param>
         public void pro_SetProgreesMotionMode(bool smooth)
         {
             LerpMotion = smooth;
@@ -673,7 +436,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置进度条标题名称
         /// </summary>
-        /// <param tweenName="val"></param>
+        /// <param name="val"></param>
         public string pro_TitleSet(string val = null)
         {
             con_title = val;
@@ -689,11 +452,10 @@ namespace SevenStrikeModules.XHud
 
             return val;
         }
-
         /// <summary>
         /// 设置进度条副标题名称
         /// </summary>
-        /// <param tweenName="val"></param>
+        /// <param name="val"></param>
         public string pro_SubTitleSet(string val = null)
         {
             con_subtitle = val;
@@ -708,11 +470,10 @@ namespace SevenStrikeModules.XHud
 
             return val;
         }
-
         /// <summary>
         /// 设置进度条标题名称和副标题名称
         /// </summary>
-        /// <param tweenName="val"></param>
+        /// <param name="val"></param>
         public void pro_TitlesSet(string val_title = null, string val_sub = null)
         {
             con_title = val_title;
@@ -730,7 +491,6 @@ namespace SevenStrikeModules.XHud
             if (pro_TmpText_Subtitle != null)
                 pro_TmpText_Subtitle.text = val_sub;
         }
-
         /// <summary>
         /// 清空标题与副标题名称
         /// </summary>
@@ -760,7 +520,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置控制柄的图像
         /// </summary>
-        /// <param tweenName="tex"></param>
+        /// <param name="tex"></param>
         public void pro_SetHandle(Texture2D tex)
         {
             pro_Handle.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
@@ -768,11 +528,10 @@ namespace SevenStrikeModules.XHud
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条飞梭图形为：" + tex.name, HudMsgState.通知);
         }
-
         /// <summary>
         /// 设置前景的图像
         /// </summary>
-        /// <param tweenName="tex"></param>
+        /// <param name="tex"></param>
         public void pro_SetFore(Texture2D tex)
         {
             pro_Fore.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
@@ -780,11 +539,10 @@ namespace SevenStrikeModules.XHud
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条前景图形为：" + tex.name, HudMsgState.通知);
         }
-
         /// <summary>
         /// 设置背景的图像
         /// </summary>
-        /// <param tweenName="tex"></param>
+        /// <param name="tex"></param>
         public void pro_SetBg(Texture2D tex)
         {
             pro_Bg.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
@@ -792,11 +550,10 @@ namespace SevenStrikeModules.XHud
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条背景图形为：" + tex.name, HudMsgState.通知);
         }
-
         /// <summary>
         /// 设置进度条图标
         /// </summary>
-        /// <param tweenName="tex"></param>
+        /// <param name="tex"></param>
         public void pro_SetIcon(Texture2D tex)
         {
             pro_Icon.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
@@ -804,11 +561,10 @@ namespace SevenStrikeModules.XHud
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条图标图形为：" + tex.name, HudMsgState.通知);
         }
-
         /// <summary>
         /// 设置进度条图标
         /// </summary>
-        /// <param tweenName="spr"></param>
+        /// <param name="spr"></param>
         public void pro_SetIcon(Sprite spr)
         {
             pro_Icon.sprite = spr;
@@ -816,17 +572,16 @@ namespace SevenStrikeModules.XHud
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条图标图形为：" + spr.name, HudMsgState.通知);
         }
-
         /// <summary>
         /// 设置进度条可视化组件的可见性
         /// </summary>
-        /// <param tweenName="d_ProgressRect_Fore"></param>
-        /// <param tweenName="d_ProgressRect_Bg"></param>
-        /// <param tweenName="d_ProgressRect_Handle"></param>
-        /// <param tweenName="d_Icon"></param>
-        /// <param tweenName="d_Title"></param>
-        /// <param tweenName="d_SubTitle"></param>
-        /// <param tweenName="d_Value"></param>
+        /// <param name="d_ProgressRect_Fore"></param>
+        /// <param name="d_ProgressRect_Bg"></param>
+        /// <param name="d_ProgressRect_Handle"></param>
+        /// <param name="d_Icon"></param>
+        /// <param name="d_Title"></param>
+        /// <param name="d_SubTitle"></param>
+        /// <param name="d_Value"></param>
         public void pro_SetVisuals(bool d_ProgressRect_Fore, bool d_ProgressRect_Bg, bool d_ProgressRect_Handle, bool d_Icon, bool d_Title, bool d_SubTitle, bool d_Value)
         {
             pro_SetDisplay_ProgressRect_Fore(d_ProgressRect_Fore);
@@ -837,11 +592,10 @@ namespace SevenStrikeModules.XHud
             pro_SetDisplay_SubTitle(d_SubTitle);
             pro_SetDisplay_Value(d_Value);
         }
-
         /// <summary>
         /// 可视化组件是否可见 - 前景图形
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void pro_SetDisplay_ProgressRect_Fore(bool state)
         {
             Display_ProgressRect_Fore = state;
@@ -850,11 +604,10 @@ namespace SevenStrikeModules.XHud
                 pro_Fore.enabled = state;
             }
         }
-
         /// <summary>
         /// 可视化组件是否可见 - 背景图形
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void pro_SetDisplay_ProgressRect_Bg(bool state)
         {
             Display_ProgressRect_Bg = state;
@@ -863,11 +616,10 @@ namespace SevenStrikeModules.XHud
                 pro_Bg.enabled = state;
             }
         }
-
         /// <summary>
         /// 可视化组件是否可见 - 标记
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void pro_SetDisplay_ProgressRect_Handle(bool state)
         {
             Display_ProgressRect_Handle = state;
@@ -876,11 +628,10 @@ namespace SevenStrikeModules.XHud
                 pro_Handle.enabled = state;
             }
         }
-
         /// <summary>
         /// 可视化组件是否可见 - 图标
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void pro_SetDisplay_Icon(bool state)
         {
             Display_Icon = state;
@@ -889,11 +640,10 @@ namespace SevenStrikeModules.XHud
                 pro_Icon.enabled = state;
             }
         }
-
         /// <summary>
         /// 可视化组件是否可见 - 标题
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void pro_SetDisplay_Title(bool state)
         {
             Display_Title = state;
@@ -906,11 +656,10 @@ namespace SevenStrikeModules.XHud
                 pro_TmpText_Title.enabled = state;
             }
         }
-
         /// <summary>
         /// 可视化组件是否可见 - 副标题
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void pro_SetDisplay_SubTitle(bool state)
         {
             Display_SubTitle = state;
@@ -923,11 +672,10 @@ namespace SevenStrikeModules.XHud
                 pro_TmpText_Subtitle.enabled = state;
             }
         }
-
         /// <summary>
         /// 可视化组件是否可见 - 进度值
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void pro_SetDisplay_Value(bool state)
         {
             Display_Value = state;

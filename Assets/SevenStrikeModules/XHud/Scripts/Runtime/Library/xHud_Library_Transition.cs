@@ -122,9 +122,9 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 添加一个转场资源
         /// </summary>
-        /// <param tweenName="name"></param>
-        /// <param tweenName="texs"></param>
-        /// <param tweenName="skipframe"></param>
+        /// <param name="name"></param>
+        /// <param name="texs"></param>
+        /// <param name="skipframe"></param>
         public void TransitionLibrary_Add(string name, Texture2D[] texs, int skipframe)
         {
             XHud_LibraryArg_Transition node = new XHud_LibraryArg_Transition();
@@ -150,7 +150,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 移除一个转场资源
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void TransitionLibrary_Remove(string name)
         {
             for (int i = 0; i < TransitionLibrary.Count; i++)
@@ -165,7 +165,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取指定名称的转场资源名称
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public XHud_LibraryArg_Transition TransitionLibrary_Get(string name)
         {
@@ -183,7 +183,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 通过指定的转场资源名称获取索引号
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public int TransitionLibrary_GetIndexWithName(string name)
         {
@@ -224,7 +224,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 定位
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void TransitionLibrary_Location(string name)
         {
             int index = TransitionLibrary_GetIndexWithName(name);
@@ -257,7 +257,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 查找
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void TransitionLibrary_Location_Find(string name)
         {
             int index = TransitionLibrary_GetIndexWithName(name);
@@ -289,8 +289,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 替换目标转场
         /// </summary>
-        /// <param tweenName="index">替换的转场索引号</param>
-        /// <param tweenName="node">替换转场</param>
+        /// <param name="index">替换的转场索引号</param>
+        /// <param name="node">替换转场</param>
         public void TransitionsLibrary_Replace(int index, XHud_LibraryArg_Transition node)
         {
             TransitionLibrary[index] = node;

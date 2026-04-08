@@ -237,8 +237,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 替换元素
         /// </summary>
-        /// <param tweenName="index"></param>
-        /// <param tweenName="paramObject"></param>
+        /// <param name="index"></param>
+        /// <param name="paramObject"></param>
         public void ElementsLibrary_ReplaceElement(XHud_Module_Element paramObject)
         {
             for (int i = 0; i < ElementLibrary.Count; i++)
@@ -254,8 +254,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 替换元素
         /// </summary>
-        /// <param tweenName="index"></param>
-        /// <param tweenName="paramObject"></param>
+        /// <param name="index"></param>
+        /// <param name="paramObject"></param>
         public void ElementsLibrary_ReplaceElement(int index, XHud_LibraryArg_Element_Item item)
         {
             ElementLibrary[index] = item;
@@ -264,8 +264,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 增加一个元素项
         /// </summary>
-        /// <param tweenName="element">元素</param>
-        /// <param tweenName="count">数量</param>
+        /// <param name="element">元素</param>
+        /// <param name="count">数量</param>
         public void ElementsLibrary_Add(XHud_Module_Element element, int count)
         {
             XHud_LibraryArg_Element_Item item = new XHud_LibraryArg_Element_Item();
@@ -278,8 +278,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 增加一个元素项
         /// </summary>
-        /// <param tweenName="item">元素项</param>
-        /// <param tweenName="count">数量</param>
+        /// <param name="item">元素项</param>
+        /// <param name="count">数量</param>
         public void ElementsLibrary_Add(XHud_LibraryArg_Element_Item item)
         {
             ElementLibrary.Add(item);
@@ -288,7 +288,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 移除指定索引的元素
         /// </summary>
-        /// <param tweenName="index">索引</param>
+        /// <param name="index">索引</param>
         public void ElementsLibrary_Remove(int index)
         {
             ElementLibrary.RemoveAt(index);
@@ -297,7 +297,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 修改库名称
         /// </summary>
-        /// <param tweenName="name">目标名称</param>
+        /// <param name="name">目标名称</param>
         public void ElementLibrary_ChangeLibraryName(string name)
         {
             LibraryName = name;
@@ -378,7 +378,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取指定标识名称的元素
         /// </summary>
-        /// <param tweenName="name">指定的标识名称</param>
+        /// <param name="name">指定的标识名称</param>
         /// <returns>元素</returns>
         public XHud_Module_Element ElementsLibrary_GetTargetElement(string name)
         {
@@ -395,7 +395,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取指定名称的元素项
         /// </summary>
-        /// <param tweenName="name">目标名称</param>
+        /// <param name="name">目标名称</param>
         /// <returns>元素</returns>
         public XHud_LibraryArg_Element_Item ElementsLibrary_GetTargetLibraryItem(string name)
         {
@@ -412,8 +412,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取指定标识名称的元素的初始化数量
         /// </summary>
-        /// <param tweenName="Indicator">指定的标识名称</param>
-        /// <param tweenName="Count">初始化数量</param>
+        /// <param name="Indicator">指定的标识名称</param>
+        /// <param name="Count">初始化数量</param>
         public void ElementsLibrary_ChangeElementInitializeCount(string Indicator, int Count)
         {
             for (int i = 0; i < ElementLibrary.Count; i++)
@@ -466,7 +466,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 已存在
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public bool ElementLibrary_IsExist(string name)
         {
@@ -485,7 +485,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 根据名称获取索引号
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public int ElementLibrary_GetIndexWithName(string name)
         {
@@ -516,7 +516,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 定位
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void ElementLibrary_Location(string name)
         {
             int index = ElementLibrary_GetIndexWithName(name);
@@ -549,7 +549,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 查找
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void ElementLibrary_Location_Find(string name)
         {
             int index = ElementLibrary_GetIndexWithName(name);

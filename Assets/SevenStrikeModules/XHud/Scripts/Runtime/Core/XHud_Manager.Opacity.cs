@@ -77,13 +77,12 @@ namespace SevenStrikeModules.XHud
 
         /// <summary>
         /// 内容透明度更新
-        /// 同步屏幕空间和世界空间 UI 内容的整体透明度，并触发相应的状态变化事件
+        /// 同步屏幕空间 UI 内容的整体透明度，并触发相应的状态变化事件
         /// 
         /// 工作原理：
         /// 1. 同步屏幕空间内容的透明度（HudCanvasGroup_Screen.alpha = ContentAlpha_Screen）
-        /// 2. 同步世界空间内容的透明度（HudCanvasGroup_World.alpha = ContentAlpha_World）
-        /// 3. 检测透明度是否达到边界值（0 或 1），触发相应事件
-        /// 4. 检测透明度变化，触发变化事件
+        /// 2. 检测透明度是否达到边界值（0 或 1），触发相应事件
+        /// 3. 检测透明度变化，触发变化事件
         /// 
         /// 为什么需要整体内容透明度控制？
         /// - 实现 UI 整体的淡入淡出效果（如场景切换、游戏暂停）
@@ -92,9 +91,9 @@ namespace SevenStrikeModules.XHud
         /// - 配合动画系统实现平滑的 UI 显隐
         /// 
         /// 边界事件触发时机：
-        /// - 透明度达到 1：触发 Act_ContentOpacity_Screen_IsMax / Act_ContentOpacity_World_IsMax
-        /// - 透明度达到 0：触发 Act_ContentOpacity_Screen_IsMin / Act_ContentOpacity_World_IsMin
-        /// - 透明度在 0-1 之间：触发 Act_ContentOpacity_Screen_Changed / Act_ContentOpacity_World_Changed
+        /// - 透明度达到 1：触发 Act_ContentOpacity_Screen_IsMax
+        /// - 透明度达到 0：触发 Act_ContentOpacity_Screen_IsMin
+        /// - 透明度在 0-1 之间：触发 Act_ContentOpacity_Screen_Changed
         /// 
         /// 使用场景：
         /// - 场景切换时的 UI 淡入淡出
@@ -107,43 +106,78 @@ namespace SevenStrikeModules.XHud
         /// - 开销极小，仅做属性同步和边界判断
         /// 
         /// 注意事项：
-        /// - 屏幕空间和世界空间的透明度独立控制
+        /// - 屏幕空间的透明度独立控制
         /// - 透明度通过 CanvasGroup 组件实现，不影响子物体的独立透明度
-        /// - 需要确保 HudCanvasGroup_Screen/World 组件已正确配置
+        /// - 需要确保 HudCanvasGroup_Screen 组件已正确配置
         /// </summary>
-        public void hm_ContentOpacity_Update()
+        public void hm_Screen_ContentOpacity_Update()
         {
-            if (HudCanvasGroup_Screen != null)
+            if (HudCanvasGroup_Screen == null)
+                return;
+
+            HudCanvasGroup_Screen.alpha = ContentOpacity_Screen;
+            if (ContentOpacity_Screen >= 1)
             {
-                HudCanvasGroup_Screen.alpha = ContentOpacity_Screen;
-                if (ContentOpacity_Screen >= 1)
+                if (OpacityIsChangedToMax_Screen)
                 {
-                    if (OpacityIsChangedToMax_Screen)
-                    {
-                        OpacityIsChangedToMax_Screen = false;
-                        if (Act_ContentOpacity_Screen_IsMax != null)
-                            Act_ContentOpacity_Screen_IsMax(ContentOpacity_Screen);
-                    }
-                }
-                else if (ContentOpacity_Screen <= 0)
-                {
-                    if (OpacityIsChangedToMin_Screen)
-                    {
-                        OpacityIsChangedToMin_Screen = false;
-                        if (Act_ContentOpacity_Screen_IsMin != null)
-                            Act_ContentOpacity_Screen_IsMin(ContentOpacity_Screen);
-                    }
-                }
-                else
-                {
-                    OpacityIsChangedToMax_Screen = true;
-                    OpacityIsChangedToMin_Screen = true;
-                    if (Act_ContentOpacity_Screen_Changed != null)
-                        Act_ContentOpacity_Screen_Changed(ContentOpacity_Screen);
+                    OpacityIsChangedToMax_Screen = false;
+                    if (Act_ContentOpacity_Screen_IsMax != null)
+                        Act_ContentOpacity_Screen_IsMax(ContentOpacity_Screen);
                 }
             }
-
-
+            else if (ContentOpacity_Screen <= 0)
+            {
+                if (OpacityIsChangedToMin_Screen)
+                {
+                    OpacityIsChangedToMin_Screen = false;
+                    if (Act_ContentOpacity_Screen_IsMin != null)
+                        Act_ContentOpacity_Screen_IsMin(ContentOpacity_Screen);
+                }
+            }
+            else
+            {
+                OpacityIsChangedToMax_Screen = true;
+                OpacityIsChangedToMin_Screen = true;
+                if (Act_ContentOpacity_Screen_Changed != null)
+                    Act_ContentOpacity_Screen_Changed(ContentOpacity_Screen);
+            }
+        }
+        /// <summary>
+        /// 内容透明度更新
+        /// 同步世界空间 UI 内容的整体透明度，并触发相应的状态变化事件
+        /// 
+        /// 工作原理：
+        /// 1. 同步世界空间内容的透明度（HudCanvasGroup_World.alpha = ContentAlpha_World）
+        /// 2. 检测透明度是否达到边界值（0 或 1），触发相应事件
+        /// 3. 检测透明度变化，触发变化事件
+        /// 
+        /// 为什么需要整体内容透明度控制？
+        /// - 实现 UI 整体的淡入淡出效果（如场景切换、游戏暂停）
+        /// - 创建沉浸式的 UI 过渡体验
+        /// - 统一控制所有 UI 元素的可见性
+        /// - 配合动画系统实现平滑的 UI 显隐
+        /// 
+        /// 边界事件触发时机：
+        /// - 透明度达到 1：触发 Act_ContentOpacity_World_IsMax
+        /// - 透明度达到 0：触发 Act_ContentOpacity_World_IsMin
+        /// - 透明度在 0-1 之间：触发 Act_ContentOpacity_World_Changed
+        /// 
+        /// 使用场景：
+        /// - 场景切换时的 UI 淡入淡出
+        /// - 游戏暂停界面的整体淡入效果
+        /// - 全屏菜单打开/关闭的过渡动画
+        /// - UI 整体隐藏/显示（如截图模式、相机模式切换）
+        /// 
+        /// 调用频率：
+        /// - 每帧在 XHud_Manager.Update() 中调用
+        /// - 开销极小，仅做属性同步和边界判断
+        /// 
+        /// 注意事项：
+        /// - 透明度通过 CanvasGroup 组件实现，不影响子物体的独立透明度
+        /// - 需要确保 HudCanvasGroup_World 组件已正确配置
+        /// </summary>
+        public void hm_World_ContentOpacity_Update()
+        {
             if (HudCanvasGroup_World != null)
             {
                 HudCanvasGroup_World.alpha = ContentOpacity_World;

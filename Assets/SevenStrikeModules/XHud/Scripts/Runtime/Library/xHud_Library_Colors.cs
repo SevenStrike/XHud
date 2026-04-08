@@ -45,8 +45,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 新增配色信息
         /// </summary>
-        /// <param tweenName="name">新增名称</param>
-        /// <param tweenName="color">新增配色</param>
+        /// <param name="name">新增名称</param>
+        /// <param name="color">新增配色</param>
         public xHud_LibraryArg_Color(string name, Color color, string description)
         {
             Name = name;
@@ -125,7 +125,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标配色
         /// </summary>
-        /// <param tweenName="name">配色名称</param>
+        /// <param name="name">配色名称</param>
         /// <returns></returns>
         public Color ColorsLibrary_GetColor(string name)
         {
@@ -143,7 +143,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 根据Index获取目标配色名称
         /// </summary>
-        /// <param tweenName="index">配色Index</param>
+        /// <param name="index">配色Index</param>
         /// <returns></returns>
         public string ColorsLibrary_GetColorName(int index)
         {
@@ -155,7 +155,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 根据颜色名称获取目标配色的Index
         /// </summary>
-        /// <param tweenName="name">配色名称</param>
+        /// <param name="name">配色名称</param>
         /// <returns></returns>
         public int ColorsLibrary_GetColorIndex(string name)
         {
@@ -171,7 +171,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标配色
         /// </summary>
-        /// <param tweenName="id">配色ID</param>
+        /// <param name="id">配色ID</param>
         /// <returns></returns>
         public Color ColorsLibrary_GetColor(int id)
         {
@@ -190,8 +190,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置颜色
         /// </summary>
-        /// <param tweenName="name"></param>
-        /// <param tweenName="color"></param>
+        /// <param name="name"></param>
+        /// <param name="color"></param>
         public void ColorsLibrary_SetColor(string name, Color color, string description)
         {
             for (int x = 0; x < ColorLibrary.Count; x++)
@@ -209,8 +209,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置颜色
         /// </summary>
-        /// <param tweenName="id"></param>
-        /// <param tweenName="color"></param>
+        /// <param name="id"></param>
+        /// <param name="color"></param>
         public void ColorsLibrary_SetColor(int id, Color color, string description)
         {
             ColorLibrary[id].Color = color;
@@ -222,8 +222,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 新增目标配色
         /// </summary>
-        /// <param tweenName="name">新增的配色名称</param>
-        /// <param tweenName="color">新增配色</param>
+        /// <param name="name">新增的配色名称</param>
+        /// <param name="color">新增配色</param>
         public void ColorsLibrary_AddColor(string name, Color color, string Description)
         {
             bool sw = false;
@@ -242,7 +242,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 新增目标配色
         /// </summary>
-        /// <param tweenName="info">新增的配色信息</param>
+        /// <param name="info">新增的配色信息</param>
         public void ColorsLibrary_AddColor(xHud_LibraryArg_Color info)
         {
             bool sw = false;
@@ -261,8 +261,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 替换目标配色
         /// </summary>
-        /// <param tweenName="name">替换的配色名称</param>
-        /// <param tweenName="color">替换配色</param>
+        /// <param name="name">替换的配色名称</param>
+        /// <param name="color">替换配色</param>
         public void ColorsLibrary_ReplaceColor(string name, Color color, string description)
         {
             for (int i = 0; i < ColorLibrary.Count; i++)
@@ -280,8 +280,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 替换目标配色
         /// </summary>
-        /// <param tweenName="name">替换的配色名称</param>
-        /// <param tweenName="color">替换配色</param>
+        /// <param name="name">替换的配色名称</param>
+        /// <param name="color">替换配色</param>
         public void ColorsLibrary_ReplaceColorAndName(string originname, string name, Color color, string description)
         {
             for (int i = 0; i < ColorLibrary.Count; i++)
@@ -299,8 +299,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 替换目标配色
         /// </summary>
-        /// <param tweenName="name">替换的配色名称</param>
-        /// <param tweenName="color">替换配色</param>
+        /// <param name="name">替换的配色名称</param>
+        /// <param name="color">替换配色</param>
         public void ColorsLibrary_ReplaceColorAndName(int index, string originname, string name, Color color, string description)
         {
             ColorLibrary[index].Name = name;
@@ -370,7 +370,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 检查是否已存在该名称的颜色
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public bool ColorsLibrary_IsExist(string name)
         {
@@ -392,7 +392,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 检查是否已存在该名称的颜色
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public int ColorsLibrary_CheckNameToIndex(string name)
         {
@@ -411,7 +411,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 定位
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void ColorsLibrary_Location(string name)
         {
             int index = ColorsLibrary_GetColorIndex(name);
@@ -444,7 +444,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 查找
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void ColorsLibrary_Location_Find(string name)
         {
             int index = ColorsLibrary_GetColorIndex(name);

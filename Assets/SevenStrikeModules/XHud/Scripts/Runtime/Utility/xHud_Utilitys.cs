@@ -41,7 +41,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// 优化Unity实例化出来的物体的(Clone)的标记名称
         /// </summary>
         /// <returns>返回不带(Clone)后缀的原物体名称.</returns>
-        /// <param tweenName="RemoveString">要处理的字符串.</param>
+        /// <param name="RemoveString">要处理的字符串.</param>
         public static string Func_RemoveCloneSuffix(string RemoveString)
         {
             string str = RemoveString.Remove(RemoveString.Length - 7, RemoveString.Length - (RemoveString.Length - 7));
@@ -51,9 +51,9 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 打印消息到控制台
         /// </summary>
-        /// <param tweenName="Title">标题</param>
-        /// <param tweenName="文字内容_Content">内容</param>
-        /// <param tweenName="Mode">消息类型</param>
+        /// <param name="Title">标题</param>
+        /// <param name="文字内容_Content">内容</param>
+        /// <param name="Mode">消息类型</param>
         public static HudMsgState Func_PrintInfo(string Title, string Content, HudMsgState Mode, GameObject xobject = null)
         {
             if (!PrintMsgEnable)
@@ -112,7 +112,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                 //Iterate over the objects in sorted for comparison.
                 for (int j = 0; j < sortedObjects.Count; j++)
                 {
-                    //The condition, in this case, tweenName being less then
+                    //The condition, in this case, name being less then
                     if (unsortedObjects[i].name.CompareTo(sortedObjects[j].name) < 0)
                     {
                         //Insert the object into list at point. Placing it before.
@@ -137,7 +137,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 获取Float数组中最小值
         /// </summary>
-        /// <param tweenName="Values">源数组</param>
+        /// <param name="Values">源数组</param>
         /// <returns>返回数组中的最小值</returns>
         public static float Array_MinValue(float[] Values)
         {
@@ -155,7 +155,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 获取Float数组中最大值
         /// </summary>
-        /// <param tweenName="Values"></param>
+        /// <param name="Values"></param>
         /// <returns>返回数组中的最大值</returns>
         public static float Array_MaxValue(float[] Values)
         {
@@ -167,7 +167,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 拷贝字符串内容到系统剪贴板
         /// </summary>
-        /// <param tweenName="str"></param>
+        /// <param name="str"></param>
         /// <returns></returns>
         public static string CopyToSystemBuffer(string str)
         {
@@ -178,7 +178,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 处理转义字符串
         /// </summary>
-        /// <param tweenName="input"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
         public static string ProcessEscapeSequences(string input)
         {
@@ -189,7 +189,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 计算颜色的亮度极限
         /// </summary>
-        /// <param tweenName="color">要计算亮度的颜色</param>
+        /// <param name="color">要计算亮度的颜色</param>
         /// <returns>返回False小于亮度中间值，返回True大于亮度中间值</returns>
         public static bool GetBrightnessLimite(Color color, float Threshold = 0.35f)
         {
@@ -199,7 +199,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 计算颜色的亮度（灰度值）
         /// </summary>
-        /// <param tweenName="color">要计算亮度的颜色</param>
+        /// <param name="color">要计算亮度的颜色</param>
         /// <returns>颜色的亮度，范围在 0 到 1 之间</returns>
         public static float GetBrightness(Color color)
         {
@@ -225,11 +225,11 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 根据RGBA值转换到Color类型
         /// </summary>
-        /// <param tweenName="R">填写 R - 红色值</param>
-        /// <param tweenName="G">填写 G - 绿色值</param>
-        /// <param tweenName="B">填写 B - 蓝色值</param>
-        /// <param tweenName="A">填写 A - 透明度值</param>
-        /// <param tweenName="ValueMode">指定色值模式 \n为True时：输入色值范围=0 - 255 \n为False时：输入色值范围=0.0 - 1.0.</param>
+        /// <param name="R">填写 R - 红色值</param>
+        /// <param name="G">填写 G - 绿色值</param>
+        /// <param name="B">填写 B - 蓝色值</param>
+        /// <param name="A">填写 A - 透明度值</param>
+        /// <param name="ValueMode">指定色值模式 \n为True时：输入色值范围=0 - 255 \n为False时：输入色值范围=0.0 - 1.0.</param>
         /// <returns>此方法返回类型为 -> 颜色_Color</returns>
         public static Color Color_From_RGBA(float R, float G, float B, float A, bool ValueMode = true)
         {
@@ -253,8 +253,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将分隔符为逗号的"r,g,b,a"的字符串转换为Color类型
         /// </summary>
-        /// <param tweenName="ColorString">目标颜色格式字符串.</param>
-        /// <param tweenName="ValueMode">指定色值模式 \n为True时：输入色值范围=0 - 255 \n为False时：输入色值范围=0.0 - 1.0.</param>
+        /// <param name="ColorString">目标颜色格式字符串.</param>
+        /// <param name="ValueMode">指定色值模式 \n为True时：输入色值范围=0 - 255 \n为False时：输入色值范围=0.0 - 1.0.</param>
         /// <returns>此方法返回类型为 -> 颜色_Color.</returns>
         public static Color Color_From_String(string ColorString, bool ValueMode = true)
         {
@@ -283,8 +283,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将字符串数组转换为Color类型
         /// </summary>
-        /// <param tweenName="ColorStringArray">颜色字符串数组，数组长度为4，既代表了RGBA</param>
-        /// <param tweenName="ValueMode">指定色值模式 \n为True时：输入色值范围=0 - 255 \n为False时：输入色值范围=0.0 - 1.0.</param>
+        /// <param name="ColorStringArray">颜色字符串数组，数组长度为4，既代表了RGBA</param>
+        /// <param name="ValueMode">指定色值模式 \n为True时：输入色值范围=0 - 255 \n为False时：输入色值范围=0.0 - 1.0.</param>
         /// <returns>此方法返回类型为 -> 颜色_Color.</returns>
         public static Color Color_From_StringArray(string[] ColorStringArray, bool ValueMode = true)
         {
@@ -308,8 +308,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将浮点数组转换为Color类型
         /// </summary>
-        /// <param tweenName="ColorFloatArray">颜色浮点数组，数组长度为4，既代表了RGBA</param>
-        /// <param tweenName="ValueMode">指定色值模式 \n为True时：输入色值范围=0 - 255 \n为False时：输入色值范围=0.0 - 1.0.</param>
+        /// <param name="ColorFloatArray">颜色浮点数组，数组长度为4，既代表了RGBA</param>
+        /// <param name="ValueMode">指定色值模式 \n为True时：输入色值范围=0 - 255 \n为False时：输入色值范围=0.0 - 1.0.</param>
         /// <returns>此方法返回类型为 -> 颜色_Color.</returns>
         public static Color Color_From_FloatArray(float[] ColorFloatArray, bool ValueMode = true)
         {
@@ -333,8 +333,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将整形数组转换为Color类型
         /// </summary>
-        /// <param tweenName="ColorFloatArray">颜色浮点数组，数组长度为4，既代表了RGBA</param>
-        /// <param tweenName="ValueMode">指定色值模式 \n为True时：输入色值范围=0 - 255 \n为False时：输入色值范围=0.0 - 1.0.</param>
+        /// <param name="ColorFloatArray">颜色浮点数组，数组长度为4，既代表了RGBA</param>
+        /// <param name="ValueMode">指定色值模式 \n为True时：输入色值范围=0 - 255 \n为False时：输入色值范围=0.0 - 1.0.</param>
         /// <returns>此方法返回类型为 -> 颜色_Color.</returns>
         public static Color Color_From_IntArray(int[] ColorFloatArray, bool ValueMode = true)
         {
@@ -358,7 +358,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将十六位进制颜色码字符串转换到Color类型
         /// </summary>
-        /// <param tweenName="hex">填写需要转换成Color类型的十六位进制的颜色码字符串（请忽略颜色代码开头的 #）</param>
+        /// <param name="hex">填写需要转换成Color类型的十六位进制的颜色码字符串（请忽略颜色代码开头的 #）</param>
         /// <returns>此方法返回类型为 -> 颜色_Color</returns>
         public static Color Color_From_HexString(string hex)
         {
@@ -379,9 +379,9 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将HSV颜色转换到Color类型
         /// </summary>
-        /// <param tweenName="H">H</param>
-        /// <param tweenName="S">S</param>
-        /// <param tweenName="V">V</param>
+        /// <param name="H">H</param>
+        /// <param name="S">S</param>
+        /// <param name="V">V</param>
         /// <returns>此方法返回类型为 -> 颜色_Color</returns>
         public static Color Color_From_HSV(float H, float S, float V)
         {
@@ -422,8 +422,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将Color类型转换到十六进制颜色码字符串
         /// </summary>
-        /// <param tweenName="color">填写需要转换成字符串格式的Color类型</param>
-        /// <param tweenName="HasPrefixSymbol">True：前缀带有 # 号，False：无_None # 号前缀</param>
+        /// <param name="color">填写需要转换成字符串格式的Color类型</param>
+        /// <param name="HasPrefixSymbol">True：前缀带有 # 号，False：无_None # 号前缀</param>
         /// <returns>此方法返回类型为 -> 字符串_String</returns>
         public static string Color_To_HexColor(Color color, bool HasPrefixSymbol = false)
         {
@@ -435,7 +435,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将Color类型转换到字符串
         /// </summary>
-        /// <param tweenName="color">填写需要转换成字符串格式的Color类型</param>
+        /// <param name="color">填写需要转换成字符串格式的Color类型</param>
         /// <returns>此方法返回类型为 -> 字符串_String，格式为：R,G,B,A顺序排列的字符串</returns>
         public static string Color_To_String(Color color)
         {
@@ -447,8 +447,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将Color类型转换到自定义符号分隔的完整字符串
         /// </summary>
-        /// <param tweenName="color">填写需要转换成字符串格式的Color类型</param>
-        /// <param tweenName="Symbol">指定最后输出的字符串的分隔符号，例如： '|'   ','   '/'   '\'   '''   '-'   '.'   </param>
+        /// <param name="color">填写需要转换成字符串格式的Color类型</param>
+        /// <param name="Symbol">指定最后输出的字符串的分隔符号，例如： '|'   ','   '/'   '\'   '''   '-'   '.'   </param>
         /// <returns>此方法返回类型为 -> 字符串_String，格式为：R "自定义分隔符" G "自定义分隔符" B "自定义分隔符" A 顺序排列的字符串</returns>
         public static string Color_To_String(Color color, char Symbol = ',')
         {
@@ -470,7 +470,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将Color类型转换到字符串数组
         /// </summary>
-        /// <param tweenName="color">填写需要转换成字符串数组格式的Color类型</param>
+        /// <param name="color">填写需要转换成字符串数组格式的Color类型</param>
         /// <returns>此方法返回类型为 -> 字符串_String[]，格式为：字符串数组</returns>
         public static string[] Color_To_StringArray(Color color)
         {
@@ -487,7 +487,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将Color类型转换到浮点数组
         /// </summary>
-        /// <param tweenName="color">填写需要转换成浮点数组格式的Color类型</param>
+        /// <param name="color">填写需要转换成浮点数组格式的Color类型</param>
         /// <returns>此方法返回类型为 -> 浮点数_Float[]，格式为：浮点数组</returns>
         public static float[] Color_To_FloatArray(Color color)
         {
@@ -532,8 +532,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将指定的带分隔符的字符串转换为字符串数组
         /// </summary>
-        /// <param tweenName="字符串_String">需要转换的字符串</param>
-        /// <param tweenName="Symbol">字符串中的分隔符</param>
+        /// <param name="字符串_String">需要转换的字符串</param>
+        /// <param name="Symbol">字符串中的分隔符</param>
         /// <returns>此方法返回类型为 -> 字符串_String[]字符串数组.</returns>
         public static string[] String_To_StringArray(string String, char Symbol = ',')
         {
@@ -547,9 +547,9 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将指定的带分隔符的字符串转换为字符串数组并赋值给指定字符串数组
         /// </summary>
-        /// <param tweenName="StringArray">存储转换后的字符串数组</param>
-        /// <param tweenName="字符串_String">需要转换的字符串</param>
-        /// <param tweenName="Symbol">字符串中的分隔符</param>
+        /// <param name="StringArray">存储转换后的字符串数组</param>
+        /// <param name="字符串_String">需要转换的字符串</param>
+        /// <param name="Symbol">字符串中的分隔符</param>
         /// <returns></returns>
         public static void String_To_StringArray(string[] StringArray, string String, char Symbol = ',')
         {
@@ -562,8 +562,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将指定的带分隔符的字符串转换为浮点数组
         /// </summary>
-        /// <param tweenName="字符串_String">需要转换的字符串</param>
-        /// <param tweenName="Symbol">字符串中的分隔符</param>
+        /// <param name="字符串_String">需要转换的字符串</param>
+        /// <param name="Symbol">字符串中的分隔符</param>
         /// <returns>此方法返回类型为 -> 浮点数_Float[]浮点数组.</returns>
         public static float[] String_To_FloatArray(string String, char Symbol = ',')
         {
@@ -579,9 +579,9 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将指定的带分隔符的字符串转换为字符串数组并赋值给指定浮点数组
         /// </summary>
-        /// <param tweenName="FloatArray">存储转换后的浮点数组</param>
-        /// <param tweenName="字符串_String">需要转换的字符串</param>
-        /// <param tweenName="Symbol">字符串中的分隔符</param>
+        /// <param name="FloatArray">存储转换后的浮点数组</param>
+        /// <param name="字符串_String">需要转换的字符串</param>
+        /// <param name="Symbol">字符串中的分隔符</param>
         /// <returns></returns>
         public static void String_To_FloatArray(float[] FloatArray, string String, char Symbol = ',')
         {
@@ -596,8 +596,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将指定的带分隔符的字符串转换为整形数组
         /// </summary>
-        /// <param tweenName="字符串_String">需要转换的字符串</param>
-        /// <param tweenName="Symbol">字符串中的分隔符</param>
+        /// <param name="字符串_String">需要转换的字符串</param>
+        /// <param name="Symbol">字符串中的分隔符</param>
         /// <returns>此方法返回类型为 -> 整数_Int[]整形数组.</returns>
         public static int[] String_To_IntArray(string String, char Symbol = ',')
         {
@@ -613,9 +613,9 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将指定的带分隔符的字符串转换为字符串数组并赋值给指定整型数组
         /// </summary>
-        /// <param tweenName="IntArray">存储转换后的整型数组</param>
-        /// <param tweenName="字符串_String">需要转换的字符串</param>
-        /// <param tweenName="Symbol">字符串中的分隔符</param>
+        /// <param name="IntArray">存储转换后的整型数组</param>
+        /// <param name="字符串_String">需要转换的字符串</param>
+        /// <param name="Symbol">字符串中的分隔符</param>
         /// <returns></returns>
         public static void String_To_IntArray(int[] IntArray, string String, char Symbol = ',')
         {
@@ -633,8 +633,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将指定的带分隔符的字符串转换为Vector4向量
         /// </summary>
-        /// <param tweenName="SourceVector">需要转换的字符串</param>
-        /// <param tweenName="Symbol">字符串中的分隔符</param>
+        /// <param name="SourceVector">需要转换的字符串</param>
+        /// <param name="Symbol">字符串中的分隔符</param>
         /// <returns>此方法返回类型为 -> Vector4向量.</returns>
         public static Vector4 Vector4_From_String(string SourceVector, char Symbol = ',')
         {
@@ -645,8 +645,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将指定的带分隔符的字符串转换为Vector3向量
         /// </summary>
-        /// <param tweenName="SourceVector">需要->换的向量字符串</param>
-        /// <param tweenName="Symbol">字符串中的分隔符</param>
+        /// <param name="SourceVector">需要->换的向量字符串</param>
+        /// <param name="Symbol">字符串中的分隔符</param>
         /// <returns>此方法返回类型为 -> Vector3向量.</returns>
         public static Vector3 Vector3_From_String(string SourceVector, char Symbol = ',')
         {
@@ -657,8 +657,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将指定的带分隔符的字符串转换为Vector2向量
         /// </summary>
-        /// <param tweenName="SourceVector">需要转换的向量字符串</param>
-        /// <param tweenName="Symbol">字符串中的分隔符</param>
+        /// <param name="SourceVector">需要转换的向量字符串</param>
+        /// <param name="Symbol">字符串中的分隔符</param>
         /// <returns>此方法返回类型为 -> Vector2向量.</returns>
         public static Vector2 Vector2_From_String(string SourceVector, char Symbol = ',')
         {
@@ -672,7 +672,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将字符串数组转换为Vector4向量
         /// </summary>
-        /// <param tweenName="StringArray">需要转换的字符串数组，请保证数组最大长度为4</param>
+        /// <param name="StringArray">需要转换的字符串数组，请保证数组最大长度为4</param>
         /// <returns>此方法返回类型为 -> Vector4向量</returns>
         public static Vector4 Vector4_From_StringArray(string[] StringArray)
         {
@@ -682,7 +682,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将字符串数组转换为Vector3向量
         /// </summary>
-        /// <param tweenName="StringArray">需要转换的字符串数组，请保证数组最大长度为3</param>
+        /// <param name="StringArray">需要转换的字符串数组，请保证数组最大长度为3</param>
         /// <returns>此方法返回类型为 -> Vector3向量</returns>
         public static Vector3 Vector3_From_StringArray(string[] StringArray)
         {
@@ -692,7 +692,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将字符串数组转换为Vector2向量
         /// </summary>
-        /// <param tweenName="StringArray">需要转换的字符串数组，请保证数组最大长度为2</param>
+        /// <param name="StringArray">需要转换的字符串数组，请保证数组最大长度为2</param>
         /// <returns>此方法返回类型为 -> Vector2向量</returns>
         public static Vector2 Vector2_From_StringArray(string[] StringArray)
         {
@@ -705,7 +705,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将整型数组转换为Vector4向量
         /// </summary>
-        /// <param tweenName="IntArray">需要转换的整型数组，请保证数组最大长度为4</param>
+        /// <param name="IntArray">需要转换的整型数组，请保证数组最大长度为4</param>
         /// <returns>此方法返回类型为 -> Vector4向量</returns>
         public static Vector4 Vector4_From_IntArray(int[] IntArray)
         {
@@ -715,7 +715,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将整型数组转换为Vector3向量
         /// </summary>
-        /// <param tweenName="IntArray">需要转换的整型数组，请保证数组最大长度为3</param>
+        /// <param name="IntArray">需要转换的整型数组，请保证数组最大长度为3</param>
         /// <returns>此方法返回类型为 -> Vector3向量</returns>
         public static Vector3 Vector3_From_IntArray(int[] IntArray)
         {
@@ -725,7 +725,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将整型数组转换为Vector2向量
         /// </summary>
-        /// <param tweenName="IntArray">需要转换的整型数组，请保证数组最大长度为2</param>
+        /// <param name="IntArray">需要转换的整型数组，请保证数组最大长度为2</param>
         /// <returns>此方法返回类型为 -> Vector2向量</returns>
         public static Vector2 Vector2_From_IntArray(int[] IntArray)
         {
@@ -738,7 +738,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将浮点数组转换为Vector4向量
         /// </summary>
-        /// <param tweenName="FloatArray">需要转换的浮点数组，请保证数组最大长度为4</param>
+        /// <param name="FloatArray">需要转换的浮点数组，请保证数组最大长度为4</param>
         /// <returns>此方法返回类型为 -> Vector4向量</returns>
         public static Vector4 Vector4_From_FloatArray(float[] FloatArray)
         {
@@ -748,7 +748,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将浮点数组转换为Vector3Int向量
         /// </summary>
-        /// <param tweenName="FloatArray">需要转换的浮点数组，请保证数组最大长度为3</param>
+        /// <param name="FloatArray">需要转换的浮点数组，请保证数组最大长度为3</param>
         /// <returns>此方法返回类型为 -> Vector3Int向量</returns>
         public static Vector3 Vector3Int_From_IntArray(float[] FloatArray)
         {
@@ -758,7 +758,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将浮点数组转换为Vector2向量
         /// </summary>
-        /// <param tweenName="FloatArray">需要转换的浮点数组，请保证数组最大长度为2</param>
+        /// <param name="FloatArray">需要转换的浮点数组，请保证数组最大长度为2</param>
         /// <returns>此方法返回类型为 -> Vector2向量</returns>
         public static Vector2 Vector2_From_FloatArray(float[] FloatArray)
         {
@@ -771,7 +771,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将字符串形式的布尔值解析到布尔类型
         /// </summary>
-        /// <param tweenName="字符串_String">需要解析成布尔值的字符串，字符串内容只能是true、false、0、1、on、off</param>
+        /// <param name="字符串_String">需要解析成布尔值的字符串，字符串内容只能是true、false、0、1、on、off</param>
         /// <returns>此方法返回类型为 -> Bool类型.</returns>
         public static bool String_To_Bool(string String)
         {
@@ -785,8 +785,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 将字符串形式的多个布尔值解析转换成布尔数组
         /// </summary>
-        /// <param tweenName="字符串_String">需要解析成布尔数组的字符串，字符串内容可以是 \n "true,true,false,true" \n "1,1,0,1" \n "on,on,off,on"</param>
-        /// <param tweenName="Symbol">字符串中的分隔符</param>
+        /// <param name="字符串_String">需要解析成布尔数组的字符串，字符串内容可以是 \n "true,true,false,true" \n "1,1,0,1" \n "on,on,off,on"</param>
+        /// <param name="Symbol">字符串中的分隔符</param>
         /// <returns>此方法返回类型为 -> Bool数组类型.</returns>
         public static bool[] String_To_BoolArray(string String, char Symbol = ',')
         {
@@ -808,8 +808,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         ///  将Vector3向量转换为 x,y,z 字符串格式（小括号可选）
         /// </summary>
-        /// <param tweenName="SourceVector">需要转换的向量.</param>
-        /// <param tweenName="IncludeBracket">转换后是否包含前后小括号，例：(x,y,z) </param>
+        /// <param name="SourceVector">需要转换的向量.</param>
+        /// <param name="IncludeBracket">转换后是否包含前后小括号，例：(x,y,z) </param>
         /// <returns>此方法返回类型为 ->  x,y,z 格式的字符串.</returns>
         public static string Vector3_To_String(Vector3 SourceVector, bool IncludeBracket = false)
         {
@@ -829,8 +829,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         ///  将Vector4向量转换为 x,y,z,w 字符串格式（小括号可选）
         /// </summary>
-        /// <param tweenName="SourceVector">需要转换的向量.</param>
-        /// <param tweenName="IncludeBracket">转换后是否包含前后小括号，例：(x,y,z) </param>
+        /// <param name="SourceVector">需要转换的向量.</param>
+        /// <param name="IncludeBracket">转换后是否包含前后小括号，例：(x,y,z) </param>
         /// <returns>此方法返回类型为 ->  x,y,z,w 格式的字符串.</returns>
         public static string Vector4_To_String(Vector4 SourceVector, bool IncludeBracket = false)
         {
@@ -850,8 +850,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         ///  将Vector2向量转换为 x,y 字符串格式（小括号可选）
         /// </summary>
-        /// <param tweenName="SourceVector">需要转换的向量.</param>
-        /// <param tweenName="IncludeBracket">转换后是否包含前后小括号，例：(x,y,z) </param>
+        /// <param name="SourceVector">需要转换的向量.</param>
+        /// <param name="IncludeBracket">转换后是否包含前后小括号，例：(x,y,z) </param>
         /// <returns>此方法返回类型为 ->  x,y 格式的字符串.</returns>
         public static string Vector2_To_String(Vector2 SourceVector, bool IncludeBracket = false)
         {
@@ -874,7 +874,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         ///  将Vector3向量转换为字符串数组
         /// </summary>
-        /// <param tweenName="VectorValue">待转换的目标 三维向量_Vector3 </param>
+        /// <param name="VectorValue">待转换的目标 三维向量_Vector3 </param>
         /// <returns>此方法返回类型为 ->String数组.</returns>
         public static string[] Vector3_To_StringArray(Vector3 VectorValue)
         {
@@ -889,7 +889,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         ///  将Vector4向量转换为字符串数组
         /// </summary>
-        /// <param tweenName="VectorValue">待转换的目标 四维向量_Vector4 </param>
+        /// <param name="VectorValue">待转换的目标 四维向量_Vector4 </param>
         /// <returns>此方法返回类型为 -> String数组.</returns>
         public static string[] Vector4_To_StringArray(Vector4 VectorValue)
         {
@@ -905,7 +905,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         ///  将Vector2向量转换为字符串数组
         /// </summary>
-        /// <param tweenName="VectorValue">待转换的目标 二维向量_Vector2 </param>
+        /// <param name="VectorValue">待转换的目标 二维向量_Vector2 </param>
         /// <returns>此方法返回类型为 ->String数组.</returns>
         public static string[] Vector2_To_StringArray(Vector2 VectorValue)
         {
@@ -922,7 +922,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         ///  将Vector3向量转换为浮点数组格式
         /// </summary>
-        /// <param tweenName="VectorValue">待转换的目标 三维向量_Vector3 </param>
+        /// <param name="VectorValue">待转换的目标 三维向量_Vector3 </param>
         /// <returns>此方法返回类型为 -> Float浮点数组.</returns>
         public static float[] Vector3_To_FloatArray(Vector3 VectorValue)
         {
@@ -937,7 +937,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         ///  将Vector4向量转换为浮点数组格式
         /// </summary>
-        /// <param tweenName="VectorValue">待转换的目标 四维向量_Vector4 </param>
+        /// <param name="VectorValue">待转换的目标 四维向量_Vector4 </param>
         /// <returns>此方法返回类型为 -> Float浮点数组.</returns>
         public static float[] Vector4_To_FloatArray(Vector4 VectorValue)
         {
@@ -953,7 +953,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         ///  将Vector2向量转换为浮点数组格式
         /// </summary>
-        /// <param tweenName="VectorValue">待转换的目标 二维向量_Vector2 </param>
+        /// <param name="VectorValue">待转换的目标 二维向量_Vector2 </param>
         /// <returns>此方法返回类型为 -> Float浮点数组.</returns>
         public static float[] Vector2_To_FloatArray(Vector2 VectorValue)
         {
@@ -970,7 +970,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         ///  将Vector3向量转换为整形数组格式
         /// </summary>
-        /// <param tweenName="VectorValue">待转换的目标 三维向量_Vector3 </param>
+        /// <param name="VectorValue">待转换的目标 三维向量_Vector3 </param>
         /// <returns>此方法返回类型为 -> Int整形数组.</returns>
         public static int[] Vector3_To_IntArray(Vector3 VectorValue)
         {
@@ -985,7 +985,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         ///  将Vector4向量转换为整形数组格式
         /// </summary>
-        /// <param tweenName="VectorValue">待转换的目标 四维向量_Vector4 </param>
+        /// <param name="VectorValue">待转换的目标 四维向量_Vector4 </param>
         /// <returns>此方法返回类型为 -> Int整形数组.</returns>
         public static int[] Vector4_To_IntArray(Vector4 VectorValue)
         {
@@ -1001,7 +1001,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         ///  将Vector2向量转换为整形数组格式
         /// </summary>
-        /// <param tweenName="VectorValue">待转换的目标 二维向量_Vector2 </param>
+        /// <param name="VectorValue">待转换的目标 二维向量_Vector2 </param>
         /// <returns>此方法返回类型为 -> Int整形数组.</returns>
         public static int[] Vector2_To_IntArray(Vector2 VectorValue)
         {
@@ -1021,7 +1021,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 检查数据关键字是否存在（编辑器模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
+        /// <param name="key">索引名称</param>
         public static bool PlayerPrefs_KeyIsExist_ForEditor(string key)
         {
             return EditorPrefs.HasKey(key);
@@ -1030,8 +1030,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 存入数据（编辑器模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static void PlayerPrefs_SaveValue_ForEditor(string key, string value)
         {
             EditorPrefs.SetString(key, value);
@@ -1040,8 +1040,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 存入数据（编辑器模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static void PlayerPrefs_SaveValue_ForEditor(string key, int value)
         {
             EditorPrefs.SetInt(key, value);
@@ -1050,8 +1050,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 存入数据（编辑器模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static void PlayerPrefs_SaveValue_ForEditor(string key, float value)
         {
             EditorPrefs.SetFloat(key, value);
@@ -1060,8 +1060,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 存入数据（编辑器模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static void PlayerPrefs_SaveValue_ForEditor(string key, bool value)
         {
             EditorPrefs.SetBool(key, value);
@@ -1070,8 +1070,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 取出数据（编辑器模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static string PlayerPrefs_ReadValue_String_ForEditor(string key)
         {
             return EditorPrefs.GetString(key);
@@ -1080,8 +1080,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 取出数据（编辑器模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static int PlayerPrefs_ReadValue_Int_ForEditor(string key)
         {
             return EditorPrefs.GetInt(key);
@@ -1090,8 +1090,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 取出数据（编辑器模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static float PlayerPrefs_ReadValue_Float_ForEditor(string key)
         {
             return EditorPrefs.GetFloat(key);
@@ -1100,8 +1100,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 取出数据（编辑器模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static bool PlayerPrefs_ReadValue_Bool_ForEditor(string key)
         {
             return EditorPrefs.GetBool(key);
@@ -1110,7 +1110,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 清空数据（编辑器模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
+        /// <param name="key">索引名称</param>
         public static void PlayerPrefs_DeleteValue_ForEditor(string key)
         {
             EditorPrefs.DeleteKey(key);
@@ -1121,7 +1121,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 检查数据关键字是否存在（运行模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
+        /// <param name="key">索引名称</param>
         public static bool PlayerPrefs_KeyIsExist_ForRuntime(string key)
         {
             return PlayerPrefs.HasKey(key);
@@ -1130,8 +1130,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 存入数据（运行模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static void PlayerPrefs_SaveValue_ForRuntime(string key, string value)
         {
             PlayerPrefs.SetString(key, value);
@@ -1140,8 +1140,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 存入数据（运行模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static void PlayerPrefs_SaveValue_ForRuntime(string key, int value)
         {
             PlayerPrefs.SetInt(key, value);
@@ -1150,8 +1150,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 存入数据（运行模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static void PlayerPrefs_SaveValue_ForRuntime(string key, float value)
         {
             PlayerPrefs.SetFloat(key, value);
@@ -1160,8 +1160,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 取出数据（运行模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static string PlayerPrefs_ReadValue_String_ForRuntime(string key)
         {
             return PlayerPrefs.GetString(key);
@@ -1170,8 +1170,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 取出数据（运行模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static int PlayerPrefs_ReadValue_Int_ForRuntime(string key)
         {
             return PlayerPrefs.GetInt(key);
@@ -1180,8 +1180,8 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 取出数据（运行模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
-        /// <param tweenName="value">值</param>
+        /// <param name="key">索引名称</param>
+        /// <param name="value">值</param>
         public static float PlayerPrefs_ReadValue_Float_ForRuntime(string key)
         {
             return PlayerPrefs.GetFloat(key);
@@ -1190,7 +1190,7 @@ namespace SevenStrikeModules.XHud.Utilitys
         /// <summary>
         /// 清空数据（运行模式）
         /// </summary>
-        /// <param tweenName="key">索引名称</param>
+        /// <param name="key">索引名称</param>
         public static void PlayerPrefs_DeleteValue_ForRuntime(string key)
         {
             PlayerPrefs.DeleteKey(key);

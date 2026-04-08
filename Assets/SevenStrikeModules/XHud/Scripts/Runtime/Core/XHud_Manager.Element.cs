@@ -41,7 +41,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 数量 - animators
         /// </summary>
-        public int count_animators;
+        public int count_primitives;
         /// <summary>
         /// 数量 - sliders
         /// </summary>
@@ -70,10 +70,6 @@ namespace SevenStrikeModules.XHud
         /// 数量 - tmptexts
         /// </summary>
         public int count_tmptexts;
-        /// <summary>
-        /// 数量 - containers
-        /// </summary>
-        public int count_containers;
     }
 
     /// <summary>
@@ -1207,8 +1203,7 @@ namespace SevenStrikeModules.XHud
                     statistic.count_elements++;
 
                     XHudElementNode node = lay.HudElementInfos[s];
-                    statistic.count_animators += node.Element.AnimatorNodes.Count;
-                    statistic.count_containers += node.Element.ContainerNodes.Count;
+                    statistic.count_primitives += node.Element.PrimitiveControllerNodes.Count;
                     statistic.count_sounders += node.Element.SounderNodes.Count;
                     statistic.count_buttons += node.Element.ButtonNodes.Count;
                     statistic.count_options += node.Element.OptionNodes.Count;
@@ -1226,8 +1221,7 @@ namespace SevenStrikeModules.XHud
                 statistic.count_elements++;
 
                 XHudElementNode node = Anchors_Layout_World[i];
-                statistic.count_animators += node.Element.AnimatorNodes.Count;
-                statistic.count_containers += node.Element.ContainerNodes.Count;
+                statistic.count_primitives += node.Element.PrimitiveControllerNodes.Count;
                 statistic.count_sounders += node.Element.SounderNodes.Count;
                 statistic.count_buttons += node.Element.ButtonNodes.Count;
                 statistic.count_options += node.Element.OptionNodes.Count;
@@ -1259,8 +1253,7 @@ namespace SevenStrikeModules.XHud
                         statistic.count_elements++;
 
                         XHudElementNode node = lay.HudElementInfos[s];
-                        statistic.count_animators += node.Element.AnimatorNodes.Count;
-                        statistic.count_containers += node.Element.ContainerNodes.Count;
+                        statistic.count_primitives += node.Element.PrimitiveControllerNodes.Count;
                         statistic.count_sounders += node.Element.SounderNodes.Count;
                         statistic.count_buttons += node.Element.ButtonNodes.Count;
                         statistic.count_options += node.Element.OptionNodes.Count;
@@ -1280,8 +1273,7 @@ namespace SevenStrikeModules.XHud
                     statistic.count_elements++;
 
                     XHudElementNode node = Anchors_Layout_World[i];
-                    statistic.count_animators += node.Element.AnimatorNodes.Count;
-                    statistic.count_containers += node.Element.ContainerNodes.Count;
+                    statistic.count_primitives += node.Element.PrimitiveControllerNodes.Count;
                     statistic.count_sounders += node.Element.SounderNodes.Count;
                     statistic.count_buttons += node.Element.ButtonNodes.Count;
                     statistic.count_options += node.Element.OptionNodes.Count;
@@ -1561,7 +1553,7 @@ namespace SevenStrikeModules.XHud
             node.Element.act_on_element_out_end += action_out_end;
 
             // 元素下的所有图元动画倒退
-            node.Element.Animators_Rewind();
+            node.Element.PrimitiveTween_Rewind();
 
             // 如果 autoin 开启，则表示生成元素后自动播放元素基础三项动画（Alpha、Movement、Rotation）
             if (autoin)
@@ -1661,7 +1653,7 @@ namespace SevenStrikeModules.XHud
             node.Element.act_on_element_out_end += action_out_end;
 
             // 元素下的所有图元动画倒退
-            node.Element.Animators_Rewind();
+            node.Element.PrimitiveTween_Rewind();
 
             // 如果 autoin 开启，则表示生成元素后自动播放元素基础三项动画（Alpha、Movement、Rotation）
             if (autoin)

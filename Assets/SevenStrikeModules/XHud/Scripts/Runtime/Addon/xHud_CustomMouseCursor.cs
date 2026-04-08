@@ -181,7 +181,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 是否开启自定义光标
         /// </summary>
-        /// <param tweenName="treeState">开启状态</param>
+        /// <param name="treeState">开启状态</param>
         public void mc_SetCustomCursorEnabled(bool state)
         {
             UseCustomCursor = state;
@@ -268,7 +268,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置鼠标图像
         /// </summary>
-        /// <param tweenName="cursor"></param>
+        /// <param name="cursor"></param>
         public void mc_SetCursorImager(MouseStyles style)
         {
             if (CursorImager == null)
@@ -282,7 +282,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置光标颜色
         /// </summary>
-        /// <param tweenName="color"></param>
+        /// <param name="color"></param>
         public void mc_SetCursorColor(Color color)
         {
             if (CursorImager == null)
@@ -293,7 +293,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置鼠标图像尺寸
         /// </summary>
-        /// <param tweenName="cursor"></param>
+        /// <param name="cursor"></param>
         public void mc_SetCursorSize(float size)
         {
             if (UseLerpCursorSize == "差值模式")
@@ -342,7 +342,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 光标透明度设置
         /// </summary>
-        /// <param tweenName="opacity"></param>
+        /// <param name="opacity"></param>
         public void mc_CursorOpacitySet(float opacity)
         {
             if (Tween_CursorOpacity != null && Tween_CursorOpacity.IsActive)
@@ -359,7 +359,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 光标透明度设置 - 快速
         /// </summary>
-        /// <param tweenName="opacity"></param>
+        /// <param name="opacity"></param>
         public void mc_CursorOpacityFastSet(float opacity)
         {
             CursorOpacity = opacity;
@@ -368,7 +368,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 锁定光标
         /// </summary>
-        /// <param tweenName="mode"></param>
+        /// <param name="mode"></param>
         public void mc_LockCursor(CursorLockMode mode)
         {
             Cursor.lockState = mode;

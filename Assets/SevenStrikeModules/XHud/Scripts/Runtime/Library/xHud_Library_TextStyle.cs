@@ -427,7 +427,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 拷贝数据（主要用于脱离引用的实例化）
         /// </summary>
-        /// <param tweenName="target"></param>
+        /// <param name="target"></param>
         public void CopyData(XHud_LibraryArg_TextStyle target)
         {
             //----------------------------------------Based----------------------------------------//
@@ -512,7 +512,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 拷贝数据忽略名称和说明文字（主要用于脱离引用的实例化）
         /// </summary>
-        /// <param tweenName="target"></param>
+        /// <param name="target"></param>
         public void CopyData_WithoutType(XHud_LibraryArg_TextStyle target)
         {
             //----------------------------------------Based----------------------------------------//
@@ -595,7 +595,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 对比类
         /// </summary>
-        /// <param tweenName="info"></param>
+        /// <param name="info"></param>
         /// <returns></returns>
         public bool EqualsData(XHud_LibraryArg_TextStyle info)
         {
@@ -623,7 +623,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 拷贝数据（主要用于脚本与库数据传递，所以忽略库开关属性）
         /// </summary>
-        /// <param tweenName="target"></param>
+        /// <param name="target"></param>
         public void CopyData_Ignored_LibraryToggle(XHud_LibraryArg_TextStyle target)
         {
             //----------------------------------------Based----------------------------------------//
@@ -689,7 +689,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 控制文字颜色是否受到Animator颜色控制
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void gen_Set_SyncAnimatorColor(bool state)
         {
             if (SyncAnimatorColor == state)
@@ -700,7 +700,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置射线检测可用性
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void gen_RayCastSet(bool state)
         {
             if (Raycast == state)
@@ -711,7 +711,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置蒙版可用性
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void gen_Set_MaskableSet(bool state)
         {
             if (Maskable == state)
@@ -724,7 +724,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变字体样式
         /// </summary>
-        /// <param tweenName="style">样式</param>
+        /// <param name="style">样式</param>
         public void txt_Set_FontStyle(FontStyle style)
         {
             if (Style == style)
@@ -735,7 +735,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变文字锚点位置
         /// </summary>
-        /// <param tweenName="anchor">锚点位置_AnchoredPosition</param>
+        /// <param name="anchor">锚点位置_AnchoredPosition</param>
         public void txt_Set_Alignment(ContentAnchor anchor)
         {
             if (ContentAnchor == anchor)
@@ -746,7 +746,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变文字几何对齐
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void txt_Set_GeometreAlign(bool state)
         {
             if (GeometreAlign == state)
@@ -757,7 +757,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变字体
         /// </summary>
-        /// <param tweenName="font">字体</param>
+        /// <param name="font">字体</param>
         public void txt_Set_Font(Font font)
         {
             if (font == null)
@@ -770,7 +770,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变字体尺寸
         /// </summary>
-        /// <param tweenName="size">尺寸_Size</param>
+        /// <param name="size">尺寸_Size</param>
         public void txt_Set_FontSize(float size)
         {
             if (Size == size)
@@ -781,7 +781,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变字体行高
         /// </summary>
-        /// <param tweenName="height">尺寸_Size</param>
+        /// <param name="height">尺寸_Size</param>
         public void txt_Set_FontLineHeight(float height)
         {
             if (LineHeight == height)
@@ -792,7 +792,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 溢出 H
         /// </summary>
-        /// <param tweenName="mode"> Overflow = 溢出, Wrap = 包裹</param>
+        /// <param name="mode"> Overflow = 溢出, Wrap = 包裹</param>
         public void txt_Set_Overflow(HorizontalWrapMode mode)
         {
             if (Overflow_Horizon == mode)
@@ -803,7 +803,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 溢出 V
         /// </summary>
-        /// <param tweenName="mode"> Overflow = 溢出, Truncate = 截断</param>
+        /// <param name="mode"> Overflow = 溢出, Truncate = 截断</param>
         public void txt_Set_Overflow(VerticalWrapMode mode)
         {
             if (Overflow_Vertical == mode)
@@ -814,7 +814,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置富文本开关
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void txt_Set_RichTextEnabled(bool state)
         {
             if (RichText == state)
@@ -825,7 +825,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置自动尺寸开关
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void txt_Set_BestFit(bool state)
         {
             if (BestFit == state)
@@ -836,7 +836,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变字体自动尺寸最小
         /// </summary>
-        /// <param tweenName="size">尺寸_Size</param>
+        /// <param name="size">尺寸_Size</param>
         public void txt_Set_FontFitSize_Min(int size)
         {
             if (Fit_Min == size)
@@ -847,7 +847,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变字体自动尺寸最大
         /// </summary>
-        /// <param tweenName="size">尺寸_Size</param>
+        /// <param name="size">尺寸_Size</param>
         public void txt_Set_FontFitSize_Max(int size)
         {
             if (Fit_Max == size)
@@ -858,7 +858,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变字体颜色
         /// </summary>
-        /// <param tweenName="color">颜色_Color</param>
+        /// <param name="color">颜色_Color</param>
         public void txt_Set_FontColor(Color color)
         {
             if (FontColor == color)
@@ -871,7 +871,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置富文本开关
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void tmp_Set_RichTextEnabled(bool state)
         {
             if (tmp_rich == state)
@@ -882,7 +882,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 包裹
         /// </summary>
-        /// <param tweenName="mode">NoWrap = 不包裹, Normal = 常规包裹, PreserveWhitespace = 保留空格, PreserveWhitespaceNoWrap = 保留空格但不包裹 </param>
+        /// <param name="mode">NoWrap = 不包裹, Normal = 常规包裹, PreserveWhitespace = 保留空格, PreserveWhitespaceNoWrap = 保留空格但不包裹 </param>
         public void tmp_Set_WordWrappingMode(TextWrappingModes mode)
         {
             if (tmp_contentwrap == mode)
@@ -893,7 +893,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 溢出
         /// </summary>
-        /// <param tweenName="mode"> Overflow = 溢出, Ellipsis = 省略, Masking = 遮罩, Truncate = 截断, ScrollRect = 滚动区域, Page = 翻页, Linked = 链接</param>
+        /// <param name="mode"> Overflow = 溢出, Ellipsis = 省略, Masking = 遮罩, Truncate = 截断, ScrollRect = 滚动区域, Page = 翻页, Linked = 链接</param>
         public void tmp_Set_Overflow(TextOverflowModes mode)
         {
             if (tmp_overflow == mode)
@@ -904,7 +904,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变字体样式
         /// </summary>
-        /// <param tweenName="style">样式</param>
+        /// <param name="style">样式</param>
         public void tmp_Set_FontStyle(FontStyles style)
         {
             if (tmp_style == style)
@@ -915,7 +915,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变文字锚点位置
         /// </summary>
-        /// <param tweenName="anchor">锚点位置_AnchoredPosition</param>
+        /// <param name="anchor">锚点位置_AnchoredPosition</param>
         public void tmp_Set_Alignment(TmpContentAnchor anchor)
         {
             if (tmp_anchor != anchor)
@@ -925,7 +925,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变字体
         /// </summary>
-        /// <param tweenName="font">字体</param>
+        /// <param name="font">字体</param>
         public void tmp_Set_FontAsset(TMP_FontAsset font)
         {
             if (font == null)
@@ -938,7 +938,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变字体尺寸
         /// </summary>
-        /// <param tweenName="size">尺寸_Size</param>
+        /// <param name="size">尺寸_Size</param>
         public void tmp_Set_FontSize(float size)
         {
             if (tmp_size == size)
@@ -949,7 +949,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 字符间距
         /// </summary>
-        /// <param tweenName="distance">距离</param>
+        /// <param name="distance">距离</param>
         public void tmp_Set_SpacingSet_Character(float value)
         {
             if (tmp_space_character == value)
@@ -960,7 +960,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 单词间距
         /// </summary>
-        /// <param tweenName="distance">距离</param>
+        /// <param name="distance">距离</param>
         public void tmp_Set_SpacingSet_Word(float value)
         {
             if (tmp_space_word == value)
@@ -971,7 +971,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 行高
         /// </summary>
-        /// <param tweenName="distance">距离</param>
+        /// <param name="distance">距离</param>
         public void tmp_Set_SpacingSet_Line(float value)
         {
             if (tmp_space_lineheight == value)
@@ -982,7 +982,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 段落间距
         /// </summary>
-        /// <param tweenName="distance">距离</param>
+        /// <param name="distance">距离</param>
         public void tmp_Set_SpacingSet_Paragraph(float value)
         {
             if (tmp_space_paragraph == value)
@@ -993,7 +993,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置文字包裹比例
         /// </summary>
-        /// <param tweenName="val"></param>
+        /// <param name="val"></param>
         public void tmp_Set_WrappingRatios(float val)
         {
             if (tmp_WrappingRatios == val)
@@ -1004,7 +1004,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 边距值设置
         /// </summary>
-        /// <param tweenName="value">边距值</param>
+        /// <param name="value">边距值</param>
         public void tmp_Set_MarginSet(Vector4 value)
         {
             if (tmp_contentmargin == value)
@@ -1015,7 +1015,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 间距值设置
         /// </summary>
-        /// <param tweenName="values">间距值</param>
+        /// <param name="values">间距值</param>
         public void tmp_Set_SpacingSet(XHud_TmpTextSpacingValue values)
         {
             if (values.space_Character != tmp_space_character)
@@ -1039,7 +1039,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 改变字体颜色
         /// </summary>
-        /// <param tweenName="color">颜色_Color</param>
+        /// <param name="color">颜色_Color</param>
         public void tmp_Set_FontColor(Color color)
         {
             if (tmp_color == color)
@@ -1127,7 +1127,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置渐变色 A
         /// </summary>
-        /// <param tweenName="col"></param>
+        /// <param name="col"></param>
         public void tmp_Set_GradientColor_A(Color col)
         {
             if (gra_A == col)
@@ -1138,7 +1138,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置渐变色 B
         /// </summary>
-        /// <param tweenName="col"></param>
+        /// <param name="col"></param>
         public void tmp_Set_GradientColor_B(Color col)
         {
             if (gra_B == col)
@@ -1149,7 +1149,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置渐变色 C
         /// </summary>
-        /// <param tweenName="col"></param>
+        /// <param name="col"></param>
         public void tmp_Set_GradientColor_C(Color col)
         {
             if (gra_C == col)
@@ -1160,7 +1160,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置渐变色 D
         /// </summary>
-        /// <param tweenName="col"></param>
+        /// <param name="col"></param>
         public void tmp_Set_GradientColor_D(Color col)
         {
             if (gra_D == col)
@@ -1171,7 +1171,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置渐变色反转
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void tmp_Set_GradientColor_Invert(bool state)
         {
             if (gra_Invert == state)
@@ -1182,7 +1182,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置渐变色开关
         /// </summary>
-        /// <param tweenName="treeState"></param>
+        /// <param name="treeState"></param>
         public void tmp_Set_GradientColor_Enabled(bool state)
         {
             if (gra_Used == state)
@@ -1193,7 +1193,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置渐变色模式
         /// </summary>
-        /// <param tweenName="col"></param>
+        /// <param name="col"></param>
         public void tmp_Set_GradientMode(ColorMode mode)
         {
             if (gra_ColorMode == mode)
@@ -1204,7 +1204,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 设置渐变色模式名称
         /// </summary>
-        /// <param tweenName="col"></param>
+        /// <param name="col"></param>
         public void tmp_Set_GradientModeName(string mode)
         {
             if (gra_ColorModeName == mode)
@@ -1390,7 +1390,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 添加一个字体样式模版
         /// </summary>
-        /// <param tweenName="info">文字样式信息类</param>
+        /// <param name="info">文字样式信息类</param>
         public void TextStyle_Library_Add(XHud_LibraryArg_TextStyle info)
         {
             TextStyleLibrary.Add(info);
@@ -1484,7 +1484,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标ID的字体样式
         /// </summary>
-        /// <param tweenName="index"></param>
+        /// <param name="index"></param>
         /// <returns></returns>
         public XHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(int index)
         {
@@ -1497,8 +1497,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 根据目标Index和类型获取字体样式
         /// </summary>
-        /// <param tweenName="index"></param>
-        /// <param tweenName="type"></param>
+        /// <param name="index"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
         public XHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(int index, xHud_TextType type)
         {
@@ -1514,7 +1514,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取目标名称的字体样式
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public XHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(string name)
         {
@@ -1532,8 +1532,8 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 根据目标名称和类型获取字体样式
         /// </summary>
-        /// <param tweenName="index"></param>
-        /// <param tweenName="type"></param>
+        /// <param name="index"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
         public XHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(string name, xHud_TextType type)
         {
@@ -1551,7 +1551,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 获取首个目标类型的字体样式
         /// </summary>
-        /// <param tweenName="type"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
         public XHud_LibraryArg_TextStyle TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType type)
         {
@@ -1620,7 +1620,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 定位
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void TextStyleLibrary_Location(string name)
         {
             int index = TextStyle_Library_GetIndex(name);
@@ -1653,7 +1653,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 列表定位并滚动到目标 - 查找
         /// </summary>
-        /// <param tweenName="name"></param>
+        /// <param name="name"></param>
         public void TextStyleLibrary_Location_Find(string name)
         {
             int index = TextStyle_Library_GetIndex(name);
