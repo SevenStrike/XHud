@@ -2156,6 +2156,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
+            #region 弹出菜单
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
             {
                 // 创建右键菜单
@@ -2403,27 +2404,64 @@ namespace SevenStrikeModules.XHud.Editor
                 if (!Targets_Selected())
                 {
                     menu.AddSeparator("");
-                    //menu.AddDisabledItem(new GUIContent("预览"));
-                    //if (!Tween_Preivewing_Element)
-                    //    menu.AddItem(new GUIContent("S (开始)"), false, () =>
-                    //    {
-                    //        if (Application.isPlaying)
-                    //        {
-                    //            Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
-                    //            return;
-                    //        }
-                    //        Preview_Animator_Play();
-                    //    });
-                    //else
-                    //    menu.AddItem(new GUIContent("S (停止)"), false, () =>
-                    //    {
-                    //        if (Application.isPlaying)
-                    //        {
-                    //            Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "停止预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
-                    //            return;
-                    //        }
-                    //        Preview_Animator_Stop();
-                    //    });
+                    menu.AddDisabledItem(new GUIContent("生成预览"));
+                    if (!PrimitivePreivew_State.boolValue && !TweensPreivew_Out_State.boolValue)
+                    {
+                        if (!TweensPreivew_In_State.boolValue)
+                        {
+                            menu.AddItem(new GUIContent("S (生成预览 - 开始)"), false, () =>
+                            {
+                                if (Application.isPlaying)
+                                {
+                                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
+                                    return;
+                                }
+                                ElementTweens_Preview_In_Play();
+                            });
+                        }
+                        else
+                        {
+                            menu.AddItem(new GUIContent("S (生成预览 - 停止)"), false, () =>
+                            {
+                                if (Application.isPlaying)
+                                {
+                                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "停止预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
+                                    return;
+                                }
+                                ElementTweens_Preview_In_Stop();
+                            });
+                        }
+                    }
+
+                    if (!PrimitivePreivew_State.boolValue && !TweensPreivew_In_State.boolValue)
+                    {
+                        menu.AddSeparator("");
+                        menu.AddDisabledItem(new GUIContent("回收预览"));
+                        if (!TweensPreivew_Out_State.boolValue)
+                        {
+                            menu.AddItem(new GUIContent("D (回收预览 - 开始)"), false, () =>
+                            {
+                                if (Application.isPlaying)
+                                {
+                                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
+                                    return;
+                                }
+                                ElementTweens_Preview_Out_Play();
+                            });
+                        }
+                        else
+                        {
+                            menu.AddItem(new GUIContent("D (回收预览 - 停止)"), false, () =>
+                            {
+                                if (Application.isPlaying)
+                                {
+                                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "停止预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
+                                    return;
+                                }
+                                ElementTweens_Preview_Out_Stop();
+                            });
+                        }
+                    }
                 }
 
                 if (PrefabUtility.IsAnyPrefabInstanceRoot(BaseScript.gameObject))
@@ -2456,6 +2494,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 menu.ShowAsContext(); // 在鼠标位置显示右键菜单
             }
+            #endregion
 
             CheckModulesValid();
 

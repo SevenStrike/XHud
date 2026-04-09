@@ -383,17 +383,20 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         #region 判断文字组件是否为库同步样式状态
                         bool IsTextColorMode = false;
-                        ModuleType animtype = BaseScript.controller.GetModuleType();
-                        if (nodetype == TweenNodeType.颜色)
+                        if (BaseScript.controller != null)
                         {
-                            if (animtype == Enums.ModuleType.Text || animtype == Enums.ModuleType.TmpText)
+                            ModuleType animtype = BaseScript.controller.GetModuleType();
+                            if (nodetype == TweenNodeType.颜色)
                             {
-                                XHud_Module_Text text = BaseScript.controller.mod_Text;
-                                XHud_Module_TmpText tmptext = BaseScript.controller.mod_TmpText;
-                                if ((text && text.StyleLibSynching && text.TextStyleInfo.LibStyle_Effect_color) ||
-                                (tmptext && tmptext.StyleLibSynching && tmptext.TextStyleInfo.LibStyle_Effect_color))
+                                if (animtype == Enums.ModuleType.Text || animtype == Enums.ModuleType.TmpText)
                                 {
-                                    IsTextColorMode = true;
+                                    XHud_Module_Text text = BaseScript.controller.mod_Text;
+                                    XHud_Module_TmpText tmptext = BaseScript.controller.mod_TmpText;
+                                    if ((text && text.StyleLibSynching && text.TextStyleInfo.LibStyle_Effect_color) ||
+                                    (tmptext && tmptext.StyleLibSynching && tmptext.TextStyleInfo.LibStyle_Effect_color))
+                                    {
+                                        IsTextColorMode = true;
+                                    }
                                 }
                             }
                         }
@@ -505,8 +508,13 @@ namespace SevenStrikeModules.XHud.Editor
                             Color bgstcol = GUI.color;
                             GUI.color = XHud_Dashboard.Theme_Primary;
                             draw_rect.Set(rect.x + 35, baseheight + 90 + hh, rect.width / 2 - 40, LineHeight);
-
+                            EditorGUI.BeginChangeCheck();
                             Editor_XHud_GUI.Gui_PopupWithString(draw_rect, ref sp_Timings, TimingType, HudFilled.实体, HudColor.亮白, Color.black);
+                            if (EditorGUI.EndChangeCheck())
+                            {
+                                // 再次收集动画列表所有动画时机名称
+                                Preview_PrimitiveTweens_CollectedTimings(BaseScript);
+                            }
                             GUI.color = bgstcol;
                             #endregion
 
@@ -828,16 +836,22 @@ namespace SevenStrikeModules.XHud.Editor
                     sp_Root.FindPropertyRelative("Progress").floatValue = 0;
                     sp_Root.serializedObject.ApplyModifiedProperties();
 
-                    // 刷新获取动画列表所有动画时机名称
-                    Preview_PrimitiveTweens_CollectedTimings(BaseScript);
+                    EditorApplication.delayCall += () =>
+                    {
+                        // 刷新获取动画列表所有动画时机名称
+                        Preview_PrimitiveTweens_CollectedTimings(BaseScript);
+                    };
                 },
                 onRemoveCallback = (ReorderableList list) =>
                 {
                     sp_PrimitiveTweenNodes.DeleteArrayElementAtIndex(list.index);
                     sp_PrimitiveTweenNodes.serializedObject.ApplyModifiedProperties();
 
-                    // 刷新获取动画列表所有动画时机名称
-                    Preview_PrimitiveTweens_CollectedTimings(BaseScript);
+                    EditorApplication.delayCall += () =>
+                    {
+                        // 刷新获取动画列表所有动画时机名称
+                        Preview_PrimitiveTweens_CollectedTimings(BaseScript);
+                    };
                 },
                 elementHeightCallback = index =>
                 {
