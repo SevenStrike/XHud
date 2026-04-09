@@ -32,6 +32,7 @@ namespace SevenStrikeModules.XHud.Editor
     {
         #region 组件 / 列表
         private XHud_Module_Primitive_Painting BaseScript;
+        private XHud_Manager HudManager;
         #endregion
 
         #region 序列化属性
@@ -162,9 +163,6 @@ namespace SevenStrikeModules.XHud.Editor
             Rect rect = GUILayoutUtility.GetLastRect();
             #endregion
 
-            // 获取 XHud 管理器
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             #region 检测多选模式下的颜色模式是否一致
             // 该字段用于检测多选情况下每个Painting的颜色模式是否是一致的
             bool MultiColorModeSame = true;
@@ -252,17 +250,17 @@ namespace SevenStrikeModules.XHud.Editor
                                 if (!Application.isPlaying)
                                 {
                                     //--检查色卡名称是否失效
-                                    if (!mgr.Hud_Colors.ColorsLibrary_IsExist(SelectedObjects[i].ColoriseName) || string.IsNullOrEmpty(SelectedObjects[i].ColoriseName))
+                                    if (!HudManager.Hud_Colors.ColorsLibrary_IsExist(SelectedObjects[i].ColoriseName) || string.IsNullOrEmpty(SelectedObjects[i].ColoriseName))
                                     {
-                                        SelectedObjects[i].ColoriseName = mgr.Hud_Colors.ColorsLibrary_GetColorName(0);
+                                        SelectedObjects[i].ColoriseName = HudManager.Hud_Colors.ColorsLibrary_GetColorName(0);
                                     }
                                 }
                                 else
                                 {
                                     //--检查色卡名称是否失效
-                                    if (!mgr.Hud_Colors.ColorsLibrary_IsExist(SelectedObjects[i].ColoriseName) || string.IsNullOrEmpty(SelectedObjects[i].ColoriseName))
+                                    if (!HudManager.Hud_Colors.ColorsLibrary_IsExist(SelectedObjects[i].ColoriseName) || string.IsNullOrEmpty(SelectedObjects[i].ColoriseName))
                                     {
-                                        SelectedObjects[i].ColoriseName = mgr.Hud_Colors.ColorsLibrary_GetColorName(0);
+                                        SelectedObjects[i].ColoriseName = HudManager.Hud_Colors.ColorsLibrary_GetColorName(0);
                                     }
                                 }
                             }
@@ -289,18 +287,18 @@ namespace SevenStrikeModules.XHud.Editor
                         if (!Application.isPlaying)
                         {
                             //--检查色卡名称是否失效
-                            if (!mgr.Hud_Colors.ColorsLibrary_IsExist(sp_ColoriseName.stringValue) || string.IsNullOrEmpty(sp_ColoriseName.stringValue))
+                            if (!HudManager.Hud_Colors.ColorsLibrary_IsExist(sp_ColoriseName.stringValue) || string.IsNullOrEmpty(sp_ColoriseName.stringValue))
                             {
-                                sp_ColoriseName.stringValue = mgr.Hud_Colors.ColorsLibrary_GetColorName(0);
+                                sp_ColoriseName.stringValue = HudManager.Hud_Colors.ColorsLibrary_GetColorName(0);
                                 sp_ColoriseName.serializedObject.ApplyModifiedProperties();
                             }
                         }
                         else
                         {
                             //--检查色卡名称是否失效
-                            if (!mgr.Hud_Colors.ColorsLibrary_IsExist(sp_ColoriseName.stringValue) || string.IsNullOrEmpty(sp_ColoriseName.stringValue))
+                            if (!HudManager.Hud_Colors.ColorsLibrary_IsExist(sp_ColoriseName.stringValue) || string.IsNullOrEmpty(sp_ColoriseName.stringValue))
                             {
-                                sp_ColoriseName.stringValue = mgr.Hud_Colors.ColorsLibrary_GetColorName(0);
+                                sp_ColoriseName.stringValue = HudManager.Hud_Colors.ColorsLibrary_GetColorName(0);
                                 sp_ColoriseName.serializedObject.ApplyModifiedProperties();
                             }
                         }
@@ -391,9 +389,9 @@ namespace SevenStrikeModules.XHud.Editor
                 else
                 {
                     #region 色卡库选项列表
-                    if (mgr != null)
+                    if (HudManager != null)
                     {
-                        if (mgr.Hud_Colors != null && !mgr.Hud_Colors.ColorsLibrary_IsEmpty())
+                        if (HudManager.Hud_Colors != null && !HudManager.Hud_Colors.ColorsLibrary_IsEmpty())
                         {
                             Editor_XHud_GUI.Gui_Layout_Space(5);
                             GUILayout.BeginHorizontal();
@@ -405,17 +403,17 @@ namespace SevenStrikeModules.XHud.Editor
                                 {
                                     if (!Application.isPlaying)
                                     {
-                                        if (!mgr.Hud_Colors.ColorsLibrary_IsExist(sp_ColoriseName.stringValue))
+                                        if (!HudManager.Hud_Colors.ColorsLibrary_IsExist(sp_ColoriseName.stringValue))
                                             return;
                                         Editor_XHud_MenuItemsAction_OpenLibrary.open_col();
-                                        mgr.Hud_Colors.ColorsLibrary_Location(sp_ColoriseName.stringValue);
+                                        HudManager.Hud_Colors.ColorsLibrary_Location(sp_ColoriseName.stringValue);
                                     }
                                     else
                                     {
-                                        if (!mgr.Hud_Colors.ColorsLibrary_IsExist(sp_ColoriseName.stringValue))
+                                        if (!HudManager.Hud_Colors.ColorsLibrary_IsExist(sp_ColoriseName.stringValue))
                                             return;
                                         Editor_XHud_MenuItemsAction_OpenLibrary.open_col();
-                                        mgr.Hud_Colors.ColorsLibrary_Location(sp_ColoriseName.stringValue);
+                                        HudManager.Hud_Colors.ColorsLibrary_Location(sp_ColoriseName.stringValue);
                                     }
                                 }
                                 Editor_XHud_GUI.Gui_Layout_Space(20);
@@ -426,7 +424,7 @@ namespace SevenStrikeModules.XHud.Editor
                             }
 
                             #region 控件列表文字 （色卡库列表下拉菜单）
-                            string[] collist = mgr.Hud_Colors.ColorsLibrary_GetColorNames();
+                            string[] collist = HudManager.Hud_Colors.ColorsLibrary_GetColorNames();
                             #endregion
 
                             #region 控件背景色
@@ -435,7 +433,7 @@ namespace SevenStrikeModules.XHud.Editor
                             string FirstColoriseName = SelectedObjects[0].ColoriseName;
                             if (!Targets_Selected())
                             {
-                                cc = mgr.Hud_Colors.ColorsLibrary_GetColor(sp_ColoriseName.stringValue);
+                                cc = HudManager.Hud_Colors.ColorsLibrary_GetColor(sp_ColoriseName.stringValue);
                             }
                             else
                             {
@@ -451,7 +449,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                             if (SameColor)
                             {
-                                cc = mgr.Hud_Colors.ColorsLibrary_GetColor(FirstColoriseName);
+                                cc = HudManager.Hud_Colors.ColorsLibrary_GetColor(FirstColoriseName);
                             }
                             else
                             {
@@ -723,7 +721,7 @@ namespace SevenStrikeModules.XHud.Editor
             window.SetInfo(info.Name, info.Description, info.Color);
             window.SetPainting(info.Painting);
             window.SetButtonText("添加", "取消");
-            window.SetTarget_Hud_ColorsLibrary(XHud_Dashboard.HudManagerGet().Hud_Colors);
+            window.SetTarget_Hud_ColorsLibrary(HudManager.Hud_Colors);
             //window.ShowModal();
             window.Show();
         }

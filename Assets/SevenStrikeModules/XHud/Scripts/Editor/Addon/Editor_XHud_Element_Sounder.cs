@@ -36,6 +36,7 @@ namespace SevenStrikeModules.XHud.Editor
     {
         #region 组件
         private XHud_Element_Sounder BaseScript;
+        private XHud_Manager HudManager;
         #endregion
 
         private bool OriginalDisplay;
@@ -124,6 +125,8 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnEnable()
         {
+            HudManager = XHud_Dashboard.HudManagerGet();
+
             BaseScript = (XHud_Element_Sounder)target;
 
             UseRandomPitch = serializedObject.FindProperty("UseRandomPitch");
@@ -196,19 +199,17 @@ namespace SevenStrikeModules.XHud.Editor
                 Button.serializedObject.ApplyModifiedProperties();
             }
 
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             #region 如果音效名称是空的检查音效名称是否有效
 
             if (!IsMultiSelected())
             {
                 if (string.IsNullOrEmpty(SoundName.stringValue))
                 {
-                    if (mgr.Hud_Sounds != null)
+                    if (HudManager.Hud_Sounds != null)
                     {
-                        if (!mgr.Hud_Sounds.SoundLibrary_IsEmpty())
+                        if (!HudManager.Hud_Sounds.SoundLibrary_IsEmpty())
                         {
-                            SoundName.stringValue = mgr.Hud_Sounds.SoundLibrary_GetSoundNames()[0];
+                            SoundName.stringValue = HudManager.Hud_Sounds.SoundLibrary_GetSoundNames()[0];
                             SoundName.serializedObject.ApplyModifiedProperties();
                         }
                     }
@@ -220,7 +221,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     if (string.IsNullOrEmpty(SelectedObjects[i].SoundName))
                     {
-                        SelectedObjects[i].SoundName = mgr.Hud_Sounds.SoundLibrary_GetSoundNames()[0];
+                        SelectedObjects[i].SoundName = HudManager.Hud_Sounds.SoundLibrary_GetSoundNames()[0];
                     }
                 }
             }
@@ -240,8 +241,6 @@ namespace SevenStrikeModules.XHud.Editor
                 Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 元素音效器", Color.white);
             else
                 Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 元素音效器 -> ( " + BaseScript.Indicator + " )", Color.white);
-
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
@@ -277,9 +276,9 @@ namespace SevenStrikeModules.XHud.Editor
                     return;
                 }
                 Editor_XHud_MenuItemsAction_OpenLibrary.open_sound();
-                if (mgr.Hud_Sounds == null)
+                if (HudManager.Hud_Sounds == null)
                     return;
-                mgr.Hud_Sounds.SoundLibrary_Location(SoundName.stringValue);
+                HudManager.Hud_Sounds.SoundLibrary_Location(SoundName.stringValue);
             }
             GUI.enabled = true;
             #endregion
@@ -364,9 +363,9 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 列表
-            if (mgr.Hud_Sounds != null)
+            if (HudManager.Hud_Sounds != null)
             {
-                string[] collist = mgr.Hud_Sounds.SoundLibrary_GetSoundNames();
+                string[] collist = HudManager.Hud_Sounds.SoundLibrary_GetSoundNames();
                 Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Element_Sounder>("音效列表", collist, ref SoundName, HudFilled.实体, 120, 22, SelectedObjects);
             }
             #endregion
@@ -401,13 +400,13 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statistic_title, XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            if (mgr.Hud_Sounds == null)
+            if (HudManager.Hud_Sounds == null)
             {
                 Editor_XHud_GUI.Gui_Layout_Labelfield("暂未在管理器中配置音效库", HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.阴影灰), TextAnchor.MiddleCenter);
             }
             else
             {
-                if (mgr.Hud_Sounds.SoundLibrary.Count <= 0)
+                if (HudManager.Hud_Sounds.SoundLibrary.Count <= 0)
                 {
                     Editor_XHud_GUI.Gui_Layout_Labelfield("暂未在音效库中找到任何音效资源", HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.阴影灰), TextAnchor.MiddleCenter);
                 }
@@ -415,7 +414,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     if (!IsMultiSelected())
                     {
-                        XHud_LibraryArg_Sound soundInfo = mgr.Hud_Sounds.SoundLibrary_GetSoundInfo(SoundName.stringValue);
+                        XHud_LibraryArg_Sound soundInfo = HudManager.Hud_Sounds.SoundLibrary_GetSoundInfo(SoundName.stringValue);
 
                         if (soundInfo != null)
                         {
@@ -464,7 +463,7 @@ namespace SevenStrikeModules.XHud.Editor
                         Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                         #endregion
 
-                        XHud_LibraryArg_Sound soundInfo = mgr.Hud_Sounds.SoundLibrary_GetSoundInfo(SelectedObjects[SounderStatistic_Index].SoundName);
+                        XHud_LibraryArg_Sound soundInfo = HudManager.Hud_Sounds.SoundLibrary_GetSoundInfo(SelectedObjects[SounderStatistic_Index].SoundName);
 
                         Editor_XHud_GUI.StatuDisplayer_text(soundname, 12, new Vector2(0, 7), "名称", 12, soundInfo.Name, XHud_Dashboard.Theme_Primary, 11);
                         Editor_XHud_GUI.StatuDisplayer_text(channel, 12, new Vector2(0, 7), "声道", 12, soundInfo.Channel == 1 ? "单声道" : "立体声", XHud_Dashboard.Theme_Primary, 11);
@@ -545,10 +544,10 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         IsObjectSelector = false;
                         IsSelection = true;
-                        if (mgr.Hud_Sounds.SoundLibrary == null)
-                            mgr.Hud_Sounds.SoundLibrary = new List<XHud_LibraryArg_Sound>();
+                        if (HudManager.Hud_Sounds.SoundLibrary == null)
+                            HudManager.Hud_Sounds.SoundLibrary = new List<XHud_LibraryArg_Sound>();
                         AudioClip clip = obj as AudioClip;
-                        mgr.Hud_Sounds.SoundLibrary.Add(new XHud_LibraryArg_Sound(clip.name, clip));
+                        HudManager.Hud_Sounds.SoundLibrary.Add(new XHud_LibraryArg_Sound(clip.name, clip));
                         UpdateSoundParams();
                     }
                 }
@@ -582,21 +581,19 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void UpdateSoundParams()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
-            if (mgr == null)
+            if (HudManager == null)
                 return;
-            if (mgr.Hud_Sounds == null)
+            if (HudManager.Hud_Sounds == null)
                 return;
-            if (mgr.Hud_Sounds.SoundLibrary != null && mgr.Hud_Sounds.SoundLibrary.Count > 0)
+            if (HudManager.Hud_Sounds.SoundLibrary != null && HudManager.Hud_Sounds.SoundLibrary.Count > 0)
             {
-                for (int i = 0; i < mgr.Hud_Sounds.SoundLibrary.Count; i++)
+                for (int i = 0; i < HudManager.Hud_Sounds.SoundLibrary.Count; i++)
                 {
-                    if (mgr.Hud_Sounds.SoundLibrary[i].Clip != null)
+                    if (HudManager.Hud_Sounds.SoundLibrary[i].Clip != null)
                     {
-                        mgr.Hud_Sounds.SoundLibrary[i].Channel = mgr.Hud_Sounds.SoundLibrary[i].Clip.channels;
-                        mgr.Hud_Sounds.SoundLibrary[i].Frequency = mgr.Hud_Sounds.SoundLibrary[i].Clip.frequency;
-                        mgr.Hud_Sounds.SoundLibrary[i].Length = mgr.Hud_Sounds.SoundLibrary[i].Clip.length;
+                        HudManager.Hud_Sounds.SoundLibrary[i].Channel = HudManager.Hud_Sounds.SoundLibrary[i].Clip.channels;
+                        HudManager.Hud_Sounds.SoundLibrary[i].Frequency = HudManager.Hud_Sounds.SoundLibrary[i].Clip.frequency;
+                        HudManager.Hud_Sounds.SoundLibrary[i].Length = HudManager.Hud_Sounds.SoundLibrary[i].Clip.length;
                     }
                 }
             }
@@ -606,9 +603,7 @@ namespace SevenStrikeModules.XHud.Editor
         #region 预览音效
         private void Preview_HudSound_Play(float Time)
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
-            if (mgr.Hud_Sounds == null)
+            if (HudManager.Hud_Sounds == null)
             {
                 EditorApplication.delayCall += () =>
                 {
@@ -641,11 +636,10 @@ namespace SevenStrikeModules.XHud.Editor
 
         IEnumerator Preview_HudSound_Play(string name, float time)
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
             yield return new EditorWaitForSeconds(time);
-            if (mgr.Hud_Sounds.SoundLibrary_NameIsValid(name))
+            if (HudManager.Hud_Sounds.SoundLibrary_NameIsValid(name))
             {
-                Preivew_HudSound_SoundList.Add(Preview_HudSound_Creator(mgr.Hud_Sounds.SoundLibrary_GetSound(name)));
+                Preivew_HudSound_SoundList.Add(Preview_HudSound_Creator(HudManager.Hud_Sounds.SoundLibrary_GetSound(name)));
             }
             Repaint();
         }

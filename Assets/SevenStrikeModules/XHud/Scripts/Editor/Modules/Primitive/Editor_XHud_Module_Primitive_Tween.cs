@@ -1,4 +1,4 @@
-/*
+﻿/*
  * ============================================================================
  * ⚠ 版权声明（禁止删除、禁止修改、衍生作品必须保留此注释）⚠
  * ============================================================================
@@ -41,6 +41,7 @@ namespace SevenStrikeModules.XHud.Editor
         #region 组件 / 列表
         private XHud_Module_Primitive_Tween BaseScript;
         private ReorderableList AnimateTweenNodesList;
+        private XHud_Manager HudManager;
         #endregion
 
         #region 序列化属性
@@ -160,7 +161,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnEnable()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.HudManagerGet();
 
             #region 获取系统GUI单行单位高度
             LineHeight = EditorGUIUtility.singleLineHeight;
@@ -447,23 +448,23 @@ namespace SevenStrikeModules.XHud.Editor
                             float hh = -30;
 
                             #region 曲线
-                            if (mgr != null)
+                            if (HudManager != null)
                             {
-                                if (mgr.Hud_Curves != null && !mgr.Hud_Curves.CurveLibrary_IsEmpty() && (EaseMode)sp_Ease.enumValueIndex == EaseMode.None)
+                                if (HudManager.Hud_Curves != null && !HudManager.Hud_Curves.CurveLibrary_IsEmpty() && (EaseMode)sp_Ease.enumValueIndex == EaseMode.None)
                                 {
                                     hh = 0;
-                                    string[] names = mgr.Hud_Curves.CurveLibrary_GetCurveNames();
+                                    string[] names = HudManager.Hud_Curves.CurveLibrary_GetCurveNames();
                                     EditorGUI.BeginChangeCheck();
                                     draw_rect.Set(rect.width / 2 + 80, baseheight + 31, rect.width / 2 - 34, 17);
                                     Editor_XHud_GUI.Gui_PopupWithString(draw_rect, ref sp_AnimationCurveName, names, HudFilled.实体, HudColor.亮白, Color.black);
                                     sp_AnimationCurveName.serializedObject.ApplyModifiedProperties();
-                                    if (!mgr.Hud_Curves.CurvesLibrary_NameIsValid(sp_AnimationCurveName.stringValue))
+                                    if (!HudManager.Hud_Curves.CurvesLibrary_NameIsValid(sp_AnimationCurveName.stringValue))
                                     {
                                         sp_AnimationCurveName.stringValue = "";
                                     }
                                     if (EditorGUI.EndChangeCheck())
                                     {
-                                        sp_Curve.animationCurveValue = mgr.Hud_Curves.CurveLibrary_GetCurve(sp_AnimationCurveName.stringValue);
+                                        sp_Curve.animationCurveValue = HudManager.Hud_Curves.CurveLibrary_GetCurve(sp_AnimationCurveName.stringValue);
                                     }
                                     draw_rect.Set(rect.x, baseheight + 60, rect.width - 10, LineHeight);
                                     Editor_XHud_GUI.Gui_Property_Field(draw_rect, "曲线", sp_Curve, 5, 30);
@@ -988,9 +989,6 @@ namespace SevenStrikeModules.XHud.Editor
             Rect rect = GUILayoutUtility.GetLastRect();
             #endregion
 
-            // 获取 XHud 管理器
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             #region 快捷功能
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "快捷功能", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1099,7 +1097,7 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时", 12, sp_MaxTimer.floatValue.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
                     Editor_XHud_GUI.StatuDisplayer_text(timer_min, 12, new Vector2(0, 7), "最小耗时<color=#909090>（动画器倍增）</color>", 12, sp_MinTimerWithGlobalDuration.floatValue.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
                     Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时<color=#909090>（动画器倍增）</color>", 12, sp_MaxTimerWithGlobalDuration.floatValue.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
-                    Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (sp_MaxTimerWithGlobalDuration.floatValue * mgr.DurationMultiply).ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (sp_MaxTimerWithGlobalDuration.floatValue * HudManager.DurationMultiply).ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
                 }
                 #endregion
             }
@@ -1157,7 +1155,7 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时", 12, SelectedObjects[TweenStatu_Index].MaxTimer.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 10);
                     Editor_XHud_GUI.StatuDisplayer_text(timer_min, 12, new Vector2(0, 7), "最小耗时<color=#909090>（动画器倍增）</color>", 12, SelectedObjects[TweenStatu_Index].MinTimerWithGlobalDuration.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 10);
                     Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时<color=#909090>（动画器倍增）</color>", 12, SelectedObjects[TweenStatu_Index].MaxTimerWithGlobalDuration.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 10);
-                    Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (SelectedObjects[TweenStatu_Index].MaxTimerWithGlobalDuration * mgr.DurationMultiply).ToString() + " 秒", XHud_Dashboard.Theme_Primary, 10);
+                    Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (SelectedObjects[TweenStatu_Index].MaxTimerWithGlobalDuration * HudManager.DurationMultiply).ToString() + " 秒", XHud_Dashboard.Theme_Primary, 10);
                 }
                 #endregion
             }
@@ -1908,8 +1906,6 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns></returns>
         private XTween_Interface[] Preview_PrimitiveTweens_Collected(XHud_Module_Primitive_Tween tweener, string tim)
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             List<XTween_Interface> tweens = new List<XTween_Interface>();
             for (int i = 0; i < tweener.PrimitiveTweenNodes.Count; i++)
             {
@@ -1917,7 +1913,7 @@ namespace SevenStrikeModules.XHud.Editor
                     continue;
                 if (tweener.PrimitiveTweenNodes[i].Timings != tim)
                     continue;
-                XTween_Interface tween = tweener.Tween_Create(tweener.PrimitiveTweenNodes[i], tweener.GlobalDuration * mgr.DurationMultiply);
+                XTween_Interface tween = tweener.Tween_Create(tweener.PrimitiveTweenNodes[i], tweener.GlobalDuration * HudManager.DurationMultiply);
 
                 if (tween != null)
                     tweens.Add(tween);
@@ -1969,8 +1965,6 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void Preview_PrimitiveTweens_Play()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             if (sp_PrimitiveTweenNodes == null || sp_PrimitiveTweenNodes.arraySize <= 0)
                 return;
 
@@ -1995,14 +1989,16 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                 }
                 tweens = mo.ToArray();
+                // 预览收集到的有效的音效
+                Preview_PrimitiveTweens_Sounds(sp_PreviewTiming.stringValue, SelectedObjects);
             }
             else
             {
                 tweens = Preview_PrimitiveTweens_Collected(BaseScript, sp_PreviewTiming.stringValue);
+                // 预览收集到的有效的音效
+                Preview_PrimitiveTweens_Sounds(sp_PreviewTiming.stringValue, BaseScript);
             }
 
-            // 预览收集到的有效的音效
-            Preview_PrimitiveTweens_Sounds(sp_PreviewTiming.stringValue, BaseScript);
 
             // 使用XTween预览器预览收集到的有效的动画
             XTween_Preview_Start(tweens);
@@ -2103,15 +2099,14 @@ namespace SevenStrikeModules.XHud.Editor
 
         #endregion
 
+        #region 音效预览实现
         /// <summary>
         /// 预览图元动画器身上挂载的所有音效
         /// </summary>
         /// <param name="Timings">匹配时机</param>
-        /// <param name="sp_sounds">音效节点列表对象</param>
+        /// <param name="tweener">音效节点列表对象</param>
         private void Preview_PrimitiveTweens_Sounds(string Timings, XHud_Module_Primitive_Tween tweener)
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             // 循环生成音效，但是音效的延迟时间由以下条件决定：
             // 音效本身设置的百分比参数 x 动画节点的基础耗时 x 动画器的全局耗时 + 动画节点的延迟时间
             for (int i = 0; i < tweener.PrimitiveTweenNodes.Count; i++)
@@ -2136,13 +2131,50 @@ namespace SevenStrikeModules.XHud.Editor
                     bool x_userandom = !(tsound.MinPitch == 1 && tsound.MaxPitch == 1);
                     string x_soundname = tsound.Sound.name;
 
-                    AudioClip x_clip = mgr.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
+                    AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
                     Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_PrimitiveTweens_Sound_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
                 }
             }
         }
         /// <summary>
-        ///  HudSounder 音效预览
+        /// 预览图元动画器身上挂载的所有音效
+        /// </summary>
+        /// <param name="Timings">匹配时机</param>
+        /// <param name="tweener">图元动画数组</param>
+        private void Preview_PrimitiveTweens_Sounds(string Timings, XHud_Module_Primitive_Tween[] tweener)
+        {
+            // 循环生成音效，但是音效的延迟时间由以下条件决定：
+            // 音效本身设置的百分比参数 x 动画节点的基础耗时 x 动画器的全局耗时 + 动画节点的延迟时间
+            for (int i = 0; i < tweener.Length; i++)
+            {
+                XHud_Module_Primitive_Tween tween = tweener[i];
+                for (int s = 0; s < tween.PrimitiveTweenNodes.Count; s++)
+                {
+                    TweenNode node = tween.PrimitiveTweenNodes[s];
+                    if (!node.Enabled)
+                        continue;
+                    if (node.Timings != Timings)
+                        continue;
+
+                    for (int k = 0; k < node.TweenSounds.Count; k++)
+                    {
+                        TweenSound tsound = node.TweenSounds[k];
+
+                        float x_vol = tsound.Volume;
+                        float x_pit_min = tsound.MinPitch;
+                        float x_pit_max = tsound.MaxPitch;
+                        float x_delay = (tsound.Percentage * node.Duration * tween.GlobalDuration) + node.Delay;
+                        bool x_userandom = !(tsound.MinPitch == 1 && tsound.MaxPitch == 1);
+                        string x_soundname = tsound.Sound.name;
+
+                        AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
+                        Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_PrimitiveTweens_Sound_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
+                    }
+                }
+            }
+        }
+        /// <summary>
+        ///  PrimitiveTweens_Sound 音效预览
         /// </summary>
         IEnumerator Preview_PrimitiveTweens_Sound_Play(float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_userandom, AudioClip clip, float delay)
         {
@@ -2160,7 +2192,7 @@ namespace SevenStrikeModules.XHud.Editor
             DestroyImmediate(au.gameObject, true);
         }
         /// <summary>
-        ///  停止协程列表 - HudSounder 音效预览播放 / 停止播放并清空 HudSounder 预览列表与生成的音效物体
+        ///  停止协程列表 - PrimitiveTweens_Sound 音效预览播放 / 停止播放并清空 PrimitiveTweens_Sound 预览列表与生成的音效物体
         /// </summary>
         private void Preview_PrimitiveTweens_Sound_Stop()
         {
@@ -2188,7 +2220,7 @@ namespace SevenStrikeModules.XHud.Editor
             SceneView.RepaintAll();
         }
         /// <summary>
-        /// 创建 HudSounder 预览指定声音
+        /// 创建 PrimitiveTweens_Sound 预览指定声音
         /// </summary>
         /// <param name="sp_vol"></param>
         /// <param name="sp_pitch_min"></param>
@@ -2216,5 +2248,6 @@ namespace SevenStrikeModules.XHud.Editor
             sp.SetAudioSource(au);
             return au;
         }
+        #endregion
     }
 }

@@ -30,6 +30,7 @@ namespace SevenStrikeModules.XHud.Editor
     {
         #region 组件
         private XHud_TransitionController BaseScript;
+        private XHud_Manager HudManager;
         #endregion
 
         private bool OriginalDisplay;
@@ -113,7 +114,7 @@ namespace SevenStrikeModules.XHud.Editor
             Flip_Ver = serializedObject.FindProperty("Flip_Ver");
             UseKeyControl = serializedObject.FindProperty("UseKeyControl");
 
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.HudManagerGet();
             #endregion
 
             #region 获取图标
@@ -151,12 +152,12 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (string.IsNullOrEmpty(TransitionName.stringValue))
             {
-                if (mgr.Hud_TransitionLib != null && !mgr.Hud_TransitionLib.TransitionLibrary_IsEmpty())
+                if (HudManager.Hud_TransitionLib != null && !HudManager.Hud_TransitionLib.TransitionLibrary_IsEmpty())
                 {
-                    TransitionName.stringValue = mgr.Hud_TransitionLib.TransitionLibrary_GetAllNames()[0];
+                    TransitionName.stringValue = HudManager.Hud_TransitionLib.TransitionLibrary_GetAllNames()[0];
                     TransitionName.serializedObject.ApplyModifiedProperties();
 
-                    BaseScript.CurrentTransitionNode = mgr.Hud_TransitionLib.TransitionLibrary_Get(TransitionName.stringValue);
+                    BaseScript.CurrentTransitionNode = HudManager.Hud_TransitionLib.TransitionLibrary_Get(TransitionName.stringValue);
                 }
             }
         }
@@ -170,9 +171,6 @@ namespace SevenStrikeModules.XHud.Editor
         {
             serializedObject.Update();
             Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 转场控制器", Color.white);
-
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
 
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "快捷功能", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -193,10 +191,10 @@ namespace SevenStrikeModules.XHud.Editor
             #region 快速刷新转场资源
             if (Editor_XHud_GUI.Gui_Layout_Button(14, "快速刷新转场资源", update_r, update_p))
             {
-                if (mgr.Hud_TransitionLib == null)
+                if (HudManager.Hud_TransitionLib == null)
                     return;
 
-                if (mgr.Hud_TransitionLib.TransitionLibrary_IsEmpty())
+                if (HudManager.Hud_TransitionLib.TransitionLibrary_IsEmpty())
                     return;
 
                 SerializedProperty sp_Name = CurrentTransitionNode.FindPropertyRelative("Name");
@@ -206,7 +204,7 @@ namespace SevenStrikeModules.XHud.Editor
                 SerializedProperty sp_Res = CurrentTransitionNode.FindPropertyRelative("Res");
                 SerializedProperty sp_x_frames = CurrentTransitionNode.FindPropertyRelative("Frames");
 
-                XHud_LibraryArg_Transition node = mgr.Hud_TransitionLib.TransitionLibrary_Get(TransitionName.stringValue);
+                XHud_LibraryArg_Transition node = HudManager.Hud_TransitionLib.TransitionLibrary_Get(TransitionName.stringValue);
 
                 sp_Name.stringValue = node.Name;
                 sp_TotalFramesCount.intValue = node.TotalFramesCount;
@@ -280,9 +278,9 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion         
 
             #region 快速获取转场效果
-            if (mgr != null && mgr.Hud_TransitionLib != null)
+            if (HudManager != null && HudManager.Hud_TransitionLib != null)
             {
-                string[] TransLibNames = mgr.Hud_TransitionLib.TransitionLibrary_GetAllNames();
+                string[] TransLibNames = HudManager.Hud_TransitionLib.TransitionLibrary_GetAllNames();
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
 
                 Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_TransitionController>("转场资源库", TransLibNames, ref TransitionName, HudFilled.实体, 94, 22, SelectedObjects, (comps) => { }, (res) =>
@@ -294,7 +292,7 @@ namespace SevenStrikeModules.XHud.Editor
                     SerializedProperty sp_Res = CurrentTransitionNode.FindPropertyRelative("Res");
                     SerializedProperty sp_x_frames = CurrentTransitionNode.FindPropertyRelative("Frames");
 
-                    XHud_LibraryArg_Transition node = mgr.Hud_TransitionLib.TransitionLibrary_Get(res);
+                    XHud_LibraryArg_Transition node = HudManager.Hud_TransitionLib.TransitionLibrary_Get(res);
                     sp_Name.stringValue = node.Name;
                     sp_TotalFramesCount.intValue = node.TotalFramesCount;
                     sp_LastFrameIndex.intValue = node.LastFrameIndex;
@@ -331,7 +329,7 @@ namespace SevenStrikeModules.XHud.Editor
                         //定位到元素库中的对应当前资源
                         //打开目标转场库
                         Editor_XHud_MenuItemsAction_OpenLibrary.open_transition();
-                        mgr.Hud_TransitionLib.TransitionLibrary_Location(TransLibNames[index]);
+                        HudManager.Hud_TransitionLib.TransitionLibrary_Location(TransLibNames[index]);
                     }
                 }
                 Editor_XHud_GUI.Gui_Layout_Horizontal_End();

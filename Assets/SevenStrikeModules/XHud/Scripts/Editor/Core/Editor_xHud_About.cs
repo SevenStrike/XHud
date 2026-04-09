@@ -25,7 +25,6 @@ namespace SevenStrikeModules.XHud.Editor
     using System.Diagnostics;
     using UnityEditor;
     using UnityEngine;
-    using Debug = UnityEngine.Debug;
 
     [Serializable]
     /// <summary>

@@ -192,10 +192,10 @@ namespace SevenStrikeModules.XHud.Editor
 
             TextAsset emotions = AssetDatabase.LoadAssetAtPath<TextAsset>($"{XHud_Dashboard.Get_Path_XHUD_CONFIG_Path()}XHudColorEmotions.json");
             ColorEmotions = JsonUtility.FromJson<XHud_ColorEmotions>(emotions.text);
-            for (int i = 0; i < ColorEmotions.Colors.Count; i++)
-            {
-                Debug.Log($"{ColorEmotions.Colors[i].ColorName} | {ColorEmotions.Colors[i].Neg} | {ColorEmotions.Colors[i].Hue} | {ColorEmotions.Colors[i].Pos}");
-            }
+            //for (int i = 0; i < ColorEmotions.Colors.Count; i++)
+            //{
+            //    Debug.Log($"{ColorEmotions.Colors[i].ColorName} | {ColorEmotions.Colors[i].Neg} | {ColorEmotions.Colors[i].Hue} | {ColorEmotions.Colors[i].Pos}");
+            //}
             PreviewData_Index = Editor_XHud_GUI.EditorData_Get_With_Int("XED_HudAnimator_Set_previewtexs_index");
 
             StartPreviewUpdate();
@@ -208,8 +208,6 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnGUI()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             BaseObject.Update();
 
             Rect rect = new Rect(0, 0, position.width, position.height);
@@ -764,8 +762,6 @@ namespace SevenStrikeModules.XHud.Editor
 
         IEnumerator PreviewUpdater()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             string path = $"{XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path()}Icon/Icons_XHud_Library_Color_Setter/samples";
             //获取预览序列帧
             PreviewDatas = LoadAllAssetsAtPathWithPattern<XHud_LibrarySetTool_Color_PreviewData>(path, ".asset").ToArray();

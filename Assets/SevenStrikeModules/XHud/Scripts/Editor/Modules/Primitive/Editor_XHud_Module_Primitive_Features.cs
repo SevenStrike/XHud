@@ -216,9 +216,6 @@ namespace SevenStrikeModules.XHud.Editor
             Rect rect = GUILayoutUtility.GetLastRect();
             #endregion
 
-            // 获取 XHud 管理器
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             #region 快捷功能
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "快捷功能", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(10);

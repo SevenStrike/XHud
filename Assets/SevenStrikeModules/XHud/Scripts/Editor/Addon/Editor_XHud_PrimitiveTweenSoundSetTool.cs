@@ -51,6 +51,7 @@ namespace SevenStrikeModules.XHud.Editor
         [SerializeField]
         public PrimitiveTweenSoundNode PrimitiveTweenSoundNode;
         private ReorderableList ListSounds;
+        private XHud_Manager HudManager;
         #endregion
 
         private float LineHeight = EditorGUIUtility.singleLineHeight;
@@ -116,7 +117,7 @@ namespace SevenStrikeModules.XHud.Editor
             sp_PrimitiveTweenSoundNodes = serializedObject.FindProperty("PrimitiveTweenSoundNode");
             sp_TweenSounds = sp_PrimitiveTweenSoundNodes.FindPropertyRelative("TweenSounds");
 
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.HudManagerGet();
 
             Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
             Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
@@ -258,8 +259,6 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnGUI()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             serializedObject.Update();
 
             #region 标题
@@ -418,7 +417,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
 
                 #region 判断音效库中是否存在音效，如果没有则加入
-                if (mgr.Hud_Sounds != null)
+                if (HudManager.Hud_Sounds != null)
                 {
                     if (PrimitiveTweenSoundNode.TweenSounds != null && PrimitiveTweenSoundNode.TweenSounds.Count > 0)
                     {
@@ -429,13 +428,13 @@ namespace SevenStrikeModules.XHud.Editor
                                 if (PrimitiveTweenSoundNode.TweenSounds[i].Sound != null)
                                 {
                                     AudioClip sod = PrimitiveTweenSoundNode.TweenSounds[i].Sound;
-                                    int libcount = mgr.Hud_Sounds.SoundLibrary_GetSoundCount();
+                                    int libcount = HudManager.Hud_Sounds.SoundLibrary_GetSoundCount();
 
                                     bool repeat = false;
                                     for (int s = 0; s < libcount; s++)
                                     {
-                                        if (mgr.Hud_Sounds.SoundLibrary_GetSound(s).name == sod.name &&
-                                            mgr.Hud_Sounds.SoundLibrary_GetSoundArg(s).Name == sod.name)
+                                        if (HudManager.Hud_Sounds.SoundLibrary_GetSound(s).name == sod.name &&
+                                            HudManager.Hud_Sounds.SoundLibrary_GetSoundArg(s).Name == sod.name)
                                         {
                                             repeat = true;
                                             break;
@@ -443,7 +442,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     }
                                     if (!repeat)
                                     {
-                                        mgr.Hud_Sounds.SoundLibrary_AddSound(sod.name, sod);
+                                        HudManager.Hud_Sounds.SoundLibrary_AddSound(sod.name, sod);
                                     }
                                 }
                             }
@@ -455,7 +454,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             //#region 判断音效库中是否存在音效，如果没有则加入
-            //if (mgr.Hud_Sounds != null)
+            //if (HudManager.Hud_Sounds != null)
             //{
             //    if (PrimitiveTweenSoundNode.TweenSounds != null && PrimitiveTweenSoundNode.TweenSounds.Count > 0)
             //    {
@@ -466,13 +465,13 @@ namespace SevenStrikeModules.XHud.Editor
             //                if (PrimitiveTweenSoundNode.TweenSounds[i].Sound != null)
             //                {
             //                    AudioClip sod = PrimitiveTweenSoundNode.TweenSounds[i].Sound;
-            //                    int libcount = mgr.Hud_Sounds.SoundLibrary_GetSoundCount();
+            //                    int libcount = HudManager.Hud_Sounds.SoundLibrary_GetSoundCount();
 
             //                    bool repeat = false;
             //                    for (int s = 0; s < libcount; s++)
             //                    {
-            //                        if (mgr.Hud_Sounds.SoundLibrary_GetSound(s).name == sod.name &&
-            //                            mgr.Hud_Sounds.SoundLibrary_GetSoundArg(s).Name == sod.name)
+            //                        if (HudManager.Hud_Sounds.SoundLibrary_GetSound(s).name == sod.name &&
+            //                            HudManager.Hud_Sounds.SoundLibrary_GetSoundArg(s).Name == sod.name)
             //                        {
             //                            repeat = true;
             //                            break;
@@ -480,7 +479,7 @@ namespace SevenStrikeModules.XHud.Editor
             //                    }
             //                    if (!repeat)
             //                    {
-            //                        mgr.Hud_Sounds.SoundLibrary_AddSound(sod.name, sod);
+            //                        HudManager.Hud_Sounds.SoundLibrary_AddSound(sod.name, sod);
             //                    }
             //                }
             //            }

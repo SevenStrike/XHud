@@ -794,7 +794,7 @@ namespace SevenStrikeModules.XHud.Editor
                 crc.Movement.Duration = 1f;
                 crc.Movement.Delay = 0f;
                 crc.Movement.CurveName = "";
-                crc.Movement.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves != null ? XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(crc.Movement.CurveName) : null;
+                crc.Movement.Curve = BaseScript.Hud_Curves != null ? BaseScript.Hud_Curves.CurveLibrary_GetCurve(crc.Movement.CurveName) : null;
                 crc.Movement.Ease = EaseMode.OutQuart;
                 crc.Rotation = new MotionNode_Rotation();
                 crc.Rotation.Rotation = HudMotion_Rotation.A_无旋转;
@@ -802,13 +802,13 @@ namespace SevenStrikeModules.XHud.Editor
                 crc.Rotation.Duration = 1f;
                 crc.Rotation.Delay = 0f;
                 crc.Rotation.CurveName = "";
-                crc.Rotation.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves != null ? XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(crc.Rotation.CurveName) : null;
+                crc.Rotation.Curve = BaseScript.Hud_Curves != null ? BaseScript.Hud_Curves.CurveLibrary_GetCurve(crc.Rotation.CurveName) : null;
                 crc.Rotation.Ease = EaseMode.OutQuart;
                 crc.Alpha = new MotionNode_Alpha();
                 crc.Alpha.Duration = 1f;
                 crc.Alpha.Delay = 0f;
                 crc.Alpha.CurveName = "";
-                crc.Alpha.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves != null ? XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(crc.Alpha.CurveName) : null;
+                crc.Alpha.Curve = BaseScript.Hud_Curves != null ? BaseScript.Hud_Curves.CurveLibrary_GetCurve(crc.Alpha.CurveName) : null;
                 crc.Alpha.Ease = EaseMode.OutQuart;
 
                 Motion_Recycler rec = new Motion_Recycler();
@@ -818,7 +818,7 @@ namespace SevenStrikeModules.XHud.Editor
                 rec.Movement.Duration = 1f;
                 rec.Movement.Delay = 0f;
                 rec.Movement.CurveName = "";
-                rec.Movement.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves != null ? XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Movement.CurveName) : null;
+                rec.Movement.Curve = BaseScript.Hud_Curves != null ? BaseScript.Hud_Curves.CurveLibrary_GetCurve(rec.Movement.CurveName) : null;
                 rec.Movement.Ease = EaseMode.OutQuart;
                 rec.Rotation = new MotionNode_Rotation();
                 rec.Rotation.Rotation = HudMotion_Rotation.A_无旋转;
@@ -826,13 +826,13 @@ namespace SevenStrikeModules.XHud.Editor
                 rec.Rotation.Duration = 1f;
                 rec.Rotation.Delay = 0f;
                 rec.Rotation.CurveName = "";
-                rec.Rotation.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves != null ? XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Rotation.CurveName) : null;
+                rec.Rotation.Curve = BaseScript.Hud_Curves != null ? BaseScript.Hud_Curves.CurveLibrary_GetCurve(rec.Rotation.CurveName) : null;
                 rec.Rotation.Ease = EaseMode.OutQuart;
                 rec.Alpha = new MotionNode_Alpha();
                 rec.Alpha.Duration = 1f;
                 rec.Alpha.Delay = 0f;
                 rec.Alpha.CurveName = "";
-                rec.Alpha.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves != null ? XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Alpha.CurveName) : null;
+                rec.Alpha.Curve = BaseScript.Hud_Curves != null ? BaseScript.Hud_Curves.CurveLibrary_GetCurve(rec.Alpha.CurveName) : null;
                 rec.Alpha.Ease = EaseMode.OutQuart;
                 #endregion
 
@@ -907,13 +907,13 @@ namespace SevenStrikeModules.XHud.Editor
                 string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 管理器消息", "资源库引用", "是否要将创建的资源库全部指定到管理器中？", "暂不", "指定", 0);
                 if (res == "指定")
                 {
-                    XHud_Dashboard.HudManagerGet().Hud_Colors = lib_color;
-                    XHud_Dashboard.HudManagerGet().Hud_Curves = lib_curve;
-                    XHud_Dashboard.HudManagerGet().Hud_Sounds = lib_sound;
-                    XHud_Dashboard.HudManagerGet().Hud_TextStyleLibrary = lib_textstyle;
-                    XHud_Dashboard.HudManagerGet().Hud_Motions = lib_motion;
-                    XHud_Dashboard.HudManagerGet().Hud_TransitionLib = lib_transition;
-                    XHud_Dashboard.HudManagerGet().Hud_ElementLibrarys.Add(lib_element);
+                    BaseScript.Hud_Colors = lib_color;
+                    BaseScript.Hud_Curves = lib_curve;
+                    BaseScript.Hud_Sounds = lib_sound;
+                    BaseScript.Hud_TextStyleLibrary = lib_textstyle;
+                    BaseScript.Hud_Motions = lib_motion;
+                    BaseScript.Hud_TransitionLib = lib_transition;
+                    BaseScript.Hud_ElementLibrarys.Add(lib_element);
                 }
 
                 return;
@@ -5140,7 +5140,7 @@ namespace SevenStrikeModules.XHud.Editor
             window.SetLibrarySetterMode(LibrarySetterMode.添加到库);
             window.SetButtonText("添加", "取消");
             window.SetTitle("XHud 动效库采集器");
-            window.SetTarget_Hud_MotionLibrary(XHud_Dashboard.HudManagerGet().Hud_Motions);
+            window.SetTarget_Hud_MotionLibrary(BaseScript.Hud_Motions);
             //window.ShowModal();
             window.Show();
         }

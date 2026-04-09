@@ -49,6 +49,7 @@ namespace SevenStrikeModules.XHud.Editor
 
     public class Editor_XHud_LibrarySetTool_ElementImporter : EditorWindow
     {
+        private XHud_Manager HudManager;
         private SerializedObject BaseObject;
         private SerializedProperty sp_LibName, sp_ReadySaveElementList;
 
@@ -325,7 +326,7 @@ namespace SevenStrikeModules.XHud.Editor
             sp_LibName = BaseObject.FindProperty("LibName");
             sp_ReadySaveElementList = BaseObject.FindProperty("ReadySaveElementList");
 
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.HudManagerGet();
 
             icon_libsetter_element = Editor_XHud_GUI.GetIcon("LibSetter/icon_libsetter_element");
 
@@ -344,8 +345,6 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnGUI()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             BaseObject.Update();
 
             Rect rect = new Rect(0, 0, position.width, position.height);
@@ -372,7 +371,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Labelfield(new Rect(TotalCount_rect.x + TotalCount_rect.width + 7, TotalCount_rect.y + 1, 20, TotalCount_rect.height), " 项", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 14, Font_Bold);
 
             #region 库选择
-            string[] libnames = mgr.hm_ElementLibrary_GetAllLibraryNames();
+            string[] libnames = HudManager.hm_ElementLibrary_GetAllLibraryNames();
             LibSelector_rect = new Rect(rect.width - 275, rect.y + 140, 255, 25);
             Editor_XHud_GUI.Gui_PopupWithString(LibSelector_rect, ref sp_LibName, libnames, HudFilled.实体, HudColor.深空灰, Color.white);
             sp_LibName.serializedObject.ApplyModifiedProperties();
@@ -430,9 +429,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void SendToLibrary()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
-            XHud_Library_Element target_library = mgr.hm_ElementLibrary_GetTargetLibrary(sp_LibName.stringValue);
+            XHud_Library_Element target_library = HudManager.hm_ElementLibrary_GetTargetLibrary(sp_LibName.stringValue);
 
             List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
 

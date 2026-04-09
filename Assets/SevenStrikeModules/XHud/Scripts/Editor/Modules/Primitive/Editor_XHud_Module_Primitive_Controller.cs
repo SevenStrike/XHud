@@ -121,8 +121,6 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnEnable()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             BaseScript = (XHud_Module_Primitive_Controller)target;
 
             Targets_Get();
@@ -179,9 +177,6 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, titlename, Color.white, icon_type, m_type.ToString(), 20, 20);
             Rect rect = GUILayoutUtility.GetLastRect();
             #endregion
-
-            // 获取 XHud 管理器
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             #region 快捷功能
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "快捷功能", XHud_Dashboard.Theme_Primary);

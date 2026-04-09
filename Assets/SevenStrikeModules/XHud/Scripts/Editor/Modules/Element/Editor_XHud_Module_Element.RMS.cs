@@ -31,8 +31,6 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void RMS_Redraw()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             //--判断当前元素是否在场景中
             if (!IsInPrefabStageMode())
             {
@@ -42,7 +40,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         #region 以Hud管理器中指定的RMS布局方案来对此元素进行坐标信息复位
 
-                        string solution = mgr.hm_RMS_GetCurrentSolution();
+                        string solution = HudManager.hm_RMS_GetCurrentSolution();
 
                         if (Targets_Selected())
                         {
@@ -182,21 +180,19 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void RMS_Record()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
-            if (!mgr.RMS_Enabled)
+            if (!HudManager.RMS_Enabled)
             {
                 Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "RMS记录布局", "Hud管理器中RMS未开启！无法执行记录布局信息操作！", "明白");
                 return;
             }
 
-            if (mgr.hm_RMS_IsEmpty())
+            if (HudManager.hm_RMS_IsEmpty())
             {
                 string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "RMS记录布局", "并未发现您在HudManager里配置RMS信息！请先配置RMS列表！", "去配置", "暂不", 0);
                 if (res == "去配置")
                 {
-                    Selection.activeGameObject = mgr.gameObject;
-                    EditorGUIUtility.PingObject(mgr);
+                    Selection.activeGameObject = HudManager.gameObject;
+                    EditorGUIUtility.PingObject(HudManager);
                     return;
                 }
                 if (res == "暂不")
@@ -212,7 +208,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                if (!mgr.RMS_Enabled)
+                if (!HudManager.RMS_Enabled)
                     return;
 
                 if (RMS_LayoutDatas.arraySize <= 0)
@@ -258,8 +254,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="DontCreateID"></param>
         private void RMS_Preview(XHud_Module_Element element, float alpha, Vector3 offset, string solution, bool DontCreateID)
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-            mgr.hm_ScreenElement_Initialize_By_RMS(element, solution, DontCreateID);
+            HudManager.hm_ScreenElement_Initialize_By_RMS(element, solution, DontCreateID);
         }
     }
 }

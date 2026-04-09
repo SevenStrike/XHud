@@ -65,44 +65,6 @@ namespace SevenStrikeModules.XHud.Editor
             return twns.ToArray();
         }
 
-        /// <summary>
-        /// 预览元素身上挂载的所有音效器的音效
-        /// </summary>
-        /// <param name="Timings">匹配时机</param>
-        /// <param name="sp_sounds">音效节点列表对象</param>
-        private void Preview_Sounds(string Timings, SerializedProperty sp_sounds)
-        {
-            for (int i = 0; i < sp_sounds.arraySize; i++)
-            {
-                SerializedProperty sp_soundnode = sp_sounds.GetArrayElementAtIndex(i);
-                SerializedProperty sp_sounder = sp_soundnode.FindPropertyRelative("Sounder");
-                SerializedObject so_sod = new SerializedObject(sp_sounder.objectReferenceValue);
-                SerializedProperty sp_name = so_sod.FindProperty("SoundName");
-                SerializedProperty sp_vol = so_sod.FindProperty("Volume");
-                SerializedProperty sp_delay = so_sod.FindProperty("DelayTime");
-                SerializedProperty sp_pit_min = so_sod.FindProperty("Pitch_Min");
-                SerializedProperty sp_pit_max = so_sod.FindProperty("Pitch_Max");
-                SerializedProperty sp_userandom = so_sod.FindProperty("UseRandomPitch");
-                SerializedProperty sp_timings = so_sod.FindProperty("Timings");
-
-                // 判断该音效的播放时机是否匹配，如果不匹配则跳过
-                if (Timings != sp_timings.stringValue)
-                    continue;
-
-                float x_vol = sp_vol.floatValue;
-                float x_pit_min = sp_pit_min.floatValue;
-                float x_pit_max = sp_pit_max.floatValue;
-                float x_delay = sp_delay.floatValue;
-                bool x_userandom = false;
-                if (sp_userandom.intValue == 1)
-                    x_userandom = true;
-
-                XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
-                AudioClip x_clip = mgr.Hud_Sounds.SoundLibrary_GetSound(sp_name.stringValue);
-                Preivew_HudSounder_CoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_HudSounder_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
-            }
-        }
         //------------------------------------------------------------------------------------
         /// <summary>
         /// 播放预览：元素 - 进入
@@ -126,6 +88,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     SelectedObjects[i].ElementTweens_Creator(SelectedObjects[i].CreateArgs, null, true);
                     XTween_Preview_Start(GetTargetsElementTweens());
+                    Preview_XHudSounds("元素进入时", SelectedObjects[i].SounderNodes);
                 }
             }
             else
@@ -141,7 +104,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 BaseScript.ElementTweens_Creator(BaseScript.CreateArgs, null, true);
                 XTween_Preview_Start(GetElementTweens());
-                Preview_Sounds("元素进入时", SounderNodes);
+                Preview_XHudSounds("元素进入时", SounderNodes);
             }
         }
         /// <summary>
@@ -197,6 +160,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     SelectedObjects[i].ElementTweens_Recycler(SelectedObjects[i].RecycleArgs, null, true);
                     XTween_Preview_Start(GetTargetsElementTweens());
+                    Preview_XHudSounds("元素退出时", SelectedObjects[i].SounderNodes);
                 }
             }
             else
@@ -212,7 +176,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 BaseScript.ElementTweens_Recycler(BaseScript.RecycleArgs, null, true);
                 XTween_Preview_Start(GetElementTweens());
-                Preview_Sounds("元素退出时", SounderNodes);
+                Preview_XHudSounds("元素退出时", SounderNodes);
             }
         }
         /// <summary>
@@ -627,7 +591,7 @@ namespace SevenStrikeModules.XHud.Editor
             window.SetLibrarySetterMode(LibrarySetterMode.添加到库);
             window.SetButtonText("添加", "取消");
             window.SetTitle("XHud 动效库采集器");
-            window.SetTarget_Hud_MotionLibrary(XHud_Dashboard.HudManagerGet().Hud_Motions);
+            window.SetTarget_Hud_MotionLibrary(HudManager.Hud_Motions);
             //window.ShowModal();
             window.Show();
         }

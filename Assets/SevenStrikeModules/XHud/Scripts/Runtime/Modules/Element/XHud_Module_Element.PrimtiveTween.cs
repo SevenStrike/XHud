@@ -304,14 +304,14 @@ namespace SevenStrikeModules.XHud
                 return;
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
-                XHud_Module_Primitive_Controller anim = PrimitiveControllerNodes[i].Controller;
+                XHud_Module_Primitive_Controller con = PrimitiveControllerNodes[i].Controller;
 
-                if (!anim.gameObject.activeInHierarchy)
+                if (!con.gameObject.activeInHierarchy)
                     return;
                 // 如果图元动画选项：元素联动为忽略状态则图元动画不会随元素动画播放而联动播放
-                if (anim.pt_Tween.IgnoreElementAnimationPlay)
+                if (con.pt_Tween.IgnoreElementAnimationPlay)
                     return;
-                anim.pt_Tween.Tween_PlayAll_WithDelay(PrimitiveControllerNodes[i].DelayTime, PrimitivesTweenGlobalDuration, true, tim);
+                con.pt_Tween.Tween_PlayAll_WithDelay(PrimitiveControllerNodes[i].DelayTime, PrimitivesTweenGlobalDuration, true, tim);
             }
             if (DebugState)
                 XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放图元控制器列表中的所有动画！播放时机为：" + tim.ToString(), HudMsgState.通知);

@@ -23,14 +23,11 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
-    using System.Collections;
     using System.Collections.Generic;
-    using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
     using UnityEngine.UI;
-    using Random = UnityEngine.Random;
 
     public class XHud_ModuleArg_Option
     {
@@ -55,6 +52,7 @@ namespace SevenStrikeModules.XHud.Editor
         private ReorderableList OptionButtonList;
         private ReorderableList SelectorAnimatorList;
         private XHud_Module_Animator selectormark_animator;
+        private XHud_Manager HudManager;
         #endregion
 
         #region 序列化属性
@@ -127,6 +125,8 @@ namespace SevenStrikeModules.XHud.Editor
 
         void OnEnable()
         {
+            HudManager = XHud_Dashboard.HudManagerGet();
+
             BaseScript = (XHud_Module_Option)target;
 
             // 获取序列化属性
@@ -380,8 +380,6 @@ namespace SevenStrikeModules.XHud.Editor
             else
                 Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 选项器 -> ( " + BaseScript.Indicator + " )", Color.white);
 
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             #region 快捷功能
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "快捷功能", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -567,7 +565,7 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 最大耗时        
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (mgr.DurationMultiply * PrimitivesTweenMaxDuration.floatValue).ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.DurationMultiply * PrimitivesTweenMaxDuration.floatValue).ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
                     #endregion
                 }
                 #endregion
@@ -656,7 +654,7 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 最大耗时        
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (mgr.DurationMultiply * SelectedObjects[OptionStatu_Index].PrimitivesTweenMaxDuration).ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.DurationMultiply * SelectedObjects[OptionStatu_Index].PrimitivesTweenMaxDuration).ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
                     #endregion
                 }
                 #endregion               

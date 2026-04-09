@@ -115,8 +115,6 @@ namespace SevenStrikeModules.XHud.Editor
         {
             BaseObject = new SerializedObject(this);
 
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             SerializedProperty prop = BaseObject.FindProperty("Library_Item");
             sp_PreloadElements = prop.FindPropertyRelative("PreloadElements");
             sp_Target = prop.FindPropertyRelative("Target");
@@ -230,7 +228,6 @@ namespace SevenStrikeModules.XHud.Editor
         private void OnGUI()
         {
             BaseObject.Update();
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
 
             Rect rect = new Rect(0, 0, position.width, position.height);
 

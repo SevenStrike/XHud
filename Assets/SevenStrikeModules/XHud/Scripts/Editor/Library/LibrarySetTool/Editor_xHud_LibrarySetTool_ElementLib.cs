@@ -48,6 +48,7 @@ namespace SevenStrikeModules.XHud.Editor
 
     public class Editor_XHud_LibrarySetTool_ElementLib : EditorWindow
     {
+        private XHud_Manager HudManager;
         private SerializedObject BaseObject;
         private SerializedProperty sp_ElementLibraryInfoList;
 
@@ -129,7 +130,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             BaseObject = new SerializedObject(this);
 
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.HudManagerGet();
 
             icon_logo = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_ElementLib_Selector/icon");
 
@@ -139,7 +140,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 获取所有已部署到HudManager的元素库
-            XHud_Library_Element[] libs = mgr.hm_ElementLibrary_GetArray();
+            XHud_Library_Element[] libs = HudManager.hm_ElementLibrary_GetArray();
 
             if (ElementLibraryInfoList == null)
                 ElementLibraryInfoList = new List<ElementLibraryInfo>();
@@ -258,8 +259,6 @@ namespace SevenStrikeModules.XHud.Editor
         {
             BaseObject.Update();
 
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             Rect rect = new Rect(0, 0, position.width, position.height);
 
             Icon_rect = new Rect(26, 15, 48, 48);
@@ -358,8 +357,7 @@ namespace SevenStrikeModules.XHud.Editor
             GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
             if (Editor_XHud_GUI.Gui_Layout_Button("选择", "", HudFilled.实体, HudColor.亮白, XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Light, "选择"))
             {
-                XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-                EditorUtility.OpenPropertyEditor(mgr.hm_ElementLibrary_GetArray()[SelectedLibraryIndex]);
+                EditorUtility.OpenPropertyEditor(HudManager.hm_ElementLibrary_GetArray()[SelectedLibraryIndex]);
                 Close();
                 return;
             }

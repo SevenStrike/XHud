@@ -74,6 +74,7 @@ namespace SevenStrikeModules.XHud.Editor
     {
         #region 组件 / 列表
         private XHud_Spawner BaseScript;
+        private XHud_Manager HudManager;
         #endregion
 
         /// <summary>
@@ -132,6 +133,8 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnEnable()
         {
+            HudManager = XHud_Dashboard.HudManagerGet();
+
             BaseScript = (XHud_Spawner)target;
 
             icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Spawner/icon_main");
@@ -147,10 +150,10 @@ namespace SevenStrikeModules.XHud.Editor
             GetAllTargets();
 
             #region 用于第一次加载脚本判断库名和元素名是否是空的
-            if (!Application.isPlaying && XHud_Dashboard.HudManagerGet() != null)
+            if (!Application.isPlaying && HudManager != null)
             {
                 //获取所有元素库名称
-                string[] LibNames = XHud_Dashboard.HudManagerGet().hm_ElementLibrary_GetAllLibraryNames();
+                string[] LibNames = HudManager.hm_ElementLibrary_GetAllLibraryNames();
                 //如果不是空的
                 if (LibNames.Length > 0)
                 {
@@ -164,7 +167,7 @@ namespace SevenStrikeModules.XHud.Editor
                     if (string.IsNullOrEmpty(SpawnName.stringValue))
                     {
                         //获取指定库名的元素库
-                        XHud_Library_Element lib = XHud_Dashboard.HudManagerGet().hm_ElementLibrary_GetTargetLibrary(LibName.stringValue);
+                        XHud_Library_Element lib = HudManager.hm_ElementLibrary_GetTargetLibrary(LibName.stringValue);
                         //如果元素库不是空的
                         if (lib != null)
                         {
@@ -197,20 +200,18 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 元素生成器", Color.white);
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
             #region 生成器选项
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "生成器选项", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 指定库名和元素名
-            if (mgr == null)
+            if (HudManager == null)
             {
                 EditorGUILayout.HelpBox("未找到Hud管理器!", MessageType.Error);
             }
             else
             {
-                if (mgr.Hud_ElementLibrarys == null || mgr.Hud_ElementLibrarys.Count <= 0)
+                if (HudManager.Hud_ElementLibrarys == null || HudManager.Hud_ElementLibrarys.Count <= 0)
                 {
                     EditorGUILayout.HelpBox("未找到任何已指定的元素库，请先添加元素库项!", MessageType.Warning);
                 }
@@ -219,24 +220,24 @@ namespace SevenStrikeModules.XHud.Editor
                     #region 选择元素库
                     Editor_XHud_GUI.Gui_Layout_Space(10);
 
-                    string[] libsname = mgr.hm_ElementLibrary_GetAllLibraryNames();
+                    string[] libsname = HudManager.hm_ElementLibrary_GetAllLibraryNames();
 
-                    if (!mgr.hm_ElementLibrary_IsExist(LibName.stringValue))
+                    if (!HudManager.hm_ElementLibrary_IsExist(LibName.stringValue))
                     {
-                        LibName.stringValue = mgr.hm_ElementLibrary_GetFirstLibrary().LibraryName;
+                        LibName.stringValue = HudManager.hm_ElementLibrary_GetFirstLibrary().LibraryName;
                     }
 
                     Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Spawner>("元素库", libsname, ref LibName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                     {
                         //如果切换库名后之前指定的目标元素不存在则使用切换后的库的首个元素名称来指定元素
-                        if (!mgr.hm_ElementLibrary_GetTargetLibrary(res).ElementLibrary_IsExist(SpawnName.stringValue))
+                        if (!HudManager.hm_ElementLibrary_GetTargetLibrary(res).ElementLibrary_IsExist(SpawnName.stringValue))
                         {
-                            SpawnName.stringValue = mgr.hm_ElementLibrary_GetTargetLibrary(res).ElementLibrary[0].Name;
+                            SpawnName.stringValue = HudManager.hm_ElementLibrary_GetTargetLibrary(res).ElementLibrary[0].Name;
                             SpawnName.serializedObject.ApplyModifiedProperties();
                         }
                     });
 
-                    string[] ele_names = mgr.hm_ElementLibrary_GetTargetLibrary(LibName.stringValue).ElementsLibrary_GetAllElementsNames();
+                    string[] ele_names = HudManager.hm_ElementLibrary_GetTargetLibrary(LibName.stringValue).ElementsLibrary_GetAllElementsNames();
 
                     Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Spawner>("元素", ele_names, ref SpawnName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                     {
@@ -354,10 +355,10 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.阴影灰, 5, "RMS 布局信息", Color.white);
                 Editor_XHud_GUI.Gui_Layout_Space(5);
-                ScreenResolutionNode[] nodes = mgr.hm_RMS_GetResolutionNodes();
+                ScreenResolutionNode[] nodes = HudManager.hm_RMS_GetResolutionNodes();
                 if (nodes.Length > 0)
                 {
-                    string[] nodesName = mgr.hm_RMS_GetResolutionNodeNames();
+                    string[] nodesName = HudManager.hm_RMS_GetResolutionNodeNames();
                     Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Spawner>("RMS 方案", nodesName, ref RMS_SelctedName, HudFilled.实体, 100, 22, SelectedObjects);
                 }
                 else
@@ -416,20 +417,20 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 模版库                             
             //确保动效库存在
-            if (mgr.Hud_Motions != null)
+            if (HudManager.Hud_Motions != null)
             {
                 //确保动效库不是空的
-                if (mgr.Hud_Motions.ElementMotionList != null && mgr.Hud_Motions.ElementMotionList.Count > 0)
+                if (HudManager.Hud_Motions.ElementMotionList != null && HudManager.Hud_Motions.ElementMotionList.Count > 0)
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
 
                     //动效列表
-                    string[] motnames = mgr.Hud_Motions.ElementMotion_GetAllName_With_Create();
+                    string[] motnames = HudManager.Hud_Motions.ElementMotion_GetAllName_With_Create();
                     EditorGUI.BeginChangeCheck();
                     Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Spawner>("生成", motnames, ref Crc_Lib_Name, HudFilled.实体, 120, 22, SelectedObjects);
                     if (EditorGUI.EndChangeCheck())
                     {
-                        Motion_Creator crc = mgr.Hud_Motions.ElementMotion_GetElementCreator_At_Create(Crc_Lib_Name.stringValue);
+                        Motion_Creator crc = HudManager.Hud_Motions.ElementMotion_GetElementCreator_At_Create(Crc_Lib_Name.stringValue);
 
                         CreateArgs.FindPropertyRelative("anchor").enumValueIndex = (int)crc.anchor;
                         CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)crc.Movement.Movement;
@@ -467,10 +468,10 @@ namespace SevenStrikeModules.XHud.Editor
 
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "定位", locate_r, locate_p, 2))
                     {
-                        if (!mgr.Hud_Motions.ElementMotion_IsExist(Crc_Lib_Name.stringValue))
+                        if (!HudManager.Hud_Motions.ElementMotion_IsExist(Crc_Lib_Name.stringValue))
                             return;
                         Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
-                        mgr.Hud_Motions.ElementMotionLibrary_Location(Crc_Lib_Name.stringValue);
+                        HudManager.Hud_Motions.ElementMotionLibrary_Location(Crc_Lib_Name.stringValue);
                         return;
                     }
 
@@ -547,14 +548,14 @@ namespace SevenStrikeModules.XHud.Editor
                     #region 曲线列表
                     SerializedProperty sp_CurveName = CreateArgs.FindPropertyRelative("Movement.CurveName");
                     SerializedProperty sp_Curve = CreateArgs.FindPropertyRelative("Movement.Curve");
-                    if (mgr.Hud_Curves != null)
+                    if (HudManager.Hud_Curves != null)
                     {
-                        if (mgr.Hud_Curves.CurveLibrary != null && mgr.Hud_Curves.CurveLibrary.Count > 0)
+                        if (HudManager.Hud_Curves.CurveLibrary != null && HudManager.Hud_Curves.CurveLibrary.Count > 0)
                         {
-                            string[] names = mgr.Hud_Curves.CurveLibrary_GetCurveNames();
+                            string[] names = HudManager.Hud_Curves.CurveLibrary_GetCurveNames();
                             Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Spawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                             {
-                                sp_Curve.animationCurveValue = mgr.Hud_Curves.CurveLibrary_GetCurve(res);
+                                sp_Curve.animationCurveValue = HudManager.Hud_Curves.CurveLibrary_GetCurve(res);
                                 sp_Curve.serializedObject.ApplyModifiedProperties();
                             });
                         }
@@ -622,14 +623,14 @@ namespace SevenStrikeModules.XHud.Editor
                     #region 曲线列表
                     SerializedProperty sp_CurveName = CreateArgs.FindPropertyRelative("Rotation.CurveName");
                     SerializedProperty sp_Curve = CreateArgs.FindPropertyRelative("Rotation.Curve");
-                    if (mgr.Hud_Curves != null)
+                    if (HudManager.Hud_Curves != null)
                     {
-                        if (mgr.Hud_Curves.CurveLibrary != null && mgr.Hud_Curves.CurveLibrary.Count > 0)
+                        if (HudManager.Hud_Curves.CurveLibrary != null && HudManager.Hud_Curves.CurveLibrary.Count > 0)
                         {
-                            string[] names = mgr.Hud_Curves.CurveLibrary_GetCurveNames();
+                            string[] names = HudManager.Hud_Curves.CurveLibrary_GetCurveNames();
                             Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Spawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                             {
-                                sp_Curve.animationCurveValue = mgr.Hud_Curves.CurveLibrary_GetCurve(res);
+                                sp_Curve.animationCurveValue = HudManager.Hud_Curves.CurveLibrary_GetCurve(res);
                                 sp_Curve.serializedObject.ApplyModifiedProperties();
                             });
                         }
@@ -687,14 +688,14 @@ namespace SevenStrikeModules.XHud.Editor
                     #region 曲线列表
                     SerializedProperty sp_CurveName = CreateArgs.FindPropertyRelative("Alpha.CurveName");
                     SerializedProperty sp_Curve = CreateArgs.FindPropertyRelative("Alpha.Curve");
-                    if (mgr.Hud_Curves != null)
+                    if (HudManager.Hud_Curves != null)
                     {
-                        if (mgr.Hud_Curves.CurveLibrary != null && mgr.Hud_Curves.CurveLibrary.Count > 0)
+                        if (HudManager.Hud_Curves.CurveLibrary != null && HudManager.Hud_Curves.CurveLibrary.Count > 0)
                         {
-                            string[] names = mgr.Hud_Curves.CurveLibrary_GetCurveNames();
+                            string[] names = HudManager.Hud_Curves.CurveLibrary_GetCurveNames();
                             Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Spawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                             {
-                                sp_Curve.animationCurveValue = mgr.Hud_Curves.CurveLibrary_GetCurve(res);
+                                sp_Curve.animationCurveValue = HudManager.Hud_Curves.CurveLibrary_GetCurve(res);
                                 sp_Curve.serializedObject.ApplyModifiedProperties();
                             });
                         }
@@ -746,20 +747,20 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 模版库                             
             //确保动效库存在
-            if (mgr.Hud_Motions != null)
+            if (HudManager.Hud_Motions != null)
             {
                 //确保动效库不是空的
-                if (mgr.Hud_Motions.ElementMotionList != null && mgr.Hud_Motions.ElementMotionList.Count > 0)
+                if (HudManager.Hud_Motions.ElementMotionList != null && HudManager.Hud_Motions.ElementMotionList.Count > 0)
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
 
                     //动效列表
-                    string[] motnames = mgr.Hud_Motions.ElementMotion_GetAllName_With_Recycle();
+                    string[] motnames = HudManager.Hud_Motions.ElementMotion_GetAllName_With_Recycle();
                     EditorGUI.BeginChangeCheck();
                     Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Spawner>("回收", motnames, ref Rec_Lib_Name, HudFilled.实体, 120, 22, SelectedObjects);
                     if (EditorGUI.EndChangeCheck())
                     {
-                        Motion_Recycler rec = mgr.Hud_Motions.ElementMotion_GetElementCreator_At_Recycle(Rec_Lib_Name.stringValue);
+                        Motion_Recycler rec = HudManager.Hud_Motions.ElementMotion_GetElementCreator_At_Recycle(Rec_Lib_Name.stringValue);
 
                         RecycleArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)rec.Movement.Movement;
                         RecycleArgs.FindPropertyRelative("Movement.Distance").floatValue = rec.Movement.Distance;
@@ -796,10 +797,10 @@ namespace SevenStrikeModules.XHud.Editor
 
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "定位", locate_r, locate_p, 2))
                     {
-                        if (!mgr.Hud_Motions.ElementMotion_IsExist(Rec_Lib_Name.stringValue, HudElementMotionType.Recycler))
+                        if (!HudManager.Hud_Motions.ElementMotion_IsExist(Rec_Lib_Name.stringValue, HudElementMotionType.Recycler))
                             return;
                         Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
-                        mgr.Hud_Motions.ElementMotionLibrary_Location(Rec_Lib_Name.stringValue);
+                        HudManager.Hud_Motions.ElementMotionLibrary_Location(Rec_Lib_Name.stringValue);
                         return;
                     }
 
@@ -875,14 +876,14 @@ namespace SevenStrikeModules.XHud.Editor
                     #region 曲线列表
                     SerializedProperty sp_CurveName = RecycleArgs.FindPropertyRelative("Movement.CurveName");
                     SerializedProperty sp_Curve = RecycleArgs.FindPropertyRelative("Movement.Curve");
-                    if (mgr.Hud_Curves != null)
+                    if (HudManager.Hud_Curves != null)
                     {
-                        if (mgr.Hud_Curves.CurveLibrary != null && mgr.Hud_Curves.CurveLibrary.Count > 0)
+                        if (HudManager.Hud_Curves.CurveLibrary != null && HudManager.Hud_Curves.CurveLibrary.Count > 0)
                         {
-                            string[] names = mgr.Hud_Curves.CurveLibrary_GetCurveNames();
+                            string[] names = HudManager.Hud_Curves.CurveLibrary_GetCurveNames();
                             Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Spawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                             {
-                                sp_Curve.animationCurveValue = mgr.Hud_Curves.CurveLibrary_GetCurve(res);
+                                sp_Curve.animationCurveValue = HudManager.Hud_Curves.CurveLibrary_GetCurve(res);
                                 sp_Curve.serializedObject.ApplyModifiedProperties();
                             });
                         }
@@ -947,14 +948,14 @@ namespace SevenStrikeModules.XHud.Editor
                     #region 曲线列表
                     SerializedProperty sp_CurveName = RecycleArgs.FindPropertyRelative("Rotation.CurveName");
                     SerializedProperty sp_Curve = RecycleArgs.FindPropertyRelative("Rotation.Curve");
-                    if (mgr.Hud_Curves != null)
+                    if (HudManager.Hud_Curves != null)
                     {
-                        if (mgr.Hud_Curves.CurveLibrary != null && mgr.Hud_Curves.CurveLibrary.Count > 0)
+                        if (HudManager.Hud_Curves.CurveLibrary != null && HudManager.Hud_Curves.CurveLibrary.Count > 0)
                         {
-                            string[] names = mgr.Hud_Curves.CurveLibrary_GetCurveNames();
+                            string[] names = HudManager.Hud_Curves.CurveLibrary_GetCurveNames();
                             Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Spawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                             {
-                                sp_Curve.animationCurveValue = mgr.Hud_Curves.CurveLibrary_GetCurve(res);
+                                sp_Curve.animationCurveValue = HudManager.Hud_Curves.CurveLibrary_GetCurve(res);
                                 sp_Curve.serializedObject.ApplyModifiedProperties();
                             });
                         }
@@ -1011,14 +1012,14 @@ namespace SevenStrikeModules.XHud.Editor
                     #region 曲线列表
                     SerializedProperty sp_CurveName = RecycleArgs.FindPropertyRelative("Alpha.CurveName");
                     SerializedProperty sp_Curve = RecycleArgs.FindPropertyRelative("Alpha.Curve");
-                    if (mgr.Hud_Curves != null)
+                    if (HudManager.Hud_Curves != null)
                     {
-                        if (mgr.Hud_Curves.CurveLibrary != null && mgr.Hud_Curves.CurveLibrary.Count > 0)
+                        if (HudManager.Hud_Curves.CurveLibrary != null && HudManager.Hud_Curves.CurveLibrary.Count > 0)
                         {
-                            string[] names = mgr.Hud_Curves.CurveLibrary_GetCurveNames();
+                            string[] names = HudManager.Hud_Curves.CurveLibrary_GetCurveNames();
                             Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Spawner>("曲线样式", names, ref sp_CurveName, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
                             {
-                                sp_Curve.animationCurveValue = mgr.Hud_Curves.CurveLibrary_GetCurve(res);
+                                sp_Curve.animationCurveValue = HudManager.Hud_Curves.CurveLibrary_GetCurve(res);
                                 sp_Curve.serializedObject.ApplyModifiedProperties();
                             });
                         }
@@ -1819,7 +1820,7 @@ namespace SevenStrikeModules.XHud.Editor
             window.SetLibrarySetterMode(LibrarySetterMode.添加到库);
             window.SetButtonText("添加", "取消");
             window.SetTitle("XHud 动效库采集器");
-            window.SetTarget_Hud_MotionLibrary(XHud_Dashboard.HudManagerGet().Hud_Motions);
+            window.SetTarget_Hud_MotionLibrary(HudManager.Hud_Motions);
             //window.ShowModal();
             window.Show();
         }

@@ -40,7 +40,7 @@ namespace SevenStrikeModules.XHud.Editor
             TextList,
             TmpTextList;
 
-        public void ReorderableList_Draw_Sounder(XHud_Manager mgr)
+        public void ReorderableList_Draw_Sounder()
         {
             SounderList = new ReorderableList(serializedObject, SounderNodes)
             {
@@ -107,9 +107,9 @@ namespace SevenStrikeModules.XHud.Editor
                             #endregion
 
                             #region 音效列表
-                            if (mgr.Hud_Sounds != null)
+                            if (HudManager.Hud_Sounds != null)
                             {
-                                string[] collist = mgr.Hud_Sounds.SoundLibrary_GetSoundNames();
+                                string[] collist = HudManager.Hud_Sounds.SoundLibrary_GetSoundNames();
                                 Color bgcol = GUI.color;
                                 GUI.color = XHud_Dashboard.Theme_Primary;
                                 Editor_XHud_GUI.Gui_PopupWithString(new Rect(rect.width + 25, rect.y + 30, 30, 19), ref sp_SoundName, collist, HudFilled.实体, HudColor.亮白, Color.black);
@@ -143,8 +143,8 @@ namespace SevenStrikeModules.XHud.Editor
                     if (sp_userandom.intValue == 1)
                         x_userandom = true;
 
-                    AudioClip x_clip = mgr.Hud_Sounds.SoundLibrary_GetSound(sp_name.stringValue);
-                    Preivew_HudSounder_CoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_HudSounder_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
+                    AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(sp_name.stringValue);
+                    Preivew_HudSounder_CoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_XHudSounder_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
                     #endregion
                 },
                 elementHeightCallback = index =>
@@ -153,7 +153,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             };
         }
-        public void ReorderableList_Draw_PrimitiveControllerNodes(XHud_Manager mgr)
+        public void ReorderableList_Draw_PrimitiveControllerNodes()
         {
             PrimitivesTweenList = new ReorderableList(serializedObject, PrimitiveControllerNodes)
             {
@@ -243,7 +243,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             };
         }
-        public void ReorderableList_Draw_Button(XHud_Manager mgr)
+        public void ReorderableList_Draw_Button()
         {
             ButtonList = new ReorderableList(serializedObject, ButtonNodes)
             {
@@ -293,7 +293,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             };
         }
-        public void ReorderableList_Draw_Option(XHud_Manager mgr)
+        public void ReorderableList_Draw_Option()
         {
             OptionList = new ReorderableList(serializedObject, OptionNodes)
             {
@@ -342,7 +342,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             };
         }
-        public void ReorderableList_Draw_Slider(XHud_Manager mgr)
+        public void ReorderableList_Draw_Slider()
         {
             SliderList = new ReorderableList(serializedObject, SliderNodes)
             {
@@ -391,7 +391,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             };
         }
-        public void ReorderableList_Draw_Progress(XHud_Manager mgr)
+        public void ReorderableList_Draw_Progress()
         {
             ProgressList = new ReorderableList(serializedObject, ProgressNodes)
             {
@@ -440,7 +440,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             };
         }
-        public void ReorderableList_Draw_Toggle(XHud_Manager mgr)
+        public void ReorderableList_Draw_Toggle()
         {
             ToggleList = new ReorderableList(serializedObject, ToggleNodes)
             {
@@ -489,7 +489,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             };
         }
-        public void ReorderableList_Draw_Text(XHud_Manager mgr)
+        public void ReorderableList_Draw_Text()
         {
             TextList = new ReorderableList(serializedObject, TextNodes)
             {
@@ -538,7 +538,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             };
         }
-        public void ReorderableList_Draw_TmpText(XHud_Manager mgr)
+        public void ReorderableList_Draw_TmpText()
         {
             TmpTextList = new ReorderableList(serializedObject, TmpTextNodes)
             {
