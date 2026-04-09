@@ -31,6 +31,7 @@ namespace SevenStrikeModules.XHud
     [System.Serializable]
     public class ElementNode_Slider
     {
+        [SerializeField]
         /// <summary>
         /// 滑动条组件
         /// </summary>

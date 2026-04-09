@@ -66,12 +66,7 @@ namespace SevenStrikeModules.XHud.Editor
         #region 序列化属性
         private SerializedProperty
             CanvasGroup, SounderNodes, PrimitiveControllerNodes, OptionNodes, ButtonNodes, TextIsFold, TmpTextIsFold, SliderNodes, TextNodes, TmpTextNodes, DebugState, PreviewPrimitivesTween, ProgressNodes, ToggleNodes, Indicator, PrimitivesTweenMaxDuration, RectTransform, TriggerAction, ObjectTracker, CreateState, AnimateState, PrimitivesTweenGlobalDuration, OriginPoolName, PrimitivesIsFold, ButtonIsFold, OptionIsFold, SliderIsFold, SounderIsFold, ProgressIsFold, ToggleIsFold, EventIsFold, AutoPlayPrimitivesTween, AutoKillPreviewTweens, Alpha, RMS_Enabled, RMS_LayoutDatas, RMS_Name, CurrentPivot, OriginalName, eve_on_element_in_start, eve_on_element_in_end, eve_on_element_out_start, eve_on_element_out_end, TweensPreivew_In_State, TweensPreivew_Out_State, PrimitivePreivew_State, RewindPreviewTweensWithKill, ClearPreviewTweensWithKill, CreateArgs, RecycleArgs, Crc_Lib_Name, Rec_Lib_Name, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, create_fold_move, create_fold_rotate, create_fold_alpha, recycle_fold_move, recycle_fold_rotate, recycle_fold_alpha;
-        #endregion
-
-        #region Preview - HudSounder
-        private List<AudioSource> Preivew_HudSounder_SoundList = new List<AudioSource>();
-        private List<EditorCoroutine> Preivew_HudSounder_CoroutineList_Stop = new List<EditorCoroutine>();
-        #endregion
+        #endregion       
 
         #region 图标
         private Texture2D icon_main, icon_sound, icon_anim, icon_button, icon_option, icon_slider, icon_progress, icon_toggle, icon_text, icon_tmptext, icon_scan_r, icon_scan_p, icon_record_rms_r, icon_record_rms_p, resetanchorpos_r, resetanchorpos_p, prw_play_r, prw_play_p, prw_stop_r, prw_stop_p, usestate, animstate, dutation, comp_tracking, elelibsource, locate_r, locate_p, rms_move, rms_rotate, rms_anchor, rms_anchor_center, rms_scale, comp_alpha, comp_transform, comp_trigger, status, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, prw_play_out_r, prw_play_out_p, prw_play_in_p, prw_play_in_r, save_r, save_p, reset_r, reset_p;
@@ -234,7 +229,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     RMS_Redraw();
                     Preview_HudSounder_Coroutine_Stop();
-                    Preview_Kill();
+                    XTween_Preview_Kill();
                 }
             }
         }
@@ -336,6 +331,9 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (!PreviewPrimitivesTween.boolValue)
             {
+
+                Editor_XHud_GUI.SetEnabled(!TweensPreivew_Out_State.boolValue);
+
                 // 动画预览按钮
                 if (!TweensPreivew_In_State.boolValue)
                 {
@@ -354,6 +352,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 Editor_XHud_GUI.Gui_Layout_Space(40);
 
+                Editor_XHud_GUI.SetEnabled(!TweensPreivew_In_State.boolValue);
                 // 动画预览按钮
                 if (!TweensPreivew_Out_State.boolValue)
                 {
@@ -369,6 +368,7 @@ namespace SevenStrikeModules.XHud.Editor
                         ElementTweens_Preview_Out_Stop();
                     }
                 }
+                Editor_XHud_GUI.SetEnabled(true);
                 Editor_XHud_GUI.Gui_Layout_Space(20);
             }
             else
@@ -430,7 +430,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 元素预览动效参数
             string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
-            bool sw_option = xHud_FunctionGroup("预览动效参数", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Option, null);
+            bool sw_option = FunctionGroup("预览动效参数", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Option, null);
             if (sw_option)
             {
                 //Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "预览动效参数", XHud_Dashboard.Theme_Primary);
@@ -3101,7 +3101,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="offset"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-        private bool xHud_FunctionGroup(string title, float margin, HudFilled Fill, HudColor color, Color titlecolor, Color titlecolor_hover, Color titlecolor_active, RectOffset margin_btn, Vector2 offset, string key, Texture2D icon)
+        private bool FunctionGroup(string title, float margin, HudFilled Fill, HudColor color, Color titlecolor, Color titlecolor_hover, Color titlecolor_active, RectOffset margin_btn, Vector2 offset, string key, Texture2D icon)
         {
             int inspectorwidth = Screen.width;
             //sp_DebugMode.Log(inspectorwidth);
@@ -3193,84 +3193,6 @@ namespace SevenStrikeModules.XHud.Editor
             PrimitivePreivew_State = serializedObject.FindProperty("PrimitivePreivew_State");
             PrimitiveControllerNodes = serializedObject.FindProperty("PrimitiveControllerNodes");
         }
-        #endregion
-
-        #region HudSounder 音效器 音效预览
-        /// <summary>
-        ///  HudSounder 音效预览
-        /// </summary>
-        IEnumerator Preview_HudSounder_Play(float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_userandom, AudioClip clip, float delay)
-        {
-            yield return new EditorWaitForSeconds(delay);
-            Preivew_HudSounder_SoundList.Add(Preview_HudSounder_CreateSound(sp_vol, sp_pitch_min, sp_pitch_max, sp_userandom, clip));
-            AudioSource au = Preivew_HudSounder_SoundList[Preivew_HudSounder_SoundList.Count - 1];
-            while (true)
-            {
-                if (au != null && !au.isPlaying)
-                {
-                    break;
-                }
-                yield return null;
-            }
-            DestroyImmediate(au.gameObject, true);
-        }
-        /// <summary>
-        /// 创建 HudSounder 预览指定声音
-        /// </summary>
-        /// <param name="sp_vol"></param>
-        /// <param name="sp_pitch_min"></param>
-        /// <param name="sp_pitch_max"></param>
-        /// <param name="sp_userandom"></param>
-        /// <param name="clip"></param>
-        /// <returns></returns>
-        public AudioSource Preview_HudSounder_CreateSound(float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_userandom, AudioClip clip)
-        {
-            GameObject obj = new GameObject();
-            obj.name = "HudSound_Previewer-" + "[" + clip.length.ToString("F2") + " s]-" + "[" + clip.channels + " ch]-" + "[" + clip.frequency + " hz]";
-            AudioSource au = obj.AddComponent<AudioSource>();
-            au.clip = clip;
-            au.volume = sp_vol;
-            if (sp_userandom)
-            {
-                au.pitch = Random.Range(sp_pitch_min, sp_pitch_max);
-            }
-            else
-            {
-                au.pitch = 1.0f;
-            }
-            au.Play();
-            XHud_AudioStoper sp = au.gameObject.AddComponent<XHud_AudioStoper>();
-            sp.SetAudioSource(au);
-            return au;
-        }
-        /// <summary>
-        ///  停止协程列表 - HudSounder 音效预览播放 / 停止播放并清空 HudSounder 预览列表与生成的音效物体
-        /// </summary>
-        private void Preview_HudSounder_Coroutine_Stop()
-        {
-            for (int i = 0; i < Preivew_HudSounder_CoroutineList_Stop.Count; i++)
-            {
-                if (Preivew_HudSounder_CoroutineList_Stop[i] != null)
-                    EditorCoroutineUtility.StopCoroutine(Preivew_HudSounder_CoroutineList_Stop[i]);
-            }
-            Preivew_HudSounder_CoroutineList_Stop.Clear();
-
-            if (Preivew_HudSounder_SoundList != null)
-            {
-                for (int i = 0; i < Preivew_HudSounder_SoundList.Count; i++)
-                {
-                    if (Preivew_HudSounder_SoundList[i] != null)
-                    {
-                        Preivew_HudSounder_SoundList[i].Stop();
-                        DestroyImmediate(Preivew_HudSounder_SoundList[i].gameObject, true);
-                        Preivew_HudSounder_SoundList[i] = null;
-                    }
-                }
-                Preivew_HudSounder_SoundList.Clear();
-            }
-
-            SceneView.RepaintAll();
-        }
-        #endregion
+        #endregion      
     }
 }

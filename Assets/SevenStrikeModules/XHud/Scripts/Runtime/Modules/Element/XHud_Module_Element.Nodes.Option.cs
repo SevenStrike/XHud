@@ -31,14 +31,17 @@ namespace SevenStrikeModules.XHud
     [System.Serializable]
     public class ElementNode_OptionButton
     {
+        [SerializeField]
         /// <summary>
         /// 按钮组件
         /// </summary>
         public XHud_Module_Button Button;
+        [SerializeField]
         /// <summary>
         /// 选项按钮标识
         /// </summary>
         public string Indicator;
+        [SerializeField]
         /// <summary>
         /// 用于选项按钮
         /// </summary>
@@ -51,6 +54,7 @@ namespace SevenStrikeModules.XHud
     [System.Serializable]
     public class ElementNode_Option
     {
+        [SerializeField]
         /// <summary>
         /// 按钮组件
         /// </summary>

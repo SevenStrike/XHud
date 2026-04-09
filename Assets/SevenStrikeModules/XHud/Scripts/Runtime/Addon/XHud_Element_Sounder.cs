@@ -25,28 +25,47 @@ namespace SevenStrikeModules.XHud
     using System.Collections;
     using UnityEngine;
 
+    [SerializeField]
     public class XHud_Element_Sounder : MonoBehaviour
     {
+        [SerializeField]
         public XHud_Module_Element Element;
+        [SerializeField]
         public XHud_Module_Toggle Toggle;
+        [SerializeField]
         public XHud_Module_Slider Slider;
+        [SerializeField]
         public XHud_Module_Progress Progress;
+        [SerializeField]
         public XHud_Module_Option Option;
+        [SerializeField]
         public XHud_Module_Button Button;
+        [SerializeField]
         public string SoundName;
+        [SerializeField]
         public float DelayTime;
+        [SerializeField]
         public string Indicator;
+        [SerializeField]
         public string Timings = "无";
 
+        [SerializeField]
         public bool IsLoop;
+        [SerializeField]
         [Range(0, 1)]
         public float Volume = 1f;
+        [SerializeField]
         public bool UseRandomPitch;
+        [SerializeField]
         public float Pitch_Min = 1f;
+        [SerializeField]
         public float Pitch_Max = 1f;
+        [SerializeField]
         public bool DebugState;
 
+        [SerializeField]
         public KeyCode PreviewKey;
+        [SerializeField]
         public KeyCode UnPreviewKey;
 
         void Start()

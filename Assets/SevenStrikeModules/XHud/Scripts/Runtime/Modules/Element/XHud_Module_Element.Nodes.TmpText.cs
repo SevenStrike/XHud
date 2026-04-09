@@ -31,6 +31,7 @@ namespace SevenStrikeModules.XHud
     [System.Serializable]
     public class ElementNode_TmpText
     {
+        [SerializeField]
         /// <summary>
         /// 文字组件
         /// </summary>

@@ -23,6 +23,7 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
+    using SevenStrikeModules.XTween.Editor;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -43,12 +44,11 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 序列化属性
-        private SerializedProperty sp_Debug, sp_PrimitiveTweenNodes, sp_TweenIsPreviewing, sp_GlobalDuration, sp_MutePlay, sp_MaxTimer, sp_MinTimer, sp_MinTimerWithGlobalDuration, sp_MaxTimerWithGlobalDuration, sp_IgnoreElementAnimationPlay;
+        private SerializedProperty sp_Debug, sp_PrimitiveTweenNodes, sp_TweenIsPreviewing, sp_GlobalDuration, sp_MutePlay, sp_MaxTimer, sp_MinTimer, sp_MinTimerWithGlobalDuration, sp_MaxTimerWithGlobalDuration, sp_IgnoreElementAnimationPlay, sp_PreviewTiming;
 
         #endregion
 
         Rect draw_rect;
-
         #region GUI 参数
         /// <summary>
         /// 系统默认GUI行高
@@ -93,15 +93,20 @@ namespace SevenStrikeModules.XHud.Editor
         private XHud_Module_Option HudOption;
         #endregion
 
-        private List<EditorCoroutine> Preivew_Animator_CoroutineList_Play = new List<EditorCoroutine>();
-        private List<XTween_Interface> Preview_Animator_TweenList = new List<XTween_Interface>();
-        private EditorCoroutine Preivew_Animator_Coroutine_ProgressCalcToSound;
-        private EditorCoroutine Preivew_Animator_Coroutine_Stop;
-        public List<AudioSource> Preview_Animator_SoundList = new List<AudioSource>();
+        #region 音效预览
+        private List<AudioSource> Preview_PrimitiveTweens_SoundList = new List<AudioSource>();
+        private List<EditorCoroutine> Preview_PrimitiveTweens_SoundCoroutineList_Stop = new List<EditorCoroutine>();
+        #endregion
+
         /// <summary>
         /// 音效设置器
         /// </summary>
-        private Editor_XHud_PrimitiveTweenSoundSetTool Editor_XHud_PrimitiveTween_SounderViewer;
+        private Editor_XHud_PrimitiveTweenSoundSetTool Editor_XHud_PrimitiveTweenSoundSetTool;
+
+        /// <summary>
+        /// 预览时机
+        /// </summary>
+        string[] PreviewTimings;
 
         #region 批量模式查看索引
         private int TweenStatu_Index;
@@ -532,7 +537,13 @@ namespace SevenStrikeModules.XHud.Editor
                             Color bgscol_dir = GUI.color;
                             GUI.color = XHud_Dashboard.Theme_Primary;
                             draw_rect.Set(rect.width / 2 + 83, baseheight + 90 + hh, rect.width / 2 - 70, LineHeight);
+                            EditorGUI.BeginChangeCheck();
                             dir_index = Editor_XHud_GUI.Gui_Popup(draw_rect, dir_index, directionTexts, HudFilled.实体, HudColor.亮白, Color.black);
+                            if (EditorGUI.EndChangeCheck())
+                            {
+                                // 再次收集动画列表所有动画时机名称
+                                Preview_PrimitiveTweens_CollectedTimings(BaseScript);
+                            }
                             GUI.color = bgscol_dir;
 
                             if (dir_index == 0)
@@ -617,10 +628,10 @@ namespace SevenStrikeModules.XHud.Editor
                                 draw_rect.Set(rect.width - 10, baseheight - 29, 15, 15);
                                 if (Editor_XHud_GUI.Gui_Button(draw_rect, anim_sound_r, anim_sound_p, true, "", "", Color.white))
                                 {
-                                    Editor_XHud_PrimitiveTween_SounderViewer = (Editor_XHud_PrimitiveTweenSoundSetTool)EditorWindow.GetWindow(typeof(Editor_XHud_PrimitiveTweenSoundSetTool), false, "Hud动画器节点音效设置器", true);
-                                    Editor_XHud_PrimitiveTween_SounderViewer.minSize = new Vector2(360, 500);
-                                    Editor_XHud_PrimitiveTween_SounderViewer.maxSize = Editor_XHud_PrimitiveTween_SounderViewer.minSize;
-                                    Editor_XHud_PrimitiveTween_SounderViewer.Show();
+                                    Editor_XHud_PrimitiveTweenSoundSetTool = (Editor_XHud_PrimitiveTweenSoundSetTool)EditorWindow.GetWindow(typeof(Editor_XHud_PrimitiveTweenSoundSetTool), false, "Hud动画器节点音效设置器", true);
+                                    Editor_XHud_PrimitiveTweenSoundSetTool.minSize = new Vector2(360, 500);
+                                    Editor_XHud_PrimitiveTweenSoundSetTool.maxSize = Editor_XHud_PrimitiveTweenSoundSetTool.minSize;
+                                    Editor_XHud_PrimitiveTweenSoundSetTool.Show();
                                     PrimitiveTweenSoundNode node = new PrimitiveTweenSoundNode();
                                     node.Tween = BaseScript;
                                     node.Index = index;
@@ -638,8 +649,8 @@ namespace SevenStrikeModules.XHud.Editor
                                         ts.MinPitch = sp_TweenSounds.GetArrayElementAtIndex(i).FindPropertyRelative("MinPitch").floatValue;
                                         node.TweenSounds.Add(ts);
                                     }
-                                    Editor_XHud_PrimitiveTween_SounderViewer.PrimitiveTweenSoundNode = node;
-                                    Editor_XHud_PrimitiveTween_SounderViewer.Repaint();
+                                    Editor_XHud_PrimitiveTweenSoundSetTool.PrimitiveTweenSoundNode = node;
+                                    Editor_XHud_PrimitiveTweenSoundSetTool.Repaint();
                                 }
                             }
                             GUI.color = Color.white;
@@ -816,11 +827,17 @@ namespace SevenStrikeModules.XHud.Editor
                     sp_Root.FindPropertyRelative("LoopCount").intValue = 0;
                     sp_Root.FindPropertyRelative("Progress").floatValue = 0;
                     sp_Root.serializedObject.ApplyModifiedProperties();
+
+                    // 刷新获取动画列表所有动画时机名称
+                    Preview_PrimitiveTweens_CollectedTimings(BaseScript);
                 },
                 onRemoveCallback = (ReorderableList list) =>
                 {
                     sp_PrimitiveTweenNodes.DeleteArrayElementAtIndex(list.index);
                     sp_PrimitiveTweenNodes.serializedObject.ApplyModifiedProperties();
+
+                    // 刷新获取动画列表所有动画时机名称
+                    Preview_PrimitiveTweens_CollectedTimings(BaseScript);
                 },
                 elementHeightCallback = index =>
                 {
@@ -928,15 +945,21 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             };
             #endregion
+
+            // 收集动画列表所有动画时机名称
+            Preview_PrimitiveTweens_CollectedTimings(BaseScript);
         }
 
         private void OnDisable()
         {
             if (!Application.isPlaying)
             {
+                Preview_PrimitiveTweens_Stop();
+                Preview_PrimitiveTweens_Sound_Stop();
+
                 // 如果音效设置器是打开的就关闭它
-                if (Editor_XHud_PrimitiveTween_SounderViewer != null)
-                    Editor_XHud_PrimitiveTween_SounderViewer.Close();
+                if (Editor_XHud_PrimitiveTweenSoundSetTool != null)
+                    Editor_XHud_PrimitiveTweenSoundSetTool.Close();
             }
         }
 
@@ -964,32 +987,25 @@ namespace SevenStrikeModules.XHud.Editor
             #region 预览按钮
             if (!Application.isPlaying)
             {
-                if (!Targets_Selected())
-                {
-                    Editor_XHud_GUI.SetEnabled(true);
-                }
-                else
-                {
-                    Editor_XHud_GUI.SetEnabled(false);
-                }
                 if (!sp_TweenIsPreviewing.boolValue)
                 {
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "预览", prw_play_r, prw_play_p, 4))
                     {
-                        //Preview_Animator_Play();
+                        Preview_PrimitiveTweens_Play();
                     }
                 }
                 else
                 {
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "停止", prw_stop_r, prw_stop_p, 4))
                     {
-                        //Preview_Animator_Stop();
+                        Preview_PrimitiveTweens_Stop();
                     }
                 }
-                Editor_XHud_GUI.SetEnabled(true);
                 Editor_XHud_GUI.Gui_Layout_FlexSpace();
             }
             #endregion
+
+            string tim = Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Module_Primitive_Tween>("预览时机", PreviewTimings, ref sp_PreviewTiming, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) => { });
 
             GUILayout.Space(10);
             GUILayout.EndHorizontal();
@@ -1187,15 +1203,20 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
-                menu.AddItem(new GUIContent("S (预览动画)"), false, () =>
+                if (!sp_TweenIsPreviewing.boolValue)
                 {
-
-                });
-                menu.AddSeparator("");
-                menu.AddItem(new GUIContent("X (停止预览)"), false, () =>
+                    menu.AddItem(new GUIContent("S (预览动画)"), false, () =>
+                    {
+                        Preview_PrimitiveTweens_Play();
+                    });
+                }
+                else
                 {
-
-                });
+                    menu.AddItem(new GUIContent("S (停止预览)"), false, () =>
+                    {
+                        Preview_PrimitiveTweens_Stop();
+                    });
+                }
                 menu.AddSeparator("");
                 menu.AddDisabledItem(new GUIContent("动画效果"));
                 if (!Targets_Selected())
@@ -1328,303 +1349,8 @@ namespace SevenStrikeModules.XHud.Editor
             sp_MinTimerWithGlobalDuration = serializedObject.FindProperty("MinTimerWithGlobalDuration");
             sp_MaxTimerWithGlobalDuration = serializedObject.FindProperty("MaxTimerWithGlobalDuration");
             sp_IgnoreElementAnimationPlay = serializedObject.FindProperty("IgnoreElementAnimationPlay");
+            sp_PreviewTiming = serializedObject.FindProperty("PreviewTiming");
         }
-
-        #region 动画预览
-        /// <summary>
-        /// 预览动画
-        /// </summary>
-        private void Preview_Animator_Play()
-        {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
-            if (sp_PrimitiveTweenNodes == null || sp_PrimitiveTweenNodes.arraySize <= 0)
-                return;
-
-            //先停止之前的动画预览
-            Preview_Animator_Stop();
-
-            //将动画预览中的开关打开
-            sp_TweenIsPreviewing.boolValue = true;
-            sp_TweenIsPreviewing.serializedObject.ApplyModifiedProperties();
-
-            for (int i = 0; i < sp_PrimitiveTweenNodes.arraySize; i++)
-            {
-                SerializedProperty twnNode = sp_PrimitiveTweenNodes.GetArrayElementAtIndex(i);
-                TweenNode tweenNode = TweenNodeConvert_From_SerialProperty(twnNode);
-                BaseScript.PrimitiveTweenNodes[i] = tweenNode;
-                if (!tweenNode.Enabled)
-                {
-                    continue;
-                }
-                else
-                {
-                    if (tweenNode.ActivateOnlyToEnd)
-                        continue;
-                    else
-                    {
-                        XTween_Interface tweener;
-                        if (mgr == null)
-                            tweener = BaseScript.Tween_Create(tweenNode, 1 * sp_GlobalDuration.floatValue, null, null, 0);
-                        else
-                            tweener = BaseScript.Tween_Create(tweenNode, mgr.DurationMultiply * sp_GlobalDuration.floatValue, null, null, 0);
-                        Preview_Animator_TweenList.Add(tweener);
-                    }
-                }
-            }
-
-            //同步启动音效播放
-            Preivew_Animator_Coroutine_ProgressCalcToSound = EditorCoroutineUtility.StartCoroutineOwnerless(Preview_Animator_Coroutine_ProgressCalcSound());
-
-            if (Preview_Animator_TweenList != null && Preview_Animator_TweenList.Count > 0)
-            {
-                for (int i = 0; i < Preview_Animator_TweenList.Count; i++)
-                {
-                    Preivew_Animator_CoroutineList_Play.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_Animator_Coroutine_Play(i)));
-                }
-                if (!HasLoopMode())
-                    Preivew_Animator_Coroutine_Stop = EditorCoroutineUtility.StartCoroutine(Preview_Animator_Coroutine_Stop(), this);
-                //DOTweenEditorPreview.Start();
-            }
-        }
-        /// <summary>
-        /// 监测所有动画进度
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator Preview_Animator_Coroutine_ProgressCalcSound()
-        {
-            while (sp_TweenIsPreviewing.boolValue)
-            {
-                for (int i = 0; i < BaseScript.PrimitiveTweenNodes.Count; i++)
-                {
-                    TweenNode tweenNode = BaseScript.PrimitiveTweenNodes[i];
-                    XTween_Interface tweener = tweenNode.Tweener;
-
-                    if (tweener != null && tweener.IsActive && tweener.IsPlaying)
-                    {
-                        if (tweenNode.Progress > 0.985f)
-                            tweenNode.Progress = 1;
-                        else
-                            tweenNode.Progress = tweener.ElapsedTime / tweener.Duration;
-                    }
-
-                    for (int s = 0; s < tweenNode.TweenSounds.Count; s++)
-                    {
-                        ///---如果动画是循环模式则不会播放音效，以为初始化时动画的Progress为0，此时程序会判定已到达播放音效的触点位置，则会误判发出音效
-                        if (tweenNode.LoopCount == -1)
-                            continue;
-
-                        TweenSound tweenSound = tweenNode.TweenSounds[s];
-
-                        if (tweenSound.Sound == null)
-                            continue;
-
-                        if (tweenSound.Percentage >= 1)
-                        {
-                            if (tweenNode.Progress >= tweenSound.Percentage)
-                            {
-                                if (!tweenSound.IsPlayed)
-                                {
-                                    tweenSound.IsPlayed = true;
-
-                                    AudioClip clip = tweenSound.Sound;
-                                    float vol = tweenSound.Volume;
-                                    float pitch_min = tweenSound.MinPitch;
-                                    float pitch_max = tweenSound.MaxPitch;
-                                    Preview_Animator_SoundList.Add(Preview_AnimatorSound_Creator(clip, vol, pitch_min, pitch_max));
-                                }
-                            }
-                            else
-                            {
-                                tweenSound.IsPlayed = false;
-                            }
-                        }
-                        else if (tweenSound.Percentage < 1)
-                        {
-                            if (tweenNode.Progress > tweenSound.Percentage)
-                            {
-                                if (!tweenSound.IsPlayed)
-                                {
-                                    tweenSound.IsPlayed = true;
-
-                                    AudioClip clip = tweenSound.Sound;
-                                    float vol = tweenSound.Volume;
-                                    float pitch_min = tweenSound.MinPitch;
-                                    float pitch_max = tweenSound.MaxPitch;
-                                    Preview_Animator_SoundList.Add(Preview_AnimatorSound_Creator(clip, vol, pitch_min, pitch_max));
-                                }
-                            }
-                            else
-                            {
-                                tweenSound.IsPlayed = false;
-                            }
-                        }
-                    }
-                }
-                Repaint();
-                yield return null;
-            }
-        }
-        /// <summary>
-        /// 预览动画协程播放
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        IEnumerator Preview_Animator_Coroutine_Play(int index)
-        {
-            //DOTweenEditorPreview.PrepareTweenForPreview(Preview_Animator_TweenList[index], true, true, true);
-            yield return null;
-        }
-        /// <summary>
-        /// 停止预览动画
-        /// </summary>
-        private void Preview_Animator_Stop(bool LoadOriginalState = true)
-        {
-            if (target != null)
-            {
-                sp_TweenIsPreviewing.boolValue = false;
-                sp_TweenIsPreviewing.serializedObject.ApplyModifiedProperties();
-
-                #region 杀死所有预览的节点的动画
-                if (Preview_Animator_TweenList != null && Preview_Animator_TweenList.Count > 0)
-                {
-                    for (int i = 0; i < Preview_Animator_TweenList.Count; i++)
-                    {
-                        if (Preview_Animator_TweenList[i] != null)
-                        {
-                            //Preview_Animator_TweenList[i].Complete();
-                            Preview_Animator_TweenList[i].Kill();
-                            if (LoadOriginalState)
-                                Preview_Animator_TweenList[i].Rewind();
-                        }
-                    }
-                }
-                #endregion
-
-                #region 复位所有节点的动画
-                for (int i = 0; i < sp_PrimitiveTweenNodes.arraySize; i++)
-                {
-                    SerializedProperty twnNode = sp_PrimitiveTweenNodes.GetArrayElementAtIndex(i);
-                    TweenNode tweenNode = TweenNodeConvert_From_SerialProperty(twnNode);
-                    tweenNode.Progress = 0;
-
-                    if (!tweenNode.Enabled)
-                        continue;
-                    else
-                    {
-                        if (tweenNode.ActivateOnlyToEnd)
-                            continue;
-
-                        if (LoadOriginalState)
-                        {
-                            BaseScript.Tween_Rewind(tweenNode);
-                        }
-                        TweenNodeConvert_From_Class(twnNode, tweenNode);
-                    }
-                }
-                #endregion
-
-                #region 清空预览列表
-
-                for (int i = 0; i < Preivew_Animator_CoroutineList_Play.Count; i++)
-                {
-                    EditorCoroutineUtility.StopCoroutine(Preivew_Animator_CoroutineList_Play[i]);
-                }
-                Preivew_Animator_CoroutineList_Play.Clear();
-
-                if (Preivew_Animator_Coroutine_Stop != null)
-                {
-                    EditorCoroutineUtility.StopCoroutine(Preivew_Animator_Coroutine_Stop);
-                    Preivew_Animator_Coroutine_Stop = null;
-                }
-
-                if (Preivew_Animator_Coroutine_ProgressCalcToSound != null)
-                {
-                    EditorCoroutineUtility.StopCoroutine(Preivew_Animator_Coroutine_ProgressCalcToSound);
-                    Preivew_Animator_Coroutine_ProgressCalcToSound = null;
-                }
-
-                if (Preview_Animator_SoundList != null)
-                {
-                    for (int i = 0; i < Preview_Animator_SoundList.Count; i++)
-                    {
-                        if (Preview_Animator_SoundList[i] != null)
-                        {
-                            Preview_Animator_SoundList[i].Stop();
-                            DestroyImmediate(Preview_Animator_SoundList[i].gameObject, true);
-                            Preview_Animator_SoundList[i] = null;
-                        }
-                    }
-                    Preview_Animator_SoundList.Clear();
-                }
-                #endregion
-
-                Preview_Animator_TweenList.Clear();
-                //DOTweenEditorPreview.Stop();
-
-                if (LoadOriginalState && target != null)
-                    BaseScript.controller.pt_Feature.PrimitiveFeature_Load();
-            }
-        }
-        /// <summary>
-        /// 延迟停止
-        /// </summary>
-        IEnumerator Preview_Animator_Coroutine_Stop()
-        {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-
-            float dur = sp_GlobalDuration.floatValue;
-            yield return new EditorWaitForSeconds(dur * sp_MaxTimer.floatValue * mgr.DurationMultiply);
-            if (!Application.isPlaying)
-            {
-                while (Preview_AllAnimatorSound_IsStop())
-                {
-                    yield return null;
-                }
-                Preview_Animator_Stop();
-            }
-        }
-        #endregion
-
-        #region 音效预览
-        /// <summary>
-        /// 预览声音
-        /// </summary>
-        /// <param name="clip"></param>
-        public AudioSource Preview_AnimatorSound_Creator(AudioClip clip, float vol, float pitch_min, float pitch_max)
-        {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
-            if (sp_MutePlay.boolValue)
-                return null;
-            GameObject obj = new GameObject();
-            obj.name = "SoundPreviewer-" + "[" + clip.length.ToString("F2") + " s]-" + "[" + clip.channels + " ch]-" + "[" + clip.frequency + " hz]";
-            AudioSource au = obj.AddComponent<AudioSource>();
-            au.volume = mgr.Volume * 0.01f * vol;
-            au.mute = mgr.VolumeMute;
-            au.pitch = Random.Range(pitch_min, pitch_max);
-            au.clip = clip;
-            au.Play();
-            XHud_AudioStoper sp = au.gameObject.AddComponent<XHud_AudioStoper>();
-            sp.AudioSource = au;
-            return au;
-        }
-        /// <summary>
-        /// 所有的节点音效是否都停止了？
-        /// </summary>
-        /// <returns></returns>
-        private bool Preview_AllAnimatorSound_IsStop()
-        {
-            bool sw = false;
-            for (int i = 0; i < Preview_Animator_SoundList.Count; i++)
-            {
-                if (Preview_Animator_SoundList[i] != null && Preview_Animator_SoundList[i].isPlaying)
-                {
-                    sw = true;
-                }
-            }
-            return sw;
-        }
-        #endregion
 
         #region 动画值控件
         /// <summary>
@@ -2159,5 +1885,322 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         #endregion
+
+        #region 动画预览
+        /// <summary>
+        /// 创建收集图元动画器的动画节点列表所有动画
+        /// </summary>
+        /// <param name="tweener"></param>
+        /// <returns></returns>
+        private XTween_Interface[] Preview_PrimitiveTweens_Collected(XHud_Module_Primitive_Tween tweener, string tim)
+        {
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+
+            List<XTween_Interface> tweens = new List<XTween_Interface>();
+            for (int i = 0; i < tweener.PrimitiveTweenNodes.Count; i++)
+            {
+                if (!tweener.PrimitiveTweenNodes[i].Enabled)
+                    continue;
+                if (tweener.PrimitiveTweenNodes[i].Timings != tim)
+                    continue;
+                XTween_Interface tween = tweener.Tween_Create(tweener.PrimitiveTweenNodes[i], tweener.GlobalDuration * mgr.DurationMultiply);
+
+                if (tween != null)
+                    tweens.Add(tween);
+            }
+
+            return tweens.ToArray();
+        }
+        /// <summary>
+        /// 创建收集图元动画器的动画节点列表所有动画
+        /// </summary>
+        /// <param name="tweener"></param>
+        /// <returns></returns>
+        private string[] Preview_PrimitiveTweens_CollectedTimings(XHud_Module_Primitive_Tween tweener)
+        {
+            List<string> tims = new List<string>();
+            for (int i = 0; i < tweener.PrimitiveTweenNodes.Count; i++)
+            {
+                if (!tweener.PrimitiveTweenNodes[i].Enabled)
+                    continue;
+
+                string timing = tweener.PrimitiveTweenNodes[i].Timings;
+                if (!tims.Contains(timing))  // 添加前检查是否已存在
+                    tims.Add(timing);
+            }
+
+            PreviewTimings = tims.ToArray();
+            return tims.ToArray();
+        }
+        /// <summary>
+        /// 杀死并清空图元动画器的动画节点列表所有已生成的 XTweenInterface 动画
+        /// </summary>
+        /// <param name="nodes"></param>
+        /// <returns></returns>
+        private void Preview_PrimitiveTweens_KillAndClear(List<TweenNode> nodes)
+        {
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                TweenNode node = nodes[i];
+                if (node == null || !node.Enabled)
+                    continue;
+
+                node.Tweener?.Kill();  // 使用 ?. 简化
+                node.Tweener = null;
+            }
+        }
+
+        /// <summary>
+        /// 预览动画
+        /// </summary>
+        private void Preview_PrimitiveTweens_Play()
+        {
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+
+            if (sp_PrimitiveTweenNodes == null || sp_PrimitiveTweenNodes.arraySize <= 0)
+                return;
+
+            //先停止之前的动画预览
+            Preview_PrimitiveTweens_Stop();
+
+            //将动画预览中的开关打开
+            sp_TweenIsPreviewing.boolValue = true;
+            sp_TweenIsPreviewing.serializedObject.ApplyModifiedProperties();
+
+            XTween_Interface[] tweens = null;
+
+            if (Targets_Selected())
+            {
+                List<XTween_Interface> mo = new List<XTween_Interface>();
+                for (int i = 0; i < SelectedObjects.Length; i++)
+                {
+                    XTween_Interface[] sel_tweens = Preview_PrimitiveTweens_Collected(SelectedObjects[i], SelectedObjects[i].PreviewTiming);
+                    for (int s = 0; s < sel_tweens.Length; s++)
+                    {
+                        mo.Add(sel_tweens[s]);
+                    }
+                }
+                tweens = mo.ToArray();
+            }
+            else
+            {
+                tweens = Preview_PrimitiveTweens_Collected(BaseScript, sp_PreviewTiming.stringValue);
+            }
+
+            // 预览收集到的有效的音效
+            Preview_PrimitiveTweens_Sounds(sp_PreviewTiming.stringValue, BaseScript);
+
+            // 使用XTween预览器预览收集到的有效的动画
+            XTween_Preview_Start(tweens);
+        }
+        /// <summary>
+        /// 停止预览动画
+        /// </summary>
+        private void Preview_PrimitiveTweens_Stop(bool LoadOriginalState = true)
+        {
+            if (target != null)
+            {
+                sp_TweenIsPreviewing.boolValue = false;
+                sp_TweenIsPreviewing.serializedObject.ApplyModifiedProperties();
+
+                XTween_Preview_Kill();
+
+                if (Targets_Selected())
+                {
+                    for (int i = 0; i < SelectedObjects.Length; i++)
+                    {
+                        if (LoadOriginalState && SelectedObjects[i] != null)
+                            SelectedObjects[i].controller.pt_Feature.PrimitiveFeature_Load();
+                    }
+                }
+                else
+                {
+                    if (LoadOriginalState && target != null)
+                        BaseScript.controller.pt_Feature.PrimitiveFeature_Load();
+                }
+            }
+        }
+
+        //------------------------------------------------------------------------------------
+
+        /// <summary>
+        /// 动画预览 - 播放
+        /// </summary>
+        /// <param name="tweens">传入需要预览的动画，但前提是动画已创建，如果是空的则会导致预览异常</param>
+        public void XTween_Preview_Start(XTween_Interface[] tweens)
+        {
+            if (Application.isPlaying)
+                return;
+
+            Editor_XTween_Previewer.AutoKillWithDuration = false;
+            // 预览动画杀死后自动清空预览器的列表 - 状态根据元素脚本的开关
+            Editor_XTween_Previewer.AfterKillClear = true;
+            // 预览动画杀死前将动画目标的属性倒退 - 状态根据元素脚本的开关
+            Editor_XTween_Previewer.BeforeKillRewind = true;
+
+            for (int i = 0; i < tweens.Length; i++)
+            {
+                Editor_XTween_Previewer.Append(tweens[i]);
+            }
+
+            Editor_XTween_Previewer.Play(null);
+        }
+        /// <summary>
+        ///  动画预览 - 杀死
+        /// </summary>
+        private void XTween_Preview_Kill()
+        {
+            if (Application.isPlaying)
+                return;
+
+            // 预览开关状态复位
+            sp_TweenIsPreviewing.boolValue = false;
+            sp_TweenIsPreviewing.serializedObject.ApplyModifiedProperties();
+
+            if (Targets_Selected())
+            {
+                for (int i = 0; i < SelectedObjects.Length; i++)
+                {
+                    XHud_Module_Primitive_Tween tween = SelectedObjects[i];
+                    Preview_PrimitiveTweens_KillAndClear(tween.PrimitiveTweenNodes);
+                }
+            }
+            else
+            {
+                Preview_PrimitiveTweens_KillAndClear(BaseScript.PrimitiveTweenNodes);
+            }
+
+            // 预览器执行动作：杀死动画
+            Editor_XTween_Previewer.Kill(true, true, () =>
+            {
+                //BaseScript.CurrentTweener = null;
+            });
+        }
+        /// <summary>
+        /// 预览倒退重置
+        /// </summary>
+        private void XTween_Preview_Rewind()
+        {
+            Editor_XTween_Previewer.Rewind();
+        }
+
+        //------------------------------------------------------------------------------------
+
+
+        #endregion
+
+        /// <summary>
+        /// 预览图元动画器身上挂载的所有音效
+        /// </summary>
+        /// <param name="Timings">匹配时机</param>
+        /// <param name="sp_sounds">音效节点列表对象</param>
+        private void Preview_PrimitiveTweens_Sounds(string Timings, XHud_Module_Primitive_Tween tweener)
+        {
+            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+
+            // 循环生成音效，但是音效的延迟时间由以下条件决定：
+            // 音效本身设置的百分比参数 x 动画节点的基础耗时 x 动画器的全局耗时 + 动画节点的延迟时间
+            for (int i = 0; i < tweener.PrimitiveTweenNodes.Count; i++)
+            {
+                TweenNode node = tweener.PrimitiveTweenNodes[i];
+
+                if (!node.Enabled)
+                    continue;
+
+                // 判断该音效的播放时机是否匹配，如果不匹配则跳过
+                if (Timings != node.Timings)
+                    continue;
+
+                for (int s = 0; s < node.TweenSounds.Count; s++)
+                {
+                    TweenSound tsound = node.TweenSounds[s];
+
+                    float x_vol = tsound.Volume;
+                    float x_pit_min = tsound.MinPitch;
+                    float x_pit_max = tsound.MaxPitch;
+                    float x_delay = (tsound.Percentage * node.Duration * tweener.GlobalDuration) + node.Delay;
+                    bool x_userandom = !(tsound.MinPitch == 1 && tsound.MaxPitch == 1);
+                    string x_soundname = tsound.Sound.name;
+
+                    AudioClip x_clip = mgr.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
+                    Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_PrimitiveTweens_Sound_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
+                }
+            }
+        }
+        /// <summary>
+        ///  HudSounder 音效预览
+        /// </summary>
+        IEnumerator Preview_PrimitiveTweens_Sound_Play(float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_userandom, AudioClip clip, float delay)
+        {
+            yield return new EditorWaitForSeconds(delay);
+            Preview_PrimitiveTweens_SoundList.Add(Preview_PrimitiveTweens_Sound_Create(sp_vol, sp_pitch_min, sp_pitch_max, sp_userandom, clip));
+            AudioSource au = Preview_PrimitiveTweens_SoundList[Preview_PrimitiveTweens_SoundList.Count - 1];
+            while (true)
+            {
+                if (au != null && !au.isPlaying)
+                {
+                    break;
+                }
+                yield return null;
+            }
+            DestroyImmediate(au.gameObject, true);
+        }
+        /// <summary>
+        ///  停止协程列表 - HudSounder 音效预览播放 / 停止播放并清空 HudSounder 预览列表与生成的音效物体
+        /// </summary>
+        private void Preview_PrimitiveTweens_Sound_Stop()
+        {
+            for (int i = 0; i < Preview_PrimitiveTweens_SoundCoroutineList_Stop.Count; i++)
+            {
+                if (Preview_PrimitiveTweens_SoundCoroutineList_Stop[i] != null)
+                    EditorCoroutineUtility.StopCoroutine(Preview_PrimitiveTweens_SoundCoroutineList_Stop[i]);
+            }
+            Preview_PrimitiveTweens_SoundCoroutineList_Stop.Clear();
+
+            if (Preview_PrimitiveTweens_SoundList != null)
+            {
+                for (int i = 0; i < Preview_PrimitiveTweens_SoundList.Count; i++)
+                {
+                    if (Preview_PrimitiveTweens_SoundList[i] != null)
+                    {
+                        Preview_PrimitiveTweens_SoundList[i].Stop();
+                        DestroyImmediate(Preview_PrimitiveTweens_SoundList[i].gameObject, true);
+                        Preview_PrimitiveTweens_SoundList[i] = null;
+                    }
+                }
+                Preview_PrimitiveTweens_SoundList.Clear();
+            }
+
+            SceneView.RepaintAll();
+        }
+        /// <summary>
+        /// 创建 HudSounder 预览指定声音
+        /// </summary>
+        /// <param name="sp_vol"></param>
+        /// <param name="sp_pitch_min"></param>
+        /// <param name="sp_pitch_max"></param>
+        /// <param name="sp_userandom"></param>
+        /// <param name="clip"></param>
+        /// <returns></returns>
+        public AudioSource Preview_PrimitiveTweens_Sound_Create(float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_userandom, AudioClip clip)
+        {
+            GameObject obj = new GameObject();
+            obj.name = "PrimitiveTweens_Sound_Previewer-" + "[" + clip.length.ToString("F2") + " s]-" + "[" + clip.channels + " ch]-" + "[" + clip.frequency + " hz]";
+            AudioSource au = obj.AddComponent<AudioSource>();
+            au.clip = clip;
+            au.volume = sp_vol;
+            if (sp_userandom)
+            {
+                au.pitch = Random.Range(sp_pitch_min, sp_pitch_max);
+            }
+            else
+            {
+                au.pitch = 1.0f;
+            }
+            au.Play();
+            XHud_AudioStoper sp = au.gameObject.AddComponent<XHud_AudioStoper>();
+            sp.SetAudioSource(au);
+            return au;
+        }
     }
 }

@@ -31,6 +31,7 @@ namespace SevenStrikeModules.XHud
     [System.Serializable]
     public class ElementNode_Progress
     {
+        [SerializeField]
         /// <summary>
         /// 进度条组件
         /// </summary>

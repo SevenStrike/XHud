@@ -189,6 +189,16 @@ namespace SevenStrikeModules.XHud
         }
 
         /// <summary>
+        /// 获取目标音效参数
+        /// </summary>        
+        /// <param name="index">目标音效序号</param>
+        /// <returns></returns>
+        public XHud_LibraryArg_Sound SoundLibrary_GetSoundArg(int index)
+        {
+            return SoundLibrary[index];
+        }
+
+        /// <summary>
         /// 新增音效
         /// </summary>
         /// <param name="name">新增的配色名称</param>

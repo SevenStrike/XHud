@@ -34,3 +34,23 @@ MonoBehaviour:
     Frequency: 44100
     Channel: 2
     Length: 0.8097959
+  - Name: hud_sound_4
+    Clip: {fileID: 8300000, guid: d0e32d5d4cf2d844094c037e42092c70, type: 3}
+    Frequency: 44100
+    Channel: 2
+    Length: 1.6718367
+  - Name: hud_sound_2
+    Clip: {fileID: 8300000, guid: 0cb2d898e345e98418069a5400946dea, type: 3}
+    Frequency: 22050
+    Channel: 1
+    Length: 0.34507936
+  - Name: hud_sound_3
+    Clip: {fileID: 8300000, guid: a18d03b06576fcf4a8e62700b4bee6a7, type: 3}
+    Frequency: 22050
+    Channel: 2
+    Length: 0.241678
+  - Name: hud_sound_1
+    Clip: {fileID: 8300000, guid: 7c59136550e71ea49b3082ed00aff460, type: 3}
+    Frequency: 22050
+    Channel: 1
+    Length: 0.5885714

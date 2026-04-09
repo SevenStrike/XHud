@@ -24,6 +24,7 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XTween;
     using SevenStrikeModules.XTween.Editor;
     using System.Collections.Generic;
+    using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEngine;
 
@@ -65,6 +66,45 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         /// <summary>
+        /// 预览元素身上挂载的所有音效器的音效
+        /// </summary>
+        /// <param name="Timings">匹配时机</param>
+        /// <param name="sp_sounds">音效节点列表对象</param>
+        private void Preview_Sounds(string Timings, SerializedProperty sp_sounds)
+        {
+            for (int i = 0; i < sp_sounds.arraySize; i++)
+            {
+                SerializedProperty sp_soundnode = sp_sounds.GetArrayElementAtIndex(i);
+                SerializedProperty sp_sounder = sp_soundnode.FindPropertyRelative("Sounder");
+                SerializedObject so_sod = new SerializedObject(sp_sounder.objectReferenceValue);
+                SerializedProperty sp_name = so_sod.FindProperty("SoundName");
+                SerializedProperty sp_vol = so_sod.FindProperty("Volume");
+                SerializedProperty sp_delay = so_sod.FindProperty("DelayTime");
+                SerializedProperty sp_pit_min = so_sod.FindProperty("Pitch_Min");
+                SerializedProperty sp_pit_max = so_sod.FindProperty("Pitch_Max");
+                SerializedProperty sp_userandom = so_sod.FindProperty("UseRandomPitch");
+                SerializedProperty sp_timings = so_sod.FindProperty("Timings");
+
+                // 判断该音效的播放时机是否匹配，如果不匹配则跳过
+                if (Timings != sp_timings.stringValue)
+                    continue;
+
+                float x_vol = sp_vol.floatValue;
+                float x_pit_min = sp_pit_min.floatValue;
+                float x_pit_max = sp_pit_max.floatValue;
+                float x_delay = sp_delay.floatValue;
+                bool x_userandom = false;
+                if (sp_userandom.intValue == 1)
+                    x_userandom = true;
+
+                XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+
+                AudioClip x_clip = mgr.Hud_Sounds.SoundLibrary_GetSound(sp_name.stringValue);
+                Preivew_HudSounder_CoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_HudSounder_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
+            }
+        }
+        //------------------------------------------------------------------------------------
+        /// <summary>
         /// 播放预览：元素 - 进入
         /// </summary>
         private void ElementTweens_Preview_In_Play()
@@ -85,7 +125,7 @@ namespace SevenStrikeModules.XHud.Editor
                     //Debug.Log($"TweensPreivew_In：{SelectedObjects[i].TweensPreivew_In_State}");
 
                     SelectedObjects[i].ElementTweens_Creator(SelectedObjects[i].CreateArgs, null, true);
-                    Preview_Start(GetTargetsElementTweens());
+                    XTween_Preview_Start(GetTargetsElementTweens());
                 }
             }
             else
@@ -100,7 +140,8 @@ namespace SevenStrikeModules.XHud.Editor
                 PrimitivePreivew_State.serializedObject.ApplyModifiedProperties();
 
                 BaseScript.ElementTweens_Creator(BaseScript.CreateArgs, null, true);
-                Preview_Start(GetElementTweens());
+                XTween_Preview_Start(GetElementTweens());
+                Preview_Sounds("元素进入时", SounderNodes);
             }
         }
         /// <summary>
@@ -132,7 +173,7 @@ namespace SevenStrikeModules.XHud.Editor
                 BaseScript.KillElementTweens();
             }
 
-            Preview_Kill();
+            XTween_Preview_Kill();
         }
         /// <summary>
         /// 播放预览：元素 - 退出
@@ -155,7 +196,7 @@ namespace SevenStrikeModules.XHud.Editor
                     //Debug.Log($"TweensPreivew_Out：{SelectedObjects[i].TweensPreivew_Out_State}");
 
                     SelectedObjects[i].ElementTweens_Recycler(SelectedObjects[i].RecycleArgs, null, true);
-                    Preview_Start(GetTargetsElementTweens());
+                    XTween_Preview_Start(GetTargetsElementTweens());
                 }
             }
             else
@@ -170,7 +211,8 @@ namespace SevenStrikeModules.XHud.Editor
                 PrimitivePreivew_State.serializedObject.ApplyModifiedProperties();
 
                 BaseScript.ElementTweens_Recycler(BaseScript.RecycleArgs, null, true);
-                Preview_Start(GetElementTweens());
+                XTween_Preview_Start(GetElementTweens());
+                Preview_Sounds("元素退出时", SounderNodes);
             }
         }
         /// <summary>
@@ -199,8 +241,9 @@ namespace SevenStrikeModules.XHud.Editor
                 TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
             }
 
-            Preview_Kill();
+            XTween_Preview_Kill();
         }
+        //------------------------------------------------------------------------------------
         /// <summary>
         /// 播放预览：元素 - 图元
         /// </summary>
@@ -263,8 +306,9 @@ namespace SevenStrikeModules.XHud.Editor
                 PrimitivePreivew_State.serializedObject.ApplyModifiedProperties();
             }
 
-            Preview_Kill();
+            XTween_Preview_Kill();
         }
+        //------------------------------------------------------------------------------------
         /// <summary>
         /// 预览开关状态复位
         /// </summary>
@@ -297,7 +341,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// 动画预览 - 播放
         /// </summary>
         /// <param name="tweens">传入需要预览的动画，但前提是动画已创建，如果是空的则会导致预览异常</param>
-        public void Preview_Start(XTween_Interface[] tweens)
+        public void XTween_Preview_Start(XTween_Interface[] tweens)
         {
             if (Application.isPlaying)
                 return;
@@ -313,7 +357,7 @@ namespace SevenStrikeModules.XHud.Editor
                 Editor_XTween_Previewer.AutoKillWithDuration = true;
 
                 // 预览动画杀死后的委托事件
-                Editor_XTween_Previewer.act_on_editor_autokill += OnAutoKillPreview;
+                Editor_XTween_Previewer.act_on_editor_autokill += XTween_OnAutoKillPreview;
             }
             else
             {
@@ -334,7 +378,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         ///  动画预览 - 杀死
         /// </summary>
-        private void Preview_Kill()
+        private void XTween_Preview_Kill()
         {
             if (Application.isPlaying)
                 return;
@@ -392,7 +436,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 当动画预览器为根据动画耗时自动杀死的情况下
             if (AutoKillPreviewTweens.boolValue)
-                Editor_XTween_Previewer.act_on_editor_autokill -= OnAutoKillPreview;
+                Editor_XTween_Previewer.act_on_editor_autokill -= XTween_OnAutoKillPreview;
         }
         /// <summary>
         ///  动画预览 - 倒退
@@ -400,7 +444,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 杀死预览动画后的操作逻辑
         /// </summary>
-        private void OnAutoKillPreview()
+        private void XTween_OnAutoKillPreview()
         {
             // 预览开关状态复位
             StopAllPreviewState();
@@ -446,8 +490,18 @@ namespace SevenStrikeModules.XHud.Editor
             }
 
             // 清空预览动画杀死后的委托事件
-            Editor_XTween_Previewer.act_on_editor_autokill -= OnAutoKillPreview;
+            Editor_XTween_Previewer.act_on_editor_autokill -= XTween_OnAutoKillPreview;
         }
+        /// <summary>
+        /// 预览倒退重置
+        /// </summary>
+        private void XTween_Preview_Rewind()
+        {
+            Editor_XTween_Previewer.Rewind();
+        }
+
+        //------------------------------------------------------------------------------------
+
         /// <summary>
         /// 读取XHud元素的动画预览配置数据
         /// </summary>
@@ -469,13 +523,6 @@ namespace SevenStrikeModules.XHud.Editor
             ClearPreviewTweensWithKill.serializedObject.ApplyModifiedProperties();
             #endregion
         }
-        private void Preview_Rewind()
-        {
-            Editor_XTween_Previewer.Rewind();
-        }
-
-        //------------------------------------------------------------------------------------
-
         /// <summary>
         /// 重置生成与回收的参数到默认
         /// </summary>

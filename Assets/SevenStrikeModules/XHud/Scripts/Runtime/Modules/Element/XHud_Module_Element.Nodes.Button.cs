@@ -31,10 +31,12 @@ namespace SevenStrikeModules.XHud
     [System.Serializable]
     public class ElementNode_Button
     {
+        [SerializeField]
         /// <summary>
         /// 按钮组件
         /// </summary>
         public XHud_Module_Button Button;
+        [SerializeField]
         /// <summary>
         /// 用于选项按钮
         /// </summary>

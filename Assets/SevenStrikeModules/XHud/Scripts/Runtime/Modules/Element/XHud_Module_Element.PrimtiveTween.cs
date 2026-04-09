@@ -306,6 +306,8 @@ namespace SevenStrikeModules.XHud
             {
                 XHud_Module_Primitive_Controller anim = PrimitiveControllerNodes[i].Controller;
 
+                if (!anim.gameObject.activeInHierarchy)
+                    return;
                 // 如果图元动画选项：元素联动为忽略状态则图元动画不会随元素动画播放而联动播放
                 if (anim.pt_Tween.IgnoreElementAnimationPlay)
                     return;

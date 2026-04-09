@@ -941,6 +941,13 @@ namespace SevenStrikeModules.XHud
         [SerializeField] public bool Debug;
         #endregion
 
+        #region 预览时机
+        /// <summary>
+        /// 预览时机
+        /// </summary>
+        [SerializeField] public string PreviewTiming;
+        #endregion
+
         void Awake()
         {
             TweenNode_AllTweenProgress_Reset();
@@ -1549,7 +1556,9 @@ namespace SevenStrikeModules.XHud
                 Tween_Rewind(arg);
             }
             else
+            {
                 Tween_Kill(arg);
+            }
 
             if (arg.Type == TweenNodeType.位移)
             {
@@ -3193,7 +3202,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="complete"></param>
         /// <param name="percentage"></param>
         /// <param name="PercentageLimite"></param>
-        public void Tween_PlayAll_Forced(float dur = 1, bool MatchTiming = false, string tim = "", UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f)
+        public void Tween_PlayAll_Forced(float dur = 1, bool MatchTiming = false, string tim = "", UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f, bool ForPreview = false)
         {
             ///--播放
             for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
@@ -3205,14 +3214,14 @@ namespace SevenStrikeModules.XHud
                         if (PrimitiveTweenNodes[i].Timings == tim)
                         {
                             TweenNode arg = PrimitiveTweenNodes[i];
-                            arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration * dur, complete, percentage, PercentageLimite);
+                            arg.Tweener = Tween_Create(arg, (ForPreview ? XHud_Dashboard.HudManagerGet().DurationMultiply : XHud_Manager.Instance.DurationMultiply) * GlobalDuration * dur, complete, percentage, PercentageLimite);
                             arg.Tweener.Play();
                         }
                     }
                     else
                     {
                         TweenNode arg = PrimitiveTweenNodes[i];
-                        arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration * dur, complete, percentage, PercentageLimite);
+                        arg.Tweener = Tween_Create(arg, ForPreview ? XHud_Dashboard.HudManagerGet().DurationMultiply : XHud_Manager.Instance.DurationMultiply * GlobalDuration * dur, complete, percentage, PercentageLimite);
                         arg.Tweener.Play();
                     }
                 }

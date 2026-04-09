@@ -29,6 +29,7 @@ namespace SevenStrikeModules.XHud
     [System.Serializable]
     public class ElementNode_Sound
     {
+        [SerializeField]
         /// <summary>
         /// 音效器
         /// </summary>

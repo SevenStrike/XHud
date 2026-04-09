@@ -59,7 +59,7 @@ namespace SevenStrikeModules.XHud.Editor
         private double _lastUserActionTime;
         private double UPDATE_KEEPTIME = 0.6f; // 自动降频阈值
         private double UPDATE_INTERVAL = 1; // 每秒最1次
-        private double UPDATE_INTERVAL_Low = 1f; // 低频
+        private double UPDATE_INTERVAL_Low = 0.033f; // 低频
         private double UPDATE_INTERVAL_High = 0.005f; // 高频
 
         #region 序列化属性
@@ -947,6 +947,9 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     BaseScript.hm_AnchorMarks_Create();
                 }
+
+                SetHighFrequencyMode();
+                xHud_EditorUpdate_HelperVisual();
                 return;
             }
             GUI.enabled = true;

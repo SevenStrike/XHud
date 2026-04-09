@@ -31,6 +31,7 @@ namespace SevenStrikeModules.XHud
     [System.Serializable]
     public class ElementNode_Toggle
     {
+        [SerializeField]
         /// <summary>
         /// 开关组件
         /// </summary>

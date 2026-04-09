@@ -174,15 +174,31 @@ namespace SevenStrikeModules.XHud.Editor
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
                         if (SelectedObjects[i] != null)
-                            PrimitiveFeature_Save(SelectedObjects[i]);
+                        {
+                            if (!SelectedObjects[i].controller.pt_Tween.TweenIsPreviewing)
+                            {
+                                PrimitiveFeature_Save(SelectedObjects[i]);
+                            }
+                            else
+                            {
+                                PrimitiveFeature_Load(SelectedObjects[i]);
+                            }
+                        }
                     }
                 }
                 else
                 {
                     if (target != null)
                     {
-                        PrimitiveFeature_Save(BaseScript);
-                        serializedObject.ApplyModifiedProperties();
+                        if (!BaseScript.controller.pt_Tween.TweenIsPreviewing)
+                        {
+                            PrimitiveFeature_Save(BaseScript);
+                            serializedObject.ApplyModifiedProperties();
+                        }
+                        else
+                        {
+                            PrimitiveFeature_Load(BaseScript);
+                        }
                     }
                 }
                 #endregion
