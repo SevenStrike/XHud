@@ -2062,10 +2062,10 @@ namespace SevenStrikeModules.XHud
                     node.Element.act_on_element_out_start += action_out_start;
 
                     //if (node.Element.act_on_element_out_progress == null)
-                        node.Element.act_on_element_out_progress += action_out_progress;
+                    node.Element.act_on_element_out_progress += action_out_progress;
 
                     //if (node.Element.act_on_element_out_end == null)
-                        node.Element.act_on_element_out_end += action_out_end;
+                    node.Element.act_on_element_out_end += action_out_end;
 
                     // 执行回收
                     if (args == null)
@@ -2109,10 +2109,10 @@ namespace SevenStrikeModules.XHud
                 node.Element.act_on_element_out_start += action_out_start;
 
                 //if (node.Element.act_on_element_out_progress == null)
-                    node.Element.act_on_element_out_progress += action_out_progress;
+                node.Element.act_on_element_out_progress += action_out_progress;
 
                 //if (node.Element.act_on_element_out_end == null)
-                    node.Element.act_on_element_out_end += action_out_end;
+                node.Element.act_on_element_out_end += action_out_end;
 
                 // 执行回收
                 if (args == null)
@@ -2194,13 +2194,13 @@ namespace SevenStrikeModules.XHud
 
                 // 因为音效器的委托关系就不能再判断，否则如果元素上的音效器选定时机为元素退出时，就会不是空的
                 //if (targetNode.Element.act_on_element_out_start == null)
-                    targetNode.Element.act_on_element_out_start += action_out_start;
+                targetNode.Element.act_on_element_out_start += action_out_start;
 
                 //if (targetNode.Element.act_on_element_out_progress == null)
-                    targetNode.Element.act_on_element_out_progress += action_out_progress;
+                targetNode.Element.act_on_element_out_progress += action_out_progress;
 
                 //if (targetNode.Element.act_on_element_out_end == null)
-                    targetNode.Element.act_on_element_out_end += action_out_end;
+                targetNode.Element.act_on_element_out_end += action_out_end;
 
                 // 执行回收
                 if (args == null)

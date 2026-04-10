@@ -274,6 +274,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
+            EditorGUI.BeginChangeCheck();
             #region 射线检测可用性   
             if (!sp_LibStyle_Effect_raycast.boolValue || !sp_StyleLibSynching.boolValue)
                 Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("射线检测", stroptions_enabled, ref sp_Raycast, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);

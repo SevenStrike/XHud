@@ -354,6 +354,20 @@ namespace SevenStrikeModules.XHud.Editor
 
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Toggle>("标题交互", stroptions_enabled, ref TitleCanToggle, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
+            if (EditorGUI.EndChangeCheck())
+            {
+                if (ToggleText.objectReferenceValue != null)
+                {
+                    XHud_Module_Text tt = (XHud_Module_Text)ToggleText.objectReferenceValue;
+                    tt.TextStyleInfo.Raycast = TitleCanToggle.boolValue;
+                }
+                if (ToggleTmpText.objectReferenceValue != null)
+                {
+                    XHud_Module_TmpText tt = (XHud_Module_TmpText)ToggleTmpText.objectReferenceValue;
+                    tt.TextStyleInfo.Raycast = TitleCanToggle.boolValue;
+                }
+            }
+
             Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion

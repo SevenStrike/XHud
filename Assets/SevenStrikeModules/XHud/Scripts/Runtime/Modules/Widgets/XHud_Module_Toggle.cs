@@ -229,15 +229,17 @@ namespace SevenStrikeModules.XHud
 
         #region 辅助
         /// <summary>
-        /// 更新控制柄的位置
+        /// 更新
         /// </summary>
-        private void tog_Update()
+        public void tog_Update()
         {
             if (Tog_Bg != null)
                 Tog_Bg.raycastTarget = BgCanToggle;
 
             if (ToggleText != null)
+            {
                 ToggleText.raycastTarget = TitleCanToggle;
+            }
 
             if (ToggleTmpText != null)
                 ToggleTmpText.raycastTarget = TitleCanToggle;

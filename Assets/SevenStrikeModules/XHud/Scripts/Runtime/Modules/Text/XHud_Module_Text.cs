@@ -433,6 +433,7 @@ namespace SevenStrikeModules.XHud
             if (raycastTarget != TextStyleInfo.Raycast)
             {
                 raycastTarget = TextStyleInfo.Raycast;
+                //SetRaycastDirty();
             }
 
             //--同步 - 遮罩
