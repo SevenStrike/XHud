@@ -87,7 +87,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   - Name: NewTextStyle_HudTmpText
     Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudTmpText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
     Type: 1
@@ -161,7 +161,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   Preview_Font: {fileID: 12800000, guid: 04aab7cee3241a3428b78bdef8ce2efc, type: 3}
   PreviewFontColor: {r: 1, g: 1, b: 1, a: 1}
   PreviewContent: XHud Sample Fonts
