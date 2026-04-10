@@ -26,14 +26,14 @@ namespace SevenStrikeModules.XHud
     using UnityEngine;
 
     /// <summary>
-    /// 动画器的结构类
+    /// 图元控制器的结构类
     /// </summary>
     [System.Serializable]
     public class PrimitiveControllerNode
     {
         [SerializeField]
         /// <summary>
-        /// 动画器
+        /// 控制器
         /// </summary>
         public XHud_Module_Primitive_Controller Controller;
         [SerializeField]
@@ -81,7 +81,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public bool AutoPlayPrimitivesTween = true;
 
-        #region 获取动画器和动画节点
+        #region 获取控制器和动画节点
         /// <summary>
         /// 获取一个图元控制器
         /// </summary>
@@ -233,7 +233,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="primitive_indicator">目标图元控制器名称</param>
         /// <param name="tween_indicator">目标图元控制器动画节点的名称</param>
         /// <returns></returns>
-        public TweenNode GetAnimatorTween(string primitive_indicator, string tween_indicator)
+        public TweenNode GetPrimitiveTween(string primitive_indicator, string tween_indicator)
         {
             XHud_Module_Primitive_Controller anim = GetPrimitiveController_WithIndicator(primitive_indicator);
             TweenNode node = anim.pt_Tween.TweenNode_GetByIndicator(tween_indicator);
@@ -261,7 +261,7 @@ namespace SevenStrikeModules.XHud
         }
         #endregion
 
-        #region 动画器播放与倒退
+        #region 图元动画器播放与倒退
         /// <summary>
         /// 验证是否存在指定ID的图元控制器
         /// </summary>

@@ -123,24 +123,24 @@ namespace SevenStrikeModules.XHud.Editor
             Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
 
             #region 获取图标
-            Logo_Add_Release = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/Logo_Add_Release");
-            Logo_Add_Press = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/Logo_Add_Press");
-            Logo_Play_Release = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/Logo_Play_Release");
-            Logo_Play_Press = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/Logo_Play_Press");
-            Logo_Apply_Release = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/Logo_Apply_Release");
-            Logo_Apply_Press = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/Logo_Apply_Press");
-            Icon_twn_sound_percent = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/Icon_twn_sound_percent");
-            Icon_twn_sound_volume = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/Icon_twn_sound_volume");
-            Icon_twn_sound_pitch = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/Icon_twn_sound_pitch");
+            Logo_Add_Release = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Logo_Add_Release");
+            Logo_Add_Press = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Logo_Add_Press");
+            Logo_Play_Release = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Logo_Play_Release");
+            Logo_Play_Press = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Logo_Play_Press");
+            Logo_Apply_Release = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Logo_Apply_Release");
+            Logo_Apply_Press = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Logo_Apply_Press");
+            Icon_twn_sound_percent = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Icon_twn_sound_percent");
+            Icon_twn_sound_volume = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Icon_twn_sound_volume");
+            Icon_twn_sound_pitch = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Icon_twn_sound_pitch");
 
-            anim_type_move = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/anim_type_move");
-            anim_type_rotator = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/anim_type_rotator");
-            anim_type_scale = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/anim_type_scale");
-            anim_type_color = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/anim_type_color");
-            anim_type_fade = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/anim_type_fade");
-            anim_type_writter = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/anim_type_writter");
-            anim_type_fill = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/anim_type_fill");
-            anim_type_size = Editor_XHud_GUI.GetIcon("Icons_XHud_Animator_Sound_Setter/anim_type_size");
+            anim_type_move = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_move");
+            anim_type_rotator = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_rotator");
+            anim_type_scale = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_scale");
+            anim_type_color = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_color");
+            anim_type_fade = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_fade");
+            anim_type_writter = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_writter");
+            anim_type_fill = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_fill");
+            anim_type_size = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_size");
             #endregion
 
             #region 动画列表
@@ -365,11 +365,11 @@ namespace SevenStrikeModules.XHud.Editor
             // 应用到图元动画节点中
             if (Editor_XHud_GUI.Gui_Button(rect_btn_apply, Logo_Apply_Release, Logo_Apply_Press, true, "", "", Color.white))
             {
-                #region 获取动画器节点
-                SerializedProperty sp_animator = sp_PrimitiveTweenSoundNodes.FindPropertyRelative("Tween");
+                #region 获取动画节点
+                SerializedProperty sp_node = sp_PrimitiveTweenSoundNodes.FindPropertyRelative("Tween");
                 SerializedProperty sp_index = sp_PrimitiveTweenSoundNodes.FindPropertyRelative("Index");
 
-                XHud_Module_Primitive_Tween tween = (XHud_Module_Primitive_Tween)sp_animator.objectReferenceValue;
+                XHud_Module_Primitive_Tween tween = (XHud_Module_Primitive_Tween)sp_node.objectReferenceValue;
 
                 SerializedObject so_anim = new SerializedObject(tween);
                 so_anim.Update();
@@ -452,41 +452,6 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
             }
             #endregion
-
-            //#region 判断音效库中是否存在音效，如果没有则加入
-            //if (HudManager.Hud_Sounds != null)
-            //{
-            //    if (PrimitiveTweenSoundNode.TweenSounds != null && PrimitiveTweenSoundNode.TweenSounds.Count > 0)
-            //    {
-            //        for (int i = 0; i < PrimitiveTweenSoundNode.TweenSounds.Count; i++)
-            //        {
-            //            if (PrimitiveTweenSoundNode.TweenSounds[i] != null)
-            //            {
-            //                if (PrimitiveTweenSoundNode.TweenSounds[i].Sound != null)
-            //                {
-            //                    AudioClip sod = PrimitiveTweenSoundNode.TweenSounds[i].Sound;
-            //                    int libcount = HudManager.Hud_Sounds.SoundLibrary_GetSoundCount();
-
-            //                    bool repeat = false;
-            //                    for (int s = 0; s < libcount; s++)
-            //                    {
-            //                        if (HudManager.Hud_Sounds.SoundLibrary_GetSound(s).name == sod.name &&
-            //                            HudManager.Hud_Sounds.SoundLibrary_GetSoundArg(s).Name == sod.name)
-            //                        {
-            //                            repeat = true;
-            //                            break;
-            //                        }
-            //                    }
-            //                    if (!repeat)
-            //                    {
-            //                        HudManager.Hud_Sounds.SoundLibrary_AddSound(sod.name, sod);
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //#endregion
 
             Editor_XHud_GUI.Gui_Layout_Space(25);
 

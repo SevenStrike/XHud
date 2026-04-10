@@ -450,7 +450,7 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.Gui_Layout_Space(35);
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "清空曲线库", clear_r, clear_p, 4))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 曲线库消息", "清空所有曲线", "是否清空所有曲线项？请注意！如果您的场景中或是预制体中的脚本用到了该曲线库中的曲线，清空后会导致动画器的曲线信息丢失，请谨慎操作！", "清空", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 曲线库消息", "清空所有曲线", "是否清空所有曲线项？请注意！如果您的场景中或是预制体中的脚本用到了该曲线库中的曲线，清空后会导致曲线信息丢失，请谨慎操作！", "清空", "暂不", 1);
                         if (res == "暂不")
                             return;
 

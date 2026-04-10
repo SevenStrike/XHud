@@ -746,7 +746,7 @@ namespace SevenStrikeModules.XHud.Editor
                 info_text.RichText = true;
                 info_text.Maskable = false;
                 info_text.Raycast = false;
-                info_text.SyncAnimatorColor = false;
+                info_text.SyncPrimitivePaintingColor = false;
                 info_text.BestFit = false;
                 info_text.GeometreAlign = false;
                 info_text.Font = AssetDatabase.LoadAssetAtPath<Font>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Fonts/Text/SevenBlack-Light.ttf");
@@ -765,7 +765,7 @@ namespace SevenStrikeModules.XHud.Editor
                 info_tmptext.tmp_rich = true;
                 info_tmptext.Maskable = false;
                 info_tmptext.Raycast = false;
-                info_tmptext.SyncAnimatorColor = false;
+                info_tmptext.SyncPrimitivePaintingColor = false;
                 info_tmptext.tmp_EnableAutoSizing = false;
                 info_tmptext.tmp_font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Fonts/Tmp/SevenBlack-Light SDF.asset");
                 info_tmptext.tmp_color = Color.white;

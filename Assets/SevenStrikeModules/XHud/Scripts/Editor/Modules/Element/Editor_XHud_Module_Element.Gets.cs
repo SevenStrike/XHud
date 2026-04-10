@@ -163,7 +163,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 drawHeaderCallback = rect =>
                 {
-                    EditorGUI.LabelField(rect, "动画器列表");
+                    EditorGUI.LabelField(rect, "图元控制器列表");
                 },
                 drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
                 {
@@ -224,12 +224,6 @@ namespace SevenStrikeModules.XHud.Editor
                 },
                 onSelectCallback = (ReorderableList list) =>
                 {
-                    //if (!Application.isPlaying)
-                    //{
-                    //    Preview_Animator_Stop();
-                    //}
-
-                    //Preview_Animator_PlayAt(list.index);
                     SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(list.index);
                     if (sp_node != null)
                     {
@@ -589,7 +583,7 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         /// <summary>
-        /// 获取所有图元动画器
+        /// 获取所有图元控制器
         /// </summary>
         private void GetPrimitivesTween()
         {
@@ -763,7 +757,7 @@ namespace SevenStrikeModules.XHud.Editor
                     SerializedProperty sp_nodes = so_ele.FindProperty("TextNodes");
                     so_ele.Update();
 
-                    #region 获取所有Animator并过滤条件
+                    #region 获取所有 Text文字组件 并过滤条件
                     XHud_Module_Text[] texts = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Text>();
 
                     List<XHud_Module_Text> texts_fillter = new List<XHud_Module_Text>();
@@ -818,7 +812,7 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_nodes.InsertArrayElementAtIndex(index);
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
 
-                            #region 赋值Animator
+                            #region 赋值 Text
                             SerializedProperty sp_Text = sp_node.FindPropertyRelative("Text");
                             sp_Text.objectReferenceValue = texts_confirm[m];
                             sp_Text.serializedObject.ApplyModifiedProperties();
@@ -837,7 +831,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 SerializedProperty sp_nodes = serializedObject.FindProperty("TextNodes");
 
-                #region 获取所有Animator并过滤条件
+                #region 获取所有 文字组件 并过滤条件
                 XHud_Module_Text[] texts = BaseScript.GetComponentsInChildren<XHud_Module_Text>();
 
                 List<XHud_Module_Text> texts_fillter = new List<XHud_Module_Text>();
@@ -866,7 +860,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XHud_Module_Text[] texts_confirm = texts_fillter.ToArray();
                 for (int i = 0; i < texts_confirm.Length; i++)
                 {
-                    #region 判断是否已存在Text
+                    #region 判断是否已存在 Text
                     bool isrepeat = false;
 
                     for (int s = 0; s < sp_nodes.arraySize; s++)
@@ -892,7 +886,7 @@ namespace SevenStrikeModules.XHud.Editor
                         sp_nodes.InsertArrayElementAtIndex(index);
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
 
-                        #region 赋值Text
+                        #region 赋值 Text
                         SerializedProperty sp_text = sp_node.FindPropertyRelative("Text");
                         sp_text.objectReferenceValue = texts_confirm[i];
                         sp_text.serializedObject.ApplyModifiedProperties();
@@ -919,7 +913,7 @@ namespace SevenStrikeModules.XHud.Editor
                     SerializedProperty sp_nodes = so_ele.FindProperty("TmpTextNodes");
                     so_ele.Update();
 
-                    #region 获取所有Animator并过滤条件
+                    #region 获取所有 TmpText组件 并过滤条件
                     XHud_Module_TmpText[] texts = SelectedObjects[i].GetComponentsInChildren<XHud_Module_TmpText>();
 
                     List<XHud_Module_TmpText> texts_fillter = new List<XHud_Module_TmpText>();
@@ -974,7 +968,7 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_nodes.InsertArrayElementAtIndex(index);
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
 
-                            #region 赋值Animator
+                            #region 赋值 TmpText
                             SerializedProperty sp_Text = sp_node.FindPropertyRelative("TmpText");
                             sp_Text.objectReferenceValue = texts_confirm[m];
                             sp_Text.serializedObject.ApplyModifiedProperties();
@@ -993,7 +987,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 SerializedProperty sp_nodes = serializedObject.FindProperty("TmpTextNodes");
 
-                #region 获取所有Animator并过滤条件
+                #region 获取所有 TmpText组件 并过滤条件
                 XHud_Module_TmpText[] texts = BaseScript.GetComponentsInChildren<XHud_Module_TmpText>();
 
                 List<XHud_Module_TmpText> texts_fillter = new List<XHud_Module_TmpText>();
@@ -1048,7 +1042,7 @@ namespace SevenStrikeModules.XHud.Editor
                         sp_nodes.InsertArrayElementAtIndex(index);
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
 
-                        #region 赋值Text
+                        #region 赋值 TmpText
                         SerializedProperty sp_text = sp_node.FindPropertyRelative("TmpText");
                         sp_text.objectReferenceValue = texts_confirm[i];
                         sp_text.serializedObject.ApplyModifiedProperties();
@@ -1128,12 +1122,12 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 SerializedProperty sp_nodes = serializedObject.FindProperty("OptionNodes");
 
-                XHud_Module_Option[] allanimators = BaseScript.GetComponentsInChildren<XHud_Module_Option>();
+                XHud_Module_Option[] options = BaseScript.GetComponentsInChildren<XHud_Module_Option>();
 
                 List<XHud_Module_Option> Filter = new List<XHud_Module_Option>();
-                for (int i = 0; i < allanimators.Length; i++)
+                for (int i = 0; i < options.Length; i++)
                 {
-                    Filter.Add(allanimators[i]);
+                    Filter.Add(options[i]);
                 }
 
                 XHud_Module_Option[] gettedOpts = Filter.ToArray();
@@ -1359,15 +1353,15 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 SerializedProperty sp_nodes = serializedObject.FindProperty("ButtonNodes");
 
-                XHud_Module_Button[] allanimators = BaseScript.GetComponentsInChildren<XHud_Module_Button>();
+                XHud_Module_Button[] buttons = BaseScript.GetComponentsInChildren<XHud_Module_Button>();
 
                 List<XHud_Module_Button> Filter = new List<XHud_Module_Button>();
-                for (int i = 0; i < allanimators.Length; i++)
+                for (int i = 0; i < buttons.Length; i++)
                 {
-                    XHud_Module_Option hud_optselector = allanimators[i].GetComponentInParent<XHud_Module_Option>();
+                    XHud_Module_Option hud_optselector = buttons[i].GetComponentInParent<XHud_Module_Option>();
                     if (hud_optselector != null)
                         continue;
-                    Filter.Add(allanimators[i]);
+                    Filter.Add(buttons[i]);
                 }
 
                 XHud_Module_Button[] gettedBtns = Filter.ToArray();
@@ -1400,10 +1394,10 @@ namespace SevenStrikeModules.XHud.Editor
                         sp_nodes.InsertArrayElementAtIndex(index);
 
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_Animator = sp_node.FindPropertyRelative("Button");
-                        sp_Animator.objectReferenceValue = gettedBtns[i];
+                        SerializedProperty sp_button = sp_node.FindPropertyRelative("Button");
+                        sp_button.objectReferenceValue = gettedBtns[i];
 
-                        sp_Animator.serializedObject.ApplyModifiedProperties();
+                        sp_button.serializedObject.ApplyModifiedProperties();
                         sp_node.serializedObject.ApplyModifiedProperties();
                     }
                 }

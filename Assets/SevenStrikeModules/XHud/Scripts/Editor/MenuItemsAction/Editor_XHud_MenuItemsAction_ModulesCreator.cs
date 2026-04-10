@@ -217,11 +217,15 @@ namespace SevenStrikeModules.XHud.Editor
                 XHud_Module_Text value = Mc_AddText(actobj, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "XHud Text", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
                 value.Indicator = "Text";
 
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "创建动画器", "是否要为创建的Text创建一个Animator动画器？", "暂不", "添加", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "创建图元控制器", "是否要为创建的Text创建一个图元控制器？", "暂不", "添加", 0);
                 if (res == "添加")
                 {
-                    XHud_Module_Animator anim = value.gameObject.AddComponent<XHud_Module_Animator>();
-                    anim.OriginalColor = value.TextStyleInfo.tmp_color;
+                    // 初始化图元控制器
+                    XHud_Module_Primitive_Controller con = value.gameObject.AddComponent<XHud_Module_Primitive_Controller>();
+                    // 初始化图元控制器
+                    con.InitialComponents_For_Editor();
+                    // 初始配色同步
+                    con.pt_Painting.OriginalColor = value.TextStyleInfo.tmp_color;
                 }
 
                 Selection.activeTransform = value.transform;
@@ -258,11 +262,15 @@ namespace SevenStrikeModules.XHud.Editor
                 XHud_Module_TmpText value = Mc_AddTmpText(actobj, "TmpText", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "XHud Text", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
                 value.Indicator = "TmpText";
 
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "创建动画器", "是否要为创建的TmpText创建一个Animator动画器？", "暂不", "添加", 0);
+                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "创建图元控制器", "是否要为创建的TmpText创建一个图元控制器？", "暂不", "添加", 0);
                 if (res == "添加")
                 {
-                    XHud_Module_Animator anim = value.gameObject.AddComponent<XHud_Module_Animator>();
-                    anim.OriginalColor = value.TextStyleInfo.tmp_color;
+                    // 初始化图元控制器
+                    XHud_Module_Primitive_Controller con = value.gameObject.AddComponent<XHud_Module_Primitive_Controller>();
+                    // 初始化图元控制器
+                    con.InitialComponents_For_Editor();
+                    // 初始配色同步
+                    con.pt_Painting.OriginalColor = value.TextStyleInfo.tmp_color;
                 }
 
                 Selection.activeTransform = value.transform;
@@ -809,7 +817,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 创建Option
             XHud_Module_Option option = Mc_AddHudOption(opt_root, "Option");
-            option.RepeatAnimatorPlay = true;
+            option.RepeatTweenPlay = true;
             option.UseBlinked = true;
             option.UseEaseMotion = true;
             #endregion

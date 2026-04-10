@@ -64,7 +64,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 序列化属性
-        private SerializedProperty Indicator, DebugState, PrimitivesTweenMaxDuration, PrimitivesTweenState, ButtonActionTiming, IsOptionButton, TextColorSyncFade, IconColorSyncFade, IconImage, LongPress_Step, PrimitivesTweenGlobalDuration, eve_on_Deselect, eve_on_Select, eve_on_Click, eve_on_Press, eve_on_Enter, eve_on_Exit, eve_on_Release, eve_on_LongPressed, eve_on_LongpressPer, LongPress_Percent, PrimitiveControllerNodes, ButtonName, PrimitivesTweenIsFold, ClickDelayTimeThreadhold, EventIsFold, ToggleOriginalIsFold, ButtonText, ButtonTmpText, LongPress_Threshold, LongPress_SmoothRewind, LongPress_UseRewind, HudButtonState_Clicked, HudButtonState_LongPressed, HudButtonState_Selector, HudButtonState_Holder, HudButtonState_Pressed, AutoStopPreview, BgColorSyncFade, BgImage;
+        private SerializedProperty Indicator, DebugState, PrimitivesTweenMaxDuration, PrimitivesTweenState, ButtonActionTiming, IsOptionButton, TextColorSyncFade, IconColorSyncFade, IconImage, LongPress_Step, PrimitivesTweenGlobalDuration, eve_on_Deselect, eve_on_Select, eve_on_Click, eve_on_Press, eve_on_Enter, eve_on_Exit, eve_on_Release, eve_on_LongPressed, eve_on_LongpressPer, LongPress_Percent, PrimitiveControllerNodes, ButtonName, PrimitivesIsFold, ClickDelayTimeThreadhold, EventIsFold, ToggleOriginalIsFold, ButtonText, ButtonTmpText, LongPress_Threshold, LongPress_SmoothRewind, LongPress_UseRewind, HudButtonState_Clicked, HudButtonState_LongPressed, HudButtonState_Selector, HudButtonState_Holder, HudButtonState_Pressed, AutoStopPreview, BgColorSyncFade, BgImage;
         #endregion
 
         #region 图标                                                                                                                                     
@@ -117,7 +117,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region Preview - PrimitivesTween
-        private bool Preivew_PrimitivesTween_PlayingState;
+        private bool Preivew_Tween_PlayingState;
         #endregion
 
         #region GUI 参数
@@ -174,7 +174,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 drawHeaderCallback = rect =>
                 {
-                    EditorGUI.LabelField(rect, "动画器列表");
+                    EditorGUI.LabelField(rect, "图元动画器列表");
                 },
                 drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
                 {
@@ -296,9 +296,9 @@ namespace SevenStrikeModules.XHud.Editor
                 GUILayout.FlexibleSpace();
 
                 #region 预览动画
-                if (!Preivew_PrimitivesTween_PlayingState)
+                if (!Preivew_Tween_PlayingState)
                 {
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "播放所有动画器预览", play_r, play_p))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "播放所有图元动画器预览", play_r, play_p))
                     {
                         if (!Application.isPlaying)
                         {
@@ -309,7 +309,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 else
                 {
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "停止所有动画器预览", stop_r, stop_p))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "停止所有图元动画器预览", stop_r, stop_p))
                     {
                         if (!Application.isPlaying)
                         {
@@ -586,7 +586,7 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[ButtonStatu_Index].PrimitivesTweenState == XHudElementAnimateState.Animating ? "动画中" : "静止状态", SelectedObjects[ButtonStatu_Index].PrimitivesTweenState == XHudElementAnimateState.Animating ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                     #endregion
 
-                    SelectedObjects[ButtonStatu_Index].PrimitivesTweenMaxDuration = Animators_GetAnimatorsMaxDuration(SelectedObjects[ButtonStatu_Index].PrimitiveControllerNodes, SelectedObjects[ButtonStatu_Index].PrimitivesTweenGlobalDuration);
+                    SelectedObjects[ButtonStatu_Index].PrimitivesTweenMaxDuration = PrimitiveTweens_MaxDuration_Get(SelectedObjects[ButtonStatu_Index].PrimitiveControllerNodes, SelectedObjects[ButtonStatu_Index].PrimitivesTweenGlobalDuration);
 
                     #region 最大耗时     
                     Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, SelectedObjects[ButtonStatu_Index].PrimitivesTweenMaxDuration.ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
@@ -618,10 +618,10 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 else
                 {
-                    #region 组件数量 - 动画器
+                    #region 组件数量 - 图元动画器
                     if (PrimitiveControllerNodes.arraySize > 0)
                     {
-                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, PrimitiveControllerNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, PrimitiveControllerNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
                     }
                     #endregion
                 }
@@ -671,10 +671,10 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 else
                 {
-                    #region 组件数量 - 动画器
+                    #region 组件数量 - 图元动画器
                     if (SelectedObjects[ButtonStatistic_Index].PrimitiveControllerNodes.Count > 0)
                     {
-                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, SelectedObjects[ButtonStatistic_Index].PrimitiveControllerNodes.Count.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, SelectedObjects[ButtonStatistic_Index].PrimitiveControllerNodes.Count.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
                     }
                     #endregion
                 }
@@ -684,8 +684,8 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
-            #region 检查是否有无效的动画器
-            CheckAnimatorsValid();
+            #region 检查是否有无效的图元动画器
+            CheckTweensValid();
             #endregion
 
             #region 事件/列表
@@ -699,7 +699,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
-                    EditorGUILayout.HelpBox("动画列表不支持多项操作", MessageType.Warning);
+                    EditorGUILayout.HelpBox("图元动画器列表不支持多项操作", MessageType.Warning);
                     Editor_XHud_GUI.Gui_Layout_Space(5);
                     Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 }
@@ -708,13 +708,13 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
 
-                    PrimitivesTweenIsFold.boolValue = EditorGUILayout.Foldout(PrimitivesTweenIsFold.boolValue, "动画器", true);
+                    PrimitivesIsFold.boolValue = EditorGUILayout.Foldout(PrimitivesIsFold.boolValue, "图元动画器", true);
                     Editor_XHud_GUI.Gui_Layout_Space(5);
                     Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(5);
-                    if (PrimitivesTweenIsFold.boolValue)
+                    if (PrimitivesIsFold.boolValue)
                         PrimitivesTweenList.DoLayoutList();
                     Editor_XHud_GUI.Gui_Layout_Space(5);
                     Editor_XHud_GUI.Gui_Layout_Horizontal_End();
@@ -970,7 +970,7 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 按钮消息", "脚本参数操作", "已将剪贴板的参数粘贴至当前HudButton脚本！", "明白");
                 });
-                menu.AddDisabledItem(new GUIContent("动画器"));
+                menu.AddDisabledItem(new GUIContent("图元动画器"));
                 menu.AddItem(new GUIContent("X (扫描)"), false, () =>
                 {
                     if (Application.isPlaying)
@@ -1014,7 +1014,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     menu.AddSeparator("");
                     menu.AddDisabledItem(new GUIContent("预览"));
-                    if (!Preivew_PrimitivesTween_PlayingState)
+                    if (!Preivew_Tween_PlayingState)
                     {
                         menu.AddItem(new GUIContent("S (开始)"), false, () =>
                         {
@@ -1056,16 +1056,16 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
-            CalculateAnimatorMaxDuration(BaseScript.PrimitiveControllerNodes, PrimitivesTweenGlobalDuration.floatValue);
+            PrimitiveTweens_MaxDuration_Calculate(BaseScript.PrimitiveControllerNodes, PrimitivesTweenGlobalDuration.floatValue);
 
             serializedObject.ApplyModifiedProperties();
         }
 
         #region 辅助
         /// <summary>
-        /// 检查是否存在无效的动画器
+        /// 检查是否存在无效的图元动画器
         /// </summary>
-        private void CheckAnimatorsValid()
+        private void CheckTweensValid()
         {
             for (int i = 0; i < PrimitiveControllerNodes.arraySize; i++)
             {
@@ -1091,14 +1091,14 @@ namespace SevenStrikeModules.XHud.Editor
                     if (SelectedObjects[i] == null)
                         continue;
                     SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_anim_isfold = so_ele.FindProperty("AnimatorsIsFold");
+                    SerializedProperty sp_tween_isfold = so_ele.FindProperty("PrimitivesIsFold");
                     SerializedProperty sp_event_isfold = so_ele.FindProperty("EventIsFold");
                     so_ele.Update();
 
-                    sp_anim_isfold.boolValue = state;
+                    sp_tween_isfold.boolValue = state;
                     sp_event_isfold.boolValue = state;
                     sp_event_isfold.serializedObject.ApplyModifiedProperties();
-                    sp_anim_isfold.serializedObject.ApplyModifiedProperties();
+                    sp_tween_isfold.serializedObject.ApplyModifiedProperties();
 
                     so_ele.ApplyModifiedProperties();
                 }
@@ -1107,10 +1107,10 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 if (target != null)
                 {
-                    PrimitivesTweenIsFold.boolValue = state;
+                    PrimitivesIsFold.boolValue = state;
                     EventIsFold.boolValue = state;
                     EventIsFold.serializedObject.ApplyModifiedProperties();
-                    PrimitivesTweenIsFold.serializedObject.ApplyModifiedProperties();
+                    PrimitivesIsFold.serializedObject.ApplyModifiedProperties();
                 }
             }
         }
@@ -1119,16 +1119,16 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         /// <param name="list"></param>
         /// <param name="globaldur"></param>
-        private void CalculateAnimatorMaxDuration(List<PrimitiveControllerNode> list, float globaldur)
+        private void PrimitiveTweens_MaxDuration_Calculate(List<PrimitiveControllerNode> list, float globaldur)
         {
-            PrimitivesTweenMaxDuration.floatValue = Animators_GetAnimatorsMaxDuration(list, globaldur);
+            PrimitivesTweenMaxDuration.floatValue = PrimitiveTweens_MaxDuration_Get(list, globaldur);
             PrimitivesTweenMaxDuration.serializedObject.ApplyModifiedProperties();
         }
         /// <summary>
-        /// 从所有子动画器中获取最大耗时
+        /// 从所有子图元动画器中获取最大耗时
         /// </summary>
         /// <returns></returns>
-        public float Animators_GetAnimatorsMaxDuration(List<PrimitiveControllerNode> list, float globaldur)
+        public float PrimitiveTweens_MaxDuration_Get(List<PrimitiveControllerNode> list, float globaldur)
         {
             if (list.Count <= 0)
                 return 0;
@@ -1147,10 +1147,10 @@ namespace SevenStrikeModules.XHud.Editor
             return v * globaldur;
         }
         /// <summary>
-        /// 获取动画器中是否存在循环模式
+        /// 获取图元动画器中是否存在循环模式
         /// </summary>
         /// <returns></returns>
-        public bool Animators_HasLoopMode()
+        public bool PrimitiveTweens_HasLoopMode()
         {
             bool hasLoop = false;
 
@@ -1187,10 +1187,10 @@ namespace SevenStrikeModules.XHud.Editor
             return hasLoop;
         }
         /// <summary>
-        /// 获取动画器中是否存在循环模式
+        /// 获取图元动画器中是否存在循环模式
         /// </summary>
         /// <returns></returns>
-        public bool AnimatorTweenNodes_HasLoopMode(List<TweenNode> tweenlist)
+        public bool PrimitiveTweenNodes_HasLoopMode(List<TweenNode> tweenlist)
         {
             bool hasLoop = false;
 
@@ -1249,7 +1249,7 @@ namespace SevenStrikeModules.XHud.Editor
             PrimitivesTweenGlobalDuration = serializedObject.FindProperty("PrimitivesTweenGlobalDuration");
             PrimitivesTweenMaxDuration = serializedObject.FindProperty("PrimitivesTweenMaxDuration");
             PrimitivesTweenState = serializedObject.FindProperty("PrimitivesTweenState");
-            PrimitivesTweenIsFold = serializedObject.FindProperty("PrimitivesTweenIsFold");
+            PrimitivesIsFold = serializedObject.FindProperty("PrimitivesIsFold");
         }
         #endregion
 
@@ -1369,7 +1369,7 @@ namespace SevenStrikeModules.XHud.Editor
                             XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
 
                             dataitem.Title = $"{btn.name} ( {btn.Indicator} )";
-                            dataitem.SubTitle = $"扫描到动画器";
+                            dataitem.SubTitle = $"扫描到图元动画器";
                             dataitem.Message = $"{btn.PrimitiveControllerNodes[c].Controller.name} ( {btn.PrimitiveControllerNodes[c].Controller.Indicator} )";
 
                             Datas.Add(dataitem);

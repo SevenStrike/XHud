@@ -203,7 +203,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="primitive_indicator">目标图元控制器名称</param>
         /// <param name="tween_indicator">目标图元控制器动画节点的名称</param>
         /// <returns></returns>
-        public TweenNode GetAnimatorTween(string primitive_indicator, string tween_indicator)
+        public TweenNode GetPrimitiveTweenNode(string primitive_indicator, string tween_indicator)
         {
             XHud_Module_Primitive_Controller anim = GetPrimitiveController_WithIndicator(primitive_indicator);
             TweenNode node = anim.pt_Tween.TweenNode_GetByIndicator(tween_indicator);

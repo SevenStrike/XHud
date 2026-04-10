@@ -159,7 +159,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #endregion
 
-            CheckFirstCreatedAnimator();
+            CheckFirstCreatedFeature();
 
             PrimitiveFeature_Capture(SelectedObjects);
         }
@@ -375,7 +375,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 检测图元特性首次初始状态
         /// </summary>
-        private void CheckFirstCreatedAnimator()
+        private void CheckFirstCreatedFeature()
         {
             if (Targets_Selected())
             {

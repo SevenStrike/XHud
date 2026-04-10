@@ -32,8 +32,8 @@ namespace SevenStrikeModules.XHud.Editor
     public class XHud_ModuleArg_Option
     {
         public string Indicator;
-        public float OptionSelector_Animators_GlobalDuration;
-        public bool RepeatAnimatorPlay;
+        public float OptionSelector_Tween_GlobalDuration;
+        public bool RepeatTweenPlay;
         public bool UseBlinked;
         public bool UseEaseMotion;
         public float LerpSpeed;
@@ -50,13 +50,12 @@ namespace SevenStrikeModules.XHud.Editor
         #region 组件 / 列表
         private XHud_Module_Option BaseScript;
         private ReorderableList OptionButtonList;
-        private ReorderableList SelectorAnimatorList;
-        private XHud_Module_Animator selectormark_animator;
+        private ReorderableList SelectorTweenList;
         private XHud_Manager HudManager;
         #endregion
 
         #region 序列化属性
-        private SerializedProperty DebugState, SelectorTweenMotion, SelectorOffset, SelectorOffsetAdded, Indicator, LerpSpeed, Pos_Destination, ChangingInterval, sm_Pos_Destination, TweenSpeed, OptionSelector, RepeatAnimatorPlay, PrimitivesTweenGlobalDuration, PrimitiveControllerNodes, UseEaseMotion, OptionButtonNodes, PrimitivesTweenMaxDuration, CurrentOptionName, OptionIndex, SelectorMark, OptionRoot, UseBlinked, AnimateState, PrimitivesIsFold, ButtonIsFold, EventIsFold, eve_on_selector_position_changed, eve_on_option_clicked, eve_on_option_clicked_with_indicator, eve_on_option_clicked_with_index, eve_on_option_clicked_with_position, eve_on_selector_position_started, eve_on_selector_position_complete, AutoStopPreview;
+        private SerializedProperty DebugState, SelectorTweenMotion, SelectorOffset, SelectorOffsetAdded, Indicator, LerpSpeed, Pos_Destination, ChangingInterval, sm_Pos_Destination, TweenSpeed, OptionSelector, RepeatTweenPlay, PrimitivesTweenGlobalDuration, PrimitiveControllerNodes, UseEaseMotion, OptionButtonNodes, PrimitivesTweenMaxDuration, CurrentOptionName, OptionIndex, SelectorMark, OptionRoot, UseBlinked, AnimateState, PrimitivesIsFold, ButtonIsFold, EventIsFold, eve_on_selector_position_changed, eve_on_option_clicked, eve_on_option_clicked_with_indicator, eve_on_option_clicked_with_index, eve_on_option_clicked_with_position, eve_on_selector_position_started, eve_on_selector_position_complete, AutoStopPreview;
         #endregion
 
         #region 图标                                                                                                                                     
@@ -74,8 +73,8 @@ namespace SevenStrikeModules.XHud.Editor
         private float LineHeight;
         #endregion
 
-        #region Preview - Animator
-        private bool Preivew_Animator_PlayingState;
+        #region Preview - Tween
+        private bool Preivew_Tween_PlayingState;
         #endregion
 
         #region 批量模式查看索引
@@ -165,7 +164,7 @@ namespace SevenStrikeModules.XHud.Editor
             Vector2 ButtonSize = new Vector2(18, 18);
 
             #region ReorderableList - PrimitivesTween
-            SelectorAnimatorList = new ReorderableList(serializedObject, PrimitiveControllerNodes)
+            SelectorTweenList = new ReorderableList(serializedObject, PrimitiveControllerNodes)
             {
                 displayAdd = true,
                 displayRemove = true,
@@ -173,7 +172,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 drawHeaderCallback = rect =>
                 {
-                    EditorGUI.LabelField(rect, "动画器列表");
+                    EditorGUI.LabelField(rect, "图元动画器列表");
                 },
                 drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
                 {
@@ -337,7 +336,6 @@ namespace SevenStrikeModules.XHud.Editor
                                 SelectorOffsetAdded.vector3Value = target;
                                 Pos_Destination.vector3Value = target;
                                 sm_Pos_Destination.vector3Value = target;
-                                OriginalPoseState_Record(sel_mark);
 
                                 SelectorOffsetAdded.serializedObject.ApplyModifiedProperties();
                                 Pos_Destination.serializedObject.ApplyModifiedProperties();
@@ -346,9 +344,11 @@ namespace SevenStrikeModules.XHud.Editor
                                 sel_mark.anchoredPosition3D = new Vector3(Pos_Destination.vector3Value.x, Pos_Destination.vector3Value.y, sel_mark.anchoredPosition3D.z) + SelectorOffset.vector3Value;
 
                                 SelectorMark.serializedObject.ApplyModifiedProperties();
+
+                                // 记录光标在因选项选择后改变的图元特性姿态
+                                SaveSelectorMarkFeature(sel_mark);
                             }
                         }
-                        //#endregion
 
                         EditorGUIUtility.PingObject(sp_button.objectReferenceValue);
                     }
@@ -411,9 +411,9 @@ namespace SevenStrikeModules.XHud.Editor
                 GUILayout.FlexibleSpace();
 
                 #region 预览动画
-                if (!Preivew_Animator_PlayingState)
+                if (!Preivew_Tween_PlayingState)
                 {
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "播放所有动画器预览", play_r, play_p))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "播放所有图元动画器预览", play_r, play_p))
                     {
                         if (!Application.isPlaying)
                         {
@@ -424,7 +424,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 else
                 {
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "停止所有动画器预览", stop_r, stop_p))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "停止所有图元动画器预览", stop_r, stop_p))
                     {
                         if (!Application.isPlaying)
                         {
@@ -451,7 +451,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Option>("状态调试", stroptions_debug, ref DebugState, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Option>("选择时重复动画", stroptions_enabled, ref RepeatAnimatorPlay, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Option>("选择时重复动画", stroptions_enabled, ref RepeatTweenPlay, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Option>("选择器闪现", stroptions_blinked, ref UseBlinked, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
 
@@ -501,17 +501,21 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 if (!Targets_Selected())
                 {
-                    RectTransform selectorMarksel = (RectTransform)SelectorMark.objectReferenceValue;
-                    selectorMarksel.anchoredPosition3D = SelectorOffsetAdded.vector3Value + SelectorOffset.vector3Value;
-                    OriginalPoseState_Record(selectorMarksel);
+                    RectTransform sel_mark = (RectTransform)SelectorMark.objectReferenceValue;
+                    sel_mark.anchoredPosition3D = SelectorOffsetAdded.vector3Value + SelectorOffset.vector3Value;
+
+                    // 记录光标在因选项选择后改变的图元特性姿态
+                    SaveSelectorMarkFeature(sel_mark);
                 }
                 else
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
-                        RectTransform selectorMarksel = SelectedObjects[i].SelectorMark;
-                        selectorMarksel.anchoredPosition3D = SelectedObjects[i].SelectorOffsetAdded + SelectedObjects[i].SelectorOffset;
-                        OriginalPoseState_Record(selectorMarksel);
+                        RectTransform sel_mark = SelectedObjects[i].SelectorMark;
+                        sel_mark.anchoredPosition3D = SelectedObjects[i].SelectorOffsetAdded + SelectedObjects[i].SelectorOffset;
+
+                        // 记录光标在因选项选择后改变的图元特性姿态
+                        SaveSelectorMarkFeature(sel_mark);
                     }
                 }
             }
@@ -647,7 +651,7 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[OptionStatu_Index].AnimateState == XHudElementAnimateState.Animating ? "动画中" : "静止状态", SelectedObjects[OptionStatu_Index].AnimateState == XHudElementAnimateState.Animating ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                     #endregion
 
-                    SelectedObjects[OptionStatu_Index].PrimitivesTweenMaxDuration = Animators_GetAnimatorsMaxDuration(SelectedObjects[OptionStatu_Index].PrimitiveControllerNodes, SelectedObjects[OptionStatu_Index].PrimitivesTweenGlobalDuration);
+                    SelectedObjects[OptionStatu_Index].PrimitivesTweenMaxDuration = PrimitiveTweens_MaxDuration_Get(SelectedObjects[OptionStatu_Index].PrimitiveControllerNodes, SelectedObjects[OptionStatu_Index].PrimitivesTweenGlobalDuration);
 
                     #region 最大耗时     
                     Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, SelectedObjects[OptionStatu_Index].PrimitivesTweenMaxDuration.ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
@@ -679,10 +683,10 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 else
                 {
-                    #region 组件数量 - 动画器
+                    #region 组件数量 - 图元动画器
                     if (PrimitiveControllerNodes.arraySize > 0)
                     {
-                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, PrimitiveControllerNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, PrimitiveControllerNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
                     }
                     #endregion
 
@@ -733,10 +737,10 @@ namespace SevenStrikeModules.XHud.Editor
                 Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 #endregion
 
-                #region 组件数量 - 动画器
+                #region 组件数量 - 图元动画器
                 if (SelectedObjects[OptionStatistic_Index].PrimitiveControllerNodes.Count > 0)
                 {
-                    Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, SelectedObjects[OptionStatistic_Index].PrimitiveControllerNodes.Count + " 个", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, SelectedObjects[OptionStatistic_Index].PrimitiveControllerNodes.Count + " 个", XHud_Dashboard.Theme_Primary, 11);
                 }
                 #endregion
 
@@ -751,8 +755,8 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
-            #region 检查是否有无效的动画器
-            CheckAnimatorsValid();
+            #region 检查是否有无效的图元动画器
+            CheckTweensValid();
             #endregion
 
             #region 检查是否有无效的选项按钮
@@ -763,7 +767,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "事件/列表", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            #region 动画器列表
+            #region 图元动画器列表
             if (PrimitiveControllerNodes.arraySize > 0)
             {
                 if (Targets_Selected())
@@ -778,14 +782,14 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
-                    PrimitivesIsFold.boolValue = EditorGUILayout.Foldout(PrimitivesIsFold.boolValue, "动画器", true);
+                    PrimitivesIsFold.boolValue = EditorGUILayout.Foldout(PrimitivesIsFold.boolValue, "图元动画器", true);
                     Editor_XHud_GUI.Gui_Layout_Space(5);
                     Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(5);
                     if (PrimitivesIsFold.boolValue)
-                        SelectorAnimatorList.DoLayoutList();
+                        SelectorTweenList.DoLayoutList();
                     Editor_XHud_GUI.Gui_Layout_Space(5);
                     Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 }
@@ -898,8 +902,8 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
             {
-                SerializedProperty sp_OptionSelector_Animators_GlobalDuration = serializedObject.FindProperty("OptionSelector_Animators_GlobalDuration");
-                SerializedProperty sp_RepeatAnimatorPlay = serializedObject.FindProperty("RepeatAnimatorPlay");
+                SerializedProperty sp_OptionSelector_Tween_GlobalDuration = serializedObject.FindProperty("OptionSelector_Tween_GlobalDuration");
+                SerializedProperty sp_RepeatTweenPlay = serializedObject.FindProperty("RepeatTweenPlay");
                 SerializedProperty sp_UseBlinked = serializedObject.FindProperty("UseBlinked");
                 SerializedProperty sp_UseEaseMotion = serializedObject.FindProperty("UseEaseMotion");
                 SerializedProperty sp_LerpSpeed = serializedObject.FindProperty("LerpSpeed");
@@ -915,8 +919,8 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         XHud_ModuleArg_Option hop = new XHud_ModuleArg_Option();
 
-                        hop.OptionSelector_Animators_GlobalDuration = sp_OptionSelector_Animators_GlobalDuration.floatValue;
-                        hop.RepeatAnimatorPlay = sp_RepeatAnimatorPlay.boolValue;
+                        hop.OptionSelector_Tween_GlobalDuration = sp_OptionSelector_Tween_GlobalDuration.floatValue;
+                        hop.RepeatTweenPlay = sp_RepeatTweenPlay.boolValue;
                         hop.UseBlinked = sp_UseBlinked.boolValue;
                         hop.UseEaseMotion = sp_UseEaseMotion.boolValue;
                         hop.LerpSpeed = sp_LerpSpeed.floatValue;
@@ -937,8 +941,8 @@ namespace SevenStrikeModules.XHud.Editor
                         {
                             SerializedObject so_option = new SerializedObject(SelectedObjects[i]);
 
-                            SerializedProperty c_sp_OptionSelector_Animators_GlobalDuration = so_option.FindProperty("OptionSelector_Animators_GlobalDuration");
-                            SerializedProperty c_sp_RepeatAnimatorPlay = so_option.FindProperty("RepeatAnimatorPlay");
+                            SerializedProperty c_sp_OptionSelector_Tween_GlobalDuration = so_option.FindProperty("OptionSelector_Tween_GlobalDuration");
+                            SerializedProperty c_sp_RepeatTweenPlay = so_option.FindProperty("RepeatTweenPlay");
                             SerializedProperty c_sp_UseBlinked = so_option.FindProperty("UseBlinked");
                             SerializedProperty c_sp_UseEaseMotion = so_option.FindProperty("UseEaseMotion");
                             SerializedProperty c_sp_LerpSpeed = so_option.FindProperty("LerpSpeed");
@@ -947,16 +951,16 @@ namespace SevenStrikeModules.XHud.Editor
 
                             so_option.Update();
 
-                            c_sp_OptionSelector_Animators_GlobalDuration.floatValue = hop.OptionSelector_Animators_GlobalDuration;
-                            c_sp_RepeatAnimatorPlay.boolValue = hop.RepeatAnimatorPlay;
+                            c_sp_OptionSelector_Tween_GlobalDuration.floatValue = hop.OptionSelector_Tween_GlobalDuration;
+                            c_sp_RepeatTweenPlay.boolValue = hop.RepeatTweenPlay;
                             c_sp_UseBlinked.boolValue = hop.UseBlinked;
                             c_sp_UseEaseMotion.boolValue = hop.UseEaseMotion;
                             c_sp_LerpSpeed.floatValue = hop.LerpSpeed;
                             c_sp_TweenSpeed.floatValue = hop.TweenSpeed;
                             c_sp_SelectorTweenMotion.enumValueIndex = (int)hop.SelectorTweenMotion;
 
-                            c_sp_OptionSelector_Animators_GlobalDuration.serializedObject.ApplyModifiedProperties();
-                            c_sp_RepeatAnimatorPlay.serializedObject.ApplyModifiedProperties();
+                            c_sp_OptionSelector_Tween_GlobalDuration.serializedObject.ApplyModifiedProperties();
+                            c_sp_RepeatTweenPlay.serializedObject.ApplyModifiedProperties();
                             c_sp_UseBlinked.serializedObject.ApplyModifiedProperties();
                             c_sp_UseEaseMotion.serializedObject.ApplyModifiedProperties();
                             c_sp_LerpSpeed.serializedObject.ApplyModifiedProperties();
@@ -968,16 +972,16 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     else
                     {
-                        sp_OptionSelector_Animators_GlobalDuration.floatValue = hop.OptionSelector_Animators_GlobalDuration;
-                        sp_RepeatAnimatorPlay.boolValue = hop.RepeatAnimatorPlay;
+                        sp_OptionSelector_Tween_GlobalDuration.floatValue = hop.OptionSelector_Tween_GlobalDuration;
+                        sp_RepeatTweenPlay.boolValue = hop.RepeatTweenPlay;
                         sp_UseBlinked.boolValue = hop.UseBlinked;
                         sp_UseEaseMotion.boolValue = hop.UseEaseMotion;
                         sp_LerpSpeed.floatValue = hop.LerpSpeed;
                         sp_TweenSpeed.floatValue = hop.TweenSpeed;
                         sp_SelectorTweenMotion.enumValueIndex = (int)hop.SelectorTweenMotion;
 
-                        sp_OptionSelector_Animators_GlobalDuration.serializedObject.ApplyModifiedProperties();
-                        sp_RepeatAnimatorPlay.serializedObject.ApplyModifiedProperties();
+                        sp_OptionSelector_Tween_GlobalDuration.serializedObject.ApplyModifiedProperties();
+                        sp_RepeatTweenPlay.serializedObject.ApplyModifiedProperties();
                         sp_UseBlinked.serializedObject.ApplyModifiedProperties();
                         sp_UseEaseMotion.serializedObject.ApplyModifiedProperties();
                         sp_LerpSpeed.serializedObject.ApplyModifiedProperties();
@@ -986,7 +990,7 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                 });
                 menu.AddSeparator("");
-                menu.AddDisabledItem(new GUIContent("动画器"));
+                menu.AddDisabledItem(new GUIContent("图元动画器"));
                 menu.AddItem(new GUIContent("X (扫描)"), false, () =>
                 {
                     string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 选项器消息", "获取子组件", "请确保子级中按钮的选项模式已开启！否则无法被扫描到并作为选项按钮！", "立即扫描", "再检查下", 1);
@@ -1032,7 +1036,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     menu.AddSeparator("");
                     menu.AddDisabledItem(new GUIContent("预览"));
-                    if (!Preivew_Animator_PlayingState)
+                    if (!Preivew_Tween_PlayingState)
                     {
                         menu.AddItem(new GUIContent("S (开始)"), false, () =>
                         {
@@ -1074,13 +1078,14 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
-            CalculateAnimatorMaxDuration(BaseScript.PrimitiveControllerNodes, PrimitivesTweenGlobalDuration.floatValue);
+            PrimitiveTweens_MaxDuration_Calculate(BaseScript.PrimitiveControllerNodes, PrimitivesTweenGlobalDuration.floatValue);
 
             CorrectionSelectorWhenRectChangeSized();
 
             serializedObject.ApplyModifiedProperties();
         }
 
+        #region 辅助
         /// <summary>
         /// 当选项器尺寸发生变化时校正光标位置
         /// </summary>
@@ -1095,7 +1100,6 @@ namespace SevenStrikeModules.XHud.Editor
 
             lastSize = currentSize;
         }
-
         /// <summary>
         /// 校正光标位置
         /// </summary>
@@ -1127,29 +1131,36 @@ namespace SevenStrikeModules.XHud.Editor
 
                             sel_mark.anchoredPosition3D = new Vector3(Pos_Destination.vector3Value.x, Pos_Destination.vector3Value.y, sel_mark.anchoredPosition3D.z) + SelectorOffset.vector3Value;
 
-                            OriginalPoseState_Record(sel_mark);
+                            // 记录光标在因选项选择后改变的图元特性姿态
+                            SaveSelectorMarkFeature(sel_mark);
                         }
                     }
                 }
             }
         }
-
-        #region 辅助
         /// <summary>
-        /// 检查是否存在无效的动画器
+        /// 记录光标在因选项选择后改变的图元特性姿态
         /// </summary>
-        private void CheckAnimatorsValid()
+        private void SaveSelectorMarkFeature(RectTransform img)
         {
-            for (int i = 0; i < PrimitiveControllerNodes.arraySize; i++)
-            {
-                SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(i);
-                SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+            if (img == null)
+                return;
 
-                if (sp_node_con.objectReferenceValue == null)
-                {
-                    PrimitiveControllerNodes.DeleteArrayElementAtIndex(i);
-                }
+            XHud_Module_Primitive_Controller con = img.GetComponent<XHud_Module_Primitive_Controller>();
+
+            if (con == null)
+            {
+                return;
             }
+
+            SerializedObject so = new SerializedObject(con);
+            so.Update();
+            SerializedProperty sp_con_feature = so.FindProperty("pt_Feature");
+            XHud_Module_Primitive_Feature feature = (XHud_Module_Primitive_Feature)sp_con_feature.objectReferenceValue;
+
+            feature.PrimitiveFeature_Save();
+
+            so.ApplyModifiedProperties();
         }
         /// <summary>
         /// 检查是否存在无效的选项按钮
@@ -1167,6 +1178,26 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
         }
+        /// <summary>
+        /// 检查是否存在无效的图元动画器
+        /// </summary>
+        private void CheckTweensValid()
+        {
+            for (int i = 0; i < PrimitiveControllerNodes.arraySize; i++)
+            {
+                SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(i);
+                SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+
+                if (sp_node_con.objectReferenceValue == null)
+                {
+                    PrimitiveControllerNodes.DeleteArrayElementAtIndex(i);
+                }
+            }
+        }
+        /// <summary>
+        /// 折叠列表
+        /// </summary>
+        /// <param name="state"></param>
         private void AllListFoldState(bool state)
         {
             if (Targets_Selected())
@@ -1176,16 +1207,16 @@ namespace SevenStrikeModules.XHud.Editor
                     if (SelectedObjects[i] == null)
                         continue;
                     SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_anim_isfold = so_ele.FindProperty("AnimatorsIsFold");
+                    SerializedProperty sp_tweens_isfold = so_ele.FindProperty("PrimitivesIsFold");
                     SerializedProperty sp_btn_isfold = so_ele.FindProperty("ButtonIsFold");
                     SerializedProperty sp_event_isfold = so_ele.FindProperty("EventIsFold");
                     so_ele.Update();
 
-                    sp_anim_isfold.boolValue = state;
+                    sp_tweens_isfold.boolValue = state;
                     sp_btn_isfold.boolValue = state;
                     sp_event_isfold.boolValue = state;
                     sp_event_isfold.serializedObject.ApplyModifiedProperties();
-                    sp_anim_isfold.serializedObject.ApplyModifiedProperties();
+                    sp_tweens_isfold.serializedObject.ApplyModifiedProperties();
                     sp_btn_isfold.serializedObject.ApplyModifiedProperties();
                     so_ele.ApplyModifiedProperties();
                 }
@@ -1204,78 +1235,20 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 记录Animator姿态
+        /// 计算最大耗时
         /// </summary>
-        private void OriginalPoseState_Record(RectTransform img)
+        /// <param name="list"></param>
+        /// <param name="globaldur"></param>
+        private void PrimitiveTweens_MaxDuration_Calculate(List<PrimitiveControllerNode> list, float globaldur)
         {
-            if (img == null)
-                return;
-
-            selectormark_animator = img.GetComponent<XHud_Module_Animator>();
-
-            if (selectormark_animator == null)
-            {
-                return;
-            }
-
-            SerializedObject so = new SerializedObject(selectormark_animator);
-            so.Update();
-            SerializedProperty origin = so.FindProperty("OriginalAnimatorPoser");
-            SerializedProperty m_rect = so.FindProperty("mod_RectTransform");
-            SerializedProperty m_img = so.FindProperty("mod_Image");
-            SerializedProperty m_text = so.FindProperty("mod_Text");
-            SerializedProperty m_tmptext = so.FindProperty("mod_TmpText");
-            SerializedProperty m_cav = so.FindProperty("CanvasGroup");
-
-            SerializedProperty pos = origin.FindPropertyRelative("Position");
-            SerializedProperty eur = origin.FindPropertyRelative("Euler");
-            SerializedProperty sca = origin.FindPropertyRelative("Scale");
-            SerializedProperty size = origin.FindPropertyRelative("Size");
-            SerializedProperty alp = origin.FindPropertyRelative("Alpha");
-            SerializedProperty col = origin.FindPropertyRelative("Color");
-            SerializedProperty fil = origin.FindPropertyRelative("Fill");
-
-            RectTransform rect = (RectTransform)m_rect.objectReferenceValue;
-
-            pos.vector3Value = rect.anchoredPosition3D;
-            eur.vector3Value = rect.localEulerAngles;
-            sca.vector3Value = rect.localScale;
-            size.vector2Value = rect.sizeDelta;
-            m_rect.serializedObject.ApplyModifiedProperties();
-
-            alp.floatValue = ((CanvasGroup)m_cav.objectReferenceValue).alpha;
-            m_cav.serializedObject.ApplyModifiedProperties();
-
-            if (m_img.objectReferenceValue != null)
-            {
-                Image x_img = (Image)m_img.objectReferenceValue;
-                col.colorValue = x_img.color;
-                fil.floatValue = x_img.fillAmount;
-                m_img.serializedObject.ApplyModifiedProperties();
-            }
-            if (m_text.objectReferenceValue != null)
-            {
-                col.colorValue = ((XHud_Module_Text)m_text.objectReferenceValue).color;
-                m_text.serializedObject.ApplyModifiedProperties();
-            }
-            if (m_tmptext.objectReferenceValue != null)
-            {
-                col.colorValue = ((XHud_Module_TmpText)m_tmptext.objectReferenceValue).color;
-                m_tmptext.serializedObject.ApplyModifiedProperties();
-            }
-
-            so.ApplyModifiedProperties();
-        }
-        private void CalculateAnimatorMaxDuration(List<PrimitiveControllerNode> list, float globaldur)
-        {
-            PrimitivesTweenMaxDuration.floatValue = Animators_GetAnimatorsMaxDuration(list, globaldur);
+            PrimitivesTweenMaxDuration.floatValue = PrimitiveTweens_MaxDuration_Get(list, globaldur);
             PrimitivesTweenMaxDuration.serializedObject.ApplyModifiedProperties();
         }
         /// <summary>
-        /// 从所有子动画器中获取最大耗时
+        /// 从所有子图元动画器中获取最大耗时
         /// </summary>
         /// <returns></returns>
-        public float Animators_GetAnimatorsMaxDuration(List<PrimitiveControllerNode> list, float globaldur)
+        public float PrimitiveTweens_MaxDuration_Get(List<PrimitiveControllerNode> list, float globaldur)
         {
             if (list.Count <= 0)
                 return 0;
@@ -1294,10 +1267,10 @@ namespace SevenStrikeModules.XHud.Editor
             return v * globaldur;
         }
         /// <summary>
-        /// 获取动画器中是否存在循环模式
+        /// 获取图元动画器中是否存在循环模式
         /// </summary>
         /// <returns></returns>
-        public bool Animators_HasLoopMode()
+        public bool PrimitiveTweens_HasLoopMode()
         {
             bool hasLoop = false;
 
@@ -1334,10 +1307,10 @@ namespace SevenStrikeModules.XHud.Editor
             return hasLoop;
         }
         /// <summary>
-        /// 获取动画器中是否存在循环模式
+        /// 获取图元动画器中是否存在循环模式
         /// </summary>
         /// <returns></returns>
-        public bool AnimatorTweenNodes_HasLoopMode(List<TweenNode> tweenlist)
+        public bool PrimitiveTweenNodes_HasLoopMode(List<TweenNode> tweenlist)
         {
             bool hasLoop = false;
 
@@ -1362,7 +1335,7 @@ namespace SevenStrikeModules.XHud.Editor
             SelectorTweenMotion = serializedObject.FindProperty("SelectorTweenMotion");
             SelectorOffset = serializedObject.FindProperty("SelectorOffset");
             SelectorOffsetAdded = serializedObject.FindProperty("SelectorOffsetAdded");
-            RepeatAnimatorPlay = serializedObject.FindProperty("RepeatAnimatorPlay");
+            RepeatTweenPlay = serializedObject.FindProperty("RepeatTweenPlay");
             TweenSpeed = serializedObject.FindProperty("TweenSpeed");
             OptionSelector = serializedObject.FindProperty("SelectorMark");
             CurrentOptionName = serializedObject.FindProperty("CurrentOptionName");
@@ -1396,7 +1369,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 获取 PrimitivesTween
         /// <summary>
-        /// 扫描所有Animator动画
+        /// 扫描所有图元动画
         /// </summary>
         private void GetPrimitivesTween()
         {
@@ -1492,7 +1465,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 扫描动画器的结果报告
+        /// 扫描图元动画的结果报告
         /// </summary>
         private void GetPrimitivesTweenResults()
         {
@@ -1508,7 +1481,7 @@ namespace SevenStrikeModules.XHud.Editor
                         {
                             XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
                             dataitem.Title = $"{opt.name} ( {opt.Indicator} )";
-                            dataitem.SubTitle = $"扫描到动画器";
+                            dataitem.SubTitle = $"扫描到图元动画器";
                             dataitem.Message = $"{opt.PrimitiveControllerNodes[i].Controller.name} ( {opt.PrimitiveControllerNodes[i].Controller.Indicator} )";
                             Datas.Add(dataitem);
                         }
@@ -1546,7 +1519,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
                         dataitem.Title = $"{BaseScript.name} ( {BaseScript.Indicator} )";
-                        dataitem.SubTitle = $"扫描到动画器";
+                        dataitem.SubTitle = $"扫描到图元动画器";
                         dataitem.Message = $"{BaseScript.PrimitiveControllerNodes[i].Controller.name} ( {BaseScript.PrimitiveControllerNodes[i].Controller.Indicator} )";
                         Datas.Add(dataitem);
                     }

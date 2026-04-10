@@ -333,7 +333,7 @@ namespace SevenStrikeModules.XHud
 
             if (AutoPlayPrimitivesTween)
             {
-                ///-----播放Animator上的动画
+                ///-----播放 图元动画器上的动画
                 PrimitiveTween_Play("元素进入时");
             }
         }
@@ -353,7 +353,7 @@ namespace SevenStrikeModules.XHud
 
             if (AutoPlayPrimitivesTween)
             {
-                ///-----播放Animator上的动画
+                ///-----播放 图元动画器上的动画
                 PrimitiveTween_Play("元素进入后");
             }
         }
@@ -416,7 +416,7 @@ namespace SevenStrikeModules.XHud
 
             if (AutoPlayPrimitivesTween)
             {
-                ///-----播放Animator上的动画
+                ///-----播放 图元动画器上的动画
                 PrimitiveTween_Play("元素退出时");
             }
         }
@@ -456,7 +456,7 @@ namespace SevenStrikeModules.XHud
             PrimitiveTween_Rewind();
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "将所有子节点中的Animator的动画都立即杀死！", HudMsgState.通知);
+                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "将所有子节点中的图元动画器的动画都立即杀死！", HudMsgState.通知);
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
                 for (int s = 0; s < PrimitiveControllerNodes[i].Controller.pt_Tween.PrimitiveTweenNodes.Count; s++)

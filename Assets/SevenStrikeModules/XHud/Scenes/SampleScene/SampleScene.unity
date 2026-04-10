@@ -4227,7 +4227,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 324613759}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6860,7 +6860,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 1
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: 
     Description: 
@@ -6935,7 +6935,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!222 &453724097
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7648,7 +7648,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: 
     Description: 
@@ -7723,7 +7723,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!222 &514756885
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8334,6 +8334,12 @@ GameObject:
   - component: {fileID: 555128085}
   - component: {fileID: 555128087}
   - component: {fileID: 555128086}
+  - component: {fileID: 555128093}
+  - component: {fileID: 555128092}
+  - component: {fileID: 555128091}
+  - component: {fileID: 555128090}
+  - component: {fileID: 555128089}
+  - component: {fileID: 555128088}
   m_Layer: 8
   m_Name: Selector
   m_TagString: Untagged
@@ -8357,7 +8363,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 195, y: -22.5}
+  m_AnchoredPosition: {x: -85, y: -22.5}
   m_SizeDelta: {x: 31, y: 31}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &555128086
@@ -8373,7 +8379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2313726, g: 0.9960784, b: 0.6078432, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8398,6 +8404,175 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 555128084}
   m_CullTransparentMesh: 1
+--- !u!114 &555128088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555128084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 016f78ca51676bb4299db661f4208ae1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 555128093}
+  MutePlay: 0
+  AnimatingBreakState: 0
+  IgnoreElementAnimationPlay: 0
+  TweenIsPreviewing: 0
+  PrimitiveTweenNodes: []
+  MainTweenNode: 
+  GlobalDuration: 1
+  MinTimer: 0
+  MaxTimer: 0
+  MinTimerWithGlobalDuration: 0
+  MaxTimerWithGlobalDuration: 0
+  eve_on_Tween_Play:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Play_At_Node:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Play_At_ID:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Play_At_Indicator:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_PlayAll:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Create_At_ID:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Create_At_Index:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Create_At_Indicator:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Rewind:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_RewindAll:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Kill:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_KillAll:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Ready:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Complete:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Initialized:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_SoundPlay:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_AnimatingState:
+    m_PersistentCalls:
+      m_Calls: []
+  Debug: 0
+  PreviewTiming: 
+--- !u!114 &555128089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555128084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67835f613303af544ab15c3f47f25281, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 555128093}
+  PrimitiveFeatures:
+    Position: {x: -85, y: -22.5, z: 0}
+    Euler: {x: -0, y: 0, z: 0}
+    Scale: {x: 1, y: 1, z: 1}
+    Alpha: 1
+    Color: {r: 1, g: 0, b: 0, a: 1}
+    Size: {x: 31, y: 31}
+    Fill: 1
+  FirstSaveFeatures: 1
+  Debug: 0
+--- !u!114 &555128090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555128084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b8966a601623b4a9ad4044e643dbdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 555128093}
+  OriginalColor: {r: 1, g: 0, b: 0, a: 1}
+  ColoriseName: 
+  Debug: 0
+  SyncLibraryColor: 0
+  SyncImageColor: 1
+--- !u!114 &555128091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555128084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3bf3174e1981ec4b8bd6afe0f97cecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!225 &555128092
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555128084}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &555128093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555128084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 0
+  Indicator: 
+  IsInitial: 1
+  ModuleType: 3
+  mod_CanvasGroup: {fileID: 555128092}
+  mod_Rect: {fileID: 555128085}
+  mod_TmpText: {fileID: 0}
+  mod_Text: {fileID: 0}
+  mod_Image: {fileID: 555128086}
+  mod_RawImage: {fileID: 0}
+  mod_HudButton: {fileID: 0}
+  Debug: 0
+  pt_Painting: {fileID: 555128090}
+  pt_Feature: {fileID: 555128089}
+  pt_Tween: {fileID: 555128088}
 --- !u!1 &558024270
 GameObject:
   m_ObjectHideFlags: 0
@@ -10805,7 +10980,7 @@ MonoBehaviour:
   PrimitiveControllerNodes: []
   PrimitivesTweenMaxDuration: 0
   PrimitivesTweenGlobalDuration: 1
-  PrimitivesTweenIsFold: 0
+  PrimitivesIsFold: 0
 --- !u!224 &761320395
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10821,9 +10996,9 @@ RectTransform:
   - {fileID: 609024929}
   m_Father: {fileID: 957958835}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 265, y: -15}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &761772495
@@ -11242,7 +11417,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 1
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: 
     Description: 
@@ -11317,7 +11492,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!222 &771765373
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14130,7 +14305,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: NewTextStyle_HudTmpText
     Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudTmpText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
@@ -14205,7 +14380,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!222 &875335474
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15398,6 +15573,7 @@ MonoBehaviour:
   sli_Icon: {fileID: 1249655323}
   AnimateState: 0
   ToggleOriginalIsFold: 0
+  EventIsFold: 0
   AutoStopPreview: 1
   Display_Rect_Fore: 1
   Display_Rect_Bg: 1
@@ -16040,7 +16216,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 1
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: 
     Description: 
@@ -16115,7 +16291,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!222 &943445481
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -18403,7 +18579,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: 
     Description: 
@@ -18478,7 +18654,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!222 &1092152271
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -18996,7 +19172,7 @@ MonoBehaviour:
     DelayTime: 0
   PrimitivesTweenMaxDuration: 2
   PrimitivesTweenGlobalDuration: 1
-  PrimitivesTweenIsFold: 1
+  PrimitivesIsFold: 0
 --- !u!1 &1127139216
 GameObject:
   m_ObjectHideFlags: 0
@@ -22017,7 +22193,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: 
     Description: 
@@ -22092,7 +22268,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!222 &1260004774
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -22371,7 +22547,7 @@ MonoBehaviour:
   PrimitiveControllerNodes: []
   PrimitivesTweenMaxDuration: 0
   PrimitivesTweenGlobalDuration: 1
-  PrimitivesTweenIsFold: 0
+  PrimitivesIsFold: 0
 --- !u!224 &1295077947
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22387,9 +22563,9 @@ RectTransform:
   - {fileID: 1848860147}
   m_Father: {fileID: 957958835}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 125, y: -15}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1298807851
@@ -22638,7 +22814,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 1
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: 
     Description: 
@@ -22713,7 +22889,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!1 &1319122565
 GameObject:
   m_ObjectHideFlags: 0
@@ -23425,7 +23601,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 1
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: 
     Description: 
@@ -23500,7 +23676,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!1 &1354243756
 GameObject:
   m_ObjectHideFlags: 0
@@ -23947,7 +24123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1387306918
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23989,10 +24165,10 @@ MonoBehaviour:
   SelectorMark: {fileID: 555128085}
   OptionRoot: {fileID: 957958835}
   AnimateState: 0
-  Pos_Destination: {x: 195, y: -22.5, z: 0}
+  Pos_Destination: {x: -85, y: -22.5, z: 0}
   Prev_Pos_Destination: {x: 0, y: 0, z: 0}
-  sm_Pos_Destination: {x: 195, y: -22.5, z: 0}
-  RepeatAnimatorPlay: 1
+  sm_Pos_Destination: {x: -85, y: -22.5, z: 0}
+  RepeatTweenPlay: 1
   UseBlinked: 1
   TweenSpeed: 1
   SelectorTweenMotion: 0
@@ -24029,20 +24205,20 @@ MonoBehaviour:
   eve_on_option_clicked_with_position:
     m_PersistentCalls:
       m_Calls: []
-  OptionIndex: 2
-  CurrentOptionName: C
+  OptionIndex: 0
+  CurrentOptionName: A
   ButtonIsFold: 1
   EventIsFold: 0
   AutoStopPreview: 1
   SelectorOffset: {x: 0, y: 0, z: 0}
-  SelectorOffsetAdded: {x: 195, y: -22.5, z: 0}
+  SelectorOffsetAdded: {x: -85, y: -22.5, z: 0}
   PrimitiveControllerNodes:
   - Controller: {fileID: 324613766}
     TotalTime: 0
     DelayTime: 0
   PrimitivesTweenMaxDuration: 1
   PrimitivesTweenGlobalDuration: 1
-  PrimitivesIsFold: 1
+  PrimitivesIsFold: 0
 --- !u!1 &1390053375
 GameObject:
   m_ObjectHideFlags: 0
@@ -24555,7 +24731,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: 
     Description: 
@@ -24630,7 +24806,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!222 &1413254370
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -25049,7 +25225,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: 
     Description: 
@@ -25124,7 +25300,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!222 &1447729696
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -26220,7 +26396,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: 
     Description: 
@@ -26295,7 +26471,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!222 &1564947729
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -29111,7 +29287,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: 
     Description: 
@@ -29186,7 +29362,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!222 &1702374299
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -29227,9 +29403,9 @@ RectTransform:
   - {fileID: 1756801086}
   m_Father: {fileID: 957958835}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 405, y: -15}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1706784290
@@ -29340,7 +29516,7 @@ MonoBehaviour:
   PrimitiveControllerNodes: []
   PrimitivesTweenMaxDuration: 0
   PrimitivesTweenGlobalDuration: 1
-  PrimitivesTweenIsFold: 0
+  PrimitivesIsFold: 0
 --- !u!1 &1708474743
 GameObject:
   m_ObjectHideFlags: 0
@@ -29654,7 +29830,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
     Name: 
     Description: 
@@ -29729,7 +29905,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncAnimatorColor: 0
+    SyncPrimitivePaintingColor: 0
 --- !u!222 &1726495637
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -37147,6 +37323,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[0].Progress
+      value: 0.6666431
+      objectReference: {fileID: 0}
+    - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[1].Progress
+      value: 0.6666525
+      objectReference: {fileID: 0}
+    - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: PrimitiveTweenNodes.Array.data[1].TweenSounds.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -37298,8 +37482,24 @@ PrefabInstance:
       propertyPath: MinTimerWithGlobalDuration
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7244169530817569284, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[0].Progress
+      value: 0.6848782
+      objectReference: {fileID: 0}
+    - target: {fileID: 7244169530817569284, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[1].Progress
+      value: 0.6848799
+      objectReference: {fileID: 0}
     - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: Alpha
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
+      propertyPath: SounderIsFold
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
+      propertyPath: PrimitivesIsFold
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
@@ -37345,6 +37545,14 @@ PrefabInstance:
     - target: {fileID: 8513650909720280453, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: PrimitiveTweenNodes.Array.data[1].IsFold
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513650909720280453, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[0].Progress
+      value: 0.684881
+      objectReference: {fileID: 0}
+    - target: {fileID: 8513650909720280453, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[1].Progress
+      value: 0.6848825
       objectReference: {fileID: 0}
     - target: {fileID: 8568537368518311244, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: m_Name
@@ -37672,7 +37880,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

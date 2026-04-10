@@ -35,7 +35,7 @@ namespace SevenStrikeModules.XHud.Editor
         public string con_subtitle;
         public int ProgressPrecision;
         public string ProgressUnit;
-        public float ProgressAnimatorSpeedMultiply;
+        public float ProgressTweenSpeedMultiply;
         public bool EaseMotion;
         public bool ProgressIsFinished;
         public float ProgressValue;
@@ -57,8 +57,8 @@ namespace SevenStrikeModules.XHud.Editor
         private SerializedProperty sp_Indicator, sp_debugstate, PrimitivesIsFold, eve_on_ValueChanged, eve_on_ValueStart, eve_on_ValueEnd, pro_Text_Title, pro_TmpText_Title, pro_Text_Subtitle, pro_TmpText_Subtitle, pro_Text_Percent, pro_TmpText_Percent, pro_Bg, pro_Fore, ProgressPrecision, ProgressUnit, pro_Icon, con_title, con_subtitle, ProgressValue, RectTransform, pro_Handle, ProgressValueDuration, PrimitiveControllerNodes, EventIsFold, AnimateState, PrimitivesTweenMaxDuration, PrimitivesTweenGlobalDuration, LerpMotion, AutoStopPreview, Display_ProgressRect_Fore, Display_ProgressRect_Bg, Display_ProgressRect_Handle, Display_Icon, Display_Title, Display_SubTitle, Display_Value;
         #endregion
 
-        #region Preview - Animator
-        private bool Preivew_Animator_PlayingState;
+        #region Preview - Tween
+        private bool Preivew_Tween_PlayingState;
         #endregion
 
         #region 图标                                                                                                                                     
@@ -170,7 +170,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 drawHeaderCallback = rect =>
                 {
-                    EditorGUI.LabelField(rect, "动画器列表");
+                    EditorGUI.LabelField(rect, "图元动画器列表");
                 },
                 drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
                 {
@@ -287,7 +287,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 GUILayout.FlexibleSpace();
 
-                if (!Preivew_Animator_PlayingState)
+                if (!Preivew_Tween_PlayingState)
                 {
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "播放光标动画预览", play_r, play_p))
                     {
@@ -300,7 +300,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 else
                 {
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "停止所有动画器预览", stop_r, stop_p))
+                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "停止所有图元动画器预览", stop_r, stop_p))
                     {
                         if (!Application.isPlaying)
                         {
@@ -562,7 +562,7 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[ProgressStatu_Index].AnimateState == XHudElementAnimateState.Animating ? "动画中" : "静止状态", SelectedObjects[ProgressStatu_Index].AnimateState == XHudElementAnimateState.Animating ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
                     #endregion
 
-                    SelectedObjects[ProgressStatu_Index].PrimitivesTweenMaxDuration = Animators_GetAnimatorsMaxDuration(SelectedObjects[ProgressStatu_Index].PrimitiveControllerNodes, SelectedObjects[ProgressStatu_Index].PrimitivesTweenGlobalDuration);
+                    SelectedObjects[ProgressStatu_Index].PrimitivesTweenMaxDuration = PrimitiveTweens_MaxDuration_Get(SelectedObjects[ProgressStatu_Index].PrimitiveControllerNodes, SelectedObjects[ProgressStatu_Index].PrimitivesTweenGlobalDuration);
 
                     #region 最大耗时     
                     Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, SelectedObjects[ProgressStatu_Index].PrimitivesTweenMaxDuration.ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
@@ -594,10 +594,10 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 else
                 {
-                    #region 组件数量 - 动画器
+                    #region 组件数量 - 图元动画器
                     if (PrimitiveControllerNodes.arraySize > 0)
                     {
-                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, PrimitiveControllerNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, PrimitiveControllerNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
                     }
                     #endregion
                 }
@@ -647,10 +647,10 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 else
                 {
-                    #region 组件数量 - 动画器
+                    #region 组件数量 - 图元动画器
                     if (SelectedObjects[ProgressStatistic_Index].PrimitiveControllerNodes.Count > 0)
                     {
-                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "动画器", 12, SelectedObjects[ProgressStatistic_Index].PrimitiveControllerNodes.Count.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, SelectedObjects[ProgressStatistic_Index].PrimitiveControllerNodes.Count.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
                     }
                     #endregion
                 }
@@ -660,21 +660,21 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
-            #region 检查是否有无效的动画器
-            CheckAnimatorsValid();
+            #region 检查是否有无效的图元动画器
+            CheckTweensValid();
             #endregion
 
             #region 事件/列表
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "事件/列表", XHud_Dashboard.Theme_Primary);
 
-            #region 动画器列表
+            #region 图元动画器列表
             if (PrimitiveControllerNodes.arraySize > 0)
             {
                 if (Targets_Selected())
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
-                    EditorGUILayout.HelpBox("动画器列表不支持多项操作", MessageType.Warning);
+                    EditorGUILayout.HelpBox("图元动画器列表不支持多项操作", MessageType.Warning);
                     Editor_XHud_GUI.Gui_Layout_Space(5);
                     Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 }
@@ -682,7 +682,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                     Editor_XHud_GUI.Gui_Layout_Space(10);
-                    PrimitivesIsFold.boolValue = EditorGUILayout.Foldout(PrimitivesIsFold.boolValue, "动画器", true);
+                    PrimitivesIsFold.boolValue = EditorGUILayout.Foldout(PrimitivesIsFold.boolValue, "图元动画器", true);
                     Editor_XHud_GUI.Gui_Layout_Space(5);
                     Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
@@ -741,8 +741,8 @@ namespace SevenStrikeModules.XHud.Editor
                 SerializedProperty sp_con_subtitle = serializedObject.FindProperty("con_subtitle");
                 SerializedProperty sp_ProgressPrecision = serializedObject.FindProperty("ProgressPrecision");
                 SerializedProperty sp_ProgressUnit = serializedObject.FindProperty("ProgressUnit");
-                SerializedProperty sp_ProgressAnimatorSpeedMultiply = serializedObject.FindProperty("ProgressAnimatorSpeedMultiply");
-                SerializedProperty sp_ToggleAnimatorSpeedMultiply = serializedObject.FindProperty("ToggleAnimatorSpeedMultiply");
+                SerializedProperty sp_ProgressTweenSpeedMultiply = serializedObject.FindProperty("ProgressTweenSpeedMultiply");
+                SerializedProperty sp_ToggleTweenSpeedMultiply = serializedObject.FindProperty("ToggleTweenSpeedMultiply");
                 SerializedProperty sp_LerpMotion = serializedObject.FindProperty("LerpMotion");
                 SerializedProperty sp_ProgressIsFinished = serializedObject.FindProperty("ProgressIsFinished");
                 SerializedProperty sp_ProgressValue = serializedObject.FindProperty("ProgressValue");
@@ -763,7 +763,7 @@ namespace SevenStrikeModules.XHud.Editor
                         hpp.con_title = sp_con_title.stringValue;
                         hpp.ProgressPrecision = sp_ProgressPrecision.intValue;
                         hpp.ProgressUnit = sp_ProgressUnit.stringValue;
-                        hpp.ProgressAnimatorSpeedMultiply = sp_ProgressAnimatorSpeedMultiply.floatValue;
+                        hpp.ProgressTweenSpeedMultiply = sp_ProgressTweenSpeedMultiply.floatValue;
                         hpp.EaseMotion = sp_LerpMotion.boolValue;
                         hpp.ProgressIsFinished = sp_ProgressIsFinished.boolValue;
                         hpp.ProgressValue = sp_ProgressValue.floatValue;
@@ -783,7 +783,7 @@ namespace SevenStrikeModules.XHud.Editor
                     sp_con_title.stringValue = hpp.con_title;
                     sp_ProgressPrecision.intValue = hpp.ProgressPrecision;
                     sp_ProgressUnit.stringValue = hpp.ProgressUnit;
-                    sp_ProgressAnimatorSpeedMultiply.floatValue = hpp.ProgressAnimatorSpeedMultiply;
+                    sp_ProgressTweenSpeedMultiply.floatValue = hpp.ProgressTweenSpeedMultiply;
                     sp_LerpMotion.boolValue = hpp.EaseMotion;
                     sp_ProgressIsFinished.boolValue = hpp.ProgressIsFinished;
                     sp_ProgressValue.floatValue = hpp.ProgressValue;
@@ -795,7 +795,7 @@ namespace SevenStrikeModules.XHud.Editor
                     sp_con_title.serializedObject.ApplyModifiedProperties();
                     sp_ProgressPrecision.serializedObject.ApplyModifiedProperties();
                     sp_ProgressUnit.serializedObject.ApplyModifiedProperties();
-                    sp_ProgressAnimatorSpeedMultiply.serializedObject.ApplyModifiedProperties();
+                    sp_ProgressTweenSpeedMultiply.serializedObject.ApplyModifiedProperties();
                     sp_LerpMotion.serializedObject.ApplyModifiedProperties();
                     sp_ProgressIsFinished.serializedObject.ApplyModifiedProperties();
                     sp_ProgressValue.serializedObject.ApplyModifiedProperties();
@@ -803,7 +803,7 @@ namespace SevenStrikeModules.XHud.Editor
                     sp_ProgressValueDuration.serializedObject.ApplyModifiedProperties();
                 });
                 menu.AddSeparator("");
-                menu.AddDisabledItem(new GUIContent("动画器"));
+                menu.AddDisabledItem(new GUIContent("图元动画器"));
                 menu.AddItem(new GUIContent("X (扫描)"), false, () =>
                 {
                     GetPrimitivesTween();
@@ -841,7 +841,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     menu.AddSeparator("");
                     menu.AddDisabledItem(new GUIContent("预览"));
-                    if (!Preivew_Animator_PlayingState)
+                    if (!Preivew_Tween_PlayingState)
                     {
                         menu.AddItem(new GUIContent("S (开始)"), false, () =>
                         {
@@ -883,7 +883,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
-            CalculateAnimatorMaxDuration(BaseScript.PrimitiveControllerNodes, PrimitivesTweenGlobalDuration.floatValue);
+            PrimitiveTweens_MaxDuration_Calculate(BaseScript.PrimitiveControllerNodes, PrimitivesTweenGlobalDuration.floatValue);
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -907,9 +907,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 检查是否存在无效的动画器
+        /// 检查是否存在无效的图元动画器
         /// </summary>
-        private void CheckAnimatorsValid()
+        private void CheckTweensValid()
         {
             for (int i = 0; i < PrimitiveControllerNodes.arraySize; i++)
             {
@@ -922,6 +922,10 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
         }
+        /// <summary>
+        /// 折叠列表
+        /// </summary>
+        /// <param name="state"></param>
         private void AllListFoldState(bool state)
         {
             if (Targets_Selected())
@@ -931,14 +935,14 @@ namespace SevenStrikeModules.XHud.Editor
                     if (SelectedObjects[i] == null)
                         continue;
                     SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_anim_isfold = so_ele.FindProperty("ProgressAnimatorListIsFold");
+                    SerializedProperty sp_tweens_isfold = so_ele.FindProperty("PrimitivesIsFold");
                     SerializedProperty sp_event_isfold = so_ele.FindProperty("EventIsFold");
                     so_ele.Update();
 
-                    sp_anim_isfold.boolValue = state;
+                    sp_tweens_isfold.boolValue = state;
                     sp_event_isfold.boolValue = state;
                     sp_event_isfold.serializedObject.ApplyModifiedProperties();
-                    sp_anim_isfold.serializedObject.ApplyModifiedProperties();
+                    sp_tweens_isfold.serializedObject.ApplyModifiedProperties();
 
                     so_ele.ApplyModifiedProperties();
                 }
@@ -954,16 +958,16 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
         }
-        private void CalculateAnimatorMaxDuration(List<PrimitiveControllerNode> list, float globaldur)
+        private void PrimitiveTweens_MaxDuration_Calculate(List<PrimitiveControllerNode> list, float globaldur)
         {
-            PrimitivesTweenMaxDuration.floatValue = Animators_GetAnimatorsMaxDuration(list, globaldur);
+            PrimitivesTweenMaxDuration.floatValue = PrimitiveTweens_MaxDuration_Get(list, globaldur);
             PrimitivesTweenMaxDuration.serializedObject.ApplyModifiedProperties();
         }
         /// <summary>
-        /// 从所有子动画器中获取最大耗时
+        /// 从所有子图元动画器中获取最大耗时
         /// </summary>
         /// <returns></returns>
-        public float Animators_GetAnimatorsMaxDuration(List<PrimitiveControllerNode> list, float globaldur)
+        public float PrimitiveTweens_MaxDuration_Get(List<PrimitiveControllerNode> list, float globaldur)
         {
             if (list.Count <= 0)
                 return 0;
@@ -982,10 +986,10 @@ namespace SevenStrikeModules.XHud.Editor
             return v * globaldur;
         }
         /// <summary>
-        /// 获取动画器中是否存在循环模式
+        /// 获取图元动画器中是否存在循环模式
         /// </summary>
         /// <returns></returns>
-        public bool Animators_HasLoopMode()
+        public bool PrimitiveTweens_HasLoopMode()
         {
             bool hasLoop = false;
 
@@ -1022,10 +1026,10 @@ namespace SevenStrikeModules.XHud.Editor
             return hasLoop;
         }
         /// <summary>
-        /// 获取动画器中是否存在循环模式
+        /// 获取图元动画器中是否存在循环模式
         /// </summary>
         /// <returns></returns>
-        public bool AnimatorTweenNodes_HasLoopMode(List<TweenNode> tweenlist)
+        public bool PrimitiveTweenNodes_HasLoopMode(List<TweenNode> tweenlist)
         {
             bool hasLoop = false;
 
@@ -1040,11 +1044,11 @@ namespace SevenStrikeModules.XHud.Editor
             return hasLoop;
         }
         /// <summary>
-        /// 动画器 - 创建ID编号
+        /// 图元控制器 - 创建ID编号
         /// </summary>
         /// <param name="nodes"></param>
         /// <returns></returns>
-        public virtual int Animator_CreateAnimatorID(List<PrimitiveControllerNode> nodes)
+        public virtual int PrimitiveController_CreateID(List<PrimitiveControllerNode> nodes)
         {
             List<int> ids = new List<int>();
             for (int i = 0; i < nodes.Count; i++)

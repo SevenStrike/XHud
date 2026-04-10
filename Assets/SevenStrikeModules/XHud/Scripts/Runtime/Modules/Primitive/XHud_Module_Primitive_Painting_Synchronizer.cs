@@ -81,7 +81,7 @@ namespace SevenStrikeModules.XHud
         }
 
         /// <summary>
-        /// 同步刷新HudAnimator颜色信息
+        /// 同步刷新颜色信息
         /// </summary>
         private void UpdateLibraryColor()
         {

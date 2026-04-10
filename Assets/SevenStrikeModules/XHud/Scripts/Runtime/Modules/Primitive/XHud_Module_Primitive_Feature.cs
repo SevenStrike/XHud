@@ -72,7 +72,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         [SerializeField] public PrimitiveFeatures PrimitiveFeatures;
         /// <summary>
-        /// 第一次点击的时候记录为首次使用动画器，并且会把所有动画器涉及的参数都收集，只有第一次使用才会起效
+        /// 第一次点击的时候记录为首次使用控制器特性，并且会把所有涉及的特性参数都收集，只有第一次使用才会起效
         /// </summary>
         [SerializeField] public bool FirstSaveFeatures;
         #endregion

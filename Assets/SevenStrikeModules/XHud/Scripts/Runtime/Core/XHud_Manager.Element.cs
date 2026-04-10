@@ -39,7 +39,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public int count_sounders;
         /// <summary>
-        /// 数量 - animators
+        /// 数量 - primitives
         /// </summary>
         public int count_primitives;
         /// <summary>

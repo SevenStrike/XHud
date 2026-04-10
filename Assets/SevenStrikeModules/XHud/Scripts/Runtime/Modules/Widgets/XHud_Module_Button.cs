@@ -220,13 +220,13 @@ namespace SevenStrikeModules.XHud
             if (RectTransform == null)
                 RectTransform = GetComponent<RectTransform>();
 
-            //---如果按钮文字模块上有Animator那么将当前按钮组件赋值给Animator的modButton模块以此防止按钮文字变色功能受到Animator实时同步颜色的阻碍
+            //---如果按钮文字模块上有图元控制器那么将当前按钮组件赋值给图元控制器的modButton模块以此防止按钮文字变色功能受到图元控制器的配色器接管颜色的阻碍
             if (ButtonTmpText != null)
             {
-                XHud_Module_Animator animator = ButtonTmpText.GetComponent<XHud_Module_Animator>();
-                if (animator != null)
+                XHud_Module_Primitive_Controller con = ButtonTmpText.GetComponent<XHud_Module_Primitive_Controller>();
+                if (con != null)
                 {
-                    animator.mod_HudButton = this;
+                    con.mod_HudButton = this;
                 }
             }
         }

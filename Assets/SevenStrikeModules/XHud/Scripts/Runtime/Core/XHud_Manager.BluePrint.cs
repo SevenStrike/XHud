@@ -465,7 +465,7 @@ namespace SevenStrikeModules.XHud
                 XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格清空并停止动画", HudMsgState.设置);
         }
         /// <summary>
-        /// 停止动画器
+        /// 停止蓝图图元动画器
         /// </summary>
         /// <param name="twn"></param>
         private void hm_BluePrint_StopTweener(XTween_Interface twn)

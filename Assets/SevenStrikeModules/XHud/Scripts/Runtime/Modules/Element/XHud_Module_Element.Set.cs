@@ -54,7 +54,7 @@ namespace SevenStrikeModules.XHud
         /// XHud元素 - 生成后自动播放动画的开关
         /// </summary>
         /// <param name="state">开关状态</param>
-        public virtual void element_SetAutoAnimator(bool state)
+        public virtual void element_SetAutoPlayPrimitiveTween(bool state)
         {
             AutoPlayPrimitivesTween = state;
         }

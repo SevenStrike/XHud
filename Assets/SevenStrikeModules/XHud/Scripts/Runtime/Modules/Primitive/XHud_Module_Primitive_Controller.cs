@@ -21,6 +21,7 @@
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
+    using UnityEditor;
     using UnityEngine;
     using UnityEngine.UI;
 
@@ -188,7 +189,7 @@ namespace SevenStrikeModules.XHud
 
         #region 组件标识
         /// <summary>
-        /// 获取动画器ID
+        /// 获取ID
         /// </summary>
         /// <returns></returns>
         public int GetID()
@@ -196,7 +197,7 @@ namespace SevenStrikeModules.XHud
             return ID;
         }
         /// <summary>
-        /// 设置动画器ID
+        /// 设置D
         /// </summary>
         /// <param name="id"></param>
         public void SetID(int id)
@@ -204,7 +205,7 @@ namespace SevenStrikeModules.XHud
             ID = id;
         }
         /// <summary>
-        /// 获取动画器标识名称
+        /// 获取标识名称
         /// </summary>
         /// <returns></returns>
         public string GetIndicator()
@@ -212,7 +213,7 @@ namespace SevenStrikeModules.XHud
             return Indicator;
         }
         /// <summary>
-        /// 设置动画器标识名称
+        /// 设置标识名称
         /// </summary>
         /// <param name="indicator"></param>
         public void SetIndicator(string indicator)
@@ -220,5 +221,46 @@ namespace SevenStrikeModules.XHud
             Indicator = indicator;
         }
         #endregion
+
+#if UNITY_EDITOR
+        /// <summary>
+        /// 编辑器内初始化图元控制器
+        /// </summary>
+        /// <returns></returns>
+        public XHud_Module_Primitive_Controller InitialComponents_For_Editor()
+        {
+            Undo.AddComponent(gameObject, typeof(CanvasGroup));
+            Undo.AddComponent(gameObject, typeof(XHud_Module_Primitive_Painting_Synchronizer));
+            XHud_Module_Primitive_Painting comp_painting = (XHud_Module_Primitive_Painting)Undo.AddComponent(gameObject, typeof(XHud_Module_Primitive_Painting));
+            comp_painting.FindController();
+            XHud_Module_Primitive_Feature comp_feature = (XHud_Module_Primitive_Feature)Undo.AddComponent(gameObject, typeof(XHud_Module_Primitive_Feature));
+            comp_feature.FindController();
+            XHud_Module_Primitive_Tween comp_tween = (XHud_Module_Primitive_Tween)Undo.AddComponent(gameObject, typeof(XHud_Module_Primitive_Tween));
+            comp_tween.FindController();
+
+            IsInitial = true;
+
+            return this;
+        }
+
+        /// <summary>
+        /// 编辑器内清理已经初始化的图元控制器
+        /// </summary>
+        /// <returns></returns>
+        public void ClearComponents_For_Editor()
+        {
+            IsInitial = false;
+            if (gameObject.GetComponent<CanvasGroup>() != null)
+                Undo.DestroyObjectImmediate(gameObject.GetComponent<CanvasGroup>());
+            if (gameObject.GetComponent<XHud_Module_Primitive_Painting_Synchronizer>() != null)
+                Undo.DestroyObjectImmediate(gameObject.GetComponent<XHud_Module_Primitive_Painting_Synchronizer>());
+            if (gameObject.GetComponent<XHud_Module_Primitive_Painting>() != null)
+                Undo.DestroyObjectImmediate(gameObject.GetComponent<XHud_Module_Primitive_Painting>());
+            if (gameObject.GetComponent<XHud_Module_Primitive_Feature>() != null)
+                Undo.DestroyObjectImmediate(gameObject.GetComponent<XHud_Module_Primitive_Feature>());
+            if (gameObject.GetComponent<XHud_Module_Primitive_Tween>() != null)
+                Undo.DestroyObjectImmediate(gameObject.GetComponent<XHud_Module_Primitive_Tween>());
+        }
+#endif
     }
 }

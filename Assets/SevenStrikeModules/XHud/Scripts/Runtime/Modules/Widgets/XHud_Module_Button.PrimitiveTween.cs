@@ -49,7 +49,7 @@ namespace SevenStrikeModules.XHud
         /// true表示折叠，false表示展开
         /// 用于控制Inspector中图元列表的显示/隐藏
         /// </summary>
-        public bool PrimitivesTweenIsFold;
+        public bool PrimitivesIsFold;
 
         #region 获取动画器和动画节点
         /// <summary>
@@ -203,7 +203,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="primitive_indicator">目标图元控制器名称</param>
         /// <param name="tween_indicator">目标图元控制器动画节点的名称</param>
         /// <returns></returns>
-        public TweenNode GetAnimatorTween(string primitive_indicator, string tween_indicator)
+        public TweenNode GetPrimitiveTweenNode(string primitive_indicator, string tween_indicator)
         {
             XHud_Module_Primitive_Controller anim = GetPrimitiveController_WithIndicator(primitive_indicator);
             TweenNode node = anim.pt_Tween.TweenNode_GetByIndicator(tween_indicator);

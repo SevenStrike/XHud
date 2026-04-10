@@ -965,8 +965,8 @@ namespace SevenStrikeModules.XHud.Enums
         尺寸 = 7
     }
     /// <summary>
-    /// 动画器目标模块类型
-    /// 定义动画所作用的UI组件类型
+    /// 图元控制器目标模块类型
+    /// 定义图元所作用的UI组件类型
     /// </summary>
     public enum ModuleType
     {

@@ -122,6 +122,8 @@ namespace SevenStrikeModules.XHud
         [SerializeField]
         public bool ToggleOriginalIsFold;
         [SerializeField]
+        public bool EventIsFold;
+        [SerializeField]
         public bool AutoStopPreview = true;
 
         #region 是否显示滑动条各种可视化组件

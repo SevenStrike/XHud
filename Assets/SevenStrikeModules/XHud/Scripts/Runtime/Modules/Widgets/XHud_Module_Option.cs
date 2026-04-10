@@ -52,7 +52,7 @@ namespace SevenStrikeModules.XHud
         public Vector3 sm_Pos_Destination;
 
         [SerializeField]
-        public bool RepeatAnimatorPlay = true;
+        public bool RepeatTweenPlay = true;
 
         #region 运动动态参数
         [SerializeField]
@@ -244,20 +244,20 @@ namespace SevenStrikeModules.XHud
         {
             if (SelectorMark == null)
                 return;
-            if (!RepeatAnimatorPlay)
+            if (!RepeatTweenPlay)
                 if (OptionIndex == index)
                 {
                     return;
                 }
 
-            Selector_Animators_Rewind();
+            Selector_Tween_Rewind();
 
             OptionIndex = index;
             CurrentOptionName = OptionButtonNodes[index].Button.Indicator;
 
             Vector3 pos = OptionRoot.parent.InverseTransformPoint(OptionButtonNodes[index].Button.RectTransform.position);
 
-            Selector_Animators_Play("点击选项");
+            Selector_Tween_Play("点击选项");
             PrimitiveTween_Play("点击选项");
 
             opt_SetSelectorPosition(pos);
@@ -291,20 +291,20 @@ namespace SevenStrikeModules.XHud
             if (SelectorMark == null)
                 return;
 
-            if (!RepeatAnimatorPlay)
+            if (!RepeatTweenPlay)
                 if (CurrentOptionName == indicator)
                 {
                     return;
                 }
 
-            Selector_Animators_Rewind();
+            Selector_Tween_Rewind();
 
             OptionIndex = opt_GetIndex_WithButtonIndicator(indicator);
             CurrentOptionName = indicator;
 
             Vector3 pos = OptionRoot.parent.InverseTransformPoint(opt_GetRectTransform_WithButtonIndicator(indicator).position);
 
-            Selector_Animators_Play("点击选项");
+            Selector_Tween_Play("点击选项");
             PrimitiveTween_Play("点击选项");
 
             opt_SetSelectorPosition(pos);
@@ -333,7 +333,7 @@ namespace SevenStrikeModules.XHud
         /// 只设置选项的光标的位置和当前选项器的选中信息
         /// </summary>
         /// <param name="indicator"></param>
-        public void opt_Select(string indicator, bool playanimator = true)
+        public void opt_Select(string indicator, bool playtween = true)
         {
             if (SelectorMark == null)
                 return;
@@ -352,7 +352,7 @@ namespace SevenStrikeModules.XHud
             eve_on_selector_position_changed.Invoke(Pos_Destination, SelectorMark);
             #endregion
 
-            if (playanimator)
+            if (playtween)
                 PrimitiveTween_Play("光标位置改变");
 
             if (DebugState)
@@ -600,7 +600,7 @@ namespace SevenStrikeModules.XHud
         /// 播放光标动画
         /// </summary>
         /// <param name="tim">点击选项 | 光标移动开始 | 光标移动结束 | 光标位置改变</param>
-        public void Selector_Animators_Play(string tim)
+        public void Selector_Tween_Play(string tim)
         {
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
@@ -620,7 +620,7 @@ namespace SevenStrikeModules.XHud
         /// 倒退光标动画
         /// </summary>
         /// <param name="IncludeSelectorMark">忽略光标的动画倒退</param>
-        public void Selector_Animators_Rewind()
+        public void Selector_Tween_Rewind()
         {
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {

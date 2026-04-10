@@ -78,19 +78,19 @@ namespace SevenStrikeModules.XHud
         /// <param name="color"></param>
         public void UpdateColor(Color color)
         {
-            //如果Animator存在于上级按钮物体下
+            //如果图元控制器存在于上级按钮物体下
             if (controller.mod_HudButton != null)
             {
-                //--如果 - 此Animator类型为TmpText并作为Button下挂的组件且按钮控制  文字变色  则不同步颜色
+                //--如果 - 此图元控制器识别类型为TmpText并作为Button下挂的组件且按钮控制  文字变色  则不同步颜色
                 if (controller.mod_HudButton.TextColorSyncFade && controller.mod_HudButton.ButtonTmpText != null && controller.mod_HudButton.ButtonTmpText == controller.mod_TmpText)
                     return;
-                //--如果 - 此Animator类型为Text并作为Button下挂的组件且按钮控制  文字变色  则不同步颜色
+                //--如果 - 此图元控制器识别类型为Text并作为Button下挂的组件且按钮控制  文字变色  则不同步颜色
                 if (controller.mod_HudButton.TextColorSyncFade && controller.mod_HudButton.ButtonText != null && controller.mod_HudButton.ButtonText == controller.mod_Text)
                     return;
-                //--如果 - 此Animator类型为Image并作为Button下挂的组件且按钮控制  图标变色  则不同步颜色
+                //--如果 - 此图元控制器识别类型为Image并作为Button下挂的组件且按钮控制  图标变色  则不同步颜色
                 if (controller.mod_HudButton.IconColorSyncFade && controller.mod_HudButton.IconImage == controller.mod_Image)
                     return;
-                //--如果 - 此Animator类型为Image并作为Button下挂的组件且按钮控制  背景变色  则不同步颜色
+                //--如果 - 此图元控制器识别类型为Image并作为Button下挂的组件且按钮控制  背景变色  则不同步颜色
                 if (controller.mod_HudButton.BgColorSyncFade && controller.mod_HudButton.BgImage == controller.mod_Image)
                     return;
             }
@@ -103,7 +103,7 @@ namespace SevenStrikeModules.XHud
             //--否则 - 如果 - 文字组件存在则使用color覆盖文字组件的颜色
             else if (controller.mod_Text != null)
             {
-                if (!controller.mod_Text.TextStyleInfo.SyncAnimatorColor)
+                if (!controller.mod_Text.TextStyleInfo.SyncPrimitivePaintingColor)
                     return;
                 if (controller.mod_Text.StyleLibSynching)
                     if (controller.mod_Text.TextStyleInfo.LibStyle_Effect_color)
@@ -113,7 +113,7 @@ namespace SevenStrikeModules.XHud
             //--否则 - 如果 - 文字组件存在则使用color覆盖文字组件的颜色
             else if (controller.mod_TmpText != null)
             {
-                if (!controller.mod_TmpText.TextStyleInfo.SyncAnimatorColor)
+                if (!controller.mod_TmpText.TextStyleInfo.SyncPrimitivePaintingColor)
                     return;
                 if (controller.mod_TmpText.StyleLibSynching)
                     if (controller.mod_TmpText.TextStyleInfo.LibStyle_Effect_color)

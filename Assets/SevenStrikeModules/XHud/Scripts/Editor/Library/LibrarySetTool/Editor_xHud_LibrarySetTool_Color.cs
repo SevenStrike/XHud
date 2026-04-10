@@ -192,11 +192,8 @@ namespace SevenStrikeModules.XHud.Editor
 
             TextAsset emotions = AssetDatabase.LoadAssetAtPath<TextAsset>($"{XHud_Dashboard.Get_Path_XHUD_CONFIG_Path()}XHudColorEmotions.json");
             ColorEmotions = JsonUtility.FromJson<XHud_ColorEmotions>(emotions.text);
-            //for (int i = 0; i < ColorEmotions.Colors.Count; i++)
-            //{
-            //    Debug.Log($"{ColorEmotions.Colors[i].ColorName} | {ColorEmotions.Colors[i].Neg} | {ColorEmotions.Colors[i].Hue} | {ColorEmotions.Colors[i].Pos}");
-            //}
-            PreviewData_Index = Editor_XHud_GUI.EditorData_Get_With_Int("XED_HudAnimator_Set_previewtexs_index");
+
+            PreviewData_Index = Editor_XHud_GUI.EditorData_Get_With_Int("XED_Library_Color_PreviewData_Index");
 
             StartPreviewUpdate();
         }
@@ -368,7 +365,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 StopPreviewUpdate();
                 StartPreviewUpdate();
-                Editor_XHud_GUI.EditorData_Set_With_Int("XED_HudAnimator_Set_previewtexs_index", PreviewData_Index);
+                Editor_XHud_GUI.EditorData_Set_With_Int("XED_Library_Color_PreviewData_Index", PreviewData_Index);
             }
 
             draw_rect.Set(rect_preview.width - 45, rect_preview.y + 198 + margin, 64, 64);
@@ -385,7 +382,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 StopPreviewUpdate();
                 StartPreviewUpdate();
-                Editor_XHud_GUI.EditorData_Set_With_Int("XED_HudAnimator_Set_previewtexs_index", PreviewData_Index);
+                Editor_XHud_GUI.EditorData_Set_With_Int("XED_Library_Color_PreviewData_Index", PreviewData_Index);
             }
             #endregion
 

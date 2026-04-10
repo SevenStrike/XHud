@@ -195,7 +195,7 @@ namespace SevenStrikeModules.XHud.Editor
             //--------------------------------- Features ---------------------------------//
             SerializedProperty sp_Raycast = sp_TextStyleInfo.FindPropertyRelative("Raycast");
             SerializedProperty sp_Maskable = sp_TextStyleInfo.FindPropertyRelative("Maskable");
-            SerializedProperty sp_SyncAnimatorColor = sp_TextStyleInfo.FindPropertyRelative("SyncAnimatorColor");
+            SerializedProperty sp_SyncPrimitivePaintingColor = sp_TextStyleInfo.FindPropertyRelative("SyncPrimitivePaintingColor");
             #endregion
 
             #region 标题
@@ -255,7 +255,7 @@ namespace SevenStrikeModules.XHud.Editor
                         info.gra_ColorModeName = sp_gra_ColorModeName.stringValue;
                         info.Raycast = sp_Raycast.boolValue;
                         info.Maskable = sp_Maskable.boolValue;
-                        info.SyncAnimatorColor = sp_SyncAnimatorColor.boolValue;
+                        info.SyncPrimitivePaintingColor = sp_SyncPrimitivePaintingColor.boolValue;
 
                         Open_Hud_Library_TextStyle_Setter(info);
                     }
@@ -344,8 +344,8 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("全局尺寸增量", stroptions_syncsize, ref sp_SyncGlobalFontSize, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             #endregion
 
-            #region Animator接管字体颜色        
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("图元配色器接管颜色", stroptions_synccolor, ref sp_SyncAnimatorColor, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            #region PrimitivePainting 接管字体颜色        
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("图元配色器接管颜色", stroptions_synccolor, ref sp_SyncPrimitivePaintingColor, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
             #endregion
 
             #region 渐变色支持      

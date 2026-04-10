@@ -249,29 +249,14 @@ namespace SevenStrikeModules.XHud.Editor
                                 string csd = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图元控制器消息", "重新初始化", $"确认为此图元重新建立控制脚本结构吗？", "重建", "暂不", 1);
                                 if (csd == "重建")
                                 {
-                                    BaseScript.IsInitial = false;
-                                    Undo.DestroyObjectImmediate(BaseScript.gameObject.GetComponent<CanvasGroup>());
-                                    Undo.DestroyObjectImmediate(BaseScript.gameObject.GetComponent<XHud_Module_Primitive_Painting_Synchronizer>());
-                                    Undo.DestroyObjectImmediate(BaseScript.gameObject.GetComponent<XHud_Module_Primitive_Painting>());
-                                    Undo.DestroyObjectImmediate(BaseScript.gameObject.GetComponent<XHud_Module_Primitive_Feature>());
-                                    Undo.DestroyObjectImmediate(BaseScript.gameObject.GetComponent<XHud_Module_Primitive_Tween>());
+                                    BaseScript.ClearComponents_For_Editor();
                                 }
                                 else
                                 {
                                     return;
                                 }
                             }
-
-                            Undo.AddComponent(BaseScript.gameObject, typeof(CanvasGroup));
-                            Undo.AddComponent(BaseScript.gameObject, typeof(XHud_Module_Primitive_Painting_Synchronizer));
-                            XHud_Module_Primitive_Painting comp_painting = (XHud_Module_Primitive_Painting)Undo.AddComponent(BaseScript.gameObject, typeof(XHud_Module_Primitive_Painting));
-                            comp_painting.FindController();
-                            XHud_Module_Primitive_Feature comp_feature = (XHud_Module_Primitive_Feature)Undo.AddComponent(BaseScript.gameObject, typeof(XHud_Module_Primitive_Feature));
-                            comp_feature.FindController();
-                            XHud_Module_Primitive_Tween comp_tween = (XHud_Module_Primitive_Tween)Undo.AddComponent(BaseScript.gameObject, typeof(XHud_Module_Primitive_Tween));
-                            comp_tween.FindController();
-
-                            BaseScript.IsInitial = true;
+                            BaseScript.InitialComponents_For_Editor();
                         }
                     };
                 }

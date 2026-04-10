@@ -197,7 +197,7 @@ namespace SevenStrikeModules.XHud.Editor
             SerializedProperty prop_Type = sp_StyleInfo.FindPropertyRelative("Type");
             SerializedProperty prop_Raycast = sp_StyleInfo.FindPropertyRelative("Raycast");
             SerializedProperty prop_Maskable = sp_StyleInfo.FindPropertyRelative("Maskable");
-            SerializedProperty prop_SyncAnimatorColor = sp_StyleInfo.FindPropertyRelative("SyncAnimatorColor");
+            SerializedProperty prop_SyncPrimitivePaintingColor = sp_StyleInfo.FindPropertyRelative("SyncPrimitivePaintingColor");
 
             #region Text属性
             SerializedProperty prop_overflow_h = sp_StyleInfo.FindPropertyRelative("Overflow_Horizon");
@@ -263,7 +263,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 样式参数 - 颜色接管
                 rect_group.Set(rect.x + 25, rect.y + 210, 160, 50);
                 Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "颜色接管", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_SyncAnimatorColor.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_b, prop_SyncAnimatorColor.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
+                prop_SyncPrimitivePaintingColor.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_b, prop_SyncPrimitivePaintingColor.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 水平溢出
@@ -356,7 +356,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 样式参数 - 颜色接管
                 rect_group.Set(rect.x + 25, rect.y + 210, 160, 50);
                 Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "颜色接管", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_SyncAnimatorColor.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_b, prop_SyncAnimatorColor.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
+                prop_SyncPrimitivePaintingColor.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_b, prop_SyncPrimitivePaintingColor.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
                 #endregion
 
                 #region 样式参数 - 自动尺寸

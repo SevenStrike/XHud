@@ -52,10 +52,10 @@ namespace SevenStrikeModules.XHud
 
         #region 获取动画器和动画节点
         /// <summary>
-        /// 获取一个动画器
+        /// 获取一个PrimitiveController控制器
         /// </summary>
-        /// <param name="indicator">目标标识名称</param>
-        /// <returns>返回一个匹配标识名称的HudAnimator动画器</returns>
+        /// <param name="indicator">目标控制器标识名称</param>
+        /// <returns>返回一个匹配标识名称的XHud_Module_Primitive_Controller的控制器</returns>
         public XHud_Module_Primitive_Controller GetPrimitiveController_WithIndicator(string indicator)
         {
             XHud_Module_Primitive_Controller am = null;
@@ -79,10 +79,10 @@ namespace SevenStrikeModules.XHud
             return am;
         }
         /// <summary>
-        /// 获取一个动画器
+        /// 获取一个PrimitiveController控制器
         /// </summary>
-        /// <param name="name">目标物体名称</param>
-        /// <returns>返回一个匹配物体名称名称的HudAnimator动画器</returns>
+        /// <param name="name">目标控制器物体名称</param>
+        /// <returns>返回一个匹配物体名称名称的XHud_Module_Primitive_Controller的控制器</returns>
         public XHud_Module_Primitive_Controller GetPrimitiveController_WithObjectName(string name)
         {
             XHud_Module_Primitive_Controller am = null;
@@ -106,10 +106,10 @@ namespace SevenStrikeModules.XHud
             return am;
         }
         /// <summary>
-        /// 获取一个动画器
+        /// 获取一个PrimitiveController控制器
         /// </summary>
-        /// <param name="id">目标动画器的ID</param>
-        /// <returns>返回一个匹配ID的HudAnimator动画器</returns>
+        /// <param name="id">目标控制器的ID</param>
+        /// <returns>返回一个匹配ID的XHud_Module_Primitive_Controller的控制器</returns>
         public XHud_Module_Primitive_Controller GetPrimitiveController_WithID(int id)
         {
             XHud_Module_Primitive_Controller am = null;
@@ -133,7 +133,7 @@ namespace SevenStrikeModules.XHud
             return am;
         }
         /// <summary>
-        /// 获取一个目标动画器上的目标动画节点
+        /// 获取一个目标图元控制器上的目标动画节点
         /// </summary>
         /// <param name="primitive_indicator">目标动画器名称</param>
         /// <param name="tween_id">目标动画节点的ID</param>
@@ -165,7 +165,7 @@ namespace SevenStrikeModules.XHud
             return node;
         }
         /// <summary>
-        /// 获取一个目标动画器上的目标动画节点
+        /// 获取一个目标图元控制器上的目标动画节点
         /// </summary>
         /// <param name="primitive_id">目标动画器ID</param>
         /// <param name="tween_id">目标动画节点的ID</param>
@@ -197,12 +197,12 @@ namespace SevenStrikeModules.XHud
             return node;
         }
         /// <summary>
-        /// 获取一个目标动画器上的目标动画节点
+        /// 获取一个目标图元控制器上的目标动画节点
         /// </summary>
         /// <param name="primitive_indicator">目标动画器名称</param>
         /// <param name="tween_indicator">目标动画节点的名称</param>
         /// <returns></returns>
-        public TweenNode GetAnimatorTween(string primitive_indicator, string tween_indicator)
+        public TweenNode GetPrimitiveTweenNode(string primitive_indicator, string tween_indicator)
         {
             XHud_Module_Primitive_Controller anim = GetPrimitiveController_WithIndicator(primitive_indicator);
             TweenNode node = anim.pt_Tween.TweenNode_GetByIndicator(tween_indicator);

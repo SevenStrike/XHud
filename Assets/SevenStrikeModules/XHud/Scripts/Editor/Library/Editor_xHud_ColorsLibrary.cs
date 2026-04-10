@@ -263,7 +263,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     string hexcol = XHud_Utilitys.Color_To_HexColor(sp_color.colorValue, true);
 
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>色卡信息已就绪！请选择需要识别的动画器后右键菜单点击识别色卡即可应用该色卡颜色！", "明白");
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 色卡库消息", "获取色卡信息", $"<color={hexcol}>{sp_name.stringValue} </color>色卡信息已就绪！请选择需要识别的图元配色器后右键菜单点击识别色卡即可应用该色卡颜色！", "明白");
                 });
                 menu.AddItem(new GUIContent("E (修改色卡信息)"), false, () =>
                 {
@@ -517,7 +517,7 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.Gui_Layout_Space(35);
                     if (Editor_XHud_GUI.Gui_Layout_Button(14, "清空色卡", clear_r, clear_p, 4))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 色卡库消息", "清空所有色卡", "是否清空所有色卡项？请注意！如果您的场景中或是预制体中的动画器用到了该色卡库中的色卡，清空后会导致动画器的色卡信息丢失，请谨慎操作！", "清空", "暂不", 0);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 色卡库消息", "清空所有色卡", "是否清空所有色卡项？请注意！如果您的场景中或是预制体中的图元配色器用到了该色卡库中的色卡，清空后会导致图元配色器的色卡信息丢失，请谨慎操作！", "清空", "暂不", 0);
                         if (res == "暂不")
                             return;
                         sp_ColorLibrary_Original.ClearArray();

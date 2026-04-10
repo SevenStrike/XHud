@@ -230,7 +230,7 @@ namespace SevenStrikeModules.XHud.Editor
                         Datas.Add(data);
                     }
 
-                    string res_x = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "XHud - 图元配色器消息", "批量切换颜色模式", "是否需要批量切换以下列表中的动画器物体的颜色模式？", "暂不", "切换", 0);
+                    string res_x = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "XHud - 图元配色器消息", "批量切换颜色模式", "是否需要批量切换以下列表中的图元控制器的配色器物体的颜色模式？", "暂不", "切换", 0);
                     if (res_x == "切换")
                     {
                         string res_y = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图元配色器消息", "切换颜色模式", "需要切换为那种模式？", "色卡库", "原始色", 1);
@@ -598,7 +598,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     Datas.Add(dataitem);
                                 }
 
-                                Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 图元配色器消息", "批量识别色卡信息", "以下是已应用识别的色卡参数的动画器列表，请您检查核对：", "明白");
+                                Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 图元配色器消息", "批量识别色卡信息", "以下是已应用识别的色卡参数的图元控制器的配色器列表，请您检查核对：", "明白");
                             }
                             else
                             {
@@ -638,7 +638,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     Editor_XHud_GUI.EditorData_Set_With_String("XED_PrimitivePainting_Get_ColoriseName", BaseScript.ColoriseName);
                     string hexcol = XHud_Utilitys.Color_To_HexColor(sp_OriginalColor.colorValue, true);
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 图元配色器消息", "色板信息拷贝", $"已将当前动画器的色卡信息<color={hexcol}> {BaseScript.ColoriseName} </color>XHudEditorData (XED)！", "好的");
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 图元配色器消息", "色板信息拷贝", $"已将当前图元控制器的配色器的色卡信息<color={hexcol}> {BaseScript.ColoriseName} </color>存入XHudEditorData (XED)！", "好的");
                 });
                 menu.AddItem(new GUIContent("W (粘贴色卡)"), false, () =>
                 {

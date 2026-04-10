@@ -419,9 +419,9 @@ namespace SevenStrikeModules.XHud
         public bool Maskable;
         [SerializeField]
         /// <summary>
-        /// 同步Animator颜色
+        /// 同步 图元配色器 颜色
         /// </summary>
-        public bool SyncAnimatorColor;
+        public bool SyncPrimitivePaintingColor;
         #endregion
 
         /// <summary>
@@ -506,7 +506,7 @@ namespace SevenStrikeModules.XHud
             //----------------------------------------Features----------------------------------------//
             Raycast = target.Raycast;
             Maskable = target.Maskable;
-            SyncAnimatorColor = target.SyncAnimatorColor;
+            SyncPrimitivePaintingColor = target.SyncPrimitivePaintingColor;
         }
 
         /// <summary>
@@ -589,7 +589,7 @@ namespace SevenStrikeModules.XHud
             //----------------------------------------Features----------------------------------------//
             Raycast = target.Raycast;
             Maskable = target.Maskable;
-            SyncAnimatorColor = target.SyncAnimatorColor;
+            SyncPrimitivePaintingColor = target.SyncPrimitivePaintingColor;
         }
 
         /// <summary>
@@ -681,20 +681,20 @@ namespace SevenStrikeModules.XHud
             //----------------------------------------Features----------------------------------------//
             Raycast = target.Raycast;
             Maskable = target.Maskable;
-            SyncAnimatorColor = target.SyncAnimatorColor;
+            SyncPrimitivePaintingColor = target.SyncPrimitivePaintingColor;
         }
 
         //------------------------通用参数设置
 
         /// <summary>
-        /// 控制文字颜色是否受到Animator颜色控制
+        /// 控制文字颜色是否受到 图元配色器 颜色控制
         /// </summary>
         /// <param name="treeState"></param>
-        public void gen_Set_SyncAnimatorColor(bool state)
+        public void gen_Set_SyncPrimitivePaintingColor(bool state)
         {
-            if (SyncAnimatorColor == state)
+            if (SyncPrimitivePaintingColor == state)
                 return;
-            SyncAnimatorColor = state;
+            SyncPrimitivePaintingColor = state;
         }
 
         /// <summary>

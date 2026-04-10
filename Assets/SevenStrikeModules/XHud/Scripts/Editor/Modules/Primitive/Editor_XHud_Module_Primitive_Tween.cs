@@ -637,7 +637,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 draw_rect.Set(rect.width - 10, baseheight - 29, 15, 15);
                                 if (Editor_XHud_GUI.Gui_Button(draw_rect, anim_sound_r, anim_sound_p, true, "", "", Color.white))
                                 {
-                                    Editor_XHud_PrimitiveTweenSoundSetTool = (Editor_XHud_PrimitiveTweenSoundSetTool)EditorWindow.GetWindow(typeof(Editor_XHud_PrimitiveTweenSoundSetTool), false, "Hud动画器节点音效设置器", true);
+                                    Editor_XHud_PrimitiveTweenSoundSetTool = (Editor_XHud_PrimitiveTweenSoundSetTool)EditorWindow.GetWindow(typeof(Editor_XHud_PrimitiveTweenSoundSetTool), false, "图元动画器节点音效设置器", true);
                                     Editor_XHud_PrimitiveTweenSoundSetTool.minSize = new Vector2(360, 500);
                                     Editor_XHud_PrimitiveTweenSoundSetTool.maxSize = Editor_XHud_PrimitiveTweenSoundSetTool.minSize;
                                     Editor_XHud_PrimitiveTweenSoundSetTool.Show();
@@ -1095,8 +1095,8 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.StatuDisplayer_text(count, 12, new Vector2(0, 7), "动画节点", 12, sp_PrimitiveTweenNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
                     Editor_XHud_GUI.StatuDisplayer_text(timer_min, 12, new Vector2(0, 7), "最小耗时", 12, sp_MinTimer.floatValue.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
                     Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时", 12, sp_MaxTimer.floatValue.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
-                    Editor_XHud_GUI.StatuDisplayer_text(timer_min, 12, new Vector2(0, 7), "最小耗时<color=#909090>（动画器倍增）</color>", 12, sp_MinTimerWithGlobalDuration.floatValue.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
-                    Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时<color=#909090>（动画器倍增）</color>", 12, sp_MaxTimerWithGlobalDuration.floatValue.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(timer_min, 12, new Vector2(0, 7), "最小耗时<color=#909090>（图元动画器倍增）</color>", 12, sp_MinTimerWithGlobalDuration.floatValue.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时<color=#909090>（图元动画器倍增）</color>", 12, sp_MaxTimerWithGlobalDuration.floatValue.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
                     Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (sp_MaxTimerWithGlobalDuration.floatValue * HudManager.DurationMultiply).ToString() + " 秒", XHud_Dashboard.Theme_Primary, 11);
                 }
                 #endregion
@@ -1153,8 +1153,8 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.StatuDisplayer_text(count, 12, new Vector2(0, 7), "动画节点数", 12, SelectedObjects[TweenStatu_Index].PrimitiveTweenNodes.Count + " 个", XHud_Dashboard.Theme_Primary, 10);
                     Editor_XHud_GUI.StatuDisplayer_text(timer_min, 12, new Vector2(0, 7), "最小耗时", 12, SelectedObjects[TweenStatu_Index].MinTimer.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 10);
                     Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时", 12, SelectedObjects[TweenStatu_Index].MaxTimer.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 10);
-                    Editor_XHud_GUI.StatuDisplayer_text(timer_min, 12, new Vector2(0, 7), "最小耗时<color=#909090>（动画器倍增）</color>", 12, SelectedObjects[TweenStatu_Index].MinTimerWithGlobalDuration.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 10);
-                    Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时<color=#909090>（动画器倍增）</color>", 12, SelectedObjects[TweenStatu_Index].MaxTimerWithGlobalDuration.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 10);
+                    Editor_XHud_GUI.StatuDisplayer_text(timer_min, 12, new Vector2(0, 7), "最小耗时<color=#909090>（图元动画器倍增）</color>", 12, SelectedObjects[TweenStatu_Index].MinTimerWithGlobalDuration.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 10);
+                    Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时<color=#909090>（图元动画器倍增）</color>", 12, SelectedObjects[TweenStatu_Index].MaxTimerWithGlobalDuration.ToString() + " 秒", XHud_Dashboard.Theme_Primary, 10);
                     Editor_XHud_GUI.StatuDisplayer_text(timer_max, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (SelectedObjects[TweenStatu_Index].MaxTimerWithGlobalDuration * HudManager.DurationMultiply).ToString() + " 秒", XHud_Dashboard.Theme_Primary, 10);
                 }
                 #endregion
@@ -1245,14 +1245,14 @@ namespace SevenStrikeModules.XHud.Editor
 
                         string json = JsonUtility.ToJson(tnc);
 
-                        Editor_XHud_GUI.EditorData_Set_With_String("XED_HudAnimator_Copied_TweenNodes", json);
+                        Editor_XHud_GUI.EditorData_Set_With_String("XED_PrimitiveTween_Copied_TweenNodes", json);
                         string indicator = $"( {BaseScript.controller.Indicator} )";
                         Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 图元动画器消息", "动画节点数据", $"已拷贝 {BaseScript.name}{(string.IsNullOrEmpty(indicator) ? "" : indicator)} 动画器的动画节点数据！", "明白");
                     });
                 }
                 menu.AddItem(new GUIContent("C (粘贴动画列表)"), false, () =>
                 {
-                    string json = Editor_XHud_GUI.EditorData_Get_With_String("XED_HudAnimator_Copied_TweenNodes");
+                    string json = Editor_XHud_GUI.EditorData_Get_With_String("XED_PrimitiveTween_Copied_TweenNodes");
                     TweenNodeArray tnc = JsonUtility.FromJson<TweenNodeArray>(json);
 
                     if (Targets_Selected())
