@@ -10996,9 +10996,9 @@ RectTransform:
   - {fileID: 609024929}
   m_Father: {fileID: 957958835}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 265, y: -15}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &761772495
@@ -13362,7 +13362,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 870914014}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -13392,11 +13392,148 @@ MonoBehaviour:
   IgnoreElementAnimationPlay: 0
   TweenIsPreviewing: 0
   PrimitiveTweenNodes:
+  - ID: 3510
+    Indicator: out
+    Enabled: 1
+    Type: 4
+    Timings: "\u9F20\u6807\u6309\u4E0B"
+    Duration: 1
+    Delay: 0
+    Progress: 0.58618826
+    Rewind_Set_Startvalue: 1
+    Complete_Set_Endvalue: 1
+    Ease: 10
+    AnimationCurveName: 
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Original_Int: 0
+    Original_Float: 1
+    Original_Vector2: {x: 0, y: 0}
+    Original_Vector3: {x: 0, y: 0, z: 0}
+    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    Original_Color: {r: 0, g: 0.34555626, b: 1, a: 1}
+    Original_String: 
+    ActivateFrom: 0
+    From_Int: 0
+    From_Float: 0
+    From_Vector2: {x: 0, y: 0}
+    From_Vector3: {x: -348, y: 0, z: 0}
+    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    From_Color: {r: 1, g: 1, b: 1, a: 1}
+    From_String: 
+    ActivateEnd: 0
+    End_Int: 0
+    End_Float: 1
+    End_Vector2: {x: 0, y: 0}
+    End_Vector3: {x: 0, y: 0, z: 0}
+    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    End_Color: {r: 1, g: 1, b: 1, a: 1}
+    End_String: 
+    ActivateOnlyToEnd: 1
+    RotateMode: 0
+    LoopType: 0
+    LoopCount: 0
+    IsFold: 1
+    TweenSounds:
+    - Sound: {fileID: 8300000, guid: 98542864717bc5d47b8a03236e38c1d0, type: 3}
+      Path: 
+      Percentage: 0.048
+      IsPlayed: 0
+      Volume: 1
+      MaxPitch: 1
+      MinPitch: 1
+  - ID: 9779
+    Indicator: out
+    Enabled: 1
+    Type: 0
+    Timings: "\u9F20\u6807\u6309\u4E0B"
+    Duration: 1
+    Delay: 0
+    Progress: 0.5861932
+    Rewind_Set_Startvalue: 1
+    Complete_Set_Endvalue: 1
+    Ease: 10
+    AnimationCurveName: 
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Original_Int: 0
+    Original_Float: 1
+    Original_Vector2: {x: 0, y: 0}
+    Original_Vector3: {x: 0, y: 106.2, z: 0}
+    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    Original_Color: {r: 0, g: 0.34555626, b: 1, a: 1}
+    Original_String: 
+    ActivateFrom: 0
+    From_Int: 0
+    From_Float: 0
+    From_Vector2: {x: 0, y: 0}
+    From_Vector3: {x: 224, y: 106.2, z: 0}
+    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    From_Color: {r: 1, g: 1, b: 1, a: 1}
+    From_String: 
+    ActivateEnd: 0
+    End_Int: 0
+    End_Float: 0
+    End_Vector2: {x: 0, y: 0}
+    End_Vector3: {x: 0, y: 122.7, z: 0}
+    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    End_Color: {r: 1, g: 1, b: 1, a: 1}
+    End_String: 
+    ActivateOnlyToEnd: 1
+    RotateMode: 0
+    LoopType: 0
+    LoopCount: 0
+    IsFold: 1
+    TweenSounds: []
   - ID: 3669
     Indicator: in
     Enabled: 1
     Type: 4
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Timings: "\u9F20\u6807\u677E\u5F00"
     Duration: 1
     Delay: 0
     Progress: 0
@@ -13455,7 +13592,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
     TweenSounds:
     - Sound: {fileID: 8300000, guid: 98542864717bc5d47b8a03236e38c1d0, type: 3}
       Path: 
@@ -13468,7 +13605,7 @@ MonoBehaviour:
     Indicator: in
     Enabled: 1
     Type: 0
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Timings: "\u9F20\u6807\u677E\u5F00"
     Duration: 1
     Delay: 0
     Progress: 0
@@ -13527,144 +13664,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
-    TweenSounds: []
-  - ID: 3510
-    Indicator: out
-    Enabled: 1
-    Type: 4
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 1
-    Delay: 0
-    Progress: 0
-    Rewind_Set_Startvalue: 1
-    Complete_Set_Endvalue: 1
-    Ease: 10
-    AnimationCurveName: 
-    Curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    Original_Int: 0
-    Original_Float: 1
-    Original_Vector2: {x: 0, y: 0}
-    Original_Vector3: {x: 0, y: 0, z: 0}
-    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    Original_Color: {r: 0, g: 0.34555626, b: 1, a: 1}
-    Original_String: 
-    ActivateFrom: 0
-    From_Int: 0
-    From_Float: 0
-    From_Vector2: {x: 0, y: 0}
-    From_Vector3: {x: -348, y: 0, z: 0}
-    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    From_Color: {r: 1, g: 1, b: 1, a: 1}
-    From_String: 
-    ActivateEnd: 0
-    End_Int: 0
-    End_Float: 1
-    End_Vector2: {x: 0, y: 0}
-    End_Vector3: {x: 0, y: 0, z: 0}
-    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    End_Color: {r: 1, g: 1, b: 1, a: 1}
-    End_String: 
-    ActivateOnlyToEnd: 1
-    RotateMode: 0
-    LoopType: 0
-    LoopCount: 0
-    IsFold: 0
-    TweenSounds:
-    - Sound: {fileID: 8300000, guid: 98542864717bc5d47b8a03236e38c1d0, type: 3}
-      Path: 
-      Percentage: 0.048
-      IsPlayed: 0
-      Volume: 1
-      MaxPitch: 1
-      MinPitch: 1
-  - ID: 9779
-    Indicator: out
-    Enabled: 1
-    Type: 0
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 1
-    Delay: 0
-    Progress: 0
-    Rewind_Set_Startvalue: 1
-    Complete_Set_Endvalue: 1
-    Ease: 10
-    AnimationCurveName: 
-    Curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    Original_Int: 0
-    Original_Float: 1
-    Original_Vector2: {x: 0, y: 0}
-    Original_Vector3: {x: 0, y: 106.2, z: 0}
-    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    Original_Color: {r: 0, g: 0.34555626, b: 1, a: 1}
-    Original_String: 
-    ActivateFrom: 0
-    From_Int: 0
-    From_Float: 0
-    From_Vector2: {x: 0, y: 0}
-    From_Vector3: {x: 224, y: 106.2, z: 0}
-    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    From_Color: {r: 1, g: 1, b: 1, a: 1}
-    From_String: 
-    ActivateEnd: 0
-    End_Int: 0
-    End_Float: 0
-    End_Vector2: {x: 0, y: 0}
-    End_Vector3: {x: 0, y: 122.7, z: 0}
-    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    End_Color: {r: 1, g: 1, b: 1, a: 1}
-    End_String: 
-    ActivateOnlyToEnd: 1
-    RotateMode: 0
-    LoopType: 0
-    LoopCount: 0
-    IsFold: 0
+    IsFold: 1
     TweenSounds: []
   MainTweenNode: 
   GlobalDuration: 2
@@ -13724,7 +13724,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   Debug: 0
-  PreviewTiming: 
+  PreviewTiming: "\u9F20\u6807\u6309\u4E0B"
 --- !u!114 &870914018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14412,7 +14412,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 877618101}
-  - component: {fileID: 877618100}
+  - component: {fileID: 877618102}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -14420,7 +14420,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &877618100
+--- !u!4 &877618101
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877618099}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.489168, y: -3.1090372, z: 15.794761}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &877618102
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14429,639 +14444,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 877618099}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6829dcedd0687784aa69616b00d5a78b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8826b5e8635bbc140b99f14edc55d272, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   LibName: NewElementLibrary
-  IsLoadedLayout_Screen: 0
-  IsLoadedLayout_World: 0
-  SpawnItemList_Screen:
-  - SpawnName: Image
-    Indicator: Indicator_Image
-    Delay_Spawn: 0
-    Delay_Despawn: 0
-    Position: {x: 721.49384, y: 233.59912, z: 0}
-    Euler: {x: -0, y: 0, z: 221.3908}
-    Offset: {x: 0, y: 0, z: 0}
-    Scale: {x: 1, y: 1, z: 1}
-    Size: {x: 100, y: 100}
-    Pivot: {x: 0.5, y: 0.5}
-    Anchor_Min: {x: 0.5, y: 0.5}
-    Anchor_Max: {x: 0.5, y: 0.5}
-    AutoIn: "\u81EA\u52A8 In"
-    InMotion: 0
-    Spawned: 0
-    SpawnedElementNode:
-      Indicator: 
-      ModuleName: 
-      ID: 0
-      Element: {fileID: 0}
-      IsAnimating: 0
-    UseSpawnerMotion: "\u751F\u6210\u5668\u52A8\u6548"
-    CreateArgs:
-      anchor: 5
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 13
-      Movement:
-        Movement: 1
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 12
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 0
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 0
-    RecycleArgs:
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 12
-      Movement:
-        Movement: 2
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 13
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 0
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 0
-    MotionPercentage: 0
-    isFold: 1
-    isEnabled: 1
-  - SpawnName: Image
-    Indicator: Indicator_Image
-    Delay_Spawn: 0
-    Delay_Despawn: 0
-    Position: {x: 619.5442, y: -303.24405, z: 0}
-    Euler: {x: -0, y: -0, z: 73.69488}
-    Offset: {x: 0, y: 0, z: 0}
-    Scale: {x: 1, y: 1, z: 1}
-    Size: {x: 100, y: 100}
-    Pivot: {x: 0.5, y: 0.5}
-    Anchor_Min: {x: 0.5, y: 0.5}
-    Anchor_Max: {x: 0.5, y: 0.5}
-    AutoIn: "\u81EA\u52A8 In"
-    InMotion: 0
-    Spawned: 0
-    SpawnedElementNode:
-      Indicator: 
-      ModuleName: 
-      ID: 0
-      Element: {fileID: 0}
-      IsAnimating: 0
-    UseSpawnerMotion: "\u751F\u6210\u5668\u52A8\u6548"
-    CreateArgs:
-      anchor: 5
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 13
-      Movement:
-        Movement: 1
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 12
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 0
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 0
-    RecycleArgs:
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 12
-      Movement:
-        Movement: 2
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 13
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 0
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 0
-    MotionPercentage: 0
-    isFold: 1
-    isEnabled: 1
-  - SpawnName: Image
-    Indicator: Indicator_Image
-    Delay_Spawn: 0
-    Delay_Despawn: 0
-    Position: {x: 281, y: 336, z: 0}
-    Euler: {x: -0, y: 0, z: 0}
-    Offset: {x: 0, y: 0, z: 0}
-    Scale: {x: 1, y: 1, z: 1}
-    Size: {x: 100, y: 100}
-    Pivot: {x: 0.5, y: 0.5}
-    Anchor_Min: {x: 0.5, y: 0.5}
-    Anchor_Max: {x: 0.5, y: 0.5}
-    AutoIn: "\u81EA\u52A8 In"
-    InMotion: 0
-    Spawned: 0
-    SpawnedElementNode:
-      Indicator: 
-      ModuleName: 
-      ID: 0
-      Element: {fileID: 0}
-      IsAnimating: 0
-    UseSpawnerMotion: "\u751F\u6210\u5668\u52A8\u6548"
-    CreateArgs:
-      anchor: 5
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 13
-      Movement:
-        Movement: 1
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 12
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 0
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 0
-    RecycleArgs:
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 12
-      Movement:
-        Movement: 2
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 13
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 0
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 0
-    MotionPercentage: 0
-    isFold: 1
-    isEnabled: 1
-  - SpawnName: Image
-    Indicator: Indicator_Image
-    Delay_Spawn: 0
-    Delay_Despawn: 0
-    Position: {x: -833.1102, y: 234.86159, z: 0}
-    Euler: {x: -0, y: -0, z: 75.027664}
-    Offset: {x: 0, y: 0, z: 0}
-    Scale: {x: 1, y: 1, z: 1}
-    Size: {x: 100, y: 100}
-    Pivot: {x: 0.5, y: 0.5}
-    Anchor_Min: {x: 0.5, y: 0.5}
-    Anchor_Max: {x: 0.5, y: 0.5}
-    AutoIn: "\u81EA\u52A8 In"
-    InMotion: 0
-    Spawned: 0
-    SpawnedElementNode:
-      Indicator: 
-      ModuleName: 
-      ID: 0
-      Element: {fileID: 0}
-      IsAnimating: 0
-    UseSpawnerMotion: "\u751F\u6210\u5668\u52A8\u6548"
-    CreateArgs:
-      anchor: 5
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 13
-      Movement:
-        Movement: 1
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 12
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 0
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 0
-    RecycleArgs:
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 12
-      Movement:
-        Movement: 2
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 13
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 0
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 0
-    MotionPercentage: 0
-    isFold: 1
-    isEnabled: 1
-  - SpawnName: Image
-    Indicator: Indicator_Image
-    Delay_Spawn: 0
-    Delay_Despawn: 0
-    Position: {x: -446.5321, y: -287.87698, z: 0}
-    Euler: {x: -0, y: 0, z: 250.04633}
-    Offset: {x: 0, y: 0, z: 0}
-    Scale: {x: 1, y: 1, z: 1}
-    Size: {x: 100, y: 100}
-    Pivot: {x: 0.5, y: 0.5}
-    Anchor_Min: {x: 0.5, y: 0.5}
-    Anchor_Max: {x: 0.5, y: 0.5}
-    AutoIn: "\u81EA\u52A8 In"
-    InMotion: 0
-    Spawned: 0
-    SpawnedElementNode:
-      Indicator: 
-      ModuleName: 
-      ID: 0
-      Element: {fileID: 0}
-      IsAnimating: 0
-    UseSpawnerMotion: "\u751F\u6210\u5668\u52A8\u6548"
-    CreateArgs:
-      anchor: 5
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 13
-      Movement:
-        Movement: 1
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 12
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 0
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 0
-    RecycleArgs:
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 12
-      Movement:
-        Movement: 2
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 13
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 0
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 0
-    MotionPercentage: 0
-    isFold: 1
-    isEnabled: 1
-  - SpawnName: Image
-    Indicator: Indicator_Image
-    Delay_Spawn: 0
-    Delay_Despawn: 0
-    Position: {x: -132.55614, y: -88.29391, z: 0}
-    Euler: {x: -0, y: -0, z: 162.64311}
-    Offset: {x: 0, y: 0, z: 0}
-    Scale: {x: 1, y: 1, z: 1}
-    Size: {x: 100, y: 100}
-    Pivot: {x: 0.5, y: 0.5}
-    Anchor_Min: {x: 0.5, y: 0.5}
-    Anchor_Max: {x: 0.5, y: 0.5}
-    AutoIn: "\u81EA\u52A8 In"
-    InMotion: 0
-    Spawned: 0
-    SpawnedElementNode:
-      Indicator: 
-      ModuleName: 
-      ID: 0
-      Element: {fileID: 0}
-      IsAnimating: 0
-    UseSpawnerMotion: "\u751F\u6210\u5668\u52A8\u6548"
-    CreateArgs:
-      anchor: 5
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 13
-      Movement:
-        Movement: 1
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 12
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 0
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 0
-    RecycleArgs:
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 12
-      Movement:
-        Movement: 2
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 13
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 0
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 0
-    MotionPercentage: 0
-    isFold: 1
-    isEnabled: 1
-  SpawnItemList_World: []
+  SpawnName: Image
+  SpawnIndicator: Indicator_Image
   SpawnerIndicator: 
+  SpawnElement: {fileID: 0}
   CreateArgs:
     anchor: 5
     MotionAnimateEndState: 0
@@ -15157,7 +14547,6 @@ MonoBehaviour:
       CurveName: 
       Ease: 10
   CreateParamName: 
-  Crc_Lib_Name: 
   RecycleArgs:
     MotionAnimateEndState: 0
     Alpha:
@@ -15252,43 +14641,48 @@ MonoBehaviour:
       CurveName: 
       Ease: 10
   RecycleParamName: 
-  Rec_Lib_Name: 
+  ElementSize: {x: 0, y: 0}
+  ElementOffset: {x: 0, y: 0, z: 0}
+  ElementScale: {x: 1, y: 1, z: 1}
+  WorldPosition: {x: 0, y: 0, z: 0}
+  WorldRotation: {x: 0, y: 0, z: 0}
+  WorldScale: {x: 1, y: 1, z: 1}
+  ReferObject: {fileID: 0}
   SpawnFunctionKey_Primary: 3
   SpawnFunctionKey_Secondary: 0
   Key_Create: 115
   Key_Recycle: 100
-  UseManullyKey: 1
-  ControlScreen: 1
-  ControlWorld: 1
-  FoldScreen: 0
-  FoldWorld: 0
-  ProtectedAction: 1
-  inMotion: 0
-  Sequence_Spawn_Screen: 0.03
-  Sequence_Spawn_World: 0
-  Sequence_Despawn_Screen: 0.03
-  Sequence_Despawn_World: 0
-  create_fold_move: 0
-  create_fold_rotate: 0
-  create_fold_alpha: 0
+  ManullyCreate: 1
+  VisuallerCreate: 0
+  WorldCreate: 0
+  RMSEnabled: 0
+  AutoIn: 1
+  m_SpawnerRunning: 0
+  Crc_Lib_Name: 
+  Rec_Lib_Name: 
+  RMS_SelctedName: 
   recycle_fold_move: 0
   recycle_fold_rotate: 0
   recycle_fold_alpha: 0
---- !u!4 &877618101
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 877618099}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.489168, y: -3.1090372, z: 15.794761}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  create_fold_move: 0
+  create_fold_rotate: 0
+  create_fold_alpha: 0
+  ProtectedAction: 1
+  eve_on_element_spawn_start:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_element_spawn_end:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_element_despawn_start:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_element_despawn_end:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_element_state_changed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &891263006
 GameObject:
   m_ObjectHideFlags: 0
@@ -17320,6 +16714,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 989260158}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &993661984 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8568537368518311244, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
+  m_PrefabInstance: {fileID: 5058769946318357369}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &997731679
 GameObject:
   m_ObjectHideFlags: 0
@@ -19791,7 +19190,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1176431797
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21437,7 +20836,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1241744501}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -21471,7 +20870,7 @@ MonoBehaviour:
     Indicator: in
     Enabled: 1
     Type: 4
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Timings: "\u65E0"
     Duration: 1
     Delay: 0
     Progress: 0
@@ -21543,7 +20942,7 @@ MonoBehaviour:
     Indicator: in
     Enabled: 1
     Type: 0
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Timings: "\u65E0"
     Duration: 1
     Delay: 0
     Progress: 0
@@ -21608,7 +21007,7 @@ MonoBehaviour:
     Indicator: out
     Enabled: 1
     Type: 4
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Timings: "\u65E0"
     Duration: 1
     Delay: 0
     Progress: 0
@@ -21680,7 +21079,7 @@ MonoBehaviour:
     Indicator: out
     Enabled: 1
     Type: 0
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Timings: "\u65E0"
     Duration: 1
     Delay: 0
     Progress: 0
@@ -21799,7 +21198,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   Debug: 0
-  PreviewTiming: 
+  PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
 --- !u!114 &1241744505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22563,9 +21962,9 @@ RectTransform:
   - {fileID: 1848860147}
   m_Father: {fileID: 957958835}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 125, y: -15}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1298807851
@@ -24123,7 +23522,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1387306918
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26767,7 +26166,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2080979221}
-  - {fileID: 2030484016}
   - {fileID: 5178204818839089177}
   - {fileID: 680334744}
   m_Father: {fileID: 1261817883}
@@ -29403,9 +28801,9 @@ RectTransform:
   - {fileID: 1756801086}
   m_Father: {fileID: 957958835}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 405, y: -15}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1706784290
@@ -34383,6 +33781,321 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1993095366}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1999219504
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1999219505}
+  - component: {fileID: 1999219513}
+  - component: {fileID: 1999219512}
+  - component: {fileID: 1999219511}
+  - component: {fileID: 1999219518}
+  - component: {fileID: 1999219517}
+  - component: {fileID: 1999219516}
+  - component: {fileID: 1999219515}
+  - component: {fileID: 1999219514}
+  m_Layer: 8
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1999219505
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999219504}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5178204818839089177}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1999219511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999219504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 0
+  Indicator: 
+  IsInitial: 1
+  ModuleType: 3
+  mod_CanvasGroup: {fileID: 1999219518}
+  mod_Rect: {fileID: 1999219505}
+  mod_TmpText: {fileID: 0}
+  mod_Text: {fileID: 0}
+  mod_Image: {fileID: 1999219512}
+  mod_RawImage: {fileID: 0}
+  mod_HudButton: {fileID: 0}
+  Debug: 0
+  pt_Painting: {fileID: 1999219516}
+  pt_Feature: {fileID: 1999219515}
+  pt_Tween: {fileID: 1999219514}
+--- !u!114 &1999219512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999219504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1999219513
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999219504}
+  m_CullTransparentMesh: 1
+--- !u!114 &1999219514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999219504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 016f78ca51676bb4299db661f4208ae1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 1999219511}
+  MutePlay: 0
+  AnimatingBreakState: 0
+  IgnoreElementAnimationPlay: 0
+  TweenIsPreviewing: 0
+  PrimitiveTweenNodes:
+  - ID: 7737
+    Indicator: NewTween
+    Enabled: 1
+    Type: 0
+    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Duration: 1
+    Delay: 0
+    Progress: 0
+    Rewind_Set_Startvalue: 1
+    Complete_Set_Endvalue: 1
+    Ease: 10
+    AnimationCurveName: 
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Original_Int: 0
+    Original_Float: 0
+    Original_Vector2: {x: 0, y: 0}
+    Original_Vector3: {x: 0, y: 0, z: 0}
+    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    Original_Color: {r: 1, g: 1, b: 1, a: 1}
+    Original_String: 
+    ActivateFrom: 1
+    From_Int: 0
+    From_Float: 0
+    From_Vector2: {x: 0, y: 0}
+    From_Vector3: {x: 0, y: 0, z: 0}
+    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    From_Color: {r: 1, g: 1, b: 1, a: 1}
+    From_String: 
+    ActivateEnd: 0
+    End_Int: 0
+    End_Float: 0
+    End_Vector2: {x: 0, y: 0}
+    End_Vector3: {x: 0, y: 0, z: 0}
+    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    End_Color: {r: 1, g: 1, b: 1, a: 1}
+    End_String: 
+    ActivateOnlyToEnd: 0
+    RotateMode: 0
+    LoopType: 0
+    LoopCount: 0
+    IsFold: 0
+    TweenSounds: []
+  MainTweenNode: 
+  GlobalDuration: 1
+  MinTimer: 1
+  MaxTimer: 1
+  MinTimerWithGlobalDuration: 1
+  MaxTimerWithGlobalDuration: 1
+  eve_on_Tween_Play:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Play_At_Node:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Play_At_ID:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Play_At_Indicator:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_PlayAll:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Create_At_ID:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Create_At_Index:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Create_At_Indicator:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Rewind:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_RewindAll:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Kill:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_KillAll:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Ready:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Complete:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Initialized:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_SoundPlay:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_AnimatingState:
+    m_PersistentCalls:
+      m_Calls: []
+  Debug: 0
+  PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
+--- !u!114 &1999219515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999219504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67835f613303af544ab15c3f47f25281, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 1999219511}
+  PrimitiveFeatures:
+    Position: {x: 0, y: 0, z: 0}
+    Euler: {x: 0, y: 0, z: 0}
+    Scale: {x: 1, y: 1, z: 1}
+    Alpha: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Size: {x: 100, y: 100}
+    Fill: 1
+  FirstSaveFeatures: 1
+  Debug: 0
+--- !u!114 &1999219516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999219504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b8966a601623b4a9ad4044e643dbdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 1999219511}
+  OriginalColor: {r: 1, g: 1, b: 1, a: 1}
+  ColoriseName: 
+  Debug: 0
+  SyncLibraryColor: 0
+  SyncImageColor: 0
+--- !u!114 &1999219517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999219504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3bf3174e1981ec4b8bd6afe0f97cecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!225 &1999219518
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999219504}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2003143870
 GameObject:
   m_ObjectHideFlags: 0
@@ -35098,188 +34811,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2027535178}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &2030484015
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1591088442}
-    m_Modifications:
-    - target: {fileID: 1290872502789279007, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2524624664434944627, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3007201570190896062, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveFeatures.Color.a
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3007201570190896062, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveFeatures.Color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3007201570190896062, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveFeatures.Color.g
-      value: 0.5807174
-      objectReference: {fileID: 0}
-    - target: {fileID: 3007201570190896062, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveFeatures.Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: TweenIsPreviewing
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3825519748901760086, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5091216300239228032, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5284026036508404324, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: SoundName
-      value: hud_sound_3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -613
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 254
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6921029999383070082, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7171893478332382866, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7244169530817569284, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: TweenIsPreviewing
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7461380165790207627, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: SoundName
-      value: hud_sound_2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: Alpha
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: TweensPreivew_In_State
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: TweensPreivew_Out_State
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveControllerNodes.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8439528596986950714, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8513650909720280453, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: TweenIsPreviewing
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8568537368518311244, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_Name
-      value: Image_2
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
---- !u!224 &2030484016 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-  m_PrefabInstance: {fileID: 2030484015}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2031036402
 GameObject:
   m_ObjectHideFlags: 0
@@ -35887,6 +35418,239 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5405044337899974818, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
   m_PrefabInstance: {fileID: 5058769946318357369}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2080979224 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
+  m_PrefabInstance: {fileID: 5058769946318357369}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993661984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 427992cb4fdf0d4488fb77d4e7ae18af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2080979226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993661984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e623c31c6fe2624eb7a4ebeb2a07f7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HudElement: {fileID: 2080979224}
+  IsEnable: 1
+  DebugState: 0
+  key_Element_In: 99
+  key_Element_Out: 118
+  CreateArgs:
+    anchor: 0
+    MotionAnimateEndState: 0
+    Alpha:
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+    Movement:
+      Movement: 1
+      Distance: 100
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+    Rotation:
+      Rotation: 0
+      Degree: 0
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+  RecycleArgs:
+    MotionAnimateEndState: 0
+    Alpha:
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+    Movement:
+      Movement: 2
+      Distance: 100
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+    Rotation:
+      Rotation: 0
+      Degree: 0
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+  HideWithStart: 1
+  OriginalPosition: {x: 0, y: 0, z: 0}
+  OriginalEuler: {x: -0, y: 0, z: 0}
+  DurationScaler: 1
+  previewIsRunning: 0
+  Crc_Lib_Name: 
+  Rec_Lib_Name: 
+  DelayWithIn: 0
+  DelayWithOut: 0
+  create_fold_move: 0
+  create_fold_rotate: 0
+  create_fold_alpha: 0
+  recycle_fold_move: 0
+  recycle_fold_rotate: 0
+  recycle_fold_alpha: 0
+  RMS_Enabled: 0
+  RMS_Name: 
+  ElementIsIn: 1
 --- !u!1 &2083003363
 GameObject:
   m_ObjectHideFlags: 0
@@ -37282,97 +37046,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1591088442}
     m_Modifications:
-    - target: {fileID: 1290872502789279007, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2524624664434944627, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3007201570190896062, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveFeatures.Color.a
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3007201570190896062, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveFeatures.Color.b
-      value: 0.8752489
-      objectReference: {fileID: 0}
-    - target: {fileID: 3007201570190896062, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveFeatures.Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3007201570190896062, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveFeatures.Color.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: GlobalDuration
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: TweenIsPreviewing
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: MaxTimerWithGlobalDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: MinTimerWithGlobalDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: PrimitiveTweenNodes.Array.data[0].Progress
-      value: 0.6666431
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: PrimitiveTweenNodes.Array.data[1].Progress
-      value: 0.6666525
-      objectReference: {fileID: 0}
-    - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[1].TweenSounds.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[1].TweenSounds.Array.data[0].Path
-      value: Assets/SevenStrikeModules/XHud/Sound/hud_sound_2.wav
-      objectReference: {fileID: 0}
-    - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[1].TweenSounds.Array.data[0].Sound
-      value: 
-      objectReference: {fileID: 8300000, guid: 0cb2d898e345e98418069a5400946dea, type: 3}
-    - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[1].TweenSounds.Array.data[0].Volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[1].TweenSounds.Array.data[0].MaxPitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[1].TweenSounds.Array.data[0].MinPitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3746737271248288640, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[1].TweenSounds.Array.data[0].Percentage
-      value: 0.787
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3825519748901760086, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: m_Alpha
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4520652945945187189, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveFeatures.Color.b
-      value: 0.8752489
-      objectReference: {fileID: 0}
-    - target: {fileID: 4520652945945187189, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveFeatures.Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4520652945945187189, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveFeatures.Color.r
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5091216300239228032, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -37462,106 +37150,45 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7171893478332382866, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7244169530817569284, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: GlobalDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7244169530817569284, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: TweenIsPreviewing
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7244169530817569284, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: MaxTimerWithGlobalDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7244169530817569284, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: MinTimerWithGlobalDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7244169530817569284, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[0].Progress
-      value: 0.6848782
-      objectReference: {fileID: 0}
-    - target: {fileID: 7244169530817569284, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[1].Progress
-      value: 0.6848799
-      objectReference: {fileID: 0}
-    - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: Alpha
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: SounderIsFold
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitivesIsFold
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: TweensPreivew_In_State
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: TweensPreivew_Out_State
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitivesTweenMaxDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: PrimitiveControllerNodes.Array.size
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 8439528596986950714, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: m_Alpha
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8513650909720280453, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: GlobalDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8513650909720280453, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: TweenIsPreviewing
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8513650909720280453, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: MaxTimerWithGlobalDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8513650909720280453, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-      propertyPath: MinTimerWithGlobalDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8513650909720280453, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: PrimitiveTweenNodes.Array.data[0].IsFold
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8513650909720280453, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: PrimitiveTweenNodes.Array.data[1].IsFold
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8513650909720280453, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: PrimitiveTweenNodes.Array.data[0].Progress
-      value: 0.684881
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8513650909720280453, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: PrimitiveTweenNodes.Array.data[1].Progress
-      value: 0.6848825
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8568537368518311244, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
       propertyPath: m_Name
       value: Image
       objectReference: {fileID: 0}
+    - target: {fileID: 8568537368518311244, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8568537368518311244, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2080979226}
   m_SourcePrefab: {fileID: 100100000, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
 --- !u!224 &5178204818839089177
 RectTransform:
@@ -37582,6 +37209,7 @@ RectTransform:
   - {fileID: 1387306918}
   - {fileID: 771765371}
   - {fileID: 875335466}
+  - {fileID: 1999219505}
   m_Father: {fileID: 1591088442}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}

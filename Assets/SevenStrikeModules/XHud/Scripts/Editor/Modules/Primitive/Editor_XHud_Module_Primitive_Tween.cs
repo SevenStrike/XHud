@@ -31,6 +31,7 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
+    using UnityEngine.InputSystem.LowLevel;
     using UnityEngine.UI;
     using Random = UnityEngine.Random;
 
@@ -1017,7 +1018,19 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
-            string tim = Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Module_Primitive_Tween>("预览时机", PreviewTimings, ref sp_PreviewTiming, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) => { });
+            Rect last = Editor_XHud_GUI.Gui_GetLastRect();
+            Rect timRefresh_Rect = new Rect(rect.width - 140, last.y - 10, 150, 38);
+            //Editor_XHud_GUI.Gui_Box(timRefresh_Rect, Color.green * 0.5f);
+
+            // 点击预览时机下拉菜单时先更新一下
+            Event e = Event.current;
+            if (e.type == EventType.MouseDown && e.button == (int)MouseButton.Left && timRefresh_Rect.Contains(e.mousePosition))
+            {
+                // 再次收集动画列表所有动画时机名称
+                Preview_PrimitiveTweens_CollectedTimings(BaseScript);
+            }
+
+            Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Module_Primitive_Tween>("预览时机", PreviewTimings, ref sp_PreviewTiming, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) => { });
 
             GUILayout.Space(10);
             GUILayout.EndHorizontal();
@@ -1340,6 +1353,47 @@ namespace SevenStrikeModules.XHud.Editor
 
                         string indicator = $"( {BaseScript.controller.Indicator} )";
                         Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 图元动画器消息", "清空图元动画效果列表", $"已将  {BaseScript.name}{(string.IsNullOrEmpty(indicator) ? "" : indicator)} 动画器的动画效果列表清空！", "明白");
+                    }
+                });
+                menu.AddSeparator("");
+                menu.AddItem(new GUIContent("F (动画列表 - 全部折叠)"), false, () =>
+                {
+                    if (Targets_Selected())
+                    {
+                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        {
+                            for (int s = 1; s < SelectedObjects[i].PrimitiveTweenNodes.Count; s++)
+                            {
+                                SelectedObjects[i].PrimitiveTweenNodes[s].IsFold = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < BaseScript.PrimitiveTweenNodes.Count; i++)
+                        {
+                            BaseScript.PrimitiveTweenNodes[i].IsFold = true;
+                        }
+                    }
+                });
+                menu.AddItem(new GUIContent("D (动画列表 - 全部展开)"), false, () =>
+                {
+                    if (Targets_Selected())
+                    {
+                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        {
+                            for (int s = 1; s < SelectedObjects[i].PrimitiveTweenNodes.Count; s++)
+                            {
+                                SelectedObjects[i].PrimitiveTweenNodes[s].IsFold = false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < BaseScript.PrimitiveTweenNodes.Count; i++)
+                        {
+                            BaseScript.PrimitiveTweenNodes[i].IsFold = false;
+                        }
                     }
                 });
                 menu.ShowAsContext(); // 在鼠标位置显示右键菜单
@@ -1957,6 +2011,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 node.Tweener?.Kill();  // 使用 ?. 简化
                 node.Tweener = null;
+                node.Progress = 0;
             }
         }
 

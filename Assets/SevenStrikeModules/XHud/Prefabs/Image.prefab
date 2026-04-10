@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 6845709772388858414}
   - component: {fileID: 3007201570190896062}
   - component: {fileID: 8513650909720280453}
-  - component: {fileID: 1454422810569840876}
   m_Layer: 8
   m_Name: Image
   m_TagString: Untagged
@@ -169,7 +168,7 @@ MonoBehaviour:
     Euler: {x: -0, y: 0, z: 0}
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
-    Color: {r: 0, g: 1, b: 0.8752489, a: 0.4}
+    Color: {r: 1, g: 0.5807174, b: 0, a: 0.6}
     Size: {x: 512, y: 512}
     Fill: 1
   FirstSaveFeatures: 1
@@ -255,7 +254,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 1
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
     TweenSounds:
     - Sound: {fileID: 8300000, guid: 7c59136550e71ea49b3082ed00aff460, type: 3}
       Path: 
@@ -327,7 +326,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
     TweenSounds:
     - Sound: {fileID: 8300000, guid: 98542864717bc5d47b8a03236e38c1d0, type: 3}
       Path: Assets/SevenStrikeModules/XHud/Sound/Cat.mp3
@@ -395,20 +394,6 @@ MonoBehaviour:
       m_Calls: []
   Debug: 0
   PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
---- !u!114 &1454422810569840876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1964085796488173602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 233330a3a9064ba4cb75392d8423660e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tween: {fileID: 8513650909720280453}
-  id: 3669
 --- !u!1 &5877874815024146164
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,7 +411,6 @@ GameObject:
   - component: {fileID: 2057482543889419126}
   - component: {fileID: 204542589459285731}
   - component: {fileID: 3746737271248288640}
-  - component: {fileID: 4641608777562429351}
   m_Layer: 8
   m_Name: Image_2
   m_TagString: Untagged
@@ -664,7 +648,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
     TweenSounds: []
   - ID: 2834
     Indicator: NewTweenCopied
@@ -729,8 +713,15 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
-    TweenSounds: []
+    IsFold: 1
+    TweenSounds:
+    - Sound: {fileID: 8300000, guid: 0cb2d898e345e98418069a5400946dea, type: 3}
+      Path: Assets/SevenStrikeModules/XHud/Sound/hud_sound_2.wav
+      Percentage: 0.787
+      IsPlayed: 0
+      Volume: 1
+      MaxPitch: 1
+      MinPitch: 1
   MainTweenNode: 
   GlobalDuration: 1
   MinTimer: 1
@@ -790,20 +781,6 @@ MonoBehaviour:
       m_Calls: []
   Debug: 0
   PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
---- !u!114 &4641608777562429351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5877874815024146164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 233330a3a9064ba4cb75392d8423660e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tween: {fileID: 3746737271248288640}
-  id: 3669
 --- !u!1 &6888053526282335532
 GameObject:
   m_ObjectHideFlags: 0
@@ -821,7 +798,6 @@ GameObject:
   - component: {fileID: 6760835187810168883}
   - component: {fileID: 4520652945945187189}
   - component: {fileID: 7244169530817569284}
-  - component: {fileID: 4854686252732208393}
   m_Layer: 8
   m_Name: Image_1
   m_TagString: Untagged
@@ -973,7 +949,7 @@ MonoBehaviour:
     Euler: {x: -0, y: 0, z: 0}
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
-    Color: {r: 0, g: 1, b: 0.8752489, a: 0.4}
+    Color: {r: 1, g: 0, b: 0.90547323, a: 0.4}
     Size: {x: 512, y: 512}
     Fill: 1
   FirstSaveFeatures: 1
@@ -1059,7 +1035,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
     TweenSounds: []
   - ID: 2834
     Indicator: NewTweenCopied
@@ -1124,7 +1100,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
     TweenSounds: []
   MainTweenNode: 
   GlobalDuration: 1
@@ -1185,20 +1161,6 @@ MonoBehaviour:
       m_Calls: []
   Debug: 0
   PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
---- !u!114 &4854686252732208393
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6888053526282335532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 233330a3a9064ba4cb75392d8423660e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tween: {fileID: 7244169530817569284}
-  id: 3669
 --- !u!1 &8568537368518311244
 GameObject:
   m_ObjectHideFlags: 0
@@ -1210,7 +1172,6 @@ GameObject:
   - component: {fileID: 5405044337899974818}
   - component: {fileID: 1290872502789279007}
   - component: {fileID: 7842899311693621446}
-  - component: {fileID: 7461380165790207627}
   - component: {fileID: 5284026036508404324}
   m_Layer: 8
   m_Name: Image
@@ -1265,7 +1226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427992cb4fdf0d4488fb77d4e7ae18af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Alpha: 1
+  Alpha: 0
   CanvasGroup: {fileID: 1290872502789279007}
   Indicator: 
   OriginalName: 
@@ -1505,7 +1466,6 @@ MonoBehaviour:
   SliderNodes: []
   SliderIsFold: 1
   SounderNodes:
-  - Sounder: {fileID: 7461380165790207627}
   - Sounder: {fileID: 5284026036508404324}
   SounderIsFold: 0
   TextNodes: []
@@ -1520,48 +1480,18 @@ MonoBehaviour:
     DelayTime: 0
   - Controller: {fileID: 8082404643869670020}
     TotalTime: 0
-    DelayTime: 0
+    DelayTime: 0.5
   - Controller: {fileID: 9090314688846220917}
     TotalTime: 0
-    DelayTime: 0
-  PrimitivesTweenMaxDuration: 1
+    DelayTime: 1
+  PrimitivesTweenMaxDuration: 2
   PrimitivesTweenGlobalDuration: 1
-  PrimitivesIsFold: 0
+  PrimitivesIsFold: 1
   AutoPlayPrimitivesTween: 1
   RMS_Enabled: 0
   RMS_LayoutDatas: []
   RMS_Name: 
   TriggerAction: {fileID: 0}
---- !u!114 &7461380165790207627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8568537368518311244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 437bcee6f551ac6439fe6679a232275c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Element: {fileID: 7842899311693621446}
-  Toggle: {fileID: 0}
-  Slider: {fileID: 0}
-  Progress: {fileID: 0}
-  Option: {fileID: 0}
-  Button: {fileID: 0}
-  SoundName: Cat
-  DelayTime: 0
-  Indicator: 
-  Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-  IsLoop: 0
-  Volume: 1
-  UseRandomPitch: 0
-  Pitch_Min: 1
-  Pitch_Max: 1
-  DebugState: 0
-  PreviewKey: 0
-  UnPreviewKey: 0
 --- !u!114 &5284026036508404324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1580,7 +1510,7 @@ MonoBehaviour:
   Progress: {fileID: 0}
   Option: {fileID: 0}
   Button: {fileID: 0}
-  SoundName: DefaultSound
+  SoundName: hud_sound_4
   DelayTime: 0
   Indicator: 
   Timings: "\u5143\u7D20\u9000\u51FA\u65F6"
