@@ -2054,15 +2054,16 @@ namespace SevenStrikeModules.XHud
                      *        }
                      *    }
                      */
-                    node.Element.element_SounderUnRegisterAction();
+                    // 但是会导致元素退出时无法播放音效了
+                    //node.Element.element_SounderUnRegisterAction();
 
-                    if (node.Element.act_on_element_out_start == null)
+                    //if (node.Element.act_on_element_out_start == null)
                         node.Element.act_on_element_out_start += action_out_start;
 
-                    if (node.Element.act_on_element_out_progress == null)
+                    //if (node.Element.act_on_element_out_progress == null)
                         node.Element.act_on_element_out_progress += action_out_progress;
 
-                    if (node.Element.act_on_element_out_end == null)
+                    //if (node.Element.act_on_element_out_end == null)
                         node.Element.act_on_element_out_end += action_out_end;
 
                     // 执行回收
@@ -2099,15 +2100,16 @@ namespace SevenStrikeModules.XHud
                  *        }
                  *    }
                  */
-                node.Element.element_SounderUnRegisterAction();
+                // 但是会导致元素退出时无法播放音效了
+                //node.Element.element_SounderUnRegisterAction();
 
-                if (node.Element.act_on_element_out_start == null)
+                //if (node.Element.act_on_element_out_start == null)
                     node.Element.act_on_element_out_start += action_out_start;
 
-                if (node.Element.act_on_element_out_progress == null)
+                //if (node.Element.act_on_element_out_progress == null)
                     node.Element.act_on_element_out_progress += action_out_progress;
 
-                if (node.Element.act_on_element_out_end == null)
+                //if (node.Element.act_on_element_out_end == null)
                     node.Element.act_on_element_out_end += action_out_end;
 
                 // 执行回收
@@ -2185,15 +2187,16 @@ namespace SevenStrikeModules.XHud
                  *        }
                  *    }
                  */
-                targetNode.Element.element_SounderUnRegisterAction();
+                // 但是会导致元素退出时无法播放音效了
+                //targetNode.Element.element_SounderUnRegisterAction();
 
-                if (targetNode.Element.act_on_element_out_start == null)
+                //if (targetNode.Element.act_on_element_out_start == null)
                     targetNode.Element.act_on_element_out_start += action_out_start;
 
-                if (targetNode.Element.act_on_element_out_progress == null)
+                //if (targetNode.Element.act_on_element_out_progress == null)
                     targetNode.Element.act_on_element_out_progress += action_out_progress;
 
-                if (targetNode.Element.act_on_element_out_end == null)
+                //if (targetNode.Element.act_on_element_out_end == null)
                     targetNode.Element.act_on_element_out_end += action_out_end;
 
                 // 执行回收
