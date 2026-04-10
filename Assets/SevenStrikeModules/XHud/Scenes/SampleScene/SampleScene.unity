@@ -19211,7 +19211,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -220, y: 310}
+  m_AnchoredPosition: {x: 107, y: -216}
   m_SizeDelta: {x: 185, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1176431798
@@ -20870,7 +20870,7 @@ MonoBehaviour:
     Indicator: in
     Enabled: 1
     Type: 4
-    Timings: "\u65E0"
+    Timings: "\u5F00\u5173\u5173\u95ED\u65F6"
     Duration: 1
     Delay: 0
     Progress: 0
@@ -20942,7 +20942,7 @@ MonoBehaviour:
     Indicator: in
     Enabled: 1
     Type: 0
-    Timings: "\u65E0"
+    Timings: "\u5F00\u5173\u5173\u95ED\u65F6"
     Duration: 1
     Delay: 0
     Progress: 0
@@ -21007,7 +21007,7 @@ MonoBehaviour:
     Indicator: out
     Enabled: 1
     Type: 4
-    Timings: "\u65E0"
+    Timings: "\u5F00\u5173\u6253\u5F00\u65F6"
     Duration: 1
     Delay: 0
     Progress: 0
@@ -21079,7 +21079,7 @@ MonoBehaviour:
     Indicator: out
     Enabled: 1
     Type: 0
-    Timings: "\u65E0"
+    Timings: "\u5F00\u5173\u6253\u5F00\u65F6"
     Duration: 1
     Delay: 0
     Progress: 0

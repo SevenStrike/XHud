@@ -510,7 +510,7 @@ namespace SevenStrikeModules.XHud
 
         #endregion
 
-        #region 公共方法
+        #region  生成 & 回收
         /// <summary>
         /// 从池中取出一个 XHud 元素并生成到场景中
         /// </summary>
@@ -625,23 +625,27 @@ namespace SevenStrikeModules.XHud
         /// <param name="actionend">回收结束时的回调事件，用于覆盖默认的动画结束处理</param>
         public void hsp_Despawn(Motion_Recycler RecycleParam = null, UnityAction<XHud_Module_Element> actionstart = null, UnityAction<XHud_Module_Element> actionend = null)
         {
-            XHud_Manager.Instance.hm_HudElement_RecycleAt(SpawnElement, RecycleParam == null ? this.RecycleArgs : RecycleParam, actionstart == null ? (wrap) =>
-            {
-                if (act_on_element_out_start != null)
-                    act_on_element_out_start();
-                eve_on_element_despawn_start.Invoke();
-                SpawnerRunning = true;
-            }
-            : actionstart, null, actionend == null ? (wrap) =>
-            {
-                if (act_on_element_out_end != null)
-                    act_on_element_out_end();
-                if (act_on_element_despawn != null)
-                    act_on_element_despawn(SpawnElement);
-                eve_on_element_despawn_end.Invoke();
-                SpawnElement = null;
-                SpawnerRunning = false;
-            }
+            XHud_Manager.Instance.hm_HudElement_RecycleAt(
+                SpawnElement,
+                RecycleParam == null ? this.RecycleArgs : RecycleParam,
+                actionstart == null ? (ele) =>
+                {
+                    if (act_on_element_out_start != null)
+                        act_on_element_out_start();
+                    eve_on_element_despawn_start.Invoke();
+                    SpawnerRunning = true;
+                }
+            : actionstart,
+                null, actionend == null ? (ele) =>
+                {
+                    if (act_on_element_out_end != null)
+                        act_on_element_out_end();
+                    if (act_on_element_despawn != null)
+                        act_on_element_despawn(SpawnElement);
+                    eve_on_element_despawn_end.Invoke();
+                    SpawnElement = null;
+                    SpawnerRunning = false;
+                }
             : actionend);
         }
         /// <summary>

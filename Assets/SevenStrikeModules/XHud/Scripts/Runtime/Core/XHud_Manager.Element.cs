@@ -2026,21 +2026,53 @@ namespace SevenStrikeModules.XHud
             if (args == null)
                 args = RecycleArgs_Default;
 
+            string x_indicator = "";
+            int x_id = 0;
+
             // 回收所有屏幕元素
             for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
             {
                 for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
                 {
                     XHudElementNode node = Anchors_Layout_Screen[i].HudElementInfos[s];
+                    x_indicator = node.Indicator;
+                    x_id = node.ID;
+
+                    /*释放音效器对元素的In_Start  /  In_End  /  Out_Start  的委托，
+                     * 如果不执行这步会导致 Element 的 act_on_element_out_start 委托总是被占用一个，
+                     * 虽然回收后会清空
+                     * -----------------------
+                     * 原因：音效器会在元素从生出来的时候自动注册：
+                     *   if (Element != null)
+                     *    {
+                     *        Element.act_on_element_in_start += ele_act_on_element_in_start;
+                     *        Element.act_on_element_in_end += ele_act_on_element_in_end;
+                     *        Element.act_on_element_out_start += ele_act_on_element_out_start;
+                     *        if (DebugState)
+                     *        {
+                     *            XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注册 - 元素 - 事件", HudMsgState.通知);
+                     *        }
+                     *    }
+                     */
+                    node.Element.element_SounderUnRegisterAction();
 
                     if (node.Element.act_on_element_out_start == null)
                         node.Element.act_on_element_out_start += action_out_start;
+
                     if (node.Element.act_on_element_out_progress == null)
                         node.Element.act_on_element_out_progress += action_out_progress;
+
                     if (node.Element.act_on_element_out_end == null)
                         node.Element.act_on_element_out_end += action_out_end;
 
+                    // 执行回收
+                    if (args == null)
+                        args = RecycleArgs_Default;
                     node.Element.Element_Out(args);
+
+                    // 调试信息 - 成功
+                    if (UseDebug)
+                        XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", $"已{(node.Element.CreatedSourceType == XHudElementCreatedSourceType.Library ? "回收" : "销毁")}元素：" + x_indicator + " / " + x_id, HudMsgState.通知);
                 }
             }
 
@@ -2048,15 +2080,44 @@ namespace SevenStrikeModules.XHud
             for (int i = 0; i < Anchors_Layout_World.Count; i++)
             {
                 XHudElementNode node = Anchors_Layout_World[i];
+                x_indicator = node.Indicator;
+                x_id = node.ID;
+
+                /*释放音效器对元素的In_Start  /  In_End  /  Out_Start  的委托，
+                 * 如果不执行这步会导致 Element 的 act_on_element_out_start 委托总是被占用一个，
+                 * 虽然回收后会清空
+                 * -----------------------
+                 * 原因：音效器会在元素从生出来的时候自动注册：
+                 *   if (Element != null)
+                 *    {
+                 *        Element.act_on_element_in_start += ele_act_on_element_in_start;
+                 *        Element.act_on_element_in_end += ele_act_on_element_in_end;
+                 *        Element.act_on_element_out_start += ele_act_on_element_out_start;
+                 *        if (DebugState)
+                 *        {
+                 *            XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注册 - 元素 - 事件", HudMsgState.通知);
+                 *        }
+                 *    }
+                 */
+                node.Element.element_SounderUnRegisterAction();
 
                 if (node.Element.act_on_element_out_start == null)
                     node.Element.act_on_element_out_start += action_out_start;
+
                 if (node.Element.act_on_element_out_progress == null)
                     node.Element.act_on_element_out_progress += action_out_progress;
+
                 if (node.Element.act_on_element_out_end == null)
                     node.Element.act_on_element_out_end += action_out_end;
 
+                // 执行回收
+                if (args == null)
+                    args = RecycleArgs_Default;
                 node.Element.Element_Out(args);
+
+                // 调试信息 - 成功
+                if (UseDebug)
+                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", $"已{(node.Element.CreatedSourceType == XHudElementCreatedSourceType.Library ? "回收" : "销毁")}元素：" + x_indicator + " / " + x_id, HudMsgState.通知);
             }
         }
 
@@ -2108,11 +2169,30 @@ namespace SevenStrikeModules.XHud
             // 执行回收逻辑
             if (finded)
             {
-                // 注册回收事件委托
+                /*释放音效器对元素的In_Start  /  In_End  /  Out_Start  的委托，
+                 * 如果不执行这步会导致 Element 的 act_on_element_out_start 委托总是被占用一个，
+                 * 虽然回收后会清空
+                 * -----------------------
+                 * 原因：音效器会在元素从生出来的时候自动注册：
+                 *   if (Element != null)
+                 *    {
+                 *        Element.act_on_element_in_start += ele_act_on_element_in_start;
+                 *        Element.act_on_element_in_end += ele_act_on_element_in_end;
+                 *        Element.act_on_element_out_start += ele_act_on_element_out_start;
+                 *        if (DebugState)
+                 *        {
+                 *            XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注册 - 元素 - 事件", HudMsgState.通知);
+                 *        }
+                 *    }
+                 */
+                targetNode.Element.element_SounderUnRegisterAction();
+
                 if (targetNode.Element.act_on_element_out_start == null)
                     targetNode.Element.act_on_element_out_start += action_out_start;
+
                 if (targetNode.Element.act_on_element_out_progress == null)
                     targetNode.Element.act_on_element_out_progress += action_out_progress;
+
                 if (targetNode.Element.act_on_element_out_end == null)
                     targetNode.Element.act_on_element_out_end += action_out_end;
 

@@ -50,5 +50,16 @@ namespace SevenStrikeModules.XHud
         /// 用于控制Inspector中音效器列表的显示/隐藏
         /// </summary>
         public bool SounderIsFold;
+
+        /// <summary>
+        /// 将所有的音效器委托释放
+        /// </summary>
+        public void element_SounderUnRegisterAction()
+        {
+            for (int i = 0; i < SounderNodes.Count; i++)
+            {
+                SounderNodes[i].Sounder.UnRegisterAction();
+            }
+        }
     }
 }

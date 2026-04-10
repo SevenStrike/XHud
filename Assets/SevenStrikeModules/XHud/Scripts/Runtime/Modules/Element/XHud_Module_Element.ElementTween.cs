@@ -530,14 +530,17 @@ namespace SevenStrikeModules.XHud
                     if (isPreview)
                         element_AlphaSyncUpdate();
                     if (!isPreview)
+                    {
                         if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                         {
                             if (act_on_element_in_progress != null)
                                 act_on_element_in_progress(Tween_Alpha.CurrentEasedProgress);
                         }
+                    }
                 }).OnComplete((d) =>
                 {
                     if (!isPreview)
+                    {
                         if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                         {
                             if (act_on_element_in_end != null)
@@ -548,6 +551,7 @@ namespace SevenStrikeModules.XHud
                                 act_InComplete();
                             Element_In_End();
                         }
+                    }
                 }).OnKill(() =>
                         {
                             if (isPreview)
@@ -567,14 +571,17 @@ namespace SevenStrikeModules.XHud
                     if (isPreview)
                         element_AlphaSyncUpdate();
                     if (!isPreview)
+                    {
                         if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                         {
                             if (act_on_element_in_progress != null)
                                 act_on_element_in_progress(Tween_Alpha.CurrentEasedProgress);
                         }
+                    }
                 }).OnComplete((d) =>
                 {
                     if (!isPreview)
+                    {
                         if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                         {
                             if (act_on_element_in_end != null)
@@ -585,6 +592,7 @@ namespace SevenStrikeModules.XHud
                                 act_InComplete();
                             Element_In_End();
                         }
+                    }
                 }).OnKill(() =>
                 {
                     if (isPreview)
@@ -712,11 +720,13 @@ namespace SevenStrikeModules.XHud
                         Tween_Move = RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * duration).SetAutoKill(isPreview ? false : true).SetFrom(fromvalue).SetDelay(args.Movement.Delay).SetEase(args.Movement.Ease).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (!isPreview)
+                            {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_in_progress != null)
                                         act_on_element_in_progress(Tween_Move.CurrentEasedProgress);
                                 }
+                            }
                         }).OnComplete((d) =>
                         {
                             if (isPreview)
@@ -724,6 +734,7 @@ namespace SevenStrikeModules.XHud
                                 RectTransform.localScale = scale;
                             }
                             if (!isPreview)
+                            {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_in_end != null)
@@ -734,6 +745,7 @@ namespace SevenStrikeModules.XHud
                                         act_InComplete();
                                     Element_In_End();
                                 }
+                            }
                         }).Play();
                     }
                     else
@@ -741,14 +753,17 @@ namespace SevenStrikeModules.XHud
                         Tween_Move = RectTransform.xt_AnchoredPosition3D_To(endvalue, args.Movement.Duration * duration).SetAutoKill(isPreview ? false : true).SetFrom(fromvalue).SetRelative(true).SetDelay(args.Movement.Delay).SetEase(args.Movement.Ease).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (!isPreview)
+                            {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_in_progress != null)
                                         act_on_element_in_progress(Tween_Move.CurrentEasedProgress);
                                 }
+                            }
                         }).OnComplete((d) =>
                         {
                             if (!isPreview)
+                            {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_in_end != null)
@@ -759,6 +774,7 @@ namespace SevenStrikeModules.XHud
                                         act_InComplete();
                                     Element_In_End();
                                 }
+                            }
                         }).OnKill(() =>
                         {
                             if (isPreview)
@@ -777,11 +793,13 @@ namespace SevenStrikeModules.XHud
                         Tween_Move = RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * duration).SetAutoKill(isPreview ? false : true).SetFrom(fromvalue).SetDelay(args.Movement.Delay).SetEase(args.Movement.Curve).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (!isPreview)
+                            {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_in_progress != null)
                                         act_on_element_in_progress(Tween_Move.CurrentEasedProgress);
                                 }
+                            }
                         }).OnComplete((d) =>
                         {
                             if (isPreview)
@@ -789,6 +807,7 @@ namespace SevenStrikeModules.XHud
                                 RectTransform.localScale = scale;
                             }
                             if (!isPreview)
+                            {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_in_end != null)
@@ -799,6 +818,7 @@ namespace SevenStrikeModules.XHud
                                         act_InComplete();
                                     Element_In_End();
                                 }
+                            }
                         }).Play();
                     }
                     else
@@ -806,14 +826,17 @@ namespace SevenStrikeModules.XHud
                         Tween_Move = RectTransform.xt_AnchoredPosition3D_To(endvalue, args.Movement.Duration * duration).SetAutoKill(isPreview ? false : true).SetFrom(fromvalue).SetRelative(true).SetDelay(args.Movement.Delay).SetEase(args.Movement.Curve).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (!isPreview)
+                            {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_in_progress != null)
                                         act_on_element_in_progress(Tween_Move.CurrentEasedProgress);
                                 }
+                            }
                         }).OnComplete((d) =>
                         {
                             if (!isPreview)
+                            {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_in_end != null)
@@ -824,6 +847,7 @@ namespace SevenStrikeModules.XHud
                                         act_InComplete();
                                     Element_In_End();
                                 }
+                            }
                         }).OnKill(() =>
                         {
                             if (isPreview)
@@ -875,14 +899,17 @@ namespace SevenStrikeModules.XHud
                     Tween_Rotation = RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * duration, true, false, XTweenRotationSpace.相对, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Ease).SetAutoKill(isPreview ? false : true).OnUpdate<Vector3>((v, d, t) =>
                     {
                         if (!isPreview)
+                        {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                             {
                                 if (act_on_element_in_progress != null)
                                     act_on_element_in_progress(Tween_Rotation.CurrentEasedProgress);
                             }
+                        }
                     }).OnComplete((d) =>
                     {
                         if (!isPreview)
+                        {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                             {
                                 if (act_on_element_in_end != null)
@@ -893,6 +920,7 @@ namespace SevenStrikeModules.XHud
                                     act_InComplete();
                                 Element_In_End();
                             }
+                        }
                     }).OnKill(() =>
                     {
                         if (isPreview)
@@ -908,14 +936,17 @@ namespace SevenStrikeModules.XHud
                     Tween_Rotation = RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * duration, true, false, XTweenRotationSpace.绝对, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Curve).SetAutoKill(isPreview ? false : true).OnUpdate<Vector3>((v, d, t) =>
                     {
                         if (!isPreview)
+                        {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                             {
                                 if (act_on_element_in_progress != null)
                                     act_on_element_in_progress(Tween_Rotation.CurrentEasedProgress);
                             }
+                        }
                     }).OnComplete((d) =>
                     {
                         if (!isPreview)
+                        {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                             {
                                 if (act_on_element_in_end != null)
@@ -926,6 +957,7 @@ namespace SevenStrikeModules.XHud
                                     act_InComplete();
                                 Element_In_End();
                             }
+                        }
                     }).OnKill(() =>
                     {
                         if (isPreview)
@@ -963,14 +995,17 @@ namespace SevenStrikeModules.XHud
                             element_AlphaSyncUpdate();
 
                         if (!isPreview)
+                        {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                             {
                                 if (act_on_element_out_progress != null)
                                     act_on_element_out_progress(Tween_Alpha.CurrentEasedProgress);
                             }
+                        }
                     }).OnComplete((d) =>
                     {
                         if (!isPreview)
+                        {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                             {
                                 if (act_on_element_out_end != null)
@@ -981,6 +1016,7 @@ namespace SevenStrikeModules.XHud
                                     act_OutComplete();
                                 Element_Out_End(args);
                             }
+                        }
                     }).OnKill(() =>
                     {
                         if (isPreview)
@@ -1001,14 +1037,17 @@ namespace SevenStrikeModules.XHud
                         if (isPreview)
                             element_AlphaSyncUpdate();
                         if (!isPreview)
+                        {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                             {
                                 if (act_on_element_out_progress != null)
                                     act_on_element_out_progress(Tween_Alpha.CurrentEasedProgress);
                             }
+                        }
                     }).OnComplete((d) =>
                     {
                         if (!isPreview)
+                        {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                             {
                                 if (act_on_element_out_end != null)
@@ -1019,6 +1058,7 @@ namespace SevenStrikeModules.XHud
                                     act_OutComplete();
                                 Element_Out_End(args);
                             }
+                        }
                     }).OnKill(() =>
                     {
                         if (isPreview)
@@ -1112,14 +1152,17 @@ namespace SevenStrikeModules.XHud
                         Tween_Move = RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * duration).SetDelay(args.Movement.Delay).SetEase(args.Movement.Ease).SetAutoKill(isPreview ? false : true).OnUpdate<Vector3>((v, d, t) =>
                             {
                                 if (!isPreview)
+                                {
                                     if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                     {
                                         if (act_on_element_out_progress != null)
                                             act_on_element_out_progress(Tween_Move.CurrentEasedProgress);
                                     }
+                                }
                             }).OnComplete((d) =>
                             {
                                 if (!isPreview)
+                                {
                                     if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                     {
                                         if (act_on_element_out_end != null)
@@ -1130,6 +1173,7 @@ namespace SevenStrikeModules.XHud
                                             act_OutComplete();
                                         Element_Out_End(args);
                                     }
+                                }
                             }).OnKill(() =>
                             {
                                 if (isPreview)
@@ -1144,14 +1188,17 @@ namespace SevenStrikeModules.XHud
                         }).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (!isPreview)
+                            {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_out_progress != null)
                                         act_on_element_out_progress(Tween_Move.CurrentEasedProgress);
                                 }
+                            }
                         }).OnComplete((d) =>
                         {
                             if (!isPreview)
+                            {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_out_end != null)
@@ -1162,6 +1209,7 @@ namespace SevenStrikeModules.XHud
                                         act_OutComplete();
                                     Element_Out_End(args);
                                 }
+                            }
                         }).OnKill(() =>
                         {
                             if (isPreview)
@@ -1180,14 +1228,17 @@ namespace SevenStrikeModules.XHud
                         Tween_Move = RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * duration).SetDelay(args.Movement.Delay).SetEase(args.Movement.Curve).SetAutoKill(isPreview ? false : true).OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (!isPreview)
+                            {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_out_progress != null)
                                         act_on_element_out_progress(Tween_Move.CurrentEasedProgress);
                                 }
+                            }
                         }).OnComplete((d) =>
                         {
                             if (!isPreview)
+                            {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_out_end != null)
@@ -1198,6 +1249,7 @@ namespace SevenStrikeModules.XHud
                                         act_OutComplete();
                                     Element_Out_End(args);
                                 }
+                            }
                         }).OnKill(() =>
                         {
                             if (isPreview)
@@ -1217,6 +1269,7 @@ namespace SevenStrikeModules.XHud
                         }).OnComplete((d) =>
                         {
                             if (!isPreview)
+                            {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_out_end != null)
@@ -1227,6 +1280,7 @@ namespace SevenStrikeModules.XHud
                                         act_OutComplete();
                                     Element_Out_End(args);
                                 }
+                            }
                         }).OnKill(() =>
                         {
                             if (isPreview)
@@ -1275,13 +1329,18 @@ namespace SevenStrikeModules.XHud
                     if (DebugState)
                         XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放旋转动画 - 根据缓动参数", HudMsgState.通知);
                     Tween_Rotation = RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * duration, true, isPreview ? false : true, XTweenRotationSpace.相对, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Ease).SetAutoKill(isPreview ? false : true).OnUpdate<Vector3>((v, d, t) =>
+                    {
+                        if (!isPreview)
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                             {
                                 if (act_on_element_out_progress != null)
                                     act_on_element_out_progress(Tween_Rotation.CurrentEasedProgress);
                             }
-                        }).OnComplete((d) =>
+                        }
+                    }).OnComplete((d) =>
+                    {
+                        if (!isPreview)
                         {
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                             {
@@ -1293,10 +1352,11 @@ namespace SevenStrikeModules.XHud
                                     act_OutComplete();
                                 Element_Out_End(args);
                             }
-                        }).OnKill(() =>
-                        {
-                            RectTransform.localEulerAngles = euler;
-                        }).Play();
+                        }
+                    }).OnKill(() =>
+                    {
+                        RectTransform.localEulerAngles = euler;
+                    }).Play();
                 }
 
                 ///---动画 - 旋转（Curve）
@@ -1306,22 +1366,28 @@ namespace SevenStrikeModules.XHud
                         XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放旋转动画 - 根据曲线参数", HudMsgState.通知);
                     Tween_Rotation = RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * duration, true, isPreview ? false : true, XTweenRotationSpace.相对, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetEase(args.Rotation.Curve).SetAutoKill(isPreview ? false : true).OnUpdate<Vector3>((v, d, t) =>
                         {
-                            if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
+                            if (!isPreview)
                             {
-                                if (act_on_element_out_progress != null)
-                                    act_on_element_out_progress(Tween_Rotation.CurrentEasedProgress);
+                                if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
+                                {
+                                    if (act_on_element_out_progress != null)
+                                        act_on_element_out_progress(Tween_Rotation.CurrentEasedProgress);
+                                }
                             }
                         }).OnComplete((d) =>
                         {
-                            if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
+                            if (!isPreview)
                             {
-                                if (act_on_element_out_end != null)
-                                    act_on_element_out_end(this);
-                                if (eve_on_element_out_end != null)
-                                    eve_on_element_out_end.Invoke();
-                                if (act_OutComplete != null)
-                                    act_OutComplete();
-                                Element_Out_End(args);
+                                if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
+                                {
+                                    if (act_on_element_out_end != null)
+                                        act_on_element_out_end(this);
+                                    if (eve_on_element_out_end != null)
+                                        eve_on_element_out_end.Invoke();
+                                    if (act_OutComplete != null)
+                                        act_OutComplete();
+                                    Element_Out_End(args);
+                                }
                             }
                         }).OnKill(() =>
                         {
