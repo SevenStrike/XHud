@@ -2057,8 +2057,9 @@ namespace SevenStrikeModules.XHud
                     // 但是会导致元素退出时无法播放音效了
                     //node.Element.element_SounderUnRegisterAction();
 
+                    // 因为音效器的委托关系就不能再判断，否则如果元素上的音效器选定时机为元素退出时，就会不是空的
                     //if (node.Element.act_on_element_out_start == null)
-                        node.Element.act_on_element_out_start += action_out_start;
+                    node.Element.act_on_element_out_start += action_out_start;
 
                     //if (node.Element.act_on_element_out_progress == null)
                         node.Element.act_on_element_out_progress += action_out_progress;
@@ -2103,8 +2104,9 @@ namespace SevenStrikeModules.XHud
                 // 但是会导致元素退出时无法播放音效了
                 //node.Element.element_SounderUnRegisterAction();
 
+                // 因为音效器的委托关系就不能再判断，否则如果元素上的音效器选定时机为元素退出时，就会不是空的
                 //if (node.Element.act_on_element_out_start == null)
-                    node.Element.act_on_element_out_start += action_out_start;
+                node.Element.act_on_element_out_start += action_out_start;
 
                 //if (node.Element.act_on_element_out_progress == null)
                     node.Element.act_on_element_out_progress += action_out_progress;
@@ -2190,6 +2192,7 @@ namespace SevenStrikeModules.XHud
                 // 但是会导致元素退出时无法播放音效了
                 //targetNode.Element.element_SounderUnRegisterAction();
 
+                // 因为音效器的委托关系就不能再判断，否则如果元素上的音效器选定时机为元素退出时，就会不是空的
                 //if (targetNode.Element.act_on_element_out_start == null)
                     targetNode.Element.act_on_element_out_start += action_out_start;
 
