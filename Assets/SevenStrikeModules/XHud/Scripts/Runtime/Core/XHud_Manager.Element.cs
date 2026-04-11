@@ -796,6 +796,12 @@ namespace SevenStrikeModules.XHud
                 {
                     XHud_LibraryArg_Element_Item item = Lib.ElementLibrary[i];
 
+                    if (item.Target == null)
+                    {
+                        XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", $"库元素 \" {item.Name} \" 的目标预制体 \"已丢失\"，预生成元素过程将  \"跳过\"  此元素！", HudMsgState.错误);
+                        continue;
+                    }
+
                     GameObject root = new GameObject();
                     root.name = "Category - " + item.Target.name;
                     root.layer = LayerMask.NameToLayer("XHud");

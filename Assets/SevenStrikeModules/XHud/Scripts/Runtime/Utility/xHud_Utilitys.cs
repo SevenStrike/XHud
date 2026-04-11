@@ -64,7 +64,7 @@ namespace SevenStrikeModules.XHud.Utilitys
                     Debug.Log("<color=#c4c4c4>" + Title + "： </color>" + "┠─<color=#c3e55c>" + Content + "</color>", xobject);
                     break;
                 case HudMsgState.错误:
-                    Debug.Log("<color=#c4c4c4>" + Title + "： </color>" + "┠─<color=#ff3f3f>" + Content + "</color>", xobject);
+                    Debug.Log("<color=#c4c4c4>" + Title + "： </color>" + "┠─<color=#f05f5f>" + Content + "</color>", xobject);
                     break;
                 case HudMsgState.通知:
                     Debug.Log("<color=#c4c4c4>" + Title + "： </color>" + "┠─<color=#bebebe>" + Content + "</color>", xobject);
