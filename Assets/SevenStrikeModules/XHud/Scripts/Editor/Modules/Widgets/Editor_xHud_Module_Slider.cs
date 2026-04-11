@@ -53,7 +53,7 @@ namespace SevenStrikeModules.XHud.Editor
 
     [CanEditMultipleObjects]
     [CustomEditor(typeof(XHud_Module_Slider), true)]
-    public class Editor_xHud_Module_Slider : SliderEditor
+    public class Editor_XHud_Module_Slider : SliderEditor
     {
         #region 组件 / 列表
         private XHud_Module_Slider BaseScript;

@@ -87,7 +87,6 @@ namespace SevenStrikeModules.XHud
                 TargetCamera.clearFlags = CameraClearFlags.SolidColor;
                 x_UICamera_Bgcolor_Original = TargetCamera.backgroundColor;
                 TargetCamera.backgroundColor = x_UICamera_bgcolor;
-                XHud_Dashboard.HudManagerGet().BlurMask.enabled = false;
             }
 
             if (x_mode == CaptureCameraType.场景相机)
@@ -120,7 +119,6 @@ namespace SevenStrikeModules.XHud
                     universal.renderType = CameraRenderType.Overlay;
                     TargetCamera.backgroundColor = x_UICamera_Bgcolor_Original;
                     TargetCamera.clearFlags = CameraClearFlags.Depth;
-                    XHud_Dashboard.HudManagerGet().BlurMask.enabled = true;
                 }
                 if (x_mode == CaptureCameraType.场景相机)
                 {

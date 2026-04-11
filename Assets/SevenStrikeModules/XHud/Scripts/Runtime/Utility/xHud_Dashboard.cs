@@ -140,6 +140,7 @@ namespace SevenStrikeModules.XHud
         public static string path_XHUD_FONTS = "Assets/SevenStrikeModules/XHud/Fonts/";
         public static string path_XHUD_SCRIPTS = "Assets/SevenStrikeModules/XHud/Scripts/";
         public static string path_XHUD_CONFIG = "Assets/SevenStrikeModules/XHud/Config/";
+        public static string path_XHUD_THIRDPLUGIN = "Assets/SevenStrikeModules/XHud/ThirdPlugin/";
 
         #region 路径获取
         /// <summary>
@@ -237,6 +238,14 @@ namespace SevenStrikeModules.XHud
         public static string Get_Path_XHUD_CONFIG_Path()
         {
             return path_XHUD_CONFIG;
+        }
+        /// <summary>
+        /// 获取XHUD 第三方插件路径，根目录：SevenStrikeModules/XHud/ThirdPlugin/
+        /// </summary>
+        /// <returns></returns>
+        public static string Get_Path_XHUD_THIRDPLUGIN_Path()
+        {
+            return path_XHUD_THIRDPLUGIN;
         }
         #endregion
         #endregion

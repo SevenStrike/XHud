@@ -34,18 +34,6 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public UnityAction<float> Act_MaskChanged_Value;
         /// <summary>
-        /// 委托事件 - 散焦遮罩透明度变化时
-        /// </summary>
-        public UnityAction<float> Act_BlurMaskChanged_Value;
-        /// <summary>
-        /// 委托事件 - 散焦特性强度最大时
-        /// </summary>
-        public UnityAction<float> Act_BlurMask_Intensity_IsMax;
-        /// <summary>
-        /// 委托事件 - 散焦特性强度最小时
-        /// </summary>
-        public UnityAction<float> Act_BlurMask_Intensity_IsMin;
-        /// <summary>
         /// 委托事件 - 屏幕空间的内容的透明度最大时
         /// </summary>
         public UnityAction<float> Act_ContentOpacity_Screen_IsMax;
@@ -73,10 +61,6 @@ namespace SevenStrikeModules.XHud
         /// 委托事件 - 遮罩贴图变化时
         /// </summary>
         public UnityAction<Texture2D> Act_MaskChanged_Texture;
-        /// <summary>
-        /// 委托事件 - 散焦遮罩贴图变化时
-        /// </summary>
-        public UnityAction<Texture2D> Act_BlurMaskChanged_Texture;
         /// <summary>
         /// 委托事件 - 蓝图视觉进场
         /// </summary>

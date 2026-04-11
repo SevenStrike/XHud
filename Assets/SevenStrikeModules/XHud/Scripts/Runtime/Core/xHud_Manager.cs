@@ -139,8 +139,6 @@ namespace SevenStrikeModules.XHud
             hm_BluePrint_InitializeMode();
             // 让蓝图结构永远位于底层
             hm_BluePrintRootFirstSibling();
-            // 将 Unity 渲染管线中的模糊强度与框架内部管理的强度值同步
-            hm_UniversalFeature_Blur_Get();
             // 根据配置的预制体列表，预先生成指定数量的 UI 元素实例，放入对象池待用
             hm_ElementLibrary_Initialize();
             // 预创建指定数量的 AudioSource 组件，用于播放 UI 音效
@@ -162,12 +160,8 @@ namespace SevenStrikeModules.XHud
             hm_Element_UpdateAnimating();
             // 负责同步屏幕遮罩（Mask）的视觉状态和射线检测属性
             hm_MaskUpdate();
-            // 散焦遮罩更新
-            hm_BlurMaskUpdate();
             // 转场控制器更新
             hm_TransitionUpdate();
-            // 更新散焦模糊特性强度
-            hm_UniversalFeature_Blur_Update();
             // 同步屏幕空间 UI 内容的整体透明度，并触发相应的状态变化事件
             hm_Screen_ContentOpacity_Update();
             // 同步世界空间 UI 内容的整体透明度，并触发相应的状态变化事件

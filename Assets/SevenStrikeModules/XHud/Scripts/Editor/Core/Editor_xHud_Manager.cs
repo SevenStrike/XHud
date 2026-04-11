@@ -130,12 +130,6 @@ namespace SevenStrikeModules.XHud.Editor
             MaskRaycastAlphaThreshold,
             MaskRaycastEnabled,
             MaskColor,
-            BlurMask,
-            BlurMaskAlpha,
-            BlurMaskColor,
-            BlurMaskTexture,
-            BlurMaskRaycastAlphaThreshold,
-            BlurMaskRaycastEnabled,
             ContentOpacity_Screen,
             ContentOpacity_World,
             DurationMultiply,
@@ -181,7 +175,6 @@ namespace SevenStrikeModules.XHud.Editor
             BluePrint_bg_usetilling_index,
             BluePrint_bg_usesquareratio_index,
             BluePrint_bg_mapOpacity,
-            UniversalFeature_Blur_Intensity,
             Eft_Grid,
             Eft_GridFade,
             Eft_Bg,
@@ -631,7 +624,6 @@ namespace SevenStrikeModules.XHud.Editor
             xHud_EditorUpdate_Canvas_Camera();
             xHud_EditorUpdate_Mask();
             xHud_EditorUpdate_ContentOpacity();
-            xHud_EditorUpdate_BlurMask();
             xHud_EditorUpdate_CameraArgs();
 
             // 重绘 Inspector
@@ -2111,49 +2103,6 @@ namespace SevenStrikeModules.XHud.Editor
                         xHud_EditorUpdate_ContentOpacity();
                     }
                     #endregion
-                }
-                Editor_XHud_GUI.Gui_Layout_Space(10);
-                Editor_XHud_GUI.Gui_Layout_Vertical_End();
-                #endregion
-
-                #region 散焦遮罩
-                bool sw_blurmask = xHud_FunctionGroup("散焦遮罩", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_BlurMask, panel_mask);
-                if (sw_blurmask)
-                {
-                    EditorGUI.BeginChangeCheck();
-
-                    #region 射线遮挡阈值状态     
-                    Editor_XHud_GUI.StatuDisplayer_icon(null, 12, new Vector2(0, 7), BlurMaskRaycastEnabled.boolValue ? "射线阻挡" : "射线穿透", 12, BlurMaskRaycastEnabled.boolValue ? Color.red : XHud_Dashboard.Theme_Primary, status, 12, new Vector2(0, 4), false);
-                    #endregion
-
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-
-                    Editor_XHud_GUI.Gui_Layout_Property_Field("强度", UniversalFeature_Blur_Intensity, 85);
-
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-
-                    Editor_XHud_GUI.Gui_Layout_Property_Field("遮挡阈值", BlurMaskRaycastAlphaThreshold, 85);
-
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-
-                    Editor_XHud_GUI.Gui_Layout_Property_Field("透明度", BlurMaskAlpha, 85);
-
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-
-                    Editor_XHud_GUI.Gui_Layout_Property_Field("颜色", BlurMaskColor, 85);
-
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-
-                    Editor_XHud_GUI.Gui_Layout_Property_Field("散焦面", BlurMask, 85);
-
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-
-                    Editor_XHud_GUI.Gui_Layout_Property_Field("图形", BlurMaskTexture, 85);
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        SetHighFrequencyMode();
-                        xHud_EditorUpdate_BlurMask();
-                    }
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(10);
                 Editor_XHud_GUI.Gui_Layout_Vertical_End();
@@ -3898,12 +3847,6 @@ namespace SevenStrikeModules.XHud.Editor
             BaseScript.hm_Screen_ContentOpacity_Update();
             BaseScript.hm_World_ContentOpacity_Update();
         }
-        private void xHud_EditorUpdate_BlurMask()
-        {
-            BaseScript.hm_BlurMaskUpdate();
-            BaseScript.hm_UniversalFeature_Blur_FastTo_ForEditor(UniversalFeature_Blur_Intensity.floatValue);
-            EditorUtility.SetDirty(BaseScript.UniversalFeature_Blur);
-        }
         #endregion
 
         #region 面板折叠
@@ -4096,12 +4039,6 @@ namespace SevenStrikeModules.XHud.Editor
             MaskTexture = xHud_GetSerializedProperty("MaskTexture");
             MaskRaycastAlphaThreshold = xHud_GetSerializedProperty("MaskRaycastAlphaThreshold");
             MaskColor = xHud_GetSerializedProperty("MaskColor");
-            BlurMask = xHud_GetSerializedProperty("BlurMask");
-            BlurMaskAlpha = xHud_GetSerializedProperty("BlurMaskAlpha");
-            BlurMaskColor = xHud_GetSerializedProperty("BlurMaskColor");
-            BlurMaskTexture = xHud_GetSerializedProperty("BlurMaskTexture");
-            BlurMaskRaycastAlphaThreshold = xHud_GetSerializedProperty("BlurMaskRaycastAlphaThreshold");
-            BlurMaskRaycastEnabled = xHud_GetSerializedProperty("BlurMaskRaycastEnabled");
             ContentOpacity_Screen = xHud_GetSerializedProperty("ContentOpacity_Screen");
             ContentOpacity_World = xHud_GetSerializedProperty("ContentOpacity_World");
             DurationMultiply = xHud_GetSerializedProperty("DurationMultiply");
@@ -4160,7 +4097,6 @@ namespace SevenStrikeModules.XHud.Editor
             RMS_Enabled = xHud_GetSerializedProperty("RMS_Enabled");
             RMS_Nodes = xHud_GetSerializedProperty("RMS_Nodes");
             RMS_CurrentSolution = xHud_GetSerializedProperty("RMS_CurrentSolution");
-            UniversalFeature_Blur_Intensity = xHud_GetSerializedProperty("UniversalFeature_Blur_Intensity");
             theme_color = xHud_GetSerializedProperty("theme_color");
             theme_color_gp = xHud_GetSerializedProperty("theme_color_gp");
             theme_color_sep = xHud_GetSerializedProperty("theme_color_sep");
@@ -4219,7 +4155,6 @@ namespace SevenStrikeModules.XHud.Editor
             GuideParam_IShape_Offset_Left = xHud_GetSerializedProperty("GuideParam_IShape_Offset_Left");
             GuideParam_IShape_Offset_Right = xHud_GetSerializedProperty("GuideParam_IShape_Offset_Right");
 
-
             Crc_Lib_Name = xHud_GetSerializedProperty("Crc_Lib_Name");
             Rec_Lib_Name = xHud_GetSerializedProperty("Rec_Lib_Name");
 
@@ -4275,10 +4210,6 @@ namespace SevenStrikeModules.XHud.Editor
             if (BaseScript.Mask != null)
             {
                 //VHierarchy.VHierarchy.SetIcon(BaseScript.Mask.gameObject, "AspectRatioFitter Icon");
-            }
-            if (BaseScript.BlurMask != null)
-            {
-                //VHierarchy.VHierarchy.SetIcon(BaseScript.BlurMask.gameObject, "AspectRatioFitter Icon");
             }
             if (BaseScript.Hud_EventSystem != null)
             {
@@ -4775,26 +4706,7 @@ namespace SevenStrikeModules.XHud.Editor
                 m_Mask.sizeDelta = new Vector2(0, 0);
                 Mask.objectReferenceValue = Mask_img;
                 Mask.serializedObject.ApplyModifiedProperties();
-                #endregion
-
-                #region BlurMask
-                GameObject obj_BlurMask = new GameObject();
-                obj_BlurMask.layer = LayerMask.NameToLayer("XHud");
-                UnityEngine.RectTransform m_BlurMask = obj_BlurMask.AddComponent<UnityEngine.RectTransform>();
-                Image BlurMask_img = obj_BlurMask.AddComponent<Image>();
-                BlurMask_img.color = Color.black;
-                BlurMask_img.material = AssetDatabase.LoadAssetAtPath<Material>($"Assets/SevenStrikeModules/XHud/ThirdPlugin/Universal-Blur/Materials/UniversalBlur.mat");
-
-                m_BlurMask.name = "BlurMask";
-                m_BlurMask.SetParent(cav.transform);
-                m_BlurMask.localPosition = Vector3.zero;
-                m_BlurMask.localScale = Vector3.one;
-                m_BlurMask.anchorMin = new Vector2(0, 0);
-                m_BlurMask.anchorMax = new Vector2(1, 1);
-                m_BlurMask.sizeDelta = new Vector2(0, 0);
-                BlurMask.objectReferenceValue = BlurMask_img;
-                BlurMask.serializedObject.ApplyModifiedProperties();
-                #endregion
+                #endregion           
 
                 #region EventSystem
                 GameObject obj_esys = new GameObject();
