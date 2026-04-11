@@ -26,7 +26,7 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEngine;
 
-    public class Editor_XHud_Tool_ElementPlacer : EditorWindow
+    public class Editor_XHud_Tool_ElementMenuPlacer : EditorWindow
     {
         private static void SendObjects(XHudAnchor anchor)
         {
