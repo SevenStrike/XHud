@@ -599,6 +599,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public string Rec_Lib_Name;
 
+        // 元素防止器的开关标记字段
+        public bool ElementVisualPlacer = false;
+
         #region 元素库相关操作
         /// <summary>
         /// 获取所有元素库

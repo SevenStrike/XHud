@@ -53,7 +53,7 @@ namespace SevenStrikeModules.XHud.Editor
         static MethodInfo getGroup;
         static object gameViewSizesInstance;
 
-        // 频率更新
+        #region 频率更新
         private double _lastSceneUpdate;
         private double _lastHierarchyUpdate;
         private double _lastUserActionTime;
@@ -61,6 +61,9 @@ namespace SevenStrikeModules.XHud.Editor
         private double UPDATE_INTERVAL = 1; // 每秒最1次
         private double UPDATE_INTERVAL_Low = 0.033f; // 低频
         private double UPDATE_INTERVAL_High = 0.005f; // 高频
+        #endregion
+
+        private const string MENU_KEY_VISUAL_PLACER = "XHud_ElementVisualPlacer_Enabled";
 
         #region 序列化属性
         SerializedProperty
@@ -237,7 +240,8 @@ namespace SevenStrikeModules.XHud.Editor
             GuideParam_IShape_BottomHeight,
             GuideParam_IShape_Offset_Left,
             GuideParam_IShape_Offset_Right,
-            GuideParam_GuideLine_BaseOffset;
+            GuideParam_GuideLine_BaseOffset,
+            ElementVisualPlacer;
         #endregion
 
         #region 图标
@@ -262,7 +266,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion     
 
         #region 选项文字
-        string[] stroptions_enabled = new string[2] { "关闭", "开启" }, stroptions_debug = new string[2] { "关闭", "调试" }, stroptions_hide = new string[2] { "隐藏", "显示" }, stroptions_align = new string[2] { "关闭", "对齐" }, stroptions_useful = new string[2] { "关闭", "使用" }, stroptions_refertype = new string[2] { "整体", "局部" }, stroptions_perspective = new string[2] { "透视", "正交" }, stroptions_mute = new string[2] { "关闭", "静音" }, stroptions_mouse = new string[2] { "原生", "自定" }, stroptions_world = new string[2] { "禁用", "支持" }, stroptions_effect = new string[2] { "关闭", "影响" }, stroptions_canvassize = new string[3] { "固定像素尺寸", "屏幕尺寸", "固定物理尺寸" }, stroptions_canvasanchor = System.Enum.GetNames(typeof(CanvasAnchor)), ThemeSolutionNames = new string[] { "默认", "白色", "黑色", "乳白", "浅灰", "沙漠灰", "科幻青", "液晶绿", "橄榄绿", "湖蓝", "天蓝", "胭脂粉", "灵动粉", "秋叶黄", "警示黄", "高亮橘", "烈焰红", }, ThemeEdgeSolutionNames = new string[] { "默认", "白色", "浅灰", "深灰", "黑色", "极简", "珊瑚红", "落叶黄", "烟灰蓝", "青苔绿", "荧光绿", "淡粉" };
+        string[] stroptions_enabled = new string[2] { "关闭", "开启" }, stroptions_debug = new string[2] { "关闭", "调试" }, stroptions_hide = new string[2] { "隐藏", "显示" }, stroptions_align = new string[2] { "关闭", "对齐" }, stroptions_useful = new string[2] { "关闭", "使用" }, stroptions_refertype = new string[2] { "整体", "局部" }, stroptions_perspective = new string[2] { "透视", "正交" }, stroptions_mute = new string[2] { "关闭", "静音" }, stroptions_mouse = new string[2] { "原生", "自定" }, stroptions_world = new string[2] { "禁用", "支持" }, stroptions_effect = new string[2] { "关闭", "影响" }, stroptions_canvassize = new string[3] { "固定像素尺寸", "屏幕尺寸", "固定物理尺寸" }, stroptions_canvasanchor = System.Enum.GetNames(typeof(CanvasCameraAttachment)), ThemeSolutionNames = new string[] { "默认", "白色", "黑色", "乳白", "浅灰", "沙漠灰", "科幻青", "液晶绿", "橄榄绿", "湖蓝", "天蓝", "胭脂粉", "灵动粉", "秋叶黄", "警示黄", "高亮橘", "烈焰红", }, ThemeEdgeSolutionNames = new string[] { "默认", "白色", "浅灰", "深灰", "黑色", "极简", "珊瑚红", "落叶黄", "烟灰蓝", "青苔绿", "荧光绿", "淡粉" };
         #endregion
 
         #region 字体
@@ -1115,6 +1119,19 @@ namespace SevenStrikeModules.XHud.Editor
 
                     #region 关闭面板后是否折叠所有选项卡
                     Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Manager>("关闭时折叠所有", stroptions_enabled, ref FoldAllPanelWithDisabled, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                    #endregion
+
+                    #region 元素视觉放置器
+                    ElementVisualPlacer.boolValue = Editor_XHud_Tool_ElementVisualPlacer.GetEnabled();
+                    ElementVisualPlacer.serializedObject.ApplyModifiedProperties();
+
+                    EditorGUI.BeginChangeCheck();
+                    Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Manager>("元素视觉放置器", stroptions_enabled, ref ElementVisualPlacer, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        Editor_XHud_Tool_ElementVisualPlacer.SetEnabled(ElementVisualPlacer.boolValue);
+                        XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(MENU_KEY_VISUAL_PLACER, ElementVisualPlacer.boolValue);
+                    }
                     #endregion
 
                     Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
@@ -4205,6 +4222,8 @@ namespace SevenStrikeModules.XHud.Editor
 
             Crc_Lib_Name = xHud_GetSerializedProperty("Crc_Lib_Name");
             Rec_Lib_Name = xHud_GetSerializedProperty("Rec_Lib_Name");
+
+            ElementVisualPlacer = xHud_GetSerializedProperty("ElementVisualPlacer");
         }
         #endregion
 
@@ -4619,7 +4638,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 HudCanvasAnchorIndex.intValue = 1;
                 HudCanvasAnchorIndex.serializedObject.ApplyModifiedProperties();
-                HudCanvasAnchor.enumValueIndex = (int)CanvasAnchor.CameraFar;
+                HudCanvasAnchor.enumValueIndex = (int)CanvasCameraAttachment.CameraFar;
                 HudCanvasAnchor.serializedObject.ApplyModifiedProperties();
                 #endregion
 

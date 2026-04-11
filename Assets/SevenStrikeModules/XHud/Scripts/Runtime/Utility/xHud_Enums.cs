@@ -776,7 +776,7 @@ namespace SevenStrikeModules.XHud.Enums
     /// 用于控制UI画布在相机视野中的深度位置，决定UI渲染的远近层级
     /// 主要应用于世界空间Canvas的相机附着，影响UI元素与场景物体的遮挡关系和视觉深度
     /// </summary>
-    public enum CanvasAnchor
+    public enum CanvasCameraAttachment
     {
         /// <summary>
         /// 相机近平面附着

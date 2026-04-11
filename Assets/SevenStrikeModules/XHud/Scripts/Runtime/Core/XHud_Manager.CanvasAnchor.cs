@@ -203,7 +203,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// XHud画布锚点
         /// </summary>
-        public CanvasAnchor HudCanvasAnchor = CanvasAnchor.CameraFar;
+        public CanvasCameraAttachment HudCanvasAnchor = CanvasCameraAttachment.CameraFar;
         [Tooltip("画布距离模式索引")]
         /// <summary>
         /// 画布距离模式索引
@@ -360,19 +360,19 @@ namespace SevenStrikeModules.XHud
         /// 设置Hud画布的锚点位置
         /// </summary>
         /// <param name="anchor">画布目标锚点</param>
-        public void hm_Layout_CanvasDistance(CanvasAnchor anchor)
+        public void hm_Layout_CanvasDistance(CanvasCameraAttachment anchor)
         {
             if (HudCamera == null)
                 return;
             switch (anchor)
             {
-                case CanvasAnchor.CameraNear:
+                case CanvasCameraAttachment.CameraNear:
                     CanvasDistance = HudCamera.nearClipPlane + 0.001f;
                     break;
-                case CanvasAnchor.CameraFar:
+                case CanvasCameraAttachment.CameraFar:
                     CanvasDistance = HudCamera.farClipPlane - 0.001f;
                     break;
-                case CanvasAnchor.Custom:
+                case CanvasCameraAttachment.Custom:
 
                     break;
             }

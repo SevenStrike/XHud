@@ -37,9 +37,16 @@ namespace SevenStrikeModules.XHud.Editor
         private const int RIGHT_MARGIN = 20;   // 右边距
         private const int BOTTOM_MARGIN = 40;  // 下边距
 
+        // 菜单项 ID（用于保存勾选状态）
+        private const string MENU_KEY_VISUAL_PLACER = "XHud_ElementVisualPlacer_Enabled";
+
         static Editor_XHud_Tool_FastSceneView()
         {
             SceneView.duringSceneGui += OnSceneGUI;
+
+            // 初始化时从 EditorPrefs 读取保存的状态
+            bool savedState = XHud_Utilitys.PlayerPrefs_ReadValue_Bool_ForEditor(MENU_KEY_VISUAL_PLACER);
+            Editor_XHud_Tool_ElementVisualPlacer.SetEnabled(savedState);
         }
 
         private static void OnSceneGUI(SceneView sceneView)
@@ -60,6 +67,9 @@ namespace SevenStrikeModules.XHud.Editor
             float btn2_x = viewWidth - BUTTON_WIDTH - RIGHT_MARGIN;
             // 第二个按钮的 Y 坐标 = 第一个按钮 Y 坐标 - 按钮高度 - 按钮间距
             float btn2_y = btn1_y - BUTTON_HEIGHT - BUTTON_SPACING;
+
+            // 第三个按钮（元素视觉放置器）的 Y 坐标 = 第二个按钮 Y 坐标 - 按钮高度 - 按钮间距
+            float btn3_y = btn2_y - BUTTON_HEIGHT - BUTTON_SPACING;
 
             Rect btn_rect_mgr = new Rect(btn2_x, btn2_y, BUTTON_WIDTH, BUTTON_HEIGHT);
             if (Editor_XHud_GUI.Gui_Button(btn_rect_mgr, null, null, false, "XHud 管理器", "快速选中XHudManager物体", Editor_XHud_GUI.GetColor(HudColor.深空灰), Color.white, HudFilled.实体))
@@ -88,6 +98,9 @@ namespace SevenStrikeModules.XHud.Editor
             if (Editor_XHud_GUI.Gui_Button(btn_rect_faster, null, null, false, "XHud 快速操作", "", Editor_XHud_GUI.GetColor(HudColor.深空灰), Color.white, HudFilled.实体))
             {
                 GenericMenu menu = new GenericMenu();
+
+                // 获取当前视觉放置器的启用状态
+                bool isPlacerEnabled = Editor_XHud_Tool_ElementVisualPlacer.GetEnabled();
 
                 XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
                 if (mgr != null)
@@ -140,6 +153,16 @@ namespace SevenStrikeModules.XHud.Editor
 
                 menu.AddSeparator("");
 
+                // ========== 可勾选的菜单项：元素视觉放置器 ==========
+                menu.AddItem(new GUIContent("T 元素视觉放置器"), isPlacerEnabled, () =>
+                {
+                    bool newState = !isPlacerEnabled;
+                    Editor_XHud_Tool_ElementVisualPlacer.SetEnabled(newState);
+                    XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(MENU_KEY_VISUAL_PLACER, newState);
+                });
+
+                menu.AddSeparator("");
+
                 menu.AddItem(new GUIContent("A 刷新场景"), false, () =>
                 {
                     UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
@@ -155,7 +178,6 @@ namespace SevenStrikeModules.XHud.Editor
 
                 menu.ShowAsContext();
             }
-
             Handles.EndGUI();
         }
     }

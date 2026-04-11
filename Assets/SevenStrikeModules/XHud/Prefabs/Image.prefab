@@ -1226,7 +1226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427992cb4fdf0d4488fb77d4e7ae18af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Alpha: 0
+  Alpha: 1
   CanvasGroup: {fileID: 1290872502789279007}
   Indicator: 
   OriginalName: 

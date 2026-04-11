@@ -546,7 +546,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (f_ttf != null)
                 return f_ttf;
-            else if (f_ttf != null)
+            else if (f_otf != null)
                 return f_otf;
             else
                 return null;
