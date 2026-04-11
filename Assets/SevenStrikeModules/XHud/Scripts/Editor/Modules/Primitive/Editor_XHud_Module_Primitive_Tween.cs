@@ -27,7 +27,6 @@ namespace SevenStrikeModules.XHud.Editor
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -97,7 +96,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 音效预览
         private List<AudioSource> Preview_PrimitiveTweens_SoundList = new List<AudioSource>();
-        private List<EditorCoroutine> Preview_PrimitiveTweens_SoundCoroutineList_Stop = new List<EditorCoroutine>();
+        private List<XCoroutine> Preview_PrimitiveTweens_SoundCoroutineList_Stop = new List<XCoroutine>();
         #endregion
 
         /// <summary>
@@ -2187,7 +2186,7 @@ namespace SevenStrikeModules.XHud.Editor
                     string x_soundname = tsound.Sound.name;
 
                     AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
-                    Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_PrimitiveTweens_Sound_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
+                    Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(Preview_PrimitiveTweens_Sound_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
                 }
             }
         }
@@ -2223,7 +2222,7 @@ namespace SevenStrikeModules.XHud.Editor
                         string x_soundname = tsound.Sound.name;
 
                         AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
-                        Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_PrimitiveTweens_Sound_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
+                        Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(Preview_PrimitiveTweens_Sound_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
                     }
                 }
             }
@@ -2233,7 +2232,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         IEnumerator Preview_PrimitiveTweens_Sound_Play(float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_userandom, AudioClip clip, float delay)
         {
-            yield return new EditorWaitForSeconds(delay);
+            yield return new XCoroutineWaitForSeconds(delay);
             Preview_PrimitiveTweens_SoundList.Add(Preview_PrimitiveTweens_Sound_Create(sp_vol, sp_pitch_min, sp_pitch_max, sp_userandom, clip));
             AudioSource au = Preview_PrimitiveTweens_SoundList[Preview_PrimitiveTweens_SoundList.Count - 1];
             while (true)
@@ -2254,7 +2253,7 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = 0; i < Preview_PrimitiveTweens_SoundCoroutineList_Stop.Count; i++)
             {
                 if (Preview_PrimitiveTweens_SoundCoroutineList_Stop[i] != null)
-                    EditorCoroutineUtility.StopCoroutine(Preview_PrimitiveTweens_SoundCoroutineList_Stop[i]);
+                    XCoroutineUtility.xec_StopCoroutine(Preview_PrimitiveTweens_SoundCoroutineList_Stop[i]);
             }
             Preview_PrimitiveTweens_SoundCoroutineList_Stop.Clear();
 

@@ -24,7 +24,6 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XHud.Utilitys;
     using System.Collections;
     using System.Collections.Generic;
-    using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -72,7 +71,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 预览音效
         public List<AudioSource> Preivew_HudSound_SoundList = new List<AudioSource>();
-        private List<EditorCoroutine> Preivew_HudSound_CoroutineList_Play = new List<EditorCoroutine>();
+        private List<XCoroutine> Preivew_HudSound_CoroutineList_Play = new List<XCoroutine>();
         #endregion
 
         #region 批量模式查看索引
@@ -622,13 +621,13 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
-                        EditorCoroutine cor = EditorCoroutineUtility.StartCoroutineOwnerless(Preview_HudSound_Play(SelectedObjects[i].SoundName, SelectedObjects[i].DelayTime));
+                        XCoroutine cor = XCoroutineUtility.xec_StartCoroutineOwnerless(Preview_HudSound_Play(SelectedObjects[i].SoundName, SelectedObjects[i].DelayTime));
                         Preivew_HudSound_CoroutineList_Play.Add(cor);
                     }
                 }
                 else
                 {
-                    EditorCoroutine cor = EditorCoroutineUtility.StartCoroutineOwnerless(Preview_HudSound_Play(SoundName.stringValue, DelayTime.floatValue));
+                    XCoroutine cor = XCoroutineUtility.xec_StartCoroutineOwnerless(Preview_HudSound_Play(SoundName.stringValue, DelayTime.floatValue));
                     Preivew_HudSound_CoroutineList_Play.Add(cor);
                 }
             }
@@ -636,7 +635,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         IEnumerator Preview_HudSound_Play(string name, float time)
         {
-            yield return new EditorWaitForSeconds(time);
+            yield return new XCoroutineWaitForSeconds(time);
             if (HudManager.Hud_Sounds.SoundLibrary_NameIsValid(name))
             {
                 Preivew_HudSound_SoundList.Add(Preview_HudSound_Creator(HudManager.Hud_Sounds.SoundLibrary_GetSound(name)));
@@ -687,7 +686,7 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = 0; i < Preivew_HudSound_CoroutineList_Play.Count; i++)
             {
                 if (Preivew_HudSound_CoroutineList_Play[i] != null)
-                    EditorCoroutineUtility.StopCoroutine(Preivew_HudSound_CoroutineList_Play[i]);
+                    XCoroutineUtility.xec_StopCoroutine(Preivew_HudSound_CoroutineList_Play[i]);
             }
             Preivew_HudSound_CoroutineList_Play.Clear();
             SceneView.RepaintAll();

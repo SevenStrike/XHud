@@ -24,17 +24,12 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
     using SevenStrikeModules.XTween.Editor;
-    using System.Collections;
     using System.Collections.Generic;
-    using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEditor.SceneManagement;
     using UnityEngine;
-    using UnityEngine.UI;
     using Color = UnityEngine.Color;
-    using Image = UnityEngine.UI.Image;
     using Object = UnityEngine.Object;
-    using Random = UnityEngine.Random;
 
     public enum ElementStatu
     {

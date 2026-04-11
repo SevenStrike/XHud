@@ -24,7 +24,6 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XHud.Utilitys;
     using System.Collections;
     using System.Collections.Generic;
-    using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -68,7 +67,7 @@ namespace SevenStrikeModules.XHud.Editor
         private string Selected_Steo = "-";
         #endregion
 
-        private EditorCoroutine Coroutine_Preview;
+        private XCoroutine Coroutine_Preview;
         private Vector2 Scroll;
         public List<AudioSource> PreviewAudioList;
 
@@ -490,12 +489,12 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void PreviewSounds(AudioClip clip, float time, float vol, float pitch_min, float pitch_max)
         {
-            Coroutine_Preview = EditorCoroutineUtility.StartCoroutine(PreviewSound(clip, time, vol, pitch_min, pitch_max), this);
+            Coroutine_Preview = XCoroutineUtility.xec_StartCoroutine(PreviewSound(clip, time, vol, pitch_min, pitch_max), this);
         }
 
         IEnumerator PreviewSound(AudioClip clip, float time, float vol, float pitch_min, float pitch_max)
         {
-            yield return new EditorWaitForSeconds(time);
+            yield return new XCoroutineWaitForSeconds(time);
 
             if (PreviewAudioList == null)
                 PreviewAudioList = new List<AudioSource>();
@@ -524,7 +523,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (Coroutine_Preview != null)
             {
-                EditorCoroutineUtility.StopCoroutine(Coroutine_Preview);
+                XCoroutineUtility.xec_StopCoroutine(Coroutine_Preview);
                 Coroutine_Preview = null;
             }
             if (PreviewAudioList != null)

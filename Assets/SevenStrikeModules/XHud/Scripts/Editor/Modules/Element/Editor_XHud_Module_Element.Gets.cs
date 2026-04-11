@@ -22,7 +22,6 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XHud.Enums;
     using System.Collections.Generic;
-    using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -144,7 +143,7 @@ namespace SevenStrikeModules.XHud.Editor
                         x_userandom = true;
 
                     AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(sp_name.stringValue);
-                    Preivew_HudSounder_CoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_XHudSounder_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
+                    Preivew_HudSounder_CoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(Preview_XHudSounder_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
                     #endregion
                 },
                 elementHeightCallback = index =>

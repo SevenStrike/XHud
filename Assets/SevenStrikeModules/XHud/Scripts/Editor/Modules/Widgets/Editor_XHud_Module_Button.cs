@@ -22,15 +22,11 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
-    using SevenStrikeModules.XTween;
-    using System.Collections;
     using System.Collections.Generic;
-    using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEditor.UI;
     using UnityEditorInternal;
     using UnityEngine;
-    using UnityEngine.UI;
 
     public class XHud_ModuleArg_Button
     {

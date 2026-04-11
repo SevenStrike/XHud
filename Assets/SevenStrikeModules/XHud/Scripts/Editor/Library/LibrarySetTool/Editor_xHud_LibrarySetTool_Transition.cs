@@ -25,7 +25,6 @@ namespace SevenStrikeModules.XHud.Editor
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -64,7 +63,7 @@ namespace SevenStrikeModules.XHud.Editor
         private int PreviewData_Index;
         private bool IsPreviewing;
         private bool StoppedResetMode = true;
-        private EditorCoroutine PreviewCoroutine;
+        private XCoroutine PreviewCoroutine;
         private float PreviewDataDuration = 0.035f;
         /// <summary>
         /// 反色通道
@@ -918,7 +917,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         public void StartPreviewUpdate()
         {
-            PreviewCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(PreviewUpdater());
+            PreviewCoroutine = XCoroutineUtility.xec_StartCoroutineOwnerless(PreviewUpdater());
         }
 
         /// <summary>
@@ -928,12 +927,12 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (PreviewCoroutine == null)
                 return;
-            EditorCoroutineUtility.StopCoroutine(PreviewCoroutine);
+            XCoroutineUtility.xec_StopCoroutine(PreviewCoroutine);
         }
 
         IEnumerator PreviewUpdater()
         {
-            var waitForOneSecond = new EditorWaitForSeconds(PreviewDataDuration);
+            var waitForOneSecond = new XCoroutineWaitForSeconds(PreviewDataDuration);
             while (true)
             {
                 if (PreviewData_Index >= TransitionNode.Frames.Count - 1 - TransitionNode.SkipFrame)

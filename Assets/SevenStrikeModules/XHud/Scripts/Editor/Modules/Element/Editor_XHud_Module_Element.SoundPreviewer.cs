@@ -23,7 +23,6 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XHud.Utilitys;
     using System.Collections;
     using System.Collections.Generic;
-    using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEngine;
 
@@ -31,7 +30,7 @@ namespace SevenStrikeModules.XHud.Editor
     {
         #region Preview - XHudSounder
         private List<AudioSource> Preivew_HudSounder_SoundList = new List<AudioSource>();
-        private List<EditorCoroutine> Preivew_HudSounder_CoroutineList_Stop = new List<EditorCoroutine>();
+        private List<XCoroutine> Preivew_HudSounder_CoroutineList_Stop = new List<XCoroutine>();
         #endregion
 
         /// <summary>
@@ -67,7 +66,7 @@ namespace SevenStrikeModules.XHud.Editor
                     x_userandom = true;
 
                 AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(sp_name.stringValue);
-                Preivew_HudSounder_CoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_XHudSounder_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
+                Preivew_HudSounder_CoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(Preview_XHudSounder_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
             }
         }
         /// <summary>
@@ -93,7 +92,7 @@ namespace SevenStrikeModules.XHud.Editor
                 bool x_userandom = sounder.UseRandomPitch;
 
                 AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(sounder.SoundName);
-                Preivew_HudSounder_CoroutineList_Stop.Add(EditorCoroutineUtility.StartCoroutineOwnerless(Preview_XHudSounder_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
+                Preivew_HudSounder_CoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(Preview_XHudSounder_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
             }
         }
 
@@ -103,7 +102,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         IEnumerator Preview_XHudSounder_Play(float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_userandom, AudioClip clip, float delay)
         {
-            yield return new EditorWaitForSeconds(delay);
+            yield return new XCoroutineWaitForSeconds(delay);
             Preivew_HudSounder_SoundList.Add(Preview_XHudSounder_CreateSound(sp_vol, sp_pitch_min, sp_pitch_max, sp_userandom, clip));
             AudioSource au = Preivew_HudSounder_SoundList[Preivew_HudSounder_SoundList.Count - 1];
             while (true)
@@ -153,7 +152,7 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = 0; i < Preivew_HudSounder_CoroutineList_Stop.Count; i++)
             {
                 if (Preivew_HudSounder_CoroutineList_Stop[i] != null)
-                    EditorCoroutineUtility.StopCoroutine(Preivew_HudSounder_CoroutineList_Stop[i]);
+                    XCoroutineUtility.xec_StopCoroutine(Preivew_HudSounder_CoroutineList_Stop[i]);
             }
             Preivew_HudSounder_CoroutineList_Stop.Clear();
 

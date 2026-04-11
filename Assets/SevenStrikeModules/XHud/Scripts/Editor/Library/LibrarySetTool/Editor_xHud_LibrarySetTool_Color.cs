@@ -26,7 +26,6 @@ namespace SevenStrikeModules.XHud.Editor
     using System.Collections;
     using System.Collections.Generic;
     using System.IO;
-    using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEngine;
 
@@ -97,7 +96,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         private float PreviewDataDuration = 0.035f;
         private int PreviewData_Index = 0;
-        private EditorCoroutine PreviewCoroutine;
+        private XCoroutine PreviewCoroutine;
         private Texture2D PreviewTex;
 
         public LibrarySetterMode LibrarySetterMode;
@@ -746,7 +745,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         public void StartPreviewUpdate()
         {
-            PreviewCoroutine = EditorCoroutineUtility.StartCoroutineOwnerless(PreviewUpdater());
+            PreviewCoroutine = XCoroutineUtility.xec_StartCoroutineOwnerless(PreviewUpdater());
         }
 
         /// <summary>
@@ -754,7 +753,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         public void StopPreviewUpdate()
         {
-            EditorCoroutineUtility.StopCoroutine(PreviewCoroutine);
+            XCoroutineUtility.xec_StopCoroutine(PreviewCoroutine);
         }
 
         IEnumerator PreviewUpdater()
@@ -763,7 +762,7 @@ namespace SevenStrikeModules.XHud.Editor
             //获取预览序列帧
             PreviewDatas = LoadAllAssetsAtPathWithPattern<XHud_LibrarySetTool_Color_PreviewData>(path, ".asset").ToArray();
 
-            var waitForOneSecond = new EditorWaitForSeconds(PreviewDataDuration);
+            var waitForOneSecond = new XCoroutineWaitForSeconds(PreviewDataDuration);
             while (true)
             {
                 for (int i = 0; i < PreviewDatas[PreviewData_Index].Textures.Count; i++)

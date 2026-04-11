@@ -24,7 +24,6 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XTween;
     using SevenStrikeModules.XTween.Editor;
     using System.Collections.Generic;
-    using Unity.EditorCoroutines.Editor;
     using UnityEditor;
     using UnityEngine;
 
