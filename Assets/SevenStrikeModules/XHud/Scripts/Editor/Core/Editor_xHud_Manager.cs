@@ -717,21 +717,13 @@ namespace SevenStrikeModules.XHud.Editor
                 //创建音效库
                 XHud_Library_Sounds lib_sound = ScriptableObject.CreateInstance<XHud_Library_Sounds>();
                 lib_sound.LibraryName = $"NewSoundLibrary";
-                lib_sound.SoundLibrary_AddSound("DefaultSound", AssetDatabase.LoadAssetAtPath<AudioClip>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Sound/hud_sound_1.wav"));
+                lib_sound.SoundLibrary_AddSound("DefaultSound", AssetDatabase.LoadAssetAtPath<AudioClip>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Sound/DefaultSound.wav"));
 
                 //创建元素库
                 XHud_Library_Element lib_element = ScriptableObject.CreateInstance<XHud_Library_Element>();
                 lib_element.LibraryName = $"NewElementLibrary";
-
-                Transform obj_Corners = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Prefabs/Corners.prefab");
-                Transform obj_Dots = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Prefabs/Dots.prefab");
-                Transform obj_Clicker = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Prefabs/Clicker.prefab");
-                Transform obj_Logo = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Prefabs/Logo.prefab");
-
-                lib_element.ElementsLibrary_Add(new XHud_LibraryArg_Element_Item(1, obj_Corners.GetComponent<XHud_Module_Element>()));
-                lib_element.ElementsLibrary_Add(new XHud_LibraryArg_Element_Item(1, obj_Dots.GetComponent<XHud_Module_Element>()));
-                lib_element.ElementsLibrary_Add(new XHud_LibraryArg_Element_Item(1, obj_Clicker.GetComponent<XHud_Module_Element>()));
-                lib_element.ElementsLibrary_Add(new XHud_LibraryArg_Element_Item(1, obj_Logo.GetComponent<XHud_Module_Element>()));
+                Transform obj_XHudSample = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Prefabs/XHudIcon.prefab");
+                lib_element.ElementsLibrary_Add(new XHud_LibraryArg_Element_Item(1, obj_XHudSample.GetComponent<XHud_Module_Element>()));
 
                 //创建字体库
                 XHud_Library_TextStyle lib_textstyle = ScriptableObject.CreateInstance<XHud_Library_TextStyle>();
@@ -4475,7 +4467,8 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         return;
                     }
-                };
+                }
+                ;
 
                 #region 重建Manager的结构
 
