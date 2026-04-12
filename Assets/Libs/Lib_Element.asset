@@ -22,12 +22,4 @@ MonoBehaviour:
   SelectedIndex: -1
   LocationSelectedIndex: -1
   ElementInfoList_Original_Scroller: {x: 0, y: 0}
-  ElementLibrary:
-  - Name: Image
-    InitializeCount: 1
-    UsedCount: 0
-    RecycledCount: 0
-    NextIndex: 0
-    Root: {fileID: 0}
-    Target: {fileID: 7842899311693621446, guid: 8130041bd4b8f314cb2f163f46408b4c, type: 3}
-    PreloadElements: []
+  ElementLibrary: []
