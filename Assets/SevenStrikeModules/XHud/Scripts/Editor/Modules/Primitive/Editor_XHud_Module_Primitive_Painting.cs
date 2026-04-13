@@ -121,6 +121,8 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnEnable()
         {
+            HudManager = XHud_Dashboard.HudManagerGet();
+
             #region 获取系统GUI单行单位高度
             LineHeight = EditorGUIUtility.singleLineHeight;
             #endregion
