@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud
 {
     using System.Collections.Generic;
     using UnityEngine;
+    using UnityEngine.UI;
 
     /// <summary>
     /// 重建文字模式
@@ -460,6 +461,11 @@ namespace SevenStrikeModules.XHud
         /// 图层类型
         /// </summary>
         public XHud_PSDR_LayerType enum_type;
+
+        /// <summary>
+        /// 图形
+        /// </summary>
+        public Graphic graphic;
 
         /// <summary>
         /// 是否为Mask遮罩图层

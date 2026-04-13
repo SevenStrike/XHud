@@ -31,6 +31,7 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.TextCore.LowLevel;
+    using UnityEngine.UI;
     using Application = UnityEngine.Application;
     using Color = UnityEngine.Color;
     using Debug = UnityEngine.Debug;
@@ -1120,6 +1121,7 @@ namespace SevenStrikeModules.XHud.Editor
                     ///获取图层数据
                     PSDR_Layers lay = LayerStructure.structure.layers[i];
                     GameObject layerObject = null;
+                    Graphic gc = null;
 
                     ///如果是Group只创建（组）
                     if (lay.enum_type == XHud_PSDR_LayerType.group)
@@ -1195,6 +1197,9 @@ namespace SevenStrikeModules.XHud.Editor
                             Color col_img = img.color;
                             col_img.a = lay.opacity;
                             img.color = col_img;
+
+                            // 赋值通用图形
+                            gc = img;
                         }
                         else if (lay.enum_type == XHud_PSDR_LayerType.txt)
                         {
@@ -1214,6 +1219,9 @@ namespace SevenStrikeModules.XHud.Editor
                                 Color col_img = img.color;
                                 col_img = Color.white;
                                 img.color = col_img;
+
+                                // 赋值通用图形
+                                gc = img;
                             }
                             else
                             {
@@ -1223,6 +1231,9 @@ namespace SevenStrikeModules.XHud.Editor
                                 if (TextTypes == XHud_PSDR_TextLayerTypes.HudText)
                                 {
                                     XHud_Module_Text text = img_obj.AddComponent<XHud_Module_Text>();
+
+                                    // 赋值通用图形
+                                    gc = text;
                                     ///Text内容设置
                                     text.txt_Set_Content(lay.text);
 
@@ -1283,6 +1294,8 @@ namespace SevenStrikeModules.XHud.Editor
                                 {
                                     XHud_Module_TmpText text = img_obj.AddComponent<XHud_Module_TmpText>();
 
+                                    // 赋值通用图形
+                                    gc = text;
                                     ///设置文字字体
                                     for (int d = 0; d < LayerFontDatas.Length; d++)
                                     {
@@ -1366,6 +1379,10 @@ namespace SevenStrikeModules.XHud.Editor
 
                             ///Sprite内容设置
                             Image img = img_obj.AddComponent<Image>();
+
+                            // 赋值通用图形
+                            gc = img;
+
                             img.sprite = layer_sprite;
 
                             ///图层元素Image的颜色&透明度设定
@@ -1394,6 +1411,10 @@ namespace SevenStrikeModules.XHud.Editor
 
                             ///Sprite内容设置
                             Image img = img_obj.AddComponent<Image>();
+
+                            // 赋值通用图形
+                            gc = img;
+
                             img.sprite = layer_sprite;
 
                             ///图层元素Image的颜色&透明度设定
@@ -1457,6 +1478,7 @@ namespace SevenStrikeModules.XHud.Editor
                         layerObject = img_obj;
                         Undo.RegisterCreatedObjectUndo(img_obj, "CreateLayer_" + lay.id);
 
+                        img_info.Layer.graphic = gc;
                         layscon.AddLayerInfo(img_info);
                     }
 

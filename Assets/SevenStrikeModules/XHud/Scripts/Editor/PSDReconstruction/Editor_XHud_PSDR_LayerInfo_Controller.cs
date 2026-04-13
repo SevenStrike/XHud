@@ -22,9 +22,11 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
+    using System;
     using System.Linq;
     using UnityEditor;
     using UnityEngine;
+    using UnityEngine.UI;
 
     [CanEditMultipleObjects]
     [CustomEditor(typeof(XHud_PSDR_LayerInfo_Controller), true)]
@@ -141,16 +143,32 @@ namespace SevenStrikeModules.XHud.Editor
 
             Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
 
+            string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+
+            if (Editor_XHud_GUI.Gui_Layout_Button("所有图层尺寸自适应", "", HudFilled.实体, HudColor.深空灰, Color.white, 30, new RectOffset(), new Vector2(0, 0)))
+            {
+                EditorApplication.delayCall += () =>
+                {
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图层重建控制器通知", "所有图层尺寸自适应", $"此操作会将<color={hexcol}> 所有图层的Image组件 </color>执行<color={hexcol}> SetNativeSize </color>操作，UI 图片的矩形框大小，自动<color={hexcol}>（修正）调整为图片素材的原始像素尺寸 </color>！", "暂不", "自适应", 0);
+
+                    if (res == "自适应")
+                        NativeSizeAllLayer();
+                };
+            }
+
+            Editor_XHud_GUI.Gui_Layout_Space(5);
+
             if (Editor_XHud_GUI.Gui_Layout_Button("清理图层信息节点 & 删除此控制器", "", HudFilled.实体, HudColor.魅力红, Color.black, 30, new RectOffset(), new Vector2(0, 0)))
             {
                 EditorApplication.delayCall += () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图层重建查看器通知", "图层信息节点清理", "此操作会清空所有图层上挂载的图层节点信息脚本，如果清除后您将无法再校验重建的图层物体的一些参数是否和PS中的一致！请谨慎操作！", "暂不", "清理", 0);
+                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图层重建控制器通知", "图层信息节点清理", $"此操作会<color={hexcol}> 清空所有图层上 </color>挂载的<color={hexcol}> 图层节点信息脚本</color>，清除之后您将无法再<color={hexcol}> 校验重建的图层物体 </color>的一些<color={hexcol}> 参数 </color>是否和 PhotoShop 中的一致！请谨慎操作！", "暂不", "清理", 0);
 
                     if (res == "清理")
                         RemoveAllLayerInfo();
                 };
             }
+
             Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
 
@@ -173,6 +191,30 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void NativeSizeAllLayer()
+        {
+            // 开始一个 Undo 组，所有修改可以一次性撤销
+            Undo.IncrementCurrentGroup();
+            int group = Undo.GetCurrentGroup();
+
+            for (int i = 0; i < BaseScript.LayerInfos.Count; i++)
+            {
+                PSDR_Layers lay = BaseScript.LayerInfos[i].Layer;
+                Graphic gc = lay.graphic;
+
+                if (gc == null)
+                    continue;
+
+                Undo.RecordObject(gc.rectTransform, "Set Native Size");
+                gc.SetNativeSize();
+                EditorUtility.SetDirty(gc.rectTransform);
+            }
+
+            // 设置 Undo 组的名称（会显示在 Edit 菜单中）
+            Undo.SetCurrentGroupName("Set Native Size for All Layers");
+            Undo.CollapseUndoOperations(group); // 合并所有操作为一个步骤
         }
 
         private void RemoveAllLayerInfo()

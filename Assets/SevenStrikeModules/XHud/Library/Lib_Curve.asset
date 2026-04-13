@@ -50,8 +50,8 @@ MonoBehaviour:
   PreviewModeIndex: 0
   PreviewCurveIndex: 0
   PreviewCurveName: 
-  SelectedReferImage: {fileID: 0}
-  SelectedIndex: 0
+  SelectedReferImage: {fileID: 2800000, guid: 660ec2ac8b96e3b459c8295bd38f4e35, type: 3}
+  SelectedIndex: -1
   Highlight: 
   Find: 
   itemHeight: 26

@@ -177,6 +177,6 @@ MonoBehaviour:
   visibleItemCount: 8
   Find: 
   Highlight: 
-  SelectedIndex: 0
+  SelectedIndex: -1
   LocationSelectedIndex: -1
   TransitionInfoList_Original_Scroller: {x: 0, y: 0}

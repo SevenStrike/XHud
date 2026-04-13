@@ -21,7 +21,7 @@ MonoBehaviour:
   visibleItemCount: 9
   SoundInfoList_Original_Scroller: {x: 0, y: 0}
   Highlight: 
-  SelectedIndex: 0
+  SelectedIndex: -1
   LocationSelectedIndex: -1
   SoundLibrary:
   - Name: DefaultSound
