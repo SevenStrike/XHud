@@ -152,6 +152,11 @@ namespace SevenStrikeModules.XHud.Editor
 
         private int AddedSpace_Component_Text = 0;
 
+        /// <summary>
+        /// 字体 - 行高设定
+        /// </summary>
+        Font Font_Lineheigh;
+
         #region 图标
         private Texture2D Icon_sprites, Icon_debug, Icon_consmode, Icon_textmode, Icon_texttype, Icon_json;
         #endregion
@@ -162,6 +167,25 @@ namespace SevenStrikeModules.XHud.Editor
         public List<Color> dominantColors = new List<Color>();
         // 颜色相似度阈值（0到1之间）
         public float colorThreshold = 0.0001f;
+
+        /// <summary>
+        /// 静态构造
+        /// </summary>
+        static Editor_XHud_PSDReconstruction()
+        {
+            // 编译开始时关闭窗口
+            EditorApplication.update += () =>
+            {
+                if (EditorApplication.isCompiling)
+                {
+                    var windows = Resources.FindObjectsOfTypeAll<Editor_XHud_PSDReconstruction>();
+                    foreach (var win in windows)
+                    {
+                        win.Close();
+                    }
+                }
+            };
+        }
 
         [MenuItem("Tools/XHud/PSD Reconstruction #c")]
         static void Init()
@@ -197,7 +221,9 @@ namespace SevenStrikeModules.XHud.Editor
             Icon_consmode = Editor_XHud_GUI.GetIcon("Icons_XHud_Reconstruction/Icon_consmode");
             Icon_textmode = Editor_XHud_GUI.GetIcon("Icons_XHud_Reconstruction/Icon_textmode");
             Icon_texttype = Editor_XHud_GUI.GetIcon("Icons_XHud_Reconstruction/Icon_texttype");
-            #endregion           
+            #endregion
+
+            Font_Lineheigh = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
         }
 
         private void OnGUI()
@@ -322,6 +348,26 @@ namespace SevenStrikeModules.XHud.Editor
 
                     if (LayerFontDatas != null && LayerFontDatas.Length > 0)
                     {
+                        Editor_XHud_GUI.Gui_Layout_Space(10);
+
+                        XHud_PSDR_TextLayerMode TextPixel = (XHud_PSDR_TextLayerMode)sp_TextLayerMode.enumValueIndex;
+
+                        XHud_PSDR_TextLayerTypes TextTypes = (XHud_PSDR_TextLayerTypes)sp_TextLayerType.enumValueIndex;
+
+                        string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+
+                        // TmpText 模式提示
+                        if (TextTypes == XHud_PSDR_TextLayerTypes.HudTmpText)
+                        {
+                            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无);
+                            Editor_XHud_GUI.Gui_Layout_Space(10);
+                            string msg = $"在使用<color={hexcol}><b> HudTmpText </b></color>方式下需要手动<color={hexcol}><b> 为每个字体建立 TmpFontAsset</b></color>，请先<color={hexcol}><b> 选中目标字体 </b></color>然后通过以下的创建菜单的步骤为其<color={hexcol}><b> 创建TmpFontAsset资源 </b></color>再指定！\n创建步骤：<color={hexcol}>Create -> TextMeshPro -> FontAsset -> SDF</color>";
+                            Editor_XHud_GUI.Gui_Layout_TextArea_Wrap(msg, HudFilled.实体, HudColor.深空灰, Color.white * 0.8f, TextAnchor.UpperLeft, new RectOffset(10, 10, 10, 10), EditorGUIUtility.currentViewWidth, 11, Font_Lineheigh);
+                            Editor_XHud_GUI.Gui_Layout_Space(10);
+                            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+                            Editor_XHud_GUI.Gui_Layout_Space(15);
+                        }
+
                         ///展示图层数据包含的字体列表
                         for (int i = 0; i < LayerFontDatas.Length; i++)
                         {
@@ -346,9 +392,6 @@ namespace SevenStrikeModules.XHud.Editor
                             Editor_XHud_GUI.Gui_Layout_Labelfield($"( {prop_Style.stringValue} )", HudFilled.无, HudColor.无, Color.yellow, TextAnchor.MiddleRight);
                             Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-                            XHud_PSDR_TextLayerMode TextPixel = (XHud_PSDR_TextLayerMode)sp_TextLayerMode.enumValueIndex;
-
-                            XHud_PSDR_TextLayerTypes TextTypes = (XHud_PSDR_TextLayerTypes)sp_TextLayerType.enumValueIndex;
 
                             if (TextTypes == XHud_PSDR_TextLayerTypes.HudText)
                             {
@@ -364,16 +407,19 @@ namespace SevenStrikeModules.XHud.Editor
                                 {
                                     if (prop_Font.objectReferenceValue != null)
                                     {
-                                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - PSD Reconstruction消息", "指定字体", $"确认指定 {prop_Name.stringValue} 字体资源吗？指定后会自动更正字体资源名称！", "指定", "暂不", 1);
-                                        if (res == "指定")
+                                        EditorApplication.delayCall += () =>
                                         {
-                                            RenameFontAsset(prop_Font.objectReferenceValue, prop_Name.stringValue);
-                                        }
-                                        else
-                                        {
-                                            prop_Font.objectReferenceValue = null;
-                                            prop_Font.serializedObject.ApplyModifiedProperties();
-                                        }
+                                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - PSD Reconstruction消息", "指定字体", $"确认指定 {prop_Name.stringValue} 字体资源吗？指定后会自动更正字体资源名称！", "指定", "暂不", 1);
+                                            if (res == "指定")
+                                            {
+                                                RenameFontAsset(prop_Font.objectReferenceValue, prop_Name.stringValue);
+                                            }
+                                            else
+                                            {
+                                                prop_Font.objectReferenceValue = null;
+                                                prop_Font.serializedObject.ApplyModifiedProperties();
+                                            }
+                                        };
                                     }
                                 }
                             }
@@ -391,33 +437,45 @@ namespace SevenStrikeModules.XHud.Editor
                                 {
                                     if (prop_FontAsset.objectReferenceValue != null)
                                     {
-                                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - PSD Reconstruction消息", "指定字体", $"确认指定 {prop_Name.stringValue} Tmp字体资源吗？指定后会自动更正字体资源名称！", "指定", "暂不", 1);
-                                        if (res == "指定")
+                                        EditorApplication.delayCall += () =>
                                         {
-                                            RenameFontAsset(prop_FontAsset.objectReferenceValue, prop_Name.stringValue);
-                                        }
-                                        else
-                                        {
-                                            prop_FontAsset.objectReferenceValue = null;
-                                            prop_FontAsset.serializedObject.ApplyModifiedProperties();
-                                        }
+                                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - PSD Reconstruction消息", "指定字体", $"确认指定 {prop_Name.stringValue} Tmp字体资源吗？指定后会自动更正字体资源名称！", "指定", "暂不", 1);
+                                            if (res == "指定")
+                                            {
+                                                RenameFontAsset(prop_FontAsset.objectReferenceValue, prop_Name.stringValue);
+                                            }
+                                            else
+                                            {
+                                                prop_FontAsset.objectReferenceValue = null;
+                                                prop_FontAsset.serializedObject.ApplyModifiedProperties();
+                                            }
+                                        };
                                     }
                                 }
                             }
 
-                            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
-
+                            if (i != LayerFontDatas.Length - 1)
+                                Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+                            else
+                                Editor_XHud_GUI.Gui_Layout_Space(10);
                             #endregion
 
-
                             prop_fontdata.serializedObject.ApplyModifiedProperties();
+                        }
+
+                        if (TextTypes == XHud_PSDR_TextLayerTypes.HudTmpText)
+                        {
+                            Window.minSize = new Vector2(450, 490 + (LayerFontDatas.Length * 71.16f) + 120 + AddedSpace_Component_Text);
+                            Window.maxSize = Window.minSize;
+                        }
+                        else
+                        {
+                            Window.minSize = new Vector2(450, 490 + (LayerFontDatas.Length * 71.16f) + 25 + AddedSpace_Component_Text);
+                            Window.maxSize = Window.minSize;
                         }
                     }
 
                     Editor_XHud_GUI.Gui_Layout_Vertical_End();
-
-                    Window.minSize = new Vector2(450, 490 + (LayerFontDatas.Length * 71.16f) + 45 + AddedSpace_Component_Text);
-                    Window.maxSize = Window.minSize;
                 }
                 else
                 {

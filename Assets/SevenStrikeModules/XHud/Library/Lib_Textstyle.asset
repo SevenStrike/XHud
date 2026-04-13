@@ -165,7 +165,7 @@ MonoBehaviour:
   Preview_Font: {fileID: 0}
   PreviewFontColor: {r: 1, g: 1, b: 1, a: 1}
   PreviewContent: XHud Sample Fonts
-  PreviewTypeText: 
+  PreviewTypeText: Text
   PreviewStyle: 0
   Find: 
   itemHeight: 60
@@ -173,4 +173,4 @@ MonoBehaviour:
   ColorInfoList_Original_Scroller: {x: 0, y: 0}
   Highlight: 
   LocationSelectedIndex: -1
-  SelectedIndex: -1
+  SelectedIndex: 0

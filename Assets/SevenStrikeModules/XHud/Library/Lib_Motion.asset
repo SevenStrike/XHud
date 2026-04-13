@@ -17,7 +17,7 @@ MonoBehaviour:
   visibleItemCount: 7
   Find: 
   Highlight: 
-  SelectedIndex: -1
+  SelectedIndex: 0
   LocationSelectedIndex: -1
   ElementMotionList_Scroller: {x: 0, y: 0}
   ElementMotionList:
