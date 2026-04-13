@@ -23,6 +23,7 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
     using System;
+    using System.Drawing;
     using System.Linq;
     using System.Reflection;
     using UnityEditor;
@@ -2308,7 +2309,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// 创造一个Gui标签框 - 字符串内容
         /// </summary>
         /// <param name="Text">输入框标题</param>
-        public static void Gui_Layout_TextArea_Wrap(string Text, HudFilled FillStyle, HudColor Color, Color ButtonTextColor, TextAnchor Align, float Width, int FontSize = 12)
+        public static void Gui_Layout_TextArea_Wrap(string Text, HudFilled FillStyle, HudColor Color, Color ButtonTextColor, TextAnchor Align, float Width, int FontSize = 12, Font font = null)
         {
             GUIStyle Style = new GUIStyle(Style_Labelfield);
             Style.normal.background = GetFillTexture(FillStyle, Color);
@@ -2317,6 +2318,26 @@ namespace SevenStrikeModules.XHud.Editor
             Style.alignment = Align;
             Style.wordWrap = true;
             Style.richText = true;
+            if (font != null)
+                Style.font = font;
+            GUILayout.Label(Text, Style, GUILayout.MaxWidth(Width));
+        }
+        /// <summary>
+        /// 创造一个Gui标签框 - 字符串内容
+        /// </summary>
+        /// <param name="Text">输入框标题</param>
+        public static void Gui_Layout_TextArea_Wrap(string Text, HudFilled FillStyle, HudColor Color, Color ButtonTextColor, TextAnchor Align, RectOffset overflow, float Width, int FontSize = 12, Font font = null)
+        {
+            GUIStyle Style = new GUIStyle(Style_Labelfield);
+            Style.normal.background = GetFillTexture(FillStyle, Color);
+            Style.normal.textColor = ButtonTextColor;
+            Style.fontSize = FontSize;
+            Style.overflow = overflow;
+            Style.alignment = Align;
+            Style.wordWrap = true;
+            Style.richText = true;
+            if (font != null)
+                Style.font = font;
             GUILayout.Label(Text, Style, GUILayout.MaxWidth(Width));
         }
         #endregion

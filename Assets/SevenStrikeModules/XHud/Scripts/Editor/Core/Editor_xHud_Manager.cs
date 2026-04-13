@@ -271,6 +271,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// 字体 - 细体
         /// </summary>
         Font Font_Thin;
+        /// <summary>
+        /// 字体 - 行高设定
+        /// </summary>
+        Font Font_Lineheigh;
         #endregion
 
         #region 批量化操作
@@ -323,7 +327,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
             Font_Thin = Editor_XHud_GUI.GetFont("SS_Editor_Thin");
-
+            Font_Lineheigh = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
             var infos = AssetDatabase.LoadAssetAtPath<TextAsset>(XHud_Dashboard.Get_Path_XHUD_CONFIG_Path() + "/XHudDevsInfo.json");
             XHudDevInfos info = JsonUtility.FromJson<XHudDevInfos>(infos.ToString());
 
@@ -633,6 +637,8 @@ namespace SevenStrikeModules.XHud.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
+
+            string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
             Editor_XHud_GUI.Gui_Layout_Space(15);
 
@@ -1445,6 +1451,15 @@ namespace SevenStrikeModules.XHud.Editor
 
                         xHud_RatioReference_Update();
                     }
+
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
+
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
+                    string msg = $"请注意！如果您的目标分辨率尺寸是<b><color={hexcol}> 大于 8192 x 8192 </color></b>的情况下，建议<b><color={hexcol}> 手动输入画布尺寸 </color></b>为您的目标分辨率尺寸！因为当您设置大于8192的分辨率时，Unity内部会将其钳位或缩放到可显示范围内！";
+                    Editor_XHud_GUI.Gui_Layout_TextArea_Wrap(msg, HudFilled.实体, HudColor.深空灰, Color.white * 0.8f, TextAnchor.UpperLeft, new RectOffset(10, 10, 10, 10), EditorGUIUtility.currentViewWidth, 11, Font_Lineheigh);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(10);
                 Editor_XHud_GUI.Gui_Layout_Vertical_End();
@@ -2013,8 +2028,17 @@ namespace SevenStrikeModules.XHud.Editor
                 bool sw_audiospool = xHud_FunctionGroup("音效池", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Audios, panel_audios);
                 if (sw_audiospool)
                 {
+                    Editor_XHud_GUI.Gui_Layout_Space(5);
+
                     #region 音效池
-                    EditorGUILayout.HelpBox("音效池为所有元素音效提供了回环队列播放音效的能力，如果您的项目不涉及音效则可忽略该警告！", MessageType.Info);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
+                    string msg = $"音效池支持提供<b><color={hexcol}> 回环队列池化 音效 / 音乐 / 声音播放 </color></b>的能力，如果您的项目<b><color={hexcol}> 不涉及UI音效 </color></b>则可忽略该提示！并保持<b><color={hexcol}> 预加载数量为0 </color></b>";
+                    Editor_XHud_GUI.Gui_Layout_TextArea_Wrap(msg, HudFilled.实体, HudColor.深空灰, Color.white * 0.8f, TextAnchor.UpperLeft, new RectOffset(10, 10, 10, 10), EditorGUIUtility.currentViewWidth, 11, Font_Lineheigh);
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
+                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+
+                    Editor_XHud_GUI.Gui_Layout_Space(10);
 
                     if (Application.isPlaying)
                         GUI.enabled = false;
@@ -2875,8 +2899,6 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 动效默认参数
-                string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
-
                 bool sw_eleparam_creator = xHud_FunctionGroup("默认动效参数", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_ElementParam_DefaultMotion, panel_eleparammotion_default);
                 if (sw_eleparam_creator)
                 {

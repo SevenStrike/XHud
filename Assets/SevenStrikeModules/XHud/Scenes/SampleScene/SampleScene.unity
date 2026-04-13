@@ -645,7 +645,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 951229599}
-  m_PlaneDistance: 999.999
+  m_PlaneDistance: 0.999
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -764,11 +764,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0.01
+  far clip plane: 1
   field of view: 60
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 1
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -1295,7 +1295,7 @@ MonoBehaviour:
   MarginHorizontal: 1
   MarginVertical: 1
   MarginMultiply: 1
-  CanvasDistance: 999.999
+  CanvasDistance: 0.999
   HudCanvas_Screen: {fileID: 648197173}
   HudCanvas_World: {fileID: 0}
   HudCanvasAnchor: 1
