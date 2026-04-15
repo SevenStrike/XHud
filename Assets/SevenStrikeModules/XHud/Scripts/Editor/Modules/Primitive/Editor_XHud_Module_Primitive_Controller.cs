@@ -197,14 +197,14 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         XHud_GUI_Dialog_ListDatas data = new XHud_GUI_Dialog_ListDatas();
                         data.Title = string.IsNullOrEmpty(SelectedObjects[i].Indicator) ? SelectedObjects[i].name : SelectedObjects[i].Indicator;
-                        data.SubTitle = "当前颜色模式";
+                        data.SubTitle = "即将初始化图元结构";
                         data.Message = "";
                         Datas.Add(data);
                     }
 
                     EditorApplication.delayCall += () =>
                     {
-                        string res_x = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "XHud - 图元控制器消息", "批量初始化图元结构", "是否需要批量为图元建立控制脚本结构吗？", "建立", "暂不", 1);
+                        string res_x = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "XHud - 图元控制器消息", "批量初始化图元结构", "是否需要批量为图元建立控制脚本结构吗？", "建立", "暂不", 0);
                         if (res_x == "建立")
                         {
                             for (int i = 0; i < SelectedObjects.Length; i++)
@@ -214,10 +214,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     string csd = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图元控制器消息", "重新初始化", $"确认为 {SelectedObjects[i].gameObject.name} 图元重新建立控制脚本结构吗？", "重建", "暂不", 1);
                                     if (csd == "重建")
                                     {
-                                        Undo.DestroyObjectImmediate(SelectedObjects[i].gameObject.GetComponent<CanvasGroup>());
-                                        Undo.DestroyObjectImmediate(SelectedObjects[i].gameObject.GetComponent<XHud_Module_Primitive_Painting_Synchronizer>());
-                                        Undo.DestroyObjectImmediate(SelectedObjects[i].gameObject.GetComponent<XHud_Module_Primitive_Painting>());
-                                        Undo.DestroyObjectImmediate(SelectedObjects[i].gameObject.GetComponent<XHud_Module_Primitive_Feature>());
+                                        SelectedObjects[i].ClearComponents_For_Editor();
                                     }
                                     else
                                     {
@@ -225,14 +222,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     }
                                 }
 
-                                Undo.AddComponent(SelectedObjects[i].gameObject, typeof(CanvasGroup));
-                                Undo.AddComponent(SelectedObjects[i].gameObject, typeof(XHud_Module_Primitive_Painting_Synchronizer));
-                                XHud_Module_Primitive_Painting comp_painting = (XHud_Module_Primitive_Painting)Undo.AddComponent(SelectedObjects[i].gameObject, typeof(XHud_Module_Primitive_Painting));
-                                comp_painting.FindController();
-                                XHud_Module_Primitive_Feature comp_feature = (XHud_Module_Primitive_Feature)Undo.AddComponent(SelectedObjects[i].gameObject, typeof(XHud_Module_Primitive_Feature));
-                                comp_feature.FindController();
-
-                                SelectedObjects[i].IsInitial = true;
+                                SelectedObjects[i].InitialComponents_For_Editor();
                             }
                         }
                     };
@@ -241,7 +231,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     EditorApplication.delayCall += () =>
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图元控制器消息", "初始化图元结构", $"确认为此图元建立控制脚本结构吗？", "建立", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图元控制器消息", "初始化图元结构", $"确认为此图元建立控制脚本结构吗？", "建立", "暂不", 0);
                         if (res == "建立")
                         {
                             if (BaseScript.IsInitial)

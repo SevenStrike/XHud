@@ -4653,11 +4653,14 @@ MonoBehaviour:
   Animating: 0
   TweensPreivew_In_State: 0
   TweensPreivew_Out_State: 0
-  PrimitivePreivew_State: 0
-  PreviewPrimitivesTween: 0
   AutoKillPreviewTweens: 1
   RewindPreviewTweensWithKill: 1
   ClearPreviewTweensWithKill: 1
+  Crc_Preview_Position: {x: 0, y: 0, z: 0}
+  Rec_Preview_Position: {x: 0, y: 0, z: 0}
+  PreviewIncludePrimitivesTween: 0
+  Crc_Preview_SetPosition: 0
+  Rec_Preview_SetPosition: 0
   Crc_Lib_Name: 
   Rec_Lib_Name: 
   CreateArgs:

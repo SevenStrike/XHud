@@ -20,10 +20,12 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using Codice.Client.Common;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XTween;
     using SevenStrikeModules.XTween.Editor;
     using System.Collections.Generic;
+    using System.Linq;
     using UnityEditor;
     using UnityEngine;
 
@@ -82,11 +84,39 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     SelectedObjects[i].TweensPreivew_In_State = true;
                     SelectedObjects[i].TweensPreivew_Out_State = false;
-                    SelectedObjects[i].PrimitivePreivew_State = false;
                     //Debug.Log($"TweensPreivew_In：{SelectedObjects[i].TweensPreivew_In_State}");
 
-                    SelectedObjects[i].ElementTweens_Creator(SelectedObjects[i].CreateArgs, null, true);
-                    XTween_Preview_Start(GetTargetsElementTweens());
+                    // 创建元素自身基础三项动画
+                    SelectedObjects[i].ElementTweens_Creator(SelectedObjects[i].CreateArgs, null, true, SelectedObjects[i].Crc_Preview_SetPosition, SelectedObjects[i].Crc_Preview_Position);
+
+                    // 预览列表
+                    List<XTween_Interface> preview_twns = new List<XTween_Interface>();
+
+                    #region 元素基础三项动画 - 加入预览列表
+                    XTween_Interface[] ele_tweens = GetElementTweens();
+
+                    for (int s = 0; s < ele_tweens.Length; s++)
+                    {
+                        preview_twns.Add(ele_tweens[s]);
+                    }
+                    #endregion
+
+                    #region 元素子级中的图元动画 - 加入预览列表
+                    if (SelectedObjects[i].PreviewIncludePrimitivesTween)
+                    {
+                        for (int v = 0; v < SelectedObjects[i].PrimitiveControllerNodes.Count; v++)
+                        {
+                            XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(SelectedObjects[i].PrimitiveControllerNodes[v].Controller.pt_Tween, "元素进入时");
+
+                            for (int g = 0; g < primitive_tweens.Length; g++)
+                            {
+                                preview_twns.Add(primitive_tweens[g]);
+                            }
+                        }
+                    }
+                    #endregion
+
+                    XTween_Preview_Start(ele_tweens.ToArray());
                     Preview_XHudSounds("元素进入时", SelectedObjects[i].SounderNodes);
                 }
             }
@@ -94,15 +124,42 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 TweensPreivew_In_State.boolValue = true;
                 TweensPreivew_Out_State.boolValue = false;
-                PrimitivePreivew_State.boolValue = false;
                 //Debug.Log($"TweensPreivew_In：{TweensPreivew_In_State.boolValue}");
 
                 TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
                 TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
-                PrimitivePreivew_State.serializedObject.ApplyModifiedProperties();
 
-                BaseScript.ElementTweens_Creator(BaseScript.CreateArgs, null, true);
-                XTween_Preview_Start(GetElementTweens());
+                // 创建元素自身基础三项动画
+                BaseScript.ElementTweens_Creator(BaseScript.CreateArgs, null, true, Crc_Preview_SetPosition.boolValue, Crc_Preview_Position.vector3Value);
+
+                // 预览列表
+                List<XTween_Interface> preview_twns = new List<XTween_Interface>();
+
+                #region 元素基础三项动画 - 加入预览列表
+                XTween_Interface[] ele_tweens = GetElementTweens();
+
+                for (int i = 0; i < ele_tweens.Length; i++)
+                {
+                    preview_twns.Add(ele_tweens[i]);
+                }
+                #endregion
+
+                #region 元素子级中的图元动画 - 加入预览列表
+                if (PreviewIncludePrimitivesTween.boolValue)
+                {
+                    for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+                    {
+                        XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween, "元素进入时");
+
+                        for (int s = 0; s < primitive_tweens.Length; s++)
+                        {
+                            preview_twns.Add(primitive_tweens[s]);
+                        }
+                    }
+                }
+                #endregion
+
+                XTween_Preview_Start(preview_twns.ToArray());
                 Preview_XHudSounds("元素进入时", SounderNodes);
             }
         }
@@ -154,10 +211,10 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     SelectedObjects[i].TweensPreivew_In_State = false;
                     SelectedObjects[i].TweensPreivew_Out_State = true;
-                    SelectedObjects[i].PrimitivePreivew_State = false;
                     //Debug.Log($"TweensPreivew_Out：{SelectedObjects[i].TweensPreivew_Out_State}");
 
-                    SelectedObjects[i].ElementTweens_Recycler(SelectedObjects[i].RecycleArgs, null, true);
+                    SelectedObjects[i].ElementTweens_Recycler(SelectedObjects[i].RecycleArgs, null, true, SelectedObjects[i].Rec_Preview_SetPosition, SelectedObjects[i].Rec_Preview_Position);
+
                     XTween_Preview_Start(GetTargetsElementTweens());
                     Preview_XHudSounds("元素退出时", SelectedObjects[i].SounderNodes);
                 }
@@ -166,14 +223,12 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 TweensPreivew_In_State.boolValue = false;
                 TweensPreivew_Out_State.boolValue = true;
-                PrimitivePreivew_State.boolValue = false;
                 //Debug.Log($"TweensPreivew_Out：{TweensPreivew_Out_State.boolValue}");
 
                 TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
                 TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
-                PrimitivePreivew_State.serializedObject.ApplyModifiedProperties();
 
-                BaseScript.ElementTweens_Recycler(BaseScript.RecycleArgs, null, true);
+                BaseScript.ElementTweens_Recycler(BaseScript.RecycleArgs, null, true, Rec_Preview_SetPosition.boolValue, Rec_Preview_Position.vector3Value);
                 XTween_Preview_Start(GetElementTweens());
                 Preview_XHudSounds("元素退出时", SounderNodes);
             }
@@ -207,70 +262,30 @@ namespace SevenStrikeModules.XHud.Editor
             XTween_Preview_Kill();
         }
         //------------------------------------------------------------------------------------
+
         /// <summary>
-        /// 播放预览：元素 - 图元
+        /// 创建收集图元动画器的动画节点列表所有动画
         /// </summary>
-        private void PrimitiveTweens_Preview_Play()
+        /// <param name="tweener"></param>
+        /// <returns></returns>
+        private XTween_Interface[] Preview_PrimitiveTweens_Collected(XHud_Module_Primitive_Tween tweener, string tim)
         {
-            if (Application.isPlaying)
+            List<XTween_Interface> tweens = new List<XTween_Interface>();
+            for (int i = 0; i < tweener.PrimitiveTweenNodes.Count; i++)
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
-                return;
+                if (!tweener.PrimitiveTweenNodes[i].Enabled)
+                    continue;
+                if (tweener.PrimitiveTweenNodes[i].Timings != tim)
+                    continue;
+                XTween_Interface tween = tweener.Tween_Create(tweener.PrimitiveTweenNodes[i], tweener.GlobalDuration * HudManager.DurationMultiply);
+
+                if (tween != null)
+                    tweens.Add(tween);
             }
 
-            if (Targets_Selected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    SelectedObjects[i].TweensPreivew_In_State = false;
-                    SelectedObjects[i].TweensPreivew_Out_State = false;
-                    SelectedObjects[i].PrimitivePreivew_State = true;
-                    //Debug.Log($"PrimitivePreivew：{SelectedObjects[i].PrimitivePreivew_State}");
-                }
-            }
-            else
-            {
-                TweensPreivew_In_State.boolValue = false;
-                TweensPreivew_Out_State.boolValue = false;
-                PrimitivePreivew_State.boolValue = true;
-                //Debug.Log($"PrimitivePreivew：{PrimitivePreivew_State.boolValue}");
-
-                TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
-                TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
-                PrimitivePreivew_State.serializedObject.ApplyModifiedProperties();
-            }
-
-            // 收集子级下的所有图元Tweens
-            //PreviewStart(GetPrimitiveTweens());
+            return tweens.ToArray();
         }
-        /// <summary>
-        /// 停止预览：元素 - 图元
-        /// </summary>
-        private void PrimitiveTweens_Preview_Stop()
-        {
-            if (Application.isPlaying)
-            {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
-                return;
-            }
 
-            if (Targets_Selected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    SelectedObjects[i].PrimitivePreivew_State = false;
-                    //Debug.Log($"PrimitivePreivew：{SelectedObjects[i].PrimitivePreivew_State}");
-                }
-            }
-            else
-            {
-                PrimitivePreivew_State.boolValue = false;
-                //Debug.Log($"PrimitivePreivew：{PrimitivePreivew_State.boolValue}");
-                PrimitivePreivew_State.serializedObject.ApplyModifiedProperties();
-            }
-
-            XTween_Preview_Kill();
-        }
         //------------------------------------------------------------------------------------
         /// <summary>
         /// 预览开关状态复位
@@ -283,18 +298,15 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     SelectedObjects[i].TweensPreivew_In_State = false;
                     SelectedObjects[i].TweensPreivew_Out_State = false;
-                    SelectedObjects[i].PrimitivePreivew_State = false;
                 }
             }
             else
             {
                 TweensPreivew_In_State.boolValue = false;
                 TweensPreivew_Out_State.boolValue = false;
-                PrimitivePreivew_State.boolValue = false;
 
                 TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
                 TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
-                PrimitivePreivew_State.serializedObject.ApplyModifiedProperties();
             }
         }
 
@@ -349,48 +361,6 @@ namespace SevenStrikeModules.XHud.Editor
             // 预览开关状态复位
             StopAllPreviewState();
 
-            if (Targets_Selected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    XHud_Module_Element ele = SelectedObjects[i];
-                    // 根据预览类型清空 & 杀死
-                    if (!ele.PrimitivePreivew_State)
-                    {
-                        // 杀死元素三项自身动画
-                        ele.KillElementTweens();
-                        // 清空元素三项自身动画
-                        ele.ClearElementTweens();
-                    }
-                    else
-                    {
-                        // 杀死子级所有图元动画
-                        //BaseScript.KillPrimitiveTweens();
-                        // 清空子级所有图元动画
-                        //BaseScript.ClearPrimitiveTweens();
-                    }
-                }
-            }
-            else
-            {
-                // 根据预览类型清空 & 杀死
-                if (!PrimitivePreivew_State.boolValue)
-                {
-                    // 杀死元素三项自身动画
-                    BaseScript.KillElementTweens();
-                    // 清空元素三项自身动画
-                    BaseScript.ClearElementTweens();
-                }
-                else
-                {
-                    // 杀死子级所有图元动画
-                    //BaseScript.KillPrimitiveTweens();
-                    // 清空子级所有图元动画
-                    //BaseScript.ClearPrimitiveTweens();
-                }
-            }
-
-
             // 预览器执行动作：杀死动画
             Editor_XTween_Previewer.Kill(ClearPreviewTweensWithKill.boolValue, RewindPreviewTweensWithKill.boolValue, () =>
             {
@@ -400,12 +370,47 @@ namespace SevenStrikeModules.XHud.Editor
             // 当动画预览器为根据动画耗时自动杀死的情况下
             if (AutoKillPreviewTweens.boolValue)
                 Editor_XTween_Previewer.act_on_editor_autokill -= XTween_OnAutoKillPreview;
+
+            if (Targets_Selected())
+            {
+                for (int i = 0; i < SelectedObjects.Length; i++)
+                {
+                    XHud_Module_Element ele = SelectedObjects[i];
+
+                    // 根据是否包含图元动画预览类型对图元动画进行特性复位
+                    if (PreviewIncludePrimitivesTween.boolValue)
+                    {
+                        for (int d = 0; d < SelectedObjects[i].PrimitiveControllerNodes.Count; d++)
+                        {
+                            PrimitiveControllerNode con = SelectedObjects[i].PrimitiveControllerNodes[d];
+                            con.Controller.pt_Feature.PrimitiveFeature_Load();
+                        }
+                    }
+                    // 杀死元素三项自身动画
+                    ele.KillElementTweens();
+                    // 清空元素三项自身动画
+                    ele.ClearElementTweens();
+                }
+            }
+            else
+            {
+                // 根据是否包含图元动画预览类型对图元动画进行特性复位
+                if (PreviewIncludePrimitivesTween.boolValue)
+                {
+                    for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+                    {
+                        PrimitiveControllerNode con = BaseScript.PrimitiveControllerNodes[i];
+                        con.Controller.pt_Feature.PrimitiveFeature_Load();
+                    }
+                }
+                // 杀死元素三项自身动画
+                BaseScript.KillElementTweens();
+                // 清空元素三项自身动画
+                BaseScript.ClearElementTweens();
+            }
         }
         /// <summary>
-        ///  动画预览 - 倒退
-        /// </summary>
-        /// <summary>
-        /// 杀死预览动画后的操作逻辑
+        ///  动画预览 - 自动杀死的委托
         /// </summary>
         private void XTween_OnAutoKillPreview()
         {
@@ -417,39 +422,38 @@ namespace SevenStrikeModules.XHud.Editor
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
                     XHud_Module_Element ele = SelectedObjects[i];
-                    if (!ele.PrimitivePreivew_State)
+
+                    // 根据是否包含图元动画预览类型对图元动画进行特性复位
+                    if (PreviewIncludePrimitivesTween.boolValue)
                     {
-                        // 杀死元素三项自身动画
-                        ele.KillElementTweens();
-                        // 清空元素三项自身动画
-                        ele.ClearElementTweens();
+                        for (int d = 0; d < SelectedObjects[i].PrimitiveControllerNodes.Count; d++)
+                        {
+                            PrimitiveControllerNode con = SelectedObjects[i].PrimitiveControllerNodes[d];
+                            con.Controller.pt_Feature.PrimitiveFeature_Load();
+                        }
                     }
-                    else
-                    {
-                        // 杀死子级所有图元动画
-                        //BaseScript.KillPrimitiveTweens();
-                        // 清空子级所有图元动画
-                        //BaseScript.ClearPrimitiveTweens();
-                    }
+
+                    // 杀死元素三项自身动画
+                    ele.KillElementTweens();
+                    // 清空元素三项自身动画
+                    ele.ClearElementTweens();
                 }
             }
             else
             {
-                // 根据预览类型清空 & 杀死
-                if (!PrimitivePreivew_State.boolValue)
+                // 根据是否包含图元动画预览类型对图元动画进行特性复位
+                if (PreviewIncludePrimitivesTween.boolValue)
                 {
-                    // 杀死元素三项自身动画
-                    BaseScript.KillElementTweens();
-                    // 清空元素三项自身动画
-                    BaseScript.ClearElementTweens();
+                    for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+                    {
+                        PrimitiveControllerNode con = BaseScript.PrimitiveControllerNodes[i];
+                        con.Controller.pt_Feature.PrimitiveFeature_Load();
+                    }
                 }
-                else
-                {
-                    // 杀死子级所有图元动画
-                    //BaseScript.KillPrimitiveTweens();
-                    // 清空子级所有图元动画
-                    //BaseScript.ClearPrimitiveTweens();
-                }
+                // 杀死元素三项自身动画
+                BaseScript.KillElementTweens();
+                // 清空元素三项自身动画
+                BaseScript.ClearElementTweens();
             }
 
             // 清空预览动画杀死后的委托事件

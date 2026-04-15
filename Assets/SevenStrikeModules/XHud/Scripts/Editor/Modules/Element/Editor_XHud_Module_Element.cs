@@ -61,7 +61,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 序列化属性
         private SerializedProperty
-            CanvasGroup, SounderNodes, PrimitiveControllerNodes, OptionNodes, ButtonNodes, TextIsFold, TmpTextIsFold, SliderNodes, TextNodes, TmpTextNodes, DebugState, PreviewPrimitivesTween, ProgressNodes, ToggleNodes, Indicator, PrimitivesTweenMaxDuration, RectTransform, TriggerAction, ObjectTracker, CreateState, AnimateState, PrimitivesTweenGlobalDuration, OriginPoolName, PrimitivesIsFold, ButtonIsFold, OptionIsFold, SliderIsFold, SounderIsFold, ProgressIsFold, ToggleIsFold, EventIsFold, AutoPlayPrimitivesTween, AutoKillPreviewTweens, Alpha, RMS_Enabled, RMS_LayoutDatas, RMS_Name, CurrentPivot, OriginalName, eve_on_element_in_start, eve_on_element_in_end, eve_on_element_out_start, eve_on_element_out_end, TweensPreivew_In_State, TweensPreivew_Out_State, PrimitivePreivew_State, RewindPreviewTweensWithKill, ClearPreviewTweensWithKill, CreateArgs, RecycleArgs, Crc_Lib_Name, Rec_Lib_Name, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, create_fold_move, create_fold_rotate, create_fold_alpha, recycle_fold_move, recycle_fold_rotate, recycle_fold_alpha;
+            CanvasGroup, SounderNodes, PrimitiveControllerNodes, OptionNodes, ButtonNodes, TextIsFold, TmpTextIsFold, SliderNodes, TextNodes, TmpTextNodes, DebugState, ProgressNodes, ToggleNodes, Indicator, PrimitivesTweenMaxDuration, RectTransform, TriggerAction, ObjectTracker, CreateState, AnimateState, PrimitivesTweenGlobalDuration, OriginPoolName, PrimitivesIsFold, ButtonIsFold, OptionIsFold, SliderIsFold, SounderIsFold, ProgressIsFold, ToggleIsFold, EventIsFold, AutoPlayPrimitivesTween, AutoKillPreviewTweens, Alpha, RMS_Enabled, RMS_LayoutDatas, RMS_Name, CurrentPivot, OriginalName, eve_on_element_in_start, eve_on_element_in_end, eve_on_element_out_start, eve_on_element_out_end, TweensPreivew_In_State, TweensPreivew_Out_State, RewindPreviewTweensWithKill, ClearPreviewTweensWithKill, CreateArgs, RecycleArgs, Crc_Lib_Name, Rec_Lib_Name, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, create_fold_move, create_fold_rotate, create_fold_alpha, recycle_fold_move, recycle_fold_rotate, recycle_fold_alpha, Crc_Preview_Position, Rec_Preview_Position, Crc_Preview_SetPosition, Rec_Preview_SetPosition, PreviewIncludePrimitivesTween;
         #endregion       
 
         #region 图标
@@ -70,6 +70,8 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         private string PrefsKeyFold_Option = "XHUD-ELEMENT-FOLD-MOTIONARGS";
+        private string PrefsKeyFold_PREVIEWPOS = "XHUD-ELEMENT-FOLD-PREVIEWPOS";
+        private string PrefsKeyFold_PREVIEWMETHOD = "XHUD-ELEMENT-FOLD-PREVIEWMETHOD";
 
         #region 批量模式查看索引
         private int ElementStatu_Index;
@@ -77,7 +79,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 选项文字
-        string[] stroptions_enabled = new string[2] { "关闭", "开启" }, stroptions_debug = new string[2] { "关闭", "调试" }, stroptions_auto = new string[2] { "手动", "自动" }, stroptions_tweenmode = new string[2] { "元素", "图元" };
+        string[] stroptions_enabled = new string[2] { "关闭", "开启" }, stroptions_include = new string[2] { "不包含", "包含" }, stroptions_debug = new string[2] { "关闭", "调试" }, stroptions_auto = new string[2] { "手动", "自动" };
         #endregion
 
         #region 批量化操作
@@ -323,97 +325,47 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            if (!PreviewPrimitivesTween.boolValue)
+            Editor_XHud_GUI.SetEnabled(!TweensPreivew_Out_State.boolValue);
+
+            // 动画预览按钮
+            if (!TweensPreivew_In_State.boolValue)
             {
-
-                Editor_XHud_GUI.SetEnabled(!TweensPreivew_Out_State.boolValue);
-
-                // 动画预览按钮
-                if (!TweensPreivew_In_State.boolValue)
+                if (Editor_XHud_GUI.Gui_Layout_Button(15, "元素 - 进入 - 播放", prw_play_in_r, prw_play_in_p))
                 {
-                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "元素 - 进入 - 播放", prw_play_in_r, prw_play_in_p))
-                    {
-                        ElementTweens_Preview_In_Play();
-                    }
+                    ElementTweens_Preview_In_Play();
                 }
-                else
-                {
-                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "元素 - 进入 - 停止", prw_play_in_p, prw_play_in_p))
-                    {
-                        ElementTweens_Preview_In_Stop();
-                    }
-                }
-
-                Editor_XHud_GUI.Gui_Layout_Space(40);
-
-                Editor_XHud_GUI.SetEnabled(!TweensPreivew_In_State.boolValue);
-                // 动画预览按钮
-                if (!TweensPreivew_Out_State.boolValue)
-                {
-                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "元素 - 退出 - 播放", prw_play_out_r, prw_play_out_p))
-                    {
-                        ElementTweens_Preview_Out_Play();
-                    }
-                }
-                else
-                {
-                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "元素 - 退出 - 停止", prw_play_out_p, prw_play_out_p))
-                    {
-                        ElementTweens_Preview_Out_Stop();
-                    }
-                }
-                Editor_XHud_GUI.SetEnabled(true);
-                Editor_XHud_GUI.Gui_Layout_Space(20);
             }
             else
             {
-                // 动画预览按钮
-                if (!PrimitivePreivew_State.boolValue)
+                if (Editor_XHud_GUI.Gui_Layout_Button(15, "元素 - 进入 - 停止", prw_play_in_p, prw_play_in_p))
                 {
-                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "图元 - 播放", prw_play_r, prw_play_p))
-                    {
-                        PrimitiveTweens_Preview_Play();
-                    }
+                    ElementTweens_Preview_In_Stop();
                 }
-                else
-                {
-                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "图元 - 停止", prw_stop_r, prw_stop_p))
-                    {
-                        PrimitiveTweens_Preview_Stop();
-                    }
-                }
-                Editor_XHud_GUI.Gui_Layout_Space(75);
             }
+
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+
+            Editor_XHud_GUI.SetEnabled(!TweensPreivew_In_State.boolValue);
+            // 动画预览按钮
+            if (!TweensPreivew_Out_State.boolValue)
+            {
+                if (Editor_XHud_GUI.Gui_Layout_Button(15, "元素 - 退出 - 播放", prw_play_out_r, prw_play_out_p))
+                {
+                    ElementTweens_Preview_Out_Play();
+                }
+            }
+            else
+            {
+                if (Editor_XHud_GUI.Gui_Layout_Button(15, "元素 - 退出 - 停止", prw_play_out_p, prw_play_out_p))
+                {
+                    ElementTweens_Preview_Out_Stop();
+                }
+            }
+            Editor_XHud_GUI.SetEnabled(true);
+            Editor_XHud_GUI.Gui_Layout_Space(20);
 
             TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
             TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
-            PrimitivePreivew_State.serializedObject.ApplyModifiedProperties();
-
-            // 动画预览模式选择
-            EditorGUI.BeginChangeCheck();
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Element>("", stroptions_tweenmode, ref PreviewPrimitivesTween, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-            if (EditorGUI.EndChangeCheck())
-            {
-                if (Targets_Selected())
-                {
-                    for (int i = 0; i < SelectedObjects.Length; i++)
-                    {
-                        SelectedObjects[i].TweensPreivew_In_State = false;
-                        SelectedObjects[i].TweensPreivew_Out_State = false;
-                        SelectedObjects[i].PrimitivePreivew_State = false;
-                    }
-                }
-                else
-                {
-                    TweensPreivew_In_State.boolValue = false;
-                    TweensPreivew_Out_State.boolValue = false;
-                    PrimitivePreivew_State.boolValue = false;
-
-                    TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
-                    TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
-                    PrimitivePreivew_State.serializedObject.ApplyModifiedProperties();
-                }
-            }
 
             Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Horizontal_End();
@@ -424,11 +376,39 @@ namespace SevenStrikeModules.XHud.Editor
             #region 元素预览动效参数
             string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
-            bool sw_option = FunctionGroup("预览动效参数", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Option, null);
+            #region 预览方式
+            bool sw_preview_method = FunctionGroup("预览方式", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_PREVIEWMETHOD, null);
+            if (sw_preview_method)
+            {
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Element>("是否包含图元预览", stroptions_include, ref PreviewIncludePrimitivesTween, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            }
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            #endregion
+
+            #region 预览位置
+            bool sw_preview_pos = FunctionGroup("预览位置", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_PREVIEWPOS, null);
+            if (sw_preview_pos)
+            {
+                if (Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Element>("指定位置生成", stroptions_enabled, ref Crc_Preview_SetPosition, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects))
+                {
+                    Editor_XHud_GUI.Gui_Layout_Property_Field("目标位置", Crc_Preview_Position);
+                }
+                Editor_XHud_GUI.Gui_Layout_Space(5);
+                if (Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Element>("指定位置回收", stroptions_enabled, ref Rec_Preview_SetPosition, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects))
+                {
+                    Editor_XHud_GUI.Gui_Layout_Property_Field("目标位置", Rec_Preview_Position);
+                }
+            }
+            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            #endregion
+
+            #region 预览动效
+            bool sw_option = FunctionGroup("预览动效", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Option, null);
             if (sw_option)
             {
-                //Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "预览动效参数", XHud_Dashboard.Theme_Primary);
-                //Editor_XHud_GUI.Gui_Layout_Space(10);
+
 
                 #region 模版库                             
                 //确保动效库存在
@@ -1083,6 +1063,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
             Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            #endregion
             #endregion
 
             Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -2217,7 +2198,7 @@ namespace SevenStrikeModules.XHud.Editor
                     RestoreToAnchorPosition();
                 });
                 menu.AddDisabledItem(new GUIContent("动效快速操作"));
-                menu.AddItem(new GUIContent("E (复制动效)"), false, () =>
+                menu.AddItem(new GUIContent("E (复制预览动效)"), false, () =>
                 {
                     string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 元素预览器消息", "复制预览动效", "请选择动效参数复制模式！", "取消", "生成", "回收", 0);
                     if (res == "取消")
@@ -2264,7 +2245,7 @@ namespace SevenStrikeModules.XHud.Editor
                             crc.Alpha = A;
 
                             json = JsonUtility.ToJson(crc);
-                            GUIUtility.systemCopyBuffer = json;
+                            Editor_XHud_GUI.EditorData_Set_With_String("XED_Copy_MotionArgs", json);
                             break;
                         case "回收"://回收
                             Motion_Recycler rec = new Motion_Recycler();
@@ -2299,7 +2280,7 @@ namespace SevenStrikeModules.XHud.Editor
                             rec.Alpha = A;
 
                             json = JsonUtility.ToJson(rec);
-                            GUIUtility.systemCopyBuffer = json;
+                            Editor_XHud_GUI.EditorData_Set_With_String("XED_Copy_MotionArgs", json);
                             break;
                     }
 
@@ -2310,18 +2291,18 @@ namespace SevenStrikeModules.XHud.Editor
                     else if (res == "回收")
                         mode = "回收动效参数";
 
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素预览器消息", "复制预览动效", $"已复制 \" {mode} \" 到系统剪贴板 ！", "明白", 0);
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素预览器消息", "复制预览动效", $"已复制 \" {mode} \" 到 XHudEditorData (XED) ！", "明白", 0);
                 });
-                menu.AddItem(new GUIContent("R (粘贴动效)"), false, () =>
+                menu.AddItem(new GUIContent("R (粘贴预览动效)"), false, () =>
                 {
-                    string buffer = GUIUtility.systemCopyBuffer;
+                    string buffer = Editor_XHud_GUI.EditorData_Get_With_String("XED_Copy_MotionArgs");
                     if (buffer.Contains("anchor"))//粘贴生成参数
                     {
                         string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 元素预览器消息", "粘贴预览动效", "检测到动效参数类型为： \"生成动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
                         if (res == "暂不")
                             return;
 
-                        Motion_Creator crc = JsonUtility.FromJson<Motion_Creator>(GUIUtility.systemCopyBuffer);
+                        Motion_Creator crc = JsonUtility.FromJson<Motion_Creator>(buffer);
 
                         CreateArgs.FindPropertyRelative("anchor").enumValueIndex = (int)crc.anchor;
 
@@ -2398,7 +2379,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 menu.AddSeparator("");
                 menu.AddDisabledItem(new GUIContent("生成预览"));
-                if (!PrimitivePreivew_State.boolValue && !TweensPreivew_Out_State.boolValue)
+                if (!TweensPreivew_Out_State.boolValue)
                 {
                     if (!TweensPreivew_In_State.boolValue)
                     {
@@ -2426,7 +2407,7 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                 }
 
-                if (!PrimitivePreivew_State.boolValue && !TweensPreivew_In_State.boolValue)
+                if (!TweensPreivew_In_State.boolValue)
                 {
                     menu.AddSeparator("");
                     menu.AddDisabledItem(new GUIContent("回收预览"));
@@ -2470,7 +2451,17 @@ namespace SevenStrikeModules.XHud.Editor
                         string path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(BaseScript.gameObject);
                         PrefabUtility.SaveAsPrefabAssetAndConnect(BaseScript.gameObject, path, InteractionMode.AutomatedAction);
                     });
-                    menu.AddItem(new GUIContent("Z (定位)"), false, () =>
+                    menu.AddItem(new GUIContent("W (恢复)"), false, () =>
+                    {
+                        if (Application.isPlaying)
+                        {
+                            Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预制体应用", "程序正在运行，无法在运行期间执行此功能！", "明白");
+                            return;
+                        }
+                        string path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(BaseScript.gameObject);
+                        PrefabUtility.RevertPrefabInstance(BaseScript.gameObject, InteractionMode.AutomatedAction);
+                    });
+                    menu.AddItem(new GUIContent("Q (定位)"), false, () =>
                     {
                         if (Application.isPlaying)
                         {
@@ -3216,12 +3207,16 @@ namespace SevenStrikeModules.XHud.Editor
             recycle_fold_rotate = serializedObject.FindProperty("recycle_fold_rotate");
             recycle_fold_alpha = serializedObject.FindProperty("recycle_fold_alpha");
 
-            PreviewPrimitivesTween = serializedObject.FindProperty("PreviewPrimitivesTween");
+            PreviewIncludePrimitivesTween = serializedObject.FindProperty("PreviewIncludePrimitivesTween");
+            Crc_Preview_Position = serializedObject.FindProperty("Crc_Preview_Position");
+            Rec_Preview_Position = serializedObject.FindProperty("Rec_Preview_Position");
+            Crc_Preview_SetPosition = serializedObject.FindProperty("Crc_Preview_SetPosition");
+            Rec_Preview_SetPosition = serializedObject.FindProperty("Rec_Preview_SetPosition");
+
             AutoPlayPrimitivesTween = serializedObject.FindProperty("AutoPlayPrimitivesTween");
             PrimitivesTweenMaxDuration = serializedObject.FindProperty("PrimitivesTweenMaxDuration");
             PrimitivesTweenGlobalDuration = serializedObject.FindProperty("PrimitivesTweenGlobalDuration");
             PrimitivesIsFold = serializedObject.FindProperty("PrimitivesIsFold");
-            PrimitivePreivew_State = serializedObject.FindProperty("PrimitivePreivew_State");
             PrimitiveControllerNodes = serializedObject.FindProperty("PrimitiveControllerNodes");
         }
         #endregion      

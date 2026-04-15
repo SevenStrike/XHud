@@ -25,6 +25,7 @@ namespace SevenStrikeModules.XHud
     using SevenStrikeModules.XTween;
     using UnityEngine;
     using UnityEngine.Events;
+    using static UnityEditor.PlayerSettings;
 
     public partial class XHud_Module_Element : MonoBehaviour
     {
@@ -44,17 +45,6 @@ namespace SevenStrikeModules.XHud
         /// 元素动画预览状态 - Out
         /// </summary>
         public bool TweensPreivew_Out_State;
-        [SerializeField]
-        /// <summary>
-        /// 图元动画预览状态
-        /// </summary>
-        public bool PrimitivePreivew_State;
-        [SerializeField]
-        /// <summary>
-        /// 预览动画目标状态
-        /// 标识预览的是当前元素的进入退出动画还是子级的所有图元的动画
-        /// </summary>
-        public bool PreviewPrimitivesTween;
         [SerializeField]
         /// <summary>
         /// 自动停止预览开关
@@ -92,6 +82,33 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public XTween_Interface Tween_Rotation;
         #endregion
+
+        [SerializeField]
+        /// <summary>
+        /// 元素预览生成时设定的位置
+        /// </summary>
+        public Vector3 Crc_Preview_Position;
+        [SerializeField]
+        /// <summary>
+        /// 元素预览回收时设定的位置
+        /// </summary>
+        public Vector3 Rec_Preview_Position;
+
+        [SerializeField]
+        /// <summary>
+        /// 预览时是否包含子级所有图元动画？
+        /// </summary>
+        public bool PreviewIncludePrimitivesTween;
+        [SerializeField]
+        /// <summary>
+        /// 预览生成时是否指定位置？
+        /// </summary>
+        public bool Crc_Preview_SetPosition;
+        [SerializeField]
+        /// <summary>
+        /// 预览回收时是否指定位置
+        /// </summary>
+        public bool Rec_Preview_SetPosition;
 
         [SerializeField]
         /// <summary>
@@ -509,12 +526,18 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param name="args"></param>
         /// <param name="act_InComplete"></param>
-        public void ElementTweens_Creator(Motion_Creator args, UnityAction act_InComplete, bool isPreview = false)
+        public void ElementTweens_Creator(Motion_Creator args, UnityAction act_InComplete, bool isPreview = false, bool PosSet = false, Vector3 pos = default)
         {
             float duration = isPreview ? XHud_Dashboard.HudManagerGet().DurationMultiply : XHud_Manager.Instance.DurationMultiply * PrimitivesTweenGlobalDuration;
+            Vector3 ori_pos = Vector3.zero;
 
             if (isPreview)
             {
+                if (PosSet)
+                {
+                    ori_pos = RectTransform.anchoredPosition3D;
+                    element_PositionSet(pos);
+                }
                 element_AlphaSet(0);
                 element_AlphaSyncUpdate();
             }
@@ -778,7 +801,12 @@ namespace SevenStrikeModules.XHud
                         }).OnKill(() =>
                         {
                             if (isPreview)
-                                RectTransform.anchoredPosition3D = current;
+                            {
+                                if (PosSet)
+                                    element_PositionSet(ori_pos);
+                                else
+                                    element_PositionSet(current);
+                            }
                         }).Play();
                     }
                 }
@@ -851,7 +879,12 @@ namespace SevenStrikeModules.XHud
                         }).OnKill(() =>
                         {
                             if (isPreview)
-                                RectTransform.anchoredPosition3D = current;
+                            {
+                                if (PosSet)
+                                    element_PositionSet(ori_pos);
+                                else
+                                    element_PositionSet(current);
+                            }
                         }).Play();
                     }
                 }
@@ -973,12 +1006,15 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param name="args"></param>
         /// <param name="act_OutComplete"></param>
-        public void ElementTweens_Recycler(Motion_Recycler args, UnityAction act_OutComplete, bool isPreview = false)
+        public void ElementTweens_Recycler(Motion_Recycler args, UnityAction act_OutComplete, bool isPreview = false, bool PosSet = false, Vector3 pos = default)
         {
             float duration = isPreview ? XHud_Dashboard.HudManagerGet().DurationMultiply : XHud_Manager.Instance.DurationMultiply * PrimitivesTweenGlobalDuration;
+            Vector3 ori_pos = Vector3.zero;
 
             if (isPreview)
             {
+                if (PosSet)
+                    element_PositionSet(pos);
                 element_AlphaSet(1);
                 element_AlphaSyncUpdate();
             }
@@ -1213,7 +1249,12 @@ namespace SevenStrikeModules.XHud
                         }).OnKill(() =>
                         {
                             if (isPreview)
-                                RectTransform.localPosition = current;
+                            {
+                                if (PosSet)
+                                    element_PositionSet(ori_pos);
+                                else
+                                    element_PositionSet(current);
+                            }
                         }).Play();
                     }
                 }
@@ -1284,7 +1325,12 @@ namespace SevenStrikeModules.XHud
                         }).OnKill(() =>
                         {
                             if (isPreview)
-                                RectTransform.localPosition = current;
+                            {
+                                if (PosSet)
+                                    element_PositionSet(ori_pos);
+                                else
+                                    element_PositionSet(current);
+                            }
                         }).Play();
                     }
                 }

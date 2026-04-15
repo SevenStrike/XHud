@@ -1252,7 +1252,7 @@ namespace SevenStrikeModules.XHud.Editor
                             crc.Alpha = A;
 
                             json = JsonUtility.ToJson(crc);
-                            GUIUtility.systemCopyBuffer = json;
+                            Editor_XHud_GUI.EditorData_Set_With_String("XED_Copy_MotionArgs", json);
                             break;
                         case "回收"://回收
                             Motion_Recycler rec = new Motion_Recycler();
@@ -1287,7 +1287,7 @@ namespace SevenStrikeModules.XHud.Editor
                             rec.Alpha = A;
 
                             json = JsonUtility.ToJson(rec);
-                            GUIUtility.systemCopyBuffer = json;
+                            Editor_XHud_GUI.EditorData_Set_With_String("XED_Copy_MotionArgs", json);
                             break;
                     }
 
@@ -1298,18 +1298,18 @@ namespace SevenStrikeModules.XHud.Editor
                     else if (res == "回收")
                         mode = "回收动效参数";
 
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素预览器消息", "复制动效", $"已复制 \" {mode} \" 到系统剪贴板 ！", "明白", 0);
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素预览器消息", "复制动效", $"已复制 \" {mode} \" 到 XHudEditorData (XED) ！", "明白", 0);
                 });
                 menu.AddItem(new GUIContent("R (粘贴动效)"), false, () =>
                 {
-                    string buffer = GUIUtility.systemCopyBuffer;
+                    string buffer = Editor_XHud_GUI.EditorData_Get_With_String("XED_Copy_MotionArgs");
                     if (buffer.Contains("anchor"))//粘贴生成参数
                     {
                         string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 元素预览器消息", "粘贴动效", "检测到动效参数类型为： \"生成动效\"，确定要使用这个参数吗？", "确定", "暂不", 0);
                         if (res == "暂不")
                             return;
 
-                        Motion_Creator crc = JsonUtility.FromJson<Motion_Creator>(GUIUtility.systemCopyBuffer);
+                        Motion_Creator crc = JsonUtility.FromJson<Motion_Creator>(buffer);
 
                         sp_CreateArgs.FindPropertyRelative("anchor").enumValueIndex = (int)crc.anchor;
 

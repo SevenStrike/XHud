@@ -458,38 +458,38 @@ namespace SevenStrikeModules.XHud.Editor
                 SerializedProperty fil = feature.FindPropertyRelative("Fill");
 
                 // 保存特性：Rect
-                if (BaseScript.controller.mod_Rect != null)
+                if (features.controller.mod_Rect != null)
                 {
-                    pos.vector3Value = BaseScript.controller.mod_Rect.anchoredPosition3D;
-                    eur.vector3Value = BaseScript.controller.mod_Rect.localEulerAngles;
-                    sca.vector3Value = BaseScript.controller.mod_Rect.localScale;
-                    size.vector2Value = BaseScript.controller.mod_Rect.sizeDelta;
+                    pos.vector3Value = features.controller.mod_Rect.anchoredPosition3D;
+                    eur.vector3Value = features.controller.mod_Rect.localEulerAngles;
+                    sca.vector3Value = features.controller.mod_Rect.localScale;
+                    size.vector2Value = features.controller.mod_Rect.sizeDelta;
                 }
                 // 保存特性：CanvasGroup
-                if (BaseScript.controller.mod_CanvasGroup != null)
+                if (features.controller.mod_CanvasGroup != null)
                 {
-                    alp.floatValue = BaseScript.controller.mod_CanvasGroup.alpha;
+                    alp.floatValue = features.controller.mod_CanvasGroup.alpha;
                 }
                 // 保存特性：Image
-                if (BaseScript.controller.mod_Image != null)
+                if (features.controller.mod_Image != null)
                 {
-                    col.colorValue = BaseScript.controller.mod_Image.color;
-                    fil.floatValue = BaseScript.controller.mod_Image.fillAmount;
+                    col.colorValue = features.controller.mod_Image.color;
+                    fil.floatValue = features.controller.mod_Image.fillAmount;
                 }
                 // 保存特性：Text
-                else if (BaseScript.controller.mod_Text != null)
+                else if (features.controller.mod_Text != null)
                 {
-                    col.colorValue = BaseScript.controller.mod_Text.color;
+                    col.colorValue = features.controller.mod_Text.color;
                 }
                 // 保存特性：TmpText
-                else if (BaseScript.controller.mod_TmpText != null)
+                else if (features.controller.mod_TmpText != null)
                 {
-                    col.colorValue = BaseScript.controller.mod_TmpText.color;
+                    col.colorValue = features.controller.mod_TmpText.color;
                 }
                 // 保存特性：_RawImage
-                else if (BaseScript.controller.mod_RawImage != null)
+                else if (features.controller.mod_RawImage != null)
                 {
-                    col.colorValue = BaseScript.controller.mod_RawImage.color;
+                    col.colorValue = features.controller.mod_RawImage.color;
                 }
 
                 so.ApplyModifiedProperties();
@@ -520,40 +520,40 @@ namespace SevenStrikeModules.XHud.Editor
                 SerializedProperty fil = feature.FindPropertyRelative("Fill");
 
                 // 读取特性：Rect
-                if (BaseScript.controller.mod_Rect != null)
+                if (features.controller.mod_Rect != null)
                 {
-                    BaseScript.controller.mod_Rect.anchoredPosition3D = pos.vector3Value;
-                    BaseScript.controller.mod_Rect.localEulerAngles = eur.vector3Value;
-                    BaseScript.controller.mod_Rect.localScale = sca.vector3Value;
-                    BaseScript.controller.mod_Rect.sizeDelta = size.vector2Value;
+                    features.controller.mod_Rect.anchoredPosition3D = pos.vector3Value;
+                    features.controller.mod_Rect.localEulerAngles = eur.vector3Value;
+                    features.controller.mod_Rect.localScale = sca.vector3Value;
+                    features.controller.mod_Rect.sizeDelta = size.vector2Value;
                 }
                 // 读取特性：CanvasGroup
-                if (BaseScript.controller.mod_CanvasGroup != null)
+                if (features.controller.mod_CanvasGroup != null)
                 {
-                    BaseScript.controller.mod_CanvasGroup.alpha = alp.floatValue;
+                    features.controller.mod_CanvasGroup.alpha = alp.floatValue;
                 }
                 // 读取特性：Image
-                if (BaseScript.controller.mod_Image != null)
+                if (features.controller.mod_Image != null)
                 {
-                    BaseScript.controller.pt_Painting.UpdateColor(col.colorValue);
-                    BaseScript.controller.mod_Image.color = col.colorValue;
-                    BaseScript.controller.mod_Image.fillAmount = fil.floatValue;
+                    features.controller.pt_Painting.UpdateColor(col.colorValue);
+                    features.controller.mod_Image.color = col.colorValue;
+                    features.controller.mod_Image.fillAmount = fil.floatValue;
                 }
                 // 读取特性：Text
-                else if (BaseScript.controller.mod_Text != null)
+                else if (features.controller.mod_Text != null)
                 {
-                    BaseScript.controller.mod_Text.color = col.colorValue;
+                    features.controller.mod_Text.color = col.colorValue;
                 }
                 // 读取特性：TmpText
-                else if (BaseScript.controller.mod_TmpText != null)
+                else if (features.controller.mod_TmpText != null)
                 {
-                    BaseScript.controller.mod_TmpText.color = col.colorValue;
+                    features.controller.mod_TmpText.color = col.colorValue;
                 }
                 // 读取特性：RawImage
-                else if (BaseScript.controller.mod_RawImage != null)
+                else if (features.controller.mod_RawImage != null)
                 {
-                    BaseScript.controller.pt_Painting.UpdateColor(col.colorValue);
-                    BaseScript.controller.mod_RawImage.color = col.colorValue;
+                    features.controller.pt_Painting.UpdateColor(col.colorValue);
+                    features.controller.mod_RawImage.color = col.colorValue;
                 }
 
                 so.ApplyModifiedProperties();

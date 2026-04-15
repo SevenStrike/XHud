@@ -345,7 +345,7 @@ namespace SevenStrikeModules.XHud.Editor
                         Mode = "生成动效参数代码块";
                         Motion_Creator hc = MotionParam_Convert_Crc(sp_crc);
                         #region 代码块
-                        str_codeblock = $"Motion_Creator cre = new Motion_Creator();\ncre.anchor = HudAnchor. {hc.anchor.ToString()} ;\n cre.Movement = new MotionNode_Movement();\ncre.Movement.Movement = HudMotion_Movement. {hc.Movement.Movement.ToString()} ;\ncre.Movement.Distance = {hc.Movement.Distance}f;\ncre.Movement.Duration = {hc.Movement.Duration}f;\ncre.Movement.Delay = {hc.Movement.Delay}f;\ncre.Movement.CurveName =\"\";\ncre.Movement.Curve = util_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(cre.Movement.CurveName);\ncre.Movement.Ease = Ease. {hc.Movement.Ease.ToString()} ;\n cre.Rotation = new MotionNode_Rotation();\ncre.Rotation.Rotation = HudMotion_Rotation. {hc.Rotation.Rotation.ToString()} ;\ncre.Rotation.Degree = {hc.Rotation.Degree}f;\ncre.Rotation.Duration = {hc.Rotation.Duration}f;\ncre.Rotation.Delay = {hc.Rotation.Delay}f;\ncre.Rotation.CurveName = \"\";\ncre.Rotation.Curve = util_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(cre.Rotation.CurveName);\ncre.Rotation.Ease = Ease. {hc.Rotation.Ease.ToString()} ;\n cre.Alpha = new MotionNode_Alpha();\ncre.Alpha.Duration = {hc.Alpha.Duration}f;\ncre.Alpha.Delay = {hc.Alpha.Delay}f;\ncre.Alpha.CurveName =\"\";\ncre.Alpha.Curve = util_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(cre.Alpha.CurveName);\ncre.Alpha.Ease = Ease. {hc.Alpha.Ease} ;";
+                        str_codeblock = $"Motion_Creator cre = new Motion_Creator();\ncre.anchor = XHudAnchor. {hc.anchor.ToString()} ;\n cre.Movement = new MotionNode_Movement();\ncre.Movement.Movement = HudMotion_Movement. {hc.Movement.Movement.ToString()} ;\ncre.Movement.Distance = {hc.Movement.Distance}f;\ncre.Movement.Duration = {hc.Movement.Duration}f;\ncre.Movement.Delay = {hc.Movement.Delay}f;\ncre.Movement.CurveName =\"\";\ncre.Movement.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(cre.Movement.CurveName);\ncre.Movement.Ease = EaseMode. {hc.Movement.Ease.ToString()} ;\n cre.Rotation = new MotionNode_Rotation();\ncre.Rotation.Rotation = HudMotion_Rotation. {hc.Rotation.Rotation.ToString()} ;\ncre.Rotation.Degree = {hc.Rotation.Degree}f;\ncre.Rotation.Duration = {hc.Rotation.Duration}f;\ncre.Rotation.Delay = {hc.Rotation.Delay}f;\ncre.Rotation.CurveName = \"\";\ncre.Rotation.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(cre.Rotation.CurveName);\ncre.Rotation.Ease = EaseMode. {hc.Rotation.Ease.ToString()} ;\n cre.Alpha = new MotionNode_Alpha();\ncre.Alpha.Duration = {hc.Alpha.Duration}f;\ncre.Alpha.Delay = {hc.Alpha.Delay}f;\ncre.Alpha.CurveName =\"\";\ncre.Alpha.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(cre.Alpha.CurveName);\ncre.Alpha.Ease = EaseMode. {hc.Alpha.Ease} ;";
                         #endregion
                     }
                     if (sp_mode.intValue == 1)
@@ -353,7 +353,7 @@ namespace SevenStrikeModules.XHud.Editor
                         Mode = "回收动效参数代码块";
                         Motion_Recycler hr = MotionParam_Convert_Rec(sp_rec);
                         #region 代码块
-                        str_codeblock = $"Motion_Recycler rec = new Motion_Recycler();\n rec.Movement = new MotionNode_Movement();\n rec.Movement.Movement = HudMotion_Movement. {hr.Movement.Movement.ToString()} ;\n rec.Movement.Distance = {hr.Movement.Distance}f;\n rec.Movement.Duration = {hr.Movement.Duration}f;\n rec.Movement.Delay = {hr.Movement.Delay}f;\n rec.Movement.CurveName = \"\";\n rec.Movement.Curve = util_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Movement.CurveName);\n rec.Movement.Ease = Ease. {hr.Movement.Ease.ToString()} ;\n rec.Rotation = new MotionNode_Rotation();\n rec.Rotation.Rotation = HudMotion_Rotation. {hr.Rotation.Rotation.ToString()} ;\n rec.Rotation.Degree = {hr.Rotation.Degree}f;\n rec.Rotation.Duration = {hr.Rotation.Duration}f;\n rec.Rotation.Delay = {hr.Rotation.Delay}f;\n rec.Rotation.CurveName = \"\";\n rec.Rotation.Curve = util_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Rotation.CurveName);\n rec.Rotation.Ease = Ease. {hr.Rotation.Ease.ToString()} ;\n rec.Alpha = new MotionNode_Alpha();\n rec.Alpha.Duration = {hr.Alpha.Duration}f;\n rec.Alpha.Delay = {hr.Alpha.Delay}f;\n rec.Alpha.CurveName = \"\";\n rec.Alpha.Curve = util_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Alpha.CurveName);\n rec.Alpha.Ease = Ease. {hr.Alpha.Ease} ;";
+                        str_codeblock = $"Motion_Recycler rec = new Motion_Recycler();\n rec.Movement = new MotionNode_Movement();\n rec.Movement.Movement = HudMotion_Movement. {hr.Movement.Movement.ToString()} ;\n rec.Movement.Distance = {hr.Movement.Distance}f;\n rec.Movement.Duration = {hr.Movement.Duration}f;\n rec.Movement.Delay = {hr.Movement.Delay}f;\n rec.Movement.CurveName = \"\";\n rec.Movement.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Movement.CurveName);\n rec.Movement.Ease = EaseMode. {hr.Movement.Ease.ToString()} ;\n rec.Rotation = new MotionNode_Rotation();\n rec.Rotation.Rotation = HudMotion_Rotation. {hr.Rotation.Rotation.ToString()} ;\n rec.Rotation.Degree = {hr.Rotation.Degree}f;\n rec.Rotation.Duration = {hr.Rotation.Duration}f;\n rec.Rotation.Delay = {hr.Rotation.Delay}f;\n rec.Rotation.CurveName = \"\";\n rec.Rotation.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Rotation.CurveName);\n rec.Rotation.Ease = EaseMode. {hr.Rotation.Ease.ToString()} ;\n rec.Alpha = new MotionNode_Alpha();\n rec.Alpha.Duration = {hr.Alpha.Duration}f;\n rec.Alpha.Delay = {hr.Alpha.Delay}f;\n rec.Alpha.CurveName = \"\";\n rec.Alpha.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Alpha.CurveName);\n rec.Alpha.Ease = EaseMode. {hr.Alpha.Ease} ;";
                         #endregion                       
                     }
                     GUIUtility.systemCopyBuffer = str_codeblock;
@@ -366,7 +366,7 @@ namespace SevenStrikeModules.XHud.Editor
                     OpenParameterSetter(motion, (HudElementMotionType)motion.Mode, sp_name.stringValue, index);
                     return;
                 });
-                menu.AddItem(new GUIContent("S (拷贝动效)"), false, () =>
+                menu.AddItem(new GUIContent("S (复制动效)"), false, () =>
                 {
                     string str_jsons = "";
                     string Mode = "";
@@ -383,23 +383,23 @@ namespace SevenStrikeModules.XHud.Editor
                         str_jsons = JsonUtility.ToJson(MotionParam_Convert_Rec(sp_rec));
                     }
 
-                    GUIUtility.systemCopyBuffer = str_jsons;
-                    Editor_XHud_GUI.Open(XHud_DialogType.通知, "XHud - 动效库消息", "拷贝动效代码块", $"已拷贝 {Mode} - {sp_name.stringValue} 到系统剪贴板 ！", "明白", 0, true);
+                    Editor_XHud_GUI.EditorData_Set_With_String("XED_Copy_MotionArgs", str_jsons);
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动效库消息", "复制动效", $"已拷贝 {Mode} - {sp_name.stringValue} 到 XHudEditorData (XED) ！", "明白", 0, true);
                 });
                 menu.AddItem(new GUIContent("R (粘贴动效)"), false, () =>
                 {
                     int orimode = sp_mode.intValue;
-                    string buffer = GUIUtility.systemCopyBuffer;
+                    string buffer = Editor_XHud_GUI.EditorData_Get_With_String("XED_Copy_MotionArgs");
                     if (buffer.Contains("anchor"))//粘贴生成参数
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动效库消息", "粘贴生成动效", $"是否确定要将生成动效粘贴到该动效项？", "粘贴", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 动效库消息", "粘贴生成动效", $"是否确定要将生成动效粘贴到该动效项？", "粘贴", "暂不", 1);
                         if (res == "暂不")
                         {
                             return;
                         }
 
                         sp_mode.intValue = 0;
-                        Motion_Creator crc = JsonUtility.FromJson<Motion_Creator>(GUIUtility.systemCopyBuffer);
+                        Motion_Creator crc = JsonUtility.FromJson<Motion_Creator>(buffer);
 
                         sp_crc.FindPropertyRelative("anchor").enumValueIndex = (int)crc.anchor;
 
@@ -434,11 +434,11 @@ namespace SevenStrikeModules.XHud.Editor
                         else
                             tip = $"已将原始为 \"回收\" 参数的 {sp_name.stringValue} 动效类型更新为粘贴的 \"生成\" 动效参数!";
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.通知, "XHud - 动效库消息", "粘贴动效", tip, "明白", 0, true);
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动效库消息", "粘贴动效", tip, "明白", 0, true);
                     }
                     else//粘贴回收参数
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 动效库消息", "粘贴回收动效", $"是否确定要将回收动效粘贴到该动效项？", "粘贴", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 动效库消息", "粘贴回收动效", $"是否确定要将回收动效粘贴到该动效项？", "粘贴", "暂不", 1);
                         if (res == "暂不")
                         {
                             return;
@@ -477,7 +477,7 @@ namespace SevenStrikeModules.XHud.Editor
                         else
                             tip = $"已将原始为 \"生成\" 参数的 {sp_name.stringValue} 动效类型更新为粘贴的 \"回收\" 动效参数!";
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.通知, "XHud - 动效库消息", "粘贴回收动效", tip, "明白", 0, true);
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 动效库消息", "粘贴回收动效", tip, "明白", 0, true);
                     }
                 });
                 menu.AddSeparator("");
