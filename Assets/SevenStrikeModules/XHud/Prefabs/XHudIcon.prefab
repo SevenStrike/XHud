@@ -4637,7 +4637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427992cb4fdf0d4488fb77d4e7ae18af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Alpha: 1
+  Alpha: 0
   CanvasGroup: {fileID: 5784393155914110519}
   Indicator: 
   OriginalName: 

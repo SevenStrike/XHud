@@ -1495,13 +1495,6 @@ namespace SevenStrikeModules.XHud.Editor
                         #endregion
                     }
 
-                    if (HudCanvasAnchorIndex.intValue == 2)
-                    {
-                        #region 画布距离                                                     
-                        Editor_XHud_GUI.Gui_Layout_Property_Field("画布距离", CanvasDistance);
-                        #endregion
-                    }
-
                     Editor_XHud_GUI.Gui_Layout_Space(5);
 
                     #region 场景相机     
