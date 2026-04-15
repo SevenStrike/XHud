@@ -2305,7 +2305,7 @@ namespace SevenStrikeModules.XHud
                                 }
                             }
                             if (arg.Act_On_Float_Changed != null)
-                                arg.Act_On_Float_Changed(controller.mod_Image.color.a);
+                                arg.Act_On_Float_Changed(controller.mod_CanvasGroup.alpha);
                         }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
@@ -2324,7 +2324,7 @@ namespace SevenStrikeModules.XHud
                                 }
                             }
                             if (arg.Act_On_Float_Changed != null)
-                                arg.Act_On_Float_Changed(controller.mod_Image.color.a);
+                                arg.Act_On_Float_Changed(controller.mod_CanvasGroup.alpha);
                         }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
@@ -2347,7 +2347,7 @@ namespace SevenStrikeModules.XHud
                                 }
                             }
                             if (arg.Act_On_Float_Changed != null)
-                                arg.Act_On_Float_Changed(controller.mod_Image.color.a);
+                                arg.Act_On_Float_Changed(controller.mod_CanvasGroup.alpha);
                         }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
@@ -2366,7 +2366,7 @@ namespace SevenStrikeModules.XHud
                                 }
                             }
                             if (arg.Act_On_Float_Changed != null)
-                                arg.Act_On_Float_Changed(controller.mod_Image.color.a);
+                                arg.Act_On_Float_Changed(controller.mod_CanvasGroup.alpha);
                         }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
@@ -2389,7 +2389,7 @@ namespace SevenStrikeModules.XHud
                                 }
                             }
                             if (arg.Act_On_Float_Changed != null)
-                                arg.Act_On_Float_Changed(controller.mod_Image.color.a);
+                                arg.Act_On_Float_Changed(controller.mod_CanvasGroup.alpha);
                         }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
@@ -2408,7 +2408,7 @@ namespace SevenStrikeModules.XHud
                                 }
                             }
                             if (arg.Act_On_Float_Changed != null)
-                                arg.Act_On_Float_Changed(controller.mod_Image.color.a);
+                                arg.Act_On_Float_Changed(controller.mod_CanvasGroup.alpha);
                         }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
@@ -2431,7 +2431,7 @@ namespace SevenStrikeModules.XHud
                                 }
                             }
                             if (arg.Act_On_Float_Changed != null)
-                                arg.Act_On_Float_Changed(controller.mod_Image.color.a);
+                                arg.Act_On_Float_Changed(controller.mod_CanvasGroup.alpha);
                         }).OnComplete((d) =>
                         {
                             arg.Progress = 0;
@@ -2450,7 +2450,7 @@ namespace SevenStrikeModules.XHud
                                 }
                             }
                             if (arg.Act_On_Float_Changed != null)
-                                arg.Act_On_Float_Changed(controller.mod_Image.color.a);
+                                arg.Act_On_Float_Changed(controller.mod_CanvasGroup.alpha);
                         }).OnComplete((d) =>
                         {
                             arg.Progress = 0;

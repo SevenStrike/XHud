@@ -528,7 +528,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="act_InComplete"></param>
         public void ElementTweens_Creator(Motion_Creator args, UnityAction act_InComplete, bool isPreview = false, bool PosSet = false, Vector3 pos = default)
         {
-            float duration = isPreview ? XHud_Dashboard.HudManagerGet().DurationMultiply : XHud_Manager.Instance.DurationMultiply * PrimitivesTweenGlobalDuration;
+            float duration = isPreview ? XHud_Dashboard.HudManagerGet().DurationMultiply * PrimitivesTweenGlobalDuration : XHud_Manager.Instance.DurationMultiply * PrimitivesTweenGlobalDuration;
             Vector3 ori_pos = Vector3.zero;
 
             if (isPreview)

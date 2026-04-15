@@ -25,6 +25,7 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XTween;
     using SevenStrikeModules.XTween.Editor;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Linq;
     using UnityEditor;
     using UnityEngine;
@@ -106,7 +107,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         for (int v = 0; v < SelectedObjects[i].PrimitiveControllerNodes.Count; v++)
                         {
-                            XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(SelectedObjects[i].PrimitiveControllerNodes[v].Controller.pt_Tween, "元素进入时");
+                            XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(SelectedObjects[i].PrimitiveControllerNodes[v].Controller.pt_Tween, "元素进入时", SelectedObjects[i].PrimitivesTweenGlobalDuration, SelectedObjects[i].PrimitiveControllerNodes[v].DelayTime);
 
                             for (int g = 0; g < primitive_tweens.Length; g++)
                             {
@@ -149,7 +150,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
                     {
-                        XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween, "元素进入时");
+                        XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween, "元素进入时", BaseScript.PrimitivesTweenGlobalDuration, BaseScript.PrimitiveControllerNodes[i].DelayTime);
 
                         for (int s = 0; s < primitive_tweens.Length; s++)
                         {
@@ -268,7 +269,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         /// <param name="tweener"></param>
         /// <returns></returns>
-        private XTween_Interface[] Preview_PrimitiveTweens_Collected(XHud_Module_Primitive_Tween tweener, string tim)
+        private XTween_Interface[] Preview_PrimitiveTweens_Collected(XHud_Module_Primitive_Tween tweener, string tim, float dur, float delay)
         {
             List<XTween_Interface> tweens = new List<XTween_Interface>();
             for (int i = 0; i < tweener.PrimitiveTweenNodes.Count; i++)
@@ -277,7 +278,9 @@ namespace SevenStrikeModules.XHud.Editor
                     continue;
                 if (tweener.PrimitiveTweenNodes[i].Timings != tim)
                     continue;
-                XTween_Interface tween = tweener.Tween_Create(tweener.PrimitiveTweenNodes[i], tweener.GlobalDuration * HudManager.DurationMultiply);
+                XTween_Interface tween = tweener.Tween_Create(tweener.PrimitiveTweenNodes[i], tweener.GlobalDuration * HudManager.DurationMultiply * dur);
+
+                tween.SetDelay(tween.Delay + delay);
 
                 if (tween != null)
                     tweens.Add(tween);
@@ -286,6 +289,21 @@ namespace SevenStrikeModules.XHud.Editor
             return tweens.ToArray();
         }
 
+        private void Preview_PrimitiveTween(PrimitiveControllerNode node)
+        {
+            XTween_Preview_Kill();
+
+            // 预览列表
+            List<XTween_Interface> preview_twns = new List<XTween_Interface>();
+            XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(node.Controller.pt_Tween, "元素进入时", BaseScript.PrimitivesTweenGlobalDuration, node.DelayTime);
+
+            for (int s = 0; s < primitive_tweens.Length; s++)
+            {
+                preview_twns.Add(primitive_tweens[s]);
+            }
+
+            XTween_Preview_Start(preview_twns.ToArray());
+        }
         //------------------------------------------------------------------------------------
         /// <summary>
         /// 预览开关状态复位

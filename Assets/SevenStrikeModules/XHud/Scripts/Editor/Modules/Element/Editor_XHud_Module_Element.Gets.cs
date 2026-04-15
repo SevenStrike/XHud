@@ -184,7 +184,8 @@ namespace SevenStrikeModules.XHud.Editor
 
                             #region 类型图标         
                             GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_anim);
+                            if (rect.width >= 17)
+                                Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_anim);
                             GUI.color = Color.white;
                             #endregion
 
@@ -199,7 +200,8 @@ namespace SevenStrikeModules.XHud.Editor
                             #endregion
 
                             #region 延迟
-                            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 5, rect.y + 4, 30, 19), "D", sp_delay, 10, 40, LineHeight, 15);
+                            if (rect.width >= 136)
+                                Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 10, rect.y + 4, 40, 19), "D", sp_delay, 10, 50, LineHeight, 15);
                             #endregion
 
                             #region 速率                         
@@ -209,9 +211,11 @@ namespace SevenStrikeModules.XHud.Editor
                             SerializedProperty sp_glodur = so_tween.FindProperty("GlobalDuration");
                             SerializedProperty sp_maxdur = so_tween.FindProperty("MaxTimerWithGlobalDuration");
 
-                            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 50, rect.y + 4, 30, 19), "G", sp_glodur, 10, 40, LineHeight, 15);
+                            if (rect.width >= 208)
+                                Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 70, rect.y + 4, 50, 19), "G", sp_glodur, 10, 50, LineHeight, 15);
 
-                            Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect.width - 80, rect.y + 4, 30, 19), $"{sp_maxdur.floatValue.ToString()} s", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, Vector2.zero, 11);
+                            if (rect.width >= 246)
+                                Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect.width - 100, rect.y + 4, 40, 19), $"{sp_maxdur.floatValue.ToString()} s", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, Vector2.zero, 11);
 
                             so_tween.ApplyModifiedProperties();
                             #endregion
@@ -228,6 +232,8 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
                         EditorGUIUtility.PingObject(sp_node_con.objectReferenceValue);
+
+                        Preview_PrimitiveTween(BaseScript.PrimitiveControllerNodes[list.index]);
                     }
                 },
                 elementHeightCallback = index =>
