@@ -590,6 +590,15 @@ namespace SevenStrikeModules.XHud.Editor
                 Style.normal.background = null;
             GUI.Box(rect, "", Style);
         }
+        public static void Gui_Box_Style(Rect rect, string tex, Color color, RectOffset border)
+        {
+            GUIStyle Style = new GUIStyle(Style_Group);
+            Style.normal.background = GetIcon(tex);
+            Style.border = border;
+            GUI.backgroundColor = color;
+            GUI.Box(rect, "", Style);
+            GUI.backgroundColor = Color.white;
+        }
         public static void Gui_Box(Rect rect)
         {
             GUIStyle Style = new GUIStyle(Style_Box);

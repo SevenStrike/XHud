@@ -20,13 +20,10 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using Codice.Client.Common;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XTween;
     using SevenStrikeModules.XTween.Editor;
     using System.Collections.Generic;
-    using System.Drawing;
-    using System.Linq;
     using UnityEditor;
     using UnityEngine;
 
@@ -40,12 +37,29 @@ namespace SevenStrikeModules.XHud.Editor
         {
             // 收集元素三项基础动画给预览器
             List<XTween_Interface> twns = new List<XTween_Interface>();
-            if (BaseScript.Tween_Alpha != null)
-                twns.Add(BaseScript.Tween_Alpha);
-            if (BaseScript.Tween_Move != null)
-                twns.Add(BaseScript.Tween_Move);
-            if (BaseScript.Tween_Rotation != null)
-                twns.Add(BaseScript.Tween_Rotation);
+
+            if (Targets_Selected())
+            {
+                for (int i = 0; i < SelectedObjects.Length; i++)
+                {
+                    XHud_Module_Element ele_twn = SelectedObjects[i];
+                    if (ele_twn.Tween_Alpha != null)
+                        twns.Add(ele_twn.Tween_Alpha);
+                    if (ele_twn.Tween_Move != null)
+                        twns.Add(ele_twn.Tween_Move);
+                    if (ele_twn.Tween_Rotation != null)
+                        twns.Add(ele_twn.Tween_Rotation);
+                }
+            }
+            else
+            {
+                if (BaseScript.Tween_Alpha != null)
+                    twns.Add(BaseScript.Tween_Alpha);
+                if (BaseScript.Tween_Move != null)
+                    twns.Add(BaseScript.Tween_Move);
+                if (BaseScript.Tween_Rotation != null)
+                    twns.Add(BaseScript.Tween_Rotation);
+            }
             return twns.ToArray();
         }
 
@@ -81,33 +95,35 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (Targets_Selected())
             {
+                // 预览列表
+                List<XTween_Interface> preview_twns = new List<XTween_Interface>();
+
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
-                    SelectedObjects[i].TweensPreivew_In_State = true;
-                    SelectedObjects[i].TweensPreivew_Out_State = false;
+                    XHud_Module_Element ele = SelectedObjects[i];
+
+                    ele.TweensPreivew_In_State = true;
+                    ele.TweensPreivew_Out_State = false;
                     //Debug.Log($"TweensPreivew_In：{SelectedObjects[i].TweensPreivew_In_State}");
 
                     // 创建元素自身基础三项动画
-                    SelectedObjects[i].ElementTweens_Creator(SelectedObjects[i].CreateArgs, null, true, SelectedObjects[i].Crc_Preview_SetPosition, SelectedObjects[i].Crc_Preview_Position);
-
-                    // 预览列表
-                    List<XTween_Interface> preview_twns = new List<XTween_Interface>();
+                    ele.ElementTweens_Creator(ele.CreateArgs, null, true, ele.Crc_Preview_SetPosition, ele.Crc_Preview_Position);
 
                     #region 元素基础三项动画 - 加入预览列表
-                    XTween_Interface[] ele_tweens = GetElementTweens();
-
-                    for (int s = 0; s < ele_tweens.Length; s++)
-                    {
-                        preview_twns.Add(ele_tweens[s]);
-                    }
+                    if (ele.Tween_Alpha != null)
+                        preview_twns.Add(ele.Tween_Alpha);
+                    if (ele.Tween_Move != null)
+                        preview_twns.Add(ele.Tween_Move);
+                    if (ele.Tween_Rotation != null)
+                        preview_twns.Add(ele.Tween_Rotation);
                     #endregion
 
                     #region 元素子级中的图元动画 - 加入预览列表
-                    if (SelectedObjects[i].PreviewIncludePrimitivesTween)
+                    if (ele.PreviewIncludePrimitivesTween)
                     {
-                        for (int v = 0; v < SelectedObjects[i].PrimitiveControllerNodes.Count; v++)
+                        for (int v = 0; v < ele.PrimitiveControllerNodes.Count; v++)
                         {
-                            XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(SelectedObjects[i].PrimitiveControllerNodes[v].Controller.pt_Tween, "元素进入时", SelectedObjects[i].PrimitivesTweenGlobalDuration, SelectedObjects[i].PrimitiveControllerNodes[v].DelayTime);
+                            XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(ele.PrimitiveControllerNodes[v].Controller.pt_Tween, "元素进入时", ele.PrimitivesTweenGlobalDuration, SelectedObjects[i].PrimitiveControllerNodes[v].DelayTime);
 
                             for (int g = 0; g < primitive_tweens.Length; g++)
                             {
@@ -116,10 +132,10 @@ namespace SevenStrikeModules.XHud.Editor
                         }
                     }
                     #endregion
-
-                    XTween_Preview_Start(ele_tweens.ToArray());
-                    Preview_XHudSounds("元素进入时", SelectedObjects[i].SounderNodes);
+                    Preview_XHudSounds("元素进入时", ele.SounderNodes);
                 }
+
+                XTween_Preview_Start(preview_twns.ToArray());
             }
             else
             {
@@ -137,12 +153,12 @@ namespace SevenStrikeModules.XHud.Editor
                 List<XTween_Interface> preview_twns = new List<XTween_Interface>();
 
                 #region 元素基础三项动画 - 加入预览列表
-                XTween_Interface[] ele_tweens = GetElementTweens();
-
-                for (int i = 0; i < ele_tweens.Length; i++)
-                {
-                    preview_twns.Add(ele_tweens[i]);
-                }
+                if (BaseScript.Tween_Alpha != null)
+                    preview_twns.Add(BaseScript.Tween_Alpha);
+                if (BaseScript.Tween_Move != null)
+                    preview_twns.Add(BaseScript.Tween_Move);
+                if (BaseScript.Tween_Rotation != null)
+                    preview_twns.Add(BaseScript.Tween_Rotation);
                 #endregion
 
                 #region 元素子级中的图元动画 - 加入预览列表
@@ -208,17 +224,45 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (Targets_Selected())
             {
+                // 预览列表
+                List<XTween_Interface> preview_twns = new List<XTween_Interface>();
+
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
-                    SelectedObjects[i].TweensPreivew_In_State = false;
-                    SelectedObjects[i].TweensPreivew_Out_State = true;
+                    XHud_Module_Element ele = SelectedObjects[i];
+
+                    ele.TweensPreivew_In_State = false;
+                    ele.TweensPreivew_Out_State = true;
                     //Debug.Log($"TweensPreivew_Out：{SelectedObjects[i].TweensPreivew_Out_State}");
+                    ele.ElementTweens_Recycler(ele.RecycleArgs, null, true, ele.Rec_Preview_SetPosition, ele.Rec_Preview_Position);
 
-                    SelectedObjects[i].ElementTweens_Recycler(SelectedObjects[i].RecycleArgs, null, true, SelectedObjects[i].Rec_Preview_SetPosition, SelectedObjects[i].Rec_Preview_Position);
+                    #region 元素基础三项动画 - 加入预览列表
+                    if (ele.Tween_Alpha != null)
+                        preview_twns.Add(ele.Tween_Alpha);
+                    if (ele.Tween_Move != null)
+                        preview_twns.Add(ele.Tween_Move);
+                    if (ele.Tween_Rotation != null)
+                        preview_twns.Add(ele.Tween_Rotation);
+                    #endregion
 
-                    XTween_Preview_Start(GetTargetsElementTweens());
-                    Preview_XHudSounds("元素退出时", SelectedObjects[i].SounderNodes);
+                    #region 元素子级中的图元动画 - 加入预览列表
+                    if (ele.PreviewIncludePrimitivesTween)
+                    {
+                        for (int v = 0; v < ele.PrimitiveControllerNodes.Count; v++)
+                        {
+                            XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(ele.PrimitiveControllerNodes[v].Controller.pt_Tween, "元素退出时", ele.PrimitivesTweenGlobalDuration, ele.PrimitiveControllerNodes[v].DelayTime);
+
+                            for (int g = 0; g < primitive_tweens.Length; g++)
+                            {
+                                preview_twns.Add(primitive_tweens[g]);
+                            }
+                        }
+                    }
+                    #endregion
+                    Preview_XHudSounds("元素退出时", ele.SounderNodes);
                 }
+
+                XTween_Preview_Start(preview_twns.ToArray());
             }
             else
             {
@@ -230,7 +274,35 @@ namespace SevenStrikeModules.XHud.Editor
                 TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
 
                 BaseScript.ElementTweens_Recycler(BaseScript.RecycleArgs, null, true, Rec_Preview_SetPosition.boolValue, Rec_Preview_Position.vector3Value);
-                XTween_Preview_Start(GetElementTweens());
+
+                // 预览列表
+                List<XTween_Interface> preview_twns = new List<XTween_Interface>();
+
+                #region 元素基础三项动画 - 加入预览列表
+                if (BaseScript.Tween_Alpha != null)
+                    preview_twns.Add(BaseScript.Tween_Alpha);
+                if (BaseScript.Tween_Move != null)
+                    preview_twns.Add(BaseScript.Tween_Move);
+                if (BaseScript.Tween_Rotation != null)
+                    preview_twns.Add(BaseScript.Tween_Rotation);
+                #endregion
+
+                #region 元素子级中的图元动画 - 加入预览列表
+                if (PreviewIncludePrimitivesTween.boolValue)
+                {
+                    for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+                    {
+                        XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween, "元素退出时", BaseScript.PrimitivesTweenGlobalDuration, BaseScript.PrimitiveControllerNodes[i].DelayTime);
+
+                        for (int s = 0; s < primitive_tweens.Length; s++)
+                        {
+                            preview_twns.Add(primitive_tweens[s]);
+                        }
+                    }
+                }
+                #endregion
+
+                XTween_Preview_Start(preview_twns.ToArray());
                 Preview_XHudSounds("元素退出时", SounderNodes);
             }
         }
@@ -442,11 +514,11 @@ namespace SevenStrikeModules.XHud.Editor
                     XHud_Module_Element ele = SelectedObjects[i];
 
                     // 根据是否包含图元动画预览类型对图元动画进行特性复位
-                    if (PreviewIncludePrimitivesTween.boolValue)
+                    if (ele.PreviewIncludePrimitivesTween)
                     {
-                        for (int d = 0; d < SelectedObjects[i].PrimitiveControllerNodes.Count; d++)
+                        for (int d = 0; d < ele.PrimitiveControllerNodes.Count; d++)
                         {
-                            PrimitiveControllerNode con = SelectedObjects[i].PrimitiveControllerNodes[d];
+                            PrimitiveControllerNode con = ele.PrimitiveControllerNodes[d];
                             con.Controller.pt_Feature.PrimitiveFeature_Load();
                         }
                     }

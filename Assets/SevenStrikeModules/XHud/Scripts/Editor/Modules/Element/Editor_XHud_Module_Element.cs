@@ -2448,8 +2448,20 @@ namespace SevenStrikeModules.XHud.Editor
                             Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预制体应用", "程序正在运行，无法在运行期间执行此功能！", "明白");
                             return;
                         }
-                        string path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(BaseScript.gameObject);
-                        PrefabUtility.SaveAsPrefabAssetAndConnect(BaseScript.gameObject, path, InteractionMode.AutomatedAction);
+                        if (Targets_Selected())
+                        {
+                            for (int i = 0; i < SelectedObjects.Length; i++)
+                            {
+                                XHud_Module_Element ele = SelectedObjects[i];
+                                string path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(ele.gameObject);
+                                PrefabUtility.SaveAsPrefabAssetAndConnect(ele.gameObject, path, InteractionMode.AutomatedAction);
+                            }
+                        }
+                        else
+                        {
+                            string path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(BaseScript.gameObject);
+                            PrefabUtility.SaveAsPrefabAssetAndConnect(BaseScript.gameObject, path, InteractionMode.AutomatedAction);
+                        }
                     });
                     menu.AddItem(new GUIContent("W (恢复)"), false, () =>
                     {
@@ -2458,8 +2470,20 @@ namespace SevenStrikeModules.XHud.Editor
                             Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预制体应用", "程序正在运行，无法在运行期间执行此功能！", "明白");
                             return;
                         }
-                        string path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(BaseScript.gameObject);
-                        PrefabUtility.RevertPrefabInstance(BaseScript.gameObject, InteractionMode.AutomatedAction);
+                        if (Targets_Selected())
+                        {
+                            for (int i = 0; i < SelectedObjects.Length; i++)
+                            {
+                                XHud_Module_Element ele = SelectedObjects[i];
+                                string path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(ele.gameObject);
+                                PrefabUtility.RevertPrefabInstance(ele.gameObject, InteractionMode.AutomatedAction);
+                            }
+                        }
+                        else
+                        {
+                            string path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(BaseScript.gameObject);
+                            PrefabUtility.RevertPrefabInstance(BaseScript.gameObject, InteractionMode.AutomatedAction);
+                        }
                     });
                     menu.AddItem(new GUIContent("Q (定位)"), false, () =>
                     {
@@ -2468,11 +2492,22 @@ namespace SevenStrikeModules.XHud.Editor
                             Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预制体定位", "程序正在运行，无法在运行期间执行此功能！", "明白");
                             return;
                         }
-
-                        string path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(BaseScript.gameObject);
-                        //Selection.activeObject = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
-                        Object obj = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
-                        EditorGUIUtility.PingObject(obj);
+                        if (Targets_Selected())
+                        {
+                            for (int i = 0; i < SelectedObjects.Length; i++)
+                            {
+                                XHud_Module_Element ele = SelectedObjects[i];
+                                string path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(ele.gameObject);
+                                Object obj = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
+                                EditorGUIUtility.PingObject(obj);
+                            }
+                        }
+                        else
+                        {
+                            string path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(BaseScript.gameObject);
+                            Object obj = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject));
+                            EditorGUIUtility.PingObject(obj);
+                        }
                     });
                 }
                 menu.ShowAsContext(); // 在鼠标位置显示右键菜单
@@ -2497,6 +2532,59 @@ namespace SevenStrikeModules.XHud.Editor
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            #endregion
+
+            #region 预览动画时的边框发光
+            float height = 331;
+            Color color = Color.clear;
+            //Color color = Color.red * 0.5f;
+
+            if (sw_preview_method)
+            {
+                height += 26;
+            }
+
+            if (sw_preview_pos)
+            {
+                height += 58;
+
+                if (Crc_Preview_SetPosition.boolValue)
+                {
+                    height += 21;
+                }
+                if (Rec_Preview_SetPosition.boolValue)
+                {
+                    height += 20;
+                }
+            }
+
+            if (sw_option)
+            {
+                height += 275;
+
+                if (create_fold_move.boolValue)
+                    height += 122;
+                if (create_fold_rotate.boolValue)
+                    height += 127;
+                if (create_fold_alpha.boolValue)
+                    height += 75;
+
+                if (recycle_fold_move.boolValue)
+                    height += 121;
+                if (recycle_fold_rotate.boolValue)
+                    height += 121;
+                if (recycle_fold_alpha.boolValue)
+                    height += 74;
+            }
+
+            if (TweensPreivew_In_State.boolValue || TweensPreivew_Out_State.boolValue)
+            {
+                color = XHud_Dashboard.Theme_Primary;
+            }
+
+            Rect strechrect = new Rect(20, 52, Screen.width - 40, height);
+
+            Editor_XHud_GUI.Gui_Box_Style(strechrect, "Icons_XHud_Element/tweenstate", color, new RectOffset(15, 15, 15, 15));
             #endregion
 
             PrimitiveTweens_MaxDuration_Calculate(BaseScript.PrimitiveControllerNodes, PrimitivesTweenGlobalDuration.floatValue);
