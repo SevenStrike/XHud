@@ -25,7 +25,6 @@ namespace SevenStrikeModules.XHud
     using SevenStrikeModules.XTween;
     using UnityEngine;
     using UnityEngine.Events;
-    using static UnityEditor.PlayerSettings;
 
     public partial class XHud_Module_Element : MonoBehaviour
     {
@@ -333,6 +332,8 @@ namespace SevenStrikeModules.XHud
 
             // 剥离的独立动画单元：生成
             ElementTweens_Creator(args, act_InComplete);
+            // 剥离的独立动画单元：播放
+            ElementTweensPlay();
         }
         /// <summary>
         /// 元素动画 - 进入 - 前
@@ -411,6 +412,8 @@ namespace SevenStrikeModules.XHud
 
             // 剥离的独立动画单元：回收
             ElementTweens_Recycler(args, act_OutComplete);
+            // 剥离的独立动画单元：播放
+            ElementTweensPlay();
         }
         /// <summary>
         /// 元素动画 - 退出 - 前
@@ -582,10 +585,10 @@ namespace SevenStrikeModules.XHud
                                 element_AlphaSet(1);
                                 element_AlphaSyncUpdate();
                             }
-                        }).Play();
+                        });
             }
             ///---动画 - 透明度_Alpha（Curve）
-            else
+            if (args.Alpha.Ease == EaseMode.None)
             {
                 if (DebugState)
                     XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "播放透明度动画 - 根据曲线参数", HudMsgState.通知);
@@ -623,7 +626,7 @@ namespace SevenStrikeModules.XHud
                         element_AlphaSet(1);
                         element_AlphaSyncUpdate();
                     }
-                }).Play();
+                });
             }
             #endregion
 
@@ -769,7 +772,7 @@ namespace SevenStrikeModules.XHud
                                     Element_In_End();
                                 }
                             }
-                        }).Play();
+                        });
                     }
                     else
                     {
@@ -807,7 +810,7 @@ namespace SevenStrikeModules.XHud
                                 else
                                     element_PositionSet(current);
                             }
-                        }).Play();
+                        });
                     }
                 }
 
@@ -847,7 +850,7 @@ namespace SevenStrikeModules.XHud
                                     Element_In_End();
                                 }
                             }
-                        }).Play();
+                        });
                     }
                     else
                     {
@@ -885,7 +888,7 @@ namespace SevenStrikeModules.XHud
                                 else
                                     element_PositionSet(current);
                             }
-                        }).Play();
+                        });
                     }
                 }
             }
@@ -958,7 +961,7 @@ namespace SevenStrikeModules.XHud
                     {
                         if (isPreview)
                             RectTransform.localEulerAngles = current;
-                    }).Play();
+                    });
                 }
 
                 ///---动画 - 旋转（Curve）
@@ -995,7 +998,7 @@ namespace SevenStrikeModules.XHud
                     {
                         if (isPreview)
                             RectTransform.localEulerAngles = current;
-                    }).Play();
+                    });
                 }
             }
 
@@ -1060,7 +1063,7 @@ namespace SevenStrikeModules.XHud
                             element_AlphaSet(1);
                             element_AlphaSyncUpdate();
                         }
-                    }).Play();
+                    });
             }
 
             ///---动画 - 透明度_Alpha（Curve）
@@ -1102,7 +1105,7 @@ namespace SevenStrikeModules.XHud
                             element_AlphaSet(1);
                             element_AlphaSyncUpdate();
                         }
-                    }).Play();
+                    });
             }
             #endregion
 
@@ -1214,7 +1217,7 @@ namespace SevenStrikeModules.XHud
                             {
                                 if (isPreview)
                                     RectTransform.localScale = scale;
-                            }).Play();
+                            });
                     }
                     else
                     {
@@ -1255,7 +1258,7 @@ namespace SevenStrikeModules.XHud
                                 else
                                     element_PositionSet(current);
                             }
-                        }).Play();
+                        });
                     }
                 }
 
@@ -1295,7 +1298,7 @@ namespace SevenStrikeModules.XHud
                         {
                             if (isPreview)
                                 RectTransform.localScale = scale;
-                        }).Play();
+                        });
                     }
                     else
                     {
@@ -1331,7 +1334,7 @@ namespace SevenStrikeModules.XHud
                                 else
                                     element_PositionSet(current);
                             }
-                        }).Play();
+                        });
                     }
                 }
             }
@@ -1402,7 +1405,7 @@ namespace SevenStrikeModules.XHud
                     }).OnKill(() =>
                     {
                         RectTransform.localEulerAngles = euler;
-                    }).Play();
+                    });
                 }
 
                 ///---动画 - 旋转（Curve）
@@ -1438,11 +1441,28 @@ namespace SevenStrikeModules.XHud
                         }).OnKill(() =>
                         {
                             RectTransform.localEulerAngles = euler;
-                        }).Play();
+                        });
                 }
             }
             #endregion
         }
         #endregion
+
+        public void ElementTweensPlay()
+        {
+            if (Tween_Alpha != null)
+            {
+                Tween_Alpha.Play();
+            }
+            if (Tween_Move != null)
+            {
+                Tween_Move.Play();
+            }
+            if (Tween_Rotation != null)
+            {
+                Tween_Rotation.Play();
+            }
+
+        }
     }
 }

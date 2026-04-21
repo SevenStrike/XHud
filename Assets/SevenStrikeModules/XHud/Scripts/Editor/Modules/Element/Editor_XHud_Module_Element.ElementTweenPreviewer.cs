@@ -29,58 +29,6 @@ namespace SevenStrikeModules.XHud.Editor
 
     public partial class Editor_XHud_Module_Element : Editor
     {
-        /// <summary>
-        /// 收集元素的基础三项动画（前提是如果动画不为空则收集）
-        /// </summary>
-        /// <returns></returns>
-        private XTween_Interface[] GetElementTweens()
-        {
-            // 收集元素三项基础动画给预览器
-            List<XTween_Interface> twns = new List<XTween_Interface>();
-
-            if (Targets_Selected())
-            {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    XHud_Module_Element ele_twn = SelectedObjects[i];
-                    if (ele_twn.Tween_Alpha != null)
-                        twns.Add(ele_twn.Tween_Alpha);
-                    if (ele_twn.Tween_Move != null)
-                        twns.Add(ele_twn.Tween_Move);
-                    if (ele_twn.Tween_Rotation != null)
-                        twns.Add(ele_twn.Tween_Rotation);
-                }
-            }
-            else
-            {
-                if (BaseScript.Tween_Alpha != null)
-                    twns.Add(BaseScript.Tween_Alpha);
-                if (BaseScript.Tween_Move != null)
-                    twns.Add(BaseScript.Tween_Move);
-                if (BaseScript.Tween_Rotation != null)
-                    twns.Add(BaseScript.Tween_Rotation);
-            }
-            return twns.ToArray();
-        }
-
-        private XTween_Interface[] GetTargetsElementTweens()
-        {
-            // 收集所有批量元素三项基础动画给预览器
-            List<XTween_Interface> twns = new List<XTween_Interface>();
-
-            for (int i = 0; i < SelectedObjects.Length; i++)
-            {
-                XHud_Module_Element ele = SelectedObjects[i];
-                if (ele.Tween_Alpha != null)
-                    twns.Add(ele.Tween_Alpha);
-                if (ele.Tween_Move != null)
-                    twns.Add(ele.Tween_Move);
-                if (ele.Tween_Rotation != null)
-                    twns.Add(ele.Tween_Rotation);
-            }
-            return twns.ToArray();
-        }
-
         //------------------------------------------------------------------------------------
         /// <summary>
         /// 播放预览：元素 - 进入

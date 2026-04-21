@@ -3789,9 +3789,6 @@ namespace SevenStrikeModules.XHud.Editor
             XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(key, sw_option);
             return sw_option;
         }
-        /// <summary>
-        /// 面板折叠键值检查
-        /// </summary>
         #endregion
 
         #region 主逻辑更新

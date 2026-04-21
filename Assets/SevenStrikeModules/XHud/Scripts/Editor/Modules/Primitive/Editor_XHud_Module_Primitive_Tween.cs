@@ -1282,7 +1282,7 @@ namespace SevenStrikeModules.XHud.Editor
                             dataitem.Message = $"{SelectedObjects[i].name}{(string.IsNullOrEmpty(indicator) ? "" : indicator)}";
                             Datas.Add(dataitem);
                         }
-                        string res_mul = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "XHud - 图元动画器消息", "批量粘贴动画节点数据", $"确认要将 XHudEditorData (XED) 中的动画节点数据粘贴到列表中的动画器中吗？", "粘贴", "暂不", 1);
+                        string res_mul = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "XHud - 图元动画器消息", "批量粘贴动画节点数据", $"确认要将 XHudEditorData (XED) 中的动画节点数据粘贴到列表中的动画器中吗？", "粘贴", "暂不", 0);
                         if (res_mul == "暂不")
                             return;
                         #endregion
@@ -1291,7 +1291,13 @@ namespace SevenStrikeModules.XHud.Editor
                         Datas.Clear();
                         for (int s = 0; s < SelectedObjects.Length; s++)
                         {
-                            SelectedObjects[s].PrimitiveTweenNodes = tnc.TweenNodeList;
+                            List<TweenNode> tweenNodes = new List<TweenNode>();
+                            for (int c = 0; c < tnc.TweenNodeList.Count; c++)
+                            {
+                                tweenNodes.Add(tnc.TweenNodeList[c].Clone());
+                            }
+
+                            SelectedObjects[s].PrimitiveTweenNodes = tweenNodes;
 
                             XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
                             dataitem.Title = "动画节点数据";
@@ -1308,13 +1314,18 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         #region 询问
                         string indicator = $"( {BaseScript.controller.Indicator} )";
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图元动画器消息", "粘贴动画节点数据", $"确认要将 XHudEditorData (XED) 中的动画节点数据粘贴到  {BaseScript.name}{(string.IsNullOrEmpty(indicator) ? "" : indicator)} 动画器中吗？", "粘贴", "暂不", 1);
+                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图元动画器消息", "粘贴动画节点数据", $"确认要将 XHudEditorData (XED) 中的动画节点数据粘贴到  {BaseScript.name}{(string.IsNullOrEmpty(indicator) ? "" : indicator)} 动画器中吗？", "粘贴", "暂不", 0);
                         if (res == "暂不")
                             return;
                         #endregion
 
                         #region 粘贴动画节点数据
-                        BaseScript.PrimitiveTweenNodes = tnc.TweenNodeList;
+                        List<TweenNode> tweenNodes = new List<TweenNode>();
+                        for (int s = 0; s < tnc.TweenNodeList.Count; s++)
+                        {
+                            tweenNodes.Add(tnc.TweenNodeList[s].Clone());
+                        }
+                        BaseScript.PrimitiveTweenNodes = tweenNodes;
                         Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 图元动画器消息", "粘贴动画节点", $"已将动画节点粘贴到： {BaseScript.name} {BaseScript.name}{(string.IsNullOrEmpty(indicator) ? "" : indicator)}", "明白");
                         #endregion
                     }

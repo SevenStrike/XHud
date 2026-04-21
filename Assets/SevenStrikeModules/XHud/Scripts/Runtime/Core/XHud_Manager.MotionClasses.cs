@@ -88,6 +88,21 @@ namespace SevenStrikeModules.XHud
             Alpha.CurveName = m_alpha_curve_name;
             Alpha.Ease = m_alpha_ease;
         }
+
+        /// <summary>
+        /// 深拷贝当前对象
+        /// </summary>
+        /// <returns>返回新的 Motion_Creator 实例，包含所有数据的深拷贝</returns>
+        public Motion_Creator Clone()
+        {
+            Motion_Creator clone = new Motion_Creator();
+            clone.anchor = this.anchor;
+            clone.MotionAnimateEndState = this.MotionAnimateEndState;
+            clone.Alpha = this.Alpha?.Clone();
+            clone.Movement = this.Movement?.Clone();
+            clone.Rotation = this.Rotation?.Clone();
+            return clone;
+        }
     }
 
     /// <summary>
@@ -147,6 +162,20 @@ namespace SevenStrikeModules.XHud
             Alpha.CurveName = m_alpha_curve_index;
             Alpha.Ease = m_alpha_ease;
         }
+
+        /// <summary>
+        /// 深拷贝当前对象
+        /// </summary>
+        /// <returns>返回新的 Motion_Recycler 实例，包含所有数据的深拷贝</returns>
+        public Motion_Recycler Clone()
+        {
+            Motion_Recycler clone = new Motion_Recycler();
+            clone.MotionAnimateEndState = this.MotionAnimateEndState;
+            clone.Alpha = this.Alpha?.Clone();
+            clone.Movement = this.Movement?.Clone();
+            clone.Rotation = this.Rotation?.Clone();
+            return clone;
+        }
     }
 
     [System.Serializable]
@@ -190,6 +219,24 @@ namespace SevenStrikeModules.XHud
             Curve = original.Curve;
             CurveName = original.CurveName;
             Ease = original.Ease;
+        }
+
+        /// <summary>
+        /// 深拷贝当前对象
+        /// </summary>
+        /// <returns>返回新的 MotionNode_Movement 实例，包含所有数据的深拷贝</returns>
+        public MotionNode_Movement Clone()
+        {
+            MotionNode_Movement clone = new MotionNode_Movement();
+            clone.Movement = this.Movement;
+            clone.Distance = this.Distance;
+            clone.Duration = this.Duration;
+            clone.Delay = this.Delay;
+            // AnimationCurve 是 UnityEngine.Object，需要特殊处理
+            clone.Curve = this.Curve != null ? new AnimationCurve(this.Curve.keys) : null;
+            clone.CurveName = this.CurveName;
+            clone.Ease = this.Ease;
+            return clone;
         }
     }
 
@@ -235,6 +282,24 @@ namespace SevenStrikeModules.XHud
             CurveName = original.CurveName;
             Ease = original.Ease;
         }
+
+        /// <summary>
+        /// 深拷贝当前对象
+        /// </summary>
+        /// <returns>返回新的 MotionNode_Rotation 实例，包含所有数据的深拷贝</returns>
+        public MotionNode_Rotation Clone()
+        {
+            MotionNode_Rotation clone = new MotionNode_Rotation();
+            clone.Rotation = this.Rotation;
+            clone.Degree = this.Degree;
+            clone.Duration = this.Duration;
+            clone.Delay = this.Delay;
+            // AnimationCurve 是 UnityEngine.Object，需要特殊处理
+            clone.Curve = this.Curve != null ? new AnimationCurve(this.Curve.keys) : null;
+            clone.CurveName = this.CurveName;
+            clone.Ease = this.Ease;
+            return clone;
+        }
     }
 
     [System.Serializable]
@@ -268,6 +333,22 @@ namespace SevenStrikeModules.XHud
             Curve = original.Curve;
             CurveName = original.CurveName;
             Ease = original.Ease;
+        }
+
+        /// <summary>
+        /// 深拷贝当前对象
+        /// </summary>
+        /// <returns>返回新的 MotionNode_Alpha 实例，包含所有数据的深拷贝</returns>
+        public MotionNode_Alpha Clone()
+        {
+            MotionNode_Alpha clone = new MotionNode_Alpha();
+            clone.Duration = this.Duration;
+            clone.Delay = this.Delay;
+            // AnimationCurve 是 UnityEngine.Object，需要特殊处理
+            clone.Curve = this.Curve != null ? new AnimationCurve(this.Curve.keys) : null;
+            clone.CurveName = this.CurveName;
+            clone.Ease = this.Ease;
+            return clone;
         }
     }
 }

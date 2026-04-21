@@ -675,15 +675,86 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
+                //SerializedProperty sp_nodes = serializedObject.FindProperty("PrimitiveControllerNodes");
+                //sp_nodes.ClearArray();
+
+                //#region 获取所有 PrimitiveController
+                //XHud_Module_Primitive_Controller[] cons = BaseScript.GetComponentsInChildren<XHud_Module_Primitive_Controller>();
+
+                //#region 过滤 PrimitiveController
+                //// 如果找到的 PrimitiveController 的父级是按钮、选项、滑动条、进度条、开关控件那么则要忽略
+                //List<XHud_Module_Primitive_Controller> cons_fillter = new List<XHud_Module_Primitive_Controller>();
+                //for (int i = 0; i < cons.Length; i++)
+                //{
+                //    XHud_Module_Button hud_Button = cons[i].GetComponentInParent<XHud_Module_Button>();
+                //    XHud_Module_Progress hud_Progress = cons[i].GetComponentInParent<XHud_Module_Progress>();
+                //    XHud_Module_Slider hud_Slider = cons[i].GetComponentInParent<XHud_Module_Slider>();
+                //    XHud_Module_Option hud_optselector = cons[i].GetComponentInParent<XHud_Module_Option>();
+                //    XHud_Module_Toggle hud_tog = cons[i].GetComponentInParent<XHud_Module_Toggle>();
+                //    if (hud_Button != null)
+                //        continue;
+                //    if (hud_Progress != null)
+                //        continue;
+                //    if (hud_Slider != null)
+                //        continue;
+                //    if (hud_optselector != null)
+                //        continue;
+                //    if (hud_tog != null)
+                //        continue;
+                //    cons_fillter.Add(cons[i]);
+                //}
+                //#endregion
+
+                //XHud_Module_Primitive_Controller[] cons_confirm = cons_fillter.ToArray();
+                //for (int i = 0; i < cons_confirm.Length; i++)
+                //{
+                //    #region 判断是否已存在 PrimitiveController
+                //    bool isrepeat = false;
+
+                //    for (int s = 0; s < sp_nodes.arraySize; s++)
+                //    {
+                //        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
+                //        SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                //        XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
+                //        if (cons_confirm[i] == sp_con)
+                //        {
+                //            isrepeat = true;
+                //        }
+                //    }
+
+                //    if (!isrepeat)
+                //    {
+                //        int index = 0;
+
+                //        if (sp_nodes.arraySize <= 0)
+                //            index = 0;
+                //        else
+                //            index = sp_nodes.arraySize;
+
+                //        sp_nodes.InsertArrayElementAtIndex(index);
+                //        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
+
+                //        #region 加入列表 PrimitiveControllerNodes 的 PrimitiveController
+                //        SerializedProperty sp_con = sp_node.FindPropertyRelative("Controller");
+                //        sp_con.objectReferenceValue = cons_confirm[i];
+                //        sp_con.serializedObject.ApplyModifiedProperties();
+                //        #endregion
+
+                //        sp_node.serializedObject.ApplyModifiedProperties();
+                //    }
+                //    #endregion
+                //}
+                //sp_nodes.serializedObject.ApplyModifiedProperties();
+                //#endregion
                 SerializedProperty sp_nodes = serializedObject.FindProperty("PrimitiveControllerNodes");
-                sp_nodes.ClearArray();
 
                 #region 获取所有 PrimitiveController
                 XHud_Module_Primitive_Controller[] cons = BaseScript.GetComponentsInChildren<XHud_Module_Primitive_Controller>();
+                #endregion
 
                 #region 过滤 PrimitiveController
                 // 如果找到的 PrimitiveController 的父级是按钮、选项、滑动条、进度条、开关控件那么则要忽略
-                List<XHud_Module_Primitive_Controller> cons_fillter = new List<XHud_Module_Primitive_Controller>();
+                List<XHud_Module_Primitive_Controller> cons_filter = new List<XHud_Module_Primitive_Controller>();
                 for (int i = 0; i < cons.Length; i++)
                 {
                     XHud_Module_Button hud_Button = cons[i].GetComponentInParent<XHud_Module_Button>();
@@ -701,16 +772,52 @@ namespace SevenStrikeModules.XHud.Editor
                         continue;
                     if (hud_tog != null)
                         continue;
-                    cons_fillter.Add(cons[i]);
+                    cons_filter.Add(cons[i]);
                 }
                 #endregion
 
-                XHud_Module_Primitive_Controller[] cons_confirm = cons_fillter.ToArray();
+                XHud_Module_Primitive_Controller[] cons_confirm = cons_filter.ToArray();
+
+                #region 增量更新：移除不存在的，添加新增的
+                // 1. 先记录当前数组中哪些是需要保留的
+                List<XHud_Module_Primitive_Controller> existingControllers = new List<XHud_Module_Primitive_Controller>();
+                for (int s = 0; s < sp_nodes.arraySize; s++)
+                {
+                    SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
+                    SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                    XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
+                    existingControllers.Add(sp_con);
+                }
+
+                // 2. 移除已经不存在的 Controller
+                for (int s = sp_nodes.arraySize - 1; s >= 0; s--)
+                {
+                    SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
+                    SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                    XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
+
+                    bool stillExists = false;
+                    for (int i = 0; i < cons_confirm.Length; i++)
+                    {
+                        if (cons_confirm[i] == sp_con)
+                        {
+                            stillExists = true;
+                            break;
+                        }
+                    }
+
+                    if (!stillExists)
+                    {
+                        sp_nodes.DeleteArrayElementAtIndex(s);
+                    }
+                }
+
+                // 3. 添加新增的 Controller（保持场景中的自然顺序）
                 for (int i = 0; i < cons_confirm.Length; i++)
                 {
-                    #region 判断是否已存在 PrimitiveController
-                    bool isrepeat = false;
+                    bool alreadyExists = false;
 
+                    // 检查是否已存在
                     for (int s = 0; s < sp_nodes.arraySize; s++)
                     {
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
@@ -718,32 +825,42 @@ namespace SevenStrikeModules.XHud.Editor
                         XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
                         if (cons_confirm[i] == sp_con)
                         {
-                            isrepeat = true;
+                            alreadyExists = true;
+                            break;
                         }
                     }
 
-                    if (!isrepeat)
+                    if (!alreadyExists)
                     {
-                        int index = 0;
-
-                        if (sp_nodes.arraySize <= 0)
-                            index = 0;
-                        else
-                            index = sp_nodes.arraySize;
-
+                        // 插入到末尾
+                        int index = sp_nodes.arraySize;
                         sp_nodes.InsertArrayElementAtIndex(index);
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-
-                        #region 加入列表 PrimitiveControllerNodes 的 PrimitiveController
                         SerializedProperty sp_con = sp_node.FindPropertyRelative("Controller");
                         sp_con.objectReferenceValue = cons_confirm[i];
-                        sp_con.serializedObject.ApplyModifiedProperties();
-                        #endregion
-
-                        sp_node.serializedObject.ApplyModifiedProperties();
                     }
-                    #endregion
                 }
+
+                // 可选：排序，使数组顺序与 cons_confirm 保持一致
+                // 如果希望保持场景中的自然顺序，可以执行以下排序
+                if (sp_nodes.arraySize > 0 && sp_nodes.arraySize == cons_confirm.Length)
+                {
+                    // 创建临时列表来重新排序
+                    List<XHud_Module_Primitive_Controller> sortedList = new List<XHud_Module_Primitive_Controller>();
+                    for (int i = 0; i < cons_confirm.Length; i++)
+                    {
+                        sortedList.Add(cons_confirm[i]);
+                    }
+
+                    // 重新赋值
+                    for (int i = 0; i < sortedList.Count; i++)
+                    {
+                        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(i);
+                        SerializedProperty sp_con = sp_node.FindPropertyRelative("Controller");
+                        sp_con.objectReferenceValue = sortedList[i];
+                    }
+                }
+
                 sp_nodes.serializedObject.ApplyModifiedProperties();
                 #endregion
             }

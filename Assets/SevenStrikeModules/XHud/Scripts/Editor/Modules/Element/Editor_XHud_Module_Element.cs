@@ -405,7 +405,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 预览动效
-            bool sw_option = FunctionGroup("预览动效", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Option, null);
+            bool sw_option = FunctionGroup("动效（预览 / 运行 兼可用）", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Option, null);
             if (sw_option)
             {
 

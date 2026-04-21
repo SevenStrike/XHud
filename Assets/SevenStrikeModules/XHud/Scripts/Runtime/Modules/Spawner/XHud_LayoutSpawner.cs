@@ -21,6 +21,7 @@
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
     using System.Collections;
     using System.Collections.Generic;
@@ -127,7 +128,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 使用全局动效
         /// </summary>
-        public string UseSpawnerMotion = "生成器动效";
+        public string UseSpawnerMotion = "自身动效";
         /// <summary>
         /// 生成动效参数
         /// </summary>
@@ -258,6 +259,8 @@ namespace SevenStrikeModules.XHud
         public bool FoldScreen = true;
         public bool FoldWorld = true;
 
+        public bool IsPreviewing = false;
+
         /// <summary>
         /// 防止元素动效未结束时再次操作生成或回收
         /// </summary>
@@ -324,6 +327,7 @@ namespace SevenStrikeModules.XHud
 
         private void Start()
         {
+            ValidSpawnItemsMotionArgs();
         }
 
         private void OnEnable()
@@ -565,7 +569,8 @@ namespace SevenStrikeModules.XHud
                     if (item.act_on_element_out_start != null)
                     {
                         item.act_on_element_out_start(element);
-                    };
+                    }
+                    ;
                 },
                  (progres) =>/*动作委托：元素 Out 进度*/
                  {
@@ -580,7 +585,8 @@ namespace SevenStrikeModules.XHud
                     if (item.act_on_element_out_end != null)
                     {
                         item.act_on_element_out_end(element);
-                    };
+                    }
+                    ;
                     item.SpawnedElementNode = null;
                 });
             yield return null;
@@ -693,7 +699,7 @@ namespace SevenStrikeModules.XHud
                             //---回收元素
                             XHud_Manager.Instance.hm_HudElement_RecycleAt(
                                 item.SpawnedElementNode.Element,
-                                item.UseSpawnerMotion == "自身动效" ? item.RecycleArgs : RecycleArgs,
+                                item.UseSpawnerMotion == "自身" ? item.RecycleArgs : RecycleArgs,
                                 (element) =>/*动作委托：元素 Out 开始*/
                                 {
                                     item.InMotion = true;
@@ -701,7 +707,8 @@ namespace SevenStrikeModules.XHud
                                     if (item.act_on_element_out_start != null)
                                     {
                                         item.act_on_element_out_start(element);
-                                    };
+                                    }
+                                    ;
                                 },
                                  (progres) =>/*动作委托：元素 Out 进度*/
                                  {
@@ -716,7 +723,8 @@ namespace SevenStrikeModules.XHud
                                     if (item.act_on_element_out_end != null)
                                     {
                                         item.act_on_element_out_end(element);
-                                    };
+                                    }
+                                    ;
                                     item.SpawnedElementNode = null;
                                 });
                         }
@@ -735,7 +743,7 @@ namespace SevenStrikeModules.XHud
                             //---回收元素
                             XHud_Manager.Instance.hm_HudElement_RecycleAt(
                                 item.SpawnedElementNode.Element,
-                                item.UseSpawnerMotion == "自身动效" ? item.RecycleArgs : RecycleArgs,
+                                item.UseSpawnerMotion == "自身" ? item.RecycleArgs : RecycleArgs,
                                 (element) =>/*动作委托：元素 Out 开始*/
                                 {
                                     item.InMotion = true;
@@ -743,7 +751,8 @@ namespace SevenStrikeModules.XHud
                                     if (item.act_on_element_out_start != null)
                                     {
                                         item.act_on_element_out_start(element);
-                                    };
+                                    }
+                                    ;
                                 },
                                  (progres) =>/*动作委托：元素 Out 进度*/
                                  {
@@ -758,7 +767,8 @@ namespace SevenStrikeModules.XHud
                                     if (item.act_on_element_out_end != null)
                                     {
                                         item.act_on_element_out_end(element);
-                                    };
+                                    }
+                                    ;
                                     item.SpawnedElementNode = null;
                                 });
                         }
@@ -780,67 +790,89 @@ namespace SevenStrikeModules.XHud
 
             if (space == XHudSpace.屏幕空间)
             {
-                item.SpawnedElementNode = XHud_Manager.Instance.hm_ScreenElement_Create(LibName, item.SpawnName)
-                    .SetAlpha(0)
-                    .SetAnchored_Screen(arg.anchor, item.Indicator)
-                    .SetPosition_Screen(item.Position)
-                    .SetRotation_Screen(item.Euler)
-                    .SetOffset(item.Offset)
-                    .SetSize(item.Size)
-                    .SetScale(item.Scale)
-                    .On_In_Start((e) =>
-                    {
-                        item.InMotion = true;
+                item.SpawnedElementNode = XHud_Manager.Instance.hm_ScreenElement_Create(LibName, item.SpawnName);
 
-                        item.Spawned = true;
+                if (item.SpawnedElementNode == null)
+                {
+                    string hex_col = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
 
-                        if (item.act_on_element_in_start != null)
-                        {
-                            item.act_on_element_in_start(e);
-                        }
-                    })
-                    .On_In_Progress((progress) =>
-                    {
-                        item.MotionPercentage = progress;
-                    })
-                    .On_In_End((e) =>
-                    {
-                        item.InMotion = false;
+                    XHud_Utilitys.Func_PrintInfo("XHud - 布局元素生成器通知", $"未在元素库： <b><color={hex_col}>{LibName} </color></b>中找到：<b><color={hex_col}> {item.SpawnName} </color></b>元素！请检查目标元素库中是否存在该元素！", HudMsgState.通知);
+                    return;
+                }
 
-                        if (item.act_on_element_in_end != null)
-                        {
-                            item.act_on_element_in_end(e);
-                        }
-                    })
-                    .On_Out_Start((e) =>
-                    {
-                        item.InMotion = true;
+                item.SpawnedElementNode
+                .SetAlpha(0)
+                .SetAnchored_Screen(arg.anchor, item.Indicator)
+                .SetPosition_Screen(item.Position)
+                .SetRotation_Screen(item.Euler)
+                .SetOffset(item.Offset)
+                .SetSize(item.Size)
+                .SetScale(item.Scale)
+                .On_In_Start((e) =>
+                {
+                    item.InMotion = true;
 
-                        if (item.act_on_element_out_start != null)
-                        {
-                            item.act_on_element_out_start(e);
-                        };
-                    })
-                    .On_Out_Progress((progress) =>
-                    {
-                        item.MotionPercentage = progress;
-                    })
-                    .On_Out_End((e) =>
-                    {
-                        item.InMotion = false;
+                    item.Spawned = true;
 
-                        item.Spawned = false;
+                    if (item.act_on_element_in_start != null)
+                    {
+                        item.act_on_element_in_start(e);
+                    }
+                })
+                .On_In_Progress((progress) =>
+                {
+                    item.MotionPercentage = progress;
+                })
+                .On_In_End((e) =>
+                {
+                    item.InMotion = false;
 
-                        if (item.act_on_element_out_end != null)
-                        {
-                            item.act_on_element_out_end(e);
-                        };
-                        item.SpawnedElementNode = null;
-                    });
+                    if (item.act_on_element_in_end != null)
+                    {
+                        item.act_on_element_in_end(e);
+                    }
+                })
+                .On_Out_Start((e) =>
+                {
+                    item.InMotion = true;
+
+                    if (item.act_on_element_out_start != null)
+                    {
+                        item.act_on_element_out_start(e);
+                    }
+                    ;
+                })
+                .On_Out_Progress((progress) =>
+                {
+                    item.MotionPercentage = progress;
+                })
+                .On_Out_End((e) =>
+                {
+                    item.InMotion = false;
+
+                    item.Spawned = false;
+
+                    if (item.act_on_element_out_end != null)
+                    {
+                        item.act_on_element_out_end(e);
+                    }
+                    ;
+                    item.SpawnedElementNode = null;
+                });
             }
             else
             {
-                item.SpawnedElementNode = XHud_Manager.Instance.hm_WorldElement_Create(LibName, item.SpawnName)
+                item.SpawnedElementNode = XHud_Manager.Instance.hm_WorldElement_Create(LibName, item.SpawnName);
+
+                if (item.SpawnedElementNode == null)
+                {
+                    string hex_col = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+
+                    XHud_Utilitys.Func_PrintInfo("XHud - 布局元素生成器通知", $"未在元素库： <b><color={hex_col}>{LibName} </color></b>中找到：<b><color={hex_col}> {item.SpawnName} </color></b>元素！请检查目标元素库中是否存在该元素！", HudMsgState.通知);
+                    return;
+                }
+
+                item.SpawnedElementNode
                     .SetAlpha(0)
                     .SetAnchored_World(item.Indicator)
                     .SetPosition_World(item.Position)
@@ -879,7 +911,8 @@ namespace SevenStrikeModules.XHud
                         if (item.act_on_element_out_start != null)
                         {
                             item.act_on_element_out_start(e);
-                        };
+                        }
+                        ;
                     })
                     .On_Out_Progress((progress) =>
                     {
@@ -894,7 +927,8 @@ namespace SevenStrikeModules.XHud
                         if (item.act_on_element_out_end != null)
                         {
                             item.act_on_element_out_end(e);
-                        };
+                        }
+                        ;
                         item.SpawnedElementNode = null;
                     });
             }
@@ -904,6 +938,54 @@ namespace SevenStrikeModules.XHud
         }
 
         #region 辅助
+        /// <summary>
+        /// 用于从元素库同步元素动效到待生成的元素列表中的项的动效参数
+        /// 因为如果被布局元素生成器收集之后，更改了元素的动效参数，则会通过此步骤进行应用启动前的更新
+        /// 以此确保生成的动效的同源同步
+        /// </summary>
+        public void ValidSpawnItemsMotionArgs()
+        {
+            if ((SpawnItemList_Screen == null && SpawnItemList_Screen.Count <= 0) || (SpawnItemList_World == null && SpawnItemList_World.Count <= 0))
+                return;
+
+            // 匹配元素库
+            XHud_Library_Element ele_lib = Application.isPlaying ? XHud_Manager.Instance.hm_ElementLibrary_GetTargetLibrary(LibName) : XHud_Dashboard.HudManagerGet().hm_ElementLibrary_GetTargetLibrary(LibName);
+
+            if (ele_lib == null)
+                return;
+
+            for (int i = 0; i < ele_lib.ElementLibrary.Count; i++)
+            {
+                XHud_LibraryArg_Element_Item lib_item = ele_lib.ElementLibrary[i];
+                if (lib_item == null)
+                    continue;
+
+                if (lib_item.Target == null)
+                    continue;
+
+                // 屏幕空间生成元素校验
+                for (int s = 0; s < SpawnItemList_Screen.Count; s++)
+                {
+                    XHud_LayoutSpawner_Item spawn_item = SpawnItemList_Screen[s];
+                    if (spawn_item.SpawnName == lib_item.Name)
+                    {
+                        spawn_item.CreateArgs = lib_item.Target.CreateArgs.Clone();
+                        spawn_item.RecycleArgs = lib_item.Target.RecycleArgs.Clone();
+                    }
+                }
+
+                // 世界空间生成元素校验
+                for (int s = 0; s < SpawnItemList_World.Count; s++)
+                {
+                    XHud_LayoutSpawner_Item spawn_item = SpawnItemList_World[s];
+                    if (spawn_item.SpawnName == lib_item.Name)
+                    {
+                        spawn_item.CreateArgs = lib_item.Target.CreateArgs.Clone();
+                        spawn_item.RecycleArgs = lib_item.Target.RecycleArgs.Clone();
+                    }
+                }
+            }
+        }
         /// <summary>
         /// 检查判断元素库不是空的
         /// </summary>
