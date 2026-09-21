@@ -20,6 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
     using System.Collections.Generic;
     using TMPro;
@@ -65,7 +67,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 模组创建 - 元素
         [MenuItem("GameObject/XHud/Element (元素)", priority = 50, validate = true)]
-        private static bool Validate_Create_HudElementModule()
+        private static bool Validate_Create_ElementModule()
         {
             bool valid = false;
             if (Selection.activeGameObject != null)
@@ -93,7 +95,7 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         [MenuItem("GameObject/XHud/Element (元素)", priority = 50)]
-        private static void Create_HudElementModule()
+        private static void Create_ElementModule()
         {
             Transform actobj = Selection.activeTransform;
             if (actobj != null)
@@ -104,7 +106,7 @@ namespace SevenStrikeModules.XHud.Editor
                 obj.layer = LayerMask.NameToLayer("XHud");
                 XHud_Module_Element obj_ele = obj.AddComponent<XHud_Module_Element>();
                 obj_ele.Indicator = "NewElement";
-                RectTransform obj_ele_rect = obj.AddComponent<RectTransform>();
+                RectTransform obj_ele_rect = obj.GetComponent<RectTransform>();
                 obj_ele_rect.transform.SetParent(actobj);
                 obj_ele_rect.anchoredPosition3D = Vector3.zero;
                 obj_ele_rect.localEulerAngles = Vector3.zero;
@@ -117,7 +119,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 模组创建 - 图元控制器
         [MenuItem("GameObject/XHud/PrimitiveController (图元控制器)", priority = 50, validate = true)]
-        private static bool Validate_Create_HudPrimitiveController()
+        private static bool Validate_Create_PrimitiveController()
         {
             bool valid = false;
             if (Selection.activeGameObject != null)
@@ -135,7 +137,7 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         [MenuItem("GameObject/XHud/PrimitiveController (图元控制器)", priority = 50)]
-        private static void Create_HudPrimitiveController()
+        private static void Create_PrimitiveController()
         {
             Transform actobj = Selection.activeTransform;
             if (actobj != null)
@@ -149,7 +151,19 @@ namespace SevenStrikeModules.XHud.Editor
                 obj_ele_rect.localEulerAngles = Vector3.zero;
                 obj_ele_rect.localScale = Vector3.one;
 
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "创建图元控制器", "您需要为创建的 PrimitiveController 图元控制器指定一个基础类型！", "暂不", "RawImage", "Image", "Text", "TmpText", 2);
+                string res = XGUI.dialog(
+                    type: XGUIDialogType.警告,
+                    windowtitle: "XHud - 创建模组消息",
+                    title: "创建图元控制器",
+                    msg: $"您需要为创建的 PrimitiveController 图元控制器指定一个基础类型！",
+                    ok: "暂不",
+                    cancel: "RawImage",
+                    alt: "Image",
+                    other: "Text",
+                    special: "TmpText",
+                    PrimaryIndex: 2,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
 
                 if (res == "暂不")
                     return;
@@ -169,14 +183,14 @@ namespace SevenStrikeModules.XHud.Editor
                 else if (res == "Text")
                 {
                     //创建Text
-                    XHud_Module_Text value = Mc_AddText(obj, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "XHud Text", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                    XHud_Module_Text value = Mc_AddText(obj, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "XHud Text", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
                     value.Indicator = "Text";
                     obj.name = "PrimitiveController ( Text )";
                 }
                 else if (res == "TmpText")
                 {
                     //创建TmpText
-                    XHud_Module_TmpText value = Mc_AddTmpText(obj, "TmpText", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "XHud Text", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                    XHud_Module_TmpText value = Mc_AddTmpText(obj, "TmpText", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "XHud Text", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
                     value.Indicator = "TmpText";
                     obj.name = "PrimitiveController ( TmpText )";
                 }
@@ -190,7 +204,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 模组创建 - 文字模块
         [MenuItem("GameObject/XHud/Text (文字模块)", priority = 50, validate = true)]
-        private static bool Validate_Create_HudText()
+        private static bool Validate_Create_Text()
         {
             bool valid = false;
             if (Selection.activeGameObject != null)
@@ -208,16 +222,25 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         [MenuItem("GameObject/XHud/Text (文字模块)", priority = 50)]
-        private static void Create_HudText()
+        private static void Create_Text()
         {
             Transform actobj = Selection.activeTransform;
             if (actobj != null)
             {
                 //创建Text
-                XHud_Module_Text value = Mc_AddText(actobj, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "XHud Text", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text value = Mc_AddText(actobj, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "XHud Text", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
                 value.Indicator = "Text";
 
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "创建图元控制器", "是否要为创建的Text创建一个图元控制器？", "暂不", "添加", 0);
+                string res = XGUI.dialog(
+                   type: XGUIDialogType.警告,
+                   windowtitle: "XHud - 创建模组消息",
+                   title: "创建图元控制器",
+                   msg: $"是否要为创建的 Text 创建一个图元控制器？",
+                   ok: "暂不",
+                   cancel: "添加",
+                   PrimaryIndex: 1,
+                   usemodal: true,
+                   themecolor: XHud_Dashboard.Theme_Primary);
                 if (res == "添加")
                 {
                     // 初始化图元控制器
@@ -235,7 +258,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 模组创建 - Tmp文字模块
         [MenuItem("GameObject/XHud/TmpText (Tmp文字模块)", priority = 50, validate = true)]
-        private static bool Validate_Create_HudTmpText()
+        private static bool Validate_Create_TmpText()
         {
             bool valid = false;
             if (Selection.activeGameObject != null)
@@ -253,16 +276,25 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         [MenuItem("GameObject/XHud/TmpText (Tmp文字模块)", priority = 50)]
-        private static void Create_HudTmpText()
+        private static void Create_TmpText()
         {
             Transform actobj = Selection.activeTransform;
             if (actobj != null)
             {
                 //创建TmpText
-                XHud_Module_TmpText value = Mc_AddTmpText(actobj, "TmpText", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "XHud Text", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText value = Mc_AddTmpText(actobj, "TmpText", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "XHud Text", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
                 value.Indicator = "TmpText";
 
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "创建图元控制器", "是否要为创建的TmpText创建一个图元控制器？", "暂不", "添加", 0);
+                string res = XGUI.dialog(
+                    type: XGUIDialogType.警告,
+                    windowtitle: "XHud - 创建模组消息",
+                    title: "创建图元控制器",
+                    msg: $"是否要为创建的 TmpText 创建一个图元控制器？",
+                    ok: "暂不",
+                    cancel: "添加",
+                    PrimaryIndex: 1,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
                 if (res == "添加")
                 {
                     // 初始化图元控制器
@@ -280,7 +312,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 模组创建 - 按钮
         [MenuItem("GameObject/XHud/Module（模组）/Button (按钮)", priority = 1000, validate = true)]
-        private static bool Validate_Create_HudButton()
+        private static bool Validate_Create_Button()
         {
             bool valid = false;
 
@@ -297,9 +329,19 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         [MenuItem("GameObject/XHud/Module（模组）/Button (按钮)", priority = 1000)]
-        private static void Create_HudButton()
+        private static void Create_Button()
         {
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择按钮风格", "您想创建什么样风格的按钮？", "文字", "图标", "图标 & 文字", 0);
+            string res = XGUI.dialog(
+                    type: XGUIDialogType.警告,
+                    windowtitle: "XHud - 创建模组消息",
+                    title: "选择按钮风格",
+                    msg: $"您想创建什么样风格的按钮？",
+                    ok: "文字",
+                    cancel: "图标",
+                    alt: "图标 & 文字",
+                    PrimaryIndex: 1,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Button)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -338,7 +380,16 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                string res_bg = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择背景类型", "您希望使用那种背景方式作为按钮背景使用？", "有背景", "无背景", 1);
+                string res_bg = XGUI.dialog(
+                   type: XGUIDialogType.帮助,
+                   windowtitle: "XHud - 创建模组消息",
+                   title: "选择背景类型",
+                   msg: $"您希望使用那种背景方式作为按钮背景使用？",
+                   ok: "有背景",
+                   cancel: "无背景",
+                   PrimaryIndex: 1,
+                   usemodal: true,
+                   themecolor: XHud_Dashboard.Theme_Primary);
 
                 if (res_bg == "有背景")
                 {
@@ -353,20 +404,29 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
                 }
 
-                string res_text = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择文字类型", "您希望使用那种文字组件类型作为按钮文字使用？", "Text", "TmpText", 1);
+                string res_text = XGUI.dialog(
+                    type: XGUIDialogType.帮助,
+                    windowtitle: "XHud - 创建模组消息",
+                    title: "选择文字类型",
+                    msg: $"您希望使用那种文字组件类型作为按钮文字使用？",
+                    ok: "Text",
+                    cancel: "TmpText",
+                    PrimaryIndex: 1,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
 
                 if (res == "文字")
                 {
                     if (res_text == "Text")
                     {
                         //创建Slider - 按钮文字
-                        XHud_Module_Text btn_text = Mc_AddText(btn_root_rect, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(128, 35), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, btn.ButtonName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, true);
+                        XHud_Module_Text btn_text = Mc_AddText(btn_root_rect, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(128, 35), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, btn.ButtonName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, true);
                         btn.ButtonText = btn_text;
                     }
                     else if (res_text == "TmpText")
                     {
                         //创建Slider - 按钮文字
-                        XHud_Module_TmpText btn_tmptext = Mc_AddTmpText(btn_root_rect, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(128, 35), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, $"{btn.ButtonName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, true);
+                        XHud_Module_TmpText btn_tmptext = Mc_AddTmpText(btn_root_rect, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(128, 35), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, $"{btn.ButtonName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, true);
                         btn.ButtonTmpText = btn_tmptext;
                     }
                     btn.TextColorSyncFade = true;
@@ -384,13 +444,13 @@ namespace SevenStrikeModules.XHud.Editor
                     if (res_text == "Text")
                     {
                         //创建Slider - 按钮文字
-                        XHud_Module_Text btn_text = Mc_AddText(btn_root_rect, "Text", new Vector3(-56, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(80, 25), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.右, TextAnchor.MiddleRight, btn.ButtonName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, true);
+                        XHud_Module_Text btn_text = Mc_AddText(btn_root_rect, "Text", new Vector3(-56, 0, 0), Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(80, 25), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.右, TextAnchor.MiddleRight, btn.ButtonName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, true);
                         btn.ButtonText = btn_text;
                     }
                     else if (res_text == "TmpText")
                     {
                         //创建Slider - 按钮文字
-                        XHud_Module_TmpText btn_tmptext = Mc_AddTmpText(btn_root_rect, "Text", new Vector3(-56, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(80, 25), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{btn.ButtonName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, true);
+                        XHud_Module_TmpText btn_tmptext = Mc_AddTmpText(btn_root_rect, "Text", new Vector3(-56, 0, 0), Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(80, 25), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{btn.ButtonName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, true);
                         btn.ButtonTmpText = btn_tmptext;
                     }
 
@@ -405,7 +465,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 模组创建 - 进度条
         [MenuItem("GameObject/XHud/Module（模组）/Progress (进度条)", priority = 1000, validate = true)]
-        private static bool Validate_Create_HudProgress()
+        private static bool Validate_Create_Progress()
         {
             bool valid = false;
 
@@ -422,9 +482,18 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         [MenuItem("GameObject/XHud/Module（模组）/Progress (进度条)", priority = 1000)]
-        private static void Create_HudProgress()
+        private static void Create_Progress()
         {
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择进度条类型", "您希望进度条的标题、副标题以及数值文字使用哪种文字组件类型？", "Text", "TmpText", 1);
+            string res = XGUI.dialog(
+                    type: XGUIDialogType.帮助,
+                    windowtitle: "XHud - 创建模组消息",
+                    title: "选择进度条类型",
+                    msg: $"您希望使用那种文字组件类型作为按钮文字使用？",
+                    ok: "Text",
+                    cancel: "TmpText",
+                    PrimaryIndex: 1,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Progress)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -444,14 +513,14 @@ namespace SevenStrikeModules.XHud.Editor
             #region 文字组件创建
             if (res == "Text")
             {
-                //创建Slider - 数值
-                XHud_Module_Text value = Mc_AddText(pro_root_rect, "Percentage", new Vector3(-35, 28, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(70, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.右, TextAnchor.MiddleRight, $"{pro.ProgressValue.ToString("F1")} %", 12, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                //创建Progress - 数值
+                XHud_Module_Text value = Mc_AddText(pro_root_rect, "Percentage", new Vector3(-35, 28, 0), Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(70, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.右, TextAnchor.MiddleRight, $"{pro.ProgressValue.ToString("F1")} %", 12, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
-                //创建Slider - 标题
-                XHud_Module_Text title = Mc_AddText(pro_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, pro.con_title, 18, XHud_Dashboard.Theme_Primary, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                //创建Progress - 标题
+                XHud_Module_Text title = Mc_AddText(pro_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold.otf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, pro.con_title, 18, XHud_Dashboard.Theme_Primary, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
-                //创建Slider - 副标题
-                XHud_Module_Text subtitle = Mc_AddText(pro_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, pro.con_subtitle, 12, Color.white * 0.65f, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                //创建Progress - 副标题
+                XHud_Module_Text subtitle = Mc_AddText(pro_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, pro.con_subtitle, 12, Color.white * 0.65f, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 pro.pro_Text_Percent = value;
                 pro.pro_Text_Title = title;
@@ -459,14 +528,14 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                //创建Slider - 数值
-                XHud_Module_TmpText value = Mc_AddTmpText(pro_root_rect, "Percentage", new Vector3(-35, 28, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(70, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{pro.ProgressValue.ToString("F1")} %", 12, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                //创建Progress - 数值
+                XHud_Module_TmpText value = Mc_AddTmpText(pro_root_rect, "Percentage", new Vector3(-35, 28, 0), Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(70, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{pro.ProgressValue.ToString("F1")} %", 12, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
-                //创建Slider - 标题
-                XHud_Module_TmpText title = Mc_AddTmpText(pro_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{pro.con_title}", 18, XHud_Dashboard.Theme_Primary, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                //创建Progress - 标题
+                XHud_Module_TmpText title = Mc_AddTmpText(pro_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{pro.con_title}", 18, XHud_Dashboard.Theme_Primary, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
-                //创建Slider - 副标题
-                XHud_Module_TmpText subtitle = Mc_AddTmpText(pro_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{pro.con_subtitle}", 12, Color.white * 0.65f, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                //创建Progress - 副标题
+                XHud_Module_TmpText subtitle = Mc_AddTmpText(pro_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{pro.con_subtitle}", 12, Color.white * 0.65f, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 pro.pro_TmpText_Percent = value;
                 pro.pro_TmpText_Title = title;
@@ -519,7 +588,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 模组创建 - 滑动条
         [MenuItem("GameObject/XHud/Module（模组）/Slider (滑动条)", priority = 1000, validate = true)]
-        private static bool Validate_Create_HudSlider()
+        private static bool Validate_Create_Slider()
         {
             bool valid = false;
 
@@ -536,9 +605,18 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         [MenuItem("GameObject/XHud/Module（模组）/Slider (滑动条)", priority = 1000)]
-        private static void Create_HudSlider()
+        private static void Create_Slider()
         {
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.通知, "XHud - 创建模组消息", "选择滑动条类型", "您希望滑动条的标题、副标题以及数值文字使用哪种文字组件类型？", "Text", "TmpText", 1);
+            string res = XGUI.dialog(
+                   type: XGUIDialogType.帮助,
+                   windowtitle: "XHud - 创建模组消息",
+                   title: "选择滑动条类型",
+                   msg: $"您希望滑动条的标题、副标题以及数值文字使用哪种文字组件类型？",
+                   ok: "Text",
+                   cancel: "TmpText",
+                   PrimaryIndex: 1,
+                   usemodal: true,
+                   themecolor: XHud_Dashboard.Theme_Primary);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Slider)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -560,13 +638,13 @@ namespace SevenStrikeModules.XHud.Editor
             if (res == "Text")
             {
                 //创建Slider - 数值
-                XHud_Module_Text value = Mc_AddText(sli_root_rect, "Percentage", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(50, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0.5f), new Vector2(0, 2), ContentAnchor.右, TextAnchor.MiddleRight, $"{sli.value.ToString("F1")} %", 12, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text value = Mc_AddText(sli_root_rect, "Percentage", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(50, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0.5f), new Vector2(0, 2), ContentAnchor.右, TextAnchor.MiddleRight, $"{sli.value.ToString("F1")} %", 12, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 //创建Slider - 标题
-                XHud_Module_Text title = Mc_AddText(sli_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, sli.con_title, 18, XHud_Dashboard.Theme_Primary, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text title = Mc_AddText(sli_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold.otf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, sli.con_title, 18, XHud_Dashboard.Theme_Primary, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 //创建Slider - 副标题
-                XHud_Module_Text subtitle = Mc_AddText(sli_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, sli.con_subtitle, 12, Color.white * 0.65f, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text subtitle = Mc_AddText(sli_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, sli.con_subtitle, 12, Color.white * 0.65f, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 sli.sli_Text_Percent = value;
                 sli.sli_Text_Title = title;
@@ -575,13 +653,13 @@ namespace SevenStrikeModules.XHud.Editor
             else
             {
                 //创建Slider - 数值
-                XHud_Module_TmpText value = Mc_AddTmpText(sli_root_rect, "Percentage", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(50, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0.5f), new Vector2(0, 2), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{sli.value.ToString("F1")} %", 12, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText value = Mc_AddTmpText(sli_root_rect, "Percentage", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(50, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0.5f), new Vector2(0, 2), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{sli.value.ToString("F1")} %", 12, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 //创建Slider - 标题
-                XHud_Module_TmpText title = Mc_AddTmpText(sli_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{sli.con_title}", 18, XHud_Dashboard.Theme_Primary, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText title = Mc_AddTmpText(sli_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{sli.con_title}", 18, XHud_Dashboard.Theme_Primary, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 //创建Slider - 副标题
-                XHud_Module_TmpText subtitle = Mc_AddTmpText(sli_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{sli.con_subtitle}", 12, Color.white * 0.65f, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText subtitle = Mc_AddTmpText(sli_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{sli.con_subtitle}", 12, Color.white * 0.65f, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 sli.sli_TmpText_Percent = value;
                 sli.sli_TmpText_Title = title;
@@ -646,9 +724,8 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 模组创建 - 开关
-
         [MenuItem("GameObject/XHud/Module（模组）/Toggle (开关)", priority = 1000, validate = true)]
-        private static bool Validate_Create_HudToggle()
+        private static bool Validate_Create_Toggle()
         {
             bool valid = false;
 
@@ -665,9 +742,20 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         [MenuItem("GameObject/XHud/Module（模组）/Toggle (开关)", priority = 1000)]
-        private static void Create_HudToggle()
+        private static void Create_Toggle()
         {
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择开关风格", "您想创建什么样风格的开关？", "文字", "图标", "图标 & 文字", "纯净", 2);
+            string res = XGUI.dialog(
+                  type: XGUIDialogType.帮助,
+                  windowtitle: "XHud - 创建模组消息",
+                  title: "选择开关风格",
+                  msg: $"您想创建什么样风格的开关？",
+                  ok: "文字",
+                  cancel: "图标",
+                  alt: "图标 & 文字",
+                  other: "纯净",
+                  PrimaryIndex: 2,
+                  usemodal: true,
+                  themecolor: XHud_Dashboard.Theme_Primary);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Toggle)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -715,20 +803,29 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else if (res == "文字" || res == "图标 & 文字")
             {
-                string res_text = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择文字类型", "您希望使用那种文字组件类型作为开关文字使用？", "Text", "TmpText", 1);
+                string res_text = XGUI.dialog(
+                    type: XGUIDialogType.帮助,
+                    windowtitle: "XHud - 创建模组消息",
+                    title: "选择文字类型",
+                    msg: $"您希望使用那种文字组件类型作为开关文字使用？",
+                    ok: "Text",
+                    cancel: "TmpText",
+                    PrimaryIndex: 1,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
 
                 if (res == "文字")
                 {
                     if (res_text == "Text")
                     {
                         //创建Slider - 按钮文字
-                        XHud_Module_Text tog_text = Mc_AddText(tog_root_rect, "Title", new Vector3(50, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, tog.ToggleName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                        XHud_Module_Text tog_text = Mc_AddText(tog_root_rect, "Title", new Vector3(50, 0, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold.otf", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, tog.ToggleName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
                         tog.ToggleText = tog_text;
                     }
                     else if (res_text == "TmpText")
                     {
                         //创建Slider - 按钮文字
-                        XHud_Module_TmpText tog_tmptext = Mc_AddTmpText(tog_root_rect, "Title", new Vector3(50, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{tog.ToggleName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                        XHud_Module_TmpText tog_tmptext = Mc_AddTmpText(tog_root_rect, "Title", new Vector3(50, 0, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold SDF", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{tog.ToggleName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
                         tog.ToggleTmpText = tog_tmptext;
                     }
                 }
@@ -744,13 +841,13 @@ namespace SevenStrikeModules.XHud.Editor
                     if (res_text == "Text")
                     {
                         //创建Slider - 按钮文字
-                        XHud_Module_Text tog_text = Mc_AddText(tog_root_rect, "Title", new Vector3(82, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, tog.ToggleName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                        XHud_Module_Text tog_text = Mc_AddText(tog_root_rect, "Title", new Vector3(82, 0, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold.otf", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, tog.ToggleName, 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
                         tog.ToggleText = tog_text;
                     }
                     else if (res_text == "TmpText")
                     {
                         //创建Slider - 按钮文字
-                        XHud_Module_TmpText tog_tmptext = Mc_AddTmpText(tog_root_rect, "Title", new Vector3(82, 0, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{tog.ToggleName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                        XHud_Module_TmpText tog_tmptext = Mc_AddTmpText(tog_root_rect, "Title", new Vector3(82, 0, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold SDF", new Vector2(100, 30), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{tog.ToggleName}", 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
                         tog.ToggleTmpText = tog_tmptext;
                     }
                 }
@@ -781,9 +878,8 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 模组创建 - 选项
-
         [MenuItem("GameObject/XHud/Module（模组）/Option (选项器)", priority = 1000, validate = true)]
-        private static bool Validate_Create_HudOption()
+        private static bool Validate_Create_Option()
         {
             bool valid = false;
 
@@ -800,9 +896,19 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         [MenuItem("GameObject/XHud/Module（模组）/Option (选项器)", priority = 1000)]
-        private static void Create_HudOption()
+        private static void Create_Option()
         {
-            string res_type = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择选项器风格", "您想创建什么样风格的选项器？", "文字", "图标", "图标 & 文字", 0);
+            string res_type = XGUI.dialog(
+                  type: XGUIDialogType.帮助,
+                  windowtitle: "XHud - 创建模组消息",
+                  title: "选择选项器风格",
+                  msg: $"您想创建什么样风格的选项器？",
+                  ok: "文字",
+                  cancel: "图标",
+                  alt: "图标 & 文字",
+                  PrimaryIndex: 0,
+                  usemodal: true,
+                  themecolor: XHud_Dashboard.Theme_Primary);
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Option)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -830,16 +936,26 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 创建标题
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 创建模组消息", "选择标题文字类型", "您希望选项器的标题以及选项按钮标题文字使用哪种文字组件类型？", "Text", "TmpText", 1);
+            string res = XGUI.dialog(
+                type: XGUIDialogType.帮助,
+                windowtitle: "XHud - 创建模组消息",
+                title: "选择标题文字类型",
+                msg: $"您希望选项器的标题以及选项按钮标题文字使用哪种文字组件类型？",
+                ok: "Text",
+                cancel: "TmpText",
+                PrimaryIndex: 1,
+                usemodal: true,
+                themecolor: XHud_Dashboard.Theme_Primary);
+
             if (res == "Text")
             {
                 //创建Slider - 标题
-                XHud_Module_Text title = Mc_AddText(opt_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold.ttf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, "XHud-Option", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text title = Mc_AddText(opt_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold.otf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, "XHud-Option", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
             }
             else
             {
                 //创建Slider - 标题
-                XHud_Module_TmpText title = Mc_AddTmpText(opt_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "SevenBlack-Bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, "XHud-Option", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText title = Mc_AddTmpText(opt_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, "XHud-Option", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
             }
             #endregion
 
@@ -924,14 +1040,14 @@ namespace SevenStrikeModules.XHud.Editor
                     if (res == "Text")
                     {
                         //创建Slider - 标题
-                        XHud_Module_Text title = Mc_AddText(opt_img_btn_bg.rectTransform, "Title", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light.ttf", new Vector2(80, 35), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "Item " + ButtonText[i], 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, true);
+                        XHud_Module_Text title = Mc_AddText(opt_img_btn_bg.rectTransform, "Title", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(80, 35), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "Item " + ButtonText[i], 13, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, true);
 
                         btn.ButtonText = title;
                     }
                     else
                     {
                         //创建Slider - 标题
-                        XHud_Module_TmpText title = Mc_AddTmpText(opt_img_btn_bg.rectTransform, "Title", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "SevenBlack-Light SDF", new Vector2(80, 35), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "Item " + ButtonText[i], 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, true);
+                        XHud_Module_TmpText title = Mc_AddTmpText(opt_img_btn_bg.rectTransform, "Title", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(80, 35), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "Item " + ButtonText[i], 13, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, true);
 
                         btn.ButtonTmpText = title;
                     }
@@ -992,7 +1108,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns></returns>
         private static RectTransform Mc_AddRectTransform(GameObject obj, Vector2 size)
         {
-            RectTransform rect = obj.AddComponent<RectTransform>();
+            RectTransform rect = obj.GetComponent<RectTransform>();
+            if (rect == null)
+                rect = obj.AddComponent<RectTransform>();
             rect.sizeDelta = size;
             return rect;
         }

@@ -20,8 +20,8 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using System;
     using UnityEngine;
     using UnityEngine.Events;
@@ -212,7 +212,7 @@ namespace SevenStrikeModules.XHud
             eve_on_Reset.RemoveAllListeners();
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "清空所有事件！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "清空所有事件！", XGUIMsgState.通知);
         }
         /// <summary>
         /// 移除所有事件
@@ -225,7 +225,7 @@ namespace SevenStrikeModules.XHud
             act_on_Reset = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "清空所有委托！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "清空所有委托！", XGUIMsgState.通知);
         }
         #endregion
 
@@ -334,10 +334,10 @@ namespace SevenStrikeModules.XHud
                 act_on_ValueChanged(ProgressValue);
             eve_on_ValueChanged.Invoke(ProgressValue);
 
-            Debug.Log("进度变化时");
+            //Debug.Log("进度变化时");
 
             if (DebugState && Application.isPlaying)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条进度值为：" + val, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "设置进度条进度值为：" + val, XGUIMsgState.通知);
         }
         /// <summary>
         /// 进度值精度设置
@@ -347,7 +347,7 @@ namespace SevenStrikeModules.XHud
             ProgressPrecision = count;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条精度：" + count, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "设置进度条精度：" + count, XGUIMsgState.通知);
         }
         /// <summary>
         /// 单位后缀设置
@@ -357,7 +357,7 @@ namespace SevenStrikeModules.XHud
             ProgressUnit = str;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条单位为：" + str, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "设置进度条单位为：" + str, XGUIMsgState.通知);
         }
         /// <summary>
         /// 重置状态
@@ -385,7 +385,7 @@ namespace SevenStrikeModules.XHud
             pro_ResetStartEndActions(PlayTween);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已重置！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "已重置！", XGUIMsgState.通知);
         }
         /// <summary>
         /// 重置进度数值状态
@@ -405,7 +405,7 @@ namespace SevenStrikeModules.XHud
             pro_ResetStartEndActions(PlayTween);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已重置进度条数值！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "已重置进度条数值！", XGUIMsgState.通知);
         }
         /// <summary>
         /// 重置进度条首帧开始与尾帧结束委托状态
@@ -448,7 +448,7 @@ namespace SevenStrikeModules.XHud
                 pro_TmpText_Title.text = val;
 
             if (DebugState && Application.isPlaying)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条标题为：" + val, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "设置进度条标题为：" + val, XGUIMsgState.通知);
 
             return val;
         }
@@ -466,7 +466,7 @@ namespace SevenStrikeModules.XHud
                 pro_TmpText_Subtitle.text = val;
 
             if (DebugState && Application.isPlaying)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条副标题为：" + val, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "设置进度条副标题为：" + val, XGUIMsgState.通知);
 
             return val;
         }
@@ -512,7 +512,7 @@ namespace SevenStrikeModules.XHud
             con_title = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已清空所有内容显示！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "已清空所有内容显示！", XGUIMsgState.通知);
         }
         #endregion
 
@@ -526,7 +526,7 @@ namespace SevenStrikeModules.XHud
             pro_Handle.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条飞梭图形为：" + tex.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "设置进度条飞梭图形为：" + tex.name, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置前景的图像
@@ -537,7 +537,7 @@ namespace SevenStrikeModules.XHud
             pro_Fore.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条前景图形为：" + tex.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "设置进度条前景图形为：" + tex.name, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置背景的图像
@@ -548,7 +548,7 @@ namespace SevenStrikeModules.XHud
             pro_Bg.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条背景图形为：" + tex.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "设置进度条背景图形为：" + tex.name, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置进度条图标
@@ -559,7 +559,7 @@ namespace SevenStrikeModules.XHud
             pro_Icon.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条图标图形为：" + tex.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "设置进度条图标图形为：" + tex.name, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置进度条图标
@@ -570,7 +570,7 @@ namespace SevenStrikeModules.XHud
             pro_Icon.sprite = spr;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置进度条图标图形为：" + spr.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "设置进度条图标图形为：" + spr.name, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置进度条可视化组件的可见性

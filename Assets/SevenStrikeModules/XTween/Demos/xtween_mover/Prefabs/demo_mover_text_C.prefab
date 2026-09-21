@@ -140,7 +140,7 @@ MonoBehaviour:
   loopDelay: 0
   isRelative: 0
   isFromMode: 0
-  isAutoKill: 1
+  isAutoKill: 0
   useCurve: 0
   curve:
     serializedVersion: 2
@@ -177,7 +177,7 @@ MonoBehaviour:
     durationAdd_pos: 1
     duration_pos: 1
     delay_pos: 0
-    ease_pos: 8
+    ease_pos: 10
     usecurve_pos: 0
     curve_pos:
       serializedVersion: 2
@@ -206,8 +206,8 @@ MonoBehaviour:
     initial_col: 1
     durationAdd_col: 1
     duration_col: 1
-    delay_col: 0
-    ease_col: 8
+    delay_col: 0.5
+    ease_col: 10
     usecurve_col: 0
     curve_col:
       serializedVersion: 2
@@ -226,7 +226,7 @@ MonoBehaviour:
     durationAdd_pos: 1
     duration_pos: 1
     delay_pos: 0
-    ease_pos: 8
+    ease_pos: 10
     usecurve_pos: 0
     curve_pos:
       serializedVersion: 2
@@ -255,8 +255,8 @@ MonoBehaviour:
     initial_col: 1
     durationAdd_col: 1
     duration_col: 1
-    delay_col: 0
-    ease_col: 8
+    delay_col: 0.55
+    ease_col: 10
     usecurve_col: 0
     curve_col:
       serializedVersion: 2

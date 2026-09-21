@@ -368,6 +368,13 @@ namespace SevenStrikeModules.XTween
         [SerializeField] private string IndexControlLineStyle = "虚线";
         [SerializeField] private string IndexPathMarkMode = "根据路径线条";
 #pragma warning restore CS0414
+
+        public bool fold_options;
+        public bool fold_points;
+        public bool fold_params;
+        public bool fold_style;
+        public bool fold_status;
+        public bool fold_marks;
         #endregion
 
         #region 委托
@@ -827,13 +834,13 @@ namespace SevenStrikeModules.XTween
 
             #region 加载材质和贴图
 #if UNITY_EDITOR
-            string path_mat = XTween_Dashboard.Get_path_XTween_GUIStyle_Path() + "Icon/Icons_XTween_PathTool/XTween_PathMark.mat";
+            string path_mat = XTween_Dashboard.Get_XTween_GUIRoot_Path() + "Icon/Icons_XTween_PathTool/XTween_PathMark.mat";
             Material mat = AssetDatabase.LoadAssetAtPath<Material>(path_mat);
             if (PathMarksTexture != null)
                 mat.mainTexture = PathMarksTexture;
             else
             {
-                string path_tex = XTween_Dashboard.Get_path_XTween_GUIStyle_Path() + "Icon/Icons_XTween_PathTool/PathMark.png";
+                string path_tex = XTween_Dashboard.Get_XTween_GUIRoot_Path() + "Icon/Icons_XTween_PathTool/PathMark.png";
                 Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(path_tex);
                 mat.mainTexture = tex;
             }

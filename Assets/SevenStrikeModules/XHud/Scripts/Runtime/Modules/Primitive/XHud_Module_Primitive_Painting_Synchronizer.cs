@@ -39,6 +39,7 @@ namespace SevenStrikeModules.XHud
         private XHud_Manager mgr;
 
         private Vector3 ActivateScale;
+        public bool fold_based = true;
 
         private void OnEnable()
         {
@@ -88,7 +89,7 @@ namespace SevenStrikeModules.XHud
             if (Painting != null)
             {
                 //--如果使用颜色库颜色则将组件的颜色值覆盖为库中选中的颜色，否则使用原始色
-                if (Painting.SyncLibraryColor)
+                if (Painting.SyncLibraryColor && Painting.SyncImageColor)
                 {
                     if (mgr == null)
                     {

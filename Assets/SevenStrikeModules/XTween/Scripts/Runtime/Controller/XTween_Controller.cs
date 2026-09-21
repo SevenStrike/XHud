@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XTween
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using System;
     using TMPro;
     using UnityEngine;
@@ -58,7 +59,6 @@ namespace SevenStrikeModules.XTween
             Max = max;
         }
     }
-
     /// <summary>
     /// 控制动画的播放、延迟、循环等行为的控制器类
     /// 提供动画的基本配置和控制功能，支持多种动画类型（如位置、缩放_Scale、颜色等）
@@ -318,11 +318,7 @@ namespace SevenStrikeModules.XTween
         /// <summary>
         /// Tween动画坐标空间
         /// </summary>
-        [SerializeField] public XTweenRotationSpace RotationSpace = XTweenRotationSpace.绝对;
-        /// <summary>
-        /// Tween缓动预览图
-        /// </summary>
-        [SerializeField] public Texture2D EaseGraph;
+        [SerializeField] public XTweenRotationSpace RotationSpace = XTweenRotationSpace.世界坐标;
         #endregion
 
         #region 动画目标值（End）
@@ -451,7 +447,7 @@ namespace SevenStrikeModules.XTween
         /// <summary>
         /// 索引 - 旋转动画的坐标空间
         /// </summary>
-        [SerializeField] public string index_TweenTypes_Rotation_Space = "绝对";
+        [SerializeField] public string index_TweenTypes_Rotation_Space = "世界坐标";
         /// <summary>
         /// 索引 - 透明度动画子类型
         /// </summary>
@@ -539,6 +535,27 @@ namespace SevenStrikeModules.XTween
         [SerializeField] private KeyCode keyControl_Tween_Replay = KeyCode.T;
         #endregion
 
+        #region 面板折叠
+        [SerializeField]
+        public bool fold_params = true;
+        [SerializeField]
+        public bool fold_preset = true;
+        [SerializeField]
+        public bool fold_status = false;
+        [SerializeField]
+        public bool fold_type = false;
+        [SerializeField]
+        public bool fold_endvalue = false;
+        [SerializeField]
+        public bool fold_current_or_components = false;
+        [SerializeField]
+        public bool fold_option = true;
+        [SerializeField]
+        public bool fold_keycontrol = true;
+        [SerializeField]
+        public bool fold_basescript = true;
+        #endregion
+
         void Start()
         {
             GetComponents();
@@ -565,8 +582,9 @@ namespace SevenStrikeModules.XTween
                 return;
             Delay = Random.Range(RandomDelay.Min, RandomDelay.Max);
             if (DebugMode)
-                XTween_Utilitys.DebugInfo("XTween控制器消息", $"已随机化延迟时间： 最小: {RandomDelay.Min} 最大: {RandomDelay.Max} ！", XTweenGUIMsgState.设置);
+                XGUI_Utilitys.Console("XTween控制器消息", $"已随机化延迟时间： 最小: {RandomDelay.Min} 最大: {RandomDelay.Max} ！", XGUIMsgState.设置);
         }
+        [ContextMenu("G 获取动画组件")]
         /// <summary>
         /// 获取组件
         /// </summary>
@@ -580,7 +598,7 @@ namespace SevenStrikeModules.XTween
                 {
                     Target_PathTool = m_PathTool;
                     if (DebugMode)
-                        XTween_Utilitys.DebugInfo("XTween控制器消息", $"已找到组件：{m_PathTool}  ！", XTweenGUIMsgState.确认);
+                        XGUI_Utilitys.Console("XTween控制器消息", $"已找到组件：{m_PathTool}  ！", XGUIMsgState.确认);
                 }
             }
             UnityEngine.RectTransform m_RectTransform = GetComponent<UnityEngine.RectTransform>();
@@ -590,7 +608,7 @@ namespace SevenStrikeModules.XTween
                 {
                     Target_RectTransform = m_RectTransform;
                     if (DebugMode)
-                        XTween_Utilitys.DebugInfo("XTween控制器消息", $"已找到组件：{m_RectTransform}  ！", XTweenGUIMsgState.确认);
+                        XGUI_Utilitys.Console("XTween控制器消息", $"已找到组件：{m_RectTransform}  ！", XGUIMsgState.确认);
                 }
             }
             Image m_Image = GetComponent<Image>();
@@ -600,7 +618,7 @@ namespace SevenStrikeModules.XTween
                 {
                     Target_Image = m_Image;
                     if (DebugMode)
-                        XTween_Utilitys.DebugInfo("XTween控制器消息", $"已找到组件：{m_Image}  ！", XTweenGUIMsgState.确认);
+                        XGUI_Utilitys.Console("XTween控制器消息", $"已找到组件：{m_Image}  ！", XGUIMsgState.确认);
                 }
             }
             CanvasGroup m_CanvasGroup = GetComponent<CanvasGroup>();
@@ -610,7 +628,7 @@ namespace SevenStrikeModules.XTween
                 {
                     Target_CanvasGroup = m_CanvasGroup;
                     if (DebugMode)
-                        XTween_Utilitys.DebugInfo("XTween控制器消息", $"已找到组件：{m_CanvasGroup}  ！", XTweenGUIMsgState.确认);
+                        XGUI_Utilitys.Console("XTween控制器消息", $"已找到组件：{m_CanvasGroup}  ！", XGUIMsgState.确认);
                 }
             }
             Text m_Text = GetComponent<Text>();
@@ -620,7 +638,7 @@ namespace SevenStrikeModules.XTween
                 {
                     Target_Text = m_Text;
                     if (DebugMode)
-                        XTween_Utilitys.DebugInfo("XTween控制器消息", $"已找到组件：{m_Text}  ！", XTweenGUIMsgState.确认);
+                        XGUI_Utilitys.Console("XTween控制器消息", $"已找到组件：{m_Text}  ！", XGUIMsgState.确认);
                 }
             }
             TextMeshProUGUI m_TmpText = GetComponent<TextMeshProUGUI>();
@@ -630,9 +648,25 @@ namespace SevenStrikeModules.XTween
                 {
                     Target_TmpText = m_TmpText;
                     if (DebugMode)
-                        XTween_Utilitys.DebugInfo("XTween控制器消息", $"已找到组件：{m_TmpText}  ！", XTweenGUIMsgState.确认);
+                        XGUI_Utilitys.Console("XTween控制器消息", $"已找到组件：{m_TmpText}  ！", XGUIMsgState.确认);
                 }
             }
+        }
+        [ContextMenu("R 识别动画类型")]
+        /// <summary>
+        /// 根据字符串识别动画方式的枚举值
+        /// </summary>
+        public void RecognizedTweenTypes()
+        {
+            TweenTypes = (XTweenTypes)Enum.Parse(typeof(XTweenTypes), index_TweenTypes);
+            TweenTypes_Positions = (XTweenTypes_Positions)Enum.Parse(typeof(XTweenTypes_Positions), index_TweenTypes_Positions);
+            TweenTypes_Rotations = (XTweenTypes_Rotations)Enum.Parse(typeof(XTweenTypes_Rotations), index_TweenTypes_Rotations);
+            TweenTypes_Alphas = (XTweenTypes_Alphas)Enum.Parse(typeof(XTweenTypes_Alphas), index_TweenTypes_Alphas);
+            TweenTypes_Shakes = (XTweenTypes_Shakes)Enum.Parse(typeof(XTweenTypes_Shakes), index_TweenTypes_Shakes);
+            TweenTypes_Text = (XTweenTypes_Text)Enum.Parse(typeof(XTweenTypes_Text), index_TweenTypes_Text);
+            TweenTypes_TmpText = (XTweenTypes_TmpText)Enum.Parse(typeof(XTweenTypes_TmpText), index_TweenTypes_TmpText);
+            TweenTypes_To = (XTweenTypes_To)Enum.Parse(typeof(XTweenTypes_To), index_TweenTypes_To);
+            RotationSpace = (XTweenRotationSpace)Enum.Parse(typeof(XTweenRotationSpace), index_TweenTypes_Rotation_Space);
         }
         #endregion
 
@@ -681,7 +715,7 @@ namespace SevenStrikeModules.XTween
             if (TweenTypes == XTweenTypes.无_None)
             {
                 if (DebugMode)
-                    XTween_Utilitys.DebugInfo("XTween控制器消息", "当动画目标处于： " + TweenTypes.ToString() + " 时，则不会有任何效果！", XTweenGUIMsgState.警告);
+                    XGUI_Utilitys.Console("XTween控制器消息", "当动画目标处于： " + TweenTypes.ToString() + " 时，则不会有任何效果！", XGUIMsgState.警告);
                 return;
             }
 
@@ -708,7 +742,7 @@ namespace SevenStrikeModules.XTween
             CurrentTweener.OnComplete(Action_Complete);
 
             if (DebugMode)
-                XTween_Utilitys.DebugInfo("XTween控制器消息", "播放动画： " + TweenTypes.ToString(), XTweenGUIMsgState.通知, gameObject);
+                XGUI_Utilitys.Console("XTween控制器消息", "播放动画： " + TweenTypes.ToString(), XGUIMsgState.通知, gameObject);
         }
         /// <summary>
         /// 动画播放
@@ -718,13 +752,13 @@ namespace SevenStrikeModules.XTween
             if (CurrentTweener == null)
             {
                 if (DebugMode)
-                    XTween_Utilitys.DebugInfo("XTween控制器消息", "未能播放动画！因为当前不存在动画！", XTweenGUIMsgState.警告);
+                    XGUI_Utilitys.Console("XTween控制器消息", "未能播放动画！因为当前不存在动画！", XGUIMsgState.警告);
                 return;
             }
             if (TweenTypes == XTweenTypes.无_None)
             {
                 if (DebugMode)
-                    XTween_Utilitys.DebugInfo("XTween控制器消息", "未能播放动画！因为当前模式不是有效的动画模式！", XTweenGUIMsgState.警告);
+                    XGUI_Utilitys.Console("XTween控制器消息", "未能播放动画！因为当前模式不是有效的动画模式！", XGUIMsgState.警告);
                 return;
             }
 
@@ -741,13 +775,13 @@ namespace SevenStrikeModules.XTween
             if (CurrentTweener == null)
             {
                 if (DebugMode)
-                    XTween_Utilitys.DebugInfo("XTween控制器消息", "未能暂停动画！因为当前不存在动画！", XTweenGUIMsgState.警告);
+                    XGUI_Utilitys.Console("XTween控制器消息", "未能暂停动画！因为当前不存在动画！", XGUIMsgState.警告);
                 return;
             }
             if (TweenTypes == XTweenTypes.无_None)
             {
                 if (DebugMode)
-                    XTween_Utilitys.DebugInfo("XTween控制器消息", "未能暂停动画！因为当前模式不是有效的动画模式！", XTweenGUIMsgState.警告);
+                    XGUI_Utilitys.Console("XTween控制器消息", "未能暂停动画！因为当前模式不是有效的动画模式！", XGUIMsgState.警告);
                 return;
             }
             CurrentTweener.Pause();
@@ -763,13 +797,13 @@ namespace SevenStrikeModules.XTween
             if (CurrentTweener == null)
             {
                 if (DebugMode)
-                    XTween_Utilitys.DebugInfo("XTween控制器消息", "未能继续动画！因为当前不存在动画！", XTweenGUIMsgState.警告);
+                    XGUI_Utilitys.Console("XTween控制器消息", "未能继续动画！因为当前不存在动画！", XGUIMsgState.警告);
                 return;
             }
             if (TweenTypes == XTweenTypes.无_None)
             {
                 if (DebugMode)
-                    XTween_Utilitys.DebugInfo("XTween控制器消息", "未能继续动画！因为当前模式不是有效的动画模式！", XTweenGUIMsgState.警告);
+                    XGUI_Utilitys.Console("XTween控制器消息", "未能继续动画！因为当前模式不是有效的动画模式！", XGUIMsgState.警告);
                 return;
             }
             CurrentTweener.Resume();
@@ -782,12 +816,12 @@ namespace SevenStrikeModules.XTween
             if (CurrentTweener == null)
             {
                 if (DebugMode)
-                    XTween_Utilitys.DebugInfo("XTween控制器消息", "未能倒退动画！因为当前不存在动画！", XTweenGUIMsgState.警告);
+                    XGUI_Utilitys.Console("XTween控制器消息", "未能倒退动画！因为当前不存在动画！", XGUIMsgState.警告);
                 return;
             }
             CurrentTweener.Rewind();
             if (DebugMode)
-                XTween_Utilitys.DebugInfo("XTween控制器消息", "倒退动画： " + TweenTypes.ToString(), XTweenGUIMsgState.警告);
+                XGUI_Utilitys.Console("XTween控制器消息", "倒退动画： " + TweenTypes.ToString(), XGUIMsgState.警告);
         }
         /// <summary>
         /// 动画杀死
@@ -797,13 +831,13 @@ namespace SevenStrikeModules.XTween
             if (CurrentTweener == null)
             {
                 if (DebugMode)
-                    XTween_Utilitys.DebugInfo("XTween控制器消息", "未能杀死动画！因为当前不存在动画！", XTweenGUIMsgState.警告);
+                    XGUI_Utilitys.Console("XTween控制器消息", "未能杀死动画！因为当前不存在动画！", XGUIMsgState.警告);
                 return;
             }
             CurrentTweener.Kill();
             CurrentTweener = null;
             if (DebugMode)
-                XTween_Utilitys.DebugInfo("XTween控制器消息", "杀死动画： " + TweenTypes.ToString(), XTweenGUIMsgState.确认);
+                XGUI_Utilitys.Console("XTween控制器消息", "杀死动画： " + TweenTypes.ToString(), XGUIMsgState.确认);
         }
         /// <summary>
         /// 动画杀死后的委托
@@ -835,13 +869,13 @@ namespace SevenStrikeModules.XTween
             if (CurrentTweener == null)
             {
                 if (DebugMode)
-                    XTween_Utilitys.DebugInfo("XTween控制器消息", "未能重播动画！因为当前不存在动画！", XTweenGUIMsgState.警告);
+                    XGUI_Utilitys.Console("XTween控制器消息", "未能重播动画！因为当前不存在动画！", XGUIMsgState.警告);
                 return;
             }
             Tween_Rewind();
             Tween_Play();
             if (DebugMode)
-                XTween_Utilitys.DebugInfo("XTween控制器消息", "重播动画： " + TweenTypes.ToString(), XTweenGUIMsgState.通知);
+                XGUI_Utilitys.Console("XTween控制器消息", "重播动画： " + TweenTypes.ToString(), XGUIMsgState.通知);
         }
         /// <summary>
         /// 动画重建
@@ -851,7 +885,7 @@ namespace SevenStrikeModules.XTween
             //if (CurrentTweener == null)
             //{
             //    if (DebugMode)
-            //        XTween_Utilitys.DebugInfo("XTween控制器消息", "未能重播动画！因为当前不存在动画！", GUIMsgState.警告);
+            //        XGUI_Utilitys.Func_PrintInfo ("XTween控制器消息", "未能重播动画！因为当前不存在动画！", XGUIMsgState.警告);
             //    return;
             //}
             Tween_Kill();
@@ -859,7 +893,7 @@ namespace SevenStrikeModules.XTween
             Tween_Create();
             Tween_Play();
             if (DebugMode)
-                XTween_Utilitys.DebugInfo("XTween控制器消息", "重播动画： " + TweenTypes.ToString(), XTweenGUIMsgState.通知);
+                XGUI_Utilitys.Console("XTween控制器消息", "重播动画： " + TweenTypes.ToString(), XGUIMsgState.通知);
         }
         #endregion
     }

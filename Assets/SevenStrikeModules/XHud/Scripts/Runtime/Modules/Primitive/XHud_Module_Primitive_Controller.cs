@@ -21,7 +21,9 @@
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
+#if UNITY_EDITOR
     using UnityEditor;
+#endif
     using UnityEngine;
     using UnityEngine.UI;
 
@@ -31,7 +33,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 图元编号
         /// </summary>
-        [SerializeField] public int ID;
+        [SerializeField] public string ID;
         /// <summary>
         /// 图元名称
         /// </summary>
@@ -85,6 +87,27 @@ namespace SevenStrikeModules.XHud
         /// 调试开关
         /// </summary>
         [SerializeField] public bool Debug;
+        #endregion
+
+        #region 折叠
+        public bool
+            fold_param = true,
+            fold_option = true,
+            fold_based = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_param = state;
+            fold_option = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool param = true, bool option = true, bool based = true)
+        {
+            fold_param = param;
+            fold_option = option;
+            fold_based = based;
+        }
         #endregion
 
         #region 图元模块
@@ -192,7 +215,7 @@ namespace SevenStrikeModules.XHud
         /// 获取ID
         /// </summary>
         /// <returns></returns>
-        public int GetID()
+        public string GetID()
         {
             return ID;
         }
@@ -200,7 +223,7 @@ namespace SevenStrikeModules.XHud
         /// 设置D
         /// </summary>
         /// <param name="id"></param>
-        public void SetID(int id)
+        public void SetID(string id)
         {
             ID = id;
         }
@@ -240,6 +263,8 @@ namespace SevenStrikeModules.XHud
 
             IsInitial = true;
 
+            GetControlComponent();
+
             return this;
         }
 
@@ -261,6 +286,6 @@ namespace SevenStrikeModules.XHud
             if (gameObject.GetComponent<XHud_Module_Primitive_Tween>() != null)
                 Undo.DestroyObjectImmediate(gameObject.GetComponent<XHud_Module_Primitive_Tween>());
         }
-#endif
+#endif       
     }
 }

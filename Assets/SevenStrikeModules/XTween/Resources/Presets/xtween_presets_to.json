@@ -1,8 +1,749 @@
 {
     "Type": "原生动画_To",
-    "Presets": [],
+    "Presets": [
+        {
+            "rid": 1000
+        },
+        {
+            "rid": 1001
+        },
+        {
+            "rid": 1002
+        },
+        {
+            "rid": 1003
+        },
+        {
+            "rid": 1004
+        },
+        {
+            "rid": 1005
+        },
+        {
+            "rid": 1006
+        }
+    ],
     "references": {
         "version": 2,
-        "RefIds": []
+        "RefIds": [
+            {
+                "rid": 1000,
+                "type": {
+                    "class": "XTweenPresetBase",
+                    "ns": "SevenStrikeModules.XTween",
+                    "asm": "XTween.Runtime"
+                },
+                "data": {
+                    "Name": "intint",
+                    "Description": "Datas",
+                    "Duration": 103.0,
+                    "Delay": 0.0,
+                    "UseRandomDelay": false,
+                    "RandomDelay": {
+                        "Min": 0.0,
+                        "Max": 0.0
+                    },
+                    "EaseMode": 1,
+                    "UseCurve": false,
+                    "Curve": {
+                        "serializedVersion": "2",
+                        "m_Curve": [
+                            {
+                                "serializedVersion": "3",
+                                "time": 0.0,
+                                "value": 0.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            },
+                            {
+                                "serializedVersion": "3",
+                                "time": 1.0,
+                                "value": 1.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            }
+                        ],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    },
+                    "LoopCount": -1,
+                    "LoopDelay": 0.0,
+                    "LoopType": 0,
+                    "IsRelative": false,
+                    "IsAutoKill": true,
+                    "UseFromMode": true,
+                    "IsFavourite": false
+                }
+            },
+            {
+                "rid": 1001,
+                "type": {
+                    "class": "XTweenPreset_To",
+                    "ns": "SevenStrikeModules.XTween",
+                    "asm": "XTween.Runtime"
+                },
+                "data": {
+                    "Name": "dddddddddd",
+                    "Description": "sadsadasd",
+                    "Duration": 1.0,
+                    "Delay": 0.0,
+                    "UseRandomDelay": false,
+                    "RandomDelay": {
+                        "Min": 0.0,
+                        "Max": 0.0
+                    },
+                    "EaseMode": 30,
+                    "UseCurve": false,
+                    "Curve": {
+                        "serializedVersion": "2",
+                        "m_Curve": [
+                            {
+                                "serializedVersion": "3",
+                                "time": 0.0,
+                                "value": 0.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            },
+                            {
+                                "serializedVersion": "3",
+                                "time": 1.0,
+                                "value": 1.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            }
+                        ],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    },
+                    "LoopCount": -1,
+                    "LoopDelay": 0.0,
+                    "LoopType": 0,
+                    "IsRelative": false,
+                    "IsAutoKill": true,
+                    "UseFromMode": true,
+                    "IsFavourite": false,
+                    "ToType": 0,
+                    "EndValue_Int": 100,
+                    "EndValue_Float": 3.0,
+                    "EndValue_String": "",
+                    "EndValue_Vector2": {
+                        "x": 800.0,
+                        "y": 0.0
+                    },
+                    "EndValue_Vector3": {
+                        "x": 200.0,
+                        "y": 200.0,
+                        "z": 0.0
+                    },
+                    "EndValue_Vector4": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 0.0
+                    },
+                    "EndValue_Color": {
+                        "r": 1.0,
+                        "g": 1.0,
+                        "b": 1.0,
+                        "a": 1.0
+                    },
+                    "FromValue_Int": 0,
+                    "FromValue_Float": 0.0,
+                    "FromValue_String": "",
+                    "FromValue_Vector2": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "FromValue_Vector3": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "FromValue_Vector4": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 0.0
+                    },
+                    "FromValue_Color": {
+                        "r": 1.0,
+                        "g": 1.0,
+                        "b": 1.0,
+                        "a": 1.0
+                    },
+                    "IsExtendedString": false,
+                    "TextCursor": "_",
+                    "CursorBlinkTime": 0.5
+                }
+            },
+            {
+                "rid": 1002,
+                "type": {
+                    "class": "XTweenPreset_To",
+                    "ns": "SevenStrikeModules.XTween",
+                    "asm": "XTween.Runtime"
+                },
+                "data": {
+                    "Name": "NameFloat",
+                    "Description": "Datas",
+                    "Duration": 1.0,
+                    "Delay": 0.0,
+                    "UseRandomDelay": false,
+                    "RandomDelay": {
+                        "Min": 0.0,
+                        "Max": 0.0
+                    },
+                    "EaseMode": 30,
+                    "UseCurve": false,
+                    "Curve": {
+                        "serializedVersion": "2",
+                        "m_Curve": [
+                            {
+                                "serializedVersion": "3",
+                                "time": 0.0,
+                                "value": 0.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            },
+                            {
+                                "serializedVersion": "3",
+                                "time": 1.0,
+                                "value": 1.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            }
+                        ],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    },
+                    "LoopCount": -1,
+                    "LoopDelay": 0.0,
+                    "LoopType": 0,
+                    "IsRelative": false,
+                    "IsAutoKill": true,
+                    "UseFromMode": true,
+                    "IsFavourite": false,
+                    "ToType": 1,
+                    "EndValue_Int": 100,
+                    "EndValue_Float": 3.1540000438690187,
+                    "EndValue_String": "",
+                    "EndValue_Vector2": {
+                        "x": 800.0,
+                        "y": 0.0
+                    },
+                    "EndValue_Vector3": {
+                        "x": 200.0,
+                        "y": 200.0,
+                        "z": 0.0
+                    },
+                    "EndValue_Vector4": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 0.0
+                    },
+                    "EndValue_Color": {
+                        "r": 1.0,
+                        "g": 1.0,
+                        "b": 1.0,
+                        "a": 1.0
+                    },
+                    "FromValue_Int": 0,
+                    "FromValue_Float": 0.0,
+                    "FromValue_String": "",
+                    "FromValue_Vector2": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "FromValue_Vector3": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "FromValue_Vector4": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 0.0
+                    },
+                    "FromValue_Color": {
+                        "r": 1.0,
+                        "g": 1.0,
+                        "b": 1.0,
+                        "a": 1.0
+                    },
+                    "IsExtendedString": false,
+                    "TextCursor": "_",
+                    "CursorBlinkTime": 0.5
+                }
+            },
+            {
+                "rid": 1003,
+                "type": {
+                    "class": "XTweenPreset_To",
+                    "ns": "SevenStrikeModules.XTween",
+                    "asm": "XTween.Runtime"
+                },
+                "data": {
+                    "Name": "NameString",
+                    "Description": "Datas",
+                    "Duration": 1.0,
+                    "Delay": 0.0,
+                    "UseRandomDelay": false,
+                    "RandomDelay": {
+                        "Min": 0.0,
+                        "Max": 0.0
+                    },
+                    "EaseMode": 30,
+                    "UseCurve": false,
+                    "Curve": {
+                        "serializedVersion": "2",
+                        "m_Curve": [
+                            {
+                                "serializedVersion": "3",
+                                "time": 0.0,
+                                "value": 0.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            },
+                            {
+                                "serializedVersion": "3",
+                                "time": 1.0,
+                                "value": 1.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            }
+                        ],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    },
+                    "LoopCount": -1,
+                    "LoopDelay": 0.0,
+                    "LoopType": 0,
+                    "IsRelative": false,
+                    "IsAutoKill": true,
+                    "UseFromMode": true,
+                    "IsFavourite": false,
+                    "ToType": 2,
+                    "EndValue_Int": 100,
+                    "EndValue_Float": 3.1540000438690187,
+                    "EndValue_String": "sssss",
+                    "EndValue_Vector2": {
+                        "x": 800.0,
+                        "y": 0.0
+                    },
+                    "EndValue_Vector3": {
+                        "x": 200.0,
+                        "y": 200.0,
+                        "z": 0.0
+                    },
+                    "EndValue_Vector4": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 0.0
+                    },
+                    "EndValue_Color": {
+                        "r": 1.0,
+                        "g": 1.0,
+                        "b": 1.0,
+                        "a": 1.0
+                    },
+                    "FromValue_Int": 0,
+                    "FromValue_Float": 0.0,
+                    "FromValue_String": "wwwww",
+                    "FromValue_Vector2": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "FromValue_Vector3": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "FromValue_Vector4": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 0.0
+                    },
+                    "FromValue_Color": {
+                        "r": 1.0,
+                        "g": 1.0,
+                        "b": 1.0,
+                        "a": 1.0
+                    },
+                    "IsExtendedString": false,
+                    "TextCursor": "_",
+                    "CursorBlinkTime": 0.5
+                }
+            },
+            {
+                "rid": 1004,
+                "type": {
+                    "class": "XTweenPreset_To",
+                    "ns": "SevenStrikeModules.XTween",
+                    "asm": "XTween.Runtime"
+                },
+                "data": {
+                    "Name": "vv44",
+                    "Description": "Datas",
+                    "Duration": 2.3499999046325685,
+                    "Delay": 0.0,
+                    "UseRandomDelay": false,
+                    "RandomDelay": {
+                        "Min": 0.0,
+                        "Max": 0.0
+                    },
+                    "EaseMode": 30,
+                    "UseCurve": false,
+                    "Curve": {
+                        "serializedVersion": "2",
+                        "m_Curve": [
+                            {
+                                "serializedVersion": "3",
+                                "time": 0.0,
+                                "value": 0.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            },
+                            {
+                                "serializedVersion": "3",
+                                "time": 1.0,
+                                "value": 1.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            }
+                        ],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    },
+                    "LoopCount": -1,
+                    "LoopDelay": 0.0,
+                    "LoopType": 0,
+                    "IsRelative": false,
+                    "IsAutoKill": true,
+                    "UseFromMode": true,
+                    "IsFavourite": false,
+                    "ToType": 5,
+                    "EndValue_Int": 100,
+                    "EndValue_Float": 0.3499999940395355,
+                    "EndValue_String": "sssss",
+                    "EndValue_Vector2": {
+                        "x": 800.0,
+                        "y": 0.0
+                    },
+                    "EndValue_Vector3": {
+                        "x": 22.0,
+                        "y": 111.0,
+                        "z": 224.0
+                    },
+                    "EndValue_Vector4": {
+                        "x": 1.0,
+                        "y": 2.0,
+                        "z": 3.0,
+                        "w": 4.0
+                    },
+                    "EndValue_Color": {
+                        "r": 0.01839303970336914,
+                        "g": 1.0,
+                        "b": 0.0,
+                        "a": 1.0
+                    },
+                    "FromValue_Int": 0,
+                    "FromValue_Float": 0.0,
+                    "FromValue_String": "wwwww",
+                    "FromValue_Vector2": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "FromValue_Vector3": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "FromValue_Vector4": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 0.0
+                    },
+                    "FromValue_Color": {
+                        "r": 1.0,
+                        "g": 0.0,
+                        "b": 0.0,
+                        "a": 1.0
+                    },
+                    "IsExtendedString": false,
+                    "TextCursor": "_",
+                    "CursorBlinkTime": 0.5
+                }
+            },
+            {
+                "rid": 1005,
+                "type": {
+                    "class": "XTweenPreset_To",
+                    "ns": "SevenStrikeModules.XTween",
+                    "asm": "XTween.Runtime"
+                },
+                "data": {
+                    "Name": "v33333",
+                    "Description": "Datas",
+                    "Duration": 2.3499999046325685,
+                    "Delay": 0.0,
+                    "UseRandomDelay": false,
+                    "RandomDelay": {
+                        "Min": 0.0,
+                        "Max": 0.0
+                    },
+                    "EaseMode": 30,
+                    "UseCurve": false,
+                    "Curve": {
+                        "serializedVersion": "2",
+                        "m_Curve": [
+                            {
+                                "serializedVersion": "3",
+                                "time": 0.0,
+                                "value": 0.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            },
+                            {
+                                "serializedVersion": "3",
+                                "time": 1.0,
+                                "value": 1.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            }
+                        ],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    },
+                    "LoopCount": -1,
+                    "LoopDelay": 0.0,
+                    "LoopType": 0,
+                    "IsRelative": false,
+                    "IsAutoKill": true,
+                    "UseFromMode": true,
+                    "IsFavourite": false,
+                    "ToType": 4,
+                    "EndValue_Int": 100,
+                    "EndValue_Float": 0.3499999940395355,
+                    "EndValue_String": "sssss",
+                    "EndValue_Vector2": {
+                        "x": 800.0,
+                        "y": 0.0
+                    },
+                    "EndValue_Vector3": {
+                        "x": 22.0,
+                        "y": 111.0,
+                        "z": 224.0
+                    },
+                    "EndValue_Vector4": {
+                        "x": 1.0,
+                        "y": 2.0,
+                        "z": 3.0,
+                        "w": 4.0
+                    },
+                    "EndValue_Color": {
+                        "r": 0.01839303970336914,
+                        "g": 1.0,
+                        "b": 0.0,
+                        "a": 1.0
+                    },
+                    "FromValue_Int": 0,
+                    "FromValue_Float": 0.0,
+                    "FromValue_String": "wwwww",
+                    "FromValue_Vector2": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "FromValue_Vector3": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "FromValue_Vector4": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 0.0
+                    },
+                    "FromValue_Color": {
+                        "r": 1.0,
+                        "g": 0.0,
+                        "b": 0.0,
+                        "a": 1.0
+                    },
+                    "IsExtendedString": false,
+                    "TextCursor": "_",
+                    "CursorBlinkTime": 0.5
+                }
+            },
+            {
+                "rid": 1006,
+                "type": {
+                    "class": "XTweenPreset_To",
+                    "ns": "SevenStrikeModules.XTween",
+                    "asm": "XTween.Runtime"
+                },
+                "data": {
+                    "Name": "v22222222",
+                    "Description": "Datas",
+                    "Duration": 2.3499999046325685,
+                    "Delay": 0.0,
+                    "UseRandomDelay": false,
+                    "RandomDelay": {
+                        "Min": 0.0,
+                        "Max": 0.0
+                    },
+                    "EaseMode": 30,
+                    "UseCurve": false,
+                    "Curve": {
+                        "serializedVersion": "2",
+                        "m_Curve": [
+                            {
+                                "serializedVersion": "3",
+                                "time": 0.0,
+                                "value": 0.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            },
+                            {
+                                "serializedVersion": "3",
+                                "time": 1.0,
+                                "value": 1.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0,
+                                "weightedMode": 0,
+                                "inWeight": 0.0,
+                                "outWeight": 0.0
+                            }
+                        ],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    },
+                    "LoopCount": -1,
+                    "LoopDelay": 0.0,
+                    "LoopType": 0,
+                    "IsRelative": false,
+                    "IsAutoKill": true,
+                    "UseFromMode": true,
+                    "IsFavourite": false,
+                    "ToType": 3,
+                    "EndValue_Int": 100,
+                    "EndValue_Float": 0.3499999940395355,
+                    "EndValue_String": "sssss",
+                    "EndValue_Vector2": {
+                        "x": 800.0,
+                        "y": 0.0
+                    },
+                    "EndValue_Vector3": {
+                        "x": 22.0,
+                        "y": 111.0,
+                        "z": 224.0
+                    },
+                    "EndValue_Vector4": {
+                        "x": 1.0,
+                        "y": 2.0,
+                        "z": 3.0,
+                        "w": 4.0
+                    },
+                    "EndValue_Color": {
+                        "r": 0.01839303970336914,
+                        "g": 1.0,
+                        "b": 0.0,
+                        "a": 1.0
+                    },
+                    "FromValue_Int": 0,
+                    "FromValue_Float": 0.0,
+                    "FromValue_String": "wwwww",
+                    "FromValue_Vector2": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "FromValue_Vector3": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "FromValue_Vector4": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 0.0
+                    },
+                    "FromValue_Color": {
+                        "r": 1.0,
+                        "g": 0.0,
+                        "b": 0.0,
+                        "a": 1.0
+                    },
+                    "IsExtendedString": false,
+                    "TextCursor": "_",
+                    "CursorBlinkTime": 0.5
+                }
+            }
+        ]
     }
 }

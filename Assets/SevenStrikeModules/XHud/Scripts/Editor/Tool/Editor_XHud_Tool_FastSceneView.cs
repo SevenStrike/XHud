@@ -20,9 +20,10 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
@@ -39,14 +40,18 @@ namespace SevenStrikeModules.XHud.Editor
 
         // 菜单项 ID（用于保存勾选状态）
         private const string MENU_KEY_VISUAL_PLACER = "XHud_ElementVisualPlacer_Enabled";
+        private const string MENU_KEY_PRIMITIVE_CONTROLLER_ID_DISPLAY = "XHudPrimitiveController_ID_Displayer";
 
         static Editor_XHud_Tool_FastSceneView()
         {
             SceneView.duringSceneGui += OnSceneGUI;
 
             // 初始化时从 EditorPrefs 读取保存的状态
-            bool savedState = XHud_Utilitys.PlayerPrefs_ReadValue_Bool_ForEditor(MENU_KEY_VISUAL_PLACER);
+            bool savedState = XGUI.x_Editor_Data_Get_With_Bool(MENU_KEY_VISUAL_PLACER);
             Editor_XHud_Tool_ElementVisualPlacer.SetEnabled(savedState);
+
+            bool idDisplay = XGUI.x_Editor_Data_Get_With_Bool(MENU_KEY_PRIMITIVE_CONTROLLER_ID_DISPLAY);
+            XHud_Dashboard.DisplayPrimitiveControllerIDConfig.XHudPrimitiveController_ID_Displayer = idDisplay;
         }
 
         private static void OnSceneGUI(SceneView sceneView)
@@ -72,7 +77,21 @@ namespace SevenStrikeModules.XHud.Editor
             float btn3_y = btn2_y - BUTTON_HEIGHT - BUTTON_SPACING;
 
             Rect btn_rect_mgr = new Rect(btn2_x, btn2_y, BUTTON_WIDTH, BUTTON_HEIGHT);
-            if (Editor_XHud_GUI.Gui_Button(btn_rect_mgr, null, null, false, "XHud 管理器", "快速选中XHudManager物体", Editor_XHud_GUI.GetColor(HudColor.深空灰), Color.white, HudFilled.实体))
+
+            if (XGUI.gui_button(
+               rect: btn_rect_mgr,
+               text: "XHud 管理器",
+               tooltip: "快速选中XHudManager物体",
+               btn_fill: XGUIFilled.实体,
+               btn_color: XGUIColor.亮白,
+               btn_color_gui: XHud_Dashboard.Theme_Primary,
+               btn_text_color: Color.black,
+               press_fill: XGUIFilled.实体,
+               press_color: XGUIColor.深空灰,
+               press_text_color: Color.white,
+               font_size: XGUIFontSize.M,
+               margin: new RectOffset(0, 0, 0, 0),
+               padding: new RectOffset(0, 0, 0, 0)))
             {
                 // 使用新的 API
                 XHud_Manager[] managers = Object.FindObjectsByType<XHud_Manager>(
@@ -89,7 +108,15 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     EditorApplication.delayCall += () =>
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 快速视图工具消息", "未找到管理器", $"抱歉未在场景列表中找到 <color=#{XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary)}>XHud Manager</color>！", "明白", 0);
+                        string res = XGUI.dialog(
+                            type: XGUIDialogType.警告,
+                            windowtitle: "XHud - 快速视图工具消息",
+                            title: "未找到管理器",
+                            msg: $"抱歉未在场景列表中找到 <color=#{XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary)}>XHud Manager</color>！",
+                            ok: "明白",
+                            PrimaryIndex: 0,
+                            usemodal: true,
+                            themecolor: XHud_Dashboard.Theme_Primary);
                     };
                 }
             }
@@ -101,6 +128,8 @@ namespace SevenStrikeModules.XHud.Editor
 
                 // 获取当前视觉放置器的启用状态
                 bool isPlacerEnabled = Editor_XHud_Tool_ElementVisualPlacer.GetEnabled();
+
+                bool isPrimitiveControllerIDDisplay = XHud_Dashboard.DisplayPrimitiveControllerIDConfig.XHudPrimitiveController_ID_Displayer;
 
                 XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
                 if (mgr != null)
@@ -158,10 +187,16 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     bool newState = !isPlacerEnabled;
                     Editor_XHud_Tool_ElementVisualPlacer.SetEnabled(newState);
-                    XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(MENU_KEY_VISUAL_PLACER, newState);
+                    XGUI.x_Editor_Data_Set_With_Bool(MENU_KEY_VISUAL_PLACER, newState);
                 });
-
                 menu.AddSeparator("");
+                menu.AddItem(new GUIContent("P 图元ID在场景中显示"), isPrimitiveControllerIDDisplay, () =>
+                {
+                    bool newState = !isPrimitiveControllerIDDisplay;
+                    XHud_Dashboard.DisplayPrimitiveControllerIDConfig.XHudPrimitiveController_ID_Displayer = newState;
+                    XHud_Dashboard.DisplayPrimitiveControllerIDConfig_Save();
+                    XGUI.x_Editor_Data_Set_With_Bool(MENU_KEY_PRIMITIVE_CONTROLLER_ID_DISPLAY, newState);
+                });
 
                 menu.AddItem(new GUIContent("A 刷新场景"), false, () =>
                 {

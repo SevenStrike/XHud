@@ -20,10 +20,10 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XTween;
     using System;
-    using System.Drawing;
     using System.Linq;
     using System.Reflection;
     using UnityEditor;
@@ -541,18 +541,21 @@ namespace SevenStrikeModules.XHud.Editor
                 Gui_Layout_Initia();
             }
 
-            Font f_ttf = AssetDatabase.LoadAssetAtPath<Font>(XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path() + $"EditorFonts/{FontName}.ttf");
+            Font f_ttf = AssetDatabase.LoadAssetAtPath<Font>(XTween_Dashboard.Get_XTween_GUIRoot_Path() + @$"EditorFonts/{FontName}.ttf");
 
-            Font f_otf = AssetDatabase.LoadAssetAtPath<Font>(XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path() + $"EditorFonts/{FontName}.otf");
+            Font f_otf = AssetDatabase.LoadAssetAtPath<Font>(XTween_Dashboard.Get_XTween_GUIRoot_Path() + @$"EditorFonts/{FontName}.otf");
 
             if (f_ttf != null)
+            {
                 return f_ttf;
+            }
             else if (f_otf != null)
+            {
                 return f_otf;
+            }
             else
                 return null;
         }
-
         #endregion
 
         #region GUI 控件
@@ -1279,7 +1282,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// 创造一个Gui标签框（细字体） - 字符串内容
         /// </summary>
         /// <param name="Text">输入框标题</param>
-        public static void Gui_Labelfield_Thin_WithClipping(Rect Rect, string Text, HudFilled FillStyle, HudColor Color, Color ButtonTextColor, TextAnchor Align, Vector2 Offset, int FontSize = 12, bool WrapWord = false, bool ContentClip = false, bool RichText = false, TextClipping textClipping = TextClipping.Ellipsis)
+        public static void Gui_Labelfield_Thin_WithClipping(Rect Rect, string Text, HudFilled FillStyle, HudColor Color, Color ButtonTextColor, TextAnchor Align, Vector2 Offset, int FontSize = 12, bool WrapWord = false, bool ContentClip = false, bool RichText = false, TextClipping textClipping = TextClipping.Ellipsis, Font font = null)
         {
             GUIStyle Style = new GUIStyle(Style_Labelfield);
             Style.normal.background = GetFillTexture(FillStyle, Color);
@@ -1289,6 +1292,8 @@ namespace SevenStrikeModules.XHud.Editor
             Style.contentOffset = Offset;
             Style.wordWrap = WrapWord;
             Style.richText = RichText;
+            if (font != null)
+                Style.font = font;
             if (ContentClip)
                 Style.clipping = textClipping;
             GUI.Label(Rect, Text, Style);
@@ -1829,7 +1834,7 @@ namespace SevenStrikeModules.XHud.Editor
             Style.normal.background = GetBtnFillTexture(FillStyle, HudColor.亮白);
             Style.onNormal.background = GetBtnFillTexture(FillStyle, HudColor.亮白);
             Style.margin = new RectOffset(0, 0, -1, 0);
-            if (XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary))
+            if (XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary))
             {
                 Style.normal.textColor = Color.black;
                 Style.onNormal.textColor = Color.black;
@@ -1987,7 +1992,7 @@ namespace SevenStrikeModules.XHud.Editor
             Style.normal.background = GetBtnFillTexture(FillStyle, HudColor.亮白);
             Style.onNormal.background = GetBtnFillTexture(FillStyle, HudColor.亮白);
             Style.margin = new RectOffset(0, 0, -1, 0);
-            if (XHud_Utilitys.GetBrightnessLimite(BgColor))
+            if (XGUI_Utilitys.ColorBrightness_LimiteGet(BgColor))
             {
                 Style.normal.textColor = Color.black;
                 Style.onNormal.textColor = Color.black;
@@ -2151,13 +2156,13 @@ namespace SevenStrikeModules.XHud.Editor
             Style.onNormal.background = GetBtnFillTexture(FillStyle_Selected, HudColor.亮白);
             Style.margin = new RectOffset(0, 0, -1, 0);
             Style.normal.textColor = TextColor_Normal;
-            if (XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary))
+            if (XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary))
             {
-                Style.onNormal.textColor = Color.black;
+                Style.onNormal.textColor = Color.black * 0.9f;
             }
             else
             {
-                Style.onNormal.textColor = Color.white;
+                Style.onNormal.textColor = Color.white * 0.9f;
             }
             Style.fixedHeight = Height;
 
@@ -2493,7 +2498,7 @@ namespace SevenStrikeModules.XHud.Editor
             GUILayout.Space(5 + Margin);
             Color bgcol = GUI.backgroundColor;
             GUI.backgroundColor = XHud_Dashboard.Theme_Group;
-            if (Gui_Layout_Button(Title, "", HudFilled.透明, HudColor.无, TitleColor, 20, Btn_Margin, Btn_Offset, TextAnchor.MiddleLeft, 12, GetFont("SS_Editor_Light")))
+            if (Gui_Layout_Button(Title, "", HudFilled.透明, HudColor.无, TitleColor, 20, Btn_Margin, Btn_Offset, TextAnchor.MiddleLeft, 12, GetFont("sx_regular")))
             {
                 fold = !fold;
             }
@@ -2634,7 +2639,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 Gui_Layout_Space(5);
             }
-            Gui_Layout_LabelfieldThin(Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, new Vector2(0, 0), TitleFontSize);
+            Gui_Layout_LabelfieldThin(Title, HudFilled.无, HudColor.无, Color.white * 0.9f, TextAnchor.MiddleLeft, new Vector2(0, 0), TitleFontSize);
             Gui_Layout_FlexSpace();
             Gui_Layout_LabelfieldThin(Value, HudFilled.无, HudColor.无, ValueColor, TextAnchor.MiddleRight, new Vector2(0, 0), ValueFontSize);
             Gui_Layout_Space(5);
@@ -2656,7 +2661,7 @@ namespace SevenStrikeModules.XHud.Editor
             Gui_Layout_Space(5);
             Gui_Layout_Icon(IconSize, Icon, IconOffset);
             Gui_Layout_Space(10);
-            Gui_Layout_LabelfieldThin(Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, new Vector2(0, 0), TitleFontSize);
+            Gui_Layout_LabelfieldThin(Title, HudFilled.无, HudColor.无, Color.white * 0.9f, TextAnchor.MiddleLeft, new Vector2(0, 0), TitleFontSize);
             Gui_Layout_FlexSpace();
             Gui_Layout_Icon(ValueSize, Value, ValueOffset);
             Gui_Layout_Space(5);
@@ -2677,7 +2682,7 @@ namespace SevenStrikeModules.XHud.Editor
             Gui_Layout_Space(5);
             Gui_Layout_Icon(IconSize, Icon, IconOffset);
             Gui_Layout_Space(10);
-            Gui_Layout_LabelfieldThin(Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, new Vector2(0, 0), TitleFontSize);
+            Gui_Layout_LabelfieldThin(Title, HudFilled.无, HudColor.无, Color.white * 0.9f, TextAnchor.MiddleLeft, new Vector2(0, 0), TitleFontSize);
             Gui_Layout_FlexSpace();
             GUI.color = Color;
             Gui_Layout_Icon(IconSize, GetIcon("ColorRect"), IconOffset);
@@ -2710,7 +2715,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 Gui_Layout_Space(5);
             }
-            Gui_Layout_LabelfieldThin(Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, new Vector2(0, 0), TitleFontSize);
+            Gui_Layout_LabelfieldThin(Title, HudFilled.无, HudColor.无, Color.white * 0.9f, TextAnchor.MiddleLeft, new Vector2(0, 0), TitleFontSize);
             Gui_Layout_FlexSpace();
             GUI.color = Color;
             Gui_Layout_Icon(StateIconSize, StateIcon, StateIconOffset);
@@ -2735,7 +2740,7 @@ namespace SevenStrikeModules.XHud.Editor
             Gui_Layout_Space(5);
             Gui_Layout_Icon(IconSize, Icon, IconOffset);
             Gui_Layout_Space(10);
-            Gui_Layout_LabelfieldThin(Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, new Vector2(0, 0), TitleFontSize);
+            Gui_Layout_LabelfieldThin(Title, HudFilled.无, HudColor.无, Color.white * 0.9f, TextAnchor.MiddleLeft, new Vector2(0, 0), TitleFontSize);
             Gui_Layout_FlexSpace();
             Gui_Layout_LabelfieldThin(Value, HudFilled.无, HudColor.无, ValueColor, TextAnchor.MiddleRight, new Vector2(0, 0), ValueFontSize);
             Gui_Layout_Space(10);
@@ -2771,7 +2776,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 Gui_Layout_Space(5);
             }
-            Gui_Layout_LabelfieldThin(Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, TitleOffset, TitleFontSize);
+            Gui_Layout_LabelfieldThin(Title, HudFilled.无, HudColor.无, Color.white * 0.9f, TextAnchor.MiddleLeft, TitleOffset, TitleFontSize);
             Gui_Layout_FlexSpace();
             Gui_Layout_Property_Field("", Property);
             Gui_Layout_Space(10);
@@ -3452,7 +3457,7 @@ namespace SevenStrikeModules.XHud.Editor
         public static void CenterEditorWindow(Vector2Int size, EditorWindow window)
         {
             window.minSize = size;
-            window.maxSize = window.minSize;
+            //window.maxSize = window.minSize;
 
             // 获取当前屏幕的分辨率
             int screenWidth = Screen.currentResolution.width;

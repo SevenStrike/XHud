@@ -19,7 +19,7 @@ MonoBehaviour:
     Type: 0
     Style: 0
     ContentAnchor: 4
-    Font: {fileID: 12800000, guid: 04aab7cee3241a3428b78bdef8ce2efc, type: 3}
+    Font: {fileID: 12800000, guid: aca8c7dd72f74624d95ec59655a7afa5, type: 3}
     Font_AssetPath: 
     Size: 50
     LineHeight: 1
@@ -113,7 +113,7 @@ MonoBehaviour:
     tmp_overflow: 0
     tmp_style: 0
     tmp_anchor: 14
-    tmp_font: {fileID: 11400000, guid: db49732efa942dc4cba2ba81357bf48f, type: 2}
+    tmp_font: {fileID: 11400000, guid: 3d6405d940e228d4b85a181d7ed3204f, type: 2}
     tmp_fontasset_assetpath: 
     tmp_size: 13
     tmp_size_globalscaled: 0
@@ -132,13 +132,13 @@ MonoBehaviour:
     tmp_CharWidthMaxAdj: 0
     tmp_LineSpacingMax: 0
     gra_A: {r: 1, g: 1, b: 1, a: 1}
-    gra_B: {r: 1, g: 1, b: 1, a: 1}
+    gra_B: {r: 1, g: 0, b: 0, a: 1}
     gra_C: {r: 1, g: 1, b: 1, a: 1}
     gra_D: {r: 1, g: 1, b: 1, a: 1}
     gra_Invert: 0
-    gra_Used: 0
-    gra_ColorMode: 0
-    gra_ColorModeName: 
+    gra_Used: 1
+    gra_ColorMode: 1
+    gra_ColorModeName: "\u6C34\u5E73\u6E10\u53D8"
     LibStyle_Effect_geometre_align: 0
     LibStyle_Effect_align: 0
     LibStyle_Effect_font: 0
@@ -162,14 +162,14 @@ MonoBehaviour:
     Raycast: 0
     Maskable: 0
     SyncPrimitivePaintingColor: 0
-  Preview_Font: {fileID: 0}
+  Preview_Font: {fileID: 12800000, guid: aca8c7dd72f74624d95ec59655a7afa5, type: 3}
   PreviewFontColor: {r: 1, g: 1, b: 1, a: 1}
-  PreviewContent: XHud Sample Fonts
+  PreviewContent: TextStyle
   PreviewTypeText: 
   PreviewStyle: 0
   Find: 
-  itemHeight: 60
-  visibleItemCount: 9
+  itemHeight: 61
+  visibleItemCount: 7
   ColorInfoList_Original_Scroller: {x: 0, y: 0}
   Highlight: 
   LocationSelectedIndex: -1

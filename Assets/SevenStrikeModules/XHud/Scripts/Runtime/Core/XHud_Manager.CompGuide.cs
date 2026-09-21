@@ -169,10 +169,10 @@ namespace SevenStrikeModules.XHud
             switch (CompGuideMode)
             {
                 case "水平对称":
-                    hm_CompGuide_LeftRightMirror();
+                    hm_CompGuide_h_Mirror();
                     break;
                 case "垂直对称":
-                    hm_CompGuide_UpDownMirror();
+                    hm_CompGuide_v_Mirror();
                     break;
                 case "黄金螺旋":
                     hm_CompGuide_GoldenSpiral();
@@ -198,7 +198,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 左右对称
         /// </summary>
-        private void hm_CompGuide_LeftRightMirror()
+        private void hm_CompGuide_v_Mirror()
         {
             if (!UseCompGuide)
                 return;
@@ -240,7 +240,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 上下对称
         /// </summary>
-        private void hm_CompGuide_UpDownMirror()
+        private void hm_CompGuide_h_Mirror()
         {
             if (!UseCompGuide)
                 return;

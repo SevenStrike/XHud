@@ -20,8 +20,8 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
     using System.Collections.Generic;
     using UnityEngine;
@@ -216,7 +216,7 @@ namespace SevenStrikeModules.XHud
             act_on_option_clicked_with_position = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "清空所有委托！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 选项控件通知", "清空所有委托！", XGUIMsgState.通知);
         }
 
         public void opt_ClearEvents()
@@ -230,7 +230,7 @@ namespace SevenStrikeModules.XHud
             eve_on_option_clicked_with_position.RemoveAllListeners();
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "清空所有事件！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 选项控件通知", "清空所有事件！", XGUIMsgState.通知);
         }
 
         #endregion
@@ -279,7 +279,7 @@ namespace SevenStrikeModules.XHud
             eve_on_option_clicked_with_position.Invoke(pos);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "点击了选项：" + CurrentOptionName, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 选项控件通知", "点击了选项：" + CurrentOptionName, XGUIMsgState.通知);
         }
 
         /// <summary>
@@ -326,7 +326,7 @@ namespace SevenStrikeModules.XHud
             eve_on_option_clicked_with_position.Invoke(pos);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "点击了选项：" + CurrentOptionName, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 选项控件通知", "点击了选项：" + CurrentOptionName, XGUIMsgState.通知);
         }
 
         /// <summary>
@@ -356,7 +356,7 @@ namespace SevenStrikeModules.XHud
                 PrimitiveTween_Play("光标位置改变");
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "已将光标移动到标识为：" + indicator + " 的选项按钮上！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 选项控件通知", "已将光标移动到标识为：" + indicator + " 的选项按钮上！", XGUIMsgState.通知);
         }
 
         /// <summary>
@@ -368,7 +368,7 @@ namespace SevenStrikeModules.XHud
             CurrentOptionName = "";
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "选项信息复位", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 选项控件通知", "选项信息复位", XGUIMsgState.通知);
         }
         #endregion
 
@@ -456,12 +456,12 @@ namespace SevenStrikeModules.XHud
                 PrimitiveTween_Play("光标位置改变");
 
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "更改了光标位置（平滑移动）", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 选项控件通知", "更改了光标位置（平滑移动）", XGUIMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "更改了光标位置（闪现移动）", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 选项控件通知", "更改了光标位置（闪现移动）", XGUIMsgState.通知);
                 opt_SetSelectorPosition_Fast(pos);
             }
         }
@@ -486,7 +486,7 @@ namespace SevenStrikeModules.XHud
             PrimitiveTween_Play("光标位置改变");
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "快速更改光标位置！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 选项控件通知", "快速更改光标位置！", XGUIMsgState.通知);
         }
 
         /// <summary>
@@ -505,12 +505,12 @@ namespace SevenStrikeModules.XHud
             if (OptionButtonNodes.Count <= 0)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "获取的选项按钮列表为空！", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 选项控件通知", "获取的选项按钮列表为空！", XGUIMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "已获取到" + OptionButtonNodes.Count + " 个选项按钮！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 选项控件通知", "已获取到" + OptionButtonNodes.Count + " 个选项按钮！", XGUIMsgState.通知);
             }
 
             return OptionalButtons.ToArray();
@@ -533,7 +533,7 @@ namespace SevenStrikeModules.XHud
             if (OptionButtonNodes.Count <= 0)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "获取的选项按钮列表为空！", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 选项控件通知", "获取的选项按钮列表为空！", XGUIMsgState.错误);
             }
             else
             {
@@ -543,7 +543,7 @@ namespace SevenStrikeModules.XHud
                     names += Names[i] + " | ";
                 }
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "已获取到" + OptionButtonNodes.Count + " 个选项按钮名称，分别是：" + names, HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 选项控件通知", "已获取到" + OptionButtonNodes.Count + " 个选项按钮名称，分别是：" + names, XGUIMsgState.通知);
             }
 
             return Names.ToArray();
@@ -608,12 +608,12 @@ namespace SevenStrikeModules.XHud
                 int x = SelectorMark.GetInstanceID();
                 if (v == x)
                 {
-                    PrimitiveControllerNodes[i].Controller.pt_Tween.Tween_PlayAll_WithDelay(PrimitiveControllerNodes[i].DelayTime, PrimitivesTweenGlobalDuration, true, tim);
+                    PrimitiveControllerNodes[i].Controller.pt_Tween.Tweens_Play_With_Delay(PrimitiveControllerNodes[i].DelayTime, PrimitivesTweenGlobalDuration, true, tim);
                     break;
                 }
             }
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "播放选项的光标动画！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 选项控件通知", "播放选项的光标动画！", XGUIMsgState.通知);
         }
 
         /// <summary>
@@ -633,7 +633,7 @@ namespace SevenStrikeModules.XHud
                 }
             }
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 选项控件通知", "倒退复位选项的光标动画！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 选项控件通知", "倒退复位选项的光标动画！", XGUIMsgState.通知);
         }
     }
 }

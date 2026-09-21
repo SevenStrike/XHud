@@ -1,19 +1,22 @@
-﻿{
+{
     "name": "XTween.Editor",
     "rootNamespace": "SevenStrikeModules.XTween.Editor",
     "references": [
         "XTween.Runtime",
         "UnityEditor.UI",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "XGUI.Editor",
+        "XGUI.Runtime"
     ],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }

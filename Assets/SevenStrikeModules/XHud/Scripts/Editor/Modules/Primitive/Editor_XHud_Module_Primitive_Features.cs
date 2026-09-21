@@ -20,8 +20,9 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
+    using System;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
@@ -43,28 +44,9 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region GUI 参数
         /// <summary>
-        /// 系统默认GUI行高
-        /// </summary>
-        private float LineHeight;
-        /// <summary>
-        /// 原始脚本参数显示开关
-        /// </summary>
-        private bool OriginalDisplay;
-        /// <summary>
         /// 多选特性的索引
         /// </summary>
         private int MultiPrimitiveFeature_Index;
-        #endregion
-
-        #region 字体
-        /// <summary>
-        /// 字体 - 粗体
-        /// </summary>
-        Font Font_Bold;
-        /// <summary>
-        /// 字体 - 细体
-        /// </summary>
-        Font Font_Light;
         #endregion
 
         #region 选项文字
@@ -72,7 +54,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 图标
-        private Texture2D icon_main, f_pos, f_rot, f_sca, f_size, f_alp, f_fill, f_color, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, f_save_r, f_save_p, f_load_r, f_load_p;
+        private Texture2D icon_main, f_pos, f_rot, f_sca, f_size, f_alp, f_fill, f_color, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, f_save_r, f_save_p, f_load_r, f_load_p, icon_col_mark;
         #endregion
 
         #region 批量化操作
@@ -123,10 +105,6 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnEnable()
         {
-            #region 获取系统GUI单行单位高度
-            LineHeight = EditorGUIUtility.singleLineHeight;
-            #endregion
-
             BaseScript = (XHud_Module_Primitive_Feature)target;
 
             Targets_Get();
@@ -134,29 +112,24 @@ namespace SevenStrikeModules.XHud.Editor
             // 获取所有序列化字段
             GetSerializeFields();
 
-            #region 获取字体
-            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Light");
-            #endregion
-
             #region 获取图标          
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/icon_main");
-            f_pos = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/f_pos");
-            f_rot = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/f_rot");
-            f_sca = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/f_sca");
-            f_size = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/f_size");
-            f_alp = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/f_alp");
-            f_fill = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/f_fill");
-            f_color = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/f_color");
-            left_arrow_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/left_arrow_r");
-            left_arrow_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/left_arrow_p");
-            right_arrow_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/right_arrow_r");
-            right_arrow_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/right_arrow_p");
-            f_save_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/f_save_r");
-            f_save_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/f_save_p");
-            f_load_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/f_load_r");
-            f_load_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Features/f_load_p");
-
+            icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/icon_main");
+            f_pos = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/f_pos");
+            f_rot = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/f_rot");
+            f_sca = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/f_sca");
+            f_size = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/f_size");
+            f_alp = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/f_alp");
+            f_fill = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/f_fill");
+            f_color = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/f_color");
+            left_arrow_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/left_arrow_r");
+            left_arrow_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/left_arrow_p");
+            right_arrow_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/right_arrow_r");
+            right_arrow_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/right_arrow_p");
+            f_save_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/f_save_r");
+            f_save_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/f_save_p");
+            f_load_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/f_load_r");
+            f_load_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/f_load_p");
+            icon_col_mark = XGUI.GetBasedIcon("icon_stop_r");
             #endregion
 
             CheckFirstCreatedFeature();
@@ -209,143 +182,360 @@ namespace SevenStrikeModules.XHud.Editor
         {
             serializedObject.Update();
 
+            TextClipping clipping = XGUI.TryEllipsisClipping();
+
             #region 标题
-            string h_color = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary);
-            string titlename = "XHud - 图元  >  特性";
-            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, titlename, Color.white, null, "", 20, 20);
-            Rect rect = GUILayoutUtility.GetLastRect();
+            XGUI.layout_banner(
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.深空灰,
+                bg_height: 30,
+                icon: icon_main,
+                icon_color: XHud_Dashboard.Theme_Primary,
+                title_text: "XHud  -  图元  >  特性",
+                title_anchor: TextAnchor.MiddleLeft,
+                title_style: FontStyle.Normal,
+                title_color: Color.white,
+                title_size: XGUIFontSize.B,
+                title_clipping: clipping,
+                bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
 
-            #region 快捷功能
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "快捷功能", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
+            Rect rect = XGUI.GetLastRect();
 
-            GUILayout.BeginHorizontal();
-            GUILayout.Space(10);
+            #region 快捷功能          
+            XGUI.layout_group_start(
+               type: XGUIContainerType.Horizontal,
+               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_color: XGUIColor.亮白,
+               bg_color_gui: XHud_Dashboard.Theme_Group,
+               title: "快捷功能",
+               title_size: XGUIFontSize.M,
+               title_text_color: XHud_Dashboard.Theme_Primary,
+               title_clipping: TextClipping.Clip,
+               padding: new RectOffset(15, 15, 20, 15));
 
-            ///--- 特性的记录按钮
-            if (Editor_XHud_GUI.Gui_Layout_Button(14, "", f_save_r, f_save_p, 4))
+            #region 特性记录
+            if (XGUI.layout_button(
+                tooltip: "特性记录",
+                tex_release: f_save_r,
+                tex_press: f_save_p,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                width: 14,
+                height: 14))
             {
                 PrimitiveFeature_Dual_Save_WithDialog();
             }
-            ///--- 特性的读取按钮
-            if (Editor_XHud_GUI.Gui_Layout_Button(14, "", f_load_r, f_load_p, 4))
+            #endregion
+
+            XGUI.layout_flexspace();
+
+            #region 特性读取
+            if (XGUI.layout_button(
+                tooltip: "特性读取",
+                tex_release: f_load_r,
+                tex_press: f_load_p,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                width: 14,
+                height: 14))
             {
                 PrimitiveFeature_Dual_Load_WithDialog();
             }
-            GUILayout.Space(10);
-            GUILayout.EndHorizontal();
+            #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
 
             #region 特性参数
-            string info_title = "特性参数";
+            string statu_title = "特性参数";
             if (Targets_Selected())
-                info_title = "特性参数 - ( 批量模式 )";
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, info_title, XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+                statu_title = "特性参数 - ( 批量模式 )";
 
-            if (!Targets_Selected())
+            BaseScript.fold_param = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: statu_title,
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_param);
+
+            if (!BaseScript.fold_param)
             {
-                SerializedProperty pos = sp_PrimitiveFeatures.FindPropertyRelative("Position");
-                SerializedProperty eur = sp_PrimitiveFeatures.FindPropertyRelative("Euler");
-                SerializedProperty sca = sp_PrimitiveFeatures.FindPropertyRelative("Scale");
-                SerializedProperty size = sp_PrimitiveFeatures.FindPropertyRelative("Size");
-                SerializedProperty alp = sp_PrimitiveFeatures.FindPropertyRelative("Alpha");
-                SerializedProperty col = sp_PrimitiveFeatures.FindPropertyRelative("Color");
-                SerializedProperty fil = sp_PrimitiveFeatures.FindPropertyRelative("Fill");
+                if (!Targets_Selected())
+                {
+                    SerializedProperty pos = sp_PrimitiveFeatures.FindPropertyRelative("Position");
+                    SerializedProperty eur = sp_PrimitiveFeatures.FindPropertyRelative("Euler");
+                    SerializedProperty sca = sp_PrimitiveFeatures.FindPropertyRelative("Scale");
+                    SerializedProperty size = sp_PrimitiveFeatures.FindPropertyRelative("Size");
+                    SerializedProperty alp = sp_PrimitiveFeatures.FindPropertyRelative("Alpha");
+                    SerializedProperty col = sp_PrimitiveFeatures.FindPropertyRelative("Color");
+                    SerializedProperty fil = sp_PrimitiveFeatures.FindPropertyRelative("Fill");
 
-                PrimitiveFeature_Displayer(pos.vector3Value, eur.vector3Value, sca.vector3Value, size.vector2Value, alp.floatValue, fil.floatValue, col.colorValue);
-            }
-            else
-            {
-                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_XHud_GUI.Gui_Layout_Space(10);
-                if (Editor_XHud_GUI.Gui_Layout_Button($"{SelectedObjects[MultiPrimitiveFeature_Index].name} ( {SelectedObjects[MultiPrimitiveFeature_Index].controller.Indicator} )", "", HudFilled.透明, HudColor.无, SelectedObjects[MultiPrimitiveFeature_Index].controller.pt_Painting.OriginalColor, 20))
-                {
-                    EditorGUIUtility.PingObject(SelectedObjects[MultiPrimitiveFeature_Index]);
-                }
-                Editor_XHud_GUI.Gui_Layout_FlexSpace();
-                if (Editor_XHud_GUI.Gui_Layout_Button(12, "", left_arrow_r, left_arrow_p))
-                {
-                    if (MultiPrimitiveFeature_Index <= 0)
-                    {
-                        MultiPrimitiveFeature_Index = PrimitiveFeatures.Length - 1;
-                    }
-                    else
-                    {
-                        MultiPrimitiveFeature_Index--;
-                    }
-                    EditorGUIUtility.PingObject(SelectedObjects[MultiPrimitiveFeature_Index]);
-                }
-                Editor_XHud_GUI.Gui_Layout_Space(16);
-                if (Editor_XHud_GUI.Gui_Layout_Button(12, "", right_arrow_r, right_arrow_p))
-                {
-                    if (MultiPrimitiveFeature_Index >= PrimitiveFeatures.Length - 1)
-                    {
-                        MultiPrimitiveFeature_Index = 0;
-                    }
-                    else
-                    {
-                        MultiPrimitiveFeature_Index++;
-                    }
-                    EditorGUIUtility.PingObject(SelectedObjects[MultiPrimitiveFeature_Index]);
-                }
-                Editor_XHud_GUI.Gui_Layout_Space(5);
-                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-                PrimitiveFeature_Displayer(PrimitiveFeatures[MultiPrimitiveFeature_Index].Position, PrimitiveFeatures[MultiPrimitiveFeature_Index].Euler, PrimitiveFeatures[MultiPrimitiveFeature_Index].Scale, PrimitiveFeatures[MultiPrimitiveFeature_Index].Size, PrimitiveFeatures[MultiPrimitiveFeature_Index].Alpha, PrimitiveFeatures[MultiPrimitiveFeature_Index].Fill, PrimitiveFeatures[MultiPrimitiveFeature_Index].Color);
-            }
+                    #region 位置
+                    XGUI.layout_state_displayer_text(
+                        title: "位置",
+                        title_size: XGUIFontSize.M,
+                        subtitle: pos.vector3Value.ToString(),
+                        subtitle_size: XGUIFontSize.M,
+                        subtitle_color: XHud_Dashboard.Theme_Primary,
+                        margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+                    #region 角度
+                    XGUI.layout_state_displayer_text(
+                       title: "角度",
+                       title_size: XGUIFontSize.M,
+                       subtitle: eur.vector3Value.ToString(),
+                       subtitle_size: XGUIFontSize.M,
+                       subtitle_color: XHud_Dashboard.Theme_Primary,
+                       margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+
+                    #region 缩放
+                    XGUI.layout_state_displayer_text(
+                        title: "缩放",
+                        title_size: XGUIFontSize.M,
+                        subtitle: sca.vector3Value.ToString(),
+                        subtitle_size: XGUIFontSize.M,
+                        subtitle_color: XHud_Dashboard.Theme_Primary,
+                        margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+
+                    #region 尺寸
+                    XGUI.layout_state_displayer_text(
+                       title: "尺寸",
+                       title_size: XGUIFontSize.M,
+                       subtitle: size.vector2Value.ToString(),
+                       subtitle_size: XGUIFontSize.M,
+                       subtitle_color: XHud_Dashboard.Theme_Primary,
+                       margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+
+                    #region 透明度
+                    XGUI.layout_state_displayer_text(
+                       title: "透明度",
+                       title_size: XGUIFontSize.M,
+                       subtitle: alp.floatValue.ToString(),
+                       subtitle_size: XGUIFontSize.M,
+                       subtitle_color: XHud_Dashboard.Theme_Primary,
+                       margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+
+                    #region 填充
+                    XGUI.layout_state_displayer_text(
+                       title: "填充",
+                       title_size: XGUIFontSize.M,
+                       subtitle: fil.floatValue.ToString(),
+                       subtitle_size: XGUIFontSize.M,
+                       subtitle_color: XHud_Dashboard.Theme_Primary,
+                       margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+
+                    #region 颜色
+                    XGUI.layout_state_displayer_icon(
+                     title: "颜色",
+                     title_size: XGUIFontSize.M,
+                     icon: icon_col_mark,
+                     icon_size: new Vector2(14, 14),
+                     icon_offset: new Vector2(0, 0),
+                     icon_color: col.colorValue,
+                     padding: new RectOffset(0, 0, 0, 0),
+                     margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+                }
+                else
+                {
+                    #region 控制区
+                    XGUI.layout_group_start(
+                        type: XGUIContainerType.Horizontal,
+                        bg_fill: XGUIFilled.透明,
+                        bg_color: XGUIColor.亮白,
+                        bg_color_gui: XHud_Dashboard.Theme_Group,
+                        absolute_margin: true,
+                        absolute_padding: true,
+                        margin: new RectOffset(0, 0, 0, 0),
+                        padding: new RectOffset(15, 15, 5, 10));
+
+                    #region 标题按钮
+                    if (XGUI.layout_button(
+                        text: $"{SelectedObjects[MultiPrimitiveFeature_Index].name}",
+                        tooltip: "",
+                        bg_fill: XGUIFilled.透明,
+                        button_text_color: Color.gray,
+                        press_fill: XGUIFilled.透明,
+                        press_text_color: XHud_Dashboard.Theme_Primary,
+                        font_size: XGUIFontSize.M,
+                        anchor: TextAnchor.MiddleLeft,
+                        margin: new RectOffset(0, 0, 0, 0),
+                        padding: new RectOffset(0, 0, 0, 0),
+                        layout_width: 150,
+                        button_text_font: XGUI.GetFont("xg-medium")))
+                    {
+                        EditorGUIUtility.PingObject(SelectedObjects[MultiPrimitiveFeature_Index]);
+                    }
+                    #endregion
+
+                    XGUI.layout_flexspace();
+
+                    #region 上一个
+                    if (XGUI.layout_button(
+                        tooltip: "上一个",
+                        tex_release: left_arrow_r,
+                        tex_press: left_arrow_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 12,
+                        height: 12))
+                    {
+                        if (MultiPrimitiveFeature_Index <= 0)
+                        {
+                            MultiPrimitiveFeature_Index = SelectedObjects.Length - 1;
+                        }
+                        else
+                        {
+                            MultiPrimitiveFeature_Index--;
+                        }
+                        EditorGUIUtility.PingObject(SelectedObjects[MultiPrimitiveFeature_Index]);
+                    }
+                    #endregion
+
+                    XGUI.layout_space(20);
+
+                    #region 下一个
+                    if (XGUI.layout_button(
+                        tooltip: "下一个",
+                        tex_release: right_arrow_r,
+                        tex_press: right_arrow_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 12,
+                        height: 12))
+                    {
+                        if (MultiPrimitiveFeature_Index >= SelectedObjects.Length - 1)
+                        {
+                            MultiPrimitiveFeature_Index = 0;
+                        }
+                        else
+                        {
+                            MultiPrimitiveFeature_Index++;
+                        }
+                        EditorGUIUtility.PingObject(SelectedObjects[MultiPrimitiveFeature_Index]);
+                    }
+                    #endregion
+
+                    XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+                    #endregion
+
+                    XGUI.layout_seperator(
+                            thickness: 1,
+                            color: XHud_Dashboard.Theme_SeperateLine,
+                            margin: new RectOffset(15, 15, 5, 25));
+
+                    #region 位置
+                    XGUI.layout_state_displayer_text(
+                        title: "位置",
+                    title_size: XGUIFontSize.M,
+                        subtitle: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Position.ToString(),
+                        subtitle_size: XGUIFontSize.M,
+                        subtitle_color: XHud_Dashboard.Theme_Primary,
+                        margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+
+                    #region 角度
+                    XGUI.layout_state_displayer_text(
+                       title: "角度",
+                       title_size: XGUIFontSize.M,
+                       subtitle: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Euler.ToString(),
+                       subtitle_size: XGUIFontSize.M,
+                       subtitle_color: XHud_Dashboard.Theme_Primary,
+                       margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+
+                    #region 缩放
+                    XGUI.layout_state_displayer_text(
+                        title: "缩放",
+                        title_size: XGUIFontSize.M,
+                        subtitle: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Scale.ToString(),
+                        subtitle_size: XGUIFontSize.M,
+                        subtitle_color: XHud_Dashboard.Theme_Primary,
+                        margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+
+                    #region 尺寸
+                    XGUI.layout_state_displayer_text(
+                       title: "尺寸",
+                       title_size: XGUIFontSize.M,
+                       subtitle: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Size.ToString(),
+                       subtitle_size: XGUIFontSize.M,
+                       subtitle_color: XHud_Dashboard.Theme_Primary,
+                       margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+
+                    #region 透明度
+                    XGUI.layout_state_displayer_text(
+                       title: "透明度",
+                       title_size: XGUIFontSize.M,
+                       subtitle: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Alpha.ToString(),
+                       subtitle_size: XGUIFontSize.M,
+                       subtitle_color: XHud_Dashboard.Theme_Primary,
+                       margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+
+                    #region 填充
+                    XGUI.layout_state_displayer_text(
+                       title: "填充",
+                       title_size: XGUIFontSize.M,
+                       subtitle: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Fill.ToString(),
+                       subtitle_size: XGUIFontSize.M,
+                       subtitle_color: XHud_Dashboard.Theme_Primary,
+                       margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+
+                    #region 颜色
+                    XGUI.layout_state_displayer_icon(
+                     title: "颜色",
+                     title_size: XGUIFontSize.M,
+                     icon: icon_col_mark,
+                     icon_size: new Vector2(14, 14),
+                     icon_offset: new Vector2(0, 0),
+                     icon_color: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Color,
+                     padding: new RectOffset(0, 0, 0, 0),
+                     margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+                }
+            }
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 选项
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            BaseScript.fold_option = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "选项",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_option);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Primitive_Feature>("调试", stroptions_debug, ref sp_Debug, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            if (!BaseScript.fold_option)
+            {
+                #region 状态调试
+                DrawToggle("状态调试", sp_Debug, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_debug, (b) => { });
+                #endregion
+            }
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 右键菜单
-            ContextMenu(rect);
-            #endregion
-
-            #region 源脚本
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
-            #region 脚本类
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            OriginalDisplay = EditorGUILayout.Foldout(OriginalDisplay, "脚本类", true);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-            if (OriginalDisplay)
-                DrawDefaultInspector();
-            #endregion
-
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
-            #endregion
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        /// <summary>
-        /// 右键菜单
-        /// </summary>
-        private void ContextMenu(Rect rect)
-        {
-            Rect rect_MenuArea = new Rect(0, rect.y, EditorGUIUtility.currentViewWidth, 260);
-
-            // 在指定区域点击右键弹出菜单
-            if (Event.current.type == EventType.MouseDown && Event.current.button == 1 && (rect_MenuArea.Contains(Event.current.mousePosition)))
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
             {
                 // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
@@ -360,6 +550,30 @@ namespace SevenStrikeModules.XHud.Editor
                 });
                 menu.ShowAsContext(); // 在鼠标位置显示右键菜单
             }
+            #endregion
+
+            #region 源脚本
+            BaseScript.fold_based = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "源脚本",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_based);
+
+            if (!BaseScript.fold_based)
+            {
+                DrawDefaultInspector();
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         /// <summary>
@@ -408,31 +622,6 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         #region 特性参数
-        /// <summary>
-        /// 绘制 PrimitiveFeature 特性参数控件
-        /// </summary>
-        /// <param name="pos"></param>
-        /// <param name="eur"></param>
-        /// <param name="sca"></param>
-        /// <param name="size"></param>
-        /// <param name="alp"></param>
-        /// <param name="col"></param>
-        /// <param name="fil"></param>
-        private void PrimitiveFeature_Displayer(Vector3 pos, Vector3 eur, Vector3 sca, Vector2 size, float alp, float fil, Color col)
-        {
-            int titlesize = 12;
-            int contensize = 10;
-            float iconsize = 12;
-            Color valuecol = Color.white * 0.75f;
-
-            Editor_XHud_GUI.StatuDisplayer_text(f_pos, iconsize, new Vector2(0, 7), "位置", titlesize, XHud_Utilitys.TrimParentheses(pos.ToString()), valuecol, contensize);
-            Editor_XHud_GUI.StatuDisplayer_text(f_rot, iconsize, new Vector2(0, 7), "旋转", titlesize, XHud_Utilitys.TrimParentheses(eur.ToString()), valuecol, contensize);
-            Editor_XHud_GUI.StatuDisplayer_text(f_sca, iconsize, new Vector2(0, 7), "缩放", titlesize, XHud_Utilitys.TrimParentheses(sca.ToString()), valuecol, contensize);
-            Editor_XHud_GUI.StatuDisplayer_text(f_size, iconsize, new Vector2(0, 7), "尺寸", titlesize, XHud_Utilitys.TrimParentheses(size.ToString()), valuecol, contensize);
-            Editor_XHud_GUI.StatuDisplayer_text(f_alp, iconsize, new Vector2(0, 7), "透明度", titlesize, XHud_Utilitys.TrimParentheses(alp.ToString()), valuecol, contensize);
-            Editor_XHud_GUI.StatuDisplayer_text(f_fill, iconsize, new Vector2(0, 7), "填充度", titlesize, XHud_Utilitys.TrimParentheses(fil.ToString()), valuecol, contensize);
-            Editor_XHud_GUI.StatuDisplayer_color(f_color, iconsize, new Vector2(0, 7), "颜色", titlesize, col);
-        }
         /// <summary>
         /// 记录 PrimitiveFeature 特性参数
         /// </summary>
@@ -641,6 +830,37 @@ namespace SevenStrikeModules.XHud.Editor
                 };
             }
         }
-        #endregion      
+        #endregion
+
+        #region Draw
+        /// <summary>
+        /// 通用方法：绘制开关
+        /// </summary>
+        private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, string[] options = null, Action<bool> act_on_changed = null)
+        {
+            XGUI.layout_toggle(
+                title: title,
+                title_size: XGUIFontSize.M,
+                title_font_style: FontStyle.Normal,
+                title_padding: new RectOffset(5, 10, 0, 0),
+                title_width: width,
+                prop: prop,
+                tog_style: style,
+                tog_padding: new RectOffset(0, 9, 0, 0),
+                tog_margin: new RectOffset(0, 0, 0, 5),
+                tog_mixed_options: options,
+                tog_mixed_text_size: XGUIFontSize.M,
+                tog_mixed_text_color: Color.black,
+                tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                tog_mixed_font_style: FontStyle.Normal,
+                tog_bg_off_color: color_bg_off,
+                tog_bg_on_color: color_bg_on,
+                tog_handler_off_color: color_off,
+                tog_handler_on_color: color_on,
+                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                act_on_changed: act_on_changed);
+        }
+        #endregion
     }
 }

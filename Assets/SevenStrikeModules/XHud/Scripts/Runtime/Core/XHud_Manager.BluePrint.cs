@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
@@ -64,17 +65,17 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 蓝图视觉网格线颜色
         /// </summary>
-        public Color BluePrint_grid_color = XHud_Utilitys.Color_From_RGBA(166, 166, 166, 26);
+        public Color BluePrint_grid_color = XGUI_Utilitys.RGBA_To_Color(166, 166, 166, 26);
         [Tooltip("蓝图视觉背景颜色")]
         /// <summary>
         /// 蓝图视觉背景颜色
         /// </summary>
-        public Color BluePrint_bg_color = XHud_Utilitys.Color_From_RGBA(55, 55, 55, 255);
+        public Color BluePrint_bg_color = XGUI_Utilitys.RGBA_To_Color(55, 55, 55, 255);
         [Tooltip("蓝图视觉叠加颜色")]
         /// <summary>
         /// 蓝图视觉叠加颜色
         /// </summary>
-        public Color BluePrint_bg_decal_color = XHud_Utilitys.Color_From_RGBA(0, 0, 0, 80);
+        public Color BluePrint_bg_decal_color = XGUI_Utilitys.RGBA_To_Color(0, 0, 0, 80);
         [Tooltip("蓝图视觉背景图像索引名称")]
         /// <summary>
         /// 蓝图视觉背景图像索引名称
@@ -298,16 +299,16 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 蓝图视觉透明度
         /// </summary>
-        public void hm_BluePrint_OpacitySet(float opacity, float dur = 1, EaseMode ease = EaseMode.OutExpo, float delay = 0)
+        public XTween_Interface hm_BluePrint_OpacitySet(float opacity, float dur = 1, EaseMode ease = EaseMode.OutExpo, float delay = 0)
         {
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
-                return;
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图模式已关闭！", XGUIMsgState.设置);
+                return null;
             }
 
-            hm_BluePrint_Fade(opacity, dur, ease, delay);
+            XTween_Interface twn = hm_BluePrint_Fade(opacity, dur, ease, delay);
 
             if (opacity == 0)
             {
@@ -321,7 +322,9 @@ namespace SevenStrikeModules.XHud
             }
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格入场", HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图网格入场", XGUIMsgState.设置);
+
+            return twn;
         }
         /// <summary>
         /// 蓝图入场
@@ -329,20 +332,20 @@ namespace SevenStrikeModules.XHud
         /// <param name="eft_grid">影响网格</param>
         /// <param name="eft_bg">影响背景</param>
         /// <param name="eft_mark">影响水印</param>
-        public void hm_BluePrint_In(bool eft_grid = true, bool eft_gridfade = true, bool eft_bg = true, bool eft_mark = true)
+        public XTween_Interface hm_BluePrint_In(bool eft_grid = true, bool eft_gridfade = true, bool eft_bg = true, bool eft_mark = true)
         {
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
-                return;
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图模式已关闭！", XGUIMsgState.设置);
+                return null;
             }
 
             if (BluePrint_Displayed)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格入场，无需重复入场！", HudMsgState.设置);
-                return;
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图网格入场，无需重复入场！", XGUIMsgState.设置);
+                return null;
             }
 
             BluePrint_Displayed = true;
@@ -354,20 +357,24 @@ namespace SevenStrikeModules.XHud
             Eft_Bg = eft_bg;
             Eft_Mark = eft_mark;
 
+            XTween_Interface twn = null;
+
             if (Eft_GridFade)
-                hm_BluePrint_Grid_Fade(1, BluePrint_AnimationDuration, BluePrint_Grid_AnimationEase);
+                twn = hm_BluePrint_Grid_Fade(1, BluePrint_AnimationDuration, BluePrint_Grid_AnimationEase);
             if (Eft_Grid)
-                hm_BluePrint_Grid_Length(BluePrint_GridEnd, BluePrint_Grid_AnimationDuration, BluePrint_Grid_AnimationEase);
+                twn = hm_BluePrint_Grid_Length(BluePrint_GridEnd, BluePrint_Grid_AnimationDuration, BluePrint_Grid_AnimationEase);
             if (Eft_Bg)
-                hm_BluePrint_Bg_Fade(1, BluePrint_AnimationDuration, BluePrint_Bg_AnimationEase_In);
+                twn = hm_BluePrint_Bg_Fade(1, BluePrint_AnimationDuration, BluePrint_Bg_AnimationEase_In);
             if (Eft_Mark)
-                hm_BluePrint_Mark_Fade(1, BluePrint_AnimationDuration, BluePrint_Bg_AnimationEase_In);
+                twn = hm_BluePrint_Mark_Fade(1, BluePrint_AnimationDuration, BluePrint_Bg_AnimationEase_In);
 
             if (Act_BluePrint_In != null)
                 Act_BluePrint_In();
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格入场", HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图网格入场", XGUIMsgState.设置);
+
+            return twn;
         }
         /// <summary>
         /// 蓝图入场
@@ -375,74 +382,86 @@ namespace SevenStrikeModules.XHud
         /// <param name="eft_grid">影响网格</param>
         /// <param name="eft_bg">影响背景</param>
         /// <param name="eft_mark">影响水印</param>
-        public void hm_BluePrint_In()
+        public XTween_Interface hm_BluePrint_In()
         {
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
-                return;
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图模式已关闭！", XGUIMsgState.设置);
+                return null;
             }
 
             if (BluePrint_Displayed)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格入场，无需重复入场！", HudMsgState.设置);
-                return;
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图网格入场，无需重复入场！", XGUIMsgState.设置);
+                return null;
             }
 
             BluePrint_Displayed = true;
 
             hm_BluePrint_ResetTweeners();
 
+            XTween_Interface twn = null;
+
             if (Eft_GridFade)
-                hm_BluePrint_Grid_Fade(1, BluePrint_AnimationDuration, BluePrint_Grid_AnimationEase);
+                twn = hm_BluePrint_Grid_Fade(1, BluePrint_AnimationDuration, BluePrint_Grid_AnimationEase);
             if (Eft_Grid)
-                hm_BluePrint_Grid_Length(BluePrint_GridEnd, BluePrint_Grid_AnimationDuration, BluePrint_Grid_AnimationEase);
+                twn = hm_BluePrint_Grid_Length(BluePrint_GridEnd, BluePrint_Grid_AnimationDuration, BluePrint_Grid_AnimationEase);
             if (Eft_Bg)
-                hm_BluePrint_Bg_Fade(1, BluePrint_AnimationDuration, BluePrint_Bg_AnimationEase_In);
+                twn = hm_BluePrint_Bg_Fade(1, BluePrint_AnimationDuration, BluePrint_Bg_AnimationEase_In);
             if (Eft_Mark)
-                hm_BluePrint_Mark_Fade(1, BluePrint_AnimationDuration, BluePrint_Bg_AnimationEase_In);
+                twn = hm_BluePrint_Mark_Fade(1, BluePrint_AnimationDuration, BluePrint_Bg_AnimationEase_In);
 
             if (Act_BluePrint_In != null)
                 Act_BluePrint_In();
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格入场", HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图网格入场", XGUIMsgState.设置);
+
+            return twn;
         }
         /// <summary>
         /// 蓝图退场
         /// </summary>
-        public void hm_BluePrint_Out()
+        public XTween_Interface hm_BluePrint_Out()
         {
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
-                return;
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图模式已关闭！", XGUIMsgState.设置);
+                return null;
             }
 
             if (!BluePrint_Displayed)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格已经退场，无需重复退场！", HudMsgState.设置);
-                return;
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图网格已经退场，无需重复退场！", XGUIMsgState.设置);
+                return null;
             }
 
             BluePrint_Displayed = false;
 
             hm_BluePrint_ResetTweeners();
 
-            hm_BluePrint_Grid_Fade(0, BluePrint_AnimationDuration, BluePrint_Grid_AnimationEase);
-            hm_BluePrint_Grid_Length(BluePrint_GridStart, BluePrint_AnimationDuration, BluePrint_Grid_AnimationEase);
-            hm_BluePrint_Bg_Fade(-0.5f, BluePrint_AnimationDuration, BluePrint_Bg_AnimationEase_Out, BluePrint_Bg_FadeAnimationDelay);
-            hm_BluePrint_Mark_Fade(-0.5f, BluePrint_AnimationDuration, BluePrint_Bg_AnimationEase_Out);
+            XTween_Interface twn = null;
+
+            if (Eft_GridFade)
+                twn = hm_BluePrint_Grid_Fade(0, BluePrint_AnimationDuration, BluePrint_Grid_AnimationEase);
+            if (Eft_Grid)
+                twn = hm_BluePrint_Grid_Length(BluePrint_GridStart, BluePrint_AnimationDuration, BluePrint_Grid_AnimationEase);
+            if (Eft_Bg)
+                twn = hm_BluePrint_Bg_Fade(-0.5f, BluePrint_AnimationDuration, BluePrint_Bg_AnimationEase_Out, BluePrint_Bg_FadeAnimationDelay);
+            if (Eft_Mark)
+                twn = hm_BluePrint_Mark_Fade(-0.5f, BluePrint_AnimationDuration, BluePrint_Bg_AnimationEase_Out);
 
             if (Act_BluePrint_Out != null)
                 Act_BluePrint_Out();
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格退场", HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图网格退场", XGUIMsgState.设置);
+
+            return twn;
         }
         /// <summary>
         /// 蓝图动画清空重置
@@ -452,7 +471,7 @@ namespace SevenStrikeModules.XHud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图模式已关闭！", XGUIMsgState.设置);
                 return;
             }
 
@@ -462,7 +481,7 @@ namespace SevenStrikeModules.XHud
             hm_BluePrint_StopTweener(BluePrint_GridLengthTweener);
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格清空并停止动画", HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图网格清空并停止动画", XGUIMsgState.设置);
         }
         /// <summary>
         /// 停止蓝图图元动画器
@@ -481,7 +500,7 @@ namespace SevenStrikeModules.XHud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图模式已关闭！", XGUIMsgState.设置);
                 return;
             }
 
@@ -490,7 +509,7 @@ namespace SevenStrikeModules.XHud
             BluePrint_mark_opacity = 0;
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图网格快速到隐藏状态", HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图网格快速到隐藏状态", XGUIMsgState.设置);
         }
         /// <summary>
         /// 将蓝图设为图层级的最底层
@@ -513,12 +532,14 @@ namespace SevenStrikeModules.XHud
         /// <param name="dur">耗时</param>
         /// <param name="ease">缓动</param>
         /// <param name="delay">延迟</param>
-        private void hm_BluePrint_Fade(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0)
+        private XTween_Interface hm_BluePrint_Fade(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0)
         {
             BluePrint_opacityTweener = XTween.To(() => BluePrint_opacity, opa => BluePrint_opacity = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay).OnComplete((d) =>
             {
                 hm_BluePrint_StopTweener(BluePrint_opacityTweener);
             });
+
+            return BluePrint_opacityTweener;
         }
         /// <summary>
         /// 蓝图背景淡化方式
@@ -527,9 +548,11 @@ namespace SevenStrikeModules.XHud
         /// <param name="dur">耗时</param>
         /// <param name="ease">缓动</param>
         /// <param name="delay">延迟</param>
-        private void hm_BluePrint_Bg_Fade(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0)
+        private XTween_Interface hm_BluePrint_Bg_Fade(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0)
         {
             BluePrint_BgFadeTweener = XTween.To(() => BluePrint_bg_opacity, opa => BluePrint_bg_opacity = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay);
+
+            return BluePrint_BgFadeTweener;
         }
         /// <summary>
         /// 水印淡化方式
@@ -538,9 +561,11 @@ namespace SevenStrikeModules.XHud
         /// <param name="dur">耗时</param>
         /// <param name="ease">缓动</param>
         /// <param name="delay">延迟</param>
-        private void hm_BluePrint_Mark_Fade(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0f)
+        private XTween_Interface hm_BluePrint_Mark_Fade(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0f)
         {
             BluePrint_MarkFadeTweener = XTween.To(() => BluePrint_mark_opacity, opa => BluePrint_mark_opacity = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay);
+
+            return BluePrint_MarkFadeTweener;
         }
         /// <summary>
         /// 网格生长方式
@@ -549,12 +574,14 @@ namespace SevenStrikeModules.XHud
         /// <param name="dur">耗时</param>
         /// <param name="ease">缓动</param>
         /// <param name="delay">延迟</param>
-        private void hm_BluePrint_Grid_Length(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0f)
+        private XTween_Interface hm_BluePrint_Grid_Length(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0f)
         {
             BluePrint_GridLengthTweener = XTween.To(() => BluePrint_Grid_LengthPercentage, opa => BluePrint_Grid_LengthPercentage = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay).OnComplete((d) =>
             {
                 hm_BluePrint_ResetTweeners();
             });
+
+            return BluePrint_GridLengthTweener;
         }
         /// <summary>
         /// 网格淡化方式
@@ -563,12 +590,14 @@ namespace SevenStrikeModules.XHud
         /// <param name="dur">耗时</param>
         /// <param name="ease">缓动</param>
         /// <param name="delay">延迟</param>
-        private void hm_BluePrint_Grid_Fade(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0)
+        private XTween_Interface hm_BluePrint_Grid_Fade(float val, float dur = 1, EaseMode ease = EaseMode.OutQuart, float delay = 0)
         {
             BluePrint_grid_opacityTweener = XTween.To(() => BluePrint_grid_Opacity, opa => BluePrint_grid_Opacity = opa, val, dur).SetRelative(false).SetEase(ease).SetDelay(delay).OnComplete((d) =>
             {
                 hm_BluePrint_StopTweener(BluePrint_grid_opacityTweener);
             });
+
+            return BluePrint_grid_opacityTweener;
         }
         #endregion
 
@@ -581,7 +610,7 @@ namespace SevenStrikeModules.XHud
             if (!BluePrintMode)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "蓝图模式已关闭！", HudMsgState.设置);
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "蓝图模式已关闭！", XGUIMsgState.设置);
                 return;
             }
 
@@ -775,7 +804,7 @@ namespace SevenStrikeModules.XHud
             hm_BluePrint_Update();
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "已创建蓝图网格", HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 管理器通知", "已创建蓝图网格", XGUIMsgState.设置);
         }
         /// <summary>
         /// 蓝图移除网格线
@@ -805,7 +834,7 @@ namespace SevenStrikeModules.XHud
             hm_BluePrint_ClearHidden();
 
             if (UseDebug)
-                XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "已移除蓝图网格", HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 管理器通知", "已移除蓝图网格", XGUIMsgState.设置);
         }
         private void hm_BluePrint_ClearHidden()
         {

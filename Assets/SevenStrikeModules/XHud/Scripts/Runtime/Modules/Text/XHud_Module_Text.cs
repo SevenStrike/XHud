@@ -20,8 +20,8 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.UI;
@@ -474,7 +474,7 @@ namespace SevenStrikeModules.XHud
         public void txt_Set_Content(string content, bool ParseEscape = true)
         {
             if (ParseEscape)
-                base.text = XHud_Utilitys.ProcessEscapeSequences(content);
+                base.text = XGUI_Utilitys.Unescape(content);
             else
                 base.text = content;
         }

@@ -20,9 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
-    using System;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditorInternal;
@@ -51,7 +50,7 @@ namespace SevenStrikeModules.XHud.Editor
     {
         private XHud_Manager HudManager;
         private SerializedObject BaseObject;
-        private SerializedProperty sp_LibName, sp_ReadySaveElementList;
+        private SerializedProperty sp_library_name, sp_element_list;
 
         /// <summary>
         /// 数据列表
@@ -74,49 +73,16 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         public int SelectedIndex = 0;
 
-        public List<ReadyLibElement> ReadySaveElementList = new List<ReadyLibElement>();
+        public List<ReadyLibElement> element_list = new List<ReadyLibElement>();
 
         private Texture2D icon_libsetter_element;
 
-        /// <summary>
-        /// 字体 - 粗体
-        /// </summary>
-        Font Font_Bold;
-        /// <summary>
-        /// 字体 - 细体
-        /// </summary>
-        Font Font_Light;
-
         [SerializeField]
-        public string LibName;
+        public string library_name;
         [SerializeField]
         public string DateTimes;
 
-        /// <summary>
-        /// 按钮宽度
-        /// </summary>
-        private float ButtonWidth = 110;
-        /// <summary>
-        /// 按钮高度
-        /// </summary>
-        private float ButtonHeight = 25;
-        /// <summary>
-        /// 按钮间距
-        /// </summary>
-        private float ButtonDistance = 15;
-
-        Color SepLineColor = new Color(1, 1, 1, 0.15f);
-        Color MessageColor = new Color(1, 1, 1, 0.62f);
-        Color DateTimeColor = new Color(1, 1, 1, 0.42f);
-
-        Rect Sepline_rect;
-        Rect Title_rect;
-        Rect Date_rect;
-        Rect Icon_rect;
-        Rect TotalCount_rect;
         Rect LibSelector_rect;
-
-        private ReadyElementInfo CurrentReadyElemetInfo = new ReadyElementInfo();
 
         #region 将工程预制体添加到元素库
         [MenuItem("Assets/XHud/SendToElementLibrary (将元素预制体添加到元素库)", priority = 3000, validate = true)]
@@ -150,7 +116,14 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (mgr == null)
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素库添加器消息", "寻找Hud管理器", "场景中未找到HudManager管理器！", "明白");
+                XGUI.dialog(
+                    type: XGUIDialogType.通知,
+                    windowtitle: "XHud - 元素库添加器消息",
+                    title: "未发现XHud管理器",
+                    msg: "场景中未找到XHudManager管理器！",
+                    ok: "明白",
+                    PrimaryIndex: 0,
+                    themecolor: XHud_Dashboard.Theme_Primary);
                 return;
             }
             Transform[] sel_ele_objs = Selection.GetTransforms(SelectionMode.Unfiltered);
@@ -163,7 +136,14 @@ namespace SevenStrikeModules.XHud.Editor
 
                 if (mgr.hm_ElementLibrary_GetCount() <= 0)
                 {
-                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素库添加器消息", "元素库未配置", "您未在HudManager中配置元素库！请先至少指定一个元素库后再执行此操作！ ", "明白");
+                    XGUI.dialog(
+                        type: XGUIDialogType.通知,
+                        windowtitle: "XHud - 元素库添加器消息",
+                        title: "元素库未配置",
+                        msg: "您未在HudManager中配置元素库！请先至少指定一个元素库后再执行此操作！ ",
+                        ok: "明白",
+                        PrimaryIndex: 0,
+                        themecolor: XHud_Dashboard.Theme_Primary);
                     return;
                 }
 
@@ -172,7 +152,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             Editor_XHud_LibrarySetTool_ElementImporter window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_ElementImporter>(true);
             window.titleContent = new GUIContent("XHud 元素库添加器");
-            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(620, 450), window);
+            XGUI.CenterEditorWindow(new Vector2Int(500, 440), window);
 
             // 将要存入元素库的物体信息发送至窗口
             window.SetElements(Hud_Elements);
@@ -182,14 +162,10 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region DataList
-
-        Rect index_rect;
-        Rect indicator_rect;
         Rect scrollview_rect;
         Rect item_rect;
         Rect itemmark_rect;
         Rect itemmarkBg_rect;
-        Rect readyelementinfo_rect;
 
         private void Remove(ReorderableList list)
         {
@@ -205,33 +181,50 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="isFocused"></param>
         private void DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
-            index_rect = new Rect(rect.x + 15, rect.y + 5, 30, 20);
-            indicator_rect = new Rect(rect.x + 39, rect.y + 5, 180, 20);
-
-            SerializedProperty prop = sp_ReadySaveElementList.GetArrayElementAtIndex(index);
+            SerializedProperty prop = sp_element_list.GetArrayElementAtIndex(index);
             SerializedProperty prop_Info = prop.FindPropertyRelative("Info");
             SerializedProperty sp_name = prop_Info.FindPropertyRelative("Name");
 
-            Editor_XHud_GUI.Gui_Labelfield(index_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
+            #region 预生成元素索引号
+            XGUI.gui_label(
+                rect: new Rect(rect.x + 15, rect.y + 3, 30, 20),
+                text: new GUIContent(index.ToString("D2")),
+                text_color: Color.white * 0.75f,
+                size: XGUIFontSize.M,
+                clipping: TextClipping.Clip,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                wrap: true,
+                font_style: FontStyle.Normal);
+            #endregion
 
-            #region 标识名称
-            Editor_XHud_GUI.Gui_Labelfield(indicator_rect, sp_name.stringValue, HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.亮白), TextAnchor.MiddleLeft, Vector2.zero, 12, TextClipping.Ellipsis);
+            #region 预生成元素名称
+            XGUI.gui_label(
+                rect: new Rect(rect.x + 40, rect.y + 3, 150, 20),
+                text: new GUIContent(sp_name.stringValue),
+                text_color: Color.white,
+                size: XGUIFontSize.M,
+                clipping: TextClipping.Clip,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                wrap: true,
+                font_style: FontStyle.Bold);
             #endregion
         }
 
         private void DeleteElementAtIndex(int index)
         {
-            if (index < 0 || index >= sp_ReadySaveElementList.arraySize)
+            if (index < 0 || index >= sp_element_list.arraySize)
                 return;
 
             // 删除项
-            sp_ReadySaveElementList.DeleteArrayElementAtIndex(index);
-            sp_ReadySaveElementList.serializedObject.ApplyModifiedProperties();
+            sp_element_list.DeleteArrayElementAtIndex(index);
+            sp_element_list.serializedObject.ApplyModifiedProperties();
 
             // 调整选中索引
-            if (SelectedIndex >= sp_ReadySaveElementList.arraySize)
+            if (SelectedIndex >= sp_element_list.arraySize)
             {
-                SelectedIndex = sp_ReadySaveElementList.arraySize - 1;
+                SelectedIndex = sp_element_list.arraySize - 1;
             }
 
             // 刷新 UI
@@ -246,9 +239,9 @@ namespace SevenStrikeModules.XHud.Editor
             // 绘制滚动视图
             scrollview_rect = GUILayoutUtility.GetRect(0, visibleItemCount * itemHeight);
             scrollview_rect.x = 18;
-            scrollview_rect.width = 300;
+            scrollview_rect.width = 220;
             scrollview_rect.height = 290;
-            DataList_Scroller = GUI.BeginScrollView(scrollview_rect, DataList_Scroller, new Rect(0, 0, scrollview_rect.width - 50, ReadySaveElementList.Count * itemHeight), false, true);
+            DataList_Scroller = GUI.BeginScrollView(scrollview_rect, DataList_Scroller, new Rect(0, 0, scrollview_rect.width - 50, element_list.Count * itemHeight), false, true);
 
             // 计算可视区域的起始和结束索引
             int startIndex = Mathf.FloorToInt(DataList_Scroller.y / itemHeight);
@@ -257,7 +250,7 @@ namespace SevenStrikeModules.XHud.Editor
             // 只绘制可视区域内的元素
             for (int i = startIndex; i < endIndex && i < ReorderableList.count; i++)
             {
-                SerializedProperty prop = sp_ReadySaveElementList.GetArrayElementAtIndex(i);
+                SerializedProperty prop = sp_element_list.GetArrayElementAtIndex(i);
 
                 item_rect = new Rect(0, i * itemHeight, scrollview_rect.width, itemHeight);
 
@@ -282,8 +275,6 @@ namespace SevenStrikeModules.XHud.Editor
                         // 更新选中项
                         SelectedIndex = i;
 
-                        CurrentReadyElemetInfo = ReadySaveElementList[SelectedIndex].Info;
-
                         // 标记界面需要更新
                         GUI.changed = true;
                     }
@@ -296,7 +287,7 @@ namespace SevenStrikeModules.XHud.Editor
                     if (Event.current.keyCode == KeyCode.Delete)
                     {
                         // 确保有选中的项
-                        if (SelectedIndex >= 0 && SelectedIndex < sp_ReadySaveElementList.arraySize)
+                        if (SelectedIndex >= 0 && SelectedIndex < sp_element_list.arraySize)
                         {
                             // 删除选中的项
                             DeleteElementAtIndex(SelectedIndex);
@@ -323,92 +314,205 @@ namespace SevenStrikeModules.XHud.Editor
         private void OnEnable()
         {
             BaseObject = new SerializedObject(this);
-            sp_LibName = BaseObject.FindProperty("LibName");
-            sp_ReadySaveElementList = BaseObject.FindProperty("ReadySaveElementList");
+            sp_library_name = BaseObject.FindProperty("library_name");
+            sp_element_list = BaseObject.FindProperty("element_list");
 
             HudManager = XHud_Dashboard.HudManagerGet();
 
-            icon_libsetter_element = Editor_XHud_GUI.GetIcon("LibSetter/icon_libsetter_element");
-
-            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
-
-            CurrentReadyElemetInfo = new ReadyElementInfo();
+            icon_libsetter_element = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_element_setter/icon");
 
             #region ReorderableList
-            ReorderableList = new ReorderableList(BaseObject, sp_ReadySaveElementList, true, true, true, true);
+            ReorderableList = new ReorderableList(BaseObject, sp_element_list, true, true, true, true);
             ReorderableList.drawElementCallback = DrawElementCallback;
             ReorderableList.onRemoveCallback = Remove;
             #endregion
         }
 
-
         private void OnGUI()
         {
             BaseObject.Update();
 
+            #region 抬头
             Rect rect = new Rect(0, 0, position.width, position.height);
 
-            Icon_rect = new Rect(26, 15, 48, 48);
+            // 图标
+            Rect rect_icon = new Rect(15, 15, icon_libsetter_element.width, icon_libsetter_element.height);
+            XGUI.gui_icon(
+                rect: rect_icon,
+                icon: icon_libsetter_element,
+                padding: new RectOffset(0, 0, 0, 0),
+                border: new RectOffset(0, 0, 0, 0),
+                color: Color.white);
 
-            Editor_XHud_GUI.Gui_Icon(Icon_rect, icon_libsetter_element);
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
 
-            Title_rect = new Rect(rect.x + 100, rect.y + 15, rect.width - 80, 30);
-            Editor_XHud_GUI.Gui_Labelfield(Title_rect, "元素库添加器", HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
+            // 大标题
+            Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
+            XGUI.gui_label(
+                rect: rect_title,
+                text: new GUIContent("元素库添加器"),
+                text_color: Color.white,
+                size: XGUIFontSize.L,
+                clipping: clipping,
+                font: XGUI.GetFont("xg-heavy"));
 
-            Sepline_rect = new Rect(rect.x + 102, rect.y + 60, 200, 1);
-            Editor_XHud_GUI.Gui_Box(Sepline_rect, SepLineColor);
+            // 分割线
+            Rect rect_seperate = new Rect(rect.x + 68, rect.y + 43, 200, 1);
+            XGUI.gui_seperator(
+                rect: rect_seperate,
+                thickness: 1,
+                color: XHud_Dashboard.Theme_SeperateLine,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0));
 
-            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 26, rect.y + 80, rect.width - 45, rect.height), "以下列表中的元素为待入库的Hud元素物体，您可以检查或按Delete键剔除不需要入库的选中元素项，点击每一项可查看此项元素的基础信息", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
-
-            DateTimes = DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss:ff");
-            Date_rect = new Rect(rect.x + 150, rect.y + 15, rect.width - 180, rect.height);
-            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(Date_rect, DateTimes, HudFilled.无, HudColor.无, DateTimeColor, TextAnchor.UpperRight, new Vector2(0, 0), 13, true, Font_Light);
-
-            TotalCount_rect = new Rect(rect.width - 300, rect.y + 15, 80, 30);
-            Editor_XHud_GUI.Gui_Labelfield(TotalCount_rect, ReadySaveElementList.Count.ToString(), HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleRight, Vector2.zero, 17, Font_Bold);
-
-            Editor_XHud_GUI.Gui_Labelfield(new Rect(TotalCount_rect.x + TotalCount_rect.width + 7, TotalCount_rect.y + 1, 20, TotalCount_rect.height), " 项", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 14, Font_Bold);
-
-            #region 库选择
-            string[] libnames = HudManager.hm_ElementLibrary_GetAllLibraryNames();
-            LibSelector_rect = new Rect(rect.width - 275, rect.y + 140, 255, 25);
-            Editor_XHud_GUI.Gui_PopupWithString(LibSelector_rect, ref sp_LibName, libnames, HudFilled.实体, HudColor.深空灰, Color.white);
-            sp_LibName.serializedObject.ApplyModifiedProperties();
+            // 小标题
+            Rect rect_subtitle = new Rect(rect.x + 18, rect.y + 53, rect.width, 30);
+            XGUI.gui_label(
+                rect: rect_subtitle,
+                text: new GUIContent("以下列表中的元素为待入库的Hud元素物体，您可以检查或剔除不需要入库的元素项，点击列表可查看元素的基础信息"),
+                text_color: Color.white * 0.7f,
+                size: XGUIFontSize.M,
+                anchor: TextAnchor.UpperLeft,
+                wrap: true,
+                clipping: TextClipping.Overflow);
             #endregion
 
-            #region 选中的元素信息
-            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+            LibSelector_rect = rect;
 
-            readyelementinfo_rect = new Rect(rect.width - 270, rect.y + 185, 200, 15);
-            Editor_XHud_GUI.Gui_Labelfield(readyelementinfo_rect, "元素信息：", HudFilled.无, HudColor.无, Color.white, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 12, Font_Bold);
+            string colorhex_value = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string colorhex_title = XGUI_Utilitys.Color_To_HexString(Color.white * 0.65f, true);
 
-            if (ReadySaveElementList != null && ReadySaveElementList.Count > 0)
+            #region 统计数量
+            LibSelector_rect.Set(rect.x + rect.width - 120, rect.y + 15, 100, XGUI.GetSingleLineHeight());
+            XGUI.gui_label(
+               rect: LibSelector_rect,
+               text: new GUIContent($"<color={colorhex_value}>{element_list.Count.ToString()}</color> <color={colorhex_title}> 项</color>"),
+               text_color: Color.white,
+               size: XGUIFontSize.M,
+               anchor: TextAnchor.MiddleRight,
+               clipping: TextClipping.Overflow);
+            #endregion
+
+            #region 目标入库选择
+            string[] libnames = HudManager.hm_ElementLibrary_GetAllLibraryNames();
+            LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 110, rect.width - 15, XGUI.GetSingleLineHeight());
+            XGUI.gui_string_popup(
+                  rect: LibSelector_rect,
+                  title: "类型",
+                  title_color: Color.white,
+                  title_size: XGUIFontSize.M,
+                  title_font_style: FontStyle.Normal,
+                  title_padding: new RectOffset(0, 0, 0, 0),
+                  title_width: 25,
+                  interval: 10,
+                  prop: sp_library_name,
+                  options: libnames,
+                  opt_text_size: XGUIFontSize.M,
+                  opt_text_color: Color.black,
+                  opt_text_padding: new RectOffset(10, 10, 0, 0),
+                  opt_anchor: TextAnchor.MiddleCenter,
+                  opt_font_style: FontStyle.Normal,
+                  opt_bg_fill: XGUIFilled.实体,
+                  opt_bg_color: XGUIColor.亮白,
+                  opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                  icon_arrow_color: Color.black);
+            sp_library_name.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            #region 元素信息标题
+            LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 160, 100, 15);
+            XGUI.gui_label(
+                   rect: LibSelector_rect,
+                   text: new GUIContent("元素信息"),
+                   text_color: Color.white,
+                   size: XGUIFontSize.M,
+                   clipping: clipping,
+                   anchor: TextAnchor.MiddleLeft,
+                   offset: new Vector2(0, 0),
+                   wrap: true,
+                   font_style: FontStyle.Bold);
+
+            if (element_list != null && element_list.Count > 0)
             {
-                SelectedElementInfoViewer(rect, 220, $" 名称： <color={colorhex}>{ReadySaveElementList[SelectedIndex].Info.Name}</color>");
-                if (string.IsNullOrEmpty(ReadySaveElementList[SelectedIndex].Info.Indicator))
-                    SelectedElementInfoViewer(rect, 250, $" 标识： <color={colorhex}>未设置标识名称</color>");
-                else
-                    SelectedElementInfoViewer(rect, 250, $" 标识： <color={colorhex}>{ReadySaveElementList[SelectedIndex].Info.Indicator}</color>");
-                SelectedElementInfoViewer(rect, 280, $" 尺寸： <color={colorhex}>{ReadySaveElementList[SelectedIndex].Info.Size}</color>");
-                SelectedElementInfoViewer(rect, 310, $" 位置： <color={colorhex}>{ReadySaveElementList[SelectedIndex].Info.Pos}</color>");
-                SelectedElementInfoViewer(rect, 340, $" 旋转： <color={colorhex}>{ReadySaveElementList[SelectedIndex].Info.Rot}</color>");
+                #region 名称
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 190, rect.width - 15, 20);
+                XGUI.gui_label(
+                    rect: LibSelector_rect,
+                    text: new GUIContent($"名称： <color={colorhex_value}>{element_list[SelectedIndex].Info.Name}</color>"),
+                    text_color: Color.white,
+                    size: XGUIFontSize.M,
+                    clipping: clipping,
+                    anchor: TextAnchor.MiddleLeft,
+                    font_style: FontStyle.Normal);
+                #endregion
+
+                #region 标识
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 220, rect.width - 15, 20);
+                XGUI.gui_label(
+                    rect: LibSelector_rect,
+                    text: new GUIContent($"标识： <color={colorhex_value}>{(!string.IsNullOrEmpty(element_list[SelectedIndex].Info.Indicator) ? element_list[SelectedIndex].Info.Indicator : "未设置标识名称")} </color>"),
+                    text_color: Color.white,
+                    size: XGUIFontSize.M,
+                    clipping: clipping,
+                    anchor: TextAnchor.MiddleLeft,
+                    font_style: FontStyle.Normal);
+                #endregion
+
+                #region 尺寸
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 245, rect.width - 15, 20);
+                XGUI.gui_label(
+                    rect: LibSelector_rect,
+                    text: new GUIContent($"尺寸： <color={colorhex_value}>{element_list[SelectedIndex].Info.Size} </color>"),
+                    text_color: Color.white,
+                    size: XGUIFontSize.M,
+                    clipping: clipping,
+                    anchor: TextAnchor.MiddleLeft,
+                    font_style: FontStyle.Normal);
+                #endregion
+
+                #region 位置
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 270, rect.width - 15, 20);
+                XGUI.gui_label(
+                    rect: LibSelector_rect,
+                    text: new GUIContent($"位置： <color={colorhex_value}>{element_list[SelectedIndex].Info.Pos} </color>"),
+                    text_color: Color.white,
+                    size: XGUIFontSize.M,
+                    clipping: clipping,
+                    anchor: TextAnchor.MiddleLeft,
+                    font_style: FontStyle.Normal);
+                #endregion
+
+                #region 旋转
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 295, rect.width - 15, 20);
+                XGUI.gui_label(
+                    rect: LibSelector_rect,
+                    text: new GUIContent($"旋转： <color={colorhex_value}>{element_list[SelectedIndex].Info.Rot} </color>"),
+                    text_color: Color.white,
+                    size: XGUIFontSize.M,
+                    clipping: clipping,
+                    anchor: TextAnchor.MiddleLeft,
+                    font_style: FontStyle.Normal);
+                #endregion
             }
             #endregion
 
+            XGUI.layout_space(110);
+
             #region 列表
-
-            Editor_XHud_GUI.Gui_Layout_Space(140);
-
             DrawDataList();
+            #endregion
 
             BaseObject.ApplyModifiedProperties();
-            #endregion
 
             Repaint();
 
-            Editor_XHud_GUI.Gui_Layout_Space(65);
-            DialogType_Buttons();
+            XGUI.layout_space(50);
+
+            Buttons();
 
             Event e = Event.current;
             if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape)
@@ -418,54 +522,67 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
 
-        private void SelectedElementInfoViewer(Rect rect, float offset, string content)
-        {
-            readyelementinfo_rect = new Rect(rect.width - 275, rect.y + offset, 200, 15);
-            Editor_XHud_GUI.Gui_Labelfield(readyelementinfo_rect, content, HudFilled.无, HudColor.无, Color.gray, TextAnchor.UpperLeft, Vector2.zero, 12, true, TextClipping.Ellipsis, true, Font_Light);
-        }
-
         /// <summary>
         /// 发送到元素库
         /// </summary>
         private void SendToLibrary()
         {
-            XHud_Library_Element target_library = HudManager.hm_ElementLibrary_GetTargetLibrary(sp_LibName.stringValue);
+            XHud_Library_Element target_library = HudManager.hm_ElementLibrary_GetTargetLibrary(sp_library_name.stringValue);
 
-            List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            List<XGUIDialogListDatas> valids = new List<XGUIDialogListDatas>();
 
-            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
-
-            for (int s = 0; s < ReadySaveElementList.Count; s++)
+            for (int s = 0; s < element_list.Count; s++)
             {
-                XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
+                XGUIDialogListDatas item = new XGUIDialogListDatas();
 
-                if (target_library.ElementLibrary_IsExist(ReadySaveElementList[s].Element.name))
+                if (target_library.ElementLibrary_IsExist(element_list[s].Element.name))
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素库添加器消息", "存在重复元素名称", $"名称为<color={colorhex}> {ReadySaveElementList[s].Element.transform.name} </color>的元素已经存在于<color={colorhex}> \" {sp_LibName.stringValue} \" </color>元素库中，是否以当前元素更新替换库中的元素？", "更新替换", "跳过", 1);
+                    string res = XGUI.dialog(
+                                type: XGUIDialogType.通知,
+                                windowtitle: "XHud - 元素库添加器消息",
+                                title: "存在重复元素名称",
+                                msg: $"名称为<color={colorhex}> {element_list[s].Element.transform.name} </color>的元素已经存在于<color={colorhex}> \" {sp_library_name.stringValue} \" </color>元素库中，是否以当前元素更新替换库中的元素？",
+                                ok: "更新替换",
+                                cancel: "跳过",
+                                PrimaryIndex: 1,
+                                themecolor: XHud_Dashboard.Theme_Primary);
+
                     if (res == "更新替换")
                     {
-                        target_library.ElementsLibrary_ReplaceElement(ReadySaveElementList[s].Element);
+                        target_library.ElementsLibrary_ReplaceElement(element_list[s].Element);
 
-                        dataitem.Title = ReadySaveElementList[s].Element.transform.name;
-                        dataitem.SubTitle = "替换库中元素";
-                        dataitem.Message = sp_LibName.stringValue;
-                        Datas.Add(dataitem);
+                        item.Title = element_list[s].Element.transform.name;
+                        item.SubTitle = "替换库中元素";
+                        item.Message = sp_library_name.stringValue;
+                        valids.Add(item);
                     }
                 }
                 else
                 {
-                    target_library.ElementsLibrary_Add(ReadySaveElementList[s].Element, 1);
+                    target_library.ElementsLibrary_Add(element_list[s].Element, 1);
 
-                    dataitem.Title = ReadySaveElementList[s].Element.transform.name;
-                    dataitem.SubTitle = "新增元素到库";
-                    dataitem.Message = sp_LibName.stringValue;
+                    item.Title = element_list[s].Element.transform.name;
+                    item.SubTitle = "新增元素到库";
+                    item.Message = sp_library_name.stringValue;
 
-                    Datas.Add(dataitem);
+                    valids.Add(item);
                 }
             }
 
-            if (Datas.Count > 0)
-                Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 元素库添加器消息", "元素入库", "以下是已被新增入库和被替换已有的元素列表，请您检查核对：", "明白");
+            if (valids.Count > 0)
+            {
+                XGUI.dialog_listview(
+                    datas: valids.ToArray(),
+                    type: XGUIDialogType.通知,
+                    windowtitle: "XHud - 元素库添加器消息",
+                    title: "元素入库",
+                    msg: "以下是已被新增入库和被替换已有的元素列表，请您检查核对：",
+                    ok: "明白",
+                    PrimaryIndex: 0,
+                    usemodal: false,
+                    themecolor: XHud_Dashboard.Theme_Primary);
+            }
         }
 
         /// <summary>
@@ -474,8 +591,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="eles"></param>
         public void SetElements(List<XHud_Module_Element> eles)
         {
-            if (ReadySaveElementList == null)
-                ReadySaveElementList = new List<ReadyLibElement>();
+            if (element_list == null)
+                element_list = new List<ReadyLibElement>();
 
             for (int i = 0; i < eles.Count; i++)
             {
@@ -489,35 +606,72 @@ namespace SevenStrikeModules.XHud.Editor
                 ready.Info.Size = eles[i].RectTransform.sizeDelta;
                 ready.Info.Rot = eles[i].RectTransform.localEulerAngles;
 
-                ReadySaveElementList.Add(ready);
+                element_list.Add(ready);
             }
         }
 
         /// <summary>
         /// 控件按钮
         /// </summary>
-        private void DialogType_Buttons()
+        private void Buttons()
         {
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_FlexSpace();
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(250, 15, 2, 15));
 
-            if (Editor_XHud_GUI.Gui_Layout_Button("关闭", "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, "关闭"))
+            if (XGUI.layout_button(
+                text: "关闭",
+                tooltip: "",
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: Color.white,
+                button_text_color: Color.black,
+                press_fill: XGUIFilled.实体,
+                press_color: XGUIColor.深空灰,
+                press_text_color: Color.white,
+                font_size: XGUIFontSize.B,
+                anchor: TextAnchor.MiddleCenter,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                height: XGUI.GetSingleLineHeight() + 10,
+                button_text_font: XGUI.GetFont("xg-medium")))
             {
                 Close();
             }
-            GUI.backgroundColor = Color.white;
-            Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
-            GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
-            if (Editor_XHud_GUI.Gui_Layout_Button("添加", "", HudFilled.实体, HudColor.亮白, XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Light, "添加"))
+
+            XGUI.layout_space(10);
+
+            if (Application.isPlaying)
+                XGUI.SetEnabled(false);
+            else
+                XGUI.SetEnabled(true);
+
+            if (XGUI.layout_button(
+                text: "添加",
+                tooltip: "",
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                button_text_color: Color.black,
+                press_fill: XGUIFilled.实体,
+                press_color: XGUIColor.深空灰,
+                press_text_color: Color.white,
+                font_size: XGUIFontSize.B,
+                anchor: TextAnchor.MiddleCenter,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                height: XGUI.GetSingleLineHeight() + 10,
+                button_text_font: XGUI.GetFont("xg-medium")))
             {
                 SendToLibrary();
                 Close();
                 return;
             }
             GUI.backgroundColor = Color.white;
+            XGUI.SetEnabled(true);
 
-            Editor_XHud_GUI.Gui_Layout_Space(25);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
         }
     }
 }

@@ -20,14 +20,14 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
-    using UnityEngine.UI;
 
     public class XHud_ModuleArg_Option
     {
@@ -449,15 +449,15 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Option>("状态调试", stroptions_debug, ref DebugState, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Option>("状态调试", stroptions_debug, ref DebugState, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Option>("选择时重复动画", stroptions_enabled, ref RepeatTweenPlay, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Option>("选择时重复动画", stroptions_enabled, ref RepeatTweenPlay, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Option>("选择器闪现", stroptions_blinked, ref UseBlinked, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Option>("选择器闪现", stroptions_blinked, ref UseBlinked, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
             if (!UseBlinked.boolValue)
             {
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Option>("选择器缓动", stroptions_easemode, ref UseEaseMotion, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Option>("选择器缓动", stroptions_easemode, ref UseEaseMotion, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             }
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
@@ -1263,7 +1263,7 @@ namespace SevenStrikeModules.XHud.Editor
                 list[i].Controller.pt_Tween.TweenNode_GetTimers();
                 x_list[i] = list[i].Controller.pt_Tween.MaxTimerWithGlobalDuration + list[i].DelayTime;
             }
-            float v = XHud_Utilitys.Array_MaxValue(x_list);
+            float v = XGUI_Utilitys.MaxValue(x_list);
             return v * globaldur;
         }
         /// <summary>
@@ -1323,6 +1323,25 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
             return hasLoop;
+        }
+        /// <summary>
+        /// 图元控制器 - 创建ID编号
+        /// </summary>
+        /// <returns></returns>
+        public string PrimitiveController_CreateID()
+        {
+            return XGUI_Utilitys.GenerateUniqueId(CollectIDs());
+        }
+        public string[] CollectIDs()
+        {
+            List<string> list = new List<string>();
+
+            for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+            {
+                list.Add(BaseScript.PrimitiveControllerNodes[i].Controller.ID);
+            }
+
+            return list.ToArray();
         }
         /// <summary>
         /// 获取序列化字段

@@ -277,44 +277,44 @@ namespace SevenStrikeModules.XHud.Editor
             EditorGUI.BeginChangeCheck();
             #region 射线检测可用性   
             if (!sp_LibStyle_Effect_raycast.boolValue || !sp_StyleLibSynching.boolValue)
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("射线检测", stroptions_enabled, ref sp_Raycast, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("射线检测", stroptions_enabled, ref sp_Raycast, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
             #region 遮罩 
             if (!sp_LibStyle_Effect_maskable.boolValue || !sp_StyleLibSynching.boolValue)
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("遮罩", stroptions_enabled, ref sp_Maskable, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("遮罩", stroptions_enabled, ref sp_Maskable, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
             #region 富文本支持           
             if (!sp_LibStyle_Effect_rich.boolValue || !sp_StyleLibSynching.boolValue)
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("富文本", stroptions_enabled, ref sp_txt_rich, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("富文本", stroptions_enabled, ref sp_txt_rich, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
             #region 几何对齐
             if (!sp_LibStyle_Effect_geometre_align.boolValue || !sp_StyleLibSynching.boolValue)
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("几何对齐", stroptions_enabled, ref sp_txt_geometre_align, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("几何对齐", stroptions_enabled, ref sp_txt_geometre_align, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
             #region 自动字体尺寸
             if (!sp_LibStyle_Effect_size.boolValue && !sp_LibStyle_Effect_bestfit.boolValue || !sp_StyleLibSynching.boolValue)
             {
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("自动尺寸", stroptions_enabled, ref sp_txt_bestfit, HudFilled.无, HudFilled.实体, Color.white, 120, 25, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("自动尺寸", stroptions_enabled, ref sp_txt_bestfit, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 25, SelectedObjects);
             }
             #endregion
 
             #region 尺寸全局受控               
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("全局尺寸增量", stroptions_syncsize, ref sp_SyncGlobalFontSize, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("全局尺寸增量", stroptions_syncsize, ref sp_SyncGlobalFontSize, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
             #region PrimitivePainting 接管字体颜色        
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("图元配色器接管颜色", stroptions_synccolor, ref sp_SyncPrimitivePaintingColor, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("图元配色器接管颜色", stroptions_synccolor, ref sp_SyncPrimitivePaintingColor, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
             #region 实时匹配库
             if (HudManager != null && HudManager.Hud_TextStyleLibrary != null)
             {
                 if (!HudManager.Hud_TextStyleLibrary.TextStyle_Library_IsEmpty())
-                    Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("实时匹配库", stroptions_enabled, ref sp_StyleLibSynching, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                    Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("实时匹配库", stroptions_enabled, ref sp_StyleLibSynching, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 else
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
@@ -388,7 +388,7 @@ namespace SevenStrikeModules.XHud.Editor
                             }
                             //定位到元素库中的对应当前元素
                             //打开目标元素库
-                            Editor_XHud_MenuItemsAction_OpenLibrary.open_font();
+                            Editor_XHud_MenuItemsAction_OpenLibrary.open_textstyle();
                             HudManager.Hud_TextStyleLibrary.TextStyleLibrary_Location(str_fotlib_ItemsName[index]);
                         }
                         //util_EditorGuiLib.Gui_Layout_Space(5);
@@ -409,19 +409,19 @@ namespace SevenStrikeModules.XHud.Editor
                 Editor_XHud_GUI.Gui_Layout_Space(10);
 
                 #region 射线检测
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("射线检测", stroptions_syncstyle, ref sp_LibStyle_Effect_raycast, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("射线检测", stroptions_syncstyle, ref sp_LibStyle_Effect_raycast, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 遮罩
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("遮罩", stroptions_syncstyle, ref sp_LibStyle_Effect_maskable, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("遮罩", stroptions_syncstyle, ref sp_LibStyle_Effect_maskable, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 富文本
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("富文本", stroptions_syncstyle, ref sp_LibStyle_Effect_rich, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("富文本", stroptions_syncstyle, ref sp_LibStyle_Effect_rich, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 尺寸
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("尺寸", stroptions_syncstyle, ref sp_LibStyle_Effect_size, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("尺寸", stroptions_syncstyle, ref sp_LibStyle_Effect_size, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 if (sp_LibStyle_Effect_size.boolValue)
                 {
                     sp_LibStyle_Effect_bestfit.boolValue = false;
@@ -432,7 +432,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 自适应尺寸
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("自适应尺寸", stroptions_syncstyle, ref sp_LibStyle_Effect_bestfit, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("自适应尺寸", stroptions_syncstyle, ref sp_LibStyle_Effect_bestfit, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 if (sp_LibStyle_Effect_bestfit.boolValue)
                 {
                     sp_LibStyle_Effect_size.boolValue = false;
@@ -443,35 +443,35 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 对齐
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("对齐", stroptions_syncstyle, ref sp_LibStyle_Effect_align, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("对齐", stroptions_syncstyle, ref sp_LibStyle_Effect_align, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 对齐
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("几何对齐", stroptions_syncstyle, ref sp_LibStyle_Effect_geometre_align, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("几何对齐", stroptions_syncstyle, ref sp_LibStyle_Effect_geometre_align, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 行高
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("行高", stroptions_syncstyle, ref sp_LibStyle_Effect_line, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("行高", stroptions_syncstyle, ref sp_LibStyle_Effect_line, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 字体
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("字体", stroptions_syncstyle, ref sp_LibStyle_Effect_font, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("字体", stroptions_syncstyle, ref sp_LibStyle_Effect_font, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 样式
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("样式", stroptions_syncstyle, ref sp_LibStyle_Effect_style, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("样式", stroptions_syncstyle, ref sp_LibStyle_Effect_style, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 颜色
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("颜色", stroptions_syncstyle, ref sp_LibStyle_Effect_color, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("颜色", stroptions_syncstyle, ref sp_LibStyle_Effect_color, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 水平溢出
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("水平溢出", stroptions_syncstyle, ref sp_LibStyle_Effect_overflow_h, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("水平溢出", stroptions_syncstyle, ref sp_LibStyle_Effect_overflow_h, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 垂直溢出
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("垂直溢出", stroptions_syncstyle, ref sp_LibStyle_Effect_overflow_v, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Text>("垂直溢出", stroptions_syncstyle, ref sp_LibStyle_Effect_overflow_v, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -669,13 +669,13 @@ namespace SevenStrikeModules.XHud.Editor
                     info.CopyData_Ignored_LibraryToggle(BaseScript.TextStyleInfo);
 
                     string json = JsonUtility.ToJson(info);
-                    Editor_XHud_GUI.EditorData_Set_With_String("XED_HudText_Get_TextStyle", json);
+                    Editor_XHud_GUI.EditorData_Set_With_String("xData_XHud_TextStyle", json);
 
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式复制", $"已将当前文字样式存入 XHudEditorData (XED)！", "好的");
+                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式复制", $"已将当前文字样式存入 xData ！", "好的");
                 });
                 menu.AddItem(new GUIContent("V (粘贴样式)"), false, () =>
                 {
-                    XHud_LibraryArg_TextStyle info = JsonUtility.FromJson<XHud_LibraryArg_TextStyle>(Editor_XHud_GUI.EditorData_Get_With_String("XED_HudText_Get_TextStyle"));
+                    XHud_LibraryArg_TextStyle info = JsonUtility.FromJson<XHud_LibraryArg_TextStyle>(Editor_XHud_GUI.EditorData_Get_With_String("xData_XHud_TextStyle"));
 
                     if (Targets_Selected())
                     {
@@ -686,7 +686,7 @@ namespace SevenStrikeModules.XHud.Editor
                             SelectedObjects[i].TextStyleInfo.CopyData(info);
                         }
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式粘贴", $"已从 XHudEditorData (XED) 中获取文字样式并应用到当前文字组件！", "好的");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式粘贴", $"已从 xData 中获取文字样式并应用到当前文字组件！", "好的");
                     }
                     else
                     {
@@ -695,14 +695,14 @@ namespace SevenStrikeModules.XHud.Editor
 
                         BaseScript.TextStyleInfo.CopyData(info);
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式粘贴", $"已从 XHudEditorData (XED) 中获取文字样式并应用到当前文字组件！", "好的");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式粘贴", $"已从 xData 中获取文字样式并应用到当前文字组件！", "好的");
                     }
                 });
                 menu.AddSeparator("");
                 menu.AddDisabledItem(new GUIContent("文字样式库"));
                 menu.AddItem(new GUIContent("X (识别)"), false, () =>
                 {
-                    XHud_LibraryArg_TextStyle info = JsonUtility.FromJson<XHud_LibraryArg_TextStyle>(Editor_XHud_GUI.EditorData_Get_With_String("XED_HudTextStyleLibrary_Get_TextStyle"));
+                    XHud_LibraryArg_TextStyle info = JsonUtility.FromJson<XHud_LibraryArg_TextStyle>(Editor_XHud_GUI.EditorData_Get_With_String("xData_XHud_TextStyle"));
 
                     if (Targets_Selected())
                     {
@@ -714,7 +714,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                             if (info.Type != xHud_TextType.Text)
                             {
-                                Editor_XHud_GUI.Open(XHud_DialogType.错误, "XHud - 文字组件消息", "文字样式识别", $"从 XHudEditorData (XED) 中识别的文字样式似乎并不是用于 {SelectedObjects[i].name} ( {SelectedObjects[i].Indicator} ) 的文字组件的规范样式！请检查您复制的样式类型是否和当前组件一致？", "好的");
+                                Editor_XHud_GUI.Open(XHud_DialogType.错误, "XHud - 文字组件消息", "文字样式识别", $"从 XData 中识别的文字样式似乎并不是用于 {SelectedObjects[i].name} ( {SelectedObjects[i].Indicator} ) 的文字组件的规范样式！请检查您复制的样式类型是否和当前组件一致？", "好的");
 
                                 data.Title = info.Name;
                                 data.SubTitle = "文字样式类型未能匹配到";
@@ -738,13 +738,13 @@ namespace SevenStrikeModules.XHud.Editor
                             }
                         }
 
-                        Editor_XHud_GUI.Open(datas.ToArray(), XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式识别", $"已从 XHudEditorData (XED) 中识别到文字样式并应用到如下文字组件中！", "好的");
+                        Editor_XHud_GUI.Open(datas.ToArray(), XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式识别", $"已从 xData 中识别到文字样式并应用到如下文字组件中！", "好的");
                     }
                     else
                     {
                         if (info.Type != xHud_TextType.Text)
                         {
-                            Editor_XHud_GUI.Open(XHud_DialogType.错误, "XHud - 文字组件消息", "文字样式识别", $"从 XHudEditorData (XED) 中识别的文字样式似乎并不是用于当前文字组件的规范样式！请检查您复制的样式类型是否和当前组件一致？", "好的");
+                            Editor_XHud_GUI.Open(XHud_DialogType.错误, "XHud - 文字组件消息", "文字样式识别", $"从 xData 中识别的文字样式似乎并不是用于当前文字组件的规范样式！请检查您复制的样式类型是否和当前组件一致？", "好的");
                             return;
                         }
 
@@ -753,7 +753,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                         BaseScript.TextStyleInfo.CopyData_Ignored_LibraryToggle(info);
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式识别", $"已从 XHudEditorData (XED) 中识别到文字样式并应用到当前文字组件！", "好的");
+                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式识别", $"已从 xData 中识别到文字样式并应用到当前文字组件！", "好的");
                     }
                 });
                 menu.AddSeparator("");
@@ -983,15 +983,15 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Editor_XHud_LibrarySetTool_TextStyle window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_TextStyle>(true);
 
-            window.titleContent = new GUIContent("XHud 字体样式库采集器");
-            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(630, 620), window);
+            window.titleContent = new GUIContent("XHud - 文字样式采集器");
+            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(348, info.Type == xHud_TextType.Text ? 820 : 800), window);
 
             window.SetComponent(BaseScript);
             window.SetStyle(info);
             window.SetOriginStyle(info);
             window.SetLibrarySetterMode(LibrarySetterMode.添加到库);
             window.SetButtonText("添加", "取消");
-            window.SetTitle("XHud 文字样式库采集器");
+            window.SetTitle("文字样式采集器");
             //window.ShowModal();
             window.Show();
         }

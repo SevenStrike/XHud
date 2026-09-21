@@ -20,9 +20,9 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
-    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.IO;
@@ -43,48 +43,12 @@ namespace SevenStrikeModules.XHud.Editor
         }
     }
 
-    [System.Serializable]
-    public class XHud_Emotions
-    {
-        // 积极情绪列表
-        public string Pos { get; set; }
-
-        // 消极情绪列表
-        public string Neg { get; set; }
-    }
-
-    [System.Serializable]
-    public class XHud_ColorEmotionNode
-    {
-        [SerializeField]
-        // 颜色名称
-        public string ColorName;
-        [SerializeField]
-        // 积极情绪列表
-        public List<string> Pos;
-        [SerializeField]
-        // 色环角度
-        public string Hue;
-        [SerializeField]
-        // 消极情绪列表
-        public List<string> Neg;
-    }
-
-    [System.Serializable]
-    public class XHud_ColorEmotions
-    {
-        [SerializeField]
-        // 颜色情绪列表
-        public List<XHud_ColorEmotionNode> Colors;
-    }
-
     public class Editor_XHud_LibrarySetTool_Color : EditorWindow
     {
         private SerializedObject BaseObject;
         private SerializedProperty
             sp_ColorName,
             sp_OriginColorName,
-            sp_ColorDescription,
             sp_Color;
 
         private Texture2D icon_libsetter_color;
@@ -97,20 +61,10 @@ namespace SevenStrikeModules.XHud.Editor
         private float PreviewDataDuration = 0.035f;
         private int PreviewData_Index = 0;
         private XCoroutine PreviewCoroutine;
-        private Texture2D PreviewTex;
+        private Texture2D PreviewTex = null;
 
         public LibrarySetterMode LibrarySetterMode;
 
-        /// <summary>
-        /// 字体 - 粗体
-        /// </summary>
-        Font Font_Bold;
-        /// <summary>
-        /// 字体 - 细体
-        /// </summary>
-        Font Font_Light;
-
-        public XHud_ColorEmotions ColorEmotions;
         /// <summary>
         /// 源配色器
         /// </summary>
@@ -120,14 +74,8 @@ namespace SevenStrikeModules.XHud.Editor
         [SerializeField]
         public string DateTimes;
         [SerializeField]
-        public string ColorDescription;
-        [SerializeField]
         public Color Color;
 
-        /// <summary>
-        /// 按钮宽度
-        /// </summary>
-        private float ButtonWidth = 110;
         /// <summary>
         /// 按钮高度
         /// </summary>
@@ -135,7 +83,11 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 按钮间距
         /// </summary>
-        private float ButtonDistance = 15;
+        private float ButtonDistance = 10;
+        /// <summary>
+        /// 标题文字
+        /// </summary>
+        public string Title;
 
         [SerializeField]
         public bool UseBg = true;
@@ -147,17 +99,11 @@ namespace SevenStrikeModules.XHud.Editor
         [SerializeField]
         public string OriginColorName;
 
-        Color SepLineColor = new Color(1, 1, 1, 0.15f);
-        Color MessageColor = new Color(1, 1, 1, 0.62f);
-        Color DateTimeColor = new Color(1, 1, 1, 0.42f);
-
         Color PreviewBgColor = Color.black;
 
-        Rect draw_rect;
+        Rect draw_rect = new Rect(0, 0, 0, 0);
 
         public int ModifiedIndex;
-
-        string Title;
 
         public XHud_LibrarySetTool_Color_PreviewData[] PreviewDatas;
 
@@ -170,31 +116,23 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnEnable()
         {
+            StartPreviewUpdate();
+
             BaseObject = new SerializedObject(this);
             sp_ColorName = BaseObject.FindProperty("ColorName");
-            sp_ColorDescription = BaseObject.FindProperty("ColorDescription");
             sp_Color = BaseObject.FindProperty("Color");
             sp_OriginColorName = BaseObject.FindProperty("OriginColorName");
 
-            icon_libsetter_color = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/logo");
+            icon_libsetter_color = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/logo");
+            leftarr_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/leftarr_p");
+            leftarr_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/leftarr_r");
+            rightarr_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/rightarr_p");
+            rightarr_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/rightarr_r");
 
-            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
-
-            leftarr_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/leftarr_p");
-            leftarr_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/leftarr_r");
-            rightarr_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/rightarr_p");
-            rightarr_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/rightarr_r");
-
-            ColorDescription = "颜色说明内容";
             ColorName = "颜色名称";
 
-            TextAsset emotions = AssetDatabase.LoadAssetAtPath<TextAsset>($"{XHud_Dashboard.Get_Path_XHUD_CONFIG_Path()}XHudColorEmotions.json");
-            ColorEmotions = JsonUtility.FromJson<XHud_ColorEmotions>(emotions.text);
+            PreviewData_Index = XGUI.x_Editor_Data_Get_With_Int("xData_library_color_previewdata_index");
 
-            PreviewData_Index = Editor_XHud_GUI.EditorData_Get_With_Int("XED_Library_Color_PreviewData_Index");
-
-            StartPreviewUpdate();
         }
 
         private void OnDestroy()
@@ -207,114 +145,93 @@ namespace SevenStrikeModules.XHud.Editor
             BaseObject.Update();
 
             Rect rect = new Rect(0, 0, position.width, position.height);
-            draw_rect.Set(0, 0, position.width, position.height);
 
-            draw_rect.Set(26, 15, 48, 48);
-            Editor_XHud_GUI.Gui_Icon(draw_rect, icon_libsetter_color);
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
 
-            draw_rect.Set(rect.x + 100, rect.y + 15, rect.width - 80, 30);
-            Editor_XHud_GUI.Gui_Labelfield(draw_rect, Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
+            #region 抬头
+            // 图标
+            Rect rect_icon = new Rect(15, 15, icon_libsetter_color.width, icon_libsetter_color.height);
+            XGUI.gui_icon(
+                rect: rect_icon,
+                icon: icon_libsetter_color,
+                padding: new RectOffset(0, 0, 0, 0),
+                border: new RectOffset(0, 0, 0, 0),
+                color: Color.white);
 
-            draw_rect.Set(rect.x + 102, rect.y + 60, 200, 1);
-            Editor_XHud_GUI.Gui_Box(draw_rect, SepLineColor);
 
-            draw_rect.Set(rect.x + 26, rect.y + 80, rect.width - 45, rect.height);
-            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(draw_rect, "以下为待入库的颜色参数与效果的预览，您可以检查即将入库的颜色是否符合您的要求，同时您可以再次调整即将入库的颜色！", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
+            // 大标题
+            Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
+            XGUI.gui_label(
+                rect: rect_title,
+                text: new GUIContent(Title),
+                text_color: Color.white,
+                size: XGUIFontSize.L,
+                clipping: clipping,
+                font: XGUI.GetFont("xg-heavy"));
 
-            DateTimes = DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss:ff");
-            draw_rect.Set(rect.x + 150, rect.y + 15, rect.width - 180, rect.height);
-            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(draw_rect, DateTimes, HudFilled.无, HudColor.无, DateTimeColor, TextAnchor.UpperRight, new Vector2(0, 0), 13, true, Font_Light);
+            // 分割线
+            Rect rect_seperate = new Rect(rect.x + 68, rect.y + 43, 200, 1);
+            XGUI.gui_seperator(
+                rect: rect_seperate,
+                thickness: 1,
+                color: XHud_Dashboard.Theme_SeperateLine,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0));
 
-            #region 颜色入库信息
-            string colorhex = XHud_Utilitys.Color_To_HexColor(sp_Color.colorValue, true);
-
-            draw_rect.Set(rect.width - 280, rect.y + 150, (rect.width / 2) - 55, 20);
-            sp_Color.colorValue = Editor_XHud_GUI.Gui_ColorField(draw_rect, sp_Color.colorValue);
-
-            string col_string = XHud_Utilitys.Color_To_String(sp_Color.colorValue);
-            string col_hex = XHud_Utilitys.Color_To_HexColor(sp_Color.colorValue, true);
-            float[] col_array = XHud_Utilitys.Color_To_FloatArray(sp_Color.colorValue);
-
-            draw_rect.Set(rect.width - 278, rect.y + 190, (rect.width / 2) - 55, 20);
-            Editor_XHud_GUI.Gui_Labelfield(draw_rect, $"颜色字符串 ：{col_string}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true);
-            draw_rect.Set(rect.width - 278, rect.y + 220, (rect.width / 2) - 55, 20);
-            Editor_XHud_GUI.Gui_Labelfield(draw_rect, $"16进制颜色 ：{col_hex}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true);
-            draw_rect.Set(rect.width - 278, rect.y + 250, (rect.width / 2) - 55, 20);
-            Editor_XHud_GUI.Gui_Labelfield(draw_rect, "通道颜色 ：", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true);
-            draw_rect.Set(rect.width - 265, rect.y + 275, (rect.width / 2) - 55, 15);
-            Editor_XHud_GUI.Gui_Labelfield(draw_rect, $"R: {col_array[0].ToString("F2")}        G: {col_array[1].ToString("F2")}        B: {col_array[2].ToString("F2")}        A: {col_array[3].ToString("F2")}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true);
-
-            draw_rect.Set(rect.width - 278, rect.y + 275, 4, 12);
-            Editor_XHud_GUI.Gui_Box(draw_rect, new Color(col_array[0], 0, 0));
-            draw_rect.Set(rect.width - 215, rect.y + 275, 4, 12);
-            Editor_XHud_GUI.Gui_Box(draw_rect, new Color(0, col_array[1], 0));
-            draw_rect.Set(rect.width - 148, rect.y + 275, 4, 12);
-            Editor_XHud_GUI.Gui_Box(draw_rect, new Color(0, 0, col_array[2]));
-            draw_rect.Set(rect.width - 85, rect.y + 275, 4, 12);
-            Editor_XHud_GUI.Gui_Box(draw_rect, new Color(1, 1, 1, col_array[3]));
-
-            #region 入库名称
-            Color LibName_color = Color.white;
-            if (string.IsNullOrEmpty(sp_ColorName.stringValue))
-            {
-                LibName_color = Color.gray;
-                sp_ColorName.stringValue = "颜色名称";
-            }
-            else
-            {
-                if (sp_ColorName.stringValue == "颜色名称")
-                    LibName_color = Color.gray;
-                else
-                    LibName_color = Color.white;
-            }
-
-            draw_rect.Set(rect.width - 280, rect.height - 230, (rect.width / 2) - 55, 50);
-            sp_ColorName.stringValue = Editor_XHud_GUI.Gui_TextField(draw_rect, sp_ColorName.stringValue, LibName_color, 12);
-            sp_ColorName.serializedObject.ApplyModifiedProperties();
+            // 小标题
+            Rect rect_subtitle = new Rect(rect.x + 18, rect.y + 45, rect.width, 30);
+            XGUI.gui_label(
+                rect: rect_subtitle,
+                text: new GUIContent("以下为目标色卡的颜色参数与效果的预览"),
+                text_color: Color.white * 0.7f,
+                size: XGUIFontSize.M,
+                clipping: clipping);
             #endregion
 
-            #region 说明文字
-            Color Description_Color = Color.white;
-            if (string.IsNullOrEmpty(sp_ColorDescription.stringValue))
-            {
-                Description_Color = Color.gray;
-                sp_ColorDescription.stringValue = "颜色说明内容";
-            }
-            else
-            {
-                if (sp_ColorDescription.stringValue == "颜色说明内容")
-                    Description_Color = Color.gray;
-                else
-                    Description_Color = Color.white;
-            }
-            draw_rect.Set(rect.width - 280, rect.height - 175, (rect.width / 2) - 55, 60);
-            sp_ColorDescription.stringValue = Editor_XHud_GUI.Gui_TextField(draw_rect, sp_ColorDescription.stringValue, Description_Color, 12);
-            sp_ColorDescription.serializedObject.ApplyModifiedProperties();
+            XGUI.layout_space(100);
 
-            #endregion
-
-            #endregion
-
-            #region 情绪说明
-            string tone = GetColorTone(sp_Color.colorValue);
-            XHud_Emotions emo = GetEmotions(tone);
-            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 30, rect.height - 100, 200, 15), $"色系：<color={colorhex}> {tone} </color>", HudFilled.无, HudColor.无, Color.white, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 15, Font_Bold);
-
-            Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect.x + 30, rect.height - 75, 200, 15), $"+ ：{emo.Pos}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, false, false, true);
-
-            Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect.x + 30, rect.height - 45, 200, 15), $"- ：{emo.Neg}", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, false, false, true);
-            #endregion
+            Rect rect_preview = XGUI.GetControlRect(false, 290);
 
             #region 预览
-            Rect rect_preview = new Rect(rect.x + 25, rect.y + 150, 300, 265);
-            Editor_XHud_GUI.Gui_Group(rect_preview, HudFilled.纯色边框, HudColor.亮白, "着色效果预览", new Vector2(25, -8), Color.white, Font_Light);
-            float margin = 10;
+            rect_preview.Set(rect.x + 14, rect_preview.y, rect_preview.width - 23, rect_preview.height);
+            XGUI.gui_group_start(
+                rect_group: rect_preview,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_height: 0,
+                true,
+                true,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                title: "预览",
+                title_bg_fill: XGUIFilled.无,
+                title_bg_color: XGUIColor.亮白,
+                title_bg_color_gui: Color.black,
+                title_size: XGUIFontSize.M,
+                title_anchor: TextAnchor.MiddleLeft,
+                title_text_color: Color.white,
+                title_offset: new Vector2(0, 0),
+                title_padding: new RectOffset(5, 0, 2, 2),
+                title_font: null,
+                title_font_style: FontStyle.Normal,
+                title_clipping: TextClipping.Clip,
+                icon: null,
+                icon_color: Color.white,
+                icon_padding: new RectOffset(0, 0, 10, 10),
+                foldout: false);
+
+            XGUI.gui_group_end();
 
             draw_rect.Set(rect_preview.x + 10, rect_preview.y + 10, rect_preview.width - 20, rect_preview.height - 20);
             if (UseBg)
             {
                 #region 预览背景
-                if (XHud_Utilitys.GetBrightnessLimite(sp_Color.colorValue, 0.2f))
+                if (XGUI_Utilitys.ColorBrightness_LimiteGet(sp_Color.colorValue, 0.2f))
                 {
                     PreviewBgColor = Color.black;
                 }
@@ -322,18 +239,22 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     PreviewBgColor = Color.white * 0.88f;
                 }
-                Editor_XHud_GUI.Gui_Box(draw_rect, PreviewBgColor);
+                XGUI.gui_box(draw_rect, PreviewBgColor);
                 #endregion
-
             }
+
             #region 预览图片（尺寸300 x 265）
-            GUI.backgroundColor = sp_Color.colorValue;
-            Editor_XHud_GUI.Gui_Icon(draw_rect, PreviewTex);
-            GUI.backgroundColor = Color.white;
+            draw_rect.Set(rect_preview.x + ((rect_preview.width / 2) - (PreviewTex ? PreviewTex.width / 2 : 0)), rect_preview.y + 10, 300, 265);
+
+            XGUI.gui_icon(
+                rect: draw_rect,
+                icon: PreviewTex,
+                border: new RectOffset(0, 0, 0, 0),
+                color: sp_Color.colorValue);
             #endregion
 
             #region 背景切换
-            draw_rect.Set(rect_preview.width / 2 - 6, rect_preview.y + 198 + margin, 64, 64);
+            draw_rect.Set(rect_preview.x + ((rect_preview.width / 2) - 32), rect_preview.y + (rect_preview.height - 65), 64, 64);
             string bgstatu = "显示背景";
             if (UseBg)
             {
@@ -343,15 +264,35 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 bgstatu = "无背景";
             }
-            if (Editor_XHud_GUI.Gui_Button(draw_rect, null, null, TextAnchor.MiddleCenter, false, bgstatu, "", Color.clear, Color.white, HudFilled.透明, 12))
+
+            if (XGUI.gui_button(
+                rect: draw_rect,
+                text: bgstatu,
+                tooltip: "切换背景",
+                btn_fill: XGUIFilled.无,
+                btn_color: XGUIColor.亮白,
+                btn_color_gui: Color.white,
+                btn_text_color: Color.white,
+                press_fill: XGUIFilled.无,
+                press_color: XGUIColor.深空灰,
+                press_text_color: Color.gray,
+                font_size: XGUIFontSize.S,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0)))
             {
                 UseBg = !UseBg;
             }
             #endregion
 
             #region 翻页按钮           
-            draw_rect.Set(rect_preview.x + 5, rect_preview.y + 198 + margin, 64, 64);
-            if (Editor_XHud_GUI.Gui_Button(draw_rect, leftarr_r, leftarr_p, true, "", "", Color.white))
+            draw_rect.Set(rect_preview.x - 5, rect_preview.y + (rect_preview.height - 65), 64, 64);
+            if (XGUI.gui_button(
+                rect: draw_rect,
+                tex_release: leftarr_r,
+                tex_press: leftarr_p,
+                tex_gui_color: Color.white,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0)))
             {
                 if (PreviewData_Index <= 0)
                 {
@@ -364,11 +305,17 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 StopPreviewUpdate();
                 StartPreviewUpdate();
-                Editor_XHud_GUI.EditorData_Set_With_Int("XED_Library_Color_PreviewData_Index", PreviewData_Index);
+                XGUI.x_Editor_Data_Set_With_Int("xData_library_color_previewdata_index", PreviewData_Index);
             }
 
-            draw_rect.Set(rect_preview.width - 45, rect_preview.y + 198 + margin, 64, 64);
-            if (Editor_XHud_GUI.Gui_Button(draw_rect, rightarr_r, rightarr_p, true, "", "", Color.white))
+            draw_rect.Set(rect_preview.x + (rect_preview.width - 60), rect_preview.y + (rect_preview.height - 65), 64, 64);
+            if (XGUI.gui_button(
+               rect: draw_rect,
+               tex_release: rightarr_r,
+               tex_press: rightarr_p,
+               tex_gui_color: Color.white,
+               margin: new RectOffset(0, 0, 0, 0),
+               padding: new RectOffset(0, 0, 0, 0)))
             {
                 if (PreviewData_Index >= PreviewDatas.Length - 1)
                 {
@@ -381,20 +328,158 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 StopPreviewUpdate();
                 StartPreviewUpdate();
-                Editor_XHud_GUI.EditorData_Set_With_Int("XED_Library_Color_PreviewData_Index", PreviewData_Index);
+                XGUI.x_Editor_Data_Set_With_Int("xData_library_color_previewdata_index", PreviewData_Index);
             }
             #endregion
 
             GUI.backgroundColor = Color.white;
             #endregion
 
+            #region 参数
+            XGUI.layout_group_start(
+              type: XGUIContainerType.Vertical,
+              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_color: XGUIColor.亮白,
+              bg_color_gui: XHud_Dashboard.Theme_Group,
+              title: "参数",
+              title_size: XGUIFontSize.M,
+              title_text_color: Color.white,
+              title_clipping: clipping,
+              margin: new RectOffset(10, 10, 0, 0),
+              padding: new RectOffset(10, 10, 15, 15));
+
+            #region 入库名称
+            if (string.IsNullOrEmpty(sp_ColorName.stringValue))
+            {
+                sp_ColorName.stringValue = "颜色名称";
+            }
+
+            sp_ColorName.stringValue = XGUI.layout_inputfield(
+                title: "标识",
+                prop: sp_ColorName.stringValue,
+                text_wrap: false,
+                field_fontsize: XGUIFontSize.M,
+                field_text_offset: Vector2.zero,
+                field_height: 20,
+                field_padding: new RectOffset(0, 0, 0, 0),
+                field_margin: new RectOffset(0, 0, 5, 5),
+                field_text_color: Color.white,
+                title_width: 80,
+                field_text_font: XGUI.GetFont("xg-medium"),
+                field_text_style: FontStyle.Normal,
+                field_text_anchor: TextAnchor.MiddleLeft);
+            //status_icon: "icon_field_status",
+            //status_icon_color: Color.green);
+
+            sp_ColorName.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            #region 颜色
+            XGUI.layout_colorfield(
+                prop: sp_Color,
+                title: "颜色",
+                title_width: 80,
+                title_color: Color.white,
+                //icon: "icon_field_status",
+                //icon_color: Color.red,
+                state_title: "Hex：",
+                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_Color.colorValue)}",
+                state_value_color: Color.gray,
+                state_dialog_theme_color: XHud_Dashboard.Theme_Primary);
+            #endregion
+
+            XGUI.layout_seperator(
+                thickness: 1,
+                color: XHud_Dashboard.Theme_SeperateLine,
+                margin: new RectOffset(15, 15, 15, 15));
+
+            string col_string = XGUI_Utilitys.Color_To_String(sp_Color.colorValue);
+            string col_hex = XGUI_Utilitys.Color_To_HexString(sp_Color.colorValue, true);
+            float[] col_array = XGUI_Utilitys.Color_To_FloatArray(sp_Color.colorValue);
+
+            #region 颜色字符串
+            XGUI.layout_state_displayer_text(
+                  title: "颜色字符串",
+                  title_size: XGUIFontSize.M,
+                  subtitle: col_string,
+                  subtitle_size: XGUIFontSize.M,
+                  subtitle_color: Color.white * 0.7f,
+                  margin: new RectOffset(5, 5, 0, 5));
+            #endregion
+
+            #region 16进制颜色
+            XGUI.layout_state_displayer_text(
+                title: "16进制颜色",
+                title_size: XGUIFontSize.M,
+                subtitle: col_hex,
+                subtitle_size: XGUIFontSize.M,
+                subtitle_color: Color.white * 0.7f,
+                margin: new RectOffset(5, 5, 0, 5));
+            #endregion
+
+            XGUI.layout_seperator(
+                thickness: 1,
+                color: XHud_Dashboard.Theme_SeperateLine,
+                margin: new RectOffset(15, 15, 15, 15));
+
+            #region RGBA
+            Rect rect_rgba = XGUI.GetControlRect(false, XGUI.GetSingleLineHeight());
+            //XGUI.gui_box(rect_rgba, Color.red * 0.3f);
+
+            float pers = rect_rgba.width / 4 + 3.5f;
+            Color col = Color.white;
+            string label = "";
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (i == 0)
+                {
+                    col = new Color(col_array[i], 0, 0);
+                    label = "R";
+                }
+                if (i == 1)
+                {
+                    col = new Color(0, col_array[i], 0);
+                    label = "G";
+                }
+                if (i == 2)
+                {
+                    col = new Color(0, 0, col_array[i]);
+                    label = "B";
+                }
+                if (i == 3)
+                {
+                    col = new Color(1, 1, 1, col_array[i]);
+                    label = "A";
+                }
+
+                draw_rect.Set(rect_rgba.x + (i != 0 ? pers : 0) * i + 5, rect_rgba.y, 4, rect_rgba.height);
+                XGUI.gui_box(draw_rect, col);
+
+                draw_rect.Set(rect_rgba.x + (i != 0 ? pers : 0) * i + 15, rect_rgba.y, 60, rect_rgba.height);
+                XGUI.gui_label(
+                    rect: draw_rect,
+                    text: new GUIContent($"{label} ：{col_array[i].ToString("F2")}"),
+                    text_color: Color.white,
+                    font_style: FontStyle.Bold,
+                    offset: new Vector2(0, 0),
+                    size: XGUIFontSize.S,
+                    padding: new RectOffset(0, 0, 0, 0),
+                    anchor: TextAnchor.MiddleLeft,
+                    clipping: TextClipping.Clip);
+            }
+            #endregion
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
             BaseObject.ApplyModifiedProperties();
 
             Repaint();
 
-            Editor_XHud_GUI.Gui_Layout_Space(480);
+            XGUI.layout_space(10);
 
-            DialogType_Buttons();
+            Buttons();
 
             Event e = Event.current;
             // 检测点击事件
@@ -431,60 +516,115 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (sp_ColorName.stringValue == "颜色名称")
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 色卡库采集器消息", "未填写名称", "请为色卡添加一个名称！", "明白");
+                string res = XGUI.dialog(
+                type: XGUIDialogType.警告,
+                windowtitle: "XHud - 色卡库采集器消息",
+                title: "未填写名称",
+                msg: "请为色卡添加一个名称！",
+                ok: "明白",
+                PrimaryIndex: 0,
+                usemodal: true,
+                themecolor: XHud_Dashboard.Theme_Primary);
                 return;
             }
 
-            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
             bool exist = Target_Hud_ColorsLibrary.ColorsLibrary_IsExist(sp_ColorName.stringValue);
 
             if (exist)
             {
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 色卡库采集器消息", "存在重复色卡名称", $"名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡已经存在于色卡库中！", "重命名", 0);
-                if (res == "重命名")
+                EditorApplication.delayCall += () =>
                 {
-                    return;
-                }
+                    string res = XGUI.dialog(
+                    type: XGUIDialogType.警告,
+                    windowtitle: "XHud - 色卡库采集器消息",
+                    title: "存在重复色卡名称",
+                    msg: $"名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡已经存在于色卡库中！",
+                    ok: "重命名",
+                    PrimaryIndex: 0,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
+
+                    if (res == "重命名")
+                    {
+                        return;
+                    }
+                };
             }
             else
             {
                 xHud_LibraryArg_Color info = new xHud_LibraryArg_Color();
                 info.Name = sp_ColorName.stringValue;
-                info.Description = sp_ColorDescription.stringValue;
                 info.Color = sp_Color.colorValue;
                 Target_Hud_ColorsLibrary.ColorsLibrary_AddColor(info);
+                EditorApplication.delayCall += () =>
+                {
+                    XGUI.dialog(
+                         type: XGUIDialogType.确认,
+                         windowtitle: "XHud - 色卡库采集器消息",
+                         title: "已添加到色卡库",
+                         msg: $"已将名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡添加到色卡库中！",
+                         ok: "明白",
+                         PrimaryIndex: 0,
+                         usemodal: true,
+                         themecolor: XHud_Dashboard.Theme_Primary);
+                };
 
-                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 色卡库采集器消息", "已添加到色卡库", $"已将名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡添加到色卡库中！", "明白");
                 Close();
 
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 色卡库采集器消息", "存入色卡库", "色卡存入完成，是否要打开色卡库进行查看？", "不用", "查看色卡库", 0);
-                if (res == "查看色卡库")
+                EditorApplication.delayCall += () =>
                 {
-                    EditorUtility.OpenPropertyEditor(Target_Hud_ColorsLibrary);
-                }
+                    string res = XGUI.dialog(
+                    type: XGUIDialogType.帮助,
+                    windowtitle: "XHud - 色卡库采集器消息",
+                    title: "存入色卡库",
+                    msg: "色卡存入完成，是否要打开色卡库进行查看？",
+                    ok: "不用",
+                    cancel: "查看色卡库",
+                    PrimaryIndex: 0,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
+
+                    if (res == "查看色卡库")
+                    {
+                        EditorUtility.OpenPropertyEditor(Target_Hud_ColorsLibrary);
+                    }
+                };
             }
 
-            string indicator = SourcePainting.controller.GetIndicator();
-
-            string res_saved_turnon = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 色卡库采集器消息", "色卡库模式设定", $"是否要将 {(string.IsNullOrEmpty(indicator) ? SourcePainting.transform.name : indicator)} 色卡模式开启？", "开启", "暂不", 0);
-            if (res_saved_turnon == "开启")
+            EditorApplication.delayCall += () =>
             {
-                SourcePainting.SyncLibraryColor = true;
-                int id = Target_Hud_ColorsLibrary.ColorsLibrary_GetColorCount() - 1;
-                SourcePainting.ColoriseName = Target_Hud_ColorsLibrary.ColorsLibrary_GetColorNames()[id];
-            }
+                string indicator = SourcePainting.controller.GetIndicator();
+
+                string res_saved_turnon = XGUI.dialog(
+                    type: XGUIDialogType.帮助,
+                    windowtitle: "XHud - 色卡库采集器消息",
+                    title: "色卡库模式设定",
+                    msg: $"是否要将 {(string.IsNullOrEmpty(indicator) ? SourcePainting.transform.name : indicator)} 色卡模式开启？",
+                    ok: "开启",
+                    cancel: "暂不",
+                    PrimaryIndex: 0,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
+
+                if (res_saved_turnon == "开启")
+                {
+                    SourcePainting.SyncLibraryColor = true;
+                    int id = Target_Hud_ColorsLibrary.ColorsLibrary_GetColorCount() - 1;
+                    SourcePainting.ColoriseName = Target_Hud_ColorsLibrary.ColorsLibrary_GetColorNames()[id];
+                }
+            };
+
             this.Close();
         }
 
         private void UpdateToLibrary()
         {
-            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
-
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
             xHud_LibraryArg_Color info = new xHud_LibraryArg_Color();
             info.Name = sp_ColorName.stringValue;
-            info.Description = sp_ColorDescription.stringValue;
             info.Color = sp_Color.colorValue;
-            Target_Hud_ColorsLibrary.ColorsLibrary_ReplaceColorAndName(ModifiedIndex, sp_OriginColorName.stringValue, sp_ColorName.stringValue, sp_Color.colorValue, sp_ColorDescription.stringValue);
+            Target_Hud_ColorsLibrary.ColorsLibrary_ReplaceColorAndName(ModifiedIndex, sp_OriginColorName.stringValue, sp_ColorName.stringValue, sp_Color.colorValue);
 
             Close();
         }
@@ -536,14 +676,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="name"></param>
         /// <param name="decription"></param>
         /// <param name="color"></param>
-        public void SetInfo(string name, string decription, Color color)
+        public void SetInfo(string name, Color color)
         {
             sp_ColorName.stringValue = name;
-            sp_ColorDescription.stringValue = decription;
             sp_Color.colorValue = color;
 
             sp_ColorName.serializedObject.ApplyModifiedProperties();
-            sp_ColorDescription.serializedObject.ApplyModifiedProperties();
             sp_Color.serializedObject.ApplyModifiedProperties();
         }
 
@@ -554,6 +692,7 @@ namespace SevenStrikeModules.XHud.Editor
         public void SetTitle(string title)
         {
             Title = title;
+            Repaint();
         }
 
         /// <summary>
@@ -595,18 +734,58 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 控件按钮
         /// </summary>
-        private void DialogType_Buttons()
+        private void Buttons()
         {
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_FlexSpace();
+            #region 按钮
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(10, 10, 0, 0));
 
-            if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Cancel, "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Cancel))
+            XGUI.layout_flexspace();
+
+            if (XGUI.layout_button(
+                text: ButtonText_Cancel,
+                tooltip: "",
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: Color.white,
+                button_text_color: Color.black,
+                press_fill: XGUIFilled.实体,
+                press_color: XGUIColor.深空灰,
+                press_text_color: Color.white,
+                font_size: XGUIFontSize.B,
+                anchor: TextAnchor.MiddleCenter,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                layout_min_width: 0,
+                layout_width: 200,
+                height: ButtonHeight,
+                button_text_font: XGUI.GetFont("xg-medium")))
             {
                 Close();
             }
-            Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
-            GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
-            if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Ok, "", HudFilled.实体, HudColor.亮白, XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Ok))
+
+            XGUI.layout_space(ButtonDistance);
+
+            if (XGUI.layout_button(
+                text: ButtonText_Ok,
+                tooltip: "",
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                button_text_color: Color.black,
+                press_fill: XGUIFilled.实体,
+                press_color: XGUIColor.深空灰,
+                press_text_color: Color.white,
+                font_size: XGUIFontSize.B,
+                anchor: TextAnchor.MiddleCenter,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                layout_min_width: 0,
+                layout_width: 200,
+                height: ButtonHeight,
+                button_text_font: XGUI.GetFont("xg-medium")))
             {
                 if (LibrarySetterMode == LibrarySetterMode.添加到库)
                 {
@@ -616,12 +795,12 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     UpdateToLibrary();
                 }
-                return;
             }
-            GUI.backgroundColor = Color.white;
 
-            Editor_XHud_GUI.Gui_Layout_Space(25);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+            XGUI.layout_flexspace();
+
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+            #endregion
         }
 
         // 将 RGB 转换为 HSV
@@ -713,33 +892,6 @@ namespace SevenStrikeModules.XHud.Editor
             return "未知色";
         }
 
-        public XHud_Emotions GetEmotions(string col)
-        {
-            XHud_Emotions emo = new XHud_Emotions();
-            for (int i = 0; i < ColorEmotions.Colors.Count; i++)
-            {
-                if (col == ColorEmotions.Colors[i].ColorName)
-                {
-                    for (int s = 0; s < ColorEmotions.Colors[i].Pos.Count; s++)
-                    {
-                        if (s == ColorEmotions.Colors[i].Pos.Count - 1)
-                            emo.Pos += ColorEmotions.Colors[i].Pos[s];
-                        else
-                            emo.Pos += ColorEmotions.Colors[i].Pos[s] + "  /  ";
-                    }
-                    for (int s = 0; s < ColorEmotions.Colors[i].Neg.Count; s++)
-                    {
-                        if (s == ColorEmotions.Colors[i].Neg.Count - 1)
-                            emo.Neg += ColorEmotions.Colors[i].Neg[s];
-                        else
-                            emo.Neg += ColorEmotions.Colors[i].Neg[s] + "  /  ";
-                    }
-                }
-            }
-
-            return emo;
-        }
-
         /// <summary>
         /// 开始预览
         /// </summary>
@@ -758,7 +910,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         IEnumerator PreviewUpdater()
         {
-            string path = $"{XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path()}Icon/Icons_XHud_Library_Color_Setter/samples";
+            string path = $"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/samples";
             //获取预览序列帧
             PreviewDatas = LoadAllAssetsAtPathWithPattern<XHud_LibrarySetTool_Color_PreviewData>(path, ".asset").ToArray();
 

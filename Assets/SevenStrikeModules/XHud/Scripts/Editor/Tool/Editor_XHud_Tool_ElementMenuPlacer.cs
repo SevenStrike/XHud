@@ -20,8 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
@@ -33,7 +33,7 @@ namespace SevenStrikeModules.XHud.Editor
             XHud_Manager manager = XHud_Dashboard.HudManagerGet();
             if (manager == null)
             {
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素放置器通知", "未找到XHudManager管理器！", HudMsgState.错误);
+                XGUI_Utilitys.Console("XHud - 元素放置器通知", "未找到XHudManager管理器！", XGUIMsgState.错误);
                 return;
             }
 
@@ -50,7 +50,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (targetAnchor == null)
             {
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素放置器通知", $"未找到锚点: {anchor}！", HudMsgState.错误);
+                XGUI_Utilitys.Console("XHud - 元素放置器通知", $"未找到锚点: {anchor}！", XGUIMsgState.错误);
                 return;
             }
 
@@ -87,11 +87,11 @@ namespace SevenStrikeModules.XHud.Editor
             if (createdObjects.Count > 0)
             {
                 Selection.objects = createdObjects.ToArray();
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素放置器通知", $"成功放置 {createdObjects.Count} 个元素到 {anchor}", HudMsgState.确认);
+                XGUI_Utilitys.Console("XHud - 元素放置器通知", $"成功放置 {createdObjects.Count} 个元素到 {anchor}", XGUIMsgState.确认);
             }
             else
             {
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素放置器通知", "没有有效的元素被放置！", HudMsgState.警告);
+                XGUI_Utilitys.Console("XHud - 元素放置器通知", "没有有效的元素被放置！", XGUIMsgState.警告);
             }
         }
 
@@ -173,7 +173,7 @@ namespace SevenStrikeModules.XHud.Editor
             XHud_Manager manager = XHud_Dashboard.HudManagerGet();
             if (manager == null)
             {
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素放置器通知", "未找到XHudManager管理器！", HudMsgState.错误);
+                XGUI_Utilitys.Console("XHud - 元素放置器通知", "未找到XHudManager管理器！", XGUIMsgState.错误);
                 return;
             }
 
@@ -206,7 +206,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (createdObjects.Count > 0)
             {
                 Selection.objects = createdObjects.ToArray();
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素放置器通知", $"成功放置 {createdObjects.Count} 个元素到世界锚点", HudMsgState.确认);
+                XGUI_Utilitys.Console("XHud - 元素放置器通知", $"成功放置 {createdObjects.Count} 个元素到世界锚点", XGUIMsgState.确认);
             }
         }
 

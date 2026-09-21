@@ -20,8 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using System;
     using System.Collections.Generic;
     using UnityEditor;
@@ -255,7 +255,7 @@ namespace SevenStrikeModules.XHud.Editor
         string DateTimes;
 
         Color SepLineColor = new Color(1, 1, 1, 0.15f);
-        Color MessageColor = new Color(1, 1, 1, 1f);
+        Color MessageColor = new Color(1, 1, 1, 0.85f);
         Color DateTimeColor = new Color(1, 1, 1, 0.42f);
 
         Rect Sepline_rect;
@@ -290,8 +290,8 @@ namespace SevenStrikeModules.XHud.Editor
             icon_Notice = Editor_XHud_GUI.GetIcon("Dialogs/icon_notice");
             icon_Confirm = Editor_XHud_GUI.GetIcon("Dialogs/icon_confirm");
 
-            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
+            Font_Bold = Editor_XHud_GUI.GetFont("sx_bold");
+            Font_Light = Editor_XHud_GUI.GetFont("sx_regular");
 
             #region ReorderableList
             ReorderableList = new ReorderableList(BaseObject, sp_DataList, true, true, true, true);
@@ -333,7 +333,7 @@ namespace SevenStrikeModules.XHud.Editor
             Sepline_rect = new Rect(rect.x + 102, rect.y + 60, 200, 1);
             Editor_XHud_GUI.Gui_Box(Sepline_rect, SepLineColor);
 
-            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 26, rect.y + 80, rect.width - 45, rect.height), Message, HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 26, rect.y + 80, rect.width - 45, rect.height), Message, HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Bold);
 
             DateTimes = DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss:ff");
             Date_rect = new Rect(rect.x + 150, rect.y + 15, rect.width - 180, rect.height);
@@ -522,7 +522,7 @@ namespace SevenStrikeModules.XHud.Editor
         private void DialogType_BtnMode_1()
         {
             GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Ok, "", HudFilled.实体, HudColor.亮白, XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Ok + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Ok, "", HudFilled.实体, HudColor.亮白, XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Ok + PrimaryIndex))
             {
                 Close();
 
@@ -537,7 +537,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DialogType_BtnMode_2()
         {
-            Color textcolor = XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
+            Color textcolor = XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
 
             if (PrimaryIndex == 1)
             {
@@ -547,7 +547,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Cancel, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Cancel + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Cancel, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Cancel + PrimaryIndex))
             {
                 Close();
                 // 调用回调函数
@@ -563,7 +563,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Ok, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Ok + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Ok, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Ok + PrimaryIndex))
             {
                 Close();
                 // 调用回调函数
@@ -577,7 +577,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DialogType_BtnMode_3()
         {
-            Color textcolor = XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
+            Color textcolor = XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
 
             if (PrimaryIndex == 2)
             {
@@ -587,7 +587,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Alt, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Alt + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Alt, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Alt + PrimaryIndex))
             {
                 Close();
 
@@ -604,7 +604,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Cancel, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Cancel + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Cancel, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Cancel + PrimaryIndex))
             {
                 Close();
 
@@ -621,7 +621,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Ok, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Ok + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Ok, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Ok + PrimaryIndex))
             {
                 Close();
 
@@ -636,7 +636,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DialogType_BtnMode_4()
         {
-            Color textcolor = XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
+            Color textcolor = XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
 
             if (PrimaryIndex == 3)
             {
@@ -646,7 +646,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Other, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Other + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Other, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Other + PrimaryIndex))
             {
                 Close();
 
@@ -663,7 +663,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Alt, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Alt + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Alt, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Alt + PrimaryIndex))
             {
                 Close();
 
@@ -680,7 +680,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Cancel, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Cancel + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Cancel, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Cancel + PrimaryIndex))
             {
                 Close();
 
@@ -697,7 +697,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Ok, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Ok + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Ok, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Ok + PrimaryIndex))
             {
                 Close();
 
@@ -712,7 +712,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DialogType_BtnMode_5()
         {
-            Color textcolor = XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
+            Color textcolor = XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
 
             if (PrimaryIndex == 4)
             {
@@ -722,7 +722,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Special, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Special + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Special, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Special + PrimaryIndex))
             {
                 Close();
 
@@ -739,7 +739,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Other, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Other + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Other, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Other + PrimaryIndex))
             {
                 Close();
 
@@ -756,7 +756,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Alt, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Alt + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Alt, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Alt + PrimaryIndex))
             {
                 Close();
 
@@ -773,7 +773,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Cancel, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Cancel + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Cancel, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Cancel + PrimaryIndex))
             {
                 Close();
 
@@ -790,7 +790,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 textcolor = Color.black;
             }
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Ok, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Light, Text_Ok + PrimaryIndex))
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Ok, "", HudFilled.实体, HudColor.亮白, textcolor, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Ok + PrimaryIndex))
             {
                 Close();
 

@@ -1,3 +1,4 @@
+using SevenStrikeModules.XGUI.Runtime;
 using SevenStrikeModules.XTween;
 using System;
 using System.Collections.Generic;
@@ -54,11 +55,11 @@ public class demo_path_drive : demo_base
         if (carPaint_Colors.Length == 0)
         {
             carPaint_Colors = new Color[5];
-            carPaint_Colors[0] = XTween_Utilitys.ConvertHexStringToColor("BEBEBE");
-            carPaint_Colors[1] = XTween_Utilitys.ConvertHexStringToColor("C09627");
-            carPaint_Colors[2] = XTween_Utilitys.ConvertHexStringToColor("2767C0");
-            carPaint_Colors[3] = XTween_Utilitys.ConvertHexStringToColor("A13131");
-            carPaint_Colors[4] = XTween_Utilitys.ConvertHexStringToColor("785DB3");
+            carPaint_Colors[0] = XGUI_Utilitys.HexString_To_Color("BEBEBE");
+            carPaint_Colors[1] = XGUI_Utilitys.HexString_To_Color("C09627");
+            carPaint_Colors[2] = XGUI_Utilitys.HexString_To_Color("2767C0");
+            carPaint_Colors[3] = XGUI_Utilitys.HexString_To_Color("A13131");
+            carPaint_Colors[4] = XGUI_Utilitys.HexString_To_Color("785DB3");
         }
 
         if (autoStart)
@@ -228,7 +229,7 @@ public class demo_path_drive : demo_base
     /// <returns></returns>
     public XTween_Interface CreateRotationTween()
     {
-        return rotateTween = carTargetImage.rectTransform.xt_Rotate_To(rotateTarget, duration, isRelative, true, XTweenRotationSpace.相对, RotationMode, EaseMode.Linear, true, () => rotateFrom, true, rotateCurve).SetDelay(rotateDelay).SetLoop(0).OnComplete((s) =>
+        return rotateTween = carTargetImage.rectTransform.xt_Rotate_To(rotateTarget, duration, isRelative, true, XTweenRotationSpace.本地坐标, RotationMode, EaseMode.Linear, true, () => rotateFrom, true, rotateCurve).SetDelay(rotateDelay).SetLoop(0).OnComplete((s) =>
         {
             carTargetImage.rectTransform.localRotation = Quaternion.Euler(rotateFrom);
         }).OnKill(() =>

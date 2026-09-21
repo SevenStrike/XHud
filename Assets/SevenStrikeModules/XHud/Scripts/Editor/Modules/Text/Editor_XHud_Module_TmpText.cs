@@ -322,35 +322,35 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 射线检测可用性   
             if (!sp_LibStyle_Effect_raycast.boolValue || !sp_StyleLibSynching.boolValue)
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("射线检测", stroptions_enabled, ref sp_Raycast, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("射线检测", stroptions_enabled, ref sp_Raycast, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
             #region 遮罩 
             if (!sp_LibStyle_Effect_maskable.boolValue || !sp_StyleLibSynching.boolValue)
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("遮罩", stroptions_enabled, ref sp_Maskable, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("遮罩", stroptions_enabled, ref sp_Maskable, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
             #region 富文本支持           
             if (!sp_LibStyle_Effect_rich.boolValue || !sp_StyleLibSynching.boolValue)
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("富文本", stroptions_enabled, ref sp_tmp_rich, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("富文本", stroptions_enabled, ref sp_tmp_rich, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
             #region 自动尺寸         
             if (!sp_LibStyle_Effect_autosizing.boolValue || !sp_StyleLibSynching.boolValue)
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("自动尺寸", stroptions_enabled, ref sp_tmp_EnableAutoSizing, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("自动尺寸", stroptions_enabled, ref sp_tmp_EnableAutoSizing, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
             #region 尺寸全局受控               
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("全局尺寸增量", stroptions_syncsize, ref sp_SyncGlobalFontSize, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("全局尺寸增量", stroptions_syncsize, ref sp_SyncGlobalFontSize, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
             #region PrimitivePainting 接管字体颜色        
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("图元配色器接管颜色", stroptions_synccolor, ref sp_SyncPrimitivePaintingColor, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("图元配色器接管颜色", stroptions_synccolor, ref sp_SyncPrimitivePaintingColor, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
             #region 渐变色支持      
             if (!sp_LibStyle_Effect_gradientcolor.boolValue || !sp_StyleLibSynching.boolValue)
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("渐变色支持", stroptions_enabled, ref sp_gra_Used, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("渐变色支持", stroptions_enabled, ref sp_gra_Used, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
             #region 渐变色模式
@@ -404,7 +404,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 渐变色方向
             if (sp_gra_Used.boolValue && !sp_LibStyle_Effect_gradientcolor.boolValue || !sp_StyleLibSynching.boolValue)
             {
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("渐变色方向", stroptions_flip, ref sp_gra_Invert, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("渐变色方向", stroptions_flip, ref sp_gra_Invert, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             }
             #endregion
 
@@ -412,7 +412,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (HudManager != null && HudManager.Hud_TextStyleLibrary != null)
             {
                 if (!HudManager.Hud_TextStyleLibrary.TextStyle_Library_IsEmpty())
-                    Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("实时匹配库", stroptions_enabled, ref sp_StyleLibSynching, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                    Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("实时匹配库", stroptions_enabled, ref sp_StyleLibSynching, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 else
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
@@ -485,7 +485,7 @@ namespace SevenStrikeModules.XHud.Editor
                             }
                             //定位到元素库中的对应当前元素
                             //打开目标元素库
-                            Editor_XHud_MenuItemsAction_OpenLibrary.open_font();
+                            Editor_XHud_MenuItemsAction_OpenLibrary.open_textstyle();
                             HudManager.Hud_TextStyleLibrary.TextStyleLibrary_Location(str_fotlib_ItemsName[index]);
                         }
                         //util_EditorGuiLib.Gui_Layout_Space(5);
@@ -508,19 +508,19 @@ namespace SevenStrikeModules.XHud.Editor
                 Editor_XHud_GUI.Gui_Layout_Space(10);
 
                 #region 射线检测
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("射线检测", stroptions_syncstyle, ref sp_LibStyle_Effect_raycast, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("射线检测", stroptions_syncstyle, ref sp_LibStyle_Effect_raycast, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 遮罩
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("遮罩", stroptions_syncstyle, ref sp_LibStyle_Effect_maskable, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("遮罩", stroptions_syncstyle, ref sp_LibStyle_Effect_maskable, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 富文本
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("富文本", stroptions_syncstyle, ref sp_LibStyle_Effect_rich, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("富文本", stroptions_syncstyle, ref sp_LibStyle_Effect_rich, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 尺寸
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("尺寸", stroptions_syncstyle, ref sp_LibStyle_Effect_size, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("尺寸", stroptions_syncstyle, ref sp_LibStyle_Effect_size, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 if (sp_LibStyle_Effect_size.boolValue)
                 {
                     sp_LibStyle_Effect_autosizing.boolValue = false;
@@ -531,7 +531,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 自适应尺寸
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("自适应尺寸", stroptions_syncstyle, ref sp_LibStyle_Effect_autosizing, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("自适应尺寸", stroptions_syncstyle, ref sp_LibStyle_Effect_autosizing, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 if (sp_LibStyle_Effect_autosizing.boolValue)
                 {
                     sp_LibStyle_Effect_size.boolValue = false;
@@ -542,43 +542,43 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 渐变色
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("渐变色", stroptions_syncstyle, ref sp_LibStyle_Effect_gradientcolor, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("渐变色", stroptions_syncstyle, ref sp_LibStyle_Effect_gradientcolor, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 对齐
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("对齐", stroptions_syncstyle, ref sp_LibStyle_Effect_align, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("对齐", stroptions_syncstyle, ref sp_LibStyle_Effect_align, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 字体
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("字体", stroptions_syncstyle, ref sp_LibStyle_Effect_font, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("字体", stroptions_syncstyle, ref sp_LibStyle_Effect_font, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 样式
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("样式", stroptions_syncstyle, ref sp_LibStyle_Effect_style, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("样式", stroptions_syncstyle, ref sp_LibStyle_Effect_style, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 颜色
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("颜色", stroptions_syncstyle, ref sp_LibStyle_Effect_color, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("颜色", stroptions_syncstyle, ref sp_LibStyle_Effect_color, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 文本包裹
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("包裹", stroptions_syncstyle, ref sp_LibStyle_Effect_wrap, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("包裹", stroptions_syncstyle, ref sp_LibStyle_Effect_wrap, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 溢出
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("溢出", stroptions_syncstyle, ref sp_LibStyle_Effect_overflow, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("溢出", stroptions_syncstyle, ref sp_LibStyle_Effect_overflow, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 包裹比例
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("包裹比例", stroptions_syncstyle, ref sp_LibStyle_Effect_wrapratio, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("包裹比例", stroptions_syncstyle, ref sp_LibStyle_Effect_wrapratio, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 边距
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("边距", stroptions_syncstyle, ref sp_LibStyle_Effect_margin, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("边距", stroptions_syncstyle, ref sp_LibStyle_Effect_margin, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 #region 间距
-                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("间距", stroptions_syncstyle, ref sp_LibStyle_Effect_space, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("间距", stroptions_syncstyle, ref sp_LibStyle_Effect_space, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
                 #endregion
 
                 Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1306,15 +1306,15 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Editor_XHud_LibrarySetTool_TextStyle window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_TextStyle>(true);
 
-            window.titleContent = new GUIContent("XHud 字体样式库采集器");
-            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(850, 640), window);
+            window.titleContent = new GUIContent("XHud - 文字样式采集器");
+            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(348, info.Type == xHud_TextType.Text ? 820 : 800), window);
 
             window.SetComponent(BaseScript);
             window.SetStyle(info);
             window.SetOriginStyle(info);
             window.SetLibrarySetterMode(LibrarySetterMode.添加到库);
             window.SetButtonText("添加", "取消");
-            window.SetTitle("XHud 文字样式库采集器");
+            window.SetTitle("文字样式采集器");
             //window.ShowModal();
             window.Show();
         }

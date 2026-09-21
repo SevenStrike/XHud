@@ -2054,12 +2054,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02ecc3446355c7349b895cc7a3f77fb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.3
+  duration: 0.6
   delay: 0
   min_delay: 0
   max_delay: 1
   randomDelay: 0
-  easeMode: 8
+  easeMode: 24
   loop: 0
   loopType: 0
   loopDelay: 0
@@ -2103,13 +2103,13 @@ MonoBehaviour:
   - {fileID: 1294485487}
   galleryArgs:
     from: {x: 0, y: 30}
-    duration: 0.5
-    ease: 9
+    duration: 1
+    ease: 24
   Image: {fileID: 1867376714}
   Sprites:
-  - {fileID: 21300000, guid: 42f56b48a6bef4845b713fa4f2586d6b, type: 3}
-  - {fileID: 21300000, guid: eafa17a71901d944999fcfb8cd897edf, type: 3}
-  - {fileID: 21300000, guid: e48768fbd9a39604ca954cb4de1376f5, type: 3}
+  - {fileID: 21300000, guid: 281a05899e10db949b2e4cf95ecb3b70, type: 3}
+  - {fileID: 21300000, guid: e1ae67464f2d7bb4da22d564ec3986bb, type: 3}
+  - {fileID: 21300000, guid: a49abbc66d271714ba613f54c5a60c3c, type: 3}
   opt_index: 0
 --- !u!1 &1867376712
 GameObject:
@@ -2168,7 +2168,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 42f56b48a6bef4845b713fa4f2586d6b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 281a05899e10db949b2e4cf95ecb3b70, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

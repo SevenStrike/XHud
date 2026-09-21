@@ -1235,12 +1235,12 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// Editor列表项高度
         /// </summary>
-        public float itemHeight = 60;
+        public float itemHeight = 61;
 
         /// <summary>
         /// 可视区域显示的元素数量
         /// </summary>
-        public int visibleItemCount = 9;
+        public int visibleItemCount = 7;
 
         /// <summary>
         /// 列表滚动位置
@@ -1266,8 +1266,8 @@ namespace SevenStrikeModules.XHud
 
         private void OnEnable()
         {
-            itemHeight = 60;
-            visibleItemCount = 9;
+            itemHeight = 61;
+            visibleItemCount = 7;
         }
 
         // 确保内部名称与文件名一致

@@ -20,8 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XGUI.Runtime;
     using UnityEngine;
 
     public partial class XHud_Module_Element : MonoBehaviour
@@ -56,7 +55,7 @@ namespace SevenStrikeModules.XHud
             ObjectTracker.Tracker_SetTrackerArgs(info);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "创建场景物体跟踪器！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 元素控件通知", "创建场景物体跟踪器！", XGUIMsgState.通知);
         }
         /// <summary>
         /// Hud跟踪器 - 创建
@@ -70,7 +69,7 @@ namespace SevenStrikeModules.XHud
             ObjectTracker.Tracker_SetTrackerArgs(info);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "创建场景物体跟踪器！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 元素控件通知", "创建场景物体跟踪器！", XGUIMsgState.通知);
         }
         /// <summary>
         /// 创建物体跟踪器
@@ -80,7 +79,7 @@ namespace SevenStrikeModules.XHud
         {
             ObjectTracker = gameObject.AddComponent<XHud_ObjectTracker>();
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "创建场景物体跟踪器！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 元素控件通知", "创建场景物体跟踪器！", XGUIMsgState.通知);
             return ObjectTracker;
         }
         /// <summary>
@@ -93,7 +92,7 @@ namespace SevenStrikeModules.XHud
             ObjectTracker = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "移除场景物体跟踪器！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 元素控件通知", "移除场景物体跟踪器！", XGUIMsgState.通知);
         }
     }
 }

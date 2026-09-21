@@ -20,8 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XGUI.Runtime;
     using UnityEngine;
     using UnityEngine.Rendering.Universal;
 
@@ -204,7 +203,7 @@ namespace SevenStrikeModules.XHud
         {
             if (HudCamera == null)
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "当前HudCamera为空，无法为指定的相机堆栈添加Hud叠加层", HudMsgState.警告);
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "当前HudCamera为空，无法为指定的相机堆栈添加Hud叠加层", XGUIMsgState.警告);
             if (!uac.cameraStack.Contains(HudCamera))
             {
                 uac.cameraStack.Add(HudCamera);

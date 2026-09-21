@@ -20,8 +20,8 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using System.Collections;
     using UnityEngine;
 
@@ -67,6 +67,12 @@ namespace SevenStrikeModules.XHud
         public KeyCode PreviewKey;
         [SerializeField]
         public KeyCode UnPreviewKey;
+
+        public bool
+            fold_param = true,
+            fold_option = true,
+            fold_state = true,
+            fold_based = true;
 
         void Start()
         {
@@ -117,7 +123,7 @@ namespace SevenStrikeModules.XHud
                 Element.act_on_element_out_start += ele_act_on_element_out_start;
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注册 - 元素 - 事件", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 音效器通知", "已注册 - 元素 - 事件", XGUIMsgState.通知);
                 }
             }
             if (Slider != null)
@@ -127,7 +133,7 @@ namespace SevenStrikeModules.XHud
                 Slider.act_on_ValueChanged += sli_act_on_ValueChanged;
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注册 - 滑动条控件 - 事件", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 音效器通知", "已注册 - 滑动条控件 - 事件", XGUIMsgState.通知);
                 }
             }
             if (Toggle != null)
@@ -139,7 +145,7 @@ namespace SevenStrikeModules.XHud
                 Toggle.act_on_UnChecked += tog_act_on_UnChecked;
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注册 - 开关控件 - 事件", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 音效器通知", "已注册 - 开关控件 - 事件", XGUIMsgState.通知);
                 }
             }
             if (Progress != null)
@@ -149,7 +155,7 @@ namespace SevenStrikeModules.XHud
                 Progress.act_on_ValueChanged += pro_act_on_ValueChanged;
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注册 - 进度条控件 - 事件", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 音效器通知", "已注册 - 进度条控件 - 事件", XGUIMsgState.通知);
                 }
             }
             if (Option != null)
@@ -160,7 +166,7 @@ namespace SevenStrikeModules.XHud
                 Option.act_on_option_clicked += opt_act_on_option_clicked;
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注册 - 选项器控件 - 事件", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 音效器通知", "已注册 - 选项器控件 - 事件", XGUIMsgState.通知);
                 }
             }
             if (Button != null)
@@ -175,7 +181,7 @@ namespace SevenStrikeModules.XHud
                 Button.act_on_Select += btn_act_on_Select;
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注册 - 按钮控件 - 事件", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 音效器通知", "已注册 - 按钮控件 - 事件", XGUIMsgState.通知);
                 }
             }
         }
@@ -189,7 +195,7 @@ namespace SevenStrikeModules.XHud
                 Element.act_on_element_out_start -= ele_act_on_element_out_start;
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注销 - 元素 - 事件", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 音效器通知", "已注销 - 元素 - 事件", XGUIMsgState.通知);
                 }
             }
             if (Slider != null)
@@ -199,7 +205,7 @@ namespace SevenStrikeModules.XHud
                 Slider.act_on_ValueChanged -= sli_act_on_ValueChanged;
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注销 - 滑动条控件 - 事件", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 音效器通知", "已注销 - 滑动条控件 - 事件", XGUIMsgState.通知);
                 }
             }
             if (Toggle != null)
@@ -211,7 +217,7 @@ namespace SevenStrikeModules.XHud
                 Toggle.act_on_UnChecked -= tog_act_on_UnChecked;
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注销 - 开关控件 - 事件", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 音效器通知", "已注销 - 开关控件 - 事件", XGUIMsgState.通知);
                 }
             }
             if (Progress != null)
@@ -221,7 +227,7 @@ namespace SevenStrikeModules.XHud
                 Progress.act_on_ValueChanged -= pro_act_on_ValueChanged;
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注销 - 进度条控件 - 事件", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 音效器通知", "已注销 - 进度条控件 - 事件", XGUIMsgState.通知);
                 }
             }
             if (Option != null)
@@ -232,7 +238,7 @@ namespace SevenStrikeModules.XHud
                 Option.act_on_option_clicked -= opt_act_on_option_clicked;
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注销 - 选项器控件 - 事件", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 音效器通知", "已注销 - 选项器控件 - 事件", XGUIMsgState.通知);
                 }
             }
             if (Button != null)
@@ -247,7 +253,7 @@ namespace SevenStrikeModules.XHud
                 Button.act_on_Select -= btn_act_on_Select;
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 音效器通知", "已注销 - 按钮控件 - 事件", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 音效器通知", "已注销 - 按钮控件 - 事件", XGUIMsgState.通知);
                 }
             }
         }

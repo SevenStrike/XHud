@@ -98,7 +98,7 @@ MonoBehaviour:
     durationAdd_pos: 1
     duration_pos: 1
     delay_pos: 0
-    ease_pos: 8
+    ease_pos: 9
     usecurve_pos: 0
     curve_pos:
       serializedVersion: 2
@@ -127,8 +127,8 @@ MonoBehaviour:
     initial_col: 1
     durationAdd_col: 1
     duration_col: 1
-    delay_col: 0.1
-    ease_col: 9
+    delay_col: 0
+    ease_col: 10
     usecurve_col: 0
     curve_col:
       serializedVersion: 2
@@ -147,7 +147,7 @@ MonoBehaviour:
     durationAdd_pos: 1
     duration_pos: 1
     delay_pos: 0
-    ease_pos: 8
+    ease_pos: 9
     usecurve_pos: 0
     curve_pos:
       serializedVersion: 2
@@ -176,8 +176,8 @@ MonoBehaviour:
     initial_col: 1
     durationAdd_col: 1
     duration_col: 1
-    delay_col: 0.1
-    ease_col: 9
+    delay_col: 0
+    ease_col: 10
     usecurve_col: 0
     curve_col:
       serializedVersion: 2
@@ -187,7 +187,7 @@ MonoBehaviour:
       m_RotationOrder: 0
     from_col: {r: 0.23137255, g: 0.99607843, b: 0.60784316, a: 0}
     target_col: {r: 0.23137255, g: 0.99607843, b: 0.60784316, a: 1}
-    delay_multi: 0.2
+    delay_multi: 0
 --- !u!1 &7491214770408107548
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +222,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -156.66, y: 15.025002}
+  m_AnchoredPosition: {x: -240, y: 15.025}
   m_SizeDelta: {x: 313.32, y: 30.050003}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5435310470671661100
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.23137257, g: 0.9960785, b: 0.60784316, a: 1}
+  m_Color: {r: 0.23137255, g: 0.99607843, b: 0.60784316, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -301,7 +301,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 121.51997, y: -21.854996}
+  m_AnchoredPosition: {x: 192, y: -21.855}
   m_SizeDelta: {x: 243.04, y: 43.70999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6231404501708516410
@@ -325,7 +325,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

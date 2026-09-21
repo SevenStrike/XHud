@@ -20,8 +20,8 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XTween;
     using UnityEngine;
-    using UnityEngine.Events;
 
     public partial class XHud_Manager : MonoBehaviour
     {
@@ -39,11 +39,11 @@ namespace SevenStrikeModules.XHud
         /// 光标 - 尺寸_Size
         /// </summary>
         /// <param name="size">尺寸_Size</param>
-        public void hm_Cursor_SizeSet(float size)
+        public XTween_Interface hm_Cursor_SizeSet(float size)
         {
             if (Hud_MouseCursor == null)
-                return;
-            Hud_MouseCursor.mc_SetCursorSize(size);
+                return null;
+            return Hud_MouseCursor.mc_SetCursorSize(size);
         }
         /// <summary>
         /// 光标 - 启用
@@ -66,20 +66,20 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 光标 - 显示
         /// </summary>
-        public void hm_Cursor_Display()
+        public XTween_Interface hm_Cursor_Display()
         {
             if (Hud_MouseCursor == null)
-                return;
-            Hud_MouseCursor.mc_CursorOpacitySet(1);
+                return null;
+            return Hud_MouseCursor.mc_CursorOpacitySet(1);
         }
         /// <summary>
         /// 光标 - 隐藏
         /// </summary>
-        public void hm_Cursor_Hide()
+        public XTween_Interface hm_Cursor_Hide()
         {
             if (Hud_MouseCursor == null)
-                return;
-            Hud_MouseCursor.mc_CursorOpacitySet(0);
+                return null;
+            return Hud_MouseCursor.mc_CursorOpacitySet(0);
         }
         /// <summary>
         /// 光标 - 快速显示

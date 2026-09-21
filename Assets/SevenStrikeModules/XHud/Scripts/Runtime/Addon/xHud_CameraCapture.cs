@@ -41,6 +41,8 @@ namespace SevenStrikeModules.XHud
         // 相机类型
         public CaptureBgType x_bgtype = CaptureBgType.天空盒;
 
+        public int x_bg_alpha;
+
         // 像素尺寸
         public Vector2 Pixels = new Vector2(1024, 768);
 
@@ -54,6 +56,12 @@ namespace SevenStrikeModules.XHud
         // UI相机原始数据
         public Color x_UICamera_Bgcolor_Original = Color.black;
         public CameraClearFlags x_UICamera_ClearFlags_Original = CameraClearFlags.Skybox;
+
+        public bool
+          fold_options = true,
+          fold_param = true,
+          fold_camera = true,
+          fold_based = true;
 
 #if UNITY_EDITOR
         private void Reset()

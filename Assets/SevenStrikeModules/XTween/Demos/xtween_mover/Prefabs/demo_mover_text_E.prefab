@@ -97,7 +97,7 @@ MonoBehaviour:
     durationAdd_pos: 1
     duration_pos: 2
     delay_pos: 0
-    ease_pos: 8
+    ease_pos: 9
     usecurve_pos: 0
     curve_pos:
       serializedVersion: 2

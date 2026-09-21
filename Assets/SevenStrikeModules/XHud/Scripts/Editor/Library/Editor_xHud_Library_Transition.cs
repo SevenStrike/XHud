@@ -20,7 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -39,11 +40,6 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 图标
         private Texture2D warnIcon, btn_icon_details_released, btn_icon_details_press, analyze_p, analyze_r, clear_p, clear_r, create_p, create_r, delete_p, delete_r, skip, total, last;
-        #endregion
-
-        #region 字体
-        private Font Font_Bold;
-        private Font Font_Light;
         #endregion
 
         /// <summary>
@@ -72,33 +68,30 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 获取图标
-            warnIcon = EditorGUIUtility.IconContent("console.warnicon").image as Texture2D;
-            btn_icon_details_released = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/detail_r");
-            btn_icon_details_press = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/detail_p");
-            analyze_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/analyze_p");
-            analyze_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/analyze_r");
-            clear_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/clear_p");
-            clear_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/clear_r");
-            create_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/create_p");
-            create_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/create_r");
-            delete_p = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/delete_p");
-            delete_r = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/delete_r");
-            skip = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/skip");
-            total = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/total");
-            last = Editor_XHud_GUI.GetIcon("Icons_XHud_TransitionLibrary/last");
+            warnIcon = XGUI.GetBuiltInIcon("console.warnicon");
+            btn_icon_details_released = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition/detail_r");
+            btn_icon_details_press = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition/detail_p");
+            analyze_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition/analyze_p");
+            analyze_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition/analyze_r");
+            clear_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition/clear_p");
+            clear_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition/clear_r");
+            create_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition/create_p");
+            create_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition/create_r");
+            delete_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition/delete_p");
+            delete_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition/delete_r");
+            skip = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition/skip");
+            total = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition/total");
+            last = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition/last");
             #endregion
 
             //设定列表项高度值
             sp_itemHeight.floatValue = 75;
             sp_itemHeight.serializedObject.ApplyModifiedProperties();
 
-            sp_visibleItemCount.intValue = 8;
+            sp_visibleItemCount.intValue = 6;
             sp_visibleItemCount.serializedObject.ApplyModifiedProperties();
 
             blocked_col = new Color(0, 0, 0, blocked_alp);
-
-            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Light");
 
             #region ReorderableList - TransitionLibrary
             TrasitionInfoList = new ReorderableList(serializedObject, sp_TransitionLibrary, true, true, true, true);
@@ -164,40 +157,106 @@ namespace SevenStrikeModules.XHud.Editor
             SerializedProperty sp_Res = prop.FindPropertyRelative("Res");
             SerializedProperty sp_Frames = prop.FindPropertyRelative("Frames");
 
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
+
+            #region 序号
             drawelement_rect.Set(rect.x + 15, rect.y + 5, 30, 20);
-            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
+            XGUI.gui_label(
+                rect: drawelement_rect,
+                text: new GUIContent(index.ToString("D2")),
+                text_color: Color.gray,
+                size: XGUIFontSize.S,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Normal);
+            #endregion
 
             #region 标识名称
             drawelement_rect.Set(rect.x + 40, rect.y + 5, rect.width - 140, 20);
-            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, sp_name.stringValue, HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 12, TextClipping.Ellipsis);
+            XGUI.gui_label(
+                rect: drawelement_rect,
+                text: new GUIContent(sp_name.stringValue),
+                text_color: XHud_Dashboard.Theme_Primary,
+                size: XGUIFontSize.M,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Normal);
             #endregion
 
-            #region 说明
+            #region 动效说明
             drawelement_rect.Set(rect.x + 40, rect.y + 25, rect.width - 160, 20);
-            Editor_XHud_GUI.Gui_Labelfield_Thin_WithClipping(drawelement_rect, sp_des.stringValue, HudFilled.无, HudColor.无, Color.white * 0.65f, TextAnchor.MiddleLeft, Vector2.zero, 11, true, true, true, TextClipping.Ellipsis);
+            XGUI.gui_label(
+                rect: drawelement_rect,
+                text: new GUIContent(sp_des.stringValue),
+                text_color: Color.white * 0.65f,
+                size: XGUIFontSize.M,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Normal);
             #endregion
+
 
             #region 帧信息
 
             float AddedHeight = 16;
 
-            drawelement_rect.Set(rect.x + 40, rect.y + 35 + AddedHeight, 14, 14);
-            Editor_XHud_GUI.Gui_Icon(drawelement_rect, total);
+            drawelement_rect.Set(rect.x + 40, rect.y + 36 + AddedHeight, 14, 14);
+            XGUI.gui_icon(
+                  rect: drawelement_rect,
+                  icon: total,
+                  color: Color.white);
 
-            drawelement_rect.Set(rect.x + 110, rect.y + 35 + AddedHeight, 14, 14);
-            Editor_XHud_GUI.Gui_Icon(drawelement_rect, last);
+            drawelement_rect.Set(rect.x + 110, rect.y + 36 + AddedHeight, 14, 14);
+            XGUI.gui_icon(
+                  rect: drawelement_rect,
+                  icon: last,
+                  color: Color.white);
 
-            drawelement_rect.Set(rect.x + 180, rect.y + 35 + AddedHeight, 14, 14);
-            Editor_XHud_GUI.Gui_Icon(drawelement_rect, skip);
+            drawelement_rect.Set(rect.x + 180, rect.y + 36 + AddedHeight, 14, 14);
+            XGUI.gui_icon(
+                  rect: drawelement_rect,
+                  icon: skip,
+                  color: Color.white);
 
             drawelement_rect.Set(rect.x + 70, rect.y + 33 + AddedHeight, 80, 20);
-            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, sp_TotalFramesCount.intValue.ToString(), HudFilled.无, HudColor.无, Color.white * 0.9f, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+            XGUI.gui_label(
+                rect: drawelement_rect,
+                text: new GUIContent(sp_TotalFramesCount.intValue.ToString()),
+                text_color: Color.white,
+                size: XGUIFontSize.M,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Normal);
 
             drawelement_rect.Set(rect.x + 140, rect.y + 33 + AddedHeight, 80, 20);
-            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, sp_LastFrameIndex.intValue.ToString(), HudFilled.无, HudColor.无, Color.white * 0.9f, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+            XGUI.gui_label(
+                rect: drawelement_rect,
+                text: new GUIContent(sp_LastFrameIndex.intValue.ToString()),
+                text_color: Color.white,
+                size: XGUIFontSize.M,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Normal);
 
             drawelement_rect.Set(rect.x + 210, rect.y + 33 + AddedHeight, 80, 20);
-            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, sp_SkipFrame.intValue.ToString(), HudFilled.无, HudColor.无, Color.white * 0.9f, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
+            XGUI.gui_label(
+                rect: drawelement_rect,
+                text: new GUIContent(sp_SkipFrame.intValue.ToString()),
+                text_color: Color.white,
+                size: XGUIFontSize.M,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Normal);
             #endregion
 
             #region 转场项的序列帧状态
@@ -207,7 +266,16 @@ namespace SevenStrikeModules.XHud.Editor
                 content.image = warnIcon;
                 content.tooltip = "未找到任何序列帧图像";
                 drawelement_rect.Set(rect.x + 15, rect.y + 35, 15, 15);
-                Editor_XHud_GUI.Gui_Icon(drawelement_rect, content);
+
+                XGUI.gui_label(
+                    rect: drawelement_rect,
+                    text: content,
+                    text_color: Color.white,
+                    size: XGUIFontSize.M,
+                    clipping: clipping,
+                    anchor: TextAnchor.MiddleLeft,
+                    offset: new Vector2(0, 0),
+                    font_style: FontStyle.Normal);
             }
             #endregion
 
@@ -245,7 +313,15 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 查看详细信息
             drawelement_rect.Set(rect.width - 50, rect.y + 14, 22, 22);
-            if (Editor_XHud_GUI.Gui_Button(drawelement_rect, btn_icon_details_released, btn_icon_details_press, true, "", "", Color.white))
+            if (XGUI.gui_button(
+                rect: drawelement_rect,
+                tooltip: $"查看详细信息",
+                tex_release: btn_icon_details_released,
+                tex_press: btn_icon_details_press,
+                tex_gui_color: Color.white,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                focus_name: "fav_btn"))
             {
                 OpenParameterSetter(BaseScript.TransitionLibrary[index], index);
             }
@@ -262,7 +338,15 @@ namespace SevenStrikeModules.XHud.Editor
             if (index == sp_LocationSelectedIndex.intValue)
             {
                 drawelement_rect.Set(rect.width - 125, rect.y + 15, 50, 20);
-                Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, "已定位", HudFilled.无, HudColor.亮白, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleRight, Vector2.zero, 11);
+                XGUI.gui_label(
+                    rect: drawelement_rect,
+                    text: new GUIContent("已定位"),
+                    text_color: XHud_Dashboard.Theme_Primary,
+                    size: XGUIFontSize.S,
+                    clipping: TextClipping.Clip,
+                    anchor: TextAnchor.MiddleCenter,
+                    offset: new Vector2(0, 0),
+                    font_style: FontStyle.Normal);
             }
         }
 
@@ -373,29 +457,77 @@ namespace SevenStrikeModules.XHud.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "XHud - 转场库", Color.black);
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
+            #region 标题
+            XGUI.layout_banner(
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.深空灰,
+                bg_height: 30,
+                title_text: "XHud  -  转场库",
+                title_anchor: TextAnchor.MiddleLeft,
+                title_style: FontStyle.Normal,
+                title_color: Color.white,
+                title_size: XGUIFontSize.B,
+                title_clipping: clipping,
+                title_offset: new Vector2(-10, 0),
+                bg_margin: new RectOffset(0, 0, 5, 5));
+            #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Property_Field("转场库名称", sp_LibraryName);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+            XGUI.layout_space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            #region 参数区
+            XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    title: "参数",
+                    title_size: XGUIFontSize.M,
+                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_clipping: TextClipping.Clip,
+                    padding: new RectOffset(10, 10, 15, 15));
 
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            EditorGUI.BeginChangeCheck();
-            Editor_XHud_GUI.Gui_Layout_Property_Field("过滤（包含）", sp_Highlight);
-            if (EditorGUI.EndChangeCheck())
+            #region 库名称
+            XGUI.layout_property_field(
+                title: "库名称",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 90,
+                prop: sp_LibraryName,
+                prop_margin: new RectOffset(0, 0, 5, 0));
+            #endregion
+
+            #region 过滤（包含）
+            XGUI.ChangedCheck_Start();
+            XGUI.layout_property_field(
+                title: "过滤（包含）",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 90,
+                prop: sp_Highlight,
+                prop_margin: new RectOffset(0, 0, 5, 0));
+            if (XGUI.ChangedCheck_End())
             {
                 sp_LocationSelectedIndex.intValue = -1;
                 sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
             }
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            EditorGUI.BeginChangeCheck();
-            Editor_XHud_GUI.Gui_Layout_Property_Field("查找（精确）", sp_Find);
-            if (EditorGUI.EndChangeCheck())
+            #endregion
+
+            #region 查找（精确）
+            XGUI.ChangedCheck_Start();
+            XGUI.layout_property_field(
+                title: "查找（精确）",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 90,
+                prop: sp_Find,
+                prop_margin: new RectOffset(0, 0, 5, 0));
+            if (XGUI.ChangedCheck_End())
             {
                 if (!string.IsNullOrEmpty(sp_Find.stringValue))
                     BaseScript.TransitionLibrary_Location_Find(sp_Find.stringValue);
@@ -408,19 +540,36 @@ namespace SevenStrikeModules.XHud.Editor
                     sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
                 }
             }
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+            #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
 
+            #region 快捷功能
             if (string.IsNullOrEmpty(sp_Highlight.stringValue))
             {
                 if (!Application.isPlaying)
                 {
-                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    Editor_XHud_GUI.Gui_Layout_FlexSpace();
+                    XGUI.layout_group_start(
+                        type: XGUIContainerType.Horizontal,
+                        bg_fill: XGUIFilled.缺口纯色边框,
+                        bg_color: XGUIColor.亮白,
+                        bg_color_gui: XHud_Dashboard.Theme_Group,
+                        title: "快捷功能",
+                        title_size: XGUIFontSize.M,
+                        title_text_color: XHud_Dashboard.Theme_Primary,
+                        title_clipping: TextClipping.Clip,
+                        padding: new RectOffset(15, 15, 20, 15));
 
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "分析帧数据", analyze_r, analyze_p, 4))
+                    #region 分析帧数据
+                    if (XGUI.layout_button(
+                        tooltip: "分析帧数据",
+                        tex_release: analyze_r,
+                        tex_press: analyze_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
                     {
                         for (int i = 0; i < BaseScript.TransitionLibrary.Count; i++)
                         {
@@ -456,11 +605,33 @@ namespace SevenStrikeModules.XHud.Editor
                                 node.Res = new Vector2Int(node.Frames[0].width, node.Frames[0].height);
                             }
                         }
+                        return;
                     }
-                    Editor_XHud_GUI.Gui_Layout_Space(35);
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "清空所有转场项", clear_r, clear_p, 4))
+                    #endregion
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 导出元素动效参数模版
+                    if (XGUI.layout_button(
+                        tooltip: "导出元素动效参数模版",
+                        tex_release: clear_r,
+                        tex_press: clear_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 转场库消息", "清空所有转场", "是否清空所有转场项？请注意！如果您的场景中转场组件用到了该转场库中的转场效果项，清空后会导致转场信息丢失，请谨慎操作！", "清空", "暂不", 1);
+                        string res = XGUI.dialog(
+                         type: XGUIDialogType.警告,
+                         windowtitle: "XHud - 转场库消息",
+                         title: "清空所有转场",
+                         msg: "是否清空所有转场项？请注意！如果您的场景中转场组件用到了该转场库中的转场效果项，清空后会导致转场信息丢失，请谨慎操作！",
+                         ok: "清空",
+                         cancel: "暂不",
+                         PrimaryIndex: 0,
+                         usemodal: true,
+                         themecolor: XHud_Dashboard.Theme_Primary);
+
                         if (res == "暂不")
                             return;
 
@@ -473,37 +644,65 @@ namespace SevenStrikeModules.XHud.Editor
 
                         sp_TransitionLibrary.ClearArray();
                         sp_TransitionLibrary.serializedObject.ApplyModifiedProperties();
+                        return;
                     }
-                    Editor_XHud_GUI.Gui_Layout_Space(35);
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "添加项", create_r, create_p, 4))
+                    #endregion
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 添加项
+                    if (XGUI.layout_button(
+                        tooltip: "添加项",
+                        tex_release: create_r,
+                        tex_press: create_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
                     {
                         TransitionInfoList_Original_Add(TrasitionInfoList);
+                        return;
                     }
-                    Editor_XHud_GUI.Gui_Layout_Space(35);
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "删除项", delete_r, delete_p, 4))
+                    #endregion
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 删除项
+                    if (XGUI.layout_button(
+                        tooltip: "删除项",
+                        tex_release: delete_r,
+                        tex_press: delete_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
                     {
                         TransitionInfoList_Original_Remove(TrasitionInfoList);
+                        return;
                     }
-                    GUILayout.FlexibleSpace();
-                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+                    #endregion
 
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-                    Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
-                    Editor_XHud_GUI.Gui_Layout_Space(10);
+                    XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
                 }
             }
-            else
-            {
-                Editor_XHud_GUI.Gui_Layout_LabelfieldThin("当前为过滤筛选状态", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12);
-            }
+            #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "转场库列表", Color.white);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            #region 转场库列表
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "转场库列表",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15));
 
             DrawTransitionInfoList_Original();
 
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -516,9 +715,9 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Editor_XHud_LibrarySetTool_Transition window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_Transition>(true);
 
-            window.titleContent = new GUIContent("XHud 转场库修改器");
-            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(800, 680), window);
-            window.SetTitle("XHud 转场库修改器");
+            window.titleContent = new GUIContent("XHud - 转场资源修改器");
+            XGUI.CenterEditorWindow(new Vector2Int(800, 680), window);
+            window.SetTitle("转场资源修改器");
             window.SetInfo(info.Name, info.Description);
             window.Set_TransitionNode(info);
             window.Set_OriginTransitionNode(info);

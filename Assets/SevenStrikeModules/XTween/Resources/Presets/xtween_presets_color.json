@@ -16,9 +16,9 @@
                     "asm": "XTween.Runtime"
                 },
                 "data": {
-                    "Name": "Y_To_B",
-                    "Description": "黄色到蓝色的颜色变化",
-                    "Duration": 2.0,
+                    "Name": "ddddddddddcccccccolor",
+                    "Description": "Datas",
+                    "Duration": 1.0,
                     "Delay": 0.0,
                     "UseRandomDelay": false,
                     "RandomDelay": {
@@ -57,23 +57,23 @@
                         "m_PostInfinity": 2,
                         "m_RotationOrder": 4
                     },
-                    "LoopCount": 0,
+                    "LoopCount": -1,
                     "LoopDelay": 0.0,
                     "LoopType": 0,
                     "IsRelative": false,
-                    "IsAutoKill": false,
-                    "UseFromMode": false,
-                    "IsFavourite": true,
+                    "IsAutoKill": true,
+                    "UseFromMode": true,
+                    "IsFavourite": false,
                     "EndValue": {
-                        "r": 0.24899627268314362,
+                        "r": 0.01839303970336914,
                         "g": 1.0,
-                        "b": 0.1921568512916565,
+                        "b": 0.0,
                         "a": 1.0
                     },
                     "FromValue": {
                         "r": 1.0,
-                        "g": 1.0,
-                        "b": 1.0,
+                        "g": 0.0,
+                        "b": 0.0,
                         "a": 1.0
                     }
                 }

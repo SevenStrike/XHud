@@ -20,10 +20,10 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud;
-    using SevenStrikeModules.XHud.Editor;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
@@ -63,15 +63,6 @@ namespace SevenStrikeModules.XHud.Editor
         /// 该值用于在拖拽过程中高亮对应的锚点区域。
         /// </summary>
         private static int hoverGridIndex = -1;
-
-        /// <summary>
-        /// 字体 - 粗体
-        /// </summary>
-        private static Font Font_Bold;
-        /// <summary>
-        /// 字体 - 细体
-        /// </summary>
-        private static Font Font_Light;
 
         #region 颜色配置
 
@@ -130,9 +121,6 @@ namespace SevenStrikeModules.XHud.Editor
         static Editor_XHud_Tool_ElementVisualPlacer()
         {
             SceneView.duringSceneGui += OnSceneGUI;
-
-            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Light");
         }
 
         /// <summary>
@@ -256,7 +244,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (prefabs == null || prefabs.Length == 0) return;
 
-            XHud_Utilitys.Func_PrintInfo("XHud - 元素视觉放置器", $"已将所选元素放置到屏幕锚点 \" {GetGridNameWithIndex(gridIndex)} \"，放置的数量：{prefabs.Length} 个", HudMsgState.确认);
+            XGUI_Utilitys.Console("XHud - 元素视觉放置器", $"已将所选元素放置到屏幕锚点 \" {GetGridNameWithIndex(gridIndex)} \"，放置的数量：{prefabs.Length} 个", XGUIMsgState.确认);
 
             foreach (GameObject prefab in prefabs)
             {
@@ -287,7 +275,7 @@ namespace SevenStrikeModules.XHud.Editor
                 case 6: Dragged_To_LD(ele); break;
                 case 7: Dragged_To_D(ele); break;
                 case 8: Dragged_To_RD(ele); break;
-                default: XHud_Utilitys.Func_PrintInfo("XHud - 元素视觉放置器", $"未知的锚点索引！", HudMsgState.错误); break;
+                default: XGUI_Utilitys.Console("XHud - 元素视觉放置器", $"未知的锚点索引！", XGUIMsgState.错误); break;
             }
         }
 
@@ -425,7 +413,7 @@ namespace SevenStrikeModules.XHud.Editor
                 isDraggingTarget = true;
                 draggedPrefabs = validPrefabs.ToArray();
 
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素视觉放置器", $"检测到目标预制体 {validPrefabs.Count} 个！", HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 元素视觉放置器", $"检测到目标预制体 {validPrefabs.Count} 个！", XGUIMsgState.设置);
             }
         }
         /// <summary>
@@ -532,9 +520,27 @@ namespace SevenStrikeModules.XHud.Editor
                 style.fontStyle = FontStyle.Bold;
 
                 Rect label_rect = new Rect(rect.x + rect.width / 2 - 60, rect.y + rect.height / 2 - 45, 120, 25);
-                Editor_XHud_GUI.Gui_Labelfield(label_rect, GetGridLabel(i), HudFilled.无, HudColor.深空灰, Color.white, TextAnchor.MiddleCenter, 14, GetBoldFont());
+                XGUI.gui_label(
+                    rect: label_rect,
+                    text: new GUIContent(GetGridLabel(i)),
+                    text_color: XHud_Dashboard.Theme_Primary,
+                    offset: new Vector2(0, -1),
+                    size: XGUIFontSize.BX,
+                    anchor: TextAnchor.MiddleCenter,
+                    padding: new RectOffset(0, 0, 0, 0),
+                    font_style: FontStyle.Bold,
+                    clipping: TextClipping.Clip);
+
                 label_rect.Set(label_rect.x, label_rect.y + 40, label_rect.width, label_rect.height);
-                Editor_XHud_GUI.Gui_Labelfield(label_rect, GetGridLabel_Abbr(i), HudFilled.实体, HudColor.深空灰, Color.white * 0.9f, TextAnchor.MiddleCenter, 12, GetLightFont());
+                XGUI.gui_label(
+                    rect: label_rect,
+                    text: new GUIContent(GetGridLabel_Abbr(i)),
+                    text_color: Color.white * 0.9f,
+                    offset: new Vector2(0, -1),
+                    size: XGUIFontSize.B,
+                    anchor: TextAnchor.MiddleCenter,
+                    padding: new RectOffset(0, 0, 0, 0),
+                    clipping: TextClipping.Clip);
             }
 
             Handles.EndGUI();
@@ -605,7 +611,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素视觉放置器", $"锚点区域索引 {gridIndex} 超出范围 (0-{Colors_Grid_UnHighlight.Length - 1})！", HudMsgState.警告);
+                XGUI_Utilitys.Console("XHud - 元素视觉放置器", $"锚点区域索引 {gridIndex} 超出范围 (0-{Colors_Grid_UnHighlight.Length - 1})！", XGUIMsgState.警告);
             }
         }
         /// <summary>
@@ -627,28 +633,6 @@ namespace SevenStrikeModules.XHud.Editor
         public static Color[] GetGridColors()
         {
             return (Color[])Colors_Grid_UnHighlight.Clone();
-        }
-        /// <summary>
-        /// 获取粗体字体资源。
-        /// 如果字体尚未加载，则通过 Editor_XHud_GUI.GetFont 方法从资源中加载 "SS_Editor_Bold" 字体。
-        /// </summary>
-        /// <returns>返回粗体字体对象，用于 GUI 绘制中的标题或强调文本。</returns>
-        private static Font GetBoldFont()
-        {
-            if (Font_Bold == null)
-                Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            return Font_Bold;
-        }
-        /// <summary>
-        /// 获取细体/常规字体资源。
-        /// 如果字体尚未加载，则通过 Editor_XHud_GUI.GetFont 方法从资源中加载 "SS_Editor_Light" 字体。
-        /// </summary>
-        /// <returns>返回细体字体对象，用于 GUI 绘制中的辅助文本或说明文字。</returns>
-        private static Font GetLightFont()
-        {
-            if (Font_Light == null)
-                Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Light");
-            return Font_Light;
         }
         #endregion
 

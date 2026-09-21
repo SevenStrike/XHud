@@ -20,6 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XTween;
     using SevenStrikeModules.XTween.Editor;
@@ -37,7 +39,15 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (Application.isPlaying)
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
+                XGUI.dialog(
+                      type: XGUIDialogType.警告,
+                      windowtitle: "XHud - 元素消息",
+                      title: "预览动画",
+                      msg: $"程序正在运行，无法在运行期间执行此功能！",
+                      ok: "明白",
+                      PrimaryIndex: 0,
+                      usemodal: true,
+                      themecolor: XHud_Dashboard.Theme_Primary);
                 return;
             }
 
@@ -71,6 +81,9 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         for (int v = 0; v < ele.PrimitiveControllerNodes.Count; v++)
                         {
+                            if (ele.PrimitiveControllerNodes[v].Controller.pt_Tween == null)
+                                continue;
+
                             XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(ele.PrimitiveControllerNodes[v].Controller.pt_Tween, "元素进入时", ele.PrimitivesTweenGlobalDuration, SelectedObjects[i].PrimitiveControllerNodes[v].DelayTime);
 
                             for (int g = 0; g < primitive_tweens.Length; g++)
@@ -114,6 +127,9 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
                     {
+                        if (BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween == null)
+                            continue;
+
                         XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween, "元素进入时", BaseScript.PrimitivesTweenGlobalDuration, BaseScript.PrimitiveControllerNodes[i].DelayTime);
 
                         for (int s = 0; s < primitive_tweens.Length; s++)
@@ -135,7 +151,15 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (Application.isPlaying)
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
+                XGUI.dialog(
+                     type: XGUIDialogType.警告,
+                     windowtitle: "XHud - 元素消息",
+                     title: "预览动画",
+                     msg: $"程序正在运行，无法在运行期间执行此功能！",
+                     ok: "明白",
+                     PrimaryIndex: 0,
+                     usemodal: true,
+                     themecolor: XHud_Dashboard.Theme_Primary);
                 return;
             }
 
@@ -145,7 +169,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     SelectedObjects[i].TweensPreivew_In_State = false;
                     //Debug.Log($"TweensPreivew_In：{SelectedObjects[i].TweensPreivew_In_State}");
-                    SelectedObjects[i].KillElementTweens();
+                    SelectedObjects[i].ElementTweens_Kill();
                 }
             }
             else
@@ -154,7 +178,7 @@ namespace SevenStrikeModules.XHud.Editor
                 //Debug.Log($"TweensPreivew_In：{TweensPreivew_In_State.boolValue}");
                 TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
 
-                BaseScript.KillElementTweens();
+                BaseScript.ElementTweens_Kill();
             }
 
             XTween_Preview_Kill();
@@ -166,7 +190,15 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (Application.isPlaying)
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
+                XGUI.dialog(
+                     type: XGUIDialogType.警告,
+                     windowtitle: "XHud - 元素消息",
+                     title: "预览动画",
+                     msg: $"程序正在运行，无法在运行期间执行此功能！",
+                     ok: "明白",
+                     PrimaryIndex: 0,
+                     usemodal: true,
+                     themecolor: XHud_Dashboard.Theme_Primary);
                 return;
             }
 
@@ -198,6 +230,9 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         for (int v = 0; v < ele.PrimitiveControllerNodes.Count; v++)
                         {
+                            if (BaseScript.PrimitiveControllerNodes[v].Controller.pt_Tween == null)
+                                continue;
+
                             XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(ele.PrimitiveControllerNodes[v].Controller.pt_Tween, "元素退出时", ele.PrimitivesTweenGlobalDuration, ele.PrimitiveControllerNodes[v].DelayTime);
 
                             for (int g = 0; g < primitive_tweens.Length; g++)
@@ -240,6 +275,9 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
                     {
+                        if (BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween == null)
+                            continue;
+
                         XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween, "元素退出时", BaseScript.PrimitivesTweenGlobalDuration, BaseScript.PrimitiveControllerNodes[i].DelayTime);
 
                         for (int s = 0; s < primitive_tweens.Length; s++)
@@ -261,7 +299,15 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (Application.isPlaying)
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "预览动画", "程序正在运行，无法在运行期间执行此功能！", "明白");
+                XGUI.dialog(
+                     type: XGUIDialogType.警告,
+                     windowtitle: "XHud - 元素消息",
+                     title: "预览动画",
+                     msg: $"程序正在运行，无法在运行期间执行此功能！",
+                     ok: "明白",
+                     PrimaryIndex: 0,
+                     usemodal: true,
+                     themecolor: XHud_Dashboard.Theme_Primary);
                 return;
             }
 
@@ -315,6 +361,10 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 预览列表
             List<XTween_Interface> preview_twns = new List<XTween_Interface>();
+
+            if (node.Controller.pt_Tween == null)
+                return;
+
             XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(node.Controller.pt_Tween, "元素进入时", BaseScript.PrimitivesTweenGlobalDuration, node.DelayTime);
 
             for (int s = 0; s < primitive_tweens.Length; s++)
@@ -387,6 +437,13 @@ namespace SevenStrikeModules.XHud.Editor
             }
 
             Editor_XTween_Previewer.Play(null);
+
+            Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(
+              state: true,
+              x_color: XHud_Dashboard.Theme_Primary,
+              x_title: "Seven Strike Media",
+              x_msg: "元素动效预览中...",
+              x_anchor: XHudSceneActivateMarkAnchor.左下);
         }
         /// <summary>
         ///  动画预览 - 杀死
@@ -421,13 +478,15 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int d = 0; d < SelectedObjects[i].PrimitiveControllerNodes.Count; d++)
                         {
                             PrimitiveControllerNode con = SelectedObjects[i].PrimitiveControllerNodes[d];
+                            if (con.Controller.pt_Feature == null)
+                                continue;
                             con.Controller.pt_Feature.PrimitiveFeature_Load();
                         }
                     }
                     // 杀死元素三项自身动画
-                    ele.KillElementTweens();
+                    ele.ElementTweens_Kill();
                     // 清空元素三项自身动画
-                    ele.ClearElementTweens();
+                    ele.ElementTweens_Clear();
                 }
             }
             else
@@ -438,14 +497,17 @@ namespace SevenStrikeModules.XHud.Editor
                     for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
                     {
                         PrimitiveControllerNode con = BaseScript.PrimitiveControllerNodes[i];
-                        con.Controller.pt_Feature.PrimitiveFeature_Load();
+                        if (con.Controller.pt_Feature != null)
+                            con.Controller.pt_Feature.PrimitiveFeature_Load();
                     }
                 }
                 // 杀死元素三项自身动画
-                BaseScript.KillElementTweens();
+                BaseScript.ElementTweens_Kill();
                 // 清空元素三项自身动画
-                BaseScript.ClearElementTweens();
+                BaseScript.ElementTweens_Clear();
             }
+
+            Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
         }
         /// <summary>
         ///  动画预览 - 自动杀死的委托
@@ -467,14 +529,18 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int d = 0; d < ele.PrimitiveControllerNodes.Count; d++)
                         {
                             PrimitiveControllerNode con = ele.PrimitiveControllerNodes[d];
+                            if (con.Controller.pt_Feature == null)
+                                continue;
                             con.Controller.pt_Feature.PrimitiveFeature_Load();
                         }
                     }
 
                     // 杀死元素三项自身动画
-                    ele.KillElementTweens();
+                    ele.ElementTweens_Kill();
                     // 清空元素三项自身动画
-                    ele.ClearElementTweens();
+                    ele.ElementTweens_Clear();
+
+                    ele.Alpha = 1;
                 }
             }
             else
@@ -485,14 +551,19 @@ namespace SevenStrikeModules.XHud.Editor
                     for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
                     {
                         PrimitiveControllerNode con = BaseScript.PrimitiveControllerNodes[i];
+                        if (con.Controller.pt_Feature == null)
+                            continue;
                         con.Controller.pt_Feature.PrimitiveFeature_Load();
                     }
                 }
                 // 杀死元素三项自身动画
-                BaseScript.KillElementTweens();
+                BaseScript.ElementTweens_Kill();
                 // 清空元素三项自身动画
-                BaseScript.ClearElementTweens();
+                BaseScript.ElementTweens_Clear();
+                BaseScript.Alpha = 1;
             }
+
+            Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
 
             // 清空预览动画杀死后的委托事件
             Editor_XTween_Previewer.act_on_editor_autokill -= XTween_OnAutoKillPreview;
@@ -533,7 +604,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void ResetMotionParams(string state)
         {
-            if (state == "CreateArgs")
+            if (state == "c")
             {
                 CreateArgs.FindPropertyRelative("anchor").enumValueIndex = (int)XHudAnchor.中心;
                 CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)HudMotion_Movement.S_从下至上;
@@ -557,8 +628,11 @@ namespace SevenStrikeModules.XHud.Editor
                 CreateArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                 CreateArgs.serializedObject.ApplyModifiedProperties();
+
+                Crc_Lib_Name.stringValue = null;
+                Crc_Lib_Name.serializedObject.ApplyModifiedProperties();
             }
-            else if (state == "RecycleArgs")
+            else if (state == "r")
             {
                 RecycleArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)HudMotion_Movement.D_从上至下;
                 RecycleArgs.FindPropertyRelative("Movement.Distance").floatValue = 100;
@@ -581,6 +655,9 @@ namespace SevenStrikeModules.XHud.Editor
                 RecycleArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
                 RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                 RecycleArgs.serializedObject.ApplyModifiedProperties();
+
+                Rec_Lib_Name.stringValue = null;
+                Rec_Lib_Name.serializedObject.ApplyModifiedProperties();
             }
         }
         /// <summary>
@@ -590,8 +667,8 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Editor_XHud_LibrarySetTool_Motion window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_Motion>(true);
 
-            window.titleContent = new GUIContent("XHud 动效库采集器");
-            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(600, 530), window);
+            window.titleContent = new GUIContent("XHud - 元素动效资源采集器");
+            XGUI.CenterEditorWindow(new Vector2Int(348, Type == HudElementMotionType.Creator ? 850 : 780), window);
 
             // 将要存入元素库的物体信息发送至窗口
             switch (Type)
@@ -629,9 +706,10 @@ namespace SevenStrikeModules.XHud.Editor
                     window.SetElementMotion(crc);
                     break;
             }
+            window.SetElementMotionType(Type);
             window.SetLibrarySetterMode(LibrarySetterMode.添加到库);
             window.SetButtonText("添加", "取消");
-            window.SetTitle("XHud 动效库采集器");
+            window.SetTitle("元素动效资源采集器");
             window.SetTarget_Hud_MotionLibrary(HudManager.Hud_Motions);
             //window.ShowModal();
             window.Show();

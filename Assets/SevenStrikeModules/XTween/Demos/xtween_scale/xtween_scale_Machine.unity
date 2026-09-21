@@ -6297,12 +6297,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d596d7425fe2298418fca190d3e9f1d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.65
+  duration: 0.8
   delay: 0
   min_delay: 0
   max_delay: 1
   randomDelay: 0
-  easeMode: 0
+  easeMode: 27
   loop: 0
   loopType: 0
   loopDelay: 0
@@ -6430,8 +6430,8 @@ MonoBehaviour:
     target: {x: 0, y: 0, z: 0}
     duration: 1
     id: 
-  Ruler_easeMode: 26
-  Ruler_Delay: 0.15
+  Ruler_easeMode: 24
+  Ruler_Delay: 0.35
   probtween:
     img: {fileID: 21308073}
     target: {r: 1, g: 1, b: 1, a: 1}
@@ -6606,7 +6606,7 @@ MonoBehaviour:
   Prob_Duration_hidden: 0.3
   Prob_Delay_display: 0.55
   Prob_Delay_hidden: 0
-  Hidden_easeMode: 9
+  Hidden_easeMode: 10
   Hidden_Duration: 0.5
   Hidden_DelayMultiply: 0.35
   btn_display: {fileID: 522598599}

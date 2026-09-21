@@ -20,6 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using UnityEditor;
     using UnityEngine;
 
@@ -33,7 +35,15 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 EditorApplication.delayCall += () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 资源库消息", "未指定色卡库", "未在HudManager中配置色卡库！请先前往XHud管理器指定一个色卡库！", "明白", "前往", 1);
+                    string res = XGUI.dialog(
+                        type: XGUIDialogType.警告,
+                        windowtitle: "XHud - 色卡库消息",
+                        title: "未指定色卡库",
+                        msg: "未在XHudManager中配置色卡库！请先前往XHud管理器指定一个色卡库！",
+                        ok: "明白",
+                        cancel: "前往",
+                        PrimaryIndex: 1,
+                        themecolor: XHud_Dashboard.Theme_Primary);
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;
@@ -52,7 +62,15 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 EditorApplication.delayCall += () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 资源库消息", "未指定曲线库", "未在HudManager中配置曲线库！请先前往XHud管理器指定一个曲线库！", "明白", "前往", 1);
+                    string res = XGUI.dialog(
+                      type: XGUIDialogType.警告,
+                      windowtitle: "XHud - 曲线库消息",
+                      title: "未指定曲线库",
+                      msg: "未在XHudManager中配置曲线库！请先前往XHud管理器指定一个曲线库！",
+                      ok: "明白",
+                      cancel: "前往",
+                      PrimaryIndex: 1,
+                      themecolor: XHud_Dashboard.Theme_Primary);
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;
@@ -71,7 +89,15 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 EditorApplication.delayCall += () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 资源库消息", "未指定音效库", "未在HudManager中配置音效库！请先前往XHud管理器指定一个音效库！", "明白", "前往", 1);
+                    string res = XGUI.dialog(
+                        type: XGUIDialogType.警告,
+                        windowtitle: "XHud - 音效库消息",
+                        title: "未指定音效库",
+                        msg: "未在XHudManager中配置音效库！请先前往XHud管理器指定一个音效库！",
+                        ok: "明白",
+                        cancel: "前往",
+                        PrimaryIndex: 1,
+                        themecolor: XHud_Dashboard.Theme_Primary);
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;
@@ -86,11 +112,20 @@ namespace SevenStrikeModules.XHud.Editor
         public static void open_elements()
         {
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+
             if (mgr.Hud_ElementLibrarys.Count <= 0)
             {
                 EditorApplication.delayCall += () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 资源库消息", "未指定元素库", "未在HudManager中配置元素库！请先前往XHud管理器指定一个元素库！", "明白", "前往", 1);
+                    string res = XGUI.dialog(
+                        type: XGUIDialogType.警告,
+                        windowtitle: "XHud - 资源库消息",
+                        title: "未指定元素库",
+                        msg: "未在XHudManager中配置元素库！请先前往XHud管理器指定一个元素库！",
+                        ok: "明白",
+                        cancel: "前往",
+                        PrimaryIndex: 1,
+                        themecolor: XHud_Dashboard.Theme_Primary);
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;
@@ -99,19 +134,21 @@ namespace SevenStrikeModules.XHud.Editor
                     return;
                 };
             }
-
-            if (mgr.Hud_ElementLibrarys.Count == 1)
-            {
-                XHud_Library_Element lib = mgr.Hud_ElementLibrarys[0];
-                EditorUtility.OpenPropertyEditor(lib);
-            }
             else
             {
-                Editor_XHud_LibrarySetTool_ElementLib Window = (Editor_XHud_LibrarySetTool_ElementLib)EditorWindow.GetWindow(typeof(Editor_XHud_LibrarySetTool_ElementLib), true, "当前部署的Hud元素库列表", true);
-                Window.minSize = new Vector2(620, 450);
-                Window.maxSize = Window.minSize;
-                //Window.mode = "reference";
-                Window.Show();
+                if (mgr.Hud_ElementLibrarys.Count == 1)
+                {
+                    XHud_Library_Element lib = mgr.Hud_ElementLibrarys[0];
+                    EditorUtility.OpenPropertyEditor(lib);
+                }
+                else
+                {
+                    Editor_XHud_LibrarySetTool_ElementLib window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_ElementLib>(true);
+                    window.titleContent = new GUIContent("当前已部署的XHud元素库列表");
+                    XGUI.CenterEditorWindow(new Vector2Int(500, 440), window);
+
+                    window.Show();
+                }
             }
         }
         public static XHud_Library_Element open_target_elements(string libname)
@@ -132,14 +169,22 @@ namespace SevenStrikeModules.XHud.Editor
             return ele_lib;
         }
         [MenuItem(("Tools/XHud/Library/CurrentLibrary-TextStyleLibrary #F5"))]
-        public static void open_font()
+        public static void open_textstyle()
         {
             XHud_Library_TextStyle lib = (XHud_Library_TextStyle)FindFirstObjectByType<XHud_Manager>().Hud_TextStyleLibrary;
             if (lib == null)
             {
                 EditorApplication.delayCall += () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 资源库消息", "未指定字体库", "未在HudManager中配置字体库！请先前往XHud管理器指定一个字体库！", "明白", "前往", 1);
+                    string res = XGUI.dialog(
+                        type: XGUIDialogType.警告,
+                        windowtitle: "XHud - 文字样式库消息",
+                        title: "未指定文字样式库",
+                        msg: "未在XHudManager中配置字体库！请先前往XHud管理器指定一个文字样式库！",
+                        ok: "明白",
+                        cancel: "前往",
+                        PrimaryIndex: 1,
+                        themecolor: XHud_Dashboard.Theme_Primary);
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;
@@ -158,7 +203,15 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 EditorApplication.delayCall += () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 资源库消息", "未指定动效库", "未在HudManager中配置动效库！请先前往XHud管理器指定一个动效库！", "明白", "前往", 1);
+                    string res = XGUI.dialog(
+                       type: XGUIDialogType.警告,
+                       windowtitle: "XHud - 元素动效库消息",
+                       title: "未指定元素动效库",
+                       msg: "未在XHudManager中配置元素动效库！请先前往XHud管理器指定一个元素动效库！",
+                       ok: "明白",
+                       cancel: "前往",
+                       PrimaryIndex: 1,
+                       themecolor: XHud_Dashboard.Theme_Primary);
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;
@@ -177,7 +230,15 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 EditorApplication.delayCall += () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 资源库消息", "未指定转场库", "未在HudManager中配置转场库！请先前往XHud管理器指定一个转场库！", "明白", "前往", 1);
+                    string res = XGUI.dialog(
+                       type: XGUIDialogType.警告,
+                       windowtitle: "XHud - 转场库",
+                       title: "未指定转场库",
+                       msg: "未在XHudManager中配置转场库！请先前往XHud管理器指定一个转场库！",
+                       ok: "明白",
+                       cancel: "前往",
+                       PrimaryIndex: 1,
+                       themecolor: XHud_Dashboard.Theme_Primary);
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;

@@ -24,8 +24,6 @@ namespace SevenStrikeModules.XTween
 
     public static class XTween_Utilitys
     {
-        public static bool PrintMsgEnable = true;
-
         /// <summary>
         /// 计算考虑旋转的相对位移坐标（2D空间）
         /// </summary>
@@ -84,176 +82,17 @@ namespace SevenStrikeModules.XTween
             Vector2 xyOffset = CalculateRelativePosition(rectTransform, (Vector2)currentPos, (Vector2)offset);
             return new Vector3(xyOffset.x, xyOffset.y, currentPos.z + offset.z);
         }
+        /// <summary>
+        /// 计算 Transform 的相对位置
+        /// </summary>
+        /// <param name="transform"></param>
+        /// <param name="currentPos"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
         public static Vector3 CalculateRelativePosition(Transform transform, Vector3 currentPos, Vector3 offset)
         {
             // 对于 Transform，使用四元数旋转来处理完整的3D旋转
             return currentPos + transform.rotation * offset;
-        }
-        /// <summary>
-        /// 计算颜色的亮度极限
-        /// </summary>
-        /// <param name="color">要计算亮度的颜色</param>
-        /// <returns>返回False小于亮度中间值，返回True大于亮度中间值</returns>
-        public static bool GetColorBrightnessLimite(Color color, float Threshold = 0.35f)
-        {
-            return (0.299f * color.r + 0.587f * color.g + 0.114f * color.b) > Threshold;
-        }
-        /// <summary>
-        /// 计算颜色的亮度（灰度值）
-        /// </summary>
-        /// <param name="color">要计算亮度的颜色</param>
-        /// <returns>颜色的亮度，范围在 0 到 1 之间</returns>
-        public static float GetColorBrightness(Color color)
-        {
-            return 0.299f * color.r + 0.587f * color.g + 0.114f * color.b;
-        }
-        /// <summary>
-        /// 打印消息到控制台
-        /// </summary>
-        /// <param name="Title">标题</param>
-        /// <param name="Content">内容</param>
-        /// <param name="Mode">消息类型</param>
-        public static XTweenGUIMsgState DebugInfo(string Title, string Content, XTweenGUIMsgState Mode, GameObject xobject = null)
-        {
-            if (!PrintMsgEnable)
-                return XTweenGUIMsgState.未开启消息模块功能;
-            switch (Mode)
-            {
-                case XTweenGUIMsgState.确认:
-                    Debug.Log("<color=#c4c4c4>" + Title + "： </color>" + "┠─<color=#c3e55c>" + Content + "</color>", xobject);
-                    break;
-                case XTweenGUIMsgState.错误:
-                    Debug.Log("<color=#c4c4c4>" + Title + "： </color>" + "┠─<color=#ff3f3f>" + Content + "</color>", xobject);
-                    break;
-                case XTweenGUIMsgState.通知:
-                    Debug.Log("<color=#c4c4c4>" + Title + "： </color>" + "┠─<color=#bebebe>" + Content + "</color>", xobject);
-                    break;
-                case XTweenGUIMsgState.警告:
-                    Debug.Log("<color=#c4c4c4>" + Title + "： </color>" + "┠─<color=#ffb80e>" + Content + "</color>", xobject);
-                    break;
-                case XTweenGUIMsgState.设置:
-                    Debug.Log("<color=#c4c4c4>" + Title + "： </color>" + "┠─<color=#5cc1e5>" + Content + "</color>", xobject);
-                    break;
-            }
-            return Mode;
-        }
-        /// <summary>
-        /// 将分隔符为逗号的"r,g,b,a"的字符串转换为Color类型
-        /// </summary>
-        /// <param name="ColorString">目标颜色格式字符串.</param>
-        /// <param name="ValueMode">指定色值模式 \n为True时：输入色值范围=0 - 255 \n为False时：输入色值范围=0.0 - 1.0.</param>
-        /// <returns>此方法返回类型为 -> 颜色_Color.</returns>
-        public static Color ConvertStringToColor(string ColorString, bool ValueMode = true)
-        {
-            if (string.IsNullOrEmpty(ColorString))
-                return Color.white;
-            int Count = 0;
-            string[] xx = ColorString.Split(new char[1] { ',' });
-
-            float[] x = new float[xx.Length];
-
-            foreach (string a in xx)
-            {
-                if (ValueMode)
-                    x[Count] = float.Parse(a) / 255f;
-                else
-                    x[Count] = float.Parse(a);
-                Count++;
-                if (Count >= 4)
-                {
-                    Count = 0;
-                }
-            }
-            Color color = new Color(x[0], x[1], x[2], x[3]);
-            return color;
-        }
-        /// <summary>
-        /// 将十六位进制颜色码字符串转换到Color类型
-        /// </summary>
-        /// <param name="hex">填写需要转换成Color类型的十六位进制的颜色码字符串（请忽略颜色代码开头的 #）</param>
-        /// <returns>此方法返回类型为 -> 颜色_Color</returns>
-        public static Color ConvertHexStringToColor(string hex)
-        {
-            Color nowColor = Color.black;
-
-            bool HasPrefix = false;
-            for (int i = 0; i < hex.Length; i++)
-            {
-                if (hex[i] == '#')
-                    HasPrefix = true;
-            }
-            if (HasPrefix)
-                ColorUtility.TryParseHtmlString(hex, out nowColor);
-            else
-                ColorUtility.TryParseHtmlString("#" + hex, out nowColor);
-            return nowColor;
-        }
-        /// <summary>
-        /// 将Color类型转换到十六进制颜色码字符串
-        /// </summary>
-        /// <param name="color">填写需要转换成字符串格式的Color类型</param>
-        /// <param name="HasPrefixSymbol">True：前缀带有 # 号，False：无_None # 号前缀</param>
-        /// <returns>此方法返回类型为 -> 字符串_String</returns>
-        public static string ConvertColorToHexString(Color color, bool HasPrefixSymbol = false)
-        {
-            if (HasPrefixSymbol)
-                return "#" + ColorUtility.ToHtmlStringRGB(color);
-            else
-                return ColorUtility.ToHtmlStringRGB(color);
-        }
-        /// <summary>
-        ///  将Vector3向量转换为 x,y,z 字符串格式（小括号可选）
-        /// </summary>
-        /// <param name="SourceVector">需要转换的向量.</param>
-        /// <param name="IncludeBracket">转换后是否包含前后小括号，例：(x,y,z) </param>
-        /// <returns>此方法返回类型为 ->  x,y,z 格式的字符串.</returns>
-        public static string ConvertVector3ToString(Vector3 SourceVector, bool IncludeBracket = false)
-        {
-            string Combine = null;
-
-            if (!IncludeBracket)
-            {
-                string ConData = SourceVector.ToString().Remove(0, 1).Trim();
-                Combine = ConData.Remove(ConData.Length - 1, 1).Trim();
-            }
-            else
-            {
-                Combine = SourceVector.ToString();
-            }
-            return Combine;
-        }
-        /// <summary>
-        ///  将Vector2向量转换为 x,y 字符串格式（小括号可选）
-        /// </summary>
-        /// <param name="SourceVector">需要转换的向量.</param>
-        /// <param name="IncludeBracket">转换后是否包含前后小括号，例：(x,y,z) </param>
-        /// <returns>此方法返回类型为 ->  x,y 格式的字符串.</returns>
-        public static string Vector2_To_String(Vector2 SourceVector, bool IncludeBracket = false)
-        {
-            string Combine = null;
-
-            if (!IncludeBracket)
-            {
-                string ConData = SourceVector.ToString().Remove(0, 1).Trim();
-                Combine = ConData.Remove(ConData.Length - 1, 1).Trim();
-            }
-            else
-            {
-                Combine = SourceVector.ToString();
-            }
-            return Combine;
-        }
-        /// <summary>
-        /// 将指定的带分隔符的字符串转换为Vector2向量
-        /// </summary>
-        /// <param name="SourceVector">需要转换的向量字符串</param>
-        /// <param name="Symbol">字符串中的分隔符</param>
-        /// <returns>此方法返回类型为 -> Vector2向量.</returns>
-        public static Vector2 Vector2_From_String(string SourceVector, char Symbol = ',')
-        {
-            string[] Splite = SourceVector.Split(new char[1] { Symbol });
-            Vector2 Combine = new Vector2(float.Parse(Splite[0]), float.Parse(Splite[1]));
-            return Combine;
         }
     }
 }

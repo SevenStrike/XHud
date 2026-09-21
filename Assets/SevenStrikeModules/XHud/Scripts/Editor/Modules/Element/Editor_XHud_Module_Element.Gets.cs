@@ -20,7 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditorInternal;
@@ -39,6 +40,668 @@ namespace SevenStrikeModules.XHud.Editor
             TextList,
             TmpTextList;
 
+        public void ReorderableList_Draw_PrimitiveController()
+        {
+            PrimitivesTweenList = new ReorderableList(serializedObject, PrimitiveControllerNodes)
+            {
+                displayAdd = false,
+                displayRemove = true,
+                draggable = true,
+
+                drawHeaderCallback = rect =>
+                {
+                    XGUI.gui_label(
+                      rect: rect,
+                      text: new GUIContent("图元控制器列表"),
+                      text_color: Color.white * 0.85f,
+                      size: XGUIFontSize.M,
+                      offset: new Vector2(5, 0),
+                      clipping: XGUI.TryEllipsisClipping(),
+                      anchor: TextAnchor.MiddleLeft,
+                      font_style: FontStyle.Normal);
+                },
+                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+                {
+                    if (PrimitiveControllerNodes == null)
+                        return;
+                    if (PrimitiveControllerNodes.arraySize <= 0)
+                        return;
+                    SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(index);
+                    if (sp_node != null)
+                    {
+                        SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                        SerializedProperty sp_delay = sp_node.FindPropertyRelative("DelayTime");
+
+                        XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
+
+                        if (sp_con != null)
+                        {
+                            #region 图标
+                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                            {
+                                XGUI.gui_icon(
+                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                                    icon: icon_anim,
+                                    color: XHud_Dashboard.Theme_Primary);
+                            }
+                            #endregion
+
+                            #region 名称
+                            string title = "";
+                            string indicator = sp_con.GetIndicator();
+                            if (!string.IsNullOrEmpty(indicator))
+                                title += indicator;
+                            else
+                                title += sp_con.gameObject.name;
+
+                            XGUI.gui_state_displayer_text(
+                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                                title: new GUIContent(title),
+                                title_size: XGUIFontSize.M,
+                                subtitle: new GUIContent(!string.IsNullOrEmpty(sp_con.ID) ? sp_con.ID : "未分配ID"),
+                                subtitle_size: XGUIFontSize.S,
+                                subtitle_color: !string.IsNullOrEmpty(sp_con.ID) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+
+                            if (sp_con.pt_Tween != null)
+                            {
+                                #region 速率      
+                                if (XGUI.CurrentWindowWidthThreshold(">", 150f))
+                                {
+                                    SerializedObject so_tween = new SerializedObject(sp_con.pt_Tween);
+                                    so_tween.Update();
+
+                                    SerializedProperty sp_glodur = so_tween.FindProperty("GlobalDuration");
+                                    SerializedProperty sp_maxdur = so_tween.FindProperty("MaxTimerWithGlobalDuration");
+
+                                    sp_glodur.floatValue = XGUI.gui_slider(
+                                        rect: new Rect(rect.x + 5, rect.y + 28, rect.width - 15, XGUI.GetSingleLineHeight()),
+                                        title: "速率",
+                                        title_size: XGUIFontSize.M,
+                                        title_anchor: TextAnchor.MiddleLeft,
+                                        title_color: Color.white,
+                                        title_width: 30,
+                                        title_offset: new Vector2(0, -3),
+                                        prop: sp_glodur.floatValue,
+                                        left: 0,
+                                        right: 1,
+                                        slider_height: 20,
+                                        limite_width: 230);
+                                    sp_glodur.serializedObject.ApplyModifiedProperties();
+                                    so_tween.ApplyModifiedProperties();
+                                }
+                                #endregion
+
+                                #region 延迟
+                                if (XGUI.CurrentWindowWidthThreshold(">", 150f))
+                                {
+                                    sp_delay.floatValue = XGUI.gui_inputfield(
+                                    rect: new Rect(rect.x + 5, rect.y + 52, rect.width - 15, XGUI.GetSingleLineHeight()),
+                                    title: "延迟",
+                                    prop: sp_delay.floatValue,
+                                    field_fontsize: XGUIFontSize.M,
+                                    field_text_offset: Vector2.zero,
+                                    field_height: 20,
+                                    field_text_color: Color.white,
+                                    title_width: 30,
+                                    field_text_style: FontStyle.Normal,
+                                    field_text_anchor: TextAnchor.MiddleLeft,
+                                    field_padding: new RectOffset(5, 5, 0, 0),
+                                    field_margin: new RectOffset(0, 0, 0, 0),
+                                    limite_width: 230);
+                                    sp_delay.serializedObject.ApplyModifiedProperties();
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                XGUI.gui_label(
+                                    rect: new Rect(rect.x + 20, rect.y + (rect.height / 2) - 5, rect.width - 30, XGUI.GetSingleLineHeight() * 2),
+                                    text: new GUIContent("未初始化动画模块"),
+                                    text_color: Color.gray,
+                                    bg_fill: XGUIFilled.纯色边框,
+                                    bg_color: XGUIColor.亮白,
+                                    bg_color_gui: Color.gray * 0.85f,
+                                    size: XGUIFontSize.S,
+                                    clipping: XGUI.TryEllipsisClipping(),
+                                    anchor: TextAnchor.MiddleCenter,
+                                    offset: new Vector2(0, -2),
+                                    padding: new RectOffset(0, 0, 10, 10),
+                                    font_style: FontStyle.Normal);
+                            }
+
+                            sp_node_con.serializedObject.ApplyModifiedProperties();
+                            sp_node.serializedObject.ApplyModifiedProperties();
+                        }
+                    }
+                },
+                onSelectCallback = (ReorderableList list) =>
+                {
+                    SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(list.index);
+                    if (sp_node != null)
+                    {
+                        SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                        EditorGUIUtility.PingObject(sp_node_con.objectReferenceValue);
+
+                        Preview_PrimitiveTween(BaseScript.PrimitiveControllerNodes[list.index]);
+                    }
+                },
+                elementHeightCallback = index =>
+                {
+                    return 4.5f * XGUI.GetSingleLineHeight();
+                }
+            };
+        }
+        public void ReorderableList_Draw_Text()
+        {
+            TextList = new ReorderableList(serializedObject, TextNodes)
+            {
+                displayAdd = false,
+                displayRemove = true,
+                draggable = true,
+
+                drawHeaderCallback = rect =>
+                {
+                    XGUI.gui_label(
+                      rect: rect,
+                      text: new GUIContent("文字列表"),
+                      text_color: Color.white * 0.85f,
+                      size: XGUIFontSize.M,
+                      offset: new Vector2(5, 0),
+                      clipping: XGUI.TryEllipsisClipping(),
+                      anchor: TextAnchor.MiddleLeft,
+                      font_style: FontStyle.Normal);
+                },
+                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+                {
+                    float titleheight = rect.y + 7;
+                    float baseheight = rect.y + (rect.height - 25);
+
+                    SerializedProperty sp_root = TextNodes.GetArrayElementAtIndex(index);
+                    if (sp_root != null)
+                    {
+                        SerializedProperty sp_text = sp_root.FindPropertyRelative("Text");
+                        XHud_Module_Text txt = (XHud_Module_Text)sp_text.objectReferenceValue;
+                        if (txt != null)
+                        {
+                            #region 图标
+                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                            {
+                                XGUI.gui_icon(
+                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                                    icon: icon_text,
+                                    color: XHud_Dashboard.Theme_Primary);
+                            }
+                            #endregion
+
+                            #region 名称
+                            string title = "";
+                            string indicator = txt.Indicator;
+                            if (!string.IsNullOrEmpty(indicator))
+                                title += indicator;
+                            else
+                                title += txt.gameObject.name;
+
+                            XGUI.gui_state_displayer_text(
+                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                                title: new GUIContent(title),
+                                title_size: XGUIFontSize.M,
+                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                                subtitle_size: XGUIFontSize.S,
+                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+                        }
+                    }
+                },
+                onSelectCallback = (ReorderableList list) =>
+                {
+                    SerializedProperty sp_text = TextNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Text");
+                    EditorGUIUtility.PingObject(sp_text.objectReferenceValue);
+                },
+                elementHeightCallback = index =>
+                {
+                    return 1.5f * XGUI.GetSingleLineHeight();
+                }
+            };
+        }
+        public void ReorderableList_Draw_TmpText()
+        {
+            TmpTextList = new ReorderableList(serializedObject, TmpTextNodes)
+            {
+                displayAdd = false,
+                displayRemove = true,
+                draggable = true,
+
+                drawHeaderCallback = rect =>
+                {
+                    XGUI.gui_label(
+                      rect: rect,
+                      text: new GUIContent("Tmp文字列表"),
+                      text_color: Color.white * 0.85f,
+                      size: XGUIFontSize.M,
+                      offset: new Vector2(5, 0),
+                      clipping: XGUI.TryEllipsisClipping(),
+                      anchor: TextAnchor.MiddleLeft,
+                      font_style: FontStyle.Normal);
+                },
+                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+                {
+                    float titleheight = rect.y + 7;
+                    float baseheight = rect.y + (rect.height - 25);
+
+                    SerializedProperty sp_root = TmpTextNodes.GetArrayElementAtIndex(index);
+                    if (sp_root != null)
+                    {
+                        SerializedProperty sp_text = sp_root.FindPropertyRelative("TmpText");
+                        XHud_Module_TmpText tmp_txt = (XHud_Module_TmpText)sp_text.objectReferenceValue;
+                        if (tmp_txt != null)
+                        {
+                            #region 图标
+                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                            {
+                                XGUI.gui_icon(
+                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                                    icon: icon_tmptext,
+                                    color: XHud_Dashboard.Theme_Primary);
+                            }
+                            #endregion
+
+                            #region 名称
+                            string title = "";
+                            string indicator = tmp_txt.Indicator;
+                            if (!string.IsNullOrEmpty(indicator))
+                                title += indicator;
+                            else
+                                title += tmp_txt.gameObject.name;
+
+                            XGUI.gui_state_displayer_text(
+                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                                title: new GUIContent(title),
+                                title_size: XGUIFontSize.M,
+                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                                subtitle_size: XGUIFontSize.S,
+                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+                        }
+                    }
+                },
+                onSelectCallback = (ReorderableList list) =>
+                {
+                    SerializedProperty sp_text = TmpTextNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("TmpText");
+                    EditorGUIUtility.PingObject(sp_text.objectReferenceValue);
+                },
+                elementHeightCallback = index =>
+                {
+                    return 1.5f * XGUI.GetSingleLineHeight();
+                }
+            };
+        }
+        public void ReorderableList_Draw_Button()
+        {
+            ButtonList = new ReorderableList(serializedObject, ButtonNodes)
+            {
+                displayAdd = false,
+                displayRemove = true,
+                draggable = true,
+
+                drawHeaderCallback = rect =>
+                {
+                    XGUI.gui_label(
+                      rect: rect,
+                      text: new GUIContent("按钮列表"),
+                      text_color: Color.white * 0.85f,
+                      size: XGUIFontSize.M,
+                      offset: new Vector2(5, 0),
+                      clipping: XGUI.TryEllipsisClipping(),
+                      anchor: TextAnchor.MiddleLeft,
+                      font_style: FontStyle.Normal);
+                },
+                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+                {
+                    SerializedProperty sp_root = ButtonNodes.GetArrayElementAtIndex(index);
+                    if (sp_root != null)
+                    {
+                        SerializedProperty sp_btn = sp_root.FindPropertyRelative("Button");
+                        XHud_Module_Button btn = (XHud_Module_Button)sp_btn.objectReferenceValue;
+                        if (btn != null)
+                        {
+                            #region 图标
+                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                            {
+                                XGUI.gui_icon(
+                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                                    icon: icon_button,
+                                    color: XHud_Dashboard.Theme_Primary);
+                            }
+                            #endregion
+
+                            #region 名称
+                            string title = "";
+                            string indicator = btn.Indicator;
+                            if (!string.IsNullOrEmpty(indicator))
+                                title += indicator;
+                            else
+                                title += btn.gameObject.name;
+
+                            XGUI.gui_state_displayer_text(
+                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                                title: new GUIContent(title),
+                                title_size: XGUIFontSize.M,
+                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                                subtitle_size: XGUIFontSize.S,
+                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+                        }
+                    }
+                },
+                onSelectCallback = (ReorderableList list) =>
+                {
+                    SerializedProperty sp_btn = ButtonNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Button");
+                    //Hud_Button btn = (Hud_Button)sp_btn.objectReferenceValue;
+                    EditorGUIUtility.PingObject(sp_btn.objectReferenceValue);
+                },
+                elementHeightCallback = index =>
+                {
+                    return 1.5f * XGUI.GetSingleLineHeight();
+                }
+            };
+        }
+        public void ReorderableList_Draw_Option()
+        {
+            OptionList = new ReorderableList(serializedObject, OptionNodes)
+            {
+                displayAdd = false,
+                displayRemove = true,
+                draggable = true,
+
+                drawHeaderCallback = rect =>
+                {
+                    XGUI.gui_label(
+                      rect: rect,
+                      text: new GUIContent("选项列表"),
+                      text_color: Color.white * 0.85f,
+                      size: XGUIFontSize.M,
+                      offset: new Vector2(5, 0),
+                      clipping: XGUI.TryEllipsisClipping(),
+                      anchor: TextAnchor.MiddleLeft,
+                      font_style: FontStyle.Normal);
+                },
+                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+                {
+                    float titleheight = rect.y + 7;
+                    float baseheight = rect.y + (rect.height - 25);
+
+                    SerializedProperty sp_root = OptionNodes.GetArrayElementAtIndex(index);
+                    if (sp_root != null)
+                    {
+                        SerializedProperty sp_opt = sp_root.FindPropertyRelative("Option");
+                        XHud_Module_Option opt = (XHud_Module_Option)sp_opt.objectReferenceValue;
+                        if (opt != null)
+                        {
+                            #region 图标
+                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                            {
+                                XGUI.gui_icon(
+                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                                    icon: icon_option,
+                                    color: XHud_Dashboard.Theme_Primary);
+                            }
+                            #endregion
+
+                            #region 名称
+                            string title = "";
+                            string indicator = opt.Indicator;
+                            if (!string.IsNullOrEmpty(indicator))
+                                title += indicator;
+                            else
+                                title += opt.gameObject.name;
+
+                            XGUI.gui_state_displayer_text(
+                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                                title: new GUIContent(title),
+                                title_size: XGUIFontSize.M,
+                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                                subtitle_size: XGUIFontSize.S,
+                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+                        }
+                    }
+                },
+                onSelectCallback = (ReorderableList list) =>
+                {
+                    SerializedProperty sp_opt = OptionNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Option");
+                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
+                },
+                elementHeightCallback = index =>
+                {
+                    return 1.5f * XGUI.GetSingleLineHeight();
+                }
+            };
+        }
+        public void ReorderableList_Draw_Slider()
+        {
+            SliderList = new ReorderableList(serializedObject, SliderNodes)
+            {
+                displayAdd = false,
+                displayRemove = true,
+                draggable = true,
+
+                drawHeaderCallback = rect =>
+                {
+                    XGUI.gui_label(
+                      rect: rect,
+                      text: new GUIContent("滑动条列表"),
+                      text_color: Color.white * 0.85f,
+                      size: XGUIFontSize.M,
+                      offset: new Vector2(5, 0),
+                      clipping: XGUI.TryEllipsisClipping(),
+                      anchor: TextAnchor.MiddleLeft,
+                      font_style: FontStyle.Normal);
+                },
+                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+                {
+                    float titleheight = rect.y + 7;
+                    float baseheight = rect.y + (rect.height - 25);
+
+                    SerializedProperty sp_root = SliderNodes.GetArrayElementAtIndex(index);
+                    if (sp_root != null)
+                    {
+                        SerializedProperty sp_sli = sp_root.FindPropertyRelative("Slider");
+                        XHud_Module_Slider sli = (XHud_Module_Slider)sp_sli.objectReferenceValue;
+                        if (sli != null)
+                        {
+                            #region 图标
+                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                            {
+                                XGUI.gui_icon(
+                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                                    icon: icon_slider,
+                                    color: XHud_Dashboard.Theme_Primary);
+                            }
+                            #endregion
+
+                            #region 名称
+                            string title = "";
+                            string indicator = sli.Indicator;
+                            if (!string.IsNullOrEmpty(indicator))
+                                title += indicator;
+                            else
+                                title += sli.gameObject.name;
+
+                            XGUI.gui_state_displayer_text(
+                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                                title: new GUIContent(title),
+                                title_size: XGUIFontSize.M,
+                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                                subtitle_size: XGUIFontSize.S,
+                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+                        }
+                    }
+                },
+                onSelectCallback = (ReorderableList list) =>
+                {
+                    SerializedProperty sp_opt = SliderNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Slider");
+                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
+                },
+                elementHeightCallback = index =>
+                {
+                    return 1.5f * XGUI.GetSingleLineHeight();
+                }
+            };
+        }
+        public void ReorderableList_Draw_Progress()
+        {
+            ProgressList = new ReorderableList(serializedObject, ProgressNodes)
+            {
+                displayAdd = false,
+                displayRemove = true,
+                draggable = true,
+
+                drawHeaderCallback = rect =>
+                {
+                    XGUI.gui_label(
+                      rect: rect,
+                      text: new GUIContent("进度条列表"),
+                      text_color: Color.white * 0.85f,
+                      size: XGUIFontSize.M,
+                      offset: new Vector2(5, 0),
+                      clipping: XGUI.TryEllipsisClipping(),
+                      anchor: TextAnchor.MiddleLeft,
+                      font_style: FontStyle.Normal);
+                },
+                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+                {
+                    float titleheight = rect.y + 7;
+                    float baseheight = rect.y + (rect.height - 25);
+
+                    SerializedProperty sp_root = ProgressNodes.GetArrayElementAtIndex(index);
+                    if (sp_root != null)
+                    {
+                        SerializedProperty sp_pro = sp_root.FindPropertyRelative("Progress");
+                        XHud_Module_Progress pro = (XHud_Module_Progress)sp_pro.objectReferenceValue;
+                        if (pro != null)
+                        {
+                            #region 图标
+                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                            {
+                                XGUI.gui_icon(
+                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                                    icon: icon_progress,
+                                    color: XHud_Dashboard.Theme_Primary);
+                            }
+                            #endregion
+
+                            #region 名称
+                            string title = "";
+                            string indicator = pro.Indicator;
+                            if (!string.IsNullOrEmpty(indicator))
+                                title += indicator;
+                            else
+                                title += pro.gameObject.name;
+
+                            XGUI.gui_state_displayer_text(
+                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                                title: new GUIContent(title),
+                                title_size: XGUIFontSize.M,
+                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                                subtitle_size: XGUIFontSize.S,
+                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+                        }
+                    }
+                },
+                onSelectCallback = (ReorderableList list) =>
+                {
+                    SerializedProperty sp_opt = ProgressNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Progress");
+                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
+                },
+                elementHeightCallback = index =>
+                {
+                    return 1.5f * XGUI.GetSingleLineHeight();
+                }
+            };
+        }
+        public void ReorderableList_Draw_Toggle()
+        {
+            ToggleList = new ReorderableList(serializedObject, ToggleNodes)
+            {
+                displayAdd = false,
+                displayRemove = true,
+                draggable = true,
+
+                drawHeaderCallback = rect =>
+                {
+                    XGUI.gui_label(
+                      rect: rect,
+                      text: new GUIContent("开关列表"),
+                      text_color: Color.white * 0.85f,
+                      size: XGUIFontSize.M,
+                      offset: new Vector2(5, 0),
+                      clipping: XGUI.TryEllipsisClipping(),
+                      anchor: TextAnchor.MiddleLeft,
+                      font_style: FontStyle.Normal);
+                },
+                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+                {
+                    float titleheight = rect.y + 7;
+                    float baseheight = rect.y + (rect.height - 25);
+
+                    SerializedProperty sp_root = ToggleNodes.GetArrayElementAtIndex(index);
+                    if (sp_root != null)
+                    {
+                        SerializedProperty sp_tog = sp_root.FindPropertyRelative("Toggle");
+                        XHud_Module_Toggle tog = (XHud_Module_Toggle)sp_tog.objectReferenceValue;
+                        if (tog != null)
+                        {
+                            #region 图标
+                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                            {
+                                XGUI.gui_icon(
+                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                                    icon: icon_toggle,
+                                    color: XHud_Dashboard.Theme_Primary);
+                            }
+                            #endregion
+
+                            #region 名称
+                            string title = "";
+                            string indicator = tog.Indicator;
+                            if (!string.IsNullOrEmpty(indicator))
+                                title += indicator;
+                            else
+                                title += tog.gameObject.name;
+
+                            XGUI.gui_state_displayer_text(
+                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                                title: new GUIContent(title),
+                                title_size: XGUIFontSize.M,
+                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                                subtitle_size: XGUIFontSize.S,
+                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+                        }
+                    }
+                },
+                onSelectCallback = (ReorderableList list) =>
+                {
+                    SerializedProperty sp_opt = ToggleNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Toggle");
+                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
+                },
+                elementHeightCallback = index =>
+                {
+                    return 1.5f * XGUI.GetSingleLineHeight();
+                }
+            };
+        }
         public void ReorderableList_Draw_Sounder()
         {
             SounderList = new ReorderableList(serializedObject, SounderNodes)
@@ -49,13 +712,18 @@ namespace SevenStrikeModules.XHud.Editor
 
                 drawHeaderCallback = rect =>
                 {
-                    EditorGUI.LabelField(rect, "元素音效列表");
+                    XGUI.gui_label(
+                        rect: rect,
+                        text: new GUIContent("音效器列表"),
+                        text_color: Color.white * 0.85f,
+                        size: XGUIFontSize.M,
+                        offset: new Vector2(5, 0),
+                        clipping: XGUI.TryEllipsisClipping(),
+                        anchor: TextAnchor.MiddleLeft,
+                        font_style: FontStyle.Normal);
                 },
                 drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
                 {
-                    float titleheight = rect.y + 6;
-                    float baseheight = rect.y + (rect.height - 25);
-
                     SerializedProperty sp_root = SounderNodes.GetArrayElementAtIndex(index);
                     if (sp_root != null)
                     {
@@ -63,15 +731,33 @@ namespace SevenStrikeModules.XHud.Editor
                         XHud_Element_Sounder sounder = (XHud_Element_Sounder)sp_sounder.objectReferenceValue;
                         if (sounder != null)
                         {
+                            #region 图标
+                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                            {
+                                XGUI.gui_icon(
+                                    rect: new Rect(rect.x + 5, rect.y + 6, 10, 10),
+                                    icon: icon_sound,
+                                    color: XHud_Dashboard.Theme_Primary);
+                            }
+                            #endregion
+
+                            #region 名称
                             string title = "";
                             if (!string.IsNullOrEmpty(sounder.Indicator))
                                 title += sounder.Indicator;
                             else
                                 title += sounder.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
 
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight, 10, 10), icon_sound);
+                            XGUI.gui_label(
+                                rect: new Rect(rect.x + 20, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                                text: new GUIContent(title),
+                                text_color: Color.white * 0.85f,
+                                size: XGUIFontSize.M,
+                                offset: new Vector2(5, 0),
+                                clipping: XGUI.TryEllipsisClipping(),
+                                anchor: TextAnchor.MiddleLeft,
+                                font_style: FontStyle.Normal);
+                            #endregion
 
                             SerializedObject so_sounder = new SerializedObject(sounder);
 
@@ -83,36 +769,96 @@ namespace SevenStrikeModules.XHud.Editor
 
                             so_sounder.Update();
 
-                            GUI.color = Color.white;
+                            if (XGUI.CurrentWindowWidthThreshold(">", 145f))
+                            {
+                                #region 音量      
+                                sp_Vol.floatValue = XGUI.gui_slider(
+                                    rect: new Rect(rect.x + 5, rect.y + 26, rect.width - 15, XGUI.GetSingleLineHeight()),
+                                    title: "音量",
+                                    title_size: XGUIFontSize.M,
+                                    title_anchor: TextAnchor.MiddleLeft,
+                                    title_color: Color.white,
+                                    title_width: 30,
+                                    title_offset: new Vector2(0, -3),
+                                    prop: sp_Vol.floatValue,
+                                    left: 0,
+                                    right: 1,
+                                    slider_height: 20,
+                                    limite_width: 230);
+                                sp_Vol.serializedObject.ApplyModifiedProperties();
+                                #endregion
 
-                            #region 最小音高
-                            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 40, rect.y + 4, 30, 19), "音高", sp_PitchMin, 0, 60, LineHeight, 30);
-                            #endregion
+                                #region 音高
+                                xgui_minmax_value mimax = XGUI.gui_slider_min_max(
+                                    ref_min: ref BaseScript.SounderNodes[index].Sounder.Pitch_Min,
+                                    ref_max: ref BaseScript.SounderNodes[index].Sounder.Pitch_Max,
+                                    rect: new Rect(rect.x + 5, rect.y + 50, rect.width - 15, XGUI.GetSingleLineHeight()),
+                                    title: "音高",
+                                    title_size: XGUIFontSize.M,
+                                    title_anchor: TextAnchor.MiddleLeft,
+                                    title_color: Color.white,
+                                    title_width: 30,
+                                    limite_width: 230,
+                                    slider_height: 20,
+                                    min_field_text: null,
+                                    max_field_text: null,
+                                    min_limite: -2,
+                                    max_limite: 3,
+                                    displaystate: XGUI.CurrentWindowWidthThreshold(">", 190f));
+                                sp_PitchMin.floatValue = mimax.min;
+                                sp_PitchMax.floatValue = mimax.max;
 
-                            #region 最大音高                         
-                            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width + 25, rect.y + 4, 30, 19), "", sp_PitchMax, 0, 25, LineHeight, 5);
-                            #endregion
+                                sp_PitchMin.serializedObject.ApplyModifiedProperties();
+                                sp_PitchMax.serializedObject.ApplyModifiedProperties();
+                                #endregion
 
-                            #region 音量          
-                            float fieldwidth = EditorGUIUtility.fieldWidth;
-                            EditorGUIUtility.fieldWidth = 40;
-                            EditorGUI.Slider(new Rect(rect.x + 5, rect.y + 30, 120, 19), sp_Vol, 0, 1, "");
-                            EditorGUIUtility.fieldWidth = fieldwidth;
-                            so_sounder.ApplyModifiedProperties();
-                            #endregion
-
-                            #region 延迟                         
-                            Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 40, rect.y + 30, 30, 19), "延迟", sp_Delay, 0, 60, LineHeight, 30);
-                            #endregion
+                                #region 延迟
+                                sp_Delay.floatValue = XGUI.gui_inputfield(
+                                    rect: new Rect(rect.x + 5, rect.y + (XGUI.CurrentWindowWidthThreshold(">", 190f) ? 100 : 75), rect.width - 15, XGUI.GetSingleLineHeight()),
+                                    title: "延迟",
+                                    prop: sp_Delay.floatValue,
+                                    field_fontsize: XGUIFontSize.M,
+                                    field_text_offset: Vector2.zero,
+                                    field_height: 20,
+                                    field_text_color: Color.white,
+                                    title_width: 30,
+                                    field_text_style: FontStyle.Normal,
+                                    field_text_anchor: TextAnchor.MiddleLeft,
+                                    field_padding: new RectOffset(5, 5, 0, 0),
+                                    field_margin: new RectOffset(0, 0, 0, 0));
+                                sp_Delay.serializedObject.ApplyModifiedProperties();
+                                #endregion
+                            }
 
                             #region 音效列表
                             if (HudManager.Hud_Sounds != null)
                             {
-                                string[] collist = HudManager.Hud_Sounds.SoundLibrary_GetSoundNames();
-                                Color bgcol = GUI.color;
-                                GUI.color = XHud_Dashboard.Theme_Primary;
-                                Editor_XHud_GUI.Gui_PopupWithString(new Rect(rect.width + 25, rect.y + 30, 30, 19), ref sp_SoundName, collist, HudFilled.实体, HudColor.亮白, Color.black);
-                                GUI.color = bgcol;
+                                if (XGUI.CurrentWindowWidthThreshold(">", 170f))
+                                {
+                                    string[] collist = HudManager.Hud_Sounds.SoundLibrary_GetSoundNames();
+                                    sp_SoundName.stringValue = XGUI.gui_string_popup(
+                                        rect: new Rect(rect.x + 5, rect.y + (XGUI.CurrentWindowWidthThreshold(">", 190f) ? 128 : 103), XGUI.GetCurrentWindowWidth() - 58, XGUI.GetSingleLineHeight()),
+                                        title: "音效",
+                                        title_color: Color.white,
+                                        title_size: XGUIFontSize.M,
+                                        title_font_style: FontStyle.Normal,
+                                        title_padding: new RectOffset(0, 0, 0, 0),
+                                        title_width: 30,
+                                        interval: 10,
+                                        prop: sp_SoundName,
+                                        options: collist,
+                                        opt_text_size: XGUIFontSize.M,
+                                        opt_text_color: Color.black,
+                                        opt_text_padding: new RectOffset(10, 10, 0, 0),
+                                        opt_anchor: TextAnchor.MiddleCenter,
+                                        opt_font_style: FontStyle.Normal,
+                                        opt_bg_fill: XGUIFilled.实体,
+                                        opt_bg_color: XGUIColor.亮白,
+                                        opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                                        icon_arrow_color: Color.black);
+
+                                    sp_SoundName.serializedObject.ApplyModifiedProperties();
+                                }
                             }
                             #endregion
 
@@ -148,445 +894,12 @@ namespace SevenStrikeModules.XHud.Editor
                 },
                 elementHeightCallback = index =>
                 {
-                    return 2.8f * LineHeight;
-                }
-            };
-        }
-        public void ReorderableList_Draw_PrimitiveControllerNodes()
-        {
-            PrimitivesTweenList = new ReorderableList(serializedObject, PrimitiveControllerNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "图元控制器列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    if (PrimitiveControllerNodes == null)
-                        return;
-                    if (PrimitiveControllerNodes.arraySize <= 0)
-                        return;
-                    SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(index);
-                    if (sp_node != null)
-                    {
-                        SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
-                        SerializedProperty sp_delay = sp_node.FindPropertyRelative("DelayTime");
-                        XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
-
-                        if (sp_con != null)
-                        {
-                            float titleheight = rect.y + 7;
-                            float baseheight = rect.y + 25;
-
-                            #region 类型图标         
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            if (rect.width >= 17)
-                                Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_anim);
-                            GUI.color = Color.white;
-                            #endregion
-
-                            #region 标题文字
-                            string title = "";
-                            string indicator = sp_con.GetIndicator();
-                            if (!string.IsNullOrEmpty(indicator))
-                                title += indicator;
-                            else
-                                title += sp_con.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-                            #endregion
-
-                            #region 延迟
-                            if (rect.width >= 136)
-                                Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 10, rect.y + 4, 40, 19), "D", sp_delay, 10, 50, LineHeight, 15);
-                            #endregion
-
-                            #region 速率                         
-                            SerializedObject so_tween = new SerializedObject(sp_con.pt_Tween);
-                            so_tween.Update();
-
-                            SerializedProperty sp_glodur = so_tween.FindProperty("GlobalDuration");
-                            SerializedProperty sp_maxdur = so_tween.FindProperty("MaxTimerWithGlobalDuration");
-
-                            if (rect.width >= 208)
-                                Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 70, rect.y + 4, 50, 19), "G", sp_glodur, 10, 50, LineHeight, 15);
-
-                            if (rect.width >= 246)
-                                Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect.width - 100, rect.y + 4, 40, 19), $"{sp_maxdur.floatValue.ToString()} s", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, Vector2.zero, 11);
-
-                            so_tween.ApplyModifiedProperties();
-                            #endregion
-
-                            sp_node_con.serializedObject.ApplyModifiedProperties();
-                            sp_node.serializedObject.ApplyModifiedProperties();
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(list.index);
-                    if (sp_node != null)
-                    {
-                        SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
-                        EditorGUIUtility.PingObject(sp_node_con.objectReferenceValue);
-
-                        Preview_PrimitiveTween(BaseScript.PrimitiveControllerNodes[list.index]);
-                    }
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-        }
-        public void ReorderableList_Draw_Button()
-        {
-            ButtonList = new ReorderableList(serializedObject, ButtonNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "按钮列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = ButtonNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_btn = sp_root.FindPropertyRelative("Button");
-                        XHud_Module_Button btn = (XHud_Module_Button)sp_btn.objectReferenceValue;
-                        if (btn != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(btn.Indicator))
-                                title += btn.Indicator;
-                            else
-                                title += btn.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_button);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_btn = ButtonNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Button");
-                    //Hud_Button btn = (Hud_Button)sp_btn.objectReferenceValue;
-                    EditorGUIUtility.PingObject(sp_btn.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-        }
-        public void ReorderableList_Draw_Option()
-        {
-            OptionList = new ReorderableList(serializedObject, OptionNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "选项列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = OptionNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_opt = sp_root.FindPropertyRelative("Option");
-                        XHud_Module_Option opt = (XHud_Module_Option)sp_opt.objectReferenceValue;
-                        if (opt != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(opt.Indicator))
-                                title += opt.Indicator;
-                            else
-                                title += opt.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_option);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_opt = OptionNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Option");
-                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-        }
-        public void ReorderableList_Draw_Slider()
-        {
-            SliderList = new ReorderableList(serializedObject, SliderNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "滑动条列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = SliderNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_sli = sp_root.FindPropertyRelative("Slider");
-                        XHud_Module_Slider sli = (XHud_Module_Slider)sp_sli.objectReferenceValue;
-                        if (sli != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(sli.Indicator))
-                                title += sli.Indicator;
-                            else
-                                title += sli.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_slider);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_opt = SliderNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Slider");
-                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-        }
-        public void ReorderableList_Draw_Progress()
-        {
-            ProgressList = new ReorderableList(serializedObject, ProgressNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "进度条列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = ProgressNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_pro = sp_root.FindPropertyRelative("Progress");
-                        XHud_Module_Progress pro = (XHud_Module_Progress)sp_pro.objectReferenceValue;
-                        if (pro != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(pro.Indicator))
-                                title += pro.Indicator;
-                            else
-                                title += pro.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_progress);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_opt = ProgressNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Progress");
-                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-        }
-        public void ReorderableList_Draw_Toggle()
-        {
-            ToggleList = new ReorderableList(serializedObject, ToggleNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "开关列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = ToggleNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_tog = sp_root.FindPropertyRelative("Toggle");
-                        XHud_Module_Toggle tog = (XHud_Module_Toggle)sp_tog.objectReferenceValue;
-                        if (tog != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(tog.Indicator))
-                                title += tog.Indicator;
-                            else
-                                title += tog.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_toggle);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_opt = ToggleNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Toggle");
-                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-        }
-        public void ReorderableList_Draw_Text()
-        {
-            TextList = new ReorderableList(serializedObject, TextNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "文字列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = TextNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_text = sp_root.FindPropertyRelative("Text");
-                        XHud_Module_Text txt = (XHud_Module_Text)sp_text.objectReferenceValue;
-                        if (txt != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(txt.Indicator))
-                                title += txt.Indicator;
-                            else
-                                title += txt.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_text);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_text = TextNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Text");
-                    EditorGUIUtility.PingObject(sp_text.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
-                }
-            };
-        }
-        public void ReorderableList_Draw_TmpText()
-        {
-            TmpTextList = new ReorderableList(serializedObject, TmpTextNodes)
-            {
-                displayAdd = false,
-                displayRemove = true,
-                draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    EditorGUI.LabelField(rect, "Tmp文字列表");
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = TmpTextNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_text = sp_root.FindPropertyRelative("TmpText");
-                        XHud_Module_TmpText txt = (XHud_Module_TmpText)sp_text.objectReferenceValue;
-                        if (txt != null)
-                        {
-                            string title = "";
-                            if (!string.IsNullOrEmpty(txt.Indicator))
-                                title += txt.Indicator;
-                            else
-                                title += txt.gameObject.name;
-                            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
-
-                            GUI.color = XHud_Dashboard.Theme_Primary;
-                            Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_tmptext);
-
-                            GUI.color = Color.white;
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_text = TmpTextNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("TmpText");
-                    EditorGUIUtility.PingObject(sp_text.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * LineHeight;
+                    return (XGUI.CurrentWindowWidthThreshold(">", 190f) ? 8.5f : 7) * XGUI.GetSingleLineHeight();
                 }
             };
         }
 
+        #region Gets
         /// <summary>
         /// 获取所有图元控制器
         /// </summary>
@@ -675,77 +988,6 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                //SerializedProperty sp_nodes = serializedObject.FindProperty("PrimitiveControllerNodes");
-                //sp_nodes.ClearArray();
-
-                //#region 获取所有 PrimitiveController
-                //XHud_Module_Primitive_Controller[] cons = BaseScript.GetComponentsInChildren<XHud_Module_Primitive_Controller>();
-
-                //#region 过滤 PrimitiveController
-                //// 如果找到的 PrimitiveController 的父级是按钮、选项、滑动条、进度条、开关控件那么则要忽略
-                //List<XHud_Module_Primitive_Controller> cons_fillter = new List<XHud_Module_Primitive_Controller>();
-                //for (int i = 0; i < cons.Length; i++)
-                //{
-                //    XHud_Module_Button hud_Button = cons[i].GetComponentInParent<XHud_Module_Button>();
-                //    XHud_Module_Progress hud_Progress = cons[i].GetComponentInParent<XHud_Module_Progress>();
-                //    XHud_Module_Slider hud_Slider = cons[i].GetComponentInParent<XHud_Module_Slider>();
-                //    XHud_Module_Option hud_optselector = cons[i].GetComponentInParent<XHud_Module_Option>();
-                //    XHud_Module_Toggle hud_tog = cons[i].GetComponentInParent<XHud_Module_Toggle>();
-                //    if (hud_Button != null)
-                //        continue;
-                //    if (hud_Progress != null)
-                //        continue;
-                //    if (hud_Slider != null)
-                //        continue;
-                //    if (hud_optselector != null)
-                //        continue;
-                //    if (hud_tog != null)
-                //        continue;
-                //    cons_fillter.Add(cons[i]);
-                //}
-                //#endregion
-
-                //XHud_Module_Primitive_Controller[] cons_confirm = cons_fillter.ToArray();
-                //for (int i = 0; i < cons_confirm.Length; i++)
-                //{
-                //    #region 判断是否已存在 PrimitiveController
-                //    bool isrepeat = false;
-
-                //    for (int s = 0; s < sp_nodes.arraySize; s++)
-                //    {
-                //        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                //        SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
-                //        XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
-                //        if (cons_confirm[i] == sp_con)
-                //        {
-                //            isrepeat = true;
-                //        }
-                //    }
-
-                //    if (!isrepeat)
-                //    {
-                //        int index = 0;
-
-                //        if (sp_nodes.arraySize <= 0)
-                //            index = 0;
-                //        else
-                //            index = sp_nodes.arraySize;
-
-                //        sp_nodes.InsertArrayElementAtIndex(index);
-                //        SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-
-                //        #region 加入列表 PrimitiveControllerNodes 的 PrimitiveController
-                //        SerializedProperty sp_con = sp_node.FindPropertyRelative("Controller");
-                //        sp_con.objectReferenceValue = cons_confirm[i];
-                //        sp_con.serializedObject.ApplyModifiedProperties();
-                //        #endregion
-
-                //        sp_node.serializedObject.ApplyModifiedProperties();
-                //    }
-                //    #endregion
-                //}
-                //sp_nodes.serializedObject.ApplyModifiedProperties();
-                //#endregion
                 SerializedProperty sp_nodes = serializedObject.FindProperty("PrimitiveControllerNodes");
 
                 #region 获取所有 PrimitiveController
@@ -1884,6 +2126,8 @@ namespace SevenStrikeModules.XHud.Editor
                 sp_nodes.serializedObject.ApplyModifiedProperties();
             }
         }
+        #endregion
+
         /// <summary>
         /// 清理所有无效控件节点
         /// </summary>

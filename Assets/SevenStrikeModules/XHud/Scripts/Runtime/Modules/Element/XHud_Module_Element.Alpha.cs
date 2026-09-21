@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
     using UnityEngine;
@@ -68,7 +69,7 @@ namespace SevenStrikeModules.XHud
             element_AlphaSyncUpdate();
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "透明度设置为：" + alpha, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 元素控件通知", "透明度设置为：" + alpha, XGUIMsgState.通知);
         }
     }
 }

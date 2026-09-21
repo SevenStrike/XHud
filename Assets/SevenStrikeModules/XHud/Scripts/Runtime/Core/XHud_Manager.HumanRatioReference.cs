@@ -78,7 +78,7 @@ namespace SevenStrikeModules.XHud
         /// 示例：Vector2(0.5f, 0.5f) 表示参考标识占屏幕宽高的 50%
         /// </summary>
         [SerializeField]
-        public Vector2 ReferShape_RatioSize;
+        public Vector2 ReferShape_RatioSize = new Vector2(5, 5);
         /// <summary>
         /// 参考形状的比例容差
         /// 定义参考标识允许的尺寸偏差范围，用于自动适配不同分辨率
@@ -87,7 +87,7 @@ namespace SevenStrikeModules.XHud
         /// 示例：Vector2(0.05f, 0.05f) 表示允许 5% 的尺寸偏差
         /// </summary>
         [SerializeField]
-        public Vector2 ReferShape_RatioTolerance;
+        public Vector2 ReferShape_RatioTolerance = new Vector2(1, 1);
         [SerializeField]
         /// <summary>
         /// 使用人形比例参考

@@ -510,7 +510,7 @@ MonoBehaviour:
   RandomDelay:
     Min: 0
     Max: 0
-  EaseMode: 0
+  EaseMode: 1
   UseCurve: 0
   Curve:
     serializedVersion: 2
@@ -553,7 +553,7 @@ MonoBehaviour:
   AutoStart: 1
   IsPaused: 0
   RotationSpace: 1
-  EaseGraph: {fileID: 0}
+  EaseGraph: {fileID: 2800000, guid: 1f3f0a016f854564394383a20b328091, type: 3}
   EndValue_Int: 0
   EndValue_Float: 0
   EndValue_String: 
@@ -587,7 +587,7 @@ MonoBehaviour:
   index_TweenTypes_Text: "\u6587\u5B57\u5C3A\u5BF8_FontSize"
   index_TweenTypes_TmpText: "\u6587\u5B57\u5C3A\u5BF8_FontSize"
   index_TweenTypes_To: "\u6574\u6570_Int"
-  index_AutoKillPreviewTweens: 1
+  index_AutoKillPreviewTweens: 0
   index_RewindPreviewTweensWithKill: 1
   index_ClearPreviewTweensWithKill: 1
   Target_RectTransform: {fileID: 420213834}
@@ -712,7 +712,7 @@ MonoBehaviour:
   RandomDelay:
     Min: 0
     Max: 0
-  EaseMode: 0
+  EaseMode: 1
   UseCurve: 0
   Curve:
     serializedVersion: 2
@@ -755,7 +755,7 @@ MonoBehaviour:
   AutoStart: 1
   IsPaused: 0
   RotationSpace: 1
-  EaseGraph: {fileID: 0}
+  EaseGraph: {fileID: 2800000, guid: 1f3f0a016f854564394383a20b328091, type: 3}
   EndValue_Int: 0
   EndValue_Float: 0
   EndValue_String: 
@@ -789,7 +789,7 @@ MonoBehaviour:
   index_TweenTypes_Text: "\u6587\u5B57\u5C3A\u5BF8_FontSize"
   index_TweenTypes_TmpText: "\u6587\u5B57\u5C3A\u5BF8_FontSize"
   index_TweenTypes_To: "\u6574\u6570_Int"
-  index_AutoKillPreviewTweens: 1
+  index_AutoKillPreviewTweens: 0
   index_RewindPreviewTweensWithKill: 1
   index_ClearPreviewTweensWithKill: 1
   Target_RectTransform: {fileID: 430979932}
@@ -1039,7 +1039,7 @@ MonoBehaviour:
   RandomDelay:
     Min: 0
     Max: 0
-  EaseMode: 18
+  EaseMode: 1
   UseCurve: 0
   Curve:
     serializedVersion: 2
@@ -1082,7 +1082,7 @@ MonoBehaviour:
   AutoStart: 1
   IsPaused: 0
   RotationSpace: 1
-  EaseGraph: {fileID: 0}
+  EaseGraph: {fileID: 2800000, guid: 1f3f0a016f854564394383a20b328091, type: 3}
   EndValue_Int: 0
   EndValue_Float: 0
   EndValue_String: 
@@ -1116,7 +1116,7 @@ MonoBehaviour:
   index_TweenTypes_Text: "\u6587\u5B57\u5C3A\u5BF8_FontSize"
   index_TweenTypes_TmpText: "\u6587\u5B57\u5C3A\u5BF8_FontSize"
   index_TweenTypes_To: "\u6574\u6570_Int"
-  index_AutoKillPreviewTweens: 1
+  index_AutoKillPreviewTweens: 0
   index_RewindPreviewTweensWithKill: 1
   index_ClearPreviewTweensWithKill: 1
   Target_RectTransform: {fileID: 647592247}
@@ -1343,7 +1343,7 @@ MonoBehaviour:
   RandomDelay:
     Min: 0
     Max: 0
-  EaseMode: 0
+  EaseMode: 1
   UseCurve: 0
   Curve:
     serializedVersion: 2
@@ -1386,7 +1386,7 @@ MonoBehaviour:
   AutoStart: 1
   IsPaused: 0
   RotationSpace: 1
-  EaseGraph: {fileID: 0}
+  EaseGraph: {fileID: 2800000, guid: 1f3f0a016f854564394383a20b328091, type: 3}
   EndValue_Int: 0
   EndValue_Float: 0
   EndValue_String: 
@@ -1420,7 +1420,7 @@ MonoBehaviour:
   index_TweenTypes_Text: "\u6587\u5B57\u5C3A\u5BF8_FontSize"
   index_TweenTypes_TmpText: "\u6587\u5B57\u5C3A\u5BF8_FontSize"
   index_TweenTypes_To: "\u6574\u6570_Int"
-  index_AutoKillPreviewTweens: 1
+  index_AutoKillPreviewTweens: 0
   index_RewindPreviewTweensWithKill: 1
   index_ClearPreviewTweensWithKill: 1
   Target_RectTransform: {fileID: 859119758}

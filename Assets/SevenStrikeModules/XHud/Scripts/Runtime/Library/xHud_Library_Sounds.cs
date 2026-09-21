@@ -33,6 +33,7 @@ namespace SevenStrikeModules.XHud
     public class XHud_LibraryArg_Sound
     {
         public string Name;
+        public string Format;
         public AudioClip Clip;
         public int Frequency;
         public int Channel;
@@ -47,13 +48,14 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param name="name">新增名称</param>
         /// <param name="clip">新增配色</param>
-        public XHud_LibraryArg_Sound(string name, AudioClip clip)
+        public XHud_LibraryArg_Sound(string name, AudioClip clip, string format)
         {
             Name = name;
             Clip = clip;
             Frequency = clip.frequency;
             Channel = clip.channels;
             Length = clip.length;
+            Format = format;
         }
     }
 
@@ -91,7 +93,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 可视区域显示的元素数量
         /// </summary>
-        public int visibleItemCount = 9;
+        public int visibleItemCount = 8;
 
         /// <summary>
         /// 列表滚动位置
@@ -124,7 +126,7 @@ namespace SevenStrikeModules.XHud
         private void OnEnable()
         {
             itemHeight = 50;
-            visibleItemCount = 9;
+            visibleItemCount = 8;
         }
 
         // 确保内部名称与文件名一致
@@ -203,7 +205,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param name="name">新增的配色名称</param>
         /// <param name="sound">新增配色</param>
-        public void SoundLibrary_AddSound(string name, AudioClip sound)
+        public void SoundLibrary_AddSound(string name, AudioClip sound, string format)
         {
             bool sw = false;
             for (int i = 0; i < SoundLibrary.Count; i++)
@@ -215,7 +217,9 @@ namespace SevenStrikeModules.XHud
                 }
             }
             if (!sw)
-                SoundLibrary.Add(new XHud_LibraryArg_Sound(name, sound));
+            {
+                SoundLibrary.Add(new XHud_LibraryArg_Sound(name, sound, format));
+            }
             if (act_on_SoundAdded != null)
                 act_on_SoundAdded(name, sound);
         }
@@ -224,7 +228,7 @@ namespace SevenStrikeModules.XHud
         /// 移除音效
         /// </summary>
         /// <param name="name">移除的音效名称</param>
-        public void SoundLibrary_AddSound(string name)
+        public void SoundLibrary_RemoveSound(string name)
         {
             for (int i = 0; i < SoundLibrary.Count; i++)
             {

@@ -20,7 +20,6 @@
  */
 namespace SevenStrikeModules.XHud
 {
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using UnityEditor;
@@ -64,18 +63,8 @@ namespace SevenStrikeModules.XHud
         public UnityAction<string, AnimationCurve> act_on_CurveAdded;
         public UnityAction act_on_CurveRemoved;
 
-        public bool UsePreviewAutoStop;
-        public bool UsePreviewLooped;
-        public float PreviewGridSize = 20;
-        public float PreviewImageSize = 1;
-        public float PreviewDuration = 1;
-        public Color PreviewBGColor = new Color(0.1f, 0.1f, 0.1f);
-        public Color PreviewGridColor = new Color(0.3f, 0.3f, 0.3f);
-        public int ReferImgIndex;
-        public int PreviewModeIndex;
-        public int PreviewCurveIndex;
-        public string PreviewCurveName;
-        [SerializeField] public Texture2D SelectedReferImage;
+        public int LocationSelectedIndex = -1;
+
         /// <summary>
         /// 当前选中的索引号
         /// </summary>
@@ -88,11 +77,11 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// Editor列表项高度
         /// </summary>
-        public float itemHeight = 26;
+        public float itemHeight = 30;
         /// <summary>
         /// 可视区域显示的元素数量
         /// </summary>
-        public int visibleItemCount = 18;
+        public int visibleItemCount = 15;
         /// <summary>
         /// 列表滚动位置
         /// </summary>
@@ -100,8 +89,8 @@ namespace SevenStrikeModules.XHud
 
         private void OnEnable()
         {
-            itemHeight = 26;
-            visibleItemCount = 18;
+            itemHeight = 30;
+            visibleItemCount = 15;
         }
 
         // 确保内部名称与文件名一致
@@ -301,6 +290,7 @@ namespace SevenStrikeModules.XHud
         public void CurveLibrary_Location(string name)
         {
             int index = CurveLibrary_GetIndexWithName(name);
+            LocationSelectedIndex = index;
             SelectedIndex = index;
             Highlight = name;
 
@@ -333,6 +323,7 @@ namespace SevenStrikeModules.XHud
         public void CurveLibrary_Location_Find(string name)
         {
             int index = CurveLibrary_GetIndexWithName(name);
+            LocationSelectedIndex = index;
             SelectedIndex = index;
 
             //计算列表滚动值

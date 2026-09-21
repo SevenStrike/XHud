@@ -72,11 +72,11 @@ namespace SevenStrikeModules.XTween
         /// <summary>
         /// 本地坐标空间
         /// </summary>
-        相对 = 0,
+        本地坐标 = 0,
         /// <summary>
         /// 世界坐标空间
         /// </summary>
-        绝对 = 1,
+        世界坐标 = 1,
     }
     /// <summary>
     /// 定义XTween框架中所有可用的补间动画类型
@@ -497,5 +497,4 @@ namespace SevenStrikeModules.XTween
         设置 = 4,
         未开启消息模块功能 = 5
     }
-
 }

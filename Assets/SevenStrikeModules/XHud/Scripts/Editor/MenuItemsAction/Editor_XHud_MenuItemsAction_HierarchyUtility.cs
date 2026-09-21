@@ -17,9 +17,11 @@
  * 4. 完整协议文本可查阅：https://www.gnu.org/licenses/agpl-3.0.html
  * ============================================================================
  * 违反本注释保留要求，将违反 AGPL 3.0 授权协议，需承担相应法律责任
- */namespace SevenStrikeModules.XHud.Editor
+ */
+namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using UnityEditor;
     using UnityEngine;
 
@@ -29,10 +31,18 @@
         private static void util_GetChildCount()
         {
             GameObject seleobject = Selection.activeGameObject;
-            string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
 
-            Editor_XHud_GUI.Open(XHud_DialogType.警告, $"XHud - 实用工具消息", "获取子物体数量", $"当前物体的子物体数量为： <color={hexcol}> {seleobject.transform.childCount} </color>", "明白", 0);
 
+            XGUI.dialog(
+                type: XGUIDialogType.警告,
+                windowtitle: "XHud - 实用工具消息",
+                title: "获取子物体数量",
+                msg: $"当前物体的子物体数量为： <color={hexcol}> {seleobject.transform.childCount} </color>",
+                ok: "明白",
+                PrimaryIndex: 0,
+                usemodal: true,
+                themecolor: XHud_Dashboard.Theme_Primary);
         }
         [MenuItem("GameObject/XHud/Utilitys (实用工具)/SelectedAllChild (选中所有子物体)", priority = -10)]
         private static void util_SelectedAllChild()
@@ -46,6 +56,16 @@
                     arr[i] = obj;
             }
             Selection.objects = arr;
+        }
+        [MenuItem("GameObject/XHud/Utilitys (实用工具)/NameSuffixClean (移除名称后缀)", priority = -10)]
+        private static void util_CleanGameObjectNameSuffix()
+        {
+            Object[] seleobject = Selection.objects;
+            for (int i = 0; i < seleobject.Length; i++)
+            {
+                GameObject obj = seleobject[i] as GameObject;
+                obj.name = XGUI_Utilitys.GameObject_SuffixName_Cleaner(obj);
+            }
         }
     }
 }

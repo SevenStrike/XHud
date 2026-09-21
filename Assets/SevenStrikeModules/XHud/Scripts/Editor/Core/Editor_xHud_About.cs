@@ -20,7 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using System;
     using System.Diagnostics;
     using UnityEditor;
@@ -63,37 +64,18 @@ namespace SevenStrikeModules.XHud.Editor
     {
         static Editor_XHud_About Window;
 
-        #region 字体
         /// <summary>
-        /// 字体 - 粗体
+        /// 版本信息
         /// </summary>
-        Font Font_Bold;
-        /// <summary>
-        /// 字体 - 细体
-        /// </summary>
-        Font Font_Thin;
-        #endregion
-
-        /// <summary>
-        /// 版本
-        /// </summary>
-        string Ver;
-        /// <summary>
-        /// 副标题
-        /// </summary>
-        string Sub;
-        /// <summary>
-        /// 信息
-        /// </summary>
-        string Infos;
-
         public XHudDevInfos HudDevInfos;
+
+        private Texture2D icon_logo;
 
         [MenuItem("Tools/XHud/About #a")]
         static void Init()
         {
             Window = (Editor_XHud_About)EditorWindow.GetWindow(typeof(Editor_XHud_About), true, "关于XHUD的信息", true);
-            Window.minSize = new Vector2(350, 310);
+            Window.minSize = new Vector2(350, 430);
             Window.maxSize = Window.minSize;
             Window.Show();
         }
@@ -101,88 +83,122 @@ namespace SevenStrikeModules.XHud.Editor
         private void OnEnable()
         {
             #region 读取Json数据
-            Infos = AssetDatabase.LoadAssetAtPath<TextAsset>(XHud_Dashboard.Get_Path_XHUD_CONFIG_Path() + "/XHudDevsInfo.json").text;
+            string datas = AssetDatabase.LoadAssetAtPath<TextAsset>(XHud_Dashboard.Get_Path_XHUD_CONFIG_Path() + "/XHudDevsInfo.json").text;
             #endregion
-            //Debug.Log(Infos);
+
             #region 解析Json类
             if (HudDevInfos == null)
                 HudDevInfos = new XHudDevInfos();
-            HudDevInfos = JsonUtility.FromJson<XHudDevInfos>(Infos);
+            HudDevInfos = JsonUtility.FromJson<XHudDevInfos>(datas);
             #endregion
 
-            #region 指定字体
-            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            Font_Thin = Editor_XHud_GUI.GetFont("SS_Editor_Thin");
+            #region 获取图标
+            icon_logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_about/logo");
             #endregion
-
-            Ver = HudDevInfos.ver;
-            Sub = HudDevInfos.sub;
         }
 
         private void OnGUI()
         {
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.无, HudColor.无);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
+            XGUI.layout_icon(
+                icon: icon_logo,
+                icon_color: Color.white,
+                //icon_size: 16,
+                width: icon_logo.width,
+                height: icon_logo.height,
+                icon_offset: new Vector2(0, 0),
+                icon_margin: new RectOffset(0, 0, 50, 0),
+                icon_padding: new RectOffset(0, 0, 0, 0),
+                icon_alignment: XGUIIconAlignment.中心);
 
-            #region LOGO
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            GUILayout.FlexibleSpace();
+            XGUI.layout_label(
+                text: $"{HudDevInfos.sub}  /  Version : {HudDevInfos.ver}",
+                size: XGUIFontSize.M,
+                text_color: Color.white * 0.65f,
+                margin: new RectOffset(0, 0, 20, 0),
+                offset: new Vector2(0, 1),
+                clipping: TextClipping.Clip,
+                font_style: FontStyle.Normal,
+                anchor: TextAnchor.MiddleCenter,
+                font: XGUI.GetFont("xg-medium"));
 
-            Editor_XHud_GUI.Gui_Layout_Labelfield("X  H  U  D", HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleRight, new Vector2(0, 15), 35, Font_Thin);
+            XGUI.layout_seperator(
+                thickness: 1,
+                color: Color.white * 0.5f,
+                margin: new RectOffset(30, 30, 30, 30),
+                padding: new RectOffset(0, 0, 0, 0));
 
-            Rect rect_logo = GUILayoutUtility.GetLastRect();
-            GUILayout.FlexibleSpace();
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-            Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect_logo.x + 64, rect_logo.height + 60, 60, 20), Ver, HudFilled.无, HudColor.亮白, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleRight, new Vector2(0, 0), 11);
-            Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect_logo.x, rect_logo.height + 60, 60, 20), Sub, HudFilled.无, HudColor.亮白, Color.gray, TextAnchor.MiddleLeft, new Vector2(0, 0), 11);
-            #endregion
+            XGUI.layout_label(
+                text: $"此插件由 （南京塞维斯传媒）SevenStrikeMedia 独家开发",
+                size: XGUIFontSize.M,
+                text_color: Color.white * 0.7f,
+                margin: new RectOffset(0, 0, 0, 10),
+                offset: new Vector2(0, 1),
+                clipping: TextClipping.Clip,
+                font_style: FontStyle.Normal,
+                anchor: TextAnchor.MiddleCenter,
+                font: XGUI.GetFont("xg-medium"));
 
-            Editor_XHud_GUI.Gui_Layout_Space(80);
+            XGUI.layout_label(
+                text: HudDevInfos.intro,
+                size: XGUIFontSize.M,
+                text_color: Color.white * 0.9f,
+                margin: new RectOffset(20, 20, 0, 0),
+                offset: new Vector2(0, 1),
+                clipping: TextClipping.Clip,
+                wrap: true,
+                font_style: FontStyle.Normal,
+                anchor: TextAnchor.MiddleLeft,
+                font: XGUI.GetFont("xg-medium"));
 
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Labelfield("此插件由 （南京塞维斯传媒）SevenStrikeMedia 独家开发", HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.阴影灰), TextAnchor.MiddleCenter, 12);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                absolute_margin: true,
+                margin: new RectOffset(15, 15, 40, 0),
+                padding: new RectOffset(0, 0, 0, 0));
 
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无);
-            Editor_XHud_GUI.Gui_Layout_Space(15);
-            Editor_XHud_GUI.Gui_Layout_TextArea_Wrap(HudDevInfos.intro, HudFilled.无, HudColor.无, new Color(1, 1, 1, 0.65f), TextAnchor.UpperLeft, 330, 12);
-            Editor_XHud_GUI.Gui_Layout_Space(15);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无);
-            Editor_XHud_GUI.Gui_Layout_Space(15);
-            if (Editor_XHud_GUI.Gui_Layout_Button("访问XHud官网", "", HudFilled.实体, HudColor.深空灰, Color.white, 35, new RectOffset(), new Vector2(0, 0)))
+            if (XGUI.layout_button(
+                text: "访问XHud官网",
+                tooltip: "",
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: Color.white,
+                button_text_color: Color.black,
+                press_fill: XGUIFilled.实体,
+                press_color: XGUIColor.深空灰,
+                press_text_color: Color.white,
+                font_size: XGUIFontSize.B,
+                anchor: TextAnchor.MiddleCenter,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                height: 25,
+                button_text_font: XGUI.GetFont("xg-medium")))
             {
-                OpenURL(HudDevInfos.website);
+                XGUI_Utilitys.OpenURL(HudDevInfos.website);
             }
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            if (Editor_XHud_GUI.Gui_Layout_Button("教程手册", "", HudFilled.实体, HudColor.深空灰, Color.white, 35, new RectOffset(), new Vector2(0, 0)))
+
+            XGUI.layout_space(10);
+
+            if (XGUI.layout_button(
+                text: "教程手册",
+                tooltip: "",
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white,
+                press_fill: XGUIFilled.实体,
+                press_color: XGUIColor.深空灰,
+                press_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.white : Color.black,
+                font_size: XGUIFontSize.B,
+                anchor: TextAnchor.MiddleCenter,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                height: 25,
+                button_text_font: XGUI.GetFont("xg-medium")))
             {
-                OpenURL(HudDevInfos.document);
+                XGUI_Utilitys.OpenURL(HudDevInfos.document);
             }
-            Editor_XHud_GUI.Gui_Layout_Space(15);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_XHud_GUI.Gui_Layout_Space(15);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
-        }
-
-        /// <summary>
-        /// 打开网址
-        /// </summary>
-        /// <param name="url"></param>
-        private void OpenURL(string url)
-        {
-            // 使用Process.Start打开URL
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = url,
-                UseShellExecute = true
-            });
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
         }
     }
 }

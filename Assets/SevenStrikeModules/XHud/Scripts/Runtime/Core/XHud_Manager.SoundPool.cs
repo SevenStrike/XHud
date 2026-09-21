@@ -20,8 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XGUI.Runtime;
     using UnityEngine;
 
     /// <summary>
@@ -153,7 +152,7 @@ namespace SevenStrikeModules.XHud
             if (index == -1)
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "无法在音效库里找到目标名称的索引号！", HudMsgState.警告);
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "无法在音效库里找到目标名称的索引号！", XGUIMsgState.警告);
                 return 0;
             }
             else
@@ -174,7 +173,7 @@ namespace SevenStrikeModules.XHud
             else
             {
                 if (UseDebug)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 管理器通知", "无法在音效库里找到目标索引号的音效名称！", HudMsgState.警告);
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "无法在音效库里找到目标索引号的音效名称！", XGUIMsgState.警告);
                 return "";
             }
         }

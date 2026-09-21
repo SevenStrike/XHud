@@ -55,6 +55,26 @@ namespace SevenStrikeModules.XHud
         [SerializeField] public bool SyncImageColor;
         #endregion
 
+        #region 折叠
+        public bool
+            fold_param = true,
+            fold_option = true,
+            fold_based = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_param = state;
+            fold_option = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool param = true, bool option = true, bool based = true)
+        {
+            fold_param = param;
+            fold_option = option;
+            fold_based = based;
+        }
+        #endregion
 
         void Awake()
         {
@@ -139,8 +159,11 @@ namespace SevenStrikeModules.XHud
                 //--如果颜色库存在则设置组件颜色为指定名称的库中的颜色
                 if (XHud_Manager.Instance.Hud_Colors != null)
                 {
-                    Color cc = XHud_Manager.Instance.Hud_Colors.ColorsLibrary_GetColor(ColoriseName);
-                    UpdateColor(cc);
+                    if (SyncImageColor)
+                    {
+                        Color cc = XHud_Manager.Instance.Hud_Colors.ColorsLibrary_GetColor(ColoriseName);
+                        UpdateColor(cc);
+                    }
                 }
             }
             else

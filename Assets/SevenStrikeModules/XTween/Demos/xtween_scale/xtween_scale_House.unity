@@ -933,7 +933,7 @@ MonoBehaviour:
   min_delay: 0
   max_delay: 1
   randomDelay: 0
-  easeMode: 23
+  easeMode: 24
   loop: 0
   loopType: 0
   loopDelay: 0
@@ -1136,7 +1136,7 @@ MonoBehaviour:
     delay: 0.52
     id: 
     particle: {fileID: 0}
-  Hidden_easeMode: 9
+  Hidden_easeMode: 10
   Hidden_Duration: 0.5
   Hidden_DelayMultiply: 1
   btn_display: {fileID: 1963171589}

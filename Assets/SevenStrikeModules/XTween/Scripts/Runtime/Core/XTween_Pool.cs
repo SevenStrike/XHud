@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XTween
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using System;
     using System.Collections.Generic;
     using UnityEngine;
@@ -158,12 +159,28 @@ namespace SevenStrikeModules.XTween
             {
                 var tween = (T)queue.Dequeue();
 
-                // 先重置状态确保安全
+                // 双重验证：确保取出的对象确实是空闲的
+                if (tween.IsInUse)
+                {
+                    // 理论上不应该发生，但万一发生了就报错并尝试取下一个
+                    Debug.LogError($"取出的动画 {tween.ShortId} 竟然还在使用中！强制回收并重试");
+                    // 强制回收这个异常对象
+                    ForceCleanupTween(tween);
+                    return CreateTween<T>(); // 递归重试
+                }
+
+                // 先重置状态（确保 ResetState 不会重置 IsInUse）
                 tween.ResetState();
 
+                // 再标记为使用中
+                tween.IsInUse = true;
+
                 tween.IsPoolRecyled = false;
+
                 Count_Created[type]++;
+
                 XTween_Manager.Instance.RegisterTween(tween);
+
                 return tween;
             }
 
@@ -177,6 +194,13 @@ namespace SevenStrikeModules.XTween
                     {
                         var newTween = (XTween_Interface)Activator.CreateInstance(type);
                         newTween.ResetState();
+
+                        // 池中的对象应该是空闲状态
+                        newTween.IsInUse = false;
+
+                        // 在池中标记为已回收
+                        newTween.IsPoolRecyled = true;
+
                         TweenPool[type].Enqueue(newTween);
                         Count_Preloaded[type]++;
                     }
@@ -186,6 +210,19 @@ namespace SevenStrikeModules.XTween
                 if (queue.Count > 0)
                 {
                     var tween = (T)queue.Dequeue();
+
+                    // 同样需要验证和标记
+                    if (tween.IsInUse)
+                    {
+                        Debug.LogError($"扩容后取出的动画 {tween.ShortId} 竟然还在使用中！");
+                        ForceCleanupTween(tween);
+                        return CreateTween<T>();
+                    }
+
+                    tween.ResetState();
+                    tween.IsInUse = true;
+                    tween.IsPoolRecyled = false;
+
                     Count_Created[type]++;
                     XTween_Manager.Instance.RegisterTween(tween);
                     return tween;
@@ -209,14 +246,26 @@ namespace SevenStrikeModules.XTween
             if (tween.IsPoolRecyled)
                 return;
 
-            tween.IsPoolRecyled = true;
-
             // 获取即将回收的动画类型
             Type type = tween.GetType();
+
             // 检查池中是否已经存在此类型的记录，如果没有就增加一条
             TweenTypeExistInPool(type);
 
-            // 将动画进行重置操作以被后续重复使用
+            // ✅ 修正：应该是正在使用中才能回收
+            if (!tween.IsInUse)
+            {
+                Debug.LogWarning($"尝试回收一个已经空闲的动画 {tween.ShortId}，这可能是重复回收");
+                return;
+            }
+
+            // 先清空使用标志
+            tween.IsInUse = false;
+
+            // 标记为已回收
+            tween.IsPoolRecyled = true;
+
+            // 最后重置其他状态
             tween.ResetState();
 
             // 确保从管理器中注销动画记录            
@@ -239,22 +288,58 @@ namespace SevenStrikeModules.XTween
 
             foreach (var tween in activeTweens)
             {
-                // 2. 检查是否需要跳过正在播放的动画
+                // 检查是否需要跳过正在播放的动画
                 if (skipActiveAnimations && tween.IsPlaying)
                 {
                     continue;
                 }
                 isrecycled = true;
-                // 3. 执行回收前回调
+
+                // 执行回收前回调
                 onForceRecycle?.Invoke(tween);
 
-                // 4. 强制停止并回收动画
-                tween.Kill();
-                RecycleTween(tween);
+                // 直接清理，不通过 Kill（避免重复回收）
+                // 或者先检查是否已经被回收
+                if (!tween.IsPoolRecyled)
+                {
+                    tween.Kill(false);  // 不触发完成回调
+                    // Kill 内部已经调用了 RecycleTween，不需要再重复调用
+                }
             }
 
             if (!isrecycled)
-                XTween_Utilitys.DebugInfo("XTween Pool动画池消息", "所有动画均已回收！", XTweenGUIMsgState.确认);
+                XGUI_Utilitys.Console("XTween Pool动画池消息", "所有动画均已回收！", XGUIMsgState.确认);
+        }
+        /// <summary>
+        /// 强制清理异常的动画对象
+        /// </summary>
+        private static void ForceCleanupTween(XTween_Interface tween)
+        {
+            if (tween == null) return;
+
+            // 先标记，防止递归
+            bool wasInUse = tween.IsInUse;
+
+            if (wasInUse)
+            {
+                Debug.LogWarning($"强制清理正在使用中的动画 {tween.ShortId}");
+            }
+
+            tween.IsInUse = false;
+            tween.IsPoolRecyled = true;
+
+            // 如果动画还在管理器中，强制移除
+            try
+            {
+                // 使用 Kill(false) 不触发完成回调，避免递归
+                tween.Kill(false);  // 强制终止，但不触发完成回调
+                tween.ResetState();
+                XTween_Manager.Instance.UnregisterTween(tween);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"强制清理动画 {tween.ShortId} 时发生异常: {e.Message}");
+            }
         }
         #endregion
 
@@ -264,31 +349,35 @@ namespace SevenStrikeModules.XTween
         /// </summary>
         public static void Preload<T>(int count) where T : XTween_Interface, new()
         {
-            //识别动画类型
+            // 识别动画类型
             Type type = typeof(T);
 
-            //确保动画类型是否存在与池中
+            // 确保动画类型是否存在与池中
             TweenTypeExistInPool(type);
 
-            //如果PreloadedCounts字典中没有找到目标type的记录项则添加一个
+            // 如果PreloadedCounts字典中没有找到目标type的记录项则添加一个
             if (!Count_Preloaded.ContainsKey(type))
                 Count_Preloaded[type] = 0;
 
-            //循环count次穿件新的实例化tween类型并重置Tween的状态且给其一个随机ID，PreloadedCounts字典中目标type的记录项递增
+            // 循环count次穿件新的实例化tween类型并重置Tween的状态且给其一个随机ID，PreloadedCounts字典中目标type的记录项递增
             for (int i = 0; i < count; i++)
             {
                 var tween = new T();
 
                 //获取即将回收的动画类型
                 Type t = tween.GetType();
-                ////检查池中是否已经存在此类型的记录，如果没有就增加一条
+
+                //检查池中是否已经存在此类型的记录，如果没有就增加一条
                 TweenTypeExistInPool(t);
 
-                //将该回收的动画进行重置操作
+                // 将该回收的动画进行重置操作
                 tween.ResetState();
                 tween.ClearCallbacks();
 
-                //动画入列归位
+                // 设置正确的池状态
+                tween.IsInUse = false;
+                tween.IsPoolRecyled = true;
+
                 TweenPool[type].Enqueue(tween);
 
                 Count_Preloaded[type]++;
@@ -452,7 +541,7 @@ namespace SevenStrikeModules.XTween
             }
 
             // 计算使用百分比
-            return Mathf.Clamp(created * 100f / preloaded, 0f, 100f);
+            return Mathf.Clamp((float)created / preloaded, 0f, 1f);
         }
         /// <summary>
         /// 获取指定类型的对象池使用百分比

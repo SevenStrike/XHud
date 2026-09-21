@@ -1,0 +1,372 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae0aafe5f1e5fb64792ecc0a5bc76a60, type: 3}
+  m_Name: XGUISamples
+  m_EditorClassIdentifier: 
+  ThemeColor_Primary: {r: 0.23137255, g: 0.99215686, b: 0.6039216, a: 1}
+  ThemeColor_Secondary: {r: 1, g: 0.5764706, b: 0.34509805, a: 1}
+  ThemeColor_Group: {r: 0, g: 0, b: 0, a: 1}
+  playing: 0
+  recycled: 0
+  Hardware: "\u6781\u9650\u914D\u7F6E\u4E3B\u673A"
+  Stones: RutilatedQuartz
+  Types: 
+  EaseMode: 
+  param_string: 
+  param_float: 6.27
+  param_int: 90
+  param_color: {r: 1, g: 1, b: 1, a: 1}
+  param_vector2: {x: 1, y: 1}
+  param_vector3: {x: 10, y: 25, z: 5}
+  param_vector4: {x: 120, y: 3.5, z: 12.8, w: 70}
+  param_rectoffset:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  param_gameobject: {fileID: 0}
+  param_curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  param_slider_min: 20
+  param_slider_max: 100
+  param_slider_hz: 6000
+  param_slider_volume: 0
+  param_slider_distance: 0
+  param_slider_manual: 0
+  param_slider_manual_min: 141.98
+  param_slider_manual_max: 196.98
+  state_toggle: 0
+  state_toggle_A: 1
+  state_toggle_B: 1
+  state_toggle_C: 0
+  state_toggle_D: 1
+  state_toggle_E: 0
+  field_string: "\u9ED8\u8BA4\u6587\u672C"
+  field_float: 1
+  field_int: 10
+  field_color: {r: 1, g: 1, b: 1, a: 1}
+  field_curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  field_vector2: {x: 1, y: 1}
+  field_vector3: {x: 0, y: 0, z: 0}
+  field_vector4: {x: 0, y: 0, z: 0, w: 0}
+  field_quaternion: {x: 0, y: 0, z: 0, w: 1}
+  gui_curve_A:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  gui_curve_B:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  toolbar_index: 0
+  toolbar_manual_index: 0
+  CardDataWrap_Edge:
+    _datas:
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A0"
+      _bgcolor: {r: 0.42473942, g: 0.12742183, b: 0.34802002, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A1"
+      _bgcolor: {r: 0.14437757, g: 0.48125857, b: 0.36902645, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A2"
+      _bgcolor: {r: 0.22685967, g: 0.312302, b: 0.7561989, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A3"
+      _bgcolor: {r: 0.72066635, g: 0.8777555, b: 0.26332667, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A4"
+      _bgcolor: {r: 0.74080455, g: 0.28059542, b: 0.935318, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A5"
+      _bgcolor: {r: 0.7327962, g: 0.6697027, b: 0.21983887, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A6"
+      _bgcolor: {r: 0.29423818, g: 0.33732444, b: 0.10119734, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A7"
+      _bgcolor: {r: 0.5795805, g: 0.17387415, b: 0.3296777, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A8"
+      _bgcolor: {r: 0.51267153, g: 0.17173807, b: 0.57246023, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A9"
+      _bgcolor: {r: 0.27957165, g: 0.2084507, b: 0.69483566, a: 1}
+    index: 0
+  CardDataWrap_Solid:
+    _datas:
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A0"
+      _bgcolor: {r: 0.21481873, g: 0.6316151, b: 0.7160624, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A1"
+      _bgcolor: {r: 0.6557567, g: 0.19672702, b: 0.2486398, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A2"
+      _bgcolor: {r: 0.29814765, g: 0.99382544, b: 0.38078532, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A3"
+      _bgcolor: {r: 0.822088, g: 0.2466264, b: 0.4240094, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A4"
+      _bgcolor: {r: 0.4726486, g: 0.7851225, b: 0.23553677, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A5"
+      _bgcolor: {r: 0.48523998, g: 0.26314467, b: 0.87714887, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A6"
+      _bgcolor: {r: 0.39418083, g: 0.12424541, b: 0.41415137, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A7"
+      _bgcolor: {r: 0.5804214, g: 0.46091756, b: 0.17412642, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A8"
+      _bgcolor: {r: 0.21985538, g: 0.43416253, b: 0.73285127, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A9"
+      _bgcolor: {r: 0.7511246, g: 0.47625798, b: 0.2253374, a: 1}
+    index: 0
+  CardDataWrap_Solid_Manual:
+    _datas:
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A0"
+      _bgcolor: {r: 0.956048, g: 0.34770784, b: 0.28681442, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A1"
+      _bgcolor: {r: 0.29668778, g: 0.72448874, b: 0.9889592, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A2"
+      _bgcolor: {r: 0.29621845, g: 0.8685999, b: 0.9873948, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A3"
+      _bgcolor: {r: 0.8603492, g: 0.46096116, b: 0.25810477, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A4"
+      _bgcolor: {r: 0.8454704, g: 0.25364113, b: 0.29208073, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A5"
+      _bgcolor: {r: 0.23719954, g: 0.6833321, b: 0.20499964, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A6"
+      _bgcolor: {r: 0.72544134, g: 0.38083288, b: 0.21763241, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A7"
+      _bgcolor: {r: 0.2340471, g: 0.50963265, b: 0.78015697, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A8"
+      _bgcolor: {r: 0.2780354, g: 0.30518407, b: 0.92678463, a: 1}
+    - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A9"
+      _bgcolor: {r: 0.21538253, g: 0.18677106, b: 0.6225702, a: 1}
+    index: 0
+  fold_param_layout: 0
+  fold_param_gui: 0
+  fold_tweenstate_gui: 0
+  fold_pops_layout: 0
+  fold_sliders_layout: 0
+  fold_sliders_gui: 1
+  fold_inputfield_layout: 0
+  fold_inputfield_Manual: 0
+  fold_state_layout: 0
+  fold_state_gui: 0
+  fold_toolbar_layout: 0
+  fold_pathselector_layout: 0
+  fold_pathselector_manual: 0
+  fold_toolbar_gui: 0
+  fold_color_gui: 1
+  fold_color_gui_layout: 0
+  fold_curve_gui: 0
+  fold_toggle_layout: 0
+  fold_listview: 0
+  fold_card: 0
+  fold_card_manual: 0
+  PlayerDatas:
+  - _name: "\u535C\u5C0F"
+    _level: 62
+    _weapon: SG552
+    _health: 55.19
+    _region: "\u5DE5\u4E1A\u5E9F\u6599\u533A"
+    _ammo: 74
+    _cdpercent: 71.31
+    _avatarpath: Avatars/avatar_0
+  - _name: "\u5415\u541B"
+    _level: 74
+    _weapon: "\u91CE\u725B (Bizon)"
+    _health: 75.45
+    _region: "\u6838\u8BBE\u65BD\u5382"
+    _ammo: 51
+    _cdpercent: 6.72
+    _avatarpath: Avatars/avatar_1
+  - _name: "\u502A\u5929"
+    _level: 11
+    _weapon: MP7
+    _health: 8.83
+    _region: "\u822A\u5929\u7814\u7A76\u4E2D\u5FC3"
+    _ammo: 01
+    _cdpercent: 64.44
+    _avatarpath: Avatars/avatar_2
+  - _name: "\u5B5F\u6BC5"
+    _level: 76
+    _weapon: MP7
+    _health: 6.19
+    _region: "\u822A\u5929\u7814\u7A76\u4E2D\u5FC3"
+    _ammo: 81
+    _cdpercent: 4.97
+    _avatarpath: Avatars/avatar_3
+  - _name: "\u9C81\u7389"
+    _level: 56
+    _weapon: 'K416 '
+    _health: 0.31
+    _region: "\u5DE5\u4E1A\u5E9F\u6599\u533A"
+    _ammo: 83
+    _cdpercent: 61.83
+    _avatarpath: Avatars/avatar_4
+  - _name: "\u6C64\u56FD"
+    _level: 24
+    _weapon: 'AWM '
+    _health: 41.47
+    _region: "\u5DE5\u4E1A\u5E9F\u6599\u533A"
+    _ammo: 30
+    _cdpercent: 90.61
+    _avatarpath: Avatars/avatar_5
+  - _name: "\u4E50\u4E91"
+    _level: 94
+    _weapon: 'K416 '
+    _health: 67.87
+    _region: "\u6838\u8BBE\u65BD\u5382"
+    _ammo: 09
+    _cdpercent: 83.67
+    _avatarpath: Avatars/avatar_6
+  - _name: "\u5434\u5F64"
+    _level: 68
+    _weapon: 'SMG-45 '
+    _health: 66.40
+    _region: "\u6838\u8BBE\u65BD\u5382"
+    _ammo: 98
+    _cdpercent: 66.69
+    _avatarpath: Avatars/avatar_7
+  - _name: "\u9648\u6587"
+    _level: 94
+    _weapon: 'Vector '
+    _health: 0.18
+    _region: "\u6838\u8BBE\u65BD\u5382"
+    _ammo: 85
+    _cdpercent: 66.59
+    _avatarpath: Avatars/avatar_8
+  - _name: "\u848B\u6770"
+    _level: 45
+    _weapon: 'SMG-45 '
+    _health: 94.60
+    _region: "\u822A\u5929\u7814\u7A76\u4E2D\u5FC3"
+    _ammo: 07
+    _cdpercent: 77.99
+    _avatarpath: Avatars/avatar_9
+  - _name: "\u90B9\u5A77"
+    _level: 99
+    _weapon: MP7
+    _health: 17.82
+    _region: "\u822A\u5929\u7814\u7A76\u4E2D\u5FC3"
+    _ammo: 72
+    _cdpercent: 70.47
+    _avatarpath: Avatars/avatar_10
+  - _name: "\u5F20\u5999"
+    _level: 53
+    _weapon: 'SMG-45 '
+    _health: 96.72
+    _region: "7\u53F7\u7535\u7AD9"
+    _ammo: 76
+    _cdpercent: 12.59
+    _avatarpath: Avatars/avatar_11
+  - _name: "\u8427\u5A9B"
+    _level: 6
+    _weapon: "\u91CE\u725B (Bizon)"
+    _health: 29.77
+    _region: "\u6838\u8BBE\u65BD\u5382"
+    _ammo: 88
+    _cdpercent: 91.87
+    _avatarpath: Avatars/avatar_12
+  - _name: "\u8BB8\u6B23"
+    _level: 46
+    _weapon: 'Vector '
+    _health: 2.99
+    _region: "\u6838\u8BBE\u65BD\u5382"
+    _ammo: 10
+    _cdpercent: 31.88
+    _avatarpath: Avatars/avatar_13
+  - _name: "\u5B89\u6210"
+    _level: 69
+    _weapon: 'K416 '
+    _health: 63.53
+    _region: "\u822A\u5929\u7814\u7A76\u4E2D\u5FC3"
+    _ammo: 07
+    _cdpercent: 71.46
+    _avatarpath: Avatars/avatar_14
+  _outputPath: 
+  _configPath: 
+  _filePath: 
+  _filePath_manual: 
+  _configPath_manual: 

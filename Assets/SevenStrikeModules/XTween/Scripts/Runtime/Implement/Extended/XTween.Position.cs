@@ -2324,5 +2324,85 @@ namespace SevenStrikeModules.XTween
                 return tweener;
             }
         }
+
+        // ============================================================================
+        // 移动到目标物体位置
+        // ============================================================================
+
+        /// <summary>
+        /// 将 RectTransform 移动到目标 RectTransform 的位置
+        /// </summary>
+        public static XTween_Interface xt_AnchoredPosition_To(this RectTransform rectTransform, RectTransform target, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        {
+            if (rectTransform == null)
+            {
+                Debug.LogError("RectTransform is null!");
+                return null;
+            }
+            if (target == null)
+            {
+                Debug.LogError("Target RectTransform is null!");
+                return null;
+            }
+
+            return xt_AnchoredPosition_To(rectTransform, target.anchoredPosition, duration, isRelative, autokill, rewind_set_startvalue);
+        }
+
+        /// <summary>
+        /// 将 RectTransform 3D位置移动到目标 RectTransform 的 3D位置
+        /// </summary>
+        public static XTween_Interface xt_AnchoredPosition3D_To(this RectTransform rectTransform, RectTransform target, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        {
+            if (rectTransform == null)
+            {
+                Debug.LogError("RectTransform is null!");
+                return null;
+            }
+            if (target == null)
+            {
+                Debug.LogError("Target RectTransform is null!");
+                return null;
+            }
+
+            return xt_AnchoredPosition3D_To(rectTransform, target.anchoredPosition3D, duration, isRelative, autokill, rewind_set_startvalue);
+        }
+
+        /// <summary>
+        /// 将 Transform 本地位置移动到目标 Transform 的本地位置
+        /// </summary>
+        public static XTween_Interface xt_LocalPosition_To(this Transform transform, Transform target, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        {
+            if (transform == null)
+            {
+                Debug.LogError("Transform is null!");
+                return null;
+            }
+            if (target == null)
+            {
+                Debug.LogError("Target Transform is null!");
+                return null;
+            }
+
+            return xt_LocalPosition_To(transform, target.localPosition, duration, isRelative, autokill, rewind_set_startvalue);
+        }
+
+        /// <summary>
+        /// 将 Transform 世界位置移动到目标 Transform 的世界位置
+        /// </summary>
+        public static XTween_Interface xt_WorldPosition_To(this Transform transform, Transform target, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        {
+            if (transform == null)
+            {
+                Debug.LogError("Transform is null!");
+                return null;
+            }
+            if (target == null)
+            {
+                Debug.LogError("Target Transform is null!");
+                return null;
+            }
+
+            return xt_WorldPosition_To(transform, target.position, duration, isRelative, autokill, rewind_set_startvalue);
+        }   
     }
 }

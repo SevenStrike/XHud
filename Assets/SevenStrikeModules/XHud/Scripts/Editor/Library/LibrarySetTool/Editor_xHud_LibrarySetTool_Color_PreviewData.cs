@@ -20,7 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using System.Collections.Generic;
     using System.IO;
     using UnityEditor;
@@ -34,28 +35,62 @@ namespace SevenStrikeModules.XHud.Editor
         private Texture2D collect_p;
         private Texture2D clear_r;
         private Texture2D clear_p;
+        private Texture2D logo;
+
+        private bool fold_based;
 
         private void OnEnable()
         {
-            BaseScript = (XHud.XHud_LibrarySetTool_Color_PreviewData)target;
-            collect_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/collect_r");
-            collect_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/collect_p");
-            clear_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/clear_r");
-            clear_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/clear_p");
+            BaseScript = (XHud_LibrarySetTool_Color_PreviewData)target;
+
+            collect_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/collect_r");
+            collect_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/collect_p");
+            clear_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/clear_r");
+            clear_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/clear_p");
+            logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/preview_data");
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Color_Setter/preview_data"), HudFilled.实体, HudColor.深空灰, "色卡编辑器预览视觉", Color.white);
 
-            #region 快捷功能
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "收集序列帧", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_FlexSpace();
-            if (Editor_XHud_GUI.Gui_Layout_Button(14, "扫描序列帧", collect_r, collect_p))
+            #region 标题
+            XGUI.layout_banner(
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.深空灰,
+                bg_height: 30,
+                icon: logo,
+                icon_color: XHud_Dashboard.Theme_Primary,
+                title_text: "XHUD  -  色卡编辑器预览视觉包",
+                title_anchor: TextAnchor.MiddleLeft,
+                title_style: FontStyle.Normal,
+                title_color: Color.white,
+                title_size: XGUIFontSize.B,
+                title_clipping: TextClipping.Ellipsis,
+                bg_margin: new RectOffset(0, 0, 5, 5));
+            #endregion
+
+            #region 快捷功能          
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "快捷功能",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(15, 15, 20, 15));
+
+            #region 收集序列帧
+            if (XGUI.layout_button(
+                tooltip: "收集序列帧",
+                tex_release: collect_r,
+                tex_press: collect_p,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                width: 14,
+                height: 14))
             {
                 if (BaseScript.Textures != null)
                     BaseScript.Textures.Clear();
@@ -76,20 +111,48 @@ namespace SevenStrikeModules.XHud.Editor
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
             }
-            Editor_XHud_GUI.Gui_Layout_Space(50);
-            if (Editor_XHud_GUI.Gui_Layout_Button(14, "清空序列帧", clear_r, clear_p))
+            #endregion
+
+            GUILayout.FlexibleSpace();
+
+            #region 清空序列帧
+            if (XGUI.layout_button(
+                tooltip: "清空序列帧",
+                tex_release: clear_r,
+                tex_press: clear_p,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                width: 14,
+                height: 14))
             {
                 if (BaseScript.Textures != null)
                     BaseScript.Textures.Clear();
             }
-            Editor_XHud_GUI.Gui_Layout_FlexSpace();
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
-            base.OnInspectorGUI();
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+            #endregion
+
+            #region 源脚本
+            fold_based = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "源脚本",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: fold_based);
+
+            if (fold_based)
+            {
+                DrawDefaultInspector();
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
 
             serializedObject.ApplyModifiedProperties();
         }

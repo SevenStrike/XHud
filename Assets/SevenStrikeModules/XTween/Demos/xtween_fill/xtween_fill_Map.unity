@@ -5578,7 +5578,7 @@ MonoBehaviour:
   min_delay: 0
   max_delay: 1
   randomDelay: 0
-  easeMode: 15
+  easeMode: 16
   loop: 0
   loopType: 0
   loopDelay: 1
@@ -5616,23 +5616,23 @@ MonoBehaviour:
     img: {fileID: 1896428069}
     target: {x: 326.305, y: 14.86993}
     from: {x: -309, y: 14.86993}
-    id: cS7V1E1j
+    id: 
   maptweens:
   - img: {fileID: 1323112733}
     target: 1
     from: 0.06
     delay: 0
-    id: eijfZR05
+    id: 
   - img: {fileID: 1104490844}
     target: 1
     from: 0
     delay: 0.4
-    id: cFpHd717
+    id: 
   - img: {fileID: 1310259723}
     target: 1
     from: 0
     delay: 0.8
-    id: Z8BIt8ua
+    id: 
   particle_points: {fileID: 101893875}
   btn_open: {fileID: 202443286}
   btn_close: {fileID: 94802756}
@@ -6429,7 +6429,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.062
+  m_FillAmount: 0.06
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -6822,7 +6822,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -309, y: 14.869934}
+  m_AnchoredPosition: {x: -309, y: 14.86993}
   m_SizeDelta: {x: 141, y: 762}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1896428069

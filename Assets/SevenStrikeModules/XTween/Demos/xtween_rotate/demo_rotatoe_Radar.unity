@@ -1334,7 +1334,7 @@ MonoBehaviour:
   min_delay: 0
   max_delay: 1
   randomDelay: 0
-  easeMode: 0
+  easeMode: 1
   loop: -1
   loopType: 0
   loopDelay: 0
@@ -1400,7 +1400,7 @@ MonoBehaviour:
   map_SiteIndex: 0
   map_IsMoved: 0
   map_MoveDuration: 1
-  map_EaseMode: 9
+  map_EaseMode: 10
   label_FontSize: 10
   label_Offset: {x: 0, y: -30}
   label_Font: {fileID: 12800000, guid: 2ac3caeb91119894d80b570c92d19486, type: 3}

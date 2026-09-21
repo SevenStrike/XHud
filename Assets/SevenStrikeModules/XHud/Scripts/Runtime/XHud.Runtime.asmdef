@@ -8,7 +8,9 @@
         "Unity.RenderPipelines.Core.Runtime",
         "XTween.Runtime",
         "Unified.Universal.Blur",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "XGUI.Runtime",
+        "XGUI.Editor"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

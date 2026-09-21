@@ -223,12 +223,12 @@ namespace SevenStrikeModules.XHud
         /// 生成触发键
         /// 按下此键（配合功能键）触发元素生成操作
         /// </summary>
-        public KeyCode Key_Create = KeyCode.S;
+        public KeyCode Key_Create = KeyCode.G;
         /// <summary>
         /// 回收触发键
         /// 按下此键（配合功能键）触发元素回收操作
         /// </summary>
-        public KeyCode Key_Recycle = KeyCode.D;
+        public KeyCode Key_Recycle = KeyCode.R;
         /// <summary>
         /// 手动生成开关
         /// 是否允许通过快捷键手动生成和回收元素
@@ -254,6 +254,11 @@ namespace SevenStrikeModules.XHud
         /// 元素生成后是否自动播放进入动画
         /// </summary>
         public bool AutoIn = true;
+        [SerializeField]
+        /// <summary>
+        /// 使用元素自身动效
+        /// </summary>
+        public bool UseElementSelfMotion = true;
         #endregion
 
         #region 运行时状态
@@ -266,7 +271,7 @@ namespace SevenStrikeModules.XHud
         /// 标识当前生成器是否正在执行生成或回收操作（播放动画中）
         /// 当值为 true 时，新的操作将被阻止，防止动画冲突
         /// </summary>
-        public bool SpawnerRunning
+        public bool IsSpawing
         {
             get
             {
@@ -486,7 +491,7 @@ namespace SevenStrikeModules.XHud
                         return;
                     if (!ManullyCreate)
                         return;
-                    if (SpawnerRunning)
+                    if (IsSpawing)
                         return;
                     if (SpawnElement != null)
                         return;
@@ -499,7 +504,7 @@ namespace SevenStrikeModules.XHud
                         return;
                     if (!ManullyCreate)
                         return;
-                    if (SpawnerRunning)
+                    if (IsSpawing)
                         return;
                     if (SpawnElement == null)
                         return;
@@ -522,7 +527,10 @@ namespace SevenStrikeModules.XHud
             XHud_Module_Element element = null;
 
             Motion_Creator arg = CreateParam == null ? this.CreateArgs : CreateParam;
+
             string indicator = string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName;
+            // 从元素库中获取目标元素本体
+            XHud_Module_Element target_ele = XHud_Manager.Instance.hm_ElementLibrary_GetTargetLibrary(LibName).ElementsLibrary_GetTargetElement(SpawnName);
 
             ///---如果UI渲染模式为世界空间则使用世界空间专用的方法
             if (WorldCreate)
@@ -544,14 +552,16 @@ namespace SevenStrikeModules.XHud
                           if (act_on_element_in_start != null)
                               act_on_element_in_start();
                           eve_on_element_spawn_start.Invoke();
-                          SpawnerRunning = true;
+                          if (ProtectedAction)
+                              IsSpawing = true;
                       }).On_In_End((e) =>
                       {
                           ///--------当元素 - 进入 - 结束时
                           if (act_on_element_in_end != null)
                               act_on_element_in_end();
                           eve_on_element_spawn_end.Invoke();
-                          SpawnerRunning = false;
+                          if (ProtectedAction)
+                              IsSpawing = false;
                       }).Element;
                 }
                 else
@@ -570,24 +580,25 @@ namespace SevenStrikeModules.XHud
                             if (act_on_element_in_start != null)
                                 act_on_element_in_start();
                             eve_on_element_spawn_start.Invoke();
-                            SpawnerRunning = true;
+                            if (ProtectedAction)
+                                IsSpawing = true;
                         }).On_In_End((e) =>
                         {
                             ///--------当元素 - 进入 - 结束时
                             if (act_on_element_in_end != null)
                                 act_on_element_in_end();
                             eve_on_element_spawn_end.Invoke();
-                            SpawnerRunning = false;
+
+                            if (ProtectedAction)
+                                IsSpawing = false;
                         }).Element;
                 }
-                if (AutoIn)
-                    element.Element_In(arg);
             }
             else
             {
                 element = XHud_Manager.Instance.hm_ScreenElement_Create(LibName, SpawnName)
                     .SetAlpha(0)
-                    .SetAnchored_Screen(arg.anchor, indicator)
+                    .SetAnchored_Screen(UseElementSelfMotion ? target_ele.CreateArgs.anchor : arg.anchor, indicator)
                     .SetOffset(ElementOffset)
                     .SetScale(ElementScale)
                     .SetSize(ElementSize)
@@ -598,19 +609,21 @@ namespace SevenStrikeModules.XHud
                         if (act_on_element_in_start != null)
                             act_on_element_in_start();
                         eve_on_element_spawn_start.Invoke();
-                        SpawnerRunning = true;
+                        if (ProtectedAction)
+                            IsSpawing = true;
                     }).On_In_End((e) =>
                     {
                         ///--------当元素 - 进入 - 结束时
                         if (act_on_element_in_end != null)
                             act_on_element_in_end();
                         eve_on_element_spawn_end.Invoke();
-                        SpawnerRunning = false;
+                        if (ProtectedAction)
+                            IsSpawing = false;
                     }).Element;
-
-                if (AutoIn)
-                    element.Element_In(arg);
             }
+
+            if (AutoIn)
+                element.Element_In(UseElementSelfMotion ? element.CreateArgs : arg);
 
             if (act_on_element_spawn != null)
                 act_on_element_spawn(element);
@@ -626,14 +639,14 @@ namespace SevenStrikeModules.XHud
         public void hsp_Despawn(Motion_Recycler RecycleParam = null, UnityAction<XHud_Module_Element> actionstart = null, UnityAction<XHud_Module_Element> actionend = null)
         {
             XHud_Manager.Instance.hm_HudElement_RecycleAt(
-                SpawnElement,
-                RecycleParam == null ? this.RecycleArgs : RecycleParam,
+                SpawnElement, (UseElementSelfMotion ? SpawnElement.RecycleArgs : (RecycleParam == null ? this.RecycleArgs : RecycleParam)),
                 actionstart == null ? (ele) =>
                 {
                     if (act_on_element_out_start != null)
                         act_on_element_out_start();
                     eve_on_element_despawn_start.Invoke();
-                    SpawnerRunning = true;
+                    if (ProtectedAction)
+                        IsSpawing = true;
                 }
             : actionstart,
                 null, actionend == null ? (ele) =>
@@ -643,10 +656,18 @@ namespace SevenStrikeModules.XHud
                     if (act_on_element_despawn != null)
                         act_on_element_despawn(SpawnElement);
                     eve_on_element_despawn_end.Invoke();
-                    SpawnElement = null;
-                    SpawnerRunning = false;
+                    if (ProtectedAction)
+                    {
+                        SpawnElement = null;
+                        IsSpawing = false;
+                    }
                 }
             : actionend);
+
+            if (!ProtectedAction)
+            {
+                SpawnElement = null;
+            }
         }
         /// <summary>
         /// 检查元素库是否为空

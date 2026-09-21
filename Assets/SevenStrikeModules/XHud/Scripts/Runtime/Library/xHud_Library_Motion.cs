@@ -102,7 +102,6 @@ namespace SevenStrikeModules.XHud
     {
         public string LibraryName = "NewMotionLibrary";
 
-
         /// <summary>
         /// Editor列表项高度
         /// </summary>
@@ -111,7 +110,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 可视区域显示的元素数量
         /// </summary>
-        public int visibleItemCount = 7;
+        public int visibleItemCount = 6;
 
         /// <summary>
         /// 名称项查找（精确匹配）
@@ -146,7 +145,7 @@ namespace SevenStrikeModules.XHud
         private void OnEnable()
         {
             itemHeight = 80;
-            visibleItemCount = 7;
+            visibleItemCount = 6;
         }
 
         // 确保内部名称与文件名一致
@@ -340,6 +339,7 @@ namespace SevenStrikeModules.XHud
         public string[] ElementMotion_GetAllName_With_Create()
         {
             List<string> names = new List<string>();
+            names.Add("None");
             for (int i = 0; i < ElementMotionList.Count; i++)
             {
                 if (ElementMotionList[i].Mode == 0)
@@ -355,6 +355,7 @@ namespace SevenStrikeModules.XHud
         public string[] ElementMotion_GetAllName_With_Recycle()
         {
             List<string> names = new List<string>();
+            names.Add("None");
             for (int i = 0; i < ElementMotionList.Count; i++)
             {
                 if (ElementMotionList[i].Mode == 1)

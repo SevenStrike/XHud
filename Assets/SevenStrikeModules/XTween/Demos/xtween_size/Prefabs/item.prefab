@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 10.1}
-  m_SizeDelta: {x: 119.99992, y: 119.99992}
+  m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4791170159193257962
 CanvasRenderer:
@@ -207,12 +207,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470c1da4f2b58dd4baa6fda2316e7d04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.75
+  duration: 1
   delay: 0
   min_delay: 0
   max_delay: 1
   randomDelay: 0
-  easeMode: 9
+  easeMode: 19
   loop: 0
   loopType: 0
   loopDelay: 0
@@ -250,21 +250,21 @@ MonoBehaviour:
   - img: {fileID: 2444728556998596119}
     target: {x: 150, y: 150}
     from: {x: 0, y: 0}
-    ease: 8
+    ease: 9
     duration: 0.5
     delay: 0
     id: 
   - img: {fileID: 7173272185456513436}
     target: {x: 0, y: -120}
     from: {x: 0, y: 0}
-    ease: 18
+    ease: 19
     duration: 0.6
     delay: 0.15
     id: 
   - img: {fileID: 6694430009347626747}
     target: {x: 120, y: 120}
     from: {x: 0, y: 0}
-    ease: 26
+    ease: 27
     duration: 0.6
     delay: 0.35
     id: 

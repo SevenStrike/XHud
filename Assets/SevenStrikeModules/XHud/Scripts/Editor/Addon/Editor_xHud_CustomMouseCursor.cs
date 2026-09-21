@@ -20,11 +20,13 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
+    using System;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
-    using UnityEngine.UI;
+    using Image = UnityEngine.UI.Image;
 
     [CustomEditor(typeof(XHud_CustomMouseCursor), true)]
     public class Editor_XHud_CustomMouseCursor : Editor
@@ -38,12 +40,11 @@ namespace SevenStrikeModules.XHud.Editor
         private SerializedProperty CursorRect, CursorCanvasGroup, CursorImager, UseCustomCursor, MouseStyles, CursorSize_TweenDuration, CursorSize_TweenEase, CursorImagerSizeSmooth, CursorOpacity_TweenDuration, CursorOpacity_TweenEase, CursorSize, CursorColor, CursorColorSmooth, CursorOpacity, IndexMouseType, UseLerpCursorSize, CurrentCursorStyle;
         #endregion
 
-        private bool BasicVars;
         private float LineHeight;
-        private bool IsMouseStyles;
 
         #region 图标
         private Texture2D icon_main;
+        private Texture2D icon_invalid_tex;
         #endregion
 
         #region 批量化操作
@@ -107,7 +108,8 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 获取图标
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_MouseCursor/icon_main");
+            icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_mouse_cursor/icon_main");
+            icon_invalid_tex = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_mouse_cursor/icon_invalid");
             #endregion
 
             BaseScript.CursorRect = BaseScript.GetComponent<RectTransform>();
@@ -135,7 +137,7 @@ namespace SevenStrikeModules.XHud.Editor
                 BaseScript.CursorImager = BaseScript.transform.GetChild(0).GetComponent<Image>();
             }
 
-            LineHeight = EditorGUIUtility.singleLineHeight;
+            LineHeight = XGUI.GetSingleLineHeight();
 
             GetAllTargets();
 
@@ -150,11 +152,16 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     EditorGUI.LabelField(rect, "鼠标样式表");
                 },
-
+                drawElementBackgroundCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+                {
+                    if (isFocused)
+                        XGUI.gui_box(new Rect(rect.x + 22, rect.y + 7, 2, 10), XHud_Dashboard.Theme_Primary);
+                },
                 drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
                 {
                     float titleheight = rect.y + 2;
                     float baseheight = rect.y + (rect.height - 25);
+                    float current_width = XGUI.GetCurrentWindowWidth();
 
                     SerializedProperty sp_name = MouseStyles.GetArrayElementAtIndex(index).FindPropertyRelative("Name");
 
@@ -164,18 +171,61 @@ namespace SevenStrikeModules.XHud.Editor
                     SerializedProperty pivot = MouseStyles.GetArrayElementAtIndex(index).FindPropertyRelative("Pivot");
 
                     #region 光标名称
-                    sp_name.stringValue = Editor_XHud_GUI.Gui_TextField(new Rect(rect.width - (rect.width - 60), titleheight, 70, LineHeight), sp_name.stringValue);
-                    sp_name.serializedObject.ApplyModifiedProperties();
+                    if (current_width > 130)
+                    {
+                        Rect rect_name = new Rect(rect.x + 12, titleheight, rect.width - 16, LineHeight);
+                        sp_name.stringValue = XGUI.gui_inputfield(
+                            rect: rect_name,
+                            title: "标识",
+                            prop: sp_name.stringValue,
+                            text_wrap: false,
+                            field_fontsize: XGUIFontSize.M,
+                            field_text_offset: Vector2.zero,
+                            field_height: 20,
+                            field_text_color: Color.white,
+                            title_width: 25,
+                            //status_icon: "icon_field_status",
+                            //status_icon_color: Color.green,
+                            field_text_font: XGUI.GetFont("xg-medium"),
+                            field_text_style: FontStyle.Normal,
+                            field_text_anchor: TextAnchor.MiddleLeft,
+                            field_padding: new RectOffset(5, 5, 0, 0),
+                            field_margin: new RectOffset(0, 0, 0, 0));
 
-                    Editor_XHud_GUI.Gui_SerializePropertyWithObject(new Rect(rect.width - (rect.width - 57), titleheight + 30, 185, LineHeight), index_sprite);
-
-                    if (spr != null)
-                        sp_name.stringValue = spr.name;
-                    index_sprite.serializedObject.ApplyModifiedProperties();
+                        sp_name.serializedObject.ApplyModifiedProperties();
+                    }
                     #endregion
 
-                    #region 锚点位置
-                    pivot.vector2Value = Editor_XHud_GUI.Gui_InputField_Vector2(new Rect(rect.width - (rect.width - 140), titleheight + 2.5f, 100, LineHeight), pivot.vector2Value);
+                    #region 光标贴图
+                    if (current_width > 130)
+                    {
+                        Rect rect_sprite = new Rect(rect.x + 47, titleheight + 30, rect.width - 50, LineHeight);
+                        XGUI.gui_property_field(
+                            rect: rect_sprite,
+                            title: null,
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 80,
+                            prop: index_sprite);
+
+                        index_sprite.serializedObject.ApplyModifiedProperties();
+                    }
+                    #endregion
+
+                    #region 位置相对偏移
+                    if (current_width > 130)
+                    {
+                        Rect rect_offset = new Rect(rect.x + 47, titleheight + 55, rect.width - 50, LineHeight);
+
+                        pivot.vector2Value = XGUI.gui_inputfield(
+                            rect: rect_offset,
+                            title: null,
+                            prop: pivot.vector2Value,
+                            title_size: XGUIFontSize.M,
+                            //title_color: Color.white,
+                            title_anchor: TextAnchor.MiddleLeft,
+                            title_width: 60);
+                    }
                     pivot.serializedObject.ApplyModifiedProperties();
 
                     SerializedProperty cur_sprite = CurrentCursorStyle.FindPropertyRelative("Sprite");
@@ -190,13 +240,14 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 预览光标
-                    Texture2D tex = null;
+                    titleheight += 30;
+
                     Sprite icon_spr = (Sprite)index_sprite.objectReferenceValue;
-                    if (icon_spr != null)
-                    {
-                        tex = icon_spr.texture;
-                        Editor_XHud_GUI.Gui_Icon(new Rect(rect.width + 30, titleheight + 15, 15, 15), tex);
-                    }
+                    Rect rect_icon = new Rect(rect.x + (current_width <= 130 ? 0 : 10), titleheight, 15, 15);
+                    XGUI.gui_icon(
+                        rect: rect_icon,
+                        icon: icon_spr != null ? icon_spr.texture : icon_invalid_tex,
+                        color: Color.white);
                     #endregion
                 },
                 onAddCallback = (ReorderableList list) =>
@@ -230,7 +281,7 @@ namespace SevenStrikeModules.XHud.Editor
                 },
                 elementHeightCallback = index =>
                 {
-                    return 3f * LineHeight;
+                    return 4.8f * LineHeight;
                 }
             };
             #endregion
@@ -239,15 +290,48 @@ namespace SevenStrikeModules.XHud.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 鼠标样式", Color.white);
 
-            #region 控制
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "控制", XHud_Dashboard.Theme_Primary);
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
+
+            #region 标题
+            XGUI.layout_banner(
+             bg_fill: XGUIFilled.实体,
+             bg_color: XGUIColor.深空灰,
+             bg_height: 30,
+             icon: icon_main,
+             icon_color: XHud_Dashboard.Theme_Primary,
+             title_text: "XHud  -  鼠标样式",
+             title_anchor: TextAnchor.MiddleLeft,
+             title_style: FontStyle.Normal,
+             title_color: Color.white,
+             title_size: XGUIFontSize.B,
+             title_clipping: clipping,
+             bg_margin: new RectOffset(0, 0, 5, 5));
+            #endregion
+
+            XGUI.layout_space(5);
+
+            #region 当前光标预览
+            XGUI.layout_group_start(
+               type: XGUIContainerType.Vertical,
+               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_color: XGUIColor.亮白,
+               bg_color_gui: XHud_Dashboard.Theme_Group,
+               title: "当前光标预览",
+               title_size: XGUIFontSize.M,
+               title_text_color: XHud_Dashboard.Theme_Primary,
+               title_clipping: TextClipping.Clip,
+               padding: new RectOffset(10, 10, 15, 15));
 
             if (!Application.isPlaying)
             {
                 CanvasGroup cg = (CanvasGroup)CursorCanvasGroup.objectReferenceValue;
                 Image imgsursor = (Image)CursorImager.objectReferenceValue;
+
                 if (cg != null)
                     cg.alpha = CursorOpacity.floatValue;
                 CursorCanvasGroup.serializedObject.ApplyModifiedProperties();
@@ -261,125 +345,280 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (UseCustomCursor.boolValue)
             {
-                #region 当前选择的光标图标
-                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_XHud_GUI.Gui_Layout_Space(10);
-                GUILayout.FlexibleSpace();
-
                 SerializedProperty index_sprite = CurrentCursorStyle.FindPropertyRelative("Sprite");
                 Sprite spr = (Sprite)index_sprite.objectReferenceValue;
 
-                GUI.color = CursorColor.colorValue;
-                if (spr != null)
-                    Editor_XHud_GUI.Gui_Layout_Icon(25, spr.texture, new Vector2(0, 0));
-                GUI.color = Color.white;
-
-                GUILayout.FlexibleSpace();
-                Editor_XHud_GUI.Gui_Layout_Space(10);
-                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-                #endregion
+                #region 当前选择的光标图标
+                XGUI.layout_icon(
+                    icon: spr != null && spr.texture != null ? spr.texture : icon_invalid_tex,
+                    icon_color: CursorColor.colorValue,
+                    width: 15,
+                    height: 15,
+                    icon_alignment: XGUIIconAlignment.中心,
+                    layout_margin: new RectOffset(0, 0, 15, 15));
+                #endregion                
             }
 
             #region 光标位置
             if (Application.isPlaying)
             {
-                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_XHud_GUI.Gui_Layout_Space(10);
                 Vector3 mpos = Input.mousePosition;
-                Editor_XHud_GUI.Gui_Layout_Labelfield("光标X轴：" + mpos.x, HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.魅力红), TextAnchor.MiddleLeft);
-                Editor_XHud_GUI.Gui_Layout_Space(10);
-                Editor_XHud_GUI.Gui_Layout_Labelfield("光标Y轴：" + mpos.y, HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.柠檬绿), TextAnchor.MiddleRight);
-                Editor_XHud_GUI.Gui_Layout_Space(10);
-                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+
+                XGUI.layout_group_start(
+                    type: XGUIContainerType.Horizontal,
+                    padding: new RectOffset(10, 10, 0, 0));
+
+                XGUI.layout_label(
+                    text: "光标  X轴： " + mpos.x,
+                    bg_fill: XGUIFilled.无,
+                    bg_color: XGUIColor.无,
+                    size: XGUIFontSize.S,
+                    anchor: TextAnchor.MiddleLeft,
+                    text_color: Color.white * 0.7f,
+                    offset: new Vector2(0, 0),
+                    padding: new RectOffset(15, 10, 0, 0),
+                    margin: new RectOffset(0, 0, 5, 0),
+                    clipping: TextClipping.Clip,
+                    font: XGUI.GetFont("xg-bold"),
+                    font_style: FontStyle.Normal);
+
+                XGUI.layout_label(
+                    text: "光标  Y轴： " + mpos.y,
+                    bg_fill: XGUIFilled.无,
+                    bg_color: XGUIColor.无,
+                    size: XGUIFontSize.S,
+                    anchor: TextAnchor.MiddleRight,
+                    text_color: Color.white * 0.7f,
+                    offset: new Vector2(0, 0),
+                    padding: new RectOffset(15, 10, 0, 0),
+                    margin: new RectOffset(0, 0, 5, 0),
+                    clipping: TextClipping.Clip,
+                    font: XGUI.GetFont("xg-bold"),
+                    font_style: FontStyle.Normal);
+
+                XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             }
             #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
-            #region 选项
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            #region 选项         
+            BaseScript.fold_options = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "选项",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_options);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_CustomMouseCursor>("自定义光标", new string[] { "禁用", "启用" }, ref UseCustomCursor, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-
-            string[] actionlist = System.Enum.GetNames(typeof(MouseType));
-            Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_CustomMouseCursor>("鼠标响应", actionlist, ref IndexMouseType, HudFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
+            if (!BaseScript.fold_options)
             {
-                BaseScript.MouseClickType = (MouseType)System.Enum.Parse(typeof(MouseType), res);
-            });
+                DrawToggle("自定义光标", UseCustomCursor, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
 
-            string[] smoothsizelist = new string[2] { "缓动模式", "差值模式" };
-            Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_CustomMouseCursor>("光标尺寸平滑方式", smoothsizelist, ref UseLerpCursorSize, HudFilled.实体, 120, 22, SelectedObjects);
+                string[] actionlist = System.Enum.GetNames(typeof(MouseType));
+                XGUI.layout_string_popup(
+                    title: "鼠标响应",
+                    title_width: 100,
+                    title_size: XGUIFontSize.M,
+                    title_anchor: TextAnchor.MiddleLeft,
+                    prop: IndexMouseType,
+                    options: actionlist,
+                    opt_text_size: XGUIFontSize.M,
+                    opt_text_color: Color.black,
+                    opt_text_padding: new RectOffset(10, 10, 0, 0),
+                    opt_anchor: TextAnchor.MiddleLeft,
+                    opt_font_style: FontStyle.Normal,
+                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_color: XGUIColor.亮白,
+                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    margin: new RectOffset(0, 0, 5, 5),
+                    padding: new RectOffset(5, 5, 0, 0),
+                    title_margin: new RectOffset(0, 0, 0, 0),
+                    icon_arrow_color: Color.black,
+                    act_on_changed: (d) =>
+                     {
+                         BaseScript.MouseClickType = (MouseType)System.Enum.Parse(typeof(MouseType), d);
+                     });
 
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+                string[] smoothsizelist = new string[2] { "缓动模式", "差值模式" };
+                XGUI.layout_string_popup(
+                    title: "光标尺寸平滑方式",
+                    title_width: 100,
+                    title_size: XGUIFontSize.M,
+                    title_anchor: TextAnchor.MiddleLeft,
+                    prop: UseLerpCursorSize,
+                    options: smoothsizelist,
+                    opt_text_size: XGUIFontSize.M,
+                    opt_text_color: Color.black,
+                    opt_text_padding: new RectOffset(10, 10, 0, 0),
+                    opt_anchor: TextAnchor.MiddleLeft,
+                    opt_font_style: FontStyle.Normal,
+                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_color: XGUIColor.亮白,
+                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    margin: new RectOffset(0, 0, 5, 5),
+                    padding: new RectOffset(5, 5, 0, 0),
+                    title_margin: new RectOffset(0, 0, 0, 0),
+                    icon_arrow_color: Color.black);
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 参数
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "参数", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
+            BaseScript.fold_params = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "参数",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(5, 10, 15, 15),
+                foldout: BaseScript.fold_params);
 
             Image img_cursor = (Image)CursorImager.objectReferenceValue;
 
             if (UseCustomCursor.boolValue)
             {
-                img_cursor.enabled = true;
-
-                Editor_XHud_GUI.Gui_Layout_Property_Field("焦点物体", CursorRect);
-
-                Editor_XHud_GUI.Gui_Layout_Space(5);
-
-                Editor_XHud_GUI.Gui_Layout_Property_Field("透明组件", CursorCanvasGroup);
-
-                Editor_XHud_GUI.Gui_Layout_Space(5);
-
-                Editor_XHud_GUI.Gui_Layout_Property_Field("光标组件", CursorImager);
-
-                Editor_XHud_GUI.Gui_Layout_Space(5);
-
-                Editor_XHud_GUI.Gui_Layout_Property_Field("尺寸", CursorSize);
-
-                Editor_XHud_GUI.Gui_Layout_Space(5);
-
-                EditorGUI.BeginChangeCheck();
-                Editor_XHud_GUI.Gui_Layout_Property_Field("颜色", CursorColor);
-                if (EditorGUI.EndChangeCheck())
+                if (!BaseScript.fold_params)
                 {
-                    BaseScript.CursorImager.color = CursorColor.colorValue;
-                }
+                    #region 焦点物体
+                    XGUI.layout_property_field(
+                        title: "焦点物体",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: CursorRect,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
 
-                Editor_XHud_GUI.Gui_Layout_Space(5);
+                    #region 透明组件
+                    XGUI.layout_property_field(
+                        title: "透明组件",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: CursorCanvasGroup,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
 
-                Editor_XHud_GUI.Gui_Layout_Property_Field("颜色平滑系数", CursorColorSmooth, 90);
+                    #region 光标组件
+                    XGUI.layout_property_field(
+                        title: "光标组件",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: CursorImager,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
 
-                Editor_XHud_GUI.Gui_Layout_Space(5);
+                    #region 尺寸
+                    XGUI.layout_property_field(
+                        title: "尺寸",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: CursorSize,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
 
-                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_XHud_GUI.Gui_Layout_Space(5);
-                CursorOpacity.floatValue = Editor_XHud_GUI.Gui_Layout_Slider("透明度", CursorOpacity.floatValue, 0, 1);
-                CursorOpacity.serializedObject.ApplyModifiedProperties();
-                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+                    #region 颜色
+                    EditorGUI.BeginChangeCheck();
+                    XGUI.layout_property_field(
+                        title: "颜色",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: CursorColor,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        BaseScript.CursorImager.color = CursorColor.colorValue;
+                    }
 
-                Editor_XHud_GUI.Gui_Layout_Space(5);
-                Editor_XHud_GUI.Gui_Layout_Property_Field("透明度缓动方式", CursorOpacity_TweenEase, 120);
-                Editor_XHud_GUI.Gui_Layout_Space(5);
-                Editor_XHud_GUI.Gui_Layout_Property_Field("透明度变化耗时", CursorOpacity_TweenDuration, 120);
+                    #endregion
 
+                    #region 颜色平滑系数
+                    XGUI.layout_property_field(
+                        title: "颜色平滑系数",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: CursorColorSmooth,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
 
-                if (UseLerpCursorSize.stringValue == "缓动模式")
-                {
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-                    Editor_XHud_GUI.Gui_Layout_Property_Field("光标尺寸缓动耗时", CursorSize_TweenDuration, 120);
+                    #region 透明度
+                    XGUI.layout_property_field(
+                        title: "透明度",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: CursorOpacity,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
 
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-                    Editor_XHud_GUI.Gui_Layout_Property_Field("光标尺寸缓动方式", CursorSize_TweenEase, 120);
-                }
-                else
-                {
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-                    Editor_XHud_GUI.Gui_Layout_Property_Field("光标尺寸差值速率", CursorImagerSizeSmooth, 120);
+                    #region 透明度缓动方式
+                    XGUI.layout_property_field(
+                        title: "透明度缓动方式",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: CursorOpacity_TweenEase,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
+
+                    #region 透明度变化耗时
+                    XGUI.layout_property_field(
+                        title: "透明度变化耗时",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: CursorOpacity_TweenDuration,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
+
+                    if (UseLerpCursorSize.stringValue == "缓动模式")
+                    {
+                        #region 光标尺寸缓动耗时
+                        XGUI.layout_property_field(
+                            title: "光标尺寸缓动耗时",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: CursorSize_TweenDuration,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+                        #endregion
+
+                        #region 光标尺寸缓动方式
+                        XGUI.layout_property_field(
+                            title: "光标尺寸缓动方式",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: CursorSize_TweenEase,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+                        #endregion
+                    }
+                    else
+                    {
+                        #region 光标尺寸差值速率
+                        XGUI.layout_property_field(
+                            title: "光标尺寸差值速率",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: CursorImagerSizeSmooth,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+                        #endregion
+                    }
                 }
             }
             else
@@ -387,51 +626,83 @@ namespace SevenStrikeModules.XHud.Editor
                 if (img_cursor != null)
                     img_cursor.enabled = false;
             }
-
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 光标样式表
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "光标样式表", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
+            BaseScript.fold_styles = XGUI.layout_group_start(
+              type: XGUIContainerType.Vertical,
+              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_color: XGUIColor.亮白,
+              bg_color_gui: XHud_Dashboard.Theme_Group,
+              title: "光标样式表",
+              title_size: XGUIFontSize.M,
+              title_text_color: XHud_Dashboard.Theme_Primary,
+              title_clipping: TextClipping.Clip,
+              padding: new RectOffset(10, 10, 15, 15),
+              foldout: BaseScript.fold_styles);
 
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            IsMouseStyles = EditorGUILayout.Foldout(IsMouseStyles, "光标样式表");
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            if (IsMouseStyles)
+            if (!BaseScript.fold_styles)
+            {
                 StyleList.DoLayoutList();
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+            }
 
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 源脚本
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            BaseScript.fold_based = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "源脚本",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_based);
 
-            #region 原始变量
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            BasicVars = EditorGUILayout.Foldout(BasicVars, "变量/属性", true);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-            if (BasicVars)
+            if (!BaseScript.fold_based)
+            {
                 DrawDefaultInspector();
-            #endregion
+            }
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             serializedObject.ApplyModifiedProperties();
         }
+
+        #region Draw
+        /// <summary>
+        /// 通用方法：绘制开关
+        /// </summary>
+        private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, Action<bool> act_on_changed = null)
+        {
+            XGUI.layout_toggle(
+                title: title,
+                title_size: XGUIFontSize.M,
+                title_font_style: FontStyle.Normal,
+                title_padding: new RectOffset(5, 10, 0, 0),
+                title_width: width,
+                prop: prop,
+                tog_style: style,
+                tog_padding: new RectOffset(0, 9, 0, 0),
+                tog_margin: new RectOffset(0, 0, 0, 5),
+                tog_mixed_options: new string[] { "禁用", "启用" },
+                tog_mixed_text_size: XGUIFontSize.M,
+                tog_mixed_text_color: Color.black,
+                tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                tog_mixed_font_style: FontStyle.Normal,
+                tog_bg_off_color: color_bg_off,
+                tog_bg_on_color: color_bg_on,
+                tog_handler_off_color: color_off,
+                tog_handler_on_color: color_on,
+                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                act_on_changed: act_on_changed);
+        }
+        #endregion
     }
 }

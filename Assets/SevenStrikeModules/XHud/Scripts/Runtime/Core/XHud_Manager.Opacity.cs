@@ -217,7 +217,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="delay">延迟</param>
         /// <param name="action_start">委托 - 开始时</param>
         /// <param name="action_end">委托 - 结束时</param>
-        public void hm_Screen_ContentOpacity_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
+        public XTween_Interface hm_Screen_ContentOpacity_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
             if (twn_ContentOpacity_Screen != null && twn_ContentOpacity_Screen.IsActive)
                 if (twn_ContentOpacity_Screen.IsPlaying)
@@ -231,6 +231,8 @@ namespace SevenStrikeModules.XHud
                 if (action_end != null)
                     action_end();
             });
+
+            return twn_ContentOpacity_Screen;
         }
         /// <summary>
         /// 屏幕内容透明度平滑到
@@ -241,7 +243,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="delay">延迟</param>
         /// <param name="action_start">委托 - 开始时</param>
         /// <param name="action_end">委托 - 结束时</param>
-        public void hm_Screen_ContentOpacity_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
+        public XTween_Interface hm_Screen_ContentOpacity_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
             if (twn_ContentOpacity_Screen != null && twn_ContentOpacity_Screen.IsActive)
                 if (twn_ContentOpacity_Screen.IsPlaying)
@@ -255,6 +257,8 @@ namespace SevenStrikeModules.XHud
                 if (action_end != null)
                     action_end();
             });
+
+            return twn_ContentOpacity_Screen;
         }
         /// <summary>
         /// 屏幕内容透明度快速到
@@ -276,7 +280,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="delay">延迟</param>
         /// <param name="action_start">委托 - 开始时</param>
         /// <param name="action_end">委托 - 结束时</param>
-        public void hm_World_ContentOpacity_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
+        public XTween_Interface hm_World_ContentOpacity_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
             if (twn_ContentOpacity_World != null && twn_ContentOpacity_World.IsActive)
                 if (twn_ContentOpacity_World.IsPlaying)
@@ -290,6 +294,8 @@ namespace SevenStrikeModules.XHud
                 if (action_end != null)
                     action_end();
             });
+
+            return twn_ContentOpacity_World;
         }
         /// <summary>
         /// 世界内容透明度平滑到
@@ -300,7 +306,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="delay">延迟</param>
         /// <param name="action_start">委托 - 开始时</param>
         /// <param name="action_end">委托 - 结束时</param>
-        public void hm_World_ContentOpacity_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
+        public XTween_Interface hm_World_ContentOpacity_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
             if (twn_ContentOpacity_World != null && twn_ContentOpacity_World.IsActive)
                 if (twn_ContentOpacity_World.IsPlaying)
@@ -314,6 +320,8 @@ namespace SevenStrikeModules.XHud
                 if (action_end != null)
                     action_end();
             });
+
+            return twn_ContentOpacity_World;
         }
         /// <summary>
         /// 世界内容透明度快速到

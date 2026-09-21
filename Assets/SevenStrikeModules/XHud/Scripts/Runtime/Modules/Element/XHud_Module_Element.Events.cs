@@ -33,6 +33,8 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public bool EventIsFold;
 
+        public bool ClearEvents_With_Spawn = true;
+
         /// <summary>
         /// 动作 - 动画播放 - 入场 - 开始
         /// </summary>

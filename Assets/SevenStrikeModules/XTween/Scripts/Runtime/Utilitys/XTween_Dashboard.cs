@@ -20,119 +20,11 @@
  */
 namespace SevenStrikeModules.XTween
 {
-    using System.IO;
-    using UnityEditor;
 #if UNITY_EDITOR
+    using UnityEditor;
     using UnityEditor.Callbacks;
 #endif
     using UnityEngine;
-
-    /// <summary>
-    /// XTween配置数据类
-    /// </summary>
-    public class TweenConfigData
-    {
-        /// <summary>
-        /// 主题色
-        /// </summary>
-        public string Theme_Primary;
-        /// <summary>
-        /// 群组色
-        /// </summary>
-        public string Theme_Group;
-        /// <summary>
-        /// 分割线颜色
-        /// </summary>
-        public string Theme_SeperateLine;
-        /// <summary>
-        /// 液晶显示扫描线风格
-        /// </summary>
-        public bool LiquidScanStyle;
-        /// <summary>
-        /// 液晶显示肮脏效果
-        /// </summary>
-        public bool LiquidDirty;
-        /// <summary>
-        /// 液晶显示闪烁特效
-        /// </summary>
-        public int LiquidBlinker;
-        /// <summary>
-        /// 液晶颜色 - 播放动画
-        /// </summary>
-        public string LiquidColor_Playing;
-        /// <summary>
-        /// 液晶颜色 - 待命中
-        /// </summary>
-        public string LiquidColor_Idle;
-        /// <summary>
-        /// 动画池 - Int
-        /// </summary>
-        public int PoolCount_Int;
-        /// <summary>
-        /// 动画池 - Float
-        /// </summary>
-        public int PoolCount_Float;
-        /// <summary>
-        /// 动画池 - String
-        /// </summary>
-        public int PoolCount_String;
-        /// <summary>
-        /// 动画池 - Vector2
-        /// </summary>
-        public int PoolCount_Vector2;
-        /// <summary>
-        /// 动画池 - Vector3
-        /// </summary>
-        public int PoolCount_Vector3;
-        /// <summary>
-        /// 动画池 - Vector4
-        /// </summary>
-        public int PoolCount_Vector4;
-        /// <summary>
-        /// 动画池 - Quaternion
-        /// </summary>
-        public int PoolCount_Quaternion;
-        /// <summary>
-        /// 动画池 - Color
-        /// </summary>
-        public int PoolCount_Color;
-        /// <summary>
-        /// 动画池 - 场景卸载时回收所有
-        /// </summary>
-        public bool PoolRecyleAllOnSceneUnloaded;
-        /// <summary>
-        /// 动画池 - 场景加载时回收所有
-        /// </summary>
-        public bool PoolRecyleAllOnSceneLoaded;
-        /// <summary>
-        /// 预览选项 - 自动杀死预览
-        /// </summary>
-        public bool PreviewOption_AutoKillPreviewTweens;
-        /// <summary>
-        /// 预览选项 - 杀死后自动倒退
-        /// </summary>
-        public bool PreviewOption_RewindPreviewTweensWithKill;
-        /// <summary>
-        /// 预览选项 - 杀死后清除预览
-        /// </summary>
-        public bool PreviewOption_ClearPreviewTweensWithKill;
-        /// <summary>
-        /// 预设模式：星标模式
-        /// </summary>
-        public bool PresetInFavouriteMode;
-        /// <summary>
-        /// 最后选择的预设类型
-        /// </summary>
-        public string PresetSelectionMark_LastTypeName;
-        /// <summary>
-        /// 预设类型光标的最后一次坐标
-        /// </summary>
-        public Rect PresetSelectionMark_LastRect;
-        /// <summary>
-        /// 预设中心窗口尺寸
-        /// </summary>
-        public Vector2 PresetCentralWindowSize;
-    }
 
     public static class XTween_Dashboard
     {
@@ -145,44 +37,41 @@ namespace SevenStrikeModules.XTween
         /// XTween配置数据
         /// </summary>
         [SerializeField]
-        public static TweenConfigData ConfigData;
+        public static XTween_Config XTweenConfig;
 
         #region ThemeColor 主题色
-        public static Color Theme_Primary { get; set; } = XTween_Utilitys.ConvertHexStringToColor("#3BFE9B");
-        public static Color Theme_Group { get; set; } = XTween_Utilitys.ConvertHexStringToColor("#1E1E1E");
-        public static Color Theme_SeperateLine { get; set; } = XTween_Utilitys.ConvertHexStringToColor("#535353");
+        public static Color Theme_Primary { get; set; } = new Color(0.2313726f, 0.9960784f, 0.6078432f, 1);
+        public static Color Theme_Group { get; set; } = new Color(0.1176471f, 0.1176471f, 0.1176471f, 1);
+        public static Color Theme_SeperateLine { get; set; } = new Color(0.3254902f, 0.3254902f, 0.3254902f, 1);
 
         public static string Version { get; set; }
 
 #if UNITY_EDITOR
         [DidReloadScripts]
-        public static void LoadThemes()
-        {
-            //获取配置文件
-            string json = AssetDatabase.LoadAssetAtPath<TextAsset>(Get_path_XTween_Config_Path() + $"XTweenConfigData.json").text;
-            ConfigData = JsonUtility.FromJson<TweenConfigData>(json);
-
-            Theme_Primary = XTween_Utilitys.ConvertHexStringToColor(ConfigData.Theme_Primary);
-            Theme_Group = XTween_Utilitys.ConvertHexStringToColor(ConfigData.Theme_Group);
-            Theme_SeperateLine = XTween_Utilitys.ConvertHexStringToColor(ConfigData.Theme_SeperateLine);
-        }
 #endif
+        public static void LoadColors_Themes()
+        {
+            GetXTweenConfig();
+
+            Theme_Primary = XTweenConfig.Datas.Theme_Primary;
+            Theme_Group = XTweenConfig.Datas.Theme_Group;
+            Theme_SeperateLine = XTweenConfig.Datas.Theme_SeperateLine;
+        }
         #endregion
 
         #region 公共路径
-        public static string path_XTween_GUISTYLE = "Assets/SevenStrikeModules/XTween/GUI/Editor/XTweenGuiStyle/";
-        public static string path_XTween_GUIROOT = "Assets/SevenStrikeModules/XTween/GUI/";
-        public static string path_XTween_ROOT = "Assets/SevenStrikeModules/XTween/";
-        public static string path_XTween_MATERIAL = "Assets/SevenStrikeModules/XTween/Materials/";
-        public static string path_XTween_CONFIG = "Assets/SevenStrikeModules/XTween/Resources/Config/";
-        public static string path_XTween_PRESETS = "Assets/SevenStrikeModules/XTween/Resources/Presets/";
-        public static string path_XTween_PREFABS = "Assets/SevenStrikeModules/XTween/Prefabs/";
-        public static string path_XTween_SHADERS = "Assets/SevenStrikeModules/XTween/Shaders/";
-        public static string path_XTween_SOUND = "Assets/SevenStrikeModules/XTween/Sound/";
-        public static string path_XTween_SPRITES = "Assets/SevenStrikeModules/XTween/Sprites/";
-        public static string path_XTween_TEXTURES = "Assets/SevenStrikeModules/XTween/Textures/";
-        public static string path_XTween_FONTS = "Assets/SevenStrikeModules/XTween/Fonts/";
-        public static string path_XTween_SCRIPTS = "Assets/SevenStrikeModules/XTween/Scripts/";
+        public readonly static string path_XTween_GUIROOT = "Assets/SevenStrikeModules/XTween/GUI/";
+        public readonly static string path_XTween_ROOT = "Assets/SevenStrikeModules/XTween/";
+        public readonly static string path_XTween_MATERIAL = "Assets/SevenStrikeModules/XTween/Materials/";
+        public readonly static string path_XTween_CONFIG = "Assets/SevenStrikeModules/XTween/Resources/Config/";
+        public readonly static string path_XTween_PRESETS = "Assets/SevenStrikeModules/XTween/Resources/Presets/";
+        public readonly static string path_XTween_PREFABS = "Assets/SevenStrikeModules/XTween/Prefabs/";
+        public readonly static string path_XTween_SHADERS = "Assets/SevenStrikeModules/XTween/Shaders/";
+        public readonly static string path_XTween_SOUND = "Assets/SevenStrikeModules/XTween/Sound/";
+        public readonly static string path_XTween_SPRITES = "Assets/SevenStrikeModules/XTween/Sprites/";
+        public readonly static string path_XTween_TEXTURES = "Assets/SevenStrikeModules/XTween/Textures/";
+        public readonly static string path_XTween_FONTS = "Assets/SevenStrikeModules/XTween/Fonts/";
+        public readonly static string path_XTween_SCRIPTS = "Assets/SevenStrikeModules/XTween/Scripts/";
 
         #region 路径获取
         /// <summary>
@@ -194,20 +83,12 @@ namespace SevenStrikeModules.XTween
             return path_XTween_ROOT;
         }
         /// <summary>
-        /// 获取 XTween GUIROOT路径，根目录：SevenStrikeModules/XTween/GUI/
+        /// 获取 XTween GUISTYLE路径，根目录：SevenStrikeModules/XTween/GUI/
         /// </summary>
         /// <returns></returns>
         public static string Get_XTween_GUIRoot_Path()
         {
             return path_XTween_GUIROOT;
-        }
-        /// <summary>
-        /// 获取 XTween GUISTYLE路径，根目录：SevenStrikeModules/XTween/GUI/Editor/XTweenGuiStyle/
-        /// </summary>
-        /// <returns></returns>
-        public static string Get_path_XTween_GUIStyle_Path()
-        {
-            return path_XTween_GUISTYLE;
         }
         /// <summary>
         /// 获取 XTween 配置路径，根目录：SevenStrikeModules/XTween/Resources/Config/
@@ -293,51 +174,31 @@ namespace SevenStrikeModules.XTween
         #endregion
 
         #region 液晶面板预览样式配置      
-        public static Color LiquidColor_Playing { get; set; } = XTween_Utilitys.ConvertHexStringToColor("#94AC59");
-        public static Color LiquidColor_Idle { get; set; } = XTween_Utilitys.ConvertHexStringToColor("#778456");
+        public static Color LiquidColor_Playing { get; set; } = new Color(0.5803922f, 0.6745098f, 0.3490196f, 1);
+        public static Color LiquidColor_Idle { get; set; } = new Color(0.4666667f, 0.5176471f, 0.3372549f, 1);
 
 #if UNITY_EDITOR
         [InitializeOnEnterPlayMode]
         [DidReloadScripts]
-        public static void LoadLiquidStyle()
+#endif
+        public static void LoadColors_Liquid()
         {
-            GetXTweenConfigData();
+            GetXTweenConfig();
 
-            LiquidColor_Playing = XTween_Utilitys.ConvertHexStringToColor(ConfigData.LiquidColor_Playing);
-            LiquidColor_Idle = XTween_Utilitys.ConvertHexStringToColor(ConfigData.LiquidColor_Idle);
+            LiquidColor_Playing = XTweenConfig.Datas.LiquidColor_Playing;
+            LiquidColor_Idle = XTweenConfig.Datas.LiquidColor_Idle;
         }
 
-#endif
         #endregion
 
         #region 读取配置文件参数
-        public static TweenConfigData GetXTweenConfigData()
+        public static XTween_Config GetXTweenConfig()
         {
-            string json = null;
-#if UNITY_EDITOR
             //获取配置文件
-            json = AssetDatabase.LoadAssetAtPath<TextAsset>(Get_path_XTween_Config_Path() + $"XTweenConfigData.json").text;
-#else
-            json = Resources.Load<TextAsset>($"Config/XTweenConfigData").text;            
-#endif
-            ConfigData = JsonUtility.FromJson<TweenConfigData>(json);
+            XTween_Config config = Resources.Load<XTween_Config>("Config/XTweenConfig");
 
-            //Debug.Log(ConfigData);
-            return ConfigData;
-        }
-
-        public static void SavePreviewOptionsToXTweenConfigData()
-        {
-#if UNITY_EDITOR
-            // 保存预览选项参数
-            string json = JsonUtility.ToJson(ConfigData);
-            // 使用StreamWriter写入文件
-            using (StreamWriter writer = new StreamWriter(Get_path_XTween_Config_Path() + $"XTweenConfigData.json"))
-            {
-                writer.Write(json);
-            }
-            AssetDatabase.Refresh();
-#endif
+            XTweenConfig = config;
+            return config;
         }
         #endregion
 
@@ -348,11 +209,11 @@ namespace SevenStrikeModules.XTween
         /// <returns></returns>
         public static bool Get_PreviewOption_AutoKillPreviewTweens()
         {
-            if (ConfigData == null)
-                GetXTweenConfigData();
+            if (XTweenConfig == null)
+                GetXTweenConfig();
 
             // 额外容错：避免加载配置失败后仍为null
-            return ConfigData?.PreviewOption_AutoKillPreviewTweens ?? false;
+            return XTweenConfig?.Datas.PreviewOption_AutoKillPreviewTweens ?? false;
         }
 
         /// <summary>
@@ -361,11 +222,11 @@ namespace SevenStrikeModules.XTween
         /// <returns></returns>
         public static bool Get_PreviewOption_RewindPreviewTweensWithKill()
         {
-            if (ConfigData == null)
+            if (XTweenConfig == null)
             {
-                GetXTweenConfigData();
+                GetXTweenConfig();
             }
-            return ConfigData?.PreviewOption_RewindPreviewTweensWithKill ?? false;
+            return XTweenConfig?.Datas.PreviewOption_RewindPreviewTweensWithKill ?? false;
         }
 
         /// <summary>
@@ -374,11 +235,11 @@ namespace SevenStrikeModules.XTween
         /// <returns></returns>
         public static bool Get_PreviewOption_ClearPreviewTweensWithKill()
         {
-            if (ConfigData == null)
+            if (XTweenConfig == null)
             {
-                GetXTweenConfigData();
+                GetXTweenConfig();
             }
-            return ConfigData?.PreviewOption_ClearPreviewTweensWithKill ?? false;
+            return XTweenConfig?.Datas.PreviewOption_ClearPreviewTweensWithKill ?? false;
         }
 
         /// <summary>
@@ -387,7 +248,7 @@ namespace SevenStrikeModules.XTween
         /// <returns></returns>
         public static void Set_PreviewOption_AutoKillPreviewTweens(bool state)
         {
-            ConfigData.PreviewOption_AutoKillPreviewTweens = state;
+            XTweenConfig.Datas.PreviewOption_AutoKillPreviewTweens = state;
         }
 
         /// <summary>
@@ -396,7 +257,7 @@ namespace SevenStrikeModules.XTween
         /// <returns></returns>
         public static void Set_PreviewOption_RewindPreviewTweensWithKill(bool state)
         {
-            ConfigData.PreviewOption_RewindPreviewTweensWithKill = state;
+            XTweenConfig.Datas.PreviewOption_RewindPreviewTweensWithKill = state;
         }
 
         /// <summary>
@@ -405,7 +266,16 @@ namespace SevenStrikeModules.XTween
         /// <returns></returns>
         public static void Set_PreviewOption_ClearPreviewTweensWithKill(bool state)
         {
-            ConfigData.PreviewOption_ClearPreviewTweensWithKill = state;
+            XTweenConfig.Datas.PreviewOption_ClearPreviewTweensWithKill = state;
+        }
+
+        /// <summary>
+        /// 设置状态 - 预览面板极简化
+        /// </summary>
+        /// <returns></returns>
+        public static void Set_PerformanceLiquidMode(bool state)
+        {
+            XTweenConfig.Datas.PerformanceLiquidMode = state;
         }
         #endregion
 

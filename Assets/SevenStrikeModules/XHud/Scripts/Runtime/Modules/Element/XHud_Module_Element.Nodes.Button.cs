@@ -20,8 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XGUI.Runtime;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -73,12 +72,12 @@ namespace SevenStrikeModules.XHud
             if (state)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "启用元素下所有按钮交互！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有按钮交互！", XGUIMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "禁用元素下所有按钮交互！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有按钮交互！", XGUIMsgState.通知);
             }
         }
         /// <summary>
@@ -94,12 +93,12 @@ namespace SevenStrikeModules.XHud
             if (state)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "启用元素下所有按钮脚本！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有按钮脚本！", XGUIMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "禁用元素下所有按钮脚本！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有按钮脚本！", XGUIMsgState.通知);
             }
         }
         /// <summary>
@@ -119,12 +118,12 @@ namespace SevenStrikeModules.XHud
             if (btn == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "未找到对应标识的按钮！", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "未找到对应标识的按钮！", XGUIMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的按钮！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的按钮！", XGUIMsgState.通知);
             }
             return btn;
         }
@@ -144,12 +143,12 @@ namespace SevenStrikeModules.XHud
             if (btnlist.Count <= 0)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "获取的按钮列表为空！", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "获取的按钮列表为空！", XGUIMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "已获取到" + ButtonNodes.Count + " 个按钮！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + ButtonNodes.Count + " 个按钮！", XGUIMsgState.通知);
             }
             return btnlist.ToArray();
         }

@@ -58,10 +58,10 @@ Material:
     - _BgMapOpacity: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _UseRatio: 1
+    - _UseRatio: 0
     - _UseTiling: 0
     m_Colors:
     - _Color: {r: 0, g: 0, b: 0, a: 0.3137255}
-    - _Tiling: {r: 20, g: 20, b: 0, a: 0}
+    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
@@ -50,6 +51,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         Rect draw_rect;
+
         #region GUI 参数
         /// <summary>
         /// 系统默认GUI行高
@@ -175,8 +177,8 @@ namespace SevenStrikeModules.XHud.Editor
             GetSerializeFields();
 
             #region 获取字体
-            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Light");
+            Font_Bold = Editor_XHud_GUI.GetFont("sx_bold");
+            Font_Light = Editor_XHud_GUI.GetFont("sx_regular");
             #endregion
 
             #region 获取图标          
@@ -588,7 +590,7 @@ namespace SevenStrikeModules.XHud.Editor
                             draw_rect.Set(rect.width + 23, baseheight + 91 + hh, 14, 14);
                             if (Editor_XHud_GUI.Gui_Button(draw_rect, anim_dir_war_r, anim_dir_war_p, true, "", "", Color.white))
                             {
-                                string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+                                string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
                                 string nav = "";
                                 switch (dir_index)
                                 {
@@ -638,7 +640,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 if (Editor_XHud_GUI.Gui_Button(draw_rect, anim_sound_r, anim_sound_p, true, "", "", Color.white))
                                 {
                                     Editor_XHud_PrimitiveTweenSoundSetTool = (Editor_XHud_PrimitiveTweenSoundSetTool)EditorWindow.GetWindow(typeof(Editor_XHud_PrimitiveTweenSoundSetTool), false, "图元动画器节点音效设置器", true);
-                                    Editor_XHud_PrimitiveTweenSoundSetTool.minSize = new Vector2(360, 500);
+                                    Editor_XHud_PrimitiveTweenSoundSetTool.minSize = new Vector2(350, 600);
                                     Editor_XHud_PrimitiveTweenSoundSetTool.maxSize = Editor_XHud_PrimitiveTweenSoundSetTool.minSize;
                                     Editor_XHud_PrimitiveTweenSoundSetTool.Show();
                                     PrimitiveTweenSoundNode node = new PrimitiveTweenSoundNode();
@@ -745,7 +747,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         SerializedProperty sp_soundnode = sp_TweenSounds.GetArrayElementAtIndex(p);
                         SerializedProperty sp_soundper = sp_soundnode.FindPropertyRelative("Percentage");
-                        draw_rect.Set(rect.x + 10 + ((rect.width - 20) * sp_soundper.floatValue), rect.y + 6, 3, 3);
+                        draw_rect.Set(rect.x + 10 + ((rect.width - 20) * sp_soundper.floatValue * 0.01f), rect.y + 6, 3, 3);
                         EditorGUI.DrawRect(draw_rect, Editor_XHud_GUI.GetColor(HudColor.亮金色));
                     }
                     draw_rect.Set(rect.x + 10 + ((rect.width - 20) * sp_Progress.floatValue), rect.y + 3, 2, 8);
@@ -983,7 +985,7 @@ namespace SevenStrikeModules.XHud.Editor
             serializedObject.Update();
 
             #region 标题
-            string h_color = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary);
+            string h_color = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary);
             string titlename = "XHud - 图元  >  动画";
             Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, titlename, Color.white, null, "", 20, 20);
             Rect rect = GUILayoutUtility.GetLastRect();
@@ -995,7 +997,10 @@ namespace SevenStrikeModules.XHud.Editor
 
             GUILayout.BeginHorizontal();
             GUILayout.Space(10);
-
+            if (Editor_XHud_GUI.Gui_Layout_Button(14, "OPEN", prw_play_r, prw_play_p, 4))
+            {
+                MiniTimelineWindow.OpenWith(BaseScript);
+            }
             #region 预览按钮
             if (!Application.isPlaying)
             {
@@ -1077,11 +1082,11 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Primitive_Tween>("调试", opt_debug, ref sp_Debug, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Primitive_Tween>("调试", opt_debug, ref sp_Debug, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Primitive_Tween>("静音", opt_mute, ref sp_MutePlay, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Primitive_Tween>("静音", opt_mute, ref sp_MutePlay, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Primitive_Tween>("元素联动", opt_control, ref sp_IgnoreElementAnimationPlay, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Primitive_Tween>("元素联动", opt_control, ref sp_IgnoreElementAnimationPlay, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
@@ -2194,7 +2199,7 @@ namespace SevenStrikeModules.XHud.Editor
                     float x_vol = tsound.Volume;
                     float x_pit_min = tsound.MinPitch;
                     float x_pit_max = tsound.MaxPitch;
-                    float x_delay = (tsound.Percentage * node.Duration * tweener.GlobalDuration) + node.Delay;
+                    float x_delay = ((tsound.Percentage * 0.01f) * node.Duration * tweener.GlobalDuration) + node.Delay;
                     bool x_userandom = !(tsound.MinPitch == 1 && tsound.MaxPitch == 1);
                     string x_soundname = tsound.Sound.name;
 

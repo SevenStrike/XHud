@@ -20,10 +20,13 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Utilitys;
+    using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
@@ -37,8 +40,6 @@ namespace SevenStrikeModules.XHud.Editor
         private XHud_Element_Sounder BaseScript;
         private XHud_Manager HudManager;
         #endregion
-
-        private bool OriginalDisplay;
 
         #region 序列化属性
         SerializedProperty
@@ -79,7 +80,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 图标
-        private Texture2D left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, locate_r, locate_p, play_r, play_p, add_r, add_p, icon_main, channel, soundname, play_r_mul, play_p_mul, freq, length;
+        private Texture2D left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, locate_r, locate_p, play_r, play_p, add_r, add_p, icon_main, play_r_mul, play_p_mul;
         #endregion
 
         #region 选项文字
@@ -147,23 +148,19 @@ namespace SevenStrikeModules.XHud.Editor
             PreviewKey = serializedObject.FindProperty("PreviewKey");
             UnPreviewKey = serializedObject.FindProperty("UnPreviewKey");
 
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/icon_main");
-            channel = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/channel");
-            soundname = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/soundname");
-            freq = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/freq");
-            length = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/length");
-            locate_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/locate_r");
-            locate_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/locate_p");
-            play_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/play_r");
-            play_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/play_p");
-            add_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/add_r");
-            add_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/add_p");
-            left_arrow_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/left_arrow_r");
-            left_arrow_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/left_arrow_p");
-            right_arrow_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/right_arrow_r");
-            right_arrow_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/right_arrow_p");
-            play_r_mul = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/play_r_mul");
-            play_p_mul = Editor_XHud_GUI.GetIcon("Icons_XHud_Sounder/play_p_mul");
+            icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/icon_main");
+            locate_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/locate_r");
+            locate_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/locate_p");
+            play_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/play_r");
+            play_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/play_p");
+            add_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/add_r");
+            add_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/add_p");
+            left_arrow_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/left_arrow_r");
+            left_arrow_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/left_arrow_p");
+            right_arrow_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/right_arrow_r");
+            right_arrow_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/right_arrow_p");
+            play_r_mul = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/play_r_mul");
+            play_p_mul = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/play_p_mul");
 
             GetAllTargets();
 
@@ -236,38 +233,76 @@ namespace SevenStrikeModules.XHud.Editor
         {
             serializedObject.Update();
 
-            if (string.IsNullOrEmpty(BaseScript.Indicator))
-                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 元素音效器", Color.white);
-            else
-                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 元素音效器 -> ( " + BaseScript.Indicator + " )", Color.white);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
 
-            #region 快捷控制
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "快捷控制", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
+            #region 标题
+            XGUI.layout_banner(
+             bg_fill: XGUIFilled.实体,
+             bg_color: XGUIColor.深空灰,
+             bg_height: 30,
+             icon: icon_main,
+             icon_color: XHud_Dashboard.Theme_Primary,
+             title_text: "XHud  -  音效器",
+             title_anchor: TextAnchor.MiddleLeft,
+             title_style: FontStyle.Normal,
+             title_color: Color.white,
+             title_size: XGUIFontSize.B,
+             title_clipping: clipping,
+             bg_margin: new RectOffset(0, 0, 5, 5));
+            #endregion
 
-            #region 工具栏
-            GUILayout.BeginHorizontal();
-            Editor_XHud_GUI.Gui_Layout_Space(10);
+            XGUI.layout_space(5);
+
+            #region 快捷功能
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "快捷功能",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(15, 15, 20, 15));
 
             #region 预览当前声音
             if (Application.isPlaying)
-                GUI.enabled = false;
+                XGUI.SetEnabled(false);
             else
-                GUI.enabled = true;
+                XGUI.SetEnabled(true);
 
-            if (Editor_XHud_GUI.Gui_Layout_Button(14, "预览当前声音", IsMultiSelected() ? play_r_mul : play_r, IsMultiSelected() ? play_p_mul : play_p))
+            if (XGUI.layout_button(
+                tooltip: "预览当前声音",
+                tex_release: IsMultiSelected() ? play_r_mul : play_r,
+                tex_press: IsMultiSelected() ? play_p_mul : play_p,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                width: 14,
+                height: 14))
             {
                 Preview_HudSound_Play(DelayTime.floatValue);
             }
-            GUI.enabled = true;
+
+            XGUI.SetEnabled(true);
             #endregion
 
             GUILayout.FlexibleSpace();
 
-            #region 定位资源
-            if (Editor_XHud_GUI.Gui_Layout_Button(14, "定位到音效资源", locate_r, locate_p))
+            #region 定位到音效资源
+            if (XGUI.layout_button(
+                tooltip: "定位到音效资源",
+                tex_release: locate_r,
+                tex_press: locate_p,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                width: 14,
+                height: 14))
             {
                 if (Application.isPlaying)
                 {
@@ -279,13 +314,19 @@ namespace SevenStrikeModules.XHud.Editor
                     return;
                 HudManager.Hud_Sounds.SoundLibrary_Location(SoundName.stringValue);
             }
-            GUI.enabled = true;
             #endregion
 
             GUILayout.FlexibleSpace();
 
-            #region 添加到库
-            if (Editor_XHud_GUI.Gui_Layout_Button(14, "添加音效到库", add_r, add_p))
+            #region 添加音效到库
+            if (XGUI.layout_button(
+                tooltip: "添加音效到库",
+                tex_release: add_r,
+                tex_press: add_p,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                width: 14,
+                height: 14))
             {
                 if (Application.isPlaying)
                 {
@@ -295,231 +336,463 @@ namespace SevenStrikeModules.XHud.Editor
                 IsObjectSelector = true;
                 EditorGUIUtility.ShowObjectPicker<AudioClip>(SelectedClip, false, "", 0);
             }
-            GUI.enabled = true;
             #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            GUILayout.EndHorizontal();
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
-
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
-            #endregion
-
-            #region 音效控制
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "音效控制", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-
-            #region 时机
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
-            string[] str_tims = new string[1] { "无" };
-
-            #region Element
-            if (Element.objectReferenceValue != null)
-            {
-                str_tims = new string[4] { "元素进入时", "元素进入后", "元素退出时", "自定义" };
-            }
-            #endregion
-
-            #region Slider
-            if (Slider.objectReferenceValue != null)
-            {
-                str_tims = new string[] { "无", "按下滑动条", "松开滑动条", "滑动条数值改变" };
-            }
-            #endregion
-
-            #region Toggle
-            if (Toggle.objectReferenceValue != null)
-            {
-                str_tims = new string[] { "无", "开关打开时", "开关关闭时", "开关按下时", "开关抬起时", "开关变化时" };
-            }
-            #endregion
-
-            #region Progress
-            if (Progress.objectReferenceValue != null)
-            {
-                str_tims = new string[] { "无", "进度开始时", "进度变化时", "进度结束时" };
-            }
-            #endregion
-
-            #region Button
-            if (Button.objectReferenceValue != null)
-            {
-                str_tims = new string[] { "无", "鼠标进入", "鼠标退出", "鼠标按下", "鼠标松开", "鼠标长按", "鼠标点击", "鼠标选中", "鼠标取消选中" };
-            }
-            #endregion
-
-            #region Option
-            if (Option.objectReferenceValue != null)
-            {
-                str_tims = new string[] { "无", "点击选项", "光标移动开始", "光标移动结束", "光标位置改变" };
-            }
-            #endregion
-
-            Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Element_Sounder>("播放时机", str_tims, ref Timings, HudFilled.实体, 120, 22, SelectedObjects);
-            #endregion
-
-            #region 列表
-            if (HudManager.Hud_Sounds != null)
-            {
-                string[] collist = HudManager.Hud_Sounds.SoundLibrary_GetSoundNames();
-                Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Element_Sounder>("音效列表", collist, ref SoundName, HudFilled.实体, 120, 22, SelectedObjects);
-            }
-            #endregion
-
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
-            #endregion
-
-            Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 选项
+            BaseScript.fold_option = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "选项",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_option);
 
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "选项", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
+            if (!BaseScript.fold_option)
+            {
+                DrawToggle("状态调试", DebugState, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { }, stroptions_debug);
+                DrawToggle("随机音高", UseRandomPitch, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { }, stroptions_random);
+                DrawToggle("循环播放", IsLoop, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { }, stroptions_cycle);
+            }
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Element_Sounder>("随机音高", stroptions_random, ref UseRandomPitch, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Element_Sounder>("状态调试", stroptions_debug, ref DebugState, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Element_Sounder>("循环播放", stroptions_cycle, ref IsLoop, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
             #region 统计
-            string statistic_title = "统计信息";
-            if (IsMultiSelected())
-                statistic_title = "统计信息 - ( 批量模式 )";
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statistic_title, XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            BaseScript.fold_state = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "统计",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_state);
 
-            if (HudManager.Hud_Sounds == null)
+            if (!BaseScript.fold_state)
             {
-                Editor_XHud_GUI.Gui_Layout_Labelfield("暂未在管理器中配置音效库", HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.阴影灰), TextAnchor.MiddleCenter);
-            }
-            else
-            {
-                if (HudManager.Hud_Sounds.SoundLibrary.Count <= 0)
+                if (HudManager.Hud_Sounds == null)
                 {
-                    Editor_XHud_GUI.Gui_Layout_Labelfield("暂未在音效库中找到任何音效资源", HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.阴影灰), TextAnchor.MiddleCenter);
+                    XGUI.layout_label(
+                        text: "暂未在管理器中配置音效库",
+                        size: XGUIFontSize.M,
+                        text_color: Color.gray,
+                        padding: new RectOffset(0, 0, 0, -10),
+                        margin: new RectOffset(0, 0, 15, 35),
+                        clipping: TextClipping.Clip,
+                        font_style: FontStyle.Normal,
+                        anchor: TextAnchor.MiddleCenter);
                 }
                 else
                 {
-                    if (!IsMultiSelected())
+                    if (HudManager.Hud_Sounds.SoundLibrary.Count <= 0)
                     {
-                        XHud_LibraryArg_Sound soundInfo = HudManager.Hud_Sounds.SoundLibrary_GetSoundInfo(SoundName.stringValue);
-
-                        if (soundInfo != null)
-                        {
-                            Editor_XHud_GUI.StatuDisplayer_text(soundname, 12, new Vector2(0, 7), "名称", 12, soundInfo.Name, XHud_Dashboard.Theme_Primary, 11);
-                            Editor_XHud_GUI.StatuDisplayer_text(channel, 12, new Vector2(0, 7), "声道", 12, soundInfo.Channel == 1 ? "单声道" : "立体声", XHud_Dashboard.Theme_Primary, 11);
-                            Editor_XHud_GUI.StatuDisplayer_text(this.freq, 12, new Vector2(0, 7), "频率", 12, soundInfo.Frequency.ToString() + "hz", XHud_Dashboard.Theme_Primary, 11);
-                            Editor_XHud_GUI.StatuDisplayer_text(length, 12, new Vector2(0, 7), "时长", 12, soundInfo.Length.ToString("F2") + " 秒", XHud_Dashboard.Theme_Primary, 11);
-                        }
+                        XGUI.layout_label(
+                           text: "暂未在音效库中找到任何音效资源",
+                           size: XGUIFontSize.M,
+                           text_color: Color.gray,
+                           padding: new RectOffset(0, 0, 0, -10),
+                           margin: new RectOffset(0, 0, 15, 35),
+                           clipping: TextClipping.Clip,
+                           font_style: FontStyle.Normal,
+                           anchor: TextAnchor.MiddleCenter);
                     }
                     else
                     {
-                        #region 批量控件
-                        Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                        Editor_XHud_GUI.Gui_Layout_Space(10);
-                        if (Editor_XHud_GUI.Gui_Layout_Button($"{SelectedObjects[SounderStatistic_Index].name} ( {SelectedObjects[SounderStatistic_Index].Indicator} )", "", HudFilled.透明, HudColor.无, Color.gray, 20))
+                        if (!IsMultiSelected())
                         {
-                            EditorGUIUtility.PingObject(SelectedObjects[SounderStatistic_Index]);
-                        }
-                        Editor_XHud_GUI.Gui_Layout_FlexSpace();
-                        if (Editor_XHud_GUI.Gui_Layout_Button(12, "", left_arrow_r, left_arrow_p))
-                        {
-                            if (SounderStatistic_Index <= 0)
-                            {
-                                SounderStatistic_Index = SelectedObjects.Length - 1;
-                            }
-                            else
-                            {
-                                SounderStatistic_Index--;
-                            }
-                            EditorGUIUtility.PingObject(SelectedObjects[SounderStatistic_Index]);
-                        }
-                        Editor_XHud_GUI.Gui_Layout_Space(16);
-                        if (Editor_XHud_GUI.Gui_Layout_Button(12, "", right_arrow_r, right_arrow_p))
-                        {
-                            if (SounderStatistic_Index >= SelectedObjects.Length - 1)
-                            {
-                                SounderStatistic_Index = 0;
-                            }
-                            else
-                            {
-                                SounderStatistic_Index++;
-                            }
-                            EditorGUIUtility.PingObject(SelectedObjects[SounderStatistic_Index]);
-                        }
-                        Editor_XHud_GUI.Gui_Layout_Space(5);
-                        Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-                        #endregion
+                            XHud_LibraryArg_Sound soundInfo = HudManager.Hud_Sounds.SoundLibrary_GetSoundInfo(SoundName.stringValue);
 
-                        XHud_LibraryArg_Sound soundInfo = HudManager.Hud_Sounds.SoundLibrary_GetSoundInfo(SelectedObjects[SounderStatistic_Index].SoundName);
+                            if (soundInfo != null)
+                            {
+                                #region 名称
+                                XGUI.layout_state_displayer_text(
+                                    title: "名称",
+                                    title_size: XGUIFontSize.M,
+                                    subtitle: soundInfo.Name,
+                                    subtitle_size: XGUIFontSize.M,
+                                    subtitle_color: XHud_Dashboard.Theme_Primary,
+                                    margin: new RectOffset(5, 5, 0, 5));
+                                #endregion
 
-                        Editor_XHud_GUI.StatuDisplayer_text(soundname, 12, new Vector2(0, 7), "名称", 12, soundInfo.Name, XHud_Dashboard.Theme_Primary, 11);
-                        Editor_XHud_GUI.StatuDisplayer_text(channel, 12, new Vector2(0, 7), "声道", 12, soundInfo.Channel == 1 ? "单声道" : "立体声", XHud_Dashboard.Theme_Primary, 11);
-                        Editor_XHud_GUI.StatuDisplayer_text(this.freq, 12, new Vector2(0, 7), "频率", 12, soundInfo.Frequency.ToString() + "hz", XHud_Dashboard.Theme_Primary, 11);
-                        Editor_XHud_GUI.StatuDisplayer_text(length, 12, new Vector2(0, 7), "时长", 12, soundInfo.Length.ToString("F2") + " 秒", XHud_Dashboard.Theme_Primary, 11);
+                                #region 声道
+                                XGUI.layout_state_displayer_text(
+                                    title: "声道",
+                                    title_size: XGUIFontSize.M,
+                                    subtitle: soundInfo.Channel == 1 ? "单声道" : "立体声",
+                                    subtitle_size: XGUIFontSize.M,
+                                    subtitle_color: XHud_Dashboard.Theme_Primary,
+                                    margin: new RectOffset(5, 5, 0, 5));
+                                #endregion
+
+                                #region 频率
+                                XGUI.layout_state_displayer_text(
+                                    title: "频率",
+                                    title_size: XGUIFontSize.M,
+                                    subtitle: soundInfo.Frequency.ToString() + "hz",
+                                    subtitle_size: XGUIFontSize.M,
+                                    subtitle_color: XHud_Dashboard.Theme_Primary,
+                                    margin: new RectOffset(5, 5, 0, 5));
+                                #endregion
+
+                                #region 时长
+                                XGUI.layout_state_displayer_text(
+                                    title: "时长",
+                                    title_size: XGUIFontSize.M,
+                                    subtitle: soundInfo.Length.ToString("F2") + " 秒",
+                                    subtitle_size: XGUIFontSize.M,
+                                    subtitle_color: XHud_Dashboard.Theme_Primary,
+                                    margin: new RectOffset(5, 5, 0, 5));
+                                #endregion
+                            }
+                        }
+                        else
+                        {
+                            #region 批量控件
+                            XGUI.layout_group_start(
+                                type: XGUIContainerType.Horizontal,
+                                absolute_margin: true,
+                                absolute_padding: true,
+                                margin: new RectOffset(0, 0, 0, 0),
+                                padding: new RectOffset(0, 0, 10, 15),
+                                foldout: BaseScript.fold_option);
+
+                            if (XGUI.layout_button(
+                                text: $"{SelectedObjects[SounderStatistic_Index].name} ( {SelectedObjects[SounderStatistic_Index].Indicator} )",
+                                tooltip: "",
+                                bg_fill: XGUIFilled.透明,
+                                bg_color: XGUIColor.亮白,
+                                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                                button_text_color: Color.white,
+                                press_fill: XGUIFilled.透明,
+                                press_color: XGUIColor.深空灰,
+                                press_text_color: XHud_Dashboard.Theme_Primary,
+                                font_size: XGUIFontSize.B,
+                                anchor: TextAnchor.MiddleLeft,
+                                margin: new RectOffset(0, 0, 0, 0),
+                                padding: new RectOffset(0, 0, 0, 0),
+                                button_text_style: FontStyle.Bold))
+                            {
+                                EditorGUIUtility.PingObject(SelectedObjects[SounderStatistic_Index]);
+                            }
+
+                            if (XGUI.layout_button(
+                                tooltip: "",
+                                tex_release: left_arrow_r,
+                                tex_press: left_arrow_p,
+                                tex_gui_color: Color.white,
+                                border: new RectOffset(0, 0, 0, 0),
+                                margin: new RectOffset(20, 0, 5, 0),
+                                width: left_arrow_r.width,
+                                height: left_arrow_r.height))
+                            {
+                                if (SounderStatistic_Index <= 0)
+                                {
+                                    SounderStatistic_Index = SelectedObjects.Length - 1;
+                                }
+                                else
+                                {
+                                    SounderStatistic_Index--;
+                                }
+                                EditorGUIUtility.PingObject(SelectedObjects[SounderStatistic_Index]);
+                            }
+
+                            if (XGUI.layout_button(
+                                tooltip: "",
+                                tex_release: right_arrow_r,
+                                tex_press: right_arrow_p,
+                                tex_gui_color: Color.white,
+                                border: new RectOffset(0, 0, 0, 0),
+                                margin: new RectOffset(20, 0, 5, 0),
+                                width: right_arrow_r.width,
+                                height: right_arrow_r.height))
+                            {
+                                if (SounderStatistic_Index >= SelectedObjects.Length - 1)
+                                {
+                                    SounderStatistic_Index = 0;
+                                }
+                                else
+                                {
+                                    SounderStatistic_Index++;
+                                }
+                                EditorGUIUtility.PingObject(SelectedObjects[SounderStatistic_Index]);
+                            }
+
+                            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+                            #endregion
+
+                            XHud_LibraryArg_Sound soundInfo = HudManager.Hud_Sounds.SoundLibrary_GetSoundInfo(SelectedObjects[SounderStatistic_Index].SoundName);
+
+                            #region 名称
+                            XGUI.layout_state_displayer_text(
+                                title: "名称",
+                                title_size: XGUIFontSize.M,
+                                subtitle: soundInfo.Name,
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+
+                            #region 声道
+                            XGUI.layout_state_displayer_text(
+                                title: "声道",
+                                title_size: XGUIFontSize.M,
+                                subtitle: soundInfo.Channel == 1 ? "单声道" : "立体声",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+
+                            #region 频率
+                            XGUI.layout_state_displayer_text(
+                                title: "频率",
+                                title_size: XGUIFontSize.M,
+                                subtitle: soundInfo.Frequency.ToString() + "hz",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+
+                            #region 时长
+                            XGUI.layout_state_displayer_text(
+                                title: "时长",
+                                title_size: XGUIFontSize.M,
+                                subtitle: soundInfo.Length.ToString("F2") + " 秒",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+                        }
                     }
                 }
             }
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
             #region 参数
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "参数", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
+            BaseScript.fold_param = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "参数",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_param);
 
-            Editor_XHud_GUI.Gui_Layout_Property_Field("音效标识", Indicator);
-
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
-            Editor_XHud_GUI.Gui_Layout_Property_Field("音效音量", Volume);
-
-            if (UseRandomPitch.intValue == 1)
+            if (!BaseScript.fold_param)
             {
-                Editor_XHud_GUI.Gui_Layout_Space(5);
+                #region 播放时机
+                string[] str_tims = new string[1] { "无" };
 
-                Editor_XHud_GUI.Gui_Layout_Property_Field("最小音高", Pitch_Min);
+                #region Element
+                if (Element.objectReferenceValue != null)
+                {
+                    str_tims = new string[4] { "元素进入时", "元素进入后", "元素退出时", "自定义" };
+                }
+                #endregion
 
-                Editor_XHud_GUI.Gui_Layout_Space(5);
+                #region Slider
+                if (Slider.objectReferenceValue != null)
+                {
+                    str_tims = new string[] { "无", "按下滑动条", "松开滑动条", "滑动条数值改变" };
+                }
+                #endregion
 
-                Editor_XHud_GUI.Gui_Layout_Property_Field("最大音高", Pitch_Max);
+                #region Toggle
+                if (Toggle.objectReferenceValue != null)
+                {
+                    str_tims = new string[] { "无", "开关打开时", "开关关闭时", "开关按下时", "开关抬起时", "开关变化时" };
+                }
+                #endregion
 
-                Editor_XHud_GUI.Gui_Layout_Space(5);
+                #region Progress
+                if (Progress.objectReferenceValue != null)
+                {
+                    str_tims = new string[] { "无", "进度开始时", "进度变化时", "进度结束时" };
+                }
+                #endregion
 
-                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_XHud_GUI.Gui_Layout_Space(5);
-                Editor_XHud_GUI.Gui_Layout_SliderMinMax("音高范围", ref BaseScript.Pitch_Min, ref BaseScript.Pitch_Max, -2f, 3f);
-                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+                #region Button
+                if (Button.objectReferenceValue != null)
+                {
+                    str_tims = new string[] { "无", "鼠标进入", "鼠标退出", "鼠标按下", "鼠标松开", "鼠标长按", "鼠标点击", "鼠标选中", "鼠标取消选中" };
+                }
+                #endregion
+
+                #region Option
+                if (Option.objectReferenceValue != null)
+                {
+                    str_tims = new string[] { "无", "点击选项", "光标移动开始", "光标移动结束", "光标位置改变" };
+                }
+                #endregion
+
+                Timings.stringValue = XGUI.layout_string_popup(
+                    title: "播放时机",
+                    title_width: 100,
+                    title_size: XGUIFontSize.M,
+                    title_anchor: TextAnchor.MiddleLeft,
+                    prop: Timings,
+                    options: str_tims,
+                    opt_text_size: XGUIFontSize.M,
+                    opt_text_color: Color.black,
+                    opt_text_padding: new RectOffset(10, 10, 0, 0),
+                    opt_anchor: TextAnchor.MiddleCenter,
+                    opt_font_style: FontStyle.Normal,
+                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_color: XGUIColor.亮白,
+                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    icon_arrow_color: Color.black,
+                    margin: new RectOffset(0, 0, 5, 5),
+                    padding: new RectOffset(5, 5, 0, 0),
+                    title_margin: new RectOffset(0, 0, 0, 0),
+                    act_on_changed: (value) =>
+                    {
+
+                    });
+                Timings.serializedObject.ApplyModifiedProperties();
+                #endregion
+
+                #region 音效列表
+                if (HudManager.Hud_Sounds != null)
+                {
+                    string[] collist = HudManager.Hud_Sounds.SoundLibrary_GetSoundNames();
+
+                    SoundName.stringValue = XGUI.layout_string_popup(
+                    title: "音效列表",
+                    title_width: 100,
+                    title_size: XGUIFontSize.M,
+                    title_anchor: TextAnchor.MiddleLeft,
+                    prop: SoundName,
+                    options: collist,
+                    opt_text_size: XGUIFontSize.M,
+                    opt_text_color: Color.black,
+                    opt_text_padding: new RectOffset(10, 10, 0, 0),
+                    opt_anchor: TextAnchor.MiddleCenter,
+                    opt_font_style: FontStyle.Normal,
+                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_color: XGUIColor.亮白,
+                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    icon_arrow_color: Color.black,
+                    margin: new RectOffset(0, 0, 5, 5),
+                    padding: new RectOffset(5, 5, 0, 0),
+                    title_margin: new RectOffset(0, 0, 0, 0),
+                    act_on_changed: (value) =>
+                    {
+
+                    });
+                    SoundName.serializedObject.ApplyModifiedProperties();
+                }
+                #endregion
+
+                XGUI.layout_seperator(
+                    thickness: 1,
+                    color: XHud_Dashboard.Theme_SeperateLine,
+                    margin: new RectOffset(15, 15, 15, 15));
+
+                #region 音效标识
+                XGUI.layout_property_field(
+                    title: "音效标识",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: Indicator,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+
+                #region 音效音量
+                XGUI.layout_property_field(
+                    title: "音效音量",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: Volume,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+
+                if (UseRandomPitch.intValue == 1)
+                {
+                    #region 最小音高
+                    XGUI.layout_property_field(
+                    title: "最小音高",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: Pitch_Min,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
+
+                    #region 最大音高
+                    XGUI.layout_property_field(
+                        title: "最大音高",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: Pitch_Max,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
+
+                    #region 音高范围
+                    xgui_minmax_value minmax = XGUI.layout_slider_min_max(
+                     title: "音高范围",
+                     ref_min: ref BaseScript.Pitch_Min,
+                     ref_max: ref BaseScript.Pitch_Max,
+                     min_limite: -2f,
+                     max_limite: 3f,
+                     title_width: 100,
+                     title_size: XGUIFontSize.M,
+                     title_anchor: TextAnchor.MiddleLeft,
+                     min_field_color: Color.white,
+                     max_field_color: Color.white,
+                     shrink_text_color: Color.white * 0.65f,
+                     control_limite: 210,
+                     prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
+                }
+
+                #region 延迟时间
+                XGUI.layout_property_field(
+                    title: "延迟时间",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: DelayTime,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+
+                #region 开始预览
+                XGUI.layout_property_field(
+                    title: "开始预览",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: PreviewKey,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+
+                #region 停止预览
+                XGUI.layout_property_field(
+                    title: "停止预览",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: UnPreviewKey,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
             }
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
-            Editor_XHud_GUI.Gui_Layout_Property_Field("延迟时间", DelayTime);
-
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
-            Editor_XHud_GUI.Gui_Layout_Property_Field("开始预览", PreviewKey);
-
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
-            Editor_XHud_GUI.Gui_Layout_Property_Field("停止预览", UnPreviewKey);
-
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             ///------------选择音效
@@ -546,29 +819,32 @@ namespace SevenStrikeModules.XHud.Editor
                         if (HudManager.Hud_Sounds.SoundLibrary == null)
                             HudManager.Hud_Sounds.SoundLibrary = new List<XHud_LibraryArg_Sound>();
                         AudioClip clip = obj as AudioClip;
-                        HudManager.Hud_Sounds.SoundLibrary.Add(new XHud_LibraryArg_Sound(clip.name, clip));
+                        string clip_format = Path.GetExtension(AssetDatabase.GetAssetPath(clip)).ToLower();
+                        HudManager.Hud_Sounds.SoundLibrary.Add(new XHud_LibraryArg_Sound(clip.name, clip, clip_format));
                         UpdateSoundParams();
                     }
                 }
             }
 
-
             #region 源脚本
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            BaseScript.fold_based = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "源脚本",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_based);
 
-            #region 原始变量
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            OriginalDisplay = EditorGUILayout.Foldout(OriginalDisplay, "变量/属性", true);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-            if (OriginalDisplay)
+            if (!BaseScript.fold_based)
+            {
                 DrawDefaultInspector();
-            #endregion
+            }
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             serializedObject.ApplyModifiedProperties();
@@ -606,13 +882,24 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 EditorApplication.delayCall += () =>
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 音效消息", "未指定音效库", "未在HudManager中配置音效库！请先前往XHud管理器指定一个音效库！", "明白", "前往", 1);
-                    if (res == "前往")
-                    {
-                        Transform man = FindFirstObjectByType<XHud_Manager>().transform;
-                        EditorGUIUtility.PingObject(man);
-                    }
-                    return;
+                    string res = XGUI.dialog(
+                        type: XGUIDialogType.警告,
+                        windowtitle: "XHud - 音效器消息",
+                        title: "未指定音效库",
+                        msg: "未在 XHudManager 中配置音效库！请先前往 XHud管理器 指定一个音效库！",
+                        ok: "前往",
+                        cancel: "明白",
+                        PrimaryIndex: 0,
+                        usemodal: true,
+                        themecolor: XHud_Dashboard.Theme_Primary,
+                        on_selected: (d) =>
+                        {
+                            if (d == "前往")
+                            {
+                                Transform man = FindFirstObjectByType<XHud_Manager>().transform;
+                                EditorGUIUtility.PingObject(man);
+                            }
+                        });
                 };
             }
             else
@@ -690,6 +977,37 @@ namespace SevenStrikeModules.XHud.Editor
             }
             Preivew_HudSound_CoroutineList_Play.Clear();
             SceneView.RepaintAll();
+        }
+        #endregion
+
+        #region Draw
+        /// <summary>
+        /// 通用方法：绘制开关
+        /// </summary>
+        private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, Action<bool> act_on_changed = null, string[] options = null)
+        {
+            XGUI.layout_toggle(
+                title: title,
+                title_size: XGUIFontSize.M,
+                title_font_style: FontStyle.Normal,
+                title_padding: new RectOffset(5, 10, 0, 0),
+                title_width: width,
+                prop: prop,
+                tog_style: style,
+                tog_padding: new RectOffset(0, 9, 0, 0),
+                tog_margin: new RectOffset(0, 0, 0, 5),
+                tog_mixed_options: options,
+                tog_mixed_text_size: XGUIFontSize.M,
+                tog_mixed_text_color: Color.black,
+                tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                tog_mixed_font_style: FontStyle.Normal,
+                tog_bg_off_color: color_bg_off,
+                tog_bg_on_color: color_bg_on,
+                tog_handler_off_color: color_off,
+                tog_handler_on_color: color_on,
+                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                act_on_changed: act_on_changed);
         }
         #endregion
     }

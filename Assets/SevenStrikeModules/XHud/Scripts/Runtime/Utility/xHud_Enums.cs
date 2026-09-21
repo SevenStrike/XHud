@@ -1273,4 +1273,22 @@ namespace SevenStrikeModules.XHud.Enums
         播放 = 1,
         杀死 = 2
     }
+    /// <summary>
+    /// XHud 生成操作模式
+    /// </summary>
+    public enum XHudSpawnMode
+    {
+        生成 = 0,
+        回收 = 1
+    }
+    /// <summary>
+    /// 场景视图边框高亮标记锚点
+    /// </summary>
+    public enum XHudSceneActivateMarkAnchor
+    {
+        左上 = 0,
+        左下 = 1,
+        右上 = 2,
+        右下 = 3
+    }
 }

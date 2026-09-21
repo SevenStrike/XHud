@@ -20,9 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
-    using System;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEditor;
@@ -45,11 +44,12 @@ namespace SevenStrikeModules.XHud.Editor
             sp_itemHeight,
             sp_visibleItemCount,
             sp_SelectedIndex,
-            sp_TransitionInfoList_Scroller;
+            sp_TransitionInfoList_Scroller,
+            sp_PreviewData_Index;
 
         private ReorderableList TrasitionInfoList;
 
-        private Texture2D icon_libsetter_transition;
+        private Texture2D icon;
 
         private Texture2D leftarr_r;
         private Texture2D leftarr_p;
@@ -59,7 +59,9 @@ namespace SevenStrikeModules.XHud.Editor
         private Texture2D stop_p;
         private Texture2D play_r;
         private Texture2D play_p;
+        private Texture2D seq_list_logo;
 
+        [SerializeField]
         private int PreviewData_Index;
         private bool IsPreviewing;
         private bool StoppedResetMode = true;
@@ -111,15 +113,6 @@ namespace SevenStrikeModules.XHud.Editor
 
         public int ModifiedIndex;
 
-        /// <summary>
-        /// 字体 - 粗体
-        /// </summary>
-        Font Font_Bold;
-        /// <summary>
-        /// 字体 - 细体
-        /// </summary>
-        Font Font_Light;
-
         [SerializeField]
         public string TransitionName;
         [SerializeField]
@@ -127,10 +120,6 @@ namespace SevenStrikeModules.XHud.Editor
         [SerializeField]
         public string TransitionDescription;
 
-        /// <summary>
-        /// 按钮宽度
-        /// </summary>
-        private float ButtonWidth = 110;
         /// <summary>
         /// 按钮高度
         /// </summary>
@@ -150,10 +139,6 @@ namespace SevenStrikeModules.XHud.Editor
         [SerializeField]
         private XHud_LibraryArg_Transition OriginTransitionNode;
 
-        private Color SepLineColor = new Color(1, 1, 1, 0.15f);
-        private Color MessageColor = new Color(1, 1, 1, 0.62f);
-        private Color DateTimeColor = new Color(1, 1, 1, 0.42f);
-
         private Rect draw_rect;
         private Rect dragarea;
         private XHud_Library_Transition Target_Hud_TransitionLibrary;
@@ -161,10 +146,10 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnDisable()
         {
-            Editor_XHud_GUI.EditorData_Set_With_String("XED_Transition_Bg_Grid_ColorA", XHud_Utilitys.Color_To_String(sp_BgGrid_Color_A.colorValue));
-            Editor_XHud_GUI.EditorData_Set_With_String("XED_Transition_Bg_Grid_ColorB", XHud_Utilitys.Color_To_String(sp_BgGrid_Color_B.colorValue));
-            Editor_XHud_GUI.EditorData_Set_With_String("XED_Transition_Bg_Grid_Tilling", sp_BgGrid_Tilling_multiply.floatValue.ToString("F2"));
-            Editor_XHud_GUI.EditorData_Set_With_String("XED_Transition_Bg_Path", AssetDatabase.GetAssetPath(sp_Preview_Texture_Bg.objectReferenceValue));
+            XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_ColorA", XGUI_Utilitys.Color_To_String(sp_BgGrid_Color_A.colorValue));
+            XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_ColorB", XGUI_Utilitys.Color_To_String(sp_BgGrid_Color_B.colorValue));
+            XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_Tilling", sp_BgGrid_Tilling_multiply.floatValue.ToString("F2"));
+            XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Path", AssetDatabase.GetAssetPath(sp_Preview_Texture_Bg.objectReferenceValue));
         }
 
         private void OnEnable()
@@ -185,23 +170,24 @@ namespace SevenStrikeModules.XHud.Editor
             sp_visibleItemCount = BaseObject.FindProperty("visibleItemCount");
             sp_SelectedIndex = BaseObject.FindProperty("SelectedIndex");
             sp_TransitionInfoList_Scroller = BaseObject.FindProperty("TransitionInfoList_Scroller");
+            sp_PreviewData_Index = BaseObject.FindProperty("PreviewData_Index");
 
             InitializePreviewMaterial();
 
             LoadPreviewTexture();
 
-            if (Editor_XHud_GUI.EditorData_Has_String("XED_Transition_Bg_Grid_ColorA"))
-                sp_BgGrid_Color_A.colorValue = XHud_Utilitys.Color_From_String(Editor_XHud_GUI.EditorData_Get_With_String("XED_Transition_Bg_Grid_ColorA"), false);
+            if (XGUI.x_Editor_Data_Has_String("xData_Transition_Bg_Grid_ColorA"))
+                sp_BgGrid_Color_A.colorValue = XGUI_Utilitys.String_To_Color(XGUI.x_Editor_Data_Get_With_String("xData_Transition_Bg_Grid_ColorA"), false);
             else
                 sp_BgGrid_Color_A.colorValue = Color.white * 0.509f;
 
-            if (Editor_XHud_GUI.EditorData_Has_String("XED_Transition_Bg_Grid_ColorB"))
-                sp_BgGrid_Color_B.colorValue = XHud_Utilitys.Color_From_String(Editor_XHud_GUI.EditorData_Get_With_String("XED_Transition_Bg_Grid_ColorB"), false);
+            if (XGUI.x_Editor_Data_Has_String("xData_Transition_Bg_Grid_ColorB"))
+                sp_BgGrid_Color_B.colorValue = XGUI_Utilitys.String_To_Color(XGUI.x_Editor_Data_Get_With_String("xData_Transition_Bg_Grid_ColorB"), false);
             else
                 sp_BgGrid_Color_B.colorValue = Color.white * 0.376f;
 
-            if (Editor_XHud_GUI.EditorData_Has_String("XED_Transition_Bg_Grid_Tilling"))
-                sp_BgGrid_Tilling_multiply.floatValue = float.Parse(Editor_XHud_GUI.EditorData_Get_With_String("XED_Transition_Bg_Grid_Tilling"));
+            if (XGUI.x_Editor_Data_Has_String("xData_Transition_Bg_Grid_Tilling"))
+                sp_BgGrid_Tilling_multiply.floatValue = float.Parse(XGUI.x_Editor_Data_Get_With_String("xData_Transition_Bg_Grid_Tilling"));
             else
                 sp_BgGrid_Tilling_multiply.floatValue = 5;
 
@@ -209,20 +195,19 @@ namespace SevenStrikeModules.XHud.Editor
             sp_BgGrid_Color_B.serializedObject.ApplyModifiedProperties();
             sp_BgGrid_Tilling_multiply.serializedObject.ApplyModifiedProperties();
 
-            icon_libsetter_transition = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/logo");
+            icon = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/logo");
 
-            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
+            leftarr_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/left_arrow_p");
+            leftarr_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/left_arrow_r");
+            rightarr_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/right_arrow_p");
+            rightarr_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/right_arrow_r");
 
-            leftarr_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/left_arrow_p");
-            leftarr_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/left_arrow_r");
-            rightarr_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/right_arrow_p");
-            rightarr_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/right_arrow_r");
+            stop_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/prw_stop_r");
+            stop_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/prw_stop_p");
+            play_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/prw_play_r");
+            play_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/prw_play_p");
 
-            stop_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/prw_stop_r");
-            stop_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/prw_stop_p");
-            play_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/prw_play_r");
-            play_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/prw_play_p");
+            seq_list_logo = XGUI.GetBasedIcon("d_RawImage Icon");
 
             TransitionDescription = "转场说明内容";
             TransitionName = "转场名称";
@@ -230,7 +215,7 @@ namespace SevenStrikeModules.XHud.Editor
             sp_itemHeight.floatValue = 25;
             sp_itemHeight.serializedObject.ApplyModifiedProperties();
 
-            sp_visibleItemCount.intValue = 19;
+            sp_visibleItemCount.intValue = 15;
             sp_visibleItemCount.serializedObject.ApplyModifiedProperties();
 
             #region ReorderableList - TransitionLibrary
@@ -266,19 +251,44 @@ namespace SevenStrikeModules.XHud.Editor
 
             Texture2D tex = sp_tex.objectReferenceValue as Texture2D;
 
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
+
             #region 序号
             drawelement_rect.Set(rect.x + 15, rect.y + 3, 30, 20);
-            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
+            XGUI.gui_label(
+                rect: drawelement_rect,
+                text: new GUIContent(index.ToString("D2")),
+                text_color: Color.gray,
+                size: XGUIFontSize.S,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Normal);
             #endregion
 
             #region 名称
             drawelement_rect.Set(rect.x + 40, rect.y, rect.width - 80, rect.height);
-            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, tex.name, HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 12, TextClipping.Ellipsis);
+            XGUI.gui_label(
+             rect: drawelement_rect,
+             text: new GUIContent(tex.name),
+             text_color: XHud_Dashboard.Theme_Primary,
+             size: XGUIFontSize.M,
+             clipping: clipping,
+             anchor: TextAnchor.MiddleLeft,
+             offset: new Vector2(0, 0),
+             font_style: FontStyle.Normal);
             #endregion
 
             #region 贴图
             drawelement_rect.Set(rect.width - 50, rect.y + rect.height * (0.3f / 2), rect.height * 0.7f, rect.height * 0.7f);
-            Editor_XHud_GUI.Gui_Icon(drawelement_rect, tex);
+            XGUI.gui_icon(
+                 rect: drawelement_rect,
+                 icon: tex,
+                 color: Color.white);
             #endregion           
         }
 
@@ -389,6 +399,56 @@ namespace SevenStrikeModules.XHud.Editor
         {
             BaseObject.Update();
 
+#if UNITY_6000_0_OR_NEWERdddd
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+            TextClipping clipping = TextClipping.Clip;
+#endif
+
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+
+            #region 抬头
+            Rect rect = new Rect(0, 0, position.width, position.height);
+
+            // 图标
+            Rect rect_icon = new Rect(15, 15, icon.width, icon.height);
+            XGUI.gui_icon(
+                rect: rect_icon,
+                icon: icon,
+                padding: new RectOffset(0, 0, 0, 0),
+                border: new RectOffset(0, 0, 0, 0),
+                color: Color.white);
+
+            // 大标题
+            Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
+            XGUI.gui_label(
+                rect: rect_title,
+                text: new GUIContent(Title),
+                text_color: Color.white,
+                size: XGUIFontSize.L,
+                clipping: clipping,
+                font: XGUI.GetFont("xg-heavy"));
+
+            // 分割线
+            Rect rect_seperate = new Rect(rect.x + 68, rect.y + 43, 200, 1);
+            XGUI.gui_seperator(
+                rect: rect_seperate,
+                thickness: 1,
+                color: XHud_Dashboard.Theme_SeperateLine,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0));
+
+            // 小标题
+            Rect rect_subtitle = new Rect(rect.x + 18, rect.y + 53, rect.width, 30);
+            XGUI.gui_label(
+                rect: rect_subtitle,
+                text: new GUIContent("转场资源参数与效果的预览，您可以检查和调整转场资源！(请确保导入的序列图片颜色空间匹配您的渲染管线！)"),
+                text_color: Color.white * 0.7f,
+                size: XGUIFontSize.M,
+                anchor: TextAnchor.UpperLeft,
+                clipping: clipping);
+            #endregion
+
             SerializedProperty sp_name = sp_TransitionNode.FindPropertyRelative("Name");
             SerializedProperty sp_des = sp_TransitionNode.FindPropertyRelative("Description");
             SerializedProperty sp_TotalFramesCount = sp_TransitionNode.FindPropertyRelative("TotalFramesCount");
@@ -396,25 +456,6 @@ namespace SevenStrikeModules.XHud.Editor
             SerializedProperty sp_SkipFrame = sp_TransitionNode.FindPropertyRelative("SkipFrame");
             SerializedProperty sp_Res = sp_TransitionNode.FindPropertyRelative("Res");
             SerializedProperty sp_Frames = sp_TransitionNode.FindPropertyRelative("Frames");
-
-            Rect rect = new Rect(0, 0, position.width, position.height);
-            draw_rect.Set(0, 0, position.width, position.height);
-
-            draw_rect.Set(26, 15, 48, 48);
-            Editor_XHud_GUI.Gui_Icon(draw_rect, icon_libsetter_transition);
-
-            draw_rect.Set(rect.x + 100, rect.y + 15, rect.width - 80, 30);
-            Editor_XHud_GUI.Gui_Labelfield(draw_rect, Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
-
-            draw_rect.Set(rect.x + 102, rect.y + 60, 200, 1);
-            Editor_XHud_GUI.Gui_Box(draw_rect, SepLineColor);
-
-            draw_rect.Set(rect.x + 26, rect.y + 80, rect.width - 45, rect.height);
-            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(draw_rect, "以下为待入库的转场资源参数与效果的预览，您可以检查即将入库的转场资源是否符合您的要求，同时您可以再次调整即将入库的转场资源！(请确保导入的序列图片颜色空间匹配您的渲染管线！)", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
-
-            DateTimes = DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss:ff");
-            draw_rect.Set(rect.x + 150, rect.y + 15, rect.width - 180, rect.height);
-            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(draw_rect, DateTimes, HudFilled.无, HudColor.无, DateTimeColor, TextAnchor.UpperRight, new Vector2(0, 0), 13, true, Font_Light);
 
             #region 数值关联
             if (sp_Frames.arraySize > 0)
@@ -425,60 +466,389 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
-            #region 颜色入库信息
-            float Added_Input_Height = 80;
-            #region 入库名称
-            Color LibName_color = Color.white;
-            if (string.IsNullOrEmpty(sp_TransitionName.stringValue))
+            #region 序列帧列表
+            Rect rect_transitionlist_group = new Rect(rect.x + 20, rect.y + 120, 245, 407);
+
+            XGUI.gui_group_start(
+               rect_group: rect_transitionlist_group,
+               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_color: XGUIColor.亮白,
+               bg_color_gui: XHud_Dashboard.Theme_Group,
+               bg_height: 0,
+               false,
+               false,
+               margin: new RectOffset(0, 0, 0, 0),
+               padding: new RectOffset(0, 0, 0, 0),
+               title: "序列帧列表",
+               //title_bg_fill: XGUIFilled.实体,
+               //title_bg_color: XGUIColor.亮白,
+               //title_bg_color_gui: Color.white,
+               title_size: XGUIFontSize.M,
+               title_anchor: TextAnchor.MiddleLeft,
+               title_text_color: XHud_Dashboard.Theme_Primary,
+               title_offset: new Vector2(0, 0),
+               title_padding: new RectOffset(5, 2, 2, 2),
+               title_font: null,
+               title_font_style: FontStyle.Normal,
+               title_clipping: TextClipping.Clip,
+               //icon: seq_list_logo,
+               icon: null,
+               //icon_color: Color.white,
+               icon_padding: new RectOffset(0, 0, 10, 10),
+               foldout: false);
+            XGUI.gui_group_end();
+
+            DrawTransitionInfoList_Original(rect_transitionlist_group);
+
+            #endregion
+
+            #region 控制区
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                absolute_margin: true,
+                absolute_padding: true,
+                title: "控制区",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                title_manual_offset: true,
+                title_manual_offset_space: 5,
+                margin: new RectOffset(270, 15, 120, 0),
+                padding: new RectOffset(10, 10, 15, 15));
+
+            #region 控件区 - 视觉配置
+            XGUI.layout_group_start(
+               type: XGUIContainerType.Horizontal,
+               //bg_fill: XGUIFilled.缺口纯色边框,
+               //bg_color: XGUIColor.亮白,
+               //bg_color_gui: XHud_Dashboard.Theme_Group,
+               absolute_margin: true,
+               absolute_padding: true,
+               //title: "SSS",
+               //title_size: XGUIFontSize.M,
+               //title_text_color: XHud_Dashboard.Theme_Primary,
+               //title_clipping: TextClipping.Clip,
+               //title_manual_offset: true,
+               //title_manual_offset_space: 5,
+               margin: new RectOffset(0, 0, 0, 0),
+               padding: new RectOffset(0, 0, 0, 0));
+
+            #region 参考图
+            XGUI.layout_property_field(
+              title: "参考图",
+              title_size: XGUIFontSize.M,
+              title_hover_color: XHud_Dashboard.Theme_Primary,
+              title_width: 50,
+              field_width: 130,
+              prop: sp_Preview_Texture_Bg,
+              prop_margin: new RectOffset(0, 0, 5, 10));
+            #endregion
+
+            #region 跳帧
+            XGUI.layout_property_field(
+                title: "跳帧",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 30,
+                field_width: 35,
+                prop: sp_SkipFrame,
+                prop_margin: new RectOffset(0, 0, 5, 10));
+            #endregion
+
+            #region 平铺
+            XGUI.layout_property_field(
+                title: "平铺",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 30,
+                field_width: 35,
+                prop: sp_BgGrid_Tilling_multiply,
+                prop_margin: new RectOffset(0, 0, 5, 10));
+            #endregion
+
+            #region 颜色 - 背景
+            sp_Preview_Color.colorValue = XGUI.layout_colorfield(
+                prop: sp_Preview_Color.colorValue,
+                state_title: null,
+                field_width: 50);
+            sp_Preview_Color.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            #region 颜色 - 格子 - 前景
+            sp_BgGrid_Color_A.colorValue = XGUI.layout_colorfield(
+                prop: sp_BgGrid_Color_A.colorValue,
+                state_title: null,
+                field_width: 50);
+            sp_BgGrid_Color_A.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            #region 颜色 - 格子 - 背景
+            sp_BgGrid_Color_B.colorValue = XGUI.layout_colorfield(
+                prop: sp_BgGrid_Color_B.colorValue,
+                state_title: null,
+                field_width: 50);
+            sp_BgGrid_Color_B.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+            #endregion
+
+            XGUI.layout_space(316);
+
+            #region 控件区 - 预览操作
+            XGUI.layout_group_start(
+               type: XGUIContainerType.Horizontal,
+               //bg_fill: XGUIFilled.缺口纯色边框,
+               //bg_color: XGUIColor.亮白,
+               //bg_color_gui: XHud_Dashboard.Theme_Group,
+               absolute_margin: true,
+               absolute_padding: true,
+               //title: "SSS",
+               //title_size: XGUIFontSize.M,
+               //title_text_color: XHud_Dashboard.Theme_Primary,
+               //title_clipping: TextClipping.Clip,
+               //title_manual_offset: true,
+               //title_manual_offset_space: 5,
+               margin: new RectOffset(0, 0, 0, 0),
+               padding: new RectOffset(0, 0, 0, 0));
+
+            XGUI.ChangedCheck_Start();
+            sp_PreviewData_Index.intValue = XGUI.layout_slider_int(
+                title: "序列进度",
+                prop: sp_PreviewData_Index,
+                left: 0,
+                right: TransitionNode.Frames.Count - 1,
+                title_width: 80,
+                title_size: XGUIFontSize.M,
+                title_anchor: TextAnchor.MiddleLeft,
+                prop_margin: new RectOffset(0, 0, 0, 0));
+            if (XGUI.ChangedCheck_End())
             {
-                LibName_color = Color.gray;
-                sp_TransitionName.stringValue = "转场名称";
+                StopPreviewUpdate();
+                IsPreviewing = false;
+
+                sp_SelectedIndex.intValue = sp_PreviewData_Index.intValue;
+
+                CalculateListScroller();
+            }
+            sp_PreviewData_Index.serializedObject.ApplyModifiedProperties();
+
+            XGUI.layout_space(20);
+
+            #region 播放控制
+            if (!IsPreviewing && XGUI.layout_button(
+                tooltip: "播放",
+                tex_release: play_r,
+                tex_press: play_p,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                margin: new RectOffset(0, 0, 3, 0),
+                width: 14,
+                height: 14))
+            {
+                IsPreviewing = true;
+                StartPreviewUpdate();
+                return;
+            }
+            if (IsPreviewing && XGUI.layout_button(
+               tooltip: "停止",
+               tex_release: stop_r,
+               tex_press: stop_p,
+               tex_gui_color: Color.white,
+               border: new RectOffset(0, 0, 0, 0),
+               margin: new RectOffset(0, 0, 3, 0),
+               width: 14,
+               height: 14))
+            {
+                IsPreviewing = false;
+                StopPreviewUpdate();
+                PreviewData_Index = 0;
+                return;
+            }
+            #endregion
+
+            XGUI.layout_space(20);
+
+            #region 播放模式
+            string stopmode = "自动复位";
+            if (!StoppedResetMode)
+            {
+                stopmode = "自动复位";
             }
             else
             {
-                if (sp_TransitionName.stringValue == "转场名称")
-                    LibName_color = Color.gray;
-                else
-                    LibName_color = Color.white;
+                stopmode = "手动复位";
+            }
+            if (XGUI.layout_button(
+               text: stopmode,
+               tooltip: "",
+               bg_fill: XGUIFilled.无,
+               bg_color: XGUIColor.亮白,
+               bg_color_gui: Color.white,
+               button_text_color: Color.white,
+               press_fill: XGUIFilled.透明,
+               press_color: XGUIColor.无,
+               press_text_color: XHud_Dashboard.Theme_Primary,
+               font_size: XGUIFontSize.B,
+               anchor: TextAnchor.MiddleCenter,
+               margin: new RectOffset(0, 0, 0, 0),
+               padding: new RectOffset(0, 0, 0, 1),
+               layout_min_width: 0,
+               layout_width: 80,
+               height: ButtonHeight,
+               button_text_font: XGUI.GetFont("xg-medium")))
+            {
+                StoppedResetMode = !StoppedResetMode;
+            }
+            #endregion
+
+            XGUI.layout_space(10);
+
+            #region 转场方向
+            string inverted = "正常";
+            if (!InvertChannel)
+            {
+                inverted = "正常";
+            }
+            else
+            {
+                inverted = "反向";
+            }
+            if (XGUI.layout_button(
+               text: inverted,
+               tooltip: "",
+               bg_fill: XGUIFilled.无,
+               bg_color: XGUIColor.亮白,
+               bg_color_gui: Color.white,
+               button_text_color: Color.white,
+               press_fill: XGUIFilled.透明,
+               press_color: XGUIColor.无,
+               press_text_color: XHud_Dashboard.Theme_Primary,
+               font_size: XGUIFontSize.B,
+               anchor: TextAnchor.MiddleCenter,
+               margin: new RectOffset(0, 0, 0, 0),
+               padding: new RectOffset(0, 0, 0, 1),
+               layout_min_width: 0,
+               layout_width: 80,
+               height: ButtonHeight,
+               button_text_font: XGUI.GetFont("xg-medium")))
+            {
+                InvertChannel = !InvertChannel;
+                StopPreviewUpdate();
+                IsPreviewing = false;
+
+                PreviewData_Index = 0;
+            }
+            #endregion
+
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+            #endregion
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            #region 信息区
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                absolute_margin: true,
+                absolute_padding: true,
+                title: "转场序列帧信息",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                title_manual_offset: true,
+                title_manual_offset_space: 5,
+                margin: new RectOffset(20, 15, 20, 0),
+                padding: new RectOffset(10, 10, 15, 15));
+
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                absolute_margin: true,
+                absolute_padding: true,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0));
+
+            #region 转场名称
+            if (string.IsNullOrEmpty(sp_TransitionName.stringValue))
+            {
+                sp_TransitionName.stringValue = "转场名称";
             }
 
-            draw_rect.Set(rect.width - 527, rect.height - 230 + Added_Input_Height, 230, 60);
-            sp_TransitionName.stringValue = Editor_XHud_GUI.Gui_TextField(draw_rect, sp_TransitionName.stringValue, LibName_color, 12);
+            sp_TransitionName.stringValue = XGUI.layout_inputfield(
+                title: "名称",
+                prop: sp_TransitionName.stringValue,
+                text_wrap: false,
+                field_fontsize: XGUIFontSize.M,
+                field_text_offset: Vector2.zero,
+                field_height: 20,
+                field_padding: new RectOffset(0, 0, 0, 0),
+                field_margin: new RectOffset(0, 0, 5, 0),
+                field_text_color: Color.white,
+                title_width: 55,
+                field_width: 200,
+                field_text_font: XGUI.GetFont("xg-medium"),
+                field_text_style: FontStyle.Normal,
+                field_text_anchor: TextAnchor.MiddleLeft);
             sp_TransitionName.serializedObject.ApplyModifiedProperties();
             #endregion
 
-            #region 说明文字
-            Color Description_Color = Color.white;
+            XGUI.layout_space(15);
+
+            #region 转场说明
             if (string.IsNullOrEmpty(sp_TransitionDescription.stringValue))
             {
-                Description_Color = Color.gray;
-                sp_TransitionDescription.stringValue = "转场说明内容";
+                sp_TransitionDescription.stringValue = "转场说明";
             }
-            else
-            {
-                if (sp_TransitionDescription.stringValue == "转场说明内容")
-                    Description_Color = Color.gray;
-                else
-                    Description_Color = Color.white;
-            }
-            draw_rect.Set(rect.width - 285, rect.height - 230 + Added_Input_Height, 260, 60);
-            sp_TransitionDescription.stringValue = Editor_XHud_GUI.Gui_TextField(draw_rect, sp_TransitionDescription.stringValue, Description_Color, 12);
+            sp_TransitionDescription.stringValue = XGUI.layout_inputfield(
+              title: "说明",
+              prop: sp_TransitionDescription.stringValue,
+              text_wrap: false,
+              field_fontsize: XGUIFontSize.M,
+              field_text_offset: Vector2.zero,
+              field_height: 20,
+              field_padding: new RectOffset(0, 0, 0, 0),
+              field_margin: new RectOffset(0, 0, 5, 0),
+              field_text_color: Color.white,
+              title_width: 50,
+              field_width: 400,
+              field_text_font: XGUI.GetFont("xg-medium"),
+              field_text_style: FontStyle.Normal,
+              field_text_anchor: TextAnchor.MiddleLeft);
             sp_TransitionDescription.serializedObject.ApplyModifiedProperties();
             #endregion
-            #endregion
+
+            XGUI.layout_space(15);
 
             #region 转场帧信息
-            float Added_Info_Height = 30;
-            string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
-            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 275, rect.height - 100 + Added_Info_Height, 200, 15), $"总帧数：<color={hexcol}> {sp_TotalFramesCount.intValue} </color> 张", HudFilled.无, HudColor.无, Color.white, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 15, Font_Bold);
+            XGUI.layout_label(
+                text: $"<color={colorhex}>{PreviewData_Index.ToString()}</color> / 帧",
+                bg_fill: XGUIFilled.无,
+                bg_color: XGUIColor.无,
+                size: XGUIFontSize.L,
+                anchor: TextAnchor.MiddleCenter,
+                text_color: Color.white,
+                offset: new Vector2(0, 0),
+                padding: new RectOffset(10, 10, 0, 0),
+                margin: new RectOffset(0, 0, 6, 0),
+                clipping: TextClipping.Clip,
+                font: XGUI.GetFont("xg-medium"),
+                font_style: FontStyle.Bold);
+            #endregion
 
-            Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect.x + 275, rect.height - 75 + Added_Info_Height, 200, 15), $"尾帧 ：{sp_LastFrameIndex.intValue} 帧", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, new Vector2(0, 0), 12, false, false, true);
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 预览
 
             Rect rect_preview_group = new Rect(rect.width - 530, rect.y + 140, 510, 380);
-            Editor_XHud_GUI.Gui_Group(rect_preview_group, HudFilled.纯色边框, HudColor.亮白, "序列帧预览器", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
 
             if (TransitionNode.Frames != null && TransitionNode.Frames.Count > 0)
             {
@@ -517,7 +887,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 draw_rect.Set(x, y + 15, textureWidth, textureHeight);
 
-                Editor_XHud_GUI.Gui_Box(draw_rect, Color.black * 0.1f);
+                XGUI.gui_box(draw_rect, Color.black * 0.1f);
 
                 Preview_Material.SetColor("_Color", sp_Preview_Color.colorValue);
                 Preview_Material.SetFloat("_Alpha", sp_Preview_Color.colorValue.a);
@@ -554,149 +924,68 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
                 #endregion
 
-                #region 预览控件
-
-                float PreviewActiveX_added_height = 15;
-
-                #region 颜色
-                draw_rect.Set(rect_preview.x + rect_preview.width - 50, rect_preview_group.y + 3 + margin, 40, 20);
-                sp_Preview_Color.colorValue = Editor_XHud_GUI.Gui_ColorField(draw_rect, sp_Preview_Color.colorValue);
-                #endregion
-
-                #region Grid A颜色
-                draw_rect.Set(rect_preview.x + rect_preview.width - 100, rect_preview_group.y + 3 + margin, 40, 20);
-                sp_BgGrid_Color_A.colorValue = Editor_XHud_GUI.Gui_ColorField(draw_rect, sp_BgGrid_Color_A.colorValue);
-                #endregion
-
-                #region Grid B颜色
-                draw_rect.Set(rect_preview.x + rect_preview.width - 150, rect_preview_group.y + 3 + margin, 40, 20);
-                sp_BgGrid_Color_B.colorValue = Editor_XHud_GUI.Gui_ColorField(draw_rect, sp_BgGrid_Color_B.colorValue);
-                #endregion
-
-                #region 背景平铺
-                draw_rect.Set(rect_preview.x + rect_preview.width - 235, rect_preview_group.y + 3 + margin, 65, 20);
-                Editor_XHud_GUI.Gui_Property_Field(draw_rect, "平铺", sp_BgGrid_Tilling_multiply, 0, 30);
-                #endregion
-
-                #region 跳帧
-                draw_rect.Set(rect_preview.x + rect_preview.width - 310, rect_preview_group.y + 3 + margin, 65, 20);
-                Editor_XHud_GUI.Gui_Property_Field(draw_rect, "跳帧", sp_SkipFrame, 0, 30);
-                #endregion
-
-                #region 转场图片
-                draw_rect.Set(rect_preview.x + rect_preview.width - 495, rect_preview_group.y + 3 + margin, 170, 20);
-                Editor_XHud_GUI.Gui_Property_Field(draw_rect, "预览图", sp_Preview_Texture_Bg, 0, 40);
-                #endregion
-
-                #region 播放停止模式
-                string stopmode = "自动复位";
-                if (!StoppedResetMode)
-                {
-                    stopmode = "自动复位";
-                }
-                else
-                {
-                    stopmode = "手动复位";
-                }
-                draw_rect.Set(rect_preview.x + rect_preview.width - 210, rect_preview.y + 316 + margin + PreviewActiveX_added_height, 40, 20);
-                if (Editor_XHud_GUI.Gui_Button(draw_rect, null, null, TextAnchor.MiddleCenter, false, stopmode, "", Color.clear, XHud_Dashboard.Theme_Primary, HudFilled.透明, 12))
-                {
-                    StoppedResetMode = !StoppedResetMode;
-                }
-                #endregion
-
-                #region 进度条
-                draw_rect.Set(rect_preview.x + 15, rect_preview.y + 316 + margin + PreviewActiveX_added_height, rect_preview.width - 245, 18);
-                EditorGUI.BeginChangeCheck();
-                PreviewData_Index = Editor_XHud_GUI.Gui_Slider(draw_rect, "进度", PreviewData_Index, 0, TransitionNode.Frames.Count - 1);
-                if (EditorGUI.EndChangeCheck())
-                {
-                    StopPreviewUpdate();
-                    IsPreviewing = false;
-
-                    sp_SelectedIndex.intValue = PreviewData_Index;
-
-                    CalculateListScroller();
-                }
-                #endregion
-
-                #region 反色模式
-                string inverted = "正常";
-                if (!InvertChannel)
-                {
-                    inverted = "正常";
-                }
-                else
-                {
-                    inverted = "反色";
-                }
-                draw_rect.Set(rect_preview.x + rect_preview.width - 155, rect_preview.y + 316 + margin + PreviewActiveX_added_height, 40, 20);
-                if (Editor_XHud_GUI.Gui_Button(draw_rect, null, null, TextAnchor.MiddleCenter, false, inverted, "", Color.clear, XHud_Dashboard.Theme_Primary, HudFilled.透明, 12))
-                {
-                    InvertChannel = !InvertChannel;
-                    StopPreviewUpdate();
-                    IsPreviewing = false;
-
-                    PreviewData_Index = 0;
-                }
-                #endregion
-
-                #region 播放
-                draw_rect.Set(rect_preview.x + rect_preview.width - 98, rect_preview.y + 319 + margin + PreviewActiveX_added_height, 14, 14);
-                if (!IsPreviewing && Editor_XHud_GUI.Gui_Button(draw_rect, play_r, play_p, true, "", "", Color.white))
-                {
-                    IsPreviewing = true;
-                    StartPreviewUpdate();
-                }
-                #endregion
-
-                #region 停止
-                draw_rect.Set(rect_preview.x + rect_preview.width - 98, rect_preview.y + 319 + margin + PreviewActiveX_added_height, 14, 14);
-                if (IsPreviewing && Editor_XHud_GUI.Gui_Button(draw_rect, stop_r, stop_p, true, "", "", Color.white))
-                {
-                    IsPreviewing = false;
-                    StopPreviewUpdate();
-                    PreviewData_Index = 0;
-                }
+                #region 帧显示
+                draw_rect.Set(rect_preview.x + rect_preview.width - 90, rect_preview.y + rect_preview.height - 12, 70, 25);
+                XGUI.gui_label(
+                    rect: draw_rect,
+                    bg_fill: XGUIFilled.实体,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    text: new GUIContent($"{PreviewData_Index} / {sp_TotalFramesCount.intValue - 1}"),
+                    text_color: Color.black,
+                    size: XGUIFontSize.M,
+                    offset: new Vector2(0, -2),
+                    clipping: clipping,
+                    anchor: TextAnchor.MiddleCenter,
+                    font_style: FontStyle.Bold);
                 #endregion
 
                 #region 左一帧
-                draw_rect.Set(rect_preview.x + rect_preview.width - 60, rect_preview.y + 319 + margin + PreviewActiveX_added_height, 14, 14);
-                if (Editor_XHud_GUI.Gui_Button(draw_rect, leftarr_r, leftarr_p, true, "", "", Color.white))
+                draw_rect.Set(rect_preview.x + rect_preview.width - 90, rect_preview.y + (rect_preview.height - 40), 14, 14);
+                if (XGUI.gui_button(
+                    rect: draw_rect,
+                    tooltip: "",
+                    tex_release: leftarr_r,
+                    tex_press: leftarr_p,
+                    tex_gui_color: Color.white,
+                    margin: new RectOffset(0, 0, 0, 0),
+                    padding: new RectOffset(0, 0, 0, 0),
+                    focus_name: "prev_btn"))
                 {
                     FrameMoveBackward();
                 }
                 #endregion
 
                 #region 右一帧
-                draw_rect.Set(rect_preview.x + rect_preview.width - 25, rect_preview.y + 319 + margin + PreviewActiveX_added_height, 14, 14);
-                if (Editor_XHud_GUI.Gui_Button(draw_rect, rightarr_r, rightarr_p, true, "", "", Color.white))
+                draw_rect.Set(rect_preview.x + rect_preview.width - 35, rect_preview.y + (rect_preview.height - 40), 14, 14);
+                if (XGUI.gui_button(
+                    rect: draw_rect,
+                    tooltip: "",
+                    tex_release: rightarr_r,
+                    tex_press: rightarr_p,
+                    tex_gui_color: Color.white,
+                    margin: new RectOffset(0, 0, 0, 0),
+                    padding: new RectOffset(0, 0, 0, 0),
+                    focus_name: "next_btn"))
                 {
                     FrameMoveForward();
                 }
-                #endregion
-
-                #region 帧显示
-                draw_rect.Set(rect_preview.x + rect_preview.width - 70, rect_preview.y + rect_preview.height - 8, 50, 20);
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
-                Editor_XHud_GUI.Gui_Labelfield_Thin(draw_rect, $"{PreviewData_Index} / {sp_TotalFramesCount.intValue}", HudFilled.实体, HudColor.亮白, Color.black, TextAnchor.MiddleCenter, new Vector2(-2, -1), 10, false, false, true);
-                GUI.backgroundColor = Color.white;
-                #endregion
                 #endregion
             }
             else
             {
                 draw_rect.Set(rect.width - 530, rect.y + 330, 510, 20);
-                Editor_XHud_GUI.Gui_Labelfield(draw_rect, "请先添加序列帧图像", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleCenter, Vector2.zero, 12, Font_Light);
+                XGUI.gui_label(
+                    rect: draw_rect,
+                    text: new GUIContent("请先添加序列帧图像"),
+                    text_color: Color.gray,
+                    size: XGUIFontSize.B,
+                    clipping: clipping,
+                    anchor: TextAnchor.MiddleCenter,
+                    font: XGUI.GetFont("xg-heavy"));
             }
 
             GUI.backgroundColor = Color.white;
-            #endregion
-
-            #region 序列帧列表
-            Rect rect_transitionlist_group = new Rect(rect.x + 20, rect.y + 140, 245, 518);
-            Editor_XHud_GUI.Gui_Group(rect_transitionlist_group, HudFilled.纯色边框, HudColor.亮白, "序列帧列表", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-            DrawTransitionInfoList_Original(rect_transitionlist_group);
             #endregion
 
             #region 拖放序列帧
@@ -732,9 +1021,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(631);
+            XGUI.layout_space(10);
 
-            DialogType_Buttons();
+            Buttons();
 
             #region 检测点击事件以及左右帧进
             if (e.type == EventType.MouseDown)
@@ -788,17 +1077,19 @@ namespace SevenStrikeModules.XHud.Editor
             StopPreviewUpdate();
             IsPreviewing = false;
 
-            if (PreviewData_Index >= TransitionNode.Frames.Count - 1)
+            if (sp_PreviewData_Index.intValue >= TransitionNode.Frames.Count - 1)
             {
-                PreviewData_Index = TransitionNode.Frames.Count - 1;
+                sp_PreviewData_Index.intValue = TransitionNode.Frames.Count - 1;
             }
             else
 
             {
-                PreviewData_Index++;
+                sp_PreviewData_Index.intValue++;
             }
 
-            sp_SelectedIndex.intValue = PreviewData_Index;
+            sp_SelectedIndex.intValue = sp_PreviewData_Index.intValue;
+
+            Repaint();
         }
 
         private void FrameMoveBackward()
@@ -806,23 +1097,25 @@ namespace SevenStrikeModules.XHud.Editor
             StopPreviewUpdate();
             IsPreviewing = false;
 
-            if (PreviewData_Index <= 0)
+            if (sp_PreviewData_Index.intValue <= 0)
             {
-                PreviewData_Index = 0;
+                sp_PreviewData_Index.intValue = 0;
             }
             else
 
             {
-                PreviewData_Index--;
+                sp_PreviewData_Index.intValue--;
             }
 
-            sp_SelectedIndex.intValue = PreviewData_Index;
+            sp_SelectedIndex.intValue = sp_PreviewData_Index.intValue;
+
+            Repaint();
         }
 
         #region 辅助
         private void UpdateToLibrary()
         {
-            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
 
             XHud_LibraryArg_Transition info = new XHud_LibraryArg_Transition();
             info.CopyData(TransitionNode);
@@ -830,7 +1123,15 @@ namespace SevenStrikeModules.XHud.Editor
             info.Description = sp_TransitionDescription.stringValue;
             Target_Hud_TransitionLibrary.TransitionsLibrary_Replace(ModifiedIndex, info);
 
-            Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 转场资源修改器消息", "更新完成", $"转场资源已更新完成！", "明白");
+            XGUI.dialog(
+                type: XGUIDialogType.确认,
+                windowtitle: "XHud - 转场资源修改器消息",
+                title: "更新完成",
+                msg: $"转场资源已更新完成！",
+                ok: "明白",
+                PrimaryIndex: 0,
+                usemodal: true,
+                themecolor: XHud_Dashboard.Theme_Primary);
 
             Close();
         }
@@ -875,26 +1176,67 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 控件按钮
         /// </summary>
-        private void DialogType_Buttons()
+        private void Buttons()
         {
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_FlexSpace();
+            #region 按钮
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(10, 10, 0, 0));
 
-            if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Cancel, "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Cancel))
+            XGUI.layout_flexspace();
+
+            if (XGUI.layout_button(
+                text: ButtonText_Cancel,
+                tooltip: "",
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: Color.white,
+                button_text_color: Color.black,
+                press_fill: XGUIFilled.实体,
+                press_color: XGUIColor.深空灰,
+                press_text_color: Color.white,
+                font_size: XGUIFontSize.B,
+                anchor: TextAnchor.MiddleCenter,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                layout_min_width: 0,
+                layout_width: 200,
+                height: ButtonHeight,
+                button_text_font: XGUI.GetFont("xg-medium")))
             {
                 Close();
             }
-            Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
-            GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
-            if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Ok, "", HudFilled.实体, HudColor.亮白, XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Ok))
+
+            XGUI.layout_space(ButtonDistance);
+
+            if (XGUI.layout_button(
+                text: ButtonText_Ok,
+                tooltip: "",
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                button_text_color: Color.black,
+                press_fill: XGUIFilled.实体,
+                press_color: XGUIColor.深空灰,
+                press_text_color: Color.white,
+                font_size: XGUIFontSize.B,
+                anchor: TextAnchor.MiddleCenter,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                layout_min_width: 0,
+                layout_width: 200,
+                height: ButtonHeight,
+                button_text_font: XGUI.GetFont("xg-medium")))
             {
                 UpdateToLibrary();
                 return;
             }
-            GUI.backgroundColor = Color.white;
 
-            Editor_XHud_GUI.Gui_Layout_Space(25);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+            XGUI.layout_flexspace();
+
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+            #endregion
         }
 
         public void Set_TransitionNode(XHud_LibraryArg_Transition node)
@@ -973,10 +1315,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void LoadPreviewTexture()
         {
-            string path = Editor_XHud_GUI.EditorData_Get_With_String("XED_Transition_Bg_Path");
+            string path = XGUI.x_Editor_Data_Get_With_String("xData_Transition_Bg_Path");
             Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
             if (tex == null)
-                sp_Preview_Texture_Bg.objectReferenceValue = Editor_XHud_GUI.GetIcon("Icons_XHud_Library_Transition_Setter/defaultbg");
+                sp_Preview_Texture_Bg.objectReferenceValue = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/defaultbg");
             else
                 sp_Preview_Texture_Bg.objectReferenceValue = tex;
         }

@@ -20,8 +20,9 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditor.UI;
@@ -330,26 +331,26 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("原生参数", stroptions_hide, ref ToggleOriginalIsFold, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("原生参数", stroptions_hide, ref ToggleOriginalIsFold, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("状态调试", stroptions_debug, ref DebugState, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("状态调试", stroptions_debug, ref DebugState, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("自动停止预览", stroptions_enabled, ref AutoStopPreview, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("自动停止预览", stroptions_enabled, ref AutoStopPreview, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("选项模式", stroptions_enabled, ref IsOptionButton, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("选项模式", stroptions_enabled, ref IsOptionButton, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
             if (IsOptionButton.boolValue)
                 Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Module_Button>("作为选项按钮激活条件", str_clickthreadhold, ref ButtonActionTiming, HudFilled.实体, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("文字变色", stroptions_enabled, ref TextColorSyncFade, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("文字变色", stroptions_enabled, ref TextColorSyncFade, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("图标变色", stroptions_enabled, ref IconColorSyncFade, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("图标变色", stroptions_enabled, ref IconColorSyncFade, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("背景变色", stroptions_enabled, ref BgColorSyncFade, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("背景变色", stroptions_enabled, ref BgColorSyncFade, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("长按回退机制", stroptions_threholdback, ref LongPress_UseRewind, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("长按回退机制", stroptions_threholdback, ref LongPress_UseRewind, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("长按回退方式", stroptions_smoothback, ref LongPress_SmoothRewind, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("长按回退方式", stroptions_smoothback, ref LongPress_SmoothRewind, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
             Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
@@ -1139,7 +1140,7 @@ namespace SevenStrikeModules.XHud.Editor
                 list[i].Controller.pt_Tween.TweenNode_GetTimers();
                 x_list[i] = list[i].Controller.pt_Tween.MaxTimerWithGlobalDuration + list[i].DelayTime;
             }
-            float v = XHud_Utilitys.Array_MaxValue(x_list);
+            float v = XGUI_Utilitys.MaxValue(x_list);
             return v * globaldur;
         }
         /// <summary>
@@ -1199,6 +1200,25 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
             return hasLoop;
+        }
+        /// <summary>
+        /// 图元控制器 - 创建ID编号
+        /// </summary>
+        /// <returns></returns>
+        public string PrimitiveController_CreateID()
+        {
+            return XGUI_Utilitys.GenerateUniqueId(CollectIDs());
+        }
+        public string[] CollectIDs()
+        {
+            List<string> list = new List<string>();
+
+            for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+            {
+                list.Add(BaseScript.PrimitiveControllerNodes[i].Controller.ID);
+            }
+
+            return list.ToArray();
         }
         /// <summary>
         /// 获取序列化字段

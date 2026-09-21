@@ -20,8 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XGUI.Runtime;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -69,12 +68,12 @@ namespace SevenStrikeModules.XHud
             if (am == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到名为 " + indicator + " 的子级图元控制器！ ", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 进度条控件通知", "未获取到名为 " + indicator + " 的子级图元控制器！ ", XGUIMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级图元控制器 " + indicator, HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 进度条控件通知", "已获取子级图元控制器 " + indicator, XGUIMsgState.通知);
             }
             return am;
         }
@@ -96,12 +95,12 @@ namespace SevenStrikeModules.XHud
             if (am == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到名为 " + name + " 的子级图元控制器！ ", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 进度条控件通知", "未获取到名为 " + name + " 的子级图元控制器！ ", XGUIMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级图元控制器 " + name, HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 进度条控件通知", "已获取子级图元控制器 " + name, XGUIMsgState.通知);
             }
             return am;
         }
@@ -110,7 +109,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         /// <param name="id">目标ID</param>
         /// <returns>返回一个匹配ID的图元控制器</returns>
-        public XHud_Module_Primitive_Controller GetPrimitiveController_WithID(int id)
+        public XHud_Module_Primitive_Controller GetPrimitiveController_WithID(string id)
         {
             XHud_Module_Primitive_Controller am = null;
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
@@ -123,12 +122,12 @@ namespace SevenStrikeModules.XHud
             if (am == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到索引号为 " + id + " 的子级图元控制器！ ", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 进度条控件通知", "未获取到索引号为 " + id + " 的子级图元控制器！ ", XGUIMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取索引号为 " + id + " 子级图元控制器！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 进度条控件通知", "已获取索引号为 " + id + " 子级图元控制器！", XGUIMsgState.通知);
             }
             return am;
         }
@@ -146,19 +145,19 @@ namespace SevenStrikeModules.XHud
             if (anim == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到名为 " + primitive_indicator + " 的子级图元控制器！ ", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 进度条控件通知", "未获取到名为 " + primitive_indicator + " 的子级图元控制器！ ", XGUIMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级图元控制器 " + primitive_indicator, HudMsgState.通知);
+                        XGUI_Utilitys.Console("XHud - 进度条控件通知", "已获取子级图元控制器 " + primitive_indicator, XGUIMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级图元控制器 " + primitive_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", HudMsgState.警告);
+                        XGUI_Utilitys.Console("XHud - 进度条控件通知", "已获取子级图元控制器 " + primitive_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", XGUIMsgState.警告);
                 }
             }
 
@@ -170,7 +169,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="primitive_id">目标图元控制器ID</param>
         /// <param name="tween_id">目标图元控制器动画节点的ID</param>
         /// <returns></returns>
-        public TweenNode GetPrimitiveTweenNode_WithID(int primitive_id, int tween_id)
+        public TweenNode GetPrimitiveTweenNode_WithID(string primitive_id, int tween_id)
         {
             XHud_Module_Primitive_Controller anim = GetPrimitiveController_WithID(primitive_id);
             TweenNode node = anim.pt_Tween.TweenNode_GetByID(tween_id);
@@ -178,19 +177,19 @@ namespace SevenStrikeModules.XHud
             if (anim == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到ID为 " + primitive_id + " 的子级图元控制器！ ", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 进度条控件通知", "未获取到ID为 " + primitive_id + " 的子级图元控制器！ ", XGUIMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取ID为 " + primitive_id + " 子级图元控制器", HudMsgState.通知);
+                        XGUI_Utilitys.Console("XHud - 进度条控件通知", "已获取ID为 " + primitive_id + " 子级图元控制器", XGUIMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取ID为 " + primitive_id + " 子级图元控制器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", HudMsgState.警告);
+                        XGUI_Utilitys.Console("XHud - 进度条控件通知", "已获取ID为 " + primitive_id + " 子级图元控制器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", XGUIMsgState.警告);
                 }
             }
 
@@ -210,19 +209,19 @@ namespace SevenStrikeModules.XHud
             if (anim == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "未获取到名为 " + primitive_indicator + " 的子级图元控制器！ ", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 进度条控件通知", "未获取到名为 " + primitive_indicator + " 的子级图元控制器！ ", XGUIMsgState.错误);
             }
             else
             {
                 if (node == null)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级图元控制器 " + primitive_indicator, HudMsgState.通知);
+                        XGUI_Utilitys.Console("XHud - 进度条控件通知", "已获取子级图元控制器 " + primitive_indicator, XGUIMsgState.通知);
                 }
                 else
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "已获取子级图元控制器 " + primitive_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", HudMsgState.警告);
+                        XGUI_Utilitys.Console("XHud - 进度条控件通知", "已获取子级图元控制器 " + primitive_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", XGUIMsgState.警告);
                 }
             }
 
@@ -235,7 +234,7 @@ namespace SevenStrikeModules.XHud
         /// 验证是否存在指定ID的动画器
         /// </summary>
         /// <returns></returns>
-        public bool PrimitiveController_IsExist(int ID)
+        public bool PrimitiveController_IsExist_With_ID(string ID)
         {
             bool isExist = false;
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
@@ -251,7 +250,7 @@ namespace SevenStrikeModules.XHud
         /// 验证是否存在指定昵称的动画器
         /// </summary>
         /// <returns></returns>
-        public bool PrimitiveController_IsExist(string Indicator)
+        public bool PrimitiveController_IsExist_With_Indicator(string Indicator)
         {
             bool isExist = false;
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
@@ -273,22 +272,22 @@ namespace SevenStrikeModules.XHud
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
                 XHud_Module_Primitive_Controller anim = PrimitiveControllerNodes[i].Controller;
-                anim.pt_Tween.Tween_PlayAll_WithDelay(PrimitiveControllerNodes[i].DelayTime, PrimitivesTweenGlobalDuration, true, tim);
+                anim.pt_Tween.Tweens_Play_With_Delay(PrimitiveControllerNodes[i].DelayTime, PrimitivesTweenGlobalDuration, true, tim);
             }
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "播放图元控制器列表中的所有动画！播放时机为：" + tim.ToString(), HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "播放图元控制器列表中的所有动画！播放时机为：" + tim.ToString(), XGUIMsgState.通知);
         }
         /// <summary>
         /// 播放按钮子级中的指定ID的动画
         /// </summary>
         /// <param name="id">动画节点的ID</param>
         /// <param name="tim">触发动画的时机</param>
-        private void PrimitiveTween_PlayAt(int id, string tim)
+        private void PrimitiveTween_PlayAt(string id, string tim)
         {
             if (PrimitiveControllerNodes == null || PrimitiveControllerNodes.Count <= 0)
                 return;
 
-            if (!PrimitiveController_IsExist(id))
+            if (!PrimitiveController_IsExist_With_ID(id))
                 return;
 
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
@@ -296,11 +295,11 @@ namespace SevenStrikeModules.XHud
                 if (PrimitiveControllerNodes[i].Controller.GetID() != id)
                     continue;
                 XHud_Module_Primitive_Controller anim = PrimitiveControllerNodes[i].Controller;
-                anim.pt_Tween.Tween_PlayAll_WithDelay(PrimitiveControllerNodes[i].DelayTime, PrimitivesTweenGlobalDuration, true, tim);
+                anim.pt_Tween.Tweens_Play_With_Delay(PrimitiveControllerNodes[i].DelayTime, PrimitivesTweenGlobalDuration, true, tim);
             }
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "播放指定ID的图元控制器的动画！播放时机为：" + tim.ToString(), HudMsgState.确认);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "播放指定ID的图元控制器的动画！播放时机为：" + tim.ToString(), XGUIMsgState.确认);
         }
         /// <summary>
         /// 倒退按钮子级中的所有动画
@@ -314,7 +313,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "倒退复位图元控制器列表中的所有动画！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "倒退复位图元控制器列表中的所有动画！", XGUIMsgState.通知);
         }
         #endregion 
     }

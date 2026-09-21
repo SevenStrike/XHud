@@ -20,13 +20,17 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
+    using UnityEngine.UIElements;
     using Random = UnityEngine.Random;
 
     [System.Serializable]
@@ -78,17 +82,6 @@ namespace SevenStrikeModules.XHud.Editor
         private Texture2D Logo_Add_Release, Logo_Add_Press, Logo_Play_Release, Logo_Play_Press, Logo_Apply_Release, Logo_Apply_Press, Icon_twn_sound_percent, Icon_twn_sound_volume, Icon_twn_sound_pitch, anim_type_move, anim_type_rotator, anim_type_scale, anim_type_color, anim_type_fade, anim_type_writter, anim_type_fill, anim_type_size;
         #endregion
 
-        #region 字体
-        /// <summary>
-        /// 字体 - 粗体
-        /// </summary>
-        Font Font_Bold;
-        /// <summary>
-        /// 字体 - 细体
-        /// </summary>
-        Font Font_Light;
-        #endregion
-
         private void OnDisable()
         {
             StopAllPreviewAudio();
@@ -118,28 +111,25 @@ namespace SevenStrikeModules.XHud.Editor
 
             HudManager = XHud_Dashboard.HudManagerGet();
 
-            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
-
             #region 获取图标
-            Logo_Add_Release = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Logo_Add_Release");
-            Logo_Add_Press = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Logo_Add_Press");
-            Logo_Play_Release = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Logo_Play_Release");
-            Logo_Play_Press = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Logo_Play_Press");
-            Logo_Apply_Release = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Logo_Apply_Release");
-            Logo_Apply_Press = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Logo_Apply_Press");
-            Icon_twn_sound_percent = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Icon_twn_sound_percent");
-            Icon_twn_sound_volume = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Icon_twn_sound_volume");
-            Icon_twn_sound_pitch = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/Icon_twn_sound_pitch");
+            Logo_Add_Release = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/Logo_Add_Release");
+            Logo_Add_Press = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/Logo_Add_Press");
+            Logo_Play_Release = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/Logo_Play_Release");
+            Logo_Play_Press = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/Logo_Play_Press");
+            Logo_Apply_Release = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/Logo_Apply_Release");
+            Logo_Apply_Press = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/Logo_Apply_Press");
+            Icon_twn_sound_percent = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/Icon_twn_sound_percent");
+            Icon_twn_sound_volume = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/Icon_twn_sound_volume");
+            Icon_twn_sound_pitch = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/Icon_twn_sound_pitch");
 
-            anim_type_move = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_move");
-            anim_type_rotator = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_rotator");
-            anim_type_scale = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_scale");
-            anim_type_color = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_color");
-            anim_type_fade = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_fade");
-            anim_type_writter = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_writter");
-            anim_type_fill = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_fill");
-            anim_type_size = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primtive_Tween_Sound_Setter/anim_type_size");
+            anim_type_move = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/anim_type_move");
+            anim_type_rotator = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/anim_type_rotator");
+            anim_type_scale = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/anim_type_scale");
+            anim_type_color = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/anim_type_color");
+            anim_type_fade = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/anim_type_fade");
+            anim_type_writter = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/anim_type_writter");
+            anim_type_fill = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/anim_type_fill");
+            anim_type_size = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primtive_tween_sound_setter/anim_type_size");
             #endregion
 
             #region 动画列表
@@ -155,49 +145,131 @@ namespace SevenStrikeModules.XHud.Editor
                 },
                 drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
                 {
-                    #region Audioclip
+#if UNITY_6000_0_OR_NEWER
+                    TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
 
                     SerializedProperty sp_clip = sp_TweenSounds.GetArrayElementAtIndex(index).FindPropertyRelative("Sound");
                     SerializedProperty sp_clippath = sp_TweenSounds.GetArrayElementAtIndex(index).FindPropertyRelative("Path");
-                    EditorGUI.BeginChangeCheck();
-                    Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 130, rect.y + 2.5f, 150, 15), "", sp_clip, 0, 50);
-                    if (EditorGUI.EndChangeCheck())
+
+                    #region Audioclip
+                    XGUI.ChangedCheck_Start();
+                    XGUI.gui_property_field(
+                        rect: new Rect(rect.width - 130, rect.y + 2.5f, 150, 15),
+                        title: null,
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 0,
+                        prop: sp_clip);
+                    if (XGUI.ChangedCheck_End())
                     {
                         sp_clippath.stringValue = AssetDatabase.GetAssetPath(sp_clip.objectReferenceValue);
                         sp_clippath.serializedObject.ApplyModifiedProperties();
                     }
-
                     #endregion
 
                     #region 名称
-                    GUI.color = Editor_XHud_GUI.GetColor(HudColor.亮白);
                     AudioClip clip = (AudioClip)sp_clip.objectReferenceValue;
                     string clipname = "";
                     if (clip != null)
                         clipname = clip.name;
                     else
                         clipname = "未指定";
-                    Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 5, rect.y + 2, 100, 15), clipname, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 12, true, TextClipping.Ellipsis);
-                    GUI.color = Color.white;
+
+                    XGUI.gui_label(
+                        rect: new Rect(rect.x + 5, rect.y + 3, rect.width - 165, 15),
+                        text: new GUIContent(clipname),
+                        text_color: Color.white,
+                        size: XGUIFontSize.M,
+                        anchor: TextAnchor.MiddleLeft,
+                        font_style: FontStyle.Bold,
+                        padding: new RectOffset(0, 0, 0, 0),
+                        offset: new Vector2(0, 0),
+                        clipping: clipping);
                     #endregion
+
+                    float offset = 5;
 
                     #region 触点
                     SerializedProperty sp_per = sp_TweenSounds.GetArrayElementAtIndex(index).FindPropertyRelative("Percentage");
-                    float per = sp_per.floatValue * 100;
-                    Editor_XHud_GUI.Gui_Icon(new Rect(rect.x + 5, rect.y + 25, 15, 15), Icon_twn_sound_percent);
-                    Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 35, rect.y + 25, 60, 20), per.ToString("F2") + " %", HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleRight, new Vector2(0, 0), 12);
-                    sp_per.floatValue = EditorGUI.Slider(new Rect(rect.x + 120, rect.y + 25, rect.width - 120, 20), sp_per.floatValue, 0, 1);
+
+                    XGUI.gui_icon(
+                        rect: new Rect(rect.x + 5, rect.y + offset + 25, 15, 15),
+                        icon: Icon_twn_sound_percent,
+                        color: Color.white * 0.6f);
+
+                    XGUI.gui_label(
+                       rect: new Rect(rect.x + 35, rect.y + offset + 22, 60, 20),
+                       text: new GUIContent(sp_per.floatValue.ToString("F2") + " %"),
+                       text_color: Color.white,
+                       size: XGUIFontSize.M,
+                       anchor: TextAnchor.MiddleLeft,
+                       font_style: FontStyle.Bold,
+                       padding: new RectOffset(0, 0, 0, 0),
+                       offset: new Vector2(0, 0),
+                       clipping: clipping);
+
+                    sp_per.floatValue = XGUI.gui_slider(
+                        rect: new Rect(rect.x + 120, rect.y + offset + 25, rect.width - 120, 20),
+                        title: null,
+                        title_size: XGUIFontSize.M,
+                        title_anchor: TextAnchor.MiddleLeft,
+                        title_color: Color.white,
+                        title_width: 60,
+                        //status_icon: "icon_field_status",
+                        //status_icon_color: Color.red,
+                        prop: sp_per.floatValue,
+                        left: 0,
+                        right: 100,
+                        slider_height: 20,
+                        limite_width: 230);
+
                     sp_per.serializedObject.ApplyModifiedProperties();
                     #endregion
+
+                    offset += 25;
 
                     #region 音量
                     SerializedProperty sp_vol = sp_TweenSounds.GetArrayElementAtIndex(index).FindPropertyRelative("Volume");
                     float vol = sp_vol.floatValue * 100;
-                    Editor_XHud_GUI.Gui_Icon(new Rect(rect.x + 5, rect.y + 55, 15, 15), Icon_twn_sound_volume);
-                    Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 35, rect.y + 55, 60, 20), vol.ToString("F0") + " %", HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleRight, new Vector2(0, 0), 12);
-                    sp_vol.floatValue = EditorGUI.Slider(new Rect(rect.x + 120, rect.y + 55, rect.width - 120, 20), sp_vol.floatValue, 0, 1);
+
+                    XGUI.gui_icon(
+                        rect: new Rect(rect.x + 5, rect.y + offset + 25, 15, 15),
+                        icon: Icon_twn_sound_volume,
+                        color: Color.white * 0.6f);
+
+                    XGUI.gui_label(
+                       rect: new Rect(rect.x + 35, rect.y + offset + 22, 60, 20),
+                       text: new GUIContent(vol.ToString("F0") + " %"),
+                       text_color: Color.white,
+                       size: XGUIFontSize.M,
+                       anchor: TextAnchor.MiddleLeft,
+                       font_style: FontStyle.Bold,
+                       padding: new RectOffset(0, 0, 0, 0),
+                       offset: new Vector2(0, 0),
+                       clipping: clipping);
+
+                    sp_vol.floatValue = XGUI.gui_slider(
+                        rect: new Rect(rect.x + 120, rect.y + offset + 25, rect.width - 120, 20),
+                        title: null,
+                        title_size: XGUIFontSize.M,
+                        title_anchor: TextAnchor.MiddleLeft,
+                        title_color: Color.white,
+                        title_width: 60,
+                        //status_icon: "icon_field_status",
+                        //status_icon_color: Color.red,
+                        prop: sp_vol.floatValue,
+                        left: 0,
+                        right: 100,
+                        slider_height: 20,
+                        limite_width: 230);
+
                     sp_vol.serializedObject.ApplyModifiedProperties();
                     #endregion
+
+                    offset += 25;
 
                     #region 音高
                     SerializedProperty sp_min_pitch = sp_TweenSounds.GetArrayElementAtIndex(index).FindPropertyRelative("MinPitch");
@@ -206,15 +278,74 @@ namespace SevenStrikeModules.XHud.Editor
                     float minpitch = sp_min_pitch.floatValue;
                     float maxpitch = sp_max_pitch.floatValue;
 
-                    Editor_XHud_GUI.Gui_Icon(new Rect(rect.x + 5, rect.y + 85, 15, 15), Icon_twn_sound_pitch);
-                    EditorGUI.MinMaxSlider(new Rect(rect.x + 55, rect.y + 85, rect.width - 135, 20), ref minpitch, ref maxpitch, -1, 2);
+                    XGUI.gui_icon(
+                        rect: new Rect(rect.x + 5, rect.y + offset + 25, 15, 15),
+                        icon: Icon_twn_sound_pitch,
+                        color: Color.white * 0.6f);
 
-                    sp_min_pitch.floatValue = Editor_XHud_GUI.Gui_InputField_Float(new Rect(rect.width - 45, rect.y + 85, 30, 20), minpitch);
-                    sp_max_pitch.floatValue = Editor_XHud_GUI.Gui_InputField_Float(new Rect(rect.width - 10, rect.y + 85, 30, 20), maxpitch);
+                    XGUI.gui_label(
+                       rect: new Rect(rect.x + 35, rect.y + offset + 22, 60, 20),
+                       text: new GUIContent(vol.ToString("F0") + " %"),
+                       text_color: Color.white,
+                       size: XGUIFontSize.M,
+                       anchor: TextAnchor.MiddleLeft,
+                       font_style: FontStyle.Bold,
+                       padding: new RectOffset(0, 0, 0, 0),
+                       offset: new Vector2(0, 0),
+                       clipping: clipping);
+
+                    xgui_minmax_value minmax_value = XGUI.gui_slider_min_max(
+                        ref_min: ref minpitch,
+                        ref_max: ref maxpitch,
+                        rect: new Rect(rect.x + 120, rect.y + offset + 25, rect.width - 210, 20),
+                        title: null,
+                        title_size: XGUIFontSize.M,
+                        title_anchor: TextAnchor.MiddleLeft,
+                        title_color: Color.white,
+                        title_width: 60,
+                        //status_icon: "icon_field_status",
+                        //status_icon_color: Color.green,
+                        limite_width: 50,
+                        slider_height: 20,
+                        min_limite: -1,
+                        max_limite: 2,
+                        displaystate: false);
+
+                    sp_min_pitch.floatValue = minmax_value.min;
+                    sp_max_pitch.floatValue = minmax_value.max;
+
+                    sp_min_pitch.floatValue = XGUI.gui_inputfield(
+                        rect: new Rect(rect.width - 60, rect.y + 80, 40, 20),
+                        title: null,
+                        prop: sp_min_pitch.floatValue,
+                        field_fontsize: XGUIFontSize.M,
+                        field_text_offset: Vector2.zero,
+                        field_height: 20,
+                        field_text_color: Color.white,
+                        title_width: 40,
+                        field_text_font: XGUI.GetFont("xg-medium"),
+                        field_text_style: FontStyle.Normal,
+                        field_text_anchor: TextAnchor.MiddleCenter,
+                        field_padding: new RectOffset(5, 5, 0, 0),
+                        field_margin: new RectOffset(0, 0, 0, 0));
+
+                    sp_max_pitch.floatValue = XGUI.gui_inputfield(
+                        rect: new Rect(rect.width - 18, rect.y + 80, 40, 20),
+                        title: null,
+                        prop: sp_max_pitch.floatValue,
+                        field_fontsize: XGUIFontSize.M,
+                        field_text_offset: Vector2.zero,
+                        field_height: 20,
+                        field_text_color: Color.white,
+                        title_width: 40,
+                        field_text_font: XGUI.GetFont("xg-medium"),
+                        field_text_style: FontStyle.Normal,
+                        field_text_anchor: TextAnchor.MiddleCenter,
+                        field_padding: new RectOffset(5, 5, 0, 0),
+                        field_margin: new RectOffset(0, 0, 0, 0));
 
                     sp_min_pitch.serializedObject.ApplyModifiedProperties();
                     sp_max_pitch.serializedObject.ApplyModifiedProperties();
-
                     #endregion
                 },
                 onRemoveCallback = (ReorderableList list) =>
@@ -260,63 +391,54 @@ namespace SevenStrikeModules.XHud.Editor
         {
             serializedObject.Update();
 
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
+
             #region 标题
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                title_clipping: TextClipping.Clip,
+                absolute_padding: true,
+                absolute_margin: true,
+                padding: new RectOffset(15, 15, 15, 5));
 
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_FlexSpace();
-            Editor_XHud_GUI.Gui_Layout_Labelfield(string.IsNullOrEmpty(PrimitiveTweenSoundNode.Name) ? "未命名动画" : PrimitiveTweenSoundNode.Name, HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleRight, 18, Font_Bold);
-            Editor_XHud_GUI.Gui_Layout_Space(20);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+            XGUI.layout_state_displayer_text(
+                title: string.IsNullOrEmpty(PrimitiveTweenSoundNode.Name) ? "未命名动画" : PrimitiveTweenSoundNode.Name,
+                title_size: XGUIFontSize.L,
+                title_color: XHud_Dashboard.Theme_Primary,
+                subtitle: PrimitiveTweenSoundNode.Type.ToString(),
+                subtitle_size: XGUIFontSize.M,
+                subtitle_color: Color.white * 0.75f,
+                margin: new RectOffset(0, 0, 0, 0));
 
-            Rect rect_title = GUILayoutUtility.GetLastRect();
-            Rect rect_subtitle = new Rect(rect_title.width - 120, rect_title.height + 10, 100, 15);
-            Editor_XHud_GUI.Gui_Labelfield_Thin(rect_subtitle, PrimitiveTweenSoundNode.Type.ToString(), HudFilled.无, HudColor.无, new Color(1, 1, 1, 0.4f), TextAnchor.MiddleRight, new Vector2(0, 0), 12, Font_Light);
-
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
 
-            #region 图标
-            Rect rect_icon = new Rect(position.size.x - 80, position.size.y - 80, 64, 64);
-            GUI.color = new Color(1, 1, 1, 0.06f);
-            Texture2D icon = null;
-            switch (PrimitiveTweenSoundNode.Type)
-            {
-                case TweenNodeType.位移:
-                    icon = anim_type_move;
-                    break;
-                case TweenNodeType.旋转:
-                    icon = anim_type_rotator;
-                    break;
-                case TweenNodeType.缩放:
-                    icon = anim_type_scale;
-                    break;
-                case TweenNodeType.颜色:
-                    icon = anim_type_color;
-                    break;
-                case TweenNodeType.淡化:
-                    icon = anim_type_fade;
-                    break;
-                case TweenNodeType.打字机:
-                    icon = anim_type_writter;
-                    break;
-                case TweenNodeType.图像填充:
-                    icon = anim_type_fill;
-                    break;
-                case TweenNodeType.尺寸:
-                    icon = anim_type_size;
-                    break;
-            }
-            Editor_XHud_GUI.Gui_Icon(rect_icon, icon);
-            GUI.color = Color.white;
-            #endregion
+            XGUI.layout_seperator(
+                      thickness: 1,
+                      color: XHud_Dashboard.Theme_SeperateLine,
+                      margin: new RectOffset(15, 15, 10, 20));
 
-            #region 按钮
-            Rect rect_btn_add = new Rect(rect_title.x + 15, rect_title.y + 12, 20, 20);
-            Rect rect_btn_play = new Rect(rect_title.x + 60, rect_title.y + 12, 20, 20);
-            Rect rect_btn_apply = new Rect(rect_title.x + 110, rect_title.y + 12, 20, 20);
+            #region 快捷功能
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                title_clipping: TextClipping.Clip,
+                absolute_padding: true,
+                absolute_margin: true,
+                padding: new RectOffset(20, 20, 0, 15));
 
-            // 新增一个音效
-            if (Editor_XHud_GUI.Gui_Button(rect_btn_add, Logo_Add_Release, Logo_Add_Press, true, "", "", Color.white))
+            #region 新增
+            if (XGUI.layout_button(
+                tooltip: "新增",
+                tex_release: Logo_Add_Release,
+                tex_press: Logo_Add_Press,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                width: 14,
+                height: 14))
             {
                 int index = 0;
                 if (sp_TweenSounds.arraySize <= 0)
@@ -333,9 +455,19 @@ namespace SevenStrikeModules.XHud.Editor
                 sp_soundinfo.FindPropertyRelative("MinPitch").floatValue = 1;
                 sp_TweenSounds.serializedObject.ApplyModifiedProperties();
             }
+            #endregion
 
-            // 播放预览音效
-            if (Editor_XHud_GUI.Gui_Button(rect_btn_play, Logo_Play_Release, Logo_Play_Press, true, "", "", Color.white))
+            GUILayout.FlexibleSpace();
+
+            #region 播放
+            if (XGUI.layout_button(
+                tooltip: "播放",
+                tex_release: Logo_Play_Release,
+                tex_press: Logo_Play_Press,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                width: 14,
+                height: 14))
             {
                 if (Application.isPlaying)
                 {
@@ -360,9 +492,19 @@ namespace SevenStrikeModules.XHud.Editor
                     PreviewSounds(clip, x, vol, pit_min, pit_max);
                 }
             }
+            #endregion
 
-            // 应用到图元动画节点中
-            if (Editor_XHud_GUI.Gui_Button(rect_btn_apply, Logo_Apply_Release, Logo_Apply_Press, true, "", "", Color.white))
+            GUILayout.FlexibleSpace();
+
+            #region 应用
+            if (XGUI.layout_button(
+                tooltip: "应用",
+                tex_release: Logo_Apply_Release,
+                tex_press: Logo_Apply_Press,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                width: 14,
+                height: 14))
             {
                 #region 获取动画节点
                 SerializedProperty sp_node = sp_PrimitiveTweenSoundNodes.FindPropertyRelative("Tween");
@@ -441,7 +583,8 @@ namespace SevenStrikeModules.XHud.Editor
                                     }
                                     if (!repeat)
                                     {
-                                        HudManager.Hud_Sounds.SoundLibrary_AddSound(sod.name, sod);
+                                        string sod_format = Path.GetExtension(AssetDatabase.GetAssetPath(sod)).ToLower();
+                                        HudManager.Hud_Sounds.SoundLibrary_AddSound(sod.name, sod, sod_format);
                                     }
                                 }
                             }
@@ -452,30 +595,110 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(25);
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+            #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Scroll = EditorGUILayout.BeginScrollView(Scroll, GUILayout.Width(position.width - 20), GUILayout.ExpandWidth(true));
+            #region 动画类型图标
+            Texture2D icon = null;
+            switch (PrimitiveTweenSoundNode.Type)
+            {
+                case TweenNodeType.位移:
+                    icon = anim_type_move;
+                    break;
+                case TweenNodeType.旋转:
+                    icon = anim_type_rotator;
+                    break;
+                case TweenNodeType.缩放:
+                    icon = anim_type_scale;
+                    break;
+                case TweenNodeType.颜色:
+                    icon = anim_type_color;
+                    break;
+                case TweenNodeType.淡化:
+                    icon = anim_type_fade;
+                    break;
+                case TweenNodeType.打字机:
+                    icon = anim_type_writter;
+                    break;
+                case TweenNodeType.图像填充:
+                    icon = anim_type_fill;
+                    break;
+                case TweenNodeType.尺寸:
+                    icon = anim_type_size;
+                    break;
+            }
+
+            Rect rect_icon = new Rect(position.size.x - 80, position.size.y - 80, 64, 64);
+            XGUI.gui_icon(
+                  rect: rect_icon,
+                  icon: icon,
+                  color: new Color(1, 1, 1, 0.06f));
+            #endregion
+
+            #region 列表
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                title_clipping: TextClipping.Clip,
+                absolute_padding: true,
+                absolute_margin: true,
+                padding: new RectOffset(15, 15, 15, 100));
+
+            Scroll = EditorGUILayout.BeginScrollView(Scroll, GUILayout.Width(position.width - 25), GUILayout.ExpandWidth(true));
             ListSounds.DoLayoutList();
             EditorGUILayout.EndScrollView();
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_XHud_GUI.Gui_Layout_Space(100);
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+            #endregion
 
-            #region 信息
-
+            #region 选中的音效信息
             Rect rect_info_name = new Rect(15, position.size.y - 80, position.size.x - 120, 22);
             Rect rect_info_hz = new Rect(15, position.size.y - 58, position.size.x, 22);
             Rect rect_info_channel = new Rect(15, position.size.y - 36, 70, 22);
             Rect rect_info_length = new Rect(70, position.size.y - 36, position.size.x, 22);
 
-            Editor_XHud_GUI.Gui_Labelfield(rect_info_name, Selected_Name, HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, new Vector2(0, 0), 14, TextClipping.Ellipsis);
-            Editor_XHud_GUI.Gui_Labelfield(rect_info_hz, Selected_Hz, HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, new Vector2(0, 0), 11);
-            Editor_XHud_GUI.Gui_Labelfield(rect_info_channel, Selected_Steo, HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, new Vector2(0, 0), 11);
-            Editor_XHud_GUI.Gui_Labelfield(rect_info_length, Selected_Length, HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, new Vector2(0, 0), 11);
+            XGUI.gui_label(
+                rect: rect_info_name,
+                text: new GUIContent(Selected_Name),
+                text_color: XHud_Dashboard.Theme_Primary,
+                size: XGUIFontSize.B,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                wrap: true,
+                font_style: FontStyle.Normal);
 
+            XGUI.gui_label(
+                rect: rect_info_hz,
+                text: new GUIContent(Selected_Hz),
+                text_color: Color.gray,
+                size: XGUIFontSize.M,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                wrap: true,
+                font_style: FontStyle.Normal);
+
+            XGUI.gui_label(
+                rect: rect_info_channel,
+                text: new GUIContent(Selected_Steo),
+                text_color: Color.gray,
+                size: XGUIFontSize.M,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                wrap: true,
+                font_style: FontStyle.Normal);
+
+            XGUI.gui_label(
+                rect: rect_info_length,
+                text: new GUIContent(Selected_Length),
+                text_color: Color.gray,
+                size: XGUIFontSize.M,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                wrap: true,
+                font_style: FontStyle.Normal);
             #endregion
 
             serializedObject.ApplyModifiedProperties();

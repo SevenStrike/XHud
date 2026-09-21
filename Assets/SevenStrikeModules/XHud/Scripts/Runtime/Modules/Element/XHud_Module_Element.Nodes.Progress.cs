@@ -20,8 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XGUI.Runtime;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -68,12 +67,12 @@ namespace SevenStrikeModules.XHud
             if (state)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "启用元素下所有进度条脚本！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有进度条脚本！", XGUIMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "禁用元素下所有进度条脚本！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有进度条脚本！", XGUIMsgState.通知);
             }
         }
         /// <summary>
@@ -93,12 +92,12 @@ namespace SevenStrikeModules.XHud
             if (progress == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "未找到对应标识的进度条！", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "未找到对应标识的进度条！", XGUIMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的进度条！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的进度条！", XGUIMsgState.通知);
             }
             return progress;
         }
@@ -115,12 +114,12 @@ namespace SevenStrikeModules.XHud
             if (progresslist.Count <= 0)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "获取的进度条列表为空！", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "获取的进度条列表为空！", XGUIMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "已获取到" + ProgressNodes.Count + " 个进度条！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + ProgressNodes.Count + " 个进度条！", XGUIMsgState.通知);
             }
             return progresslist.ToArray();
         }

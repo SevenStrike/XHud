@@ -104,6 +104,13 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public UnityEvent eve_on_pointer_Drop;
 
+        public bool Enabled = true;
+
+        public bool
+            fold_param = true,
+            fold_option = true,
+            fold_based = true;
+
         void Start()
         {
             if (HudElement == null)
@@ -159,6 +166,8 @@ namespace SevenStrikeModules.XHud
 
         public override void OnPointerEnter(PointerEventData eventData)
         {
+            if (!Enabled) return;
+
             base.OnPointerEnter(eventData);
             if (act_on_Enter != null)
                 act_on_Enter(HudElement, eventData);
@@ -167,6 +176,8 @@ namespace SevenStrikeModules.XHud
 
         public override void OnPointerExit(PointerEventData eventData)
         {
+            if (!Enabled) return;
+
             base.OnPointerExit(eventData);
             if (act_on_Enter != null)
                 act_on_Enter(HudElement, eventData);
@@ -175,6 +186,8 @@ namespace SevenStrikeModules.XHud
 
         public override void OnSelect(BaseEventData eventData)
         {
+            if (!Enabled) return;
+
             base.OnSelect(eventData);
             if (act_on_Select != null)
                 act_on_Select(HudElement, eventData);
@@ -183,6 +196,8 @@ namespace SevenStrikeModules.XHud
 
         public override void OnDeselect(BaseEventData eventData)
         {
+            if (!Enabled) return;
+
             base.OnDeselect(eventData);
             if (act_on_Unselect != null)
                 act_on_Unselect(HudElement, eventData);
@@ -191,6 +206,8 @@ namespace SevenStrikeModules.XHud
 
         public override void OnPointerClick(PointerEventData eventData)
         {
+            if (!Enabled) return;
+
             base.OnPointerClick(eventData);
             if (act_on_Clicked != null)
                 act_on_Clicked(HudElement, eventData);
@@ -199,6 +216,8 @@ namespace SevenStrikeModules.XHud
 
         public override void OnPointerDown(PointerEventData eventData)
         {
+            if (!Enabled) return;
+
             base.OnPointerDown(eventData);
             if (act_on_Press != null)
                 act_on_Press(HudElement, eventData);
@@ -207,6 +226,8 @@ namespace SevenStrikeModules.XHud
 
         public override void OnPointerUp(PointerEventData eventData)
         {
+            if (!Enabled) return;
+
             base.OnPointerUp(eventData);
             if (act_on_Release != null)
                 act_on_Release(HudElement, eventData);
@@ -215,6 +236,8 @@ namespace SevenStrikeModules.XHud
 
         public override void OnDrag(PointerEventData eventData)
         {
+            if (!Enabled) return;
+
             base.OnDrag(eventData);
             if (act_on_Drag != null)
                 act_on_Drag(HudElement, eventData);
@@ -223,6 +246,8 @@ namespace SevenStrikeModules.XHud
 
         public override void OnDrop(PointerEventData eventData)
         {
+            if (!Enabled) return;
+
             base.OnDrop(eventData);
             if (act_on_Drop != null)
                 act_on_Drop(HudElement, eventData);

@@ -20,8 +20,8 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -95,7 +95,7 @@ namespace SevenStrikeModules.XHud
             if (string.IsNullOrEmpty(RMS_Name))
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "RMS已开启但未指定布局方案名称", HudMsgState.警告);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "RMS已开启但未指定布局方案名称", XGUIMsgState.警告);
                 return;
             }
 

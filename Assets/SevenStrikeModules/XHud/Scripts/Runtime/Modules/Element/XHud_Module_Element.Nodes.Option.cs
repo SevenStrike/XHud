@@ -20,8 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XGUI.Runtime;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -94,12 +93,12 @@ namespace SevenStrikeModules.XHud
             if (state)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "启用元素下所有选项交互！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有选项交互！", XGUIMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "禁用元素下所有选项交互！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有选项交互！", XGUIMsgState.通知);
             }
         }
         /// <summary>
@@ -115,12 +114,12 @@ namespace SevenStrikeModules.XHud
             if (state)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "启用元素下所有选项脚本！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有选项脚本！", XGUIMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "禁用元素下所有选项脚本！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有选项脚本！", XGUIMsgState.通知);
             }
         }
         /// <summary>
@@ -140,12 +139,12 @@ namespace SevenStrikeModules.XHud
             if (opt == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "未找到对应标识的选项！", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "未找到对应标识的选项！", XGUIMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的选项！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的选项！", XGUIMsgState.通知);
             }
             return opt;
         }
@@ -162,12 +161,12 @@ namespace SevenStrikeModules.XHud
             if (optlist.Count <= 0)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "获取的选项列表为空！", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "获取的选项列表为空！", XGUIMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "已获取到" + OptionNodes.Count + " 个选项！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + OptionNodes.Count + " 个选项！", XGUIMsgState.通知);
             }
             return optlist.ToArray();
         }

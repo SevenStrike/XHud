@@ -1,4 +1,4 @@
-﻿{
+{
     "name": "XHud.Editor",
     "rootNamespace": "SevenStrikeModules.XHud.Editor",
     "references": [
@@ -12,16 +12,19 @@
         "Unity.InputSystem",
         "SoftMask",
         "Unity.TextMeshPro.Editor",
-        "Unified.Universal.Blur"
+        "Unified.Universal.Blur",
+        "XGUI.Editor",
+        "XGUI.Runtime"
     ],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }

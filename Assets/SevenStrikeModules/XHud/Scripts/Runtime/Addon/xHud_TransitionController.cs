@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
     using System;
@@ -149,6 +150,12 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public UnityAction On_LimiteEndFrame;
 
+        public bool fold_options = true;
+        public bool fold_state = true;
+        public bool fold_params = true;
+        public bool fold_key = true;
+        public bool fold_based = true;
+
         void Start()
         {
             InitialMaterial();
@@ -160,7 +167,6 @@ namespace SevenStrikeModules.XHud
             TransitionMat.name = "RuntimeTransitionMat";
             TransitionImage.material = TransitionMat;
         }
-
 
         void Update()
         {
@@ -239,7 +245,7 @@ namespace SevenStrikeModules.XHud
                 Transition_Set_ChannelInvert(false);
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 转场器通知", "开始转场 -> 入场！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 转场器通知", "开始转场 -> 入场！", XGUIMsgState.通知);
                 }
             }
             else
@@ -247,7 +253,7 @@ namespace SevenStrikeModules.XHud
                 Transition_Set_ChannelInvert(true);
                 if (DebugState)
                 {
-                    XHud_Utilitys.Func_PrintInfo("XHud - 转场器通知", "开始转场 -> 出场！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 转场器通知", "开始转场 -> 出场！", XGUIMsgState.通知);
                 }
             }
 

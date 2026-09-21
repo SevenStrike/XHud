@@ -16,7 +16,7 @@ MonoBehaviour:
   LibraryDescription: NewDescription
   LibraryRoot: {fileID: 0}
   itemHeight: 50
-  visibleItemCount: 10
+  visibleItemCount: 9
   Find: 
   Highlight: 
   SelectedIndex: -1
@@ -24,7 +24,7 @@ MonoBehaviour:
   ElementInfoList_Original_Scroller: {x: 0, y: 0}
   ElementLibrary:
   - Name: XHudIcon
-    InitializeCount: 1
+    InitializeCount: 5
     UsedCount: 0
     RecycledCount: 0
     NextIndex: 0

@@ -20,8 +20,10 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using System;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
@@ -54,17 +56,6 @@ namespace SevenStrikeModules.XHud.Editor
         private float LineHeight;
         #endregion
 
-        #region 字体
-        /// <summary>
-        /// 字体 - 粗体
-        /// </summary>
-        Font Font_Bold;
-        /// <summary>
-        /// 字体 - 细体
-        /// </summary>
-        Font Font_Light;
-        #endregion
-
         #region 选项文字
         string[] stroptions_debug = new string[2] { "关闭", "调试" },
             stroptions_mute = new string[] { "正常", "静音" },
@@ -72,7 +63,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 图标
-        private Texture2D icon_type, icon_text, icon_tmptext, icon_image, icon_rawimage, icon_main, icon_initial_r, icon_initial_p;
+        private Texture2D icon_type, icon_text, icon_tmptext, icon_image, icon_rawimage, icon_main, icon_initial_r, icon_initial_p, icon_recreate_id_r, icon_recreate_id_p, icon_clear_mods_r, icon_clear_mods_p;
         #endregion
 
         #region 批量化操作
@@ -132,19 +123,18 @@ namespace SevenStrikeModules.XHud.Editor
             // 识别类型
             BaseScript.RecognizeType();
 
-            #region 获取字体
-            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Light");
-            #endregion
-
             #region 获取图标          
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Controller/icon_main");
-            icon_text = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Controller/icon_text");
-            icon_tmptext = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Controller/icon_tmptext");
-            icon_image = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Controller/icon_image");
-            icon_rawimage = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Controller/icon_rawimage");
-            icon_initial_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Controller/icon_initial_r");
-            icon_initial_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Controller/icon_initial_p");
+            icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_controller/icon_main");
+            icon_text = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_controller/icon_text");
+            icon_tmptext = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_controller/icon_tmptext");
+            icon_image = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_controller/icon_image");
+            icon_rawimage = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_controller/icon_rawimage");
+            icon_initial_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_controller/icon_initial_r");
+            icon_initial_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_controller/icon_initial_p");
+            icon_recreate_id_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_controller/icon_recreate_id_r");
+            icon_recreate_id_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_controller/icon_recreate_id_p");
+            icon_clear_mods_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_controller/icon_clear_mods_r");
+            icon_clear_mods_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_controller/icon_clear_mods_p");
             #endregion
         }
 
@@ -171,58 +161,115 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
+            string h_color = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary);
+
+            TextClipping clipping = XGUI.TryEllipsisClipping();
+
             #region 标题
-            string h_color = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary);
-            string titlename = "XHud - 图元  >  控制器";
-            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, titlename, Color.white, icon_type, m_type.ToString(), 20, 20);
-            Rect rect = GUILayoutUtility.GetLastRect();
+            XGUI.layout_banner(
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.深空灰,
+                bg_height: 30,
+                icon: icon_main,
+                icon_color: XHud_Dashboard.Theme_Primary,
+                title_text: string.IsNullOrEmpty(sp_ID.stringValue) ? "XHud  -  图元  >  控制器" : "XHud - 图元  >  控制器  ( " + sp_ID.stringValue + " )",
+                title_anchor: TextAnchor.MiddleLeft,
+                title_style: FontStyle.Normal,
+                title_color: Color.white,
+                title_size: XGUIFontSize.B,
+                title_clipping: clipping,
+                bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
 
-            #region 快捷功能
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "快捷功能", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
+            #region 类型图标
+            Rect rect_banner = XGUI.GetLastRect();
+            XGUI.gui_icon(
+                rect: new Rect(rect_banner.x + (rect_banner.width - 30), rect_banner.y + 8, icon_type.width, icon_type.height),
+                icon: icon_type,
+                color: Color.white * 0.65f);
+            #endregion
 
-            #region 快捷按钮
-            GUILayout.BeginHorizontal();
-            GUILayout.Space(10);
+            XGUI.layout_space(5);
 
-            ///---切换模式按钮
-            if (Editor_XHud_GUI.Gui_Layout_Button(14, "", icon_initial_r, icon_initial_p, 4))
+            #region 快捷功能          
+            XGUI.layout_group_start(
+               type: XGUIContainerType.Horizontal,
+               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_color: XGUIColor.亮白,
+               bg_color_gui: XHud_Dashboard.Theme_Group,
+               title: "快捷功能",
+               title_size: XGUIFontSize.M,
+               title_text_color: XHud_Dashboard.Theme_Primary,
+               title_clipping: TextClipping.Clip,
+               padding: new RectOffset(15, 15, 20, 15));
+
+            #region 建立图元扩展
+            if (XGUI.layout_button(
+                tooltip: "建立图元扩展",
+                tex_release: icon_initial_r,
+                tex_press: icon_initial_p,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                width: 14,
+                height: 14))
             {
                 if (Targets_Selected())
                 {
-                    List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
+                    List<XGUIDialogListDatas> datas = new List<XGUIDialogListDatas>();
 
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
-                        XHud_GUI_Dialog_ListDatas data = new XHud_GUI_Dialog_ListDatas();
+                        XGUIDialogListDatas data = new XGUIDialogListDatas();
                         data.Title = string.IsNullOrEmpty(SelectedObjects[i].Indicator) ? SelectedObjects[i].name : SelectedObjects[i].Indicator;
                         data.SubTitle = "即将初始化图元结构";
                         data.Message = "";
-                        Datas.Add(data);
+                        datas.Add(data);
                     }
 
                     EditorApplication.delayCall += () =>
                     {
-                        string res_x = Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.警告, "XHud - 图元控制器消息", "批量初始化图元结构", "是否需要批量为图元建立控制脚本结构吗？", "建立", "暂不", 0);
-                        if (res_x == "建立")
+                        if (datas.Count > 0)
                         {
-                            for (int i = 0; i < SelectedObjects.Length; i++)
-                            {
-                                if (SelectedObjects[i].IsInitial)
-                                {
-                                    string csd = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图元控制器消息", "重新初始化", $"确认为 {SelectedObjects[i].gameObject.name} 图元重新建立控制脚本结构吗？", "重建", "暂不", 1);
-                                    if (csd == "重建")
-                                    {
-                                        SelectedObjects[i].ClearComponents_For_Editor();
-                                    }
-                                    else
-                                    {
-                                        continue;
-                                    }
-                                }
+                            string res_x = XGUI.dialog_listview(
+                                datas: datas.ToArray(),
+                                type: XGUIDialogType.通知,
+                                windowtitle: "XHud - 图元控制器消息",
+                                title: "批量初始化图元结构",
+                                msg: "是否需要批量为图元建立控制脚本结构吗？",
+                                ok: "建立",
+                                cancel: "暂不",
+                                PrimaryIndex: 0,
+                                usemodal: false,
+                                themecolor: XHud_Dashboard.Theme_Primary);
 
-                                SelectedObjects[i].InitialComponents_For_Editor();
+                            if (res_x == "建立")
+                            {
+                                for (int i = 0; i < SelectedObjects.Length; i++)
+                                {
+                                    if (SelectedObjects[i].IsInitial)
+                                    {
+                                        string csd = XGUI.dialog(
+                                            type: XGUIDialogType.警告,
+                                            windowtitle: "XHud - 图元控制器消息",
+                                            title: "重新初始化",
+                                            msg: $"确认为 {SelectedObjects[i].gameObject.name} 图元重新建立控制脚本结构吗？",
+                                            ok: "重建",
+                                            cancel: "暂不",
+                                            PrimaryIndex: 0,
+                                            usemodal: true,
+                                            themecolor: XHud_Dashboard.Theme_Primary);
+
+                                        if (csd == "重建")
+                                        {
+                                            SelectedObjects[i].ClearComponents_For_Editor();
+                                        }
+                                        else
+                                        {
+                                            continue;
+                                        }
+                                    }
+                                    SelectedObjects[i].InitialComponents_For_Editor();
+                                }
                             }
                         }
                     };
@@ -231,12 +278,32 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     EditorApplication.delayCall += () =>
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图元控制器消息", "初始化图元结构", $"确认为此图元建立控制脚本结构吗？", "建立", "暂不", 0);
+                        string res = XGUI.dialog(
+                                          type: XGUIDialogType.警告,
+                                          windowtitle: "XHud - 图元控制器消息",
+                                          title: "初始化图元结构",
+                                          msg: $"确认为此图元建立控制脚本结构吗？",
+                                          ok: "建立",
+                                          cancel: "暂不",
+                                          PrimaryIndex: 0,
+                                          usemodal: true,
+                                          themecolor: XHud_Dashboard.Theme_Primary);
+
                         if (res == "建立")
                         {
-                            if (BaseScript.IsInitial)
+                            if (sp_IsInitial.boolValue)
                             {
-                                string csd = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 图元控制器消息", "重新初始化", $"确认为此图元重新建立控制脚本结构吗？", "重建", "暂不", 1);
+                                string csd = XGUI.dialog(
+                                    type: XGUIDialogType.警告,
+                                    windowtitle: "XHud - 图元控制器消息",
+                                    title: "重新初始化",
+                                    msg: $"此图元已经创建了模块结构，确认重新创建模块结构吗？",
+                                    ok: "重建",
+                                    cancel: "暂不",
+                                    PrimaryIndex: 0,
+                                    usemodal: true,
+                                    themecolor: XHud_Dashboard.Theme_Primary);
+
                                 if (csd == "重建")
                                 {
                                     BaseScript.ClearComponents_For_Editor();
@@ -252,72 +319,334 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 return;
             }
-
-            GUILayout.Space(10);
-            GUILayout.EndHorizontal();
-
             #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_flexspace();
+
+            #region 重分配图元控制器ID
+            if (XGUI.layout_button(
+                tooltip: "重分配图元控制器ID",
+                tex_release: icon_recreate_id_r,
+                tex_press: icon_recreate_id_p,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                width: 14,
+                height: 14))
+            {
+                if (Targets_Selected())
+                {
+                    List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
+
+                    for (int i = 0; i < SelectedObjects.Length; i++)
+                    {
+                        XGUIDialogListDatas data = new XGUIDialogListDatas();
+                        data.Title = string.IsNullOrEmpty(SelectedObjects[i].Indicator) ? SelectedObjects[i].name : SelectedObjects[i].Indicator;
+                        data.SubTitle = "即将批量更新图元控制器ID";
+                        data.Message = "";
+                        Datas.Add(data);
+                    }
+
+                    EditorApplication.delayCall += () =>
+                    {
+                        string res_x = XGUI.dialog_listview(
+                            datas: Datas.ToArray(),
+                            type: XGUIDialogType.通知,
+                            windowtitle: "XHud - 图元控制器消息",
+                            title: "批量控制器ID更新",
+                            msg: "是否需要批量更新控制器的ID吗？",
+                            ok: "更新",
+                            cancel: "暂不",
+                            PrimaryIndex: 0,
+                            usemodal: false,
+                            themecolor: XHud_Dashboard.Theme_Primary);
+
+                        if (res_x == "更新")
+                        {
+                            for (int i = 0; i < SelectedObjects.Length; i++)
+                            {
+                                Undo.RecordObject(SelectedObjects[i], "更新所有图元控制器的ID");
+
+                                XHud_Module_Primitive_Controller con = SelectedObjects[i];
+
+                                #region 从父物体找元素并获取元素下所有图元控制器的ID
+                                XHud_Module_Element parent_ele = con.GetComponentInParent<XHud_Module_Element>();
+
+                                if (parent_ele == null)
+                                    continue;
+
+                                if (parent_ele.PrimitiveControllerNodes == null && parent_ele.PrimitiveControllerNodes.Count <= 0)
+                                    continue;
+
+                                List<string> list = new List<string>();
+                                for (int s = 0; s < parent_ele.PrimitiveControllerNodes.Count; s++)
+                                {
+                                    list.Add(parent_ele.PrimitiveControllerNodes[s].Controller.ID);
+                                }
+                                #endregion
+
+                                con.ID = XGUI_Utilitys.GenerateUniqueId(list.ToArray());
+                            }
+                        }
+                    };
+                }
+                else
+                {
+                    EditorApplication.delayCall += () =>
+                    {
+                        string res = XGUI.dialog(
+                                 type: XGUIDialogType.警告,
+                                 windowtitle: "XHud - 图元控制器消息",
+                                 title: "控制器ID更新",
+                                 msg: $"确定要更新当前图元控制器的ID吗？",
+                                 ok: "更新 ID",
+                                 cancel: "暂不",
+                                 PrimaryIndex: 0,
+                                 usemodal: true,
+                                 themecolor: XHud_Dashboard.Theme_Primary);
+
+                        if (res == "暂不")
+                            return;
+
+                        Undo.RecordObject(BaseScript, "刷新图元控制器ID");
+                        BaseScript.ID = XGUI_Utilitys.GenerateUniqueId(CollectIDs());
+                    };
+                }
+                return;
+            }
             #endregion
 
-            #region 基础参数
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "基础参数", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
+            XGUI.layout_flexspace();
 
-            #region ID 
-            Editor_XHud_GUI.Gui_Layout_Property_Field("ID", sp_ID);
+            #region 清空图元结构
+            if (XGUI.layout_button(
+                tooltip: "清空图元结构",
+                tex_release: icon_clear_mods_r,
+                tex_press: icon_clear_mods_p,
+                tex_gui_color: Color.white,
+                border: new RectOffset(0, 0, 0, 0),
+                width: 14,
+                height: 14))
+            {
+                if (Targets_Selected())
+                {
+                    List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
+
+                    for (int i = 0; i < SelectedObjects.Length; i++)
+                    {
+                        XGUIDialogListDatas data = new XGUIDialogListDatas();
+                        data.Title = string.IsNullOrEmpty(SelectedObjects[i].Indicator) ? SelectedObjects[i].name : SelectedObjects[i].Indicator;
+                        data.SubTitle = "即将移除图元控制器建立的扩展结构";
+                        data.Message = "";
+                        Datas.Add(data);
+                    }
+
+                    EditorApplication.delayCall += () =>
+                    {
+                        string res_x = XGUI.dialog_listview(
+                         datas: Datas.ToArray(),
+                         type: XGUIDialogType.通知,
+                         windowtitle: "XHud - 图元控制器消息",
+                         title: "批量移除建立的扩展结构",
+                         msg: "是否需要批量移除图元控制器建立的扩展结构吗？",
+                         ok: "移除",
+                         cancel: "暂不",
+                         PrimaryIndex: 0,
+                         usemodal: false,
+                         themecolor: XHud_Dashboard.Theme_Primary);
+
+                        if (res_x == "移除")
+                        {
+                            for (int i = 0; i < SelectedObjects.Length; i++)
+                            {
+                                XHud_Module_Primitive_Controller con = SelectedObjects[i];
+
+                                if (con.pt_Feature != null)
+                                    Undo.DestroyObjectImmediate(con.pt_Feature);
+
+                                XHud_Module_Primitive_Painting_Synchronizer Synchronizer = con.GetComponent<XHud_Module_Primitive_Painting_Synchronizer>();
+
+                                if (Synchronizer != null)
+                                    Undo.DestroyObjectImmediate(Synchronizer);
+
+                                if (con.pt_Painting != null)
+                                    Undo.DestroyObjectImmediate(con.pt_Painting);
+
+                                if (con.pt_Tween != null)
+                                    Undo.DestroyObjectImmediate(con.pt_Tween);
+
+                                if (con.mod_CanvasGroup != null)
+                                    Undo.DestroyObjectImmediate(con.mod_CanvasGroup);
+
+                                con.IsInitial = false;
+                                con.pt_Feature = null;
+                                con.pt_Painting = null;
+                                con.pt_Tween = null;
+                                con.mod_CanvasGroup = null;
+                            }
+                        }
+                    };
+                }
+                else
+                {
+                    EditorApplication.delayCall += () =>
+                    {
+                        string res = XGUI.dialog(
+                                type: XGUIDialogType.警告,
+                                windowtitle: "XHud - 图元控制器消息",
+                                title: "移除建立的扩展结构",
+                                msg: $"确定要移除图元控制器建立的扩展结构吗？",
+                                ok: "移除",
+                                cancel: "暂不",
+                                PrimaryIndex: 0,
+                                usemodal: true,
+                                themecolor: XHud_Dashboard.Theme_Primary);
+
+                        if (res == "暂不")
+                            return;
+
+                        if (BaseScript.pt_Feature != null)
+                            Undo.DestroyObjectImmediate(BaseScript.pt_Feature);
+
+                        XHud_Module_Primitive_Painting_Synchronizer Synchronizer = BaseScript.GetComponent<XHud_Module_Primitive_Painting_Synchronizer>();
+
+                        if (Synchronizer != null)
+                            Undo.DestroyObjectImmediate(Synchronizer);
+
+                        if (BaseScript.pt_Painting != null)
+                            Undo.DestroyObjectImmediate(BaseScript.pt_Painting);
+
+                        if (BaseScript.pt_Tween != null)
+                            Undo.DestroyObjectImmediate(BaseScript.pt_Tween);
+
+                        if (BaseScript.mod_CanvasGroup != null)
+                            Undo.DestroyObjectImmediate(BaseScript.mod_CanvasGroup);
+
+                        BaseScript.IsInitial = false;
+                        BaseScript.pt_Feature = null;
+                        BaseScript.pt_Painting = null;
+                        BaseScript.pt_Tween = null;
+                        BaseScript.mod_CanvasGroup = null;
+                    };
+                }
+                return;
+            }
             #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
-            #region 标识
-            Editor_XHud_GUI.Gui_Layout_Property_Field("标识", sp_Indicator);
-            sp_Indicator.serializedObject.ApplyModifiedProperties();
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            #region 参数          
+            BaseScript.fold_param = XGUI.layout_group_start(
+               type: XGUIContainerType.Vertical,
+               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_color: XGUIColor.亮白,
+               bg_color_gui: XHud_Dashboard.Theme_Group,
+               title: "参数",
+               title_size: XGUIFontSize.M,
+               title_text_color: XHud_Dashboard.Theme_Primary,
+               title_clipping: TextClipping.Clip,
+               padding: new RectOffset(5, 5, 20, 15),
+               foldout: BaseScript.fold_param);
 
-            #region 类型
-            GUI.enabled = false;
-            Editor_XHud_GUI.Gui_Layout_Property_Field("被控类型", sp_ModuleType);
-            GUI.enabled = true;
-            #endregion
+            if (!BaseScript.fold_param)
+            {
+                #region ID
+                XGUI.layout_property_field(
+                    title: "ID",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: sp_ID,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+                #region 标识
+                XGUI.layout_property_field(
+                    title: "标识",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: sp_Indicator,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+
+                #region 类型
+                XGUI.layout_property_field(
+                    title: "类型",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: sp_ModuleType,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+
+            }
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 选项
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            BaseScript.fold_option = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "选项",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_option);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Primitive_Controller>("调试", stroptions_debug, ref sp_Debug, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            if (!BaseScript.fold_option)
+            {
+                #region 状态调试
+                DrawToggle("状态调试", sp_Debug, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_debug, (b) => { });
+                #endregion          
+            }
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 源脚本
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            BaseScript.fold_based = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "源脚本",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_based);
 
-            #region 脚本类
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            OriginalDisplay = EditorGUILayout.Foldout(OriginalDisplay, "脚本类", true);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-            if (OriginalDisplay)
+            if (!BaseScript.fold_based)
+            {
                 DrawDefaultInspector();
-            #endregion
+            }
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private string[] CollectIDs()
+        {
+            XHud_Module_Element parent_ele = BaseScript.GetComponentInParent<XHud_Module_Element>();
+
+            if (parent_ele == null)
+                return null;
+
+            if (parent_ele.PrimitiveControllerNodes == null && parent_ele.PrimitiveControllerNodes.Count <= 0)
+                return null;
+
+            List<string> list = new List<string>();
+            for (int i = 0; i < parent_ele.PrimitiveControllerNodes.Count; i++)
+            {
+                list.Add(parent_ele.PrimitiveControllerNodes[i].Controller.ID);
+            }
+
+            return list.ToArray();
         }
 
         /// <summary>
@@ -331,5 +660,36 @@ namespace SevenStrikeModules.XHud.Editor
             sp_Debug = serializedObject.FindProperty("Debug");
             sp_IsInitial = serializedObject.FindProperty("IsInitial");
         }
+
+        #region Draw
+        /// <summary>
+        /// 通用方法：绘制开关
+        /// </summary>
+        private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, string[] options = null, Action<bool> act_on_changed = null)
+        {
+            XGUI.layout_toggle(
+                title: title,
+                title_size: XGUIFontSize.M,
+                title_font_style: FontStyle.Normal,
+                title_padding: new RectOffset(5, 10, 0, 0),
+                title_width: width,
+                prop: prop,
+                tog_style: style,
+                tog_padding: new RectOffset(0, 9, 0, 0),
+                tog_margin: new RectOffset(0, 0, 0, 5),
+                tog_mixed_options: options,
+                tog_mixed_text_size: XGUIFontSize.M,
+                tog_mixed_text_color: Color.black,
+                tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                tog_mixed_font_style: FontStyle.Normal,
+                tog_bg_off_color: color_bg_off,
+                tog_bg_on_color: color_bg_on,
+                tog_handler_off_color: color_off,
+                tog_handler_on_color: color_on,
+                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                act_on_changed: act_on_changed);
+        }
+        #endregion
     }
 }

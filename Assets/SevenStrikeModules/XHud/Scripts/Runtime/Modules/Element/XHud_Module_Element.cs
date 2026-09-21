@@ -22,9 +22,11 @@ namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XHud.Enums;
     using UnityEngine;
+    using UnityEngine.UI;
 
     [System.Serializable]
     [RequireComponent(typeof(CanvasGroup))]
+    [RequireComponent(typeof(Image))]
     public partial class XHud_Module_Element : MonoBehaviour
     {
         #region 参数
@@ -110,6 +112,45 @@ namespace SevenStrikeModules.XHud
         public bool Tween_Preview_IsPlaying = false;
         #endregion
 
+        #region 折叠
+        public bool
+            fold_param = true,
+            fold_preview = true,
+            fold_state = true,
+            fold_option = true,
+            fold_rms = true,
+            fold_list = true,
+            fold_statistic = true,
+            fold_based = true,
+            fold_component = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_param = state;
+            fold_preview = state;
+            fold_state = state;
+            fold_option = state;
+            fold_rms = state;
+            fold_list = state;
+            fold_statistic = state;
+            fold_component = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool param = true, bool preview = true, bool state = true, bool option = true, bool rms = true, bool list = true, bool statistic = true, bool component = true, bool based = true)
+        {
+            fold_param = param;
+            fold_preview = preview;
+            fold_state = state;
+            fold_option = option;
+            fold_rms = rms;
+            fold_list = list;
+            fold_statistic = statistic;
+            fold_component = component;
+            fold_based = based;
+        }
+        #endregion
+
         private void Awake()
         {
             // 获取自身的 RectTransform
@@ -131,7 +172,7 @@ namespace SevenStrikeModules.XHud
 
         public virtual void OnDisable()
         {
-            PrimitiveTween_Rewind();
+            PrimitiveTweens_Rewind();
         }
 
         public virtual void Start()
@@ -144,6 +185,11 @@ namespace SevenStrikeModules.XHud
         {
             // 同步透明度，将 Alpha 值赋值给 CanvasGroup 的 Alpha
             element_AlphaSyncUpdate();
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            DisplayPrimitivesID();
         }
     }
 }

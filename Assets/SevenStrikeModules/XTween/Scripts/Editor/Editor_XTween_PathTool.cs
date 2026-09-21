@@ -20,6 +20,9 @@
  */
 namespace SevenStrikeModules.XTween.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
+    using System;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -43,11 +46,11 @@ namespace SevenStrikeModules.XTween.Editor
         /// <summary>
         /// 序列化属性
         /// </summary>
-        private SerializedProperty sp_PathPoints, sp_PathType, sp_PathOrientation, sp_PathOrientationVector, sp_LookAtObject, sp_LookAtPosition, sp_LookAtPoints, sp_IsWorldMode, sp_StartPosition, sp_PathProgress, sp_PathLength, sp_SegmentsPerCurve, sp_IsClosed, sp_DisplayPath, sp_DisplayIndex, sp_Color_Path, sp_Color_PathPoint, sp_Color_PathPoint_Selected, sp_Color_BezierControl, sp_Color_BezierControl_Selected, sp_Color_Index, sp_Color_IndexLength, sp_Color_LookAtLine, sp_ControlLineStyle, sp_PathPointSize, sp_BezierControlSize, sp_PathWidth, sp_IndexSize, sp_IndexLengthHeight, sp_IndexOffset, sp_AddedDistance, sp_LookAtLine, sp_LookAtLineWidth, sp_PathMarksTexture, sp_PathMarksSize, sp_PathMarksSample, sp_PathMarksMode, sp_PathPointsIsFold, sp_IndexPathType, sp_IndexPathOrientation, sp_IndexPathOrientationVector, sp_IndexControlLineStyle, sp_IndexPathMarkMode, sp_PathLimitePercent, sp_PathParent, sp_PathMarksColor, sp_PathMarksGroup;
+        private SerializedProperty sp_PathPoints, sp_PathType, sp_PathOrientation, sp_PathOrientationVector, sp_LookAtObject, sp_LookAtPosition, sp_LookAtPoints, sp_IsWorldMode, sp_StartPosition, sp_PathLength, sp_SegmentsPerCurve, sp_IsClosed, sp_DisplayPath, sp_DisplayIndex, sp_Color_Path, sp_Color_PathPoint, sp_Color_PathPoint_Selected, sp_Color_BezierControl, sp_Color_BezierControl_Selected, sp_Color_Index, sp_Color_IndexLength, sp_Color_LookAtLine, sp_ControlLineStyle, sp_PathPointSize, sp_BezierControlSize, sp_PathWidth, sp_IndexSize, sp_IndexLengthHeight, sp_IndexOffset, sp_AddedDistance, sp_LookAtLine, sp_LookAtLineWidth, sp_PathMarksTexture, sp_PathMarksSize, sp_PathMarksSample, sp_PathMarksMode, sp_PathPointsIsFold, sp_IndexPathType, sp_IndexPathOrientation, sp_IndexPathOrientationVector, sp_IndexControlLineStyle, sp_IndexPathMarkMode, sp_PathLimitePercent, sp_PathParent, sp_PathMarksColor, sp_PathMarksGroup;
         /// <summary>
         /// 图标
         /// </summary>
-        private Texture2D icon_main, icon_worldmode, icon_startpos, icon_pathlength, icon_Grandparent, icon_pathpercent, icon_add_r, icon_add_p, clear_r, clear_p, repos_zero_r, repos_zero_p, createpathmarks_r, createpathmarks_p, locate, status;
+        private Texture2D icon_main;
         /// <summary>
         /// 当前选中的锚点索引，用于路径点的编辑
         /// </summary>
@@ -64,11 +67,17 @@ namespace SevenStrikeModules.XTween.Editor
         /// 是否正在编辑控制点
         /// </summary>
         private bool isInControl = false;
-        private bool BasicVars = false;
+        private bool fold_raw = false;
         /// <summary>
         /// 用于绘制路径点索引的样式
         /// </summary>
         private GUIStyle IndexStyle;
+
+        string[] enums_name_path_type;
+        string[] enums_name_path_orient;
+        string[] enums_name_path_orient_vector;
+        string[] enums_name_line_style;
+        string[] enums_name_path_marks;
 
         #region 批量化操作
         private XTween_PathTool[] SelectedObjects;
@@ -123,7 +132,6 @@ namespace SevenStrikeModules.XTween.Editor
             sp_LookAtPoints = serializedObject.FindProperty("LookAtPoints");
             sp_IsWorldMode = serializedObject.FindProperty("IsWorldMode");
             sp_StartPosition = serializedObject.FindProperty("StartPosition");
-            sp_PathProgress = serializedObject.FindProperty("PathProgress");
             sp_PathLength = serializedObject.FindProperty("PathLength");
             sp_SegmentsPerCurve = serializedObject.FindProperty("SegmentsPerCurve");
             sp_IsClosed = serializedObject.FindProperty("IsClosed");
@@ -164,29 +172,20 @@ namespace SevenStrikeModules.XTween.Editor
             #endregion
 
             #region 图标获取
-            icon_main = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/icon_main");
-            icon_worldmode = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/icon_worldmode");
-            icon_pathpercent = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/icon_pathpercent");
-            icon_add_r = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/icon_add_r");
-            icon_add_p = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/icon_add_p");
-            clear_r = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/clear_r");
-            clear_p = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/clear_p");
-            repos_zero_r = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/repos_zero_r");
-            repos_zero_p = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/repos_zero_p");
-            createpathmarks_r = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/createpathmarks_r");
-            createpathmarks_p = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/createpathmarks_p");
-            locate = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/locate");
-            status = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/status");
-            icon_startpos = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/icon_startpos");
-            icon_pathlength = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/icon_pathlength");
-            icon_Grandparent = Editor_XTween_GUI.GetIcon("Icons_XTween_PathTool/icon_Grandparent");
+            icon_main = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_path/icon_main");
             #endregion
 
-            LineHeight = EditorGUIUtility.singleLineHeight;
+            enums_name_path_type = Enum.GetNames(typeof(XTween_PathType));
+            enums_name_path_orient = Enum.GetNames(typeof(XTween_PathOrientation));
+            enums_name_path_orient_vector = Enum.GetNames(typeof(XTween_PathOrientationVector));
+            enums_name_line_style = Enum.GetNames(typeof(XTween_LineStyle));
+            enums_name_path_marks = Enum.GetNames(typeof(XTween_PathMarksMode));
+
+            LineHeight = XGUI.GetSingleLineHeight();
 
             // 初始化索引样式
             IndexStyle = new GUIStyle();
-            IndexStyle.font = AssetDatabase.LoadAssetAtPath<Font>(XTween_Dashboard.Get_XTween_Root_Path() + "Fonts/Text/SevenStrikeFont_Bold.ttf");
+            IndexStyle.font = AssetDatabase.LoadAssetAtPath<Font>(XTween_Dashboard.Get_XTween_GUIRoot_Path() + "EditorFonts/sx_bold.otf");
             GetAllTargets();
 
             sp_PathParent.objectReferenceValue = BaseScript.transform.parent;
@@ -220,12 +219,22 @@ namespace SevenStrikeModules.XTween.Editor
     TextClipping clipping = TextClipping.Clip;
 #endif
 
-                        Editor_XTween_GUI.Gui_Labelfield(new Rect(rect.x + 25, titleheight - 3.5f, (rect.width * 0.45f) - 20, LineHeight), $"#  路径点 {index.ToString()}", XTweenGUIFilled.无, XTweenGUIColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 12, clipping);
+                        XGUI.gui_label(
+                            rect: new Rect(rect.x + 25, titleheight - 3.5f, (rect.width * 0.45f) - 20, LineHeight),
+                            text: new GUIContent($"#  路径点 {index.ToString()}"),
+                            text_color: Color.white,
+                            size: XGUIFontSize.M,
+                            clipping: clipping,
+                            anchor: TextAnchor.MiddleLeft,
+                            offset: new Vector2(0, 0),
+                            font_style: FontStyle.Bold,
+                            font: XGUI.GetFont("xg-medium"));
 
-                        GUI.color = XTween_Dashboard.Theme_Primary;
-                        Editor_XTween_GUI.Gui_Icon(new Rect(rect.x + 5, titleheight, 10, 10), locate);
-
-                        GUI.color = Color.white;
+                        XGUI.gui_icon(
+                            rect: new Rect(rect.x + 5, titleheight, 10, 10),
+                            icon: XGUI.GetBasedIcon("icon_locate"),
+                            padding: new RectOffset(0, 0, 0, 0),
+                            color: XTween_Dashboard.Theme_Primary);
 
                         SerializedProperty sp_relative = sp_root.FindPropertyRelative("relative");
                         SerializedProperty sp_world = sp_root.FindPropertyRelative("world");
@@ -235,16 +244,43 @@ namespace SevenStrikeModules.XTween.Editor
                         SerializedProperty sp_bezier_in_world = sp_root.FindPropertyRelative("bezier_in_world");
                         SerializedProperty sp_bezier_out_world = sp_root.FindPropertyRelative("bezier_out_world");
 
-                        string hexcol = XTween_Utilitys.ConvertColorToHexString(XTween_Dashboard.Theme_Primary, true);
+                        string hexcol = XGUI_Utilitys.Color_To_HexString(XTween_Dashboard.Theme_Primary, true);
 
-                        #region 最小音高
-                        Editor_XTween_GUI.Gui_Labelfield_Thin(new Rect(rect.x + 5, titleheight + 20, rect.width - 15, 19), $"<color={hexcol}> -   Relative   :   </color>" + XTween_Utilitys.ConvertVector3ToString(sp_relative.vector3Value), XTweenGUIFilled.无, XTweenGUIColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
-                        Editor_XTween_GUI.Gui_Labelfield_Thin(new Rect(rect.x + 5, titleheight + 40, rect.width - 15, 19), $"<color=#c2c2c2> -   World   :   </color>" + XTween_Utilitys.ConvertVector3ToString(sp_world.vector3Value), XTweenGUIFilled.无, XTweenGUIColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
-                        Editor_XTween_GUI.Gui_Labelfield_Thin(new Rect(rect.x + 5, titleheight + 60, rect.width - 15, 19), $"<color={hexcol}> -   Anchored   :   </color>" + XTween_Utilitys.ConvertVector3ToString(sp_anchored.vector3Value), XTweenGUIFilled.无, XTweenGUIColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
-                        Editor_XTween_GUI.Gui_Labelfield_Thin(new Rect(rect.x + 5, titleheight + 80, rect.width - 15, 19), $"<color=#c2c2c2> -   Bezier_In   :   </color>" + XTween_Utilitys.ConvertVector3ToString(sp_bezier_in.vector3Value), XTweenGUIFilled.无, XTweenGUIColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
-                        Editor_XTween_GUI.Gui_Labelfield_Thin(new Rect(rect.x + 5, titleheight + 100, rect.width - 15, 19), $"<color={hexcol}> -   Bezier_Out   :   </color>" + XTween_Utilitys.ConvertVector3ToString(sp_bezier_out.vector3Value), XTweenGUIFilled.无, XTweenGUIColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
-                        Editor_XTween_GUI.Gui_Labelfield_Thin(new Rect(rect.x + 5, titleheight + 120, rect.width - 15, 19), $"<color=#c2c2c2> -   BezierWorld_In   :   </color>" + XTween_Utilitys.ConvertVector3ToString(sp_bezier_in_world.vector3Value), XTweenGUIFilled.无, XTweenGUIColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
-                        Editor_XTween_GUI.Gui_Labelfield_Thin(new Rect(rect.x + 5, titleheight + 140, rect.width - 15, 19), $"<color={hexcol}> -   BezierWorld_Out   :   </color>" + XTween_Utilitys.ConvertVector3ToString(sp_bezier_out_world.vector3Value), XTweenGUIFilled.无, XTweenGUIColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11, false, false, true);
+                        #region 路径点数据
+                        DrawPointInfo(
+                            rect: new Rect(rect.x + 5, titleheight + 20, rect.width - 15, 19),
+                            info: $"<color={hexcol}> -   Relative   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_relative.vector3Value) + "</color>",
+                            clipping: clipping);
+
+                        DrawPointInfo(
+                            rect: new Rect(rect.x + 5, titleheight + 40, rect.width - 15, 19),
+                            info: $"<color=#c2c2c2> -   World   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_world.vector3Value) + "</color>",
+                            clipping: clipping);
+
+                        DrawPointInfo(
+                            rect: new Rect(rect.x + 5, titleheight + 60, rect.width - 15, 19),
+                            info: $"<color={hexcol}> -   Anchored   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_anchored.vector3Value) + "</color>",
+                            clipping: clipping);
+
+                        DrawPointInfo(
+                            rect: new Rect(rect.x + 5, titleheight + 80, rect.width - 15, 19),
+                            info: $"<color=#c2c2c2> -   Bezier_In   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_bezier_in.vector3Value) + "</color>",
+                            clipping: clipping);
+
+                        DrawPointInfo(
+                            rect: new Rect(rect.x + 5, titleheight + 100, rect.width - 15, 19),
+                            info: $"<color={hexcol}> -   Bezier_Out   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_bezier_out.vector3Value) + "</color>",
+                            clipping: clipping);
+
+                        DrawPointInfo(
+                            rect: new Rect(rect.x + 5, titleheight + 120, rect.width - 15, 19),
+                            info: $"<color=#c2c2c2> -   BezierWorld_In   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_bezier_in_world.vector3Value) + "</color>",
+                            clipping: clipping);
+
+                        DrawPointInfo(
+                            rect: new Rect(rect.x + 5, titleheight + 140, rect.width - 15, 19),
+                            info: $"<color={hexcol}> -   BezierWorld_Out   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_bezier_out_world.vector3Value) + "</color>",
+                            clipping: clipping);
                         #endregion
                     }
                 },
@@ -281,291 +317,538 @@ namespace SevenStrikeModules.XTween.Editor
         {
             serializedObject.Update();
 
-            Editor_XTween_GUI.Gui_Layout_Banner(icon_main, XTweenGUIFilled.实体, XTweenGUIColor.深空灰, "XTween - 路径工具", Color.white, 20, 20);
+            Event currentEvent = Event.current;
+            if (currentEvent.type == EventType.MouseDown)
+            {
+                // 取消当前拥有键盘焦点的控件
+                GUI.FocusControl(null);
+                Repaint();
+            }
+
+            XGUI.layout_banner(
+               bg_fill: XGUIFilled.实体,
+               bg_color: XGUIColor.深空灰,
+               bg_height: 30,
+               icon: icon_main,
+               icon_color: XTween_Dashboard.Theme_Primary,
+               title_text: "XTween  -  路径工具",
+               title_anchor: TextAnchor.MiddleLeft,
+               title_style: FontStyle.Normal,
+               title_color: Color.white,
+               title_size: XGUIFontSize.B,
+               title_clipping: TextClipping.Ellipsis);
 
             #region 快捷功能
-            Editor_XTween_GUI.Gui_Layout_Vertical_Start(XTweenGUIFilled.纯色边框, XTweenGUIColor.亮白, 5, "快捷功能", XTween_Dashboard.Theme_Primary);
-            Editor_XTween_GUI.Gui_Layout_Space(10);
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XTween_Dashboard.Theme_Group,
+                title: "快捷功能",
+                title_size: XGUIFontSize.M,
+                title_text_color: XTween_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(20, 20, 20, 20));
 
-            Editor_XTween_GUI.Gui_Layout_Horizontal_Start(XTweenGUIFilled.无, XTweenGUIColor.无, 0);
-            Editor_XTween_GUI.Gui_Layout_Space(10);
-            #region 添加路径点
-            GUI.enabled = true;
-            if (Editor_XTween_GUI.Gui_Layout_Button(15, "添加路径点", icon_add_r, icon_add_p))
+            #region 添加路径点 
+            if (XGUI.layout_button(
+                tooltip: "添加路径点",
+                tex_release: XGUI.GetBasedIcon("icon_add_r"),
+                tex_press: XGUI.GetBasedIcon("icon_add_p"),
+                tex_gui_color: Color.white,
+                width: 15,
+                height: 15))
             {
                 PathPoints_Add();
                 return;
             }
             #endregion
+
             GUILayout.FlexibleSpace();
-            #region 清空路径点
-            GUI.enabled = true;
-            if (Editor_XTween_GUI.Gui_Layout_Button(15, "清空路径点", clear_r, clear_p))
+
+            #region 清空路径点 
+            if (XGUI.layout_button(
+                tooltip: "清空路径点",
+                tex_release: XGUI.GetBasedIcon("icon_clear_r"),
+                tex_press: XGUI.GetBasedIcon("icon_clear_p"),
+                tex_gui_color: Color.white,
+                width: 15,
+                height: 15))
             {
                 PathPoints_Clear();
                 return;
             }
             #endregion
+
             GUILayout.FlexibleSpace();
-            #region 路径点深度归零
-            GUI.enabled = true;
-            if (Editor_XTween_GUI.Gui_Layout_Button(15, "路径点深度归零", repos_zero_r, repos_zero_p))
+
+            #region 路径点深度归零 
+            if (XGUI.layout_button(
+                tooltip: "路径点深度归零",
+                tex_release: XGUI.GetBasedIcon("icon_rewind_r"),
+                tex_press: XGUI.GetBasedIcon("icon_rewind_p"),
+                tex_gui_color: Color.white,
+                width: 15,
+                height: 15))
             {
                 PathPoints_ZAxis_ToZero();
                 return;
             }
             #endregion
+
             GUILayout.FlexibleSpace();
-            #region 生成路径标记
-            GUI.enabled = true;
-            if (Editor_XTween_GUI.Gui_Layout_Button(15, "生成路径标记", createpathmarks_r, createpathmarks_p))
+
+            #region 生成路径标记 
+            if (XGUI.layout_button(
+                tooltip: "生成路径标记",
+                tex_release: XGUI.GetBasedIcon("icon_path_r"),
+                tex_press: XGUI.GetBasedIcon("icon_path_p"),
+                tex_gui_color: Color.white,
+                width: 15,
+                height: 15))
             {
                 PathMarksCreator();
                 return;
             }
             #endregion
-            Editor_XTween_GUI.Gui_Layout_Space(10);
-            Editor_XTween_GUI.Gui_Layout_Horizontal_End();
 
-            Editor_XTween_GUI.Gui_Layout_Space(10);
-            Editor_XTween_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
 
             #region 路径列表
-            Editor_XTween_GUI.Gui_Layout_Vertical_Start(XTweenGUIFilled.纯色边框, XTweenGUIColor.亮白, 5, "路径列表", XTween_Dashboard.Theme_Primary);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            #region 路径列表
-            if (sp_PathPoints.arraySize > 0)
-            {
-                if (IsMultiSelected())
-                {
-                    Editor_XTween_GUI.Gui_Layout_Horizontal_Start(XTweenGUIFilled.无, XTweenGUIColor.无, 0);
-                    Editor_XTween_GUI.Gui_Layout_Space(10);
-                    EditorGUILayout.HelpBox("路径列表不支持多项操作", MessageType.Warning);
-                    Editor_XTween_GUI.Gui_Layout_Space(5);
-                    Editor_XTween_GUI.Gui_Layout_Horizontal_End();
-                }
-                else
-                {
-                    Editor_XTween_GUI.Gui_Layout_Horizontal_Start(XTweenGUIFilled.无, XTweenGUIColor.无, 0);
-                    Editor_XTween_GUI.Gui_Layout_Space(10);
-                    sp_PathPointsIsFold.boolValue = EditorGUILayout.Foldout(sp_PathPointsIsFold.boolValue, "路径", true);
-                    Editor_XTween_GUI.Gui_Layout_Space(5);
-                    Editor_XTween_GUI.Gui_Layout_Horizontal_End();
+            BaseScript.fold_points = XGUI.layout_group_start(
+                 type: XGUIContainerType.Vertical,
+                 bg_fill: XGUIFilled.缺口纯色边框,
+                 bg_color: XGUIColor.亮白,
+                 bg_color_gui: XTween_Dashboard.Theme_Group,
+                 title: "路径列表",
+                 title_size: XGUIFontSize.M,
+                 title_text_color: XTween_Dashboard.Theme_Primary,
+                 title_clipping: TextClipping.Clip,
+                 padding: new RectOffset(5, 5, 10, 10),
+                 foldout: BaseScript.fold_points);
 
-                    Editor_XTween_GUI.Gui_Layout_Horizontal_Start(XTweenGUIFilled.无, XTweenGUIColor.无, 0);
-                    Editor_XTween_GUI.Gui_Layout_Space(5);
-                    if (sp_PathPointsIsFold.boolValue)
+            if (BaseScript.fold_points)
+            {
+                if (sp_PathPoints.arraySize > 0)
+                {
+                    if (IsMultiSelected())
+                    {
+                        XGUI.layout_helpbox(
+                            state: XGUIHelboxState.警告,
+                            title_text: "路径列表不支持多项操作",
+                            title_size: XGUIFontSize.M,
+                            title_style: FontStyle.Normal,
+                            title_color: Color.white * 0.75f);
+                    }
+                    else
+                    {
                         PathPoints.DoLayoutList();
-                    Editor_XTween_GUI.Gui_Layout_Space(5);
-                    Editor_XTween_GUI.Gui_Layout_Horizontal_End();
+                    }
                 }
             }
-            #endregion
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 有效路径百分比
-            Editor_XTween_GUI.Gui_Layout_Vertical_Start(XTweenGUIFilled.纯色边框, XTweenGUIColor.亮白, 5, "有效路径百分比", XTween_Dashboard.Theme_Primary);
-            Editor_XTween_GUI.Gui_Layout_Space(10);
+            XGUI.layout_group_start(
+               type: XGUIContainerType.Vertical,
+               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_color: XGUIColor.亮白,
+               bg_color_gui: XTween_Dashboard.Theme_Group,
+               title: "有效路径百分比",
+               title_size: XGUIFontSize.M,
+               title_text_color: XTween_Dashboard.Theme_Primary,
+               title_clipping: TextClipping.Clip,
+               padding: new RectOffset(5, 5, 10, 10));
 
-            Rect rect_longpress = GUILayoutUtility.GetLastRect();
+            XGUI.layout_progress(
+                height: 30,
+                title: "起点",
+                title_size: XGUIFontSize.XS,
+                title_offset: new Vector2(0, 0),
+                title_color: Color.white,
+                subtitle: "终点",
+                subtitle_size: XGUIFontSize.XS,
+                subtitle_offset: new Vector2(0, 0),
+                subtitle_color: Color.white,
+                line_left_color: Color.white * 0.5f,
+                line_right_color: Color.white * 0.5f,
+                line_center_color: Color.white * 0.5f,
+                progress_fg_color: XTween_Dashboard.Theme_Primary,
+                progress_bg_color: Color.black * 0.5f,
+                indicator_color: Color.white,
+                icon_indicator: XGUI.GetBasedIcon("icon_mark_arrow_up"),
+                value: sp_PathLimitePercent.floatValue,
+                title_distance: 0,
+                thickness: 2);
 
-            EditorGUI.DrawRect(new Rect(rect_longpress.x + 5, rect_longpress.y + 22, (EditorGUIUtility.currentViewWidth - 65), 1), Color.black * 0.3f);
-
-            EditorGUI.DrawRect(new Rect(rect_longpress.x + 5, rect_longpress.y + 22, (EditorGUIUtility.currentViewWidth - 65) * sp_PathLimitePercent.floatValue, 1), XTween_Dashboard.Theme_Primary);
-
-            Editor_XTween_GUI.Gui_Labelfield_Thin(new Rect(rect_longpress.x + 5, rect_longpress.y + 8, 50, 6), "起点", XTweenGUIFilled.无, XTweenGUIColor.无, XTween_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, new Vector2(0, 0), 9);
-
-            Editor_XTween_GUI.Gui_Labelfield_Thin(new Rect(rect_longpress.x + (EditorGUIUtility.currentViewWidth - 110), rect_longpress.y + 8, 50, 6), "终点", XTweenGUIFilled.无, XTweenGUIColor.无, Color.gray, TextAnchor.MiddleRight, new Vector2(0, 0), 9);
-
-            EditorGUI.DrawRect(new Rect((rect_longpress.x + 5), rect_longpress.y + 20, 1, 6), Color.gray);
-
-            EditorGUI.DrawRect(new Rect((rect_longpress.x + (EditorGUIUtility.currentViewWidth - 60)), rect_longpress.y + 20, 1, 6), Color.gray);
-
-            Editor_XTween_GUI.Gui_Icon(new Rect(((rect_longpress.x + 1) + (EditorGUIUtility.currentViewWidth - 65) * sp_PathLimitePercent.floatValue), rect_longpress.y + 6, 8, 8), icon_pathpercent);
-
-            EditorGUI.DrawRect(new Rect(((rect_longpress.x + 5) + (EditorGUIUtility.currentViewWidth - 65) * sp_PathLimitePercent.floatValue), rect_longpress.y + 18, 1, 10), Color.red);
-
-
-            Editor_XTween_GUI.Gui_Layout_Space(28);
-            Editor_XTween_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 选项
-            Editor_XTween_GUI.Gui_Layout_Vertical_Start(XTweenGUIFilled.纯色边框, XTweenGUIColor.亮白, 5, "选项", XTween_Dashboard.Theme_Primary);
-            Editor_XTween_GUI.Gui_Layout_Space(10);
-            #region 路径样式
-            string[] actionlist = System.Enum.GetNames(typeof(XTween_PathType));
-            Editor_XTween_GUI.Gui_Layout_Popup<string, XTween_PathTool>("路径样式", actionlist, ref sp_IndexPathType, XTweenGUIFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
-            {
-                sp_PathType.enumValueIndex = (int)(XTween_PathType)System.Enum.Parse(typeof(XTween_PathType), res);
-            });
-            #endregion
+            BaseScript.fold_options = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XTween_Dashboard.Theme_Group,
+                title: "选项",
+                title_size: XGUIFontSize.M,
+                title_text_color: XTween_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 5, 15, 15),
+                foldout: BaseScript.fold_options);
 
-            #region 朝向模式
-            actionlist = System.Enum.GetNames(typeof(XTween_PathOrientation));
-            Editor_XTween_GUI.Gui_Layout_Popup<string, XTween_PathTool>("朝向模式", actionlist, ref sp_IndexPathOrientation, XTweenGUIFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
+            if (!BaseScript.fold_options)
             {
-                sp_PathOrientation.enumValueIndex = (int)(XTween_PathOrientation)System.Enum.Parse(typeof(XTween_PathOrientation), res);
-            });
-            #endregion
+                #region 动画类型           
+                XGUI.layout_string_popup(
+                   title: "路径样式",
+                   title_width: 100,
+                   title_size: XGUIFontSize.M,
+                   title_anchor: TextAnchor.MiddleLeft,
+                   prop: sp_IndexPathType,
+                   options: enums_name_path_type,
+                   opt_text_size: XGUIFontSize.M,
+                   opt_text_color: Color.black,
+                   opt_text_padding: new RectOffset(10, 10, 0, 0),
+                   opt_anchor: TextAnchor.MiddleLeft,
+                   opt_font_style: FontStyle.Normal,
+                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_color: XGUIColor.亮白,
+                   opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
+                   icon_arrow_color: Color.black,
+                   margin: new RectOffset(0, 0, 5, 5),
+                   padding: new RectOffset(5, 5, 0, 0),
+                   title_margin: new RectOffset(0, 0, 0, 0),
+                   act_on_changed: (value) =>
+                   {
+                       sp_PathType.enumValueIndex = (int)(XTween_PathType)System.Enum.Parse(typeof(XTween_PathType), value);
+                   });
+                #endregion
 
-            #region 朝向轴向
-            if (BaseScript.PathOrientation != XTween_PathOrientation.无)
-            {
-                actionlist = System.Enum.GetNames(typeof(XTween_PathOrientationVector));
-                Editor_XTween_GUI.Gui_Layout_Popup<string, XTween_PathTool>("朝向轴向", actionlist, ref sp_IndexPathOrientationVector, XTweenGUIFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
+                #region 朝向模式           
+                XGUI.layout_string_popup(
+                   title: "朝向模式",
+                   title_width: 100,
+                   title_size: XGUIFontSize.M,
+                   title_anchor: TextAnchor.MiddleLeft,
+                   prop: sp_IndexPathOrientation,
+                   options: enums_name_path_orient,
+                   opt_text_size: XGUIFontSize.M,
+                   opt_text_color: Color.black,
+                   opt_text_padding: new RectOffset(10, 10, 0, 0),
+                   opt_anchor: TextAnchor.MiddleLeft,
+                   opt_font_style: FontStyle.Normal,
+                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_color: XGUIColor.亮白,
+                   opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
+                   icon_arrow_color: Color.black,
+                   margin: new RectOffset(0, 0, 5, 5),
+                   padding: new RectOffset(5, 5, 0, 0),
+                   title_margin: new RectOffset(0, 0, 0, 0),
+                   act_on_changed: (value) =>
+                   {
+                       sp_PathOrientation.enumValueIndex = (int)(XTween_PathOrientation)System.Enum.Parse(typeof(XTween_PathOrientation), value);
+                   });
+                #endregion
+
+                #region 朝向轴向           
+                if (BaseScript.PathOrientation != XTween_PathOrientation.无)
                 {
-                    sp_PathOrientationVector.enumValueIndex = (int)(XTween_PathOrientationVector)System.Enum.Parse(typeof(XTween_PathOrientationVector), res);
+                    XGUI.layout_string_popup(
+                   title: "朝向轴向",
+                   title_width: 100,
+                   title_size: XGUIFontSize.M,
+                   title_anchor: TextAnchor.MiddleLeft,
+                   prop: sp_IndexPathOrientationVector,
+                   options: enums_name_path_orient_vector,
+                   opt_text_size: XGUIFontSize.M,
+                   opt_text_color: Color.black,
+                   opt_text_padding: new RectOffset(10, 10, 0, 0),
+                   opt_anchor: TextAnchor.MiddleLeft,
+                   opt_font_style: FontStyle.Normal,
+                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_color: XGUIColor.亮白,
+                   opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
+                   icon_arrow_color: Color.black,
+                   margin: new RectOffset(0, 0, 5, 5),
+                   padding: new RectOffset(5, 5, 0, 0),
+                   title_margin: new RectOffset(0, 0, 0, 0),
+                   act_on_changed: (value) =>
+                   {
+                       sp_PathOrientationVector.enumValueIndex = (int)(XTween_PathOrientationVector)System.Enum.Parse(typeof(XTween_PathOrientationVector), value);
+                   });
+                }
+                #endregion
+
+                #region 控制点样式           
+                XGUI.layout_string_popup(
+                   title: "控制点样式",
+                   title_width: 100,
+                   title_size: XGUIFontSize.M,
+                   title_anchor: TextAnchor.MiddleLeft,
+                   prop: sp_IndexControlLineStyle,
+                   options: enums_name_line_style,
+                   opt_text_size: XGUIFontSize.M,
+                   opt_text_color: Color.black,
+                   opt_text_padding: new RectOffset(10, 10, 0, 0),
+                   opt_anchor: TextAnchor.MiddleLeft,
+                   opt_font_style: FontStyle.Normal,
+                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_color: XGUIColor.亮白,
+                   opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
+                   icon_arrow_color: Color.black,
+                   margin: new RectOffset(0, 0, 5, 5),
+                   padding: new RectOffset(5, 5, 0, 0),
+                   title_margin: new RectOffset(0, 0, 0, 0),
+                   act_on_changed: (value) =>
+                   {
+                       sp_ControlLineStyle.enumValueIndex = (int)(XTween_LineStyle)System.Enum.Parse(typeof(XTween_LineStyle), value);
+                   });
+                #endregion
+
+                #region 生成标记方式           
+                XGUI.layout_string_popup(
+                   title: "生成标记方式",
+                   title_width: 100,
+                   title_size: XGUIFontSize.M,
+                   title_anchor: TextAnchor.MiddleLeft,
+                   prop: sp_IndexPathMarkMode,
+                   options: enums_name_path_marks,
+                   opt_text_size: XGUIFontSize.M,
+                   opt_text_color: Color.black,
+                   opt_text_padding: new RectOffset(10, 10, 0, 0),
+                   opt_anchor: TextAnchor.MiddleLeft,
+                   opt_font_style: FontStyle.Normal,
+                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_color: XGUIColor.亮白,
+                   opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
+                   icon_arrow_color: Color.black,
+                   margin: new RectOffset(0, 0, 5, 5),
+                   padding: new RectOffset(5, 5, 0, 0),
+                   title_margin: new RectOffset(0, 0, 0, 0),
+                   act_on_changed: (value) =>
+                   {
+                       sp_PathMarksMode.enumValueIndex = (int)(XTween_PathMarksMode)System.Enum.Parse(typeof(XTween_PathMarksMode), value);
+                   });
+                #endregion
+
+                XGUI.layout_seperator(
+                    thickness: 1,
+                    color: XTween_Dashboard.Theme_SeperateLine,
+                    margin: new RectOffset(0, 0, 15, 13),
+                    padding: new RectOffset(0, 0, 0, 0));
+
+                // 调试信息
+                DrawToggle(
+                    title: "路径闭合",
+                    prop: sp_IsClosed,
+                    width: 120,
+                    options: new string[] { "闭合", "开放" },
+                    act_on_changed: (b) =>
+                {
+
                 });
+
+                // 显示路径
+                DrawToggle(
+                    title: "显示路径",
+                    prop: sp_DisplayPath,
+                    width: 120,
+                    options: new string[] { "闭合", "开放" },
+                    act_on_changed: (b) =>
+                    {
+
+                    });
+
+                // 显示路径点信息
+                DrawToggle(
+                    title: "显示路径点信息",
+                    prop: sp_DisplayIndex,
+                    width: 120,
+                    options: new string[] { "开放", "闭合" },
+                    act_on_changed: (b) =>
+                    {
+
+                    });
+
+                // 注视线可视化
+                DrawToggle(
+                    title: "注视线可视化",
+                    prop: sp_LookAtLine,
+                    width: 120,
+                    options: new string[] { "闭合", "开放" },
+                    act_on_changed: (b) =>
+                    {
+
+                    });
             }
-            #endregion
-
-            #region 控制点样式
-            actionlist = System.Enum.GetNames(typeof(XTween_LineStyle));
-            Editor_XTween_GUI.Gui_Layout_Popup<string, XTween_PathTool>("控制点样式", actionlist, ref sp_IndexControlLineStyle, XTweenGUIFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
-            {
-                sp_ControlLineStyle.enumValueIndex = (int)(XTween_LineStyle)System.Enum.Parse(typeof(XTween_LineStyle), res);
-            });
-            #endregion
-
-            #region 标记方式
-            actionlist = System.Enum.GetNames(typeof(XTween_PathMarksMode));
-            Editor_XTween_GUI.Gui_Layout_Popup<string, XTween_PathTool>("生成标记方式", actionlist, ref sp_IndexPathMarkMode, XTweenGUIFilled.实体, 120, 22, SelectedObjects, (comps) => { }, (res) =>
-            {
-                sp_PathMarksMode.enumValueIndex = (int)(XTween_PathMarksMode)System.Enum.Parse(typeof(XTween_PathMarksMode), res);
-            });
-            #endregion
-
-            #region 路径闭合
-            Editor_XTween_GUI.Gui_Layout_Toggle<bool, XTween_PathTool>("路径闭合", new string[] { "禁用", "启用" }, ref sp_IsClosed, XTweenGUIFilled.无, XTweenGUIFilled.实体, Color.white, 120, 22, SelectedObjects);
-            #endregion
-
-            #region 显示路径
-            Editor_XTween_GUI.Gui_Layout_Toggle<bool, XTween_PathTool>("显示路径", new string[] { "禁用", "启用" }, ref sp_DisplayPath, XTweenGUIFilled.无, XTweenGUIFilled.实体, Color.white, 120, 22, SelectedObjects);
-            #endregion
-
-            #region 显示路径点信息
-            Editor_XTween_GUI.Gui_Layout_Toggle<bool, XTween_PathTool>("显示路径点信息", new string[] { "禁用", "启用" }, ref sp_DisplayIndex, XTweenGUIFilled.无, XTweenGUIFilled.实体, Color.white, 120, 22, SelectedObjects);
-            #endregion
-
-            #region 注视线
-            Editor_XTween_GUI.Gui_Layout_Toggle<bool, XTween_PathTool>("注视线可视化", new string[] { "禁用", "启用" }, ref sp_LookAtLine, XTweenGUIFilled.无, XTweenGUIFilled.实体, Color.white, 120, 22, SelectedObjects);
-            #endregion
-            Editor_XTween_GUI.Gui_Layout_Space(10);
-            Editor_XTween_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 注视参数
             if (BaseScript.PathOrientation == XTween_PathOrientation.注视目标物体 || BaseScript.PathOrientation == XTween_PathOrientation.注视目标位置)
             {
-                Editor_XTween_GUI.Gui_Layout_Vertical_Start(XTweenGUIFilled.纯色边框, XTweenGUIColor.亮白, 5, "注视参数", XTween_Dashboard.Theme_Primary);
-                Editor_XTween_GUI.Gui_Layout_Space(5);
+                XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XTween_Dashboard.Theme_Group,
+                title: "注视参数",
+                title_size: XGUIFontSize.M,
+                title_text_color: XTween_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 5, 15, 15));
+
                 if (BaseScript.PathOrientation == XTween_PathOrientation.注视目标物体)
                 {
-                    Editor_XTween_GUI.Gui_Layout_Space(5);
-                    Editor_XTween_GUI.Gui_Layout_Property_Field("目标物体", sp_LookAtObject);
+                    DrawParamField("目标物体", sp_LookAtObject, 100);
                 }
+
                 if (BaseScript.PathOrientation == XTween_PathOrientation.注视目标位置)
                 {
-                    Editor_XTween_GUI.Gui_Layout_Space(5);
-                    Editor_XTween_GUI.Gui_Layout_Property_Field("目标位置", sp_LookAtPosition);
+                    DrawParamField("目标位置", sp_LookAtPosition, 100);
                 }
-                Editor_XTween_GUI.Gui_Layout_Space(5);
-                Editor_XTween_GUI.SetEnabled(false);
-                Editor_XTween_GUI.Gui_Layout_Property_Field("连线坐标数组", sp_LookAtPoints);
-                Editor_XTween_GUI.SetEnabled(true);
 
-                Editor_XTween_GUI.Gui_Layout_Space(10);
-                Editor_XTween_GUI.Gui_Layout_Vertical_End();
+                XGUI.SetEnabled(false);
+                DrawParamField("连线坐标数组", sp_LookAtPoints, 100);
+                XGUI.SetEnabled(true);
+
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             }
             #endregion
 
-            #region 开关状态
-            Editor_XTween_GUI.Gui_Layout_Vertical_Start(XTweenGUIFilled.纯色边框, XTweenGUIColor.亮白, 5, "开关状态", XTween_Dashboard.Theme_Primary);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            #region 世界状态     
-            Editor_XTween_GUI.StatuDisplayer_text(icon_worldmode, 12, new Vector2(0, 7), "世界状态", 12, sp_IsWorldMode.boolValue ? "启用" : "禁用", sp_IsWorldMode.boolValue ? XTween_Dashboard.Theme_Primary : Color.gray, 11);
-            #endregion
+            #region 路径状态
+            BaseScript.fold_status = XGUI.layout_group_start(
+                   type: XGUIContainerType.Vertical,
+                   bg_fill: XGUIFilled.缺口纯色边框,
+                   bg_color: XGUIColor.亮白,
+                   bg_color_gui: XTween_Dashboard.Theme_Group,
+                   title: "路径状态",
+                   title_size: XGUIFontSize.M,
+                   title_text_color: XTween_Dashboard.Theme_Primary,
+                   title_clipping: TextClipping.Clip,
+                   padding: new RectOffset(10, 5, 15, 15),
+                   foldout: BaseScript.fold_status);
 
-            #region 初始坐标     
-            Editor_XTween_GUI.StatuDisplayer_text(icon_startpos, 12, new Vector2(0, 7), "初始坐标", 12, XTween_Utilitys.ConvertVector3ToString(sp_StartPosition.vector3Value), XTween_Dashboard.Theme_Primary, 11);
-            #endregion
+            if (BaseScript.fold_status)
+            {
+                XGUI.layout_state_displayer_text(
+                    title: "世界状态",
+                    title_size: XGUIFontSize.M,
+                    subtitle: sp_IsWorldMode.boolValue ? "启用" : "禁用",
+                    subtitle_size: XGUIFontSize.M,
+                    subtitle_color: Color.white * 0.7f,
+                    padding: new RectOffset(0, 0, 0, 0));
 
-            #region 路径长度     
-            Editor_XTween_GUI.StatuDisplayer_text(icon_pathlength, 12, new Vector2(0, 7), "路径长度", 12, sp_PathLength.floatValue.ToString("F2"), XTween_Dashboard.Theme_Primary, 11);
-            #endregion
+                XGUI.layout_state_displayer_text(
+                    title: "初始坐标",
+                    title_size: XGUIFontSize.M,
+                    subtitle: sp_StartPosition.vector3Value.ToString(),
+                    subtitle_size: XGUIFontSize.M,
+                    subtitle_color: XTween_Dashboard.Theme_Primary,
+                    padding: new RectOffset(0, 0, 0, 0));
 
-            #region 路径父级物体
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.StatuDisplayer_Object(icon_Grandparent, 12, new Vector2(0, 1), "路径父级物体", 12, new Vector2(0, -7), status, new Vector2(0, 3), sp_PathParent.objectReferenceValue == null ? false : true, XTween_Dashboard.Theme_Primary, Color.black * 0.7f, sp_PathParent);
-            #endregion
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Vertical_End();
+                XGUI.layout_state_displayer_text(
+                    title: "路径长度",
+                    title_size: XGUIFontSize.M,
+                    subtitle: sp_PathLength.floatValue.ToString("F2"),
+                    subtitle_size: XGUIFontSize.M,
+                    subtitle_color: XTween_Dashboard.Theme_Primary,
+                    padding: new RectOffset(0, 0, 0, 0));
+
+                XGUI.layout_property_field(
+                    title: "路径父级物体",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XTween_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    status_icon: "icon_field_status",
+                    status_icon_color: sp_PathParent.objectReferenceValue != null ? XTween_Dashboard.Theme_Primary : Color.black * 0.7f,
+                    prop: sp_PathParent,
+                    prop_margin: new RectOffset(0, 0, 0, 10));
+            }
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 路径参数
-            Editor_XTween_GUI.Gui_Layout_Vertical_Start(XTweenGUIFilled.纯色边框, XTweenGUIColor.亮白, 5, "路径参数", XTween_Dashboard.Theme_Primary);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("有效路径百分比", sp_PathLimitePercent, 120);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("路径步数细分", sp_SegmentsPerCurve, 120);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("添加路径初始距离", sp_AddedDistance, 120);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Vertical_End();
+            BaseScript.fold_params = XGUI.layout_group_start(
+            type: XGUIContainerType.Vertical,
+            bg_fill: XGUIFilled.缺口纯色边框,
+            bg_color: XGUIColor.亮白,
+            bg_color_gui: XTween_Dashboard.Theme_Group,
+            title: "路径参数",
+            title_size: XGUIFontSize.M,
+            title_text_color: XTween_Dashboard.Theme_Primary,
+            title_clipping: TextClipping.Clip,
+            padding: new RectOffset(10, 5, 15, 15),
+            foldout: BaseScript.fold_params);
+
+            if (BaseScript.fold_params)
+            {
+                DrawParamField("有效路径百分比", sp_PathLimitePercent, 100);
+                DrawParamField("路径步数细分", sp_SegmentsPerCurve, 100);
+                DrawParamField("添加路径初始距离", sp_AddedDistance, 100);
+            }
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 路径样式
-            Editor_XTween_GUI.Gui_Layout_Vertical_Start(XTweenGUIFilled.纯色边框, XTweenGUIColor.亮白, 5, "路径样式", XTween_Dashboard.Theme_Primary);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("路径点尺寸", sp_PathPointSize, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("贝塞尔控制点尺寸", sp_BezierControlSize, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("路径宽度", sp_PathWidth, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("路径信息尺寸", sp_IndexSize, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("路径信息高度", sp_IndexLengthHeight, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("路径信息偏移", sp_IndexOffset, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("注视线宽度", sp_LookAtLineWidth, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("路径颜色", sp_Color_Path, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("路径点颜色", sp_Color_PathPoint, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("路径点选中颜色", sp_Color_PathPoint_Selected, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("控制点颜色", sp_Color_BezierControl, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("控制点选中颜色", sp_Color_BezierControl_Selected, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("路径点序号颜色", sp_Color_Index, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("路径点信息颜色", sp_Color_IndexLength, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("注视线颜色", sp_Color_LookAtLine, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("标记颜色", sp_PathMarksColor, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Vertical_End();
+            BaseScript.fold_style = XGUI.layout_group_start(
+                   type: XGUIContainerType.Vertical,
+                   bg_fill: XGUIFilled.缺口纯色边框,
+                   bg_color: XGUIColor.亮白,
+                   bg_color_gui: XTween_Dashboard.Theme_Group,
+                   title: "路径样式",
+                   title_size: XGUIFontSize.M,
+                   title_text_color: XTween_Dashboard.Theme_Primary,
+                   title_clipping: TextClipping.Clip,
+                   padding: new RectOffset(10, 5, 15, 15),
+                   foldout: BaseScript.fold_style);
+
+            if (BaseScript.fold_style)
+            {
+                DrawParamField("路径点尺寸", sp_PathPointSize, 100);
+                DrawParamField("贝塞尔控制点尺寸", sp_BezierControlSize, 100);
+                DrawParamField("路径宽度", sp_PathWidth, 100);
+                DrawParamField("路径信息尺寸", sp_IndexSize, 100);
+                DrawParamField("路径信息高度", sp_IndexLengthHeight, 100);
+                DrawParamField("路径信息偏移", sp_IndexOffset, 100);
+                DrawParamField("注视线宽度", sp_LookAtLineWidth, 100);
+                DrawParamField("路径颜色", sp_Color_Path, 100);
+                DrawParamField("路径点颜色", sp_Color_PathPoint, 100);
+                DrawParamField("路径点选中颜色", sp_Color_PathPoint_Selected, 100);
+                DrawParamField("控制点颜色", sp_Color_BezierControl, 100);
+                DrawParamField("控制点选中颜色", sp_Color_BezierControl_Selected, 100);
+                DrawParamField("路径点序号颜色", sp_Color_Index, 100);
+                DrawParamField("路径点信息颜色", sp_Color_IndexLength, 100);
+                DrawParamField("注视线颜色", sp_Color_LookAtLine, 100);
+                DrawParamField("标记颜色", sp_PathMarksColor, 100);
+            }
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 路径标记生成
-            Editor_XTween_GUI.Gui_Layout_Vertical_Start(XTweenGUIFilled.纯色边框, XTweenGUIColor.亮白, 5, "路径标记生成", XTween_Dashboard.Theme_Primary);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("标记样式", sp_PathMarksTexture, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("标记尺寸", sp_PathMarksSize, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Property_Field("标记采样", sp_PathMarksSample, 110);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Vertical_End();
+            BaseScript.fold_marks = XGUI.layout_group_start(
+                   type: XGUIContainerType.Vertical,
+                   bg_fill: XGUIFilled.缺口纯色边框,
+                   bg_color: XGUIColor.亮白,
+                   bg_color_gui: XTween_Dashboard.Theme_Group,
+                   title: "路径标记生成",
+                   title_size: XGUIFontSize.M,
+                   title_text_color: XTween_Dashboard.Theme_Primary,
+                   title_clipping: TextClipping.Clip,
+                   padding: new RectOffset(10, 5, 15, 15),
+                   foldout: BaseScript.fold_marks);
+
+            if (BaseScript.fold_marks)
+            {
+                DrawParamField("标记样式", sp_PathMarksTexture, 100);
+                DrawParamField("标记尺寸", sp_PathMarksSize, 100);
+                DrawParamField("标记采样", sp_PathMarksSample, 100);
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             Event e = Event.current;
@@ -590,7 +873,14 @@ namespace SevenStrikeModules.XTween.Editor
                 {
                     menu.AddItem(new GUIContent("D (标记)"), false, () =>
                     {
-                        string res = Editor_XTween_GUI.Open(XTweenDialogType.警告, "XTweenPath消息", "创建标记物", "此操作会根据当前的路径生成标记物！", "创建", "暂不", 0);
+                        string res = XGUI.dialog(
+                            type: XGUIDialogType.警告,
+                            windowtitle: "XTweenPath消息",
+                            title: "创建标记物",
+                            msg: "此操作会根据当前的路径生成标记物！",
+                            ok: "创建",
+                            cancel: "暂不",
+                            PrimaryIndex: 0);
                         if (res == "创建")
                         {
                             BaseScript.PathMarks_Create();
@@ -601,7 +891,7 @@ namespace SevenStrikeModules.XTween.Editor
                 {
                     menu.AddItem(new GUIContent("D (清除)"), false, () =>
                     {
-                        string res_de = Editor_XTween_GUI.Open(XTweenDialogType.警告, "XTweenPath消息", "已存在标记物", "此操作会将当前的所有路径标记物全部清除！", "清除", "暂不", 0);
+                        string res_de = XGUI.dialog(type: XGUIDialogType.警告, windowtitle: "XTweenPath消息", title: "已存在标记物", msg: "此操作会将当前的所有路径标记物全部清除！", ok: "清除", cancel: "暂不", PrimaryIndex: 0);
                         if (res_de == "清除")
                         {
                             BaseScript.PathMarks_Clear();
@@ -620,24 +910,29 @@ namespace SevenStrikeModules.XTween.Editor
 
             serializedObject.ApplyModifiedProperties();
 
-            #region 源脚本
-            Editor_XTween_GUI.Gui_Layout_Vertical_Start(XTweenGUIFilled.纯色边框, XTweenGUIColor.亮白, 3, "源脚本", XTween_Dashboard.Theme_Primary);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
+            #region 原始类
+            fold_raw = XGUI.layout_group_start(
+                 type: XGUIContainerType.Vertical,
+                 bg_fill: XGUIFilled.缺口纯色边框,
+                 bg_color: XGUIColor.亮白,
+                 bg_color_gui: XTween_Dashboard.Theme_Group,
+                 title: "原始类",
+                 title_size: XGUIFontSize.M,
+                 title_text_color: XTween_Dashboard.Theme_Primary,
+                 title_clipping: TextClipping.Clip,
+                 padding: new RectOffset(10, 5, 15, 15),
+                 foldout: fold_raw);
 
-            #region 原始变量
-            Editor_XTween_GUI.Gui_Layout_Horizontal_Start(XTweenGUIFilled.无, XTweenGUIColor.无, 0);
-            Editor_XTween_GUI.Gui_Layout_Space(10);
-            BasicVars = EditorGUILayout.Foldout(BasicVars, "变量/属性", true);
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Horizontal_End();
-            if (BasicVars)
+            if (fold_raw)
+            {
                 DrawDefaultInspector();
-            #endregion
+            }
 
-            Editor_XTween_GUI.Gui_Layout_Space(5);
-            Editor_XTween_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
         }
+
+        #region 路径点
         /// <summary>
         /// 增加路径点
         /// </summary>
@@ -676,7 +971,15 @@ namespace SevenStrikeModules.XTween.Editor
         /// </summary>
         private void PathPoints_Clear()
         {
-            string res = Editor_XTween_GUI.Open(XTweenDialogType.警告, "XTweenPath消息", "清空路径点", "此操作将清空当前已设置的所有路径点！请谨慎操作！", "清空", "暂不", 1);
+            string res = XGUI.dialog(
+                type: XGUIDialogType.警告,
+                windowtitle: "XTweenPath消息",
+                title: "清空路径点",
+                msg: "此操作将清空当前已设置的所有路径点！请谨慎操作！",
+                ok: "清空",
+                cancel: "暂不",
+                PrimaryIndex: 1,
+                themecolor: XTween_Dashboard.Theme_Primary);
             if (res == "清空")
             {
                 Undo.RecordObject(BaseScript, "Clear All Path Points");
@@ -690,7 +993,15 @@ namespace SevenStrikeModules.XTween.Editor
         /// </summary>
         private void PathPoints_ZAxis_ToZero()
         {
-            string res = Editor_XTween_GUI.Open(XTweenDialogType.警告, "XTweenPath消息", "路径点Z轴归零", "此操作会将当前已设置的所有路径点的Z轴坐标归零到画布！请谨慎操作！", "归零", "暂不", 1);
+            string res = XGUI.dialog(
+                type: XGUIDialogType.警告,
+                windowtitle: "XTweenPath消息",
+                title: "路径点Z轴归零",
+                msg: "此操作会将当前已设置的所有路径点的Z轴坐标归零到画布！请谨慎操作！",
+                ok: "归零",
+                cancel: "暂不",
+                PrimaryIndex: 1,
+                themecolor: XTween_Dashboard.Theme_Primary);
             if (res == "归零")
             {
                 Undo.RecordObject(BaseScript, "Path Points ResetToZero");
@@ -700,6 +1011,8 @@ namespace SevenStrikeModules.XTween.Editor
                 }
             }
         }
+        #endregion
+
         /// <summary>
         /// 标记点创建/清除
         /// </summary>
@@ -707,7 +1020,15 @@ namespace SevenStrikeModules.XTween.Editor
         {
             if (sp_PathMarksGroup.objectReferenceValue != null)
             {
-                string res_de = Editor_XTween_GUI.Open(XTweenDialogType.警告, "XTweenPath消息", "已存在标记物", "此操作会将当前的所有路径标记物全部清除！", "清除", "暂不", 0);
+                string res_de = XGUI.dialog(
+                    type: XGUIDialogType.警告,
+                    windowtitle: "XTweenPath消息",
+                    title: "已存在标记物",
+                    msg: "此操作会将当前的所有路径标记物全部清除！",
+                    ok: "清除",
+                    cancel: "暂不",
+                    PrimaryIndex: 0,
+                    themecolor: XTween_Dashboard.Theme_Primary);
                 if (res_de == "清除")
                 {
                     BaseScript.PathMarks_Clear();
@@ -715,13 +1036,22 @@ namespace SevenStrikeModules.XTween.Editor
             }
             else
             {
-                string res = Editor_XTween_GUI.Open(XTweenDialogType.警告, "XTweenPath消息", "创建标记物", "此操作会根据当前的路径生成标记物！", "创建", "暂不", 0);
+                string res = XGUI.dialog(
+                    type: XGUIDialogType.警告,
+                    windowtitle: "XTweenPath消息",
+                    title: "创建标记物",
+                    msg: "此操作会根据当前的路径生成标记物！",
+                    ok: "创建",
+                    cancel: "暂不",
+                    PrimaryIndex: 0,
+                    themecolor: XTween_Dashboard.Theme_Primary);
                 if (res == "创建")
                 {
                     BaseScript.PathMarks_Create();
                 }
             }
         }
+
         /// <summary>
         /// 在场景视图中绘制路径和路径点
         /// </summary>
@@ -785,6 +1115,8 @@ namespace SevenStrikeModules.XTween.Editor
             if (BaseScript.act_on_pathChanged != null)
                 BaseScript.act_on_pathChanged?.Invoke();
         }
+
+        #region 绘制类
         /// <summary>
         /// 绘制路径
         /// </summary>
@@ -1066,6 +1398,64 @@ namespace SevenStrikeModules.XTween.Editor
             }
         }
         /// <summary>
+        /// 通用方法：绘制开关
+        /// </summary>
+        private void DrawToggle(string title = null, SerializedProperty prop = null, float width = 100, string[] options = null, Action<bool> act_on_changed = null)
+        {
+            XGUI.layout_toggle(
+                title: title,
+                title_size: XGUIFontSize.M,
+                title_font_style: FontStyle.Normal,
+                title_padding: new RectOffset(0, 10, 0, 0),
+                title_width: width,
+                prop: prop,
+                tog_style: XGUIToggleStyle.实体,
+                tog_padding: new RectOffset(5, 8, 0, 0),
+                tog_margin: new RectOffset(0, 0, 0, 5),
+                tog_mixed_options: options == null ? new string[] { "禁用", "启用" } : options,
+                tog_mixed_text_size: XGUIFontSize.M,
+                tog_mixed_text_color: Color.black,
+                tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                tog_mixed_font_style: FontStyle.Normal,
+                tog_bg_off_color: new Color(0.38f, 0.38f, 0.38f),
+                tog_bg_on_color: XTween_Dashboard.Theme_Primary,
+                tog_handler_off_color: Color.white,
+                tog_handler_on_color: Color.white,
+                tog_mixed_bg_color_gui: XTween_Dashboard.Theme_Primary,
+                act_on_changed: act_on_changed);
+        }
+        /// <summary>
+        /// 通用方法：绘制参数
+        /// </summary>
+        private void DrawParamField(string title, SerializedProperty prop, float width)
+        {
+            XGUI.layout_property_field(
+                title: title,
+                title_size: XGUIFontSize.M,
+                title_hover_color: XTween_Dashboard.Theme_Primary,
+                title_width: width,
+                //status_icon: "icon_field_status",
+                //status_icon_color: Color.green,
+                prop: prop,
+                prop_margin: new RectOffset(0, 0, 0, 5));
+        }
+        private void DrawPointInfo(Rect rect, string info, TextClipping clipping)
+        {
+            XGUI.gui_label(
+                rect: rect,
+                text: new GUIContent(info),
+                text_color: Color.white,
+                size: XGUIFontSize.S,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Normal,
+                font: XGUI.GetFont("xg-regular"));
+        }
+        #endregion
+
+        /// <summary>
         /// 对路径点进行键盘操作，按下 Delete 键时删除选中的路径点或重置控制点
         /// </summary>
         /// <param name="e">当前事件</param>
@@ -1107,6 +1497,7 @@ namespace SevenStrikeModules.XTween.Editor
                 }
             }
         }
+
         /// <summary>
         /// 因为路径动画的特殊性必须将其轴心点设为中心对齐
         /// </summary>
@@ -1115,6 +1506,8 @@ namespace SevenStrikeModules.XTween.Editor
             if (target == null)
                 return;
             RectTransform rect = BaseScript.GetComponent<RectTransform>();
+            if (rect == null)
+                return;
             Vector3 ori_pos = rect.localPosition;
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);

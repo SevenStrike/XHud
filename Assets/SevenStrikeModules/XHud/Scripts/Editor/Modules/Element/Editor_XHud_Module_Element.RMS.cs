@@ -20,6 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEngine;
@@ -182,13 +184,32 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (!HudManager.RMS_Enabled)
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "RMS记录布局", "Hud管理器中RMS未开启！无法执行记录布局信息操作！", "明白");
+                XGUI.dialog(
+                           type: XGUIDialogType.警告,
+                           windowtitle: "XHud - 元素消息",
+                           title: "RMS记录布局",
+                           msg: $"XHud管理器中RMS未开启！无法执行记录布局信息操作！",
+                           ok: "明白",
+                           PrimaryIndex: 0,
+                           usemodal: true,
+                           themecolor: XHud_Dashboard.Theme_Primary);
+
                 return;
             }
 
             if (HudManager.hm_RMS_IsEmpty())
             {
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "RMS记录布局", "并未发现您在HudManager里配置RMS信息！请先配置RMS列表！", "去配置", "暂不", 0);
+                string res = XGUI.dialog(
+                    type: XGUIDialogType.警告,
+                    windowtitle: "XHud - 元素消息",
+                    title: "RMS记录布局",
+                    msg: $"并未发现您在 XHudManager 里配置RMS信息！请先配置RMS列表！",
+                    ok: "去配置",
+                    cancel: "暂不",
+                    PrimaryIndex: 0,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
+
                 if (res == "去配置")
                 {
                     Selection.activeGameObject = HudManager.gameObject;
@@ -203,7 +224,16 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (Targets_Selected())
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 元素消息", "RMS批量记录", "因为考虑到每个元素当前设计布局可能不一致，因此不支持批量记录设计布局信息！", "明白");
+                XGUI.dialog(
+                    type: XGUIDialogType.警告,
+                    windowtitle: "XHud - 元素消息",
+                    title: "RMS记录布局",
+                    msg: "因为考虑到每个元素当前设计布局可能不一致，因此不支持批量记录设计布局信息！",
+                    ok: "明白",
+                    PrimaryIndex: 0,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
+
                 return;
             }
             else
@@ -241,7 +271,15 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
 
-            Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 元素消息", "RMS记录布局", "已记录  \"" + RMS_Name.stringValue + "\"  设计布局信息！", "明白");
+            XGUI.dialog(
+                type: XGUIDialogType.警告,
+                windowtitle: "XHud - 元素消息",
+                title: "RMS记录布局",
+                msg: $"已记录 {RMS_Name.stringValue} 设计布局信息！",
+                ok: "明白",
+                PrimaryIndex: 0,
+                usemodal: true,
+                themecolor: XHud_Dashboard.Theme_Primary);
         }
 
         /// <summary>

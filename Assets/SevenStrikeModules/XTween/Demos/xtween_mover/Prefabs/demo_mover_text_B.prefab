@@ -207,7 +207,7 @@ MonoBehaviour:
     durationAdd_col: 1
     duration_col: 0
     delay_col: 0.1
-    ease_col: 9
+    ease_col: 10
     usecurve_col: 0
     curve_col:
       serializedVersion: 2
@@ -256,7 +256,7 @@ MonoBehaviour:
     durationAdd_col: 1
     duration_col: 0
     delay_col: 0.1
-    ease_col: 9
+    ease_col: 10
     usecurve_col: 0
     curve_col:
       serializedVersion: 2

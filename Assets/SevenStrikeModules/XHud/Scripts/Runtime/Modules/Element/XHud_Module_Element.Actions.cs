@@ -25,6 +25,8 @@ namespace SevenStrikeModules.XHud
 
     public partial class XHud_Module_Element : MonoBehaviour
     {
+        public bool ClearActions_With_Spawn = true;
+
         /// <summary>
         /// 动作 - 动画播放 - 入场 - 开始
         /// </summary>

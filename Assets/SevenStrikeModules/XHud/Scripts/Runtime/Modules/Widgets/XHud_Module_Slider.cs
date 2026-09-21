@@ -20,8 +20,8 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.EventSystems;
@@ -187,7 +187,7 @@ namespace SevenStrikeModules.XHud
             eve_on_Released.RemoveAllListeners();
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "清空所有事件！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "清空所有事件！", XGUIMsgState.通知);
         }
         /// <summary>
         /// 移除所有事件
@@ -199,7 +199,7 @@ namespace SevenStrikeModules.XHud
             act_on_Released = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "清空所有委托！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "清空所有委托！", XGUIMsgState.通知);
         }
         #endregion
 
@@ -221,7 +221,7 @@ namespace SevenStrikeModules.XHud
             PrimitiveTween_Rewind();
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "已重置！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "已重置！", XGUIMsgState.通知);
         }
         /// <summary>
         /// 重置进度数值状态
@@ -241,12 +241,12 @@ namespace SevenStrikeModules.XHud
             if (state)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "启用按钮交互", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 滑动条控件通知", "启用按钮交互", XGUIMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "禁用按钮交互", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 滑动条控件通知", "禁用按钮交互", XGUIMsgState.通知);
             }
         }
         #endregion
@@ -297,7 +297,7 @@ namespace SevenStrikeModules.XHud
             eve_on_ValueChanged.Invoke(value);
 
             if (DebugState && Application.isPlaying)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "设置滑动条进度值为：" + val, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "设置滑动条进度值为：" + val, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置滑动条的位置
@@ -315,7 +315,7 @@ namespace SevenStrikeModules.XHud
             eve_on_ValueChanged.Invoke(value);
 
             if (DebugState && Application.isPlaying)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "设置滑动条进度值为：" + val, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "设置滑动条进度值为：" + val, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置滑动条的范围
@@ -327,7 +327,7 @@ namespace SevenStrikeModules.XHud
             maxValue = max;
 
             if (DebugState && Application.isPlaying)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", $"设置滑动条范围值为：{min} - {max}", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", $"设置滑动条范围值为：{min} - {max}", XGUIMsgState.通知);
         }
         /// <summary>
         /// 数值精度设置
@@ -337,7 +337,7 @@ namespace SevenStrikeModules.XHud
             sli_Precision = count;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "设置滑动条精度：" + count, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "设置滑动条精度：" + count, XGUIMsgState.通知);
         }
         /// <summary>
         /// 单位后缀设置
@@ -347,7 +347,7 @@ namespace SevenStrikeModules.XHud
             sli_Unit = str;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "设置滑动条单位为：" + str, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "设置滑动条单位为：" + str, XGUIMsgState.通知);
         }
         #endregion
 
@@ -367,7 +367,7 @@ namespace SevenStrikeModules.XHud
                 sli_TmpText_Title.text = val;
 
             if (DebugState && Application.isPlaying)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "设置标题文字为：" + val, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "设置标题文字为：" + val, XGUIMsgState.通知);
 
             return val;
         }
@@ -386,7 +386,7 @@ namespace SevenStrikeModules.XHud
                 sli_TmpText_Subtitle.text = val;
 
             if (DebugState && Application.isPlaying)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "设置副标题文字为：" + val, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "设置副标题文字为：" + val, XGUIMsgState.通知);
 
             return val;
         }
@@ -433,7 +433,7 @@ namespace SevenStrikeModules.XHud
             con_subtitle = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "清空所有文字内容！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "清空所有文字内容！", XGUIMsgState.通知);
         }
         #endregion
 
@@ -447,7 +447,7 @@ namespace SevenStrikeModules.XHud
             sli_Handle.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "设置滑动条控制柄图形为：" + tex.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "设置滑动条控制柄图形为：" + tex.name, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置前景的图像
@@ -458,7 +458,7 @@ namespace SevenStrikeModules.XHud
             sli_Fore.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "设置滑动条前景图形为：" + tex.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "设置滑动条前景图形为：" + tex.name, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置背景的图像
@@ -469,7 +469,7 @@ namespace SevenStrikeModules.XHud
             sli_Bg.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "设置滑动条背景图形为：" + tex.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "设置滑动条背景图形为：" + tex.name, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置滑动条图标
@@ -480,7 +480,7 @@ namespace SevenStrikeModules.XHud
             sli_Icon.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置滑动条图标图形为：" + tex.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "设置滑动条图标图形为：" + tex.name, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置滑动条图标
@@ -491,7 +491,7 @@ namespace SevenStrikeModules.XHud
             sli_Icon.sprite = spr;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 进度条控件通知", "设置滑动条图标图形为：" + spr.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 进度条控件通知", "设置滑动条图标图形为：" + spr.name, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置进度条可视化组件的可见性
@@ -621,7 +621,7 @@ namespace SevenStrikeModules.XHud
             PrimitiveTween_Play("按下滑动条");
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "按住！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "按住！", XGUIMsgState.通知);
         }
         public override void OnPointerUp(PointerEventData eventData)
         {
@@ -632,7 +632,7 @@ namespace SevenStrikeModules.XHud
             PrimitiveTween_Play("松开滑动条");
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 滑动条控件通知", "松开！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 滑动条控件通知", "松开！", XGUIMsgState.通知);
         }
         #endregion
     }

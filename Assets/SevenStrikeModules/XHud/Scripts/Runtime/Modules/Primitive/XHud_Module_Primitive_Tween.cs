@@ -20,15 +20,15 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
-    using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.Events;
-    using UnityEngine.InputSystem.XR;
     using UnityEngine.UI;
+    using static UnityEngine.GraphicsBuffer;
+    using UnityEngine.UIElements;
 
     [SerializeField]
     [System.Serializable]
@@ -929,11 +929,6 @@ namespace SevenStrikeModules.XHud
         public UnityEvent<bool> eve_on_Tween_AnimatingState;
         #endregion
 
-        /// <summary>
-        /// 动画协程
-        /// </summary>
-        Coroutine Coroutine_TweenPlayAll;
-
         #region 状态开关
         /// <summary>
         /// 调试开关
@@ -946,6 +941,15 @@ namespace SevenStrikeModules.XHud
         /// 预览时机
         /// </summary>
         [SerializeField] public string PreviewTiming;
+        #endregion
+
+        #region 编辑器视图状态
+        /// <summary>迷你时间轴 - 每秒像素数（缩放）。</summary>
+        [SerializeField] public float MiniTimeline_PixelsPerSecond = 100f;
+        /// <summary>迷你时间轴 - 水平滚动量（像素）。</summary>
+        [SerializeField] public float MiniTimeline_ScrollX = 0f;
+        /// <summary>迷你时间轴 - 轨道高度（像素）。</summary>
+        [SerializeField] public float MiniTimeline_TrackHeight = 0f;
         #endregion
 
         void Awake()
@@ -1203,12 +1207,12 @@ namespace SevenStrikeModules.XHud
 
             if (type == "Min")
             {
-                MinTimer = XHud_Utilitys.Array_MinValue(timers.ToArray());
+                MinTimer = XGUI_Utilitys.MinValue(timers.ToArray());
                 return MinTimer;
             }
             else if (type == "Max")
             {
-                MaxTimer = XHud_Utilitys.Array_MaxValue(timers.ToArray());
+                MaxTimer = XGUI_Utilitys.MinValue(timers.ToArray());
                 return MaxTimer;
             }
             else
@@ -1520,7 +1524,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="AnimationAction_Percentage">动画进度状态动作</param>
         /// <param name="PercentageLimite">激活动画进度状态动作的阈值（最小0，最大1）</param>
         /// <returns></returns>
-        public XTween_Interface Tween_Create(TweenNode arg, float Duration, UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f)
+        public XTween_Interface Tween_Create(TweenNode arg, float Duration, float delay = 0, UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f)
         {
             XTween_Interface twn = null;
             bool sw_From = arg.ActivateFrom;
@@ -1529,10 +1533,12 @@ namespace SevenStrikeModules.XHud
 
             // 模式                |    使用场景                                 |       示例
 
+            /*
             // 起始 → 默认    |    动画需要回退到原始状态         |      按钮悬停放大，离开时缩回原大小
             // 默认 → 结束    |    动画只改变到新状态不回退      |      进度条从当前值增加到目标值
             // 起始 → 结束    |    精确控制的往返动画                |      卡片翻转动画（从 A 角度到 B 角度）
             // 当前 → 结束    |    独立动画节点支持中断             |       连续点击触发不同动画，不互相干扰
+            */
 
             /* “ActivateOnlyToEnd” 的概念为：从 "当前状态值到结束值"
              * 正常情况下，如果使用的动画方式为以下几种：
@@ -1559,11 +1565,11 @@ namespace SevenStrikeModules.XHud
             */
             if (!arg.ActivateOnlyToEnd)
             {
-                Tween_Rewind(arg);
+                Tween_Rewind(arg, true);
             }
             else
             {
-                Tween_Kill(arg);
+                Tween_Kill(arg, true);
             }
 
             if (arg.Type == TweenNodeType.位移)
@@ -1573,7 +1579,7 @@ namespace SevenStrikeModules.XHud
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.Original_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.Original_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1594,7 +1600,7 @@ namespace SevenStrikeModules.XHud
                                 complete();
                         });
                     else
-                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.Original_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.Original_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1619,7 +1625,7 @@ namespace SevenStrikeModules.XHud
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1638,7 +1644,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1661,7 +1667,7 @@ namespace SevenStrikeModules.XHud
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1680,7 +1686,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1703,7 +1709,7 @@ namespace SevenStrikeModules.XHud
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1722,7 +1728,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_AnchoredPosition3D_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1749,7 +1755,7 @@ namespace SevenStrikeModules.XHud
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_Rotate_To(arg.Original_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Rotate_To(arg.Original_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.世界坐标, arg.RotateMode).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1768,7 +1774,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_Rotate_To(arg.Original_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Rotate_To(arg.Original_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.世界坐标, arg.RotateMode).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1791,7 +1797,7 @@ namespace SevenStrikeModules.XHud
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.世界坐标, arg.RotateMode).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1810,7 +1816,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.世界坐标, arg.RotateMode).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1833,7 +1839,7 @@ namespace SevenStrikeModules.XHud
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.世界坐标, arg.RotateMode).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1852,7 +1858,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.世界坐标, arg.RotateMode).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1875,7 +1881,7 @@ namespace SevenStrikeModules.XHud
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.世界坐标, arg.RotateMode).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1894,7 +1900,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.绝对, arg.RotateMode).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Rotate_To(arg.End_Vector3, arg.Duration * Duration, false, true, XTweenRotationSpace.世界坐标, arg.RotateMode).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1921,7 +1927,7 @@ namespace SevenStrikeModules.XHud
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_Scale_To(arg.Original_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Scale_To(arg.Original_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1940,7 +1946,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_Scale_To(arg.Original_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Scale_To(arg.Original_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1963,7 +1969,7 @@ namespace SevenStrikeModules.XHud
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -1982,7 +1988,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2005,7 +2011,7 @@ namespace SevenStrikeModules.XHud
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector3).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2024,7 +2030,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector3).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2047,7 +2053,7 @@ namespace SevenStrikeModules.XHud
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2066,7 +2072,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Scale_To(arg.End_Vector3, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector3>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2118,7 +2124,7 @@ namespace SevenStrikeModules.XHud
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = gc.xt_Color_To(arg.Original_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Color).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
+                        twn = gc.xt_Color_To(arg.Original_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Color).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2137,7 +2143,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = gc.xt_Color_To(arg.Original_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Color).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
+                        twn = gc.xt_Color_To(arg.Original_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Color).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2160,7 +2166,7 @@ namespace SevenStrikeModules.XHud
                 if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
+                        twn = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2179,7 +2185,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
+                        twn = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2202,7 +2208,7 @@ namespace SevenStrikeModules.XHud
                 if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Color).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
+                        twn = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Color).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2221,7 +2227,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Color).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
+                        twn = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Color).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2244,7 +2250,7 @@ namespace SevenStrikeModules.XHud
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
+                        twn = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2263,7 +2269,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
+                        twn = gc.xt_Color_To(arg.End_Color, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Color>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2292,7 +2298,7 @@ namespace SevenStrikeModules.XHud
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.Original_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Float).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.Original_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Float).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2311,7 +2317,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.Original_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Float).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.Original_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Float).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2334,7 +2340,7 @@ namespace SevenStrikeModules.XHud
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2353,7 +2359,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2376,7 +2382,7 @@ namespace SevenStrikeModules.XHud
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Float).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Float).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2395,7 +2401,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Float).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Float).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2418,7 +2424,7 @@ namespace SevenStrikeModules.XHud
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2437,7 +2443,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = controller.mod_CanvasGroup.xt_Alpha_To(arg.End_Float, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2471,7 +2477,7 @@ namespace SevenStrikeModules.XHud
                     if (controller.mod_Text != null)
                     {
                         if (arg.Ease != EaseMode.None)
-                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.Original_String, arg.Duration * Duration, true, 0.5f, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.Original_String, arg.Duration * Duration, true, 0.5f, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2490,7 +2496,7 @@ namespace SevenStrikeModules.XHud
                                 arg.Progress = 0;
                             });
                         else
-                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.Original_String, arg.Duration * Duration, true, 0.5f, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.Original_String, arg.Duration * Duration, true, 0.5f, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2512,7 +2518,7 @@ namespace SevenStrikeModules.XHud
                     else if (controller.mod_TmpText != null)
                     {
                         if (arg.Ease != EaseMode.None)
-                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.Original_String, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.Original_String, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2531,7 +2537,7 @@ namespace SevenStrikeModules.XHud
                                 arg.Progress = 0;
                             });
                         else
-                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.Original_String, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.Original_String, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2557,7 +2563,7 @@ namespace SevenStrikeModules.XHud
                     if (controller.mod_Text != null)
                     {
                         if (arg.Ease != EaseMode.None)
-                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true, 0.5f, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.Original_String).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true, 0.5f, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.Original_String).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2576,7 +2582,7 @@ namespace SevenStrikeModules.XHud
                                 arg.Progress = 0;
                             });
                         else
-                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true, 0.5f, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.Original_String).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true, 0.5f, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.Original_String).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2598,7 +2604,7 @@ namespace SevenStrikeModules.XHud
                     else if (controller.mod_TmpText != null)
                     {
                         if (arg.Ease != EaseMode.None)
-                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.Original_String).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.Original_String).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2617,7 +2623,7 @@ namespace SevenStrikeModules.XHud
                                 arg.Progress = 0;
                             });
                         else
-                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.Original_String).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.Original_String).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2643,7 +2649,7 @@ namespace SevenStrikeModules.XHud
                     if (controller.mod_Text != null)
                     {
                         if (arg.Ease != EaseMode.None)
-                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true, 0.5f, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true, 0.5f, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2662,7 +2668,7 @@ namespace SevenStrikeModules.XHud
                                 arg.Progress = 0;
                             });
                         else
-                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true, 0.5f, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true, 0.5f, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2684,7 +2690,7 @@ namespace SevenStrikeModules.XHud
                     else if (controller.mod_TmpText != null)
                     {
                         if (arg.Ease != EaseMode.None)
-                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2703,7 +2709,7 @@ namespace SevenStrikeModules.XHud
                                 arg.Progress = 0;
                             });
                         else
-                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_String).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2729,7 +2735,7 @@ namespace SevenStrikeModules.XHud
                     if (controller.mod_Text != null)
                     {
                         if (arg.Ease != EaseMode.None)
-                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2748,7 +2754,7 @@ namespace SevenStrikeModules.XHud
                                 arg.Progress = 0;
                             });
                         else
-                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_Text.xt_FontText_To(false, " |", arg.End_String, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2770,7 +2776,7 @@ namespace SevenStrikeModules.XHud
                     else if (controller.mod_TmpText != null)
                     {
                         if (arg.Ease != EaseMode.None)
-                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2789,7 +2795,7 @@ namespace SevenStrikeModules.XHud
                                 arg.Progress = 0;
                             });
                         else
-                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
+                            twn = controller.mod_TmpText.xt_FontText_To(false, arg.End_String, arg.Duration * Duration, true).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<string>((v, d, t) =>
                             {
                                 arg.Progress = twn.ElapsedTime / twn.Duration;
                                 if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2817,7 +2823,7 @@ namespace SevenStrikeModules.XHud
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_Size_To(arg.Original_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector2).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Size_To(arg.Original_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector2).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2836,7 +2842,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_Size_To(arg.Original_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector2).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Size_To(arg.Original_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector2).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2859,7 +2865,7 @@ namespace SevenStrikeModules.XHud
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2878,7 +2884,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2901,7 +2907,7 @@ namespace SevenStrikeModules.XHud
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector2).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector2).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2921,7 +2927,7 @@ namespace SevenStrikeModules.XHud
                         });
                     else
                     {
-                        twn = controller.mod_Rect.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector2).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Vector2).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2945,7 +2951,7 @@ namespace SevenStrikeModules.XHud
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = controller.mod_Rect.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2964,7 +2970,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = controller.mod_Rect.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
+                        twn = controller.mod_Rect.xt_Size_To(arg.End_Vector2, arg.Duration * Duration, false, true, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<Vector2>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -2995,7 +3001,7 @@ namespace SevenStrikeModules.XHud
                 if (sw_From && !sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.Original_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Float).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.Original_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Float).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -3014,7 +3020,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.Original_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Float).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.Original_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(arg.From_Float).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -3037,7 +3043,7 @@ namespace SevenStrikeModules.XHud
                 else if (!sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -3056,7 +3062,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -3079,7 +3085,7 @@ namespace SevenStrikeModules.XHud
                 else if (sw_From && sw_End && !sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(Mathf.Clamp01(arg.From_Float)).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(Mathf.Clamp01(arg.From_Float)).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -3098,7 +3104,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(Mathf.Clamp01(arg.From_Float)).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetFrom(Mathf.Clamp01(arg.From_Float)).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -3121,7 +3127,7 @@ namespace SevenStrikeModules.XHud
                 else if (!sw_From && !sw_End && sw_OnlyToEnd)
                 {
                     if (arg.Ease != EaseMode.None)
-                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Ease).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -3140,7 +3146,7 @@ namespace SevenStrikeModules.XHud
                             arg.Progress = 0;
                         });
                     else
-                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
+                        twn = XTween.To(() => controller.mod_Image.fillAmount, x => controller.mod_Image.fillAmount = x, Mathf.Clamp01(arg.End_Float), arg.Duration * Duration, arg.Rewind_Set_Startvalue, arg.Complete_Set_Endvalue).SetEase(arg.Curve).SetDelay(arg.Delay + delay).SetLoop(arg.LoopCount, arg.LoopType).OnUpdate<float>((v, d, t) =>
                         {
                             arg.Progress = twn.ElapsedTime / twn.Duration;
                             if (twn.CurrentEasedProgress >= PercentageLimite)
@@ -3170,11 +3176,11 @@ namespace SevenStrikeModules.XHud
         /// <param name="AnimationAction_Complete"></param>
         /// <param name="AnimationAction_Percentage"></param>
         /// <param name="PercentageLimite"></param>
-        public XTween_Interface Tween_Create_At_Index(int index, UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f)
+        public XTween_Interface Tween_Create_At_Index(int index, float delay = 0, UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f)
         {
             TweenNode arg = PrimitiveTweenNodes[index];
 
-            arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration, complete, percentage, PercentageLimite);
+            arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration, delay, complete, percentage, PercentageLimite);
 
             if (act_on_Tween_Create_At_Index != null)
                 act_on_Tween_Create_At_Index(arg);
@@ -3189,11 +3195,11 @@ namespace SevenStrikeModules.XHud
         /// <param name="AnimationAction_Complete"></param>
         /// <param name="AnimationAction_Percentage"></param>
         /// <param name="PercentageLimite"></param>
-        public XTween_Interface Tween_Create_At_ID(int id, UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f)
+        public XTween_Interface Tween_Create_At_ID(int id, float delay = 0, UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f)
         {
             TweenNode arg = TweenNode_GetByID(id);
 
-            arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration, complete, percentage, PercentageLimite);
+            arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration, delay, complete, percentage, PercentageLimite);
 
             if (act_on_Tween_Create_At_ID != null)
                 act_on_Tween_Create_At_ID(arg);
@@ -3208,11 +3214,11 @@ namespace SevenStrikeModules.XHud
         /// <param name="AnimationAction_Complete"></param>
         /// <param name="AnimationAction_Percentage"></param>
         /// <param name="PercentageLimite"></param>
-        public XTween_Interface Tween_Create_At_Indicator(string indicator, UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f)
+        public XTween_Interface Tween_Create_At_Indicator(string indicator, float delay = 0, UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f)
         {
             TweenNode arg = TweenNode_GetByIndicator(indicator);
 
-            arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration, complete, percentage, PercentageLimite);
+            arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration, delay, complete, percentage, PercentageLimite);
 
             if (act_on_Tween_Create_At_Indicator != null)
                 act_on_Tween_Create_At_Indicator(arg);
@@ -3222,7 +3228,7 @@ namespace SevenStrikeModules.XHud
         }
         #endregion
 
-        #region 播放独立动画
+        #region 动画播放
         /// <summary>
         /// 动画播放
         /// </summary>
@@ -3271,48 +3277,6 @@ namespace SevenStrikeModules.XHud
 
         #region 播放全部动画
         /// <summary>
-        /// 播放动画（批量所有）
-        /// </summary>
-        /// <param name="tim"></param>
-        /// <param name="dur"></param>
-        /// <param name="MatchTiming"></param>
-        /// <param name="complete"></param>
-        /// <param name="percentage"></param>
-        /// <param name="PercentageLimite"></param>
-        public void Tween_PlayAll_Forced(float dur = 1, bool MatchTiming = false, string tim = "", UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f, bool ForPreview = false)
-        {
-            ///--播放
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
-            {
-                if (PrimitiveTweenNodes[i].Enabled)
-                {
-                    if (MatchTiming)
-                    {
-                        if (PrimitiveTweenNodes[i].Timings == tim)
-                        {
-                            TweenNode arg = PrimitiveTweenNodes[i];
-                            arg.Tweener = Tween_Create(arg, (ForPreview ? XHud_Dashboard.HudManagerGet().DurationMultiply : XHud_Manager.Instance.DurationMultiply) * GlobalDuration * dur, complete, percentage, PercentageLimite);
-                            arg.Tweener.Play();
-                        }
-                    }
-                    else
-                    {
-                        TweenNode arg = PrimitiveTweenNodes[i];
-                        arg.Tweener = Tween_Create(arg, ForPreview ? XHud_Dashboard.HudManagerGet().DurationMultiply : XHud_Manager.Instance.DurationMultiply * GlobalDuration * dur, complete, percentage, PercentageLimite);
-                        arg.Tweener.Play();
-                    }
-                }
-                else
-                {
-                    continue;
-                }
-            }
-
-            if (act_on_Tween_PlayAll != null)
-                act_on_Tween_PlayAll();
-            eve_on_Tween_PlayAll.Invoke();
-        }
-        /// <summary>
         /// 动画播放（所有节点）
         /// </summary>
         /// <param name="tim"></param>
@@ -3322,29 +3286,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="complete"></param>
         /// <param name="percentage"></param>
         /// <param name="PercentageLimite"></param>
-        public void Tween_PlayAll_WithDelay(float delay, float dur = 1, bool MatchTiming = false, string tim = "", UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f)
+        public void Tweens_Play_With_Delay(float delay, float dur = 1, bool MatchTiming = false, string tim = "", UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f)
         {
             if (controller.mod_Rect == null)
                 return;
-            if (Coroutine_TweenPlayAll != null)
-                Coroutine_TweenPlayAll = null;
-
-            Coroutine_TweenPlayAll = StartCoroutine(Tween_PlayAll_Coroutine(tim, delay, dur, MatchTiming, complete, percentage, PercentageLimite));
-        }
-        /// <summary>
-        /// 延迟播放动画（批量所有）
-        /// </summary>
-        /// <param name="tim">播放匹配条件</param>
-        /// <param name="delay">延迟时间</param>
-        /// <param name="dur">耗时</param>
-        /// <param name="MatchTiming">是否启用匹配播放条件</param>
-        /// <param name="complete">动画播放完成后动作</param>
-        /// <param name="percentage">动画进度状态动作</param>
-        /// <param name="PercentageLimite">激活动画进度状态动作的阈值（最小0，最大1）</param>
-        private IEnumerator Tween_PlayAll_Coroutine(string tim, float delay = 0, float dur = 1, bool MatchTiming = true, UnityAction complete = null, UnityAction percentage = null, float PercentageLimite = 0.5f)
-        {
-            ///--延迟
-            yield return new WaitForSeconds(delay);
 
             ///--播放
             for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
@@ -3356,21 +3301,19 @@ namespace SevenStrikeModules.XHud
                         if (PrimitiveTweenNodes[i].Timings == tim)
                         {
                             TweenNode arg = PrimitiveTweenNodes[i];
-                            arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration * dur, complete, percentage, PercentageLimite);
+                            arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration * dur, delay, complete, percentage, PercentageLimite);
                             arg.Tweener.Play();
                         }
                     }
                     else
                     {
                         TweenNode arg = PrimitiveTweenNodes[i];
-                        arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration * dur, complete, percentage, PercentageLimite);
+                        arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration * dur, delay, complete, percentage, PercentageLimite);
                         arg.Tweener.Play();
                     }
                 }
                 else
-                {
                     continue;
-                }
             }
 
             if (act_on_Tween_PlayAll != null)
@@ -3383,19 +3326,12 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 动画重置（所有节点）
         /// </summary>
-        public void Tween_RewindAll()
+        public void Tween_RewindAll(bool complete = true)
         {
-            ///--停止所有协程
-            if (Coroutine_TweenPlayAll != null)
-            {
-                StopCoroutine(Coroutine_TweenPlayAll);
-                Coroutine_TweenPlayAll = null;
-            }
-
             ///--动画恢复初始
             for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
             {
-                Tween_Rewind(PrimitiveTweenNodes[i]);
+                Tween_Rewind(PrimitiveTweenNodes[i], complete);
             }
 
             if (act_on_Tween_RewindAll != null)
@@ -3405,26 +3341,29 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 动画杀死（所有节点）
         /// </summary>
-        public void Tween_KillAll()
+        public void Tween_KillAll(bool complete = true)
         {
-            ///--停止所有协程
-            if (Coroutine_TweenPlayAll != null)
-            {
-                StopCoroutine(Coroutine_TweenPlayAll);
-                Coroutine_TweenPlayAll = null;
-            }
-
             ///--动画恢复初始
             for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
             {
-                Tween_Kill(PrimitiveTweenNodes[i]);
+                Tween_Kill(PrimitiveTweenNodes[i], complete);
             }
 
             if (act_on_Tween_KillAll != null)
                 act_on_Tween_KillAll();
             eve_on_Tween_KillAll.Invoke();
         }
-
+        /// <summary>
+        /// 动画清理（所有节点）
+        /// </summary>
+        public void Tween_CleanAll()
+        {
+            ///--动画清理
+            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            {
+                PrimitiveTweenNodes[i].Tweener = null;
+            }
+        }
         /*如果目标动画动向为：“当前 -> 结束”则不执行退回动画，
          * 因为此动向是指让动画直接到达目标值（没有起始值，如果有也只是他的当前值）
          * 所以倒退对其没有意义，其他动画方式可忽略此提示
@@ -3434,7 +3373,7 @@ namespace SevenStrikeModules.XHud
         /// 复位动画
         /// </summary>
         /// <param name="arg">目标动画节点</param>
-        public void Tween_Rewind(TweenNode arg)
+        public void Tween_Rewind(TweenNode arg, bool complete = true)
         {
             /*如果动画方式为：当前 -> 结束则不执行退回动画，因为此方式是指让动画直接到达目标值（没有起始值，如果有也只是他的当前值），所以倒退对其没有意义*/
             if (arg.ActivateOnlyToEnd)
@@ -3446,8 +3385,8 @@ namespace SevenStrikeModules.XHud
             #region 杀死动画
             if (arg.Tweener != null)  // ← 添加空值检查
             {
-                arg.Tweener.Kill();
-                arg.Tweener.Rewind();
+                arg.Tweener.Kill(complete);
+                arg.Tweener.Rewind(complete);
             }
             #endregion
 
@@ -3466,6 +3405,7 @@ namespace SevenStrikeModules.XHud
 
             if (arg.Type == TweenNodeType.位移)
             {
+                //方式：起始 -> 结束
                 if (sw_From && sw_End)
                 {
                     controller.mod_Rect.anchoredPosition3D = arg.From_Vector3;
@@ -3474,6 +3414,7 @@ namespace SevenStrikeModules.XHud
                         arg.Act_On_Vector3_Rewind(arg.From_Vector3);
                     }
                 }
+                //方式：起始 -> 默认
                 else if (sw_From && !sw_End)
                 {
                     controller.mod_Rect.anchoredPosition3D = arg.From_Vector3;
@@ -3482,6 +3423,7 @@ namespace SevenStrikeModules.XHud
                         arg.Act_On_Vector3_Rewind(arg.From_Vector3);
                     }
                 }
+                //方式：当前 -> 结束
                 else if (!sw_From && sw_End)
                 {
                     controller.mod_Rect.anchoredPosition3D = arg.Original_Vector3;
@@ -3730,12 +3672,13 @@ namespace SevenStrikeModules.XHud
         /// 杀死动画
         /// </summary>
         /// <param name="arg">目标动画节点</param>
-        public void Tween_Kill(TweenNode arg)
+        public void Tween_Kill(TweenNode arg, bool complete = true)
         {
             #region 杀死动画
             if (arg.Tweener != null)  // ← 添加空值检查
             {
-                arg.Tweener.Kill();
+                arg.Tweener.Kill(complete);
+                arg.Tweener = null;
             }
             #endregion
 

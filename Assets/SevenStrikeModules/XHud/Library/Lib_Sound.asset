@@ -14,17 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LibraryName: NewSoundLibrary
   UseRandomPitch: 0
-  Pitch_Min: 1
+  Pitch_Min: 0.3
   Pitch_Max: 1
   Find: 
   itemHeight: 50
-  visibleItemCount: 9
+  visibleItemCount: 8
   SoundInfoList_Original_Scroller: {x: 0, y: 0}
   Highlight: 
   SelectedIndex: -1
   LocationSelectedIndex: -1
   SoundLibrary:
   - Name: DefaultSound
+    Format: .wav
     Clip: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
     Frequency: 22050
     Channel: 1

@@ -116,6 +116,31 @@ namespace SevenStrikeModules.XHud
         public bool FoldAllPanelWithDisabled;
         #endregion
 
+        public bool
+            fold_options = true,
+            fold_canvasset = true,
+            fold_camera = true,
+            fold_ratiorefer = true,
+            fold_compguid = true,
+            fold_reslibs = true,
+            fold_elementlibs = true,
+            fold_soundslib = true,
+            fold_masks = true,
+            fold_global = true,
+            fold_tool = true,
+            fold_RMS = true,
+            fold_layout = true,
+            fold_visualsafe = true,
+            fold_blueprint = true,
+            fold_motion_default = true,
+            fold_themes = true,
+            fold_based = true;
+
+        [SerializeField] public float PrimtiveID_LabelLine_Height = 0.5f;
+        [SerializeField] public Color PrimtiveID_LabelLine_Color = Color.white * 0.5f;
+        [SerializeField] public int PrimtiveID_LabelFont_Size = 12;
+        [SerializeField] public Color PrimtiveID_LabelFont_Color = Color.white;
+
         void Awake()
         {
             // 单例模式检查

@@ -20,8 +20,8 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
     using System;
     using System.Collections;
@@ -283,7 +283,7 @@ namespace SevenStrikeModules.XHud
             act_on_LongPressPer = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "清空所有委托！", HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "清空所有委托！", XGUIMsgState.设置);
         }
         /// <summary>
         /// 移除所有事件
@@ -301,7 +301,7 @@ namespace SevenStrikeModules.XHud
             eve_on_LongpressPer.RemoveAllListeners();
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "清空所有事件！", HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "清空所有事件！", XGUIMsgState.设置);
         }
         #endregion
 
@@ -326,7 +326,7 @@ namespace SevenStrikeModules.XHud
                 act_on_DeSelect(this, HudButtonState);
             eve_on_Deselect.Invoke();
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "取消选中！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "取消选中！", XGUIMsgState.通知);
         }
         /// <summary>
         /// 按钮选中
@@ -347,7 +347,7 @@ namespace SevenStrikeModules.XHud
                 act_on_Select(this, HudButtonState);
             eve_on_Select.Invoke();
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "选中！", HudMsgState.确认);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "选中！", XGUIMsgState.确认);
         }
         /// <summary>
         /// 按钮点击
@@ -373,7 +373,7 @@ namespace SevenStrikeModules.XHud
                 act_on_Clicked(this, HudButtonState);
             eve_on_Click.Invoke();
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "点击！", HudMsgState.确认);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "点击！", XGUIMsgState.确认);
         }
         /// <summary>
         /// 按钮进入
@@ -394,7 +394,7 @@ namespace SevenStrikeModules.XHud
                 act_on_Enter(this, HudButtonState);
             eve_on_Enter.Invoke();
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "鼠标进入！", HudMsgState.确认);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "鼠标进入！", XGUIMsgState.确认);
         }
         /// <summary>
         /// 按钮离开
@@ -416,7 +416,7 @@ namespace SevenStrikeModules.XHud
             eve_on_Exit.Invoke();
             IsLongPress = false;
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "鼠标退出！", HudMsgState.确认);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "鼠标退出！", XGUIMsgState.确认);
         }
         /// <summary>
         /// 按钮按下
@@ -474,7 +474,7 @@ namespace SevenStrikeModules.XHud
             eve_on_Press.Invoke();
             IsLongPress = true;
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "按住！", HudMsgState.确认);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "按住！", XGUIMsgState.确认);
         }
         /// <summary>
         /// 按钮抬起
@@ -533,7 +533,7 @@ namespace SevenStrikeModules.XHud
             eve_on_Release.Invoke();
             IsLongPress = false;
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "松开！", HudMsgState.确认);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "松开！", XGUIMsgState.确认);
         }
         #endregion
 
@@ -585,12 +585,12 @@ namespace SevenStrikeModules.XHud
             if (state)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "启用按钮交互", HudMsgState.警告);
+                    XGUI_Utilitys.Console("XHud - 按钮控件通知", "启用按钮交互", XGUIMsgState.警告);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "禁用按钮交互", HudMsgState.警告);
+                    XGUI_Utilitys.Console("XHud - 按钮控件通知", "禁用按钮交互", XGUIMsgState.警告);
             }
         }
         /// <summary>
@@ -608,7 +608,7 @@ namespace SevenStrikeModules.XHud
         public float btn_GetLongPressPercent()
         {
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "获取到长按百分比：" + LongPress_Percent, HudMsgState.警告);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "获取到长按百分比：" + LongPress_Percent, XGUIMsgState.警告);
             return LongPress_Percent;
         }
         /// <summary>
@@ -621,12 +621,12 @@ namespace SevenStrikeModules.XHud
             if (state)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "长按松开平滑回退启用！", HudMsgState.警告);
+                    XGUI_Utilitys.Console("XHud - 按钮控件通知", "长按松开平滑回退启用！", XGUIMsgState.警告);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "长按松开平滑回退禁用！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 按钮控件通知", "长按松开平滑回退禁用！", XGUIMsgState.通知);
             }
         }
         /// <summary>
@@ -638,7 +638,7 @@ namespace SevenStrikeModules.XHud
             LongPress_Threshold = value;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "设置长按阈值为：" + value, HudMsgState.警告);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "设置长按阈值为：" + value, XGUIMsgState.警告);
         }
         /// <summary>
         /// 设置按钮文字名称
@@ -660,7 +660,7 @@ namespace SevenStrikeModules.XHud
                 ButtonText.text = content;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "设置按钮显示文字为：" + content, HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "设置按钮显示文字为：" + content, XGUIMsgState.设置);
             return content;
         }
         /// <summary>
@@ -691,7 +691,7 @@ namespace SevenStrikeModules.XHud
             LongPress_Percent = 0;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "已停止长按逻辑检测协程！", HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "已停止长按逻辑检测协程！", XGUIMsgState.设置);
         }
         public float ClickDelayTime;
         [Range(0, 1)]
@@ -703,7 +703,7 @@ namespace SevenStrikeModules.XHud
         IEnumerator LongPress()
         {
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "已启动长按逻辑检测协程！", HudMsgState.设置);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "已启动长按逻辑检测协程！", XGUIMsgState.设置);
             while (true)
             {
                 if (IsLongPress)
@@ -725,7 +725,7 @@ namespace SevenStrikeModules.XHud
                             eve_on_Longpressed.Invoke();
 
                             if (DebugState)
-                                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "长按动作完成！", HudMsgState.设置);
+                                XGUI_Utilitys.Console("XHud - 按钮控件通知", "长按动作完成！", XGUIMsgState.设置);
                         }
                         if (LongPress_UseRewind)
                             IsLongPress = false;
@@ -772,7 +772,7 @@ namespace SevenStrikeModules.XHud
                 if (HudOption == null)
                 {
                     if (DebugState)
-                        XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "未发现此按钮处于选项层级中！", HudMsgState.错误);
+                        XGUI_Utilitys.Console("XHud - 按钮控件通知", "未发现此按钮处于选项层级中！", XGUIMsgState.错误);
                     return;
                 }
                 for (int i = 0; i < HudOption.OptionButtonNodes.Count; i++)
@@ -783,7 +783,7 @@ namespace SevenStrikeModules.XHud
                         //HudOption.opt_Clicked(i);
                         HudOption.opt_Select(Indicator);
                         if (DebugState)
-                            XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "选项点击！", HudMsgState.确认);
+                            XGUI_Utilitys.Console("XHud - 按钮控件通知", "选项点击！", XGUIMsgState.确认);
                     }
                 }
             }
@@ -800,7 +800,7 @@ namespace SevenStrikeModules.XHud
                 ButtonText.text = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 按钮控件通知", "清空显示文字！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 按钮控件通知", "清空显示文字！", XGUIMsgState.通知);
         }
         #endregion
     }

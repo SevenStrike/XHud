@@ -20,8 +20,8 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
     using System;
     using UnityEngine;
@@ -181,7 +181,7 @@ namespace SevenStrikeModules.XHud
                 act_on_Press();
             eve_on_Press.Invoke();
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "按下开关！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "按下开关！", XGUIMsgState.通知);
         }
         public override void OnPointerUp(PointerEventData eventData)
         {
@@ -190,7 +190,7 @@ namespace SevenStrikeModules.XHud
                 act_on_Released();
             eve_on_Released.Invoke();
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "松开开关！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "松开开关！", XGUIMsgState.通知);
         }
         #endregion
 
@@ -208,7 +208,7 @@ namespace SevenStrikeModules.XHud
             eve_on_Released.RemoveAllListeners();
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "清空所有事件！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "清空所有事件！", XGUIMsgState.通知);
         }
         /// <summary>
         /// 移除所有事件
@@ -223,7 +223,7 @@ namespace SevenStrikeModules.XHud
             act_on_Released = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "清空所有委托！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "清空所有委托！", XGUIMsgState.通知);
         }
         #endregion 
 
@@ -287,7 +287,7 @@ namespace SevenStrikeModules.XHud
             tog_HandleColorTo(Tog_Color_Handle_Checked);
             tog_BgColorTo(Tog_Color_Bg_Checked);
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "打开开关！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "打开开关！", XGUIMsgState.通知);
         }
         /// <summary>
         /// 关闭开关
@@ -299,7 +299,7 @@ namespace SevenStrikeModules.XHud
             tog_HandleColorTo(Tog_Color_Handle_Unchecked);
             tog_BgColorTo(Tog_Color_Bg_Unchecked);
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "关闭开关！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "关闭开关！", XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置开关状态
@@ -329,12 +329,12 @@ namespace SevenStrikeModules.XHud
             if (state)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "启用开关交互", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 开关控件通知", "启用开关交互", XGUIMsgState.通知);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "禁用开关交互", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 开关控件通知", "禁用开关交互", XGUIMsgState.通知);
             }
         }
         /// <summary>
@@ -361,7 +361,7 @@ namespace SevenStrikeModules.XHud
                 HandleProgress = value;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "开关值到：" + value, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "开关值到：" + value, XGUIMsgState.通知);
         }
         /// <summary>
         /// 重置状态
@@ -388,7 +388,7 @@ namespace SevenStrikeModules.XHud
 
             PrimitiveTween_Rewind();
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "开关已重置！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "开关已重置！", XGUIMsgState.通知);
         }
         /// <summary>
         /// 映射位置范围到0-1
@@ -419,7 +419,7 @@ namespace SevenStrikeModules.XHud
                 ToggleText.text = content;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "设置开关显示名：" + val, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "设置开关显示名：" + val, XGUIMsgState.通知);
             return content;
         }
         /// <summary>
@@ -436,7 +436,7 @@ namespace SevenStrikeModules.XHud
                 ToggleText.text = null;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "清空开关显示名！", HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "清空开关显示名！", XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置控制柄的移动范围
@@ -448,7 +448,7 @@ namespace SevenStrikeModules.XHud
             HandlePosRange = new Vector2(start, end);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "设置开关控制柄运动范围为：左极限 - " + start + " 右极限 - " + end, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "设置开关控制柄运动范围为：左极限 - " + start + " 右极限 - " + end, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置控制柄的位置
@@ -459,7 +459,7 @@ namespace SevenStrikeModules.XHud
             HandleProgress = val;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "设置开关控制柄运动进度值为：" + val, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "设置开关控制柄运动进度值为：" + val, XGUIMsgState.通知);
         }
         #endregion
 
@@ -482,7 +482,7 @@ namespace SevenStrikeModules.XHud
             }
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "开关控制柄颜色到：" + value, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "开关控制柄颜色到：" + value, XGUIMsgState.通知);
         }
         /// <summary>
         /// 背景颜色到
@@ -501,7 +501,7 @@ namespace SevenStrikeModules.XHud
                     Tog_Bg.color = value;
             }
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "开关背景颜色到：" + value, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "开关背景颜色到：" + value, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置控制柄的图像
@@ -511,7 +511,7 @@ namespace SevenStrikeModules.XHud
         {
             Tog_Handle.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "已设置开关控制柄图像为：" + tex.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "已设置开关控制柄图像为：" + tex.name, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置控制柄的图像
@@ -521,7 +521,7 @@ namespace SevenStrikeModules.XHud
         {
             Tog_Handle.sprite = sprite;
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "已设置开关控制柄精灵图集图像为：" + sprite.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "已设置开关控制柄精灵图集图像为：" + sprite.name, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置背景的图像
@@ -532,7 +532,7 @@ namespace SevenStrikeModules.XHud
             Tog_Bg.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "设置开关背景图像为：" + tex.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "设置开关背景图像为：" + tex.name, XGUIMsgState.通知);
         }
         /// <summary>
         /// 设置背景的图像
@@ -543,7 +543,7 @@ namespace SevenStrikeModules.XHud
             Tog_Bg.sprite = sprite;
 
             if (DebugState)
-                XHud_Utilitys.Func_PrintInfo("XHud - 开关控件通知", "设置开关背景精灵图集图像为：" + sprite.name, HudMsgState.通知);
+                XGUI_Utilitys.Console("XHud - 开关控件通知", "设置开关背景精灵图集图像为：" + sprite.name, XGUIMsgState.通知);
         }
         #endregion
     }

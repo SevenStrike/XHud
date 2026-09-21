@@ -41,6 +41,41 @@ namespace SevenStrikeModules.XTween
         Unregister = 1
     }
 
+    public class EaseInfo
+    {
+        public EaseMode ease_arg;
+        public AnimationCurve ease_curve;
+        public bool use_curve;
+
+        public EaseInfo Clone()
+        {
+            EaseInfo info = new EaseInfo();
+            info.ease_arg = ease_arg;
+            info.ease_curve = ease_curve != null ? new AnimationCurve(ease_curve.keys) : null;
+            info.use_curve = use_curve;
+            return info;
+        }
+
+        // 无参构造函数
+        public EaseInfo() { }
+
+        // 拷贝构造函数
+        public EaseInfo(EaseInfo info)
+        {
+            if (info == null) return;
+            ease_arg = info.ease_arg;
+            ease_curve = info.ease_curve;
+            use_curve = info.use_curve;
+        }
+
+        public void Reset()
+        {
+            ease_curve = AnimationCurve.Linear(0, 0, 1, 1);
+            ease_arg = EaseMode.Linear;
+            use_curve = false;
+        }
+    }
+
     public abstract class XTween_Base<TArg> : XTween_Interface
     {
         /// <summary>
@@ -156,6 +191,10 @@ namespace SevenStrikeModules.XTween
         /// </summary>
         internal EaseMode _easeMode { get; set; } = EaseMode.Linear;
         /// <summary>
+        /// 动画的缓动信息
+        /// </summary>
+        internal EaseInfo _easeinfo { get; set; } = new EaseInfo();
+        /// <summary>
         /// 标记动画是否已开始播放
         /// </summary>
         internal bool _hasStarted { get; set; }
@@ -245,6 +284,13 @@ namespace SevenStrikeModules.XTween
         internal float _stepProgressInterval = 0f;  // 进度间隔（0-1）
         internal float _lastStepTime = 0f;          // 上次时间间隔执行时间
         internal float _lastStepProgress = -1f;     // 上次进度间隔执行进度
+
+        private bool _isInUse = false;
+        public bool IsInUse
+        {
+            get => _isInUse;
+            set => _isInUse = value;
+        }
         #endregion
 
         #region 接口属性实现
@@ -425,6 +471,10 @@ namespace SevenStrikeModules.XTween
                 _StartValue = (TArg)value;
             }
         }
+        /// <summary>
+        /// 自定义缓动信息
+        /// </summary>
+        public EaseInfo EaseInfo => _easeinfo;
         #endregion
 
         #region 接口方法实现 - 控制
@@ -954,7 +1004,7 @@ namespace SevenStrikeModules.XTween
 
             if (andKill)
             {
-                Kill();
+                Kill(true);
             }
             else
             {
@@ -1034,6 +1084,7 @@ namespace SevenStrikeModules.XTween
         public void ResetState()
         {
             ClearCallbacks();
+
             _IsKilled = false;
             _IsPlaying = false;
             _IsPaused = false;
@@ -1052,6 +1103,7 @@ namespace SevenStrikeModules.XTween
             _LoopingDelay = 0f;
             _LoopCount = 0;
             _easeMode = EaseMode.Linear;
+            _easeinfo.Reset();
             _CustomEaseCurve = null;
 
             // 重置步长状态
@@ -1133,6 +1185,15 @@ namespace SevenStrikeModules.XTween
         XTween_Interface XTween_Interface.SetEase(AnimationCurve curve)
         {
             return SetEase(curve);
+        }
+        /// <summary>
+        /// 设置动画的缓动信息
+        /// </summary>
+        /// <param name="easeMode">缓动模式</param>
+        /// <returns>当前动画对象</returns>
+        XTween_Interface XTween_Interface.SetEase(EaseInfo info)
+        {
+            return SetEase(info);
         }
         /// <summary>
         /// 设置动画的延迟时间
@@ -1457,6 +1518,22 @@ namespace SevenStrikeModules.XTween
             _CustomEaseCurve = new AnimationCurve(curve.keys); // 创建副本以避免外部修改
             _UseCustomEaseCurve = true;
             return ReturnSelf();
+        }
+        /// <summary>
+        /// 设置动画的缓动信息，由信息内开关与参数决定使用哪种方式的缓动
+        /// </summary>
+        /// <param name="info">缓动模式</param>
+        /// <returns>当前动画对象</returns>
+        public XTween_Base<TArg> SetEase(EaseInfo info)
+        {
+            _easeinfo = info.Clone();
+            switch (info.use_curve)
+            {
+                case true:
+                    return SetEase(info.ease_arg);
+                case false:
+                    return SetEase(info.ease_curve);
+            }
         }
         /// <summary>
         /// 清除自定义缓动曲线

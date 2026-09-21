@@ -123,6 +123,13 @@ namespace SevenStrikeModules.XHud
         public float CursorOpacity_TweenDuration = 1;
         public EaseMode CursorOpacity_TweenEase;
 
+        public bool
+            fold_based = true,
+            fold_options = true,
+            fold_styles = true,
+            fold_params = true;
+
+
         void Start()
         {
             InitializeCursor();
@@ -294,10 +301,12 @@ namespace SevenStrikeModules.XHud
         /// 设置鼠标图像尺寸
         /// </summary>
         /// <param name="cursor"></param>
-        public void mc_SetCursorSize(float size)
+        public XTween_Interface mc_SetCursorSize(float size)
         {
             if (UseLerpCursorSize == "差值模式")
+            {
                 CursorSize = size;
+            }
             else
             {
                 if (Tween_CursorSize != null && Tween_CursorSize.IsActive)
@@ -310,6 +319,8 @@ namespace SevenStrikeModules.XHud
 
                 Tween_CursorSize = XTween.To(() => CursorSize, x => CursorSize = x, size, CursorSize_TweenDuration * XHud_Manager.Instance.DurationMultiply).SetEase(CursorSize_TweenEase).SetAutoKill(true);
             }
+
+            return Tween_CursorSize;
         }
 
         /// <summary>
@@ -343,7 +354,7 @@ namespace SevenStrikeModules.XHud
         /// 光标透明度设置
         /// </summary>
         /// <param name="opacity"></param>
-        public void mc_CursorOpacitySet(float opacity)
+        public XTween_Interface mc_CursorOpacitySet(float opacity)
         {
             if (Tween_CursorOpacity != null && Tween_CursorOpacity.IsActive)
             {
@@ -354,6 +365,8 @@ namespace SevenStrikeModules.XHud
             }
 
             Tween_CursorOpacity = XTween.To(() => CursorOpacity, x => CursorOpacity = x, opacity, CursorOpacity_TweenDuration).SetEase(CursorOpacity_TweenEase).SetAutoKill(true);
+
+            return Tween_CursorOpacity;
         }
 
         /// <summary>

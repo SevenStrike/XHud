@@ -43,6 +43,10 @@ namespace SevenStrikeModules.XTween
         /// </summary>
         EaseMode EaseMode { get; }
         /// <summary>
+        /// 设置自定义缓动信息
+        /// </summary>
+        EaseInfo EaseInfo { get; }
+        /// <summary>
         /// 获取是否使用自定义缓动曲线
         /// </summary>
         bool UseCustomEaseCurve { get; }
@@ -114,6 +118,11 @@ namespace SevenStrikeModules.XTween
         /// 获取动画是否已完成
         /// </summary>
         bool IsCompleted { get; }
+        /// <summary>
+        /// 标记动画是否正在被外部使用（从池中取出但未回收）
+        /// 池外代码不应修改此属性，仅由对象池管理
+        /// </summary>
+        bool IsInUse { get; set; }
         /// <summary>
         /// 获取动画是否处于活动状态
         /// </summary>
@@ -232,6 +241,12 @@ namespace SevenStrikeModules.XTween
         /// <param name="curve">自定义缓动曲线</param>
         /// <returns>当前动画对象</returns>
         XTween_Interface SetEase(AnimationCurve curve);
+        /// <summary>
+        /// 设置自定义缓动信息
+        /// </summary>
+        /// <param name="info">自定义缓动信息</param>
+        /// <returns>当前动画对象</returns>
+        XTween_Interface SetEase(EaseInfo info);
         /// <summary>
         /// 设置动画的延迟时间
         /// </summary>

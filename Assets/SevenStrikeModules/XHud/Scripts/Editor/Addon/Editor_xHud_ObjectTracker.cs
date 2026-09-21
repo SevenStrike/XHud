@@ -20,7 +20,9 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
+    using System;
     using UnityEditor;
     using UnityEngine;
 
@@ -37,7 +39,7 @@ namespace SevenStrikeModules.XHud.Editor
             UseSmoothTracker,
             TrackerOffset,
             SmoothTime;
-        private bool OriginalDisplay;
+
         private Texture2D icon_main;
 
         #region 批量化操作
@@ -87,7 +89,7 @@ namespace SevenStrikeModules.XHud.Editor
             SmoothTime = serializedObject.FindProperty("SmoothTime");
             TrackerOffset = serializedObject.FindProperty("TrackerOffset");
 
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_ObjectTracker/icon_main");
+            icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_object_tracker/icon_main");
 
             GetAllTargets();
         }
@@ -95,58 +97,179 @@ namespace SevenStrikeModules.XHud.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 物体追踪器", Color.white);
 
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "参数", XHud_Dashboard.Theme_Primary);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_ObjectTracker>("使用平滑追踪", new string[] { "禁用", "启用" }, ref UseSmoothTracker, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
-            Editor_XHud_GUI.Gui_Layout_Property_Field("XHud元素", SelfObject, 90);
-
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
-            Editor_XHud_GUI.Gui_Layout_Property_Field("XHud元素父物体", RelativeObject, 90);
-
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
-            Editor_XHud_GUI.Gui_Layout_Property_Field("场景目标物体", TargetObject, 90);
-
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
-            if (UseSmoothTracker.boolValue)
-            {
-                Editor_XHud_GUI.Gui_Layout_Property_Field("平滑速率", SmoothTime);
-            }
-
-            Editor_XHud_GUI.Gui_Layout_Property_Field("位置偏移", TrackerOffset);
-
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
-
-            #region 源脚本
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
-            #region 原始变量
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            OriginalDisplay = EditorGUILayout.Foldout(OriginalDisplay, "变量/属性", true);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-            if (OriginalDisplay)
-                DrawDefaultInspector();
+            #region 标题
+            XGUI.layout_banner(
+             bg_fill: XGUIFilled.实体,
+             bg_color: XGUIColor.深空灰,
+             bg_height: 30,
+             icon: icon_main,
+             icon_color: XHud_Dashboard.Theme_Primary,
+             title_text: "XHud  -  物体追踪器",
+             title_anchor: TextAnchor.MiddleLeft,
+             title_style: FontStyle.Normal,
+             title_color: Color.white,
+             title_size: XGUIFontSize.B,
+             title_clipping: clipping,
+             bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_space(5);
+
+            #region 选项
+            BaseScript.fold_option = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "选项",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_option);
+
+            if (!BaseScript.fold_option)
+            {
+                DrawToggle("使用平滑追踪", UseSmoothTracker, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            #region 参数
+            BaseScript.fold_param = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "参数",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_param);
+
+            if (!BaseScript.fold_param)
+            {
+                #region XHud元素
+                XGUI.layout_property_field(
+                    title: "XHud元素",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: SelfObject,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+
+                #region XHud元素父物体
+                XGUI.layout_property_field(
+                    title: "XHud元素父物体",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: RelativeObject,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+
+                #region 场景目标物体
+                XGUI.layout_property_field(
+                    title: "场景目标物体",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: TargetObject,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+
+                if (UseSmoothTracker.boolValue)
+                {
+                    #region 平滑速率
+                    XGUI.layout_property_field(
+                        title: "平滑速率",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: SmoothTime,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
+                }
+
+                #region 位置偏移
+                XGUI.layout_property_field(
+                    title: "位置偏移",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: TrackerOffset,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            #region 源脚本
+            BaseScript.fold_based = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "源脚本",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_based);
+
+            if (!BaseScript.fold_based)
+            {
+                DrawDefaultInspector();
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             serializedObject.ApplyModifiedProperties();
         }
 
+        #region Draw
+        /// <summary>
+        /// 通用方法：绘制开关
+        /// </summary>
+        private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, Action<bool> act_on_changed = null)
+        {
+            XGUI.layout_toggle(
+                title: title,
+                title_size: XGUIFontSize.M,
+                title_font_style: FontStyle.Normal,
+                title_padding: new RectOffset(5, 10, 0, 0),
+                title_width: width,
+                prop: prop,
+                tog_style: style,
+                tog_padding: new RectOffset(0, 9, 0, 0),
+                tog_margin: new RectOffset(0, 0, 0, 5),
+                tog_mixed_options: new string[] { "禁用", "启用" },
+                tog_mixed_text_size: XGUIFontSize.M,
+                tog_mixed_text_color: Color.black,
+                tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                tog_mixed_font_style: FontStyle.Normal,
+                tog_bg_off_color: color_bg_off,
+                tog_bg_on_color: color_bg_on,
+                tog_handler_off_color: color_off,
+                tog_handler_on_color: color_on,
+                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                act_on_changed: act_on_changed);
+        }
+        #endregion
     }
 }

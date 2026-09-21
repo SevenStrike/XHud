@@ -20,8 +20,9 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditorInternal;
@@ -324,11 +325,11 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.Theme_Primary);
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("状态调试", stroptions_debug, ref sp_debugstate, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("状态调试", stroptions_debug, ref sp_debugstate, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("自动停止预览", stroptions_enabled, ref AutoStopPreview, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("自动停止预览", stroptions_enabled, ref AutoStopPreview, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("平滑模式", stroptions_smooth, ref LerpMotion, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("平滑模式", stroptions_smooth, ref LerpMotion, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
             Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
@@ -435,19 +436,19 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             EditorGUI.BeginChangeCheck();
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("前景", stroptions_enabled, ref Display_ProgressRect_Fore, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("前景", stroptions_enabled, ref Display_ProgressRect_Fore, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("背景", stroptions_enabled, ref Display_ProgressRect_Bg, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("背景", stroptions_enabled, ref Display_ProgressRect_Bg, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("标记", stroptions_enabled, ref Display_ProgressRect_Handle, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("标记", stroptions_enabled, ref Display_ProgressRect_Handle, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("图标", stroptions_enabled, ref Display_Icon, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("图标", stroptions_enabled, ref Display_Icon, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("标题", stroptions_enabled, ref Display_Title, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("标题", stroptions_enabled, ref Display_Title, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("副标题", stroptions_enabled, ref Display_SubTitle, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("副标题", stroptions_enabled, ref Display_SubTitle, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("进度值", stroptions_enabled, ref Display_Value, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("进度值", stroptions_enabled, ref Display_Value, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -982,7 +983,7 @@ namespace SevenStrikeModules.XHud.Editor
                 list[i].Controller.pt_Tween.TweenNode_GetTimers();
                 x_list[i] = list[i].Controller.pt_Tween.MaxTimerWithGlobalDuration + list[i].DelayTime;
             }
-            float v = XHud_Utilitys.Array_MaxValue(x_list);
+            float v = XGUI_Utilitys.MaxValue(x_list);
             return v * globaldur;
         }
         /// <summary>
@@ -1046,29 +1047,21 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 图元控制器 - 创建ID编号
         /// </summary>
-        /// <param name="nodes"></param>
         /// <returns></returns>
-        public virtual int PrimitiveController_CreateID(List<PrimitiveControllerNode> nodes)
+        public string PrimitiveController_CreateID()
         {
-            List<int> ids = new List<int>();
-            for (int i = 0; i < nodes.Count; i++)
+            return XGUI_Utilitys.GenerateUniqueId(CollectIDs());
+        }
+        public string[] CollectIDs()
+        {
+            List<string> list = new List<string>();
+
+            for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
             {
-                ids.Add(nodes[i].Controller.GetID());
+                list.Add(BaseScript.PrimitiveControllerNodes[i].Controller.ID);
             }
 
-            int ran_id = Random.Range(1111, 9999);
-
-            while (true)
-            {
-                if (ids.Contains(ran_id))
-                {
-                    ran_id = Random.Range(1111, 9999);
-                }
-                else
-                {
-                    return ran_id;
-                }
-            }
+            return list.ToArray();
         }
         /// <summary>
         /// 获取序列化属性

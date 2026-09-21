@@ -189,7 +189,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 可视区域显示的元素数量
         /// </summary>
-        public int visibleItemCount = 10;
+        public int visibleItemCount = 9;
         /// <summary>
         /// 名称项查找（精确匹配）
         /// </summary>
@@ -216,7 +216,7 @@ namespace SevenStrikeModules.XHud
         private void OnEnable()
         {
             itemHeight = 50;
-            visibleItemCount = 10;
+            visibleItemCount = 9;
         }
 
         // 确保内部名称与文件名一致

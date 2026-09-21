@@ -20,8 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using System;
     using System.Collections.Generic;
     using UnityEditor;
@@ -49,8 +49,6 @@ namespace SevenStrikeModules.XHud.Editor
     {
         private SerializedObject BaseObject;
 
-        private static Editor_XHud_Tool_GuideReference window;
-
         private Texture2D logo, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p;
 
         public GuideReferDataList GuideReferDataList;
@@ -58,24 +56,15 @@ namespace SevenStrikeModules.XHud.Editor
         [SerializeField]
         private Texture2D[] ReferImages;
 
-        Color SepLineColor = new Color(1, 1, 1, 0.15f);
-        Color MessageColor = new Color(1, 1, 1, 0.62f);
-
-        Rect Sepline_rect;
-        Rect Title_rect;
-        Rect Icon_rect;
-
         public string GuideType = "垂直对称";
         private int referIndex = 0;
 
-        /// <summary>
-        /// 字体 - 粗体
-        /// </summary>
-        Font Font_Bold;
-        /// <summary>
-        /// 字体 - 细体
-        /// </summary>
-        Font Font_Light;
+        public float refer_img_overflow = 35;
+
+        // 构图参考说明 - 简要名称
+        string abbr = "";
+        // 构图参考说明 - 说明内容
+        string des = "";
 
         private void OnDisable()
         {
@@ -86,19 +75,40 @@ namespace SevenStrikeModules.XHud.Editor
         {
             BaseObject = new SerializedObject(this);
 
-            logo = Editor_XHud_GUI.GetIcon("Icons_XHud_GuideRefDescription/logo");
-
-            left_arrow_r = Editor_XHud_GUI.GetIcon("Icons_XHud_GuideRefDescription/left_arrow_r");
-            left_arrow_p = Editor_XHud_GUI.GetIcon("Icons_XHud_GuideRefDescription/left_arrow_p");
-            right_arrow_r = Editor_XHud_GUI.GetIcon("Icons_XHud_GuideRefDescription/right_arrow_r");
-            right_arrow_p = Editor_XHud_GUI.GetIcon("Icons_XHud_GuideRefDescription/right_arrow_p");
-
-            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
-
+            logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/logo");
+            left_arrow_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/left_arrow_r");
+            left_arrow_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/left_arrow_p");
+            right_arrow_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/right_arrow_r");
+            right_arrow_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/right_arrow_p");
+        }
+        private void LoadReferDes()
+        {
             // 读取配置表
             TextAsset value = (TextAsset)AssetDatabase.LoadAssetAtPath($"{XHud_Dashboard.Get_Path_XHUD_CONFIG_Path()}XHudGuideRefer.json", typeof(TextAsset));
             GuideReferDataList = JsonUtility.FromJson<GuideReferDataList>(value.text);
+
+            // 匹配参考说明内容
+            for (int i = 0; i < GuideReferDataList.GuideReferDatas.Count; i++)
+            {
+                if (GuideReferDataList.GuideReferDatas[i].name == GuideType)
+                {
+                    abbr = GuideReferDataList.GuideReferDatas[i].abbr;
+                    des = GuideReferDataList.GuideReferDatas[i].des;
+                    break;
+                }
+            }
+        }
+
+        private void LoadReferImages(string type)
+        {
+            if (ReferImages == null)
+            {
+                ReferImages = new Texture2D[5];
+                for (int i = 0; i < ReferImages.Length; i++)
+                {
+                    ReferImages[i] = AssetDatabase.LoadAssetAtPath<Texture2D>($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/ReferImages/{type}/ReferImg_{i}.png");
+                }
+            }
         }
 
         private void OnDestroy()
@@ -113,48 +123,108 @@ namespace SevenStrikeModules.XHud.Editor
             BaseObject.Update();
 
             // 关键文字主题色
-            string hexcol = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
 
             #region 抬头
             Rect rect = new Rect(0, 0, position.width, position.height);
 
-            Icon_rect = new Rect(15, 15, 48, 48);
+            // 图标
+            Rect rect_icon = new Rect(15, 15, logo.width, logo.height);
+            XGUI.gui_icon(
+                rect: rect_icon,
+                icon: logo,
+                padding: new RectOffset(0, 0, 0, 0),
+                border: new RectOffset(0, 0, 0, 0),
+                color: Color.white);
 
-            Editor_XHud_GUI.Gui_Icon(Icon_rect, logo);
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
 
-            Title_rect = new Rect(rect.x + 85, rect.y + 15, rect.width - 80, 30);
-            Editor_XHud_GUI.Gui_Labelfield(Title_rect, $"XHud 构图参考说明书", HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
+            // 大标题
+            Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
+            XGUI.gui_label(
+                rect: rect_title,
+                text: new GUIContent("XHud 构图参考说明书"),
+                text_color: Color.white,
+                size: XGUIFontSize.L,
+                clipping: clipping,
+                font: XGUI.GetFont("xg-heavy"));
 
-            Sepline_rect = new Rect(rect.x + 85, rect.y + 60, 200, 1);
-            Editor_XHud_GUI.Gui_Box(Sepline_rect, SepLineColor);
+            // 分割线
+            Rect rect_seperate = new Rect(rect.x + 68, rect.y + 43, 200, 1);
+            XGUI.gui_seperator(
+                rect: rect_seperate,
+                thickness: 1,
+                color: XHud_Dashboard.Theme_SeperateLine,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0));
 
-            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 18, rect.y + 80, rect.width - 38, rect.height), "此窗口提供了各种构图参考线的具体解释，用户可根据每种构图线的释义来选择适合您的构图参考类型！", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
+            // 小标题
+            Rect rect_subtitle = new Rect(rect.x + 18, rect.y + 52, rect.width - 18, 30);
+            XGUI.gui_label(
+                rect: rect_subtitle,
+                text: new GUIContent("此窗口提供了各种构图参考线的具体解释，用户可根据每种构图线的释义来选择适合的构图参考类型"),
+                text_color: Color.white * 0.7f,
+                size: XGUIFontSize.M,
+                wrap: true,
+                anchor: TextAnchor.UpperLeft,
+                clipping: TextClipping.Overflow,
+                padding: new RectOffset(0, 10, 0, 0));
             #endregion
 
-            if (ReferImages == null)
-            {
-                ReferImages = new Texture2D[5];
-                for (int i = 0; i < ReferImages.Length; i++)
-                {
-                    ReferImages[i] = AssetDatabase.LoadAssetAtPath<Texture2D>($"{XHud_Dashboard.Get_Path_XHUD_GUISTYLE_Path()}Icon/Icons_XHud_GuideRefDescription/ReferImages/{GuideType}/ReferImg_{i}.png");
-                }
-            }
+            XGUI.layout_space(105);
 
             #region 参考图片 / 参数
+            if (ReferImages == null)
+                LoadReferImages(GuideType);
+
+            Texture2D icon = ReferImages[referIndex];
+            float ratio = (float)icon.width / icon.height;  // 注意要显式转换为float
+
+            // 计算保持宽高比的高度
+            float targetWidth = position.width - refer_img_overflow;
+            float targetHeight = targetWidth / ratio;
+
+            Rect rect_refer = XGUI.GetControlRect(false, targetHeight);
+            rect_refer.Set(rect_refer.x + 15, rect_refer.y, targetWidth, targetHeight);
+
             // 图标
-            Editor_XHud_GUI.Gui_Icon(new Rect(rect.x + 18, rect.y + 130, 500, 500), ReferImages[referIndex]);
+            XGUI.gui_icon(
+                rect: rect_refer,
+                icon: icon,
+                color: Color.white);
 
             #region 图片控件
             // 左翻页
-            if (Editor_XHud_GUI.Gui_Button(new Rect(rect.x + 20, rect.y + 580, 32, 32), left_arrow_r, left_arrow_p, true, "", "", Color.white))
+            if (XGUI.gui_button(
+                rect: new Rect(rect_refer.x - 5, rect_refer.y + (rect_refer.height + 5), 32, 32),
+                tooltip: "收藏的预设",
+                tex_release: left_arrow_r,
+                tex_press: left_arrow_p,
+                tex_gui_color: Color.white,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                focus_name: "prev_btn"))
             {
                 if (referIndex <= 0)
                     referIndex = ReferImages.Length - 1;
                 else
                     referIndex--;
             }
+
             // 右翻页
-            if (Editor_XHud_GUI.Gui_Button(new Rect(rect.x + 480, rect.y + 580, 32, 32), right_arrow_r, right_arrow_p, true, "", "", Color.white))
+            if (XGUI.gui_button(
+               rect: new Rect(rect_refer.x + (rect_refer.width - 25), rect_refer.y + (rect_refer.height + 5), 32, 32),
+               tooltip: "收藏的预设",
+               tex_release: right_arrow_r,
+               tex_press: right_arrow_p,
+               tex_gui_color: Color.white,
+               margin: new RectOffset(0, 0, 0, 0),
+               padding: new RectOffset(0, 0, 0, 0),
+               focus_name: "prev_btn"))
             {
                 if (referIndex >= ReferImages.Length - 1)
                     referIndex = 0;
@@ -163,30 +233,42 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
-            // 分割线
-            Editor_XHud_GUI.Gui_Box(new Rect(rect.x + 545, rect.y + 150, 1, 350), Color.gray * 0.65f);
-
-            // 构图参考说明 - 简要名称
-            string abbr = "";
-            // 构图参考说明 - 说明内容
-            string des = "";
-
-            // 匹配参考说明内容
-            for (int i = 0; i < GuideReferDataList.GuideReferDatas.Count; i++)
-            {
-                if (GuideReferDataList.GuideReferDatas[i].name == GuideType)
-                {
-                    abbr = GuideReferDataList.GuideReferDatas[i].abbr;
-                    des = GuideReferDataList.GuideReferDatas[i].des;
-                    break;
-                }
-            }
-
             // 构图参考说明 - 构图类型标题
-            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 570, rect.y + 130, 448, 30), $"{GuideType}  <size=14>( <color={hexcol}>{abbr}</color> )</size>", HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, 25, true, Font_Bold);
+            XGUI.gui_label(
+                rect: new Rect(rect_refer.x, rect_refer.y + (rect_refer.height + 12), rect_refer.width, XGUI.GetSingleLineHeight()),
+                text: new GUIContent($"{GuideType}    <size=11>( <color={hexcol}>{abbr}</color> )</size>"),
+                text_color: Color.white,
+                size: XGUIFontSize.M,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleCenter,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Normal);
+            #endregion
 
-            // 构图参考说明 - 构图类型解释
-            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 570, rect.y + 180, 345, 20), des, HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, 13, Font_Light, true, TextClipping.Overflow);
+            XGUI.layout_seperator(
+                thickness: 1,
+                color: XHud_Dashboard.Theme_SeperateLine,
+                margin: new RectOffset(15, 15, 45, 10));
+
+            #region 图片说明
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.无,
+                bg_color: XGUIColor.无,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0));
+
+            XGUI.layout_label(
+                text: des,
+                size: XGUIFontSize.M,
+                text_color: Color.white * 0.8f,
+                margin: new RectOffset(15, 15, 10, 0),
+                clipping: TextClipping.Overflow,
+                wrap: true,
+                font_style: FontStyle.Normal,
+                anchor: TextAnchor.MiddleLeft);
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             BaseObject.ApplyModifiedProperties();
@@ -197,6 +279,8 @@ namespace SevenStrikeModules.XHud.Editor
                 e.Use();
                 Close();
             }
+
+            return;
         }
 
         /// <summary>
@@ -206,6 +290,7 @@ namespace SevenStrikeModules.XHud.Editor
         public void SetGuideType(string type)
         {
             GuideType = type;
+            LoadReferDes();
         }
     }
 }

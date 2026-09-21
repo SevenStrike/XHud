@@ -20,12 +20,17 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Utilitys;
+    using System;
     using System.Collections.Generic;
+    using System.IO;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
+    using Object = UnityEngine.Object;
+    using Random = UnityEngine.Random;
 
     [CustomEditor(typeof(XHud_Library_Sounds))]
     public class Editor_XHud_Library_Sounds : Editor
@@ -39,7 +44,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 序列化属性
-        private SerializedProperty sp_SoundInfoList_Original_Scroller, sp_itemHeight, sp_visibleItemCount, sp_SoundList, sp_UseRandomPitch, sp_Pitch_Min, sp_Pitch_Max, sp_SelectedIndex, sp_LocationSelectedIndex, sp_Highlight, sp_Find, LibraryName;
+        private SerializedProperty sp_SoundInfoList_Original_Scroller, sp_itemHeight, sp_visibleItemCount, sp_SoundList, sp_UseRandomPitch, sp_Pitch_Min, sp_Pitch_Max, sp_SelectedIndex, sp_LocationSelectedIndex, sp_Highlight, sp_Find, sp_LibraryName;
         #endregion
 
         private float LineHeight;
@@ -65,10 +70,6 @@ namespace SevenStrikeModules.XHud.Editor
         /// 屏蔽颜色透明度
         /// </summary>
         private float blocked_alp = 0.45f;
-
-        #region 选项文字
-        string[] stroptions_enabled = new string[2] { "关闭", "开启" };
-        #endregion
 
         #region 批量化操作
         XHud_Library_Sounds[] SelectedObjects;
@@ -115,7 +116,7 @@ namespace SevenStrikeModules.XHud.Editor
             sp_UseRandomPitch = serializedObject.FindProperty("UseRandomPitch");
             sp_Pitch_Min = serializedObject.FindProperty("Pitch_Min");
             sp_Pitch_Max = serializedObject.FindProperty("Pitch_Max");
-            LibraryName = serializedObject.FindProperty("LibraryName");
+            sp_LibraryName = serializedObject.FindProperty("LibraryName");
             sp_SelectedIndex = serializedObject.FindProperty("SelectedIndex");
             sp_Highlight = serializedObject.FindProperty("Highlight");
             sp_LocationSelectedIndex = serializedObject.FindProperty("LocationSelectedIndex");
@@ -133,20 +134,20 @@ namespace SevenStrikeModules.XHud.Editor
             sp_itemHeight.floatValue = 50;
             sp_itemHeight.serializedObject.ApplyModifiedProperties();
 
-            sp_visibleItemCount.intValue = 9;
+            sp_visibleItemCount.intValue = 8;
             sp_visibleItemCount.serializedObject.ApplyModifiedProperties();
 
             #region 获取图标
-            scan_p = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/scan_p");
-            scan_r = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/scan_r");
-            stoppreview_p = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/stoppreview_p");
-            stoppreview_r = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/stoppreview_r");
-            clear_p = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/clear_p");
-            clear_r = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/clear_r");
-            create_p = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/create_p");
-            create_r = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/create_r");
-            delete_p = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/delete_p");
-            delete_r = Editor_XHud_GUI.GetIcon("Icons_XHud_SoundLibrary/delete_r");
+            scan_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_sound/scan_p");
+            scan_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_sound/scan_r");
+            stoppreview_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_sound/stoppreview_p");
+            stoppreview_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_sound/stoppreview_r");
+            clear_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_sound/clear_p");
+            clear_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_sound/clear_r");
+            create_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_sound/create_p");
+            create_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_sound/create_r");
+            delete_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_sound/delete_p");
+            delete_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_sound/delete_r");
             #endregion
 
             blocked_col = new Color(0, 0, 0, blocked_alp);
@@ -191,9 +192,6 @@ namespace SevenStrikeModules.XHud.Editor
         Rect item_rect;
         Color SelectedBg = new Color(0, 0, 0, 0.2f);
 
-        Rect x_dragarea;
-        Rect dragarea;
-
         private void BlockGUI(string name)
         {
             if (!name.Contains(sp_Highlight.stringValue))
@@ -215,7 +213,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="isFocused"></param>
         private void SoundInfoList_Original_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
-            float titleheight = rect.y + 2;
+            float titleheight = rect.y + 8;
 
             SerializedProperty prop = sp_SoundList.GetArrayElementAtIndex(index);
 
@@ -224,22 +222,59 @@ namespace SevenStrikeModules.XHud.Editor
             SerializedProperty sp_length = prop.FindPropertyRelative("Length");
             SerializedProperty sp_chan = prop.FindPropertyRelative("Channel");
             SerializedProperty sp_freq = prop.FindPropertyRelative("Frequency");
+            SerializedProperty sp_format = prop.FindPropertyRelative("Format");
 
-            drawelement_rect.Set(rect.x + 15, rect.y, 30, 20);
-            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, index.ToString("D2"), HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
+            #region 序号
+            drawelement_rect.Set(rect.x + 16, rect.y + 6, 30, 20);
+            XGUI.gui_label(
+                rect: drawelement_rect,
+                text: new GUIContent(index.ToString("D2")),
+                text_color: Color.gray,
+                size: XGUIFontSize.S,
+                clipping: TextClipping.Clip,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Normal);
+            #endregion
 
             BlockGUI(sp_name.stringValue);
 
-            drawelement_rect.Set(rect.x + 35, titleheight, rect.width - 200, LineHeight);
-            Editor_XHud_GUI.Gui_Property_Field(drawelement_rect, "", sp_name, 0, 30);
+            #region 音效名称
+            drawelement_rect.Set(rect.x + 35, titleheight, rect.width - 180, LineHeight);
+            sp_name.stringValue = XGUI.gui_inputfield(
+                     rect: drawelement_rect,
+                     //title: "Bk",
+                     prop: sp_name.stringValue,
+                     text_wrap: true,
+                     field_fontsize: XGUIFontSize.M,
+                     field_text_offset: Vector2.zero,
+                     field_height: XGUI.GetSingleLineHeight(),
+                     field_text_color: Color.white,
+                     //title_width: 40,
+                     //status_icon: "icon_field_status",
+                     //status_icon_color: Color.magenta,
+                     field_text_font: XGUI.GetFont("xg-medium"),
+                     field_text_style: FontStyle.Normal,
+                     field_text_anchor: TextAnchor.UpperLeft,
+                     field_padding: new RectOffset(5, 5, 0, 0),
+                     field_margin: new RectOffset(0, 0, 0, 0));
+            sp_name.serializedObject.ApplyModifiedProperties();
+            #endregion
 
             BlockGUI(sp_name.stringValue);
 
-            drawelement_rect.Set(rect.width - 120, titleheight, 90, LineHeight);
-            Editor_XHud_GUI.Gui_Property_Field(drawelement_rect, "", sp_clip, 10, 40);
+            #region 音效
+            drawelement_rect.Set(rect.width - 120, titleheight, 100, LineHeight);
+            XGUI.gui_property_field(
+                           rect: drawelement_rect,
+                           //status_icon: "icon_field_status",
+                           //status_icon_color: Color.red,
+                           prop: sp_clip);
+            #endregion
 
             BlockGUI(sp_name.stringValue);
 
+            #region 音效信息
             string cxs = sp_length.floatValue.ToString("F2") + " s";
             string xxc = "";
             if (BaseScript.SoundLibrary[index].Channel == 2)
@@ -252,10 +287,21 @@ namespace SevenStrikeModules.XHud.Editor
             }
             string fsr = sp_freq.intValue + " hz";
 
-            string res = cxs + " | " + xxc + " | " + fsr;
+            string res = cxs + " | " + xxc + " | " + fsr + " | " + sp_format.stringValue;
 
             drawelement_rect.Set(rect.x + 36, rect.y + 28, rect.width - 10, LineHeight);
-            Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, res, HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 11);
+            XGUI.gui_label(
+                rect: drawelement_rect,
+                text: new GUIContent(res),
+                text_color: Color.white * 0.75f,
+                size: XGUIFontSize.S,
+                clipping: TextClipping.Clip,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Normal
+                //font: XGUI.GetFont("xg-medium")
+                );
+            #endregion
 
             GUI.enabled = true;
 
@@ -267,8 +313,16 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (index == sp_LocationSelectedIndex.intValue)
             {
-                drawelement_rect.Set(rect.width - 80, rect.y + 25, 50, 20);
-                Editor_XHud_GUI.Gui_Labelfield(drawelement_rect, "已定位", HudFilled.无, HudColor.亮白, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleRight, Vector2.zero, 11);
+                drawelement_rect.Set(rect.width - 80, rect.y + 25, 58, 20);
+                XGUI.gui_label(
+                    rect: drawelement_rect,
+                    text: new GUIContent("已定位"),
+                    text_color: XHud_Dashboard.Theme_Primary,
+                    size: XGUIFontSize.S,
+                    clipping: TextClipping.Clip,
+                    anchor: TextAnchor.MiddleRight,
+                    offset: new Vector2(0, 0),
+                    font_style: FontStyle.Normal);
             }
         }
 
@@ -299,7 +353,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     if (sp_SelectedIndex.intValue == i)
                     {
-                        item_rect.Set(1, i * sp_itemHeight.floatValue + 6, 5, 5);
+                        item_rect.Set(1, i * sp_itemHeight.floatValue + 13, 5, 5);
                         // 高亮标记表示选中
                         EditorGUI.DrawRect(item_rect, XHud_Dashboard.Theme_Primary);
                         item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
@@ -367,30 +421,78 @@ namespace SevenStrikeModules.XHud.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            Editor_XHud_GUI.Gui_Layout_Banner(HudFilled.实体, HudColor.亮白, "XHud - 音效库", Color.black);
 
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            #region 标题
+            XGUI.layout_banner(
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.深空灰,
+                bg_height: 30,
+                title_text: "XHud  -  音效库",
+                title_anchor: TextAnchor.MiddleLeft,
+                title_style: FontStyle.Normal,
+                title_color: Color.white,
+                title_size: XGUIFontSize.B,
+                title_clipping: clipping,
+                title_offset: new Vector2(-10, 0),
+                bg_margin: new RectOffset(0, 0, 5, 5));
+            #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Property_Field("音效库名称", LibraryName);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+            XGUI.layout_space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            #region 参数区
+            XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    title: "参数",
+                    title_size: XGUIFontSize.M,
+                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_clipping: TextClipping.Clip,
+                    padding: new RectOffset(10, 10, 15, 15));
 
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            EditorGUI.BeginChangeCheck();
-            Editor_XHud_GUI.Gui_Layout_Property_Field("过滤（包含）", sp_Highlight);
-            if (EditorGUI.EndChangeCheck())
+            #region 库名称
+            XGUI.layout_property_field(
+                title: "库名称",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 90,
+                prop: sp_LibraryName,
+                prop_margin: new RectOffset(0, 0, 5, 0));
+            #endregion
+
+            #region 过滤（包含）
+            XGUI.ChangedCheck_Start();
+            XGUI.layout_property_field(
+                title: "过滤（包含）",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 90,
+                prop: sp_Highlight,
+                prop_margin: new RectOffset(0, 0, 5, 0));
+            if (XGUI.ChangedCheck_End())
             {
                 sp_LocationSelectedIndex.intValue = -1;
                 sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
             }
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            EditorGUI.BeginChangeCheck();
-            Editor_XHud_GUI.Gui_Layout_Property_Field("查找（精确）", sp_Find);
-            if (EditorGUI.EndChangeCheck())
+            #endregion
+
+            #region 查找（精确）
+            XGUI.ChangedCheck_Start();
+            XGUI.layout_property_field(
+                title: "查找（精确）",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 90,
+                prop: sp_Find,
+                prop_margin: new RectOffset(0, 0, 5, 0));
+            if (XGUI.ChangedCheck_End())
             {
                 if (!string.IsNullOrEmpty(sp_Find.stringValue))
                     BaseScript.SoundLibrary_Location_Find(sp_Find.stringValue);
@@ -403,29 +505,69 @@ namespace SevenStrikeModules.XHud.Editor
                     sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
                 }
             }
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+            #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            XGUI.layout_seperator(
+                thickness: 1,
+                color: XHud_Dashboard.Theme_SeperateLine,
+                margin: new RectOffset(15, 15, 20, 15));
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
+            #region 随机音高
+            DrawToggle("随机音高", sp_UseRandomPitch, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            #endregion
 
+            if (sp_UseRandomPitch.boolValue)
+            {
+                #region 最小音高
+                XGUI.layout_property_field(
+                    title: "最小音高",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: sp_Pitch_Min,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+
+                #region 最大音高
+                XGUI.layout_property_field(
+                    title: "最大音高",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: sp_Pitch_Max,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            #region 快捷功能
             if (string.IsNullOrEmpty(sp_Highlight.stringValue))
             {
                 if (!Application.isPlaying)
                 {
-                    Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                    GUILayout.FlexibleSpace();
-                    if (BaseScript.SoundLibrary != null && BaseScript.SoundLibrary.Count > 0)
-                        GUI.enabled = true;
-                    else
-                        GUI.enabled = false;
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "扫描取所有音效参数", scan_r, scan_p, 4))
+                    XGUI.layout_group_start(
+                        type: XGUIContainerType.Horizontal,
+                        bg_fill: XGUIFilled.缺口纯色边框,
+                        bg_color: XGUIColor.亮白,
+                        bg_color_gui: XHud_Dashboard.Theme_Group,
+                        title: "快捷功能",
+                        title_size: XGUIFontSize.M,
+                        title_text_color: XHud_Dashboard.Theme_Primary,
+                        title_clipping: TextClipping.Clip,
+                        padding: new RectOffset(15, 15, 20, 15));
+
+                    #region 扫描取所有音效参数
+                    if (XGUI.layout_button(
+                        tooltip: "扫描取所有音效参数",
+                        tex_release: scan_r,
+                        tex_press: scan_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
                     {
-                        if (Application.isPlaying)
-                            return;
                         for (int i = 0; i < sp_SoundList.arraySize; i++)
                         {
                             SerializedProperty item = sp_SoundList.GetArrayElementAtIndex(i);
@@ -433,6 +575,7 @@ namespace SevenStrikeModules.XHud.Editor
                             SerializedProperty x_Frequency = item.FindPropertyRelative("Frequency");
                             SerializedProperty x_Channel = item.FindPropertyRelative("Channel");
                             SerializedProperty x_Length = item.FindPropertyRelative("Length");
+                            SerializedProperty x_Format = item.FindPropertyRelative("Format");
 
                             if (x_Clip.objectReferenceValue != null)
                             {
@@ -442,6 +585,10 @@ namespace SevenStrikeModules.XHud.Editor
                                 x_Frequency.intValue = ac.frequency;
                                 x_Length.floatValue = ac.length;
 
+                                string format = Path.GetExtension(AssetDatabase.GetAssetPath(ac)).ToLower();
+                                x_Format.stringValue = format;
+
+                                x_Format.serializedObject.ApplyModifiedProperties();
                                 x_Length.serializedObject.ApplyModifiedProperties();
                                 x_Frequency.serializedObject.ApplyModifiedProperties();
                                 x_Channel.serializedObject.ApplyModifiedProperties();
@@ -449,150 +596,111 @@ namespace SevenStrikeModules.XHud.Editor
                             }
                         }
                     }
-                    GUI.enabled = true;
-                    GUILayout.Space(35);
+                    #endregion
+
                     if (BaseScript.SoundLibrary != null && BaseScript.SoundLibrary.Count > 0)
                         GUI.enabled = true;
                     else
                         GUI.enabled = false;
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "停止并删除所有预览音效", stoppreview_r, stoppreview_p, 4))
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 停止并删除所有预览音效
+                    if (XGUI.layout_button(
+                    tooltip: "停止并删除所有预览音效",
+                        tex_release: stoppreview_r,
+                        tex_press: stoppreview_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
                     {
                         if (Application.isPlaying)
                             return;
                         RecycleAudio();
                     }
+                    #endregion
+
                     GUI.enabled = true;
-                    Editor_XHud_GUI.Gui_Layout_Space(35);
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "移除所有音效项", clear_r, clear_p, 4))
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 清空所有音效项
+                    if (XGUI.layout_button(
+                        tooltip: "清空所有音效项",
+                        tex_release: clear_r,
+                        tex_press: clear_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 音效库消息", "清空所有音效项", "是否确认要清空当前音效库的所有音效项？", "清空", "暂不", 1);
+                        string res = XGUI.dialog(
+                            type: XGUIDialogType.警告,
+                            windowtitle: "XHud - 音效库消息",
+                            title: "清空所有音效项",
+                            msg: "是否确认要清空当前音效库的所有音效项？",
+                            ok: "清空",
+                            cancel: "暂不",
+                            PrimaryIndex: 0,
+                            usemodal: true,
+                            themecolor: XHud_Dashboard.Theme_Primary);
                         if (res == "暂不")
-                        {
                             return;
-                        }
 
                         sp_SoundList.ClearArray();
                         sp_SoundList.serializedObject.ApplyModifiedProperties();
                     }
-                    Editor_XHud_GUI.Gui_Layout_Space(35);
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "添加项", create_r, create_p, 4))
+                    #endregion
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 添加项
+                    if (XGUI.layout_button(
+                        tooltip: "添加项",
+                        tex_release: create_r,
+                        tex_press: create_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
                     {
                         SoundInfoList_Original_Add(SoundInfoList);
                     }
-                    Editor_XHud_GUI.Gui_Layout_Space(35);
-                    if (Editor_XHud_GUI.Gui_Layout_Button(14, "删除项", delete_r, delete_p, 4))
+                    #endregion
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 删除项
+                    if (XGUI.layout_button(
+                        tooltip: "删除项",
+                        tex_release: delete_r,
+                        tex_press: delete_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
                     {
                         SoundInfoList_Original_Remove(SoundInfoList);
                     }
-                    GUILayout.FlexibleSpace();
-                    Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-
-                    Editor_XHud_GUI.Gui_Layout_Space(5);
-                    Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
-                    x_dragarea = GUILayoutUtility.GetLastRect();
-                    Editor_XHud_GUI.Gui_Layout_Space(10);
-
-                    #region 拖放操作
-                    dragarea.Set((x_dragarea.width / 2) - 65, x_dragarea.y + 10, 200, 33);
-
-                    Event evt = Event.current;
-                    if (dragarea.Contains(evt.mousePosition))
-                    {
-                        DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-
-                        if (evt.type == EventType.DragPerform)
-                        {
-                            DragAndDrop.AcceptDrag();
-                            Object[] dropobjs = DragAndDrop.objectReferences;
-                            string names = "";
-                            foreach (var item in dropobjs)
-                            {
-                                XHud_LibraryArg_Sound it = new XHud_LibraryArg_Sound();
-                                it.Clip = (AudioClip)item;
-                                if (it.Clip != null)
-                                {
-                                    bool isExist = false;
-                                    for (int s = 0; s < sp_SoundList.arraySize; s++)
-                                    {
-                                        SerializedProperty ser = sp_SoundList.GetArrayElementAtIndex(s);
-                                        SerializedProperty ser_target = ser.FindPropertyRelative("Clip");
-                                        if (ser_target.objectReferenceValue.name == it.Clip.name)
-                                        {
-                                            isExist = true;
-                                            break;
-                                        }
-                                    }
-                                    if (isExist)
-                                    {
-                                        Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 音效库消息", "重复添加音效", $"此音效已存在于该库中！请勿重复添加！重复音效名称： {it.Clip.name}", "明白");
-                                        continue;
-                                    }
-                                    else
-                                    {
-                                        it.Name = it.Clip.name;
-
-                                        sp_SoundList.InsertArrayElementAtIndex(sp_SoundList.arraySize);
-                                        SerializedProperty root = sp_SoundList.GetArrayElementAtIndex(sp_SoundList.arraySize - 1);
-                                        SerializedProperty x_Clip = root.FindPropertyRelative("Clip");
-                                        SerializedProperty x_Name = root.FindPropertyRelative("Name");
-                                        SerializedProperty x_Frequency = root.FindPropertyRelative("Frequency");
-                                        SerializedProperty x_Channel = root.FindPropertyRelative("Channel");
-                                        SerializedProperty x_Length = root.FindPropertyRelative("Length");
-
-                                        x_Clip.objectReferenceValue = it.Clip;
-                                        x_Name.stringValue = it.Name;
-                                        x_Channel.intValue = it.Clip.channels;
-                                        x_Frequency.intValue = it.Clip.frequency;
-                                        x_Length.floatValue = it.Clip.length;
-
-                                        root.serializedObject.ApplyModifiedProperties();
-
-                                        names += x_Name.stringValue + " / ";
-                                    }
-                                }
-                            }
-
-                            if (!string.IsNullOrEmpty(names))
-                                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 音效库消息", "添加音效完成", $"所选有效音效 : {names}已添加到音效库中！", "明白");
-                        }
-                    }
-
-                    Editor_XHud_GUI.Gui_Box_Style(dragarea, HudFilled.实体, HudColor.深空灰);
-                    Editor_XHud_GUI.Gui_Labelfield(dragarea, "拖放音效剪辑到此处快速入库", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleCenter, new Vector2(0, 0), 11);
                     #endregion
+
+                    XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
                 }
             }
-            else
-            {
-                Editor_XHud_GUI.Gui_Layout_LabelfieldThin("当前为过滤筛选状态", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, new Vector2(0, 0), 12);
-            }
+            #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Space(30);
-            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Library_Sounds>("随机音高", stroptions_enabled, ref sp_UseRandomPitch, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-
-            if (sp_UseRandomPitch.boolValue)
-            {
-                Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-                Editor_XHud_GUI.Gui_Layout_Property_Field("最小音高", sp_Pitch_Min);
-                Editor_XHud_GUI.Gui_Layout_Space(10);
-                Editor_XHud_GUI.Gui_Layout_Property_Field("最大音高", sp_Pitch_Max);
-                Editor_XHud_GUI.Gui_Layout_Space(10);
-                Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-            }
-            sp_UseRandomPitch.serializedObject.ApplyModifiedProperties();
-
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "音效列表", Color.white);
-
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            #region 音效列表
+            XGUI.layout_group_start(
+               type: XGUIContainerType.Vertical,
+               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_color: XGUIColor.亮白,
+               bg_color_gui: XHud_Dashboard.Theme_Group,
+               title: "音效列表",
+               title_size: XGUIFontSize.M,
+               title_text_color: XHud_Dashboard.Theme_Primary,
+               title_clipping: TextClipping.Clip,
+               padding: new RectOffset(10, 10, 15, 15));
 
             DrawSoundInfoList_Original();
 
@@ -625,7 +733,8 @@ namespace SevenStrikeModules.XHud.Editor
                         if (BaseScript.SoundLibrary == null)
                             BaseScript.SoundLibrary = new List<XHud_LibraryArg_Sound>();
                         AudioClip clip = obj as AudioClip;
-                        BaseScript.SoundLibrary.Add(new XHud_LibraryArg_Sound(clip.name, clip));
+                        string format = Path.GetExtension(AssetDatabase.GetAssetPath(clip)).ToLower();
+                        BaseScript.SoundLibrary.Add(new XHud_LibraryArg_Sound(clip.name, clip, format));
                         if (BaseScript.act_on_SoundAdded != null)
                             BaseScript.act_on_SoundAdded(clip.name, clip);
                     }
@@ -636,8 +745,95 @@ namespace SevenStrikeModules.XHud.Editor
                 IsObjectSelectorUpdated = true;
             }
 
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            #region 拖放操作
+            Event evt = Event.current;
+            if (scrollview_rect.Contains(evt.mousePosition))
+            {
+                DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+
+                if (evt.type == EventType.DragPerform)
+                {
+                    DragAndDrop.AcceptDrag();
+                    Object[] dropobjs = DragAndDrop.objectReferences;
+                    string names = "";
+                    foreach (var item in dropobjs)
+                    {
+                        XHud_LibraryArg_Sound it = new XHud_LibraryArg_Sound();
+                        it.Clip = (AudioClip)item;
+                        if (it.Clip != null)
+                        {
+                            bool isExist = false;
+                            for (int s = 0; s < sp_SoundList.arraySize; s++)
+                            {
+                                SerializedProperty ser = sp_SoundList.GetArrayElementAtIndex(s);
+                                SerializedProperty ser_target = ser.FindPropertyRelative("Clip");
+                                if (ser_target.objectReferenceValue.name == it.Clip.name)
+                                {
+                                    isExist = true;
+                                    break;
+                                }
+                            }
+                            if (isExist)
+                            {
+                                XGUI.dialog(
+                                    type: XGUIDialogType.警告,
+                                    windowtitle: "XHud - 音效库消息",
+                                    title: "重复添加音效",
+                                    msg: $"此音效已存在于该库中！请勿重复添加！重复音效名称： {it.Clip.name}",
+                                    ok: "明白",
+                                    PrimaryIndex: 0,
+                                    usemodal: true,
+                                    themecolor: XHud_Dashboard.Theme_Primary);
+                                continue;
+                            }
+                            else
+                            {
+                                string item_format = Path.GetExtension(AssetDatabase.GetAssetPath(item)).ToLower();
+
+                                it.Name = it.Clip.name;
+                                it.Format = item_format;
+
+                                sp_SoundList.InsertArrayElementAtIndex(sp_SoundList.arraySize);
+                                SerializedProperty root = sp_SoundList.GetArrayElementAtIndex(sp_SoundList.arraySize - 1);
+                                SerializedProperty x_Clip = root.FindPropertyRelative("Clip");
+                                SerializedProperty x_Name = root.FindPropertyRelative("Name");
+                                SerializedProperty x_Frequency = root.FindPropertyRelative("Frequency");
+                                SerializedProperty x_Channel = root.FindPropertyRelative("Channel");
+                                SerializedProperty x_Length = root.FindPropertyRelative("Length");
+                                SerializedProperty x_Format = root.FindPropertyRelative("Format");
+
+                                x_Clip.objectReferenceValue = it.Clip;
+                                x_Name.stringValue = it.Name;
+                                x_Channel.intValue = it.Clip.channels;
+                                x_Frequency.intValue = it.Clip.frequency;
+                                x_Length.floatValue = it.Clip.length;
+                                x_Format.stringValue = it.Format;
+
+                                root.serializedObject.ApplyModifiedProperties();
+
+                                names += x_Name.stringValue + " / ";
+                            }
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(names))
+                    {
+                        XGUI.dialog(
+                          type: XGUIDialogType.警告,
+                          windowtitle: "XHud - 音效库消息",
+                          title: "添加音效完成",
+                          msg: $"所选有效音效 : {names}已添加到音效库中！",
+                          ok: "明白",
+                          PrimaryIndex: 0,
+                          usemodal: true,
+                          themecolor: XHud_Dashboard.Theme_Primary);
+                    }
+                }
+            }
+            #endregion
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -717,6 +913,37 @@ namespace SevenStrikeModules.XHud.Editor
             au.Play();
             XHud_AudioStoper sp = au.gameObject.AddComponent<XHud_AudioStoper>();
             sp.AudioSource = au;
+        }
+        #endregion
+
+        #region 绘制方法
+        /// <summary>
+        /// 通用方法：绘制开关
+        /// </summary>
+        private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, Action<bool> act_on_changed = null)
+        {
+            XGUI.layout_toggle(
+                title: title,
+                title_size: XGUIFontSize.M,
+                title_font_style: FontStyle.Normal,
+                title_padding: new RectOffset(0, 10, 0, 0),
+                title_width: width,
+                prop: prop,
+                tog_style: style,
+                tog_padding: new RectOffset(5, 6, 0, 0),
+                tog_margin: new RectOffset(0, 0, 0, 5),
+                tog_mixed_options: new string[] { "禁用", "启用" },
+                tog_mixed_text_size: XGUIFontSize.M,
+                tog_mixed_text_color: Color.black,
+                tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                tog_mixed_font_style: FontStyle.Normal,
+                tog_bg_off_color: color_bg_off,
+                tog_bg_on_color: color_bg_on,
+                tog_handler_off_color: color_off,
+                tog_handler_on_color: color_on,
+                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                act_on_changed: act_on_changed);
         }
         #endregion
     }

@@ -312,5 +312,294 @@ namespace SevenStrikeModules.XTween
                 return tweener;
             }
         }
+
+        /// <summary>
+        /// 创建一个从当前缩放到目标缩放的动画
+        /// 支持相对变化和自动销毁
+        /// </summary>
+        /// <param name="transform">目标 Transform 组件</param>
+        /// <param name="endValue">目标缩放</param>
+        /// <param name="duration">动画持续时间，单位为秒</param>
+        /// <param name="isRelative">是否为相对变化</param>
+        /// <param name="autokill">动画完成后是否自动销毁</param>
+        /// <returns>创建的动画对象</returns>
+        public static XTween_Interface xt_Scale_To(this UnityEngine.Transform transform, Vector3 endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
+        {
+            if (transform == null)
+            {
+                Debug.LogError("RectTransform is null!");
+                return null;
+            }
+
+            Vector3 currentScale = transform.localScale;
+            Vector3 targetScale = isRelative ? currentScale + endValue : endValue;
+
+            if (Application.isPlaying)
+            {
+                var tweener = XTween_Pool.CreateTween<XTween_Specialized_Vector3>();
+
+                tweener.Initialize(currentScale, targetScale, duration * XTween_Dashboard.DurationMultiply);
+
+                tweener.OnUpdate((scale, linearProgress, time) =>
+                {
+                    if (transform == null)
+                        return;
+                    transform.localScale = scale;
+                })
+                .OnRewind(() =>
+                {
+                    if (transform == null)
+                        return;
+                    if (rewind_set_startvalue)
+                        transform.localScale = currentScale;
+                })
+                .OnComplete((duration) =>
+                {
+                    if (transform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        transform.localScale = targetScale;
+                })
+                .SetAutokill(autokill)
+                .SetRelative(isRelative);
+
+                return tweener;
+            }
+            else
+            {
+                XTween_Interface tweener;
+                tweener = new XTween_Specialized_Vector3(currentScale, targetScale, duration * XTween_Dashboard.DurationMultiply).OnUpdate((scale, linearProgress, time) =>
+                {
+                    if (transform == null)
+                        return;
+                    transform.localScale = scale;
+                }).OnRewind(() =>
+                {
+                    if (transform == null)
+                        return;
+                    if (rewind_set_startvalue)
+                        transform.localScale = currentScale;
+                }).OnComplete((duration) =>
+                {
+                    if (transform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        transform.localScale = targetScale;
+                }).SetAutokill(false).SetRelative(isRelative);
+
+                return tweener;
+            }
+        }
+        /// <summary>
+        /// 创建一个从当前缩放到目标缩放的动画
+        /// 支持相对变化和自动销毁
+        /// </summary>
+        /// <param name="transform">目标 RectTransform 组件</param>
+        /// <param name="endValue">目标缩放</param>
+        /// <param name="duration">动画持续时间，单位为秒</param>
+        /// <param name="isRelative">是否为相对变化</param>
+        /// <param name="autokill">动画完成后是否自动销毁</param>
+        /// <param name="easeMode">缓动模式</param>
+        /// <param name="isFromMode">从模式</param>
+        /// <param name="fromvalue">起始值</param>
+        /// <param name="useCurve">使用曲线</param>
+        /// <param name="curve">曲线</param>
+        /// <returns>创建的动画对象</returns>
+        public static XTween_Interface xt_Scale_To(this UnityEngine.Transform transform, Vector3 endValue, float duration, bool isRelative, bool autokill, EaseMode easeMode, bool isFromMode, XTween_Getter<Vector3> fromvalue, bool useCurve, AnimationCurve curve)
+        {
+            if (transform == null)
+            {
+                Debug.LogError("RectTransform is null!");
+                return null;
+            }
+
+            Vector3 currentScale = transform.localScale;
+            Vector3 targetScale = isRelative ? currentScale + endValue : endValue;
+
+            if (Application.isPlaying)
+            {
+                var tweener = XTween_Pool.CreateTween<XTween_Specialized_Vector3>();
+
+                tweener.Initialize(currentScale, targetScale, duration * XTween_Dashboard.DurationMultiply);
+
+                // 从目标源值开始
+                if (isFromMode)
+                {
+                    // 获取目标源值
+                    Vector3 fromval = fromvalue();
+                    if (useCurve)// 使用曲线
+                    {
+                        tweener.OnUpdate((scale, linearProgress, time) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = scale;
+                        }).OnRewind(() =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = currentScale;
+                        }).OnComplete((duration) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = targetScale;
+                        }).SetFrom(fromval).SetEase(curve).SetAutokill(autokill).SetRelative(isRelative);
+                    }
+                    else
+                    {
+                        tweener.OnUpdate((scale, linearProgress, time) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = scale;
+                        }).OnRewind(() =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = currentScale;
+                        }).OnComplete((duration) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = targetScale;
+                        }).SetFrom(fromval).SetEase(easeMode).SetAutokill(autokill).SetRelative(isRelative);
+                    }
+                }
+                else
+                {
+                    if (useCurve)// 使用曲线
+                    {
+                        tweener.OnUpdate((scale, linearProgress, time) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = scale;
+                        }).OnRewind(() =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = currentScale;
+                        }).OnComplete((duration) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = targetScale;
+                        }).SetEase(curve).SetAutokill(autokill).SetRelative(isRelative);
+                    }
+                    else
+                    {
+                        tweener.OnUpdate((scale, linearProgress, time) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = scale;
+                        }).OnRewind(() =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = currentScale;
+                        }).OnComplete((duration) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = targetScale;
+                        }).SetEase(easeMode).SetAutokill(autokill).SetRelative(isRelative);
+                    }
+                }
+                return tweener;
+            }
+            else
+            {
+                XTween_Interface tweener;
+
+                // 从目标源值开始
+                if (isFromMode)
+                {
+                    // 获取目标源值
+                    Vector3 fromval = fromvalue();
+                    if (useCurve)// 使用曲线
+                    {
+                        tweener = new XTween_Specialized_Vector3(currentScale, targetScale, duration * XTween_Dashboard.DurationMultiply).OnUpdate((scale, linearProgress, time) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = scale;
+                        }).OnRewind(() =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = currentScale;
+                        }).OnComplete((duration) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = targetScale;
+                        }).SetAutokill(false).SetFrom(fromval).SetEase(curve).SetRelative(isRelative);
+                    }
+                    else
+                    {
+                        tweener = new XTween_Specialized_Vector3(currentScale, targetScale, duration * XTween_Dashboard.DurationMultiply).OnUpdate((scale, linearProgress, time) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = scale;
+                        }).OnRewind(() =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = currentScale;
+                        }).OnComplete((duration) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = targetScale;
+                        }).SetAutokill(false).SetFrom(fromval).SetEase(easeMode).SetRelative(isRelative);
+                    }
+                }
+                else
+                {
+                    if (useCurve)// 使用曲线
+                    {
+                        tweener = new XTween_Specialized_Vector3(currentScale, targetScale, duration * XTween_Dashboard.DurationMultiply).OnUpdate((scale, linearProgress, time) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = scale;
+                        }).OnRewind(() =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = currentScale;
+                        }).OnComplete((duration) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = targetScale;
+                        }).SetAutokill(false).SetEase(curve).SetRelative(isRelative);
+                    }
+                    else
+                    {
+                        tweener = new XTween_Specialized_Vector3(currentScale, targetScale, duration * XTween_Dashboard.DurationMultiply).OnUpdate((scale, linearProgress, time) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = scale;
+                        }).OnRewind(() =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = currentScale;
+                        }).OnComplete((duration) =>
+                        {
+                            if (transform == null)
+                                return;
+                            transform.localScale = targetScale;
+                        }).SetAutokill(false).SetEase(easeMode).SetRelative(isRelative);
+                    }
+                }
+                return tweener;
+            }
+        }
     }
 }

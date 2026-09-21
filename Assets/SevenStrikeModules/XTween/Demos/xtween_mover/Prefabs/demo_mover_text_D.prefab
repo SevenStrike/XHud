@@ -3579,7 +3579,7 @@ MonoBehaviour:
   min_delay: 0
   max_delay: 1
   randomDelay: 0
-  easeMode: 9
+  easeMode: 10
   loop: 0
   loopType: 0
   loopDelay: 0

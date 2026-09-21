@@ -84,6 +84,27 @@ namespace SevenStrikeModules.XHud
         [SerializeField] public bool Debug;
         #endregion
 
+        #region 折叠
+        public bool
+            fold_param = true,
+            fold_option = true,
+            fold_based = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_param = state;
+            fold_option = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool param = true, bool option = true, bool based = true)
+        {
+            fold_param = param;
+            fold_option = option;
+            fold_based = based;
+        }
+        #endregion
+
         void Awake()
         {
 

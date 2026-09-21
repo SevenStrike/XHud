@@ -1580,7 +1580,7 @@ MonoBehaviour:
   min_delay: 0
   max_delay: 1
   randomDelay: 0
-  easeMode: 9
+  easeMode: 10
   loop: -1
   loopType: 1
   loopDelay: 0.2

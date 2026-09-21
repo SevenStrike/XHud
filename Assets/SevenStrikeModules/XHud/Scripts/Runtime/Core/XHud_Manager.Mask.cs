@@ -21,6 +21,7 @@
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XTween;
+    using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.UI;
@@ -165,7 +166,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="dur">耗时</param>
         /// <param name="ease">缓动</param>
         /// <param name="delay">延迟</param>
-        public void hm_MaskColor_To(Color col, float dur, EaseMode ease, float delay)
+        public XTween_Interface[] hm_MaskColor_To(Color col, float dur, EaseMode ease, float delay)
         {
             if (twn_MaskColor_R != null && twn_MaskColor_R.IsActive)
                 if (twn_MaskColor_R.IsPlaying)
@@ -177,9 +178,17 @@ namespace SevenStrikeModules.XHud
                 if (twn_MaskColor_B.IsPlaying)
                     twn_MaskColor_B.Kill();
 
+            List<XTween_Interface> tweens = new List<XTween_Interface>();
+
             twn_MaskColor_R = XTween.To(() => MaskColor.r, r => MaskColor.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
             twn_MaskColor_G = XTween.To(() => MaskColor.g, g => MaskColor.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
             twn_MaskColor_B = XTween.To(() => MaskColor.b, b => MaskColor.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+
+            tweens.Add(twn_MaskColor_R);
+            tweens.Add(twn_MaskColor_G);
+            tweens.Add(twn_MaskColor_B);
+
+            return tweens.ToArray();
         }
         /// <summary>
         /// 遮罩颜色平滑到
@@ -188,7 +197,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="dur">耗时</param>
         /// <param name="ease">曲线</param>
         /// <param name="delay">延迟</param>
-        public void hm_MaskColor_To(Color col, float dur, AnimationCurve ease, float delay)
+        public XTween_Interface[] hm_MaskColor_To(Color col, float dur, AnimationCurve ease, float delay)
         {
             if (twn_MaskColor_R != null && twn_MaskColor_R.IsActive)
                 if (twn_MaskColor_R.IsPlaying)
@@ -200,9 +209,17 @@ namespace SevenStrikeModules.XHud
                 if (twn_MaskColor_B.IsPlaying)
                     twn_MaskColor_B.Kill();
 
+            List<XTween_Interface> tweens = new List<XTween_Interface>();
+
             twn_MaskColor_R = XTween.To(() => MaskColor.r, r => MaskColor.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
             twn_MaskColor_G = XTween.To(() => MaskColor.g, g => MaskColor.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
             twn_MaskColor_B = XTween.To(() => MaskColor.b, b => MaskColor.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+
+            tweens.Add(twn_MaskColor_R);
+            tweens.Add(twn_MaskColor_G);
+            tweens.Add(twn_MaskColor_B);
+
+            return tweens.ToArray();
         }
         /// <summary>
         /// 遮罩颜色快速到
@@ -235,12 +252,12 @@ namespace SevenStrikeModules.XHud
         /// <param name="delay">延迟</param>
         /// <param name="action_start">委托 - 开始时</param>
         /// <param name="action_end">委托 - 结束时</param>
-        public void hm_MaskAlpha_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
+        public XTween_Interface hm_MaskAlpha_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
             if (twn_MaskAlpha != null && twn_MaskAlpha.IsActive)
                 if (twn_MaskAlpha.IsPlaying)
                     twn_MaskAlpha.Kill();
-            twn_MaskAlpha = XTween.To(() => MaskAlpha, x => MaskAlpha = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            twn_MaskAlpha = XTween.To(() => MaskAlpha, x => MaskAlpha = x, val, dur, true).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
@@ -249,6 +266,8 @@ namespace SevenStrikeModules.XHud
                 if (action_end != null)
                     action_end();
             });
+
+            return twn_MaskAlpha;
         }
         /// <summary>
         /// 遮罩透明度平滑到
@@ -259,12 +278,12 @@ namespace SevenStrikeModules.XHud
         /// <param name="delay">延迟</param>
         /// <param name="action_start">委托 - 开始时</param>
         /// <param name="action_end">委托 - 结束时</param>
-        public void hm_MaskAlpha_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
+        public XTween_Interface hm_MaskAlpha_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
             if (twn_MaskAlpha != null && twn_MaskAlpha.IsActive)
                 if (twn_MaskAlpha.IsPlaying)
                     twn_MaskAlpha.Kill();
-            twn_MaskAlpha = XTween.To(() => MaskAlpha, x => MaskAlpha = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            twn_MaskAlpha = XTween.To(() => MaskAlpha, x => MaskAlpha = x, val, dur, true).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
@@ -273,6 +292,8 @@ namespace SevenStrikeModules.XHud
                 if (action_end != null)
                     action_end();
             });
+
+            return twn_MaskAlpha;
         }
         /// <summary>
         /// 遮罩透明度快速到

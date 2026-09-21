@@ -907,7 +907,7 @@ MonoBehaviour:
     target_open: {x: 960, y: 655}
     duration_open: 0.5
     delay_open: 0
-    ease_open: 17
+    ease_open: 19
     target_close: {x: 0, y: 0}
     duration_close: 0.2
     delay_close: 0.05
@@ -916,7 +916,7 @@ MonoBehaviour:
     target_open: {x: 250, y: 40}
     duration_open: 0.45
     delay_open: 0.25
-    ease_open: 15
+    ease_open: 16
     target_close: {x: 0, y: 40}
     duration_close: 0.2
     delay_close: 0
@@ -2146,26 +2146,6 @@ PrefabInstance:
     - target: {fileID: 2039735106453743691, guid: 11237a54cdcf8a14db82269ce7b996fc, type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2913335653606982499, guid: 11237a54cdcf8a14db82269ce7b996fc, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 119.99992
-      objectReference: {fileID: 0}
-    - target: {fileID: 2913335653606982499, guid: 11237a54cdcf8a14db82269ce7b996fc, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 119.99992
-      objectReference: {fileID: 0}
-    - target: {fileID: 6204806885886133887, guid: 11237a54cdcf8a14db82269ce7b996fc, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 149.99998
-      objectReference: {fileID: 0}
-    - target: {fileID: 6204806885886133887, guid: 11237a54cdcf8a14db82269ce7b996fc, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 149.99998
-      objectReference: {fileID: 0}
-    - target: {fileID: 7380075661929455374, guid: 11237a54cdcf8a14db82269ce7b996fc, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: -120
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

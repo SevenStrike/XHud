@@ -20,12 +20,12 @@
  */
 namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XHud.Utilitys;
-    using SevenStrikeModules.XTween;
+    using SevenStrikeModules.XGUI.Runtime;
     using System;
     using System.IO;
     using UnityEditor;
 #if UNITY_EDITOR
+    using SevenStrikeModules.XGUI.Editor;
     using UnityEditor.Callbacks;
 #endif
     using UnityEngine;
@@ -50,9 +50,23 @@ namespace SevenStrikeModules.XHud
         public bool PreviewOption_ClearPreviewTweensWithKill;
     }
 
+    [Serializable]
+    /// <summary>
+    /// DisplayPrimitiveControllerID 开关配置
+    /// </summary>
+    public class DisplayPrimitiveControllerIDConfig
+    {
+        /// <summary>
+        /// 预览选项 - 是否在场景中显示图元控制器的ID
+        /// </summary>
+        public bool XHudPrimitiveController_ID_Displayer;
+    }
+
     public static class XHud_Dashboard
     {
         public static XHudElementPreviewConfig XHudElementPreviewConfig;
+        public static DisplayPrimitiveControllerIDConfig DisplayPrimitiveControllerIDConfig = new DisplayPrimitiveControllerIDConfig();
+
 
         #region ThemeColor 主题色
 #pragma warning disable CS0414
@@ -60,9 +74,9 @@ namespace SevenStrikeModules.XHud
         private static readonly string PrefsKeyColor_Theme_GP = "XHUD-MANAGER-COLOR-THEME-GROUP";
         private static readonly string PrefsKeyColor_Theme_SEP = "XHUD-MANAGER-COLOR-THEME-SEPERATE";
 #pragma warning restore CS0414
-        public static Color Theme_Primary { get; set; } = XHud_Utilitys.Color_From_HexString("#3BFE9B");
-        public static Color Theme_Group { get; set; } = XHud_Utilitys.Color_From_HexString("#1E1E1E");
-        public static Color Theme_SeperateLine { get; set; } = XHud_Utilitys.Color_From_HexString("#535353");
+        public static Color Theme_Primary { get; set; } = XGUI_Utilitys.HexString_To_Color("#3BFE9B");
+        public static Color Theme_Group { get; set; } = XGUI_Utilitys.HexString_To_Color("#1E1E1E");
+        public static Color Theme_SeperateLine { get; set; } = XGUI_Utilitys.HexString_To_Color("#535353");
 
         public static string Version { get; set; }
 
@@ -70,42 +84,42 @@ namespace SevenStrikeModules.XHud
         [DidReloadScripts]
         public static void LoadThemes()
         {
-            Color color_theme = XHud_Utilitys.Color_From_HexString("3BFE9B");
-            if (!XHud_Utilitys.PlayerPrefs_KeyIsExist_ForEditor(PrefsKeyColor_Theme))
+            Color color_theme = XGUI_Utilitys.HexString_To_Color("3BFE9B");
+            if (!XGUI.x_Editor_Data_Has_String(PrefsKeyColor_Theme))
             {
-                XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(PrefsKeyColor_Theme, $"{color_theme.r},{color_theme.g},{color_theme.b}");
+                XGUI.x_Editor_Data_Set_With_String(PrefsKeyColor_Theme, $"{color_theme.r},{color_theme.g},{color_theme.b}");
                 Theme_Primary = new Color(color_theme.r, color_theme.g, color_theme.b);
             }
             else
             {
-                string colorval = XHud_Utilitys.PlayerPrefs_ReadValue_String_ForEditor(PrefsKeyColor_Theme);
-                Color v3 = XHud_Utilitys.Color_From_String(colorval + ",1", false);
+                string colorval = XGUI.x_Editor_Data_Get_With_String(PrefsKeyColor_Theme);
+                Color v3 = XGUI_Utilitys.String_To_Color(colorval + ",1", false);
                 Theme_Primary = v3;
             }
 
-            Color color_theme_gp = XHud_Utilitys.Color_From_HexString("1E1E1E");
-            if (!XHud_Utilitys.PlayerPrefs_KeyIsExist_ForEditor(PrefsKeyColor_Theme_GP))
+            Color color_theme_gp = XGUI_Utilitys.HexString_To_Color("1E1E1E");
+            if (!XGUI.x_Editor_Data_Has_String(PrefsKeyColor_Theme_GP))
             {
-                XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(PrefsKeyColor_Theme_GP, $"{color_theme_gp.r},{color_theme_gp.g},{color_theme_gp.b}");
+                XGUI.x_Editor_Data_Set_With_String(PrefsKeyColor_Theme_GP, $"{color_theme_gp.r},{color_theme_gp.g},{color_theme_gp.b}");
                 Theme_Group = new Color(color_theme_gp.r, color_theme_gp.g, color_theme_gp.b);
             }
             else
             {
-                string colorval = XHud_Utilitys.PlayerPrefs_ReadValue_String_ForEditor(PrefsKeyColor_Theme_GP);
-                Color v3 = XHud_Utilitys.Color_From_String(colorval + ",1", false);
+                string colorval = XGUI.x_Editor_Data_Get_With_String(PrefsKeyColor_Theme_GP);
+                Color v3 = XGUI_Utilitys.String_To_Color(colorval + ",1", false);
                 Theme_Group = v3;
             }
 
-            Color color_theme_sep = XHud_Utilitys.Color_From_HexString("535353");
-            if (!XHud_Utilitys.PlayerPrefs_KeyIsExist_ForEditor(PrefsKeyColor_Theme_SEP))
+            Color color_theme_sep = XGUI_Utilitys.HexString_To_Color("535353");
+            if (!XGUI.x_Editor_Data_Has_String(PrefsKeyColor_Theme_SEP))
             {
-                XHud_Utilitys.PlayerPrefs_SaveValue_ForEditor(PrefsKeyColor_Theme_SEP, $"{color_theme_sep.r},{color_theme_sep.g},{color_theme_sep.b}");
+                XGUI.x_Editor_Data_Set_With_String(PrefsKeyColor_Theme_SEP, $"{color_theme_sep.r},{color_theme_sep.g},{color_theme_sep.b}");
                 Theme_SeperateLine = new Color(color_theme_sep.r, color_theme_sep.g, color_theme_sep.b);
             }
             else
             {
-                string colorval = XHud_Utilitys.PlayerPrefs_ReadValue_String_ForEditor(PrefsKeyColor_Theme_SEP);
-                Color v3 = XHud_Utilitys.Color_From_String(colorval + ",1", false);
+                string colorval = XGUI.x_Editor_Data_Get_With_String(PrefsKeyColor_Theme_SEP);
+                Color v3 = XGUI_Utilitys.String_To_Color(colorval + ",1", false);
                 Theme_SeperateLine = v3;
             }
 
@@ -250,6 +264,7 @@ namespace SevenStrikeModules.XHud
         #endregion
         #endregion
 
+        #region 动画预览配置
 #if UNITY_EDITOR
         [DidReloadScripts]
         /// <summary>
@@ -292,6 +307,7 @@ namespace SevenStrikeModules.XHud
             AssetDatabase.Refresh();
 #endif
         }
+        #endregion
 
         #region 动画预览选项
         /// <summary>
@@ -353,6 +369,50 @@ namespace SevenStrikeModules.XHud
         public static void Set_PreviewOption_ClearPreviewTweensWithKill(bool state)
         {
             XHudElementPreviewConfig.PreviewOption_ClearPreviewTweensWithKill = state;
+        }
+        #endregion
+
+        #region 场景中图元ID显示配置
+#if UNITY_EDITOR
+        [DidReloadScripts]
+        /// <summary>
+        /// 读取XHud的图元ID在场景中显示的配置数据
+        /// </summary>
+        public static void LoadConfig_PrimitiveController_ID_Displayer()
+        {
+            DisplayPrimitiveControllerIDConfig_Get();
+        }
+#endif
+
+        /// <summary>
+        /// 读取XHud的图元ID在场景中显示的配置数据
+        /// </summary>
+        public static DisplayPrimitiveControllerIDConfig DisplayPrimitiveControllerIDConfig_Get()
+        {
+            string json = null;
+#if UNITY_EDITOR
+            //获取配置文件
+            json = AssetDatabase.LoadAssetAtPath<TextAsset>(Get_Path_XHUD_CONFIG_Path() + $"XHudPrimitiveController_ID_DisplayerConfig.json").text;
+#endif
+            DisplayPrimitiveControllerIDConfig = JsonUtility.FromJson<DisplayPrimitiveControllerIDConfig>(json);
+
+            return DisplayPrimitiveControllerIDConfig;
+        }
+        /// <summary>
+        /// 保存XHud的图元ID在场景中显示的配置数据
+        /// </summary>
+        public static void DisplayPrimitiveControllerIDConfig_Save()
+        {
+#if UNITY_EDITOR
+            // 保存预览选项参数
+            string json = JsonUtility.ToJson(DisplayPrimitiveControllerIDConfig);
+            // 使用StreamWriter写入文件
+            using (StreamWriter writer = new StreamWriter(Get_Path_XHUD_CONFIG_Path() + $"XHudPrimitiveController_ID_DisplayerConfig.json"))
+            {
+                writer.Write(json);
+            }
+            AssetDatabase.Refresh();
+#endif
         }
         #endregion
     }

@@ -89,6 +89,11 @@ namespace SevenStrikeModules.XHud
 
         public XTween_Interface twn_Offset;
 
+        public bool
+            fold_param = true,
+            fold_option= true,
+            fold_based = true;
+
         void Start()
         {
 

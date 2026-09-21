@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XTween
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -58,7 +59,7 @@ namespace SevenStrikeModules.XTween
             {
                 if (_instance == null)
                 {
-                    XTween_Utilitys.DebugInfo("XTween Manager动画管理器消息", "XTween Manager 还没有被实例化！", XTweenGUIMsgState.确认);
+                    XGUI_Utilitys.Console("XTween Manager动画管理器消息", "XTween Manager 还没有被实例化！", XGUIMsgState.确认);
                 }
                 return _instance;
             }
@@ -75,25 +76,34 @@ namespace SevenStrikeModules.XTween
             }
             _instance = this;
 
-            XTween_Dashboard.GetXTweenConfigData();
+            XTween_Dashboard.GetXTweenConfig();
 
             // 预加载所有动画对象
             if (XTween_Pool.EnablePool)
             {
-                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Float), XTween_Dashboard.ConfigData.PoolCount_Float);
-                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Int), XTween_Dashboard.ConfigData.PoolCount_Int);
-                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Color), XTween_Dashboard.ConfigData.PoolCount_Color);
-                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_String), XTween_Dashboard.ConfigData.PoolCount_String);
-                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Quaternion), XTween_Dashboard.ConfigData.PoolCount_Quaternion);
-                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Vector2), XTween_Dashboard.ConfigData.PoolCount_Vector2);
-                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Vector3), XTween_Dashboard.ConfigData.PoolCount_Vector3);
-                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Vector4), XTween_Dashboard.ConfigData.PoolCount_Vector4);
+                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Float), XTween_Dashboard.XTweenConfig.Datas.PoolCount_Float);
+                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Int), XTween_Dashboard.XTweenConfig.Datas.PoolCount_Int);
+                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Color), XTween_Dashboard.XTweenConfig.Datas.PoolCount_Color);
+                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_String), XTween_Dashboard.XTweenConfig.Datas.PoolCount_String);
+                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Quaternion), XTween_Dashboard.XTweenConfig.Datas.PoolCount_Quaternion);
+                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Vector2), XTween_Dashboard.XTweenConfig.Datas.PoolCount_Vector2);
+                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Vector3), XTween_Dashboard.XTweenConfig.Datas.PoolCount_Vector3);
+                XTween_Pool.SetPreloadCount(typeof(XTween_Specialized_Vector4), XTween_Dashboard.XTweenConfig.Datas.PoolCount_Vector4);
                 XTween_Pool.PreloadAll();
-                XTween_Utilitys.DebugInfo("XTween Pool动画池消息", "XTween Pool动画池已预加载并就绪！", XTweenGUIMsgState.确认);
+                XGUI_Utilitys.Console("XTween Pool动画池消息", "XTween Pool动画池已预加载并就绪！", XGUIMsgState.确认);
             }
             DontDestroyOnLoad(gameObject);
-            XTween_Utilitys.DebugInfo("XTween Manager动画管理器消息", "XTween Manager动画管理器已就绪！", XTweenGUIMsgState.确认);
+            XGUI_Utilitys.Console("XTween Manager动画管理器消息", "XTween Manager动画管理器已就绪！", XGUIMsgState.确认);
         }
+        #endregion
+
+        #region 面板折叠
+        [SerializeField]
+        public bool fold_buttons = true;
+        [SerializeField]
+        public bool fold_statistic = true;
+        [SerializeField]
+        public bool fold_tweenlist = false;
         #endregion
 
         public Texture2D[] EasePics;
@@ -143,14 +153,14 @@ namespace SevenStrikeModules.XTween
         {
             InstanceModeCheck();
 
-            if (XTween_Dashboard.ConfigData.PoolRecyleAllOnSceneUnloaded)
+            if (XTween_Dashboard.XTweenConfig.Datas.PoolRecyleAllOnSceneUnloaded)
             {
                 // 防止重复注册（单例可能多次初始化，避免回调重复添加）
                 SceneManager.sceneUnloaded -= OnSceneUnloaded;
                 SceneManager.sceneUnloaded += OnSceneUnloaded;
             }
 
-            if (XTween_Dashboard.ConfigData.PoolRecyleAllOnSceneLoaded)
+            if (XTween_Dashboard.XTweenConfig.Datas.PoolRecyleAllOnSceneLoaded)
             {
                 // 可选：监听场景加载前（双重保障）
                 SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -753,7 +763,7 @@ namespace SevenStrikeModules.XTween
 
             // 清空播放列表（避免残留引用）
             _ActiveTweens.Clear();
-            XTween_Utilitys.DebugInfo("XTween Manager动画管理器消息", $"检测到场景切换动作，自动回收 {tempTweens.Count} 个动画实例", XTweenGUIMsgState.确认);
+            XGUI_Utilitys.Console("XTween Manager动画管理器消息", $"检测到场景切换动作，自动回收 {tempTweens.Count} 个动画实例", XGUIMsgState.确认);
         }
         #endregion
     }

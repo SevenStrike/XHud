@@ -20,8 +20,8 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using TMPro;
     using UnityEditor;
     using UnityEngine;
@@ -42,7 +42,16 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Object FontAsset = Selection.activeObject;
 
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - TmpFontAssets清理器消息", "清理TmpFontAssetAtlas", $"您确认要将 {FontAsset.name} 图集内容清空吗？清空后字体图集将保持纯净状态！此操作不可逆，请谨慎操作！", "清空", "暂不", 1);
+            string res = XGUI.dialog(
+                type: XGUIDialogType.警告,
+                windowtitle: "XHud - TmpFontAssets清理器消息",
+                title: "清理TmpFontAssetAtlas",
+                msg: $"您确认要将 {FontAsset.name} 图集内容清空吗？清空后字体图集将保持纯净状态！此操作不可逆，请谨慎操作！",
+                ok: "清空",
+                cancel: "暂不",
+                PrimaryIndex: 1,
+                usemodal: true,
+                themecolor: XHud_Dashboard.Theme_Primary);
             if (res == "暂不")
             {
                 return;
@@ -57,7 +66,15 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 catch (System.Exception err)
                 {
-                    Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - TmpFontAssets清理器消息", "清理TmpFontAssetAtlas", $"您选中的物体 {FontAsset.name} 并非是TmpFontAsset类型！,详细信息： {err.Message}", "明白");
+                    XGUI.dialog(
+                        type: XGUIDialogType.警告,
+                        windowtitle: "XHud - TmpFontAssets清理器消息",
+                        title: "清理TmpFontAssetAtlas",
+                        msg: $"您选中的物体 {FontAsset.name} 并非是TmpFontAsset类型！,详细信息： {err.Message}",
+                        ok: "明白",
+                        PrimaryIndex: 0,
+                        usemodal: true,
+                        themecolor: XHud_Dashboard.Theme_Primary);
                 }
             }
         }
@@ -101,22 +118,22 @@ namespace SevenStrikeModules.XHud.Editor
                 if (type == "SevenStrikeModules.XHud.Hud_SoundsLibrary")
                 {
                     manager.Hud_Sounds = obj as XHud_Library_Sounds;
-                    XHud_Utilitys.Func_PrintInfo("XHud - 库通知", "已将名称为： " + manager.Hud_Sounds.LibraryName + " 的音效库设为当前使用！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 库通知", "已将名称为： " + manager.Hud_Sounds.LibraryName + " 的音效库设为当前使用！", XGUIMsgState.通知);
                 }
                 else if (type == "SevenStrikeModules.XHud.Hud_TextStyleLibrary")
                 {
                     manager.Hud_TextStyleLibrary = obj as XHud_Library_TextStyle;
-                    XHud_Utilitys.Func_PrintInfo("XHud - 库通知", "已将名称为： " + manager.Hud_TextStyleLibrary.LibraryName + " 的字体库设为当前使用！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 库通知", "已将名称为： " + manager.Hud_TextStyleLibrary.LibraryName + " 的字体库设为当前使用！", XGUIMsgState.通知);
                 }
                 else if (type == "SevenStrikeModules.XHud.Hud_TransitionLibrary")
                 {
                     manager.Hud_TransitionLib = obj as XHud_Library_Transition;
-                    XHud_Utilitys.Func_PrintInfo("XHud - 库通知", "已将名称为： " + manager.Hud_TransitionLib.LibraryName + " 的转场库设为当前使用！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 库通知", "已将名称为： " + manager.Hud_TransitionLib.LibraryName + " 的转场库设为当前使用！", XGUIMsgState.通知);
                 }
                 else if (type == "SevenStrikeModules.XHud.Hud_MotionLibrary")
                 {
                     manager.Hud_Motions = obj as XHud_Library_Motion;
-                    XHud_Utilitys.Func_PrintInfo("XHud - 库通知", "已将名称为： " + manager.Hud_Motions.name + " 的动效库设为当前使用！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 库通知", "已将名称为： " + manager.Hud_Motions.name + " 的动效库设为当前使用！", XGUIMsgState.通知);
                 }
                 else if (type == "SevenStrikeModules.XHud.Hud_ElementLibrary")
                 {
@@ -134,28 +151,28 @@ namespace SevenStrikeModules.XHud.Editor
                         if (!isexist)
                         {
                             manager.Hud_ElementLibrarys.Add(lib);
-                            XHud_Utilitys.Func_PrintInfo("XHud - 库通知", "已将名称为： " + lib.LibraryName + " 的元素库添加到元素库列表中！", HudMsgState.通知);
+                            XGUI_Utilitys.Console("XHud - 库通知", "已将名称为： " + lib.LibraryName + " 的元素库添加到元素库列表中！", XGUIMsgState.通知);
                         }
                         else
                         {
-                            XHud_Utilitys.Func_PrintInfo("XHud - 库通知", "元素库列表中已存在名称为： " + lib.LibraryName + " 的元素库！", HudMsgState.警告);
+                            XGUI_Utilitys.Console("XHud - 库通知", "元素库列表中已存在名称为： " + lib.LibraryName + " 的元素库！", XGUIMsgState.警告);
                         }
                     }
                     else
                     {
                         manager.Hud_ElementLibrarys.Add(lib);
-                        XHud_Utilitys.Func_PrintInfo("XHud - 库通知", "已将名称为： " + lib.LibraryName + " 的元素库添加到元素库列表中！", HudMsgState.通知);
+                        XGUI_Utilitys.Console("XHud - 库通知", "已将名称为： " + lib.LibraryName + " 的元素库添加到元素库列表中！", XGUIMsgState.通知);
                     }
                 }
                 else if (type == "SevenStrikeModules.XHud.Hud_CurvesLibrary")
                 {
                     manager.Hud_Curves = obj as XHud_Library_Curves;
-                    XHud_Utilitys.Func_PrintInfo("XHud - 库通知", "已将名称为： " + manager.Hud_Curves.LibraryName + " 的曲线库设为当前使用！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 库通知", "已将名称为： " + manager.Hud_Curves.LibraryName + " 的曲线库设为当前使用！", XGUIMsgState.通知);
                 }
                 else if (type == "SevenStrikeModules.XHud.Hud_ColorsLibrary")
                 {
                     manager.Hud_Colors = obj as XHud_Library_Colors;
-                    XHud_Utilitys.Func_PrintInfo("XHud - 库通知", "已将名称为： " + manager.Hud_Colors.LibraryName + " 的颜色库设为当前使用！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 库通知", "已将名称为： " + manager.Hud_Colors.LibraryName + " 的颜色库设为当前使用！", XGUIMsgState.通知);
                 }
             }
         }

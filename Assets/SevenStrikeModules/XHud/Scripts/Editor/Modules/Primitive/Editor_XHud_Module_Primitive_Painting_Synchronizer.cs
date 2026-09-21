@@ -20,10 +20,11 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using UnityEditor;
     using UnityEngine;
+    using UnityEngine.UIElements;
 
     [CanEditMultipleObjects]
     [CustomEditor(typeof(XHud_Module_Primitive_Painting_Synchronizer))]
@@ -34,7 +35,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 图标
-        private Texture2D icon_main;
+        private Texture2D icon_main, icon_lib, icon_local, icon_connect;
         #endregion
 
         #region GUI 参数
@@ -93,7 +94,10 @@ namespace SevenStrikeModules.XHud.Editor
             BaseScript = (XHud_Module_Primitive_Painting_Synchronizer)target;
 
             #region 获取图标          
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Painting_Synchronizer/icon_main");
+            icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_painting_synchronizer/icon_main");
+            icon_lib = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_painting_synchronizer/icon_lib");
+            icon_local = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_painting_synchronizer/icon_local");
+            icon_connect = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_painting_synchronizer/icon_connect");
             #endregion
         }
 
@@ -101,30 +105,87 @@ namespace SevenStrikeModules.XHud.Editor
         {
             serializedObject.Update();
 
-            #region 标题
-            string h_color = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary);
-            string titlename = "XHud - 图元  >  配色更新器";
+            string h_color = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary);
 
-            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, titlename, Color.white, null, "", 20, 20);
-            Rect rect = GUILayoutUtility.GetLastRect();
+            TextClipping clipping = XGUI.TryEllipsisClipping();
+
+            #region 标题
+            XGUI.layout_banner(
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.深空灰,
+                bg_height: 30,
+                icon: icon_main,
+                icon_color: XHud_Dashboard.Theme_Primary,
+                title_text: "XHud  -  图元  >  配色同步器",
+                title_anchor: TextAnchor.MiddleLeft,
+                title_style: FontStyle.Normal,
+                title_color: Color.white,
+                title_size: XGUIFontSize.B,
+                title_clipping: clipping,
+                bg_margin: new RectOffset(0, 0, 5, 5));
+            #endregion
+
+            #region 同步指示状态
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "同步指示状态",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 25, 15));
+
+            float scale = 0.5f;
+
+            XGUI.layout_flexspace();
+
+            XGUI.layout_icon(
+                icon: icon_lib,
+                icon_alignment: XGUIIconAlignment.左,
+                layout_margin: new RectOffset(0, 0, 15, 15));
+
+            XGUI.layout_space(10);
+
+            XGUI.layout_icon(
+                icon: icon_connect,
+                width: 75,
+                icon_color: XHud_Dashboard.Theme_Primary,
+                icon_offset: new Vector2(0, -6),
+                icon_alignment: XGUIIconAlignment.默认,
+                layout_margin: new RectOffset(0, 0, 15, 15));
+
+            XGUI.layout_space(10);
+
+            XGUI.layout_icon(
+                icon: icon_local,
+                icon_alignment: XGUIIconAlignment.右,
+                layout_margin: new RectOffset(0, 0, 15, 15));
+            XGUI.layout_flexspace();
+
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
 
             #region 源脚本
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            BaseScript.fold_based = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "源脚本",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_based);
 
-            #region 脚本类
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            OriginalDisplay = EditorGUILayout.Foldout(OriginalDisplay, "脚本类", true);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-            if (OriginalDisplay)
+            if (!BaseScript.fold_based)
+            {
                 DrawDefaultInspector();
-            #endregion
+            }
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             serializedObject.ApplyModifiedProperties();

@@ -20,9 +20,9 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
-    using System;
     using TMPro;
     using UnityEditor;
     using UnityEngine;
@@ -37,42 +37,19 @@ namespace SevenStrikeModules.XHud.Editor
         [SerializeField]
         private XHud_LibraryArg_TextStyle OriginStyleInfo;
 
-        private Texture2D icon_libsetter_text;
+        private Texture2D icon_logo;
 
         public LibrarySetterMode LibrarySetterMode;
 
-        /// <summary>
-        /// 字体 - 粗体
-        /// </summary>
-        Font Font_Bold;
-        /// <summary>
-        /// 字体 - 细体
-        /// </summary>
-        Font Font_Light;
-
         public int ModifiedIndex;
-
-        #region 渐变色预览
-        private Texture2D GradientTexture;
-        private int gra_TexWidth = 110;
-        private int gra_TexHeight = 110;
-        #endregion
 
         [SerializeField]
         public string LibName;
         [SerializeField]
-        public string DateTimes;
-        [SerializeField]
         public string Description;
         [SerializeField]
         public string OriginLibName;
-        [SerializeField]
-        public xHud_TextType OriginType;
 
-        /// <summary>
-        /// 按钮宽度
-        /// </summary>
-        private float ButtonWidth = 110;
         /// <summary>
         /// 按钮高度
         /// </summary>
@@ -88,33 +65,18 @@ namespace SevenStrikeModules.XHud.Editor
         public XHud_Module_Text Component_Text;
         public XHud_Module_TmpText Component_TmpText;
 
-        Color SepLineColor = new Color(1, 1, 1, 0.15f);
-        Color MessageColor = new Color(1, 1, 1, 0.62f);
-        Color DateTimeColor = new Color(1, 1, 1, 0.42f);
-
-        Rect Sepline_rect;
-        Rect Title_rect;
-        Rect Date_rect;
-        Rect Icon_rect;
-
         public Motion_Creator CreateArgs;
         public Motion_Recycler RecycleArgs;
 
         string Title;
-
+        private int ToolbarIndex;
         private bool isClosing;
 
-        Rect rect_group;
-        Rect rect_param;
-
         string[] optnames_a = new string[] { "Text", "TmpText" };
-        string[] optnames_b = new string[] { "原生", "接管" };
-        string[] optnames_c = new string[] { "禁用", "启用" };
         string[] optnames_d = new string[] { "换行", "溢出" };
         string[] optnames_e = new string[] { "截断", "溢出" };
         string[] optnames_f = new string[] { "常规", "加粗", "斜体", "斜粗" };
         string[] optnames_g = new string[] { "单色", "水平", "垂直", "四角" };
-        string[] optnames_h = new string[] { "正常", "翻转" };
 
         private XHud_Library_TextStyle Target_Hud_TextStyleLibrary;
 
@@ -130,10 +92,7 @@ namespace SevenStrikeModules.XHud.Editor
             sp_StyleInfo = BaseObject.FindProperty("StyleInfo");
             sp_Description = BaseObject.FindProperty("Description");
 
-            icon_libsetter_text = Editor_XHud_GUI.GetIcon("LibSetter/icon_libsetter_textstyle");
-
-            Font_Bold = Editor_XHud_GUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_XHud_GUI.GetFont("SS_Editor_Dialog");
+            icon_logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_text_style_setter/icon_logo");
 
             Description = "文字样式参数说明内容";
             LibName = "文字样式名称";
@@ -148,18 +107,30 @@ namespace SevenStrikeModules.XHud.Editor
 
                 if (!EqualsData)
                 {
-                    string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字样式库采集器消息", "恢复原有样式", "检测到您修正了样式参数，是否要恢复原有样式或者保持现有样式效果？", "保持", "恢复", 0);
-                    if (res == "恢复")
+                    EditorApplication.delayCall += () =>
                     {
-                        if (Component_Text != null)
+                        string res = XGUI.dialog(
+                            type: XGUIDialogType.警告,
+                            windowtitle: "XHud - 文字样式库采集器消息",
+                            title: "恢复原有样式",
+                            msg: $"检测到您修正了样式参数，是否要恢复原有样式或者保持现有样式效果？",
+                            ok: "保持",
+                            cancel: "恢复",
+                            PrimaryIndex: 0,
+                            usemodal: true,
+                            themecolor: XHud_Dashboard.Theme_Primary);
+                        if (res == "恢复")
                         {
-                            Component_Text.txt_Set_Style_ForSetter(OriginStyleInfo);
+                            if (Component_Text != null)
+                            {
+                                Component_Text.txt_Set_Style_ForSetter(OriginStyleInfo);
+                            }
+                            else if (Component_TmpText != null)
+                            {
+                                Component_TmpText.tmp_Update_Style_LibrarySetter(OriginStyleInfo);
+                            }
                         }
-                        else if (Component_TmpText != null)
-                        {
-                            Component_TmpText.tmp_Update_Style_LibrarySetter(OriginStyleInfo);
-                        }
-                    }
+                    };
                 }
             }
             #endregion
@@ -171,29 +142,55 @@ namespace SevenStrikeModules.XHud.Editor
         {
             BaseObject.Update();
 
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
+
+            #region 抬头
             Rect rect = new Rect(0, 0, position.width, position.height);
 
-            Icon_rect = new Rect(26, 15, 48, 48);
+            // 图标
+            Rect rect_icon = new Rect(15, 15, icon_logo.width, icon_logo.height);
+            XGUI.gui_icon(
+                rect: rect_icon,
+                icon: icon_logo,
+                padding: new RectOffset(0, 0, 0, 0),
+                border: new RectOffset(0, 0, 0, 0),
+                color: Color.white);
 
-            Editor_XHud_GUI.Gui_Icon(Icon_rect, icon_libsetter_text);
+            // 大标题
+            Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
+            XGUI.gui_label(
+                rect: rect_title,
+                text: new GUIContent(Title),
+                text_color: Color.white,
+                size: XGUIFontSize.L,
+                clipping: clipping,
+                font: XGUI.GetFont("xg-heavy"));
 
-            Title_rect = new Rect(rect.x + 100, rect.y + 15, rect.width - 80, 30);
-            Editor_XHud_GUI.Gui_Labelfield(Title_rect, Title, HudFilled.无, HudColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
+            // 分割线
+            Rect rect_seperate = new Rect(rect.x + 68, rect.y + 43, 200, 1);
+            XGUI.gui_seperator(
+                rect: rect_seperate,
+                thickness: 1,
+                color: XHud_Dashboard.Theme_SeperateLine,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0));
 
-            Sepline_rect = new Rect(rect.x + 102, rect.y + 60, 200, 1);
-            Editor_XHud_GUI.Gui_Box(Sepline_rect, SepLineColor);
-
-            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 26, rect.y + 80, rect.width - 45, rect.height), "以下为待入库的文字样式参数概览，您可以检查每项参数是否符合您的要求，每项参数均可手动校正调整！", HudFilled.无, HudColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
-
-            DateTimes = DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss:ff");
-            Date_rect = new Rect(rect.x + 150, rect.y + 15, rect.width - 180, rect.height);
-            Editor_XHud_GUI.Gui_Labelfield_Thin_WrapClip(Date_rect, DateTimes, HudFilled.无, HudColor.无, DateTimeColor, TextAnchor.UpperRight, new Vector2(0, 0), 13, true, Font_Light);
-
-            #region 样式信息
-            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+            // 小标题
+            Rect rect_subtitle = new Rect(rect.x + 18, rect.y + 53, rect.width, 30);
+            XGUI.gui_label(
+                rect: rect_subtitle,
+                text: new GUIContent("以下为目标文字样式的参数，可根据需要进行调整"),
+                text_color: Color.white * 0.7f,
+                size: XGUIFontSize.M,
+                anchor: TextAnchor.UpperLeft,
+                clipping: clipping);
+            #endregion
 
             #region 参数
-
             SerializedProperty prop_Type = sp_StyleInfo.FindPropertyRelative("Type");
             SerializedProperty prop_Raycast = sp_StyleInfo.FindPropertyRelative("Raycast");
             SerializedProperty prop_Maskable = sp_StyleInfo.FindPropertyRelative("Maskable");
@@ -245,346 +242,1166 @@ namespace SevenStrikeModules.XHud.Editor
             SerializedProperty prop_gra_ColorModeName = sp_StyleInfo.FindPropertyRelative("gra_ColorModeName");
             #endregion
 
-            Color se_color = XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
-
             xHud_TextType textType = (xHud_TextType)prop_Type.enumValueIndex;
 
+            // 类型标识
+            Rect rect_mark = new Rect(rect.x + (rect.width - 80), rect.y + 15, 65, XGUI.GetSingleLineHeight());
+            XGUI.gui_label(
+                rect: rect_mark,
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: Color.white,
+                text: new GUIContent(textType.ToString()),
+                text_color: Color.black,
+                size: XGUIFontSize.S,
+                anchor: TextAnchor.MiddleCenter,
+                offset: new Vector2(0, -2),
+                clipping: clipping);
 
-            if (textType == xHud_TextType.Text)
-            {
-                rect_group = rect;
+            XGUI.layout_space(100);
 
-                #region 样式参数 - 类型
-                rect_group.Set(rect.x + 25, rect.y + 145, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "类型", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_Type.enumValueIndex = Editor_XHud_GUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_a, prop_Type.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
-                #endregion
+            #region 样式信息
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "样式信息",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                margin: new RectOffset(10, 10, 0, 0),
+                padding: new RectOffset(10, 10, 15, 15));
 
-                #region 样式参数 - 颜色接管
-                rect_group.Set(rect.x + 25, rect.y + 210, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "颜色接管", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_SyncPrimitivePaintingColor.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_b, prop_SyncPrimitivePaintingColor.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
-                #endregion
+            Rect Description_Rect = XGUI.GetLastRect();
 
-                #region 样式参数 - 水平溢出
-                rect_group.Set(rect.x + 25, rect.y + 275, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "水平溢出", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_overflow_h.enumValueIndex = Editor_XHud_GUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_d, prop_overflow_h.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 垂直溢出
-                rect_group.Set(rect.x + 25, rect.y + 340, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "垂直溢出", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_overflow_v.enumValueIndex = Editor_XHud_GUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_e, prop_overflow_v.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 自动尺寸
-                rect_group.Set(rect.x + 25, rect.y + 405, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "自动尺寸", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_autosize.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_autosize.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 射线检测
-                rect_group.Set(rect.x + 190, rect.y + 145, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "射线检测", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_Raycast.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_Raycast.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 遮罩
-                rect_group.Set(rect.x + 190, rect.y + 210, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "遮罩", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_Maskable.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_Maskable.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 富文本
-                rect_group.Set(rect.x + 190, rect.y + 275, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "富文本", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_rich.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_rich.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 几何对齐
-                rect_group.Set(rect.x + 190, rect.y + 340, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "几何对齐", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_alignGEO.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_alignGEO.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 样式
-                rect_group.Set(rect.x + 190, rect.y + 405, rect.width - 190 - 25, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "字体样式", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_style.enumValueIndex = Editor_XHud_GUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_f, prop_style.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 参数
-                float offset = 18;
-                float lineheight = 30;
-                rect_group.Set(rect.x + 355, rect.y + 145, rect.width - 355 - 25, 245);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "参数", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-
-                rect_param = rect_group;
-                ParamDisplayer(rect_param, prop_Font, "字体", 10, 210, 40, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_ContentAnchor, "锚点", 10, 210, 40, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_Size, "尺寸", 10, 210, 40, offset);
-                offset += lineheight;
-                if (!prop_autosize.boolValue)
-                    Editor_XHud_GUI.SetEnabled(false);
-                ParamDisplayer(rect_param, prop_Fit_Min, "最小尺寸", 10, 210, 60, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_Fit_Max, "最大尺寸", 10, 210, 60, offset);
-                offset += lineheight;
-                Editor_XHud_GUI.SetEnabled(true);
-                ParamDisplayer(rect_param, prop_LineHeight, "行高", 10, 210, 40, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_FontColor, "颜色", 10, 210, 40, offset);
-                offset += lineheight;
-                #endregion
-
-                this.minSize = new Vector2(630, 620);
-                this.maxSize = this.minSize;
-            }
-            else
-            {
-                rect_group = rect;
-
-                #region 样式参数 - 类型
-                rect_group.Set(rect.x + 25, rect.y + 145, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "类型", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_Type.enumValueIndex = Editor_XHud_GUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_a, prop_Type.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 颜色接管
-                rect_group.Set(rect.x + 25, rect.y + 210, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "颜色接管", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_SyncPrimitivePaintingColor.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_b, prop_SyncPrimitivePaintingColor.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 自动尺寸
-                rect_group.Set(rect.x + 25, rect.y + 275, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "自动尺寸", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_tmp_EnableAutoSizing.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_tmp_EnableAutoSizing.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 渐变色方向
-                rect_group.Set(rect.x + 25, rect.y + 340, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "渐变色方向", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                if (!prop_gra_Used.boolValue)
-                    Editor_XHud_GUI.SetEnabled(false);
-                prop_gra_Invert.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_h, prop_gra_Invert.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
-                Editor_XHud_GUI.SetEnabled(true);
-                #endregion
-
-                #region 样式参数 - 射线检测
-                rect_group.Set(rect.x + 190, rect.y + 145, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "射线检测", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_Raycast.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_Raycast.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 遮罩
-                rect_group.Set(rect.x + 190, rect.y + 210, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "遮罩", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_Maskable.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_Maskable.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 富文本
-                rect_group.Set(rect.x + 190, rect.y + 275, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "富文本", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_tmp_rich.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_tmp_rich.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 渐变色支持
-                rect_group.Set(rect.x + 190, rect.y + 340, 160, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "渐变色支持", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                prop_gra_Used.boolValue = Editor_XHud_GUI.Gui_Toggle(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), false, optnames_c, prop_gra_Used.boolValue, HudFilled.无, HudColor.无, HudFilled.实体, XHud_Dashboard.Theme_Primary, Color.white, se_color);
-                #endregion
-
-                #region 样式参数 - 渐变色模式
-                rect_group.Set(rect.x + 25, rect.y + 405, 325, 50);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "渐变色模式", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-                if (!prop_gra_Used.boolValue)
-                    Editor_XHud_GUI.SetEnabled(false);
-                prop_gra_ColorMode.enumValueIndex = Editor_XHud_GUI.Gui_ToolBar(new Rect(rect_group.x + 10, rect_group.y + 13, rect_group.width - 20, rect_group.height), optnames_g, prop_gra_ColorMode.enumValueIndex, HudFilled.纯色边框, HudFilled.实体, Color.white, Color.white, se_color);
-                Editor_XHud_GUI.SetEnabled(true);
-                ColorMode gra_mode = (ColorMode)prop_gra_ColorMode.enumValueIndex;
-                switch (gra_mode)
-                {
-                    case ColorMode.Single:
-                        prop_gra_ColorModeName.stringValue = "单色";
-                        break;
-                    case ColorMode.HorizontalGradient:
-                        prop_gra_ColorModeName.stringValue = "水平渐变";
-                        break;
-                    case ColorMode.VerticalGradient:
-                        prop_gra_ColorModeName.stringValue = "垂直渐变";
-                        break;
-                    case ColorMode.FourCornersGradient:
-                        prop_gra_ColorModeName.stringValue = "四角渐变";
-                        break;
-                }
-                #endregion
-
-                #region 样式参数 - 参数
-                float offset = 18;
-                float lineheight = 28;
-
-                rect_group.Set(rect.x + 355, rect.y + 145, rect.width - 355 - 20, 310);
-                Editor_XHud_GUI.Gui_Group(rect_group, HudFilled.纯色边框, HudColor.亮白, "参数", new Vector2(25, -8), XHud_Dashboard.Theme_Primary, Font_Light);
-
-                rect_param = rect_group;
-                ParamDisplayer(rect_param, prop_tmp_font, "字体", 10, 150, 40, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_contentwrap, "包裹", 10, 150, 40, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_overflow, "溢出", 10, 150, 40, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_style, "样式", 10, 150, 40, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_anchor, "锚点", 10, 150, 40, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_size, "尺寸", 10, 150, 40, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_color, "颜色", 10, 150, 40, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_WrappingRatios, "包裹比例", 10, 150, 65, offset);
-                offset += lineheight;
-                if (!prop_tmp_EnableAutoSizing.boolValue)
-                    Editor_XHud_GUI.SetEnabled(false);
-                ParamDisplayer(rect_param, prop_tmp_FontSizeMin, "最小尺寸", 10, 150, 65, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_FontSizeMax, "最大尺寸", 10, 150, 65, offset);
-                offset = 18;
-                ParamDisplayer(rect_param, prop_tmp_CharWidthMaxAdj, "最大字符宽度", 175, 150, 90, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_LineSpacingMax, "最大行高", 175, 150, 65, offset);
-                Editor_XHud_GUI.SetEnabled(true);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_space_character, "字符间距", 175, 150, 65, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_space_word, "单词间距", 175, 150, 65, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_space_lineheight, "行高间距", 175, 150, 65, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_space_paragraph, "段落间距", 175, 150, 65, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_contentmargin.FindPropertyRelative("x"), "左边距", 175, 150, 65, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_contentmargin.FindPropertyRelative("y"), "上边距", 175, 150, 65, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_contentmargin.FindPropertyRelative("z"), "右边距", 175, 150, 65, offset);
-                offset += lineheight;
-                ParamDisplayer(rect_param, prop_tmp_contentmargin.FindPropertyRelative("w"), "下边距", 175, 150, 65, offset);
-                offset += lineheight;
-                #endregion
-
-                #region 渐变色
-
-                if (prop_gra_Used.boolValue)
-                {
-                    CreateGradientTexture((ColorMode)prop_gra_ColorMode.enumValueIndex, prop_gra_Invert.boolValue, prop_gra_A.colorValue, prop_gra_B.colorValue, prop_gra_C.colorValue, prop_gra_D.colorValue);
-                    rect_group.Set(rect.width - 145, rect.y + 163, gra_TexWidth, gra_TexHeight);
-                    Editor_XHud_GUI.Gui_Icon(rect_group, GradientTexture);
-
-                    switch (prop_gra_ColorModeName.stringValue)
-                    {
-                        case "单色":
-                            rect_group.Set(rect.width - 145, rect.y + 300, gra_TexWidth, 20);
-                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_A);
-                            break;
-                        case "水平渐变":
-                            rect_group.Set(rect.width - 145, rect.y + 300, gra_TexWidth, 20);
-                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_A);
-                            rect_group.Set(rect.width - 145, rect.y + 330, gra_TexWidth, 20);
-                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_B);
-                            break;
-                        case "垂直渐变":
-                            rect_group.Set(rect.width - 145, rect.y + 300, gra_TexWidth, 20);
-                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_A);
-                            rect_group.Set(rect.width - 145, rect.y + 330, gra_TexWidth, 20);
-                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_B);
-                            break;
-                        case "四角渐变":
-                            rect_group.Set(rect.width - 145, rect.y + 300, gra_TexWidth, 20);
-                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_A);
-                            rect_group.Set(rect.width - 145, rect.y + 330, gra_TexWidth, 20);
-                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_B);
-                            rect_group.Set(rect.width - 145, rect.y + 360, gra_TexWidth, 20);
-                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_C);
-                            rect_group.Set(rect.width - 145, rect.y + 390, gra_TexWidth, 20);
-                            Editor_XHud_GUI.Gui_ColorField(rect_group, prop_gra_D);
-                            break;
-                    }
-                }
-
-                #endregion
-
-                if (prop_gra_Used.boolValue)
-                    this.minSize = new Vector2(850, 620);
-                else
-                    this.minSize = new Vector2(730, 620);
-                this.maxSize = this.minSize;
-            }
-
-            #endregion
-
-            #endregion
-
-            #region 入库名称
-            Color LibName_color = Color.white;
             if (string.IsNullOrEmpty(sp_LibName.stringValue))
             {
-                LibName_color = Color.gray;
                 sp_LibName.stringValue = "文字样式名称";
             }
-            else
-            {
-                if (sp_LibName.stringValue == "文字样式名称")
-                    LibName_color = Color.gray;
-                else
-                    LibName_color = Color.white;
-            }
 
-            Rect LibName_Rect = new Rect(rect.x + 25, rect.height - 155, (rect.width / 2) - 100, 70);
-            sp_LibName.stringValue = Editor_XHud_GUI.Gui_TextField(LibName_Rect, sp_LibName.stringValue, LibName_color, 12);
+            sp_LibName.stringValue = XGUI.layout_inputfield(
+                   title: "名称",
+                   prop: sp_LibName.stringValue,
+                   text_wrap: false,
+                   field_fontsize: XGUIFontSize.M,
+                   field_text_offset: Vector2.zero,
+                   field_height: 20,
+                   field_padding: new RectOffset(0, 0, 0, 0),
+                   field_margin: new RectOffset(0, 0, 5, 0),
+                   field_text_color: Color.white,
+                   title_width: 40,
+                   field_text_font: XGUI.GetFont("xg-medium"),
+                   field_text_style: FontStyle.Normal,
+                   field_text_anchor: TextAnchor.MiddleLeft);
+
             sp_LibName.serializedObject.ApplyModifiedProperties();
-            #endregion
 
-            #region 说明文字
-            Color Description_Color = Color.white;
             if (string.IsNullOrEmpty(sp_Description.stringValue))
             {
-                Description_Color = Color.gray;
                 sp_Description.stringValue = "文字样式参数说明内容";
+            }
+
+            sp_Description.stringValue = XGUI.layout_inputfield(
+                title: "说明",
+                prop: sp_Description.stringValue,
+                text_wrap: true,
+                field_fontsize: XGUIFontSize.M,
+                field_text_offset: Vector2.zero,
+                field_height: 80,
+                field_padding: new RectOffset(0, 0, 0, 0),
+                field_margin: new RectOffset(0, 0, 5, 0),
+                field_text_color: Color.white,
+                title_width: 40,
+                field_text_font: XGUI.GetFont("xg-medium"),
+                field_text_style: FontStyle.Normal,
+                field_text_anchor: TextAnchor.UpperLeft);
+
+            sp_Description.serializedObject.ApplyModifiedProperties();
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            if (textType == xHud_TextType.Text)
+            {
+                #region 参数
+                XGUI.layout_group_start(
+                  type: XGUIContainerType.Vertical,
+                  bg_fill: XGUIFilled.缺口纯色边框,
+                  bg_color: XGUIColor.亮白,
+                  bg_color_gui: XHud_Dashboard.Theme_Group,
+                  title: "参数",
+                  title_size: XGUIFontSize.M,
+                  title_text_color: XHud_Dashboard.Theme_Primary,
+                  title_clipping: TextClipping.Clip,
+                  margin: new RectOffset(10, 10, 0, 0),
+                  padding: new RectOffset(10, 10, 15, 15));
+
+                #region 类型
+                XGUI.layout_int_popup(
+                    title: "类型",
+                    title_width: 60,
+                    title_size: XGUIFontSize.M,
+                    title_anchor: TextAnchor.MiddleLeft,
+                    prop: prop_Type,
+                    options: optnames_a,
+                    opt_text_size: XGUIFontSize.M,
+                    opt_text_color: Color.black,
+                    opt_text_padding: new RectOffset(10, 10, 0, 0),
+                    opt_anchor: TextAnchor.MiddleLeft,
+                    opt_font_style: FontStyle.Normal,
+                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_color: XGUIColor.亮白,
+                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    icon_arrow_color: Color.black,
+                    margin: new RectOffset(0, 0, 5, 5),
+                    padding: new RectOffset(5, 5, 0, 0),
+                    title_margin: new RectOffset(0, 0, 0, 0),
+                    act_on_changed: (value) =>
+                    {
+                        prop_Type.enumValueIndex = value;
+                        prop_Type.serializedObject.ApplyModifiedProperties();
+
+                        if (prop_Type.enumValueIndex == (int)xHud_TextType.Text)
+                        {
+                            this.minSize = new Vector2(this.maxSize.x, 830);
+                            maxSize = minSize;
+                        }
+                        if (prop_Type.enumValueIndex == (int)xHud_TextType.TmpText)
+                        {
+                            this.minSize = new Vector2(this.maxSize.x, 1054);
+                            maxSize = minSize;
+                        }
+                    });
+                #endregion
+
+                #region 水平溢出           
+                XGUI.layout_int_popup(
+                    title: "水平溢出",
+                    title_width: 60,
+                    title_size: XGUIFontSize.M,
+                    title_anchor: TextAnchor.MiddleLeft,
+                    prop: prop_overflow_h,
+                    options: optnames_d,
+                    opt_text_size: XGUIFontSize.M,
+                    opt_text_color: Color.black,
+                    opt_text_padding: new RectOffset(10, 10, 0, 0),
+                    opt_anchor: TextAnchor.MiddleLeft,
+                    opt_font_style: FontStyle.Normal,
+                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_color: XGUIColor.亮白,
+                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    icon_arrow_color: Color.black,
+                    margin: new RectOffset(0, 0, 5, 5),
+                    padding: new RectOffset(5, 5, 0, 0),
+                    title_margin: new RectOffset(0, 0, 0, 0),
+                    act_on_changed: (value) =>
+                    {
+                        prop_overflow_h.enumValueIndex = value;
+                        prop_overflow_h.serializedObject.ApplyModifiedProperties();
+                    });
+                #endregion
+
+                #region 垂直溢出           
+                XGUI.layout_int_popup(
+                    title: "垂直溢出",
+                    title_width: 60,
+                    title_size: XGUIFontSize.M,
+                    title_anchor: TextAnchor.MiddleLeft,
+                    prop: prop_overflow_v,
+                    options: optnames_e,
+                    opt_text_size: XGUIFontSize.M,
+                    opt_text_color: Color.black,
+                    opt_text_padding: new RectOffset(10, 10, 0, 0),
+                    opt_anchor: TextAnchor.MiddleLeft,
+                    opt_font_style: FontStyle.Normal,
+                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_color: XGUIColor.亮白,
+                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    icon_arrow_color: Color.black,
+                    margin: new RectOffset(0, 0, 5, 5),
+                    padding: new RectOffset(5, 5, 0, 0),
+                    title_margin: new RectOffset(0, 0, 0, 0),
+                    act_on_changed: (value) =>
+                    {
+                        prop_overflow_v.enumValueIndex = value;
+                        prop_overflow_v.serializedObject.ApplyModifiedProperties();
+                    });
+                #endregion
+
+                #region 样式           
+                XGUI.layout_int_popup(
+                    title: "样式",
+                    title_width: 60,
+                    title_size: XGUIFontSize.M,
+                    title_anchor: TextAnchor.MiddleLeft,
+                    prop: prop_style,
+                    options: optnames_f,
+                    opt_text_size: XGUIFontSize.M,
+                    opt_text_color: Color.black,
+                    opt_text_padding: new RectOffset(10, 10, 0, 0),
+                    opt_anchor: TextAnchor.MiddleLeft,
+                    opt_font_style: FontStyle.Normal,
+                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_color: XGUIColor.亮白,
+                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    icon_arrow_color: Color.black,
+                    margin: new RectOffset(0, 0, 5, 5),
+                    padding: new RectOffset(5, 5, 0, 0),
+                    title_margin: new RectOffset(0, 0, 0, 0),
+                    act_on_changed: (value) =>
+                    {
+                        prop_style.enumValueIndex = value;
+                        prop_style.serializedObject.ApplyModifiedProperties();
+                    });
+                #endregion
+
+                #region 字体
+                XGUI.layout_property_field(
+                    title: "字体",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: Color.white,
+                    title_width: 60,
+                    prop: prop_Font,
+                    prop_padding: new RectOffset(0, 0, 0, 0),
+                    prop_margin: new RectOffset(0, 0, 0, 10));
+                #endregion
+
+                #region 锚点
+                XGUI.layout_property_field(
+                    title: "锚点",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: Color.white,
+                    title_width: 60,
+                    prop: prop_ContentAnchor,
+                    prop_padding: new RectOffset(0, 0, 0, 0),
+                    prop_margin: new RectOffset(0, 0, 0, 10));
+                #endregion
+
+                #region 尺寸
+                XGUI.layout_property_field(
+                    title: "尺寸",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: Color.white,
+                    title_width: 60,
+                    prop: prop_Size,
+                    prop_padding: new RectOffset(0, 0, 0, 0),
+                    prop_margin: new RectOffset(0, 0, 0, 10));
+                #endregion
+
+                #region 最小尺寸
+                XGUI.layout_property_field(
+                    title: "最小尺寸",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: Color.white,
+                    title_width: 60,
+                    prop: prop_Fit_Min,
+                    prop_padding: new RectOffset(0, 0, 0, 0),
+                    prop_margin: new RectOffset(0, 0, 0, 10));
+                #endregion
+
+                #region 最大尺寸
+                XGUI.layout_property_field(
+                    title: "最大尺寸",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: Color.white,
+                    title_width: 60,
+                    prop: prop_Fit_Max,
+                    prop_padding: new RectOffset(0, 0, 0, 0),
+                    prop_margin: new RectOffset(0, 0, 0, 10));
+                #endregion
+
+                #region 行高
+                XGUI.layout_property_field(
+                    title: "行高",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: Color.white,
+                    title_width: 60,
+                    prop: prop_LineHeight,
+                    prop_padding: new RectOffset(0, 0, 0, 0),
+                    prop_margin: new RectOffset(0, 0, 0, 10));
+                #endregion
+
+                #region 颜色
+                XGUI.layout_property_field(
+                    title: "颜色",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: Color.white,
+                    title_width: 60,
+                    prop: prop_FontColor,
+                    prop_padding: new RectOffset(0, 0, 0, 0),
+                    prop_margin: new RectOffset(0, 0, 0, 10));
+                #endregion
+
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                #endregion
+
+                #region 选项
+                XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    title: "选项",
+                    title_size: XGUIFontSize.M,
+                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_clipping: TextClipping.Clip,
+                    margin: new RectOffset(10, 10, 0, 0),
+                    padding: new RectOffset(10, 10, 15, 15));
+
+                #region 颜色接管
+                XGUI.layout_toggle(
+                    title: "颜色接管",
+                    title_size: XGUIFontSize.M,
+                    title_font_style: FontStyle.Normal,
+                    title_padding: new RectOffset(0, 10, 0, 0),
+                    title_width: 60,
+                    prop: prop_SyncPrimitivePaintingColor,
+                    tog_style: XGUIToggleStyle.实体,
+                    tog_padding: new RectOffset(5, 8, 0, 0),
+                    tog_margin: new RectOffset(0, 0, 0, 5),
+                    tog_mixed_options: new string[] { "禁用", "启用" },
+                    tog_mixed_text_size: XGUIFontSize.M,
+                    tog_mixed_text_color: Color.black,
+                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                    tog_mixed_font_style: FontStyle.Normal,
+                    tog_bg_off_color: Color.white * 0.65f,
+                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
+                    tog_handler_off_color: Color.white,
+                    tog_handler_on_color: Color.white,
+                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    act_on_changed: null);
+                #endregion
+
+                #region 自动尺寸
+                XGUI.layout_toggle(
+                    title: "自动尺寸",
+                    title_size: XGUIFontSize.M,
+                    title_font_style: FontStyle.Normal,
+                    title_padding: new RectOffset(0, 10, 0, 0),
+                    title_width: 60,
+                    prop: prop_autosize,
+                    tog_style: XGUIToggleStyle.实体,
+                    tog_padding: new RectOffset(5, 8, 0, 0),
+                    tog_margin: new RectOffset(0, 0, 0, 5),
+                    tog_mixed_options: new string[] { "禁用", "启用" },
+                    tog_mixed_text_size: XGUIFontSize.M,
+                    tog_mixed_text_color: Color.black,
+                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                    tog_mixed_font_style: FontStyle.Normal,
+                    tog_bg_off_color: Color.white * 0.65f,
+                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
+                    tog_handler_off_color: Color.white,
+                    tog_handler_on_color: Color.white,
+                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    act_on_changed: null);
+                #endregion
+
+                #region 射线检测
+                XGUI.layout_toggle(
+                    title: "射线检测",
+                    title_size: XGUIFontSize.M,
+                    title_font_style: FontStyle.Normal,
+                    title_padding: new RectOffset(0, 10, 0, 0),
+                    title_width: 60,
+                    prop: prop_Raycast,
+                    tog_style: XGUIToggleStyle.实体,
+                    tog_padding: new RectOffset(5, 8, 0, 0),
+                    tog_margin: new RectOffset(0, 0, 0, 5),
+                    tog_mixed_options: new string[] { "禁用", "启用" },
+                    tog_mixed_text_size: XGUIFontSize.M,
+                    tog_mixed_text_color: Color.black,
+                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                    tog_mixed_font_style: FontStyle.Normal,
+                    tog_bg_off_color: Color.white * 0.65f,
+                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
+                    tog_handler_off_color: Color.white,
+                    tog_handler_on_color: Color.white,
+                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    act_on_changed: null);
+                #endregion
+
+                #region 遮罩
+                XGUI.layout_toggle(
+                    title: "遮罩",
+                    title_size: XGUIFontSize.M,
+                    title_font_style: FontStyle.Normal,
+                    title_padding: new RectOffset(0, 10, 0, 0),
+                    title_width: 60,
+                    prop: prop_Maskable,
+                    tog_style: XGUIToggleStyle.实体,
+                    tog_padding: new RectOffset(5, 8, 0, 0),
+                    tog_margin: new RectOffset(0, 0, 0, 5),
+                    tog_mixed_options: new string[] { "禁用", "启用" },
+                    tog_mixed_text_size: XGUIFontSize.M,
+                    tog_mixed_text_color: Color.black,
+                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                    tog_mixed_font_style: FontStyle.Normal,
+                    tog_bg_off_color: Color.white * 0.65f,
+                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
+                    tog_handler_off_color: Color.white,
+                    tog_handler_on_color: Color.white,
+                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    act_on_changed: null);
+                #endregion
+
+                #region 富文本
+                XGUI.layout_toggle(
+                    title: "富文本",
+                    title_size: XGUIFontSize.M,
+                    title_font_style: FontStyle.Normal,
+                    title_padding: new RectOffset(0, 10, 0, 0),
+                    title_width: 60,
+                    prop: prop_rich,
+                    tog_style: XGUIToggleStyle.实体,
+                    tog_padding: new RectOffset(5, 8, 0, 0),
+                    tog_margin: new RectOffset(0, 0, 0, 5),
+                    tog_mixed_options: new string[] { "禁用", "启用" },
+                    tog_mixed_text_size: XGUIFontSize.M,
+                    tog_mixed_text_color: Color.black,
+                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                    tog_mixed_font_style: FontStyle.Normal,
+                    tog_bg_off_color: Color.white * 0.65f,
+                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
+                    tog_handler_off_color: Color.white,
+                    tog_handler_on_color: Color.white,
+                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    act_on_changed: null);
+                #endregion
+
+                #region 几何对齐
+                XGUI.layout_toggle(
+                    title: "几何对齐",
+                    title_size: XGUIFontSize.M,
+                    title_font_style: FontStyle.Normal,
+                    title_padding: new RectOffset(0, 10, 0, 0),
+                    title_width: 60,
+                    prop: prop_alignGEO,
+                    tog_style: XGUIToggleStyle.实体,
+                    tog_padding: new RectOffset(5, 8, 0, 0),
+                    tog_margin: new RectOffset(0, 0, 0, 5),
+                    tog_mixed_options: new string[] { "禁用", "启用" },
+                    tog_mixed_text_size: XGUIFontSize.M,
+                    tog_mixed_text_color: Color.black,
+                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                    tog_mixed_font_style: FontStyle.Normal,
+                    tog_bg_off_color: Color.white * 0.65f,
+                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
+                    tog_handler_off_color: Color.white,
+                    tog_handler_on_color: Color.white,
+                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    act_on_changed: null);
+                #endregion
+
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                #endregion
             }
             else
             {
-                if (sp_Description.stringValue == "文字样式参数说明内容")
-                    Description_Color = Color.gray;
-                else
-                    Description_Color = Color.white;
+                #region 参数
+                XGUI.layout_group_start(
+                  type: XGUIContainerType.Vertical,
+                  bg_fill: XGUIFilled.缺口纯色边框,
+                  bg_color: XGUIColor.亮白,
+                  bg_color_gui: XHud_Dashboard.Theme_Group,
+                  title: "参数",
+                  title_size: XGUIFontSize.M,
+                  title_text_color: XHud_Dashboard.Theme_Primary,
+                  title_clipping: TextClipping.Clip,
+                  margin: new RectOffset(10, 10, 0, 0),
+                  padding: new RectOffset(10, 10, 15, 15));
+
+                ToolbarIndex = XGUI.layout_toolbar(
+                    index: ref ToolbarIndex,
+                    names: new string[] { "特征", "间距", "渐变色" },
+                    bg_normal: XGUIFilled.无,
+                    bg_selected: XGUIFilled.实体,
+                    bg_color: XGUIColor.亮白,
+                    bg_gui_color: Color.black * 0.5f,
+                    text_color_normal: Color.white,
+                    text_color_selected: XHud_Dashboard.Theme_Primary,
+                    bar_height: 25,
+                    text_anchor: TextAnchor.MiddleCenter,
+                    text_padding: new RectOffset(10, 10, 0, 0),
+                    bar_margin: new RectOffset(0, 0, 5, 15),
+                    text_offset: new Vector2(0, -2),
+                    text_size: XGUIFontSize.M,
+                    text_font: XGUI.GetFont("xg-medium"),
+                    text_fontstyle: FontStyle.Bold,
+                    navigate_style: true,
+                    navigate_style_bg: XGUIFilled.纯色边框,
+                    navigate_style_bg_color: Color.black * 0.5f);
+
+                switch (ToolbarIndex)
+                {
+                    case 0:
+                        #region 类型
+                        XGUI.layout_int_popup(
+                            title: "类型",
+                            title_width: 60,
+                            title_size: XGUIFontSize.M,
+                            title_anchor: TextAnchor.MiddleLeft,
+                            prop: prop_Type,
+                            options: optnames_a,
+                            opt_text_size: XGUIFontSize.M,
+                            opt_text_color: Color.black,
+                            opt_text_padding: new RectOffset(10, 10, 0, 0),
+                            opt_anchor: TextAnchor.MiddleLeft,
+                            opt_font_style: FontStyle.Normal,
+                            opt_bg_fill: XGUIFilled.实体,
+                            opt_bg_color: XGUIColor.亮白,
+                            opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                            icon_arrow_color: Color.black,
+                            margin: new RectOffset(0, 0, 5, 5),
+                            padding: new RectOffset(5, 5, 0, 0),
+                            title_margin: new RectOffset(0, 0, 0, 0),
+                            act_on_changed: (value) =>
+                            {
+                                prop_Type.enumValueIndex = value;
+                                prop_Type.serializedObject.ApplyModifiedProperties();
+
+                                if (prop_Type.enumValueIndex == (int)xHud_TextType.Text)
+                                {
+                                    this.minSize = new Vector2(this.maxSize.x, 830);
+                                    maxSize = minSize;
+                                }
+                                if (prop_Type.enumValueIndex == (int)xHud_TextType.TmpText)
+                                {
+                                    this.minSize = new Vector2(this.maxSize.x, 1054);
+                                    maxSize = minSize;
+                                }
+                            });
+                        #endregion
+
+                        #region 字体
+                        XGUI.layout_property_field(
+                            title: "字体",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 60,
+                            prop: prop_tmp_font,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        XGUI.layout_seperator(
+                            thickness: 1,
+                            color: XHud_Dashboard.Theme_SeperateLine,
+                            margin: new RectOffset(15, 15, 15, 15));
+
+                        XGUI.layout_group_start(
+                         type: XGUIContainerType.Horizontal,
+                         absolute_margin: true,
+                         absolute_padding: true,
+                         margin: new RectOffset(0, 0, 0, 0),
+                         padding: new RectOffset(0, 0, 0, 0));
+
+                        #region 包裹
+                        XGUI.layout_property_field(
+                            title: "包裹",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_contentwrap,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        #region 溢出
+                        XGUI.layout_property_field(
+                            title: "溢出",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_overflow,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+                        XGUI.layout_group_start(
+                         type: XGUIContainerType.Horizontal,
+                         absolute_margin: true,
+                         absolute_padding: true,
+                         margin: new RectOffset(0, 0, 0, 0),
+                         padding: new RectOffset(0, 0, 0, 0));
+
+                        #region 样式
+                        XGUI.layout_property_field(
+                            title: "样式",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_style,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        #region 锚点
+                        XGUI.layout_property_field(
+                            title: "锚点",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_anchor,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+                        XGUI.layout_group_start(
+                         type: XGUIContainerType.Horizontal,
+                         absolute_margin: true,
+                         absolute_padding: true,
+                         margin: new RectOffset(0, 0, 0, 0),
+                         padding: new RectOffset(0, 0, 0, 0));
+
+                        #region 尺寸
+                        XGUI.layout_property_field(
+                            title: "尺寸",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_size,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        #region 颜色
+                        XGUI.layout_property_field(
+                            title: "颜色",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_color,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+                        #region 包裹比例
+                        XGUI.layout_property_field(
+                            title: "包裹比例",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 60,
+                            prop: prop_tmp_WrappingRatios,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        if (!prop_tmp_EnableAutoSizing.boolValue)
+                            XGUI.SetEnabled(false);
+
+                        XGUI.layout_group_start(
+                           type: XGUIContainerType.Horizontal,
+                           absolute_margin: true,
+                           absolute_padding: true,
+                           margin: new RectOffset(0, 0, 0, 0),
+                           padding: new RectOffset(0, 0, 0, 0));
+
+                        #region 最小尺寸
+                        XGUI.layout_property_field(
+                            title: "最小尺寸",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_FontSizeMin,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        #region 最大尺寸
+                        XGUI.layout_property_field(
+                            title: "最大尺寸",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_FontSizeMax,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+                        XGUI.layout_group_start(
+                           type: XGUIContainerType.Horizontal,
+                           absolute_margin: true,
+                           absolute_padding: true,
+                           margin: new RectOffset(0, 0, 0, 0),
+                           padding: new RectOffset(0, 0, 0, 0));
+
+                        #region 最大字符宽度
+                        XGUI.layout_property_field(
+                            title: "最大字符宽度",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_CharWidthMaxAdj,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        #region 最大行高
+                        XGUI.layout_property_field(
+                            title: "最大行高",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_LineSpacingMax,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+                        break;
+                    case 1:
+                        XGUI.SetEnabled(true);
+
+                        XGUI.layout_group_start(
+                            type: XGUIContainerType.Horizontal,
+                            absolute_margin: true,
+                            absolute_padding: true,
+                            margin: new RectOffset(0, 0, 0, 0),
+                            padding: new RectOffset(0, 0, 0, 0));
+
+                        #region 字符间距
+                        XGUI.layout_property_field(
+                            title: "字符间距",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_space_character,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        #region 单词间距
+                        XGUI.layout_property_field(
+                            title: "单词间距",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_space_word,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+                        XGUI.layout_group_start(
+                            type: XGUIContainerType.Horizontal,
+                            absolute_margin: true,
+                            absolute_padding: true,
+                            margin: new RectOffset(0, 0, 0, 0),
+                            padding: new RectOffset(0, 0, 0, 0));
+                        #region 行高间距
+                        XGUI.layout_property_field(
+                            title: "行高间距",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_space_lineheight,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        #region 段落间距
+                        XGUI.layout_property_field(
+                            title: "段落间距",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_space_paragraph,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+                        XGUI.layout_group_start(
+                            type: XGUIContainerType.Horizontal,
+                            absolute_margin: true,
+                            absolute_padding: true,
+                            margin: new RectOffset(0, 0, 0, 0),
+                            padding: new RectOffset(0, 0, 0, 0));
+                        #region 左边距
+                        XGUI.layout_property_field(
+                            title: "左边距",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_contentmargin.FindPropertyRelative("x"),
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        #region 上边距
+                        XGUI.layout_property_field(
+                            title: "上边距",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_contentmargin.FindPropertyRelative("y"),
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+                        XGUI.layout_group_start(
+                            type: XGUIContainerType.Horizontal,
+                            absolute_margin: true,
+                            absolute_padding: true,
+                            margin: new RectOffset(0, 0, 0, 0),
+                            padding: new RectOffset(0, 0, 0, 0));
+                        #region 右边距
+                        XGUI.layout_property_field(
+                            title: "右边距",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_contentmargin.FindPropertyRelative("z"),
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        #region 下边距
+                        XGUI.layout_property_field(
+                            title: "下边距",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 140,
+                            prop: prop_tmp_contentmargin.FindPropertyRelative("w"),
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+                        break;
+                    case 2:
+                        #region 渐变色支持
+                        XGUI.layout_toggle(
+                            title: "渐变色支持",
+                            title_size: XGUIFontSize.M,
+                            title_font_style: FontStyle.Normal,
+                            title_padding: new RectOffset(0, 10, 0, 0),
+                            title_width: 100,
+                            prop: prop_gra_Used,
+                            tog_style: XGUIToggleStyle.实体,
+                            tog_padding: new RectOffset(5, 8, 0, 0),
+                            tog_margin: new RectOffset(0, 0, 0, 5),
+                            tog_mixed_options: new string[] { "禁用", "启用" },
+                            tog_mixed_text_size: XGUIFontSize.M,
+                            tog_mixed_text_color: Color.black,
+                            tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                            tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                            tog_mixed_font_style: FontStyle.Normal,
+                            tog_bg_off_color: Color.white * 0.65f,
+                            tog_bg_on_color: XHud_Dashboard.Theme_Primary,
+                            tog_handler_off_color: Color.white,
+                            tog_handler_on_color: Color.white,
+                            tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                            act_on_changed: null);
+
+                        ColorMode gra_mode = (ColorMode)prop_gra_ColorMode.enumValueIndex;
+                        switch (gra_mode)
+                        {
+                            case ColorMode.Single:
+                                prop_gra_ColorModeName.stringValue = "单色";
+                                break;
+                            case ColorMode.HorizontalGradient:
+                                prop_gra_ColorModeName.stringValue = "水平渐变";
+                                break;
+                            case ColorMode.VerticalGradient:
+                                prop_gra_ColorModeName.stringValue = "垂直渐变";
+                                break;
+                            case ColorMode.FourCornersGradient:
+                                prop_gra_ColorModeName.stringValue = "四角渐变";
+                                break;
+                        }
+                        #endregion
+
+                        #region 渐变方向
+                        if (!prop_gra_Used.boolValue)
+                            XGUI.SetEnabled(false);
+                        XGUI.layout_toggle(
+                            title: "渐变方向",
+                            title_size: XGUIFontSize.M,
+                            title_font_style: FontStyle.Normal,
+                            title_padding: new RectOffset(0, 10, 0, 0),
+                            title_width: 60,
+                            prop: prop_gra_Invert,
+                            tog_style: XGUIToggleStyle.实体,
+                            tog_padding: new RectOffset(5, 8, 0, 0),
+                            tog_margin: new RectOffset(0, 0, 0, 5),
+                            tog_mixed_options: new string[] { "禁用", "启用" },
+                            tog_mixed_text_size: XGUIFontSize.M,
+                            tog_mixed_text_color: Color.black,
+                            tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                            tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                            tog_mixed_font_style: FontStyle.Normal,
+                            tog_bg_off_color: Color.white * 0.65f,
+                            tog_bg_on_color: XHud_Dashboard.Theme_Primary,
+                            tog_handler_off_color: Color.white,
+                            tog_handler_on_color: Color.white,
+                            tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                            act_on_changed: null);
+                        #endregion
+
+                        #region 渐变模式
+                        XGUI.layout_int_popup(
+                            title: "渐变模式",
+                            title_width: 100,
+                            title_size: XGUIFontSize.M,
+                            title_anchor: TextAnchor.MiddleLeft,
+                            prop: prop_gra_ColorMode,
+                            options: optnames_g,
+                            opt_text_size: XGUIFontSize.M,
+                            opt_text_color: Color.black,
+                            opt_text_padding: new RectOffset(10, 10, 0, 0),
+                            opt_anchor: TextAnchor.MiddleLeft,
+                            opt_font_style: FontStyle.Normal,
+                            opt_bg_fill: XGUIFilled.实体,
+                            opt_bg_color: XGUIColor.亮白,
+                            opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                            icon_arrow_color: Color.black,
+                            margin: new RectOffset(0, 0, 5, 5),
+                            padding: new RectOffset(5, 5, 0, 0),
+                            title_margin: new RectOffset(0, 0, 0, 0),
+                            act_on_changed: (value) =>
+                            {
+                                prop_gra_ColorMode.enumValueIndex = value;
+                                prop_gra_ColorMode.serializedObject.ApplyModifiedProperties();
+                            });
+                        #endregion
+
+                        XGUI.layout_group_start(
+                            type: XGUIContainerType.Horizontal,
+                            absolute_margin: true,
+                            absolute_padding: true,
+                            margin: new RectOffset(0, 0, 0, 0),
+                            padding: new RectOffset(0, 0, 0, 0));
+
+                        #region 主色
+                        XGUI.layout_property_field(
+                            title: "主色",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 100,
+                            prop: prop_gra_A,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        #region 副色
+                        XGUI.layout_property_field(
+                            title: "副色",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 100,
+                            prop: prop_gra_B,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+                        XGUI.layout_group_start(
+                            type: XGUIContainerType.Horizontal,
+                            absolute_margin: true,
+                            absolute_padding: true,
+                            margin: new RectOffset(0, 0, 0, 0),
+                            padding: new RectOffset(0, 0, 0, 0));
+
+                        #region 次色
+                        XGUI.layout_property_field(
+                            title: "次色",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 100,
+                            prop: prop_gra_C,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        #region 尾色
+                        XGUI.layout_property_field(
+                            title: "尾色",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: Color.white,
+                            title_width: 100,
+                            prop: prop_gra_D,
+                            prop_padding: new RectOffset(0, 0, 0, 0),
+                            prop_margin: new RectOffset(0, 0, 0, 10));
+                        #endregion
+
+                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+                        break;
+                }
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                #endregion
+
+                XGUI.SetEnabled(true);
+
+                #region 选项
+                XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    title: "选项",
+                    title_size: XGUIFontSize.M,
+                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_clipping: TextClipping.Clip,
+                    margin: new RectOffset(10, 10, 0, 0),
+                    padding: new RectOffset(10, 10, 15, 15));
+
+                #region 颜色接管
+                XGUI.layout_toggle(
+                    title: "颜色接管",
+                    title_size: XGUIFontSize.M,
+                    title_font_style: FontStyle.Normal,
+                    title_padding: new RectOffset(0, 10, 0, 0),
+                    title_width: 60,
+                    prop: prop_SyncPrimitivePaintingColor,
+                    tog_style: XGUIToggleStyle.实体,
+                    tog_padding: new RectOffset(5, 8, 0, 0),
+                    tog_margin: new RectOffset(0, 0, 0, 5),
+                    tog_mixed_options: new string[] { "禁用", "启用" },
+                    tog_mixed_text_size: XGUIFontSize.M,
+                    tog_mixed_text_color: Color.black,
+                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                    tog_mixed_font_style: FontStyle.Normal,
+                    tog_bg_off_color: Color.white * 0.65f,
+                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
+                    tog_handler_off_color: Color.white,
+                    tog_handler_on_color: Color.white,
+                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    act_on_changed: null);
+                #endregion
+
+                #region 自动尺寸
+                XGUI.layout_toggle(
+                    title: "自动尺寸",
+                    title_size: XGUIFontSize.M,
+                    title_font_style: FontStyle.Normal,
+                    title_padding: new RectOffset(0, 10, 0, 0),
+                    title_width: 60,
+                    prop: prop_tmp_EnableAutoSizing,
+                    tog_style: XGUIToggleStyle.实体,
+                    tog_padding: new RectOffset(5, 8, 0, 0),
+                    tog_margin: new RectOffset(0, 0, 0, 5),
+                    tog_mixed_options: new string[] { "禁用", "启用" },
+                    tog_mixed_text_size: XGUIFontSize.M,
+                    tog_mixed_text_color: Color.black,
+                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                    tog_mixed_font_style: FontStyle.Normal,
+                    tog_bg_off_color: Color.white * 0.65f,
+                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
+                    tog_handler_off_color: Color.white,
+                    tog_handler_on_color: Color.white,
+                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    act_on_changed: null);
+                #endregion
+
+                #region 射线检测
+                XGUI.layout_toggle(
+                    title: "射线检测",
+                    title_size: XGUIFontSize.M,
+                    title_font_style: FontStyle.Normal,
+                    title_padding: new RectOffset(0, 10, 0, 0),
+                    title_width: 60,
+                    prop: prop_Raycast,
+                    tog_style: XGUIToggleStyle.实体,
+                    tog_padding: new RectOffset(5, 8, 0, 0),
+                    tog_margin: new RectOffset(0, 0, 0, 5),
+                    tog_mixed_options: new string[] { "禁用", "启用" },
+                    tog_mixed_text_size: XGUIFontSize.M,
+                    tog_mixed_text_color: Color.black,
+                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                    tog_mixed_font_style: FontStyle.Normal,
+                    tog_bg_off_color: Color.white * 0.65f,
+                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
+                    tog_handler_off_color: Color.white,
+                    tog_handler_on_color: Color.white,
+                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    act_on_changed: null);
+                #endregion
+
+                #region 遮罩
+                XGUI.layout_toggle(
+                    title: "遮罩",
+                    title_size: XGUIFontSize.M,
+                    title_font_style: FontStyle.Normal,
+                    title_padding: new RectOffset(0, 10, 0, 0),
+                    title_width: 60,
+                    prop: prop_Maskable,
+                    tog_style: XGUIToggleStyle.实体,
+                    tog_padding: new RectOffset(5, 8, 0, 0),
+                    tog_margin: new RectOffset(0, 0, 0, 5),
+                    tog_mixed_options: new string[] { "禁用", "启用" },
+                    tog_mixed_text_size: XGUIFontSize.M,
+                    tog_mixed_text_color: Color.black,
+                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                    tog_mixed_font_style: FontStyle.Normal,
+                    tog_bg_off_color: Color.white * 0.65f,
+                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
+                    tog_handler_off_color: Color.white,
+                    tog_handler_on_color: Color.white,
+                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    act_on_changed: null);
+                #endregion
+
+                #region 富文本
+                XGUI.layout_toggle(
+                    title: "富文本",
+                    title_size: XGUIFontSize.M,
+                    title_font_style: FontStyle.Normal,
+                    title_padding: new RectOffset(0, 10, 0, 0),
+                    title_width: 60,
+                    prop: prop_tmp_rich,
+                    tog_style: XGUIToggleStyle.实体,
+                    tog_padding: new RectOffset(5, 8, 0, 0),
+                    tog_margin: new RectOffset(0, 0, 0, 5),
+                    tog_mixed_options: new string[] { "禁用", "启用" },
+                    tog_mixed_text_size: XGUIFontSize.M,
+                    tog_mixed_text_color: Color.black,
+                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                    tog_mixed_font_style: FontStyle.Normal,
+                    tog_bg_off_color: Color.white * 0.65f,
+                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
+                    tog_handler_off_color: Color.white,
+                    tog_handler_on_color: Color.white,
+                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    act_on_changed: null);
+                #endregion
+
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                #endregion
+
+                //this.minSize = new Vector2(this.maxSize.x, 620);
             }
-
-            Rect Description_Rect = new Rect((rect.width / 2) - 65, rect.height - 155, (rect.width / 2) + 45, 70);
-            sp_Description.stringValue = Editor_XHud_GUI.Gui_TextField(Description_Rect, sp_Description.stringValue, Description_Color, 12);
-            sp_Description.serializedObject.ApplyModifiedProperties();
-
-            #endregion
-
-            #region 样式类型
-            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 70, 200, 15), $"文字样式类型：<color={colorhex}>{textType.ToString()}</color>", HudFilled.无, HudColor.无, Color.white, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 16, Font_Bold);
-
-            if (textType == xHud_TextType.Text)
-                Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 40, 200, 15), "该参数用于HudText的文字样式", HudFilled.无, HudColor.无, Color.white * 0.7f, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 12, Font_Light);
-            else
-                Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + 25, rect.height - 40, 200, 15), "该参数用于HudTmpText的文字样式", HudFilled.无, HudColor.无, Color.white * 0.7f, false, Color.blue, TextAnchor.UpperLeft, Vector2.zero, 12, Font_Light);
             #endregion
 
             BaseObject.ApplyModifiedProperties();
 
             Repaint();
 
-            Editor_XHud_GUI.Gui_Layout_Space(580);
+            XGUI.layout_space(10);
 
-            DialogType_Buttons();
+            Buttons();
 
             Event e = Event.current;
             // 检测点击事件
@@ -592,13 +1409,6 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 // 检查点击位置是否在窗口内
                 if (!Description_Rect.Contains(e.mousePosition))
-                {
-                    GUI.FocusControl(null); // 取消所有控件的焦点
-                    Repaint(); // 重新绘制窗口
-                }
-
-                // 检查点击位置是否在窗口内
-                if (!LibName_Rect.Contains(e.mousePosition))
                 {
                     GUI.FocusControl(null); // 取消所有控件的焦点
                     Repaint(); // 重新绘制窗口
@@ -625,123 +1435,6 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 辅助
         /// <summary>
-        /// 文字参数显示器
-        /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="Title"></param>
-        /// <param name="propname"></param>
-        /// <param name="label_distance"></param>
-        /// <param name="offset"></param>
-        private void ParamDisplayer(Rect rect, SerializedProperty prop, string Title, float x_margin, float width, float label_distance, float offset)
-        {
-            rect.Set(rect_group.x + x_margin, rect_group.y + offset, width, 20);
-
-            Editor_XHud_GUI.Gui_Property_Field(rect, Title, prop, 10, label_distance);
-        }
-
-        /// <summary>
-        /// 创建渐变贴图的方法
-        /// </summary>
-        /// <param name="mode"></param>
-        /// <param name="invert"></param>
-        /// <param name="col_start"></param>
-        /// <param name="col_end"></param>
-        /// <param name="col_start_cor"></param>
-        /// <param name="col_end_cor"></param>
-        private void CreateGradientTexture(ColorMode mode, bool invert, Color col_start, Color col_end, Color col_start_cor, Color col_end_cor)
-        {
-            // 创建一个新的Texture2D对象
-            GradientTexture = new Texture2D(gra_TexWidth, gra_TexHeight);
-            Color pixelColor = Color.white;
-            Color verticalBlend = Color.white;
-            Color horizontalBlend = Color.white;
-            Color colorBlend = Color.white;
-
-            switch (mode)
-            {
-                case ColorMode.Single:
-                    for (int x = 0; x < gra_TexWidth; x++)
-                    {
-                        for (int y = 0; y < gra_TexHeight; y++)
-                        {
-                            pixelColor = col_start;
-                            GradientTexture.SetPixel(x, y, pixelColor);
-                        }
-                    }
-                    break;
-                case ColorMode.HorizontalGradient:
-                    // 遍历每个像素并设置颜色
-                    for (int x = 0; x < gra_TexWidth; x++)
-                    {
-                        for (int y = 0; y < gra_TexHeight; y++)
-                        {
-                            // 计算水平渐变的插值
-                            float gradientValue = (float)x / (gra_TexWidth - 1);
-
-                            if (invert)
-                                pixelColor = Color.Lerp(col_end, col_start, gradientValue);
-                            else
-                                pixelColor = Color.Lerp(col_start, col_end, gradientValue);
-
-                            GradientTexture.SetPixel(x, y, pixelColor);
-                        }
-                    }
-                    break;
-                case ColorMode.VerticalGradient:
-                    for (int y = 0; y < gra_TexHeight; y++)
-                    {
-                        for (int x = 0; x < gra_TexWidth; x++)
-                        {
-                            // 计算垂直渐变的插值
-                            float gradientValue = (float)y / (gra_TexHeight - 1);
-                            if (invert)
-                                pixelColor = Color.Lerp(col_end, col_start, gradientValue);
-                            else
-                                pixelColor = Color.Lerp(col_start, col_end, gradientValue);
-                            GradientTexture.SetPixel(x, y, pixelColor);
-                        }
-                    }
-                    break;
-                case ColorMode.FourCornersGradient:
-                    for (int y = 0; y < gra_TexHeight; y++)
-                    {
-                        for (int x = 0; x < gra_TexWidth; x++)
-                        {
-                            // 归一化坐标
-                            float u = x / (float)(gra_TexWidth - 1);
-                            float v = y / (float)(gra_TexHeight - 1);
-
-                            // 计算四个角的颜色插值
-                            if (invert)
-                            {
-                                verticalBlend = Color.Lerp(col_end, col_start, u);        // 顶部水平插值
-                                horizontalBlend = Color.Lerp(col_end_cor, col_start_cor, u); // 底部水平插值
-                                colorBlend = Color.Lerp(horizontalBlend, verticalBlend, v);       // 垂直插值  
-                            }
-                            else
-                            {
-                                verticalBlend = Color.Lerp(col_start, col_end, u);        // 顶部水平插值
-                                horizontalBlend = Color.Lerp(col_start_cor, col_end_cor, u); // 底部水平插值
-                                colorBlend = Color.Lerp(horizontalBlend, verticalBlend, v);       // 垂直插值
-                            }
-                            // 计算当前像素到中心的距离（归一化）
-                            float distanceToCenter = Mathf.Sqrt((u - 0.5f) * (u - 0.5f) + (v - 0.5f) * (v - 0.5f));
-                            float normalizedDistance = 1.0f - (distanceToCenter * 2); // 从外到内，值从1到0
-
-                            // 根据距离中心的距离调整颜色
-                            Color finalColor = Color.Lerp(colorBlend, Color.white, normalizedDistance); // 中心颜色为白色
-
-                            GradientTexture.SetPixel(x, y, finalColor);
-                        }
-                    }
-                    break;
-            }
-
-            // 应用修改并压缩贴图
-            GradientTexture.Apply();
-        }
-
-        /// <summary>
         /// 发送到库
         /// </summary>
         private void SendToLibrary()
@@ -755,24 +1448,48 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (sp_LibName.stringValue == "文字样式名称")
             {
-                Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字样式库采集器消息", "未填写名称", "请为文字样式模版添加一个名称！", "明白");
+                XGUI.dialog(
+                    type: XGUIDialogType.警告,
+                    windowtitle: "XHud - 文字样式库采集器消息",
+                    title: "未填写名称",
+                    msg: $"请为文字样式模版添加一个名称！",
+                    ok: "明白",
+                    PrimaryIndex: 0,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
                 return;
             }
 
-            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
 
             bool exist = Target_Hud_TextStyleLibrary.TextStyle_Library_NameIsValid(sp_LibName.stringValue, info.Type);
 
             if (exist)
             {
-                string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字样式库采集器消息", "存在重复文字样式名称", $"名称为<color={colorhex}> {sp_LibName.stringValue} </color>的已经存在于文字样式库中！", "重命名", 1);
+                XGUI.dialog(
+                    type: XGUIDialogType.警告,
+                    windowtitle: "XHud - 文字样式库采集器消息",
+                    title: "存在重复文字样式名称",
+                    msg: $"名称为<color={colorhex}> {sp_LibName.stringValue} </color>的已经存在于文字样式库中！",
+                    ok: "重命名",
+                    PrimaryIndex: 0,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
                 return;
             }
             else
             {
                 Target_Hud_TextStyleLibrary.TextStyle_Library_Add(info);
 
-                Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字样式库采集器消息", "已添加到文字样式库", $"已将名称为<color={colorhex}> {sp_LibName.stringValue} </color>的文字样式参数添加到文字样式库中！", "明白");
+                XGUI.dialog(
+                    type: XGUIDialogType.确认,
+                    windowtitle: "XHud - 文字样式库采集器消息",
+                    title: "已添加到文字样式库",
+                    msg: $"已将名称为<color={colorhex}> {sp_LibName.stringValue} </color>的文字样式参数添加到文字样式库中！",
+                    ok: "明白",
+                    PrimaryIndex: 0,
+                    usemodal: true,
+                    themecolor: XHud_Dashboard.Theme_Primary);
                 Close();
             }
         }
@@ -782,9 +1499,19 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void UpdateToLibrary()
         {
-            string colorhex = XHud_Utilitys.Color_To_HexColor(XHud_Dashboard.Theme_Primary, true);
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
 
-            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字样式库采集器消息", "更新文字样式模版", $"即将更新文字样式库中名称为： <color={colorhex}> {OriginStyleInfo.Name} </color> 且类型为： {OriginStyleInfo.Type} 的文字样式模版参数，确认更新参数吗？", "更新", "暂不", 1);
+            string res = XGUI.dialog(
+                type: XGUIDialogType.警告,
+                windowtitle: "XHud - 文字样式库采集器消息",
+                title: "更新文字样式模版",
+                msg: $"即将更新文字样式库中名称为： <color={colorhex}> {OriginStyleInfo.Name} </color> 且类型为： {OriginStyleInfo.Type} 的文字样式模版参数，确认更新参数吗？",
+                ok: "更新",
+                cancel: "暂不",
+                PrimaryIndex: 0,
+                usemodal: true,
+                themecolor: XHud_Dashboard.Theme_Primary);
+
             if (res == "更新")
             {
                 XHud_LibraryArg_TextStyle info = new XHud_LibraryArg_TextStyle();
@@ -882,19 +1609,58 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 控件按钮
         /// </summary>
-        private void DialogType_Buttons()
+        private void Buttons()
         {
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_FlexSpace();
+            #region 按钮
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(10, 10, 0, 0));
 
-            if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Cancel, "", HudFilled.实体, HudColor.亮白, Color.black, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Cancel))
+            XGUI.layout_flexspace();
+
+            if (XGUI.layout_button(
+                text: ButtonText_Cancel,
+                tooltip: "",
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: Color.white,
+                button_text_color: Color.black,
+                press_fill: XGUIFilled.实体,
+                press_color: XGUIColor.深空灰,
+                press_text_color: Color.white,
+                font_size: XGUIFontSize.B,
+                anchor: TextAnchor.MiddleCenter,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                layout_min_width: 0,
+                layout_width: 200,
+                height: ButtonHeight,
+                button_text_font: XGUI.GetFont("xg-medium")))
             {
                 Close();
-                return;
             }
-            Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
-            GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
-            if (Editor_XHud_GUI.Gui_Layout_Button(ButtonText_Ok, "", HudFilled.实体, HudColor.亮白, XHud_Utilitys.GetBrightnessLimite(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Light, ButtonText_Ok))
+
+            XGUI.layout_space(ButtonDistance);
+
+            if (XGUI.layout_button(
+                text: ButtonText_Ok,
+                tooltip: "",
+                bg_fill: XGUIFilled.实体,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                button_text_color: Color.black,
+                press_fill: XGUIFilled.实体,
+                press_color: XGUIColor.深空灰,
+                press_text_color: Color.white,
+                font_size: XGUIFontSize.B,
+                anchor: TextAnchor.MiddleCenter,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                layout_min_width: 0,
+                layout_width: 200,
+                height: ButtonHeight,
+                button_text_font: XGUI.GetFont("xg-medium")))
             {
                 if (LibrarySetterMode == LibrarySetterMode.添加到库)
                 {
@@ -906,12 +1672,12 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 return;
             }
-            GUI.backgroundColor = Color.white;
 
-            Editor_XHud_GUI.Gui_Layout_Space(25);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
+            XGUI.layout_flexspace();
+
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+            #endregion
         }
         #endregion
-
     }
 }

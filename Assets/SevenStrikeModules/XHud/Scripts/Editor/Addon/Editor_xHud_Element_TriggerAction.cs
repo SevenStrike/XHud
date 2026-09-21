@@ -20,7 +20,9 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
+    using System;
     using UnityEditor;
     using UnityEditor.EventSystems;
     using UnityEngine;
@@ -32,10 +34,8 @@ namespace SevenStrikeModules.XHud.Editor
     {
         private XHud_Element_TriggerAction BaseScript;
 
-        private bool OriginalDisplay;
-
         #region 序列化属性
-        private SerializedProperty AutoClearActionsAndEvents;
+        private SerializedProperty AutoClearActionsAndEvents, Enabled;
         #endregion
 
         #region 图标
@@ -85,13 +85,14 @@ namespace SevenStrikeModules.XHud.Editor
             BaseScript = (XHud_Element_TriggerAction)target;
 
             AutoClearActionsAndEvents = serializedObject.FindProperty("AutoClearActionsAndEvents");
+            Enabled = serializedObject.FindProperty("Enabled");
 
             if (BaseScript.TriggerImage == null)
                 BaseScript.TriggerImage = BaseScript.GetComponent<Image>();
             if (BaseScript.HudElement == null)
                 BaseScript.HudElement = BaseScript.GetComponent<XHud_Module_Element>();
 
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_ElementTriggerAction/icon_main");
+            icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_trigger_action/icon_main");
 
             Vector2 ButtonSize = new Vector2(18, 18);
 
@@ -107,16 +108,65 @@ namespace SevenStrikeModules.XHud.Editor
         {
             serializedObject.Update();
 
-            Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 元素动作器", Color.white);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
 
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "参数", XHud_Dashboard.Theme_Primary);
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
 
-            #region 控制
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.无, HudColor.无);
+            #region 标题
+            XGUI.layout_banner(
+             bg_fill: XGUIFilled.实体,
+             bg_color: XGUIColor.深空灰,
+             bg_height: 30,
+             icon: icon_main,
+             icon_color: XHud_Dashboard.Theme_Primary,
+             title_text: "XHud  -  元素动作触发器",
+             title_anchor: TextAnchor.MiddleLeft,
+             title_style: FontStyle.Normal,
+             title_color: Color.white,
+             title_size: XGUIFontSize.B,
+             title_clipping: clipping,
+             bg_margin: new RectOffset(0, 0, 5, 5));
+            #endregion
+
+            XGUI.layout_space(5);
+
+            #region 选项
+            BaseScript.fold_option = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "选项",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_option);
+
+            if (!BaseScript.fold_option)
+            {
+                DrawToggle("是否启用触发器", Enabled, 140, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                DrawToggle("回收时清空事件和委托", AutoClearActionsAndEvents, 140, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
 
             if (Application.isPlaying)
             {
-                Editor_XHud_GUI.Gui_Layout_Labelfield("程序运行中无法操作", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleCenter);
+                XGUI.layout_label(
+                           text: "程序运行中无法操作！",
+                           size: XGUIFontSize.M,
+                           text_color: Color.gray,
+                           padding: new RectOffset(0, 0, 0, -10),
+                           margin: new RectOffset(0, 0, 15, 35),
+                           clipping: TextClipping.Clip,
+                           font_style: FontStyle.Normal,
+                           anchor: TextAnchor.MiddleCenter);
             }
             else
             {
@@ -124,37 +174,80 @@ namespace SevenStrikeModules.XHud.Editor
                     BaseScript.TriggerImage.color = Color.clear;
             }
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Element_TriggerAction>("回收时清空事件和委托", new string[2] { "禁用", "启用" }, ref AutoClearActionsAndEvents, HudFilled.无, HudFilled.实体, Color.white, 120, 22, SelectedObjects);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            #region 参数
+            BaseScript.fold_param = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "参数",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_param);
+
+            if (!BaseScript.fold_param)
+            {
+
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
-
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
-
 
             #region 源脚本
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
+            BaseScript.fold_based = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "源脚本",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_based);
 
-            #region 原始变量
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-            OriginalDisplay = EditorGUILayout.Foldout(OriginalDisplay, "变量/属性", true);
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-            if (OriginalDisplay)
+            if (!BaseScript.fold_based)
+            {
                 DrawDefaultInspector();
-            #endregion
+            }
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             serializedObject.ApplyModifiedProperties();
         }
+
+        #region Draw
+        /// <summary>
+        /// 通用方法：绘制开关
+        /// </summary>
+        private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, Action<bool> act_on_changed = null)
+        {
+            XGUI.layout_toggle(
+                title: title,
+                title_size: XGUIFontSize.M,
+                title_font_style: FontStyle.Normal,
+                title_padding: new RectOffset(5, 10, 0, 0),
+                title_width: width,
+                prop: prop,
+                tog_style: style,
+                tog_padding: new RectOffset(0, 9, 0, 0),
+                tog_margin: new RectOffset(0, 0, 0, 5),
+                tog_mixed_options: new string[] { "禁用", "启用" },
+                tog_mixed_text_size: XGUIFontSize.M,
+                tog_mixed_text_color: Color.black,
+                tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                tog_mixed_font_style: FontStyle.Normal,
+                tog_bg_off_color: color_bg_off,
+                tog_bg_on_color: color_bg_on,
+                tog_handler_off_color: color_off,
+                tog_handler_on_color: color_on,
+                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                act_on_changed: act_on_changed);
+        }
+        #endregion
     }
 }

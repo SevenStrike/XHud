@@ -15,12 +15,305 @@ MonoBehaviour:
   LibraryName: NewColorsLibrary
   ColorLibrary:
   - Painting: {fileID: 0}
-    Name: DefaultColor
+    Name: "\u739B\u7459\u7EA2(Agate Red)"
+    Color: {r: 1, g: 0.6117647, b: 0.6444564, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u7FE1\u7FE0\u7EFF(Jade Green)"
+    Color: {r: 0, g: 0.5, b: 0.2, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u591C\u5E55\u84DD(Nightshade Blue)"
+    Color: {r: 0.1, g: 0.12, b: 0.16, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u989C\u8272\u540D\u79F0"
+    Color: {r: 1, g: 0.75, b: 0, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u73AB\u7470\u7C89(Rose Pink)"
+    Color: {r: 1, g: 0.5, b: 0.5, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u7D2B\u6C34\u6676\u7D2B(Amethyst Purple)"
+    Color: {r: 0.6, g: 0.4, b: 0.8, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u949B\u767D(Titanium White)"
     Color: {r: 1, g: 1, b: 1, a: 1}
-    Description: "\u8FD9\u662F\u4E00\u4E2A\u9ED8\u8BA4\u793A\u4F8B\u8272\u5361"
+  - Painting: {fileID: 0}
+    Name: "\u70AD\u9ED1(Charcoal Black)"
+    Color: {r: 0, g: 0, b: 0, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6A44\u6984\u7EFF(Olive Green)"
+    Color: {r: 0.3, g: 0.4, b: 0, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u73CA\u745A\u6A59(Coral Orange)"
+    Color: {r: 1, g: 0.5, b: 0.3, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u94BB\u77F3\u84DD(Diamond Blue)"
+    Color: {r: 0, g: 0.5, b: 1, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u8336\u8272(Tea Brown)"
+    Color: {r: 0.5, g: 0.4, b: 0.3, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u73CD\u73E0\u7070(Pearl Grey)"
+    Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u7FE0\u9E1F\u84DD(Kingfisher Blue)"
+    Color: {r: 0, g: 0.7, b: 0.9, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u73AB\u7470\u91D1(Rose Gold)"
+    Color: {r: 1, g: 0.32467532, b: 0, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u7D2B\u7F57\u5170(Violet)"
+    Color: {r: 0.9, g: 0.5, b: 0.9, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u96EA\u677E\u7EFF(Cedar Green)"
+    Color: {r: 0.3, g: 0.5, b: 0.3, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u70DF\u718F\u7D2B(Smoky Purple)"
+    Color: {r: 0.4, g: 0.3, b: 0.5, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u949B\u91D1(Titanium Gold)"
+    Color: {r: 0.9, g: 0.8, b: 0.6, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u96FE\u973E\u84DD(Haze Blue)"
+    Color: {r: 0, g: 0.49019623, b: 1, a: 0.24705882}
+  - Painting: {fileID: 0}
+    Name: "\u51B0\u96FE\u84DD"
+    Color: {r: 0.94509804, g: 0.95686275, b: 0.9764706, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u7EAF\u767D"
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u8C61\u7259\u767D"
+    Color: {r: 0.9764706, g: 0.972549, b: 0.9019608, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u73CD\u73E0\u7070"
+    Color: {r: 0.91764706, g: 0.9019608, b: 0.85882354, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u77F3\u677F\u7070"
+    Color: {r: 0.7254902, g: 0.7254902, b: 0.69411767, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u70DF\u718F\u7070"
+    Color: {r: 0.7058824, g: 0.67058825, b: 0.6509804, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u73AB\u7470\u7070"
+    Color: {r: 0.87058824, g: 0.83137256, b: 0.827451, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u94F6\u96FE\u84DD"
+    Color: {r: 0.6745098, g: 0.6901961, b: 0.73333335, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u94A2\u7070"
+    Color: {r: 0.46666667, g: 0.49411765, b: 0.5254902, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u4E91\u6749\u7070"
+    Color: {r: 0.5529412, g: 0.59607846, b: 0.61960787, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6697\u7070"
+    Color: {r: 0.4117647, g: 0.4117647, b: 0.4117647, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u70AD\u9ED1"
+    Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6DF1\u7070"
+    Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u591C\u9ED1"
+    Color: {r: 0.09803922, g: 0.09803922, b: 0.09803922, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u5B87\u5B99\u9ED1"
+    Color: {r: 0.07058824, g: 0.07450981, b: 0.09019608, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u94C1\u7070\u84DD"
+    Color: {r: 0.33333334, g: 0.3647059, b: 0.41568628, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6DF1\u6D77\u84DD"
+    Color: {r: 0.2, g: 0.22352941, b: 0.31764707, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6697\u591C\u84DD"
+    Color: {r: 0.23137255, g: 0.24705882, b: 0.2901961, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u5348\u591C\u84DD"
+    Color: {r: 0.16078432, g: 0.21176471, b: 0.28627452, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u77FF\u84DD"
+    Color: {r: 0.2901961, g: 0.36862746, b: 0.5137255, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u5929\u9752\u84DD"
+    Color: {r: 0.47058824, g: 0.59607846, b: 0.79607844, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6674\u7A7A\u84DD"
+    Color: {r: 0.49411765, g: 0.72156864, b: 0.91764706, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6697\u6D77\u519B\u84DD"
+    Color: {r: 0.13725491, g: 0.18039216, b: 0.2509804, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u4EAE\u94B4\u84DD"
+    Color: {r: 0.3529412, g: 0.69803923, b: 1, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u5B9D\u77F3\u84DD"
+    Color: {r: 0.18039216, g: 0.36078432, b: 0.9372549, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6DF1\u975B\u84DD"
+    Color: {r: 0.11764706, g: 0.2, b: 0.32156864, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u851A\u84DD"
+    Color: {r: 0.011764706, g: 0.43529412, b: 0.92941177, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6697\u84DD"
+    Color: {r: 0.1254902, g: 0.22352941, b: 0.38431373, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u94F6\u7070"
+    Color: {r: 0.61960787, g: 0.63529414, b: 0.67058825, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u7070\u84DD"
+    Color: {r: 0.30980393, g: 0.38431373, b: 0.44313726, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6697\u94A2\u84DD"
+    Color: {r: 0.15686275, g: 0.1882353, b: 0.2627451, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6D45\u6E56\u84DD"
+    Color: {r: 0.22352941, g: 0.64705884, b: 0.8, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6DF1\u6D77\u84DD"
+    Color: {r: 0.047058824, g: 0.33333334, b: 0.5019608, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6697\u591C\u84DD"
+    Color: {r: 0.09803922, g: 0.14901961, b: 0.21176471, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6781\u591C\u9ED1"
+    Color: {r: 0.07450981, g: 0.08235294, b: 0.13333334, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u9752\u7070"
+    Color: {r: 0.2901961, g: 0.38039216, b: 0.40392157, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u82D4\u85D3\u7EFF"
+    Color: {r: 0.3372549, g: 0.49019608, b: 0.47843137, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6A44\u6984\u7070"
+    Color: {r: 0.38039216, g: 0.41960785, b: 0.3882353, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6697\u68EE\u6797\u7EFF"
+    Color: {r: 0.11764706, g: 0.19215687, b: 0.21568628, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u7070\u7EFF"
+    Color: {r: 0.47058824, g: 0.54509807, b: 0.5372549, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u8584\u8377\u7070"
+    Color: {r: 0.5803922, g: 0.627451, b: 0.5803922, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u677E\u9488\u7EFF"
+    Color: {r: 0.25490198, g: 0.32941177, b: 0.24313726, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6697\u82D4\u7EFF"
+    Color: {r: 0.18943575, g: 0.31132078, b: 0.21471086, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6E56\u6C34\u7EFF"
+    Color: {r: 0.20784314, g: 0.43529412, b: 0.4392157, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u7FE1\u7FE0\u7EFF"
+    Color: {r: 0.3647059, g: 0.62352943, b: 0.5137255, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u5AE9\u8349\u7EFF"
+    Color: {r: 0.2901961, g: 0.67058825, b: 0.4627451, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u78A7\u7EFF"
+    Color: {r: 0.10980392, g: 0.5803922, b: 0.47058824, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u5B54\u96C0\u7EFF"
+    Color: {r: 0.007843138, g: 0.5019608, b: 0.49803922, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u68EE\u6797\u7EFF"
+    Color: {r: 0.25490198, g: 0.49803922, b: 0.2509804, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u8367\u5149\u7EFF"
+    Color: {r: 0.39215687, g: 0.827451, b: 0.27450982, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u67E0\u6AAC\u9EC4\u7EFF"
+    Color: {r: 0.72156864, g: 0.78431374, b: 0.30588236, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6DE1\u9EC4\u7EFF"
+    Color: {r: 0.8509804, g: 0.89411765, b: 0.5176471, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u5976\u6CB9\u9EC4"
+    Color: {r: 0.99607843, g: 0.99215686, b: 0.6313726, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6DE1\u8349\u7EFF"
+    Color: {r: 0.8901961, g: 0.92941177, b: 0.69411767, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u5361\u5176\u7070"
+    Color: {r: 0.6313726, g: 0.6117647, b: 0.5372549, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u9999\u8349\u9EC4"
+    Color: {r: 0.95686275, g: 0.8901961, b: 0.67058825, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u674F\u9EC4"
+    Color: {r: 0.9411765, g: 0.7490196, b: 0.5176471, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u9A7C\u8272"
+    Color: {r: 0.5764706, g: 0.49803922, b: 0.39215687, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6C99\u68D5"
+    Color: {r: 0.7882353, g: 0.5882353, b: 0.38039216, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u7070\u68D5"
+    Color: {r: 0.46666667, g: 0.43529412, b: 0.38431373, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6DF1\u5496\u5561"
+    Color: {r: 0.25490198, g: 0.20392157, b: 0.17254902, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u7EA2\u68D5"
+    Color: {r: 0.6901961, g: 0.36862746, b: 0.17254902, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6D45\u68D5"
+    Color: {r: 0.77254903, g: 0.65882355, b: 0.6039216, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u91D1\u4E1D\u96C0\u9EC4"
+    Color: {r: 0.9254902, g: 0.8, b: 0.37254903, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u91D1\u9EC4"
+    Color: {r: 0.88235295, g: 0.6901961, b: 0.1882353, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u67E0\u6AAC\u9EC4"
+    Color: {r: 0.96862745, g: 0.84313726, b: 0.03137255, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6A59\u9EC4"
+    Color: {r: 0.8901961, g: 0.5529412, b: 0.11764706, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6DE1\u91D1\u9EC4"
+    Color: {r: 0.9490196, g: 0.90588236, b: 0.41960785, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6697\u7D2B\u9ED1"
+    Color: {r: 0.13725491, g: 0.12941177, b: 0.18039216, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6DF1\u7D2B\u7EA2"
+    Color: {r: 0.23921569, g: 0.10980392, b: 0.21568628, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u73AB\u7EA2"
+    Color: {r: 0.67058825, g: 0.21568628, b: 0.39215687, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u6DE1\u73AB\u7EA2"
+    Color: {r: 0.8980392, g: 0.43529412, b: 0.6156863, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u7D2B\u7F57\u5170"
+    Color: {r: 0.45490196, g: 0.24313726, b: 0.78431374, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u7C89\u9EDB\u7D2B"
+    Color: {r: 0.6666667, g: 0.59607846, b: 0.85882354, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u73AB\u7470\u7D2B"
+    Color: {r: 0.7058824, g: 0.5019608, b: 0.78431374, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u756A\u8304\u7EA2"
+    Color: {r: 0.88235295, g: 0.30588236, b: 0.27450982, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u70C8\u7130\u7EA2"
+    Color: {r: 1, g: 0.5137255, b: 0.21176471, a: 1}
+  - Painting: {fileID: 0}
+    Name: "\u5929\u9E45\u84DD"
+    Color: {r: 0.64320636, g: 0.627451, b: 1, a: 1}
+  - Painting: {fileID: 0}
+    Name: GrayGreen(gg)
+    Color: {r: 0.33236918, g: 0.7264151, b: 0.6550039, a: 1}
   Find: 
-  itemHeight: 60
-  visibleItemCount: 10
+  itemHeight: 30
+  visibleItemCount: 15
   ColorInfoList_Original_Scroller: {x: 0, y: 0}
   Highlight: 
   LocationSelectedIndex: -1

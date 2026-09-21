@@ -20,6 +20,8 @@
  */
 namespace SevenStrikeModules.XTween.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using System;
     using System.Text;
     using UnityEditor;
@@ -38,7 +40,7 @@ namespace SevenStrikeModules.XTween.Editor
         /// <summary>
         /// 动画已使用总数
         /// </summary>
-        public int Reused;
+        public int InUseCount;
         /// <summary>
         /// 动画已使用百分比
         /// </summary>
@@ -56,10 +58,19 @@ namespace SevenStrikeModules.XTween.Editor
         {
             Count = XTween_Pool.Get_PoolCount(type);
             Preloaded = XTween_Pool.GetPreloadCount(type);
-            Reused = XTween_Pool.Get_CreatedCount(type);
+            InUseCount = XTween_Pool.Get_CreatedCount(type);
             Percentage = XTween_Pool.Get_UsagePercentage(type);
-            Percentage_Smooth = Mathf.Lerp(Percentage_Smooth, Percentage, Time.unscaledDeltaTime * 3);
+            Percentage_Smooth = Mathf.Lerp(Percentage_Smooth, Percentage, Time.unscaledDeltaTime * 6);
         }
+    }
+
+    public struct progress_value
+    {
+        public string title;
+        public string sub_title;
+        public float value;
+        public float title_width;
+        public float subtitle_width;
     }
 
     public class Editor_XTween_PoolAnalyzer : EditorWindow
@@ -68,37 +79,16 @@ namespace SevenStrikeModules.XTween.Editor
         private StringBuilder stringBuilder;
 
         /// <summary>
-        /// 字体 - 粗体
-        /// </summary>
-        Font Font_Bold;
-        /// <summary>
-        /// 字体 - 细体
-        /// </summary>
-        Font Font_Light;
-
-        private string TweenLiquidContent;
-        private Texture2D TweenLiquidScreen;
-
-        /// <summary>
         /// 图标
         /// </summary>
-        private Texture2D logo, icon_pathpercent,
-            LiquidBg_Pure,
-            LiquidBg_Scan,
-            LiquidPlug,
-            MetalGrid,
-            LiquidDirty;
-
-        #region 抬头参数
-        Rect Title_rect;
-        Rect Icon_rect;
-        Rect Sepline_rect;
-        Color SepLineColor = new Color(1, 1, 1, 0.15f);
-        Color MessageColor = new Color(1, 1, 1, 0.62f);
-        #endregion
-
-        float liquid_left_margin = 35;
-        float liquid_right_margin = 70;
+        private Texture2D
+            logo_bg,
+            liquid_bg,
+            liquid_bg_pure,
+            liquid_bg_scan,
+            liquid_plug,
+            liquid_metal_grid,
+            liquid_dirty;
 
         PoolData PoolData_Int;
         PoolData PoolData_Float;
@@ -109,15 +99,13 @@ namespace SevenStrikeModules.XTween.Editor
         PoolData PoolData_Quaternion;
         PoolData PoolData_Color;
 
-        Rect rect_liquid_prim;
-        Rect rect_liquid_set;
-        RectOffset liquid_rectoffet;
+        public progress_value[] progress_values = new progress_value[8];
 
-        [MenuItem("Assets/XTween/D 动画池管理器（PoolManager)")]
-        public static void ShowWindow()
+        [MenuItem("Assets/XTween/D 动画池分析仪（PoolManager)")]
+        public static void Editor_Open_XTween_PoolAnalyzer()
         {
-            window = (Editor_XTween_PoolAnalyzer)EditorWindow.GetWindow(typeof(Editor_XTween_PoolAnalyzer), true, "XTween 动画池管理器", true);
-            Editor_XTween_GUI.CenterEditorWindow(new Vector2Int(360, 640), window);
+            window = (Editor_XTween_PoolAnalyzer)EditorWindow.GetWindow(typeof(Editor_XTween_PoolAnalyzer), false, "XTween 动画池分析仪", true);
+            XGUI.CenterEditorWindow(new Vector2Int(353, 550), window);
             window.maxSize = window.minSize;
             window.Show();
         }
@@ -125,21 +113,15 @@ namespace SevenStrikeModules.XTween.Editor
         private void OnEnable()
         {
             #region 图标获取
-            logo = Editor_XTween_GUI.GetIcon("Icons_XTween_PoolAnalyzer/logo");
-            icon_pathpercent = Editor_XTween_GUI.GetIcon("Icons_XTween_Controller/icon_pathpercent");
-            LiquidBg_Pure = Editor_XTween_GUI.GetIcon("Icons_Liquid/XTween_PoolAnalyzer/LiquidBg_Pure");
-            LiquidBg_Scan = Editor_XTween_GUI.GetIcon("Icons_Liquid/XTween_PoolAnalyzer/LiquidBg_Scan");
-            LiquidPlug = Editor_XTween_GUI.GetIcon("Icons_Liquid/LiquidPlug_Blue");
-            MetalGrid = Editor_XTween_GUI.GetIcon("Icons_Liquid/MetalGrid");
-            LiquidDirty = Editor_XTween_GUI.GetIcon("Icons_Liquid/XTween_PoolAnalyzer/LiquidDirty");
+            logo_bg = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_pool/logo");
+            liquid_bg_pure = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_liquid/pool/liquid_bg_pure");
+            liquid_bg_scan = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_liquid/pool/liquid_bg_scan");
+            liquid_plug = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_liquid/plug/liquid_plug_red");
+            liquid_dirty = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_liquid/dirty/liquid_dirty");
+            liquid_metal_grid = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_liquid/liquid_metal_grid");
             #endregion
 
-            Font_Bold = Editor_XTween_GUI.GetFont("SS_Editor_Bold");
-            Font_Light = Editor_XTween_GUI.GetFont("SS_Editor_Dialog");
-
             stringBuilder = new StringBuilder();
-
-            liquid_rectoffet = new RectOffset(45, 45, 20, 20);
         }
 
         private void OnGUI()
@@ -147,150 +129,250 @@ namespace SevenStrikeModules.XTween.Editor
             #region 抬头
             Rect rect = new Rect(0, 0, position.width, position.height);
 
-            Icon_rect = new Rect(15, 15, 48, 48);
+            // 图标
+            Rect rect_icon = new Rect(15, 15, logo_bg.width, logo_bg.height);
+            XGUI.gui_icon(
+                rect: rect_icon,
+                icon: logo_bg,
+                padding: new RectOffset(0, 0, 0, 0),
+                border: new RectOffset(0, 0, 0, 0),
+                color: Color.white);
 
-            Editor_XTween_GUI.Gui_Icon(Icon_rect, logo);
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
 
-            Title_rect = new Rect(rect.x + 85, rect.y + 15, rect.width - 80, 30);
-            Editor_XTween_GUI.Gui_Labelfield(Title_rect, "XTween 动画池管理器", XTweenGUIFilled.无, XTweenGUIColor.无, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 20, Font_Bold);
+            // 大标题
+            Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
+            XGUI.gui_label(
+                rect: rect_title,
+                text: new GUIContent("XTween 动画池分析仪"),
+                text_color: Color.white,
+                size: XGUIFontSize.L,
+                clipping: clipping,
+                font: XGUI.GetFont("xg-heavy"));
 
-            Sepline_rect = new Rect(rect.x + 85, rect.y + 60, 200, 1);
-            Editor_XTween_GUI.Gui_Box(Sepline_rect, SepLineColor);
+            // 分割线
+            Rect rect_seperate = new Rect(rect.x + 68, rect.y + 43, 200, 1);
+            XGUI.gui_seperator(
+                rect: rect_seperate,
+                thickness: 1,
+                color: Color.white * 0.45f,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0));
 
-            Editor_XTween_GUI.Gui_Labelfield_Thin_WrapClip(new Rect(rect.x + 18, rect.y + 80, rect.width - 38, rect.height), "此面板可监控并管理XTween动画池的使用状态以及参数！", XTweenGUIFilled.无, XTweenGUIColor.无, MessageColor, TextAnchor.UpperLeft, new Vector2(0, 0), 12, true, Font_Light);
+            // 小标题
+            Rect rect_subtitle = new Rect(rect.x + 18, rect.y + 45, rect.width, 30);
+            XGUI.gui_label(
+                rect: rect_subtitle,
+                text: new GUIContent("此面板可监控并管理XTween动画池的使用状态以及参数！"),
+                text_color: Color.white * 0.7f,
+                size: XGUIFontSize.M,
+                clipping: clipping);
             #endregion
 
+            CollectPoolData();
+
+            // 获取液晶屏的根锚点
+            Rect rect_root = new Rect(0, 0, position.width, position.height);
+            rect_root.Set(rect_root.x + 10, rect_root.y + 100, rect_root.width - 20, rect_root.height);
+            Rect rect_liquid = rect_root;
+
+            // 测试区域
+            //XGUI.gui_box(rect_liquid, Color.red);
+
+            Color liquid_bg_color = Color.white;
+
             #region 面板预览器
-            rect_liquid_prim = new Rect(0, 20, position.width, position.height);
-            rect_liquid_set = rect_liquid_prim;
             if (Application.isPlaying)
             {
-                TweenLiquidContent = "应用运行中";
-                if (XTween_Dashboard.ConfigData.LiquidScanStyle)
-                    TweenLiquidScreen = LiquidBg_Scan;
+                if (XTween_Dashboard.XTweenConfig.Datas.LiquidScanStyle)
+                    liquid_bg = liquid_bg_scan;
                 else
-                    TweenLiquidScreen = LiquidBg_Pure;
-                GUI.backgroundColor = XTween_Utilitys.ConvertHexStringToColor(XTween_Dashboard.ConfigData.LiquidColor_Playing);
+                    liquid_bg = liquid_bg_pure;
+                liquid_bg_color = XTween_Dashboard.XTweenConfig.Datas.LiquidColor_Playing;
             }
             else
             {
-                GUI.backgroundColor = XTween_Utilitys.ConvertHexStringToColor(XTween_Dashboard.ConfigData.LiquidColor_Idle);
+                liquid_bg_color = XTween_Dashboard.XTweenConfig.Datas.LiquidColor_Idle;
 
-                TweenLiquidContent = "应用未运行";
-                if (XTween_Dashboard.ConfigData.LiquidScanStyle)
-                    TweenLiquidScreen = LiquidBg_Scan;
+                if (XTween_Dashboard.XTweenConfig.Datas.LiquidScanStyle)
+                    liquid_bg = liquid_bg_scan;
                 else
-                    TweenLiquidScreen = LiquidBg_Pure;
+                    liquid_bg = liquid_bg_pure;
             }
 
-            // 液晶屏
-            rect_liquid_prim.Set(rect_liquid_set.x + 15, rect_liquid_set.y + 110, rect_liquid_set.width - 30, TweenLiquidScreen.height);
-            Editor_XTween_GUI.Gui_LiquidField(rect_liquid_prim, TweenLiquidContent, liquid_rectoffet, TweenLiquidScreen);
-
-            // 液晶屏肮脏
-            if (XTween_Dashboard.ConfigData.LiquidDirty)
+            if (!XTween_Dashboard.XTweenConfig.Datas.PerformanceLiquidMode)
             {
-                rect_liquid_prim.Set(rect_liquid_set.x + (rect_liquid_set.width - LiquidDirty.width - 13), rect_liquid_set.y + 108, LiquidDirty.width, LiquidDirty.height);
-                Editor_XTween_GUI.Gui_TextureBox(rect_liquid_prim, LiquidDirty);
-            }
+                #region 液晶 - 背景
+                float liquid_bg_x = rect_liquid.x;
+                float liquid_bg_y = rect_liquid.y;
+                float liquid_bg_w = rect_liquid.width;
+                float liquid_bg_h = liquid_bg.height;
 
-            // 液晶屏接口
-            rect_liquid_prim.Set(rect_liquid_set.x + ((rect_liquid_set.width / 2) - (LiquidPlug.width / 2)), rect_liquid_set.y + 545, LiquidPlug.width, LiquidPlug.height);
-            Editor_XTween_GUI.Gui_TextureBox(rect_liquid_prim, LiquidPlug);
+                Rect rect_liquidbg = new Rect(liquid_bg_x, liquid_bg_y, liquid_bg_w, liquid_bg_h);
 
-            // 液晶屏金属网格角
-            rect_liquid_prim.Set(rect_liquid_set.x + (rect_liquid_set.width - MetalGrid.width - 5), rect_liquid_set.y + 505, MetalGrid.width, MetalGrid.height);
-            Editor_XTween_GUI.Gui_TextureBox(rect_liquid_prim, MetalGrid);
+                // 测试区域
+                //XGUI.gui_box(rect_liquidbg, Color.red);
 
-            #region 状态显示
-            rect_liquid_prim.Set(rect_liquid_set.x + (rect_liquid_set.width - 130), rect_liquid_set.y + 101, 100, 65);
-            Editor_XTween_GUI.Gui_Labelfield_WrapText(rect_liquid_prim, $"状态 :  {(XTween_Pool.IsAnyTweenInUse() ? "正在使用" : "未使用")}", XTweenGUIFilled.无, XTweenGUIColor.无, Color.black, TextAnchor.MiddleRight, Vector2.zero, 11, false, false, TextClipping.Overflow, true, Font_Light);
-            #endregion
+                XGUI.gui_box(
+                    rect: rect_liquidbg,
+                    bg: liquid_bg,
+                    bg_color_gui: liquid_bg_color,
+                    border: new RectOffset(45, 45, 20, 20));
+                #endregion
 
-            #region 进度条 - EasedProgress
-            rect_liquid_prim.Set(rect_liquid_set.x, rect_liquid_set.y + 185, rect_liquid_set.width, rect_liquid_set.height - 185);
-
-            float height = 0;
-            LiquidProgress(rect_liquid_prim, height, "Int 动画", Application.isPlaying ? PoolDataVisual(PoolData_Int) : "未就绪", Application.isPlaying ? (PoolData_Int.Percentage_Smooth) : 0);
-            height += 45;
-            LiquidProgress(rect_liquid_prim, height, "Float 动画", Application.isPlaying ? PoolDataVisual(PoolData_Float) : "未就绪", Application.isPlaying ? (PoolData_Float.Percentage_Smooth) : 0);
-            height += 45;
-            LiquidProgress(rect_liquid_prim, height, "String 动画", Application.isPlaying ? PoolDataVisual(PoolData_String) : "未就绪", Application.isPlaying ? (PoolData_String.Percentage_Smooth) : 0);
-            height += 45;
-            LiquidProgress(rect_liquid_prim, height, "Vector2 动画", Application.isPlaying ? PoolDataVisual(PoolData_Vector2) : "未就绪", Application.isPlaying ? (PoolData_Vector2.Percentage_Smooth) : 0);
-            height += 45;
-            LiquidProgress(rect_liquid_prim, height, "Vector3 动画", Application.isPlaying ? PoolDataVisual(PoolData_Vector3) : "未就绪", Application.isPlaying ? (PoolData_Vector3.Percentage_Smooth) : 0);
-            height += 45;
-            LiquidProgress(rect_liquid_prim, height, "Vecto4  动画", Application.isPlaying ? PoolDataVisual(PoolData_Vector4) : "未就绪", Application.isPlaying ? (PoolData_Vector4.Percentage_Smooth) : 0);
-            height += 45;
-            LiquidProgress(rect_liquid_prim, height, "Quaternion 动画", Application.isPlaying ? PoolDataVisual(PoolData_Quaternion) : "未就绪", Application.isPlaying ? (PoolData_Quaternion.Percentage_Smooth) : 0);
-            height += 45;
-            LiquidProgress(rect_liquid_prim, height, "Color 动画", Application.isPlaying ? PoolDataVisual(PoolData_Color) : "未就绪", Application.isPlaying ? PoolData_Color.Percentage_Smooth : 0);
-            #endregion
-
-            GUI.backgroundColor = Color.white;
-            #endregion
-
-            Editor_XTween_GUI.Gui_Layout_Space(590);
-            Editor_XTween_GUI.Gui_Layout_Horizontal_Start(XTweenGUIFilled.无, XTweenGUIColor.无);
-            Editor_XTween_GUI.Gui_Layout_Space(15);
-            if (Editor_XTween_GUI.Gui_Layout_Button("回收所有动画 (快速强制)", "", XTweenGUIFilled.实体, XTweenGUIColor.深空灰, Color.white, 35, new RectOffset(), new Vector2(0, 0), TextAnchor.MiddleCenter, 12, Font_Light))
-            {
-                if (Application.isPlaying)
-                    XTween_Pool.ForceRecycleAll();
-                else
+                #region 液晶 - 附加图形 - 肮脏层
+                if (XTween_Dashboard.XTweenConfig.Datas.LiquidDirty)
                 {
-                    XTween_Utilitys.DebugInfo("XTween动画管理器消息", "应用未运行，只有在引用运行时期才可以使用此功能！", XTweenGUIMsgState.警告);
+                    GUI.BeginGroup(rect_liquidbg);
+
+                    float d_x = rect_liquid.width - liquid_dirty.width;
+                    float d_y = 0;
+                    float d_w = liquid_dirty.width;
+                    float d_h = liquid_dirty.height;
+                    Rect rect_dirty = new Rect(d_x, d_y, d_w, d_h);
+
+                    XGUI.gui_box(
+                        rect: rect_dirty,
+                        bg: liquid_dirty);
+
+                    GUI.EndGroup();
+
+                    // 测试区域
+                    //XGUI.gui_box(rect_dirty, Color.red * 0.5f);
+                }
+                #endregion
+
+                #region 液晶 - 附加图形 - 接口
+                float liquid_plug_x = rect_liquidbg.x + ((rect_liquidbg.width / 2)) - (liquid_plug.width / 2);
+                float liquid_plug_y = rect_liquidbg.y + rect_liquidbg.height;
+                float liquid_plug_w = liquid_plug.width;
+                float liquid_plug_h = liquid_plug.height;
+                Rect rect_plug = new Rect(liquid_plug_x, liquid_plug_y, liquid_plug_w, liquid_plug_h);
+
+                XGUI.gui_box(
+                    rect: rect_plug,
+                    bg: liquid_plug);
+
+                // 测试区域
+                //XGUI.gui_box(rect_plug, Color.red);
+                #endregion
+
+                #region 液晶 - 附加图形 - 金属网格角
+                float liquid_metal_grid_x = rect_liquidbg.x + rect_liquidbg.width - (liquid_metal_grid.width - 10);
+                float liquid_metal_grid_y = rect_liquidbg.y + rect_liquidbg.height - 40;
+                float liquid_metal_grid_w = liquid_metal_grid.width;
+                float liquid_metal_grid_h = liquid_metal_grid.height;
+                Rect rect_metal_grid = new Rect(liquid_metal_grid_x, liquid_metal_grid_y, liquid_metal_grid_w, liquid_metal_grid_h);
+
+                XGUI.gui_box(
+                    rect: rect_metal_grid,
+                    bg: liquid_metal_grid);
+
+                // 测试区域
+                //XGUI.gui_box(rect_metal_grid, Color.red * 0.5f);
+                #endregion
+
+                float margin = 50;
+                float width_max = rect_liquidbg.width - rect_liquidbg.x - 30;
+
+                for (int i = 0; i < progress_values.Length; i++)
+                {
+                    progress_value dat = progress_values[i];
+                    #region 进度条
+                    Rect rect_progress_int = new Rect(rect_liquidbg.x + 20, rect_liquidbg.y + margin, width_max, 0);
+                    XGUI.gui_progress(
+                        rect: rect_progress_int,
+                        title: dat.title,
+                        title_width: dat.title_width,
+                        subtitle_width: dat.subtitle_width,
+                        title_size: XGUIFontSize.M,
+                        title_offset: new Vector2(0, 0),
+                        title_color: Color.black,
+                        subtitle: dat.sub_title,
+                        subtitle_size: XGUIFontSize.S,
+                        subtitle_offset: new Vector2(0, 0),
+                        subtitle_color: Color.black,
+                         line_left_color: Color.white * 0.5f,
+                         line_right_color: Color.white * 0.5f,
+                         line_center_color: Color.white * 0.5f,
+                        progress_fg_color: Color.black,
+                        progress_bg_color: Color.black * 0.12f,
+                        indicator_color: Color.black,
+                        icon_indicator: XGUI.GetBasedIcon("icon_mark_arrow_up"),
+                        value: dat.value,
+                        thickness: 2);
+                    #endregion
+
+                    margin += 45;
                 }
             }
-            Editor_XTween_GUI.Gui_Layout_Space(15);
-            Editor_XTween_GUI.Gui_Layout_Horizontal_End();
-        }
+            else
+            {
+                float margin = 50;
+                float width_max = rect_liquid.width - rect_liquid.x - 30;
 
-        private void LiquidProgress(Rect rect_progress, float height, string title, string value, float progress)
-        {
-            Rect r_pro = rect_progress;
-            r_pro.Set(rect_progress.x + liquid_left_margin, rect_progress.y + height, (rect_progress.width - liquid_right_margin), 1);
-            // 背景线
-            EditorGUI.DrawRect(r_pro, Color.black * 0.3f);
-            // 进度条
-            r_pro.Set(rect_progress.x + liquid_left_margin, rect_progress.y + height - 4, (rect_progress.width - liquid_right_margin) * progress * 0.01f, 4);
-            EditorGUI.DrawRect(r_pro, Color.black);
-            // 标题
-            r_pro.Set(rect_progress.x + liquid_left_margin, rect_progress.y + (height - 17), 50, 6);
-            Editor_XTween_GUI.Gui_Labelfield(r_pro, title, XTweenGUIFilled.无, XTweenGUIColor.无, Color.black * 0.9f, TextAnchor.MiddleLeft, new Vector2(0, 0), 12, Font_Light);
-            // 数值
-            r_pro.Set(rect_progress.x + (rect_progress.width - liquid_right_margin - 25), rect_progress.y + (height - 17), 50, 6);
-            Editor_XTween_GUI.Gui_Labelfield(r_pro, value, XTweenGUIFilled.无, XTweenGUIColor.无, Color.black * 0.95f, TextAnchor.MiddleRight, new Vector2(0, 0), 11, Font_Light);
-            // 起点线
-            r_pro.Set((rect_progress.x + liquid_left_margin), rect_progress.y + (height - 2), 1, 6);
-            EditorGUI.DrawRect(r_pro, Color.black * 0.3f);
-            // 终点线
-            r_pro.Set((rect_progress.x + (rect_progress.width - liquid_right_margin + liquid_left_margin)), rect_progress.y + (height - 2), 1, 6);
-            EditorGUI.DrawRect(r_pro, Color.black * 0.3f);
-            // 指示器
-            r_pro.Set(((rect_progress.x + liquid_left_margin - 4) + (rect_progress.width - liquid_right_margin) * progress * 0.01f), rect_progress.y + (height + 3), 8, 8);
-            Editor_XTween_GUI.Gui_Icon(r_pro, icon_pathpercent);
-            // 中点线
-            r_pro.Set(((rect_progress.x + liquid_left_margin) + (rect_progress.width - liquid_right_margin) * 0.5f), rect_progress.y + (height - 10), 1, 10);
-            EditorGUI.DrawRect(r_pro, Color.black * 0.3f);
+                for (int i = 0; i < progress_values.Length; i++)
+                {
+                    progress_value dat = progress_values[i];
+                    #region 进度条
+                    Rect rect_progress_int = new Rect(rect_liquid.x + 20, rect_liquid.y + margin, width_max, 0);
+                    XGUI.gui_progress(
+                        rect: rect_progress_int,
+                        title: dat.title,
+                        title_width: dat.title_width,
+                        subtitle_width: dat.subtitle_width,
+                        title_size: XGUIFontSize.M,
+                        title_offset: new Vector2(0, 0),
+                        title_color: Color.white,
+                        subtitle: dat.sub_title,
+                        subtitle_size: XGUIFontSize.S,
+                        subtitle_offset: new Vector2(0, 0),
+                        subtitle_color: Color.white * 0.8f,
+                         line_left_color: Color.white * 0.5f,
+                         line_right_color: Color.white * 0.5f,
+                         line_center_color: Color.white * 0.5f,
+                        progress_fg_color: XTween_Dashboard.Theme_Primary,
+                        progress_bg_color: Color.black * 0.12f,
+                        indicator_color: Color.white,
+                        icon_indicator: XGUI.GetBasedIcon("icon_mark_arrow_up"),
+                        value: dat.value,
+                        thickness: 2);
+                    #endregion
+
+                    margin += 45;
+                }
+            }
+            GUI.backgroundColor = Color.white;
+            #endregion
         }
 
         private string PoolDataVisual(PoolData data)
         {
             stringBuilder.Clear();
-            stringBuilder.Append(data.Reused)
+            stringBuilder.Append(data.InUseCount)
                 .Append(" | ")
                 .Append(data.Count)
                 .Append(" / ")
                 .Append(data.Preloaded)
                 .Append(" | ")
-                .Append(data.Percentage_Smooth.ToString("F2"))
+                .Append(data.Percentage_Smooth.ToString("F4"))
                 .Append(" %");
             return stringBuilder.ToString();
         }
 
         private void Update()
+        {
+            CalculatePoolData();
+        }
+
+        /// <summary>
+        /// 计算每个类型的动画池的状态数据
+        /// </summary>
+        private void CalculatePoolData()
         {
             if (Application.isPlaying)
             {
@@ -302,8 +384,76 @@ namespace SevenStrikeModules.XTween.Editor
                 PoolData_Vector4.CalculateData(typeof(XTween_Specialized_Vector4));
                 PoolData_Quaternion.CalculateData(typeof(XTween_Specialized_Quaternion));
                 PoolData_Color.CalculateData(typeof(XTween_Specialized_Color));
-                Repaint();
             }
+            Repaint();
+        }
+
+        /// <summary>
+        /// 收集动画池数据
+        /// </summary>
+        private void CollectPoolData()
+        {
+            #region 数据获取
+            progress_values[0].title = "整形 - Integer";
+            progress_values[1].title = "浮点 - Float";
+            progress_values[2].title = "字符串 - String";
+            progress_values[3].title = "二维向量 - Vector 2";
+            progress_values[4].title = "三维向量 - Vector 3";
+            progress_values[5].title = "四维向量 - Vector 4";
+            progress_values[6].title = "四元数 - Quaternion";
+            progress_values[7].title = "颜色 - Color";
+
+            if (Application.isPlaying)
+            {
+                progress_values[0].value = PoolData_Int.Percentage_Smooth;
+                progress_values[1].value = PoolData_Float.Percentage_Smooth;
+                progress_values[2].value = PoolData_String.Percentage_Smooth;
+                progress_values[3].value = PoolData_Vector2.Percentage_Smooth;
+                progress_values[4].value = PoolData_Vector3.Percentage_Smooth;
+                progress_values[5].value = PoolData_Vector4.Percentage_Smooth;
+                progress_values[6].value = PoolData_Quaternion.Percentage_Smooth;
+                progress_values[7].value = PoolData_Color.Percentage_Smooth;
+            }
+            else
+            {
+                progress_values[0].value = 0;
+                progress_values[1].value = 0;
+                progress_values[2].value = 0;
+                progress_values[3].value = 0;
+                progress_values[4].value = 0;
+                progress_values[5].value = 0;
+                progress_values[6].value = 0;
+                progress_values[7].value = 0;
+            }
+
+            progress_values[0].sub_title = Application.isPlaying ? PoolDataVisual(PoolData_Int) : "待预加载";
+            progress_values[1].sub_title = Application.isPlaying ? PoolDataVisual(PoolData_Float) : "待预加载";
+            progress_values[2].sub_title = Application.isPlaying ? PoolDataVisual(PoolData_String) : "待预加载";
+            progress_values[3].sub_title = Application.isPlaying ? PoolDataVisual(PoolData_Vector2) : "待预加载";
+            progress_values[4].sub_title = Application.isPlaying ? PoolDataVisual(PoolData_Vector3) : "待预加载";
+            progress_values[5].sub_title = Application.isPlaying ? PoolDataVisual(PoolData_Vector4) : "待预加载";
+            progress_values[6].sub_title = Application.isPlaying ? PoolDataVisual(PoolData_Quaternion) : "待预加载";
+            progress_values[7].sub_title = Application.isPlaying ? PoolDataVisual(PoolData_Color) : "待预加载";
+
+            progress_values[0].title_width = 125;
+            progress_values[1].title_width = 125;
+            progress_values[2].title_width = 125;
+            progress_values[3].title_width = 125;
+            progress_values[4].title_width = 125;
+            progress_values[5].title_width = 125;
+            progress_values[6].title_width = 125;
+            progress_values[7].title_width = 125;
+
+            progress_values[0].subtitle_width = 125;
+            progress_values[1].subtitle_width = 125;
+            progress_values[2].subtitle_width = 125;
+            progress_values[3].subtitle_width = 125;
+            progress_values[4].subtitle_width = 125;
+            progress_values[5].subtitle_width = 125;
+            progress_values[6].subtitle_width = 125;
+            progress_values[7].subtitle_width = 125;
+
+            #endregion
         }
     }
 }

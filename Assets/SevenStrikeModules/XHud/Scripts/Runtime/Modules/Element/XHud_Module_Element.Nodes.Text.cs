@@ -20,8 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
+    using SevenStrikeModules.XGUI.Runtime;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -70,12 +69,12 @@ namespace SevenStrikeModules.XHud
             if (tex == null)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "未找到对应标识的文字！", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "未找到对应标识的文字！", XGUIMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的文字组件！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的文字组件！", XGUIMsgState.通知);
             }
             return tex;
         }
@@ -92,12 +91,12 @@ namespace SevenStrikeModules.XHud
             if (textlist.Count <= 0)
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "获取的文字列表为空！", HudMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "获取的文字列表为空！", XGUIMsgState.错误);
             }
             else
             {
                 if (DebugState)
-                    XHud_Utilitys.Func_PrintInfo("XHud - 元素控件通知", "已获取到" + TextNodes.Count + " 个文字组件！", HudMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + TextNodes.Count + " 个文字组件！", XGUIMsgState.通知);
             }
             return textlist.ToArray();
         }
