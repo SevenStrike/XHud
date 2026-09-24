@@ -70,7 +70,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 标签宽度会根据窗口宽度自适应，窄屏时自动缩小。
         /// </para>
         /// </remarks>
-        public static bool layout_toggle(string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, TextAnchor title_anchor = TextAnchor.MiddleLeft, float title_width = 80, Font title_font = null, RectOffset title_padding = default, SerializedProperty prop = null, RectOffset tog_padding = default, RectOffset tog_margin = default, XGUIToggleStyle tog_style = XGUIToggleStyle.实体, Color tog_bg_off_color = default, Color tog_bg_on_color = default, Color tog_handler_off_color = default, Color tog_handler_on_color = default, XGUIFilled tog_mixed_bg_fill = XGUIFilled.实体, XGUIColor tog_mixed_bg_color = XGUIColor.亮白, Color tog_mixed_bg_color_gui = default, XGUIFontSize tog_mixed_text_size = XGUIFontSize.M, FontStyle tog_mixed_font_style = FontStyle.Normal, Color tog_mixed_text_color = default, TextAnchor tog_mixed_text_anchor = TextAnchor.MiddleCenter, RectOffset tog_mixed_text_padding = default, Font tog_mixed_text_font = null, float tog_mixed_added_height = 0, string[] tog_mixed_options = null, Action<bool> act_on_changed = null)
+        public static bool layout_toggle(string title = null, string tooltip = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, TextAnchor title_anchor = TextAnchor.MiddleLeft, float title_width = 80, Font title_font = null, RectOffset title_padding = default, SerializedProperty prop = null, RectOffset tog_padding = default, RectOffset tog_margin = default, XGUIToggleStyle tog_style = XGUIToggleStyle.实体, Color tog_bg_off_color = default, Color tog_bg_on_color = default, Color tog_handler_off_color = default, Color tog_handler_on_color = default, XGUIFilled tog_mixed_bg_fill = XGUIFilled.实体, XGUIColor tog_mixed_bg_color = XGUIColor.亮白, Color tog_mixed_bg_color_gui = default, XGUIFontSize tog_mixed_text_size = XGUIFontSize.M, FontStyle tog_mixed_font_style = FontStyle.Normal, Color tog_mixed_text_color = default, TextAnchor tog_mixed_text_anchor = TextAnchor.MiddleCenter, RectOffset tog_mixed_text_padding = default, Font tog_mixed_text_font = null, float tog_mixed_added_height = 0, string[] tog_mixed_options = null, Action<bool> act_on_changed = null)
         {
             if (tog_mixed_text_padding == null)
                 tog_mixed_text_padding = new RectOffset(0, 0, 0, 0);
@@ -110,6 +110,7 @@ namespace SevenStrikeModules.XGUI.Editor
             //Debug.Log(width);
             XGUI.layout_label(
                 text: title,
+                tooltip: tooltip,
                 size: title_size,
                 text_color: title_color,
                 offset: new Vector2(0, 0),
@@ -236,22 +237,6 @@ namespace SevenStrikeModules.XGUI.Editor
             return prop.boolValue;
         }
         /// <summary>
-        /// 设置开关属性的值并触发回调（用于泛型菜单回调）。
-        /// </summary>
-        /// <param name="prop">要设置的序列化布尔属性。</param>
-        /// <param name="value">要设置的值（0 表示 false，1 表示 true）。</param>
-        /// <param name="act_on_changed">值改变时的回调委托。</param>
-        private static void SetToggleValue(SerializedProperty prop, int value, Action<bool> act_on_changed = null)
-        {
-            bool newValue = (value == 0 ? false : true);
-            prop.boolValue = newValue;
-            prop.serializedObject.ApplyModifiedProperties();
-
-            // 调用回调
-            if (act_on_changed != null)
-                act_on_changed(newValue);
-        }
-        /// <summary>
         /// 使用自动布局绘制一个带有标签的开关控件（Toggle/Switch），基于值类型。
         /// </summary>
         /// <param name="title">开关左侧显示的标签文本。为 <c>null</c> 或空时不显示标签。</param>
@@ -287,7 +272,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 该版本基于值类型（bool），适用于非序列化属性的场景，不处理多选混合状态。
         /// 标签宽度会根据窗口宽度自适应，窄屏时自动缩小。
         /// </remarks>
-        public static bool layout_toggle(string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, TextAnchor title_anchor = TextAnchor.MiddleLeft, float title_width = 80, Font title_font = null, RectOffset title_padding = default, bool prop = false, RectOffset tog_padding = default, RectOffset tog_margin = default, XGUIToggleStyle tog_style = XGUIToggleStyle.实体, Color tog_bg_off_color = default, Color tog_bg_on_color = default, Color tog_handler_off_color = default, Color tog_handler_on_color = default, XGUIFilled tog_mixed_bg_fill = XGUIFilled.实体, XGUIColor tog_mixed_bg_color = XGUIColor.亮白, Color tog_mixed_bg_color_gui = default, XGUIFontSize tog_mixed_text_size = XGUIFontSize.M, FontStyle tog_mixed_font_style = FontStyle.Normal, Color tog_mixed_text_color = default, TextAnchor tog_mixed_text_anchor = TextAnchor.MiddleCenter, RectOffset tog_mixed_text_padding = default, Font tog_mixed_text_font = null, float tog_mixed_added_height = 0, string[] tog_mixed_options = null, Action<bool> act_on_changed = null)
+        public static bool layout_toggle(string title = null, string tooltip = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, TextAnchor title_anchor = TextAnchor.MiddleLeft, float title_width = 80, Font title_font = null, RectOffset title_padding = default, bool prop = false, RectOffset tog_padding = default, RectOffset tog_margin = default, XGUIToggleStyle tog_style = XGUIToggleStyle.实体, Color tog_bg_off_color = default, Color tog_bg_on_color = default, Color tog_handler_off_color = default, Color tog_handler_on_color = default, XGUIFilled tog_mixed_bg_fill = XGUIFilled.实体, XGUIColor tog_mixed_bg_color = XGUIColor.亮白, Color tog_mixed_bg_color_gui = default, XGUIFontSize tog_mixed_text_size = XGUIFontSize.M, FontStyle tog_mixed_font_style = FontStyle.Normal, Color tog_mixed_text_color = default, TextAnchor tog_mixed_text_anchor = TextAnchor.MiddleCenter, RectOffset tog_mixed_text_padding = default, Font tog_mixed_text_font = null, float tog_mixed_added_height = 0, string[] tog_mixed_options = null, Action<bool> act_on_changed = null)
         {
             if (tog_mixed_text_padding == null)
                 tog_mixed_text_padding = new RectOffset(0, 0, 0, 0);
@@ -327,6 +312,7 @@ namespace SevenStrikeModules.XGUI.Editor
             //Debug.Log(width);
             XGUI.layout_label(
                 text: title,
+                tooltip: tooltip,
                 size: title_size,
                 text_color: title_color,
                 offset: new Vector2(0, 0),
@@ -420,6 +406,22 @@ namespace SevenStrikeModules.XGUI.Editor
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
 
             return prop;
+        }
+        /// <summary>
+        /// 设置开关属性的值并触发回调（用于泛型菜单回调）。
+        /// </summary>
+        /// <param name="prop">要设置的序列化布尔属性。</param>
+        /// <param name="value">要设置的值（0 表示 false，1 表示 true）。</param>
+        /// <param name="act_on_changed">值改变时的回调委托。</param>
+        private static void SetToggleValue(SerializedProperty prop, int value, Action<bool> act_on_changed = null)
+        {
+            bool newValue = (value == 0 ? false : true);
+            prop.boolValue = newValue;
+            prop.serializedObject.ApplyModifiedProperties();
+
+            // 调用回调
+            if (act_on_changed != null)
+                act_on_changed(newValue);
         }
     }
 }

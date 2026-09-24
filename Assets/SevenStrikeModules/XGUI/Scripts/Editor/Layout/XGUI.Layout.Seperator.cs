@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XGUI.Editor
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using UnityEngine;
 
     /// <summary>
@@ -46,7 +47,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// XGUI.layout_seperator(thickness: 2, color: new Color(0.5f, 0.5f, 0.5f, 0.5f));
         /// </code>
         /// </example>
-        public static void layout_seperator(float thickness = 1, Color color = default, RectOffset margin = default, RectOffset padding = default)
+        public static void layout_seperator(float thickness = 1, XGUISeplineDir dir = XGUISeplineDir.水平, Color color = default, RectOffset margin = default, RectOffset padding = default)
         {
             if (color == Color.clear)
                 color = Color.white;
@@ -58,7 +59,20 @@ namespace SevenStrikeModules.XGUI.Editor
                 padding = new RectOffset(0, 0, 0, 0);
 
             GUIStyle style = new GUIStyle(style_xg_seperate);
-            style.fixedHeight = thickness;
+            if (dir == XGUISeplineDir.水平)
+            {
+                style.fixedHeight = thickness;
+                style.stretchHeight = false;
+                style.stretchWidth = true;
+                style.fixedWidth = 0;
+            }
+            else
+            {
+                style.fixedHeight = 0;
+                style.stretchHeight = true;
+                style.stretchWidth = false;
+                style.fixedWidth = thickness;
+            }
             style.margin = margin;
             style.padding = padding;
 

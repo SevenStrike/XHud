@@ -910,9 +910,9 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 绘制自定义编辑器控件
         /// </summary>
         /// <returns></returns>
-        public static Rect GetControlRect(bool haslabel, float height)
+        public static Rect GetControlRect(bool haslabel, float height, params GUILayoutOption[] options)
         {
-            return EditorGUILayout.GetControlRect(haslabel, height);
+            return EditorGUILayout.GetControlRect(haslabel, height, options);
         }
         /// <summary>
         /// 灵活请求自定义矩形，主动请求参与布局
@@ -1228,9 +1228,10 @@ namespace SevenStrikeModules.XGUI.Editor
         /// </summary>
         /// <param name="size"></param>
         /// <param name="window"></param>
-        public static void CenterEditorWindow(Vector2Int size, EditorWindow window, bool fixedsize = true)
+        public static void CenterEditorWindow(Vector2Int size, EditorWindow window, bool fixedsize = true, bool minsize_mode = true)
         {
-            window.minSize = size;
+            if (minsize_mode)
+                window.minSize = size;
             if (fixedsize)
                 window.maxSize = window.minSize;
 

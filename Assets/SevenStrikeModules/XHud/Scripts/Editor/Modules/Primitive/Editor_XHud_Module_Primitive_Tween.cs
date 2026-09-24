@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XHud.Utilitys;
@@ -83,7 +84,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 图标
-        private Texture2D prw_play_r, prw_play_p, prw_stop_r, prw_stop_p, Add_r, Add_p, locate_r, locate_p, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, statu, count, timer_min, timer_max, pos, rot, sca, size, alp, fill, color, anim_dir_bak, anim_dir_for, anim_dir_for_long, anim_dir_bak_p, anim_dir_for_p, anim_dir_for_long_p, anim_dot, anim_dot_dark, anim_type_mover, anim_type_rotator, anim_type_scale, anim_type_color, anim_type_fade, anim_type_writter, anim_type_fill, anim_type_size, icon_unfold_r, icon_unfold_p, anim_fold_r, anim_fold_p, anim_change_id_r, anim_change_id_p, anim_sound_r, anim_sound_p, anim_dir_war_r, anim_dir_war_p, icon_text, icon_tmptext, icon_image, icon_rawimage, icon_trans, icon_main;
+        private Texture2D prw_play_r, prw_play_p, prw_stop_r, prw_stop_p, Add_r, Add_p, locate_r, locate_p, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, statu, count, timer_min, timer_max, pos, rot, sca, size, alp, fill, color, anim_dir_bak, anim_dir_for, anim_dir_for_long, anim_dir_bak_p, anim_dir_for_p, anim_dir_for_long_p, anim_dot, anim_dot_dark, anim_type_mover, anim_type_rotator, anim_type_scale, anim_type_color, anim_type_fade, anim_type_writter, anim_type_fill, anim_type_size, icon_unfold_r, icon_unfold_p, anim_fold_r, anim_fold_p, anim_change_id_r, anim_change_id_p, anim_sound_r, anim_sound_p, anim_dir_war_r, anim_dir_war_p, icon_text, icon_tmptext, icon_image, icon_rawimage, icon_trans, icon_main, opentrack_r, opentrack_p;
         #endregion
 
         #region 必要组件
@@ -182,61 +183,64 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 获取图标          
-            icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/icon_main");
-            left_arrow_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/left_arrow_r");
-            left_arrow_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/left_arrow_p");
-            right_arrow_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/right_arrow_r");
-            right_arrow_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/right_arrow_p");
-            prw_play_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/prw_play_r");
-            prw_play_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/prw_play_p");
-            prw_stop_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/prw_stop_r");
-            prw_stop_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/prw_stop_p");
-            Add_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/Add_r");
-            Add_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/Add_p");
-            locate_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/locate_r");
-            locate_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/locate_p");
-            statu = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/statu");
-            count = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/count");
-            timer_min = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/timer_min");
-            timer_max = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/timer_max");
-            pos = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/pos");
-            rot = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/rot");
-            sca = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/sca");
-            size = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/size");
-            alp = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/alp");
-            fill = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/fill");
-            color = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/color");
-            anim_dir_bak = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_dir_bak");
-            anim_dir_bak_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_dir_bak_p");
-            anim_dir_for = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_dir_for");
-            anim_dir_for_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_dir_for_p");
-            anim_dir_for_long = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_dir_for_long");
-            anim_dir_for_long_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_dir_for_long_p");
-            anim_dir_war_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_dir_war_r");
-            anim_dir_war_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_dir_war_p");
-            anim_dot = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_dot");
-            anim_dot_dark = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_dot_dark");
-            anim_type_color = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_type_color");
-            anim_type_fade = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_type_fade");
-            anim_type_fill = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_type_fill");
-            anim_type_mover = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_type_move");
-            anim_type_rotator = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_type_rotator");
-            anim_type_scale = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_type_scale");
-            anim_type_size = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_type_size");
-            anim_type_writter = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_type_writter");
-            anim_fold_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_fold_r");
-            anim_fold_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_fold_p");
-            icon_unfold_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/icon_unfold_r");
-            icon_unfold_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/icon_unfold_p");
-            anim_sound_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_sound_r");
-            anim_sound_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_sound_p");
-            anim_change_id_r = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_change_id_r");
-            anim_change_id_p = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/anim_change_id_p");
-            icon_text = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/icon_text");
-            icon_tmptext = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/icon_tmptext");
-            icon_image = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/icon_image");
-            icon_rawimage = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/icon_rawimage");
-            icon_trans = Editor_XHud_GUI.GetIcon("Icons_XHud_Module_Primitive_Tween/icon_trans");
+            icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_main");
+            left_arrow_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/left_arrow_r");
+            left_arrow_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/left_arrow_p");
+            right_arrow_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/right_arrow_r");
+            right_arrow_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/right_arrow_p");
+            prw_play_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/prw_play_r");
+            prw_play_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/prw_play_p");
+            prw_stop_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/prw_stop_r");
+            prw_stop_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/prw_stop_p");
+            Add_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/Add_r");
+            Add_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/Add_p");
+            locate_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/locate_r");
+            locate_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/locate_p");
+            statu = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/statu");
+            count = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/count");
+            timer_min = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/timer_min");
+            timer_max = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/timer_max");
+            pos = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/pos");
+            rot = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/rot");
+            sca = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/sca");
+            size = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/size");
+            alp = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/alp");
+            fill = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/fill");
+            color = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/color");
+            anim_dir_bak = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_dir_bak");
+            anim_dir_bak_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_dir_bak_p");
+            anim_dir_for = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_dir_for");
+            anim_dir_for_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_dir_for_p");
+            anim_dir_for_long = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_dir_for_long");
+            anim_dir_for_long_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_dir_for_long_p");
+            anim_dir_war_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_dir_war_r");
+            anim_dir_war_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_dir_war_p");
+            anim_dot = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_dot");
+            anim_dot_dark = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_dot_dark");
+            anim_type_color = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_color");
+            anim_type_fade = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_fade");
+            anim_type_fill = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_fill");
+            anim_type_mover = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_move");
+            anim_type_rotator = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_rotator");
+            anim_type_scale = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_scale");
+            anim_type_size = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_size");
+            anim_type_writter = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_writter");
+            anim_fold_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_fold_r");
+            anim_fold_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_fold_p");
+            icon_unfold_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_unfold_r");
+            icon_unfold_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_unfold_p");
+            anim_sound_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_sound_r");
+            anim_sound_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_sound_p");
+            anim_change_id_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_change_id_r");
+            anim_change_id_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_change_id_p");
+            icon_text = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_text");
+            icon_tmptext = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_tmptext");
+            icon_image = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_image");
+            icon_rawimage = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_rawimage");
+            icon_trans = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_trans");
+            opentrack_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/opentrack_r");
+            opentrack_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/opentrack_p");
+
             #endregion
 
             #region 获取父物体组件以判断类型
@@ -997,10 +1001,11 @@ namespace SevenStrikeModules.XHud.Editor
 
             GUILayout.BeginHorizontal();
             GUILayout.Space(10);
-            if (Editor_XHud_GUI.Gui_Layout_Button(14, "OPEN", prw_play_r, prw_play_p, 4))
+            if (Editor_XHud_GUI.Gui_Layout_Button(14, "打开时间线轨道编辑器", opentrack_r, opentrack_p, 4))
             {
-                MiniTimelineWindow.OpenWith(BaseScript);
+                Editor_XHud_Module_Primitive_Tween_Tracker.OpenWith(BaseScript);
             }
+            GUILayout.Space(10);
             #region 预览按钮
             if (!Application.isPlaying)
             {

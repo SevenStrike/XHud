@@ -64,6 +64,9 @@ namespace SevenStrikeModules.XGUI.Editor
             if (field_margin == null)
                 field_margin = new RectOffset(0, 0, 0, 0);
 
+            if (title_color == Color.clear)
+                title_color = Color.white * 0.9f;
+
             if (field_text_color == Color.clear)
                 field_text_color = Color.white;
 
@@ -330,6 +333,9 @@ namespace SevenStrikeModules.XGUI.Editor
             if (field_margin == null)
                 field_margin = new RectOffset(0, 0, 0, 0);
 
+            if (title_color == Color.clear)
+                title_color = Color.white * 0.9f;
+
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
                 absolute_margin: true,
@@ -394,6 +400,9 @@ namespace SevenStrikeModules.XGUI.Editor
 
             if (field_margin == null)
                 field_margin = new RectOffset(0, 0, 0, 0);
+
+            if (title_color == Color.clear)
+                title_color = Color.white * 0.9f;
 
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
@@ -460,6 +469,9 @@ namespace SevenStrikeModules.XGUI.Editor
             if (field_margin == null)
                 field_margin = new RectOffset(0, 0, 0, 0);
 
+            if (title_color == Color.clear)
+                title_color = Color.white * 0.9f;
+
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
                 absolute_margin: true,
@@ -524,6 +536,9 @@ namespace SevenStrikeModules.XGUI.Editor
 
             if (field_margin == null)
                 field_margin = new RectOffset(0, 0, 0, 0);
+
+            if (title_color == Color.clear)
+                title_color = Color.white * 0.9f;
 
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
@@ -590,6 +605,9 @@ namespace SevenStrikeModules.XGUI.Editor
 
             if (field_margin == null)
                 field_margin = new RectOffset(0, 0, 0, 0);
+
+            if (title_color == Color.clear)
+                title_color = Color.white * 0.9f;
 
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,

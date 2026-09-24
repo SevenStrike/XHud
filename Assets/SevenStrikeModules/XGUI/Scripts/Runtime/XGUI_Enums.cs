@@ -308,4 +308,14 @@ namespace SevenStrikeModules.XGUI.Runtime
         /// <summary>保存文件（弹出保存对话框）</summary>
         保存文件
     }
+    /// <summary>
+    /// 分割线方向。
+    /// </summary>
+    public enum XGUISeplineDir
+    {
+        /// <summary>垂直分割（竖线）</summary>
+        垂直,
+        /// <summary>水平分割（横线）</summary>
+        水平,
+    }
 }

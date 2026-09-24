@@ -162,7 +162,7 @@ MonoBehaviour:
     Raycast: 0
     Maskable: 0
     SyncPrimitivePaintingColor: 0
-  Preview_Font: {fileID: 12800000, guid: aca8c7dd72f74624d95ec59655a7afa5, type: 3}
+  Preview_Font: {fileID: 0}
   PreviewFontColor: {r: 1, g: 1, b: 1, a: 1}
   PreviewContent: TextStyle
   PreviewTypeText: 

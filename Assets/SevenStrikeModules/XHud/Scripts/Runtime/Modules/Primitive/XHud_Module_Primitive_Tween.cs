@@ -27,8 +27,6 @@ namespace SevenStrikeModules.XHud
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.UI;
-    using static UnityEngine.GraphicsBuffer;
-    using UnityEngine.UIElements;
 
     [SerializeField]
     [System.Serializable]
@@ -944,12 +942,22 @@ namespace SevenStrikeModules.XHud
         #endregion
 
         #region 编辑器视图状态
-        /// <summary>迷你时间轴 - 每秒像素数（缩放）。</summary>
-        [SerializeField] public float MiniTimeline_PixelsPerSecond = 100f;
-        /// <summary>迷你时间轴 - 水平滚动量（像素）。</summary>
-        [SerializeField] public float MiniTimeline_ScrollX = 0f;
-        /// <summary>迷你时间轴 - 轨道高度（像素）。</summary>
-        [SerializeField] public float MiniTimeline_TrackHeight = 0f;
+        /// <summary>动
+        /// 画轨道时间轴 - 每秒像素数（缩放）
+        /// </summary>
+        [SerializeField] public float Timeline_TrackPosition = 100f;
+        /// <summary>
+        /// 动画轨道时间轴 - 水平滚动量（像素）
+        /// </summary>
+        [SerializeField] public Vector2 Timeline_TrackScroll = Vector2.zero;
+        /// <summary>
+        /// 动画轨道时间轴 - 轨道高度（像素）
+        /// </summary>
+        [SerializeField] public float Timeline_TrackHeight = 0f;
+        /// <summary>
+        /// 动画轨道时间轴 - 轨道吸附（像素）
+        /// </summary>
+        [SerializeField] public bool Timeline_TrackSnapEnabled = false;
         #endregion
 
         void Awake()
