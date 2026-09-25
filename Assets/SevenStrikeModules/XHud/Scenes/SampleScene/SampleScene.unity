@@ -4958,6 +4958,7 @@ MonoBehaviour:
     Complete_Set_Endvalue: 1
     Ease: 17
     AnimationCurveName: 
+    valuemode_index: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -5071,12 +5072,13 @@ MonoBehaviour:
     Type: 0
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 0.56
-    Delay: 0.5
+    Delay: 0.228
     Progress: 0
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
+    valuemode_index: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -5128,20 +5130,21 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
     TweenSounds: []
   - ID: 4654
     Indicator: NewTween
     Enabled: 1
-    Type: 1
+    Type: 0
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 0.37
-    Delay: 0.42
+    Duration: 0.509
+    Delay: 0.105
     Progress: 0
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
     Ease: 0
     AnimationCurveName: DefaultCurve
+    valuemode_index: 2
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -5193,7 +5196,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
     TweenSounds: []
   MainTweenNode: 
   GlobalDuration: 1
@@ -5254,9 +5257,9 @@ MonoBehaviour:
       m_Calls: []
   Debug: 0
   PreviewTiming: 
-  Timeline_TrackPosition: 528.30194
+  Timeline_TrackPosition: 600.25385
   Timeline_TrackScroll: {x: 0, y: 0}
-  Timeline_TrackHeight: 26
+  Timeline_TrackHeight: 74.21276
   Timeline_TrackSnapEnabled: 1
 --- !u!114 &764320989
 MonoBehaviour:
@@ -5282,7 +5285,7 @@ MonoBehaviour:
   FirstSaveFeatures: 1
   Debug: 0
   fold_param: 0
-  fold_option: 1
+  fold_option: 0
   fold_based: 1
 --- !u!114 &764320990
 MonoBehaviour:
@@ -5303,7 +5306,7 @@ MonoBehaviour:
   SyncLibraryColor: 1
   SyncImageColor: 1
   fold_param: 0
-  fold_option: 1
+  fold_option: 0
   fold_based: 1
 --- !u!114 &764320991
 MonoBehaviour:
@@ -6137,6 +6140,7 @@ MonoBehaviour:
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
+    valuemode_index: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -6192,10 +6196,10 @@ MonoBehaviour:
     TweenSounds: []
   MainTweenNode: 
   GlobalDuration: 1
-  MinTimer: 4.302
-  MaxTimer: 4.302
-  MinTimerWithGlobalDuration: 4.302
-  MaxTimerWithGlobalDuration: 4.302
+  MinTimer: 4.3
+  MaxTimer: 4.3
+  MinTimerWithGlobalDuration: 4.3
+  MaxTimerWithGlobalDuration: 4.3
   eve_on_Tween_Play:
     m_PersistentCalls:
       m_Calls: []
@@ -8427,8 +8431,8 @@ MonoBehaviour:
   IsInitialized: 1
   FoldAllPanelWithDisabled: 0
   fold_options: 1
-  fold_canvasset: 1
-  fold_camera: 1
+  fold_canvasset: 0
+  fold_camera: 0
   fold_ratiorefer: 1
   fold_compguid: 1
   fold_reslibs: 1
@@ -9217,7 +9221,6 @@ GameObject:
   - component: {fileID: 1465583113}
   - component: {fileID: 1465583112}
   - component: {fileID: 1465583111}
-  - component: {fileID: 1465583116}
   m_Layer: 8
   m_Name: PrimitiveController
   m_TagString: Untagged
@@ -9333,15 +9336,16 @@ MonoBehaviour:
   - ID: 4074
     Indicator: NewTweenNewTweenNewTween
     Enabled: 1
-    Type: 0
+    Type: 1
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 2
     Delay: 1.4
     Progress: 0
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
-    Ease: 3
+    Ease: 0
     AnimationCurveName: DefaultCurve
+    valuemode_index: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -9398,7 +9402,7 @@ MonoBehaviour:
   - ID: 8078
     Indicator: NewTween
     Enabled: 1
-    Type: 4
+    Type: 0
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 2.41
     Delay: 0.85
@@ -9407,6 +9411,7 @@ MonoBehaviour:
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
+    valuemode_index: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -9472,6 +9477,7 @@ MonoBehaviour:
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
+    valuemode_index: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -9537,6 +9543,7 @@ MonoBehaviour:
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
+    valuemode_index: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -9602,6 +9609,7 @@ MonoBehaviour:
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
+    valuemode_index: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -9667,6 +9675,7 @@ MonoBehaviour:
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
+    valuemode_index: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -9779,7 +9788,7 @@ MonoBehaviour:
       m_Calls: []
   Debug: 0
   PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
-  Timeline_TrackPosition: 124
+  Timeline_TrackPosition: 105.8
   Timeline_TrackScroll: {x: 0, y: 0}
   Timeline_TrackHeight: 26
   Timeline_TrackSnapEnabled: 0
@@ -9806,8 +9815,8 @@ MonoBehaviour:
     Fill: 1
   FirstSaveFeatures: 1
   Debug: 0
-  fold_param: 1
-  fold_option: 1
+  fold_param: 0
+  fold_option: 0
   fold_based: 1
 --- !u!114 &1465583113
 MonoBehaviour:
@@ -9855,23 +9864,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!320 &1465583116
-PlayableDirector:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1465583106}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 8e66af040df03eb4e89823dabe48687b, type: 2}
-  m_InitialState: 1
-  m_WrapMode: 2
-  m_DirectorUpdateMode: 1
-  m_InitialTime: 0
-  m_SceneBindings: []
-  m_ExposedReferences:
-    m_References: []
 --- !u!1 &1469781039
 GameObject:
   m_ObjectHideFlags: 0

@@ -206,6 +206,7 @@ namespace SevenStrikeModules.XHud.Editor
                text_offset: new Vector2(0, 0),
                text_font: XGUI.GetFont("xg-regular"),
                text_fontstyle: FontStyle.Normal,
+               bg_width_offset: 28,
                navigate_style: true,
                navigate_style_bg: XGUIFilled.纯色边框,
                navigate_style_bg_color: Color.black * 0.5f);

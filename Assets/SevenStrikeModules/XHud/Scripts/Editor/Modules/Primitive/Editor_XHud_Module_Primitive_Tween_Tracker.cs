@@ -175,6 +175,16 @@ namespace SevenStrikeModules.XHud.Editor
         private bool isHoveringParamResizeZone = false;
         #endregion
 
+        #region 字段：参数面板必要组件
+        private XHud_Module_Text HudText;
+        private XHud_Module_TmpText HudTmpText;
+        private XHud_Module_Button HudButton;
+        private XHud_Module_Progress HudProgress;
+        private XHud_Module_Toggle HudToggle;
+        private XHud_Module_Slider HudSlider;
+        private XHud_Module_Option HudOption;
+        #endregion
+
         #region 常量：颜色
         /// <summary> 
         ///轨道基础底色
@@ -323,7 +333,38 @@ namespace SevenStrikeModules.XHud.Editor
         /// 新增首个动画按钮图标（按下）
         /// </summary>
         private Texture2D icon_null_add_p;
-
+        /// <summary>
+        /// 类型大图标 - 位移
+        /// </summary>
+        private Texture2D b_anim_type_move;
+        /// <summary>
+        /// 类型大图标 - 旋转
+        /// </summary>
+        private Texture2D b_anim_type_rotate;
+        /// <summary>
+        /// 类型大图标 - 缩放
+        /// </summary>
+        private Texture2D b_anim_type_scale;
+        /// <summary>
+        /// 类型大图标 - 颜色
+        /// </summary>
+        private Texture2D b_anim_type_color;
+        /// <summary>
+        /// 类型大图标 - 淡化
+        /// </summary>
+        private Texture2D b_anim_type_fade;
+        /// <summary>
+        /// 类型大图标 - 打字机
+        /// </summary>
+        private Texture2D b_anim_type_writter;
+        /// <summary>
+        /// 类型大图标 - 填充
+        /// </summary>
+        private Texture2D b_anim_type_fill;
+        /// <summary>
+        /// 类型大图标 - 尺寸
+        /// </summary>
+        private Texture2D b_anim_type_size;
 
         #endregion
 
@@ -556,6 +597,7 @@ namespace SevenStrikeModules.XHud.Editor
                 window.selectedIndex = -1;
                 window.selectedIndices.Clear();
                 window.LoadViewState();
+                window.RefreshHostComponents();
             }
             window.Repaint();
             window.Focus();
@@ -594,6 +636,14 @@ namespace SevenStrikeModules.XHud.Editor
             icon_null_check = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_null_check");
             icon_null_add_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_null_add_r");
             icon_null_add_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_null_add_p");
+            b_anim_type_move = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_move");
+            b_anim_type_rotate = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_rotate");
+            b_anim_type_scale = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_scale");
+            b_anim_type_color = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_color");
+            b_anim_type_fade = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_fade");
+            b_anim_type_writter = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_writter");
+            b_anim_type_fill = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_fill");
+            b_anim_type_size = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_size");
 
             icon_led = XGUI.GetBasedIcon("icon_field_status");
         }
@@ -737,7 +787,6 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 XGUI.layout_flexspace();
                 XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
-
 
                 return;
             }
@@ -1168,7 +1217,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.gui_icon(
                    rect: new Rect(nameRect.x + 10, nameRect.y + ((nameRect.height / 2) - TweenTypeDotSize / 2), TweenTypeDotSize, TweenTypeDotSize),
                    icon: icon_led,
-                   color: GetClipColor(node.Type));
+                   color: GetTweenTypeColor(node.Type));
 
                 if (Event.current.type == EventType.MouseDown
                     && Event.current.button == 0
@@ -1508,7 +1557,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 类型指示条
-            Color clip_type_Color = GetClipColor(node.Type);
+            Color clip_type_Color = GetTweenTypeColor(node.Type);
             if (!node.Enabled)
                 clip_type_Color *= 0.55f;
             if (isSelected)
@@ -1577,18 +1626,18 @@ namespace SevenStrikeModules.XHud.Editor
         ///</summary>
         /// <param name="type">动画节点类型</param>
         /// <returns>该类型对应的颜色</returns>
-        private Color GetClipColor(TweenNodeType type)
+        private Color GetTweenTypeColor(TweenNodeType type)
         {
             switch (type)
             {
-                case TweenNodeType.位移: return new Color(0.2f, 0.5f, 0.9f);
-                case TweenNodeType.旋转: return new Color(0.9f, 0.6f, 0.2f);
-                case TweenNodeType.缩放: return new Color(0.3f, 0.8f, 0.4f);
-                case TweenNodeType.颜色: return new Color(0.9f, 0.3f, 0.4f);
-                case TweenNodeType.淡化: return new Color(0.6f, 0.4f, 0.9f);
-                case TweenNodeType.打字机: return new Color(0.8f, 0.8f, 0.3f);
-                case TweenNodeType.图像填充: return new Color(0.3f, 0.8f, 0.8f);
-                case TweenNodeType.尺寸: return new Color(0.7f, 0.5f, 0.3f);
+                case TweenNodeType.a_位移: return new Color(0.2f, 0.5f, 0.9f);
+                case TweenNodeType.r_旋转: return new Color(0.9f, 0.6f, 0.2f);
+                case TweenNodeType.s_缩放: return new Color(0.3f, 0.8f, 0.4f);
+                case TweenNodeType.c_颜色: return new Color(0.9f, 0.3f, 0.4f);
+                case TweenNodeType.g_淡化: return new Color(0.6f, 0.4f, 0.9f);
+                case TweenNodeType.w_打字机: return new Color(0.8f, 0.8f, 0.3f);
+                case TweenNodeType.f_图像填充: return new Color(0.3f, 0.8f, 0.8f);
+                case TweenNodeType.z_尺寸: return new Color(0.7f, 0.5f, 0.3f);
                 default: return Color.gray;
             }
         }
@@ -1597,34 +1646,34 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        private Texture2D GetTweenTypeIcon(TweenNodeType type)
+        private Texture2D GetTweenTypeIcon(TweenNodeType type, bool big_mode = false)
         {
             Texture2D typeicon = null;
             switch (type)
             {
-                case TweenNodeType.位移:
-                    typeicon = icon_type_move;
+                case TweenNodeType.a_位移:
+                    typeicon = big_mode ? b_anim_type_move : icon_type_move;
                     break;
-                case TweenNodeType.旋转:
-                    typeicon = icon_type_rotator;
+                case TweenNodeType.r_旋转:
+                    typeicon = big_mode ? b_anim_type_rotate : icon_type_rotator;
                     break;
-                case TweenNodeType.缩放:
-                    typeicon = icon_type_scale;
+                case TweenNodeType.s_缩放:
+                    typeicon = big_mode ? b_anim_type_scale : icon_type_scale;
                     break;
-                case TweenNodeType.颜色:
-                    typeicon = icon_type_color;
+                case TweenNodeType.c_颜色:
+                    typeicon = big_mode ? b_anim_type_color : icon_type_color;
                     break;
-                case TweenNodeType.淡化:
-                    typeicon = icon_type_fade;
+                case TweenNodeType.g_淡化:
+                    typeicon = big_mode ? b_anim_type_fade : icon_type_fade;
                     break;
-                case TweenNodeType.打字机:
-                    typeicon = icon_type_writter;
+                case TweenNodeType.w_打字机:
+                    typeicon = big_mode ? b_anim_type_writter : icon_type_writter;
                     break;
-                case TweenNodeType.图像填充:
-                    typeicon = icon_type_fill;
+                case TweenNodeType.f_图像填充:
+                    typeicon = big_mode ? b_anim_type_fill : icon_type_fill;
                     break;
-                case TweenNodeType.尺寸:
-                    typeicon = icon_type_size;
+                case TweenNodeType.z_尺寸:
+                    typeicon = big_mode ? b_anim_type_size : icon_type_size;
                     break;
             }
 
@@ -1646,33 +1695,36 @@ namespace SevenStrikeModules.XHud.Editor
             Rect rulerParamRect = new Rect(0, 0, area.width, rulerHeight);
             Rect scrollViewportRect = new Rect(0, rulerHeight, area.width, area.height - rulerHeight);
 
-            // 用 GUILayout.BeginScrollView，让内部控件走自动布局
-            paramScroll = GUILayout.BeginScrollView(
-                paramScroll,
-                false,
-                false,
-                GUIStyle.none,
-                GUI.skin.verticalScrollbar,
-                GUILayout.Width(scrollViewportRect.width),
-                GUILayout.Height(scrollViewportRect.height));
-
-            if (selectedIndex >= 0 && selectedIndex < Nodes.Count)
+            if (selectedIndex != -1)
             {
-                DrawParamFields();
-            }
-            else
-            {
-                GUILayout.Space(6);
-                GUILayout.Label("点击左侧轨道或 Clip 以编辑参数。", EditorStyles.miniLabel);
-            }
+                TweenNode node = Nodes[selectedIndex];
+                Texture2D icon_type = GetTweenTypeIcon(node.Type, true);
 
-            GUILayout.EndScrollView();
+                // 用 GUILayout.BeginScrollView，让内部控件走自动布局
+                paramScroll = GUILayout.BeginScrollView(
+                    paramScroll,
+                    false,
+                    false,
+                    GUIStyle.none,
+                    GUI.skin.verticalScrollbar,
+                    GUILayout.Width(scrollViewportRect.width),
+                    GUILayout.Height(scrollViewportRect.height));
+
+                if (selectedIndex >= 0 && selectedIndex < Nodes.Count)
+                {
+                    DrawParamFields(scrollViewportRect, icon_type, node);
+                }
+                else
+                {
+                    GUILayout.Space(6);
+                    GUILayout.Label("点击左侧轨道或 Clip 以编辑参数。", EditorStyles.miniLabel);
+                }
+
+                GUILayout.EndScrollView();
+            }
 
             // 点击面板空白处清除键盘焦点（注意：GUILayout 里取鼠标位置仍可用 Event.current）
-            if (Event.current.type == EventType.MouseDown
-                && Event.current.button == 0
-                && !Event.current.alt
-                && scrollViewportRect.Contains(Event.current.mousePosition))
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 0 && !Event.current.alt && scrollViewportRect.Contains(Event.current.mousePosition))
             {
                 GUIUtility.keyboardControl = 0;
                 Event.current.Use();
@@ -1696,29 +1748,8 @@ namespace SevenStrikeModules.XHud.Editor
         ///绘制选中节点的参数字段
         ///<para/>使用 EditorGUILayout 自动布局；按 <see cref="TweenNode.Type"/> 动态显示起始值 / 结束值
         ///</summary>
-        private void DrawParamFields()
+        private void DrawParamFields(Rect area, Texture2D type_icon, TweenNode node)
         {
-            TweenNode node = Nodes[selectedIndex];
-
-            XGUI.ChangedCheck_Start();
-
-            #region 基础
-            XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
-                title: "基础",
-                title_text_color: XHud_Dashboard.Theme_Primary,
-                title_clipping: XGUI.TryEllipsisClipping(),
-                title_size: XGUIFontSize.M,
-                title_manual_offset: true,
-                title_manual_offset_space: 5,
-                absolute_margin: true,
-                absolute_padding: true,
-                margin: new RectOffset(10, 10, 25, 0),
-                padding: new RectOffset(10, 10, 15, 15));
-
             SerializedObject so = new SerializedObject(target);
             SerializedProperty ser_indicator = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex).FindPropertyRelative("Indicator");
             SerializedProperty ser_type = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex).FindPropertyRelative("Type");
@@ -1733,6 +1764,49 @@ namespace SevenStrikeModules.XHud.Editor
 
             so.Update();
 
+            #region 类型图标
+            //XGUI.layout_group_start(
+            //    type: XGUIContainerType.Horizontal,
+            //    bg_fill: XGUIFilled.透明,
+            //    bg_color: XGUIColor.亮白,
+            //    absolute_margin: true,
+            //    absolute_padding: true,
+            //    margin: new RectOffset(10, 10, 25, 10),
+            //    padding: new RectOffset(0, 0, 0, 0));
+
+            //XGUI.layout_icon(
+            //    icon: type_icon,
+            //    icon_color: Color.white * 0.7f,
+            //    width: 32,
+            //    height: 32,
+            //    icon_border: new RectOffset(0, 0, 0, 0),
+            //    icon_offset: new Vector2(0, 0),
+            //    icon_margin: new RectOffset(0, 0, 0, 0),
+            //    icon_padding: new RectOffset(0, 0, 0, 0),
+            //    icon_alignment: XGUIIconAlignment.中心);
+
+            //XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+            #endregion
+
+            XGUI.ChangedCheck_Start();
+
+            #region 参数
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "参数",
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: XGUI.TryEllipsisClipping(),
+                title_size: XGUIFontSize.M,
+                title_manual_offset: true,
+                title_manual_offset_space: 5,
+                absolute_margin: true,
+                absolute_padding: true,
+                margin: new RectOffset(10, 10, 25, 0),
+                padding: new RectOffset(10, 10, 15, 15));
+
             #region 标识
             XGUI.layout_property_field(
               title: "标识",
@@ -1740,19 +1814,9 @@ namespace SevenStrikeModules.XHud.Editor
               title_hover_color: XHud_Dashboard.Theme_Primary,
               title_width: 80,
               prop: ser_indicator,
-              prop_margin: new RectOffset(0, 0, 5, 0));
+              prop_padding: new RectOffset(5, 5, 0, 5),
+              prop_margin: new RectOffset(5, 5, 0, 0));
             ser_indicator.serializedObject.ApplyModifiedProperties();
-            #endregion
-
-            #region 时机
-            XGUI.layout_property_field(
-                title: "时机",
-                title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
-                title_width: 80,
-                prop: ser_timing,
-                prop_margin: new RectOffset(0, 0, 5, 0));
-            ser_timing.serializedObject.ApplyModifiedProperties();
             #endregion
 
             #region 类型
@@ -1762,8 +1826,60 @@ namespace SevenStrikeModules.XHud.Editor
                title_hover_color: XHud_Dashboard.Theme_Primary,
                title_width: 80,
                prop: ser_type,
-               prop_margin: new RectOffset(0, 0, 5, 0));
+               prop_padding: new RectOffset(5, 5, 0, 5),
+              prop_margin: new RectOffset(5, 5, 0, 5));
             ser_type.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            #region 时机
+            string[] TimingTypes = null;
+
+            if (HudButton != null)
+            {
+                TimingTypes = new string[9] { "无", "鼠标进入", "鼠标退出", "鼠标按下", "鼠标松开", "鼠标长按", "鼠标点击", "鼠标选中", "鼠标取消选中" };
+            }
+            else if (HudProgress != null)
+            {
+                TimingTypes = new string[5] { "无", "进度开始时", "进度变化时", "进度结束时", "进度重置时" };
+            }
+            else if (HudToggle != null)
+            {
+                TimingTypes = new string[7] { "无", "开关打开时", "开关关闭时", "开关按下时", "开关抬起时", "开关变化时", "开关变化中" };
+            }
+            else if (HudSlider != null)
+            {
+                TimingTypes = new string[5] { "无", "按下滑动条", "松开滑动条", "滑动条数值改变", "滑动条数值变化中" };
+            }
+            else if (HudOption != null)
+            {
+                TimingTypes = new string[5] { "无", "点击选项", "光标移动开始", "光标移动结束", "光标位置改变" };
+            }
+            else
+            {
+                TimingTypes = new string[4] { "元素进入时", "元素进入后", "元素退出时", "自定义" };
+            }
+
+            ser_timing.stringValue = XGUI.layout_string_popup(
+                   title: "时机",
+                   title_width: 80,
+                   title_size: XGUIFontSize.M,
+                   title_anchor: TextAnchor.MiddleLeft,
+                   prop: ser_timing,
+                   options: TimingTypes,
+                   opt_text_size: XGUIFontSize.M,
+                   opt_text_color: Color.black,
+                   opt_text_padding: new RectOffset(10, 10, 0, 0),
+                   opt_anchor: TextAnchor.MiddleLeft,
+                   opt_font_style: FontStyle.Normal,
+                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_color: XGUIColor.亮白,
+                   opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                   margin: new RectOffset(0, 0, 0, 0),
+                   padding: new RectOffset(10, 9, 0, 5),
+                   title_margin: new RectOffset(0, 0, 0, 0),
+                   icon_arrow_color: Color.black);
+
+            ser_timing.serializedObject.ApplyModifiedProperties();
             #endregion
 
             #region 耗时
@@ -1773,7 +1889,8 @@ namespace SevenStrikeModules.XHud.Editor
                 title_hover_color: XHud_Dashboard.Theme_Primary,
                 title_width: 80,
                 prop: ser_duration,
-                prop_margin: new RectOffset(0, 0, 5, 0));
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(5, 5, 0, 0));
             ser_duration.serializedObject.ApplyModifiedProperties();
             #endregion
 
@@ -1784,7 +1901,8 @@ namespace SevenStrikeModules.XHud.Editor
                 title_hover_color: XHud_Dashboard.Theme_Primary,
                 title_width: 80,
                 prop: ser_delay,
-                prop_margin: new RectOffset(0, 0, 5, 0));
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(5, 5, 0, 0));
             ser_delay.serializedObject.ApplyModifiedProperties();
             #endregion
 
@@ -1795,12 +1913,13 @@ namespace SevenStrikeModules.XHud.Editor
                 title_hover_color: XHud_Dashboard.Theme_Primary,
                 title_width: 80,
                 prop: ser_ease,
-                prop_margin: new RectOffset(0, 0, 5, 0));
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(0, 0, 0, 0));
             ser_ease.serializedObject.ApplyModifiedProperties();
             #endregion
 
             #region 旋转模式
-            if (node.Type == TweenNodeType.旋转)
+            if (node.Type == TweenNodeType.r_旋转)
             {
                 XGUI.layout_property_field(
                     title: "旋转模式",
@@ -1808,7 +1927,8 @@ namespace SevenStrikeModules.XHud.Editor
                     title_hover_color: XHud_Dashboard.Theme_Primary,
                     title_width: 80,
                     prop: ser_rotate_mode,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
+                    prop_padding: new RectOffset(5, 5, 0, 5),
+                    prop_margin: new RectOffset(0, 0, 0, 0));
                 ser_rotate_mode.serializedObject.ApplyModifiedProperties();
             }
             #endregion
@@ -1820,7 +1940,8 @@ namespace SevenStrikeModules.XHud.Editor
                 title_hover_color: XHud_Dashboard.Theme_Primary,
                 title_width: 80,
                 prop: ser_loop_type,
-                prop_margin: new RectOffset(0, 0, 5, 0));
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(0, 0, 0, 0));
             ser_loop_type.serializedObject.ApplyModifiedProperties();
             #endregion
 
@@ -1831,7 +1952,8 @@ namespace SevenStrikeModules.XHud.Editor
                 title_hover_color: XHud_Dashboard.Theme_Primary,
                 title_width: 80,
                 prop: ser_loop_count,
-                prop_margin: new RectOffset(0, 0, 5, 0));
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(0, 0, 0, 0));
             ser_loop_type.serializedObject.ApplyModifiedProperties();
             #endregion
 
@@ -1844,10 +1966,65 @@ namespace SevenStrikeModules.XHud.Editor
                     title_hover_color: XHud_Dashboard.Theme_Primary,
                     title_width: 80,
                     prop: ser_curve,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
+                    prop_padding: new RectOffset(5, 5, 0, 5),
+                    prop_margin: new RectOffset(0, 0, 0, 0));
                 ser_curve.serializedObject.ApplyModifiedProperties();
             }
             #endregion
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            #region 数值
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "数值",
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: XGUI.TryEllipsisClipping(),
+                title_size: XGUIFontSize.M,
+                title_manual_offset: true,
+                title_manual_offset_space: 5,
+                absolute_margin: true,
+                absolute_padding: true,
+                margin: new RectOffset(10, 10, 25, 0),
+                padding: new RectOffset(10, 10, 15, 15));
+
+            int index = node.valuemode_index = XGUI.layout_toolbar(
+                      index: node.valuemode_index,
+                      names: new string[] { "S - D", "D - E", "S - E", "C - E" },
+                      bg_normal: XGUIFilled.纯色边框,
+                      bg_selected: XGUIFilled.实体,
+                      bg_color: XGUIColor.亮白,
+                      bg_gui_color: Color.black * 0.5f,
+                      text_color_normal: Color.white,
+                      text_color_selected: XHud_Dashboard.Theme_Primary,
+                      bar_height: 25,
+                      text_anchor: TextAnchor.MiddleCenter,
+                      text_padding: new RectOffset(10, 10, 0, 0),
+                      bar_margin: new RectOffset(0, 0, 0, 0),
+                      text_offset: new Vector2(0, -2),
+                      text_font: XGUI.GetFont("xg-regular"),
+                      text_fontstyle: FontStyle.Bold,
+                      bg_width_offset: 15,
+                      maual_area_width: area.width,
+                      navigate_style: true,
+                      navigate_style_bg: XGUIFilled.纯色边框,
+                      navigate_style_bg_color: Color.black * 0.5f);
+
+            switch (index)
+            {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
 
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
@@ -1887,7 +2064,7 @@ namespace SevenStrikeModules.XHud.Editor
             EditorGUILayout.Space(6);
 
             #region 起始值 / 结束值（按类型动态显示）
-            DrawTypeSpecificFields(node);
+
             #endregion
 
             if (XGUI.ChangedCheck_End())
@@ -1902,106 +2079,31 @@ namespace SevenStrikeModules.XHud.Editor
 
             so.ApplyModifiedProperties();
         }
+
         /// <summary> 
-        ///按 <see cref="TweenNode.Type"/> 动态绘制起始值 / 结束值字段
+        ///根据当前 target 刷新其所在的 XHud 宿主组件缓存
         ///</summary>
-        private void DrawTypeSpecificFields(TweenNode node)
+        private void RefreshHostComponents()
         {
-            // 没有任何一端激活时不显示数值字段
-            if (!node.ActivateFrom && !node.ActivateEnd && !node.ActivateOnlyToEnd)
-                return;
-
-            EditorGUILayout.LabelField("数值", EditorStyles.boldLabel);
-
-            switch (node.Type)
+            if (target == null || target.Equals(null))
             {
-                case TweenNodeType.位移:
-                    DrawVec3Row("起始", ref node.ActivateFrom, ref node.From_Vector3);
-                    DrawVec3Row("结束", ref node.ActivateEnd, ref node.End_Vector3);
-                    break;
-
-                case TweenNodeType.旋转:
-                    DrawVec3Row("起始", ref node.ActivateFrom, ref node.From_Vector3);
-                    DrawVec3Row("结束", ref node.ActivateEnd, ref node.End_Vector3);
-                    break;
-
-                case TweenNodeType.缩放:
-                    DrawVec3Row("起始", ref node.ActivateFrom, ref node.From_Vector3);
-                    DrawVec3Row("结束", ref node.ActivateEnd, ref node.End_Vector3);
-                    break;
-
-                case TweenNodeType.尺寸:
-                    DrawVec2Row("起始", ref node.ActivateFrom, ref node.From_Vector2);
-                    DrawVec2Row("结束", ref node.ActivateEnd, ref node.End_Vector2);
-                    break;
-
-                case TweenNodeType.颜色:
-                    DrawColorRow("起始", ref node.ActivateFrom, ref node.From_Color);
-                    DrawColorRow("结束", ref node.ActivateEnd, ref node.End_Color);
-                    break;
-
-                case TweenNodeType.淡化:
-                    DrawFloatRow("起始", ref node.ActivateFrom, ref node.From_Float);
-                    DrawFloatRow("结束", ref node.ActivateEnd, ref node.End_Float);
-                    break;
-
-                case TweenNodeType.打字机:
-                    DrawStringRow("起始", ref node.ActivateFrom, ref node.From_String);
-                    DrawStringRow("结束", ref node.ActivateEnd, ref node.End_String);
-                    break;
-
-                case TweenNodeType.图像填充:
-                    DrawFloatRow("起始", ref node.ActivateFrom, ref node.From_Float);
-                    DrawFloatRow("结束", ref node.ActivateEnd, ref node.End_Float);
-                    break;
-
-                default:
-                    DrawFloatRow("起始", ref node.ActivateFrom, ref node.From_Float);
-                    DrawFloatRow("结束", ref node.ActivateEnd, ref node.End_Float);
-                    break;
+                HudText = null;
+                HudTmpText = null;
+                HudButton = null;
+                HudProgress = null;
+                HudToggle = null;
+                HudSlider = null;
+                HudOption = null;
+                return;
             }
-        }
 
-        // ---- 行级助手：勾选 + 数值 ----
-
-        private void DrawVec2Row(string label, ref bool activate, ref Vector2 value)
-        {
-            EditorGUILayout.BeginHorizontal();
-            activate = EditorGUILayout.Toggle(activate, GUILayout.Width(16));
-            value = EditorGUILayout.Vector2Field(label, value);
-            EditorGUILayout.EndHorizontal();
-        }
-
-        private void DrawVec3Row(string label, ref bool activate, ref Vector3 value)
-        {
-            EditorGUILayout.BeginHorizontal();
-            activate = EditorGUILayout.Toggle(activate, GUILayout.Width(16));
-            value = EditorGUILayout.Vector3Field(label, value);
-            EditorGUILayout.EndHorizontal();
-        }
-
-        private void DrawFloatRow(string label, ref bool activate, ref float value)
-        {
-            EditorGUILayout.BeginHorizontal();
-            activate = EditorGUILayout.Toggle(activate, GUILayout.Width(16));
-            value = EditorGUILayout.FloatField(label, value);
-            EditorGUILayout.EndHorizontal();
-        }
-
-        private void DrawStringRow(string label, ref bool activate, ref string value)
-        {
-            EditorGUILayout.BeginHorizontal();
-            activate = EditorGUILayout.Toggle(activate, GUILayout.Width(16));
-            value = EditorGUILayout.TextField(label, value);
-            EditorGUILayout.EndHorizontal();
-        }
-
-        private void DrawColorRow(string label, ref bool activate, ref Color value)
-        {
-            EditorGUILayout.BeginHorizontal();
-            activate = EditorGUILayout.Toggle(activate, GUILayout.Width(16));
-            value = EditorGUILayout.ColorField(label, value);
-            EditorGUILayout.EndHorizontal();
+            HudText = target.GetComponentInParent<XHud_Module_Text>();
+            HudTmpText = target.GetComponentInParent<XHud_Module_TmpText>();
+            HudButton = target.GetComponentInParent<XHud_Module_Button>();
+            HudProgress = target.GetComponentInParent<XHud_Module_Progress>();
+            HudToggle = target.GetComponentInParent<XHud_Module_Toggle>();
+            HudSlider = target.GetComponentInParent<XHud_Module_Slider>();
+            HudOption = target.GetComponentInParent<XHud_Module_Option>();
         }
 
         #region Draw 开关选项

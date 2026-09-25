@@ -336,28 +336,28 @@ namespace SevenStrikeModules.XHud.Editor
                     TweenNodeType nodetype = (TweenNodeType)sp_Type.enumValueIndex;
                     switch (nodetype)
                     {
-                        case TweenNodeType.位移:
+                        case TweenNodeType.a_位移:
                             typeicon = anim_type_mover;
                             break;
-                        case TweenNodeType.旋转:
+                        case TweenNodeType.r_旋转:
                             typeicon = anim_type_rotator;
                             break;
-                        case TweenNodeType.缩放:
+                        case TweenNodeType.s_缩放:
                             typeicon = anim_type_scale;
                             break;
-                        case TweenNodeType.颜色:
+                        case TweenNodeType.c_颜色:
                             typeicon = anim_type_color;
                             break;
-                        case TweenNodeType.淡化:
+                        case TweenNodeType.g_淡化:
                             typeicon = anim_type_fade;
                             break;
-                        case TweenNodeType.打字机:
+                        case TweenNodeType.w_打字机:
                             typeicon = anim_type_writter;
                             break;
-                        case TweenNodeType.图像填充:
+                        case TweenNodeType.f_图像填充:
                             typeicon = anim_type_fill;
                             break;
-                        case TweenNodeType.尺寸:
+                        case TweenNodeType.z_尺寸:
                             typeicon = anim_type_size;
                             break;
                     }
@@ -393,7 +393,7 @@ namespace SevenStrikeModules.XHud.Editor
                         if (BaseScript.controller != null)
                         {
                             ModuleType animtype = BaseScript.controller.GetModuleType();
-                            if (nodetype == TweenNodeType.颜色)
+                            if (nodetype == TweenNodeType.c_颜色)
                             {
                                 if (animtype == Enums.ModuleType.Text || animtype == Enums.ModuleType.TmpText)
                                 {
@@ -681,49 +681,49 @@ namespace SevenStrikeModules.XHud.Editor
                             #region 分类
                             switch (nodetype)
                             {
-                                case TweenNodeType.位移:
+                                case TweenNodeType.a_位移:
                                     SerializedProperty sp_pos_ori = sp_node.FindPropertyRelative("Original_Vector3");
                                     SerializedProperty sp_pos_from = sp_node.FindPropertyRelative("From_Vector3");
                                     SerializedProperty sp_pos_end = sp_node.FindPropertyRelative("End_Vector3");
                                     Draw_TweenValues(rect_valuepanel, dir_index, sp_pos_ori, sp_pos_from, sp_pos_end, nodetype, sp_ActivateOnlyToEnd.boolValue);
                                     break;
-                                case TweenNodeType.旋转:
+                                case TweenNodeType.r_旋转:
                                     SerializedProperty sp_rot_ori = sp_node.FindPropertyRelative("Original_Vector3");
                                     SerializedProperty sp_rot_from = sp_node.FindPropertyRelative("From_Vector3");
                                     SerializedProperty sp_rot_end = sp_node.FindPropertyRelative("End_Vector3");
                                     Draw_TweenValues(rect_valuepanel, dir_index, sp_rot_ori, sp_rot_from, sp_rot_end, nodetype, sp_ActivateOnlyToEnd.boolValue);
                                     break;
-                                case TweenNodeType.缩放:
+                                case TweenNodeType.s_缩放:
                                     SerializedProperty sp_scale_ori = sp_node.FindPropertyRelative("Original_Vector3");
                                     SerializedProperty sp_scale_from = sp_node.FindPropertyRelative("From_Vector3");
                                     SerializedProperty sp_scale_end = sp_node.FindPropertyRelative("End_Vector3");
                                     Draw_TweenValues(rect_valuepanel, dir_index, sp_scale_ori, sp_scale_from, sp_scale_end, nodetype, sp_ActivateOnlyToEnd.boolValue);
                                     break;
-                                case TweenNodeType.颜色:
+                                case TweenNodeType.c_颜色:
                                     SerializedProperty sp_color_ori = sp_node.FindPropertyRelative("Original_Color");
                                     SerializedProperty sp_color_from = sp_node.FindPropertyRelative("From_Color");
                                     SerializedProperty sp_color_end = sp_node.FindPropertyRelative("End_Color");
                                     Draw_TweenValues(rect_valuepanel, dir_index, sp_color_ori, sp_color_from, sp_color_end, nodetype, sp_ActivateOnlyToEnd.boolValue);
                                     break;
-                                case TweenNodeType.淡化:
+                                case TweenNodeType.g_淡化:
                                     SerializedProperty sp_fade_ori = sp_node.FindPropertyRelative("Original_Float");
                                     SerializedProperty sp_fade_from = sp_node.FindPropertyRelative("From_Float");
                                     SerializedProperty sp_fade_end = sp_node.FindPropertyRelative("End_Float");
                                     Draw_TweenValues(rect_valuepanel, dir_index, sp_fade_ori, sp_fade_from, sp_fade_end, nodetype, sp_ActivateOnlyToEnd.boolValue);
                                     break;
-                                case TweenNodeType.打字机:
+                                case TweenNodeType.w_打字机:
                                     SerializedProperty sp_text_ori = sp_node.FindPropertyRelative("Original_String");
                                     SerializedProperty sp_text_from = sp_node.FindPropertyRelative("From_String");
                                     SerializedProperty sp_text_end = sp_node.FindPropertyRelative("End_String");
                                     Draw_TweenValues(rect_valuepanel, dir_index, sp_text_ori, sp_text_from, sp_text_end, nodetype, sp_ActivateOnlyToEnd.boolValue);
                                     break;
-                                case TweenNodeType.图像填充:
+                                case TweenNodeType.f_图像填充:
                                     SerializedProperty sp_fill_ori = sp_node.FindPropertyRelative("Original_Float");
                                     SerializedProperty sp_fill_from = sp_node.FindPropertyRelative("From_Float");
                                     SerializedProperty sp_fill_end = sp_node.FindPropertyRelative("End_Float");
                                     Draw_TweenValues(rect_valuepanel, dir_index, sp_fill_ori, sp_fill_from, sp_fill_end, nodetype, sp_ActivateOnlyToEnd.boolValue);
                                     break;
-                                case TweenNodeType.尺寸:
+                                case TweenNodeType.z_尺寸:
                                     SerializedProperty sp_size_ori = sp_node.FindPropertyRelative("Original_Vector2");
                                     SerializedProperty sp_size_from = sp_node.FindPropertyRelative("From_Vector2");
                                     SerializedProperty sp_size_end = sp_node.FindPropertyRelative("End_Vector2");
@@ -884,25 +884,25 @@ namespace SevenStrikeModules.XHud.Editor
                     #region 分类
                     switch (types)
                     {
-                        case TweenNodeType.位移:
+                        case TweenNodeType.a_位移:
                             if (sp_dir_onlyend.boolValue)
                                 height = 17.3f + add;
                             else
                                 height = 20f + add;
                             break;
-                        case TweenNodeType.旋转:
+                        case TweenNodeType.r_旋转:
                             if (sp_dir_onlyend.boolValue)
                                 height = 17.3f + add;
                             else
                                 height = 20f + add;
                             break;
-                        case TweenNodeType.缩放:
+                        case TweenNodeType.s_缩放:
                             if (sp_dir_onlyend.boolValue)
                                 height = 17.3f + add;
                             else
                                 height = 20f + add;
                             break;
-                        case TweenNodeType.颜色:
+                        case TweenNodeType.c_颜色:
                             bool IsTextColorMode = false;
 
                             #region 判断文字组件是否为库同步样式状态
@@ -931,25 +931,25 @@ namespace SevenStrikeModules.XHud.Editor
                                     height = 20f + add;
                             }
                             break;
-                        case TweenNodeType.淡化:
+                        case TweenNodeType.g_淡化:
                             if (sp_dir_onlyend.boolValue)
                                 height = 17.3f + add;
                             else
                                 height = 20f + add;
                             break;
-                        case TweenNodeType.打字机:
+                        case TweenNodeType.w_打字机:
                             if (sp_dir_onlyend.boolValue)
                                 height = 17.3f + add;
                             else
                                 height = 20f + add;
                             break;
-                        case TweenNodeType.图像填充:
+                        case TweenNodeType.f_图像填充:
                             if (sp_dir_onlyend.boolValue)
                                 height = 17.3f + add;
                             else
                                 height = 20f + add;
                             break;
-                        case TweenNodeType.尺寸:
+                        case TweenNodeType.z_尺寸:
                             if (sp_dir_onlyend.boolValue)
                                 height = 17.3f + add;
                             else
@@ -1467,7 +1467,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="title"></param>
         /// <param name="offset"></param>
         /// <param name="type"></param>
-        private void Draw_ValueButton(Rect rect, SerializedProperty prop, int dir_index, string title, Vector2 offset, TweenNodeType type = TweenNodeType.位移)
+        private void Draw_ValueButton(Rect rect, SerializedProperty prop, int dir_index, string title, Vector2 offset, TweenNodeType type = TweenNodeType.a_位移)
         {
             Rect re = new Rect(rect.x + offset.x, rect.y + offset.y, rect.width - (5 + offset.x), LineHeight);
 
@@ -1526,25 +1526,25 @@ namespace SevenStrikeModules.XHud.Editor
                     case 0:
                         switch (type)
                         {
-                            case TweenNodeType.位移:
+                            case TweenNodeType.a_位移:
                                 prop.vector3Value = m_recttransform.anchoredPosition3D;
                                 break;
-                            case TweenNodeType.旋转:
+                            case TweenNodeType.r_旋转:
                                 prop.vector3Value = m_recttransform.localEulerAngles;
                                 break;
-                            case TweenNodeType.缩放:
+                            case TweenNodeType.s_缩放:
                                 prop.vector3Value = m_recttransform.localScale;
                                 break;
-                            case TweenNodeType.颜色:
+                            case TweenNodeType.c_颜色:
                                 // 根据 Controller 提前获取的 类型进行转换 Graphic
                                 Graphic gc = BaseScript.controller.RecognizeType();
 
                                 prop.colorValue = gc.color;
                                 break;
-                            case TweenNodeType.淡化:
+                            case TweenNodeType.g_淡化:
                                 prop.floatValue = m_canvasgroup.alpha;
                                 break;
-                            case TweenNodeType.打字机:
+                            case TweenNodeType.w_打字机:
                                 if (m_Text != null)
                                 {
                                     prop.stringValue = m_Text.text;
@@ -1554,10 +1554,10 @@ namespace SevenStrikeModules.XHud.Editor
                                     prop.stringValue = m_TmpText.text;
                                 }
                                 break;
-                            case TweenNodeType.图像填充:
+                            case TweenNodeType.f_图像填充:
                                 prop.floatValue = m_image.fillAmount;
                                 break;
-                            case TweenNodeType.尺寸:
+                            case TweenNodeType.z_尺寸:
                                 prop.vector2Value = m_recttransform.sizeDelta;
                                 break;
                         }
@@ -1567,19 +1567,19 @@ namespace SevenStrikeModules.XHud.Editor
                     case 1:
                         switch (type)
                         {
-                            case TweenNodeType.位移:
+                            case TweenNodeType.a_位移:
                                 Undo.RecordObject(BaseScript.controller.mod_Rect, "undotransform-position");
                                 m_recttransform.anchoredPosition3D = prop.vector3Value;
                                 break;
-                            case TweenNodeType.旋转:
+                            case TweenNodeType.r_旋转:
                                 Undo.RecordObject(BaseScript.controller.mod_Rect, "undotransform-eulerangle");
                                 m_recttransform.localEulerAngles = prop.vector3Value;
                                 break;
-                            case TweenNodeType.缩放:
+                            case TweenNodeType.s_缩放:
                                 Undo.RecordObject(BaseScript.controller.mod_Rect, "undotransform-localscale");
                                 m_recttransform.localScale = prop.vector3Value;
                                 break;
-                            case TweenNodeType.颜色:
+                            case TweenNodeType.c_颜色:
                                 // 根据 Controller 提前获取的 类型进行转换 Graphic
                                 Graphic gc = BaseScript.controller.RecognizeType();
 
@@ -1591,11 +1591,11 @@ namespace SevenStrikeModules.XHud.Editor
                                     BaseScript.controller.pt_Painting.OriginalColor = prop.colorValue;
                                 gc.color = prop.colorValue;
                                 break;
-                            case TweenNodeType.淡化:
+                            case TweenNodeType.g_淡化:
                                 Undo.RecordObject(BaseScript.controller.mod_CanvasGroup, "undoAlpha-origin");
                                 m_canvasgroup.alpha = prop.floatValue;
                                 break;
-                            case TweenNodeType.打字机:
+                            case TweenNodeType.w_打字机:
                                 if (m_Text != null)
                                 {
                                     Undo.RecordObject(m_Text, "undoText-origin");
@@ -1609,11 +1609,11 @@ namespace SevenStrikeModules.XHud.Editor
                                 Repaint();
                                 SceneView.RepaintAll();
                                 break;
-                            case TweenNodeType.图像填充:
+                            case TweenNodeType.f_图像填充:
                                 Undo.RecordObject(BaseScript.controller.mod_Image, "undofill-end");
                                 m_image.fillAmount = prop.floatValue;
                                 break;
-                            case TweenNodeType.尺寸:
+                            case TweenNodeType.z_尺寸:
                                 Undo.RecordObject(BaseScript.controller.mod_Rect, "undosize-origin");
                                 m_recttransform.sizeDelta = prop.vector2Value;
                                 break;
@@ -1624,28 +1624,28 @@ namespace SevenStrikeModules.XHud.Editor
                     case 2:
                         switch (type)
                         {
-                            case TweenNodeType.位移:
+                            case TweenNodeType.a_位移:
                                 prop.vector3Value = Vector3.zero;
                                 break;
-                            case TweenNodeType.旋转:
+                            case TweenNodeType.r_旋转:
                                 prop.vector3Value = Vector3.zero;
                                 break;
-                            case TweenNodeType.缩放:
+                            case TweenNodeType.s_缩放:
                                 prop.vector3Value = Vector3.zero;
                                 break;
-                            case TweenNodeType.颜色:
+                            case TweenNodeType.c_颜色:
                                 prop.colorValue = Color.white;
                                 break;
-                            case TweenNodeType.淡化:
+                            case TweenNodeType.g_淡化:
                                 prop.floatValue = 0;
                                 break;
-                            case TweenNodeType.打字机:
+                            case TweenNodeType.w_打字机:
                                 prop.stringValue = null;
                                 break;
-                            case TweenNodeType.图像填充:
+                            case TweenNodeType.f_图像填充:
                                 prop.floatValue = 0;
                                 break;
-                            case TweenNodeType.尺寸:
+                            case TweenNodeType.z_尺寸:
                                 prop.vector2Value = Vector2.zero;
                                 break;
                         }

@@ -602,28 +602,28 @@ namespace SevenStrikeModules.XHud.Editor
             Texture2D icon = null;
             switch (PrimitiveTweenSoundNode.Type)
             {
-                case TweenNodeType.位移:
+                case TweenNodeType.a_位移:
                     icon = anim_type_move;
                     break;
-                case TweenNodeType.旋转:
+                case TweenNodeType.r_旋转:
                     icon = anim_type_rotator;
                     break;
-                case TweenNodeType.缩放:
+                case TweenNodeType.s_缩放:
                     icon = anim_type_scale;
                     break;
-                case TweenNodeType.颜色:
+                case TweenNodeType.c_颜色:
                     icon = anim_type_color;
                     break;
-                case TweenNodeType.淡化:
+                case TweenNodeType.g_淡化:
                     icon = anim_type_fade;
                     break;
-                case TweenNodeType.打字机:
+                case TweenNodeType.w_打字机:
                     icon = anim_type_writter;
                     break;
-                case TweenNodeType.图像填充:
+                case TweenNodeType.f_图像填充:
                     icon = anim_type_fill;
                     break;
-                case TweenNodeType.尺寸:
+                case TweenNodeType.z_尺寸:
                     icon = anim_type_size;
                     break;
             }

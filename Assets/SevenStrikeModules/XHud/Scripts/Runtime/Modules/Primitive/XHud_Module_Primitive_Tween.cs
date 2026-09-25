@@ -106,7 +106,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 动画参数 - 动画类型
         /// </summary>
-        public TweenNodeType Type = TweenNodeType.位移;
+        public TweenNodeType Type = TweenNodeType.a_位移;
         /// <summary>
         /// 动画参数 - 播放时机
         /// </summary>
@@ -136,6 +136,10 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public EaseMode Ease = EaseMode.InOutCubic;
         public string AnimationCurveName = "";
+        /// <summary>
+        /// 数值模式索引
+        /// </summary>
+        public int valuemode_index = 0;
         /// <summary>
         /// 动画参数 - 曲线
         /// </summary>
@@ -595,6 +599,9 @@ namespace SevenStrikeModules.XHud
             newNode.LoopType = this.LoopType;
             newNode.LoopCount = this.LoopCount;
 
+            // ========== 数值模式索引 ==========
+            newNode.valuemode_index = this.valuemode_index;
+
             // ========== 音效列表（深度克隆）==========
             if (this.TweenSounds != null && this.TweenSounds.Count > 0)
             {
@@ -692,6 +699,9 @@ namespace SevenStrikeModules.XHud
             this.RotateMode = source.RotateMode;
             this.LoopType = source.LoopType;
             this.LoopCount = source.LoopCount;
+
+            // 数值模式索引
+            this.valuemode_index = source.valuemode_index;
 
             // 音效列表深度复制
             if (source.TweenSounds != null && source.TweenSounds.Count > 0)
@@ -1580,7 +1590,7 @@ namespace SevenStrikeModules.XHud
                 Tween_Kill(arg, true);
             }
 
-            if (arg.Type == TweenNodeType.位移)
+            if (arg.Type == TweenNodeType.a_位移)
             {
                 bool sw = false;
                 //方式：起始 -> 默认
@@ -1756,7 +1766,7 @@ namespace SevenStrikeModules.XHud
                         });
                 }
             }
-            else if (arg.Type == TweenNodeType.旋转)
+            else if (arg.Type == TweenNodeType.r_旋转)
             {
                 bool sw = false;
                 //方式：起始 -> 默认
@@ -1928,7 +1938,7 @@ namespace SevenStrikeModules.XHud
                         });
                 }
             }
-            else if (arg.Type == TweenNodeType.缩放)
+            else if (arg.Type == TweenNodeType.s_缩放)
             {
                 bool sw = false;
                 //方式：起始 -> 默认
@@ -2100,7 +2110,7 @@ namespace SevenStrikeModules.XHud
                         });
                 }
             }
-            else if (arg.Type == TweenNodeType.颜色)
+            else if (arg.Type == TweenNodeType.c_颜色)
             {
                 bool sw = false;
 
@@ -2297,7 +2307,7 @@ namespace SevenStrikeModules.XHud
                         });
                 }
             }
-            else if (arg.Type == TweenNodeType.淡化)
+            else if (arg.Type == TweenNodeType.g_淡化)
             {
                 bool sw = false;
                 if (controller.mod_CanvasGroup == null)
@@ -2471,7 +2481,7 @@ namespace SevenStrikeModules.XHud
                         });
                 }
             }
-            else if (arg.Type == TweenNodeType.打字机)
+            else if (arg.Type == TweenNodeType.w_打字机)
             {
                 bool sw = false;
                 if (controller.mod_Text == null && controller.mod_TmpText == null)
@@ -2824,7 +2834,7 @@ namespace SevenStrikeModules.XHud
                     }
                 }
             }
-            else if (arg.Type == TweenNodeType.尺寸)
+            else if (arg.Type == TweenNodeType.z_尺寸)
             {
                 bool sw = false;
                 //方式：起始 -> 默认
@@ -2998,7 +3008,7 @@ namespace SevenStrikeModules.XHud
                         });
                 }
             }
-            else if (arg.Type == TweenNodeType.图像填充)
+            else if (arg.Type == TweenNodeType.f_图像填充)
             {
                 bool sw = false;
                 if (controller.mod_Image == null)
@@ -3411,7 +3421,7 @@ namespace SevenStrikeModules.XHud
             }
             #endregion            
 
-            if (arg.Type == TweenNodeType.位移)
+            if (arg.Type == TweenNodeType.a_位移)
             {
                 //方式：起始 -> 结束
                 if (sw_From && sw_End)
@@ -3441,7 +3451,7 @@ namespace SevenStrikeModules.XHud
                     }
                 }
             }
-            else if (arg.Type == TweenNodeType.旋转)
+            else if (arg.Type == TweenNodeType.r_旋转)
             {
                 if (sw_From && sw_End)
                 {
@@ -3468,7 +3478,7 @@ namespace SevenStrikeModules.XHud
                     }
                 }
             }
-            else if (arg.Type == TweenNodeType.缩放)
+            else if (arg.Type == TweenNodeType.s_缩放)
             {
                 if (sw_From && sw_End)
                 {
@@ -3495,7 +3505,7 @@ namespace SevenStrikeModules.XHud
                     }
                 }
             }
-            else if (arg.Type == TweenNodeType.颜色)
+            else if (arg.Type == TweenNodeType.c_颜色)
             {
                 Graphic gc = controller.RecognizeType();
                 if (gc == null)
@@ -3527,7 +3537,7 @@ namespace SevenStrikeModules.XHud
                     }
                 }
             }
-            else if (arg.Type == TweenNodeType.淡化)
+            else if (arg.Type == TweenNodeType.g_淡化)
             {
                 if (controller.mod_CanvasGroup == null)
                 {
@@ -3558,7 +3568,7 @@ namespace SevenStrikeModules.XHud
                     }
                 }
             }
-            else if (arg.Type == TweenNodeType.打字机)
+            else if (arg.Type == TweenNodeType.w_打字机)
             {
                 if (controller.mod_Text == null && controller.mod_TmpText == null)
                 {
@@ -3613,7 +3623,7 @@ namespace SevenStrikeModules.XHud
                     }
                 }
             }
-            else if (arg.Type == TweenNodeType.尺寸)
+            else if (arg.Type == TweenNodeType.z_尺寸)
             {
                 if (sw_From && sw_End)
                 {
@@ -3640,7 +3650,7 @@ namespace SevenStrikeModules.XHud
                     }
                 }
             }
-            else if (arg.Type == TweenNodeType.图像填充)
+            else if (arg.Type == TweenNodeType.f_图像填充)
             {
                 if (controller.mod_Image == null)
                 {

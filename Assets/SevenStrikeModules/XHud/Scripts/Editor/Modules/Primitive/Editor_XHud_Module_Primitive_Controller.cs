@@ -545,19 +545,19 @@ namespace SevenStrikeModules.XHud.Editor
                title_size: XGUIFontSize.M,
                title_text_color: XHud_Dashboard.Theme_Primary,
                title_clipping: TextClipping.Clip,
-               padding: new RectOffset(5, 5, 20, 15),
+               padding: new RectOffset(10, 10, 15, 15),
                foldout: BaseScript.fold_param);
 
             if (!BaseScript.fold_param)
             {
                 #region ID
                 XGUI.layout_property_field(
-                    title: "ID",
+                    title: " ID",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.Theme_Primary,
                     title_width: 90,
                     prop: sp_ID,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
+                    prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 标识
@@ -567,7 +567,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_hover_color: XHud_Dashboard.Theme_Primary,
                     title_width: 90,
                     prop: sp_Indicator,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
+                    prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 类型
@@ -577,7 +577,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_hover_color: XHud_Dashboard.Theme_Primary,
                     title_width: 90,
                     prop: sp_ModuleType,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
+                    prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
             }

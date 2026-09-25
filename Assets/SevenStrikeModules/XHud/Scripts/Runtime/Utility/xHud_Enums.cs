@@ -955,14 +955,14 @@ namespace SevenStrikeModules.XHud.Enums
     /// </summary>
     public enum TweenNodeType
     {
-        位移 = 0,
-        旋转 = 1,
-        缩放 = 2,
-        颜色 = 3,
-        淡化 = 4,
-        打字机 = 5,
-        图像填充 = 6,
-        尺寸 = 7
+        a_位移 = 0,
+        r_旋转 = 1,
+        s_缩放 = 2,
+        c_颜色 = 3,
+        g_淡化 = 4,
+        w_打字机 = 5,
+        f_图像填充 = 6,
+        z_尺寸 = 7
     }
     /// <summary>
     /// 图元控制器目标模块类型

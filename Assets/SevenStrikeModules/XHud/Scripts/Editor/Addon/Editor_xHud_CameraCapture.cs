@@ -354,6 +354,7 @@ namespace SevenStrikeModules.XHud.Editor
                         text_size: XGUIFontSize.M,
                         text_font: XGUI.GetFont("xg-medium"),
                         text_fontstyle: FontStyle.Bold,
+                        bg_width_offset: 15,
                         navigate_style: true,
                         navigate_style_bg: XGUIFilled.纯色边框,
                         navigate_style_bg_color: Color.black * 0.5f);
@@ -452,7 +453,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 立即截图
-                XGUI.layout_space(5);
+                XGUI.layout_space(10);
                 if (XGUI.layout_button(
                     text: "立即截图",
                     tooltip: "",

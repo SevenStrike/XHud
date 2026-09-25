@@ -734,6 +734,7 @@ namespace SevenStrikeModules.XHud.Editor
                     text_size: XGUIFontSize.M,
                     text_font: XGUI.GetFont("xg-medium"),
                     text_fontstyle: FontStyle.Bold,
+                    bg_width_offset: 28,
                     navigate_style: true,
                     navigate_style_bg: XGUIFilled.纯色边框,
                     navigate_style_bg_color: Color.black * 0.5f);
