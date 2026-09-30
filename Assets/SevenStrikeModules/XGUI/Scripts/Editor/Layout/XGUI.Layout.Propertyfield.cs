@@ -62,7 +62,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// );
         /// </code>
         /// </example>
-        public static void layout_property_field(string title = null, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_color = default, float title_width = 0, string status_icon = null, Color status_icon_color = default, SerializedProperty prop = null, Color title_hover_color = default, RectOffset prop_margin = default, RectOffset prop_padding = default, float field_width = 0)
+        public static void layout_property_field(string title = null, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_color = default, float title_width = 0, string status_icon = null, Color status_icon_color = default, SerializedProperty prop = null, Color title_hover_color = default, RectOffset prop_margin = default, RectOffset prop_padding = default, float field_width = 0, Vector2 title_offset = default, FontStyle title_font_style = FontStyle.Normal)
         {
             if (title_color == Color.clear)
                 title_color = Color.white * 0.9f;
@@ -88,9 +88,9 @@ namespace SevenStrikeModules.XGUI.Editor
                 size: title_size,
                 text_color: title_color,
                 margin: new RectOffset(0, 0, 0, 0),
-                offset: new Vector2(0, 1),
+                offset: title_offset,
                 clipping: TextClipping.Clip,
-                font_style: FontStyle.Normal,
+                font_style: title_font_style,
                 width: title_width,
                 anchor: title_anchor,
                 font: XGUI.GetFont("xg-medium"));

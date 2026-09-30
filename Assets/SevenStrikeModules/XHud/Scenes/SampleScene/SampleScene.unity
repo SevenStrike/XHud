@@ -849,6 +849,12 @@ GameObject:
   - component: {fileID: 109206547}
   - component: {fileID: 109206549}
   - component: {fileID: 109206548}
+  - component: {fileID: 109206555}
+  - component: {fileID: 109206554}
+  - component: {fileID: 109206553}
+  - component: {fileID: 109206552}
+  - component: {fileID: 109206551}
+  - component: {fileID: 109206550}
   m_Layer: 8
   m_Name: TmpText
   m_TagString: Untagged
@@ -968,7 +974,7 @@ MonoBehaviour:
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
   Indicator: TmpText
   StyleName: NewTextStyle_HudTmpText
-  StyleLibSynching: 0
+  StyleLibSynching: 1
   PreviousText: XHud Text
   TextIsChanged: 0
   SyncGlobalFontSize: 1
@@ -1030,7 +1036,7 @@ MonoBehaviour:
     LibStyle_Effect_font: 0
     LibStyle_Effect_style: 0
     LibStyle_Effect_size: 0
-    LibStyle_Effect_color: 0
+    LibStyle_Effect_color: 1
     LibStyle_Effect_rich: 0
     LibStyle_Effect_line: 0
     LibStyle_Effect_overflow_h: 0
@@ -1049,14 +1055,14 @@ MonoBehaviour:
     Maskable: 0
     SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
-    Name: 
-    Description: 
-    Type: 0
+    Name: NewTextStyle_HudTmpText
+    Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudTmpText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
+    Type: 1
     Style: 0
     ContentAnchor: 4
     Font: {fileID: 0}
     Font_AssetPath: 
-    Size: 13
+    Size: 50
     LineHeight: 1
     Overflow_Horizon: 0
     Overflow_Vertical: 0
@@ -1069,18 +1075,18 @@ MonoBehaviour:
     Fit_Max_GlobalScaled: 0
     Size_GlobalScaled: 0
     FontColor: {r: 1, g: 1, b: 1, a: 1}
-    tmp_rich: 0
+    tmp_rich: 1
     tmp_contentwrap: 0
     tmp_overflow: 0
     tmp_style: 0
     tmp_anchor: 14
-    tmp_font: {fileID: 0}
+    tmp_font: {fileID: 11400000, guid: 3d6405d940e228d4b85a181d7ed3204f, type: 2}
     tmp_fontasset_assetpath: 
     tmp_size: 13
     tmp_size_globalscaled: 0
     tmp_space_character: 0
     tmp_space_word: 0
-    tmp_space_lineheight: 0
+    tmp_space_lineheight: 1
     tmp_space_paragraph: 0
     tmp_WrappingRatios: 0
     tmp_contentmargin: {x: 0, y: 0, z: 0, w: 0}
@@ -1093,13 +1099,13 @@ MonoBehaviour:
     tmp_CharWidthMaxAdj: 0
     tmp_LineSpacingMax: 0
     gra_A: {r: 1, g: 1, b: 1, a: 1}
-    gra_B: {r: 1, g: 1, b: 1, a: 1}
+    gra_B: {r: 1, g: 0, b: 0, a: 1}
     gra_C: {r: 1, g: 1, b: 1, a: 1}
     gra_D: {r: 1, g: 1, b: 1, a: 1}
     gra_Invert: 0
-    gra_Used: 0
-    gra_ColorMode: 0
-    gra_ColorModeName: 
+    gra_Used: 1
+    gra_ColorMode: 1
+    gra_ColorModeName: "\u6C34\u5E73\u6E10\u53D8"
     LibStyle_Effect_geometre_align: 0
     LibStyle_Effect_align: 0
     LibStyle_Effect_font: 0
@@ -1131,6 +1137,260 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 109206546}
   m_CullTransparentMesh: 1
+--- !u!114 &109206550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109206546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 016f78ca51676bb4299db661f4208ae1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 109206555}
+  MutePlay: 0
+  AnimatingBreakState: 0
+  IgnoreElementAnimationPlay: 0
+  TweenIsPreviewing: 0
+  PrimitiveTweenNodes:
+  - ID: 8555
+    Indicator: NewTween
+    Enabled: 1
+    Type: 3
+    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Duration: 1
+    Delay: 0
+    Progress: 0
+    Rewind_Set_Startvalue: 1
+    Complete_Set_Endvalue: 1
+    Ease: 10
+    AnimationCurveName: 
+    valuemode_index: 0
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Original_Int: 0
+    Original_Float: 0
+    Original_Vector2: {x: 0, y: 0}
+    Original_Vector3: {x: 0, y: 0, z: 0}
+    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    Original_Color: {r: 1, g: 1, b: 1, a: 1}
+    Original_String: 
+    ActivateFrom: 1
+    From_Int: 0
+    From_Float: 0
+    From_Vector2: {x: 0, y: 0}
+    From_Vector3: {x: 0, y: 0, z: 0}
+    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    From_Color: {r: 1, g: 1, b: 1, a: 1}
+    From_String: 
+    ActivateEnd: 0
+    End_Int: 0
+    End_Float: 0
+    End_Vector2: {x: 0, y: 0}
+    End_Vector3: {x: 0, y: 0, z: 0}
+    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    End_Color: {r: 1, g: 1, b: 1, a: 1}
+    End_String: 
+    ActivateOnlyToEnd: 0
+    RotateMode: 0
+    LoopType: 0
+    LoopCount: 0
+    IsFold: 0
+    TweenSounds: []
+  MainTweenNode: 
+  GlobalDuration: 1
+  MinTimer: 1
+  MaxTimer: 1
+  MinTimerWithGlobalDuration: 1
+  MaxTimerWithGlobalDuration: 1
+  eve_on_Tween_Play:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Play_At_Node:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Play_At_ID:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Play_At_Indicator:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_PlayAll:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Create_At_ID:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Create_At_Index:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Create_At_Indicator:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Rewind:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_RewindAll:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Kill:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_KillAll:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Ready:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Complete:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_Initialized:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_SoundPlay:
+    m_PersistentCalls:
+      m_Calls: []
+  eve_on_Tween_AnimatingState:
+    m_PersistentCalls:
+      m_Calls: []
+  Debug: 0
+  PreviewTiming: 
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
+  fold_list: 0
+  fold_state: 1
+  Timeline_TrackPosition: 638
+  Timeline_TrackScroll: {x: 0, y: 0}
+  Timeline_TrackHeight: 61.115917
+  Timeline_TrackSnapEnabled: 0
+--- !u!114 &109206551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109206546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67835f613303af544ab15c3f47f25281, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 109206555}
+  PrimitiveFeatures:
+    Position: {x: 0, y: 0, z: 0}
+    Euler: {x: 0, y: 0, z: 0}
+    Scale: {x: 1, y: 1, z: 1}
+    Alpha: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Size: {x: 120, y: 30}
+    Fill: 0
+  FirstSaveFeatures: 1
+  Debug: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
+--- !u!114 &109206552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109206546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b8966a601623b4a9ad4044e643dbdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 109206555}
+  OriginalColor: {r: 1, g: 1, b: 1, a: 1}
+  ColoriseName: 
+  Debug: 0
+  SyncLibraryColor: 0
+  SyncImageColor: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
+--- !u!114 &109206553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109206546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3bf3174e1981ec4b8bd6afe0f97cecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fold_based: 1
+--- !u!225 &109206554
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109206546}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &109206555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109206546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 
+  Indicator: 
+  IsInitial: 1
+  ModuleType: 2
+  mod_CanvasGroup: {fileID: 109206554}
+  mod_Rect: {fileID: 109206547}
+  mod_TmpText: {fileID: 109206548}
+  mod_Text: {fileID: 0}
+  mod_Image: {fileID: 0}
+  mod_RawImage: {fileID: 0}
+  mod_HudButton: {fileID: 0}
+  Debug: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
+  pt_Painting: {fileID: 109206552}
+  pt_Feature: {fileID: 109206551}
+  pt_Tween: {fileID: 109206550}
 --- !u!1 &171147413
 GameObject:
   m_ObjectHideFlags: 0
@@ -1188,9 +1448,9 @@ MonoBehaviour:
   SelectorMark: {fileID: 2008248907}
   OptionRoot: {fileID: 367766831}
   AnimateState: 0
-  Pos_Destination: {x: -85, y: -22.500015, z: 0}
+  Pos_Destination: {x: -85, y: -22.499985, z: 0}
   Prev_Pos_Destination: {x: 0, y: 0, z: 0}
-  sm_Pos_Destination: {x: -85, y: -22.500015, z: 0}
+  sm_Pos_Destination: {x: -85, y: -22.499985, z: 0}
   RepeatTweenPlay: 1
   UseBlinked: 1
   TweenSpeed: 1
@@ -1234,7 +1494,7 @@ MonoBehaviour:
   EventIsFold: 0
   AutoStopPreview: 1
   SelectorOffset: {x: 0, y: 0, z: 0}
-  SelectorOffsetAdded: {x: -85, y: -22.500015, z: 0}
+  SelectorOffsetAdded: {x: -85, y: -22.499985, z: 0}
   PrimitiveControllerNodes: []
   PrimitivesTweenMaxDuration: 0
   PrimitivesTweenGlobalDuration: 1
@@ -3127,7 +3387,7 @@ MonoBehaviour:
   x_UICamera_ClearFlags_Original: 1
   fold_options: 0
   fold_param: 0
-  fold_camera: 1
+  fold_camera: 0
   fold_based: 1
 --- !u!4 &492045372
 Transform:
@@ -4916,7 +5176,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 764320986}
-  m_LocalRotation: {x: 0, y: 0, z: 0.4348107, w: -0.9005219}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4925,8 +5185,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -51.546}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 307.61343, y: 271.36124}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 147.1, y: 455.1}
+  m_SizeDelta: {x: 509, y: 321}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &764320988
 MonoBehaviour:
@@ -4946,19 +5206,19 @@ MonoBehaviour:
   IgnoreElementAnimationPlay: 0
   TweenIsPreviewing: 0
   PrimitiveTweenNodes:
-  - ID: 9566
+  - ID: 9497
     Indicator: NewTweensd123
     Enabled: 1
     Type: 0
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 0.5
-    Delay: 0
+    Timings: "\u81EA\u5B9A\u4E49"
+    Duration: 0.362
+    Delay: 0.343
     Progress: 0
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
-    Ease: 17
-    AnimationCurveName: 
-    valuemode_index: 0
+    Ease: 0
+    AnimationCurveName: DefaultCurve
+    valuemode_index: 1
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -4972,83 +5232,29 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.31044143
-        value: 0
+        time: 1
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.87235695
-      - serializedVersion: 3
-        time: 0.40721238
-        value: 0.17730254
-        inSlope: 4.166333
-        outSlope: 4.166333
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.46563777
-        value: 0.55858636
-        inSlope: 6.9994125
-        outSlope: 6.9994125
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.26050344
-        outWeight: 0.13199607
-      - serializedVersion: 3
-        time: 0.541354
-        value: 0.8165922
-        inSlope: 1.0334634
-        outSlope: 1.0334634
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.7206857
-        outWeight: 0.2696288
-      - serializedVersion: 3
-        time: 0.7718427
-        value: 0.44478273
-        inSlope: -6.034088
-        outSlope: -6.034088
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.0652274
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.8610497
-        value: 0.13686456
-        inSlope: -2.2309527
-        outSlope: -2.2309527
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 0.9965352
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
+        inWeight: 0
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     Original_Int: 0
-    Original_Float: 0
-    Original_Vector2: {x: 0, y: 0}
+    Original_Float: 0.35
+    Original_Vector2: {x: 150, y: 150}
     Original_Vector3: {x: 0, y: 0, z: 0}
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
     Original_Color: {r: 1, g: 1, b: 1, a: 1}
     Original_String: 
-    ActivateFrom: 0
+    ActivateFrom: 1
     From_Int: 0
-    From_Float: 0
-    From_Vector2: {x: 0, y: 0}
-    From_Vector3: {x: 0, y: 0, z: 0}
+    From_Float: 0.5
+    From_Vector2: {x: 100, y: 100}
+    From_Vector3: {x: 1, y: 2, z: 3}
     From_Vector4: {x: 0, y: 0, z: 0, w: 0}
     From_Color: {r: 1, g: 1, b: 1, a: 1}
     From_String: 
@@ -5056,11 +5262,11 @@ MonoBehaviour:
     End_Int: 0
     End_Float: 0
     End_Vector2: {x: 0, y: 0}
-    End_Vector3: {x: 0, y: 0, z: 0}
+    End_Vector3: {x: 147.1, y: 455.1, z: 0}
     End_Vector4: {x: 0, y: 0, z: 0, w: 0}
     End_Color: {r: 1, g: 1, b: 1, a: 1}
     End_String: 
-    ActivateOnlyToEnd: 1
+    ActivateOnlyToEnd: 0
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
@@ -5069,16 +5275,16 @@ MonoBehaviour:
   - ID: 2032
     Indicator: NewTween
     Enabled: 1
-    Type: 0
+    Type: 4
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 0.56
-    Delay: 0.228
+    Duration: 0.362
+    Delay: 0.343
     Progress: 0
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
-    valuemode_index: 0
+    valuemode_index: 1
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -5110,7 +5316,7 @@ MonoBehaviour:
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
     Original_Color: {r: 1, g: 1, b: 1, a: 1}
     Original_String: 
-    ActivateFrom: 1
+    ActivateFrom: 0
     From_Int: 0
     From_Float: 0
     From_Vector2: {x: 0, y: 0}
@@ -5122,11 +5328,11 @@ MonoBehaviour:
     End_Int: 0
     End_Float: 0
     End_Vector2: {x: 0, y: 0}
-    End_Vector3: {x: 0, y: 0, z: 0}
+    End_Vector3: {x: 200, y: 100, z: 0}
     End_Vector4: {x: 0, y: 0, z: 0, w: 0}
     End_Color: {r: 1, g: 1, b: 1, a: 1}
     End_String: 
-    ActivateOnlyToEnd: 0
+    ActivateOnlyToEnd: 1
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
@@ -5136,9 +5342,9 @@ MonoBehaviour:
     Indicator: NewTween
     Enabled: 1
     Type: 0
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 0.509
-    Delay: 0.105
+    Timings: "\u5143\u7D20\u9000\u51FA\u65F6"
+    Duration: 0.25
+    Delay: 0.037
     Progress: 0
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
@@ -5176,7 +5382,7 @@ MonoBehaviour:
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
     Original_Color: {r: 1, g: 1, b: 1, a: 1}
     Original_String: 
-    ActivateFrom: 1
+    ActivateFrom: 0
     From_Int: 0
     From_Float: 0
     From_Vector2: {x: 0, y: 0}
@@ -5188,11 +5394,11 @@ MonoBehaviour:
     End_Int: 0
     End_Float: 0
     End_Vector2: {x: 0, y: 0}
-    End_Vector3: {x: 0, y: 0, z: 0}
+    End_Vector3: {x: 2, y: 2, z: 0}
     End_Vector4: {x: 0, y: 0, z: 0, w: 0}
     End_Color: {r: 1, g: 1, b: 1, a: 1}
     End_String: 
-    ActivateOnlyToEnd: 0
+    ActivateOnlyToEnd: 1
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
@@ -5200,10 +5406,10 @@ MonoBehaviour:
     TweenSounds: []
   MainTweenNode: 
   GlobalDuration: 1
-  MinTimer: 0.5
-  MaxTimer: 0.5
-  MinTimerWithGlobalDuration: 0.5
-  MaxTimerWithGlobalDuration: 0.5
+  MinTimer: 0.287
+  MaxTimer: 0.287
+  MinTimerWithGlobalDuration: 0.287
+  MaxTimerWithGlobalDuration: 0.287
   eve_on_Tween_Play:
     m_PersistentCalls:
       m_Calls: []
@@ -5255,12 +5461,17 @@ MonoBehaviour:
   eve_on_Tween_AnimatingState:
     m_PersistentCalls:
       m_Calls: []
-  Debug: 0
-  PreviewTiming: 
-  Timeline_TrackPosition: 600.25385
+  Debug: 1
+  PreviewTiming: "\u5143\u7D20\u9000\u51FA\u65F6"
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
+  fold_list: 0
+  fold_state: 1
+  Timeline_TrackPosition: 747.9484
   Timeline_TrackScroll: {x: 0, y: 0}
-  Timeline_TrackHeight: 74.21276
-  Timeline_TrackSnapEnabled: 1
+  Timeline_TrackHeight: 29.722574
+  Timeline_TrackSnapEnabled: 0
 --- !u!114 &764320989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5275,17 +5486,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 764320993}
   PrimitiveFeatures:
-    Position: {x: 307.61343, y: 271.36124, z: 0}
-    Euler: {x: -0, y: 0, z: 308.4535}
+    Position: {x: 147.1, y: 455.1, z: 0}
+    Euler: {x: -0, y: 0, z: 0}
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
-    Color: {r: 0.9, g: 0.5, b: 0.9, a: 1}
-    Size: {x: 100, y: 100}
+    Color: {r: 0.46666667, g: 0.49411765, b: 0.5254902, a: 1}
+    Size: {x: 509, y: 321}
     Fill: 1
   FirstSaveFeatures: 1
   Debug: 0
-  fold_param: 0
-  fold_option: 0
+  fold_param: 1
+  fold_option: 1
   fold_based: 1
 --- !u!114 &764320990
 MonoBehaviour:
@@ -5300,13 +5511,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 764320993}
-  OriginalColor: {r: 0.9, g: 0.5, b: 0.9, a: 1}
-  ColoriseName: "\u7D2B\u7F57\u5170(Violet)"
+  OriginalColor: {r: 0.46666667, g: 0.49411765, b: 0.5254902, a: 1}
+  ColoriseName: "\u94A2\u7070"
   Debug: 0
   SyncLibraryColor: 1
   SyncImageColor: 1
   fold_param: 0
-  fold_option: 0
+  fold_option: 1
   fold_based: 1
 --- !u!114 &764320991
 MonoBehaviour:
@@ -5345,7 +5556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 
+  ID: mzao
   Indicator: NewPrimitiveController
   IsInitial: 1
   ModuleType: 3
@@ -5376,15 +5587,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9, g: 0.5, b: 0.9, a: 1}
+  m_Color: {r: 0.46666667, g: 0.49411765, b: 0.5254902, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: e01581af563438342a901140a9c44060, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -6085,7 +6296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9, g: 0.5, b: 0.9, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6251,8 +6462,13 @@ MonoBehaviour:
   eve_on_Tween_AnimatingState:
     m_PersistentCalls:
       m_Calls: []
-  Debug: 0
+  Debug: 1
   PreviewTiming: 
+  fold_param: 0
+  fold_option: 0
+  fold_based: 1
+  fold_list: 1
+  fold_state: 0
   Timeline_TrackPosition: 124
   Timeline_TrackScroll: {x: 0, y: 0}
   Timeline_TrackHeight: 26
@@ -6275,7 +6491,7 @@ MonoBehaviour:
     Euler: {x: -0, y: 0, z: 308.4535}
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.9, g: 0.5, b: 0.9, a: 1}
     Size: {x: 100, y: 100}
     Fill: 1
   FirstSaveFeatures: 1
@@ -6296,8 +6512,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 896502542}
-  OriginalColor: {r: 1, g: 1, b: 1, a: 1}
-  ColoriseName: "\u949B\u767D(Titanium White)"
+  OriginalColor: {r: 0.9, g: 0.5, b: 0.9, a: 1}
+  ColoriseName: "\u7D2B\u7F57\u5170(Violet)"
   Debug: 0
   SyncLibraryColor: 1
   SyncImageColor: 1
@@ -6443,6 +6659,7 @@ GameObject:
   - component: {fileID: 1007850208}
   - component: {fileID: 1007850207}
   - component: {fileID: 1007850206}
+  - component: {fileID: 1007850210}
   m_Layer: 8
   m_Name: B
   m_TagString: Untagged
@@ -6796,6 +7013,236 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1007850210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007850204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e623c31c6fe2624eb7a4ebeb2a07f7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HudElement: {fileID: 1007850206}
+  IsEnable: 1
+  DebugState: 0
+  key_Element_In: 99
+  key_Element_Out: 118
+  CreateArgs:
+    anchor: 0
+    MotionAnimateEndState: 0
+    Alpha:
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+    Movement:
+      Movement: 0
+      Distance: 100
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+    Rotation:
+      Rotation: 0
+      Degree: 0
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+  RecycleArgs:
+    MotionAnimateEndState: 0
+    Alpha:
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+    Movement:
+      Movement: 0
+      Distance: 100
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+    Rotation:
+      Rotation: 0
+      Degree: 0
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 10
+  HideWithStart: 1
+  Preset_Position: {x: 0, y: 0, z: 0}
+  Preset_Euler: {x: 0, y: 0, z: 0}
+  DurationScaler: 1
+  previewIsRunning: 0
+  Crc_Lib_Name: 
+  Rec_Lib_Name: 
+  DelayWithIn: 0
+  DelayWithOut: 0
+  create_fold_move: 0
+  create_fold_rotate: 0
+  create_fold_alpha: 0
+  recycle_fold_move: 0
+  recycle_fold_rotate: 0
+  recycle_fold_alpha: 0
+  RMS_Enabled: 0
+  RMS_Name: 
+  ElementIsIn: 1
+  fold_options: 0
+  fold_param: 0
+  fold_key: 0
+  fold_state: 0
+  fold_motion: 0
+  fold_preset_trans: 0
+  fold_rms: 1
+  fold_based: 1
 --- !u!1 &1084599106
 GameObject:
   m_ObjectHideFlags: 0
@@ -7914,7 +8361,7 @@ MonoBehaviour:
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
   Indicator: 
-  StyleName: 
+  StyleName: NewTextStyle_HudTmpText
   StyleLibSynching: 0
   PreviousText: XHud-Button
   TextIsChanged: 0
@@ -8431,8 +8878,8 @@ MonoBehaviour:
   IsInitialized: 1
   FoldAllPanelWithDisabled: 0
   fold_options: 1
-  fold_canvasset: 0
-  fold_camera: 0
+  fold_canvasset: 1
+  fold_camera: 1
   fold_ratiorefer: 1
   fold_compguid: 1
   fold_reslibs: 1
@@ -8811,9 +9258,9 @@ MonoBehaviour:
   fold_param: 1
   fold_preview: 1
   fold_state: 0
-  fold_option: 1
+  fold_option: 0
   fold_rms: 1
-  fold_list: 1
+  fold_list: 0
   fold_statistic: 1
   fold_based: 1
   fold_component: 1
@@ -9050,7 +9497,7 @@ MonoBehaviour:
   SounderNodes:
   - Sounder: {fileID: 1455183921}
   - Sounder: {fileID: 1455183920}
-  SounderIsFold: 1
+  SounderIsFold: 0
   TextNodes:
   - Text: {fileID: 2012674117}
   TextIsFold: 1
@@ -9071,7 +9518,7 @@ MonoBehaviour:
     TotalTime: 0
     DelayTime: 0
   PrimitivesIsFold: 1
-  PrimitivesTweenMaxDuration: 1.43
+  PrimitivesTweenMaxDuration: 4.3
   PrimitivesTweenGlobalDuration: 1
   AutoPlayPrimitivesTween: 1
   RMS_Enabled: 1
@@ -9788,6 +10235,11 @@ MonoBehaviour:
       m_Calls: []
   Debug: 0
   PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
+  fold_param: 0
+  fold_option: 1
+  fold_based: 1
+  fold_list: 1
+  fold_state: 1
   Timeline_TrackPosition: 105.8
   Timeline_TrackScroll: {x: 0, y: 0}
   Timeline_TrackHeight: 26
@@ -12211,7 +12663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4481132, g: 0.59528285, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 0
@@ -12234,7 +12686,7 @@ MonoBehaviour:
   m_Text: XHud Text
   Indicator: Text
   StyleName: NewTextStyle_HudText
-  StyleLibSynching: 0
+  StyleLibSynching: 1
   PreviousText: XHud Text
   TextIsChanged: 0
   SyncGlobalFontSize: 1
@@ -12259,7 +12711,7 @@ MonoBehaviour:
     Fit_Max: 50
     Fit_Max_GlobalScaled: 0
     Size_GlobalScaled: 18
-    FontColor: {r: 0.4481132, g: 0.59528285, b: 1, a: 1}
+    FontColor: {r: 1, g: 1, b: 1, a: 1}
     tmp_rich: 0
     tmp_contentwrap: 0
     tmp_overflow: 0
@@ -12296,7 +12748,7 @@ MonoBehaviour:
     LibStyle_Effect_font: 0
     LibStyle_Effect_style: 0
     LibStyle_Effect_size: 0
-    LibStyle_Effect_color: 0
+    LibStyle_Effect_color: 1
     LibStyle_Effect_rich: 0
     LibStyle_Effect_line: 0
     LibStyle_Effect_overflow_h: 0
@@ -12313,7 +12765,7 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncPrimitivePaintingColor: 0
+    SyncPrimitivePaintingColor: 1
   TextStyleInfo_Library:
     Name: NewTextStyle_HudText
     Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
@@ -12474,6 +12926,11 @@ MonoBehaviour:
       m_Calls: []
   Debug: 0
   PreviewTiming: 
+  fold_param: 0
+  fold_option: 0
+  fold_based: 0
+  fold_list: 0
+  fold_state: 0
   Timeline_TrackPosition: 100
   Timeline_TrackScroll: {x: 0, y: 0}
   Timeline_TrackHeight: 0
@@ -12496,7 +12953,7 @@ MonoBehaviour:
     Euler: {x: 0, y: 0, z: 0}
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
-    Color: {r: 0.4481132, g: 0.59528285, b: 1, a: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
     Size: {x: 120, y: 30}
     Fill: 0
   FirstSaveFeatures: 1

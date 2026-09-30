@@ -237,6 +237,8 @@ namespace SevenStrikeModules.XGUI.Editor
         Color DateTimeColor = new Color(1, 1, 1, 0.55f);
         Color ThemePrimaryColor = new Color(1, 1, 1, 1);
 
+        public bool show_index;
+
         /// <summary>
         /// 按钮宽度
         /// </summary>
@@ -562,16 +564,18 @@ namespace SevenStrikeModules.XGUI.Editor
     // Unity 2021.1 之前使用 Clip
     TextClipping clipping = TextClipping.Clip;
 #endif
+
             // 列表项 - 序号
-            XGUI.gui_label(
-                  rect: index_rect,
-                  text: new GUIContent(index.ToString("D2")),
-                  text_color: ThemePrimaryColor,
-                  size: XGUIFontSize.M,
-                  clipping: clipping,
-                  anchor: TextAnchor.MiddleLeft,
-                  offset: new Vector2(0, 0),
-                  font_style: FontStyle.Normal);
+            if (show_index)
+                XGUI.gui_label(
+                      rect: index_rect,
+                      text: new GUIContent(index.ToString("D2")),
+                      text_color: ThemePrimaryColor,
+                      size: XGUIFontSize.M,
+                      clipping: clipping,
+                      anchor: TextAnchor.MiddleLeft,
+                      offset: new Vector2(0, 0),
+                      font_style: FontStyle.Normal);
             // 列表项 - 标题
             XGUI.gui_label(
                   rect: title_rect,
@@ -610,7 +614,7 @@ namespace SevenStrikeModules.XGUI.Editor
         {
             // 绘制滚动视图
             scrollview_rect = GUILayoutUtility.GetRect(0, visibleItemCount * itemHeight);
-            DataList_Scroller = GUI.BeginScrollView(scrollview_rect, DataList_Scroller, new Rect(-15, 0, scrollview_rect.width - 50, DataList.Count * itemHeight), false, true);
+            DataList_Scroller = GUI.BeginScrollView(scrollview_rect, DataList_Scroller, new Rect(-15, 0, scrollview_rect.width - 50, DataList.Count * itemHeight), false, false);
 
             // 计算可视区域的起始和结束索引
             int startIndex = Mathf.FloorToInt(DataList_Scroller.y / itemHeight);
@@ -1157,11 +1161,13 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 设置数据列表
         /// </summary>
         /// <param name="datas"></param>
-        public void SetList(XGUIDialogListDatas[] datas)
+        public void SetList(XGUIDialogListDatas[] datas, bool show_index = true)
         {
             if (DataList == null)
                 DataList = new List<XGUIDialogListDatas>();
             DataList.Clear();
+
+            this.show_index = show_index;
             for (int i = 0; i < datas.Length; i++)
             {
                 DataList.Add(datas[i]);

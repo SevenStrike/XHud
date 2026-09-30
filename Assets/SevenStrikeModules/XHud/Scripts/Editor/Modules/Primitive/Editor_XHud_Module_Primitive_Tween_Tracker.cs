@@ -28,6 +28,85 @@ namespace SevenStrikeModules.XHud.Editor
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
+    using UnityEngine.UI;
+    using static UnityEngine.GraphicsBuffer;
+
+    /// <summary>
+    /// 图元动画数值属性包装类，用于在参数面板中统一引用「起始 / 结束 / 默认」三组序列化属性
+    /// <para/>
+    /// 使用场景：<see cref="Editor_XHud_Module_Primitive_Tween_Tracker.DrawNodeParameterFields"/>
+    /// 中通过 <c>ResolveTweenValueProperties</c> 构造本类实例，
+    /// 再传递给 <c>DrawTweenValueEditor</c> 使用。
+    /// <para/>
+    /// 三个序列化属性的语义：
+    /// <list type="bullet">
+    /// <item><description><see cref="prop_from"/>：起始值（From），动画开始时的值；</description></item>
+    /// <item><description><see cref="prop_end"/>：结束值（End），动画结束时的值；</description></item>
+    /// <item><description><see cref="prop_origin"/>：默认值（Original），动画开始前的默认状态值。</description></item>
+    /// </list>
+    /// 三者的组合可表达四种数值过渡模式（S-D / D-E / S-E / C-E），
+    /// 具体哪两组参与动画由节点的 <c>valuemode_index</c> 决定。
+    /// <para/>
+    /// 注意：类名沿用项目的 <c>snake_case</c> 风格（与 <c>value_*</c> 系列方法一致），
+    /// 未改为 PascalCase 是为避免波及既有调用点。
+    /// </summary>
+    internal class TweenValueProperties
+    {
+        /// <summary>
+        /// 动画类型名称（由 <see cref="TweenNodeType"/> 去掉前缀 <c>"x_"</c> 得到），
+        /// 例如 <c>a_位移</c> → <c>"位移"</c>。当前未在 UI 中使用，保留供扩展。
+        /// </summary>
+        public string title;
+
+        /// <summary>
+        /// 该数值属性对应的动画类型，决定参数面板显示哪些字段。
+        /// </summary>
+        public TweenNodeType type;
+
+        /// <summary>
+        /// 起始值序列化属性（From）。在 S-D / S-E 模式中作为动画起点。
+        /// </summary>
+        public SerializedProperty prop_from;
+
+        /// <summary>
+        /// 结束值序列化属性（End）。在 D-E / S-E / C-E 模式中作为动画终点。
+        /// </summary>
+        public SerializedProperty prop_end;
+
+        /// <summary>
+        /// 默认值序列化属性（Original）。在 S-D / D-E 模式中作为一端，
+        /// 也用于「重置」操作的回退目标。
+        /// </summary>
+        public SerializedProperty prop_origin;
+
+        /// <summary>
+        /// 构造：以标题、类型与三组序列化属性初始化包装对象
+        /// <para/>
+        /// 注意：当前代码中实际使用的是无参构造 + 逐字段赋值的方式，
+        /// 本重载保留供未来直接构造场景使用。
+        /// </summary>
+        /// <param name="title">动画类型名称（已去掉枚举前缀）</param>
+        /// <param name="type">动画节点类型</param>
+        /// <param name="prop_start">起始值序列化属性</param>
+        /// <param name="prop_end">结束值序列化属性</param>
+        /// <param name="prop_origin">默认值序列化属性</param>
+        public TweenValueProperties(string title, TweenNodeType type, SerializedProperty prop_start, SerializedProperty prop_end, SerializedProperty prop_origin)
+        {
+            this.title = title;
+            this.type = type;
+            this.prop_from = prop_start;
+            this.prop_end = prop_end;
+            this.prop_origin = prop_origin;
+        }
+
+        /// <summary>
+        /// 构造：创建空包装对象，字段由调用方后续赋值
+        /// <para/>
+        /// 这是 <c>ResolveTweenValueProperties</c> 中实际使用的方式：
+        /// 先 new 出空对象，再按动画类型逐字段填入 <c>prop_from / prop_end / prop_origin</c>。
+        /// </summary>
+        public TweenValueProperties() { }
+    }
 
     /// <summary> 
     ///
@@ -365,7 +444,38 @@ namespace SevenStrikeModules.XHud.Editor
         /// 类型大图标 - 尺寸
         /// </summary>
         private Texture2D b_anim_type_size;
-
+        /// <summary>
+        /// 轨道参数取数值操作图标 - 记录（常规）
+        /// </summary>
+        private Texture2D icon_track_param_record_r;
+        /// <summary>
+        /// 轨道参数取数值操作图标 - 记录（按下）
+        /// </summary>
+        private Texture2D icon_track_param_record_p;
+        /// <summary>
+        /// 轨道参数取数值操作图标 - 应用（常规）
+        /// </summary>
+        private Texture2D icon_track_param_apply_r;
+        /// <summary>
+        /// 轨道参数取数值操作图标 - 应用（按下）
+        /// </summary>
+        private Texture2D icon_track_param_apply_p;
+        /// <summary>
+        /// 轨道参数取数值操作图标 - 归零（常规）
+        /// </summary>
+        private Texture2D icon_track_param_reset_r;
+        /// <summary>
+        /// 轨道参数取数值操作图标 - 归零（按下）
+        /// </summary>
+        private Texture2D icon_track_param_reset_p;
+        /// <summary>
+        /// 轨道参数数值流向图标 - 指示从起始到默认（常规）
+        /// </summary>
+        private Texture2D icon_track_param_connector_status_r;
+        /// <summary>
+        /// 轨道参数数值流向图标 - 指示从？到？（按下）
+        /// </summary>
+        private Texture2D icon_track_param_connector_status_p;
         #endregion
 
         #region 字段：视图参数
@@ -431,9 +541,9 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 字段：Clip 拖拽状态
         /// <summary> 
-        ///Clip 拖拽模式值为 <see cref="DragMode.None"/> 表示当前无拖拽
+        ///Clip 拖拽模式值为 <see cref="DragMode.无"/> 表示当前无拖拽
         ///</summary>
-        private DragMode dragMode = DragMode.None;
+        private DragMode dragMode = DragMode.无;
         /// <summary> 
         ///当前正在拖拽的动画节点索引-1 表示无
         ///</summary>
@@ -560,58 +670,83 @@ namespace SevenStrikeModules.XHud.Editor
             /// <summary> 
             ///未拖拽
             ///</summary>
-            None,
+            无,
             /// <summary> 
             ///整体移动（修改 Delay，Duration 不变）
             ///</summary>
-            Move,
+            移动,
             /// <summary> 
             ///拖拽左边缘（同时修改 Delay 与 Duration，右端固定）
             ///</summary>
-            LeftEdge,
+            左边缘,
             /// <summary> 
             ///拖拽右边缘（仅修改 Duration，左端固定）
             ///</summary>
-            RightEdge
+            右边缘
         }
         #endregion
 
         #region 窗口入口
         /// <summary> 
         ///打开（或复用）迷你时间轴窗口，并绑定指定的图元动画器
-        ///</summary>
+        /// </summary>
         /// <param name="tween">要编辑的图元动画器</param>
         public static void OpenWith(XHud_Module_Primitive_Tween tween)
         {
             Editor_XHud_Module_Primitive_Tween_Tracker window = (Editor_XHud_Module_Primitive_Tween_Tracker)EditorWindow.GetWindow(typeof(Editor_XHud_Module_Primitive_Tween_Tracker), false, "XHUD 图元动画轨道编辑器", true);
 
             window.minSize = MinWindowSize;
-            Vector2 savedSize = LoadWindowSize();
+            Vector2 savedSize = LoadPersistedWindowSize();
 
             XGUI.CenterEditorWindow(new Vector2Int((int)savedSize.x, (int)savedSize.y), window, false, false);
 
             if (window.target != tween)
             {
-                window.SaveViewState();
+                window.SavePersistedViewState();
                 window.target = tween;
                 window.selectedIndex = -1;
                 window.selectedIndices.Clear();
-                window.LoadViewState();
-                window.RefreshHostComponents();
+                window.LoadPersistedViewState();
+                window.RefreshHostComponentCache();
             }
             window.Repaint();
             window.Focus();
+        }
+        /// <summary> 
+        ///根据当前 target 刷新其所在的 XHud 宿主组件缓存
+        /// </summary>
+        private void RefreshHostComponentCache()
+        {
+            if (target == null || target.Equals(null))
+            {
+                HudText = null;
+                HudTmpText = null;
+                HudButton = null;
+                HudProgress = null;
+                HudToggle = null;
+                HudSlider = null;
+                HudOption = null;
+                return;
+            }
+
+            HudText = target.GetComponentInParent<XHud_Module_Text>();
+            HudTmpText = target.GetComponentInParent<XHud_Module_TmpText>();
+            HudButton = target.GetComponentInParent<XHud_Module_Button>();
+            HudProgress = target.GetComponentInParent<XHud_Module_Progress>();
+            HudToggle = target.GetComponentInParent<XHud_Module_Toggle>();
+            HudSlider = target.GetComponentInParent<XHud_Module_Slider>();
+            HudOption = target.GetComponentInParent<XHud_Module_Option>();
         }
         #endregion
 
         #region 生命周期
         /// <summary> 
         ///Unity 启用回调：注册 Undo/Redo 监听，加载图标
-        ///</summary>
+        /// </summary>
         private void OnEnable()
         {
-            Undo.undoRedoPerformed -= OnUndoRedo;
-            Undo.undoRedoPerformed += OnUndoRedo;
+            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+            Undo.undoRedoPerformed += OnUndoRedoPerformed;
             icon_del_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_del_r");
             icon_del_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_del_p");
             icon_add_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_add_r");
@@ -644,24 +779,33 @@ namespace SevenStrikeModules.XHud.Editor
             b_anim_type_writter = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_writter");
             b_anim_type_fill = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_fill");
             b_anim_type_size = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_size");
+            icon_track_param_record_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_record_r");
+            icon_track_param_record_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_record_p");
+            icon_track_param_apply_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_apply_r");
+            icon_track_param_apply_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_apply_p");
+            icon_track_param_reset_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_reset_r");
+            icon_track_param_reset_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_reset_p");
+            icon_track_param_connector_status_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_connector_status_r");
+            icon_track_param_connector_status_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_connector_status_p");
+
 
             icon_led = XGUI.GetBasedIcon("icon_field_status");
         }
         /// <summary> 
         ///Unity 禁用回调：注销 Undo/Redo 监听，并保存视图状态
-        ///</summary>
+        /// </summary>
         private void OnDisable()
         {
-            Undo.undoRedoPerformed -= OnUndoRedo;
-            SaveViewState();
-            SaveWindowSize();
+            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+            SavePersistedViewState();
+            SavePersistedWindowSize();
         }
         /// <summary> 
         ///Undo / Redo 执行后回调：清拖拽状态，强制重绘
-        ///</summary>
-        private void OnUndoRedo()
+        /// </summary>
+        private void OnUndoRedoPerformed()
         {
-            dragMode = DragMode.None;
+            dragMode = DragMode.无;
             draggingIndex = -1;
 
             snapGuideSecond = -1f;
@@ -687,7 +831,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (selectedIndex >= Nodes.Count)
                 selectedIndex = -1;
             if (selectedIndex < 0 && selectedIndices.Count > 0)
-                selectedIndex = GetTopmostSelected();
+                selectedIndex = GetTopmostSelectedIndex();
             Repaint();
         }
         /// <summary>
@@ -715,7 +859,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 绘制：顶部工具栏
-            DrawToolbar(valid);
+            DrawTopToolbar(valid);
             XGUI.gui_box(new Rect(0, TopBarHeight, position.width, 1), Color.black * 0.3f);
             #endregion
 
@@ -783,7 +927,7 @@ namespace SevenStrikeModules.XHud.Editor
                     width: icon_null_add_r.width,
                     height: icon_null_add_r.height))
                 {
-                    InsertNodeAt(0);
+                    InsertTweenNodeAt(0);
                 }
                 XGUI.layout_flexspace();
                 XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
@@ -824,7 +968,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 交互：滚轮
-                HandleScrollWheel();
+                HandleMouseScrollWheel();
                 #endregion
 
                 #region 交互：名字列宽度输入（必须先于 Clip 区，优先抢 hotControl）
@@ -832,9 +976,9 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 绘制：三大主区域
-                DrawClipArea(clipArea);
-                DrawNameColumn(nameArea);
-                DrawParameterPanel(paramArea);
+                DrawClipTimelineArea(clipArea);
+                DrawNameColumnPanel(nameArea);
+                DrawNodeParameterPanel(paramArea);
                 #endregion
 
                 #region 绘制：名字列宽度光标（必须在所有绘制之后，避免被 Clip 区光标覆盖）
@@ -846,7 +990,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 交互：快捷键与全局兜底
-                HandleShortcuts();
+                HandleKeyboardShortcuts();
                 HandleGlobalMouseUp();
                 #endregion
             }
@@ -862,8 +1006,8 @@ namespace SevenStrikeModules.XHud.Editor
         #region 绘制：工具栏
         /// <summary> 
         ///绘制顶部工具栏：重置视图、缩放到合适范围、吸附开关，以及右侧提示文本
-        ///</summary>
-        private void DrawToolbar(bool valid)
+        /// </summary>
+        private void DrawTopToolbar(bool valid)
         {
             XGUI.layout_group_start(
                type: XGUIContainerType.Horizontal,
@@ -932,7 +1076,7 @@ namespace SevenStrikeModules.XHud.Editor
                     layout_min_width: 0,
                     layout_width: 100, button_text_font: XGUI.GetFont("xg-regular")))
                 {
-                    ResetView();
+                    ResetTimelineView();
                 }
                 #endregion
 
@@ -963,7 +1107,7 @@ namespace SevenStrikeModules.XHud.Editor
                     layout_min_width: 0,
                     layout_width: 120, button_text_font: XGUI.GetFont("xg-regular")))
                 {
-                    FitToContent();
+                    FitViewToContent();
                 }
                 #endregion
 
@@ -1003,7 +1147,7 @@ namespace SevenStrikeModules.XHud.Editor
                 if (newSnap != snapEnabled)
                 {
                     snapEnabled = newSnap;
-                    SaveViewState();
+                    SavePersistedViewState();
                 }
                 #endregion
             }
@@ -1059,22 +1203,47 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 绘制：名字列
         /// <summary> 
-        ///绘制左侧名字列（固定面板，垂直滚动由 Clip 区主导）
-        ///</summary>
+        /// 绘制左侧名字列（固定面板，垂直滚动由 Clip 区主导）
+        /// <para/>
+        /// 布局自上而下分为三部分：
+        /// <list type="bullet">
+        /// <item><description>顶部标题栏（高 <see cref="rulerHeight"/>）：显示「图元动画列表」；</description></item>
+        /// <item><description>中部行列表（ScrollView）：每行对应一个动画节点，含类型圆点、
+        /// 标识文字、插入 / 删除 / 显隐 / 菜单四个小按钮；</description></item>
+        /// <item><description>底部滚动条占位条（高 <see cref="HorizontalScrollbarHeight"/>）：
+        /// 与 Clip 区水平滚动条等高，保证两列底边对齐。</description></item>
+        /// </list>
+        /// <para/>
+        /// 关键设计：名字列自身不处理垂直滚动，其 <c>nameScroll.y</c> 每帧从
+        /// <see cref="scrollPos"/>.y 同步，从而实现与右侧轨道的垂直对齐。
+        /// <para/>
+        /// 增删操作采用「延迟执行」模式：循环中只记录 <c>pendingInsertIndex</c> /
+        /// <c>pendingDeleteIndex</c>，循环结束后再统一调用增删方法，
+        /// 避免在遍历 <see cref="Nodes"/> 过程中修改集合引发异常。
+        /// </summary>
         /// <param name="area">名字列在窗口坐标系中的矩形区域</param>
-        private void DrawNameColumn(Rect area)
+        private void DrawNameColumnPanel(Rect area)
         {
             GUI.BeginGroup(area);
             XGUI.gui_box(new Rect(0, 0, area.width, area.height), ColorBasedBg);
+
+            // ── 顶部标题栏占位（先铺底，文字最后叠加，避免被行列表覆盖）──
             Rect rect_name = new Rect(0, 0, area.width, rulerHeight);
             XGUI.gui_box(rect_name, ColorBasedBg);
+
+            // ── 中部行列表视口：扣除顶部标题栏与底部滚动条占位条 ──
             Rect scrollViewportRect = new Rect(
                 0,
                 rulerHeight,
                 area.width,
                 area.height - rulerHeight - HorizontalScrollbarHeight);
+
+            // 内容高度 = 行数 × 行高 + 20px 底部留白（与 Clip 区保持一致，保证滚动范围对齐）
             float contentWidth = scrollViewportRect.width;
             float contentHeight = Nodes.Count * trackHeight + 20f;
+
+            // 关键：nameScroll.y 每帧从 scrollPos.y 同步，实现与右侧轨道垂直对齐。
+            // 两个方向滚动条均隐藏（false, false），因为名字列不接受独立滚动输入。
             nameScroll = new Vector2(0f, scrollPos.y);
             nameScroll = GUI.BeginScrollView(
                 scrollViewportRect,
@@ -1084,18 +1253,26 @@ namespace SevenStrikeModules.XHud.Editor
                 false,
                 GUIStyle.none,
                 GUIStyle.none);
+
+            // 本帧是否已有名字行内的控件（按钮 / 行本体）被左键命中。
+            // 用于避免「点击行内按钮」被误判为「点击行本体」而触发选中。
             bool nameHitThisFrame = false;
+            // 延迟增删：循环中只记录索引，循环结束后统一执行。
             int pendingInsertIndex = -1;
             int pendingDeleteIndex = -1;
+
             for (int i = 0; i < Nodes.Count; i++)
             {
                 TweenNode node = Nodes[i];
                 bool isSelected = selectedIndices.Contains(i);
-                Rect rowRect = GetNameRowHitRect(i, scrollViewportRect.width);
-                Rect nameRect = GetNameRowVisualRect(rowRect);
+                Rect rowRect = CalculateNameRowHitRect(i, scrollViewportRect.width);
+                Rect nameRect = CalculateNameRowVisualRect(rowRect);
 
+                // 行背景：选中行使用高亮色，未选中使用暗色
                 EditorGUI.DrawRect(nameRect, isSelected ? ColorNameRowSelectedBg : ColorNameRowBg);
 
+                // ── 四个小按钮自右向左排列：菜单 / 显隐 / 删除 / 插入 ──
+                // 每个按钮均垂直居中于行视觉矩形内，间距 dis = 3px。
                 float btnY = nameRect.y + (nameRect.height - NameRowButtonSize) * 0.5f - 1;
                 float dis = 3;
 
@@ -1126,8 +1303,9 @@ namespace SevenStrikeModules.XHud.Editor
 
                 // 贯穿式
                 Rect sepRect = new Rect(
-               insertRect.x - dis - 2, btnY, 1, NameRowButtonSize + 2);
+               insertRect.x - dis - 2, nameRect.y, 1, nameRect.height + 2);
 
+                // ── 标识文字：绘制在按钮区左侧，超出部分省略号截断 ──
                 float buttonZoneLeft = insertRect.x - 35;
                 XGUI.gui_label(
                     rect: new Rect(nameRect.x + 25, nameRect.y, buttonZoneLeft - nameRect.x, nameRect.height),
@@ -1138,8 +1316,10 @@ namespace SevenStrikeModules.XHud.Editor
                     anchor: TextAnchor.MiddleLeft,
                     font_style: FontStyle.Normal);
 
+                // 按钮区与文字区之间的竖直分隔线
                 XGUI.gui_box(sepRect, Color.white * 0.35f);
 
+                // ── 按钮：插入（在当前节点之后插入新节点）──
                 if (XGUI.gui_button(
                     rect: insertRect,
                     tooltip: "",
@@ -1156,6 +1336,7 @@ namespace SevenStrikeModules.XHud.Editor
                     nameHitThisFrame = true;
                 }
 
+                // ── 按钮：删除（删除当前节点）──
                 if (XGUI.gui_button(
                     rect: deleteRect,
                     tooltip: "",
@@ -1172,6 +1353,7 @@ namespace SevenStrikeModules.XHud.Editor
                     nameHitThisFrame = true;
                 }
 
+                // ── 按钮：显隐切换（直接写回 node.Enabled，下一帧生效）──
                 if (XGUI.gui_button(
                     rect: eyeRect,
                     tooltip: "",
@@ -1188,6 +1370,7 @@ namespace SevenStrikeModules.XHud.Editor
                     nameHitThisFrame = true;
                 }
 
+                // ── 按钮：菜单（占位，目前为 A / B / C 三个空项）──
                 if (XGUI.gui_button(
                     rect: menuRect,
                     tooltip: "",
@@ -1214,11 +1397,14 @@ namespace SevenStrikeModules.XHud.Editor
                     menu.ShowAsContext();
                 }
 
+                // ── 类型圆点：行最左侧的彩色小圆点，颜色由动画类型决定 ──
                 XGUI.gui_icon(
                    rect: new Rect(nameRect.x + 10, nameRect.y + ((nameRect.height / 2) - TweenTypeDotSize / 2), TweenTypeDotSize, TweenTypeDotSize),
                    icon: icon_led,
                    color: GetTweenTypeColor(node.Type));
 
+                // ── 行本体点击：设置选中（Ctrl 切换单项 / Shift 范围选）──
+                // 注意：!nameHitThisFrame 保证「行内按钮已被点击」时不再触发行选中。
                 if (Event.current.type == EventType.MouseDown
                     && Event.current.button == 0
                     && rowRect.Contains(Event.current.mousePosition)
@@ -1226,20 +1412,27 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     bool ctrl = Event.current.control || Event.current.command;
                     bool shift = Event.current.shift;
-                    SetSelection(i, ctrl, shift);
+                    SetNodeSelection(i, ctrl, shift);
                     nameHitThisFrame = true;
                     Event.current.Use();
                     Repaint();
                 }
             }
             GUI.EndScrollView();
+
+            // 同步回写：防止 GUI.BeginScrollView 修改 nameScroll.y 后污染下一帧
             nameScroll.y = scrollPos.y;
+
+            // ── 底部滚动条占位条：与 Clip 区水平滚动条等高，保证两列底边对齐 ──
             Rect bottomStrip = new Rect(
                 0,
                 area.height - HorizontalScrollbarHeight,
                 area.width,
                 HorizontalScrollbarHeight);
             EditorGUI.DrawRect(bottomStrip, ColorBasedBg);
+
+            // ── 名字列空白处点击：清空选中 ──
+            // 条件：左键、非 Alt、非行内控件命中、且点击落在中部行列表视口内。
             if (Event.current.type == EventType.MouseDown && Event.current.button == 0
                 && !Event.current.alt && !nameHitThisFrame
                 && scrollViewportRect.Contains(Event.current.mousePosition))
@@ -1250,6 +1443,8 @@ namespace SevenStrikeModules.XHud.Editor
                 Event.current.Use();
                 Repaint();
             }
+
+            // ── 顶部标题栏：最后叠加绘制，避免被行列表覆盖 ──
             XGUI.gui_box(rect_name, Color_Name_Header_BG);
             XGUI.gui_label(
                 rect: new Rect(rect_name.x + 8, rect_name.y, rect_name.width, rect_name.height),
@@ -1260,64 +1455,104 @@ namespace SevenStrikeModules.XHud.Editor
                 anchor: TextAnchor.MiddleLeft,
                 font_style: FontStyle.Normal);
             GUI.EndGroup();
+
+            // 名字列右边界分隔线（视觉上区分名字列与 Clip 区）
             XGUI.gui_box(new Rect(area.x + (area.width - 1), area.y, 1, area.height), Color.black * 0.35f);
+
+            // ── 延迟执行增删：循环结束后统一处理，避免遍历中修改 Nodes ──
+            // 删除优先于插入（若同一帧两者都被触发，以删除为准）。
             if (pendingDeleteIndex >= 0)
             {
-                DeleteNodeAt(pendingDeleteIndex);
+                DeleteTweenNodeAt(pendingDeleteIndex);
             }
             else if (pendingInsertIndex >= 0)
             {
-                InsertNodeAfter(pendingInsertIndex);
+                InsertTweenNodeAfter(pendingInsertIndex);
             }
         }
         /// <summary> 
-        ///计算第 <paramref name="index"/> 条名字行的命中矩形（内容坐标）
-        ///</summary>
+        /// 计算第 <paramref name="index"/> 条名字行的命中矩形（内容坐标）
+        /// <para/>
+        /// 「命中矩形」是完整行高（含上下 <see cref="RowVerticalPadding"/> 内边距），
+        /// 用于鼠标点击判定；视觉矩形请使用 <see cref="CalculateNameRowVisualRect"/>。
+        /// <para/>
+        /// 上下边界均做 <see cref="Mathf.Round"/> 取整，原因：行高 <see cref="trackHeight"/>
+        /// 可能为小数（Shift+滚轮调整后），若不做取整，相邻行的边界会出现 1px 缝隙
+        /// 或重叠，视觉上出现细线。
+        /// </summary>
         /// <param name="index">节点索引</param>
         /// <param name="width">名字列可用宽度</param>
         /// <returns>行命中矩形（内容坐标）</returns>
-        private Rect GetNameRowHitRect(int index, float width)
+        private Rect CalculateNameRowHitRect(int index, float width)
         {
+            // 行高可能为小数，上下边界分别取整，保证相邻行无缝衔接
             float y0 = Mathf.Round(index * trackHeight);
             float y1 = Mathf.Round((index + 1) * trackHeight);
             return new Rect(0, y0, width, y1 - y0);
         }
         /// <summary> 
-        ///由行命中矩形计算名字行的视觉矩形：上下按 <see cref="RowVerticalPadding"/> 内缩
-        ///</summary>
+        /// 由行命中矩形计算名字行的视觉矩形：上下按 <see cref="RowVerticalPadding"/> 内缩
+        /// <para/>
+        /// 与命中矩形的关系：
+        /// <list type="bullet">
+        /// <item><description>命中矩形：完整行高，用于鼠标点击判定；</description></item>
+        /// <item><description>视觉矩形：上下各内缩 <see cref="RowVerticalPadding"/>，
+        /// 用于行背景、按钮、文字等的绘制。</description></item>
+        /// </list>
+        /// 内缩后若高度小于 4px（行高极小时的边界保护），强制设为 4px，
+        /// 避免 <see cref="EditorGUI.DrawRect"/> 绘制出 0 或负高度的无效矩形。
+        /// </summary>
         /// <param name="rowRect">行命中矩形</param>
         /// <returns>行视觉矩形</returns>
-        private Rect GetNameRowVisualRect(Rect rowRect)
+        private Rect CalculateNameRowVisualRect(Rect rowRect)
         {
+            // 上下各内缩 pad，形成行与行之间的视觉间隔
             float pad = RowVerticalPadding;
             return new Rect(
                 rowRect.x,
                 rowRect.y + pad,
                 rowRect.width,
+                // 高度下限保护：避免极行高下出现 0 / 负高度矩形
                 Mathf.Max(rowRect.height - pad * 2f, 4f));
         }
         #endregion
 
         #region 绘制：Clip 区
         /// <summary> 
-        ///绘制 Clip 区：刻度尺（固定）+ 双向 ScrollView（轨道 + Clip）+ 自绘水平滚动条
-        ///</summary>
+        /// 绘制 Clip 时间轴区：刻度尺（固定）+ 双向 ScrollView（轨道 + Clip）+ 自绘水平滚动条
+        /// <para/>
+        /// 本方法是 Clip 区的总入口，按以下顺序执行：
+        /// <list type="number">
+        /// <item><description>绘制区域底色，并绘制顶部固定刻度尺；</description></item>
+        /// <item><description>开启双向 ScrollView，逐条绘制可见轨道（垂直裁剪，屏幕外轨道跳过）；</description></item>
+        /// <item><description>在 ScrollView 内处理 Clip 拖拽（<see cref="ProcessClipDrag"/>）；</description></item>
+        /// <item><description>关闭 ScrollView 后钳制垂直滚动，并绘制吸附 / 边界参考线；</description></item>
+        /// <item><description>绘制底部自绘水平滚动条；</description></item>
+        /// <item><description>处理刻度尺点击、空白点击、平移三类交互。</description></item>
+        /// </list>
+        /// 注意：本方法通过 <see cref="GUI.BeginGroup"/> 将局部坐标系原点移到 Clip 区左上角，
+        /// 方法内所有 Rect 均使用 Clip 区局部坐标。
+        /// </summary>
         /// <param name="area">Clip 区在窗口坐标系中的矩形区域</param>
-        private void DrawClipArea(Rect area)
+        private void DrawClipTimelineArea(Rect area)
         {
             GUI.BeginGroup(area);
             EditorGUI.DrawRect(new Rect(0, 0, area.width, area.height), ColorBasedBg);
 
+            // ── 阶段 1：绘制顶部刻度尺（固定不随 ScrollView 滚动）──
+            // 可见时间范围 = [水平滚动偏移, 水平滚动偏移 + 视口宽度] / 每秒像素数
             Rect rulerRect = new Rect(0, 0, area.width, rulerHeight);
             float startSecond = scrollPos.x / pixelsPerSecond;
             float endSecond = (scrollPos.x + area.width) / pixelsPerSecond;
-            DrawRuler(rulerRect, startSecond, endSecond);
+            DrawTimeRuler(rulerRect, startSecond, endSecond);
 
+            // ── 阶段 2：开启双向 ScrollView ──
+            // 视口 = 扣除顶部刻度尺与底部水平滚动条后的剩余区域
             Rect scrollViewportRect = new Rect(
                 0, rulerHeight, area.width,
                 area.height - rulerHeight - HorizontalScrollbarHeight);
 
-            float contentWidth = GetContentWidthPixels();
+            float contentWidth = CalculateContentWidthPixels();
             float contentHeight = Nodes.Count * trackHeight + 20f;
             Rect contentRect = new Rect(0, 0, contentWidth, contentHeight);
 
@@ -1330,6 +1565,9 @@ namespace SevenStrikeModules.XHud.Editor
                 GUIStyle.none,
                 GUI.skin.verticalScrollbar);
 
+            // ── 阶段 3：逐条绘制轨道（带垂直裁剪）──
+            // clipHitThisFrame 用于记录本帧是否有 Clip 被左键命中，
+            // 供后续 HandleClipAreaEmptyClick 判断是否需要取消选中。
             clipHitThisFrame = false;
             for (int i = 0; i < Nodes.Count; i++)
             {
@@ -1338,18 +1576,26 @@ namespace SevenStrikeModules.XHud.Editor
                 float trackH = trackBottom - trackTop;
                 float viewTop = scrollPos.y;
                 float viewBottom = scrollPos.y + scrollViewportRect.height;
+                // 屏幕外轨道直接跳过，避免无谓的绘制开销
                 if (trackBottom < viewTop || trackTop > viewBottom) continue;
                 Rect trackRect = new Rect(0, trackTop, contentWidth, trackH);
-                DrawTrack(trackRect, i, startSecond, endSecond);
+                DrawTrackRow(trackRect, i, startSecond, endSecond);
             }
+
+            // ── 阶段 4：在 ScrollView 内处理 Clip 拖拽 ──
+            // 必须放在 EndScrollView 之前，因为 MouseDrag / MouseUp 事件
+            // 依赖于 ScrollView 内部的鼠标坐标系。
             ProcessClipDrag(scrollViewportRect);
             GUI.EndScrollView();
 
-            scrollPos.y = Mathf.Clamp(scrollPos.y, 0f, GetMaxScrollY());
+            // ── 阶段 5：关闭 ScrollView 后钳制垂直滚动 ──
+            // 同步 nameScroll.y，保证左侧名字列与右侧轨道垂直对齐。
+            scrollPos.y = Mathf.Clamp(scrollPos.y, 0f, CalculateMaxVerticalScroll());
             nameScroll.y = scrollPos.y;
 
             #region 参考线（覆盖刻度尺 + 轨道区）
-            if (dragMode != DragMode.None && snapGuideSecond >= 0f)
+            // 吸附参考线：拖拽中且本帧吸附到有效时间时，绘制一条白色竖线（按住 Shift 更亮）
+            if (dragMode != DragMode.无 && snapGuideSecond >= 0f)
             {
                 float gx = snapGuideSecond * pixelsPerSecond - scrollPos.x;
                 if (gx >= 0f && gx <= area.width)
@@ -1361,7 +1607,9 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.gui_box(new Rect(gx, 0, 1f, area.height), guideColor);
                 }
             }
-            if (dragMode == DragMode.Move && draggingIndex >= 0 && draggingIndex < Nodes.Count)
+            // 边界参考线：Move 拖拽时，在 Clip 的左右两端各绘制一条暗色竖线，
+            // 便于用户判断整段动画的首尾位置（区别于吸附黄线）。
+            if (dragMode == DragMode.移动 && draggingIndex >= 0 && draggingIndex < Nodes.Count)
             {
                 TweenNode draggingNode = Nodes[draggingIndex];
                 float leftX = draggingNode.Delay * pixelsPerSecond - scrollPos.x;
@@ -1373,21 +1621,39 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
+            // ── 阶段 6：绘制底部自绘水平滚动条 ──
+            // Unity 内置 HorizontalScrollbar 样式不符合本编辑器视觉，故手工绘制。
             Rect hScrollRect = new Rect(0, area.height - HorizontalScrollbarHeight, area.width, HorizontalScrollbarHeight);
-            DrawHorizontalScrollbar(hScrollRect);
+            DrawTimelineHorizontalScrollbar(hScrollRect);
 
-            HandleRulerClick(new Rect(0, 0, area.width, rulerHeight));
-            HandleEmptyClick(scrollViewportRect);
-            HandlePan(new Rect(0, 0, area.width, area.height));
+            // ── 阶段 7：三类交互处理 ──
+            // 顺序不可调换：刻度尺点击 → 空白点击 → 平移，后者需能覆盖前者的 hotControl 占用。
+            HandleTimeRulerClick(new Rect(0, 0, area.width, rulerHeight));
+            HandleClipAreaEmptyClick(scrollViewportRect);
+            HandleViewPan(new Rect(0, 0, area.width, area.height));
 
             GUI.EndGroup();
         }
         /// <summary> 
-        ///计算 Clip 区内容矩形的宽度（像素）
-        ///</summary>
+        /// 计算 Clip 区内容矩形的宽度（像素）
+        /// <para/>
+        /// 内容宽度 = max(所有 Clip 的最右端时间, <see cref="MinContentSeconds"/>) × 每秒像素数
+        /// + 右侧额外留白 <see cref="ContentRightPaddingPixels"/>。
+        /// <para/>
+        /// 最后再与「视口宽度 - 垂直滚动条宽度」取 max，原因：
+        /// <list type="bullet">
+        /// <item><description>内容宽度若小于视口宽度，Unity ScrollView 会以内容宽度为准，
+        /// 导致轨道背景无法铺满整个视口，视觉上出现右侧空白；</description></item>
+        /// <item><description>预留 <c>verticalScrollbarWidth</c> 是为了给垂直滚动条留出空间，
+        /// 避免滚动条与内容重叠。</description></item>
+        /// </list>
+        /// 本方法在每帧绘制、水平滚动条绘制、Clip 拖拽自动平移等多处被调用，
+        /// 因此内部只做必要的遍历，不做缓存。
+        /// </summary>
         /// <returns>内容宽度（像素）</returns>
-        private float GetContentWidthPixels()
+        private float CalculateContentWidthPixels()
         {
+            // ── 步骤 1：遍历所有节点，取最右端时间 ──
             float maxEnd = 0f;
             if (Nodes != null)
             {
@@ -1397,33 +1663,59 @@ namespace SevenStrikeModules.XHud.Editor
                     if (end > maxEnd) maxEnd = end;
                 }
             }
+
+            // ── 步骤 2：内容时间下限 + 右侧留白 → 候选宽度 ──
+            // MinContentSeconds 保证节点为空或全在 0 时刻时仍有可滚动范围，
+            // 否则内容宽度会退化为「右侧留白」这一小块，时间轴几乎无法操作。
             float seconds = Mathf.Max(maxEnd, MinContentSeconds);
             float width = seconds * pixelsPerSecond + ContentRightPaddingPixels;
+
+            // ── 步骤 3：与「视口宽度 - 垂直滚动条宽度」取 max ──
+            // 让内容至少铺满视口（扣掉滚动条），避免右侧出现背景空白。
             float viewportWidth = cachedClipAreaRect.width;
             const float verticalScrollbarWidth = 16f;
             float minWidth = Mathf.Max(1f, viewportWidth - verticalScrollbarWidth);
             return Mathf.Max(width, minWidth);
         }
         /// <summary> 
-        ///自绘 Clip 区底部的水平滚动条
-        ///</summary>
+        /// 自绘 Clip 区底部的水平滚动条
+        /// <para/>
+        /// 使用 <see cref="GUI.HorizontalScrollbar"/> 绘制，但前提是内容宽度大于视口宽度：
+        /// <list type="bullet">
+        /// <item><description>内容 ≤ 视口：整个矩形只铺一层深色底，不绘制可拖拽的滑块
+        /// （此时水平方向无滚动空间，绘制滑块反而误导用户）；</description></item>
+        /// <item><description>内容 &gt; 视口：绘制标准 Unity 水平滚动条，并将拖动结果写回
+        /// <see cref="scrollPos"/>.x。</description></item>
+        /// </list>
+        /// <para/>
+        /// 注意：本方法内部对 <see cref="scrollPos"/>.x 做了 <see cref="Mathf.Max"/> 归零保护，
+        /// 因为 <see cref="GUI.HorizontalScrollbar"/> 在内容刚好等于视口宽度时可能返回极小负值。
+        /// </summary>
         /// <param name="rect">水平滚动条矩形（Clip 区局部坐标，位于 Clip 区最底部）</param>
-        private void DrawHorizontalScrollbar(Rect rect)
+        private void DrawTimelineHorizontalScrollbar(Rect rect)
         {
-            float contentWidth = GetContentWidthPixels();
+            // 内容与视口宽度：二者共同决定是否需要绘制滑块
+            float contentWidth = CalculateContentWidthPixels();
             float viewWidth = cachedClipAreaRect.width;
+
+            // ── 分支 1：内容不超过视口 → 只铺底，不绘制滑块 ──
             if (contentWidth <= viewWidth)
             {
                 EditorGUI.DrawRect(rect, new Color(0.15f, 0.15f, 0.15f));
                 return;
             }
+
+            // ── 分支 2：内容超过视口 → 绘制标准 Unity 水平滚动条 ──
+            // 先铺底，再绘制滑块，保证滑块两侧的「空白槽」颜色与底一致。
             EditorGUI.DrawRect(rect, new Color(0.15f, 0.15f, 0.15f));
             scrollPos.x = GUI.HorizontalScrollbar(
                 rect,
-                scrollPos.x,
-                viewWidth,
-                0f,
-                contentWidth);
+                scrollPos.x,   // 当前值（滚动偏移）
+                viewWidth,     // 可视区域宽度（决定了滑块长度）
+                0f,            // 最小值
+                contentWidth); // 最大值
+
+            // 归零保护：GUI.HorizontalScrollbar 在边界情况下可能返回极小负值。
             scrollPos.x = Mathf.Max(0f, scrollPos.x);
         }
         #endregion
@@ -1431,11 +1723,11 @@ namespace SevenStrikeModules.XHud.Editor
         #region 绘制：刻度尺
         /// <summary> 
         ///绘制顶部刻度尺
-        ///</summary>
+        /// </summary>
         /// <param name="rect">刻度尺矩形（Clip 区局部坐标）</param>
         /// <param name="startSecond">可见区左边缘对应的时间（秒）</param>
         /// <param name="endSecond">可见区右边缘对应的时间（秒）</param>
-        private void DrawRuler(Rect rect, float startSecond, float endSecond)
+        private void DrawTimeRuler(Rect rect, float startSecond, float endSecond)
         {
             EditorGUI.DrawRect(rect, ColorRulerBG);
             int subdiv;
@@ -1506,18 +1798,18 @@ namespace SevenStrikeModules.XHud.Editor
         #region 绘制：轨道与 Clip
         /// <summary> 
         ///绘制单条轨道及其 Clip，并进行 MouseDown 命中检测以进入拖拽模式
-        ///</summary>
+        /// </summary>
         /// <param name="trackRect">轨道矩形（内容坐标，高 = trackHeight）</param>
         /// <param name="index">动画节点索引</param>
         /// <param name="startSecond">可见区左边缘对应的时间（秒）当前未使用，保留供扩展</param>
         /// <param name="endSecond">可见区右边缘对应的时间（秒）当前未使用，保留供扩展</param>
-        private void DrawTrack(Rect trackRect, int index, float startSecond, float endSecond)
+        private void DrawTrackRow(Rect trackRect, int index, float startSecond, float endSecond)
         {
             TweenNode node = Nodes[index];
             bool isSelected = selectedIndices.Contains(index);
-            Rect trackVisualRect = GetTrackVisualRect(trackRect);
+            Rect trackVisualRect = CalculateTrackVisualRect(trackRect);
             XGUI.gui_box(trackVisualRect, ColorClipBG);
-            Rect clipRect = GetClipRect(trackVisualRect, node);
+            Rect clipRect = CalculateClipRect(trackVisualRect, node);
             float viewLeft = scrollPos.x;
             float viewRight = scrollPos.x + cachedClipAreaRect.width;
             if (clipRect.xMax < viewLeft - 10 || clipRect.x > viewRight + 10)
@@ -1527,10 +1819,10 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         ///由轨道命中矩形计算轨道视觉矩形：上下按固定像素 <see cref="RowVerticalPadding"/> 内缩
-        ///</summary>
+        /// </summary>
         /// <param name="trackRect">轨道命中矩形（高 = trackHeight）</param>
         /// <returns>轨道视觉矩形（已内缩）</returns>
-        private Rect GetTrackVisualRect(Rect trackRect)
+        private Rect CalculateTrackVisualRect(Rect trackRect)
         {
             float pad = RowVerticalPadding;
             return new Rect(
@@ -1541,7 +1833,7 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         ///绘制 Clip 自身的视觉样式：背景色块、文本标签、鼠标光标
-        ///</summary>
+        /// </summary>
         /// <param name="clipRect">Clip 矩形（内容坐标）</param>
         /// <param name="node">对应的动画节点</param>
         /// <param name="isSelected">该节点当前是否被选中</param>
@@ -1583,21 +1875,26 @@ namespace SevenStrikeModules.XHud.Editor
             if (clipRect.width >= 220)
             {
                 XGUI.gui_icon(
-                rect: new Rect(clipRect.x + 15, clipRect.y + (trackHeight / 2 - 5), 10, 10),
-                icon: GetTweenTypeIcon(node.Type),
-                color: isSelected ? Color.black : Color.white * 0.9f);
+                    rect: new Rect(clipRect.x + 15, clipRect.y + (trackHeight / 2 - 7), 10, 10),
+                    icon: GetTweenTypeIcon(node.Type),
+                    color: isSelected ? Color.black : Color.white * 0.9f);
+
+                XGUI.gui_icon(
+                    rect: new Rect(clipRect.x + (clipRect.width - 25), clipRect.y + (trackHeight / 2 - 7), 10, 10),
+                    icon: GetTweenTypeIcon(node.Type),
+                    color: isSelected ? Color.black : Color.white * 0.9f);
             }
             #endregion
 
-            DrawClipCursors(clipRect);
+            ApplyClipMouseCursors(clipRect);
         }
         /// <summary> 
         ///根据轨道矩形与节点数据计算 Clip 的内容坐标矩形
-        ///</summary>
+        /// </summary>
         /// <param name="trackVisualRect">轨道视觉矩形（内容坐标）</param>
         /// <param name="node">动画节点</param>
         /// <returns>Clip 矩形（内容坐标）</returns>
-        private Rect GetClipRect(Rect trackVisualRect, TweenNode node)
+        private Rect CalculateClipRect(Rect trackVisualRect, TweenNode node)
         {
             float clipX = trackVisualRect.x + node.Delay * pixelsPerSecond;
             float clipW = node.Duration * pixelsPerSecond;
@@ -1609,9 +1906,9 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         ///为 Clip 设置鼠标光标形状：主体为移动光标，左右边缘为水平缩放光标
-        ///</summary>
+        /// </summary>
         /// <param name="clipRect">Clip 矩形（内容坐标）</param>
-        private void DrawClipCursors(Rect clipRect)
+        private void ApplyClipMouseCursors(Rect clipRect)
         {
             Rect bodyRect = new Rect(clipRect.x + ClipEdgeZone, clipRect.y,
                                      Mathf.Max(clipRect.width - ClipEdgeZone * 2, 1), clipRect.height);
@@ -1623,7 +1920,7 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         ///根据动画类型获取 Clip 的显示颜色
-        ///</summary>
+        /// </summary>
         /// <param name="type">动画节点类型</param>
         /// <returns>该类型对应的颜色</returns>
         private Color GetTweenTypeColor(TweenNodeType type)
@@ -1685,9 +1982,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary> 
         ///绘制右侧节点参数面板，用于编辑当前选中动画节点的属性
         ///<para/>内部使用 GUILayout 布局，高度由 Unity 自动计算，无需再手工估算
-        ///</summary>
+        /// </summary>
         /// <param name="area">参数面板在窗口坐标系中的矩形区域</param>
-        private void DrawParameterPanel(Rect area)
+        private void DrawNodeParameterPanel(Rect area)
         {
             GUI.BeginGroup(area);
             XGUI.gui_box(new Rect(0, 0, area.width, area.height), ColorBasedBg);
@@ -1712,7 +2009,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 if (selectedIndex >= 0 && selectedIndex < Nodes.Count)
                 {
-                    DrawParamFields(scrollViewportRect, icon_type, node);
+                    DrawNodeParameterFields(scrollViewportRect, icon_type, node);
                 }
                 else
                 {
@@ -1747,20 +2044,24 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary> 
         ///绘制选中节点的参数字段
         ///<para/>使用 EditorGUILayout 自动布局；按 <see cref="TweenNode.Type"/> 动态显示起始值 / 结束值
-        ///</summary>
-        private void DrawParamFields(Rect area, Texture2D type_icon, TweenNode node)
+        /// </summary>
+        private void DrawNodeParameterFields(Rect area, Texture2D type_icon, TweenNode node)
         {
             SerializedObject so = new SerializedObject(target);
-            SerializedProperty ser_indicator = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex).FindPropertyRelative("Indicator");
-            SerializedProperty ser_type = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex).FindPropertyRelative("Type");
-            SerializedProperty ser_duration = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex).FindPropertyRelative("Duration");
-            SerializedProperty ser_delay = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex).FindPropertyRelative("Delay");
-            SerializedProperty ser_timing = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex).FindPropertyRelative("Timings");
-            SerializedProperty ser_loop_type = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex).FindPropertyRelative("LoopType");
-            SerializedProperty ser_loop_count = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex).FindPropertyRelative("LoopCount");
-            SerializedProperty ser_ease = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex).FindPropertyRelative("Ease");
-            SerializedProperty ser_curve = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex).FindPropertyRelative("Curve");
-            SerializedProperty ser_rotate_mode = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex).FindPropertyRelative("RotateMode");
+
+            #region 序列化字段
+            SerializedProperty prop_node = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex);
+            SerializedProperty ser_indicator = prop_node.FindPropertyRelative("Indicator");
+            SerializedProperty ser_type = prop_node.FindPropertyRelative("Type");
+            SerializedProperty ser_duration = prop_node.FindPropertyRelative("Duration");
+            SerializedProperty ser_delay = prop_node.FindPropertyRelative("Delay");
+            SerializedProperty ser_timing = prop_node.FindPropertyRelative("Timings");
+            SerializedProperty ser_loop_type = prop_node.FindPropertyRelative("LoopType");
+            SerializedProperty ser_loop_count = prop_node.FindPropertyRelative("LoopCount");
+            SerializedProperty ser_ease = prop_node.FindPropertyRelative("Ease");
+            SerializedProperty ser_curve = prop_node.FindPropertyRelative("Curve");
+            SerializedProperty ser_rotate_mode = prop_node.FindPropertyRelative("RotateMode");
+            #endregion
 
             so.Update();
 
@@ -1975,7 +2276,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
-            #region 数值
+            #region 起始值 / 结束值（按类型动态显示）
             XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIFilled.缺口纯色边框,
@@ -1989,10 +2290,12 @@ namespace SevenStrikeModules.XHud.Editor
                 title_manual_offset_space: 5,
                 absolute_margin: true,
                 absolute_padding: true,
-                margin: new RectOffset(10, 10, 25, 0),
-                padding: new RectOffset(10, 10, 15, 15));
+                margin: new RectOffset(10, 10, 20, 0),
+                padding: new RectOffset(10, 10, 15, 10),
+                can_foldout: false);
 
-            int index = node.valuemode_index = XGUI.layout_toolbar(
+            #region 动画数值过渡模式选项卡
+            int value_mode_index = node.valuemode_index = XGUI.layout_toolbar(
                       index: node.valuemode_index,
                       names: new string[] { "S - D", "D - E", "S - E", "C - E" },
                       bg_normal: XGUIFilled.纯色边框,
@@ -2004,27 +2307,61 @@ namespace SevenStrikeModules.XHud.Editor
                       bar_height: 25,
                       text_anchor: TextAnchor.MiddleCenter,
                       text_padding: new RectOffset(10, 10, 0, 0),
-                      bar_margin: new RectOffset(0, 0, 0, 0),
+                      bar_margin: new RectOffset(0, 0, 5, 5),
                       text_offset: new Vector2(0, -2),
                       text_font: XGUI.GetFont("xg-regular"),
                       text_fontstyle: FontStyle.Bold,
-                      bg_width_offset: 15,
-                      maual_area_width: area.width,
+                      bg_width_offset: 5,
+                      bg_height_offset: 2,
                       navigate_style: true,
                       navigate_style_bg: XGUIFilled.纯色边框,
                       navigate_style_bg_color: Color.black * 0.5f);
+            #endregion
 
-            switch (index)
+            #region 模式说明按钮（弹出说明弹窗）
+            Rect rect_toolbar = XGUI.GetLastRect();
+            if (XGUI.gui_button(
+                rect: new Rect(rect_toolbar.x + (rect_toolbar.width - icon_help_r.width) + 5, rect_toolbar.y - icon_help_r.height - 2, icon_help_r.width - 5, icon_help_r.height - 5),
+                tooltip: "",
+                tex_release: icon_help_r,
+                tex_press: icon_help_p,
+                tex_gui_color: Color.white,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0)))
             {
-                case 0:
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
+                EditorApplication.delayCall += () =>
+                {
+                    List<XGUIDialogListDatas> infos = new List<XGUIDialogListDatas>();
+
+                    string hexcolor = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary);
+
+                    infos.Add(new XGUIDialogListDatas($"起始 - 默认", $"<b><color=#{hexcolor}>S</color></b>  -  <b><color=#{hexcolor}>D</color></b>", $"<color=#c1c1c1>从</color>  起始值  <color=#c1c1c1>到</color>  默认值  <color=#c1c1c1>的动画</color>"));
+                    infos.Add(new XGUIDialogListDatas($"默认 - 结束", $"<b><color=#{hexcolor}>D</color></b>  -  <b><color=#{hexcolor}>E</color></b>", $"<color=#c1c1c1>从</color>  默认值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
+                    infos.Add(new XGUIDialogListDatas($"起始 - 结束", $"<b><color=#{hexcolor}>S</color></b>  -  <b><color=#{hexcolor}>E</color></b>", $"<color=#c1c1c1>从</color>  起始值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
+                    infos.Add(new XGUIDialogListDatas($"当前 - 结束", $"<b><color=#{hexcolor}>C</color></b>  -  <b><color=#{hexcolor}>E</color></b>", $"<color=#c1c1c1>从</color>  当前值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
+
+                    XGUI.dialog_listview(
+                        datas: infos.ToArray(),
+                        type: XGUIDialogType.通知,
+                        windowtitle: "XHud - 图元动画时间线编辑器消息",
+                        title: "数值模式说明",
+                        msg: "以下是数值模式的简码对应的解释",
+                        ok: "明白",
+                        PrimaryIndex: 0,
+                        show_index: false,
+                        usemodal: false,
+                        themecolor: XHud_Dashboard.Theme_Primary);
+                };
             }
+            #endregion
+
+            XGUI.layout_space(5);
+
+            // 获取动画类型
+            TweenNodeType node_type = (TweenNodeType)ser_type.enumValueIndex;
+
+            // 绘制动画数值控件逻辑
+            DrawTweenValueEditor(ResolveTweenValueProperties(node_type, prop_node), value_mode_index);
 
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
@@ -2047,29 +2384,25 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(10, 10, 15, 15));
 
             #region 动画开关
-            node.Enabled = DrawToggle("动画开关", node.Enabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+            node.Enabled = DrawLabeledToggle("动画开关", node.Enabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
             #endregion
 
             #region 重置设为起始值
-            node.Rewind_Set_Startvalue = DrawToggle("重置设为起始值", node.Rewind_Set_Startvalue, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+            node.Rewind_Set_Startvalue = DrawLabeledToggle("重置设为起始值", node.Rewind_Set_Startvalue, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
             #endregion
 
             #region 完成设为结束值
-            node.Complete_Set_Endvalue = DrawToggle("完成设为结束值", node.Complete_Set_Endvalue, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+            node.Complete_Set_Endvalue = DrawLabeledToggle("完成设为结束值", node.Complete_Set_Endvalue, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
             #endregion
 
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
-            EditorGUILayout.Space(6);
-
-            #region 起始值 / 结束值（按类型动态显示）
-
-            #endregion
+            XGUI.layout_space(6);
 
             if (XGUI.ChangedCheck_End())
             {
-                if (dragMode == DragMode.None)
+                if (dragMode == DragMode.无)
                 {
                     Undo.RecordObject(target, "Edit Tween Node");
                 }
@@ -2079,38 +2412,592 @@ namespace SevenStrikeModules.XHud.Editor
 
             so.ApplyModifiedProperties();
         }
-
-        /// <summary> 
-        ///根据当前 target 刷新其所在的 XHud 宿主组件缓存
-        ///</summary>
-        private void RefreshHostComponents()
+        /// <summary>
+        /// 绘制动画数值过渡模式的编辑器主体（左/右数值输入框 + 交换按钮）
+        /// </summary>
+        private void DrawTweenValueEditor(TweenValueProperties val_propertys, int value_mode_index)
         {
-            if (target == null || target.Equals(null))
+            bool only_end_mode = (value_mode_index == 3);
+
+            if (!only_end_mode)
+                XGUI.layout_group_start(
+                    type: XGUIContainerType.Horizontal,
+                    absolute_margin: true,
+                    absolute_padding: true,
+                    margin: new RectOffset(0, 0, 0, 0),
+                    padding: new RectOffset(0, 0, 0, 0),
+                    can_foldout: false);
+
+            if (!only_end_mode)
+                XGUI.layout_space(5);
+
+            // 数值流向指示器图表式按钮
+            if (!only_end_mode)
+                if (XGUI.layout_button(
+                tooltip: "点击交换数值",
+                tex_release: icon_track_param_connector_status_r,
+                tex_press: icon_track_param_connector_status_p,
+                tex_gui_color: XHud_Dashboard.Theme_Primary,
+                margin: new RectOffset(0, 10, 10, 0),
+                border: new RectOffset(0, 0, 3, 8),
+                width: icon_track_param_connector_status_r.width,
+                height: 92))
+                {
+                    // 根据模式进行数值交换对调
+                    switch (value_mode_index)
+                    {
+                        case 0:
+                            SwapValueProperties(val_propertys.prop_from, val_propertys.prop_origin);
+                            break;
+                        case 1:
+                            SwapValueProperties(val_propertys.prop_origin, val_propertys.prop_end);
+                            break;
+                        case 2:
+                            SwapValueProperties(val_propertys.prop_from, val_propertys.prop_end);
+                            break;
+                    }
+                }
+
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                absolute_margin: true,
+                absolute_padding: true,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                can_foldout: false);
+
+            /* value_mode_index = 动画数值过渡模式
+             *  0  => 起始 - 默认
+             *  1  => 默认 - 结束
+             *  2  => 起始 - 结束
+             *  3  => 当前 - 结束
+             * */
+
+            string title_source = null;
+            string title_target = null;
+
+            SerializedProperty prop_source = null;
+            SerializedProperty prop_target = null;
+
+            switch (value_mode_index)
             {
-                HudText = null;
-                HudTmpText = null;
-                HudButton = null;
-                HudProgress = null;
-                HudToggle = null;
-                HudSlider = null;
-                HudOption = null;
-                return;
+                case 0:
+                    // 起始 - 默认
+                    title_source = "起始";
+                    title_target = "默认";
+                    prop_source = val_propertys.prop_from;
+                    prop_target = val_propertys.prop_origin;
+                    break;
+                case 1:
+                    // 默认 - 结束
+                    title_source = "默认";
+                    title_target = "结束";
+                    prop_source = val_propertys.prop_origin;
+                    prop_target = val_propertys.prop_end;
+                    break;
+                case 2:
+                    // 起始 - 结束
+                    title_source = "起始";
+                    title_target = "结束";
+                    prop_source = val_propertys.prop_from;
+                    prop_target = val_propertys.prop_end;
+                    break;
+                case 3:
+                    // 当前 - 结束
+                    title_source = "结束";
+                    prop_source = val_propertys.prop_end;
+                    break;
             }
 
-            HudText = target.GetComponentInParent<XHud_Module_Text>();
-            HudTmpText = target.GetComponentInParent<XHud_Module_TmpText>();
-            HudButton = target.GetComponentInParent<XHud_Module_Button>();
-            HudProgress = target.GetComponentInParent<XHud_Module_Progress>();
-            HudToggle = target.GetComponentInParent<XHud_Module_Toggle>();
-            HudSlider = target.GetComponentInParent<XHud_Module_Slider>();
-            HudOption = target.GetComponentInParent<XHud_Module_Option>();
-        }
+            // 控件绘制 - 起源值
+            DrawTweenValueFields(
+                title_source,
+                prop_source,
+                // 按钮动作 - 将目标物体的类型属性数据记录到序列化属性中
+                () => { RecordValueFromTarget(prop_source, val_propertys.type); },
+                // 按钮动作 - 将序列化属性的值应用到目标物体的类型属性数据上
+                () => { ApplyValueToTarget(prop_source, val_propertys.type); },
+                // 按钮动作 - 重置序列化属性数据
+                () => { ResetValueProperty(prop_source); });
 
-        #region Draw 开关选项
+            // 如果 value_mode_index != 3 的时候说明动画都是从“起源值”到“目标值”，所以才会出现这第二个输入框
+            if (!only_end_mode)
+            {
+                XGUI.layout_seperator(
+                    thickness: 1,
+                    color: XHud_Dashboard.Theme_SeperateLine,
+                    margin: new RectOffset(15, 15, 8, 12));
+
+                // 控件绘制 - 目标值
+                DrawTweenValueFields(
+                    title_target,
+                    prop_target,
+                    // 按钮动作 - 将目标物体的类型属性数据记录到序列化属性中
+                    () => { RecordValueFromTarget(prop_target, val_propertys.type); },
+                    // 按钮动作 - 将序列化属性的值应用到目标物体的类型属性数据上
+                    () => { ApplyValueToTarget(prop_target, val_propertys.type); },
+                    // 按钮动作 - 重置序列化属性数据
+                    () => { ResetValueProperty(prop_target); });
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+
+            if (!only_end_mode)
+                XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+        }
         /// <summary>
-        /// 通用方法：绘制开关
+        /// 绘制单个数值字段（输入框 + 记录 / 应用 / 归零三个操作按钮）
         /// </summary>
-        private bool DrawToggle(string title, bool prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, string[] options = null, Action<bool> act_on_changed = null)
+        private void DrawTweenValueFields(string title, SerializedProperty prop, Action act_on_pressed_record = null, Action act_on_pressed_apply = null, Action act_on_pressed_reset = null)
+        {
+            #region 数值输入框
+            XGUI.layout_property_field(
+                       title: title,
+                       title_size: XGUIFontSize.M,
+                       title_hover_color: XHud_Dashboard.Theme_Primary,
+                       title_width: 50,
+                       title_color: XHud_Dashboard.Theme_Primary,
+                       title_offset: new Vector2(0, 0),
+                       title_font_style: FontStyle.Normal,
+                       prop: prop,
+                       prop_padding: new RectOffset(5, 5, 0, 0),
+                       prop_margin: new RectOffset(0, 0, 0, 0));
+            prop.serializedObject.ApplyModifiedProperties();
+
+            #region 按钮操作区域
+            XGUI.layout_group_start(
+            type: XGUIContainerType.Horizontal,
+            absolute_margin: true,
+            absolute_padding: true,
+            margin: new RectOffset(0, 0, 10, 0),
+            padding: new RectOffset(10, 10, 0, 0));
+
+            #region 记录当前物体
+            if (XGUI.layout_button(
+                tooltip: "记录当前物体",
+                tex_release: icon_track_param_record_r,
+                tex_press: icon_track_param_record_p,
+                tex_gui_color: Color.white,
+                margin: new RectOffset(10, 10, 0, 0),
+                border: new RectOffset(0, 0, 0, 0),
+                width: 40,
+                height: 40))
+            {
+                if (act_on_pressed_record != null)
+                    act_on_pressed_record();
+            }
+            #endregion
+
+            XGUI.layout_flexspace();
+
+            #region 应用到物体
+            if (XGUI.layout_button(
+                tooltip: "应用到物体",
+                tex_release: icon_track_param_apply_r,
+                tex_press: icon_track_param_apply_p,
+                tex_gui_color: Color.white,
+                margin: new RectOffset(10, 10, 0, 0),
+                border: new RectOffset(0, 0, 0, 0),
+                width: 40,
+                height: 40))
+            {
+                if (act_on_pressed_apply != null)
+                    act_on_pressed_apply();
+            }
+            #endregion
+
+            XGUI.layout_flexspace();
+
+            #region 当前物体对应类型值归零
+            if (XGUI.layout_button(
+                tooltip: "当前物体对应类型值归零",
+                tex_release: icon_track_param_reset_r,
+                tex_press: icon_track_param_reset_p,
+                tex_gui_color: Color.white,
+                margin: new RectOffset(10, 10, 0, 0),
+                border: new RectOffset(0, 0, 0, 0),
+                width: 40,
+                height: 40))
+            {
+                if (act_on_pressed_reset != null)
+                    act_on_pressed_reset();
+            }
+            #endregion
+
+
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+            #endregion
+            #endregion
+        }
+        /// <summary>
+        /// 根据动画类型解析出其对应的「起始 / 结束 / 默认」三组序列化属性
+        /// </summary>
+        private TweenValueProperties ResolveTweenValueProperties(TweenNodeType type, SerializedProperty prop)
+        {
+            #region 数值类型序列化获取- Vector4
+            SerializedProperty ori_v4 = prop.FindPropertyRelative("Original_Vector4");
+            SerializedProperty from_v4 = prop.FindPropertyRelative("From_Vector4");
+            SerializedProperty end_v4 = prop.FindPropertyRelative("End_Vector4");
+            #endregion
+
+            #region 数值类型序列化获取- Vector3
+            SerializedProperty ori_v3 = prop.FindPropertyRelative("Original_Vector3");
+            SerializedProperty from_v3 = prop.FindPropertyRelative("From_Vector3");
+            SerializedProperty end_v3 = prop.FindPropertyRelative("End_Vector3");
+            #endregion
+
+            #region 数值类型序列化获取- Vector2
+            SerializedProperty ori_v2 = prop.FindPropertyRelative("Original_Vector2");
+            SerializedProperty from_v2 = prop.FindPropertyRelative("From_Vector2");
+            SerializedProperty end_v2 = prop.FindPropertyRelative("End_Vector2");
+            #endregion
+
+            #region 数值类型序列化获取- Color
+            SerializedProperty ori_color = prop.FindPropertyRelative("Original_Color");
+            SerializedProperty from_color = prop.FindPropertyRelative("From_Color");
+            SerializedProperty end_color = prop.FindPropertyRelative("End_Color");
+            #endregion
+
+            #region 数值类型序列化获取- String
+            SerializedProperty ori_string = prop.FindPropertyRelative("Original_String");
+            SerializedProperty from_string = prop.FindPropertyRelative("From_String");
+            SerializedProperty end_string = prop.FindPropertyRelative("End_String");
+            #endregion
+
+            #region 数值类型序列化获取- Float
+            SerializedProperty ori_float = prop.FindPropertyRelative("Original_Float");
+            SerializedProperty from_float = prop.FindPropertyRelative("From_Float");
+            SerializedProperty end_float = prop.FindPropertyRelative("End_Float");
+            #endregion
+
+            #region 数值类型序列化获取- Int
+            SerializedProperty ori_int = prop.FindPropertyRelative("Original_Int");
+            SerializedProperty from_int = prop.FindPropertyRelative("From_Int");
+            SerializedProperty end_int = prop.FindPropertyRelative("End_Int");
+            #endregion
+
+            TweenValueProperties value_propertys = new TweenValueProperties();
+
+            // 第 1 步：统一设置 title（去掉枚举名前两个字符 "x_"）
+            value_propertys.title = type.ToString().Substring(2);
+
+            // 第 2 步：按数据类型分组设置值
+            switch (type)
+            {
+                case TweenNodeType.a_位移:
+                case TweenNodeType.r_旋转:
+                case TweenNodeType.s_缩放:
+                    value_propertys.prop_origin = ori_v3;
+                    value_propertys.prop_from = from_v3;
+                    value_propertys.prop_end = end_v3;
+                    break;
+                case TweenNodeType.c_颜色:
+                    value_propertys.prop_origin = ori_color;
+                    value_propertys.prop_from = from_color;
+                    value_propertys.prop_end = end_color;
+                    break;
+                case TweenNodeType.g_淡化:
+                case TweenNodeType.f_图像填充:
+                    value_propertys.prop_origin = ori_float;
+                    value_propertys.prop_from = from_float;
+                    value_propertys.prop_end = end_float;
+                    break;
+                case TweenNodeType.w_打字机:
+                    value_propertys.prop_origin = ori_string;
+                    value_propertys.prop_from = from_string;
+                    value_propertys.prop_end = end_string;
+                    break;
+                case TweenNodeType.z_尺寸:
+                    value_propertys.prop_origin = ori_v2;
+                    value_propertys.prop_from = from_v2;
+                    value_propertys.prop_end = end_v2;
+                    break;
+            }
+
+            value_propertys.type = type;
+
+            // 返回的类中包含了目标类型动画的序列化数据（引用）
+            return value_propertys;
+        }
+        /// <summary>
+        /// 从目标物体的当前属性读值并写入指定序列化属性
+        /// <para/>
+        /// 使用方式：参数面板中「记录当前物体」按钮点击时调用。
+        /// 与 <see cref="ApplyValueToTarget"/> 互为逆操作：
+        /// <list type="bullet">
+        /// <item><description><c>RecordValueFromTarget</c>：目标物体 → 序列化属性（本方法）；</description></item>
+        /// <item><description><c>ApplyValueToTarget</c>：序列化属性 → 目标物体。</description></item>
+        /// </list>
+        /// 本方法只读取运行时组件的当前值，不做 Undo 记录（读取不修改任何对象）。
+        /// </summary>
+        /// <param name="p">目标序列化属性，按 <paramref name="node_type"/> 决定写入的类型分支</param>
+        /// <param name="node_type">动画节点类型，决定从哪个组件 / 字段读取当前值</param>
+        private void RecordValueFromTarget(SerializedProperty p, TweenNodeType node_type)
+        {
+            switch (node_type)
+            {
+                // ── 位移：读取 RectTransform.anchoredPosition3D ──
+                case TweenNodeType.a_位移:
+                    p.vector3Value = target.controller.mod_Rect.anchoredPosition3D;
+                    break;
+
+                // ── 旋转：读取 RectTransform.localEulerAngles（欧拉角）──
+                case TweenNodeType.r_旋转:
+                    p.vector3Value = target.controller.mod_Rect.localEulerAngles;
+                    break;
+
+                // ── 缩放：读取 RectTransform.localScale ──
+                case TweenNodeType.s_缩放:
+                    p.vector3Value = target.controller.mod_Rect.localScale;
+                    break;
+
+                // ── 颜色：读取 Graphic.color ──
+                case TweenNodeType.c_颜色:
+                    // 通过 Controller 识别目标实际挂载的图形类型（Image / RawImage / Text 等），
+                    // RecognizeType() 返回对应的 Graphic 基类实例，供统一取色。
+                    Graphic gc = target.controller.RecognizeType();
+
+                    p.colorValue = gc.color;
+                    break;
+
+                // ── 淡化：读取 CanvasGroup.alpha ──
+                case TweenNodeType.g_淡化:
+                    p.floatValue = target.controller.mod_CanvasGroup.alpha;
+                    break;
+
+                // ── 打字机：读取 Text / TmpText 的内容 ──
+                // 注意：Text 与 TmpText 互斥，优先 Text，回退 TmpText；
+                // 两者都为 null 时保持属性原值不变。
+                case TweenNodeType.w_打字机:
+                    if (target.controller.mod_Text != null)
+                    {
+                        p.stringValue = target.controller.mod_Text.text;
+                    }
+                    else if (target.controller.mod_TmpText != null)
+                    {
+                        p.stringValue = target.controller.mod_TmpText.text;
+                    }
+                    break;
+
+                // ── 图像填充：读取 Image.fillAmount ──
+                case TweenNodeType.f_图像填充:
+                    p.floatValue = target.controller.mod_Image.fillAmount;
+                    break;
+
+                // ── 尺寸：读取 RectTransform.sizeDelta ──
+                case TweenNodeType.z_尺寸:
+                    p.vector2Value = target.controller.mod_Rect.sizeDelta;
+                    break;
+            }
+
+            // 将序列化属性的改动立即写回 SerializedObject，
+            // 否则参数面板上的输入框不会同步刷新。
+            p.serializedObject.ApplyModifiedProperties();
+        }
+        /// <summary>
+        /// 将指定序列化属性的值写回到目标物体的对应属性上
+        /// <para/>
+        /// 使用方式：参数面板中「应用到物体」按钮点击时调用。
+        /// 每个分支都会先用 <see cref="Undo.RecordObject"/> 记录被修改对象，
+        /// 以支持 Ctrl+Z 撤销；同时按 <paramref name="node_type"/> 决定操作目标。
+        /// </summary>
+        /// <param name="p">来源序列化属性（已由 <see cref="RecordValueFromTarget"/> 或手动编辑填入值）</param>
+        /// <param name="node_type">动画节点类型，决定值应写回哪个组件 / 字段</param>
+        private void ApplyValueToTarget(SerializedProperty p, TweenNodeType node_type)
+        {
+            switch (node_type)
+            {
+                // ── 位移：写入 RectTransform.anchoredPosition3D ──
+                case TweenNodeType.a_位移:
+                    Undo.RecordObject(target.controller.mod_Rect, "undotransform-position");
+                    target.controller.mod_Rect.anchoredPosition3D = p.vector3Value;
+                    break;
+
+                // ── 旋转：写入 RectTransform.localEulerAngles（欧拉角）──
+                case TweenNodeType.r_旋转:
+                    Undo.RecordObject(target.controller.mod_Rect, "undotransform-eulerangle");
+                    target.controller.mod_Rect.localEulerAngles = p.vector3Value;
+                    break;
+
+                // ── 缩放：写入 RectTransform.localScale ──
+                case TweenNodeType.s_缩放:
+                    Undo.RecordObject(target.controller.mod_Rect, "undotransform-localscale");
+                    target.controller.mod_Rect.localScale = p.vector3Value;
+                    break;
+
+                // ── 颜色：写入 Graphic.color，并同步刷新 Control 上缓存的 OriginalColor ──
+                case TweenNodeType.c_颜色:
+                    // 通过 Controller 识别目标实际挂载的图形类型（Image / RawImage / Text 等），
+                    // RecognizeType() 会返回对应的 Graphic 基类实例，供统一写色。
+                    Graphic gc = target.controller.RecognizeType();
+
+                    // 同步记录 Control 内部的 OriginalColor 缓存，避免下次动画运行时
+                    // 用旧的 OriginalColor 覆盖用户刚刚写入的颜色。
+                    Undo.RecordObject(target.controller.pt_Painting, "undocolor-origin");
+
+                    ModuleType x_Type = target.controller.GetModuleType();
+                    if (x_Type == ModuleType.Image)
+                        target.controller.pt_Painting.OriginalColor = p.colorValue;
+                    else if (x_Type == ModuleType.RawImage)
+                        target.controller.pt_Painting.OriginalColor = p.colorValue;
+
+                    gc.color = p.colorValue;
+                    break;
+
+                // ── 淡化：写入 CanvasGroup.alpha ──
+                case TweenNodeType.g_淡化:
+                    Undo.RecordObject(target.controller.mod_CanvasGroup, "undoAlpha");
+                    target.controller.mod_CanvasGroup.alpha = p.floatValue;
+                    break;
+
+                // ── 打字机：写入 Text / TmpText 的内容 ──
+                // 注意：Text 与 TmpText 互斥，优先 Text，回退 TmpText。
+                case TweenNodeType.w_打字机:
+                    if (target.controller.mod_Text != null)
+                    {
+                        Undo.RecordObject(target.controller.mod_Text, "undoText");
+                        target.controller.mod_Text.txt_Set_Content(p.stringValue);
+                    }
+                    else if (target.controller.mod_TmpText != null)
+                    {
+                        Undo.RecordObject(target.controller.mod_TmpText, "undoTmpText");
+                        target.controller.mod_TmpText.tmp_Set_Content(p.stringValue);
+                    }
+                    // 文本变更需要刷新编辑器窗口与场景视图，否则预览不会立即更新。
+                    Repaint();
+                    SceneView.RepaintAll();
+                    break;
+
+                // ── 图像填充：写入 Image.fillAmount ──
+                case TweenNodeType.f_图像填充:
+                    Undo.RecordObject(target.controller.mod_Image, "undofill");
+                    target.controller.mod_Image.fillAmount = p.floatValue;
+                    break;
+
+                // ── 尺寸：写入 RectTransform.sizeDelta ──
+                case TweenNodeType.z_尺寸:
+                    Undo.RecordObject(target.controller.mod_Rect, "undotransform-size");
+                    target.controller.mod_Rect.sizeDelta = p.vector2Value;
+                    break;
+            }
+        }
+        /// <summary>
+        /// 按序列化属性类型将其值重置为「零值」（Vector 零 / Color 透明 / 字符串空 / 数值 0）
+        /// </summary>
+        private void ResetValueProperty(SerializedProperty prop)
+        {
+            //Debug.Log($"{prop.propertyType}");
+
+            // 根据类型交换值
+            switch (prop.propertyType)
+            {
+                case SerializedPropertyType.Vector4:
+                    prop.vector4Value = Vector4.zero;
+                    break;
+                case SerializedPropertyType.Vector3:
+                    prop.vector3Value = Vector3.zero;
+                    break;
+                case SerializedPropertyType.Vector2:
+                    prop.vector2Value = Vector2.zero;
+                    break;
+                case SerializedPropertyType.Color:
+                    prop.colorValue = Color.clear;
+                    break;
+                case SerializedPropertyType.String:
+                    prop.stringValue = null;
+                    break;
+                case SerializedPropertyType.Float:
+                    prop.floatValue = 0f;
+                    break;
+                case SerializedPropertyType.Integer:
+                    prop.intValue = 0;
+                    break;
+            }
+        }
+        /// <summary>
+        /// 交换两个同类型序列化属性的值
+        /// <para/>
+        /// 使用方式：参数面板「数值」分组中，点击数值流向指示器按钮时调用。
+        /// 按当前 <c>value_mode_index</c> 决定交换哪两个属性：
+        /// <list type="bullet">
+        /// <item><description>0 (S-D)：交换 <c>From</c> ↔ <c>Origin</c>；</description></item>
+        /// <item><description>1 (D-E)：交换 <c>Origin</c> ↔ <c>End</c>；</description></item>
+        /// <item><description>2 (S-E)：交换 <c>From</c> ↔ <c>End</c>。</description></item>
+        /// </list>
+        /// 本方法只操作 <see cref="SerializedProperty"/>，不直接修改场景对象；
+        /// 交换结果由调用方后续的 <c>ApplyModifiedProperties()</c> 落地。
+        /// <para/>
+        /// 前置条件：两个属性的 <see cref="SerializedProperty.propertyType"/> 必须一致，
+        /// 否则直接返回不做任何修改（例如 Vector3 ↔ Color 的误用会被安全拦截）。
+        /// </summary>
+        /// <param name="prop_primary">主属性（交换后获得 <paramref name="prop_secondary"/> 的原值）</param>
+        /// <param name="prop_secondary">次属性（交换后获得 <paramref name="prop_primary"/> 的原值）</param>
+        private void SwapValueProperties(SerializedProperty prop_primary, SerializedProperty prop_secondary)
+        {
+            // 类型不一致时不做任何交换，避免把 Vector3 写进 Color 等类型错配。
+            if (prop_primary.propertyType != prop_secondary.propertyType)
+                return;
+
+            // 根据类型交换值
+            switch (prop_primary.propertyType)
+            {
+                // ── Vector4：先暂存 secondary，再依次对调 ──
+                case SerializedPropertyType.Vector4:
+                    Vector4 oriV4 = prop_secondary.vector4Value;
+                    prop_secondary.vector4Value = prop_primary.vector4Value;
+                    prop_primary.vector4Value = oriV4;
+                    break;
+
+                // ── Vector3：位移 / 旋转 / 缩放使用 ──
+                case SerializedPropertyType.Vector3:
+                    Vector3 oriV3 = prop_secondary.vector3Value;
+                    prop_secondary.vector3Value = prop_primary.vector3Value;
+                    prop_primary.vector3Value = oriV3;
+                    break;
+
+                // ── Vector2：尺寸使用 ──
+                case SerializedPropertyType.Vector2:
+                    Vector2 oriV2 = prop_secondary.vector2Value;
+                    prop_secondary.vector2Value = prop_primary.vector2Value;
+                    prop_primary.vector2Value = oriV2;
+                    break;
+
+                // ── Color：颜色使用 ──
+                case SerializedPropertyType.Color:
+                    Color oriColor = prop_secondary.colorValue;
+                    prop_secondary.colorValue = prop_primary.colorValue;
+                    prop_primary.colorValue = oriColor;
+                    break;
+
+                // ── String：打字机文本使用 ──
+                case SerializedPropertyType.String:
+                    string oriStr = prop_secondary.stringValue;
+                    prop_secondary.stringValue = prop_primary.stringValue;
+                    prop_primary.stringValue = oriStr;
+                    break;
+
+                // ── Float：淡化 / 图像填充使用 ──
+                case SerializedPropertyType.Float:
+                    float oriFloat = prop_secondary.floatValue;
+                    prop_secondary.floatValue = prop_primary.floatValue;
+                    prop_primary.floatValue = oriFloat;
+                    break;
+
+                // ── Integer：保留分支，当前 TweenNodeType 尚未用到 ──
+                case SerializedPropertyType.Integer:
+                    int oriInt = prop_secondary.intValue;
+                    prop_secondary.intValue = prop_primary.intValue;
+                    prop_primary.intValue = oriInt;
+                    break;
+            }
+        }
+        #endregion
+
+        #region 绘制：公共控件选项
+        /// <summary>
+        /// 通用方法：绘制带标题的开关控件
+        /// </summary>
+        private bool DrawLabeledToggle(string title, bool prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, string[] options = null, Action<bool> act_on_changed = null)
         {
             return XGUI.layout_toggle(
                    title: title,
@@ -2136,18 +3023,19 @@ namespace SevenStrikeModules.XHud.Editor
                    act_on_changed: act_on_changed);
         }
         #endregion
-        #endregion
 
         #region 绘制：底部工具栏
         /// <summary> 
         ///绘制窗口底部工具栏
-        ///</summary>
+        /// </summary>
         /// <param name="area">底部工具栏在窗口坐标系中的矩形</param>
         private void DrawBottomToolbar(Rect area)
         {
             EditorGUI.DrawRect(area, XGUI_Utilitys.HexString_To_Color("1e1e1e"));
             XGUI.gui_box(new Rect(area.x, area.y, area.width, 1), Color.black * 0.4f);
+
             GUILayout.BeginArea(area);
+
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
                 bg_fill: XGUIFilled.透明,
@@ -2167,13 +3055,16 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Normal,
                 anchor: TextAnchor.MiddleLeft,
                 font: XGUI.GetFont("xg-regular"));
+
             XGUI.layout_seperator(
                 thickness: 1,
                 dir: XGUISeplineDir.垂直,
                 color: Color.black * 0.4f,
                 padding: new RectOffset(0, 0, 5, 0),
                 margin: new RectOffset(10, 10, 0, 0));
+
             XGUI.layout_flexspace();
+
             if (XGUI.layout_button(
                 text: "缩放到全部",
                 tooltip: "",
@@ -2192,9 +3083,11 @@ namespace SevenStrikeModules.XHud.Editor
                 layout_width: 90,
                 button_text_font: XGUI.GetFont("xg-regular")))
             {
-                FitToContent();
+                FitViewToContent();
             }
+
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
             GUILayout.EndArea();
         }
         #endregion
@@ -2202,7 +3095,7 @@ namespace SevenStrikeModules.XHud.Editor
         #region 交互：Clip 拖拽
         /// <summary> 
         ///在 Clip 矩形上检测 MouseDown 命中，命中则进入对应的拖拽模式
-        ///</summary>
+        /// </summary>
         /// <param name="clipRect">Clip 矩形（内容坐标）</param>
         /// <param name="index">动画节点索引</param>
         private void TryBeginClipDrag(Rect clipRect, int index)
@@ -2211,18 +3104,18 @@ namespace SevenStrikeModules.XHud.Editor
             if (e.type != EventType.MouseDown) return;
             if (e.button != 0) return;
             if (e.alt) return;
-            if (dragMode != DragMode.None) return;
+            if (dragMode != DragMode.无) return;
             if (!clipRect.Contains(e.mousePosition)) return;
             TweenNode node = Nodes[index];
             bool ctrl = e.control || e.command;
             bool shift = e.shift;
             if (ctrl || shift)
             {
-                SetSelection(index, ctrl, shift);
+                SetNodeSelection(index, ctrl, shift);
             }
             else if (!selectedIndices.Contains(index))
             {
-                SetSelection(index, false, false);
+                SetNodeSelection(index, false, false);
             }
             else
             {
@@ -2230,12 +3123,12 @@ namespace SevenStrikeModules.XHud.Editor
                 GUIUtility.keyboardControl = 0;
             }
             if (Mathf.Abs(e.mousePosition.x - clipRect.xMin) < ClipEdgeZone)
-                dragMode = DragMode.LeftEdge;
+                dragMode = DragMode.左边缘;
             else if (Mathf.Abs(e.mousePosition.x - clipRect.xMax) < ClipEdgeZone)
-                dragMode = DragMode.RightEdge;
+                dragMode = DragMode.右边缘;
             else
-                dragMode = DragMode.Move;
-            if (dragMode == DragMode.Move)
+                dragMode = DragMode.移动;
+            if (dragMode == DragMode.移动)
             {
                 float clipCenterX = (clipRect.xMin + clipRect.xMax) * 0.5f;
                 moveDragAnchorSide = e.mousePosition.x < clipCenterX ? 1 : 2;
@@ -2244,7 +3137,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 moveDragAnchorSide = 0;
             }
-            primaryDragIndex = selectedIndices.Contains(index) ? GetTopmostSelected() : index;
+            primaryDragIndex = selectedIndices.Contains(index) ? GetTopmostSelectedIndex() : index;
             if (primaryDragIndex < 0) primaryDragIndex = index;
             dragStartDelays.Clear();
             dragStartDurations.Clear();
@@ -2278,12 +3171,12 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         ///统一处理 Clip 拖拽的 MouseDrag / MouseUp
-        ///</summary>
+        /// </summary>
         /// <param name="viewportArea">ScrollView 视口矩形（Clip 区局部坐标，用于判断边缘自动平移）</param>
         private void ProcessClipDrag(Rect viewportArea)
         {
             Event e = Event.current;
-            if (dragMode == DragMode.None || draggingIndex < 0 || draggingIndex >= Nodes.Count)
+            if (dragMode == DragMode.无 || draggingIndex < 0 || draggingIndex >= Nodes.Count)
             {
                 if (e.type == EventType.MouseUp && GUIUtility.hotControl == dragControlID)
                     GUIUtility.hotControl = 0;
@@ -2302,7 +3195,7 @@ namespace SevenStrikeModules.XHud.Editor
                         Undo.RecordObject(target, "Edit Tween Clip");
                         switch (dragMode)
                         {
-                            case DragMode.Move:
+                            case DragMode.移动:
                                 {
                                     TweenNode primary = Nodes[primaryDragIndex];
                                     float rawDelay = Mathf.Max(0f, dragStartDelay + totalDelta);
@@ -2313,7 +3206,7 @@ namespace SevenStrikeModules.XHud.Editor
                                         if (moveDragAnchorSide == 1)
                                         {
                                             float snappedStart;
-                                            bool leftSnapped = SnapTime(rawDelay, selectedIndices, out snappedStart);
+                                            bool leftSnapped = TrySnapTimeToReference(rawDelay, selectedIndices, out snappedStart);
                                             snappedStart = QuantizeTime(Mathf.Max(0f, snappedStart));
                                             if (leftSnapped)
                                             {
@@ -2329,7 +3222,7 @@ namespace SevenStrikeModules.XHud.Editor
                                         else
                                         {
                                             float snappedEnd;
-                                            bool rightSnapped = SnapTime(rawEnd, selectedIndices, out snappedEnd);
+                                            bool rightSnapped = TrySnapTimeToReference(rawEnd, selectedIndices, out snappedEnd);
                                             snappedEnd = QuantizeTime(Mathf.Max(0f, snappedEnd));
                                             if (rightSnapped)
                                             {
@@ -2362,7 +3255,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     }
                                     break;
                                 }
-                            case DragMode.LeftEdge:
+                            case DragMode.左边缘:
                                 {
                                     TweenNode primary = Nodes[primaryDragIndex];
                                     float primaryStartDelay = dragStartDelays.ContainsKey(primaryDragIndex)
@@ -2372,7 +3265,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     if (snapOn)
                                     {
                                         float snapValue;
-                                        bool snappedFlag = SnapTime(rawDelay, selectedIndices, out snapValue);
+                                        bool snappedFlag = TrySnapTimeToReference(rawDelay, selectedIndices, out snapValue);
                                         snapped = QuantizeTime(Mathf.Max(0f, snapValue));
                                         snapGuideSecond = snappedFlag ? snapped : -1f;
                                     }
@@ -2409,7 +3302,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     }
                                     break;
                                 }
-                            case DragMode.RightEdge:
+                            case DragMode.右边缘:
                                 {
                                     float primaryStartDelay = dragStartDelays.ContainsKey(primaryDragIndex)
                                         ? dragStartDelays[primaryDragIndex] : dragStartDelay;
@@ -2421,7 +3314,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     if (snapOn)
                                     {
                                         float snapValue;
-                                        bool snappedFlag = SnapTime(rawEnd, selectedIndices, out snapValue);
+                                        bool snappedFlag = TrySnapTimeToReference(rawEnd, selectedIndices, out snapValue);
                                         snapped = QuantizeTime(Mathf.Max(primaryStartDelay + 0.01f, snapValue));
                                         snapGuideSecond = snappedFlag ? snapped : -1f;
                                     }
@@ -2457,17 +3350,17 @@ namespace SevenStrikeModules.XHud.Editor
                                     break;
                                 }
                         }
-                        AutoScrollOnDragEdge(e.mousePosition.x - scrollPos.x, new Rect(0, 0, viewportArea.width, viewportArea.height));
+                        AutoScrollViewOnDragEdge(e.mousePosition.x - scrollPos.x, new Rect(0, 0, viewportArea.width, viewportArea.height));
                         EditorUtility.SetDirty(target);
                         Repaint();
                         e.Use();
                     }
                     break;
                 case EventType.MouseUp:
-                    if (dragMode != DragMode.None)
+                    if (dragMode != DragMode.无)
                     {
                         GUIUtility.hotControl = 0;
-                        dragMode = DragMode.None;
+                        dragMode = DragMode.无;
                         draggingIndex = -1;
                         snapGuideSecond = -1f;
                         primaryDragIndex = -1;
@@ -2487,10 +3380,10 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         ///拖拽时若鼠标靠近 Clip 区左右边缘，自动平移 <see cref="scrollPos"/>
-        ///</summary>
+        /// </summary>
         /// <param name="mouseViewportX">鼠标在 ScrollView 视口坐标系下的 X（已减 scrollPos.x）</param>
         /// <param name="viewportArea">ScrollView 视口矩形（宽高用于判断边缘）</param>
-        private void AutoScrollOnDragEdge(float mouseViewportX, Rect viewportArea)
+        private void AutoScrollViewOnDragEdge(float mouseViewportX, Rect viewportArea)
         {
             if (mouseViewportX < AutoScrollEdgeMargin)
             {
@@ -2511,9 +3404,9 @@ namespace SevenStrikeModules.XHud.Editor
         #region 交互：平移视图
         /// <summary> 
         ///处理中键 / Alt+鼠标左键拖拽平移视图（水平 + 垂直）
-        ///</summary>
+        /// </summary>
         /// <param name="localArea">Clip 区局部矩形（刻度尺下方），用于判断按下的位置是否在区内</param>
-        private void HandlePan(Rect localArea)
+        private void HandleViewPan(Rect localArea)
         {
             Event e = Event.current;
             int controlID = GUIUtility.GetControlID(FocusType.Passive);
@@ -2535,7 +3428,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         scrollPos.x -= e.delta.x;
                         scrollPos.x = Mathf.Max(0f, scrollPos.x);
-                        float maxScrollY = GetMaxScrollY();
+                        float maxScrollY = CalculateMaxVerticalScroll();
                         scrollPos.y = Mathf.Clamp(scrollPos.y - e.delta.y, 0f, maxScrollY);
                         nameScroll.y = scrollPos.y;
                         e.Use();
@@ -2558,8 +3451,8 @@ namespace SevenStrikeModules.XHud.Editor
         #region 交互：滚轮
         /// <summary> 
         ///处理滚轮操作：单独滚轮水平平移 / Alt+滚轮缩放 / Shift+滚轮调整轨道高度 / Ctrl+滚轮垂直滚动
-        ///</summary>
-        private void HandleScrollWheel()
+        /// </summary>
+        private void HandleMouseScrollWheel()
         {
             Event e = Event.current;
             if (e.type != EventType.ScrollWheel) return;
@@ -2584,7 +3477,7 @@ namespace SevenStrikeModules.XHud.Editor
                 if (Mathf.Approximately(wheel, 0f)) wheel = 1f;
                 float factor = 1f - wheel * TrackHeightZoomStep;
                 trackHeight = Mathf.Clamp(trackHeight * factor, MinTrackHeight, MaxTrackHeight);
-                float maxScrollY = GetMaxScrollY();
+                float maxScrollY = CalculateMaxVerticalScroll();
                 scrollPos.y = Mathf.Clamp(scrollPos.y, 0f, maxScrollY);
                 nameScroll.y = scrollPos.y;
                 e.Use();
@@ -2593,7 +3486,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
             if (e.control)
             {
-                float maxScrollY = GetMaxScrollY();
+                float maxScrollY = CalculateMaxVerticalScroll();
                 if (maxScrollY <= 0f)
                 {
                     e.Use();
@@ -2616,9 +3509,9 @@ namespace SevenStrikeModules.XHud.Editor
         #region 交互：空点击与刻度尺点击
         /// <summary> 
         ///在 Clip 区空白处按下左键时，取消当前选中并清除参数面板焦点
-        ///</summary>
+        /// </summary>
         /// <param name="localArea">Clip 区局部矩形（刻度尺下方）</param>
-        private void HandleEmptyClick(Rect localArea)
+        private void HandleClipAreaEmptyClick(Rect localArea)
         {
             Event e = Event.current;
             if (e.type != EventType.MouseDown) return;
@@ -2634,9 +3527,9 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         ///处理刻度尺区域的左键点击：只清除参数面板焦点，不取消选中
-        ///</summary>
+        /// </summary>
         /// <param name="rulerArea">刻度尺在 Clip 区局部坐标系下的矩形</param>
-        private void HandleRulerClick(Rect rulerArea)
+        private void HandleTimeRulerClick(Rect rulerArea)
         {
             Event e = Event.current;
             if (e.type != EventType.MouseDown) return;
@@ -2652,8 +3545,8 @@ namespace SevenStrikeModules.XHud.Editor
         #region 交互：快捷键
         /// <summary> 
         ///处理窗口快捷键：F 缩放到合适范围 / R 重置视图 / Esc 关闭窗口 / Delete 删除选中节点
-        ///</summary>
-        private void HandleShortcuts()
+        /// </summary>
+        private void HandleKeyboardShortcuts()
         {
             Event e = Event.current;
             if (e.type != EventType.KeyDown) return;
@@ -2669,7 +3562,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 if (selectedIndices.Count > 0)
                 {
-                    DeleteSelectedNodes();
+                    DeleteSelectedTweenNodes();
                     e.Use();
                 }
                 return;
@@ -2677,11 +3570,7 @@ namespace SevenStrikeModules.XHud.Editor
             switch (e.keyCode)
             {
                 case KeyCode.F:
-                    FitToContent();
-                    e.Use();
-                    break;
-                case KeyCode.R:
-                    ResetView();
+                    FitViewToContent();
                     e.Use();
                     break;
             }
@@ -2691,11 +3580,11 @@ namespace SevenStrikeModules.XHud.Editor
         #region 交互：多选
         /// <summary> 
         ///设置当前选中支持 Ctrl 多选（切换单项）、Shift 范围选
-        ///</summary>
+        /// </summary>
         /// <param name="index">目标节点索引</param>
         /// <param name="additive">true 表示 Ctrl 点击（切换单项）</param>
         /// <param name="range">true 表示 Shift 点击（范围选）</param>
-        private void SetSelection(int index, bool additive, bool range)
+        private void SetNodeSelection(int index, bool additive, bool range)
         {
             if (index < 0 || index >= Nodes.Count)
             {
@@ -2716,7 +3605,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     selectedIndices.Remove(index);
                     if (selectedIndex == index)
-                        selectedIndex = selectedIndices.Count > 0 ? GetTopmostSelected() : -1;
+                        selectedIndex = selectedIndices.Count > 0 ? GetTopmostSelectedIndex() : -1;
                 }
                 else
                 {
@@ -2735,9 +3624,9 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         ///取选中集合里索引最小的（视觉最上面）作为主节点
-        ///</summary>
+        /// </summary>
         /// <returns>主节点索引；集合为空时返回 -1</returns>
-        private int GetTopmostSelected()
+        private int GetTopmostSelectedIndex()
         {
             int top = int.MaxValue;
             foreach (int i in selectedIndices) if (i < top) top = i;
@@ -2748,7 +3637,7 @@ namespace SevenStrikeModules.XHud.Editor
         #region 交互：全局兜底
         /// <summary> 
         ///全局兜底：鼠标在窗口任意位置松开左键时，强制收尾 Clip 拖拽与名字列宽度拖拽
-        ///</summary>
+        /// </summary>
         private void HandleGlobalMouseUp()
         {
             Event e = Event.current;
@@ -2769,10 +3658,10 @@ namespace SevenStrikeModules.XHud.Editor
                 GUIUtility.hotControl = 0;
                 handled = true;
             }
-            if (dragMode != DragMode.None)
+            if (dragMode != DragMode.无)
             {
                 GUIUtility.hotControl = 0;
-                dragMode = DragMode.None;
+                dragMode = DragMode.无;
                 draggingIndex = -1;
                 snapGuideSecond = -1f;
                 primaryDragIndex = -1;
@@ -2797,7 +3686,7 @@ namespace SevenStrikeModules.XHud.Editor
         #region 交互：名字列宽度拖拽
         /// <summary> 
         ///处理名字列右边缘的拖拽输入，用于调整 <see cref="nameColumnWidth"/>
-        ///</summary>
+        /// </summary>
         /// <param name="hotZone">拖拽热区（窗口坐标）</param>
         private void HandleNameColumnResizeInput(Rect hotZone)
         {
@@ -2851,7 +3740,7 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         ///在 Repaint 阶段为名字列右边缘设置水平缩放光标
-        ///</summary>
+        /// </summary>
         /// <param name="hotZone">拖拽热区（窗口坐标）</param>
         private void DrawNameColumnResizeCursor(Rect hotZone)
         {
@@ -2867,7 +3756,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary> 
         ///处理参数面板左边缘的拖拽输入，用于调整 <see cref="paramPanelWidth"/>
         ///<para/>向左拖拽使面板变宽，向右拖拽使面板变窄（与面板位置相反）
-        ///</summary>
+        /// </summary>
         /// <param name="hotZone">拖拽热区（窗口坐标）</param>
         private void HandleParamPanelResizeInput(Rect hotZone)
         {
@@ -2913,7 +3802,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         isResizingParamPanel = false;
                         GUIUtility.hotControl = 0;
-                        SaveViewState();
+                        SavePersistedViewState();
                         e.Use();
                         Repaint();
                     }
@@ -2922,7 +3811,7 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         ///在 Repaint 阶段为参数面板左边缘设置水平缩放光标
-        ///</summary>
+        /// </summary>
         /// <param name="hotZone">拖拽热区（窗口坐标）</param>
         private void DrawParamPanelResizeCursor(Rect hotZone)
         {
@@ -2937,7 +3826,7 @@ namespace SevenStrikeModules.XHud.Editor
         #region 工具：时间量化
         /// <summary> 
         ///将时间值量化到两位小数精度（秒），即 10ms 分辨率
-        ///</summary>
+        /// </summary>
         /// <param name="t">原始时间（秒）</param>
         /// <returns>量化后的时间（秒），保留两位小数</returns>
         private static float QuantizeTime(float t)
@@ -2949,35 +3838,75 @@ namespace SevenStrikeModules.XHud.Editor
         #region 工具：吸附
         /// <summary> 
         ///吸附阈值（秒）：按像素阈值随缩放换算
-        ///</summary>
+        /// </summary>
         private float SnapThresholdSeconds => SnapThresholdPixels / pixelsPerSecond;
         /// <summary> 
-        ///对给定时间尝试吸附：优先吸附到其他 Clip 的边界，其次吸附到整秒网格
-        ///</summary>
+        /// 对给定时间尝试吸附：优先吸附到其他 Clip 的边界，其次吸附到整秒网格
+        /// <para/>
+        /// 吸附优先级（从高到低）：
+        /// <list type="number">
+        /// <item><description>其他 Clip 的起始边界（<c>other.Delay</c>）；</description></item>
+        /// <item><description>其他 Clip 的结束边界（<c>other.Delay + other.Duration</c>）；</description></item>
+        /// <item><description>整秒网格（<see cref="Mathf.Round(float)"/>）。</description></item>
+        /// </list>
+        /// 之所以 Clip 边界优先：用户拖拽时更希望对齐到已有动画的首尾，
+        /// 而非被整秒网格「抢走」，否则会导致视觉上明显的错位感。
+        /// <para/>
+        /// 判定阈值 <see cref="SnapThresholdSeconds"/> 按像素阈值换算成秒，
+        /// 保证任意缩放下手感一致（缩放大时阈值小、缩放小时阈值大）。
+        /// <para/>
+        /// 命中判定使用<b>严格小于</b>（<c>&lt;</c>）而非小于等于，
+        /// 这样多个候选时间距离相同时，会保留<b>先遍历到的</b>那个，
+        /// 配合「先 Clip 边界后整秒网格」的遍历顺序，间接实现了「Clip 边界优先」。
+        /// <para/>
+        /// 输出 <paramref name="snappedTime"/> 一定经过 <see cref="QuantizeTime"/> 量化（两位小数），
+        /// 与节点 Delay / Duration 的量化规则保持一致；未命中时直接返回原时间。
+        /// </summary>
         /// <param name="time">待吸附的时间（秒）</param>
         /// <param name="exclude">排除的节点索引集合；为 null 或空表示不排除</param>
         /// <param name="snappedTime">输出：吸附后的时间（已量化）；未命中时等于 <paramref name="time"/></param>
         /// <returns>true 表示命中吸附；false 表示未命中</returns>
-        private bool SnapTime(float time, HashSet<int> exclude, out float snappedTime)
+        private bool TrySnapTimeToReference(float time, HashSet<int> exclude, out float snappedTime)
         {
+            // 阈值 = 像素阈值 / 每秒像素数，换算成秒；
+            // 缩放越大 → 阈值越小（像素固定但对应秒数更小），反之亦然。
             float threshold = SnapThresholdSeconds;
+
+            // bestTime / bestDist 记录当前最优候选：
+            // bestDist 初值为 threshold，配合「严格小于」判定，
+            // 保证只有距离更近的候选才会覆盖 bestTime。
             float bestTime = time;
             float bestDist = threshold;
             bool snapped = false;
+
+            // ── 优先级 1 / 2：遍历其他 Clip 的起始与结束边界 ──
             for (int i = 0; i < Nodes.Count; i++)
             {
+                // exclude 用于排除「正在被拖拽的节点自身」，
+                // 否则节点会吸附到自己原来的位置上，导致拖不动。
                 if (exclude != null && exclude.Contains(i)) continue;
                 TweenNode other = Nodes[i];
                 float otherStart = other.Delay;
                 float otherEnd = other.Delay + other.Duration;
+
+                // 优先比较起始边界：距离更近才更新最优候选
                 float dStart = Mathf.Abs(time - otherStart);
                 if (dStart < bestDist) { bestDist = dStart; bestTime = otherStart; snapped = true; }
+
+                // 再比较结束边界
                 float dEnd = Mathf.Abs(time - otherEnd);
                 if (dEnd < bestDist) { bestDist = dEnd; bestTime = otherEnd; snapped = true; }
             }
+
+            // ── 优先级 3：整秒网格 ──
+            // 放在 Clip 边界之后比较，配合「严格小于」判定，
+            // 当整秒与 Clip 边界距离完全相同时，Clip 边界优先（先遍历到的胜出）。
             float rounded = Mathf.Round(time);
             float distToSecond = Mathf.Abs(time - rounded);
             if (distToSecond < bestDist) { bestDist = distToSecond; bestTime = rounded; snapped = true; }
+
+            // 命中时对最佳候选做量化，保证与节点 Delay / Duration 精度一致；
+            // 未命中时直接返回原始 time（不做量化，避免引入无谓的舍入）。
             snappedTime = snapped ? QuantizeTime(bestTime) : time;
             return snapped;
         }
@@ -2986,9 +3915,9 @@ namespace SevenStrikeModules.XHud.Editor
         #region 工具：滚动范围
         /// <summary> 
         ///计算 Clip 区垂直滚动的上限（像素）
-        ///</summary>
+        /// </summary>
         /// <returns>垂直滚动上限（像素），恒 ≥ 0</returns>
-        private float GetMaxScrollY()
+        private float CalculateMaxVerticalScroll()
         {
             float contentHeight = Nodes.Count * trackHeight + 20f;
             float viewH = cachedClipAreaRect.height - rulerHeight - HorizontalScrollbarHeight;
@@ -2999,12 +3928,12 @@ namespace SevenStrikeModules.XHud.Editor
         #region 工具：视图操作
         /// <summary> 
         ///缩放到合适范围：选中节点时以该节点 Duration 铺满；未选中时以所有节点最右端适配
-        ///</summary>
-        private void FitToContent()
+        /// </summary>
+        private void FitViewToContent()
         {
             if (Nodes == null || Nodes.Count == 0)
             {
-                ResetView();
+                ResetTimelineView();
                 return;
             }
             float availableWidth = cachedClipAreaRect.width;
@@ -3019,7 +3948,7 @@ namespace SevenStrikeModules.XHud.Editor
                 TweenNode node = Nodes[selectedIndex];
                 if (node.Duration <= 0.0001f)
                 {
-                    ResetView();
+                    ResetTimelineView();
                     return;
                 }
                 float usableWidth = Mathf.Max(1f, availableWidth - padding * 2f);
@@ -3052,7 +3981,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
             if (maxEnd <= 0.0001f)
             {
-                ResetView();
+                ResetTimelineView();
                 return;
             }
             float usableWidthAll = Mathf.Max(1f, availableWidth - padding * 2f);
@@ -3065,8 +3994,8 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         ///重置视图：水平 / 垂直滚动归零，缩放恢复默认值（100 px/s），轨道高度恢复默认值（26 px）
-        ///</summary>
-        private void ResetView()
+        /// </summary>
+        private void ResetTimelineView()
         {
             scrollPos.x = 0f;
             scrollPos.y = 0f;
@@ -3091,8 +4020,8 @@ namespace SevenStrikeModules.XHud.Editor
         #region 工具：视图状态持久化
         /// <summary> 
         ///从 <see cref="target"/> 读取持久化的视图状态
-        ///</summary>
-        private void LoadViewState()
+        /// </summary>
+        private void LoadPersistedViewState()
         {
             if (target == null) return;
             pixelsPerSecond = Mathf.Clamp(target.Timeline_TrackPosition, 1f, 20000f);
@@ -3101,13 +4030,13 @@ namespace SevenStrikeModules.XHud.Editor
             trackHeight = Mathf.Clamp(target.Timeline_TrackHeight, MinTrackHeight, MaxTrackHeight);
             snapEnabled = target.Timeline_TrackSnapEnabled;
 
-            nameColumnWidth = LoadFloatPreference(PrefKey_NameWidthWidth, DefaultNameColumnWidth, MinNameColumnWidth, MaxNameColumnWidth);
-            paramPanelWidth = LoadFloatPreference(PrefKey_ParamWidthHeight, DefaultParamPanelWidth, MinParamPanelWidth, MaxParamPanelWidth);
+            nameColumnWidth = LoadClampedFloatPreference(PrefKey_NameWidthWidth, DefaultNameColumnWidth, MinNameColumnWidth, MaxNameColumnWidth);
+            paramPanelWidth = LoadClampedFloatPreference(PrefKey_ParamWidthHeight, DefaultParamPanelWidth, MinParamPanelWidth, MaxParamPanelWidth);
         }
         /// <summary> 
         ///将当前视图状态写回 <see cref="target"/>垂直滚动不保存
-        ///</summary>
-        private void SaveViewState()
+        /// </summary>
+        private void SavePersistedViewState()
         {
             if (target == null) return;
             target.Timeline_TrackPosition = pixelsPerSecond;
@@ -3123,8 +4052,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary> 
         ///读取持久化的 float 偏好值无记录时返回 <paramref name="defaultValue"/>，
         ///并按 <paramref name="min"/> / <paramref name="max"/> 钳制
-        ///</summary>
-        private static float LoadFloatPreference(string key, float defaultValue, float min, float max)
+        /// </summary>
+        private static float LoadClampedFloatPreference(string key, float defaultValue, float min, float max)
         {
             if (!XGUI.x_Editor_Data_Has_String(key))
                 return Mathf.Clamp(defaultValue, min, max);
@@ -3135,9 +4064,9 @@ namespace SevenStrikeModules.XHud.Editor
         #region 工具：窗口尺寸持久化
         /// <summary> 
         ///读取上次关闭时保存的窗口尺寸无记录时返回 <see cref="DefaultWindowSize"/>
-        ///</summary>
+        /// </summary>
         /// <returns>窗口尺寸（已按 <see cref="MinWindowSize"/> / <see cref="MaxWindowSize"/> 钳制）</returns>
-        private static Vector2 LoadWindowSize()
+        private static Vector2 LoadPersistedWindowSize()
         {
             if (!XGUI.x_Editor_Data_Has_String(PrefKey_WindowWidth) || !XGUI.x_Editor_Data_Has_String(PrefKey_WindowHeight))
             {
@@ -3153,8 +4082,8 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         ///将当前窗口尺寸写入 EditorPrefs
-        ///</summary>
-        private void SaveWindowSize()
+        /// </summary>
+        private void SavePersistedWindowSize()
         {
             if (this == null) return;
             Vector2 size = position.size;
@@ -3168,71 +4097,180 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 工具：节点增删
         /// <summary> 
-        ///在指定索引位置插入一条新的空白动画节点
-        ///</summary>
+        /// 在指定索引位置插入一条新的空白动画节点
+        /// <para/>
+        /// 本方法是节点插入的唯一底层入口：
+        /// <list type="bullet">
+        /// <item><description>窗口空状态下的「新增首个动画」按钮 → <c>InsertTweenNodeAt(0)</c>；</description></item>
+        /// <item><description>名字行「插入」按钮 → <see cref="InsertTweenNodeAfter"/> → <c>InsertTweenNodeAt(index + 1)</c>。</description></item>
+        /// </list>
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>注册 Undo（<see cref="Undo.RegisterCompleteObjectUndo"/>），保证 Ctrl+Z 可撤销；</description></item>
+        /// <item><description>构造新节点并填入一套「安全默认值」（详见下方字段初始化）；</description></item>
+        /// <item><description>钳制插入索引后插入集合；</description></item>
+        /// <item><description>清空并重设选中集合，把新节点设为唯一选中项。</description></item>
+        /// </list>
+        /// <para/>
+        /// 注意：新节点的 <c>Type</c> 使用 <see cref="TweenNode"/> 的默认值（枚举 0），
+        /// 因此「新增首个动画」后需要用户在参数面板手动选择类型。
+        /// </summary>
         /// <param name="insertAt">插入位置；0 表示插到最前，Nodes.Count 表示追加到末尾</param>
-        private void InsertNodeAt(int insertAt)
+        private void InsertTweenNodeAt(int insertAt)
         {
+            // 前置校验：目标为空时直接返回，避免 NRE
             if (target == null || target.Equals(null)) return;
 
+            // 注册完整对象 Undo，保证本次插入可通过 Ctrl+Z 撤销
             Undo.RegisterCompleteObjectUndo(target, "Insert Tween Node");
 
+            // ── 构造新节点并填入安全默认值 ──
+            // 所有字段均显式赋值，避免依赖字段初始化器的默认值（尤其是 Color 等引用类型）。
             TweenNode newNode = new TweenNode();
+
+            // ID：由目标统一分配，保证全局唯一
             newNode.ID = target.TweenNode_ID_Create();
+
+            // 显示名：默认 "NewTween"，用户可在参数面板中修改
             newNode.Indicator = "NewTween";
+
+            // 启用状态：默认启用，插入后即可在预览中看到效果
             newNode.Enabled = true;
+
+            // 触发时机：默认「无」，需用户手动选择
             newNode.Timings = "无";
+
+            // 时长 / 延迟：默认 1 秒、无延迟，是一个「开箱即用」的起始值
             newNode.Duration = 1f;
             newNode.Delay = 0f;
+
+            // 激活标志：默认从「起始值」激活，不激活结束值 / 不只到结束
             newNode.ActivateFrom = true;
             newNode.ActivateEnd = false;
             newNode.ActivateOnlyToEnd = false;
+
+            // 循环：默认 Restart 模式、循环 0 次（即不循环）
             newNode.LoopType = XTween_LoopType.Restart;
             newNode.LoopCount = 0;
+
+            // 运行时进度：默认 0，由 XTween 运行时驱动
             newNode.Progress = 0f;
+
+            // 参数面板折叠状态：默认展开
             newNode.IsFold = false;
+
+            // 重置 / 完成时是否写回起始 / 结束值：默认都开启
             newNode.Rewind_Set_Startvalue = true;
             newNode.Complete_Set_Endvalue = true;
+
+            // 颜色三值：默认白色（对颜色动画是安全起始值，对其他类型无影响）
             newNode.Original_Color = Color.white;
             newNode.From_Color = Color.white;
             newNode.End_Color = Color.white;
+
+            // 缓动曲线：默认 EaseInOut(0,0,1,1)，即标准缓入缓出
             newNode.Curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
+            // ── 钳制插入索引后插入集合 ──
+            // Clamp 到 [0, Nodes.Count]，防止调用方传入越界索引
             insertAt = Mathf.Clamp(insertAt, 0, Nodes.Count);
             Nodes.Insert(insertAt, newNode);
             EditorUtility.SetDirty(target);
 
+            // ── 重置选中集合：新节点成为唯一选中项 ──
+            // 无论之前选中多少节点，插入后都只选中新节点，
+            // 这样参数面板会立即显示新节点的属性，用户可马上编辑。
             selectedIndices.Clear();
             selectedIndices.Add(insertAt);
             selectedIndex = insertAt;
             Repaint();
         }
         /// <summary> 
-        ///在指定索引的节点下方插入一条新的空白动画节点
-        ///</summary>
-        private void InsertNodeAfter(int index)
+        /// 在指定索引的节点下方插入一条新的空白动画节点
+        /// <para/>
+        /// 使用方式：名字行「插入」按钮点击时调用（<see cref="DrawNameColumnPanel"/> 中
+        /// 记录 <c>pendingInsertIndex</c> 后延迟执行）。
+        /// <para/>
+        /// 本方法是 <see cref="InsertTweenNodeAt"/> 的便捷包装，只做两件事：
+        /// <list type="number">
+        /// <item><description>做一次边界保护（目标非空、索引有效）；</description></item>
+        /// <item><description>把「在 <paramref name="index"/> 之后插入」翻译为
+        /// <c>InsertTweenNodeAt(index + 1)</c>。</description></item>
+        /// </list>
+        /// 真正的节点构造、Undo 注册、选中重置等逻辑全部由
+        /// <see cref="InsertTweenNodeAt"/> 承担。
+        /// <para/>
+        /// 之所以「插入到之后」而非「之前」：名字行的插入按钮位于行内，
+        /// 用户点击时的直觉是「在当前行下方新增一条」，符合自上而下的列表阅读顺序。
+        /// </summary>
+        /// <param name="index">参考节点索引；新节点将插入到该节点之后（即索引 <c>index + 1</c> 处）</param>
+        private void InsertTweenNodeAfter(int index)
         {
+            // 目标为空时直接返回，避免后续调用 NRE
             if (target == null) return;
+
+            // 索引越界保护：index 必须落在 [0, Nodes.Count - 1] 范围内
+            // 越界时直接返回，不做任何操作（调用方本不应传入越界值）
             if (index < 0 || index >= Nodes.Count) return;
-            InsertNodeAt(index + 1);
+
+            // 委托给底层入口：在 index + 1 处插入
+            // 注意此处不需要再 Clamp，因为 InsertTweenNodeAt 内部已做钳制
+            InsertTweenNodeAt(index + 1);
         }
         /// <summary> 
-        ///删除指定索引的动画节点，并修正选中集合
-        ///</summary>
+        /// 删除指定索引的动画节点，并修正选中集合
+        /// <para/>
+        /// 本方法是节点删除的底层入口：
+        /// <list type="bullet">
+        /// <item><description>名字行「删除」按钮 → <c>DeleteTweenNodeAt(i)</c>
+        /// （由 <see cref="DrawNameColumnPanel"/> 记录 <c>pendingDeleteIndex</c> 后延迟执行）。</description></item>
+        /// </list>
+        /// 批量删除请使用 <see cref="DeleteSelectedTweenNodes"/>。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>注册 Undo（<see cref="Undo.RegisterCompleteObjectUndo"/>）；</description></item>
+        /// <item><description>若节点仍有运行时 Tweener，先 Kill 并置空，避免残留动画继续影响目标；</description></item>
+        /// <item><description>从集合移除该节点；</description></item>
+        /// <item><description>重建选中集合：删除位置之后的索引全部前移一位；</description></item>
+        /// <item><description>修正 <see cref="selectedIndex"/>；</description></item>
+        /// <item><description>钳制垂直滚动，避免删除后出现滚动越界。</description></item>
+        /// </list>
+        /// <para/>
+        /// 注意：删除会使被删位置之后的所有节点索引减 1，
+        /// 因此选中集合不能简单保留，必须按「小于 <paramref name="index"/> 保留原值、
+        /// 大于则减 1、等于则丢弃」的规则重建。
+        /// </summary>
         /// <param name="index">要删除的节点索引</param>
-        private void DeleteNodeAt(int index)
+        private void DeleteTweenNodeAt(int index)
         {
+            // 前置校验：目标为空、索引越界时直接返回
             if (target == null) return;
             if (index < 0 || index >= Nodes.Count) return;
+
+            // 注册完整对象 Undo，保证本次删除可撤销
             Undo.RegisterCompleteObjectUndo(target, "Delete Tween Node");
+
+            // ── 运行时清理：先 Kill 掉仍在运行的 Tweener ──
+            // 若不移除，节点虽从列表消失，但 XTween 运行时仍持有引用并继续驱动目标，
+            // 表现为「节点已删但动画仍在跑」的诡异现象。
             TweenNode node = Nodes[index];
             if (node.Tweener != null)
             {
                 node.Tweener.Kill();
                 node.Tweener = null;
             }
+
+            // 从集合移除
             Nodes.RemoveAt(index);
             EditorUtility.SetDirty(target);
+
+            // ── 重建选中集合：删除位置之后的索引全部前移一位 ──
+            // 规则：
+            //   i <  index → 保留原值
+            //   i >  index → 减 1（因为前面的元素被删，索引整体前移）
+            //   i == index → 丢弃（该节点已不存在）
             HashSet<int> newSelection = new HashSet<int>();
             foreach (int i in selectedIndices)
             {
@@ -3241,43 +4279,96 @@ namespace SevenStrikeModules.XHud.Editor
             }
             selectedIndices.Clear();
             foreach (int i in newSelection) selectedIndices.Add(i);
+
+            // ── 修正主选中索引 ──
             if (selectedIndex == index)
             {
-                selectedIndex = selectedIndices.Count > 0 ? GetTopmostSelected() : -1;
+                // 被删的正是主选中项：改为选中集合中最上面那个；集合为空则置 -1
+                selectedIndex = selectedIndices.Count > 0 ? GetTopmostSelectedIndex() : -1;
             }
             else if (selectedIndex > index)
             {
+                // 主选中项位于被删项之后：索引前移一位
                 selectedIndex--;
             }
-            scrollPos.y = Mathf.Clamp(scrollPos.y, 0f, GetMaxScrollY());
+            // 其余情况（selectedIndex < index，或 selectedIndex == -1）保持不变
+
+            // ── 钳制垂直滚动 ──
+            // 删除后内容高度变小，原 scrollPos.y 可能超出新的滚动上限，
+            // 需重新钳制并同步 nameScroll.y，保持名字列与轨道对齐。
+            scrollPos.y = Mathf.Clamp(scrollPos.y, 0f, CalculateMaxVerticalScroll());
             nameScroll.y = scrollPos.y;
             Repaint();
         }
         /// <summary> 
-        ///删除所有当前选中的动画节点（批量删除）
-        ///</summary>
-        private void DeleteSelectedNodes()
+        /// 删除所有当前选中的动画节点（批量删除）
+        /// <para/>
+        /// 使用方式：在 Clip 区 / 名字列选中若干节点后，按下 Delete 或 Backspace 键触发
+        /// （见 <see cref="HandleKeyboardShortcuts"/>）。
+        /// <para/>
+        /// 与 <see cref="DeleteTweenNodeAt"/> 的关键区别：
+        /// <list type="bullet">
+        /// <item><description>本方法<b>倒序</b>删除，避免正序删除时索引错位；</description></item>
+        /// <item><description>本方法删除后<b>整体清空</b>选中集合，不逐个修正索引。</description></item>
+        /// </list>
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>注册 Undo；</description></item>
+        /// <item><description>把选中集合拷贝到列表并<b>降序排序</b>；</description></item>
+        /// <item><description>按降序逐个删除，每个节点在删除前先 Kill 其运行时 Tweener；</description></item>
+        /// <item><description>清空选中集合与主选中索引；</description></item>
+        /// <item><description>钳制垂直滚动。</description></item>
+        /// </list>
+        /// <para/>
+        /// 为什么倒序删除：删除索引 i 会使其后所有元素前移一位，
+        /// 若从 0 开始正序删除，则后续原本记录的下标全部失效；
+        /// 从大到小删除则不会影响尚未处理的下标。
+        /// </summary>
+        private void DeleteSelectedTweenNodes()
         {
+            // 前置校验：目标为空、无选中项时直接返回
             if (target == null) return;
             if (selectedIndices.Count == 0) return;
+
+            // 注册完整对象 Undo，保证批量删除可一次撤销
             Undo.RegisterCompleteObjectUndo(target, "Delete Tween Nodes");
+
+            // ── 拷贝选中集合到列表，并降序排序 ──
+            // 降序是为了「从后往前删」，使未处理的下标始终有效。
             List<int> indices = new List<int>(selectedIndices);
             indices.Sort((a, b) => b.CompareTo(a));
+
+            // ── 按降序逐个删除 ──
             foreach (int i in indices)
             {
+                // 越界保护：理论上不会触发，此处仅作防御
                 if (i < 0 || i >= Nodes.Count) continue;
+
+                // 与 DeleteTweenNodeAt 一致：先 Kill 运行时 Tweener，
+                // 否则节点虽删但动画仍在跑。
                 TweenNode node = Nodes[i];
                 if (node.Tweener != null)
                 {
                     node.Tweener.Kill();
                     node.Tweener = null;
                 }
+
                 Nodes.RemoveAt(i);
             }
+
             EditorUtility.SetDirty(target);
+
+            // ── 整体清空选中 ──
+            // 批量删除后不逐个修正索引，直接清空即可——
+            // 因为用户一次删除多个节点后，继续保留「残余选中」反而易产生困惑。
             selectedIndices.Clear();
             selectedIndex = -1;
-            scrollPos.y = Mathf.Clamp(scrollPos.y, 0f, GetMaxScrollY());
+
+            // ── 钳制垂直滚动 ──
+            // 删除后内容高度变小，原 scrollPos.y 可能超出新的滚动上限；
+            // 同步 nameScroll.y 保持名字列与轨道对齐。
+            scrollPos.y = Mathf.Clamp(scrollPos.y, 0f, CalculateMaxVerticalScroll());
             nameScroll.y = scrollPos.y;
             Repaint();
         }
@@ -3285,18 +4376,38 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 工具：清空窗口以及面板配置
         /// <summary> 
-        ///【测试】清空本窗口在 EditorPrefs 中保存的所有 key，
-        ///使下次打开等同于「首次运行」：窗口尺寸 / 名字列宽 / 参数面板宽全部回落到默认值
-        ///<para/>不会动 <see cref="target"/> 上的视图状态（缩放 / 滚动 / 轨道高 / 吸附）
-        ///</summary>
+        /// 【测试】清空本窗口在 EditorPrefs 中保存的所有 key，
+        /// 使下次打开等同于「首次运行」：窗口尺寸 / 名字列宽 / 参数面板宽全部回落到默认值
+        /// <para/>
+        /// 清空的 key 共四个：
+        /// <list type="bullet">
+        /// <item><description><see cref="PrefKey_WindowWidth"/>：窗口宽度；</description></item>
+        /// <item><description><see cref="PrefKey_WindowHeight"/>：窗口高度；</description></item>
+        /// <item><description><see cref="PrefKey_NameWidthWidth"/>：名字列宽度；</description></item>
+        /// <item><description><see cref="PrefKey_ParamWidthHeight"/>：参数面板宽度。</description></item>
+        /// </list>
+        /// <para/>
+        /// 注意：本方法<b>不会</b>动 <c>target</c> 上的视图状态
+        /// （缩放 <c>Timeline_TrackPosition</c>、滚动 <c>Timeline_TrackScroll</c>、
+        /// 轨道高 <c>Timeline_TrackHeight</c>、吸附 <c>Timeline_TrackSnapEnabled</c>），
+        /// 因为那些状态存在 <see cref="XHud_Module_Primitive_Tween"/> 组件上，而非 EditorPrefs 中。
+        /// <para/>
+        /// 调用方式：默认被 <c>[MenuItem]</c> 注释掉，需手动取消注释后从菜单
+        /// <c>Tools/XHud/Tween Tracker/Reset Window Prefs (Test)</c> 触发。
+        /// </summary>
         //[MenuItem("Tools/XHud/Tween Tracker/Reset Window Prefs (Test)")]
-        private static void ResetAllEditorPrefs_Test()
+        private static void ResetAllEditorPrefsForTest()
         {
+            // ── 清空四个 EditorPrefs key ──
+            // 逐个调用 XGUI.x_Editor_Data_Clear，内部会从 EditorPrefs 中移除对应项；
+            // 下次 LoadPersistedWindowSize / LoadClampedFloatPreference 时会读不到值，
+            // 从而回落到各自方法中的默认值。
             XGUI.x_Editor_Data_Clear(PrefKey_WindowWidth);
             XGUI.x_Editor_Data_Clear(PrefKey_WindowHeight);
             XGUI.x_Editor_Data_Clear(PrefKey_NameWidthWidth);
             XGUI.x_Editor_Data_Clear(PrefKey_ParamWidthHeight);
 
+            // 提示日志：确认操作已执行
             Debug.Log("[XHud] Primitive Tween Tracker EditorPrefs 已清空，窗口已回落默认尺寸");
         }
         #endregion

@@ -56,7 +56,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <returns>用户选择后的整数值（索引）。</returns>
         /// <remarks>
         /// 该版本基于 <see cref="SerializedProperty"/>，支持多选混合状态显示（显示 "—"）。
-        public static int gui_int_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, float interval = 20, SerializedProperty prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleLeft, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default)
+        public static int gui_int_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, SerializedProperty prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleLeft, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, float width_limite = 0, bool usearrow = true)
         {
             if (title_color == Color.clear)
                 title_color = Color.white * 0.9f;
@@ -76,9 +76,11 @@ namespace SevenStrikeModules.XGUI.Editor
             if (opt_bg_color_gui == Color.clear)
                 opt_bg_color_gui = Color.white;
 
-            rect.Set(rect.x, rect.y, rect.width - rect.x - 5, rect.height);
-
-            Rect rect_title = new Rect(rect.x, rect.y, rect.width < 130 ? rect.width * 0.5f : title_width + interval, rect.height);
+            float _x = rect.x;
+            float _y = rect.y;
+            float _w = title_width;
+            float _h = rect.height;
+            Rect rect_title = new Rect(rect.x, rect.y, _w, _h);
 
             XGUI.gui_label(
                 rect: rect_title,
@@ -89,7 +91,11 @@ namespace SevenStrikeModules.XGUI.Editor
                 padding: title_padding,
                 clipping: TextClipping.Clip);
 
-            Rect rect_popup = new Rect(rect.width < (title_width + interval + 40) ? rect.x + rect.width - 40 : rect.x + (title_width + interval), rect.y, rect.width < (title_width + interval + 40) ? 40 : rect.width - (title_width + interval), rect.height);
+            Rect rect_popup = new Rect(
+                rect.width < width_limite ? rect.x : rect.x + title_width,
+                rect.y,
+                rect.width < width_limite ? rect.width : rect.width - title_width,
+                rect.height);
 
             #region 下拉菜单样式
             GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
@@ -104,7 +110,10 @@ namespace SevenStrikeModules.XGUI.Editor
             style.padding = new RectOffset(_p.left + opt_text_padding.left, _p.right + opt_text_padding.right, _p.top + opt_text_padding.top, _p.bottom + opt_text_padding.bottom);
 
             if (added_height != 0)
-                style.fixedHeight += added_height;
+                style.fixedHeight = rect.height + added_height;
+            else
+                style.fixedHeight = rect.height;
+
             style.alignment = opt_anchor;
             #endregion
 
@@ -143,13 +152,17 @@ namespace SevenStrikeModules.XGUI.Editor
             prop.serializedObject.ApplyModifiedProperties();
             #endregion
 
-            Rect rect_arrow = new Rect(rect_popup.x + rect_popup.width - 25, rect_popup.y + 5, 6, 6);
+            if (usearrow)
+            {
+                Rect rect_arrow = new Rect(rect_popup.x + rect_popup.width - 25, rect_popup.y + 5, 6, 6);
 
-            // 箭头图标
-            XGUI.gui_icon(
-                rect: rect_arrow,
-                icon: XGUI.GetBasedIcon("icon_arrow"),
-                color: icon_arrow_color);
+                // 箭头图标
+                XGUI.gui_icon(
+                    rect: rect_arrow,
+                    icon: XGUI.GetBasedIcon("icon_arrow"),
+                    color: icon_arrow_color);
+            }
+
 
             return prop.intValue;
         }
@@ -181,7 +194,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <remarks>
         /// 该版本基于值类型（int），适用于非序列化属性的场景，不处理多选混合状态。
         /// </remarks>
-        public static int gui_int_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, float interval = 20, int prop = 0, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleLeft, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default)
+        public static int gui_int_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, int prop = 0, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleLeft, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, float width_limite = 0, bool usearrow = true)
         {
             if (title_color == Color.clear)
                 title_color = Color.white * 0.9f;
@@ -201,9 +214,7 @@ namespace SevenStrikeModules.XGUI.Editor
             if (opt_bg_color_gui == Color.clear)
                 opt_bg_color_gui = Color.white;
 
-            rect.Set(rect.x, rect.y, rect.width - rect.x - 5, rect.height);
-
-            Rect rect_title = new Rect(rect.x, rect.y, rect.width < 130 ? rect.width * 0.5f : title_width + interval, rect.height);
+            Rect rect_title = new Rect(rect.x, rect.y, rect.width < 130 ? rect.width * 0.5f : title_width, rect.height);
 
             XGUI.gui_label(
                 rect: rect_title,
@@ -214,7 +225,11 @@ namespace SevenStrikeModules.XGUI.Editor
                 padding: title_padding,
                 clipping: TextClipping.Clip);
 
-            Rect rect_popup = new Rect(rect.width < (title_width + interval + 40) ? rect.x + rect.width - 40 : rect.x + (title_width + interval), rect.y, rect.width < (title_width + interval + 40) ? 40 : rect.width - (title_width + interval), rect.height);
+            Rect rect_popup = new Rect(
+                rect.width < width_limite ? rect.x : rect.x + title_width,
+                rect.y,
+                rect.width < width_limite ? rect.width : rect.width - title_width,
+                rect.height);
 
             #region 下拉菜单样式
             GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
@@ -248,13 +263,16 @@ namespace SevenStrikeModules.XGUI.Editor
 
             #endregion
 
-            Rect rect_arrow = new Rect(rect_popup.x + rect_popup.width - 25, rect_popup.y + 5, 6, 6);
+            if (usearrow)
+            {
+                Rect rect_arrow = new Rect(rect_popup.x + rect_popup.width - 25, rect_popup.y + 5, 6, 6);
 
-            // 箭头图标
-            XGUI.gui_icon(
-                rect: rect_arrow,
-                icon: XGUI.GetBasedIcon("icon_arrow"),
-                color: icon_arrow_color);
+                // 箭头图标
+                XGUI.gui_icon(
+                    rect: rect_arrow,
+                    icon: XGUI.GetBasedIcon("icon_arrow"),
+                    color: icon_arrow_color);
+            }
 
             return prop;
         }
@@ -287,7 +305,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 该版本基于 <see cref="SerializedProperty"/>，支持多选混合状态显示（显示 "—"）。
         /// 通过将字符串值与选项数组匹配来确定当前选中项，选中后通过 <see cref="SerializedProperty.stringValue"/> 设置值。
         /// </remarks>
-        public static string gui_string_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, float interval = 20, SerializedProperty prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default)
+        public static string gui_string_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, SerializedProperty prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, float width_limite = 0, bool usearrow = true)
         {
             if (title_color == Color.clear)
                 title_color = Color.white * 0.9f;
@@ -307,9 +325,11 @@ namespace SevenStrikeModules.XGUI.Editor
             if (opt_bg_color_gui == Color.clear)
                 opt_bg_color_gui = Color.white;
 
-            rect.Set(rect.x, rect.y, rect.width - rect.x - 5, rect.height);
-
-            Rect rect_title = new Rect(rect.x, rect.y, rect.width < 130 ? rect.width * 0.5f : title_width + interval, rect.height);
+            float _x = rect.x;
+            float _y = rect.y;
+            float _w = title_width;
+            float _h = rect.height;
+            Rect rect_title = new Rect(rect.x, rect.y, _w, _h);
 
             XGUI.gui_label(
                 rect: rect_title,
@@ -320,7 +340,11 @@ namespace SevenStrikeModules.XGUI.Editor
                 padding: title_padding,
                 clipping: TextClipping.Clip);
 
-            Rect rect_popup = new Rect(rect.width < (title_width + interval + 40) ? rect.x + rect.width - 40 : rect.x + (title_width + interval), rect.y, rect.width < (title_width + interval + 40) ? 40 : rect.width - (title_width + interval), rect.height);
+            Rect rect_popup = new Rect(
+                rect.width < width_limite ? rect.x : rect.x + title_width,
+                rect.y,
+                rect.width < width_limite ? rect.width : rect.width - title_width,
+                rect.height);
 
             #region 下拉菜单样式
             GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
@@ -379,13 +403,16 @@ namespace SevenStrikeModules.XGUI.Editor
             prop.serializedObject.ApplyModifiedProperties();
             #endregion
 
-            Rect rect_arrow = new Rect(rect_popup.x + rect_popup.width - 25, rect_popup.y + 5, 6, 6);
+            if (usearrow)
+            {
+                Rect rect_arrow = new Rect(rect_popup.x + rect_popup.width - 25, rect_popup.y + 5, 6, 6);
 
-            // 箭头图标
-            XGUI.gui_icon(
-                rect: rect_arrow,
-                icon: XGUI.GetBasedIcon("icon_arrow"),
-                color: icon_arrow_color);
+                // 箭头图标
+                XGUI.gui_icon(
+                    rect: rect_arrow,
+                    icon: XGUI.GetBasedIcon("icon_arrow"),
+                    color: icon_arrow_color);
+            }
 
             return prop.stringValue;
         }
@@ -418,7 +445,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 该版本基于值类型（string），适用于非序列化属性的场景，不处理多选混合状态。
         /// 通过将当前值与选项数组匹配来确定选中索引，用户选择后更新值并返回。
         /// </remarks>
-        public static string gui_string_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, float interval = 20, string prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default)
+        public static string gui_string_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, string prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, float width_limite = 0, bool usearrow = true)
         {
             if (title_color == Color.clear)
                 title_color = Color.white * 0.9f;
@@ -443,7 +470,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             float _x = rect.x;
             float _y = rect.y;
-            float _w = title_width + interval;
+            float _w = title_width;
             float _h = rect.height;
             Rect rect_title = new Rect(rect.x, rect.y, _w, _h);
 
@@ -456,11 +483,11 @@ namespace SevenStrikeModules.XGUI.Editor
                 padding: title_padding,
                 clipping: TextClipping.Clip);
 
-            float p_x = rect.x + (title_width + interval);
-            float p_y = rect.y;
-            float p_w = rect.width - (title_width + interval);
-            float p_h = rect.height;
-            Rect rect_popup = new Rect(p_x, p_y, p_w, p_h);
+            Rect rect_popup = new Rect(
+                rect.width < width_limite ? rect.x : rect.x + title_width,
+                rect.y,
+                rect.width < width_limite ? rect.width : rect.width - title_width,
+                rect.height);
 
             #region 下拉菜单样式
             GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
@@ -499,13 +526,16 @@ namespace SevenStrikeModules.XGUI.Editor
 
             #endregion
 
-            Rect rect_arrow = new Rect(rect_popup.x + rect_popup.width - 25, rect_popup.y + 5, 6, 6);
+            if (usearrow)
+            {
+                Rect rect_arrow = new Rect(rect_popup.x + rect_popup.width - 25, rect_popup.y + 5, 6, 6);
 
-            // 箭头图标
-            XGUI.gui_icon(
-                rect: rect_arrow,
-                icon: XGUI.GetBasedIcon("icon_arrow"),
-                color: icon_arrow_color);
+                // 箭头图标
+                XGUI.gui_icon(
+                    rect: rect_arrow,
+                    icon: XGUI.GetBasedIcon("icon_arrow"),
+                    color: icon_arrow_color);
+            }
 
             //XGUI.gui_box(rect, Color.green * 0.8f);
             return prop;

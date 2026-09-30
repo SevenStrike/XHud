@@ -3094,7 +3094,6 @@ namespace SevenStrikeModules.XTween.Editor
                   title_font_style: FontStyle.Normal,
                   title_padding: new RectOffset(0, 0, 0, 0),
                   title_width: 80,
-                  interval: 10,
                   prop: value,
                   options: options,
                   opt_text_size: XGUIFontSize.M,

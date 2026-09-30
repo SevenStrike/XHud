@@ -333,84 +333,7 @@ namespace SevenStrikeModules.XHud.Editor
                 width: 14,
                 height: 14))
             {
-                if (Targets_Selected())
-                {
-                    List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
-
-                    for (int i = 0; i < SelectedObjects.Length; i++)
-                    {
-                        XGUIDialogListDatas data = new XGUIDialogListDatas();
-                        data.Title = string.IsNullOrEmpty(SelectedObjects[i].Indicator) ? SelectedObjects[i].name : SelectedObjects[i].Indicator;
-                        data.SubTitle = "即将批量更新图元控制器ID";
-                        data.Message = "";
-                        Datas.Add(data);
-                    }
-
-                    EditorApplication.delayCall += () =>
-                    {
-                        string res_x = XGUI.dialog_listview(
-                            datas: Datas.ToArray(),
-                            type: XGUIDialogType.通知,
-                            windowtitle: "XHud - 图元控制器消息",
-                            title: "批量控制器ID更新",
-                            msg: "是否需要批量更新控制器的ID吗？",
-                            ok: "更新",
-                            cancel: "暂不",
-                            PrimaryIndex: 0,
-                            usemodal: false,
-                            themecolor: XHud_Dashboard.Theme_Primary);
-
-                        if (res_x == "更新")
-                        {
-                            for (int i = 0; i < SelectedObjects.Length; i++)
-                            {
-                                Undo.RecordObject(SelectedObjects[i], "更新所有图元控制器的ID");
-
-                                XHud_Module_Primitive_Controller con = SelectedObjects[i];
-
-                                #region 从父物体找元素并获取元素下所有图元控制器的ID
-                                XHud_Module_Element parent_ele = con.GetComponentInParent<XHud_Module_Element>();
-
-                                if (parent_ele == null)
-                                    continue;
-
-                                if (parent_ele.PrimitiveControllerNodes == null && parent_ele.PrimitiveControllerNodes.Count <= 0)
-                                    continue;
-
-                                List<string> list = new List<string>();
-                                for (int s = 0; s < parent_ele.PrimitiveControllerNodes.Count; s++)
-                                {
-                                    list.Add(parent_ele.PrimitiveControllerNodes[s].Controller.ID);
-                                }
-                                #endregion
-
-                                con.ID = XGUI_Utilitys.GenerateUniqueId(list.ToArray());
-                            }
-                        }
-                    };
-                }
-                else
-                {
-                    EditorApplication.delayCall += () =>
-                    {
-                        string res = XGUI.dialog(
-                                 type: XGUIDialogType.警告,
-                                 windowtitle: "XHud - 图元控制器消息",
-                                 title: "控制器ID更新",
-                                 msg: $"确定要更新当前图元控制器的ID吗？",
-                                 ok: "更新 ID",
-                                 cancel: "暂不",
-                                 PrimaryIndex: 0,
-                                 usemodal: true,
-                                 themecolor: XHud_Dashboard.Theme_Primary);
-
-                        if (res == "暂不")
-                            return;
-
-                        Undo.RecordObject(BaseScript, "刷新图元控制器ID");
-                        BaseScript.ID = XGUI_Utilitys.GenerateUniqueId(CollectIDs());
-                    };
-                }
+                RefreshID();
                 return;
             }
             #endregion
@@ -606,6 +529,48 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
+            #region 右键菜单
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
+            {
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("R (刷新ID)"), false, () =>
+                {
+                    RefreshID();
+                });
+                menu.AddSeparator("");
+                menu.AddItem(new GUIContent("Q (折叠编组)"), false, () =>
+    {
+        if (Targets_Selected())
+        {
+            for (int i = 0; i < SelectedObjects.Length; i++)
+            {
+                SelectedObjects[i].GroupFold(true);
+            }
+        }
+        else
+        {
+            BaseScript.GroupFold(true);
+        }
+    });
+                menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
+                {
+                    if (Targets_Selected())
+                    {
+                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        {
+                            SelectedObjects[i].GroupFold(false);
+                        }
+                    }
+                    else
+                    {
+                        BaseScript.GroupFold(false);
+                    }
+                });
+                menu.AddSeparator("");
+                menu.ShowAsContext();
+            }
+            #endregion
+
             #region 源脚本
             BaseScript.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
@@ -628,6 +593,88 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void RefreshID()
+        {
+            if (Targets_Selected())
+            {
+                List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
+
+                for (int i = 0; i < SelectedObjects.Length; i++)
+                {
+                    XGUIDialogListDatas data = new XGUIDialogListDatas();
+                    data.Title = string.IsNullOrEmpty(SelectedObjects[i].Indicator) ? SelectedObjects[i].name : SelectedObjects[i].Indicator;
+                    data.SubTitle = "即将批量更新图元控制器ID";
+                    data.Message = "";
+                    Datas.Add(data);
+                }
+
+                EditorApplication.delayCall += () =>
+                {
+                    string res_x = XGUI.dialog_listview(
+                        datas: Datas.ToArray(),
+                        type: XGUIDialogType.通知,
+                        windowtitle: "XHud - 图元控制器消息",
+                        title: "批量控制器ID更新",
+                        msg: "是否需要批量更新控制器的ID吗？",
+                        ok: "更新",
+                        cancel: "暂不",
+                        PrimaryIndex: 0,
+                        usemodal: false,
+                        themecolor: XHud_Dashboard.Theme_Primary);
+
+                    if (res_x == "更新")
+                    {
+                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        {
+                            Undo.RecordObject(SelectedObjects[i], "更新所有图元控制器的ID");
+
+                            XHud_Module_Primitive_Controller con = SelectedObjects[i];
+
+                            #region 从父物体找元素并获取元素下所有图元控制器的ID
+                            XHud_Module_Element parent_ele = con.GetComponentInParent<XHud_Module_Element>();
+
+                            if (parent_ele == null)
+                                continue;
+
+                            if (parent_ele.PrimitiveControllerNodes == null && parent_ele.PrimitiveControllerNodes.Count <= 0)
+                                continue;
+
+                            List<string> list = new List<string>();
+                            for (int s = 0; s < parent_ele.PrimitiveControllerNodes.Count; s++)
+                            {
+                                list.Add(parent_ele.PrimitiveControllerNodes[s].Controller.ID);
+                            }
+                            #endregion
+
+                            con.ID = XGUI_Utilitys.GenerateUniqueId(list.ToArray());
+                        }
+                    }
+                };
+            }
+            else
+            {
+                EditorApplication.delayCall += () =>
+                {
+                    string res = XGUI.dialog(
+                             type: XGUIDialogType.警告,
+                             windowtitle: "XHud - 图元控制器消息",
+                             title: "控制器ID更新",
+                             msg: $"确定要更新当前图元控制器的ID吗？",
+                             ok: "更新 ID",
+                             cancel: "暂不",
+                             PrimaryIndex: 0,
+                             usemodal: true,
+                             themecolor: XHud_Dashboard.Theme_Primary);
+
+                    if (res == "暂不")
+                        return;
+
+                    Undo.RecordObject(BaseScript, "刷新图元控制器ID");
+                    BaseScript.ID = XGUI_Utilitys.GenerateUniqueId(CollectIDs());
+                };
+            }
         }
 
         private string[] CollectIDs()

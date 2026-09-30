@@ -674,7 +674,6 @@ namespace SevenStrikeModules.XHud.Editor
             #region 菜单功能
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
             {
-                // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
                 menu.AddDisabledItem(new GUIContent("色卡操作"));
                 menu.AddItem(new GUIContent("R (识别色卡)"), false, () =>
@@ -685,6 +684,35 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddItem(new GUIContent("D (拷贝色卡)"), false, () =>
                 {
                     Copy_Color();
+                });
+                menu.AddSeparator("");
+                menu.AddItem(new GUIContent("Q (折叠编组)"), false, () =>
+                {
+                    if (Targets_Selected())
+                    {
+                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        {
+                            SelectedObjects[i].GroupFold(true);
+                        }
+                    }
+                    else
+                    {
+                        BaseScript.GroupFold(true);
+                    }
+                });
+                menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
+                {
+                    if (Targets_Selected())
+                    {
+                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        {
+                            SelectedObjects[i].GroupFold(false);
+                        }
+                    }
+                    else
+                    {
+                        BaseScript.GroupFold(false);
+                    }
                 });
                 menu.ShowAsContext();
             }

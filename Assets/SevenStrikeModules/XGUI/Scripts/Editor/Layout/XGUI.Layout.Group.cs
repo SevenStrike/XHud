@@ -66,7 +66,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 无需手动指定矩形位置。
         /// </para>
         /// </remarks>
-        public static bool layout_group_start(XGUIContainerType type = XGUIContainerType.Vertical, XGUIFilled bg_fill = XGUIFilled.无, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, float bg_height = 0, RectOffset margin = default, bool absolute_padding = false, bool absolute_margin = false, RectOffset padding = default, string title = null, XGUIFilled title_bg_fill = XGUIFilled.无, XGUIColor title_bg_color = XGUIColor.无, Color title_bg_color_gui = default, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_text_color = default, Vector2 title_offset = default, RectOffset title_padding = default, Font title_font = null, FontStyle title_font_style = FontStyle.Normal, TextClipping title_clipping = TextClipping.Clip, Texture2D icon = null, Color icon_color = default, RectOffset icon_padding = default, bool foldout = true, bool title_manual_offset = false, float title_manual_offset_space = 0, float group_width = 0)
+        public static bool layout_group_start(XGUIContainerType type = XGUIContainerType.Vertical, XGUIFilled bg_fill = XGUIFilled.无, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, float bg_height = 0, RectOffset margin = default, bool absolute_padding = false, bool absolute_margin = false, RectOffset padding = default, string title = null, XGUIFilled title_bg_fill = XGUIFilled.无, XGUIColor title_bg_color = XGUIColor.无, Color title_bg_color_gui = default, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_text_color = default, Vector2 title_offset = default, RectOffset title_padding = default, Font title_font = null, FontStyle title_font_style = FontStyle.Normal, TextClipping title_clipping = TextClipping.Clip, Texture2D icon = null, Color icon_color = default, RectOffset icon_padding = default, bool can_foldout = true, bool foldout = true, bool title_manual_offset = false, float title_manual_offset_space = 0, float group_width = 0)
         {
             #region group
             if (bg_color_gui == default)
@@ -182,17 +182,20 @@ namespace SevenStrikeModules.XGUI.Editor
                 //XGUI.Gui_Box(rect_title, Color.red * 0.8f);
 
                 // 检测标题区域的点击事件
-                Event currentEvent = Event.current;
-                if (currentEvent.type == EventType.MouseDown && rect_title.Contains(currentEvent.mousePosition))
+                if (can_foldout)
                 {
-                    // 检查颜色选择器是否处于活动状态
-                    bool isColorPickerActive = EditorWindow.focusedWindow != null && EditorWindow.focusedWindow.GetType().Name.Contains("ColorPicker");
-
-                    // 只有在颜色选择器未激活时才处理折叠
-                    if (!isColorPickerActive)
+                    Event currentEvent = Event.current;
+                    if (currentEvent.type == EventType.MouseDown && rect_title.Contains(currentEvent.mousePosition))
                     {
-                        foldout = !foldout;
-                        currentEvent.Use();
+                        // 检查颜色选择器是否处于活动状态
+                        bool isColorPickerActive = EditorWindow.focusedWindow != null && EditorWindow.focusedWindow.GetType().Name.Contains("ColorPicker");
+
+                        // 只有在颜色选择器未激活时才处理折叠
+                        if (!isColorPickerActive)
+                        {
+                            foldout = !foldout;
+                            currentEvent.Use();
+                        }
                     }
                 }
             }
@@ -260,7 +263,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 该方法与 <see cref="editor_layout_group_end"/> 成对使用，基于 <see cref="EditorGUILayout"/> 自动布局系统。
         /// 与 <see cref="layout_group_start"/> 功能类似，但返回分组的矩形区域，便于需要精确位置信息的场景。
         /// </remarks>
-        public static Rect editor_layout_group_start(XGUIContainerType type = XGUIContainerType.Vertical, XGUIFilled bg_fill = XGUIFilled.无, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, float bg_height = 0, RectOffset margin = default, bool absolute_padding = false, bool absolute_margin = false, RectOffset padding = default, string title = null, XGUIFilled title_bg_fill = XGUIFilled.无, XGUIColor title_bg_color = XGUIColor.无, Color title_bg_color_gui = default, XGUIFontSize title_size = XGUIFontSize.B, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_text_color = default, Vector2 title_offset = default, RectOffset title_padding = default, Font title_font = null, FontStyle title_font_style = FontStyle.Normal, TextClipping title_clipping = TextClipping.Clip, Texture2D icon = null, Color icon_color = default, RectOffset icon_padding = default, bool foldout = true, bool title_manual_offset = false, float title_manual_offset_space = 0)
+        public static Rect editor_layout_group_start(XGUIContainerType type = XGUIContainerType.Vertical, XGUIFilled bg_fill = XGUIFilled.无, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, float bg_height = 0, RectOffset margin = default, bool absolute_padding = false, bool absolute_margin = false, RectOffset padding = default, string title = null, XGUIFilled title_bg_fill = XGUIFilled.无, XGUIColor title_bg_color = XGUIColor.无, Color title_bg_color_gui = default, XGUIFontSize title_size = XGUIFontSize.B, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_text_color = default, Vector2 title_offset = default, RectOffset title_padding = default, Font title_font = null, FontStyle title_font_style = FontStyle.Normal, TextClipping title_clipping = TextClipping.Clip, Texture2D icon = null, Color icon_color = default, RectOffset icon_padding = default, bool can_foldout = true, bool foldout = true, bool title_manual_offset = false, float title_manual_offset_space = 0)
         {
             Rect rect_group;
 
@@ -372,17 +375,20 @@ namespace SevenStrikeModules.XGUI.Editor
                 //XGUI.Gui_Box(rect_title, Color.red * 0.8f);
 
                 // 检测标题区域的点击事件
-                Event currentEvent = Event.current;
-                if (currentEvent.type == EventType.MouseDown && rect_title.Contains(currentEvent.mousePosition))
+                if (can_foldout)
                 {
-                    // 检查颜色选择器是否处于活动状态
-                    bool isColorPickerActive = EditorWindow.focusedWindow != null && EditorWindow.focusedWindow.GetType().Name.Contains("ColorPicker");
-
-                    // 只有在颜色选择器未激活时才处理折叠
-                    if (!isColorPickerActive)
+                    Event currentEvent = Event.current;
+                    if (currentEvent.type == EventType.MouseDown && rect_title.Contains(currentEvent.mousePosition))
                     {
-                        foldout = !foldout;
-                        currentEvent.Use();
+                        // 检查颜色选择器是否处于活动状态
+                        bool isColorPickerActive = EditorWindow.focusedWindow != null && EditorWindow.focusedWindow.GetType().Name.Contains("ColorPicker");
+
+                        // 只有在颜色选择器未激活时才处理折叠
+                        if (!isColorPickerActive)
+                        {
+                            foldout = !foldout;
+                            currentEvent.Use();
+                        }
                     }
                 }
             }

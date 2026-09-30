@@ -537,7 +537,6 @@ namespace SevenStrikeModules.XHud.Editor
             #region 右键菜单
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
             {
-                // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
                 menu.AddItem(new GUIContent("S (记录特性)"), false, () =>
                 {
@@ -548,7 +547,36 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     PrimitiveFeature_Dual_Load_WithDialog();
                 });
-                menu.ShowAsContext(); // 在鼠标位置显示右键菜单
+                menu.AddSeparator("");
+                menu.AddItem(new GUIContent("Q (折叠编组)"), false, () =>
+                {
+                    if (Targets_Selected())
+                    {
+                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        {
+                            SelectedObjects[i].GroupFold(true);
+                        }
+                    }
+                    else
+                    {
+                        BaseScript.GroupFold(true);
+                    }
+                });
+                menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
+                {
+                    if (Targets_Selected())
+                    {
+                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        {
+                            SelectedObjects[i].GroupFold(false);
+                        }
+                    }
+                    else
+                    {
+                        BaseScript.GroupFold(false);
+                    }
+                });
+                menu.ShowAsContext();
             }
             #endregion
 
@@ -767,12 +795,12 @@ namespace SevenStrikeModules.XHud.Editor
             // 多选时
             if (Targets_Selected())
             {
-                List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
+                List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
 
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
                     PrimitiveFeature_Save(SelectedObjects[i]);
-                    XHud_GUI_Dialog_ListDatas data = new XHud_GUI_Dialog_ListDatas();
+                    XGUIDialogListDatas data = new XGUIDialogListDatas();
 
                     data.Title = string.IsNullOrEmpty(SelectedObjects[i].controller.Indicator) ? SelectedObjects[i].name : SelectedObjects[i].controller.Indicator;
                     data.SubTitle = "";
@@ -781,7 +809,17 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 EditorApplication.delayCall += () =>
                 {
-                    Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 图元特性消息", "批量记录图元特性", "以下是批量已记录特性的所有图元列表，请您检查核对：", "明白");
+                    XGUI.dialog_listview(
+                       datas: Datas.ToArray(),
+                       type: XGUIDialogType.通知,
+                       windowtitle: "XHud - 图元特性消息",
+                       title: "批量记录图元特性",
+                       msg: "以下是批量已记录特性的所有图元列表，请您检查核对：",
+                       ok: "明白",
+                       PrimaryIndex: 0,
+                       show_index: false,
+                       usemodal: false,
+                       themecolor: XHud_Dashboard.Theme_Primary);
                 };
             }
             // 单选时
@@ -790,7 +828,15 @@ namespace SevenStrikeModules.XHud.Editor
                 PrimitiveFeature_Save(BaseScript);
                 EditorApplication.delayCall += () =>
                 {
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 图元特性消息", "图元特性记录", "已记录图元的特性参数！", "明白");
+                    XGUI.dialog(
+                        type: XGUIDialogType.确认,
+                        windowtitle: "XHud - 图元特性消息",
+                        title: "图元特性记录",
+                        msg: $"已记录图元的特性参数！",
+                        ok: "明白",
+                        PrimaryIndex: 0,
+                        usemodal: true,
+                        themecolor: XHud_Dashboard.Theme_Primary);
                 };
             }
         }
@@ -802,12 +848,12 @@ namespace SevenStrikeModules.XHud.Editor
             // 多选时
             if (Targets_Selected())
             {
-                List<XHud_GUI_Dialog_ListDatas> Datas = new List<XHud_GUI_Dialog_ListDatas>();
+                List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
 
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
                     PrimitiveFeature_Load(SelectedObjects[i]);
-                    XHud_GUI_Dialog_ListDatas data = new XHud_GUI_Dialog_ListDatas();
+                    XGUIDialogListDatas data = new XGUIDialogListDatas();
 
                     data.Title = string.IsNullOrEmpty(SelectedObjects[i].controller.Indicator) ? SelectedObjects[i].name : SelectedObjects[i].controller.Indicator;
                     data.SubTitle = "";
@@ -817,7 +863,17 @@ namespace SevenStrikeModules.XHud.Editor
 
                 EditorApplication.delayCall += () =>
                 {
-                    Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 图元特性消息", "批量读取图元特性", "以下是批量已读取特性的所有图元列表，请您检查核对：", "明白");
+                    XGUI.dialog_listview(
+                        datas: Datas.ToArray(),
+                        type: XGUIDialogType.通知,
+                        windowtitle: "XHud - 图元特性消息",
+                        title: "批量读取图元特性",
+                        msg: "以下是批量已读取特性的所有图元列表，请您检查核对：",
+                        ok: "明白",
+                        PrimaryIndex: 0,
+                        show_index: false,
+                        usemodal: false,
+                        themecolor: XHud_Dashboard.Theme_Primary);
                 };
             }
             // 单选时
@@ -826,7 +882,15 @@ namespace SevenStrikeModules.XHud.Editor
                 PrimitiveFeature_Load(BaseScript);
                 EditorApplication.delayCall += () =>
                 {
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 图元特性消息", "图元特性读取", "已读取图元的特性参数！", "明白");
+                    XGUI.dialog(
+                        type: XGUIDialogType.确认,
+                        windowtitle: "XHud - 图元特性消息",
+                        title: "图元特性读取",
+                        msg: $"已读取图元的特性参数！",
+                        ok: "明白",
+                        PrimaryIndex: 0,
+                        usemodal: true,
+                        themecolor: XHud_Dashboard.Theme_Primary);
                 };
             }
         }

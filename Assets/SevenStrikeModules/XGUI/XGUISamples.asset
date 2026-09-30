@@ -20,7 +20,7 @@ MonoBehaviour:
   Hardware: "\u6781\u9650\u914D\u7F6E\u4E3B\u673A"
   Stones: RutilatedQuartz
   Types: 
-  EaseMode: 
+  EaseMode: OutElastic
   param_string: 
   param_float: 6.27
   param_int: 90
@@ -157,75 +157,75 @@ MonoBehaviour:
   CardDataWrap_Edge:
     _datas:
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A0"
-      _bgcolor: {r: 0.42473942, g: 0.12742183, b: 0.34802002, a: 1}
+      _bgcolor: {r: 0.7573267, g: 0.2560694, b: 0.8535646, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A1"
-      _bgcolor: {r: 0.14437757, g: 0.48125857, b: 0.36902645, a: 1}
+      _bgcolor: {r: 0.7294179, g: 0.8488376, b: 0.2546513, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A2"
-      _bgcolor: {r: 0.22685967, g: 0.312302, b: 0.7561989, a: 1}
+      _bgcolor: {r: 0.19190073, g: 0.59428227, b: 0.63966906, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A3"
-      _bgcolor: {r: 0.72066635, g: 0.8777555, b: 0.26332667, a: 1}
+      _bgcolor: {r: 0.21831347, g: 0.28301424, b: 0.72771156, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A4"
-      _bgcolor: {r: 0.74080455, g: 0.28059542, b: 0.935318, a: 1}
+      _bgcolor: {r: 0.6950425, g: 0.20851275, b: 0.3490194, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A5"
-      _bgcolor: {r: 0.7327962, g: 0.6697027, b: 0.21983887, a: 1}
+      _bgcolor: {r: 0.673579, g: 0.6534841, b: 0.20207371, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A6"
-      _bgcolor: {r: 0.29423818, g: 0.33732444, b: 0.10119734, a: 1}
+      _bgcolor: {r: 0.16874051, g: 0.1752188, b: 0.56246835, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A7"
-      _bgcolor: {r: 0.5795805, g: 0.17387415, b: 0.3296777, a: 1}
+      _bgcolor: {r: 0.13404647, g: 0.4468215, b: 0.33051574, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A8"
-      _bgcolor: {r: 0.51267153, g: 0.17173807, b: 0.57246023, a: 1}
+      _bgcolor: {r: 0.9466822, g: 0.6131763, b: 0.2840047, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A9"
-      _bgcolor: {r: 0.27957165, g: 0.2084507, b: 0.69483566, a: 1}
+      _bgcolor: {r: 0.22401518, g: 0.3586347, b: 0.7467172, a: 1}
     index: 0
   CardDataWrap_Solid:
     _datas:
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A0"
-      _bgcolor: {r: 0.21481873, g: 0.6316151, b: 0.7160624, a: 1}
+      _bgcolor: {r: 0.2860127, g: 0.9533757, b: 0.7958859, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A1"
-      _bgcolor: {r: 0.6557567, g: 0.19672702, b: 0.2486398, a: 1}
+      _bgcolor: {r: 0.4821996, g: 0.14676113, b: 0.48920375, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A2"
-      _bgcolor: {r: 0.29814765, g: 0.99382544, b: 0.38078532, a: 1}
+      _bgcolor: {r: 0.35413542, g: 0.3881938, b: 0.11645814, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A3"
-      _bgcolor: {r: 0.822088, g: 0.2466264, b: 0.4240094, a: 1}
+      _bgcolor: {r: 0.23540841, g: 0.33042175, b: 0.7846947, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A4"
-      _bgcolor: {r: 0.4726486, g: 0.7851225, b: 0.23553677, a: 1}
+      _bgcolor: {r: 0.64384425, g: 0.19315328, b: 0.56762433, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A5"
-      _bgcolor: {r: 0.48523998, g: 0.26314467, b: 0.87714887, a: 1}
+      _bgcolor: {r: 0.9686713, g: 0.93319136, b: 0.2906014, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A6"
-      _bgcolor: {r: 0.39418083, g: 0.12424541, b: 0.41415137, a: 1}
+      _bgcolor: {r: 0.25591713, g: 0.853057, b: 0.27082616, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A7"
-      _bgcolor: {r: 0.5804214, g: 0.46091756, b: 0.17412642, a: 1}
+      _bgcolor: {r: 0.1389063, g: 0.46302098, b: 0.3107832, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A8"
-      _bgcolor: {r: 0.21985538, g: 0.43416253, b: 0.73285127, a: 1}
+      _bgcolor: {r: 0.19671161, g: 0.5413826, b: 0.65570533, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A9"
-      _bgcolor: {r: 0.7511246, g: 0.47625798, b: 0.2253374, a: 1}
+      _bgcolor: {r: 0.36597833, g: 0.5048395, b: 0.15145186, a: 1}
     index: 0
   CardDataWrap_Solid_Manual:
     _datas:
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A0"
-      _bgcolor: {r: 0.956048, g: 0.34770784, b: 0.28681442, a: 1}
+      _bgcolor: {r: 0.6277747, g: 0.18833242, b: 0.393306, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A1"
-      _bgcolor: {r: 0.29668778, g: 0.72448874, b: 0.9889592, a: 1}
+      _bgcolor: {r: 0.75376123, g: 0.7623981, b: 0.22871944, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A2"
-      _bgcolor: {r: 0.29621845, g: 0.8685999, b: 0.9873948, a: 1}
+      _bgcolor: {r: 0.42000145, g: 0.12600043, b: 0.21761724, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A3"
-      _bgcolor: {r: 0.8603492, g: 0.46096116, b: 0.25810477, a: 1}
+      _bgcolor: {r: 0.89433205, g: 0.26829964, b: 0.4296371, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A4"
-      _bgcolor: {r: 0.8454704, g: 0.25364113, b: 0.29208073, a: 1}
+      _bgcolor: {r: 0.9148506, g: 0.2744552, b: 0.5523929, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A5"
-      _bgcolor: {r: 0.23719954, g: 0.6833321, b: 0.20499964, a: 1}
+      _bgcolor: {r: 0.22178943, g: 0.4327822, b: 0.7392981, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A6"
-      _bgcolor: {r: 0.72544134, g: 0.38083288, b: 0.21763241, a: 1}
+      _bgcolor: {r: 0.2287152, g: 0.76238394, b: 0.75423926, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A7"
-      _bgcolor: {r: 0.2340471, g: 0.50963265, b: 0.78015697, a: 1}
+      _bgcolor: {r: 0.6699445, g: 0.30026934, b: 0.20098336, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A8"
-      _bgcolor: {r: 0.2780354, g: 0.30518407, b: 0.92678463, a: 1}
+      _bgcolor: {r: 0.91226256, g: 0.5769982, b: 0.27367878, a: 1}
     - _title: "\u6D4B\u8BD5\u6807\u9898\uFF1A9"
-      _bgcolor: {r: 0.21538253, g: 0.18677106, b: 0.6225702, a: 1}
+      _bgcolor: {r: 0.78638494, g: 0.38801762, b: 0.2359155, a: 1}
     index: 0
   fold_param_layout: 0
   fold_param_gui: 0
-  fold_tweenstate_gui: 0
+  fold_tweenstate_gui: 1
   fold_pops_layout: 0
   fold_sliders_layout: 0
   fold_sliders_gui: 1
@@ -245,125 +245,125 @@ MonoBehaviour:
   fold_card: 0
   fold_card_manual: 0
   PlayerDatas:
-  - _name: "\u535C\u5C0F"
-    _level: 62
-    _weapon: SG552
-    _health: 55.19
+  - _name: "\u5415\u5B8F"
+    _level: 25
+    _weapon: 'K416 '
+    _health: 38.84
     _region: "\u5DE5\u4E1A\u5E9F\u6599\u533A"
-    _ammo: 74
-    _cdpercent: 71.31
+    _ammo: 05
+    _cdpercent: 12.83
     _avatarpath: Avatars/avatar_0
-  - _name: "\u5415\u541B"
-    _level: 74
-    _weapon: "\u91CE\u725B (Bizon)"
-    _health: 75.45
+  - _name: "\u76AE\u52C7"
+    _level: 81
+    _weapon: R93
+    _health: 97.51
     _region: "\u6838\u8BBE\u65BD\u5382"
-    _ammo: 51
-    _cdpercent: 6.72
+    _ammo: 32
+    _cdpercent: 77.32
     _avatarpath: Avatars/avatar_1
-  - _name: "\u502A\u5929"
-    _level: 11
-    _weapon: MP7
-    _health: 8.83
-    _region: "\u822A\u5929\u7814\u7A76\u4E2D\u5FC3"
-    _ammo: 01
-    _cdpercent: 64.44
-    _avatarpath: Avatars/avatar_2
-  - _name: "\u5B5F\u6BC5"
-    _level: 76
-    _weapon: MP7
-    _health: 6.19
-    _region: "\u822A\u5929\u7814\u7A76\u4E2D\u5FC3"
-    _ammo: 81
-    _cdpercent: 4.97
-    _avatarpath: Avatars/avatar_3
-  - _name: "\u9C81\u7389"
-    _level: 56
-    _weapon: 'K416 '
-    _health: 0.31
-    _region: "\u5DE5\u4E1A\u5E9F\u6599\u533A"
-    _ammo: 83
-    _cdpercent: 61.83
-    _avatarpath: Avatars/avatar_4
-  - _name: "\u6C64\u56FD"
-    _level: 24
+  - _name: "\u9648\u4E91"
+    _level: 5
     _weapon: 'AWM '
-    _health: 41.47
+    _health: 27.74
+    _region: "\u6838\u8BBE\u65BD\u5382"
+    _ammo: 22
+    _cdpercent: 22.59
+    _avatarpath: Avatars/avatar_2
+  - _name: "\u67CF\u98DE"
+    _level: 26
+    _weapon: R93
+    _health: 83.83
     _region: "\u5DE5\u4E1A\u5E9F\u6599\u533A"
-    _ammo: 30
-    _cdpercent: 90.61
+    _ammo: 91
+    _cdpercent: 68.55
+    _avatarpath: Avatars/avatar_3
+  - _name: "\u9F50\u96C5"
+    _level: 23
+    _weapon: SCAR-H
+    _health: 54.78
+    _region: "\u6838\u8BBE\u65BD\u5382"
+    _ammo: 13
+    _cdpercent: 33.70
+    _avatarpath: Avatars/avatar_4
+  - _name: "\u5E38\u7433"
+    _level: 42
+    _weapon: 'K416 '
+    _health: 74.05
+    _region: "\u822A\u5929\u7814\u7A76\u4E2D\u5FC3"
+    _ammo: 52
+    _cdpercent: 66.97
     _avatarpath: Avatars/avatar_5
-  - _name: "\u4E50\u4E91"
-    _level: 94
-    _weapon: 'K416 '
-    _health: 67.87
+  - _name: "\u8303\u60A6"
+    _level: 55
+    _weapon: 'AWM '
+    _health: 16.69
     _region: "\u6838\u8BBE\u65BD\u5382"
-    _ammo: 09
-    _cdpercent: 83.67
+    _ammo: 59
+    _cdpercent: 35.71
     _avatarpath: Avatars/avatar_6
-  - _name: "\u5434\u5F64"
-    _level: 68
-    _weapon: 'SMG-45 '
-    _health: 66.40
-    _region: "\u6838\u8BBE\u65BD\u5382"
-    _ammo: 98
-    _cdpercent: 66.69
-    _avatarpath: Avatars/avatar_7
-  - _name: "\u9648\u6587"
-    _level: 94
-    _weapon: 'Vector '
-    _health: 0.18
-    _region: "\u6838\u8BBE\u65BD\u5382"
-    _ammo: 85
-    _cdpercent: 66.59
-    _avatarpath: Avatars/avatar_8
-  - _name: "\u848B\u6770"
-    _level: 45
-    _weapon: 'SMG-45 '
-    _health: 94.60
-    _region: "\u822A\u5929\u7814\u7A76\u4E2D\u5FC3"
-    _ammo: 07
-    _cdpercent: 77.99
-    _avatarpath: Avatars/avatar_9
-  - _name: "\u90B9\u5A77"
-    _level: 99
-    _weapon: MP7
-    _health: 17.82
-    _region: "\u822A\u5929\u7814\u7A76\u4E2D\u5FC3"
-    _ammo: 72
-    _cdpercent: 70.47
-    _avatarpath: Avatars/avatar_10
-  - _name: "\u5F20\u5999"
-    _level: 53
-    _weapon: 'SMG-45 '
-    _health: 96.72
-    _region: "7\u53F7\u7535\u7AD9"
-    _ammo: 76
-    _cdpercent: 12.59
-    _avatarpath: Avatars/avatar_11
-  - _name: "\u8427\u5A9B"
-    _level: 6
-    _weapon: "\u91CE\u725B (Bizon)"
-    _health: 29.77
-    _region: "\u6838\u8BBE\u65BD\u5382"
-    _ammo: 88
-    _cdpercent: 91.87
-    _avatarpath: Avatars/avatar_12
-  - _name: "\u8BB8\u6B23"
-    _level: 46
-    _weapon: 'Vector '
-    _health: 2.99
-    _region: "\u6838\u8BBE\u65BD\u5382"
-    _ammo: 10
-    _cdpercent: 31.88
-    _avatarpath: Avatars/avatar_13
-  - _name: "\u5B89\u6210"
+  - _name: "\u5C24\u4E00"
     _level: 69
-    _weapon: 'K416 '
-    _health: 63.53
+    _weapon: SCAR-H
+    _health: 69.48
+    _region: "7\u53F7\u7535\u7AD9"
+    _ammo: 44
+    _cdpercent: 28.52
+    _avatarpath: Avatars/avatar_7
+  - _name: "\u90DD\u83B9"
+    _level: 1
+    _weapon: MP7
+    _health: 37.01
     _region: "\u822A\u5929\u7814\u7A76\u4E2D\u5FC3"
-    _ammo: 07
-    _cdpercent: 71.46
+    _ammo: 90
+    _cdpercent: 8.33
+    _avatarpath: Avatars/avatar_8
+  - _name: "\u9EC4\u6CFD"
+    _level: 65
+    _weapon: 'K416 '
+    _health: 27.22
+    _region: "\u6838\u8BBE\u65BD\u5382"
+    _ammo: 89
+    _cdpercent: 83.06
+    _avatarpath: Avatars/avatar_9
+  - _name: "\u9648\u7ACB"
+    _level: 68
+    _weapon: MP7
+    _health: 30.93
+    _region: "7\u53F7\u7535\u7AD9"
+    _ammo: 40
+    _cdpercent: 23.42
+    _avatarpath: Avatars/avatar_10
+  - _name: "\u67F3\u6B23"
+    _level: 14
+    _weapon: R93
+    _health: 16.30
+    _region: "\u6838\u8BBE\u65BD\u5382"
+    _ammo: 04
+    _cdpercent: 64.94
+    _avatarpath: Avatars/avatar_11
+  - _name: "\u91D1\u6D69"
+    _level: 36
+    _weapon: MP7
+    _health: 10.02
+    _region: "\u5DE5\u4E1A\u5E9F\u6599\u533A"
+    _ammo: 70
+    _cdpercent: 5.49
+    _avatarpath: Avatars/avatar_12
+  - _name: "\u5E73\u4E66"
+    _level: 44
+    _weapon: 'SMG-45 '
+    _health: 99.65
+    _region: "7\u53F7\u7535\u7AD9"
+    _ammo: 30
+    _cdpercent: 68.81
+    _avatarpath: Avatars/avatar_13
+  - _name: "\u82CF\u5999"
+    _level: 63
+    _weapon: M4A1
+    _health: 51.41
+    _region: "\u6838\u8BBE\u65BD\u5382"
+    _ammo: 69
+    _cdpercent: 27.06
     _avatarpath: Avatars/avatar_14
   _outputPath: 
   _configPath: 

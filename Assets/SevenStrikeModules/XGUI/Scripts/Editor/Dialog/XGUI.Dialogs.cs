@@ -278,7 +278,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// );
         /// </code>
         /// </example>
-        public static string dialog_listview(XGUIDialogListDatas[] datas, XGUIDialogType type = XGUIDialogType.通知, string windowtitle = null, string title = null, string msg = null, string ok = null, string cancel = null, string alt = null, string other = null, string special = null, int PrimaryIndex = 0, bool usemodal = true, Color themecolor = default, Action<string> on_selected = null)
+        public static string dialog_listview(XGUIDialogListDatas[] datas, XGUIDialogType type = XGUIDialogType.通知, string windowtitle = null, string title = null, string msg = null, string ok = null, string cancel = null, string alt = null, string other = null, string special = null, int PrimaryIndex = 0, bool usemodal = true, Color themecolor = default, Action<string> on_selected = null, bool show_index = true)
         {
             if (themecolor == Color.clear)
                 themecolor = Color.white;
@@ -331,7 +331,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     on_selected(res);
             };
             window.SetInfo(type, title, msg, ok, cancel, alt, other, special, "", "", PrimaryIndex);
-            window.SetList(datas);
+            window.SetList(datas, show_index);
             window.SetThemeColor(themecolor);
 
             if (usemodal)

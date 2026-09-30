@@ -951,6 +951,33 @@ namespace SevenStrikeModules.XHud
         [SerializeField] public string PreviewTiming;
         #endregion
 
+        #region 折叠
+        public bool
+            fold_param = true,
+            fold_option = true,
+            fold_based = true,
+            fold_list = true,
+            fold_state = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_param = state;
+            fold_option = state;
+            fold_based = state;
+            fold_list = state;
+            fold_state = state;
+        }
+
+        public void GroupFold(bool param = true, bool option = true, bool based = true, bool list = true, bool state = true)
+        {
+            fold_param = param;
+            fold_option = option;
+            fold_based = based;
+            fold_list = list;
+            fold_state = state;
+        }
+        #endregion
+
         #region 编辑器视图状态
         /// <summary>动
         /// 画轨道时间轴 - 每秒像素数（缩放）
