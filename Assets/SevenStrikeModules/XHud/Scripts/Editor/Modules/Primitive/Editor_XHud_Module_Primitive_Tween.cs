@@ -36,76 +36,141 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEngine.UI;
     using Random = UnityEngine.Random;
 
+    /// <summary>
+    /// 图元动画器的自定义 Inspector 编辑器
+    /// <para/>
+    /// 负责绘制 <see cref="XHud_Module_Primitive_Tween"/> 组件的完整检视面板，包含：
+    /// <list type="bullet">
+    /// <item><description>快捷功能栏：预览播放 / 停止、打开时间轴编辑器；</description></item>
+    /// <item><description>动画节点列表：基于 <see cref="ReorderableList"/> 的可拖拽列表；</description></item>
+    /// <item><description>节点参数面板：类型 / 时长 / 延迟 / 循环 / 缓动 / 曲线 / 时机 / 动向 / 数值；</description></item>
+    /// <item><description>全局选项：调试 / 静音 / 元素联动；</description></item>
+    /// <item><description>状态统计：节点数、耗时、倍增耗时；</description></item>
+    /// <item><description>批量模式：多选组件时的切换与统计。</description></item>
+    /// </list>
+    /// <para/>
+    /// 支持多选编辑（<see cref="CanEditMultipleObjects"/>），但动画节点列表本身不支持批量操作。
+    /// </summary>
     [CanEditMultipleObjects]
     [CustomEditor(typeof(XHud_Module_Primitive_Tween))]
     public class Editor_XHud_Module_Primitive_Tween : Editor
     {
-        #region 组件 / 列表
+        #region 字段 - 组件与列表
+        /// <summary>
+        /// 当前编辑的目标组件（单选模式下使用）
+        /// </summary>
         private XHud_Module_Primitive_Tween BaseScript;
+        /// <summary>
+        /// 动画节点列表的 ReorderableList 包装
+        /// </summary>
         private ReorderableList AnimateTweenNodesList;
+        /// <summary>
+        /// XHud 管理器实例，用于访问曲线库 / 音效库 / 全局倍增系数
+        /// </summary>
         private XHud_Manager HudManager;
         #endregion
 
-        #region 序列化属性
+        #region 字段 - 序列化属性
+        /// <summary>
+        /// 序列化属性集合：调试、节点列表、预览中、全局倍增、静音、最大/最小耗时、倍增耗时、元素联动、预览时机
+        /// </summary>
         private SerializedProperty sp_Debug, sp_PrimitiveTweenNodes, sp_TweenIsPreviewing, sp_GlobalDuration, sp_MutePlay, sp_MaxTimer, sp_MinTimer, sp_MinTimerWithGlobalDuration, sp_MaxTimerWithGlobalDuration, sp_IgnoreElementAnimationPlay, sp_PreviewTiming;
-
         #endregion
 
-        Rect draw_rect;
-
-        string[] TweenNodeTypes;
-
-        #region GUI 参数
+        #region 字段 - 绘制缓存
         /// <summary>
-        /// 多选特性的索引
+        /// 通用绘制矩形缓存，避免每帧分配新的 Rect 对象
+        /// </summary>
+        Rect draw_rect;
+        /// <summary>
+        /// 动画节点类型的名称数组（从枚举一次性获取）
+        /// </summary>
+        string[] TweenNodeTypes;
+        #endregion
+
+        #region 字段 - GUI 参数
+        /// <summary>
+        /// 多选模式下当前查看的组件索引
         /// </summary>
         private int MultiPrimitiveTween_Index;
         #endregion
 
-        #region 选项文字
-        string[] opt_debug = new string[2] { "关闭", "调试" }, opt_mute = new string[] { "正常", "静音" }, opt_control = new string[] { "可控", "忽略" };
+        #region 字段 - 选项文字
+        /// <summary>调试开关的显示文字</summary>
+        string[] opt_debug = new string[2] { "关闭", "调试" };
+        /// <summary>静音开关的显示文字</summary>
+        string[] opt_mute = new string[] { "正常", "静音" };
+        /// <summary>元素联动开关的显示文字</summary>
+        string[] opt_control = new string[] { "可控", "忽略" };
         #endregion
 
-        #region 图标
+        #region 字段 - 图标
+        /// <summary>
+        /// 图标集合：预览播放/停止、左右箭头、数值连接器、数值圆点、展开/折叠、组件标题、打开时间轴
+        /// </summary>
         private Texture2D prw_play_r, prw_play_p, prw_stop_r, prw_stop_p, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, dir_connector_r, dir_connector_p, anim_dot_r, anim_dot_p, icon_unfold_r, icon_unfold_p, icon_fold_r, icon_fold_p, icon_main, opentrack_r, opentrack_p;
         #endregion
 
-        #region 必要组件
+        #region 字段 - 宿主组件缓存
+        /// <summary>父级 XHud 文字组件（用于判断时机类型）</summary>
         private XHud_Module_Text HudText;
+        /// <summary>父级 XHud TmpText 组件（用于判断时机类型）</summary>
         private XHud_Module_TmpText HudTmpText;
+        /// <summary>父级 XHud 按钮组件（用于判断时机类型）</summary>
         private XHud_Module_Button HudButton;
+        /// <summary>父级 XHud 进度条组件（用于判断时机类型）</summary>
         private XHud_Module_Progress HudProgress;
+        /// <summary>父级 XHud 开关组件（用于判断时机类型）</summary>
         private XHud_Module_Toggle HudToggle;
+        /// <summary>父级 XHud 滑动条组件（用于判断时机类型）</summary>
         private XHud_Module_Slider HudSlider;
+        /// <summary>父级 XHud 选项组件（用于判断时机类型）</summary>
         private XHud_Module_Option HudOption;
         #endregion
 
-        #region 音效预览
+        #region 字段 - 音效预览
+        /// <summary>
+        /// 预览音效播放时生成的 AudioSource 列表，用于停止时统一销毁
+        /// </summary>
         private List<AudioSource> Preview_PrimitiveTweens_SoundList = new List<AudioSource>();
+        /// <summary>
+        /// 预览音效播放的协程句柄列表，用于停止时统一终止
+        /// </summary>
         private List<XCoroutine> Preview_PrimitiveTweens_SoundCoroutineList_Stop = new List<XCoroutine>();
         #endregion
 
+        #region 字段 - 子窗口
         /// <summary>
-        /// 音效设置器
+        /// 音效设置器窗口实例（用于关闭时同步关闭）
         /// </summary>
         private Editor_XHud_PrimitiveTweenSoundSetTool Editor_XHud_PrimitiveTweenSoundSetTool;
+        #endregion
 
+        #region 字段 - 预览时机
         /// <summary>
-        /// 预览时机
+        /// 当前组件动画列表中所有出现过的时机名称
         /// </summary>
         string[] PreviewTimings;
+        #endregion
 
-        private Color dot_color_red;
-
-        #region 批量化操作
+        #region 字段 - 颜色
         /// <summary>
-        /// 批量选择脚本数组
+        /// 数值圆点按钮使用的红色（起始值标识色）
+        /// </summary>
+        private Color dot_color_red;
+        #endregion
+
+        #region 字段 - 批量操作
+        /// <summary>
+        /// 当前多选状态下所有被选中的组件数组
         /// </summary>
         XHud_Module_Primitive_Tween[] SelectedObjects;
         /// <summary>
-        /// 获取所有批量脚本目标
+        /// 缓存当前所有被选中的组件引用到 <see cref="SelectedObjects"/>
+        /// <para/>
+        /// 多选时逐个转换，单选时只填充一个元素。
         /// </summary>
-        private void Targets_Get()
+        private void CacheSelectedTargets()
         {
             if (targets.Length > 1)
             {
@@ -123,10 +188,10 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 判断是否是多选状态
+        /// 判断当前是否处于多选状态
         /// </summary>
-        /// <returns></returns>
-        private bool Targets_Selected()
+        /// <returns>true 表示选中了多个组件</returns>
+        private bool IsMultiSelection()
         {
             if (SelectedObjects == null)
                 return false;
@@ -141,20 +206,34 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
+        #region 生命周期
+        /// <summary>
+        /// Unity 启用回调
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>获取 HudManager 单例；</description></item>
+        /// <item><description>缓存目标组件与所有选中组件；</description></item>
+        /// <item><description>缓存所有序列化属性引用；</description></item>
+        /// <item><description>加载所有图标资源；</description></item>
+        /// <item><description>缓存宿主组件（用于时机判断）；</description></item>
+        /// <item><description>构造 ReorderableList 并绑定所有回调；</description></item>
+        /// <item><description>首次收集预览时机名称。</description></item>
+        /// </list>
+        /// </summary>
         private void OnEnable()
         {
             HudManager = XHud_Dashboard.HudManagerGet();
 
             BaseScript = (XHud_Module_Primitive_Tween)target;
 
-            Targets_Get();
+            CacheSelectedTargets();
 
-            // 获取所有序列化字段
-            GetSerializeFields();
+            CacheSerializedProperties();
 
             dot_color_red = XGUI_Utilitys.HexString_To_Color("ff4848");
 
-            #region 获取图标          
+            #region 获取图标
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_main");
             left_arrow_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/left_arrow_r");
             left_arrow_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/left_arrow_p");
@@ -178,8 +257,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             TweenNodeTypes = System.Enum.GetNames(typeof(TweenNodeType));
 
-            // 获取父物体组件以判断类型
-            RefreshHostComponentCache();
+            CacheHostComponents();
 
             #region 动画列表
             AnimateTweenNodesList = new ReorderableList(serializedObject, sp_PrimitiveTweenNodes)
@@ -567,7 +645,7 @@ namespace SevenStrikeModules.XHud.Editor
                             if (XGUI.ChangedCheck_End())
                             {
                                 // 再次收集动画列表所有动画时机名称
-                                Preview_PrimitiveTweens_CollectedTimings(BaseScript);
+                                CollectPreviewTimings(BaseScript);
                             }
                             #endregion
 
@@ -600,7 +678,7 @@ namespace SevenStrikeModules.XHud.Editor
                             if (XGUI.ChangedCheck_End())
                             {
                                 // 再次收集动画列表所有动画时机名称
-                                Preview_PrimitiveTweens_CollectedTimings(BaseScript);
+                                CollectPreviewTimings(BaseScript);
                             }
                             #endregion
 
@@ -662,14 +740,13 @@ namespace SevenStrikeModules.XHud.Editor
 
                             Rect rect_valuepanel = new Rect(rect.x + 5, baseheight + 255, rect.width - 10, 60);
 
-                            TweenValueProperties properties = ResolveTweenValueProperties(nodetype, sp_node);
+                            TweenValueProperties properties = ResolveValueProperties(nodetype, sp_node);
                             int mode_index = sp_valuemode_index.intValue;
 
                             if (sp_valuemode_index.intValue != 3)
-                                Draw_TweenValues_Connector(rect_valuepanel, new Vector2(0, 0), XHud_Dashboard.Theme_Primary, properties, mode_index);
+                                DrawValueConnector(rect_valuepanel, new Vector2(0, 0), XHud_Dashboard.Theme_Primary, properties, mode_index);
 
-                            // 绘制动画数值面板
-                            Draw_TweenValues_Panel(rect_valuepanel, properties, mode_index, nodetype);
+                            DrawValueFieldsPanel(rect_valuepanel, properties, mode_index, nodetype);
                         }
                         else
                         {
@@ -689,7 +766,7 @@ namespace SevenStrikeModules.XHud.Editor
                         }
                     }
 
-                    // ========== 处理右键菜单 ==========
+                    #region 处理右键菜单
                     // 获取当前元素所在的矩形区域（整个元素的范围）
                     Rect elementRect = new Rect(rect.x, rect.y, rect.width, rect.height);
 
@@ -751,6 +828,7 @@ namespace SevenStrikeModules.XHud.Editor
                         // 使用事件，防止传递给其他控件
                         Event.current.Use();
                     }
+                    #endregion
 
                     sp_node.serializedObject.ApplyModifiedProperties();
 
@@ -788,7 +866,7 @@ namespace SevenStrikeModules.XHud.Editor
                     EditorApplication.delayCall += () =>
                     {
                         // 刷新获取动画列表所有动画时机名称
-                        Preview_PrimitiveTweens_CollectedTimings(BaseScript);
+                        CollectPreviewTimings(BaseScript);
                     };
                 },
                 onRemoveCallback = (ReorderableList list) =>
@@ -799,7 +877,7 @@ namespace SevenStrikeModules.XHud.Editor
                     EditorApplication.delayCall += () =>
                     {
                         // 刷新获取动画列表所有动画时机名称
-                        Preview_PrimitiveTweens_CollectedTimings(BaseScript);
+                        CollectPreviewTimings(BaseScript);
                     };
                 },
                 elementHeightCallback = index =>
@@ -823,29 +901,37 @@ namespace SevenStrikeModules.XHud.Editor
                         height = 1.6f;
                     }
 
-
                     return height * XGUI.GetSingleLineHeight();
                 }
             };
             #endregion
 
             // 收集动画列表所有动画时机名称
-            Preview_PrimitiveTweens_CollectedTimings(BaseScript);
+            CollectPreviewTimings(BaseScript);
         }
-
+        /// <summary>
+        /// Unity 禁用回调
+        /// <para/>
+        /// 编辑器非播放模式下停止所有预览动画与音效，并关闭子窗口。
+        /// </summary>
         private void OnDisable()
         {
             if (!Application.isPlaying)
             {
-                Preview_PrimitiveTweens_Stop();
-                Preview_PrimitiveTweens_Sound_Stop();
+                StopPreview();
+                StopAllPreviewSounds();
 
                 // 如果音效设置器是打开的就关闭它
                 if (Editor_XHud_PrimitiveTweenSoundSetTool != null)
                     Editor_XHud_PrimitiveTweenSoundSetTool.Close();
             }
         }
-
+        /// <summary>
+        /// 绘制 Inspector 主入口
+        /// <para/>
+        /// 按自上而下的顺序绘制所有面板：标题栏 → 快捷功能 → 动画参数 → 动画节点列表 → 选项 → 状态 → 源脚本。
+        /// 右键菜单在最后统一处理。
+        /// </summary>
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -903,7 +989,7 @@ namespace SevenStrikeModules.XHud.Editor
                     width: 14,
                     height: 14))
                 {
-                    Preview_PrimitiveTweens_Play();
+                    PlayPreview();
                 }
                 #endregion
             }
@@ -919,7 +1005,7 @@ namespace SevenStrikeModules.XHud.Editor
                     width: 14,
                     height: 14))
                 {
-                    Preview_PrimitiveTweens_Stop();
+                    StopPreview();
                 }
                 #endregion
             }
@@ -928,7 +1014,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_flexspace();
 
             #region 打开时间线轨道编辑器
-            if (!Targets_Selected())
+            if (!IsMultiSelection())
             {
                 if (XGUI.layout_button(
                 tooltip: "打开时间线轨道编辑器",
@@ -942,7 +1028,7 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_Module_Primitive_Tween_Tracker.OpenWith(BaseScript);
                 }
             }
-            #endregion            
+            #endregion
 
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
@@ -953,7 +1039,7 @@ namespace SevenStrikeModules.XHud.Editor
                 margin: new RectOffset(15, 15, 15, 15));
 
             #region 预览时机
-            if (!Targets_Selected())
+            if (!IsMultiSelection())
             {
                 Rect last = XGUI.GetLastRect();
                 Rect timRefresh_Rect = new Rect(rect.width - 140, last.y - 10, 150, 38);
@@ -963,7 +1049,7 @@ namespace SevenStrikeModules.XHud.Editor
                 if (e.type == EventType.MouseDown && e.button == (int)MouseButton.Left && timRefresh_Rect.Contains(e.mousePosition))
                 {
                     // 再次收集动画列表所有动画时机名称
-                    Preview_PrimitiveTweens_CollectedTimings(BaseScript);
+                    CollectPreviewTimings(BaseScript);
                 }
 
                 XGUI.layout_string_popup(
@@ -1049,7 +1135,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (!BaseScript.fold_list)
             {
-                if (!Targets_Selected())
+                if (!IsMultiSelection())
                 {
                     AnimateTweenNodesList.DoLayoutList();
                     sp_PrimitiveTweenNodes.serializedObject.ApplyModifiedProperties();
@@ -1087,26 +1173,26 @@ namespace SevenStrikeModules.XHud.Editor
             if (!BaseScript.fold_option)
             {
                 #region 状态调试
-                DrawToggle("状态调试", sp_Debug, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, opt_debug, (b) => { });
+                DrawLabeledToggle("状态调试", sp_Debug, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, opt_debug, (b) => { });
                 #endregion
 
                 #region 静音
-                DrawToggle("静音", sp_MutePlay, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, opt_mute, (b) => { });
+                DrawLabeledToggle("静音", sp_MutePlay, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, opt_mute, (b) => { });
                 #endregion
 
                 #region 元素联动
-                DrawToggle("元素联动", sp_IgnoreElementAnimationPlay, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, opt_control, (b) => { });
-                #endregion  
+                DrawLabeledToggle("元素联动", sp_IgnoreElementAnimationPlay, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, opt_control, (b) => { });
+                #endregion
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 状态
             string statu_title = "状态";
-            if (Targets_Selected())
+            if (IsMultiSelection())
                 statu_title = "状态 - ( 批量模式 )";
 
-            AnimationsTimerStatistic();
+            RefreshTimerStatistics();
 
             BaseScript.fold_state = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
@@ -1122,7 +1208,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (!BaseScript.fold_state)
             {
-                if (!Targets_Selected())
+                if (!IsMultiSelection())
                 {
                     if (sp_PrimitiveTweenNodes.arraySize <= 0)
                     {
@@ -1376,18 +1462,18 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     menu.AddItem(new GUIContent("S (预览动画)"), false, () =>
                     {
-                        Preview_PrimitiveTweens_Play();
+                        PlayPreview();
                     });
                 }
                 else
                 {
                     menu.AddItem(new GUIContent("S (停止预览)"), false, () =>
                     {
-                        Preview_PrimitiveTweens_Stop();
+                        StopPreview();
                     });
                 }
                 menu.AddSeparator("");
-                if (!Targets_Selected())
+                if (!IsMultiSelection())
                 {
                     menu.AddItem(new GUIContent("A (拷贝动画列表)"), false, () =>
                     {
@@ -1420,7 +1506,7 @@ namespace SevenStrikeModules.XHud.Editor
                     string json = XGUI.x_Editor_Data_Get_With_String("xData_PrimitiveTween_Copied_TweenNodes");
                     TweenNodeArray tnc = JsonUtility.FromJson<TweenNodeArray>(json);
 
-                    if (Targets_Selected())
+                    if (IsMultiSelection())
                     {
                         #region 询问
                         List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
@@ -1543,7 +1629,7 @@ namespace SevenStrikeModules.XHud.Editor
                         return;
                     }
 
-                    if (Targets_Selected())
+                    if (IsMultiSelection())
                     {
                         List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
                         for (int s = 0; s < SelectedObjects.Length; s++)
@@ -1594,7 +1680,7 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("Q (折叠编组)"), false, () =>
                 {
-                    if (Targets_Selected())
+                    if (IsMultiSelection())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -1608,7 +1694,7 @@ namespace SevenStrikeModules.XHud.Editor
                 });
                 menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
                 {
-                    if (Targets_Selected())
+                    if (IsMultiSelection())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -1623,7 +1709,7 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("F (动画列表 - 全部折叠)"), false, () =>
                 {
-                    if (Targets_Selected())
+                    if (IsMultiSelection())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -1643,7 +1729,7 @@ namespace SevenStrikeModules.XHud.Editor
                 });
                 menu.AddItem(new GUIContent("D (动画列表 - 全部展开)"), false, () =>
                 {
-                    if (Targets_Selected())
+                    if (IsMultiSelection())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -1688,11 +1774,13 @@ namespace SevenStrikeModules.XHud.Editor
 
             serializedObject.ApplyModifiedProperties();
         }
+        #endregion
 
+        #region 序列化属性缓存
         /// <summary>
-        /// 获取所有序列化字段
+        /// 缓存所有序列化属性的引用到对应字段
         /// </summary>
-        private void GetSerializeFields()
+        private void CacheSerializedProperties()
         {
             sp_Debug = serializedObject.FindProperty("Debug");
             sp_PrimitiveTweenNodes = serializedObject.FindProperty("PrimitiveTweenNodes");
@@ -1706,9 +1794,15 @@ namespace SevenStrikeModules.XHud.Editor
             sp_IgnoreElementAnimationPlay = serializedObject.FindProperty("IgnoreElementAnimationPlay");
             sp_PreviewTiming = serializedObject.FindProperty("PreviewTiming");
         }
+        #endregion
 
         #region 动画值控件
-        private void Draw_TweenValues_Connector(Rect rect, Vector2 offset, Color color, TweenValueProperties properties, int mode)
+        /// <summary>
+        /// 绘制数值面板的「流向连接器」按钮
+        /// <para/>
+        /// 点击后根据当前动向模式交换两个值的序列化属性。
+        /// </summary>
+        private void DrawValueConnector(Rect rect, Vector2 offset, Color color, TweenValueProperties properties, int mode)
         {
             if (XGUI.gui_button(
                 rect: new Rect(rect.x - 20, rect.y + 4 + offset.y, dir_connector_r.width, 38),
@@ -1739,123 +1833,128 @@ namespace SevenStrikeModules.XHud.Editor
                         break;
                 }
 
-                SwapValueProperties(primary, secondary);
+                SwapSerializedValues(primary, secondary);
             }
         }
-        private void Draw_TweenValues_Panel(Rect rect, TweenValueProperties propties, int mode, TweenNodeType type)
+        /// <summary>
+        /// 绘制数值面板的所有数值字段（按动向模式决定显示哪些）
+        /// </summary>
+        private void DrawValueFieldsPanel(Rect rect, TweenValueProperties propties, int mode, TweenNodeType type)
         {
             switch (mode)
             {
                 case 0:
-                    Draw_TweenValue_Field(rect, propties.prop_from, mode, "起始 - S", new Vector2(0, 0), dot_color_red,
+                    DrawValueField(rect, propties.prop_from, mode, "起始 - S", new Vector2(0, 0), dot_color_red,
                         () =>
                         {
-                            RecordValueFromTarget(propties.prop_from, propties.type);
+                            RecordValueFromHost(propties.prop_from, propties.type);
                         },
                         () =>
                         {
-                            ApplyValueToTarget(propties.prop_from, propties.type);
+                            ApplyValueToHost(propties.prop_from, propties.type);
                         },
                         () =>
                         {
-                            ResetValueProperty(propties.prop_from);
+                            ResetValueToZero(propties.prop_from);
                         });
-                    Draw_TweenValue_Field(rect, propties.prop_origin, mode, "默认 - D", new Vector2(0, 25), XHud_Dashboard.Theme_Primary,
+                    DrawValueField(rect, propties.prop_origin, mode, "默认 - D", new Vector2(0, 25), XHud_Dashboard.Theme_Primary,
                          () =>
                          {
-                             RecordValueFromTarget(propties.prop_origin, propties.type);
+                             RecordValueFromHost(propties.prop_origin, propties.type);
                          },
                         () =>
                         {
-                            ApplyValueToTarget(propties.prop_origin, propties.type);
+                            ApplyValueToHost(propties.prop_origin, propties.type);
                         },
                         () =>
                         {
-                            ResetValueProperty(propties.prop_origin);
+                            ResetValueToZero(propties.prop_origin);
                         });
                     break;
                 case 1:
-                    Draw_TweenValue_Field(rect, propties.prop_origin, mode, "默认 - D", new Vector2(0, 0), XHud_Dashboard.Theme_Primary,
+                    DrawValueField(rect, propties.prop_origin, mode, "默认 - D", new Vector2(0, 0), XHud_Dashboard.Theme_Primary,
                          () =>
                          {
-                             RecordValueFromTarget(propties.prop_origin, propties.type);
+                             RecordValueFromHost(propties.prop_origin, propties.type);
                          },
                         () =>
                         {
-                            ApplyValueToTarget(propties.prop_origin, propties.type);
+                            ApplyValueToHost(propties.prop_origin, propties.type);
                         },
                         () =>
                         {
-                            ResetValueProperty(propties.prop_origin);
+                            ResetValueToZero(propties.prop_origin);
                         });
-                    Draw_TweenValue_Field(rect, propties.prop_end, mode, "结束 - E", new Vector2(0, 25), Color.white,
+                    DrawValueField(rect, propties.prop_end, mode, "结束 - E", new Vector2(0, 25), Color.white,
                      () =>
                      {
-                         RecordValueFromTarget(propties.prop_end, propties.type);
+                         RecordValueFromHost(propties.prop_end, propties.type);
                      },
                         () =>
                         {
-                            ApplyValueToTarget(propties.prop_end, propties.type);
+                            ApplyValueToHost(propties.prop_end, propties.type);
                         },
                         () =>
                         {
-                            ResetValueProperty(propties.prop_end);
+                            ResetValueToZero(propties.prop_end);
                         });
                     break;
                 case 2:
-                    Draw_TweenValue_Field(rect, propties.prop_from, mode, "起始 - S", new Vector2(0, 0), dot_color_red,
+                    DrawValueField(rect, propties.prop_from, mode, "起始 - S", new Vector2(0, 0), dot_color_red,
                          () =>
                          {
-                             RecordValueFromTarget(propties.prop_from, propties.type);
+                             RecordValueFromHost(propties.prop_from, propties.type);
                          },
                         () =>
                         {
-                            ApplyValueToTarget(propties.prop_from, propties.type);
+                            ApplyValueToHost(propties.prop_from, propties.type);
                         },
                         () =>
                         {
-                            ResetValueProperty(propties.prop_from);
+                            ResetValueToZero(propties.prop_from);
                         });
-                    Draw_TweenValue_Field(rect, propties.prop_end, mode, "结束 - E", new Vector2(0, 25), Color.white,
+                    DrawValueField(rect, propties.prop_end, mode, "结束 - E", new Vector2(0, 25), Color.white,
                      () =>
                      {
-                         RecordValueFromTarget(propties.prop_end, propties.type);
+                         RecordValueFromHost(propties.prop_end, propties.type);
                      },
                         () =>
                         {
-                            ApplyValueToTarget(propties.prop_end, propties.type);
+                            ApplyValueToHost(propties.prop_end, propties.type);
                         },
                         () =>
                         {
-                            ResetValueProperty(propties.prop_end);
+                            ResetValueToZero(propties.prop_end);
                         });
                     break;
                 case 3:
-                    Draw_TweenValue_Field(rect, propties.prop_end, mode, "结束 - E", new Vector2(0, 0), Color.white,
+                    DrawValueField(rect, propties.prop_end, mode, "结束 - E", new Vector2(0, 0), Color.white,
                         () =>
                         {
-                            RecordValueFromTarget(propties.prop_end, propties.type);
+                            RecordValueFromHost(propties.prop_end, propties.type);
                         },
                         () =>
                         {
-                            ApplyValueToTarget(propties.prop_end, propties.type);
+                            ApplyValueToHost(propties.prop_end, propties.type);
                         },
                         () =>
                         {
-                            ResetValueProperty(propties.prop_end);
+                            ResetValueToZero(propties.prop_end);
                         });
                     break;
             }
         }
         /// <summary>
         /// 动画值标记按钮控件绘制
+        /// <para/>
+        /// 圆点按钮支持三种操作：
+        /// <list type="bullet">
+        /// <item><description>鼠标左键：从宿主组件读取当前值（记录）；</description></item>
+        /// <item><description>鼠标右键：将当前值写回宿主组件（应用）；</description></item>
+        /// <item><description>鼠标中键：将当前值归零（重置）。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="prop"></param>
-        /// <param name="dir_index"></param>
-        /// <param name="title"></param>
-        /// <param name="offset"></param>
-        private void Draw_TweenValue_Field(Rect rect, SerializedProperty prop, int dir_index, string title, Vector2 offset, Color dot_color, Action act_on_pressed_record = null, Action act_on_pressed_apply = null, Action act_on_pressed_reset = null)
+        private void DrawValueField(Rect rect, SerializedProperty prop, int dir_index, string title, Vector2 offset, Color dot_color, Action act_on_pressed_record = null, Action act_on_pressed_apply = null, Action act_on_pressed_reset = null)
         {
             #region 数值输入控件
             XGUI.gui_property_field(
@@ -1906,7 +2005,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 根据动画类型解析出其对应的「起始 / 结束 / 默认」三组序列化属性
         /// </summary>
-        private TweenValueProperties ResolveTweenValueProperties(TweenNodeType type, SerializedProperty prop)
+        private TweenValueProperties ResolveValueProperties(TweenNodeType type, SerializedProperty prop)
         {
             #region 数值类型序列化获取- Vector4
             SerializedProperty ori_v4 = prop.FindPropertyRelative("Original_Vector4");
@@ -1994,19 +2093,18 @@ namespace SevenStrikeModules.XHud.Editor
             return value_propertys;
         }
         /// <summary>
-        /// 从目标物体的当前属性读值并写入指定序列化属性
+        /// 从宿主组件的当前属性读值并写入指定序列化属性
         /// <para/>
-        /// 使用方式：参数面板中「记录当前物体」按钮点击时调用。
-        /// 与 <see cref="ApplyValueToTarget"/> 互为逆操作：
+        /// 与 <see cref="ApplyValueToHost"/> 互为逆操作：
         /// <list type="bullet">
-        /// <item><description><c>RecordValueFromTarget</c>：目标物体 → 序列化属性（本方法）；</description></item>
-        /// <item><description><c>ApplyValueToTarget</c>：序列化属性 → 目标物体。</description></item>
+        /// <item><description><c>RecordValueFromHost</c>：宿主组件 → 序列化属性（本方法）；</description></item>
+        /// <item><description><c>ApplyValueToHost</c>：序列化属性 → 宿主组件。</description></item>
         /// </list>
-        /// 本方法只读取运行时组件的当前值，不做 Undo 记录（读取不修改任何对象）。
+        /// 本方法只读取，不做 Undo 记录。
         /// </summary>
         /// <param name="p">目标序列化属性，按 <paramref name="node_type"/> 决定写入的类型分支</param>
         /// <param name="node_type">动画节点类型，决定从哪个组件 / 字段读取当前值</param>
-        private void RecordValueFromTarget(SerializedProperty p, TweenNodeType node_type)
+        private void RecordValueFromHost(SerializedProperty p, TweenNodeType node_type)
         {
             switch (node_type)
             {
@@ -2069,15 +2167,15 @@ namespace SevenStrikeModules.XHud.Editor
             p.serializedObject.ApplyModifiedProperties();
         }
         /// <summary>
-        /// 将指定序列化属性的值写回到目标物体的对应属性上
+        /// 将指定序列化属性的值写回到宿主组件的对应属性上
         /// <para/>
         /// 使用方式：参数面板中「应用到物体」按钮点击时调用。
         /// 每个分支都会先用 <see cref="Undo.RecordObject"/> 记录被修改对象，
         /// 以支持 Ctrl+Z 撤销；同时按 <paramref name="node_type"/> 决定操作目标。
         /// </summary>
-        /// <param name="p">来源序列化属性（已由 <see cref="RecordValueFromTarget"/> 或手动编辑填入值）</param>
+        /// <param name="p">来源序列化属性（已由 <see cref="RecordValueFromHost"/> 或手动编辑填入值）</param>
         /// <param name="node_type">动画节点类型，决定值应写回哪个组件 / 字段</param>
-        private void ApplyValueToTarget(SerializedProperty p, TweenNodeType node_type)
+        private void ApplyValueToHost(SerializedProperty p, TweenNodeType node_type)
         {
             switch (node_type)
             {
@@ -2158,7 +2256,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 按序列化属性类型将其值重置为「零值」（Vector 零 / Color 透明 / 字符串空 / 数值 0）
         /// </summary>
-        private void ResetValueProperty(SerializedProperty prop)
+        private void ResetValueToZero(SerializedProperty prop)
         {
             //Debug.Log($"{prop.propertyType}");
 
@@ -2206,7 +2304,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         /// <param name="prop_primary">主属性（交换后获得 <paramref name="prop_secondary"/> 的原值）</param>
         /// <param name="prop_secondary">次属性（交换后获得 <paramref name="prop_primary"/> 的原值）</param>
-        private void SwapValueProperties(SerializedProperty prop_primary, SerializedProperty prop_secondary)
+        private void SwapSerializedValues(SerializedProperty prop_primary, SerializedProperty prop_secondary)
         {
             // 类型不一致时不做任何交换，避免把 Vector3 写进 Color 等类型错配。
             if (prop_primary.propertyType != prop_secondary.propertyType)
@@ -2268,8 +2366,14 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 解析TweenerNode
-
-        private TweenNode TweenNodeConvert_From_SerialProperty(SerializedProperty args)
+        /// <summary>
+        /// 从序列化属性反序列化为 <see cref="TweenNode"/> 实例
+        /// <para/>
+        /// 用于编辑器中的复制 / 粘贴 / 深拷贝场景。
+        /// </summary>
+        /// <param name="args">包含节点数据的序列化属性</param>
+        /// <returns>反序列化后的节点实例</returns>
+        private TweenNode DeserializeTweenNode(SerializedProperty args)
         {
             TweenNode node = new TweenNode();
             node.Indicator = args.FindPropertyRelative("Indicator").stringValue;
@@ -2332,8 +2436,14 @@ namespace SevenStrikeModules.XHud.Editor
 
             return node;
         }
-
-        private void TweenNodeConvert_From_Class(SerializedProperty property, TweenNode node)
+        /// <summary>
+        /// 将 <see cref="TweenNode"/> 实例序列化到指定的序列化属性中
+        /// <para/>
+        /// 与 <see cref="DeserializeTweenNode"/> 互为逆操作。
+        /// </summary>
+        /// <param name="property">目标序列化属性</param>
+        /// <param name="node">源节点实例</param>
+        private void SerializeTweenNode(SerializedProperty property, TweenNode node)
         {
             property.FindPropertyRelative("Indicator").stringValue = node.Indicator;
             property.FindPropertyRelative("ID").intValue = node.ID;
@@ -2393,15 +2503,14 @@ namespace SevenStrikeModules.XHud.Editor
             sp_TweenSounds.serializedObject.ApplyModifiedProperties();
             property.serializedObject.ApplyModifiedProperties();
         }
-
         #endregion
 
         #region 辅助
         /// <summary>
-        /// 获取动画器中是否存在循环模式
+        /// 判断动画器中是否存在无限循环节点（LoopCount == -1）
         /// </summary>
-        /// <returns></returns>
-        public bool HasLoopMode()
+        /// <returns>true 表示存在无限循环节点</returns>
+        public bool HasInfiniteLoopNode()
         {
             bool hasLoop = false;
             for (int i = 0; i < sp_PrimitiveTweenNodes.arraySize; i++)
@@ -2416,11 +2525,13 @@ namespace SevenStrikeModules.XHud.Editor
             return hasLoop;
         }
         /// <summary>
-        /// 获取最新的动画耗时信息
+        /// 刷新所有目标组件的动画耗时统计缓存
+        /// <para/>
+        /// 单选时刷新目标组件，多选时遍历刷新所有选中组件。
         /// </summary>
-        private void AnimationsTimerStatistic()
+        private void RefreshTimerStatistics()
         {
-            if (!Targets_Selected())
+            if (!IsMultiSelection())
             {
                 BaseScript.TweenNode_GetTimers();
             }
@@ -2434,10 +2545,13 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        /// <summary> 
-        ///根据当前 target 刷新其所在的 XHud 宿主组件缓存
+        #region 宿主组件缓存刷新
+        /// <summary>
+        /// 根据当前 target 刷新其所在的 XHud 宿主组件缓存
+        /// <para/>
+        /// 宿主组件用于判断动画时机枚举（不同组件类型时机选项不同）。
         /// </summary>
-        private void RefreshHostComponentCache()
+        private void CacheHostComponents()
         {
             if (target == null || target.Equals(null))
             {
@@ -2459,12 +2573,13 @@ namespace SevenStrikeModules.XHud.Editor
             HudSlider = BaseScript.GetComponentInParent<XHud_Module_Slider>();
             HudOption = BaseScript.GetComponentInParent<XHud_Module_Option>();
         }
+        #endregion
 
-        #region Draw
+        #region 绘制：公共控件选项
         /// <summary>
-        /// 通用方法：绘制开关
+        /// 通用方法：绘制带标题的开关控件
         /// </summary>
-        private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, string[] options = null, Action<bool> act_on_changed = null)
+        private void DrawLabeledToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, string[] options = null, Action<bool> act_on_changed = null)
         {
             XGUI.layout_toggle(
                 title: title,
@@ -2493,11 +2608,12 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 动画预览
         /// <summary>
-        /// 创建收集图元动画器的动画节点列表所有动画
+        /// 创建并收集图元动画器指定时机下的所有动画实例
         /// </summary>
-        /// <param name="tweener"></param>
-        /// <returns></returns>
-        private XTween_Interface[] Preview_PrimitiveTweens_Collected(XHud_Module_Primitive_Tween tweener, string tim)
+        /// <param name="tweener">目标图元动画器</param>
+        /// <param name="tim">目标时机名称</param>
+        /// <returns>收集到的动画实例数组</returns>
+        private XTween_Interface[] CollectPreviewTweens(XHud_Module_Primitive_Tween tweener, string tim)
         {
             List<XTween_Interface> tweens = new List<XTween_Interface>();
             for (int i = 0; i < tweener.PrimitiveTweenNodes.Count; i++)
@@ -2515,11 +2631,13 @@ namespace SevenStrikeModules.XHud.Editor
             return tweens.ToArray();
         }
         /// <summary>
-        /// 创建收集图元动画器的动画节点列表所有动画
+        /// 收集图元动画器中所有出现过的动画时机名称
+        /// <para/>
+        /// 结果同时写入字段 <see cref="PreviewTimings"/>，供预览时机下拉框使用。
         /// </summary>
-        /// <param name="tweener"></param>
-        /// <returns></returns>
-        private string[] Preview_PrimitiveTweens_CollectedTimings(XHud_Module_Primitive_Tween tweener)
+        /// <param name="tweener">目标图元动画器</param>
+        /// <returns>时机名称数组</returns>
+        private string[] CollectPreviewTimings(XHud_Module_Primitive_Tween tweener)
         {
             List<string> tims = new List<string>();
             for (int i = 0; i < tweener.PrimitiveTweenNodes.Count; i++)
@@ -2536,11 +2654,10 @@ namespace SevenStrikeModules.XHud.Editor
             return tims.ToArray();
         }
         /// <summary>
-        /// 杀死并清空图元动画器的动画节点列表所有已生成的 XTweenInterface 动画
+        /// 杀死并清空所有节点上已生成的 XTween_Interface 实例
         /// </summary>
-        /// <param name="nodes"></param>
-        /// <returns></returns>
-        private void Preview_PrimitiveTweens_KillAndClear(List<TweenNode> nodes)
+        /// <param name="nodes">目标节点列表</param>
+        private void KillAndClearPreviewTweens(List<TweenNode> nodes)
         {
             for (int i = 0; i < nodes.Count; i++)
             {
@@ -2553,17 +2670,25 @@ namespace SevenStrikeModules.XHud.Editor
                 node.Progress = 0;
             }
         }
-
         /// <summary>
-        /// 预览动画
+        /// 播放预览动画
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>先停止上一次预览；</description></item>
+        /// <item><description>设置预览中标志；</description></item>
+        /// <item><description>按当前预览时机收集动画；</description></item>
+        /// <item><description>收集并延迟播放匹配时机的音效；</description></item>
+        /// <item><description>启动 XTween 预览器播放所有动画。</description></item>
+        /// </list>
         /// </summary>
-        private void Preview_PrimitiveTweens_Play()
+        private void PlayPreview()
         {
             if (sp_PrimitiveTweenNodes == null || sp_PrimitiveTweenNodes.arraySize <= 0)
                 return;
 
             //先停止之前的动画预览
-            Preview_PrimitiveTweens_Stop();
+            StopPreview();
 
             //将动画预览中的开关打开
             sp_TweenIsPreviewing.boolValue = true;
@@ -2571,12 +2696,12 @@ namespace SevenStrikeModules.XHud.Editor
 
             XTween_Interface[] tweens = null;
 
-            if (Targets_Selected())
+            if (IsMultiSelection())
             {
                 List<XTween_Interface> mo = new List<XTween_Interface>();
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
-                    XTween_Interface[] sel_tweens = Preview_PrimitiveTweens_Collected(SelectedObjects[i], SelectedObjects[i].PreviewTiming);
+                    XTween_Interface[] sel_tweens = CollectPreviewTweens(SelectedObjects[i], SelectedObjects[i].PreviewTiming);
                     for (int s = 0; s < sel_tweens.Length; s++)
                     {
                         mo.Add(sel_tweens[s]);
@@ -2584,32 +2709,34 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 tweens = mo.ToArray();
                 // 预览收集到的有效的音效
-                Preview_PrimitiveTweens_Sounds(sp_PreviewTiming.stringValue, SelectedObjects);
+                PreviewTweenSounds(sp_PreviewTiming.stringValue, SelectedObjects);
             }
             else
             {
-                tweens = Preview_PrimitiveTweens_Collected(BaseScript, sp_PreviewTiming.stringValue);
+                tweens = CollectPreviewTweens(BaseScript, sp_PreviewTiming.stringValue);
                 // 预览收集到的有效的音效
-                Preview_PrimitiveTweens_Sounds(sp_PreviewTiming.stringValue, BaseScript);
+                PreviewTweenSounds(sp_PreviewTiming.stringValue, BaseScript);
             }
 
-
             // 使用XTween预览器预览收集到的有效的动画
-            XTween_Preview_Start(tweens);
+            StartXTweenPreview(tweens);
         }
         /// <summary>
         /// 停止预览动画
+        /// <para/>
+        /// 可选在停止后从宿主组件恢复原始属性状态。
         /// </summary>
-        private void Preview_PrimitiveTweens_Stop(bool LoadOriginalState = true)
+        /// <param name="LoadOriginalState">是否在停止后恢复宿主组件的原始属性</param>
+        private void StopPreview(bool LoadOriginalState = true)
         {
             if (target != null)
             {
                 sp_TweenIsPreviewing.boolValue = false;
                 sp_TweenIsPreviewing.serializedObject.ApplyModifiedProperties();
 
-                XTween_Preview_Kill();
+                KillXTweenPreview();
 
-                if (Targets_Selected())
+                if (IsMultiSelection())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
@@ -2624,14 +2751,12 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
         }
-
         //------------------------------------------------------------------------------------
-
         /// <summary>
-        /// 动画预览 - 播放
+        /// 启动 XTween 预览器并播放传入的所有动画
         /// </summary>
-        /// <param name="tweens">传入需要预览的动画，但前提是动画已创建，如果是空的则会导致预览异常</param>
-        public void XTween_Preview_Start(XTween_Interface[] tweens)
+        /// <param name="tweens">已创建好的动画实例数组</param>
+        public void StartXTweenPreview(XTween_Interface[] tweens)
         {
             if (Application.isPlaying)
                 return;
@@ -2650,9 +2775,9 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XTween_Previewer.Play(null);
         }
         /// <summary>
-        ///  动画预览 - 杀死
+        /// 杀死 XTween 预览器中的所有动画，并清空所有节点的运行时 Tweener
         /// </summary>
-        private void XTween_Preview_Kill()
+        private void KillXTweenPreview()
         {
             if (Application.isPlaying)
                 return;
@@ -2661,17 +2786,17 @@ namespace SevenStrikeModules.XHud.Editor
             sp_TweenIsPreviewing.boolValue = false;
             sp_TweenIsPreviewing.serializedObject.ApplyModifiedProperties();
 
-            if (Targets_Selected())
+            if (IsMultiSelection())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
                     XHud_Module_Primitive_Tween tween = SelectedObjects[i];
-                    Preview_PrimitiveTweens_KillAndClear(tween.PrimitiveTweenNodes);
+                    KillAndClearPreviewTweens(tween.PrimitiveTweenNodes);
                 }
             }
             else
             {
-                Preview_PrimitiveTweens_KillAndClear(BaseScript.PrimitiveTweenNodes);
+                KillAndClearPreviewTweens(BaseScript.PrimitiveTweenNodes);
             }
 
             // 预览器执行动作：杀死动画
@@ -2681,25 +2806,25 @@ namespace SevenStrikeModules.XHud.Editor
             });
         }
         /// <summary>
-        /// 预览倒退重置
+        /// 将 XTween 预览器中的所有动画倒退到起始状态
         /// </summary>
-        private void XTween_Preview_Rewind()
+        private void RewindXTweenPreview()
         {
             Editor_XTween_Previewer.Rewind();
         }
-
         //------------------------------------------------------------------------------------
-
-
         #endregion
 
         #region 音效预览实现
         /// <summary>
-        /// 预览图元动画器身上挂载的所有音效
+        /// 预览单个图元动画器上匹配指定时机的所有音效
+        /// <para/>
+        /// 音效的延迟时间计算公式：
+        /// <c>音效百分比 × 节点时长 × 全局倍增 + 节点延迟</c>
         /// </summary>
-        /// <param name="Timings">匹配时机</param>
-        /// <param name="tweener">音效节点列表对象</param>
-        private void Preview_PrimitiveTweens_Sounds(string Timings, XHud_Module_Primitive_Tween tweener)
+        /// <param name="Timings">目标时机名称</param>
+        /// <param name="tweener">目标图元动画器</param>
+        private void PreviewTweenSounds(string Timings, XHud_Module_Primitive_Tween tweener)
         {
             // 循环生成音效，但是音效的延迟时间由以下条件决定：
             // 音效本身设置的百分比参数 x 动画节点的基础耗时 x 动画器的全局耗时 + 动画节点的延迟时间
@@ -2726,16 +2851,16 @@ namespace SevenStrikeModules.XHud.Editor
                     string x_soundname = tsound.Sound.name;
 
                     AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
-                    Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(Preview_PrimitiveTweens_Sound_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
+                    Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(PlayPreviewSoundCoroutine(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
                 }
             }
         }
         /// <summary>
-        /// 预览图元动画器身上挂载的所有音效
+        /// 预览多个图元动画器上匹配指定时机的所有音效（批量模式）
         /// </summary>
-        /// <param name="Timings">匹配时机</param>
-        /// <param name="tweener">图元动画数组</param>
-        private void Preview_PrimitiveTweens_Sounds(string Timings, XHud_Module_Primitive_Tween[] tweener)
+        /// <param name="Timings">目标时机名称</param>
+        /// <param name="tweener">目标图元动画器数组</param>
+        private void PreviewTweenSounds(string Timings, XHud_Module_Primitive_Tween[] tweener)
         {
             // 循环生成音效，但是音效的延迟时间由以下条件决定：
             // 音效本身设置的百分比参数 x 动画节点的基础耗时 x 动画器的全局耗时 + 动画节点的延迟时间
@@ -2762,18 +2887,18 @@ namespace SevenStrikeModules.XHud.Editor
                         string x_soundname = tsound.Sound.name;
 
                         AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
-                        Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(Preview_PrimitiveTweens_Sound_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
+                        Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(PlayPreviewSoundCoroutine(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
                     }
                 }
             }
         }
         /// <summary>
-        ///  PrimitiveTweens_Sound 音效预览
+        /// 音效预览协程：延迟指定时间后创建 AudioSource 播放，播放完成后销毁
         /// </summary>
-        IEnumerator Preview_PrimitiveTweens_Sound_Play(float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_userandom, AudioClip clip, float delay)
+        IEnumerator PlayPreviewSoundCoroutine(float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_userandom, AudioClip clip, float delay)
         {
             yield return new XCoroutineWaitForSeconds(delay);
-            Preview_PrimitiveTweens_SoundList.Add(Preview_PrimitiveTweens_Sound_Create(sp_vol, sp_pitch_min, sp_pitch_max, sp_userandom, clip));
+            Preview_PrimitiveTweens_SoundList.Add(CreatePreviewAudioSource(sp_vol, sp_pitch_min, sp_pitch_max, sp_userandom, clip));
             AudioSource au = Preview_PrimitiveTweens_SoundList[Preview_PrimitiveTweens_SoundList.Count - 1];
             while (true)
             {
@@ -2786,9 +2911,9 @@ namespace SevenStrikeModules.XHud.Editor
             DestroyImmediate(au.gameObject, true);
         }
         /// <summary>
-        ///  停止协程列表 - PrimitiveTweens_Sound 音效预览播放 / 停止播放并清空 PrimitiveTweens_Sound 预览列表与生成的音效物体
+        /// 停止所有音效预览协程，并销毁所有已生成的预览 AudioSource
         /// </summary>
-        private void Preview_PrimitiveTweens_Sound_Stop()
+        private void StopAllPreviewSounds()
         {
             for (int i = 0; i < Preview_PrimitiveTweens_SoundCoroutineList_Stop.Count; i++)
             {
@@ -2814,15 +2939,11 @@ namespace SevenStrikeModules.XHud.Editor
             SceneView.RepaintAll();
         }
         /// <summary>
-        /// 创建 PrimitiveTweens_Sound 预览指定声音
+        /// 创建一个用于音效预览的临时 AudioSource 并立即播放
+        /// <para/>
+        /// 附带 <see cref="XHud_AudioStoper"/> 组件以支持自动停止。
         /// </summary>
-        /// <param name="sp_vol"></param>
-        /// <param name="sp_pitch_min"></param>
-        /// <param name="sp_pitch_max"></param>
-        /// <param name="sp_userandom"></param>
-        /// <param name="clip"></param>
-        /// <returns></returns>
-        public AudioSource Preview_PrimitiveTweens_Sound_Create(float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_userandom, AudioClip clip)
+        public AudioSource CreatePreviewAudioSource(float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_userandom, AudioClip clip)
         {
             GameObject obj = new GameObject();
             obj.name = "PrimitiveTweens_Sound_Previewer-" + "[" + clip.length.ToString("F2") + " s]-" + "[" + clip.channels + " ch]-" + "[" + clip.frequency + " hz]";

@@ -5211,8 +5211,8 @@ MonoBehaviour:
     Enabled: 1
     Type: 0
     Timings: "\u81EA\u5B9A\u4E49"
-    Duration: 0.362
-    Delay: 0.343
+    Duration: 1
+    Delay: 0.5
     Progress: 0
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
@@ -5246,7 +5246,7 @@ MonoBehaviour:
     Original_Int: 0
     Original_Float: 0.35
     Original_Vector2: {x: 150, y: 150}
-    Original_Vector3: {x: 0, y: 0, z: 0}
+    Original_Vector3: {x: 147.1, y: 455.1, z: 0}
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
     Original_Color: {r: 1, g: 1, b: 1, a: 1}
     Original_String: 
@@ -5262,7 +5262,7 @@ MonoBehaviour:
     End_Int: 0
     End_Float: 0
     End_Vector2: {x: 0, y: 0}
-    End_Vector3: {x: 147.1, y: 455.1, z: 0}
+    End_Vector3: {x: 0, y: 0, z: 0}
     End_Vector4: {x: 0, y: 0, z: 0, w: 0}
     End_Color: {r: 1, g: 1, b: 1, a: 1}
     End_String: 
@@ -5277,8 +5277,8 @@ MonoBehaviour:
     Enabled: 1
     Type: 4
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 0.362
-    Delay: 0.343
+    Duration: 1.5
+    Delay: 0
     Progress: 0
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
@@ -5336,15 +5336,15 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 1
+    IsFold: 0
     TweenSounds: []
   - ID: 4654
     Indicator: NewTween
     Enabled: 1
     Type: 0
     Timings: "\u5143\u7D20\u9000\u51FA\u65F6"
-    Duration: 0.25
-    Delay: 0.037
+    Duration: 1
+    Delay: 0
     Progress: 0
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
@@ -5402,14 +5402,14 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 1
+    IsFold: 0
     TweenSounds: []
   MainTweenNode: 
   GlobalDuration: 1
-  MinTimer: 0.287
-  MaxTimer: 0.287
-  MinTimerWithGlobalDuration: 0.287
-  MaxTimerWithGlobalDuration: 0.287
+  MinTimer: 1
+  MaxTimer: 1
+  MinTimerWithGlobalDuration: 1
+  MaxTimerWithGlobalDuration: 1
   eve_on_Tween_Play:
     m_PersistentCalls:
       m_Calls: []
@@ -5467,8 +5467,8 @@ MonoBehaviour:
   fold_option: 1
   fold_based: 1
   fold_list: 0
-  fold_state: 1
-  Timeline_TrackPosition: 747.9484
+  fold_state: 0
+  Timeline_TrackPosition: 402.66666
   Timeline_TrackScroll: {x: 0, y: 0}
   Timeline_TrackHeight: 29.722574
   Timeline_TrackSnapEnabled: 0
