@@ -31,3 +31,11 @@ MonoBehaviour:
     Root: {fileID: 0}
     Target: {fileID: 2484565434626366029, guid: 54cb949a8cef5ca44a27602c14cb9919, type: 3}
     PreloadElements: []
+  - Name: Gear
+    InitializeCount: 1
+    UsedCount: 0
+    RecycledCount: 0
+    NextIndex: 0
+    Root: {fileID: 0}
+    Target: {fileID: 3738649134357389805, guid: 363f6f66d530e4a4089889476c66397f, type: 3}
+    PreloadElements: []

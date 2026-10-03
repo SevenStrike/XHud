@@ -93,6 +93,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// 多选模式下当前查看的组件索引
         /// </summary>
         private int MultiPrimitiveTween_Index;
+        private bool isPreviewing = false;
         #endregion
 
         #region 字段 - 选项文字
@@ -947,6 +948,8 @@ namespace SevenStrikeModules.XHud.Editor
                 if (Editor_XHud_PrimitiveTweenSoundSetTool != null)
                     Editor_XHud_PrimitiveTweenSoundSetTool.Close();
             }
+
+            Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
         }
         /// <summary>
         /// 绘制 Inspector 主入口
@@ -2166,7 +2169,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 将序列化属性的改动立即写回 SerializedObject，
             // 否则参数面板上的输入框不会同步刷新。
-            p.serializedObject.ApplyModifiedProperties();
+            p.serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
         /// <summary>
         /// 将指定序列化属性的值写回到宿主组件的对应属性上
@@ -2183,19 +2186,22 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 // ── 位移：写入 RectTransform.anchoredPosition3D ──
                 case TweenNodeType.a_位移:
-                    Undo.RecordObject(BaseScript.controller.mod_Rect, "undotransform-position");
+                    if (!isPreviewing)
+                        Undo.RecordObject(BaseScript.controller.mod_Rect, "undotransform-position");
                     BaseScript.controller.mod_Rect.anchoredPosition3D = p.vector3Value;
                     break;
 
                 // ── 旋转：写入 RectTransform.localEulerAngles（欧拉角）──
                 case TweenNodeType.r_旋转:
-                    Undo.RecordObject(BaseScript.controller.mod_Rect, "undotransform-eulerangle");
+                    if (!isPreviewing)
+                        Undo.RecordObject(BaseScript.controller.mod_Rect, "undotransform-eulerangle");
                     BaseScript.controller.mod_Rect.localEulerAngles = p.vector3Value;
                     break;
 
                 // ── 缩放：写入 RectTransform.localScale ──
                 case TweenNodeType.s_缩放:
-                    Undo.RecordObject(BaseScript.controller.mod_Rect, "undotransform-localscale");
+                    if (!isPreviewing)
+                        Undo.RecordObject(BaseScript.controller.mod_Rect, "undotransform-localscale");
                     BaseScript.controller.mod_Rect.localScale = p.vector3Value;
                     break;
 
@@ -2207,7 +2213,8 @@ namespace SevenStrikeModules.XHud.Editor
 
                     // 同步记录 Control 内部的 OriginalColor 缓存，避免下次动画运行时
                     // 用旧的 OriginalColor 覆盖用户刚刚写入的颜色。
-                    Undo.RecordObject(BaseScript.controller.pt_Painting, "undocolor-origin");
+                    if (!isPreviewing)
+                        Undo.RecordObject(BaseScript.controller.pt_Painting, "undocolor-origin");
 
                     ModuleType x_Type = BaseScript.controller.GetModuleType();
                     if (x_Type == ModuleType.Image)
@@ -2220,7 +2227,8 @@ namespace SevenStrikeModules.XHud.Editor
 
                 // ── 淡化：写入 CanvasGroup.alpha ──
                 case TweenNodeType.g_淡化:
-                    Undo.RecordObject(BaseScript.controller.mod_CanvasGroup, "undoAlpha");
+                    if (!isPreviewing)
+                        Undo.RecordObject(BaseScript.controller.mod_CanvasGroup, "undoAlpha");
                     BaseScript.controller.mod_CanvasGroup.alpha = p.floatValue;
                     break;
 
@@ -2229,12 +2237,14 @@ namespace SevenStrikeModules.XHud.Editor
                 case TweenNodeType.w_打字机:
                     if (BaseScript.controller.mod_Text != null)
                     {
-                        Undo.RecordObject(BaseScript.controller.mod_Text, "undoText");
+                        if (!isPreviewing)
+                            Undo.RecordObject(BaseScript.controller.mod_Text, "undoText");
                         BaseScript.controller.mod_Text.txt_Set_Content(p.stringValue);
                     }
                     else if (BaseScript.controller.mod_TmpText != null)
                     {
-                        Undo.RecordObject(BaseScript.controller.mod_TmpText, "undoTmpText");
+                        if (!isPreviewing)
+                            Undo.RecordObject(BaseScript.controller.mod_TmpText, "undoTmpText");
                         BaseScript.controller.mod_TmpText.tmp_Set_Content(p.stringValue);
                     }
                     // 文本变更需要刷新编辑器窗口与场景视图，否则预览不会立即更新。
@@ -2244,13 +2254,15 @@ namespace SevenStrikeModules.XHud.Editor
 
                 // ── 图像填充：写入 Image.fillAmount ──
                 case TweenNodeType.f_图像填充:
-                    Undo.RecordObject(BaseScript.controller.mod_Image, "undofill");
+                    if (!isPreviewing)
+                        Undo.RecordObject(BaseScript.controller.mod_Image, "undofill");
                     BaseScript.controller.mod_Image.fillAmount = p.floatValue;
                     break;
 
                 // ── 尺寸：写入 RectTransform.sizeDelta ──
                 case TweenNodeType.z_尺寸:
-                    Undo.RecordObject(BaseScript.controller.mod_Rect, "undotransform-size");
+                    if (!isPreviewing)
+                        Undo.RecordObject(BaseScript.controller.mod_Rect, "undotransform-size");
                     BaseScript.controller.mod_Rect.sizeDelta = p.vector2Value;
                     break;
             }
@@ -2712,9 +2724,11 @@ namespace SevenStrikeModules.XHud.Editor
             //先停止之前的动画预览
             StopPreview();
 
+            isPreviewing = true;
+
             //将动画预览中的开关打开
             sp_TweenIsPreviewing.boolValue = true;
-            sp_TweenIsPreviewing.serializedObject.ApplyModifiedProperties();
+            sp_TweenIsPreviewing.serializedObject.ApplyModifiedPropertiesWithoutUndo();
 
             XTween_Interface[] tweens = null;
 
@@ -2743,6 +2757,13 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 使用XTween预览器预览收集到的有效的动画
             StartXTweenPreview(tweens);
+
+            Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(
+                state: true,
+                x_color: XHud_Dashboard.Theme_Primary,
+                x_title: "Seven Strike Media",
+                x_msg: "图元动画预览中...",
+                x_anchor: XHudSceneActivateMarkAnchor.左下);
         }
         /// <summary>
         /// 停止预览动画
@@ -2755,7 +2776,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (target != null)
             {
                 sp_TweenIsPreviewing.boolValue = false;
-                sp_TweenIsPreviewing.serializedObject.ApplyModifiedProperties();
+                sp_TweenIsPreviewing.serializedObject.ApplyModifiedPropertiesWithoutUndo();
 
                 KillXTweenPreview();
 
@@ -2772,7 +2793,11 @@ namespace SevenStrikeModules.XHud.Editor
                     if (LoadOriginalState && target != null)
                         BaseScript.controller.pt_Feature.PrimitiveFeature_Load();
                 }
+
+                isPreviewing = false;
             }
+
+            Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
         }
         //------------------------------------------------------------------------------------
         /// <summary>
@@ -2807,7 +2832,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 预览开关状态复位
             sp_TweenIsPreviewing.boolValue = false;
-            sp_TweenIsPreviewing.serializedObject.ApplyModifiedProperties();
+            sp_TweenIsPreviewing.serializedObject.ApplyModifiedPropertiesWithoutUndo();
 
             if (IsMultiSelection())
             {

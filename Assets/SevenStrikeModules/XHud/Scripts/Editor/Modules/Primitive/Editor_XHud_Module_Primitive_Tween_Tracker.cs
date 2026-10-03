@@ -127,6 +127,16 @@ namespace SevenStrikeModules.XHud.Editor
     ///</summary>
     public class Editor_XHud_Module_Primitive_Tween_Tracker : EditorWindow
     {
+        #region 预览状态
+        /// <summary>
+        /// 当前是否处于预览状态。
+        /// <para/>
+        /// 直接读取 <see cref="target"/> 上的 <see cref="XHud_Module_Primitive_Tween.TweenIsPreviewing"/> 字段，
+        /// 与 Inspector 共享同一个判断依据，无需额外同步。
+        /// </summary>
+        private bool IsPreviewing => target != null && target.TweenIsPreviewing;
+        #endregion
+
         #region 常量：布局参数
         /// <summary> 
         ///顶部工具栏高度（像素）名字列与 Clip 区的局部 Y 坐标均以此作为起点
@@ -2407,7 +2417,8 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 if (dragMode == DragMode.无)
                 {
-                    Undo.RecordObject(target, "Edit Tween Node");
+                    if (!IsPreviewing)
+                        Undo.RecordObject(target, "Edit Tween Node");
                 }
                 EditorUtility.SetDirty(target);
                 Repaint();
@@ -2795,7 +2806,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 将序列化属性的改动立即写回 SerializedObject，
             // 否则参数面板上的输入框不会同步刷新。
-            p.serializedObject.ApplyModifiedProperties();
+            p.serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
         /// <summary>
         /// 将指定序列化属性的值写回到目标物体的对应属性上
@@ -2812,19 +2823,22 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 // ── 位移：写入 RectTransform.anchoredPosition3D ──
                 case TweenNodeType.a_位移:
-                    Undo.RecordObject(target.controller.mod_Rect, "undotransform-position");
+                    if (!IsPreviewing)
+                        Undo.RecordObject(target.controller.mod_Rect, "undotransform-position");
                     target.controller.mod_Rect.anchoredPosition3D = p.vector3Value;
                     break;
 
                 // ── 旋转：写入 RectTransform.localEulerAngles（欧拉角）──
                 case TweenNodeType.r_旋转:
-                    Undo.RecordObject(target.controller.mod_Rect, "undotransform-eulerangle");
+                    if (!IsPreviewing)
+                        Undo.RecordObject(target.controller.mod_Rect, "undotransform-eulerangle");
                     target.controller.mod_Rect.localEulerAngles = p.vector3Value;
                     break;
 
                 // ── 缩放：写入 RectTransform.localScale ──
                 case TweenNodeType.s_缩放:
-                    Undo.RecordObject(target.controller.mod_Rect, "undotransform-localscale");
+                    if (!IsPreviewing)
+                        Undo.RecordObject(target.controller.mod_Rect, "undotransform-localscale");
                     target.controller.mod_Rect.localScale = p.vector3Value;
                     break;
 
@@ -2836,7 +2850,8 @@ namespace SevenStrikeModules.XHud.Editor
 
                     // 同步记录 Control 内部的 OriginalColor 缓存，避免下次动画运行时
                     // 用旧的 OriginalColor 覆盖用户刚刚写入的颜色。
-                    Undo.RecordObject(target.controller.pt_Painting, "undocolor-origin");
+                    if (!IsPreviewing)
+                        Undo.RecordObject(target.controller.pt_Painting, "undocolor-origin");
 
                     ModuleType x_Type = target.controller.GetModuleType();
                     if (x_Type == ModuleType.Image)
@@ -2849,7 +2864,8 @@ namespace SevenStrikeModules.XHud.Editor
 
                 // ── 淡化：写入 CanvasGroup.alpha ──
                 case TweenNodeType.g_淡化:
-                    Undo.RecordObject(target.controller.mod_CanvasGroup, "undoAlpha");
+                    if (!IsPreviewing)
+                        Undo.RecordObject(target.controller.mod_CanvasGroup, "undoAlpha");
                     target.controller.mod_CanvasGroup.alpha = p.floatValue;
                     break;
 
@@ -2858,12 +2874,14 @@ namespace SevenStrikeModules.XHud.Editor
                 case TweenNodeType.w_打字机:
                     if (target.controller.mod_Text != null)
                     {
-                        Undo.RecordObject(target.controller.mod_Text, "undoText");
+                        if (!IsPreviewing)
+                            Undo.RecordObject(target.controller.mod_Text, "undoText");
                         target.controller.mod_Text.txt_Set_Content(p.stringValue);
                     }
                     else if (target.controller.mod_TmpText != null)
                     {
-                        Undo.RecordObject(target.controller.mod_TmpText, "undoTmpText");
+                        if (!IsPreviewing)
+                            Undo.RecordObject(target.controller.mod_TmpText, "undoTmpText");
                         target.controller.mod_TmpText.tmp_Set_Content(p.stringValue);
                     }
                     // 文本变更需要刷新编辑器窗口与场景视图，否则预览不会立即更新。
@@ -2873,13 +2891,15 @@ namespace SevenStrikeModules.XHud.Editor
 
                 // ── 图像填充：写入 Image.fillAmount ──
                 case TweenNodeType.f_图像填充:
-                    Undo.RecordObject(target.controller.mod_Image, "undofill");
+                    if (!IsPreviewing)
+                        Undo.RecordObject(target.controller.mod_Image, "undofill");
                     target.controller.mod_Image.fillAmount = p.floatValue;
                     break;
 
                 // ── 尺寸：写入 RectTransform.sizeDelta ──
                 case TweenNodeType.z_尺寸:
-                    Undo.RecordObject(target.controller.mod_Rect, "undotransform-size");
+                    if (!IsPreviewing)
+                        Undo.RecordObject(target.controller.mod_Rect, "undotransform-size");
                     target.controller.mod_Rect.sizeDelta = p.vector2Value;
                     break;
             }
@@ -3164,10 +3184,21 @@ namespace SevenStrikeModules.XHud.Editor
             GUIUtility.keyboardControl = 0;
             dragStartContentSecond = e.mousePosition.x / pixelsPerSecond;
             snapGuideSecond = -1f;
-            Undo.IncrementCurrentGroup();
-            Undo.SetCurrentGroupName("Edit Tween Clip");
-            dragUndoGroup = Undo.GetCurrentGroup();
-            Undo.RecordObject(target, "Edit Tween Clip");
+
+            // ★ 预览期间不记录 Undo
+            if (!IsPreviewing)
+            {
+                Undo.IncrementCurrentGroup();
+                Undo.SetCurrentGroupName("Edit Tween Clip");
+                dragUndoGroup = Undo.GetCurrentGroup();
+                Undo.RecordObject(target, "Edit Tween Clip");
+            }
+            else
+            {
+                // -1 表示"本次拖拽无 Undo 组"，MouseUp 时会跳过 Collapse
+                dragUndoGroup = -1;
+            }
+
             clipHitThisFrame = true;
             e.Use();
             Repaint();
@@ -3195,7 +3226,10 @@ namespace SevenStrikeModules.XHud.Editor
                         float totalDelta = currentContentSecond - dragStartContentSecond;
                         snapGuideSecond = -1f;
                         bool snapOn = this.snapEnabled || e.shift;
-                        Undo.RecordObject(target, "Edit Tween Clip");
+
+                        if (!IsPreviewing)
+                            Undo.RecordObject(target, "Edit Tween Clip");
+
                         switch (dragMode)
                         {
                             case DragMode.移动:
@@ -3671,6 +3705,7 @@ namespace SevenStrikeModules.XHud.Editor
                 moveDragAnchorSide = 0;
                 dragStartDelays.Clear();
                 dragStartDurations.Clear();
+                // ★ 这里
                 if (dragUndoGroup >= 0)
                 {
                     Undo.CollapseUndoOperations(dragUndoGroup);
@@ -4126,7 +4161,8 @@ namespace SevenStrikeModules.XHud.Editor
             if (target == null || target.Equals(null)) return;
 
             // 注册完整对象 Undo，保证本次插入可通过 Ctrl+Z 撤销
-            Undo.RegisterCompleteObjectUndo(target, "Insert Tween Node");
+            if (!IsPreviewing)
+                Undo.RegisterCompleteObjectUndo(target, "Insert Tween Node");
 
             // ── 构造新节点并填入安全默认值 ──
             // 所有字段均显式赋值，避免依赖字段初始化器的默认值（尤其是 Color 等引用类型）。
@@ -4142,7 +4178,7 @@ namespace SevenStrikeModules.XHud.Editor
             newNode.Enabled = true;
 
             // 触发时机：默认「无」，需用户手动选择
-            newNode.Timings = "无";
+            newNode.Timings = "元素进入时";
 
             // 时长 / 延迟：默认 1 秒、无延迟，是一个「开箱即用」的起始值
             newNode.Duration = 1f;
@@ -4250,8 +4286,9 @@ namespace SevenStrikeModules.XHud.Editor
             if (target == null) return;
             if (index < 0 || index >= Nodes.Count) return;
 
-            // 注册完整对象 Undo，保证本次删除可撤销
-            Undo.RegisterCompleteObjectUndo(target, "Delete Tween Node");
+            // 注册完整对象 Undo，保证本次删除可撤销（预览期间不记录）
+            if (!IsPreviewing)
+                Undo.RegisterCompleteObjectUndo(target, "Delete Tween Node");
 
             // ── 运行时清理：先 Kill 掉仍在运行的 Tweener ──
             // 若不移除，节点虽从列表消失，但 XTween 运行时仍持有引用并继续驱动目标，
@@ -4332,8 +4369,9 @@ namespace SevenStrikeModules.XHud.Editor
             if (target == null) return;
             if (selectedIndices.Count == 0) return;
 
-            // 注册完整对象 Undo，保证批量删除可一次撤销
-            Undo.RegisterCompleteObjectUndo(target, "Delete Tween Nodes");
+            // 注册完整对象 Undo，保证批量删除可一次撤销（预览期间不记录）
+            if (!IsPreviewing)
+                Undo.RegisterCompleteObjectUndo(target, "Delete Tween Nodes");
 
             // ── 拷贝选中集合到列表，并降序排序 ──
             // 降序是为了「从后往前删」，使未处理的下标始终有效。

@@ -77,6 +77,8 @@ namespace SevenStrikeModules.XHud.Editor
 
         private Texture2D icon_libsetter_element;
 
+        string[] libnames;
+
         [SerializeField]
         public string library_name;
         [SerializeField]
@@ -326,6 +328,16 @@ namespace SevenStrikeModules.XHud.Editor
             ReorderableList.drawElementCallback = DrawElementCallback;
             ReorderableList.onRemoveCallback = Remove;
             #endregion
+
+            #region 获取首个元素库名称
+            /* 默认获取到的第一个元素库的名称，否则后面会报空，因为下拉菜单需要点击不同的项才会有反馈
+             * 所以，如果只有一个元素库的时候，sp_library_name 默认是空的，
+             * 就会导致后面获取不到，在这里处理一下就可以保证后面能正常获取到目标元素库
+             */
+
+            sp_library_name.stringValue = UpdateElementLibraryNames()[0];
+            sp_library_name.serializedObject.ApplyModifiedProperties();
+            #endregion
         }
 
         private void OnGUI()
@@ -397,10 +409,9 @@ namespace SevenStrikeModules.XHud.Editor
                clipping: TextClipping.Overflow);
             #endregion
 
-            #region 目标入库选择
-            string[] libnames = HudManager.hm_ElementLibrary_GetAllLibraryNames();
+            #region 目标入库选择           
             LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 110, rect.width - 15, XGUI.GetSingleLineHeight());
-            XGUI.gui_string_popup(
+            sp_library_name.stringValue = XGUI.gui_string_popup(
                   rect: LibSelector_rect,
                   title: "类型",
                   title_color: Color.white,
@@ -535,6 +546,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 XGUIDialogListDatas item = new XGUIDialogListDatas();
 
+
                 if (target_library.ElementLibrary_IsExist(element_list[s].Element.name))
                 {
                     string res = XGUI.dialog(
@@ -583,7 +595,6 @@ namespace SevenStrikeModules.XHud.Editor
                     themecolor: XHud_Dashboard.Theme_Primary);
             }
         }
-
         /// <summary>
         /// 设置元素
         /// </summary>
@@ -608,7 +619,6 @@ namespace SevenStrikeModules.XHud.Editor
                 element_list.Add(ready);
             }
         }
-
         /// <summary>
         /// 控件按钮
         /// </summary>
@@ -671,6 +681,14 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.SetEnabled(true);
 
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+        }
+        /// <summary>
+        /// 获取所有已装配的元素库名称列表
+        /// </summary>
+        /// <returns></returns>
+        private string[] UpdateElementLibraryNames()
+        {
+            return libnames = HudManager.hm_ElementLibrary_GetAllLibraryNames();
         }
     }
 }
