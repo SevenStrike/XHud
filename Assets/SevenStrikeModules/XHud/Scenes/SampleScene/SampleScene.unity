@@ -1163,11 +1163,14 @@ MonoBehaviour:
     Duration: 1
     Delay: 0
     Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
-    valuemode_index: 0
+    ValueModeIndex: 0
+    TweenValueMode: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -1199,7 +1202,6 @@ MonoBehaviour:
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
     Original_Color: {r: 1, g: 1, b: 1, a: 1}
     Original_String: 
-    ActivateFrom: 1
     From_Int: 0
     From_Float: 0
     From_Vector2: {x: 0, y: 0}
@@ -1207,7 +1209,6 @@ MonoBehaviour:
     From_Vector4: {x: 0, y: 0, z: 0, w: 0}
     From_Color: {r: 1, g: 1, b: 1, a: 1}
     From_String: 
-    ActivateEnd: 0
     End_Int: 0
     End_Float: 0
     End_Vector2: {x: 0, y: 0}
@@ -1215,7 +1216,6 @@ MonoBehaviour:
     End_Vector4: {x: 0, y: 0, z: 0, w: 0}
     End_Color: {r: 1, g: 1, b: 1, a: 1}
     End_String: 
-    ActivateOnlyToEnd: 0
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
@@ -1278,7 +1278,7 @@ MonoBehaviour:
   eve_on_Tween_AnimatingState:
     m_PersistentCalls:
       m_Calls: []
-  Debug: 0
+  UseDebug: 0
   PreviewTiming: 
   fold_param: 1
   fold_option: 1
@@ -5210,15 +5210,18 @@ MonoBehaviour:
     Indicator: NewTweensd123
     Enabled: 1
     Type: 0
-    Timings: "\u81EA\u5B9A\u4E49"
+    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
-    Delay: 0.5
+    Delay: 1
     Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
-    Ease: 0
+    Ease: 10
     AnimationCurveName: DefaultCurve
-    valuemode_index: 1
+    ValueModeIndex: 0
+    TweenValueMode: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -5250,15 +5253,79 @@ MonoBehaviour:
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
     Original_Color: {r: 1, g: 1, b: 1, a: 1}
     Original_String: 
-    ActivateFrom: 1
     From_Int: 0
     From_Float: 0.5
     From_Vector2: {x: 100, y: 100}
-    From_Vector3: {x: 1, y: 2, z: 3}
+    From_Vector3: {x: 0, y: 0, z: 0}
     From_Vector4: {x: 0, y: 0, z: 0, w: 0}
     From_Color: {r: 1, g: 1, b: 1, a: 1}
     From_String: 
-    ActivateEnd: 0
+    End_Int: 0
+    End_Float: 0
+    End_Vector2: {x: 0, y: 0}
+    End_Vector3: {x: 200, y: 200, z: 0}
+    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    End_Color: {r: 1, g: 1, b: 1, a: 1}
+    End_String: 
+    RotateMode: 0
+    LoopType: 0
+    LoopCount: 0
+    IsFold: 0
+    TweenSounds: []
+  - ID: 6013
+    Indicator: NewTween
+    Enabled: 1
+    Type: 0
+    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Duration: 1
+    Delay: 0
+    Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
+    Rewind_Set_Startvalue: 1
+    Complete_Set_Endvalue: 1
+    Ease: 10
+    AnimationCurveName: 
+    ValueModeIndex: 2
+    TweenValueMode: 2
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Original_Int: 0
+    Original_Float: 0
+    Original_Vector2: {x: 0, y: 0}
+    Original_Vector3: {x: 0, y: 0, z: 0}
+    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    Original_Color: {r: 1, g: 1, b: 1, a: 1}
+    Original_String: 
+    From_Int: 0
+    From_Float: 0
+    From_Vector2: {x: 0, y: 0}
+    From_Vector3: {x: 147.1, y: 455.1, z: 0}
+    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    From_Color: {r: 1, g: 1, b: 1, a: 1}
+    From_String: 
     End_Int: 0
     End_Float: 0
     End_Vector2: {x: 0, y: 0}
@@ -5266,139 +5333,6 @@ MonoBehaviour:
     End_Vector4: {x: 0, y: 0, z: 0, w: 0}
     End_Color: {r: 1, g: 1, b: 1, a: 1}
     End_String: 
-    ActivateOnlyToEnd: 0
-    RotateMode: 0
-    LoopType: 0
-    LoopCount: 0
-    IsFold: 0
-    TweenSounds: []
-  - ID: 2032
-    Indicator: NewTween
-    Enabled: 1
-    Type: 4
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 1.5
-    Delay: 0
-    Progress: 0
-    Rewind_Set_Startvalue: 1
-    Complete_Set_Endvalue: 1
-    Ease: 10
-    AnimationCurveName: 
-    valuemode_index: 1
-    Curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    Original_Int: 0
-    Original_Float: 0
-    Original_Vector2: {x: 0, y: 0}
-    Original_Vector3: {x: 0, y: 0, z: 0}
-    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    Original_Color: {r: 1, g: 1, b: 1, a: 1}
-    Original_String: 
-    ActivateFrom: 0
-    From_Int: 0
-    From_Float: 0
-    From_Vector2: {x: 0, y: 0}
-    From_Vector3: {x: 0, y: 0, z: 0}
-    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    From_Color: {r: 1, g: 1, b: 1, a: 1}
-    From_String: 
-    ActivateEnd: 0
-    End_Int: 0
-    End_Float: 0
-    End_Vector2: {x: 0, y: 0}
-    End_Vector3: {x: 200, y: 100, z: 0}
-    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    End_Color: {r: 1, g: 1, b: 1, a: 1}
-    End_String: 
-    ActivateOnlyToEnd: 1
-    RotateMode: 0
-    LoopType: 0
-    LoopCount: 0
-    IsFold: 0
-    TweenSounds: []
-  - ID: 4654
-    Indicator: NewTween
-    Enabled: 1
-    Type: 0
-    Timings: "\u5143\u7D20\u9000\u51FA\u65F6"
-    Duration: 1
-    Delay: 0
-    Progress: 0
-    Rewind_Set_Startvalue: 1
-    Complete_Set_Endvalue: 1
-    Ease: 0
-    AnimationCurveName: DefaultCurve
-    valuemode_index: 2
-    Curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    Original_Int: 0
-    Original_Float: 0
-    Original_Vector2: {x: 0, y: 0}
-    Original_Vector3: {x: 0, y: 0, z: 0}
-    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    Original_Color: {r: 1, g: 1, b: 1, a: 1}
-    Original_String: 
-    ActivateFrom: 0
-    From_Int: 0
-    From_Float: 0
-    From_Vector2: {x: 0, y: 0}
-    From_Vector3: {x: 0, y: 0, z: 0}
-    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    From_Color: {r: 1, g: 1, b: 1, a: 1}
-    From_String: 
-    ActivateEnd: 0
-    End_Int: 0
-    End_Float: 0
-    End_Vector2: {x: 0, y: 0}
-    End_Vector3: {x: 2, y: 2, z: 0}
-    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    End_Color: {r: 1, g: 1, b: 1, a: 1}
-    End_String: 
-    ActivateOnlyToEnd: 1
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
@@ -5407,9 +5341,9 @@ MonoBehaviour:
   MainTweenNode: 
   GlobalDuration: 1
   MinTimer: 1
-  MaxTimer: 1
+  MaxTimer: 2
   MinTimerWithGlobalDuration: 1
-  MaxTimerWithGlobalDuration: 1
+  MaxTimerWithGlobalDuration: 2
   eve_on_Tween_Play:
     m_PersistentCalls:
       m_Calls: []
@@ -5461,14 +5395,14 @@ MonoBehaviour:
   eve_on_Tween_AnimatingState:
     m_PersistentCalls:
       m_Calls: []
-  Debug: 1
-  PreviewTiming: "\u5143\u7D20\u9000\u51FA\u65F6"
-  fold_param: 1
-  fold_option: 1
-  fold_based: 1
+  UseDebug: 0
+  PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
+  fold_param: 0
+  fold_option: 0
+  fold_based: 0
   fold_list: 0
   fold_state: 0
-  Timeline_TrackPosition: 402.66666
+  Timeline_TrackPosition: 189.35504
   Timeline_TrackScroll: {x: 0, y: 0}
   Timeline_TrackHeight: 29.722574
   Timeline_TrackSnapEnabled: 0
@@ -6338,79 +6272,13 @@ MonoBehaviour:
   AnimatingBreakState: 0
   IgnoreElementAnimationPlay: 0
   TweenIsPreviewing: 0
-  PrimitiveTweenNodes:
-  - ID: 4672
-    Indicator: NewTween
-    Enabled: 1
-    Type: 0
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 3.06
-    Delay: 1.24
-    Progress: 0
-    Rewind_Set_Startvalue: 1
-    Complete_Set_Endvalue: 1
-    Ease: 10
-    AnimationCurveName: 
-    valuemode_index: 0
-    Curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    Original_Int: 0
-    Original_Float: 0
-    Original_Vector2: {x: 0, y: 0}
-    Original_Vector3: {x: 0, y: 0, z: 0}
-    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    Original_Color: {r: 1, g: 1, b: 1, a: 1}
-    Original_String: 
-    ActivateFrom: 1
-    From_Int: 0
-    From_Float: 0
-    From_Vector2: {x: 0, y: 0}
-    From_Vector3: {x: 0, y: 0, z: 0}
-    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    From_Color: {r: 1, g: 1, b: 1, a: 1}
-    From_String: 
-    ActivateEnd: 0
-    End_Int: 0
-    End_Float: 0
-    End_Vector2: {x: 0, y: 0}
-    End_Vector3: {x: 0, y: 0, z: 0}
-    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    End_Color: {r: 1, g: 1, b: 1, a: 1}
-    End_String: 
-    ActivateOnlyToEnd: 0
-    RotateMode: 0
-    LoopType: 0
-    LoopCount: 0
-    IsFold: 0
-    TweenSounds: []
+  PrimitiveTweenNodes: []
   MainTweenNode: 
   GlobalDuration: 1
-  MinTimer: 4.3
-  MaxTimer: 4.3
-  MinTimerWithGlobalDuration: 4.3
-  MaxTimerWithGlobalDuration: 4.3
+  MinTimer: 0
+  MaxTimer: 0
+  MinTimerWithGlobalDuration: 0
+  MaxTimerWithGlobalDuration: 0
   eve_on_Tween_Play:
     m_PersistentCalls:
       m_Calls: []
@@ -6462,12 +6330,12 @@ MonoBehaviour:
   eve_on_Tween_AnimatingState:
     m_PersistentCalls:
       m_Calls: []
-  Debug: 1
+  UseDebug: 0
   PreviewTiming: 
   fold_param: 0
   fold_option: 0
   fold_based: 1
-  fold_list: 1
+  fold_list: 0
   fold_state: 0
   Timeline_TrackPosition: 124
   Timeline_TrackScroll: {x: 0, y: 0}
@@ -8886,7 +8754,7 @@ MonoBehaviour:
   fold_elementlibs: 1
   fold_soundslib: 1
   fold_masks: 1
-  fold_global: 1
+  fold_global: 0
   fold_tool: 1
   fold_RMS: 1
   fold_layout: 1
@@ -9508,16 +9376,22 @@ MonoBehaviour:
   - Toggle: {fileID: 1377532789}
   ToggleIsFold: 1
   PrimitiveControllerNodes:
-  - Controller: {fileID: 1465583108}
+  - Controller: {fileID: 2012674124}
     TotalTime: 0
     DelayTime: 0
-  - Controller: {fileID: 896502542}
+  - Controller: {fileID: 109206555}
+    TotalTime: 0
+    DelayTime: 0
+  - Controller: {fileID: 1465583108}
     TotalTime: 0
     DelayTime: 0
   - Controller: {fileID: 764320993}
     TotalTime: 0
     DelayTime: 0
-  PrimitivesIsFold: 1
+  - Controller: {fileID: 896502542}
+    TotalTime: 0
+    DelayTime: 0
+  PrimitivesIsFold: 0
   PrimitivesTweenMaxDuration: 4.3
   PrimitivesTweenGlobalDuration: 1
   AutoPlayPrimitivesTween: 1
@@ -9788,11 +9662,14 @@ MonoBehaviour:
     Duration: 2
     Delay: 1.4
     Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
     Ease: 0
     AnimationCurveName: DefaultCurve
-    valuemode_index: 0
+    ValueModeIndex: 0
+    TweenValueMode: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -9824,7 +9701,6 @@ MonoBehaviour:
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
     Original_Color: {r: 1, g: 1, b: 1, a: 1}
     Original_String: 
-    ActivateFrom: 1
     From_Int: 0
     From_Float: 0
     From_Vector2: {x: 0, y: 0}
@@ -9832,7 +9708,6 @@ MonoBehaviour:
     From_Vector4: {x: 0, y: 0, z: 0, w: 0}
     From_Color: {r: 1, g: 1, b: 1, a: 1}
     From_String: 
-    ActivateEnd: 0
     End_Int: 0
     End_Float: 0
     End_Vector2: {x: 0, y: 0}
@@ -9840,7 +9715,6 @@ MonoBehaviour:
     End_Vector4: {x: 0, y: 0, z: 0, w: 0}
     End_Color: {r: 1, g: 1, b: 1, a: 1}
     End_String: 
-    ActivateOnlyToEnd: 0
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
@@ -9854,11 +9728,14 @@ MonoBehaviour:
     Duration: 2.41
     Delay: 0.85
     Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
-    valuemode_index: 0
+    ValueModeIndex: 0
+    TweenValueMode: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -9890,7 +9767,6 @@ MonoBehaviour:
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
     Original_Color: {r: 1, g: 1, b: 1, a: 1}
     Original_String: 
-    ActivateFrom: 1
     From_Int: 0
     From_Float: 0
     From_Vector2: {x: 0, y: 0}
@@ -9898,7 +9774,6 @@ MonoBehaviour:
     From_Vector4: {x: 0, y: 0, z: 0, w: 0}
     From_Color: {r: 1, g: 1, b: 1, a: 1}
     From_String: 
-    ActivateEnd: 0
     End_Int: 0
     End_Float: 0
     End_Vector2: {x: 0, y: 0}
@@ -9906,7 +9781,6 @@ MonoBehaviour:
     End_Vector4: {x: 0, y: 0, z: 0, w: 0}
     End_Color: {r: 1, g: 1, b: 1, a: 1}
     End_String: 
-    ActivateOnlyToEnd: 0
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
@@ -9920,11 +9794,14 @@ MonoBehaviour:
     Duration: 2.44
     Delay: 0.46
     Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
-    valuemode_index: 0
+    ValueModeIndex: 0
+    TweenValueMode: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -9956,7 +9833,6 @@ MonoBehaviour:
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
     Original_Color: {r: 0, g: 0.4016366, b: 1, a: 1}
     Original_String: 
-    ActivateFrom: 1
     From_Int: 0
     From_Float: 0
     From_Vector2: {x: 0, y: 0}
@@ -9964,7 +9840,6 @@ MonoBehaviour:
     From_Vector4: {x: 0, y: 0, z: 0, w: 0}
     From_Color: {r: 1, g: 1, b: 1, a: 1}
     From_String: 
-    ActivateEnd: 0
     End_Int: 0
     End_Float: 0
     End_Vector2: {x: 0, y: 0}
@@ -9972,7 +9847,6 @@ MonoBehaviour:
     End_Vector4: {x: 0, y: 0, z: 0, w: 0}
     End_Color: {r: 1, g: 1, b: 1, a: 1}
     End_String: 
-    ActivateOnlyToEnd: 0
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
@@ -9986,11 +9860,14 @@ MonoBehaviour:
     Duration: 2.02
     Delay: 0
     Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
-    valuemode_index: 0
+    ValueModeIndex: 0
+    TweenValueMode: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -10022,7 +9899,6 @@ MonoBehaviour:
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
     Original_Color: {r: 1, g: 1, b: 1, a: 1}
     Original_String: 
-    ActivateFrom: 1
     From_Int: 0
     From_Float: 0
     From_Vector2: {x: 0, y: 0}
@@ -10030,7 +9906,6 @@ MonoBehaviour:
     From_Vector4: {x: 0, y: 0, z: 0, w: 0}
     From_Color: {r: 1, g: 1, b: 1, a: 1}
     From_String: 
-    ActivateEnd: 0
     End_Int: 0
     End_Float: 0
     End_Vector2: {x: 0, y: 0}
@@ -10038,7 +9913,6 @@ MonoBehaviour:
     End_Vector4: {x: 0, y: 0, z: 0, w: 0}
     End_Color: {r: 1, g: 1, b: 1, a: 1}
     End_String: 
-    ActivateOnlyToEnd: 0
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
@@ -10052,11 +9926,14 @@ MonoBehaviour:
     Duration: 2.93
     Delay: 0.3
     Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
-    valuemode_index: 0
+    ValueModeIndex: 0
+    TweenValueMode: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -10088,7 +9965,6 @@ MonoBehaviour:
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
     Original_Color: {r: 1, g: 1, b: 1, a: 1}
     Original_String: 
-    ActivateFrom: 1
     From_Int: 0
     From_Float: 0
     From_Vector2: {x: 0, y: 0}
@@ -10096,7 +9972,6 @@ MonoBehaviour:
     From_Vector4: {x: 0, y: 0, z: 0, w: 0}
     From_Color: {r: 1, g: 1, b: 1, a: 1}
     From_String: 
-    ActivateEnd: 0
     End_Int: 0
     End_Float: 0
     End_Vector2: {x: 0, y: 0}
@@ -10104,7 +9979,6 @@ MonoBehaviour:
     End_Vector4: {x: 0, y: 0, z: 0, w: 0}
     End_Color: {r: 1, g: 1, b: 1, a: 1}
     End_String: 
-    ActivateOnlyToEnd: 0
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
@@ -10118,11 +9992,14 @@ MonoBehaviour:
     Duration: 1.58
     Delay: 1
     Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
     Ease: 10
     AnimationCurveName: 
-    valuemode_index: 0
+    ValueModeIndex: 0
+    TweenValueMode: 0
     Curve:
       serializedVersion: 2
       m_Curve:
@@ -10154,7 +10031,6 @@ MonoBehaviour:
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
     Original_Color: {r: 1, g: 1, b: 1, a: 1}
     Original_String: 
-    ActivateFrom: 1
     From_Int: 0
     From_Float: 0
     From_Vector2: {x: 0, y: 0}
@@ -10162,7 +10038,6 @@ MonoBehaviour:
     From_Vector4: {x: 0, y: 0, z: 0, w: 0}
     From_Color: {r: 1, g: 1, b: 1, a: 1}
     From_String: 
-    ActivateEnd: 0
     End_Int: 0
     End_Float: 0
     End_Vector2: {x: 0, y: 0}
@@ -10170,7 +10045,6 @@ MonoBehaviour:
     End_Vector4: {x: 0, y: 0, z: 0, w: 0}
     End_Color: {r: 1, g: 1, b: 1, a: 1}
     End_String: 
-    ActivateOnlyToEnd: 0
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
@@ -10179,9 +10053,9 @@ MonoBehaviour:
   MainTweenNode: 
   GlobalDuration: 1
   MinTimer: 2.02
-  MaxTimer: 2.02
+  MaxTimer: 3.4
   MinTimerWithGlobalDuration: 2.02
-  MaxTimerWithGlobalDuration: 2.02
+  MaxTimerWithGlobalDuration: 3.4
   eve_on_Tween_Play:
     m_PersistentCalls:
       m_Calls: []
@@ -10233,13 +10107,13 @@ MonoBehaviour:
   eve_on_Tween_AnimatingState:
     m_PersistentCalls:
       m_Calls: []
-  Debug: 0
+  UseDebug: 0
   PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
   fold_param: 0
-  fold_option: 1
+  fold_option: 0
   fold_based: 1
-  fold_list: 1
-  fold_state: 1
+  fold_list: 0
+  fold_state: 0
   Timeline_TrackPosition: 105.8
   Timeline_TrackScroll: {x: 0, y: 0}
   Timeline_TrackHeight: 26
@@ -12924,7 +12798,7 @@ MonoBehaviour:
   eve_on_Tween_AnimatingState:
     m_PersistentCalls:
       m_Calls: []
-  Debug: 0
+  UseDebug: 0
   PreviewTiming: 
   fold_param: 0
   fold_option: 0

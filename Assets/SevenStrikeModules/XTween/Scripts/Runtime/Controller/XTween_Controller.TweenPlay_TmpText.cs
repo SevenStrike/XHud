@@ -34,7 +34,7 @@ namespace SevenStrikeModules.XTween
 
             if (TweenTypes_TmpText == XTweenTypes_TmpText.文字尺寸_FontSize)
             {
-                CurrentTweener = XTween.xt_FontSize_To(Target_TmpText, EndValue_Float, Duration, IsAutoKill, EaseMode, IsFromMode, () => FromValue_Float, UseCurve, Curve).SetLoop(LoopCount, LoopType).SetLoopingDelay(LoopDelay).SetDelay(Delay).OnStart(() =>
+                CurrentTweener = XTween.xt_Size_To(Target_TmpText, EndValue_Float, Duration, IsAutoKill, EaseMode, IsFromMode, () => FromValue_Float, UseCurve, Curve).SetLoop(LoopCount, LoopType).SetLoopingDelay(LoopDelay).SetDelay(Delay).OnStart(() =>
                 {
                     if (act_on_start != null)
                         act_on_start();
@@ -82,7 +82,7 @@ namespace SevenStrikeModules.XTween
             }
             else if (TweenTypes_TmpText == XTweenTypes_TmpText.文字行高_LineHeight)
             {
-                CurrentTweener = XTween.xt_FontLineHeight_To(Target_TmpText, EndValue_Float, Duration, IsAutoKill, EaseMode, IsFromMode, () => FromValue_Float, UseCurve, Curve).SetLoop(LoopCount, LoopType).SetLoopingDelay(LoopDelay).SetDelay(Delay).OnStart(() =>
+                CurrentTweener = XTween.xt_LineHeight_To(Target_TmpText, EndValue_Float, Duration, IsAutoKill, EaseMode, IsFromMode, () => FromValue_Float, UseCurve, Curve).SetLoop(LoopCount, LoopType).SetLoopingDelay(LoopDelay).SetDelay(Delay).OnStart(() =>
                 {
                     if (act_on_start != null)
                         act_on_start();
@@ -130,7 +130,7 @@ namespace SevenStrikeModules.XTween
             }
             else if (TweenTypes_TmpText == XTweenTypes_TmpText.文字颜色_Color)
             {
-                CurrentTweener = XTween.xt_FontColor_To(Target_TmpText, EndValue_Color, Duration, IsAutoKill, EaseMode, IsFromMode, () => FromValue_Color, UseCurve, Curve).SetLoop(LoopCount, LoopType).SetLoopingDelay(LoopDelay).SetDelay(Delay).OnStart(() =>
+                CurrentTweener = XTween.xt_Color_To(Target_TmpText, EndValue_Color, Duration, IsAutoKill, EaseMode, IsFromMode, () => FromValue_Color, UseCurve, Curve).SetLoop(LoopCount, LoopType).SetLoopingDelay(LoopDelay).SetDelay(Delay).OnStart(() =>
                 {
                     if (act_on_start != null)
                         act_on_start();
@@ -178,7 +178,7 @@ namespace SevenStrikeModules.XTween
             }
             else if (TweenTypes_TmpText == XTweenTypes_TmpText.文字内容_Content)
             {
-                CurrentTweener = XTween.xt_FontText_To(Target_TmpText, IsExtendedString, EndValue_String, Duration, IsAutoKill, EaseMode, IsFromMode, () => FromValue_String, UseCurve, Curve).SetLoop(LoopCount, LoopType).SetLoopingDelay(LoopDelay).SetDelay(Delay).OnStart(() =>
+                CurrentTweener = XTween.xt_Text_To(Target_TmpText, IsExtendedString, EndValue_String, Duration, IsAutoKill, EaseMode, IsFromMode, () => FromValue_String, UseCurve, Curve).SetLoop(LoopCount, LoopType).SetLoopingDelay(LoopDelay).SetDelay(Delay).OnStart(() =>
                 {
                     if (act_on_start != null)
                         act_on_start();
@@ -226,7 +226,7 @@ namespace SevenStrikeModules.XTween
             }
             else if (TweenTypes_TmpText == XTweenTypes_TmpText.文字间距_Character)
             {
-                CurrentTweener = XTween.xt_FontCharacter_To(Target_TmpText, EndValue_Float, Duration, IsAutoKill, EaseMode, IsFromMode, () => FromValue_Float, UseCurve, Curve).SetLoop(LoopCount, LoopType).SetLoopingDelay(LoopDelay).SetDelay(Delay).OnStart(() =>
+                CurrentTweener = XTween.xt_Character_To(Target_TmpText, EndValue_Float, Duration, IsAutoKill, EaseMode, IsFromMode, () => FromValue_Float, UseCurve, Curve).SetLoop(LoopCount, LoopType).SetLoopingDelay(LoopDelay).SetDelay(Delay).OnStart(() =>
                 {
                     if (act_on_start != null)
                         act_on_start();
@@ -274,7 +274,7 @@ namespace SevenStrikeModules.XTween
             }
             else if (TweenTypes_TmpText == XTweenTypes_TmpText.文字边距_Margin)
             {
-                CurrentTweener = XTween.xt_FontMargin_To(Target_TmpText, EndValue_Vector4, Duration, IsAutoKill, EaseMode, IsFromMode, () => FromValue_Vector4, UseCurve, Curve).SetLoop(LoopCount, LoopType).SetLoopingDelay(LoopDelay).SetDelay(Delay).OnStart(() =>
+                CurrentTweener = XTween.xt_Margin_To(Target_TmpText, EndValue_Vector4, Duration, IsAutoKill, EaseMode, IsFromMode, () => FromValue_Vector4, UseCurve, Curve).SetLoop(LoopCount, LoopType).SetLoopingDelay(LoopDelay).SetDelay(Delay).OnStart(() =>
                 {
                     if (act_on_start != null)
                         act_on_start();

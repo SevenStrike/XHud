@@ -74,7 +74,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 序列化属性集合：调试、节点列表、预览中、全局倍增、静音、最大/最小耗时、倍增耗时、元素联动、预览时机
         /// </summary>
-        private SerializedProperty sp_Debug, sp_PrimitiveTweenNodes, sp_TweenIsPreviewing, sp_GlobalDuration, sp_MutePlay, sp_MaxTimer, sp_MinTimer, sp_MinTimerWithGlobalDuration, sp_MaxTimerWithGlobalDuration, sp_IgnoreElementAnimationPlay, sp_PreviewTiming;
+        private SerializedProperty sp_UseDebug, sp_PrimitiveTweenNodes, sp_TweenIsPreviewing, sp_GlobalDuration, sp_MutePlay, sp_MaxTimer, sp_MinTimer, sp_MinTimerWithGlobalDuration, sp_MaxTimerWithGlobalDuration, sp_IgnoreElementAnimationPlay, sp_PreviewTiming;
         #endregion
 
         #region 字段 - 绘制缓存
@@ -102,6 +102,10 @@ namespace SevenStrikeModules.XHud.Editor
         string[] opt_mute = new string[] { "正常", "静音" };
         /// <summary>元素联动开关的显示文字</summary>
         string[] opt_control = new string[] { "可控", "忽略" };
+        /// <summary>
+        /// 当前组件动画列表中所有出现过的时机名称
+        /// </summary>
+        string[] opt_preview_timings;
         #endregion
 
         #region 字段 - 图标
@@ -144,13 +148,6 @@ namespace SevenStrikeModules.XHud.Editor
         /// 音效设置器窗口实例（用于关闭时同步关闭）
         /// </summary>
         private Editor_XHud_PrimitiveTweenSoundSetTool Editor_XHud_PrimitiveTweenSoundSetTool;
-        #endregion
-
-        #region 字段 - 预览时机
-        /// <summary>
-        /// 当前组件动画列表中所有出现过的时机名称
-        /// </summary>
-        string[] PreviewTimings;
         #endregion
 
         #region 字段 - 颜色
@@ -229,7 +226,19 @@ namespace SevenStrikeModules.XHud.Editor
 
             CacheSelectedTargets();
 
-            CacheSerializedProperties();
+            #region 序列化属性缓存
+            sp_UseDebug = serializedObject.FindProperty("UseDebug");
+            sp_PrimitiveTweenNodes = serializedObject.FindProperty("PrimitiveTweenNodes");
+            sp_TweenIsPreviewing = serializedObject.FindProperty("TweenIsPreviewing");
+            sp_GlobalDuration = serializedObject.FindProperty("GlobalDuration");
+            sp_MutePlay = serializedObject.FindProperty("MutePlay");
+            sp_MaxTimer = serializedObject.FindProperty("MaxTimer");
+            sp_MinTimer = serializedObject.FindProperty("MinTimer");
+            sp_MinTimerWithGlobalDuration = serializedObject.FindProperty("MinTimerWithGlobalDuration");
+            sp_MaxTimerWithGlobalDuration = serializedObject.FindProperty("MaxTimerWithGlobalDuration");
+            sp_IgnoreElementAnimationPlay = serializedObject.FindProperty("IgnoreElementAnimationPlay");
+            sp_PreviewTiming = serializedObject.FindProperty("PreviewTiming");
+            #endregion
 
             dot_color_red = XGUI_Utilitys.HexString_To_Color("ff4848");
 
@@ -303,10 +312,8 @@ namespace SevenStrikeModules.XHud.Editor
                     SerializedProperty sp_Curve = sp_node.FindPropertyRelative("Curve");
                     SerializedProperty sp_IsFold = sp_node.FindPropertyRelative("IsFold");
                     SerializedProperty sp_Timings = sp_node.FindPropertyRelative("Timings");
-                    SerializedProperty sp_valuemode_index = sp_node.FindPropertyRelative("valuemode_index");
-                    SerializedProperty sp_ActivateFrom = sp_node.FindPropertyRelative("ActivateFrom");
-                    SerializedProperty sp_ActivateEnd = sp_node.FindPropertyRelative("ActivateEnd");
-                    SerializedProperty sp_ActivateOnlyToEnd = sp_node.FindPropertyRelative("ActivateOnlyToEnd");
+                    SerializedProperty sp_ValueModeIndex = sp_node.FindPropertyRelative("ValueModeIndex");
+                    SerializedProperty sp_TweenValueMode = sp_node.FindPropertyRelative("TweenValueMode");
                     SerializedProperty sp_LoopType = sp_node.FindPropertyRelative("LoopType");
                     SerializedProperty sp_LoopCount = sp_node.FindPropertyRelative("LoopCount");
                     SerializedProperty sp_Progress = sp_node.FindPropertyRelative("Progress");
@@ -471,7 +478,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                                         if (res == "更新")
                                         {
-                                            int id = BaseScript.TweenNode_ID_Create();
+                                            int id = BaseScript.TweenNode_GenerateId();
                                             sp_ID.intValue = id;
                                             sp_ID.serializedObject.ApplyModifiedProperties();
                                         }
@@ -654,15 +661,15 @@ namespace SevenStrikeModules.XHud.Editor
 
                             rect_panel_root.Set(rect.x + rect.width / 2, baseheight + 145, rect.width / 2 - 5, XGUI.GetSingleLineHeight());
                             XGUI.ChangedCheck_Start();
-                            sp_valuemode_index.intValue = XGUI.gui_int_popup(
+                            sp_ValueModeIndex.intValue = XGUI.gui_int_popup(
                                 rect: rect_panel_root,
-                                title: cur_width <= 322 ? "" : "时机",
+                                title: cur_width <= 322 ? "" : "动向",
                                 title_color: Color.white,
                                 title_size: XGUIFontSize.M,
                                 title_font_style: FontStyle.Normal,
                                 title_padding: new RectOffset(0, 0, 0, 0),
                                 title_width: 35,
-                                prop: sp_valuemode_index,
+                                prop: sp_ValueModeIndex,
                                 options: dir_type,
                                 opt_text_size: XGUIFontSize.M,
                                 opt_text_color: Color.black,
@@ -674,9 +681,25 @@ namespace SevenStrikeModules.XHud.Editor
                                 opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                                 width_limite: 110,
                                 usearrow: false);
-                            sp_valuemode_index.serializedObject.ApplyModifiedProperties();
+                            sp_ValueModeIndex.serializedObject.ApplyModifiedProperties();
                             if (XGUI.ChangedCheck_End())
                             {
+                                switch (sp_ValueModeIndex.intValue)
+                                {
+                                    case 0:
+                                        sp_TweenValueMode.enumValueIndex = (int)TweenValueMode.起始到默认_S_D;
+                                        break;
+                                    case 1:
+                                        sp_TweenValueMode.enumValueIndex = (int)TweenValueMode.默认到结束_D_E;
+                                        break;
+                                    case 2:
+                                        sp_TweenValueMode.enumValueIndex = (int)TweenValueMode.起始到结束_S_E;
+                                        break;
+                                    case 3:
+                                        sp_TweenValueMode.enumValueIndex = (int)TweenValueMode.当前到结束_C_E;
+                                        break;
+                                }
+                                sp_TweenValueMode.serializedObject.ApplyModifiedProperties();
                                 // 再次收集动画列表所有动画时机名称
                                 CollectPreviewTimings(BaseScript);
                             }
@@ -741,9 +764,9 @@ namespace SevenStrikeModules.XHud.Editor
                             Rect rect_valuepanel = new Rect(rect.x + 5, baseheight + 255, rect.width - 10, 60);
 
                             TweenValueProperties properties = ResolveValueProperties(nodetype, sp_node);
-                            int mode_index = sp_valuemode_index.intValue;
+                            int mode_index = sp_ValueModeIndex.intValue;
 
-                            if (sp_valuemode_index.intValue != 3)
+                            if (sp_ValueModeIndex.intValue != 3)
                                 DrawValueConnector(rect_valuepanel, new Vector2(0, 0), XHud_Dashboard.Theme_Primary, properties, mode_index);
 
                             DrawValueFieldsPanel(rect_valuepanel, properties, mode_index, nodetype);
@@ -787,7 +810,7 @@ namespace SevenStrikeModules.XHud.Editor
                             TweenNode node = new TweenNode();
                             node = JsonUtility.FromJson<TweenNode>(XGUI.x_Editor_Data_Get_With_String("xData_Copied_TweenNode"));
 
-                            if (BaseScript.TweenNode_IsRepeat(node))
+                            if (BaseScript.TweenNode_IsDuplicated(node))
                             {
                                 EditorApplication.delayCall += () =>
                                 {
@@ -806,12 +829,12 @@ namespace SevenStrikeModules.XHud.Editor
                                     if (res == "追加")
                                     {
                                         node.Indicator += "Copied";
-                                        node.ID = BaseScript.TweenNode_ID_Create();
+                                        node.ID = BaseScript.TweenNode_GenerateId();
                                         BaseScript.PrimitiveTweenNodes.Add(node);
                                     }
                                     if (res == "覆盖")
                                     {
-                                        TweenNode r_node = BaseScript.TweenNode_GetRepeat(node);
+                                        TweenNode r_node = BaseScript.TweenNode_GetDuplicate(node);
                                         r_node.CopyFrom(node, true);
                                     }
                                 };
@@ -819,7 +842,7 @@ namespace SevenStrikeModules.XHud.Editor
                             else
                             {
                                 node.Indicator += "Copied";
-                                node.ID = BaseScript.TweenNode_ID_Create();
+                                node.ID = BaseScript.TweenNode_GenerateId();
                                 BaseScript.PrimitiveTweenNodes.Add(node);
                             }
                         });
@@ -841,10 +864,10 @@ namespace SevenStrikeModules.XHud.Editor
                     SerializedProperty sp_Root = sp_PrimitiveTweenNodes.GetArrayElementAtIndex(list.count - 1);
 
                     sp_Root.FindPropertyRelative("Indicator").stringValue = "NewTween";
-                    sp_Root.FindPropertyRelative("ID").intValue = BaseScript.TweenNode_ID_Create();
+                    sp_Root.FindPropertyRelative("ID").intValue = BaseScript.TweenNode_GenerateId();
                     sp_Root.FindPropertyRelative("Type").enumValueIndex = 0;
                     sp_Root.FindPropertyRelative("Enabled").boolValue = true;
-                    sp_Root.FindPropertyRelative("Timings").stringValue = "无";
+                    sp_Root.FindPropertyRelative("Timings").stringValue = "元素进入时";
                     sp_Root.FindPropertyRelative("Duration").floatValue = 1;
                     sp_Root.FindPropertyRelative("Ease").enumValueIndex = 10;
                     sp_Root.FindPropertyRelative("Rewind_Set_Startvalue").boolValue = true;
@@ -855,12 +878,11 @@ namespace SevenStrikeModules.XHud.Editor
                     sp_Root.FindPropertyRelative("End_Color").colorValue = Color.white;
                     sp_Root.FindPropertyRelative("IsFold").boolValue = false;
                     sp_Root.FindPropertyRelative("TweenSounds").ClearArray();
-                    sp_Root.FindPropertyRelative("ActivateFrom").boolValue = true;
-                    sp_Root.FindPropertyRelative("ActivateEnd").boolValue = false;
-                    sp_Root.FindPropertyRelative("ActivateOnlyToEnd").boolValue = false;
                     sp_Root.FindPropertyRelative("LoopType").enumValueIndex = (int)XTween_LoopType.Restart;
                     sp_Root.FindPropertyRelative("LoopCount").intValue = 0;
                     sp_Root.FindPropertyRelative("Progress").floatValue = 0;
+                    sp_Root.FindPropertyRelative("ValueModeIndex").intValue = 0;
+                    sp_Root.FindPropertyRelative("TweenValueMode").enumValueIndex = (int)TweenValueMode.起始到默认_S_D;
                     sp_Root.serializedObject.ApplyModifiedProperties();
 
                     EditorApplication.delayCall += () =>
@@ -884,7 +906,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     SerializedProperty sp_Root = sp_PrimitiveTweenNodes.GetArrayElementAtIndex(index);
                     SerializedProperty sp_IsFold = sp_Root.FindPropertyRelative("IsFold");
-                    SerializedProperty sp_valuemode_index = sp_Root.FindPropertyRelative("valuemode_index");
+                    SerializedProperty sp_ValueModeIndex = sp_Root.FindPropertyRelative("ValueModeIndex");
 
                     float height = 20;
 
@@ -892,7 +914,7 @@ namespace SevenStrikeModules.XHud.Editor
                         height = 1.6f;
                     else
                     {
-                        if (sp_valuemode_index.intValue == 3)
+                        if (sp_ValueModeIndex.intValue == 3)
                             height = 19;
                     }
 
@@ -1052,13 +1074,13 @@ namespace SevenStrikeModules.XHud.Editor
                     CollectPreviewTimings(BaseScript);
                 }
 
-                XGUI.layout_string_popup(
+                sp_PreviewTiming.stringValue = XGUI.layout_string_popup(
                     title: "预览时机",
                     title_width: 100,
                     title_size: XGUIFontSize.M,
                     title_anchor: TextAnchor.MiddleLeft,
                     prop: sp_PreviewTiming,
-                    options: PreviewTimings,
+                    options: opt_preview_timings,
                     opt_text_size: XGUIFontSize.M,
                     opt_text_color: Color.black,
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
@@ -1173,15 +1195,15 @@ namespace SevenStrikeModules.XHud.Editor
             if (!BaseScript.fold_option)
             {
                 #region 状态调试
-                DrawLabeledToggle("状态调试", sp_Debug, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, opt_debug, (b) => { });
+                DrawLabeledToggle("状态调试", "", sp_UseDebug, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, opt_debug, (b) => { });
                 #endregion
 
                 #region 静音
-                DrawLabeledToggle("静音", sp_MutePlay, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, opt_mute, (b) => { });
+                DrawLabeledToggle("静音", "开启后再动画播放时所有音效均不播放", sp_MutePlay, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, opt_mute, (b) => { });
                 #endregion
 
                 #region 元素联动
-                DrawLabeledToggle("元素联动", sp_IgnoreElementAnimationPlay, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, opt_control, (b) => { });
+                DrawLabeledToggle("元素联动", "如果关闭则元素入场和出场动画时则不会自动调用该动画器的动画播放！", sp_IgnoreElementAnimationPlay, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, opt_control, (b) => { });
                 #endregion
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
@@ -1776,27 +1798,7 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        #region 序列化属性缓存
-        /// <summary>
-        /// 缓存所有序列化属性的引用到对应字段
-        /// </summary>
-        private void CacheSerializedProperties()
-        {
-            sp_Debug = serializedObject.FindProperty("Debug");
-            sp_PrimitiveTweenNodes = serializedObject.FindProperty("PrimitiveTweenNodes");
-            sp_TweenIsPreviewing = serializedObject.FindProperty("TweenIsPreviewing");
-            sp_GlobalDuration = serializedObject.FindProperty("GlobalDuration");
-            sp_MutePlay = serializedObject.FindProperty("MutePlay");
-            sp_MaxTimer = serializedObject.FindProperty("MaxTimer");
-            sp_MinTimer = serializedObject.FindProperty("MinTimer");
-            sp_MinTimerWithGlobalDuration = serializedObject.FindProperty("MinTimerWithGlobalDuration");
-            sp_MaxTimerWithGlobalDuration = serializedObject.FindProperty("MaxTimerWithGlobalDuration");
-            sp_IgnoreElementAnimationPlay = serializedObject.FindProperty("IgnoreElementAnimationPlay");
-            sp_PreviewTiming = serializedObject.FindProperty("PreviewTiming");
-        }
-        #endregion
-
-        #region 动画值控件
+        #region 绘制：动画值控件
         /// <summary>
         /// 绘制数值面板的「流向连接器」按钮
         /// <para/>
@@ -1958,7 +1960,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             #region 数值输入控件
             XGUI.gui_property_field(
-                    rect: new Rect(rect.x + offset.x + 40, rect.y + offset.y, rect.width - (5 + offset.x) - 40, XGUI.GetSingleLineHeight()),
+                    rect: new Rect(rect.x + offset.x + (dir_index == 3 ? 25 : 40), rect.y + offset.y, rect.width - (5 + offset.x) - (dir_index == 3 ? 25 : 40), XGUI.GetSingleLineHeight()),
                     title: new GUIContent(title),
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.Theme_Primary,
@@ -1968,7 +1970,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 圆点按钮控件（数值获取赋值的多元操作方式）
             if (XGUI.gui_button(
-              rect: new Rect(rect.x + 12, rect.y - 2 + offset.y, 24, 24),
+              rect: new Rect(rect.x + (dir_index == 3 ? -5 : 12), rect.y - 2 + offset.y, 24, 24),
               tooltip: "",
               tex_release: anim_dot_r,
               tex_press: anim_dot_p,
@@ -2365,7 +2367,39 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        #region 解析TweenerNode
+        #region 绘制：公共控件选项
+        /// <summary>
+        /// 通用方法：绘制带标题的开关控件
+        /// </summary>
+        private void DrawLabeledToggle(string title = null, string tooltip = null, SerializedProperty prop = null, float width = 0, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, string[] options = null, Action<bool> act_on_changed = null)
+        {
+            XGUI.layout_toggle(
+                title: title,
+                tooltip: tooltip,
+                title_size: XGUIFontSize.M,
+                title_font_style: FontStyle.Normal,
+                title_padding: new RectOffset(5, 10, 0, 0),
+                title_width: width,
+                prop: prop,
+                tog_style: style,
+                tog_padding: new RectOffset(0, 9, 0, 0),
+                tog_margin: new RectOffset(0, 0, 0, 5),
+                tog_mixed_options: options,
+                tog_mixed_text_size: XGUIFontSize.M,
+                tog_mixed_text_color: Color.black,
+                tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
+                tog_mixed_text_anchor: TextAnchor.MiddleCenter,
+                tog_mixed_font_style: FontStyle.Normal,
+                tog_bg_off_color: color_bg_off,
+                tog_bg_on_color: color_bg_on,
+                tog_handler_off_color: color_off,
+                tog_handler_on_color: color_on,
+                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                act_on_changed: act_on_changed);
+        }
+        #endregion
+
+        #region 工具 - 解析TweenerNode
         /// <summary>
         /// 从序列化属性反序列化为 <see cref="TweenNode"/> 实例
         /// <para/>
@@ -2394,7 +2428,6 @@ namespace SevenStrikeModules.XHud.Editor
             node.Original_Vector4 = args.FindPropertyRelative("Original_Vector4").vector4Value;
             node.Original_Color = args.FindPropertyRelative("Original_Color").colorValue;
             node.Original_String = args.FindPropertyRelative("Original_String").stringValue;
-            node.ActivateFrom = args.FindPropertyRelative("ActivateFrom").boolValue;
             node.From_Int = args.FindPropertyRelative("From_Int").intValue;
             node.From_Float = args.FindPropertyRelative("From_Float").floatValue;
             node.From_Vector2 = args.FindPropertyRelative("From_Vector2").vector2Value;
@@ -2402,8 +2435,6 @@ namespace SevenStrikeModules.XHud.Editor
             node.From_Vector4 = args.FindPropertyRelative("From_Vector4").vector4Value;
             node.From_Color = args.FindPropertyRelative("From_Color").colorValue;
             node.From_String = args.FindPropertyRelative("From_String").stringValue;
-            node.ActivateEnd = args.FindPropertyRelative("ActivateEnd").boolValue;
-            node.ActivateOnlyToEnd = args.FindPropertyRelative("ActivateOnlyToEnd").boolValue;
             node.End_Int = args.FindPropertyRelative("End_Int").intValue;
             node.End_Float = args.FindPropertyRelative("End_Float").floatValue;
             node.End_Vector2 = args.FindPropertyRelative("End_Vector2").vector2Value;
@@ -2415,6 +2446,9 @@ namespace SevenStrikeModules.XHud.Editor
             node.LoopType = (XTween_LoopType)args.FindPropertyRelative("LoopType").enumValueIndex;
             node.LoopCount = args.FindPropertyRelative("LoopCount").intValue;
             node.IsFold = args.FindPropertyRelative("IsFold").boolValue;
+            node.ValueModeIndex = args.FindPropertyRelative("ValueModeIndex").intValue;
+            node.TweenValueMode = (TweenValueMode)args.FindPropertyRelative("TweenValueMode").enumValueIndex;
+
             SerializedProperty sp_TweenSounds = args.FindPropertyRelative("TweenSounds");
 
             node.TweenSounds = new List<TweenSound>();
@@ -2463,8 +2497,6 @@ namespace SevenStrikeModules.XHud.Editor
             property.FindPropertyRelative("Original_Vector4").vector4Value = node.Original_Vector4;
             property.FindPropertyRelative("Original_Color").colorValue = node.Original_Color;
             property.FindPropertyRelative("Original_String").stringValue = node.Original_String;
-            property.FindPropertyRelative("ActivateFrom").boolValue = node.ActivateFrom;
-            property.FindPropertyRelative("ActivateOnlyToEnd").boolValue = node.ActivateOnlyToEnd;
             property.FindPropertyRelative("From_Int").intValue = node.From_Int;
             property.FindPropertyRelative("From_Float").floatValue = node.From_Float;
             property.FindPropertyRelative("From_Vector2").vector2Value = node.From_Vector2;
@@ -2472,7 +2504,6 @@ namespace SevenStrikeModules.XHud.Editor
             property.FindPropertyRelative("From_Vector4").vector4Value = node.From_Vector4;
             property.FindPropertyRelative("From_Color").colorValue = node.From_Color;
             property.FindPropertyRelative("From_String").stringValue = node.From_String;
-            property.FindPropertyRelative("ActivateEnd").boolValue = node.ActivateEnd;
             property.FindPropertyRelative("End_Int").intValue = node.End_Int;
             property.FindPropertyRelative("End_Float").floatValue = node.End_Float;
             property.FindPropertyRelative("End_Vector2").vector2Value = node.End_Vector2;
@@ -2484,6 +2515,9 @@ namespace SevenStrikeModules.XHud.Editor
             property.FindPropertyRelative("LoopType").enumValueIndex = (int)node.LoopType;
             property.FindPropertyRelative("LoopCount").intValue = node.LoopCount;
             property.FindPropertyRelative("IsFold").boolValue = node.IsFold;
+            property.FindPropertyRelative("ValueModeIndex").intValue = node.ValueModeIndex;
+            property.FindPropertyRelative("TweenValueMode").enumValueIndex = (int)node.TweenValueMode;
+
             SerializedProperty sp_TweenSounds = property.FindPropertyRelative("TweenSounds");
 
             for (int i = 0; i < sp_TweenSounds.arraySize; i++)
@@ -2505,7 +2539,7 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        #region 辅助
+        #region 工具 - 时间统计
         /// <summary>
         /// 判断动画器中是否存在无限循环节点（LoopCount == -1）
         /// </summary>
@@ -2545,7 +2579,7 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        #region 宿主组件缓存刷新
+        #region 工具 - 宿主组件缓存刷新
         /// <summary>
         /// 根据当前 target 刷新其所在的 XHud 宿主组件缓存
         /// <para/>
@@ -2575,38 +2609,7 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        #region 绘制：公共控件选项
-        /// <summary>
-        /// 通用方法：绘制带标题的开关控件
-        /// </summary>
-        private void DrawLabeledToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, string[] options = null, Action<bool> act_on_changed = null)
-        {
-            XGUI.layout_toggle(
-                title: title,
-                title_size: XGUIFontSize.M,
-                title_font_style: FontStyle.Normal,
-                title_padding: new RectOffset(5, 10, 0, 0),
-                title_width: width,
-                prop: prop,
-                tog_style: style,
-                tog_padding: new RectOffset(0, 9, 0, 0),
-                tog_margin: new RectOffset(0, 0, 0, 5),
-                tog_mixed_options: options,
-                tog_mixed_text_size: XGUIFontSize.M,
-                tog_mixed_text_color: Color.black,
-                tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
-                tog_mixed_text_anchor: TextAnchor.MiddleCenter,
-                tog_mixed_font_style: FontStyle.Normal,
-                tog_bg_off_color: color_bg_off,
-                tog_bg_on_color: color_bg_on,
-                tog_handler_off_color: color_off,
-                tog_handler_on_color: color_on,
-                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
-                act_on_changed: act_on_changed);
-        }
-        #endregion
-
-        #region 动画预览
+        #region 工具 - 动画预览
         /// <summary>
         /// 创建并收集图元动画器指定时机下的所有动画实例
         /// </summary>
@@ -2633,7 +2636,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 收集图元动画器中所有出现过的动画时机名称
         /// <para/>
-        /// 结果同时写入字段 <see cref="PreviewTimings"/>，供预览时机下拉框使用。
+        /// 结果同时写入字段 <see cref="opt_preview_timings"/>，供预览时机下拉框使用。
         /// </summary>
         /// <param name="tweener">目标图元动画器</param>
         /// <returns>时机名称数组</returns>
@@ -2650,7 +2653,26 @@ namespace SevenStrikeModules.XHud.Editor
                     tims.Add(timing);
             }
 
-            PreviewTimings = tims.ToArray();
+            opt_preview_timings = tims.ToArray();
+
+            // ========== 校正 sp_PreviewTiming，避免时机对不上导致无法预览 ==========
+            if (sp_PreviewTiming != null)
+            {
+                // 情况 1：列表非空，但当前值不在合法范围内 → 取第一个合法值
+                if (opt_preview_timings.Length > 0 &&
+                    !tims.Contains(sp_PreviewTiming.stringValue))
+                {
+                    sp_PreviewTiming.stringValue = opt_preview_timings[0];
+                    sp_PreviewTiming.serializedObject.ApplyModifiedProperties();
+                }
+                // 情况 2：列表为空 → 清空预览时机
+                else if (opt_preview_timings.Length == 0)
+                {
+                    sp_PreviewTiming.stringValue = "";
+                    sp_PreviewTiming.serializedObject.ApplyModifiedProperties();
+                }
+            }
+
             return tims.ToArray();
         }
         /// <summary>
@@ -2714,6 +2736,7 @@ namespace SevenStrikeModules.XHud.Editor
             else
             {
                 tweens = CollectPreviewTweens(BaseScript, sp_PreviewTiming.stringValue);
+                Debug.Log($"{tweens.Length} / {sp_PreviewTiming.stringValue}");
                 // 预览收集到的有效的音效
                 PreviewTweenSounds(sp_PreviewTiming.stringValue, BaseScript);
             }
@@ -2815,7 +2838,7 @@ namespace SevenStrikeModules.XHud.Editor
         //------------------------------------------------------------------------------------
         #endregion
 
-        #region 音效预览实现
+        #region 工具 - 音效预览实现
         /// <summary>
         /// 预览单个图元动画器上匹配指定时机的所有音效
         /// <para/>

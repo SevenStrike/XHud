@@ -134,9 +134,9 @@ public class demo_mover_Wheel_Action_Dim : MonoBehaviour
             for (int i = 0; i < textArg.Length; i++)
             {
                 if (textArg[i].use_curve_in)
-                    textArg[i].tweener = textArg[i].text.xt_FontColor_To(textArg[i].target, textArg[i].duration_in, true).SetDelay(textArg[i].delay_in + DelayMulti).SetEase(textArg[i].curve_in).Play();
+                    textArg[i].tweener = textArg[i].text.xt_Color_To(textArg[i].target, textArg[i].duration_in, true).SetDelay(textArg[i].delay_in + DelayMulti).SetEase(textArg[i].curve_in).Play();
                 else
-                    textArg[i].tweener = textArg[i].text.xt_FontColor_To(textArg[i].target, textArg[i].duration_in, true).SetDelay(textArg[i].delay_in + DelayMulti).SetEase(textArg[i].ease_in).Play();
+                    textArg[i].tweener = textArg[i].text.xt_Color_To(textArg[i].target, textArg[i].duration_in, true).SetDelay(textArg[i].delay_in + DelayMulti).SetEase(textArg[i].ease_in).Play();
             }
             for (int i = 0; i < imgArg.Length; i++)
             {
@@ -161,9 +161,9 @@ public class demo_mover_Wheel_Action_Dim : MonoBehaviour
             for (int i = 0; i < textArg.Length; i++)
             {
                 if (textArg[i].use_curve_out)
-                    textArg[i].tweener = textArg[i].text.xt_FontColor_To(textArg[i].source, textArg[i].duration_out, true).SetDelay(textArg[i].delay_out).SetEase(textArg[i].curve_out).Play();
+                    textArg[i].tweener = textArg[i].text.xt_Color_To(textArg[i].source, textArg[i].duration_out, true).SetDelay(textArg[i].delay_out).SetEase(textArg[i].curve_out).Play();
                 else
-                    textArg[i].tweener = textArg[i].text.xt_FontColor_To(textArg[i].source, textArg[i].duration_out, true).SetDelay(textArg[i].delay_out).SetEase(textArg[i].ease_out).Play();
+                    textArg[i].tweener = textArg[i].text.xt_Color_To(textArg[i].source, textArg[i].duration_out, true).SetDelay(textArg[i].delay_out).SetEase(textArg[i].ease_out).Play();
             }
             for (int i = 0; i < imgArg.Length; i++)
             {

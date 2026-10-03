@@ -153,9 +153,9 @@ public class demo_mover_Text : demo_base
                     if (t.initial_col)
                         t.text.color = t.from_col;
                     if (t.usecurve_col)
-                        t.tween_color = t.text.xt_FontColor_To(t.target_col, t.durationAdd_col ? t.duration_col + duration : t.duration_col, true, false, false).SetEase(t.curve_col).SetDelay(t.delay_col + t.delay_multi + delay).Play();
+                        t.tween_color = t.text.xt_Color_To(t.target_col, t.durationAdd_col ? t.duration_col + duration : t.duration_col, true, false, false).SetEase(t.curve_col).SetDelay(t.delay_col + t.delay_multi + delay).Play();
                     else
-                        t.tween_color = t.text.xt_FontColor_To(t.target_col, t.durationAdd_col ? t.duration_col + duration : t.duration_col, true, false, false).SetEase(t.ease_col).SetDelay(t.delay_col + t.delay_multi + delay).Play();
+                        t.tween_color = t.text.xt_Color_To(t.target_col, t.durationAdd_col ? t.duration_col + duration : t.duration_col, true, false, false).SetEase(t.ease_col).SetDelay(t.delay_col + t.delay_multi + delay).Play();
                 }
             }
         }

@@ -965,6 +965,16 @@ namespace SevenStrikeModules.XHud.Enums
         z_尺寸 = 7
     }
     /// <summary>
+    /// 动画数值动向类型
+    /// </summary>
+    public enum TweenValueMode
+    {
+        起始到默认_S_D = 0,
+        默认到结束_D_E = 1,
+        起始到结束_S_E = 2,
+        当前到结束_C_E = 3
+    }
+    /// <summary>
     /// 图元控制器目标模块类型
     /// 定义图元所作用的UI组件类型
     /// </summary>

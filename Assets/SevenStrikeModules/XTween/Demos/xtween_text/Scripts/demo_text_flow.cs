@@ -30,7 +30,7 @@ public class demo_text_flow : demo_base
 
         base.Tween_Create();
 
-        currentTweener = text.xt_FontText_To(false, cursor, value, duration, false, blinktime).SetEase(easeMode).SetDelay(delay).SetLoopingDelay(loopDelay).SetLoop(loop).SetLoopType(loopType);
+        currentTweener = text.xt_Text_To(false, cursor, value, duration, false, blinktime).SetEase(easeMode).SetDelay(delay).SetLoopingDelay(loopDelay).SetLoop(loop).SetLoopType(loopType);
         ShortID = currentTweener.ShortId;
     }
     /// <summary>

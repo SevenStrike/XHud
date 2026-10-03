@@ -34,7 +34,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="duration">动画持续时间，单位为秒</param>
         /// <param name="autokill">动画完成后是否自动销毁</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_FontSize_To(this TextMeshProUGUI text, float endValue, float duration, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
+        public static XTween_Interface xt_Size_To(this TextMeshProUGUI text, float endValue, float duration, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
         {
             if (text == null)
             {
@@ -116,7 +116,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="useCurve">使用曲线</param>
         /// <param name="curve">曲线</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_FontSize_To(this TextMeshProUGUI text, float endValue, float duration, bool autokill, EaseMode easeMode, bool isFromMode, XTween_Getter<float> fromvalue, bool useCurve, AnimationCurve curve)
+        public static XTween_Interface xt_Size_To(this TextMeshProUGUI text, float endValue, float duration, bool autokill, EaseMode easeMode, bool isFromMode, XTween_Getter<float> fromvalue, bool useCurve, AnimationCurve curve)
         {
             if (text == null)
             {
@@ -321,7 +321,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="duration">动画持续时间，单位为秒</param>
         /// <param name="autokill">动画完成后是否自动销毁，默认为 false</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_FontLineHeight_To(this TextMeshProUGUI text, float endValue, float duration, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
+        public static XTween_Interface xt_LineHeight_To(this TextMeshProUGUI text, float endValue, float duration, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
         {
             if (text == null)
             {
@@ -402,7 +402,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="useCurve">使用曲线</param>
         /// <param name="curve">曲线</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_FontLineHeight_To(this TextMeshProUGUI text, float endValue, float duration, bool autokill, EaseMode easeMode, bool isFromMode, XTween_Getter<float> fromvalue, bool useCurve, AnimationCurve curve)
+        public static XTween_Interface xt_LineHeight_To(this TextMeshProUGUI text, float endValue, float duration, bool autokill, EaseMode easeMode, bool isFromMode, XTween_Getter<float> fromvalue, bool useCurve, AnimationCurve curve)
         {
             if (text == null)
             {
@@ -607,7 +607,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="duration">动画持续时间，单位为秒</param>
         /// <param name="autokill">动画完成后是否自动销毁，默认为 false</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_FontCharacter_To(this TextMeshProUGUI text, float endValue, float duration, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
+        public static XTween_Interface xt_Character_To(this TextMeshProUGUI text, float endValue, float duration, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
         {
             if (text == null)
             {
@@ -688,7 +688,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="useCurve">使用曲线</param>
         /// <param name="curve">曲线</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_FontCharacter_To(this TextMeshProUGUI text, float endValue, float duration, bool autokill, EaseMode easeMode, bool isFromMode, XTween_Getter<float> fromvalue, bool useCurve, AnimationCurve curve)
+        public static XTween_Interface xt_Character_To(this TextMeshProUGUI text, float endValue, float duration, bool autokill, EaseMode easeMode, bool isFromMode, XTween_Getter<float> fromvalue, bool useCurve, AnimationCurve curve)
         {
             if (text == null)
             {
@@ -893,7 +893,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="duration">动画持续时间，单位为秒</param>
         /// <param name="autokill">动画完成后是否自动销毁，默认为 false</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_FontMargin_To(this TextMeshProUGUI text, Vector4 endValue, float duration, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
+        public static XTween_Interface xt_Margin_To(this TextMeshProUGUI text, Vector4 endValue, float duration, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
         {
             if (text == null)
             {
@@ -974,7 +974,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="useCurve">使用曲线</param>
         /// <param name="curve">曲线</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_FontMargin_To(this TextMeshProUGUI text, Vector4 endValue, float duration, bool autokill, EaseMode easeMode, bool isFromMode, XTween_Getter<Vector4> fromvalue, bool useCurve, AnimationCurve curve)
+        public static XTween_Interface xt_Margin_To(this TextMeshProUGUI text, Vector4 endValue, float duration, bool autokill, EaseMode easeMode, bool isFromMode, XTween_Getter<Vector4> fromvalue, bool useCurve, AnimationCurve curve)
         {
             if (text == null)
             {
@@ -1179,7 +1179,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="duration">动画持续时间，单位为秒</param>
         /// <param name="autokill">动画完成后是否自动销毁，默认为 false</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_FontColor_To(this TextMeshProUGUI text, Color endValue, float duration, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
+        public static XTween_Interface xt_Color_To(this TextMeshProUGUI text, Color endValue, float duration, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
         {
             if (text == null)
             {
@@ -1260,7 +1260,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="useCurve">使用曲线</param>
         /// <param name="curve">曲线</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_FontColor_To(this TextMeshProUGUI text, Color endValue, float duration, bool autokill, EaseMode easeMode, bool isFromMode, XTween_Getter<Color> fromvalue, bool useCurve, AnimationCurve curve)
+        public static XTween_Interface xt_Color_To(this TextMeshProUGUI text, Color endValue, float duration, bool autokill, EaseMode easeMode, bool isFromMode, XTween_Getter<Color> fromvalue, bool useCurve, AnimationCurve curve)
         {
             if (text == null)
             {
@@ -1466,7 +1466,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="duration">动画持续时间，单位为秒</param>
         /// <param name="autokill">动画完成后是否自动销毁，默认为 false</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_FontText_To(this TextMeshProUGUI text, bool extended, string endValue, float duration, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
+        public static XTween_Interface xt_Text_To(this TextMeshProUGUI text, bool extended, string endValue, float duration, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
         {
             if (text == null)
             {
@@ -1582,7 +1582,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="useCurve">使用曲线</param>
         /// <param name="curve">曲线</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_FontText_To(this TextMeshProUGUI text, bool extended, string endValue, float duration, bool autokill, EaseMode easeMode, bool isFromMode, XTween_Getter<string> fromvalue, bool useCurve, AnimationCurve curve)
+        public static XTween_Interface xt_Text_To(this TextMeshProUGUI text, bool extended, string endValue, float duration, bool autokill, EaseMode easeMode, bool isFromMode, XTween_Getter<string> fromvalue, bool useCurve, AnimationCurve curve)
         {
             if (text == null)
             {

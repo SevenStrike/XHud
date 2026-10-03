@@ -38,7 +38,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="isRelative">是否为相对移动</param>
         /// <param name="autokill">动画完成后是否自动销毁</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_AnchoredPosition_To(this UnityEngine.RectTransform rectTransform, Vector2 endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_AnchoredPosition_To(this UnityEngine.RectTransform rectTransform, Vector2 endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (rectTransform == null)
             {
@@ -60,6 +60,12 @@ namespace SevenStrikeModules.XTween
                     if (rectTransform == null)
                         return;
                     rectTransform.anchoredPosition = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (rectTransform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        rectTransform.anchoredPosition3D = endValue;
                 }).OnRewind(() =>
                 {
                     if (rectTransform == null)
@@ -77,6 +83,12 @@ namespace SevenStrikeModules.XTween
                     if (rectTransform == null)
                         return;
                     rectTransform.anchoredPosition = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (rectTransform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        rectTransform.anchoredPosition3D = endValue;
                 }).OnRewind(() =>
                 {
                     if (rectTransform == null)
@@ -267,7 +279,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="isRelative">是否为相对移动</param>
         /// <param name="autokill">动画完成后是否自动销毁</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_AnchoredPosition3D_To(this UnityEngine.RectTransform rectTransform, Vector3 endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_AnchoredPosition3D_To(this UnityEngine.RectTransform rectTransform, Vector3 endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (rectTransform == null)
             {
@@ -289,6 +301,12 @@ namespace SevenStrikeModules.XTween
                     if (rectTransform == null)
                         return;
                     rectTransform.anchoredPosition3D = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (rectTransform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        rectTransform.anchoredPosition3D = endValue;
                 }).OnRewind(() =>
                 {
                     if (rectTransform == null)
@@ -306,6 +324,12 @@ namespace SevenStrikeModules.XTween
                     if (rectTransform == null)
                         return;
                     rectTransform.anchoredPosition3D = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (rectTransform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        rectTransform.anchoredPosition3D = endValue;
                 }).OnRewind(() =>
                 {
                     if (rectTransform == null)
@@ -502,7 +526,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="isRelative">是否为相对移动</param>
         /// <param name="autokill">动画完成后是否自动销毁</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_LocalPosition_To(this UnityEngine.Transform transform, Vector3 endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_LocalPosition_To(this UnityEngine.Transform transform, Vector3 endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (transform == null)
             {
@@ -524,6 +548,12 @@ namespace SevenStrikeModules.XTween
                     if (transform == null)
                         return;
                     transform.localPosition = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (transform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        transform.localPosition = endValue;
                 }).OnRewind(() =>
                 {
                     if (transform == null)
@@ -541,6 +571,12 @@ namespace SevenStrikeModules.XTween
                     if (transform == null)
                         return;
                     transform.localPosition = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (transform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        transform.localPosition = endValue;
                 }).OnRewind(() =>
                 {
                     if (transform == null)
@@ -732,7 +768,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="isRelative">是否为相对移动</param>
         /// <param name="autokill">动画完成后是否自动销毁</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_WorldPosition_To(this UnityEngine.Transform transform, Vector3 endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_WorldPosition_To(this UnityEngine.Transform transform, Vector3 endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (transform == null)
             {
@@ -754,6 +790,12 @@ namespace SevenStrikeModules.XTween
                     if (transform == null)
                         return;
                     transform.position = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (transform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        transform.position = endValue;
                 }).OnRewind(() =>
                 {
                     if (transform == null)
@@ -771,6 +813,12 @@ namespace SevenStrikeModules.XTween
                     if (transform == null)
                         return;
                     transform.position = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (transform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        transform.position = endValue;
                 }).OnRewind(() =>
                 {
                     if (transform == null)
@@ -961,7 +1009,7 @@ namespace SevenStrikeModules.XTween
         /// 创建一个在本地X轴上从当前位置到目标位置的动画
         /// 完全基于 xt_LocalPosition 的逻辑改造
         /// </summary>
-        public static XTween_Interface xt_LocalPosition_X_To(this UnityEngine.Transform transform, float endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_LocalPosition_X_To(this UnityEngine.Transform transform, float endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (transform == null)
             {
@@ -986,6 +1034,12 @@ namespace SevenStrikeModules.XTween
                     if (transform == null)
                         return;
                     transform.localPosition = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (transform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        transform.localPosition = targetPos;
                 }).OnRewind(() =>
                 {
                     if (transform == null)
@@ -1004,6 +1058,12 @@ namespace SevenStrikeModules.XTween
                         if (transform == null)
                             return;
                         transform.localPosition = pos;
+                    }).OnComplete((duration) =>
+                    {
+                        if (transform == null)
+                            return;
+                        if (complete_set_endvalue)
+                            transform.localPosition = targetPos;
                     }).OnRewind(() =>
                     {
                         if (transform == null)
@@ -1188,7 +1248,7 @@ namespace SevenStrikeModules.XTween
         /// 创建一个在本地Y轴上从当前位置到目标位置的动画
         /// 完全基于 xt_LocalPosition 的逻辑改造
         /// </summary>
-        public static XTween_Interface xt_LocalPosition_Y_To(this UnityEngine.Transform transform, float endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_LocalPosition_Y_To(this UnityEngine.Transform transform, float endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (transform == null)
             {
@@ -1213,6 +1273,12 @@ namespace SevenStrikeModules.XTween
                     if (transform == null)
                         return;
                     transform.localPosition = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (transform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        transform.localPosition = targetPos;
                 }).OnRewind(() =>
                 {
                     if (transform == null)
@@ -1231,6 +1297,12 @@ namespace SevenStrikeModules.XTween
                         if (transform == null)
                             return;
                         transform.localPosition = pos;
+                    }).OnComplete((duration) =>
+                    {
+                        if (transform == null)
+                            return;
+                        if (complete_set_endvalue)
+                            transform.localPosition = targetPos;
                     }).OnRewind(() =>
                     {
                         if (transform == null)
@@ -1415,7 +1487,7 @@ namespace SevenStrikeModules.XTween
         /// 创建一个在本地Z轴上从当前位置到目标位置的动画
         /// 完全基于 xt_LocalPosition 的逻辑改造
         /// </summary>
-        public static XTween_Interface xt_LocalPosition_Z_To(this UnityEngine.Transform transform, float endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_LocalPosition_Z_To(this UnityEngine.Transform transform, float endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (transform == null)
             {
@@ -1440,6 +1512,12 @@ namespace SevenStrikeModules.XTween
                     if (transform == null)
                         return;
                     transform.localPosition = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (transform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        transform.localPosition = targetPos;
                 }).OnRewind(() =>
                 {
                     if (transform == null)
@@ -1458,6 +1536,12 @@ namespace SevenStrikeModules.XTween
                         if (transform == null)
                             return;
                         transform.localPosition = pos;
+                    }).OnComplete((duration) =>
+                    {
+                        if (transform == null)
+                            return;
+                        if (complete_set_endvalue)
+                            transform.localPosition = targetPos;
                     }).OnRewind(() =>
                     {
                         if (transform == null)
@@ -1647,7 +1731,7 @@ namespace SevenStrikeModules.XTween
         /// 创建一个在世界X轴上从当前位置到目标位置的动画
         /// 完全基于 xt_WorldPosition 的逻辑改造
         /// </summary>
-        public static XTween_Interface xt_WorldPosition_X_To(this UnityEngine.Transform transform, float endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_WorldPosition_X_To(this UnityEngine.Transform transform, float endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (transform == null)
             {
@@ -1672,6 +1756,12 @@ namespace SevenStrikeModules.XTween
                     if (transform == null)
                         return;
                     transform.position = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (transform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        transform.position = targetPos;
                 }).OnRewind(() =>
                 {
                     if (transform == null)
@@ -1690,6 +1780,12 @@ namespace SevenStrikeModules.XTween
                         if (transform == null)
                             return;
                         transform.position = pos;
+                    }).OnComplete((duration) =>
+                    {
+                        if (transform == null)
+                            return;
+                        if (complete_set_endvalue)
+                            transform.position = targetPos;
                     }).OnRewind(() =>
                     {
                         if (transform == null)
@@ -1874,7 +1970,7 @@ namespace SevenStrikeModules.XTween
         /// 创建一个在世界Y轴上从当前位置到目标位置的动画
         /// 完全基于 xt_WorldPosition 的逻辑改造
         /// </summary>
-        public static XTween_Interface xt_WorldPosition_Y_To(this UnityEngine.Transform transform, float endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_WorldPosition_Y_To(this UnityEngine.Transform transform, float endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (transform == null)
             {
@@ -1899,6 +1995,12 @@ namespace SevenStrikeModules.XTween
                     if (transform == null)
                         return;
                     transform.position = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (transform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        transform.position = targetPos;
                 }).OnRewind(() =>
                 {
                     if (transform == null)
@@ -1917,6 +2019,12 @@ namespace SevenStrikeModules.XTween
                         if (transform == null)
                             return;
                         transform.position = pos;
+                    }).OnComplete((duration) =>
+                    {
+                        if (transform == null)
+                            return;
+                        if (complete_set_endvalue)
+                            transform.position = targetPos;
                     }).OnRewind(() =>
                     {
                         if (transform == null)
@@ -2101,7 +2209,7 @@ namespace SevenStrikeModules.XTween
         /// 创建一个在世界Z轴上从当前位置到目标位置的动画
         /// 完全基于 xt_WorldPosition 的逻辑改造
         /// </summary>
-        public static XTween_Interface xt_WorldPosition_Z_To(this UnityEngine.Transform transform, float endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_WorldPosition_Z_To(this UnityEngine.Transform transform, float endValue, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (transform == null)
             {
@@ -2126,6 +2234,12 @@ namespace SevenStrikeModules.XTween
                     if (transform == null)
                         return;
                     transform.position = pos;
+                }).OnComplete((duration) =>
+                {
+                    if (transform == null)
+                        return;
+                    if (complete_set_endvalue)
+                        transform.position = targetPos;
                 }).OnRewind(() =>
                 {
                     if (transform == null)
@@ -2144,6 +2258,12 @@ namespace SevenStrikeModules.XTween
                         if (transform == null)
                             return;
                         transform.position = pos;
+                    }).OnComplete((duration) =>
+                    {
+                        if (transform == null)
+                            return;
+                        if (complete_set_endvalue)
+                            transform.position = targetPos;
                     }).OnRewind(() =>
                     {
                         if (transform == null)
@@ -2332,7 +2452,7 @@ namespace SevenStrikeModules.XTween
         /// <summary>
         /// 将 RectTransform 移动到目标 RectTransform 的位置
         /// </summary>
-        public static XTween_Interface xt_AnchoredPosition_To(this RectTransform rectTransform, RectTransform target, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_AnchoredPosition_To(this RectTransform rectTransform, RectTransform target, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (rectTransform == null)
             {
@@ -2345,13 +2465,13 @@ namespace SevenStrikeModules.XTween
                 return null;
             }
 
-            return xt_AnchoredPosition_To(rectTransform, target.anchoredPosition, duration, isRelative, autokill, rewind_set_startvalue);
+            return xt_AnchoredPosition_To(rectTransform, target.anchoredPosition, duration, isRelative, autokill, rewind_set_startvalue, complete_set_endvalue);
         }
 
         /// <summary>
         /// 将 RectTransform 3D位置移动到目标 RectTransform 的 3D位置
         /// </summary>
-        public static XTween_Interface xt_AnchoredPosition3D_To(this RectTransform rectTransform, RectTransform target, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_AnchoredPosition3D_To(this RectTransform rectTransform, RectTransform target, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (rectTransform == null)
             {
@@ -2364,13 +2484,13 @@ namespace SevenStrikeModules.XTween
                 return null;
             }
 
-            return xt_AnchoredPosition3D_To(rectTransform, target.anchoredPosition3D, duration, isRelative, autokill, rewind_set_startvalue);
+            return xt_AnchoredPosition3D_To(rectTransform, target.anchoredPosition3D, duration, isRelative, autokill, rewind_set_startvalue, complete_set_endvalue);
         }
 
         /// <summary>
         /// 将 Transform 本地位置移动到目标 Transform 的本地位置
         /// </summary>
-        public static XTween_Interface xt_LocalPosition_To(this Transform transform, Transform target, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_LocalPosition_To(this Transform transform, Transform target, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (transform == null)
             {
@@ -2383,13 +2503,13 @@ namespace SevenStrikeModules.XTween
                 return null;
             }
 
-            return xt_LocalPosition_To(transform, target.localPosition, duration, isRelative, autokill, rewind_set_startvalue);
+            return xt_LocalPosition_To(transform, target.localPosition, duration, isRelative, autokill, rewind_set_startvalue, complete_set_endvalue);
         }
 
         /// <summary>
         /// 将 Transform 世界位置移动到目标 Transform 的世界位置
         /// </summary>
-        public static XTween_Interface xt_WorldPosition_To(this Transform transform, Transform target, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true)
+        public static XTween_Interface xt_WorldPosition_To(this Transform transform, Transform target, float duration, bool isRelative = false, bool autokill = false, bool rewind_set_startvalue = true, bool complete_set_endvalue = false)
         {
             if (transform == null)
             {
@@ -2402,7 +2522,7 @@ namespace SevenStrikeModules.XTween
                 return null;
             }
 
-            return xt_WorldPosition_To(transform, target.position, duration, isRelative, autokill, rewind_set_startvalue);
-        }   
+            return xt_WorldPosition_To(transform, target.position, duration, isRelative, autokill, rewind_set_startvalue, complete_set_endvalue);
+        }
     }
 }

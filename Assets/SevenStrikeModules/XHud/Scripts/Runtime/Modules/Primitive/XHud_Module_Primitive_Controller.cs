@@ -259,7 +259,7 @@ namespace SevenStrikeModules.XHud
             XHud_Module_Primitive_Feature comp_feature = (XHud_Module_Primitive_Feature)Undo.AddComponent(gameObject, typeof(XHud_Module_Primitive_Feature));
             comp_feature.FindController();
             XHud_Module_Primitive_Tween comp_tween = (XHud_Module_Primitive_Tween)Undo.AddComponent(gameObject, typeof(XHud_Module_Primitive_Tween));
-            comp_tween.FindController();
+            comp_tween.Tween_GetController();
 
             IsInitial = true;
 

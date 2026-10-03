@@ -2295,8 +2295,8 @@ namespace SevenStrikeModules.XHud.Editor
                 can_foldout: false);
 
             #region 动画数值过渡模式选项卡
-            int value_mode_index = node.valuemode_index = XGUI.layout_toolbar(
-                      index: node.valuemode_index,
+            int value_mode_index = node.ValueModeIndex = XGUI.layout_toolbar(
+                      index: node.ValueModeIndex,
                       names: new string[] { "S - D", "D - E", "S - E", "C - E" },
                       bg_normal: XGUIFilled.纯色边框,
                       bg_selected: XGUIFilled.实体,
@@ -2317,6 +2317,9 @@ namespace SevenStrikeModules.XHud.Editor
                       navigate_style_bg: XGUIFilled.纯色边框,
                       navigate_style_bg_color: Color.black * 0.5f);
             #endregion
+
+            // 数值模式枚举值同步
+            node.TweenValueMode = (TweenValueMode)value_mode_index;
 
             #region 模式说明按钮（弹出说明弹窗）
             Rect rect_toolbar = XGUI.GetLastRect();
@@ -4130,7 +4133,7 @@ namespace SevenStrikeModules.XHud.Editor
             TweenNode newNode = new TweenNode();
 
             // ID：由目标统一分配，保证全局唯一
-            newNode.ID = target.TweenNode_ID_Create();
+            newNode.ID = target.TweenNode_GenerateId();
 
             // 显示名：默认 "NewTween"，用户可在参数面板中修改
             newNode.Indicator = "NewTween";
@@ -4144,11 +4147,6 @@ namespace SevenStrikeModules.XHud.Editor
             // 时长 / 延迟：默认 1 秒、无延迟，是一个「开箱即用」的起始值
             newNode.Duration = 1f;
             newNode.Delay = 0f;
-
-            // 激活标志：默认从「起始值」激活，不激活结束值 / 不只到结束
-            newNode.ActivateFrom = true;
-            newNode.ActivateEnd = false;
-            newNode.ActivateOnlyToEnd = false;
 
             // 循环：默认 Restart 模式、循环 0 次（即不循环）
             newNode.LoopType = XTween_LoopType.Restart;
@@ -4168,6 +4166,9 @@ namespace SevenStrikeModules.XHud.Editor
             newNode.Original_Color = Color.white;
             newNode.From_Color = Color.white;
             newNode.End_Color = Color.white;
+
+            newNode.ValueModeIndex = 0;
+            newNode.TweenValueMode = TweenValueMode.起始到默认_S_D;
 
             // 缓动曲线：默认 EaseInOut(0,0,1,1)，即标准缓入缓出
             newNode.Curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
