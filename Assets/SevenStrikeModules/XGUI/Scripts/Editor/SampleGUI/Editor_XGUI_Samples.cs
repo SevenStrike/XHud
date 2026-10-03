@@ -23,7 +23,6 @@ namespace SevenStrikeModules.XGUI.Editor
     using SevenStrikeModules.XGUI.Runtime;
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using UnityEditor;
     using UnityEngine;
 

@@ -144,13 +144,6 @@ namespace SevenStrikeModules.XHud.Editor
         private List<XCoroutine> Preview_PrimitiveTweens_SoundCoroutineList_Stop = new List<XCoroutine>();
         #endregion
 
-        #region 字段 - 子窗口
-        /// <summary>
-        /// 音效设置器窗口实例（用于关闭时同步关闭）
-        /// </summary>
-        private Editor_XHud_PrimitiveTweenSoundSetTool Editor_XHud_PrimitiveTweenSoundSetTool;
-        #endregion
-
         #region 字段 - 颜色
         /// <summary>
         /// 数值圆点按钮使用的红色（起始值标识色）
@@ -943,10 +936,6 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 StopPreview();
                 StopAllPreviewSounds();
-
-                // 如果音效设置器是打开的就关闭它
-                if (Editor_XHud_PrimitiveTweenSoundSetTool != null)
-                    Editor_XHud_PrimitiveTweenSoundSetTool.Close();
             }
 
             Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
@@ -2461,25 +2450,6 @@ namespace SevenStrikeModules.XHud.Editor
             node.ValueModeIndex = args.FindPropertyRelative("ValueModeIndex").intValue;
             node.TweenValueMode = (TweenValueMode)args.FindPropertyRelative("TweenValueMode").enumValueIndex;
 
-            SerializedProperty sp_TweenSounds = args.FindPropertyRelative("TweenSounds");
-
-            node.TweenSounds = new List<TweenSound>();
-
-            for (int i = 0; i < sp_TweenSounds.arraySize; i++)
-            {
-                SerializedProperty sp_sounditem = sp_TweenSounds.GetArrayElementAtIndex(i);
-
-                TweenSound s_node = new TweenSound();
-                s_node.IsPlayed = sp_sounditem.FindPropertyRelative("IsPlayed").boolValue;
-                s_node.Path = sp_sounditem.FindPropertyRelative("Path").stringValue;
-                s_node.Percentage = sp_sounditem.FindPropertyRelative("Percentage").floatValue;
-                s_node.Sound = (AudioClip)sp_sounditem.FindPropertyRelative("Sound").objectReferenceValue;
-                s_node.Volume = sp_sounditem.FindPropertyRelative("Volume").floatValue;
-                s_node.MaxPitch = sp_sounditem.FindPropertyRelative("MaxPitch").floatValue;
-                s_node.MinPitch = sp_sounditem.FindPropertyRelative("MinPitch").floatValue;
-                node.TweenSounds.Add(s_node);
-            }
-
             return node;
         }
         /// <summary>
@@ -2529,24 +2499,6 @@ namespace SevenStrikeModules.XHud.Editor
             property.FindPropertyRelative("IsFold").boolValue = node.IsFold;
             property.FindPropertyRelative("ValueModeIndex").intValue = node.ValueModeIndex;
             property.FindPropertyRelative("TweenValueMode").enumValueIndex = (int)node.TweenValueMode;
-
-            SerializedProperty sp_TweenSounds = property.FindPropertyRelative("TweenSounds");
-
-            for (int i = 0; i < sp_TweenSounds.arraySize; i++)
-            {
-                SerializedProperty sp_sounditem = sp_TweenSounds.GetArrayElementAtIndex(i);
-
-                sp_sounditem.FindPropertyRelative("IsPlayed").boolValue = node.TweenSounds[i].IsPlayed;
-                sp_sounditem.FindPropertyRelative("Path").stringValue = node.TweenSounds[i].Path;
-                sp_sounditem.FindPropertyRelative("Percentage").floatValue = node.TweenSounds[i].Percentage;
-                sp_sounditem.FindPropertyRelative("Sound").objectReferenceValue = node.TweenSounds[i].Sound;
-                sp_sounditem.FindPropertyRelative("Volume").floatValue = node.TweenSounds[i].Volume;
-                sp_sounditem.FindPropertyRelative("MaxPitch").floatValue = node.TweenSounds[i].MaxPitch;
-                sp_sounditem.FindPropertyRelative("MinPitch").floatValue = node.TweenSounds[i].MinPitch;
-
-                sp_sounditem.serializedObject.ApplyModifiedProperties();
-            }
-            sp_TweenSounds.serializedObject.ApplyModifiedProperties();
             property.serializedObject.ApplyModifiedProperties();
         }
         #endregion
@@ -2874,69 +2826,51 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="tweener">目标图元动画器</param>
         private void PreviewTweenSounds(string Timings, XHud_Module_Primitive_Tween tweener)
         {
-            // 循环生成音效，但是音效的延迟时间由以下条件决定：
-            // 音效本身设置的百分比参数 x 动画节点的基础耗时 x 动画器的全局耗时 + 动画节点的延迟时间
-            for (int i = 0; i < tweener.PrimitiveTweenNodes.Count; i++)
+            for (int s = 0; s < tweener.PrimitiveTweenSounds.Count; s++)
             {
-                TweenNode node = tweener.PrimitiveTweenNodes[i];
-
-                if (!node.Enabled)
-                    continue;
+                TweenSound sod = tweener.PrimitiveTweenSounds[s];
 
                 // 判断该音效的播放时机是否匹配，如果不匹配则跳过
-                if (Timings != node.Timings)
+                if (Timings != sod.Timings)
                     continue;
 
-                for (int s = 0; s < node.TweenSounds.Count; s++)
-                {
-                    TweenSound tsound = node.TweenSounds[s];
+                float x_vol = sod.Volume;
+                float x_pit_min = sod.MinPitch;
+                float x_pit_max = sod.MaxPitch;
+                float x_delay = sod.Delay;
+                bool x_userandom = !(sod.MinPitch == 1 && sod.MaxPitch == 1);
+                string x_soundname = sod.Sound.name;
 
-                    float x_vol = tsound.Volume;
-                    float x_pit_min = tsound.MinPitch;
-                    float x_pit_max = tsound.MaxPitch;
-                    float x_delay = ((tsound.Percentage * 0.01f) * node.Duration * tweener.GlobalDuration) + node.Delay;
-                    bool x_userandom = !(tsound.MinPitch == 1 && tsound.MaxPitch == 1);
-                    string x_soundname = tsound.Sound.name;
-
-                    AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
-                    Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(PlayPreviewSoundCoroutine(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
-                }
+                AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
+                Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(PlayPreviewSoundCoroutine(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
             }
         }
         /// <summary>
         /// 预览多个图元动画器上匹配指定时机的所有音效（批量模式）
         /// </summary>
         /// <param name="Timings">目标时机名称</param>
-        /// <param name="tweener">目标图元动画器数组</param>
-        private void PreviewTweenSounds(string Timings, XHud_Module_Primitive_Tween[] tweener)
+        /// <param name="tweeners">目标图元动画器数组</param>
+        private void PreviewTweenSounds(string Timings, XHud_Module_Primitive_Tween[] tweeners)
         {
-            // 循环生成音效，但是音效的延迟时间由以下条件决定：
-            // 音效本身设置的百分比参数 x 动画节点的基础耗时 x 动画器的全局耗时 + 动画节点的延迟时间
-            for (int i = 0; i < tweener.Length; i++)
+            for (int i = 0; i < tweeners.Length; i++)
             {
-                XHud_Module_Primitive_Tween tween = tweener[i];
-                for (int s = 0; s < tween.PrimitiveTweenNodes.Count; s++)
+                XHud_Module_Primitive_Tween tweener = tweeners[i];
+                for (int k = 0; k < tweener.PrimitiveTweenSounds.Count; k++)
                 {
-                    TweenNode node = tween.PrimitiveTweenNodes[s];
-                    if (!node.Enabled)
+                    TweenSound sod = tweener.PrimitiveTweenSounds[k];
+
+                    if (sod.Timings != Timings)
                         continue;
-                    if (node.Timings != Timings)
-                        continue;
 
-                    for (int k = 0; k < node.TweenSounds.Count; k++)
-                    {
-                        TweenSound tsound = node.TweenSounds[k];
+                    float x_vol = sod.Volume;
+                    float x_pit_min = sod.MinPitch;
+                    float x_pit_max = sod.MaxPitch;
+                    float x_delay = sod.Delay;
+                    bool x_userandom = !(sod.MinPitch == 1 && sod.MaxPitch == 1);
+                    string x_soundname = sod.Sound.name;
 
-                        float x_vol = tsound.Volume;
-                        float x_pit_min = tsound.MinPitch;
-                        float x_pit_max = tsound.MaxPitch;
-                        float x_delay = (tsound.Percentage * node.Duration * tween.GlobalDuration) + node.Delay;
-                        bool x_userandom = !(tsound.MinPitch == 1 && tsound.MaxPitch == 1);
-                        string x_soundname = tsound.Sound.name;
-
-                        AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
-                        Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(PlayPreviewSoundCoroutine(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
-                    }
+                    AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
+                    Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(PlayPreviewSoundCoroutine(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
                 }
             }
         }

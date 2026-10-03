@@ -25,6 +25,9 @@ namespace SevenStrikeModules.XHud
     using SevenStrikeModules.XTween;
     using System.Collections.Generic;
     using UnityEngine;
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
     using UnityEngine.Events;
     using UnityEngine.UI;
 
@@ -41,13 +44,13 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public string Path;
         /// <summary>
-        /// 触发点百分比
+        /// 音效Timings
         /// </summary>
-        public float Percentage;
+        public string Timings;
         /// <summary>
-        /// 已播放状态
+        /// 音效延迟播放时间
         /// </summary>
-        public bool IsPlayed;
+        public float Delay;
         /// <summary>
         /// 音量
         /// </summary>
@@ -65,6 +68,18 @@ namespace SevenStrikeModules.XHud
         /// 动作 - 动画器音效 - 播放
         /// </summary>
         public UnityAction<AudioClip> act_on_SoundPlay;
+
+        public TweenSound() { }
+
+        public TweenSound(AudioClip sound, string path, float delay, float volume, float maxPitch, float minPitch)
+        {
+            Sound = sound;
+            Path = path;
+            Delay = delay;
+            Volume = volume;
+            MaxPitch = maxPitch;
+            MinPitch = minPitch;
+        }
 
         /// <summary>
         /// 设置音高
@@ -84,6 +99,44 @@ namespace SevenStrikeModules.XHud
         public void SetVolume(float vol)
         {
             Volume = vol;
+        }
+
+        public void GetSoundPath()
+        {
+#if UNITY_EDITOR
+            if (Sound == null)
+            {
+                Path = "";
+                return;
+            }
+            Path = AssetDatabase.GetAssetPath(Sound);
+#endif
+        }
+
+        private TweenSound Clone()
+        {
+            TweenSound sod = new TweenSound();
+            sod.Sound = this.Sound;           // AudioClip 是 UnityEngine.Object，引用即可
+            sod.Path = this.Path;
+            sod.Volume = this.Volume;
+            sod.MaxPitch = this.MaxPitch;
+            sod.MinPitch = this.MinPitch;
+            // act_on_SoundPlay 委托不克隆，新节点需要重新绑定
+            sod.act_on_SoundPlay = null;
+
+            return sod;
+        }
+
+        public void CopyTo(TweenSound source)
+        {
+            if (source == null) return;
+
+            source.Sound = this.Sound;
+            source.Delay = this.Delay;
+            source.Path = this.Path;
+            source.Volume = this.Volume;
+            source.MaxPitch = this.MaxPitch;
+            source.MinPitch = this.MinPitch;
         }
     }
 
@@ -395,8 +448,6 @@ namespace SevenStrikeModules.XHud
         public UnityAction<AudioClip> Act_On_SoundPlayed;
         #endregion
 
-        public List<TweenSound> TweenSounds;
-
         /// <summary>
         /// 清空委托事件
         /// </summary>
@@ -489,26 +540,6 @@ namespace SevenStrikeModules.XHud
             newNode.ValueModeIndex = this.ValueModeIndex;
             newNode.TweenValueMode = this.TweenValueMode;
 
-            // ========== 音效列表（深度克隆）==========
-            if (this.TweenSounds != null && this.TweenSounds.Count > 0)
-            {
-                newNode.TweenSounds = new List<TweenSound>();
-                foreach (var sound in this.TweenSounds)
-                {
-                    TweenSound newSound = new TweenSound();
-                    newSound.Sound = sound.Sound;           // AudioClip 是 UnityEngine.Object，引用即可
-                    newSound.Path = sound.Path;
-                    newSound.Percentage = sound.Percentage;
-                    newSound.IsPlayed = false;               // 克隆后重置播放状态
-                    newSound.Volume = sound.Volume;
-                    newSound.MaxPitch = sound.MaxPitch;
-                    newSound.MinPitch = sound.MinPitch;
-                    // act_on_SoundPlay 委托不克隆，新节点需要重新绑定
-                    newSound.act_on_SoundPlay = null;
-                    newNode.TweenSounds.Add(newSound);
-                }
-            }
-
             // ========== 注意：以下字段不克隆 ==========
             // - Tweener: 动画器实例，克隆后应该为 null，由新节点独立创建
             // - IsFold: UI 折叠状态，编辑器专用，不克隆
@@ -588,28 +619,6 @@ namespace SevenStrikeModules.XHud
             this.ValueModeIndex = source.ValueModeIndex;
             this.TweenValueMode = source.TweenValueMode;
 
-            // 音效列表深度复制
-            if (source.TweenSounds != null && source.TweenSounds.Count > 0)
-            {
-                this.TweenSounds = new List<TweenSound>();
-                foreach (var sound in source.TweenSounds)
-                {
-                    TweenSound newSound = new TweenSound();
-                    newSound.Sound = sound.Sound;
-                    newSound.Path = sound.Path;
-                    newSound.Percentage = sound.Percentage;
-                    newSound.IsPlayed = false;
-                    newSound.Volume = sound.Volume;
-                    newSound.MaxPitch = sound.MaxPitch;
-                    newSound.MinPitch = sound.MinPitch;
-                    this.TweenSounds.Add(newSound);
-                }
-            }
-            else
-            {
-                this.TweenSounds = null;
-            }
-
             // 注意：ID 不复制，保持原节点的 ID 或由调用方重新生成
             // Tweener 不复制
             // 委托事件不复制
@@ -660,17 +669,18 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         [SerializeField] public bool TweenIsPreviewing;
         /// <summary>
-        /// 动画节点列表
-        /// 存储当前图元的所有动画配置与运行时状态
-        /// 每个 TweenNode 代表一条独立的动画轨道（位移、旋转、缩放、颜色等）
-        /// </summary>
-        [SerializeField] public List<TweenNode> PrimitiveTweenNodes = new List<TweenNode>();
-        /// <summary>
         /// 起始动画节点标识（Indicator 名称）
         /// 指定图元在 Element 系统调度时作为"主入口"优先播放的动画节点
         /// 通过 TweenNode_GetByIndicator(MainTweenNode) 定位
         /// </summary>
         [SerializeField] public string MainTweenNode;
+        /// <summary>
+        /// 动画节点列表
+        /// 存储当前图元的所有动画配置与运行时状态
+        /// 每个 TweenNode 代表一条独立的动画轨道（位移、旋转、缩放、颜色等）
+        /// </summary>
+        [SerializeField] public List<TweenNode> PrimitiveTweenNodes = new List<TweenNode>();
+        [SerializeField] public List<TweenSound> PrimitiveTweenSounds = new List<TweenSound>();
         #endregion
 
         #region 成员 - 速率&时间
@@ -1657,11 +1667,8 @@ namespace SevenStrikeModules.XHud
             {
                 TweenNode node = PrimitiveTweenNodes[i];
 
-                // 步骤1：更新该节点的播放进度
+                // 更新该节点的播放进度
                 TweenNode_UpdateTweenProgress(node);
-
-                // 步骤2：根据进度判断是否需要触发音效
-                TweenNode_ProcessNodeSounds(node);
             }
         }
         /// <summary>
@@ -1724,70 +1731,6 @@ namespace SevenStrikeModules.XHud
 
             // 精度修正：接近完成时直接设为 1
             node.Progress = rawProgress > 0.985f ? 1f : rawProgress;
-        }
-        #endregion
-
-        #region 播放音效
-        /// <summary>
-        /// 处理单个动画节点的音效触发逻辑
-        /// 
-        /// 音效触发规则：
-        /// 1. 每个动画节点可以配置多个音效触发点（TweenSound）
-        /// 2. 触发点可以是 0-1 之间的任意百分比
-        /// 3. 当动画进度 >= 触发点百分比时，播放对应的音效
-        /// 4. 使用 IsPlayed 标志确保每个音效只触发一次
-        /// 5. 当进度回退时（如动画被重置），IsPlayed 标志会被重置，允许再次触发
-        /// 
-        /// 特殊处理：
-        /// - 循环动画（LoopCount = -1）不触发音效，避免无限重复播放
-        /// - 触发点 >= 1 时，在动画完成时刻触发
-        /// - 触发点 < 1 时，在进度超过触发点的瞬间触发
-        /// 
-        /// </summary>
-        /// <param name="node">目标动画节点</param>
-        private void TweenNode_ProcessNodeSounds(TweenNode node)
-        {
-            // 条件1：节点没有配置任何音效
-            if (node.TweenSounds == null || node.TweenSounds.Count == 0)
-                return;
-
-            // 条件2：循环动画不触发音效（避免无限重复）
-            if (node.LoopCount == -1)
-                return;
-
-            // 遍历该节点的所有音效触发点
-            for (int i = 0; i < node.TweenSounds.Count; i++)
-            {
-                TweenSound sound = node.TweenSounds[i];
-
-                // 跳过未配置音效剪辑的触发点
-                if (sound.Sound == null)
-                    continue;
-
-                // 判断当前进度是否达到触发条件
-                // - 触发点 >= 1：使用 >= 判断（动画完成时刻触发）
-                // - 触发点 < 1：使用 > 判断（超过触发点的瞬间触发）
-                bool shouldTrigger = sound.Percentage >= 1f
-                    ? node.Progress >= sound.Percentage
-                    : node.Progress > sound.Percentage;
-
-                if (shouldTrigger)
-                {
-                    // 达到触发条件，且尚未播放过该音效
-                    if (!sound.IsPlayed)
-                    {
-                        sound.IsPlayed = true;                      // 标记已播放，防止重复
-                        PlayTweenSound(sound.Sound, sound.Volume, sound.MinPitch, sound.MaxPitch);
-                        node.Act_On_SoundPlayed?.Invoke(sound.Sound); // 触发外部事件
-                    }
-                }
-                else
-                {
-                    // 进度回退到触发点之前时，重置播放标志
-                    // 例如：动画被 Rewind 或重新播放时，音效可以再次触发
-                    sound.IsPlayed = false;
-                }
-            }
         }
         #endregion
 
@@ -3550,20 +3493,6 @@ namespace SevenStrikeModules.XHud
             // 重置进度（此处重复赋值，下一区域会再赋一次，疑似冗余）
             arg.Progress = 0;
 
-            #region 重置声音
-            // 将进度归零，使音效触发点的判断条件（Progress > Percentage）复位
-            arg.Progress = 0;
-
-            // 将每个音效的 IsPlayed 标志复位，允许下次动画再次触发
-            if (arg.TweenSounds != null && arg.TweenSounds.Count > 0)
-            {
-                for (int i = 0; i < arg.TweenSounds.Count; i++)
-                {
-                    arg.TweenSounds[i].IsPlayed = false;
-                }
-            }
-            #endregion
-
             // ========== 按动画类型恢复数值 ==========
             if (arg.Type == TweenNodeType.a_位移)
             {
@@ -3759,20 +3688,6 @@ namespace SevenStrikeModules.XHud
             {
                 arg.Tweener.Kill(complete);
                 arg.Tweener = null;   // 断开引用，防止悬空访问
-            }
-            #endregion
-
-            #region 重置声音
-            // 进度归零
-            arg.Progress = 0;
-
-            // 复位所有音效触发标志，允许下次动画再次触发
-            if (arg.TweenSounds != null && arg.TweenSounds.Count > 0)
-            {
-                for (int i = 0; i < arg.TweenSounds.Count; i++)
-                {
-                    arg.TweenSounds[i].IsPlayed = false;
-                }
             }
             #endregion
 
