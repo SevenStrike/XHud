@@ -1154,79 +1154,13 @@ MonoBehaviour:
   AnimatingBreakState: 0
   IgnoreElementAnimationPlay: 0
   TweenIsPreviewing: 0
-  PrimitiveTweenNodes:
-  - ID: 8555
-    Indicator: NewTween
-    Enabled: 1
-    Type: 3
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 1
-    Delay: 0
-    Progress: 0
-    TextCursorBlinkSpeed: 0.5
-    TextCursor: '|'
-    Rewind_Set_Startvalue: 1
-    Complete_Set_Endvalue: 1
-    Ease: 10
-    AnimationCurveName: 
-    ValueModeIndex: 0
-    TweenValueMode: 0
-    Curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    Original_Int: 0
-    Original_Float: 0
-    Original_Vector2: {x: 0, y: 0}
-    Original_Vector3: {x: 0, y: 0, z: 0}
-    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    Original_Color: {r: 1, g: 1, b: 1, a: 1}
-    Original_String: 
-    From_Int: 0
-    From_Float: 0
-    From_Vector2: {x: 0, y: 0}
-    From_Vector3: {x: 0, y: 0, z: 0}
-    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    From_Color: {r: 1, g: 1, b: 1, a: 1}
-    From_String: 
-    End_Int: 0
-    End_Float: 0
-    End_Vector2: {x: 0, y: 0}
-    End_Vector3: {x: 0, y: 0, z: 0}
-    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    End_Color: {r: 1, g: 1, b: 1, a: 1}
-    End_String: 
-    RotateMode: 0
-    LoopType: 0
-    LoopCount: 0
-    IsFold: 0
-    TweenSounds: []
+  PrimitiveTweenNodes: []
   MainTweenNode: 
   GlobalDuration: 1
-  MinTimer: 1
-  MaxTimer: 1
-  MinTimerWithGlobalDuration: 1
-  MaxTimerWithGlobalDuration: 1
+  MinTimer: 0
+  MaxTimer: 0
+  MinTimerWithGlobalDuration: 0
+  MaxTimerWithGlobalDuration: 0
   eve_on_Tween_Play:
     m_PersistentCalls:
       m_Calls: []
@@ -5185,7 +5119,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -51.546}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 147.1, y: 455.1}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 517.9, y: 478.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &764320988
@@ -5404,7 +5338,7 @@ MonoBehaviour:
   fold_state: 0
   Timeline_TrackPosition: 189.35504
   Timeline_TrackScroll: {x: 0, y: 0}
-  Timeline_TrackHeight: 29.722574
+  Timeline_TrackHeight: 31.641182
   Timeline_TrackSnapEnabled: 0
 --- !u!114 &764320989
 MonoBehaviour:
@@ -5420,7 +5354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 764320993}
   PrimitiveFeatures:
-    Position: {x: 147.1, y: 455.1, z: 0}
+    Position: {x: 0, y: 0, z: 0}
     Euler: {x: -0, y: 0, z: 0}
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
@@ -8762,6 +8696,7 @@ GameObject:
   - component: {fileID: 1455183916}
   - component: {fileID: 1455183921}
   - component: {fileID: 1455183920}
+  - component: {fileID: 1455183922}
   m_Layer: 8
   m_Name: OptionOptionOption
   m_TagString: Untagged
@@ -8824,7 +8759,7 @@ MonoBehaviour:
   Tween_Preview_IsPlaying: 0
   fold_param: 1
   fold_preview: 1
-  fold_state: 0
+  fold_state: 1
   fold_option: 0
   fold_rms: 1
   fold_list: 0
@@ -9064,7 +8999,7 @@ MonoBehaviour:
   SounderNodes:
   - Sounder: {fileID: 1455183921}
   - Sounder: {fileID: 1455183920}
-  SounderIsFold: 0
+  SounderIsFold: 1
   TextNodes:
   - Text: {fileID: 2012674117}
   TextIsFold: 1
@@ -9081,17 +9016,14 @@ MonoBehaviour:
   - Controller: {fileID: 109206555}
     TotalTime: 0
     DelayTime: 0
-  - Controller: {fileID: 0}
-    TotalTime: 0
-    DelayTime: 0
   - Controller: {fileID: 764320993}
     TotalTime: 0
     DelayTime: 0
-  - Controller: {fileID: 0}
+  - Controller: {fileID: 1572831200}
     TotalTime: 0
     DelayTime: 0
-  PrimitivesIsFold: 0
-  PrimitivesTweenMaxDuration: 4.3
+  PrimitivesIsFold: 1
+  PrimitivesTweenMaxDuration: 2.444
   PrimitivesTweenGlobalDuration: 1
   AutoPlayPrimitivesTween: 1
   RMS_Enabled: 1
@@ -9223,6 +9155,236 @@ MonoBehaviour:
   fold_param: 1
   fold_option: 1
   fold_state: 1
+  fold_based: 1
+--- !u!114 &1455183922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455183914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e623c31c6fe2624eb7a4ebeb2a07f7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HudElement: {fileID: 1455183916}
+  IsEnable: 1
+  DebugState: 0
+  key_Element_In: 99
+  key_Element_Out: 118
+  CreateArgs:
+    anchor: 5
+    MotionAnimateEndState: 0
+    Alpha:
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 12
+    Movement:
+      Movement: 1
+      Distance: 100
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 12
+    Rotation:
+      Rotation: 0
+      Degree: 0
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 12
+  RecycleArgs:
+    MotionAnimateEndState: 0
+    Alpha:
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 12
+    Movement:
+      Movement: 2
+      Distance: 100
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 12
+    Rotation:
+      Rotation: 0
+      Degree: 0
+      Duration: 1
+      Delay: 0
+      Curve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      CurveName: 
+      Ease: 12
+  HideWithStart: 1
+  Preset_Position: {x: 0, y: 0, z: 0}
+  Preset_Euler: {x: 0, y: 0, z: 0}
+  DurationScaler: 1
+  previewIsRunning: 0
+  Crc_Lib_Name: 
+  Rec_Lib_Name: 
+  DelayWithIn: 0
+  DelayWithOut: 0
+  create_fold_move: 0
+  create_fold_rotate: 0
+  create_fold_alpha: 0
+  recycle_fold_move: 0
+  recycle_fold_rotate: 0
+  recycle_fold_alpha: 0
+  RMS_Enabled: 0
+  RMS_Name: 
+  ElementIsIn: 1
+  fold_options: 0
+  fold_param: 1
+  fold_key: 0
+  fold_state: 0
+  fold_motion: 0
+  fold_preset_trans: 0
+  fold_rms: 1
   fold_based: 1
 --- !u!1 &1469781039
 GameObject:
