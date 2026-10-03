@@ -29,7 +29,6 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.UI;
-    using static UnityEngine.GraphicsBuffer;
 
     /// <summary>
     /// 图元动画数值属性包装类，用于在参数面板中统一引用「起始 / 结束 / 默认」三组序列化属性

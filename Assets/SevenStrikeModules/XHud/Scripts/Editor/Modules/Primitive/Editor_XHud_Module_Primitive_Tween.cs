@@ -2750,7 +2750,7 @@ namespace SevenStrikeModules.XHud.Editor
             else
             {
                 tweens = CollectPreviewTweens(BaseScript, sp_PreviewTiming.stringValue);
-                Debug.Log($"{tweens.Length} / {sp_PreviewTiming.stringValue}");
+
                 // 预览收集到的有效的音效
                 PreviewTweenSounds(sp_PreviewTiming.stringValue, BaseScript);
             }

@@ -2495,7 +2495,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
     TweenSounds: []
   - ID: 8797
     Indicator: NewTween
@@ -2561,7 +2561,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
     TweenSounds: []
   - ID: 9497
     Indicator: NewTweensd123
@@ -2627,7 +2627,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
     TweenSounds: []
   - ID: 5675
     Indicator: NewTween
@@ -2693,7 +2693,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
     TweenSounds: []
   MainTweenNode: 
   GlobalDuration: 1
