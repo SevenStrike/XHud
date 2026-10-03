@@ -1054,6 +1054,11 @@ namespace SevenStrikeModules.XHud
 
         }
 
+        private void OnDestroy()
+        {
+            Tween_KillAll(false);
+        }
+
         void Update()
         {
             TweenNode_AllTweenProgress_Calculation();
@@ -2005,8 +2010,13 @@ namespace SevenStrikeModules.XHud
                 .SetLoop(node.LoopCount, node.LoopType);
 
             // 仅在需要 From 时设置起始值
+            // S-* 模式：静态起点
             if (isfrom)
                 twn = twn.SetFrom(node.From_Vector3);
+
+            // C-E 模式：动态起点
+            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_Rect.anchoredPosition3D);
 
             // ========== 缓动配置 ==========
             // Ease == None 时使用自定义曲线，否则使用预设缓动模式
@@ -2117,8 +2127,14 @@ namespace SevenStrikeModules.XHud
                 .SetDelay(node.Delay + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
+            // 仅在需要 From 时设置起始值
+            // S-* 模式：静态起点
             if (isfrom)
                 twn = twn.SetFrom(node.From_Vector3);
+
+            // C-E 模式：动态起点
+            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_Rect.localEulerAngles);
 
             if (node.Ease == EaseMode.None)
                 twn = twn.SetEase(node.Curve);
@@ -2216,8 +2232,14 @@ namespace SevenStrikeModules.XHud
                 .SetDelay(node.Delay + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
+            // 仅在需要 From 时设置起始值
+            // S-* 模式：静态起点
             if (isfrom)
                 twn = twn.SetFrom(node.From_Vector3);
+
+            // C-E 模式：动态起点
+            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_Rect.localScale);
 
             if (node.Ease == EaseMode.None)
                 twn = twn.SetEase(node.Curve);
@@ -2347,8 +2369,14 @@ namespace SevenStrikeModules.XHud
                 .SetDelay(node.Delay + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
+            // 仅在需要 From 时设置起始值
+            // S-* 模式：静态起点
             if (isfrom)
                 twn = twn.SetFrom(node.From_Color);
+
+            // C-E 模式：动态起点
+            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => gc.color);
 
             if (node.Ease == EaseMode.None)
                 twn = twn.SetEase(node.Curve);
@@ -2448,8 +2476,14 @@ namespace SevenStrikeModules.XHud
                 .SetDelay(node.Delay + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
+            // 仅在需要 From 时设置起始值
+            // S-* 模式：静态起点
             if (isfrom)
                 twn = twn.SetFrom(node.From_Float);
+
+            // C-E 模式：动态起点
+            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_CanvasGroup.alpha);
 
             if (node.Ease == EaseMode.None)
                 twn = twn.SetEase(node.Curve);
@@ -2561,8 +2595,14 @@ namespace SevenStrikeModules.XHud
                 .SetDelay(node.Delay + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
+            // 仅在需要 From 时设置起始值
+            // S-* 模式：静态起点
             if (isfrom)
                 twn = twn.SetFrom(node.From_String);
+
+            // C-E 模式：动态起点
+            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_Text.text);
 
             if (node.Ease == EaseMode.None)
                 twn = twn.SetEase(node.Curve);
@@ -2665,8 +2705,14 @@ namespace SevenStrikeModules.XHud
                 .SetDelay(node.Delay + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
+            // 仅在需要 From 时设置起始值
+            // S-* 模式：静态起点
             if (isfrom)
                 twn = twn.SetFrom(node.From_String);
+
+            // C-E 模式：动态起点
+            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_TmpText.text);
 
             if (node.Ease == EaseMode.None)
                 twn = twn.SetEase(node.Curve);
@@ -2769,8 +2815,14 @@ namespace SevenStrikeModules.XHud
                 .SetDelay(node.Delay + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
+            // 仅在需要 From 时设置起始值
+            // S-* 模式：静态起点
             if (isfrom)
                 twn = twn.SetFrom(node.From_Vector2);
+
+            // C-E 模式：动态起点
+            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_Rect.sizeDelta);
 
             if (node.Ease == EaseMode.None)
                 twn = twn.SetEase(node.Curve);
@@ -2874,9 +2926,14 @@ namespace SevenStrikeModules.XHud
                 .SetDelay(node.Delay + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
-            // From 值同样 Clamp01
+            // 仅在需要 From 时设置起始值
+            // S-* 模式：静态起点
             if (isfrom)
                 twn = twn.SetFrom(Mathf.Clamp01(node.From_Float));
+
+            // C-E 模式：动态起点
+            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_Image.fillAmount);
 
             if (node.Ease == EaseMode.None)
                 twn = twn.SetEase(node.Curve);

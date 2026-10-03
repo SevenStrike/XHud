@@ -116,6 +116,9 @@ namespace SevenStrikeModules.XTween
             _StartValue = startValue;
             _CustomEaseCurve = null;
             _UseCustomEaseCurve = false;
+
+            _StartValueGetter = null;
+            _StartValueResolved = false;
         }
 
         #region 私有字段
@@ -136,6 +139,9 @@ namespace SevenStrikeModules.XTween
         /// 获取动画是否正在等待循环延迟
         /// </summary>
         public bool IsWaitingLoopDelay => _isWaitingLoopDelay;
+        // 字段
+        internal Func<TArg> _StartValueGetter { get; set; }
+        internal bool _StartValueResolved { get; set; }
         #endregion
 
         #region 回调       
@@ -516,6 +522,9 @@ namespace SevenStrikeModules.XTween
                 _IsCompleted = false;
                 _ElapsedTime = 0f;
                 _hasStarted = false;
+
+                // ★ 新增：允许重新求值动态起点
+                _StartValueResolved = false;
             }
 
             if (!_IsPlaying)
@@ -665,6 +674,21 @@ namespace SevenStrikeModules.XTween
             {
                 _ElapsedTime = currentTime - _StartTime;
                 _CurrentLinearProgress = Duration > 0 ? Mathf.Clamp01(_ElapsedTime / Duration) : 1f;
+            }
+
+            // ★ 新增：Delay 未结束，不写属性，直接返回
+            if (_ElapsedTime < 0f)
+            {
+                return true;
+            }
+
+            // ========== 动态起点求值 ==========
+            // 只有当动画"真正开始写属性"时（Delay 已过，_ElapsedTime >= 0），才求值一次
+            if (!_StartValueResolved && _StartValueGetter != null && _ElapsedTime >= 0f)
+            {
+                _StartValue = _StartValueGetter();
+                _StartValueResolved = true;
+                _CurrentValue = _StartValue;
             }
 
             // 处理进度完成
@@ -984,6 +1008,8 @@ namespace SevenStrikeModules.XTween
 
             _CurrentValue = _IsFromMode ? _StartValue/*显式设置的起始值*/: _DefaultValue;/*默认起始值*/
 
+            _StartValueResolved = false;
+
             // === 修复：重置步长状态 ===
             ResetStepState();
 
@@ -1112,6 +1138,9 @@ namespace SevenStrikeModules.XTween
             _stepProgressInterval = 0f;
             _lastStepTime = 0f;
             _lastStepProgress = -1f;
+
+            _StartValueGetter = null;
+            _StartValueResolved = false;
 
             // 重置步长状态
             ResetStepState();
@@ -1249,6 +1278,10 @@ namespace SevenStrikeModules.XTween
         XTween_Interface XTween_Interface.SetFrom(object startValue)
         {
             return SetFrom((TArg)startValue);
+        }
+        XTween_Interface XTween_Interface.SetFromDynamic(Func<object> getter)
+        {
+            return SetFrom(() => (TArg)getter());
         }
         /// <summary>
         /// 设置是否使用相对值进行动画
@@ -1471,6 +1504,15 @@ namespace SevenStrikeModules.XTween
             _CurrentValue = _StartValue;
             return ReturnSelf();
         }
+        // 方法
+        public XTween_Base<TArg> SetFrom(Func<TArg> getter)
+        {
+            _StartValueGetter = getter;
+            _StartValueResolved = false;
+            _IsFromMode = true;
+            return ReturnSelf();
+        }
+
         /// <summary>
         /// 设置动画的延迟时间
         /// 延迟时间必须是非负值

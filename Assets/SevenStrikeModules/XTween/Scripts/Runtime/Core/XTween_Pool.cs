@@ -169,7 +169,11 @@ namespace SevenStrikeModules.XTween
                     return CreateTween<T>(); // 递归重试
                 }
 
-                // 先重置状态（确保 ResetState 不会重置 IsInUse）
+                // 从对象池复用的实例，必须完整重置状态。
+                // 关键：ResetState() 内部会清空 _StartValueGetter / _StartValueResolved，
+                // 确保上一次动画挂的"动态起点委托"不会残留到本次使用——
+                // 否则会读到旧目标的属性值，或持有已销毁对象的闭包引用。
+                tween.ResetState();
                 tween.ResetState();
 
                 // 再标记为使用中

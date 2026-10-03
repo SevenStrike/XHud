@@ -284,6 +284,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="startValue">起始值</param>
         /// <returns>当前动画对象</returns>
         XTween_Interface SetFrom(object startValue);
+        XTween_Interface SetFromDynamic(Func<object> getter);
         /// <summary>
         /// 设置是否使用相对值进行动画
         /// </summary>
