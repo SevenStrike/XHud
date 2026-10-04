@@ -2696,6 +2696,14 @@ MonoBehaviour:
   - Sound: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
     Path: Assets/SevenStrikeModules/XHud/Sound/DefaultSound.wav
     Timing: 
+    Delay: 1.649
+    Volume: 1
+    MaxPitch: 1
+    MinPitch: 1
+    Mute: 0
+  - Sound: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
+    Path: Assets/SevenStrikeModules/XHud/Sound/DefaultSound.wav
+    Timing: 
     Delay: 1
     Volume: 1
     MaxPitch: 1
@@ -2764,7 +2772,7 @@ MonoBehaviour:
   fold_based: 0
   fold_list: 1
   fold_state: 0
-  Timeline_TrackPosition: 207.45601
+  Timeline_TrackPosition: 394.2982
   Timeline_TrackScroll: {x: 0, y: 0}
   Timeline_TrackHeight: 28.24315
   Timeline_TrackSnapEnabled: 0
