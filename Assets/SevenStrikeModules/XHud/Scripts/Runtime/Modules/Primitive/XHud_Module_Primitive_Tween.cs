@@ -38,35 +38,35 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 音效剪辑
         /// </summary>
-        public AudioClip Sound;
+        [SerializeField] public AudioClip Sound;
         /// <summary>
         /// 音效路径
         /// </summary>
-        public string Path;
+        [SerializeField] public string Path;
         /// <summary>
         /// 音效Timings
         /// </summary>
-        public string Timings;
+        [SerializeField] public string Timing;
         /// <summary>
         /// 音效延迟播放时间
         /// </summary>
-        public float Delay;
+        [SerializeField] public float Delay;
         /// <summary>
         /// 音量
         /// </summary>
-        public float Volume = 1f;
+        [SerializeField] public float Volume = 1f;
         /// <summary>
         /// 最大音高
         /// </summary>
-        public float MaxPitch = 1f;
+        [SerializeField] public float MaxPitch = 1f;
         /// <summary>
         /// 最小音高
         /// </summary>
-        public float MinPitch = 1f;
+        [SerializeField] public float MinPitch = 1f;
         /// <summary>
         /// 静音开关
         /// </summary>
-        public bool Mute;
+        [SerializeField] public bool Mute;
 
         /// <summary>
         /// 动作 - 动画器音效 - 播放
@@ -75,7 +75,7 @@ namespace SevenStrikeModules.XHud
 
         public TweenSound() { }
 
-        public TweenSound(AudioClip sound, string path, float delay, float volume, float maxPitch, float minPitch, bool mute)
+        public TweenSound(AudioClip sound, string path, float delay, float volume, float maxPitch, float minPitch, bool mute, string timing)
         {
             Sound = sound;
             Path = path;
@@ -84,6 +84,7 @@ namespace SevenStrikeModules.XHud
             MaxPitch = maxPitch;
             MinPitch = minPitch;
             Mute = mute;
+            Timing = timing;
         }
 
         /// <summary>
@@ -138,6 +139,7 @@ namespace SevenStrikeModules.XHud
             // act_on_SoundPlay 委托不克隆，新节点需要重新绑定
             sod.act_on_SoundPlay = null;
             sod.Mute = this.Mute;
+            sod.Timing = this.Timing;
 
             return sod;
         }
@@ -153,6 +155,7 @@ namespace SevenStrikeModules.XHud
             source.MaxPitch = this.MaxPitch;
             source.MinPitch = this.MinPitch;
             source.Mute = this.Mute;
+            source.Timing = this.Timing;
         }
     }
 

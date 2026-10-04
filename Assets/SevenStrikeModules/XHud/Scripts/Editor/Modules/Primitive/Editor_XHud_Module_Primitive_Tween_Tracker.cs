@@ -335,9 +335,13 @@ namespace SevenStrikeModules.XHud.Editor
         ///</summary>
         private static readonly Color ColorSoundClipBG_Empty = XGUI_Utilitys.HexString_To_Color("3f3f3f");
         /// <summary> 
+        ///音效轨 Clip 背景色（Sound 为空）-选中
+        ///</summary>
+        private static readonly Color ColorSoundClipBG_Empty_Selected = Color.gray * 0.65f;
+        /// <summary> 
         ///音效轨行底色（与动画轨区分）
         ///</summary>
-        private static readonly Color ColorSoundTrackBG = XGUI_Utilitys.HexString_To_Color("2e2e2e");
+        private static readonly Color ColorSoundTrackBG = XGUI_Utilitys.HexString_To_Color("363636");
         /// <summary> 
         ///音效轨行底色（与动画轨区分）静音-未选中
         ///</summary>
@@ -996,6 +1000,7 @@ namespace SevenStrikeModules.XHud.Editor
                 else
                 {
                     selectedIndex = -1;
+                    selectedKind = TrackKind.无;
                 }
             }
             Repaint();
@@ -2454,7 +2459,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (isSelected)
             {
-                bg = sound.Mute ? ColorSoundTrackBG_muted_Selected : (sound.Sound != null ? ColorSoundClipBG_Selected : ColorSoundTrackBG_muted_Selected);
+                bg = sound.Mute ? ColorSoundTrackBG_muted_Selected : (sound.Sound != null ? ColorSoundClipBG_Selected : ColorSoundClipBG_Empty_Selected);
             }
 
             XGUI.gui_box(clipRect, bg);
@@ -2462,7 +2467,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 概述信息
             bool minimal = clipRect.width < 120;
-            string state = sound.Mute ? "已静音" : sound.Sound != null ? $"长度：{sound.Sound.length.ToString("F2")}  s" : "空音效";
+            string state = sound.Mute ? "已静音" : sound.Sound != null ? $"时长：{sound.Sound.length:F2}  s" : "空音效";
             string content = minimal ? $"延迟：{sound.Delay:F3}  s" : $"{state}   /   延迟：{sound.Delay:F3}  s";
             XGUI.gui_label(
                 rect: new Rect(clipRect.x + 4, clipRect.y, clipRect.width - 8, clipRect.height),
@@ -2643,12 +2648,11 @@ namespace SevenStrikeModules.XHud.Editor
             SerializedProperty prop_sound = prop_sounds.GetArrayElementAtIndex(selectedIndex);
             SerializedProperty ser_sound = prop_sound.FindPropertyRelative("Sound");
             SerializedProperty ser_path = prop_sound.FindPropertyRelative("Path");
-            SerializedProperty ser_timings = prop_sound.FindPropertyRelative("Timings");
+            SerializedProperty ser_timing = prop_sound.FindPropertyRelative("Timing");
             SerializedProperty ser_delay = prop_sound.FindPropertyRelative("Delay");
             SerializedProperty ser_volume = prop_sound.FindPropertyRelative("Volume");
             SerializedProperty ser_minPitch = prop_sound.FindPropertyRelative("MinPitch");
             SerializedProperty ser_maxPitch = prop_sound.FindPropertyRelative("MaxPitch");
-            SerializedProperty ser_mute = prop_sound.FindPropertyRelative("Mute");
 
             so.Update();
 
@@ -2723,12 +2727,12 @@ namespace SevenStrikeModules.XHud.Editor
                 TimingTypes = new string[4] { "元素进入时", "元素进入后", "元素退出时", "自定义" };
             }
 
-            ser_timings.stringValue = XGUI.layout_string_popup(
+            ser_timing.stringValue = XGUI.layout_string_popup(
                    title: "时机",
                    title_width: 80,
                    title_size: XGUIFontSize.M,
                    title_anchor: TextAnchor.MiddleLeft,
-                   prop: ser_timings,
+                   prop: ser_timing,
                    options: TimingTypes,
                    opt_text_size: XGUIFontSize.M,
                    opt_text_color: Color.black,
@@ -2743,7 +2747,7 @@ namespace SevenStrikeModules.XHud.Editor
                    title_margin: new RectOffset(0, 0, 0, 0),
                    icon_arrow_color: Color.black);
 
-            ser_timings.serializedObject.ApplyModifiedProperties();
+            ser_timing.serializedObject.ApplyModifiedProperties();
             #endregion
 
             #region 延迟
@@ -2841,7 +2845,6 @@ namespace SevenStrikeModules.XHud.Editor
             }
 
             so.ApplyModifiedProperties();
-            so.Dispose();
         }
         /// <summary> 
         ///绘制选中节点的参数字段
@@ -5619,7 +5622,7 @@ namespace SevenStrikeModules.XHud.Editor
             TweenSound s = new TweenSound();
             s.Sound = null;
             s.Path = "";
-            s.Timings = "";
+            s.Timing = "";
             s.Delay = 0f;
             s.Volume = 1f;
             s.MinPitch = 1f;

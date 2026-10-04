@@ -2831,7 +2831,7 @@ namespace SevenStrikeModules.XHud.Editor
                 TweenSound sod = tweener.PrimitiveTweenSounds[s];
 
                 // 判断该音效的播放时机是否匹配，如果不匹配则跳过
-                if (Timings != sod.Timings)
+                if (Timings != sod.Timing)
                     continue;
 
                 float x_vol = sod.Volume;
@@ -2859,7 +2859,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     TweenSound sod = tweener.PrimitiveTweenSounds[k];
 
-                    if (sod.Timings != Timings)
+                    if (sod.Timing != Timings)
                         continue;
 
                     float x_vol = sod.Volume;

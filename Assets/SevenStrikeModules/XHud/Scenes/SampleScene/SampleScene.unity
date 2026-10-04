@@ -2695,8 +2695,8 @@ MonoBehaviour:
   PrimitiveTweenSounds:
   - Sound: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
     Path: Assets/SevenStrikeModules/XHud/Sound/DefaultSound.wav
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Delay: 2
+    Timing: 
+    Delay: 1
     Volume: 1
     MaxPitch: 1
     MinPitch: 1
