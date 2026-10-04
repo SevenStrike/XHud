@@ -169,6 +169,10 @@ namespace SevenStrikeModules.XHud.Editor
         ///名称行内小按钮的尺寸（像素）
         ///</summary>
         private const float NameRowButtonSize = 30;
+        /// <summary> 
+        ///轨道种类之间的间距行默认高度（像素）
+        ///</summary>
+        private const float DefaultTrackKindGapHeight = 2;
         #endregion
 
         #region 常量：交互参数
@@ -350,6 +354,10 @@ namespace SevenStrikeModules.XHud.Editor
         ///音效轨行底色（与动画轨区分）静音-选中
         ///</summary>
         private static readonly Color ColorSoundTrackBG_muted_Selected = Color.gray * 0.65f;
+        /// <summary> 
+        ///轨道种类间距行的底色（比轨道底色略深，形成凹陷感）
+        ///</summary>
+        private static readonly Color ColorTrackKindGapBg = XGUI_Utilitys.HexString_To_Color("545454");
         #endregion
 
         #region 字段：图标
@@ -565,6 +573,11 @@ namespace SevenStrikeModules.XHud.Editor
         ///动画类型指示器点的大小（像素）
         ///</summary>
         private float TweenTypeDotSize = 3f;
+        /// <summary> 
+        ///动画轨与音效轨之间的间距行高度（像素）。
+        ///<para/>该行不承载任何轨道数据，仅供布局分隔与自定义绘制。
+        ///</summary>
+        private float trackKindGapHeight = DefaultTrackKindGapHeight;
         #endregion
 
         #region 字段：滚动状态
@@ -787,17 +800,26 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 嵌套类型：轨道种类
         /// <summary>
-        /// 轨道种类，用于区分当前操作的是动画节点轨还是音效轨。
+        /// 轨道种类，用于区分当前操作的是动画节点轨还是音效轨，
+        /// 以及两类轨道之间的间距行。
         /// <para/>
-        /// - <see cref="Node"/>：对应 <see cref="XHud_Module_Primitive_Tween.PrimitiveTweenNodes"/>
-        /// - <see cref="Sound"/>：对应 <see cref="XHud_Module_Primitive_Tween.PrimitiveTweenSounds"/>
-        /// 两者是平行列表，无父子关系。
+        /// - <see cref="Node"/>：对应 <see cref="XHud_Module_Primitive_Tween.PrimitiveTweenNodes"/>；
+        /// - <see cref="Sound"/>：对应 <see cref="XHud_Module_Primitive_Tween.PrimitiveTweenSounds"/>；
+        /// - <see cref="Gap"/>：动画与音效之间的间距行，无数据索引；
+        /// - <see cref="无"/>：无选中。
+        /// <para/>
+        /// <see cref="Node"/> 与 <see cref="Sound"/> 是平行列表，无父子关系。
         /// </summary>
         private enum TrackKind
         {
             无,
             Node,
-            Sound
+            Sound,
+            /// <summary> 
+            ///动画轨与音效轨之间的间距行。
+            ///<para/>该行不承载轨道数据，仅用于布局分隔与自定义绘制。
+            ///</summary>
+            Gap
         }
         #endregion
 
@@ -1453,11 +1475,24 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 行号映射
         /// <summary>
-        /// 全局行总数 = 动画节点数 + 音效数。
+        /// 是否需要在动画与音效之间插入间距行。
         /// <para/>
-        /// 行号顺序：先动画节点（0..Nodes.Count-1），后音效（Nodes.Count..Total-1）。
+        /// 仅当两类轨道都非空时才插入，避免只有一类时出现无意义空白。
         /// </summary>
-        private int TotalRowCount => Nodes.Count + Sounds.Count;
+        private bool HasTrackKindGap => Nodes.Count > 0 && Sounds.Count > 0;
+
+        /// <summary>
+        /// 全局行总数 = 动画节点数 + 音效数 + （两类都非空时的 1 行间距）。
+        /// <para/>
+        /// 行号顺序：
+        /// <list type="bullet">
+        /// <item><description>0 .. Nodes.Count-1：动画节点；</description></item>
+        /// <item><description>Nodes.Count：间距行（仅当 <see cref="HasTrackKindGap"/> 为 true）；</description></item>
+        /// <item><description>其余：音效。</description></item>
+        /// </list>
+        /// </summary>
+        private int TotalRowCount =>
+            Nodes.Count + Sounds.Count + (HasTrackKindGap ? 1 : 0);
 
         /// <summary>
         /// 将全局行号解析为 (轨道种类, 列表内索引)。
@@ -1465,25 +1500,82 @@ namespace SevenStrikeModules.XHud.Editor
         /// 约定：
         /// <list type="bullet">
         /// <item><description><c>row &lt; Nodes.Count</c> → (Node, row)</description></item>
-        /// <item><description>否则 → (Sound, row - Nodes.Count)</description></item>
+        /// <item><description><c>row == Nodes.Count &amp;&amp; HasTrackKindGap</c> → (Gap, -1)</description></item>
+        /// <item><description>其余 → (Sound, row - Nodes.Count - (HasTrackKindGap ? 1 : 0))</description></item>
         /// </list>
         /// </summary>
         private (TrackKind kind, int index) ResolveRow(int row)
         {
             if (row < Nodes.Count) return (TrackKind.Node, row);
-            return (TrackKind.Sound, row - Nodes.Count);
+
+            if (HasTrackKindGap && row == Nodes.Count)
+                return (TrackKind.Gap, -1);
+
+            int soundOffset = Nodes.Count + (HasTrackKindGap ? 1 : 0);
+            return (TrackKind.Sound, row - soundOffset);
+        }
+
+        /// <summary>
+        /// 计算某一行在内容坐标系中的顶部 Y 坐标。
+        /// <para/>
+        /// 与旧版 <c>row * trackHeight</c> 的关键差异：
+        /// 间距行的高度是 <see cref="trackKindGapHeight"/> 而非 <see cref="trackHeight"/>，
+        /// 因此不能再用简单乘法，必须逐段累加。
+        /// <para/>
+        /// 关键：间距行"自身"的顶部 Y 只累计动画行高，**不**加间距行高度；
+        /// 只有音效行才需要跨过间距行，加上 <see cref="trackKindGapHeight"/>。
+        /// </summary>
+        private float GetRowTopY(int row)
+        {
+            float y = 0f;
+
+            // 动画行：无论 row 是动画行、间距行还是音效行，
+            // 都先累计前 Nodes.Count 个动画行的高度。
+            int nodeRows = Mathf.Min(row, Nodes.Count);
+            y += nodeRows * trackHeight;
+
+            if (!HasTrackKindGap) return y;
+
+            // 只有音效行（row > Nodes.Count）才跨过间距行，
+            // 需要加上间距行高度；间距行自身（row == Nodes.Count）不加。
+            if (row > Nodes.Count) y += trackKindGapHeight;
+
+            // 音效行：再加上它前面的音效行高（不含间距行那 1 行）
+            if (row > Nodes.Count) y += (row - Nodes.Count - 1) * trackHeight;
+
+            return y;
         }
 
         /// <summary>
         /// 由全局行号计算行的命中矩形（内容坐标）。
         /// <para/>
         /// 上下边界取整，避免行高为小数时出现 1px 缝隙或重叠。
+        /// 间距行返回的矩形高度 = <see cref="trackKindGapHeight"/>。
         /// </summary>
         private Rect GetRowHitRect(int row, float width)
         {
-            float y0 = Mathf.Round(row * trackHeight);
-            float y1 = Mathf.Round((row + 1) * trackHeight);
+            float y0 = Mathf.Round(GetRowTopY(row));
+
+            var (kind, _) = ResolveRow(row);
+            float h = kind == TrackKind.Gap ? trackKindGapHeight : trackHeight;
+            float y1 = Mathf.Round(y0 + h);
+
             return new Rect(0, y0, width, y1 - y0);
+        }
+
+        /// <summary>
+        /// 内容区总高度（像素）。
+        /// <para/>
+        /// = 所有行高之和 + 底部 20px 留白。
+        /// 所有需要内容高度的地方（ScrollView 内容矩形、垂直滚动上限、名字列内容）
+        /// 都必须走本方法，不能再手算 <c>TotalRowCount * trackHeight</c>，
+        /// 否则间距行的高度会被漏算。
+        /// </summary>
+        private float GetTotalContentHeight()
+        {
+            return TotalRowCount * trackHeight
+                 + (HasTrackKindGap ? trackKindGapHeight : 0f)
+                 + 20f;
         }
         #endregion
 
@@ -1526,7 +1618,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 内容高度 = 行数 × 行高 + 20px 底部留白（与 Clip 区保持一致，保证滚动范围对齐）
             float contentWidth = scrollViewportRect.width;
-            float contentHeight = TotalRowCount * trackHeight + 20f;
+            float contentHeight = GetTotalContentHeight();
 
             // 关键：nameScroll.y 每帧从 scrollPos.y 同步，实现与右侧轨道垂直对齐。
             // 两个方向滚动条均隐藏（false, false），因为名字列不接受独立滚动输入。
@@ -1560,12 +1652,16 @@ namespace SevenStrikeModules.XHud.Editor
                         ref pendingInsertIndex,
                         ref pendingDeleteIndex);
                 }
-                else
+                else if (kind == TrackKind.Sound)
                 {
                     DrawSoundNameRow(rowRect, nameRect, idx,
                         ref nameHitThisFrame,
                         ref pendingSoundInsertIndex,
                         ref pendingSoundDeleteIndex);
+                }
+                else if (kind == TrackKind.Gap)
+                {
+                    DrawNameColumnKindGapRow(rowRect);
                 }
             }
             GUI.EndScrollView();
@@ -1583,9 +1679,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             // ── 名字列空白处点击：清空选中 ──
             // 条件：左键、非 Alt、非行内控件命中、且点击落在中部行列表视口内。
-            if (Event.current.type == EventType.MouseDown && Event.current.button == 0
-                && !Event.current.alt && !nameHitThisFrame
-                && scrollViewportRect.Contains(Event.current.mousePosition))
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 0 && !Event.current.alt && !nameHitThisFrame && scrollViewportRect.Contains(Event.current.mousePosition))
             {
                 selectedNodeIndices.Clear();
                 selectedSoundIndices.Clear();
@@ -1609,7 +1703,18 @@ namespace SevenStrikeModules.XHud.Editor
             GUI.EndGroup();
 
             // 名字列右边界分隔线（视觉上区分名字列与 Clip 区）
-            XGUI.gui_box(new Rect(area.x + (area.width - 1), area.y, 1, area.height), Color.black * 0.35f);
+            //XGUI.gui_box(new Rect(area.x + (area.width - 1), area.y, 1, area.height), Color.black * 0.35f);
+
+            // ── 名字列右边界分隔线：分三段绘制，Gap 区间跳过 ──
+            // 说明：
+            //   名字列视口起点 = area.y + rulerHeight
+            //   Gap 行顶部内容坐标 = GetRowTopY(Nodes.Count)
+            //   转成窗口坐标 = area.y + rulerHeight + (内容Y - scrollPos.y)
+            //   Gap 行视觉矩形上下各外扩 RowVerticalPadding（与 DrawNameColumnKindGapRow 一致），
+            //   因此断口区间 = [GapWinTop - RowVerticalPadding, GapWinBottom + RowVerticalPadding]
+            //   断口外的两段黑线各自绘制。
+            //XGUI.gui_box(GetNameColumnRightBorderRect(area), Color.black * 0.35f);
+            DrawNameColumnRightBorder(area);
 
             if (pendingDeleteIndex >= 0)
             {
@@ -1653,7 +1758,7 @@ namespace SevenStrikeModules.XHud.Editor
             Rect deleteRect = new Rect(eyeRect.x - NameRowButtonSize - dis, btnY, NameRowButtonSize, NameRowButtonSize);
             Rect insertRect = new Rect(deleteRect.x - NameRowButtonSize - dis, btnY, NameRowButtonSize, NameRowButtonSize);
 
-            Rect sepRect = new Rect(insertRect.x - dis - 2, nameRect.y, 1, nameRect.height + 2);
+            Rect sepRect = new Rect(insertRect.x - dis - 2, nameRect.y, 1, nameRect.height);
 
             // 标识文字
             float buttonZoneLeft = insertRect.x - 35;
@@ -1775,7 +1880,7 @@ namespace SevenStrikeModules.XHud.Editor
             Rect deleteRect = new Rect(muteRect.x - NameRowButtonSize - dis, btnY, NameRowButtonSize, NameRowButtonSize);
             Rect insertRect = new Rect(deleteRect.x - NameRowButtonSize - dis, btnY, NameRowButtonSize, NameRowButtonSize);
 
-            Rect sepRect = new Rect(insertRect.x - dis - 2, nameRect.y, 1, nameRect.height + 2);
+            Rect sepRect = new Rect(insertRect.x - dis - 2, nameRect.y, 1, nameRect.height);
 
             float buttonZoneLeft = insertRect.x - 35;
             string label = sound.Sound != null ? sound.Sound.name : "(空音效)";
@@ -1870,26 +1975,6 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary> 
-        /// 计算第 <paramref name="index"/> 条名字行的命中矩形（内容坐标）
-        /// <para/>
-        /// 「命中矩形」是完整行高（含上下 <see cref="RowVerticalPadding"/> 内边距），
-        /// 用于鼠标点击判定；视觉矩形请使用 <see cref="CalculateNameRowVisualRect"/>。
-        /// <para/>
-        /// 上下边界均做 <see cref="Mathf.Round"/> 取整，原因：行高 <see cref="trackHeight"/>
-        /// 可能为小数（Shift+滚轮调整后），若不做取整，相邻行的边界会出现 1px 缝隙
-        /// 或重叠，视觉上出现细线。
-        /// </summary>
-        /// <param name="index">节点索引</param>
-        /// <param name="width">名字列可用宽度</param>
-        /// <returns>行命中矩形（内容坐标）</returns>
-        private Rect CalculateNameRowHitRect(int index, float width)
-        {
-            // 行高可能为小数，上下边界分别取整，保证相邻行无缝衔接
-            float y0 = Mathf.Round(index * trackHeight);
-            float y1 = Mathf.Round((index + 1) * trackHeight);
-            return new Rect(0, y0, width, y1 - y0);
-        }
-        /// <summary> 
         /// 由行命中矩形计算名字行的视觉矩形：上下按 <see cref="RowVerticalPadding"/> 内缩
         /// <para/>
         /// 与命中矩形的关系：
@@ -1905,14 +1990,103 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>行视觉矩形</returns>
         private Rect CalculateNameRowVisualRect(Rect rowRect)
         {
-            // 上下各内缩 pad，形成行与行之间的视觉间隔
             float pad = RowVerticalPadding;
             return new Rect(
                 rowRect.x,
                 rowRect.y + pad,
                 rowRect.width,
-                // 高度下限保护：避免极行高下出现 0 / 负高度矩形
                 Mathf.Max(rowRect.height - pad * 2f, 4f));
+        }
+        /// <summary>
+        /// 计算名字列右边界分隔线在窗口坐标系中需要绘制的区域。
+        /// <para/>
+        /// 无 Gap 行时返回整条（从 area.y 到 area.yMax）。
+        /// 有 Gap 行时返回两段合并区域：
+        /// <list type="bullet">
+        /// <item><description>上段：[area.y, GapWinTop - RowVerticalPadding]</description></item>
+        /// <item><description>下段：[GapWinBottom + RowVerticalPadding, area.yMax]</description></item>
+        /// </list>
+        /// 两段之间（即 Gap 行的视觉区间）不绘制，让间距行在名字列与 Clip 区之间横向贯通。
+        /// <para/>
+        /// 注意：返回的 Rect 是**两段中较长的那段**，如果两段都有效会分别绘制。
+        /// 为了简化调用方，这里改为返回一个可枚举的两段 Rect；由于 C# 在 Unity 编辑器
+        /// 中不便直接返回元组集合，本方法改为直接绘制。
+        /// </summary>
+        private void DrawNameColumnRightBorder(Rect area)
+        {
+            float lineX = area.x + (area.width - 1);
+            const float lineW = 1f;
+            Color lineColor = Color.black * 0.35f;
+
+            // ── 无 Gap 行：整条绘制，保持原样 ──
+            if (!HasTrackKindGap)
+            {
+                XGUI.gui_box(new Rect(lineX, area.y, lineW, area.height), lineColor);
+                return;
+            }
+
+            // ── 有 Gap 行：计算 Gap 行的窗口坐标区间 ──
+            // 名字列视口起点
+            float viewportTop = area.y + rulerHeight;
+
+            // Gap 行顶部内容坐标（未外扩）
+            float gapContentTop = GetRowTopY(Nodes.Count);
+
+            // Gap 行外扩后的视觉区间（上下各 RowVerticalPadding，与 DrawNameColumnKindGapRow 一致）
+            float gapVisualTop = gapContentTop - RowVerticalPadding;
+            float gapVisualBottom = gapContentTop + trackKindGapHeight + RowVerticalPadding;
+
+            // 转成窗口坐标
+            float gapWinTop = viewportTop + (gapVisualTop - scrollPos.y);
+            float gapWinBottom = viewportTop + (gapVisualBottom - scrollPos.y);
+
+            // 钳制到 area 范围内
+            gapWinTop = Mathf.Clamp(gapWinTop, area.y, area.yMax);
+            gapWinBottom = Mathf.Clamp(gapWinBottom, area.y, area.yMax);
+
+            // ── 上段 ──
+            if (gapWinTop > area.y)
+            {
+                XGUI.gui_box(
+                    new Rect(lineX, area.y, lineW, gapWinTop - area.y),
+                    lineColor);
+            }
+
+            // ── 下段 ──
+            if (gapWinBottom < area.yMax)
+            {
+                XGUI.gui_box(
+                    new Rect(lineX, gapWinBottom, lineW, area.yMax - gapWinBottom),
+                    lineColor);
+            }
+        }
+        /// <summary>
+        /// 绘制动画行与音效行之间的间距行（名字列一侧）。
+        /// <para/>
+        /// 与 Clip 区的 <see cref="DrawTrackKindGapRow"/> 高度一致、底色一致，
+        /// 保证左右两栏在视觉上横向贯通，形成一条完整的"分隔带"。
+        /// <para/>
+        /// 本方法是**独立的自定义绘制入口**，与 Clip 区一侧各自负责自己那半边的绘制。
+        /// </summary>
+        /// <param name="gapRect">间距行的完整矩形（内容坐标）</param>
+        private void DrawNameColumnKindGapRow(Rect gapRect)
+        {
+            // ★ 关键：Gap 行上下各扩展 1px，吃掉相邻行的内缩空间，
+            // 让分隔带在视觉上紧贴上下相邻行。
+            gapRect = new Rect(
+                gapRect.x,
+                gapRect.y - RowVerticalPadding,
+                gapRect.width,
+                gapRect.height + RowVerticalPadding * 2f);
+
+            // 底色
+            XGUI.gui_box(gapRect, ColorTrackKindGapBg);
+
+            // 上下描边
+            //XGUI.gui_box(new Rect(gapRect.x, gapRect.y, gapRect.width, 1f), ColorTrackKindGapEdge);
+            //XGUI.gui_box(new Rect(gapRect.x, gapRect.yMax - 1f, gapRect.width, 1f), ColorTrackKindGapEdge);
+
+            // ── 自定义绘制区 ──
         }
         #endregion
 
@@ -1952,7 +2126,7 @@ namespace SevenStrikeModules.XHud.Editor
                 area.height - rulerHeight - HorizontalScrollbarHeight);
 
             float contentWidth = CalculateContentWidthPixels();
-            float contentHeight = TotalRowCount * trackHeight + 20f;
+            float contentHeight = GetTotalContentHeight();
             Rect contentRect = new Rect(0, 0, contentWidth, contentHeight);
 
             scrollPos = GUI.BeginScrollView(
@@ -1978,8 +2152,10 @@ namespace SevenStrikeModules.XHud.Editor
                 var (kind, idx) = ResolveRow(row);
                 if (kind == TrackKind.Node)
                     DrawTrackRow(trackRect, idx, startSecond, endSecond);
-                else
+                else if (kind == TrackKind.Sound)
                     DrawSoundTrackRow(trackRect, idx);
+                else if (kind == TrackKind.Gap)
+                    DrawTrackKindGapRow(trackRect);
             }
 
             // ── 阶段 4：在 ScrollView 内处理 Clip 拖拽 ──
@@ -2127,6 +2303,30 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 归零保护：GUI.HorizontalScrollbar 在边界情况下可能返回极小负值。
             scrollPos.x = Mathf.Max(0f, scrollPos.x);
+        }
+        /// <summary>
+        /// 绘制动画轨与音效轨之间的间距行（Clip 区一侧）。
+        /// <para/>
+        /// 本方法是一个**独立的自定义绘制入口**：间距行不承载任何轨道数据，
+        /// 可以在这里自由放置标题、分组标签、折叠按钮、装饰线等。
+        /// <para/>
+        /// 目前的实现：铺一层比轨道底色略深的底色 + 上下描边，
+        /// 形成视觉上的"凹陷分隔带"。
+        /// </summary>
+        /// <param name="gapRect">间距行的完整矩形（内容坐标，高 = <see cref="trackKindGapHeight"/>）</param>
+        private void DrawTrackKindGapRow(Rect gapRect)
+        {
+            // ★ 同名字列：上下各扩展 1px
+            gapRect = new Rect(
+                gapRect.x,
+                gapRect.y - RowVerticalPadding,
+                gapRect.width,
+                gapRect.height + RowVerticalPadding * 2f);
+
+            XGUI.gui_box(gapRect, ColorTrackKindGapBg);
+
+            //XGUI.gui_box(new Rect(gapRect.x, gapRect.y, gapRect.width, 1f), ColorTrackKindGapEdge);
+            //XGUI.gui_box(new Rect(gapRect.x, gapRect.yMax - 1f, gapRect.width, 1f), ColorTrackKindGapEdge);
         }
         #endregion
 
@@ -2482,6 +2682,9 @@ namespace SevenStrikeModules.XHud.Editor
             // 音效只做整体移动，光标固定为 MoveArrow
             EditorGUIUtility.AddCursorRect(clipRect, MouseCursor.MoveArrow);
         }
+        #endregion
+
+        #region 绘制：轨道种类间距行
         #endregion
 
         #region 绘制：参数面板
@@ -5006,7 +5209,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>垂直滚动上限（像素），恒 ≥ 0</returns>
         private float CalculateMaxVerticalScroll()
         {
-            float contentHeight = TotalRowCount * trackHeight + 20f;
+            float contentHeight = GetTotalContentHeight();
             float viewH = cachedClipAreaRect.height - rulerHeight - HorizontalScrollbarHeight;
             return Mathf.Max(0f, contentHeight - Mathf.Max(1f, viewH));
         }
@@ -5244,6 +5447,7 @@ namespace SevenStrikeModules.XHud.Editor
             pixelsPerSecond = Mathf.Clamp(target.Timeline_TrackPosition, 1f, 20000f);
             scrollPos = Vector2.Max(Vector2.zero, target.Timeline_TrackScroll);
             nameScroll.y = scrollPos.y;
+
             trackHeight = Mathf.Clamp(target.Timeline_TrackHeight, MinTrackHeight, MaxTrackHeight);
             snapEnabled = target.Timeline_TrackSnapEnabled;
 
@@ -5258,6 +5462,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (target == null) return;
             target.Timeline_TrackPosition = pixelsPerSecond;
             target.Timeline_TrackScroll = scrollPos;
+
             target.Timeline_TrackHeight = trackHeight;
             target.Timeline_TrackSnapEnabled = snapEnabled;
 
