@@ -350,10 +350,6 @@ namespace SevenStrikeModules.XHud.Editor
         ///音效轨行底色（与动画轨区分）静音-选中
         ///</summary>
         private static readonly Color ColorSoundTrackBG_muted_Selected = Color.gray * 0.65f;
-        /// <summary> 
-        /// 动画轨与音效轨之间的分隔线颜色
-        /// </summary>
-        private static readonly Color ColorTrackKindSeparator = XGUI_Utilitys.HexString_To_Color("1e1e1e");
         #endregion
 
         #region 字段：图标
@@ -1572,10 +1568,6 @@ namespace SevenStrikeModules.XHud.Editor
                         ref pendingSoundDeleteIndex);
                 }
             }
-
-            // ★ 新增：名字列分隔线
-            DrawNameColumnKindSeparator(scrollViewportRect.width);
-
             GUI.EndScrollView();
 
             // 同步回写：防止 GUI.BeginScrollView 修改 nameScroll.y 后污染下一帧
@@ -1635,24 +1627,6 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 InsertSoundAfter(pendingSoundInsertIndex);
             }
-        }
-        /// <summary>
-        /// 在名字列中绘制动画行与音效行之间的分隔线。
-        /// <para/>
-        /// 与 Clip 区的分隔线同高，保证左右两栏视觉连贯。
-        /// </summary>
-        private void DrawNameColumnKindSeparator(float width)
-        {
-            if (Nodes.Count == 0 || Sounds.Count == 0) return;
-
-            float sepY = Mathf.Round(Nodes.Count * trackHeight);
-
-            // 名字列视口高度用于裁剪
-            float viewTop = scrollPos.y;
-            float viewBottom = scrollPos.y + (cachedNameAreaRect.height - rulerHeight - HorizontalScrollbarHeight);
-            if (sepY < viewTop || sepY > viewBottom) return;
-
-            XGUI.gui_box(new Rect(0, sepY, width, 2f), ColorTrackKindSeparator);
         }
         /// <summary>
         /// 绘制单条动画节点名字行。
@@ -2008,12 +1982,6 @@ namespace SevenStrikeModules.XHud.Editor
                     DrawSoundTrackRow(trackRect, idx);
             }
 
-            // ── 阶段 3.5：绘制动画轨与音效轨的分隔线 ──
-            DrawTrackKindSeparator(
-                contentWidth,
-                scrollPos.y,
-                scrollViewportRect.height);
-
             // ── 阶段 4：在 ScrollView 内处理 Clip 拖拽 ──
             // 必须放在 EndScrollView 之前，因为 MouseDrag / MouseUp 事件
             // 依赖于 ScrollView 内部的鼠标坐标系。
@@ -2065,24 +2033,6 @@ namespace SevenStrikeModules.XHud.Editor
             HandleViewPan(new Rect(0, 0, area.width, area.height));
 
             GUI.EndGroup();
-        }
-        /// <summary>
-        /// 在动画节点与音效之间绘制一条水平分隔线（内容坐标）。
-        /// <para/>
-        /// 位置 = Nodes.Count 行号的顶部，即第 N-1 行与第 N 行之间。
-        /// 只有两类轨道都非空时才绘制，否则没有区分意义。
-        /// </summary>
-        private void DrawTrackKindSeparator(float contentWidth, float viewTop, float viewHeight)
-        {
-            if (Nodes.Count == 0 || Sounds.Count == 0) return;
-
-            float sepY = Mathf.Round(Nodes.Count * trackHeight);
-            if (sepY < viewTop - 4 || sepY > viewTop + viewHeight + 4) return;
-
-            // 分隔带：上下各 1px 深色，中间 2px 亮线
-            XGUI.gui_box(new Rect(0, sepY - 1f, contentWidth, 5f), Color.black * 0.5f);
-            XGUI.gui_box(new Rect(0, sepY, contentWidth, 2f), ColorTrackKindSeparator);
-            XGUI.gui_box(new Rect(0, sepY + 2f, contentWidth, 5f), Color.black * 0.5f);
         }
         /// <summary> 
         /// 计算 Clip 区内容矩形的宽度（像素）
