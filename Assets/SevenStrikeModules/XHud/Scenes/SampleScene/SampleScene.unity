@@ -2503,7 +2503,7 @@ MonoBehaviour:
     Type: 0
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
-    Delay: 3
+    Delay: 2
     Progress: 0
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
@@ -2568,7 +2568,7 @@ MonoBehaviour:
     Type: 0
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
-    Delay: 2
+    Delay: 1
     Progress: 0
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
@@ -2633,7 +2633,7 @@ MonoBehaviour:
     Type: 0
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
-    Delay: 5
+    Delay: 2.006
     Progress: 0
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
@@ -2694,17 +2694,18 @@ MonoBehaviour:
     IsFold: 1
   PrimitiveTweenSounds:
   - Sound: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
-    Path: 
+    Path: Assets/SevenStrikeModules/XHud/Sound/DefaultSound.wav
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Delay: 1
+    Delay: 2
     Volume: 1
     MaxPitch: 1
     MinPitch: 1
+    Mute: 0
   GlobalDuration: 1
   MinTimer: 1
-  MaxTimer: 6
+  MaxTimer: 3.006
   MinTimerWithGlobalDuration: 1
-  MaxTimerWithGlobalDuration: 6
+  MaxTimerWithGlobalDuration: 3.006
   eve_on_Tween_Play:
     m_PersistentCalls:
       m_Calls: []
@@ -2761,12 +2762,12 @@ MonoBehaviour:
   fold_param: 0
   fold_option: 1
   fold_based: 0
-  fold_list: 0
+  fold_list: 1
   fold_state: 0
-  Timeline_TrackPosition: 121.666664
+  Timeline_TrackPosition: 207.45601
   Timeline_TrackScroll: {x: 0, y: 0}
-  Timeline_TrackHeight: 31.641182
-  Timeline_TrackSnapEnabled: 1
+  Timeline_TrackHeight: 28.24315
+  Timeline_TrackSnapEnabled: 0
 --- !u!114 &3921678159533053070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2852,7 +2853,7 @@ MonoBehaviour:
   fold_state: 1
   fold_option: 1
   fold_rms: 1
-  fold_list: 1
+  fold_list: 0
   fold_statistic: 1
   fold_based: 1
   fold_component: 1
@@ -3083,7 +3084,7 @@ MonoBehaviour:
   SliderIsFold: 1
   SounderNodes:
   - Sounder: {fileID: 1221967931506798040}
-  SounderIsFold: 1
+  SounderIsFold: 0
   TextNodes: []
   TextIsFold: 1
   TmpTextNodes: []
@@ -3095,7 +3096,7 @@ MonoBehaviour:
     TotalTime: 0
     DelayTime: 0
   PrimitivesIsFold: 1
-  PrimitivesTweenMaxDuration: 6
+  PrimitivesTweenMaxDuration: 3.006
   PrimitivesTweenGlobalDuration: 1
   AutoPlayPrimitivesTween: 1
   RMS_Enabled: 1

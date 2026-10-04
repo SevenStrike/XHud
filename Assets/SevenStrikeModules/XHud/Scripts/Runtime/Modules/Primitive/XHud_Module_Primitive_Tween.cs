@@ -63,6 +63,10 @@ namespace SevenStrikeModules.XHud
         /// 最小音高
         /// </summary>
         public float MinPitch = 1f;
+        /// <summary>
+        /// 静音开关
+        /// </summary>
+        public bool Mute;
 
         /// <summary>
         /// 动作 - 动画器音效 - 播放
@@ -71,7 +75,7 @@ namespace SevenStrikeModules.XHud
 
         public TweenSound() { }
 
-        public TweenSound(AudioClip sound, string path, float delay, float volume, float maxPitch, float minPitch)
+        public TweenSound(AudioClip sound, string path, float delay, float volume, float maxPitch, float minPitch, bool mute)
         {
             Sound = sound;
             Path = path;
@@ -79,6 +83,7 @@ namespace SevenStrikeModules.XHud
             Volume = volume;
             MaxPitch = maxPitch;
             MinPitch = minPitch;
+            Mute = mute;
         }
 
         /// <summary>
@@ -99,6 +104,15 @@ namespace SevenStrikeModules.XHud
         public void SetVolume(float vol)
         {
             Volume = vol;
+        }
+
+        /// <summary>
+        /// 设置静音状态
+        /// </summary>
+        /// <param name="state">静音状态</param>
+        public void SetMute(bool state)
+        {
+            Mute = state;
         }
 
         public void GetSoundPath()
@@ -123,6 +137,7 @@ namespace SevenStrikeModules.XHud
             sod.MinPitch = this.MinPitch;
             // act_on_SoundPlay 委托不克隆，新节点需要重新绑定
             sod.act_on_SoundPlay = null;
+            sod.Mute = this.Mute;
 
             return sod;
         }
@@ -137,6 +152,7 @@ namespace SevenStrikeModules.XHud
             source.Volume = this.Volume;
             source.MaxPitch = this.MaxPitch;
             source.MinPitch = this.MinPitch;
+            source.Mute = this.Mute;
         }
     }
 
