@@ -206,6 +206,10 @@ namespace SevenStrikeModules.XHud.Editor
         ///时间轴内容矩形右侧额外留白（像素），方便把 Clip 拖到最右端
         ///</summary>
         private const float ContentRightPaddingPixels = 200f;
+        /// <summary> 
+        ///音效 Sound 为空时，Clip 在时间轴上的默认占位长度（秒）
+        ///</summary>
+        private const float DefaultSoundClipSeconds = 1f;
         #endregion
 
         #region 常量：名字列宽度拖拽
@@ -318,6 +322,22 @@ namespace SevenStrikeModules.XHud.Editor
         ///参数区标题背景色
         ///</summary>
         private static readonly Color Color_Params_Header_BG = XGUI_Utilitys.HexString_To_Color("1e1e1e");
+        /// <summary> 
+        ///音效轨 Clip 背景色（常规）
+        ///</summary>
+        private static readonly Color ColorSoundClipBG = XGUI_Utilitys.HexString_To_Color("2a4a4a");
+        /// <summary> 
+        ///音效轨 Clip 背景色（选中）
+        ///</summary>
+        private static readonly Color ColorSoundClipBG_Selected = XGUI_Utilitys.HexString_To_Color("4a8a8a");
+        /// <summary> 
+        ///音效轨 Clip 背景色（Sound 为空）
+        ///</summary>
+        private static readonly Color ColorSoundClipBG_Empty = XGUI_Utilitys.HexString_To_Color("3a3a3a");
+        /// <summary> 
+        ///音效轨行底色（与动画轨区分）
+        ///</summary>
+        private static readonly Color ColorSoundTrackBG = XGUI_Utilitys.HexString_To_Color("2e2e2e");
         #endregion
 
         #region 字段：图标
@@ -546,6 +566,23 @@ namespace SevenStrikeModules.XHud.Editor
         ///多选集合始终包含 selectedIndex（若 &gt;= 0）用于批量拖动
         ///</summary>
         private readonly HashSet<int> selectedIndices = new HashSet<int>();
+        /// <summary>
+        /// 当前动画器的音效列表（<see cref="target"/> 的快捷访问）
+        /// <para/>
+        /// 与 <see cref="Nodes"/> 平行，无父子关系。
+        /// </summary>
+        private List<TweenSound> Sounds => target.PrimitiveTweenSounds;
+        /// <summary>
+        /// 当前选中的轨道种类。
+        /// <para/>
+        /// - <see cref="TrackKind.Node"/>：<see cref="selectedIndex"/> / <see cref="selectedIndices"/>
+        ///   的索引指向 <see cref="Nodes"/>；
+        /// - <see cref="TrackKind.Sound"/>：索引指向 <see cref="Sounds"/>；
+        /// - <see cref="TrackKind.无"/>：无选中。
+        /// <para/>
+        /// 多选**不允许跨类型**：一旦切换 <see cref="selectedKind"/>，选中集合会被清空。
+        /// </summary>
+        private TrackKind selectedKind = TrackKind.无;
         #endregion
 
         #region 字段：Clip 拖拽状态
@@ -597,6 +634,12 @@ namespace SevenStrikeModules.XHud.Editor
         ///本次 Clip 拖拽所属的 Undo 组 IDMouseDown 时开组，MouseUp 时 Collapse
         ///</summary>
         private int dragUndoGroup = -1;
+        /// <summary> 
+        /// 当前正在拖拽的轨道种类。
+        /// <para/>
+        /// <see cref="DragMode.无"/> 时此值应保持 <see cref="TrackKind.无"/>。
+        /// </summary>
+        private TrackKind draggingKind = TrackKind.无;
         #endregion
 
         #region 字段：名字列宽度拖拽状态
@@ -692,6 +735,22 @@ namespace SevenStrikeModules.XHud.Editor
             ///拖拽右边缘（仅修改 Duration，左端固定）
             ///</summary>
             右边缘
+        }
+        #endregion
+
+        #region 嵌套类型：轨道种类
+        /// <summary>
+        /// 轨道种类，用于区分当前操作的是动画节点轨还是音效轨。
+        /// <para/>
+        /// - <see cref="Node"/>：对应 <see cref="XHud_Module_Primitive_Tween.PrimitiveTweenNodes"/>
+        /// - <see cref="Sound"/>：对应 <see cref="XHud_Module_Primitive_Tween.PrimitiveTweenSounds"/>
+        /// 两者是平行列表，无父子关系。
+        /// </summary>
+        private enum TrackKind
+        {
+            无,
+            Node,
+            Sound
         }
         #endregion
 
@@ -836,11 +895,23 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 Close(); return;
             }
-            selectedIndices.RemoveWhere(i => i < 0 || i >= Nodes.Count);
-            if (selectedIndex >= Nodes.Count)
+
+            int selCount = SelectedListCount;
+
+            if (selCount <= 0)
+            {
+                selectedIndices.Clear();
                 selectedIndex = -1;
-            if (selectedIndex < 0 && selectedIndices.Count > 0)
-                selectedIndex = GetTopmostSelectedIndex();
+                selectedKind = TrackKind.无;
+            }
+            else
+            {
+                selectedIndices.RemoveWhere(i => i < 0 || i >= selCount);
+                if (selectedIndex >= selCount)
+                    selectedIndex = -1;
+                if (selectedIndex < 0 && selectedIndices.Count > 0)
+                    selectedIndex = GetTopmostSelectedIndex();
+            }
             Repaint();
         }
         /// <summary>
@@ -860,11 +931,10 @@ namespace SevenStrikeModules.XHud.Editor
         private void OnGUI()
         {
             #region 空动画列表检测
-            bool valid = target != null || !target.Equals(null);
-            if (target.PrimitiveTweenNodes.Count > 0)
-                valid = true;
-            else
-                valid = false;
+            bool valid = target != null
+                && !target.Equals(null)
+                && target.PrimitiveTweenNodes != null
+                && target.PrimitiveTweenNodes.Count > 0;
             #endregion
 
             #region 绘制：顶部工具栏
@@ -1210,6 +1280,42 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
+        #region 行号映射
+        /// <summary>
+        /// 全局行总数 = 动画节点数 + 音效数。
+        /// <para/>
+        /// 行号顺序：先动画节点（0..Nodes.Count-1），后音效（Nodes.Count..Total-1）。
+        /// </summary>
+        private int TotalRowCount => Nodes.Count + Sounds.Count;
+
+        /// <summary>
+        /// 将全局行号解析为 (轨道种类, 列表内索引)。
+        /// <para/>
+        /// 约定：
+        /// <list type="bullet">
+        /// <item><description><c>row &lt; Nodes.Count</c> → (Node, row)</description></item>
+        /// <item><description>否则 → (Sound, row - Nodes.Count)</description></item>
+        /// </list>
+        /// </summary>
+        private (TrackKind kind, int index) ResolveRow(int row)
+        {
+            if (row < Nodes.Count) return (TrackKind.Node, row);
+            return (TrackKind.Sound, row - Nodes.Count);
+        }
+
+        /// <summary>
+        /// 由全局行号计算行的命中矩形（内容坐标）。
+        /// <para/>
+        /// 上下边界取整，避免行高为小数时出现 1px 缝隙或重叠。
+        /// </summary>
+        private Rect GetRowHitRect(int row, float width)
+        {
+            float y0 = Mathf.Round(row * trackHeight);
+            float y1 = Mathf.Round((row + 1) * trackHeight);
+            return new Rect(0, y0, width, y1 - y0);
+        }
+        #endregion
+
         #region 绘制：名字列
         /// <summary> 
         /// 绘制左侧名字列（固定面板，垂直滚动由 Clip 区主导）
@@ -1249,7 +1355,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 内容高度 = 行数 × 行高 + 20px 底部留白（与 Clip 区保持一致，保证滚动范围对齐）
             float contentWidth = scrollViewportRect.width;
-            float contentHeight = Nodes.Count * trackHeight + 20f;
+            float contentHeight = TotalRowCount * trackHeight + 20f;
 
             // 关键：nameScroll.y 每帧从 scrollPos.y 同步，实现与右侧轨道垂直对齐。
             // 两个方向滚动条均隐藏（false, false），因为名字列不接受独立滚动输入。
@@ -1263,168 +1369,32 @@ namespace SevenStrikeModules.XHud.Editor
                 GUIStyle.none,
                 GUIStyle.none);
 
-            // 本帧是否已有名字行内的控件（按钮 / 行本体）被左键命中。
-            // 用于避免「点击行内按钮」被误判为「点击行本体」而触发选中。
             bool nameHitThisFrame = false;
-            // 延迟增删：循环中只记录索引，循环结束后统一执行。
             int pendingInsertIndex = -1;
             int pendingDeleteIndex = -1;
+            int pendingSoundInsertIndex = -1;
+            int pendingSoundDeleteIndex = -1;
 
-            for (int i = 0; i < Nodes.Count; i++)
+            for (int row = 0; row < TotalRowCount; row++)
             {
-                TweenNode node = Nodes[i];
-                bool isSelected = selectedIndices.Contains(i);
-                Rect rowRect = CalculateNameRowHitRect(i, scrollViewportRect.width);
+                var (kind, idx) = ResolveRow(row);
+
+                Rect rowRect = GetRowHitRect(row, scrollViewportRect.width);
                 Rect nameRect = CalculateNameRowVisualRect(rowRect);
 
-                // 行背景：选中行使用高亮色，未选中使用暗色
-                EditorGUI.DrawRect(nameRect, isSelected ? ColorNameRowSelectedBg : ColorNameRowBg);
-
-                // ── 四个小按钮自右向左排列：菜单 / 显隐 / 删除 / 插入 ──
-                // 每个按钮均垂直居中于行视觉矩形内，间距 dis = 3px。
-                float btnY = nameRect.y + (nameRect.height - NameRowButtonSize) * 0.5f - 1;
-                float dis = 3;
-
-                Rect menuRect = new Rect(
-                 nameRect.xMax - NameRowButtonSize - 5,
-                 btnY,
-                 NameRowButtonSize,
-                 NameRowButtonSize);
-                Rect eyeRect = new Rect(
-                   menuRect.x - NameRowButtonSize - dis,
-                   btnY,
-                   NameRowButtonSize,
-                   NameRowButtonSize);
-                Rect deleteRect = new Rect(
-                    eyeRect.x - NameRowButtonSize - dis,
-                    btnY,
-                    NameRowButtonSize,
-                    NameRowButtonSize);
-                Rect insertRect = new Rect(
-                    deleteRect.x - NameRowButtonSize - dis,
-                    btnY,
-                    NameRowButtonSize,
-                    NameRowButtonSize);
-
-                // 分段式
-                //Rect sepRect = new Rect(
-                //  insertRect.x - dis - 2, btnY + 10, 1, NameRowButtonSize - 20);
-
-                // 贯穿式
-                Rect sepRect = new Rect(
-               insertRect.x - dis - 2, nameRect.y, 1, nameRect.height + 2);
-
-                // ── 标识文字：绘制在按钮区左侧，超出部分省略号截断 ──
-                float buttonZoneLeft = insertRect.x - 35;
-                XGUI.gui_label(
-                    rect: new Rect(nameRect.x + 25, nameRect.y, buttonZoneLeft - nameRect.x, nameRect.height),
-                    text: new GUIContent(node.Indicator),
-                    text_color: Color.white * 0.9f,
-                    size: XGUIFontSize.B,
-                    clipping: XGUI.TryEllipsisClipping(),
-                    anchor: TextAnchor.MiddleLeft,
-                    font_style: FontStyle.Normal);
-
-                // 按钮区与文字区之间的竖直分隔线
-                XGUI.gui_box(sepRect, Color.white * 0.35f);
-
-                // ── 按钮：插入（在当前节点之后插入新节点）──
-                if (XGUI.gui_button(
-                    rect: insertRect,
-                    tooltip: "",
-                    tex_release: icon_add_r,
-                    tex_press: icon_add_p,
-                    tex_gui_color: Color.white,
-                    width: NameRowButtonSize,
-                    height: NameRowButtonSize,
-                    border: new RectOffset(0, 0, 0, 0),
-                    margin: new RectOffset(0, 0, 0, 0),
-                    padding: new RectOffset(0, 0, 0, 0)))
+                if (kind == TrackKind.Node)
                 {
-                    pendingInsertIndex = i;
-                    nameHitThisFrame = true;
+                    DrawNodeNameRow(rowRect, nameRect, idx,
+                        ref nameHitThisFrame,
+                        ref pendingInsertIndex,
+                        ref pendingDeleteIndex);
                 }
-
-                // ── 按钮：删除（删除当前节点）──
-                if (XGUI.gui_button(
-                    rect: deleteRect,
-                    tooltip: "",
-                    tex_release: icon_del_r,
-                    tex_press: icon_del_p,
-                    tex_gui_color: new Color(0.8f, 0.32f, 0.32f, 1),
-                    width: NameRowButtonSize,
-                    height: NameRowButtonSize,
-                    border: new RectOffset(0, 0, 0, 0),
-                    margin: new RectOffset(0, 0, 0, 0),
-                    padding: new RectOffset(0, 0, 0, 0)))
+                else
                 {
-                    pendingDeleteIndex = i;
-                    nameHitThisFrame = true;
-                }
-
-                // ── 按钮：显隐切换（直接写回 node.Enabled，下一帧生效）──
-                if (XGUI.gui_button(
-                    rect: eyeRect,
-                    tooltip: "",
-                    tex_release: node.Enabled ? icon_enabled_r : icon_disabled_r,
-                    tex_press: node.Enabled ? icon_enabled_p : icon_disabled_p,
-                    tex_gui_color: node.Enabled ? Color.white : Color.gray * 0.7f,
-                    width: NameRowButtonSize,
-                    height: NameRowButtonSize,
-                    border: new RectOffset(0, 0, 0, 0),
-                    margin: new RectOffset(0, 0, 0, 0),
-                    padding: new RectOffset(0, 0, 0, 0)))
-                {
-                    node.Enabled = !node.Enabled;
-                    nameHitThisFrame = true;
-                }
-
-                // ── 按钮：菜单（占位，目前为 A / B / C 三个空项）──
-                if (XGUI.gui_button(
-                    rect: menuRect,
-                    tooltip: "",
-                    tex_release: icon_menu_r,
-                    tex_press: icon_menu_p,
-                    tex_gui_color: Color.white,
-                    width: NameRowButtonSize,
-                    height: NameRowButtonSize,
-                    border: new RectOffset(0, 0, 0, 0),
-                    margin: new RectOffset(0, 0, 0, 0),
-                    padding: new RectOffset(0, 0, 0, 0)))
-                {
-                    nameHitThisFrame = true;
-                    GenericMenu menu = new GenericMenu();
-                    menu.AddItem(new GUIContent("A"), false, () =>
-                    {
-                    });
-                    menu.AddItem(new GUIContent("B"), false, () =>
-                    {
-                    });
-                    menu.AddItem(new GUIContent("C"), false, () =>
-                    {
-                    });
-                    menu.ShowAsContext();
-                }
-
-                // ── 类型圆点：行最左侧的彩色小圆点，颜色由动画类型决定 ──
-                XGUI.gui_icon(
-                   rect: new Rect(nameRect.x + 10, nameRect.y + ((nameRect.height / 2) - TweenTypeDotSize / 2), TweenTypeDotSize, TweenTypeDotSize),
-                   icon: icon_led,
-                   color: GetTweenTypeColor(node.Type));
-
-                // ── 行本体点击：设置选中（Ctrl 切换单项 / Shift 范围选）──
-                // 注意：!nameHitThisFrame 保证「行内按钮已被点击」时不再触发行选中。
-                if (Event.current.type == EventType.MouseDown
-                    && Event.current.button == 0
-                    && rowRect.Contains(Event.current.mousePosition)
-                    && !nameHitThisFrame)
-                {
-                    bool ctrl = Event.current.control || Event.current.command;
-                    bool shift = Event.current.shift;
-                    SetNodeSelection(i, ctrl, shift);
-                    nameHitThisFrame = true;
-                    Event.current.Use();
-                    Repaint();
+                    DrawSoundNameRow(rowRect, nameRect, idx,
+                        ref nameHitThisFrame,
+                        ref pendingSoundInsertIndex,
+                        ref pendingSoundDeleteIndex);
                 }
             }
             GUI.EndScrollView();
@@ -1448,6 +1418,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 selectedIndices.Clear();
                 selectedIndex = -1;
+                selectedKind = TrackKind.无;
                 GUIUtility.keyboardControl = 0;
                 Event.current.Use();
                 Repaint();
@@ -1468,8 +1439,6 @@ namespace SevenStrikeModules.XHud.Editor
             // 名字列右边界分隔线（视觉上区分名字列与 Clip 区）
             XGUI.gui_box(new Rect(area.x + (area.width - 1), area.y, 1, area.height), Color.black * 0.35f);
 
-            // ── 延迟执行增删：循环结束后统一处理，避免遍历中修改 Nodes ──
-            // 删除优先于插入（若同一帧两者都被触发，以删除为准）。
             if (pendingDeleteIndex >= 0)
             {
                 DeleteTweenNodeAt(pendingDeleteIndex);
@@ -1477,6 +1446,239 @@ namespace SevenStrikeModules.XHud.Editor
             else if (pendingInsertIndex >= 0)
             {
                 InsertTweenNodeAfter(pendingInsertIndex);
+            }
+            else if (pendingSoundDeleteIndex >= 0)
+            {
+                DeleteSoundAt(pendingSoundDeleteIndex);
+            }
+            else if (pendingSoundInsertIndex >= 0)
+            {
+                InsertSoundAfter(pendingSoundInsertIndex);
+            }
+        }
+        /// <summary>
+        /// 绘制单条动画节点名字行。
+        /// <para/>
+        /// 这是从原 <see cref="DrawNameColumnPanel"/> 循环体中抽出的逻辑，
+        /// 内容与原来完全一致，只是把 <c>i</c> 换成了参数 <paramref name="index"/>，
+        /// 把 <c>SetNodeSelection</c> 换成了 <c>SetSelection(TrackKind.Node, ...)</c>，
+        /// 把 <c>selectedIndices.Contains(i)</c> 换成了 <c>IsSelected(TrackKind.Node, index)</c>。
+        /// </summary>
+        private void DrawNodeNameRow(Rect rowRect, Rect nameRect, int index, ref bool nameHitThisFrame, ref int pendingInsertIndex, ref int pendingDeleteIndex)
+        {
+            TweenNode node = Nodes[index];
+            bool isSelected = IsSelected(TrackKind.Node, index);
+
+            // 行背景
+            EditorGUI.DrawRect(nameRect, isSelected ? ColorNameRowSelectedBg : ColorNameRowBg);
+
+            // 四个小按钮自右向左排列
+            float btnY = nameRect.y + (nameRect.height - NameRowButtonSize) * 0.5f - 1;
+            float dis = 3;
+
+            Rect menuRect = new Rect(nameRect.xMax - NameRowButtonSize - 5, btnY, NameRowButtonSize, NameRowButtonSize);
+            Rect eyeRect = new Rect(menuRect.x - NameRowButtonSize - dis, btnY, NameRowButtonSize, NameRowButtonSize);
+            Rect deleteRect = new Rect(eyeRect.x - NameRowButtonSize - dis, btnY, NameRowButtonSize, NameRowButtonSize);
+            Rect insertRect = new Rect(deleteRect.x - NameRowButtonSize - dis, btnY, NameRowButtonSize, NameRowButtonSize);
+
+            Rect sepRect = new Rect(insertRect.x - dis - 2, nameRect.y, 1, nameRect.height + 2);
+
+            // 标识文字
+            float buttonZoneLeft = insertRect.x - 35;
+            XGUI.gui_label(
+                rect: new Rect(nameRect.x + 25, nameRect.y, buttonZoneLeft - nameRect.x, nameRect.height),
+                text: new GUIContent(node.Indicator),
+                text_color: Color.white * 0.9f,
+                size: XGUIFontSize.B,
+                clipping: XGUI.TryEllipsisClipping(),
+                anchor: TextAnchor.MiddleLeft,
+                font_style: FontStyle.Normal);
+
+            XGUI.gui_box(sepRect, Color.white * 0.35f);
+
+            // ── 按钮：插入 ──
+            if (XGUI.gui_button(
+                rect: insertRect, tooltip: "",
+                tex_release: icon_add_r, tex_press: icon_add_p,
+                tex_gui_color: Color.white,
+                width: NameRowButtonSize, height: NameRowButtonSize,
+                border: new RectOffset(0, 0, 0, 0),
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0)))
+            {
+                pendingInsertIndex = index;
+                nameHitThisFrame = true;
+            }
+
+            // ── 按钮：删除 ──
+            if (XGUI.gui_button(
+                rect: deleteRect, tooltip: "",
+                tex_release: icon_del_r, tex_press: icon_del_p,
+                tex_gui_color: new Color(0.8f, 0.32f, 0.32f, 1),
+                width: NameRowButtonSize, height: NameRowButtonSize,
+                border: new RectOffset(0, 0, 0, 0),
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0)))
+            {
+                pendingDeleteIndex = index;
+                nameHitThisFrame = true;
+            }
+
+            // ── 按钮：显隐 ──
+            if (XGUI.gui_button(
+                rect: eyeRect, tooltip: "",
+                tex_release: node.Enabled ? icon_enabled_r : icon_disabled_r,
+                tex_press: node.Enabled ? icon_enabled_p : icon_disabled_p,
+                tex_gui_color: node.Enabled ? Color.white : Color.gray * 0.7f,
+                width: NameRowButtonSize, height: NameRowButtonSize,
+                border: new RectOffset(0, 0, 0, 0),
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0)))
+            {
+                node.Enabled = !node.Enabled;
+                nameHitThisFrame = true;
+            }
+
+            // ── 按钮：菜单 ──
+            if (XGUI.gui_button(
+                rect: menuRect, tooltip: "",
+                tex_release: icon_menu_r, tex_press: icon_menu_p,
+                tex_gui_color: Color.white,
+                width: NameRowButtonSize, height: NameRowButtonSize,
+                border: new RectOffset(0, 0, 0, 0),
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0)))
+            {
+                nameHitThisFrame = true;
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("A"), false, () => { });
+                menu.AddItem(new GUIContent("B"), false, () => { });
+                menu.AddItem(new GUIContent("C"), false, () => { });
+                menu.ShowAsContext();
+            }
+
+            // ── 类型圆点 ──
+            XGUI.gui_icon(
+                rect: new Rect(nameRect.x + 10, nameRect.y + ((nameRect.height / 2) - TweenTypeDotSize / 2), TweenTypeDotSize, TweenTypeDotSize),
+                icon: icon_led,
+                color: GetTweenTypeColor(node.Type));
+
+            // ── 行本体点击 ──
+            if (Event.current.type == EventType.MouseDown
+                && Event.current.button == 0
+                && rowRect.Contains(Event.current.mousePosition)
+                && !nameHitThisFrame)
+            {
+                bool ctrl = Event.current.control || Event.current.command;
+                bool shift = Event.current.shift;
+                SetSelection(TrackKind.Node, index, ctrl, shift);
+                nameHitThisFrame = true;
+                Event.current.Use();
+                Repaint();
+            }
+        }
+        /// <summary>
+        /// 绘制单条音效名字行。
+        /// <para/>
+        /// 与节点行的差异：
+        /// <list type="bullet">
+        /// <item><description>无"显隐"按钮（<see cref="TweenSound"/> 没有 Enabled）；</description></item>
+        /// <item><description>标识文字用音频名或"(空音效)"；</description></item>
+        /// <item><description>左侧圆点固定青绿色。</description></item>
+        /// </list>
+        /// </summary>
+        private void DrawSoundNameRow(Rect rowRect, Rect nameRect, int index, ref bool nameHitThisFrame, ref int pendingInsertIndex, ref int pendingDeleteIndex)
+        {
+            TweenSound sound = Sounds[index];
+            bool isSelected = IsSelected(TrackKind.Sound, index);
+
+            EditorGUI.DrawRect(nameRect, isSelected ? ColorNameRowSelectedBg : ColorNameRowBg);
+
+            float btnY = nameRect.y + (nameRect.height - NameRowButtonSize) * 0.5f - 1;
+            float dis = 3;
+
+            // 音效只有三个按钮：菜单 / 删除 / 插入
+            Rect menuRect = new Rect(nameRect.xMax - NameRowButtonSize - 5, btnY, NameRowButtonSize, NameRowButtonSize);
+            Rect deleteRect = new Rect(menuRect.x - NameRowButtonSize - dis, btnY, NameRowButtonSize, NameRowButtonSize);
+            Rect insertRect = new Rect(deleteRect.x - NameRowButtonSize - dis, btnY, NameRowButtonSize, NameRowButtonSize);
+
+            Rect sepRect = new Rect(insertRect.x - dis - 2, nameRect.y, 1, nameRect.height + 2);
+
+            float buttonZoneLeft = insertRect.x - 35;
+            string label = sound.Sound != null ? sound.Sound.name : "(空音效)";
+            XGUI.gui_label(
+                rect: new Rect(nameRect.x + 25, nameRect.y, buttonZoneLeft - nameRect.x, nameRect.height),
+                text: new GUIContent(label),
+                text_color: Color.white * 0.9f,
+                size: XGUIFontSize.B,
+                clipping: XGUI.TryEllipsisClipping(),
+                anchor: TextAnchor.MiddleLeft,
+                font_style: FontStyle.Normal);
+
+            XGUI.gui_box(sepRect, Color.white * 0.35f);
+
+            // ── 按钮：插入 ──
+            if (XGUI.gui_button(
+                rect: insertRect, tooltip: "",
+                tex_release: icon_add_r, tex_press: icon_add_p,
+                tex_gui_color: Color.white,
+                width: NameRowButtonSize, height: NameRowButtonSize,
+                border: new RectOffset(0, 0, 0, 0),
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0)))
+            {
+                pendingInsertIndex = index;
+                nameHitThisFrame = true;
+            }
+
+            // ── 按钮：删除 ──
+            if (XGUI.gui_button(
+                rect: deleteRect, tooltip: "",
+                tex_release: icon_del_r, tex_press: icon_del_p,
+                tex_gui_color: new Color(0.8f, 0.32f, 0.32f, 1),
+                width: NameRowButtonSize, height: NameRowButtonSize,
+                border: new RectOffset(0, 0, 0, 0),
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0)))
+            {
+                pendingDeleteIndex = index;
+                nameHitThisFrame = true;
+            }
+
+            // ── 按钮：菜单 ──
+            if (XGUI.gui_button(
+                rect: menuRect, tooltip: "",
+                tex_release: icon_menu_r, tex_press: icon_menu_p,
+                tex_gui_color: Color.white,
+                width: NameRowButtonSize, height: NameRowButtonSize,
+                border: new RectOffset(0, 0, 0, 0),
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0)))
+            {
+                nameHitThisFrame = true;
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("选择音频资源"), false, () => { });
+                menu.ShowAsContext();
+            }
+
+            // ── 类型圆点（音效固定青绿色）──
+            XGUI.gui_icon(
+                rect: new Rect(nameRect.x + 10, nameRect.y + ((nameRect.height / 2) - TweenTypeDotSize / 2), TweenTypeDotSize, TweenTypeDotSize),
+                icon: icon_led,
+                color: new Color(0.4f, 0.8f, 0.8f));
+
+            // ── 行本体点击 ──
+            if (Event.current.type == EventType.MouseDown
+                && Event.current.button == 0
+                && rowRect.Contains(Event.current.mousePosition)
+                && !nameHitThisFrame)
+            {
+                bool ctrl = Event.current.control || Event.current.command;
+                bool shift = Event.current.shift;
+                SetSelection(TrackKind.Sound, index, ctrl, shift);
+                nameHitThisFrame = true;
+                Event.current.Use();
+                Repaint();
             }
         }
         /// <summary> 
@@ -1562,7 +1764,7 @@ namespace SevenStrikeModules.XHud.Editor
                 area.height - rulerHeight - HorizontalScrollbarHeight);
 
             float contentWidth = CalculateContentWidthPixels();
-            float contentHeight = Nodes.Count * trackHeight + 20f;
+            float contentHeight = TotalRowCount * trackHeight + 20f;
             Rect contentRect = new Rect(0, 0, contentWidth, contentHeight);
 
             scrollPos = GUI.BeginScrollView(
@@ -1578,17 +1780,18 @@ namespace SevenStrikeModules.XHud.Editor
             // clipHitThisFrame 用于记录本帧是否有 Clip 被左键命中，
             // 供后续 HandleClipAreaEmptyClick 判断是否需要取消选中。
             clipHitThisFrame = false;
-            for (int i = 0; i < Nodes.Count; i++)
+            for (int row = 0; row < TotalRowCount; row++)
             {
-                float trackTop = Mathf.Round(i * trackHeight);
-                float trackBottom = Mathf.Round((i + 1) * trackHeight);
-                float trackH = trackBottom - trackTop;
+                Rect trackRect = GetRowHitRect(row, contentWidth);
                 float viewTop = scrollPos.y;
                 float viewBottom = scrollPos.y + scrollViewportRect.height;
-                // 屏幕外轨道直接跳过，避免无谓的绘制开销
-                if (trackBottom < viewTop || trackTop > viewBottom) continue;
-                Rect trackRect = new Rect(0, trackTop, contentWidth, trackH);
-                DrawTrackRow(trackRect, i, startSecond, endSecond);
+                if (trackRect.yMax < viewTop || trackRect.y > viewBottom) continue;
+
+                var (kind, idx) = ResolveRow(row);
+                if (kind == TrackKind.Node)
+                    DrawTrackRow(trackRect, idx, startSecond, endSecond);
+                else
+                    DrawSoundTrackRow(trackRect, idx);
             }
 
             // ── 阶段 4：在 ScrollView 内处理 Clip 拖拽 ──
@@ -1618,7 +1821,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
             // 边界参考线：Move 拖拽时，在 Clip 的左右两端各绘制一条暗色竖线，
             // 便于用户判断整段动画的首尾位置（区别于吸附黄线）。
-            if (dragMode == DragMode.移动 && draggingIndex >= 0 && draggingIndex < Nodes.Count)
+            if (dragMode == DragMode.移动 && draggingKind == TrackKind.Node && draggingIndex >= 0 && draggingIndex < Nodes.Count)
             {
                 TweenNode draggingNode = Nodes[draggingIndex];
                 float leftX = draggingNode.Delay * pixelsPerSecond - scrollPos.x;
@@ -1669,6 +1872,16 @@ namespace SevenStrikeModules.XHud.Editor
                 for (int i = 0; i < Nodes.Count; i++)
                 {
                     float end = Nodes[i].Delay + Nodes[i].Duration;
+                    if (end > maxEnd) maxEnd = end;
+                }
+            }
+            if (Sounds != null)
+            {
+                for (int i = 0; i < Sounds.Count; i++)
+                {
+                    TweenSound s = Sounds[i];
+                    float len = s.Sound != null ? s.Sound.length : DefaultSoundClipSeconds;
+                    float end = s.Delay + len;
                     if (end > maxEnd) maxEnd = end;
                 }
             }
@@ -1815,7 +2028,7 @@ namespace SevenStrikeModules.XHud.Editor
         private void DrawTrackRow(Rect trackRect, int index, float startSecond, float endSecond)
         {
             TweenNode node = Nodes[index];
-            bool isSelected = selectedIndices.Contains(index);
+            bool isSelected = IsSelected(TrackKind.Node, index);
             Rect trackVisualRect = CalculateTrackVisualRect(trackRect);
             XGUI.gui_box(trackVisualRect, ColorClipBG);
             Rect clipRect = CalculateClipRect(trackVisualRect, node);
@@ -1987,6 +2200,106 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
+        #region 绘制：音效轨
+        /// <summary> 
+        /// 绘制单条音效轨及其 Clip，并进行 MouseDown 命中检测以进入拖拽模式。
+        /// <para/>
+        /// 与 <see cref="DrawTrackRow"/> 结构完全对称，只是：
+        /// <list type="bullet">
+        /// <item><description>数据源是 <see cref="Sounds"/>；</description></item>
+        /// <item><description>Clip 宽度由音频长度决定；</description></item>
+        /// <item><description>选中判定走 <see cref="IsSelected"/>；</description></item>
+        /// <item><description>拖拽走 <see cref="TryBeginSoundClipDrag"/>。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="trackRect">轨道矩形（内容坐标，高 = trackHeight）</param>
+        /// <param name="soundIndex">音效索引</param>
+        private void DrawSoundTrackRow(Rect trackRect, int soundIndex)
+        {
+            if (soundIndex < 0 || soundIndex >= Sounds.Count) return;
+            TweenSound sound = Sounds[soundIndex];
+            bool isSelected = IsSelected(TrackKind.Sound, soundIndex);
+
+            Rect trackVisualRect = CalculateTrackVisualRect(trackRect);
+
+            // 行底色：音效轨用略深的底色，和动画轨区分
+            XGUI.gui_box(trackVisualRect, ColorSoundTrackBG);
+
+            Rect clipRect = CalculateSoundClipRect(trackVisualRect, sound);
+
+            // 屏幕外裁剪
+            float viewLeft = scrollPos.x;
+            float viewRight = scrollPos.x + cachedClipAreaRect.width;
+            if (clipRect.xMax < viewLeft - 10 || clipRect.x > viewRight + 10)
+                return;
+
+            DrawSoundClipVisual(clipRect, sound, isSelected);
+            TryBeginSoundClipDrag(clipRect, soundIndex);
+        }
+
+        /// <summary> 
+        /// 由轨道视觉矩形与音效数据计算 Clip 的内容坐标矩形。
+        /// <para/>
+        /// 规则：
+        /// <list type="bullet">
+        /// <item><description>左边缘 = <c>sound.Delay</c>；</description></item>
+        /// <item><description>宽度 = 音频长度（<c>sound.Sound.length</c>），
+        /// 若 <c>Sound</c> 为空则用 <see cref="DefaultSoundClipSeconds"/>；</description></item>
+        /// </list>
+        /// </summary>
+        private Rect CalculateSoundClipRect(Rect trackVisualRect, TweenSound sound)
+        {
+            float clipX = trackVisualRect.x + sound.Delay * pixelsPerSecond;
+            float lengthSec = sound.Sound != null ? sound.Sound.length : DefaultSoundClipSeconds;
+            float clipW = lengthSec * pixelsPerSecond;
+            return new Rect(
+                Mathf.Round(clipX),
+                trackVisualRect.y,
+                Mathf.Max(Mathf.Round(clipW), 4f),
+                trackVisualRect.height);
+        }
+
+        /// <summary> 
+        /// 绘制音效 Clip 的视觉样式：背景色块、音效名、延迟文本。
+        /// <para/>
+        /// 与 <see cref="DrawClipVisual"/> 对应，但只表达音效相关的信息。
+        /// </summary>
+        private void DrawSoundClipVisual(Rect clipRect, TweenSound sound, bool isSelected)
+        {
+            #region 背景
+            Color bg = ColorSoundClipBG;
+            if (sound.Sound == null) bg = ColorSoundClipBG_Empty;
+            if (isSelected) bg = sound.Sound == null ? ColorSoundClipBG_Empty * 1.2f : ColorSoundClipBG_Selected;
+            XGUI.gui_box(clipRect, bg);
+            #endregion
+
+            #region 左侧类型条（音效统一用一个固定色，如需按 Timings 区分可换）
+            XGUI.gui_box(
+                new Rect(clipRect.x, clipRect.y, ClipTypeLineThickness, clipRect.height),
+                isSelected ? Color.white : new Color(0.4f, 0.8f, 0.8f));
+            #endregion
+
+            #region 概述信息
+            bool minimal = clipRect.width < 120;
+            string name = sound.Sound != null ? sound.Sound.name : "(空音效)";
+            string content = minimal
+                ? $"{sound.Delay:F3}"
+                : $"{name}   /   {sound.Delay:F3}";
+            XGUI.gui_label(
+                rect: new Rect(clipRect.x + 4, clipRect.y, clipRect.width - 8, clipRect.height),
+                text: new GUIContent(content),
+                text_color: isSelected ? Color.white : Color.white * 0.9f,
+                size: XGUIFontSize.M,
+                clipping: TextClipping.Clip,
+                anchor: TextAnchor.MiddleLeft,
+                font_style: FontStyle.Normal);
+            #endregion
+
+            // 音效只做整体移动，光标固定为 MoveArrow
+            EditorGUIUtility.AddCursorRect(clipRect, MouseCursor.MoveArrow);
+        }
+        #endregion
+
         #region 绘制：参数面板
         /// <summary> 
         ///绘制右侧节点参数面板，用于编辑当前选中动画节点的属性
@@ -2003,10 +2316,6 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (selectedIndex != -1)
             {
-                TweenNode node = Nodes[selectedIndex];
-                Texture2D icon_type = GetTweenTypeIcon(node.Type, true);
-
-                // 用 GUILayout.BeginScrollView，让内部控件走自动布局
                 paramScroll = GUILayout.BeginScrollView(
                     paramScroll,
                     false,
@@ -2016,9 +2325,15 @@ namespace SevenStrikeModules.XHud.Editor
                     GUILayout.Width(scrollViewportRect.width),
                     GUILayout.Height(scrollViewportRect.height));
 
-                if (selectedIndex >= 0 && selectedIndex < Nodes.Count)
+                if (selectedKind == TrackKind.Node && selectedIndex >= 0 && selectedIndex < Nodes.Count)
                 {
+                    TweenNode node = Nodes[selectedIndex];
+                    Texture2D icon_type = GetTweenTypeIcon(node.Type, true);
                     DrawNodeParameterFields(scrollViewportRect, icon_type, node);
+                }
+                else if (selectedKind == TrackKind.Sound && selectedIndex >= 0 && selectedIndex < Sounds.Count)
+                {
+                    DrawSoundParameterFields(scrollViewportRect, Sounds[selectedIndex]);
                 }
                 else
                 {
@@ -2037,10 +2352,12 @@ namespace SevenStrikeModules.XHud.Editor
                 Repaint();
             }
 
+            string headerTitle = selectedKind == TrackKind.Sound ? "音效参数" : "节点参数";
+
             XGUI.gui_box(rulerParamRect, Color_Params_Header_BG);
             XGUI.gui_label(
                 rect: new Rect(rulerParamRect.x + 6, rulerParamRect.y, rulerParamRect.width, rulerParamRect.height),
-                text: new GUIContent("节点参数"),
+                text: new GUIContent(headerTitle),
                 text_color: Color.white,
                 size: XGUIFontSize.M,
                 clipping: TextClipping.Clip,
@@ -2049,6 +2366,179 @@ namespace SevenStrikeModules.XHud.Editor
 
             GUI.EndGroup();
             XGUI.gui_box(new Rect(area.x, area.y, 1, area.height), Color.black * 0.35f);
+        }
+        /// <summary>
+        /// 绘制选中音效的参数字段。
+        /// <para/>
+        /// 与 <see cref="DrawNodeParameterFields"/> 对称，但字段集是音效专属的：
+        /// Sound / Path / Timings / Delay / Volume / MinPitch / MaxPitch。
+        /// </summary>
+        private void DrawSoundParameterFields(Rect area, TweenSound sound)
+        {
+            SerializedObject so = new SerializedObject(target);
+
+            SerializedProperty prop_sounds = so.FindProperty("PrimitiveTweenSounds");
+            if (prop_sounds == null || selectedIndex < 0 || selectedIndex >= prop_sounds.arraySize)
+            {
+                so.Dispose();
+                return;
+            }
+
+            SerializedProperty prop_sound = prop_sounds.GetArrayElementAtIndex(selectedIndex);
+            SerializedProperty ser_sound = prop_sound.FindPropertyRelative("Sound");
+            SerializedProperty ser_path = prop_sound.FindPropertyRelative("Path");
+            SerializedProperty ser_timings = prop_sound.FindPropertyRelative("Timings");
+            SerializedProperty ser_delay = prop_sound.FindPropertyRelative("Delay");
+            SerializedProperty ser_volume = prop_sound.FindPropertyRelative("Volume");
+            SerializedProperty ser_minPitch = prop_sound.FindPropertyRelative("MinPitch");
+            SerializedProperty ser_maxPitch = prop_sound.FindPropertyRelative("MaxPitch");
+
+            so.Update();
+
+            XGUI.ChangedCheck_Start();
+
+            #region 参数
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "音效参数",
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: XGUI.TryEllipsisClipping(),
+                title_size: XGUIFontSize.M,
+                title_manual_offset: true,
+                title_manual_offset_space: 5,
+                absolute_margin: true,
+                absolute_padding: true,
+                margin: new RectOffset(10, 10, 25, 0),
+                padding: new RectOffset(10, 10, 15, 15));
+
+            #region 音效资源
+            XGUI.layout_property_field(
+                title: "音效",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 70,
+                prop: ser_sound,
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(5, 5, 0, 5));
+            ser_sound.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            #region 路径（只读显示 + 按钮：从音效资源反查）
+            XGUI.layout_property_field(
+                title: "路径",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 70,
+                prop: ser_path,
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(5, 5, 0, 5));
+            ser_path.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            #region 时机
+            XGUI.layout_property_field(
+                title: "时机",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 70,
+                prop: ser_timings,
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(5, 5, 0, 5));
+            ser_timings.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            #region 延迟
+            XGUI.layout_property_field(
+                title: "延迟",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 70,
+                prop: ser_delay,
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(5, 5, 0, 5));
+            ser_delay.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            #region 音量
+            XGUI.layout_property_field(
+                title: "音量",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 70,
+                prop: ser_volume,
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(5, 5, 0, 5));
+            ser_volume.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            #region 音高
+            XGUI.layout_property_field(
+                title: "音高下限",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 70,
+                prop: ser_minPitch,
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(5, 5, 0, 5));
+            ser_minPitch.serializedObject.ApplyModifiedProperties();
+
+            XGUI.layout_property_field(
+                title: "音高上限",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 70,
+                prop: ser_maxPitch,
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(5, 5, 0, 5));
+            ser_maxPitch.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            #region 时长（只读）
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "信息",
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_size: XGUIFontSize.M,
+                title_manual_offset: true,
+                title_manual_offset_space: 5,
+                absolute_margin: true,
+                absolute_padding: true,
+                margin: new RectOffset(10, 10, 20, 0),
+                padding: new RectOffset(10, 10, 15, 15));
+
+            string lenText = sound.Sound != null ? $"{sound.Sound.length:F3} 秒" : "—";
+            XGUI.layout_state_displayer_text(
+                title: "音频时长",
+                title_size: XGUIFontSize.M,
+                subtitle: lenText,
+                subtitle_size: XGUIFontSize.M,
+                subtitle_color: XHud_Dashboard.Theme_Primary,
+                margin: new RectOffset(5, 5, 0, 5));
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            XGUI.layout_space(6);
+
+            if (XGUI.ChangedCheck_End())
+            {
+                if (dragMode == DragMode.无 && !IsPreviewing)
+                    Undo.RecordObject(target, "Edit Tween Sound");
+                EditorUtility.SetDirty(target);
+                Repaint();
+            }
+
+            so.ApplyModifiedProperties();
+            so.Dispose();
         }
         /// <summary> 
         ///绘制选中节点的参数字段
@@ -3068,7 +3558,7 @@ namespace SevenStrikeModules.XHud.Editor
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(10, 10, 3, 0));
             XGUI.layout_label(
-                text: $"动画轨道：{Nodes.Count}    选中轨道：{selectedIndices.Count}",
+                text: $"动画轨道：{Nodes.Count}    音效轨道：{Sounds.Count}    选中：{selectedIndices.Count}",
                 size: XGUIFontSize.M,
                 text_color: Color.white * 0.7f,
                 margin: new RectOffset(0, 0, 0, 0),
@@ -3133,14 +3623,15 @@ namespace SevenStrikeModules.XHud.Editor
             bool shift = e.shift;
             if (ctrl || shift)
             {
-                SetNodeSelection(index, ctrl, shift);
+                SetSelection(TrackKind.Node, index, ctrl, shift);
             }
-            else if (!selectedIndices.Contains(index))
+            else if (!IsSelected(TrackKind.Node, index))
             {
-                SetNodeSelection(index, false, false);
+                SetSelection(TrackKind.Node, index, false, false);
             }
             else
             {
+                selectedKind = TrackKind.Node;
                 selectedIndex = index;
                 GUIUtility.keyboardControl = 0;
             }
@@ -3203,13 +3694,92 @@ namespace SevenStrikeModules.XHud.Editor
             Repaint();
         }
         /// <summary> 
+        /// 在音效 Clip 上检测 MouseDown 命中，命中则进入"移动"拖拽模式。
+        /// <para/>
+        /// 与动画 Clip 不同：音效不做左右边缘拉伸，只做整体移动。
+        /// </summary>
+        private void TryBeginSoundClipDrag(Rect clipRect, int soundIndex)
+        {
+            Event e = Event.current;
+            if (e.type != EventType.MouseDown) return;
+            if (e.button != 0) return;
+            if (e.alt) return;
+            if (dragMode != DragMode.无) return;
+            if (!clipRect.Contains(e.mousePosition)) return;
+
+            bool ctrl = e.control || e.command;
+            bool shift = e.shift;
+            if (ctrl || shift)
+                SetSelection(TrackKind.Sound, soundIndex, ctrl, shift);
+            else if (!IsSelected(TrackKind.Sound, soundIndex))
+                SetSelection(TrackKind.Sound, soundIndex, false, false);
+            else
+            {
+                selectedKind = TrackKind.Sound;
+                selectedIndex = soundIndex;
+                GUIUtility.keyboardControl = 0;
+            }
+
+            dragMode = DragMode.移动;
+            draggingKind = TrackKind.Sound;
+            draggingIndex = soundIndex;
+            moveDragAnchorSide = 0;
+            primaryDragIndex = soundIndex;
+
+            dragStartDelays.Clear();
+            dragStartDurations.Clear();
+            foreach (int i in selectedIndices)
+            {
+                if (i < 0 || i >= Sounds.Count) continue;
+                dragStartDelays[i] = QuantizeTime(Sounds[i].Delay);
+            }
+            if (dragStartDelays.Count == 0)
+                dragStartDelays[soundIndex] = QuantizeTime(Sounds[soundIndex].Delay);
+
+            dragStartDelay = QuantizeTime(Sounds[soundIndex].Delay);
+            dragStartDuration = 0f;
+
+            dragControlID = GUIUtility.GetControlID(FocusType.Passive);
+            GUIUtility.hotControl = dragControlID;
+            GUIUtility.keyboardControl = 0;
+            dragStartContentSecond = e.mousePosition.x / pixelsPerSecond;
+            snapGuideSecond = -1f;
+
+            if (!IsPreviewing)
+            {
+                Undo.IncrementCurrentGroup();
+                Undo.SetCurrentGroupName("Edit Tween Sound Clip");
+                dragUndoGroup = Undo.GetCurrentGroup();
+                Undo.RecordObject(target, "Edit Tween Sound Clip");
+            }
+            else
+            {
+                dragUndoGroup = -1;
+            }
+
+            clipHitThisFrame = true;
+            e.Use();
+            Repaint();
+        }
+        /// <summary> 
         ///统一处理 Clip 拖拽的 MouseDrag / MouseUp
         /// </summary>
         /// <param name="viewportArea">ScrollView 视口矩形（Clip 区局部坐标，用于判断边缘自动平移）</param>
         private void ProcessClipDrag(Rect viewportArea)
         {
             Event e = Event.current;
-            if (dragMode == DragMode.无 || draggingIndex < 0 || draggingIndex >= Nodes.Count)
+
+            // 按拖拽类型分别做有效性校验
+            bool valid = false;
+            if (dragMode != DragMode.无)
+            {
+                if (draggingKind == TrackKind.Sound)
+                    valid = draggingIndex >= 0 && draggingIndex < Sounds.Count;
+                else
+                    valid = draggingIndex >= 0 && draggingIndex < Nodes.Count;
+            }
+
+            if (!valid)
             {
                 if (e.type == EventType.MouseUp && GUIUtility.hotControl == dragControlID)
                     GUIUtility.hotControl = 0;
@@ -3219,184 +3789,17 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 case EventType.MouseDrag:
                     if (GUIUtility.hotControl != dragControlID) return;
-                    {
-                        TweenNode node = Nodes[draggingIndex];
-                        float currentContentSecond = e.mousePosition.x / pixelsPerSecond;
-                        float totalDelta = currentContentSecond - dragStartContentSecond;
-                        snapGuideSecond = -1f;
-                        bool snapOn = this.snapEnabled || e.shift;
-
-                        if (!IsPreviewing)
-                            Undo.RecordObject(target, "Edit Tween Clip");
-
-                        switch (dragMode)
-                        {
-                            case DragMode.移动:
-                                {
-                                    TweenNode primary = Nodes[primaryDragIndex];
-                                    float rawDelay = Mathf.Max(0f, dragStartDelay + totalDelta);
-                                    float rawEnd = QuantizeTime(rawDelay + dragStartDuration);
-                                    float snappedPrimaryDelay;
-                                    if (snapOn && moveDragAnchorSide != 0)
-                                    {
-                                        if (moveDragAnchorSide == 1)
-                                        {
-                                            float snappedStart;
-                                            bool leftSnapped = TrySnapTimeToReference(rawDelay, selectedIndices, out snappedStart);
-                                            snappedStart = QuantizeTime(Mathf.Max(0f, snappedStart));
-                                            if (leftSnapped)
-                                            {
-                                                snappedPrimaryDelay = snappedStart;
-                                                snapGuideSecond = snappedStart;
-                                            }
-                                            else
-                                            {
-                                                snappedPrimaryDelay = QuantizeTime(rawDelay);
-                                                snapGuideSecond = -1f;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            float snappedEnd;
-                                            bool rightSnapped = TrySnapTimeToReference(rawEnd, selectedIndices, out snappedEnd);
-                                            snappedEnd = QuantizeTime(Mathf.Max(0f, snappedEnd));
-                                            if (rightSnapped)
-                                            {
-                                                snappedPrimaryDelay = QuantizeTime(Mathf.Max(0f, snappedEnd - dragStartDuration));
-                                                snapGuideSecond = snappedEnd;
-                                            }
-                                            else
-                                            {
-                                                snappedPrimaryDelay = QuantizeTime(rawDelay);
-                                                snapGuideSecond = -1f;
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        snappedPrimaryDelay = QuantizeTime(rawDelay);
-                                        snapGuideSecond = -1f;
-                                    }
-                                    float finalDelta = snappedPrimaryDelay - dragStartDelay;
-                                    float minStartDelay = float.MaxValue;
-                                    foreach (var kv in dragStartDelays)
-                                        if (kv.Value < minStartDelay) minStartDelay = kv.Value;
-                                    if (minStartDelay + finalDelta < 0f)
-                                        finalDelta = -minStartDelay;
-                                    foreach (var kv in dragStartDelays)
-                                    {
-                                        int idx = kv.Key;
-                                        if (idx < 0 || idx >= Nodes.Count) continue;
-                                        Nodes[idx].Delay = QuantizeTime(kv.Value + finalDelta);
-                                    }
-                                    break;
-                                }
-                            case DragMode.左边缘:
-                                {
-                                    TweenNode primary = Nodes[primaryDragIndex];
-                                    float primaryStartDelay = dragStartDelays.ContainsKey(primaryDragIndex)
-                                        ? dragStartDelays[primaryDragIndex] : QuantizeTime(primary.Delay);
-                                    float rawDelay = Mathf.Max(0f, primaryStartDelay + totalDelta);
-                                    float snapped;
-                                    if (snapOn)
-                                    {
-                                        float snapValue;
-                                        bool snappedFlag = TrySnapTimeToReference(rawDelay, selectedIndices, out snapValue);
-                                        snapped = QuantizeTime(Mathf.Max(0f, snapValue));
-                                        snapGuideSecond = snappedFlag ? snapped : -1f;
-                                    }
-                                    else
-                                    {
-                                        snapped = QuantizeTime(rawDelay);
-                                        snapGuideSecond = -1f;
-                                    }
-                                    float delta = snapped - primaryStartDelay;
-                                    float minDelta = float.MinValue;
-                                    float maxDelta = float.MaxValue;
-                                    foreach (var kv in dragStartDelays)
-                                    {
-                                        int idx = kv.Key;
-                                        if (idx < 0 || idx >= Nodes.Count) continue;
-                                        float startD = kv.Value;
-                                        float startDur = dragStartDurations[idx];
-                                        float lo = -startD;
-                                        float hi = startDur - 0.01f;
-                                        if (lo > minDelta) minDelta = lo;
-                                        if (hi < maxDelta) maxDelta = hi;
-                                    }
-                                    delta = Mathf.Clamp(delta, minDelta, maxDelta);
-                                    foreach (var kv in dragStartDelays)
-                                    {
-                                        int idx = kv.Key;
-                                        if (idx < 0 || idx >= Nodes.Count) continue;
-                                        float startD = kv.Value;
-                                        float startDur = dragStartDurations[idx];
-                                        float endFixed = QuantizeTime(startD + startDur);
-                                        float newDelay = QuantizeTime(startD + delta);
-                                        Nodes[idx].Delay = newDelay;
-                                        Nodes[idx].Duration = QuantizeTime(Mathf.Max(0.01f, endFixed - newDelay));
-                                    }
-                                    break;
-                                }
-                            case DragMode.右边缘:
-                                {
-                                    float primaryStartDelay = dragStartDelays.ContainsKey(primaryDragIndex)
-                                        ? dragStartDelays[primaryDragIndex] : dragStartDelay;
-                                    float primaryStartDur = dragStartDurations.ContainsKey(primaryDragIndex)
-                                        ? dragStartDurations[primaryDragIndex] : dragStartDuration;
-                                    float primaryStartEnd = QuantizeTime(primaryStartDelay + primaryStartDur);
-                                    float rawEnd = primaryStartEnd + totalDelta;
-                                    float snapped;
-                                    if (snapOn)
-                                    {
-                                        float snapValue;
-                                        bool snappedFlag = TrySnapTimeToReference(rawEnd, selectedIndices, out snapValue);
-                                        snapped = QuantizeTime(Mathf.Max(primaryStartDelay + 0.01f, snapValue));
-                                        snapGuideSecond = snappedFlag ? snapped : -1f;
-                                    }
-                                    else
-                                    {
-                                        snapped = QuantizeTime(rawEnd);
-                                        snapGuideSecond = -1f;
-                                    }
-                                    float delta = snapped - primaryStartEnd;
-                                    float minDelta = float.MinValue;
-                                    float maxDelta = float.MaxValue;
-                                    foreach (var kv in dragStartDelays)
-                                    {
-                                        int idx = kv.Key;
-                                        if (idx < 0 || idx >= Nodes.Count) continue;
-                                        float startD = kv.Value;
-                                        float startDur = dragStartDurations[idx];
-                                        float lo = 0.01f - startDur;
-                                        float hi = float.MaxValue;
-                                        if (lo > minDelta) minDelta = lo;
-                                        if (hi < maxDelta) maxDelta = hi;
-                                    }
-                                    delta = Mathf.Clamp(delta, minDelta, maxDelta);
-                                    foreach (var kv in dragStartDelays)
-                                    {
-                                        int idx = kv.Key;
-                                        if (idx < 0 || idx >= Nodes.Count) continue;
-                                        float startD = kv.Value;
-                                        float startDur = dragStartDurations[idx];
-                                        Nodes[idx].Delay = QuantizeTime(startD);
-                                        Nodes[idx].Duration = QuantizeTime(Mathf.Max(0.01f, startDur + delta));
-                                    }
-                                    break;
-                                }
-                        }
-                        AutoScrollViewOnDragEdge(e.mousePosition.x - scrollPos.x, new Rect(0, 0, viewportArea.width, viewportArea.height));
-                        EditorUtility.SetDirty(target);
-                        Repaint();
-                        e.Use();
-                    }
+                    if (draggingKind == TrackKind.Sound)
+                        ProcessSoundDrag(e, viewportArea);
+                    else
+                        ProcessNodeDrag(e, viewportArea);
                     break;
                 case EventType.MouseUp:
                     if (dragMode != DragMode.无)
                     {
                         GUIUtility.hotControl = 0;
                         dragMode = DragMode.无;
+                        draggingKind = TrackKind.无;
                         draggingIndex = -1;
                         snapGuideSecond = -1f;
                         primaryDragIndex = -1;
@@ -3413,6 +3816,233 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     break;
             }
+        }
+        private void ProcessNodeDrag(Event e, Rect viewportArea)
+        {
+            TweenNode node = Nodes[draggingIndex];
+            float currentContentSecond = e.mousePosition.x / pixelsPerSecond;
+            float totalDelta = currentContentSecond - dragStartContentSecond;
+            snapGuideSecond = -1f;
+            bool snapOn = this.snapEnabled || e.shift;
+
+            if (!IsPreviewing)
+                Undo.RecordObject(target, "Edit Tween Clip");
+
+            switch (dragMode)
+            {
+                case DragMode.移动:
+                    {
+                        TweenNode primary = Nodes[primaryDragIndex];
+                        float rawDelay = Mathf.Max(0f, dragStartDelay + totalDelta);
+                        float rawEnd = QuantizeTime(rawDelay + dragStartDuration);
+                        float snappedPrimaryDelay;
+                        if (snapOn && moveDragAnchorSide != 0)
+                        {
+                            if (moveDragAnchorSide == 1)
+                            {
+                                float snappedStart;
+                                bool leftSnapped = TrySnapTimeToReference(rawDelay, selectedIndices, out snappedStart);
+                                snappedStart = QuantizeTime(Mathf.Max(0f, snappedStart));
+                                if (leftSnapped)
+                                {
+                                    snappedPrimaryDelay = snappedStart;
+                                    snapGuideSecond = snappedStart;
+                                }
+                                else
+                                {
+                                    snappedPrimaryDelay = QuantizeTime(rawDelay);
+                                    snapGuideSecond = -1f;
+                                }
+                            }
+                            else
+                            {
+                                float snappedEnd;
+                                bool rightSnapped = TrySnapTimeToReference(rawEnd, selectedIndices, out snappedEnd);
+                                snappedEnd = QuantizeTime(Mathf.Max(0f, snappedEnd));
+                                if (rightSnapped)
+                                {
+                                    snappedPrimaryDelay = QuantizeTime(Mathf.Max(0f, snappedEnd - dragStartDuration));
+                                    snapGuideSecond = snappedEnd;
+                                }
+                                else
+                                {
+                                    snappedPrimaryDelay = QuantizeTime(rawDelay);
+                                    snapGuideSecond = -1f;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            snappedPrimaryDelay = QuantizeTime(rawDelay);
+                            snapGuideSecond = -1f;
+                        }
+                        float finalDelta = snappedPrimaryDelay - dragStartDelay;
+                        float minStartDelay = float.MaxValue;
+                        foreach (var kv in dragStartDelays)
+                            if (kv.Value < minStartDelay) minStartDelay = kv.Value;
+                        if (minStartDelay + finalDelta < 0f)
+                            finalDelta = -minStartDelay;
+                        foreach (var kv in dragStartDelays)
+                        {
+                            int idx = kv.Key;
+                            if (idx < 0 || idx >= Nodes.Count) continue;
+                            Nodes[idx].Delay = QuantizeTime(kv.Value + finalDelta);
+                        }
+                        break;
+                    }
+                case DragMode.左边缘:
+                    {
+                        TweenNode primary = Nodes[primaryDragIndex];
+                        float primaryStartDelay = dragStartDelays.ContainsKey(primaryDragIndex)
+                            ? dragStartDelays[primaryDragIndex] : QuantizeTime(primary.Delay);
+                        float rawDelay = Mathf.Max(0f, primaryStartDelay + totalDelta);
+                        float snapped;
+                        if (snapOn)
+                        {
+                            float snapValue;
+                            bool snappedFlag = TrySnapTimeToReference(rawDelay, selectedIndices, out snapValue);
+                            snapped = QuantizeTime(Mathf.Max(0f, snapValue));
+                            snapGuideSecond = snappedFlag ? snapped : -1f;
+                        }
+                        else
+                        {
+                            snapped = QuantizeTime(rawDelay);
+                            snapGuideSecond = -1f;
+                        }
+                        float delta = snapped - primaryStartDelay;
+                        float minDelta = float.MinValue;
+                        float maxDelta = float.MaxValue;
+                        foreach (var kv in dragStartDelays)
+                        {
+                            int idx = kv.Key;
+                            if (idx < 0 || idx >= Nodes.Count) continue;
+                            float startD = kv.Value;
+                            float startDur = dragStartDurations[idx];
+                            float lo = -startD;
+                            float hi = startDur - 0.01f;
+                            if (lo > minDelta) minDelta = lo;
+                            if (hi < maxDelta) maxDelta = hi;
+                        }
+                        delta = Mathf.Clamp(delta, minDelta, maxDelta);
+                        foreach (var kv in dragStartDelays)
+                        {
+                            int idx = kv.Key;
+                            if (idx < 0 || idx >= Nodes.Count) continue;
+                            float startD = kv.Value;
+                            float startDur = dragStartDurations[idx];
+                            float endFixed = QuantizeTime(startD + startDur);
+                            float newDelay = QuantizeTime(startD + delta);
+                            Nodes[idx].Delay = newDelay;
+                            Nodes[idx].Duration = QuantizeTime(Mathf.Max(0.01f, endFixed - newDelay));
+                        }
+                        break;
+                    }
+                case DragMode.右边缘:
+                    {
+                        float primaryStartDelay = dragStartDelays.ContainsKey(primaryDragIndex)
+                            ? dragStartDelays[primaryDragIndex] : dragStartDelay;
+                        float primaryStartDur = dragStartDurations.ContainsKey(primaryDragIndex)
+                            ? dragStartDurations[primaryDragIndex] : dragStartDuration;
+                        float primaryStartEnd = QuantizeTime(primaryStartDelay + primaryStartDur);
+                        float rawEnd = primaryStartEnd + totalDelta;
+                        float snapped;
+                        if (snapOn)
+                        {
+                            float snapValue;
+                            bool snappedFlag = TrySnapTimeToReference(rawEnd, selectedIndices, out snapValue);
+                            snapped = QuantizeTime(Mathf.Max(primaryStartDelay + 0.01f, snapValue));
+                            snapGuideSecond = snappedFlag ? snapped : -1f;
+                        }
+                        else
+                        {
+                            snapped = QuantizeTime(rawEnd);
+                            snapGuideSecond = -1f;
+                        }
+                        float delta = snapped - primaryStartEnd;
+                        float minDelta = float.MinValue;
+                        float maxDelta = float.MaxValue;
+                        foreach (var kv in dragStartDelays)
+                        {
+                            int idx = kv.Key;
+                            if (idx < 0 || idx >= Nodes.Count) continue;
+                            float startD = kv.Value;
+                            float startDur = dragStartDurations[idx];
+                            float lo = 0.01f - startDur;
+                            float hi = float.MaxValue;
+                            if (lo > minDelta) minDelta = lo;
+                            if (hi < maxDelta) maxDelta = hi;
+                        }
+                        delta = Mathf.Clamp(delta, minDelta, maxDelta);
+                        foreach (var kv in dragStartDelays)
+                        {
+                            int idx = kv.Key;
+                            if (idx < 0 || idx >= Nodes.Count) continue;
+                            float startD = kv.Value;
+                            float startDur = dragStartDurations[idx];
+                            Nodes[idx].Delay = QuantizeTime(startD);
+                            Nodes[idx].Duration = QuantizeTime(Mathf.Max(0.01f, startDur + delta));
+                        }
+                        break;
+                    }
+            }
+            AutoScrollViewOnDragEdge(e.mousePosition.x - scrollPos.x, new Rect(0, 0, viewportArea.width, viewportArea.height));
+            EditorUtility.SetDirty(target);
+            Repaint();
+            e.Use();
+        }
+        /// <summary> 
+        /// 处理音效 Clip 拖拽：只修改 <see cref="TweenSound.Delay"/>。
+        /// </summary>
+        private void ProcessSoundDrag(Event e, Rect viewportArea)
+        {
+            if (draggingIndex < 0 || draggingIndex >= Sounds.Count) return;
+
+            float currentContentSecond = e.mousePosition.x / pixelsPerSecond;
+            float totalDelta = currentContentSecond - dragStartContentSecond;
+            snapGuideSecond = -1f;
+            bool snapOn = this.snapEnabled || e.shift;
+
+            if (!IsPreviewing)
+                Undo.RecordObject(target, "Edit Tween Sound Clip");
+
+            TweenSound primary = Sounds[draggingIndex];
+            float primaryStart = dragStartDelays.ContainsKey(draggingIndex)
+                ? dragStartDelays[draggingIndex]
+                : QuantizeTime(primary.Delay);
+            float rawDelay = Mathf.Max(0f, primaryStart + totalDelta);
+
+            float snapped;
+            if (snapOn)
+            {
+                float snapValue;
+                bool snappedFlag = TrySnapTimeToReferenceForSound(rawDelay, draggingIndex, out snapValue);
+                snapped = QuantizeTime(Mathf.Max(0f, snapValue));
+                snapGuideSecond = snappedFlag ? snapped : -1f;
+            }
+            else
+            {
+                snapped = QuantizeTime(rawDelay);
+            }
+
+            float finalDelta = snapped - primaryStart;
+            float minStart = float.MaxValue;
+            foreach (var kv in dragStartDelays)
+                if (kv.Value < minStart) minStart = kv.Value;
+            if (minStart + finalDelta < 0f)
+                finalDelta = -minStart;
+
+            foreach (var kv in dragStartDelays)
+            {
+                int idx = kv.Key;
+                if (idx < 0 || idx >= Sounds.Count) continue;
+                Sounds[idx].Delay = QuantizeTime(kv.Value + finalDelta);
+            }
+
+            AutoScrollViewOnDragEdge(e.mousePosition.x - scrollPos.x,
+                new Rect(0, 0, viewportArea.width, viewportArea.height));
+            EditorUtility.SetDirty(target);
+            Repaint();
+            e.Use();
         }
         /// <summary> 
         ///拖拽时若鼠标靠近 Clip 区左右边缘，自动平移 <see cref="scrollPos"/>
@@ -3557,6 +4187,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (clipHitThisFrame) return;
             selectedIndices.Clear();
             selectedIndex = -1;
+            selectedKind = TrackKind.无;
             GUIUtility.keyboardControl = 0;
             e.Use();
             Repaint();
@@ -3596,9 +4227,14 @@ namespace SevenStrikeModules.XHud.Editor
             if (GUIUtility.keyboardControl != 0) return;
             if (e.keyCode == KeyCode.Delete || e.keyCode == KeyCode.Backspace)
             {
-                if (selectedIndices.Count > 0)
+                if (selectedKind == TrackKind.Node && selectedIndices.Count > 0)
                 {
                     DeleteSelectedTweenNodes();
+                    e.Use();
+                }
+                else if (selectedKind == TrackKind.Sound && selectedIndices.Count > 0)
+                {
+                    DeleteSelectedSounds();
                     e.Use();
                 }
                 return;
@@ -3615,19 +4251,49 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 交互：多选
         /// <summary> 
-        ///设置当前选中支持 Ctrl 多选（切换单项）、Shift 范围选
+        ///取选中集合里索引最小的（视觉最上面）作为主节点
         /// </summary>
-        /// <param name="index">目标节点索引</param>
-        /// <param name="additive">true 表示 Ctrl 点击（切换单项）</param>
-        /// <param name="range">true 表示 Shift 点击（范围选）</param>
-        private void SetNodeSelection(int index, bool additive, bool range)
+        /// <returns>主节点索引；集合为空时返回 -1</returns>
+        private int GetTopmostSelectedIndex()
         {
-            if (index < 0 || index >= Nodes.Count)
+            int top = int.MaxValue;
+            foreach (int i in selectedIndices) if (i < top) top = i;
+            return top == int.MaxValue ? -1 : top;
+        }
+        /// <summary> 
+        /// 判断某个轨道项是否被选中。
+        /// </summary>
+        private bool IsSelected(TrackKind kind, int index)
+        {
+            return selectedKind == kind && selectedIndices.Contains(index);
+        }
+
+        /// <summary> 
+        /// 统一的选中设置入口。
+        /// <para/>
+        /// 支持 Ctrl 切换单项、Shift 范围选；跨类型时清空旧选中。
+        /// </summary>
+        private void SetSelection(TrackKind kind, int index, bool additive, bool range)
+        {
+            int count = kind == TrackKind.Node ? Nodes.Count : Sounds.Count;
+            if (index < 0 || index >= count)
             {
                 selectedIndices.Clear();
                 selectedIndex = -1;
+                selectedKind = TrackKind.无;
                 return;
             }
+
+            // 跨类型：清空旧选中，Shift 范围选无意义（退化为单选）
+            if (selectedKind != kind)
+            {
+                selectedIndices.Clear();
+                selectedKind = kind;
+                selectedIndex = -1;
+                range = false;
+                additive = false;
+            }
+
             if (range && selectedIndex >= 0)
             {
                 int from = Mathf.Min(selectedIndex, index);
@@ -3658,16 +4324,13 @@ namespace SevenStrikeModules.XHud.Editor
             GUIUtility.keyboardControl = 0;
             Repaint();
         }
+
         /// <summary> 
-        ///取选中集合里索引最小的（视觉最上面）作为主节点
+        /// 当前选中集合对应的列表数量（Node / Sound）。
         /// </summary>
-        /// <returns>主节点索引；集合为空时返回 -1</returns>
-        private int GetTopmostSelectedIndex()
-        {
-            int top = int.MaxValue;
-            foreach (int i in selectedIndices) if (i < top) top = i;
-            return top == int.MaxValue ? -1 : top;
-        }
+        private int SelectedListCount =>
+            selectedKind == TrackKind.Node ? Nodes.Count :
+            selectedKind == TrackKind.Sound ? Sounds.Count : 0;
         #endregion
 
         #region 交互：全局兜底
@@ -3698,6 +4361,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 GUIUtility.hotControl = 0;
                 dragMode = DragMode.无;
+                draggingKind = TrackKind.无;
                 draggingIndex = -1;
                 snapGuideSecond = -1f;
                 primaryDragIndex = -1;
@@ -3947,6 +4611,50 @@ namespace SevenStrikeModules.XHud.Editor
             snappedTime = snapped ? QuantizeTime(bestTime) : time;
             return snapped;
         }
+        /// <summary> 
+        /// 音效吸附：参照物 = 所有动画节点边界 + 所有音效边界（排除拖拽中的音效自身）+ 整秒网格。
+        /// </summary>
+        private bool TrySnapTimeToReferenceForSound(float time, int excludeSoundIndex, out float snappedTime)
+        {
+            float threshold = SnapThresholdSeconds;
+            float bestTime = time;
+            float bestDist = threshold;
+            bool snapped = false;
+
+            // 动画节点边界
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                TweenNode other = Nodes[i];
+                float s = other.Delay;
+                float e = other.Delay + other.Duration;
+                float ds = Mathf.Abs(time - s);
+                if (ds < bestDist) { bestDist = ds; bestTime = s; snapped = true; }
+                float de = Mathf.Abs(time - e);
+                if (de < bestDist) { bestDist = de; bestTime = e; snapped = true; }
+            }
+
+            // 其他音效边界
+            for (int i = 0; i < Sounds.Count; i++)
+            {
+                if (i == excludeSoundIndex) continue;
+                TweenSound other = Sounds[i];
+                float s = other.Delay;
+                float len = other.Sound != null ? other.Sound.length : DefaultSoundClipSeconds;
+                float e = other.Delay + len;
+                float ds = Mathf.Abs(time - s);
+                if (ds < bestDist) { bestDist = ds; bestTime = s; snapped = true; }
+                float de = Mathf.Abs(time - e);
+                if (de < bestDist) { bestDist = de; bestTime = e; snapped = true; }
+            }
+
+            // 整秒网格
+            float rounded = Mathf.Round(time);
+            float distToSecond = Mathf.Abs(time - rounded);
+            if (distToSecond < bestDist) { bestDist = distToSecond; bestTime = rounded; snapped = true; }
+
+            snappedTime = snapped ? QuantizeTime(bestTime) : time;
+            return snapped;
+        }
         #endregion
 
         #region 工具：滚动范围
@@ -3956,7 +4664,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>垂直滚动上限（像素），恒 ≥ 0</returns>
         private float CalculateMaxVerticalScroll()
         {
-            float contentHeight = Nodes.Count * trackHeight + 20f;
+            float contentHeight = TotalRowCount * trackHeight + 20f;
             float viewH = cachedClipAreaRect.height - rulerHeight - HorizontalScrollbarHeight;
             return Mathf.Max(0f, contentHeight - Mathf.Max(1f, viewH));
         }
@@ -3966,61 +4674,154 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary> 
         ///缩放到合适范围：选中节点时以该节点 Duration 铺满；未选中时以所有节点最右端适配
         /// </summary>
+        /// <summary> 
+        /// 缩放到合适范围。
+        /// <para/>
+        /// 按当前选中类型分三种策略：
+        /// <list type="bullet">
+        /// <item><description>选中动画节点：以该节点 Duration 铺满视口；</description></item>
+        /// <item><description>选中音效：以该音效的音频长度（Sound 为空时用默认 1 秒）铺满视口；</description></item>
+        /// <item><description>未选中 / 选中项越界：以所有内容（动画 + 音效）的最右端适配。</description></item>
+        /// </list>
+        /// 三种分支都保持一致的"左边距 padding"手感：若起始位置换算成像素后大于 padding，
+        /// 则起点留出 padding 余量；否则从 0 开始让内容铺满整个宽度。
+        /// </summary>
         private void FitViewToContent()
         {
+            // ── 前置校验：动画节点为空时退化为重置视图 ──
+            // 注：这里保持与原有逻辑一致，动画节点为空即视为"无可适配内容"。
+            // 若将来要支持"只有音效没有动画"的场景，需要放宽这个判断。
             if (Nodes == null || Nodes.Count == 0)
             {
                 ResetTimelineView();
                 return;
             }
+
+            // ── 计算可用宽度 ──
+            // 优先用缓存矩形；缓存无效时用窗口宽度减去左右两栏宽度兜底。
             float availableWidth = cachedClipAreaRect.width;
             if (availableWidth <= 1f)
             {
                 availableWidth = position.width - nameColumnWidth - paramPanelWidth;
             }
             if (availableWidth <= 1f) return;
+
+            // 两侧各留 20px 的视觉边距
             const float padding = 20f;
-            if (selectedIndex >= 0 && selectedIndex < Nodes.Count)
+
+            // ══════════════════════════════════════════════════════════
+            // 分支 1：选中了动画节点 → 以该节点 Duration 铺满
+            // ══════════════════════════════════════════════════════════
+            if (selectedKind == TrackKind.Node
+                && selectedIndex >= 0 && selectedIndex < Nodes.Count)
             {
                 TweenNode node = Nodes[selectedIndex];
+
+                // 时长为 0 无法适配，退回重置视图
                 if (node.Duration <= 0.0001f)
                 {
                     ResetTimelineView();
                     return;
                 }
+
                 float usableWidth = Mathf.Max(1f, availableWidth - padding * 2f);
                 float tempPixelsPerSecond = usableWidth / node.Duration;
                 tempPixelsPerSecond = Mathf.Clamp(tempPixelsPerSecond, 1f, 20000f);
+
                 float delayPixels = node.Delay * tempPixelsPerSecond;
                 if (delayPixels > padding)
                 {
+                    // 前置延迟较长：起点留出 padding 余量，让 Delay 部分可见
                     pixelsPerSecond = tempPixelsPerSecond;
                     scrollPos.x = node.Delay * pixelsPerSecond - padding;
                     scrollPos.x = Mathf.Max(0f, scrollPos.x);
                 }
                 else
                 {
+                    // 前置延迟较短：直接从 0 开始，让 Clip 铺满
                     usableWidth = Mathf.Max(1f, availableWidth - padding);
                     pixelsPerSecond = usableWidth / node.Duration;
                     pixelsPerSecond = Mathf.Clamp(pixelsPerSecond, 1f, 20000f);
                     scrollPos.x = 0f;
                 }
+
                 scrollPos.y = 0f;
                 nameScroll.y = 0f;
                 Repaint();
                 return;
             }
+
+            // ══════════════════════════════════════════════════════════
+            // 分支 2：选中了音效 → 以该音效的音频长度铺满
+            // ══════════════════════════════════════════════════════════
+            if (selectedKind == TrackKind.Sound
+                && selectedIndex >= 0 && selectedIndex < Sounds.Count)
+            {
+                TweenSound sound = Sounds[selectedIndex];
+
+                // Sound 为空时用默认占位长度（与 CalculateSoundClipRect 保持一致）
+                float len = sound.Sound != null ? sound.Sound.length : DefaultSoundClipSeconds;
+
+                if (len <= 0.0001f)
+                {
+                    ResetTimelineView();
+                    return;
+                }
+
+                float usableWidth = Mathf.Max(1f, availableWidth - padding * 2f);
+                float tempPixelsPerSecond = usableWidth / len;
+                tempPixelsPerSecond = Mathf.Clamp(tempPixelsPerSecond, 1f, 20000f);
+
+                float delayPixels = sound.Delay * tempPixelsPerSecond;
+                if (delayPixels > padding)
+                {
+                    // 前置延迟较长：起点留出 padding 余量，让 Delay 部分可见
+                    pixelsPerSecond = tempPixelsPerSecond;
+                    scrollPos.x = sound.Delay * pixelsPerSecond - padding;
+                    scrollPos.x = Mathf.Max(0f, scrollPos.x);
+                }
+                else
+                {
+                    // 前置延迟较短：直接从 0 开始，让 Clip 铺满
+                    usableWidth = Mathf.Max(1f, availableWidth - padding);
+                    pixelsPerSecond = usableWidth / len;
+                    pixelsPerSecond = Mathf.Clamp(pixelsPerSecond, 1f, 20000f);
+                    scrollPos.x = 0f;
+                }
+
+                scrollPos.y = 0f;
+                nameScroll.y = 0f;
+                Repaint();
+                return;
+            }
+
+            // ══════════════════════════════════════════════════════════
+            // 分支 3：未选中 / 选中项越界 → 以所有内容（动画 + 音效）最右端适配
+            // ══════════════════════════════════════════════════════════
             float maxEnd = 0f;
+
+            // 动画节点最右端
             for (int i = 0; i < Nodes.Count; i++)
             {
                 float end = Nodes[i].Delay + Nodes[i].Duration;
                 if (end > maxEnd) maxEnd = end;
             }
+
+            // 音效最右端
+            for (int i = 0; i < Sounds.Count; i++)
+            {
+                TweenSound s = Sounds[i];
+                float len = s.Sound != null ? s.Sound.length : DefaultSoundClipSeconds;
+                float end = s.Delay + len;
+                if (end > maxEnd) maxEnd = end;
+            }
+
             if (maxEnd <= 0.0001f)
             {
                 ResetTimelineView();
                 return;
             }
+
             float usableWidthAll = Mathf.Max(1f, availableWidth - padding * 2f);
             pixelsPerSecond = usableWidthAll / maxEnd;
             pixelsPerSecond = Mathf.Clamp(pixelsPerSecond, 1f, 20000f);
@@ -4406,6 +5207,118 @@ namespace SevenStrikeModules.XHud.Editor
             // ── 钳制垂直滚动 ──
             // 删除后内容高度变小，原 scrollPos.y 可能超出新的滚动上限；
             // 同步 nameScroll.y 保持名字列与轨道对齐。
+            scrollPos.y = Mathf.Clamp(scrollPos.y, 0f, CalculateMaxVerticalScroll());
+            nameScroll.y = scrollPos.y;
+            Repaint();
+        }
+        #endregion
+
+        #region 工具：音效增删
+        /// <summary>
+        /// 在指定索引处插入一条新的空白音效。
+        /// </summary>
+        private void InsertSoundAt(int insertAt)
+        {
+            if (target == null || target.Equals(null)) return;
+
+            if (!IsPreviewing)
+                Undo.RegisterCompleteObjectUndo(target, "Insert Tween Sound");
+
+            TweenSound s = new TweenSound();
+            s.Sound = null;
+            s.Path = "";
+            s.Timings = "";
+            s.Delay = 0f;
+            s.Volume = 1f;
+            s.MinPitch = 1f;
+            s.MaxPitch = 1f;
+
+            insertAt = Mathf.Clamp(insertAt, 0, Sounds.Count);
+            Sounds.Insert(insertAt, s);
+            EditorUtility.SetDirty(target);
+
+            selectedIndices.Clear();
+            selectedIndices.Add(insertAt);
+            selectedIndex = insertAt;
+            selectedKind = TrackKind.Sound;
+            Repaint();
+        }
+
+        /// <summary>
+        /// 在指定音效下方插入一条新的空白音效。
+        /// </summary>
+        private void InsertSoundAfter(int index)
+        {
+            if (target == null) return;
+            if (index < 0 || index >= Sounds.Count) return;
+            InsertSoundAt(index + 1);
+        }
+
+        /// <summary>
+        /// 删除指定索引的音效，并修正选中集合。
+        /// </summary>
+        private void DeleteSoundAt(int index)
+        {
+            if (target == null) return;
+            if (index < 0 || index >= Sounds.Count) return;
+
+            if (!IsPreviewing)
+                Undo.RegisterCompleteObjectUndo(target, "Delete Tween Sound");
+
+            Sounds.RemoveAt(index);
+            EditorUtility.SetDirty(target);
+
+            // 仅当当前选中集合属于音效轨时才需要修正
+            if (selectedKind == TrackKind.Sound)
+            {
+                HashSet<int> newSelection = new HashSet<int>();
+                foreach (int i in selectedIndices)
+                {
+                    if (i < index) newSelection.Add(i);
+                    else if (i > index) newSelection.Add(i - 1);
+                }
+                selectedIndices.Clear();
+                foreach (int i in newSelection) selectedIndices.Add(i);
+
+                if (selectedIndex == index)
+                    selectedIndex = selectedIndices.Count > 0 ? GetTopmostSelectedIndex() : -1;
+                else if (selectedIndex > index)
+                    selectedIndex--;
+
+                if (selectedIndex < 0 && selectedIndices.Count == 0)
+                    selectedKind = TrackKind.无;
+            }
+
+            scrollPos.y = Mathf.Clamp(scrollPos.y, 0f, CalculateMaxVerticalScroll());
+            nameScroll.y = scrollPos.y;
+            Repaint();
+        }
+
+        /// <summary>
+        /// 删除所有当前选中的音效。
+        /// </summary>
+        private void DeleteSelectedSounds()
+        {
+            if (target == null) return;
+            if (selectedKind != TrackKind.Sound) return;
+            if (selectedIndices.Count == 0) return;
+
+            if (!IsPreviewing)
+                Undo.RegisterCompleteObjectUndo(target, "Delete Tween Sounds");
+
+            List<int> indices = new List<int>(selectedIndices);
+            indices.Sort((a, b) => b.CompareTo(a));
+            foreach (int i in indices)
+            {
+                if (i < 0 || i >= Sounds.Count) continue;
+                Sounds.RemoveAt(i);
+            }
+            EditorUtility.SetDirty(target);
+
+            selectedIndices.Clear();
+            selectedIndex = -1;
+            selectedKind = TrackKind.无;
+
             scrollPos.y = Mathf.Clamp(scrollPos.y, 0f, CalculateMaxVerticalScroll());
             nameScroll.y = scrollPos.y;
             Repaint();

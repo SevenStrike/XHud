@@ -2496,7 +2496,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
   - ID: 8797
     Indicator: NewTween
     Enabled: 1
@@ -2561,7 +2561,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
   - ID: 9497
     Indicator: NewTweensd123
     Enabled: 1
@@ -2626,7 +2626,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
   - ID: 5675
     Indicator: NewTween
     Enabled: 1
@@ -2691,8 +2691,15 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
-  PrimitiveTweenSounds: []
+    IsFold: 1
+  PrimitiveTweenSounds:
+  - Sound: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
+    Path: 
+    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Delay: 1
+    Volume: 1
+    MaxPitch: 1
+    MinPitch: 1
   GlobalDuration: 1
   MinTimer: 1
   MaxTimer: 6
@@ -2753,7 +2760,7 @@ MonoBehaviour:
   PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
   fold_param: 0
   fold_option: 1
-  fold_based: 1
+  fold_based: 0
   fold_list: 0
   fold_state: 0
   Timeline_TrackPosition: 121.666664
