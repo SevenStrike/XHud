@@ -2183,6 +2183,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.gui_box(new Rect(gx, 0, 1f, area.height), guideColor);
                 }
             }
+
             // 边界参考线：Move 拖拽时，在 Clip 的左右两端各绘制一条暗色竖线，
             // 便于用户判断整段动画的首尾位置（区别于吸附黄线）。
             if (dragMode == DragMode.移动 && draggingKind == TrackKind.Node && draggingIndex >= 0 && draggingIndex < Nodes.Count)
@@ -2194,6 +2195,19 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.gui_box(new Rect(leftX, 0, 1f, area.height), ColorClipEdgeGuide);
                 if (rightX >= 0f && rightX <= area.width)
                     XGUI.gui_box(new Rect(rightX, 0, 1f, area.height), ColorClipEdgeGuide);
+            }
+
+            // 音效 Clip：Move 拖拽时同样绘制左右边界参考线
+            if (dragMode == DragMode.移动 && draggingKind == TrackKind.Sound && draggingIndex >= 0 && draggingIndex < Sounds.Count)
+            {
+                TweenSound draggingSound = Sounds[draggingIndex];
+                float sLen = draggingSound.Sound != null ? draggingSound.Sound.length : DefaultSoundClipSeconds;
+                float sLeftX = draggingSound.Delay * pixelsPerSecond - scrollPos.x;
+                float sRightX = (draggingSound.Delay + sLen) * pixelsPerSecond - scrollPos.x;
+                if (sLeftX >= 0f && sLeftX <= area.width)
+                    XGUI.gui_box(new Rect(sLeftX, 0, 1f, area.height), ColorClipEdgeGuide);
+                if (sRightX >= 0f && sRightX <= area.width)
+                    XGUI.gui_box(new Rect(sRightX, 0, 1f, area.height), ColorClipEdgeGuide);
             }
             #endregion
 
@@ -4189,8 +4203,11 @@ namespace SevenStrikeModules.XHud.Editor
             dragMode = DragMode.移动;
             draggingKind = TrackKind.Sound;
             draggingIndex = soundIndex;
-            moveDragAnchorSide = 0;
             primaryDragIndex = soundIndex;
+
+            // ★ 与动画 Clip 一致：按鼠标点在 Clip 左半 / 右半锁定吸附锚定侧
+            float clipCenterX = (clipRect.xMin + clipRect.xMax) * 0.5f;
+            moveDragAnchorSide = e.mousePosition.x < clipCenterX ? 1 : 2;
 
             // 记录起始 Delay（两类都记）
             dragStartNodeDelays.Clear();
@@ -4512,6 +4529,12 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         /// 处理音效 Clip 拖拽：只修改 <see cref="TweenSound.Delay"/>。
+        /// <para/>
+        /// 吸附锚定规则（与动画 Clip 一致）：
+        /// <list type="bullet">
+        /// <item><description><see cref="moveDragAnchorSide"/> == 1：以左边缘（Delay）为吸附基准；</description></item>
+        /// <item><description><see cref="moveDragAnchorSide"/> == 2：以右边缘（Delay + Sound.length）为吸附基准。</description></item>
+        /// </list>
         /// </summary>
         private void ProcessSoundDrag(Event e, Rect viewportArea)
         {
@@ -4525,19 +4548,52 @@ namespace SevenStrikeModules.XHud.Editor
             if (!IsPreviewing)
                 Undo.RecordObject(target, "Edit Tween Sound Clip");
 
+            // 主拖拽音效
             TweenSound primary = Sounds[draggingIndex];
             float primaryStart = dragStartSoundDelays.ContainsKey(draggingIndex)
                 ? dragStartSoundDelays[draggingIndex]
                 : QuantizeTime(primary.Delay);
-            float rawDelay = Mathf.Max(0f, primaryStart + totalDelta);
+
+            // 音效长度（Sound 为空时用默认占位长度，与 CalculateSoundClipRect 保持一致）
+            float primaryLen = primary.Sound != null ? primary.Sound.length : DefaultSoundClipSeconds;
+
+            // 拖拽起点时间：左边缘锚定 vs 右边缘锚定
+            float rawDelay;
+            if (moveDragAnchorSide == 1)
+            {
+                // 左边缘锚定：Delay 跟随鼠标
+                rawDelay = Mathf.Max(0f, primaryStart + totalDelta);
+            }
+            else
+            {
+                // 右边缘锚定：Delay + 音频长度 跟随鼠标
+                float rawEnd = primaryStart + primaryLen + totalDelta;
+                rawDelay = Mathf.Max(0f, rawEnd - primaryLen);
+            }
 
             float snapped;
             if (snapOn)
             {
                 float snapValue;
-                bool snappedFlag = TrySnapTimeToReferenceForSound(rawDelay, draggingIndex, out snapValue);
-                snapped = QuantizeTime(Mathf.Max(0f, snapValue));
-                snapGuideSecond = snappedFlag ? snapped : -1f;
+                bool snappedFlag;
+
+                if (moveDragAnchorSide == 1)
+                {
+                    // 以左边缘吸附
+                    snappedFlag = TrySnapTimeToReferenceForSound(rawDelay, selectedSoundIndices, out snapValue);
+                    snapped = QuantizeTime(Mathf.Max(0f, snapValue));
+                    snapGuideSecond = snappedFlag ? snapped : -1f;
+                }
+                else
+                {
+                    // 以右边缘吸附：先吸附 rawEnd，再反推 Delay
+                    float rawEnd = rawDelay + primaryLen;
+                    snappedFlag = TrySnapTimeToReferenceForSound(rawEnd, selectedSoundIndices, out snapValue);
+                    snapValue = Mathf.Max(0f, snapValue);
+                    snapped = QuantizeTime(snapValue) - primaryLen;
+                    snapped = QuantizeTime(Mathf.Max(0f, snapped));
+                    snapGuideSecond = snappedFlag ? QuantizeTime(snapValue) : -1f;
+                }
             }
             else
             {
@@ -5159,7 +5215,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary> 
         /// 音效吸附：参照物 = 所有动画节点边界 + 所有音效边界（排除拖拽中的音效自身）+ 整秒网格。
         /// </summary>
-        private bool TrySnapTimeToReferenceForSound(float time, int excludeSoundIndex, out float snappedTime)
+        private bool TrySnapTimeToReferenceForSound(float time, HashSet<int> excludeSoundIndices, out float snappedTime)
         {
             float threshold = SnapThresholdSeconds;
             float bestTime = time;
@@ -5181,7 +5237,7 @@ namespace SevenStrikeModules.XHud.Editor
             // 其他音效边界
             for (int i = 0; i < Sounds.Count; i++)
             {
-                if (i == excludeSoundIndex) continue;
+                if (excludeSoundIndices != null && excludeSoundIndices.Contains(i)) continue;
                 TweenSound other = Sounds[i];
                 float s = other.Delay;
                 float len = other.Sound != null ? other.Sound.length : DefaultSoundClipSeconds;

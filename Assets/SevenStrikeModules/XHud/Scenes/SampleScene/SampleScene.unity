@@ -2503,7 +2503,7 @@ MonoBehaviour:
     Type: 0
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
-    Delay: 2
+    Delay: 1.362
     Progress: 0
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
@@ -2567,7 +2567,7 @@ MonoBehaviour:
     Enabled: 1
     Type: 0
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 1
+    Duration: 0.362
     Delay: 1
     Progress: 0
     TextCursorBlinkSpeed: 0.5
@@ -2633,7 +2633,7 @@ MonoBehaviour:
     Type: 0
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
-    Delay: 2.006
+    Delay: 1.362
     Progress: 0
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
@@ -2696,7 +2696,7 @@ MonoBehaviour:
   - Sound: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
     Path: Assets/SevenStrikeModules/XHud/Sound/DefaultSound.wav
     Timing: 
-    Delay: 1
+    Delay: 0.82
     Volume: 1
     MaxPitch: 1
     MinPitch: 1
@@ -2704,16 +2704,16 @@ MonoBehaviour:
   - Sound: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
     Path: Assets/SevenStrikeModules/XHud/Sound/DefaultSound.wav
     Timing: 
-    Delay: 0.76
+    Delay: 1.107
     Volume: 1
     MaxPitch: 1
     MinPitch: 1
     Mute: 0
   GlobalDuration: 1
   MinTimer: 1
-  MaxTimer: 3.006
+  MaxTimer: 2.362
   MinTimerWithGlobalDuration: 1
-  MaxTimerWithGlobalDuration: 3.006
+  MaxTimerWithGlobalDuration: 2.362
   eve_on_Tween_Play:
     m_PersistentCalls:
       m_Calls: []
@@ -2772,9 +2772,9 @@ MonoBehaviour:
   fold_based: 0
   fold_list: 1
   fold_state: 0
-  Timeline_TrackPosition: 180.97139
+  Timeline_TrackPosition: 266.7231
   Timeline_TrackScroll: {x: 0, y: 0}
-  Timeline_TrackHeight: 38.3449
+  Timeline_TrackHeight: 32.79945
   Timeline_TrackSnapEnabled: 0
 --- !u!114 &3921678159533053070
 MonoBehaviour:
