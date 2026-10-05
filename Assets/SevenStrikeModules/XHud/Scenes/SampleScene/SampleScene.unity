@@ -399,7 +399,6 @@ MonoBehaviour:
   layoutspawner: {fileID: 91302845}
   valuebinders: []
   UseDebug: 0
-<<<<<<< HEAD
 --- !u!1 &231647082
 GameObject:
   m_ObjectHideFlags: 0
@@ -800,8 +799,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 231647082}
   m_CullTransparentMesh: 1
-=======
->>>>>>> parent of a90a138 (update)
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -2900,6 +2897,136 @@ MonoBehaviour:
     LoopType: 0
     LoopCount: 0
     IsFold: 1
+  - ID: 3276
+    Indicator: NewTween
+    Enabled: 1
+    Type: 0
+    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Duration: 1
+    Delay: 2.362
+    Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
+    Rewind_Set_Startvalue: 1
+    Complete_Set_Endvalue: 1
+    Ease: 10
+    AnimationCurveName: DefaultCurve
+    ValueModeIndex: 0
+    TweenValueMode: 0
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Original_Int: 0
+    Original_Float: 0.35
+    Original_Vector2: {x: 150, y: 150}
+    Original_Vector3: {x: 147.1, y: 455.1, z: 0}
+    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    Original_Color: {r: 1, g: 1, b: 1, a: 1}
+    Original_String: 
+    From_Int: 0
+    From_Float: 0.5
+    From_Vector2: {x: 100, y: 100}
+    From_Vector3: {x: 0, y: 0, z: 0}
+    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    From_Color: {r: 1, g: 1, b: 1, a: 1}
+    From_String: 
+    End_Int: 0
+    End_Float: 0
+    End_Vector2: {x: 0, y: 0}
+    End_Vector3: {x: 200, y: 200, z: 0}
+    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    End_Color: {r: 1, g: 1, b: 1, a: 1}
+    End_String: 
+    RotateMode: 0
+    LoopType: 0
+    LoopCount: 0
+    IsFold: 1
+  - ID: 4647
+    Indicator: NewTween
+    Enabled: 1
+    Type: 0
+    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Duration: 1
+    Delay: 0
+    Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
+    Rewind_Set_Startvalue: 1
+    Complete_Set_Endvalue: 1
+    Ease: 10
+    AnimationCurveName: DefaultCurve
+    ValueModeIndex: 0
+    TweenValueMode: 0
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Original_Int: 0
+    Original_Float: 0.35
+    Original_Vector2: {x: 150, y: 150}
+    Original_Vector3: {x: 147.1, y: 455.1, z: 0}
+    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    Original_Color: {r: 1, g: 1, b: 1, a: 1}
+    Original_String: 
+    From_Int: 0
+    From_Float: 0.5
+    From_Vector2: {x: 100, y: 100}
+    From_Vector3: {x: 0, y: 0, z: 0}
+    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    From_Color: {r: 1, g: 1, b: 1, a: 1}
+    From_String: 
+    End_Int: 0
+    End_Float: 0
+    End_Vector2: {x: 0, y: 0}
+    End_Vector3: {x: 200, y: 200, z: 0}
+    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    End_Color: {r: 1, g: 1, b: 1, a: 1}
+    End_String: 
+    RotateMode: 0
+    LoopType: 0
+    LoopCount: 0
+    IsFold: 1
   - ID: 8797
     Indicator: NewTween
     Enabled: 1
@@ -3030,7 +3157,137 @@ MonoBehaviour:
     LoopType: 0
     LoopCount: 0
     IsFold: 1
+  - ID: 6765
+    Indicator: NewTweensd123
+    Enabled: 1
+    Type: 4
+    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Duration: 0.727
+    Delay: 0.273
+    Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
+    Rewind_Set_Startvalue: 1
+    Complete_Set_Endvalue: 1
+    Ease: 10
+    AnimationCurveName: DefaultCurve
+    ValueModeIndex: 3
+    TweenValueMode: 3
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Original_Int: 0
+    Original_Float: 0.35
+    Original_Vector2: {x: 150, y: 150}
+    Original_Vector3: {x: 0, y: 0, z: 0}
+    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    Original_Color: {r: 1, g: 1, b: 1, a: 1}
+    Original_String: 
+    From_Int: 0
+    From_Float: 0.5
+    From_Vector2: {x: 100, y: 100}
+    From_Vector3: {x: 50, y: 50, z: 0}
+    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    From_Color: {r: 1, g: 1, b: 1, a: 1}
+    From_String: 
+    End_Int: 0
+    End_Float: 0
+    End_Vector2: {x: 0, y: 0}
+    End_Vector3: {x: 200, y: 200, z: 0}
+    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    End_Color: {r: 1, g: 1, b: 1, a: 1}
+    End_String: 
+    RotateMode: 0
+    LoopType: 0
+    LoopCount: 0
+    IsFold: 1
   - ID: 5675
+    Indicator: NewTween
+    Enabled: 1
+    Type: 1
+    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Duration: 1.365
+    Delay: 2.362
+    Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
+    Rewind_Set_Startvalue: 1
+    Complete_Set_Endvalue: 1
+    Ease: 10
+    AnimationCurveName: 
+    ValueModeIndex: 3
+    TweenValueMode: 3
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Original_Int: 0
+    Original_Float: 0
+    Original_Vector2: {x: 0, y: 0}
+    Original_Vector3: {x: 0, y: 0, z: 0}
+    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    Original_Color: {r: 1, g: 1, b: 1, a: 1}
+    Original_String: 
+    From_Int: 0
+    From_Float: 0
+    From_Vector2: {x: 0, y: 0}
+    From_Vector3: {x: 0, y: 0, z: 0}
+    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    From_Color: {r: 1, g: 1, b: 1, a: 1}
+    From_String: 
+    End_Int: 0
+    End_Float: 0
+    End_Vector2: {x: 0, y: 0}
+    End_Vector3: {x: 300, y: 300, z: 0}
+    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    End_Color: {r: 1, g: 1, b: 1, a: 1}
+    End_String: 
+    RotateMode: 0
+    LoopType: 0
+    LoopCount: 0
+    IsFold: 1
+  - ID: 7221
     Indicator: NewTween
     Enabled: 1
     Type: 0
@@ -3099,7 +3356,7 @@ MonoBehaviour:
   - Sound: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
     Path: Assets/SevenStrikeModules/XHud/Sound/DefaultSound.wav
     Timing: 
-    Delay: 0.82
+    Delay: 1
     Volume: 1
     MaxPitch: 1
     MinPitch: 1
@@ -3107,16 +3364,40 @@ MonoBehaviour:
   - Sound: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
     Path: Assets/SevenStrikeModules/XHud/Sound/DefaultSound.wav
     Timing: 
-    Delay: 1.107
+    Delay: 0
+    Volume: 1
+    MaxPitch: 1
+    MinPitch: 1
+    Mute: 0
+  - Sound: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
+    Path: Assets/SevenStrikeModules/XHud/Sound/DefaultSound.wav
+    Timing: 
+    Delay: 0.508
+    Volume: 1
+    MaxPitch: 1
+    MinPitch: 1
+    Mute: 0
+  - Sound: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
+    Path: Assets/SevenStrikeModules/XHud/Sound/DefaultSound.wav
+    Timing: 
+    Delay: 0.912
+    Volume: 1
+    MaxPitch: 1
+    MinPitch: 1
+    Mute: 0
+  - Sound: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
+    Path: Assets/SevenStrikeModules/XHud/Sound/DefaultSound.wav
+    Timing: 
+    Delay: 1.537
     Volume: 1
     MaxPitch: 1
     MinPitch: 1
     Mute: 0
   GlobalDuration: 1
   MinTimer: 1
-  MaxTimer: 2.362
+  MaxTimer: 3.727
   MinTimerWithGlobalDuration: 1
-  MaxTimerWithGlobalDuration: 2.362
+  MaxTimerWithGlobalDuration: 3.727
   eve_on_Tween_Play:
     m_PersistentCalls:
       m_Calls: []
@@ -3172,20 +3453,13 @@ MonoBehaviour:
   PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
   fold_param: 0
   fold_option: 1
-  fold_based: 0
-  fold_list: 1
+  fold_based: 1
+  fold_list: 0
   fold_state: 0
-<<<<<<< HEAD
   Timeline_TrackPosition: 221.89429
   Timeline_TrackScroll: {x: 105, y: 0}
   Timeline_TrackHeight: 32.815376
   Timeline_TrackSnapEnabled: 1
-=======
-  Timeline_TrackPosition: 266.7231
-  Timeline_TrackScroll: {x: 0, y: 0}
-  Timeline_TrackHeight: 32.79945
-  Timeline_TrackSnapEnabled: 0
->>>>>>> parent of a90a138 (update)
 --- !u!114 &3921678159533053070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3514,7 +3788,7 @@ MonoBehaviour:
     TotalTime: 0
     DelayTime: 0
   PrimitivesIsFold: 1
-  PrimitivesTweenMaxDuration: 3.006
+  PrimitivesTweenMaxDuration: 2.727
   PrimitivesTweenGlobalDuration: 1
   AutoPlayPrimitivesTween: 1
   RMS_Enabled: 1
@@ -3563,6 +3837,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 484731792032838865}
+  - {fileID: 231647083}
   m_Father: {fileID: 1469781040}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
