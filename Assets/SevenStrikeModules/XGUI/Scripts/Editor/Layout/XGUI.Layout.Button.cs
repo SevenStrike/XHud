@@ -54,7 +54,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 该方法与 <see cref="gui_button(Rect, string, string, XGUIFilled, XGUIColor, Color, Color, XGUIFilled, XGUIColor, Color, XGUIFontSize, TextAnchor, RectOffset, RectOffset, float, float, Font, string)"/> 
         /// 功能相同，但使用 <see cref="GUILayout"/> 自动布局系统，无需手动指定矩形位置。
         /// </remarks>
-        public static bool layout_button(string text = "button", string tooltip = "clicked", XGUIFilled bg_fill = XGUIFilled.实体, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, Color button_text_color = default, XGUIFilled press_fill = XGUIFilled.实体, XGUIColor press_color = XGUIColor.阴影灰, Color press_text_color = default, XGUIFontSize font_size = XGUIFontSize.B, TextAnchor anchor = TextAnchor.MiddleCenter, bool absolute_margin = false, bool absolute_padding = false, RectOffset margin = default, RectOffset padding = default, float width = 0, float layout_width = 0, float layout_min_width = 0, float height = 0, Font button_text_font = null, string focus_name = null, FontStyle button_text_style = FontStyle.Normal)
+        public static bool layout_button(string text = "button", string tooltip = "clicked", XGUIFilled bg_fill = XGUIFilled.实体, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, Color button_text_color = default, XGUIFilled press_fill = XGUIFilled.实体, XGUIColor press_color = XGUIColor.阴影灰, Color press_text_color = default, XGUIFontSize font_size = XGUIFontSize.B, TextAnchor anchor = TextAnchor.MiddleCenter, RectOffset margin = default, RectOffset padding = default, float width = 0, float layout_width = 0, float layout_min_width = 0, float height = 0, Font button_text_font = null, string focus_name = null, FontStyle button_text_style = FontStyle.Normal)
         {
             if (button_text_color == Color.clear)
                 button_text_color = Color.white;
@@ -95,15 +95,9 @@ namespace SevenStrikeModules.XGUI.Editor
             RectOffset _p = style.padding;
             RectOffset _m = style.margin;
 
-            if (absolute_padding)
-                style.padding = padding;
-            else
-                style.padding = new RectOffset(_p.left + padding.left, _p.right + padding.right, _p.top + padding.top, _p.bottom + padding.bottom + 4);
+            style.padding = new RectOffset(_p.left + padding.left, _p.right + padding.right, _p.top + padding.top, _p.bottom + padding.bottom + 4);
 
-            if (absolute_margin)
-                style.margin = margin;
-            else
-                style.margin = new RectOffset(_m.left + margin.left, _m.right + margin.right, _m.top + margin.top, _m.bottom + margin.bottom);
+            style.margin = new RectOffset(_m.left + margin.left, _m.right + margin.right, _m.top + margin.top, _m.bottom + margin.bottom);
 
             if (width != 0)
                 style.fixedWidth = width;
@@ -149,7 +143,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 该方法与 <see cref="gui_button(Rect, string, Texture2D, Texture2D, Color, RectOffset, RectOffset, float, float, string)"/> 
         /// 功能相同，但使用 <see cref="GUILayout"/> 自动布局系统，无需手动指定矩形位置。
         /// </remarks>
-        public static bool layout_button(string tooltip = "clicked", bool absolute_margin = false, bool absolute_padding = false, Texture2D tex_release = null, Texture2D tex_press = null, Color tex_gui_color = default, RectOffset margin = default, RectOffset padding = default, RectOffset border = default, float width = 0, float height = 0, float layout_min_width = 0, string focus_name = null)
+        public static bool layout_button(string tooltip = "clicked", Texture2D tex_release = null, Texture2D tex_press = null, Color tex_gui_color = default, RectOffset margin = default, RectOffset padding = default, RectOffset border = default, float width = 0, float height = 0, float layout_min_width = 0, string focus_name = null)
         {
             if (tex_gui_color == Color.clear)
                 tex_gui_color = Color.white;
@@ -170,15 +164,9 @@ namespace SevenStrikeModules.XGUI.Editor
             RectOffset _p = style.padding;
             RectOffset _m = style.margin;
 
-            if (absolute_padding)
-                style.padding = padding;
-            else
-                style.padding = new RectOffset(_p.left + padding.left, _p.right + padding.right, _p.top + padding.top, _p.bottom + padding.bottom);
+            style.padding = new RectOffset(_p.left + padding.left, _p.right + padding.right, _p.top + padding.top, _p.bottom + padding.bottom);
 
-            if (absolute_margin)
-                style.margin = margin;
-            else
-                style.margin = new RectOffset(_m.left + margin.left, _m.right + margin.right, _m.top + margin.top, _m.bottom + margin.bottom);
+            style.margin = new RectOffset(_m.left + margin.left, _m.right + margin.right, _m.top + margin.top, _m.bottom + margin.bottom);
 
             if (width != 0)
                 style.fixedWidth = width;
