@@ -3057,7 +3057,7 @@ MonoBehaviour:
   fold_list: 0
   fold_state: 0
   Timeline_TrackPosition: 202.73907
-  Timeline_TrackScroll: {x: 1.4999734, y: 0}
+  Timeline_TrackScroll: {x: 0, y: 0}
   Timeline_TrackHeight: 26.970028
   Timeline_TrackSnapEnabled: 0
 --- !u!114 &3921678159533053070
