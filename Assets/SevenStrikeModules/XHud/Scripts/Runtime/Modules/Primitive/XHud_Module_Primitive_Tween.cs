@@ -128,18 +128,37 @@ namespace SevenStrikeModules.XHud
 #endif
         }
 
-        private TweenSound Clone()
+        /// <summary>
+        /// 深度克隆当前音效，创建一个完全独立的副本。
+        /// <para/>
+        /// 克隆内容：
+        /// <list type="bullet">
+        /// <item><description><see cref="Sound"/>：AudioClip 是资源引用，直接共享（不复制资源）</description></item>
+        /// <item><description><see cref="Path"/> / <see cref="Timing"/> / <see cref="Delay"/> / 
+        /// <see cref="Volume"/> / <see cref="MinPitch"/> / <see cref="MaxPitch"/> / <see cref="Mute"/>：值拷贝</description></item>
+        /// </list>
+        /// <para/>
+        /// 不克隆内容：
+        /// <list type="bullet">
+        /// <item><description><c>act_on_SoundPlay</c>：委托事件，副本需要重新绑定</description></item>
+        /// </list>
+        /// </summary>
+        /// <returns>新的 TweenSound 实例</returns>
+        public TweenSound Clone()
         {
             TweenSound sod = new TweenSound();
-            sod.Sound = this.Sound;           // AudioClip 是 UnityEngine.Object，引用即可
+
+            sod.Sound = this.Sound;               // AudioClip 是 UnityEngine.Object，引用共享即可
             sod.Path = this.Path;
+            sod.Timing = this.Timing;
+            sod.Delay = this.Delay;
             sod.Volume = this.Volume;
             sod.MaxPitch = this.MaxPitch;
             sod.MinPitch = this.MinPitch;
-            // act_on_SoundPlay 委托不克隆，新节点需要重新绑定
-            sod.act_on_SoundPlay = null;
             sod.Mute = this.Mute;
-            sod.Timing = this.Timing;
+
+            // act_on_SoundPlay 委托不克隆，新副本需要重新绑定
+            sod.act_on_SoundPlay = null;
 
             return sod;
         }
@@ -506,7 +525,8 @@ namespace SevenStrikeModules.XHud
             TweenNode newNode = new TweenNode();
 
             // ========== 基础属性 ==========
-            newNode.ID = this.ID;
+            // ID 不复制：由调用方通过 TweenNode_GenerateId() 重新分配，避免与原节点冲突
+            //newNode.ID = this.ID;
             newNode.Indicator = this.Indicator;
             newNode.Enabled = this.Enabled;
             newNode.Type = this.Type;
@@ -558,6 +578,10 @@ namespace SevenStrikeModules.XHud
             // ========== 数值模式索引 ==========
             newNode.ValueModeIndex = this.ValueModeIndex;
             newNode.TweenValueMode = this.TweenValueMode;
+
+            newNode.TextCursorBlinkSpeed = this.TextCursorBlinkSpeed;
+            newNode.TextCursor = this.TextCursor;
+
 
             // ========== 注意：以下字段不克隆 ==========
             // - Tweener: 动画器实例，克隆后应该为 null，由新节点独立创建
@@ -637,6 +661,9 @@ namespace SevenStrikeModules.XHud
             // 数值模式索引
             this.ValueModeIndex = source.ValueModeIndex;
             this.TweenValueMode = source.TweenValueMode;
+
+            this.TextCursorBlinkSpeed = source.TextCursorBlinkSpeed;
+            this.TextCursor = source.TextCursor;
 
             // 注意：ID 不复制，保持原节点的 ID 或由调用方重新生成
             // Tweener 不复制

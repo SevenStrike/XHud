@@ -211,23 +211,11 @@ namespace SevenStrikeModules.XHud.Editor
         /// 该值以「秒」为单位，不随缩放变化，保证任何缩放下末尾富余都是固定时长。
         /// </summary>
         private const float ContentTrailingSeconds = 2f;
+
         /// <summary> 
         /// 音效 Sound 为空时，Clip 在时间轴上的默认占位长度（秒）
         /// </summary>
         private const float DefaultSoundClipSeconds = 1f;
-        /// <summary>
-        /// 内容区底部留白（像素）。
-        /// <para/>
-        /// 用于统一控制轨道区（名字列 + Clip 区）**内容底部**的留白高度：
-        /// 追加在最后一行（音效或动画）之后，使滚动到底时最后一行不会紧贴
-        /// 底部水平滚动条。
-        /// <para/>
-        /// 值以「像素」为单位，与 <see cref="trackKindGapHeight"/> 不同——
-        /// 后者是动画轨与音效轨之间的分隔带高度，本字段是整块内容的收尾留白。
-        /// <para/>
-        /// 只在「行高总和 > 视口高度」时才追加，避免刚好放下时多出无意义的滚动空间。
-        /// </summary>
-        private float contentBottomPadding = 0f;
         #endregion
 
         #region 常量：名字列宽度拖拽
@@ -1635,13 +1623,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private float GetTotalContentHeight()
         {
-            float rowsHeight =
-                  Nodes.Count * trackHeight
-                + Sounds.Count * trackHeight
-                + (HasTrackKindGap ? trackKindGapHeight : 0f);
-
-            // ★ 无条件追加底部留白
-            return rowsHeight + contentBottomPadding;
+            return TotalRowCount * trackHeight
+                 + (HasTrackKindGap ? trackKindGapHeight : 0f)
+                 + 20f;
         }
         #endregion
 
@@ -5354,12 +5338,8 @@ namespace SevenStrikeModules.XHud.Editor
         private float CalculateMaxVerticalScroll()
         {
             float contentHeight = GetTotalContentHeight();
-
-            float clipH = position.height - TopBarHeight - BottomBarHeight;
-            float viewH = Mathf.Floor(clipH - rulerHeight - HorizontalScrollbarHeight);
-
-            if (viewH <= 0f) return contentHeight;
-            return Mathf.Max(0f, contentHeight - viewH);
+            float viewH = cachedClipAreaRect.height - rulerHeight - HorizontalScrollbarHeight;
+            return Mathf.Max(0f, contentHeight - Mathf.Max(1f, viewH));
         }
         #endregion
 

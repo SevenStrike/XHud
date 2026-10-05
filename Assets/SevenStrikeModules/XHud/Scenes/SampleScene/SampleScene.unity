@@ -655,9 +655,9 @@ MonoBehaviour:
   fold_based: 0
   fold_list: 1
   fold_state: 0
-  Timeline_TrackPosition: 482.21576
+  Timeline_TrackPosition: 376.09332
   Timeline_TrackScroll: {x: 0, y: 0}
-  Timeline_TrackHeight: 33.64185
+  Timeline_TrackHeight: 26
   Timeline_TrackSnapEnabled: 0
 --- !u!114 &231647085
 MonoBehaviour:
@@ -3456,9 +3456,9 @@ MonoBehaviour:
   fold_based: 1
   fold_list: 0
   fold_state: 0
-  Timeline_TrackPosition: 221.89429
-  Timeline_TrackScroll: {x: 105, y: 0}
-  Timeline_TrackHeight: 32.815376
+  Timeline_TrackPosition: 195.33136
+  Timeline_TrackScroll: {x: 0, y: 0}
+  Timeline_TrackHeight: 26
   Timeline_TrackSnapEnabled: 1
 --- !u!114 &3921678159533053070
 MonoBehaviour:
