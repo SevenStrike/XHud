@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: da07c51c3a97807419bdc94ef889a104
+=======
+guid: 472acc5da2d059047a84f8be2a7c0ad3
+>>>>>>> parent of a90a138 (update)
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
