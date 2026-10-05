@@ -211,11 +211,23 @@ namespace SevenStrikeModules.XHud.Editor
         /// 该值以「秒」为单位，不随缩放变化，保证任何缩放下末尾富余都是固定时长。
         /// </summary>
         private const float ContentTrailingSeconds = 2f;
-
         /// <summary> 
         /// 音效 Sound 为空时，Clip 在时间轴上的默认占位长度（秒）
         /// </summary>
         private const float DefaultSoundClipSeconds = 1f;
+        /// <summary>
+        /// 内容区底部留白（像素）。
+        /// <para/>
+        /// 用于统一控制轨道区（名字列 + Clip 区）**内容底部**的留白高度：
+        /// 追加在最后一行（音效或动画）之后，使滚动到底时最后一行不会紧贴
+        /// 底部水平滚动条。
+        /// <para/>
+        /// 值以「像素」为单位，与 <see cref="trackKindGapHeight"/> 不同——
+        /// 后者是动画轨与音效轨之间的分隔带高度，本字段是整块内容的收尾留白。
+        /// <para/>
+        /// 只在「行高总和 > 视口高度」时才追加，避免刚好放下时多出无意义的滚动空间。
+        /// </summary>
+        private float contentBottomPadding = 2f;
         #endregion
 
         #region 常量：名字列宽度拖拽
@@ -1623,9 +1635,13 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private float GetTotalContentHeight()
         {
-            return TotalRowCount * trackHeight
-                 + (HasTrackKindGap ? trackKindGapHeight : 0f)
-                 + 20f;
+            float rowsHeight =
+                  Nodes.Count * trackHeight
+                + Sounds.Count * trackHeight
+                + (HasTrackKindGap ? trackKindGapHeight : 0f);
+
+            // ★ 无条件追加底部留白
+            return rowsHeight + contentBottomPadding;
         }
         #endregion
 
@@ -2223,8 +2239,46 @@ namespace SevenStrikeModules.XHud.Editor
             scrollPos.y = Mathf.Clamp(scrollPos.y, 0f, CalculateMaxVerticalScroll());
             nameScroll.y = scrollPos.y;
 
-            #region 参考线
-            // ... 参考线代码全部保持原样 ...
+            #region 参考线（覆盖刻度尺 + 轨道区）
+            // 吸附参考线：拖拽中且本帧吸附到有效时间时，绘制一条白色竖线（按住 Shift 更亮）
+            if (dragMode != DragMode.无 && snapGuideSecond >= 0f)
+            {
+                float gx = snapGuideSecond * pixelsPerSecond - scrollPos.x;
+                if (gx >= 0f && gx <= area.width)
+                {
+                    Color guideColor = Event.current.shift
+                        ? Color.white
+                        : Color.white * 0.7f;
+                    guideColor.a = 1f;
+                    XGUI.gui_box(new Rect(gx, 0, 1f, area.height), guideColor);
+                }
+            }
+
+            // 边界参考线：Move 拖拽时，在 Clip 的左右两端各绘制一条暗色竖线，
+            // 便于用户判断整段动画的首尾位置（区别于吸附黄线）。
+            if (dragMode == DragMode.移动 && draggingKind == TrackKind.Node && draggingIndex >= 0 && draggingIndex < Nodes.Count)
+            {
+                TweenNode draggingNode = Nodes[draggingIndex];
+                float leftX = draggingNode.Delay * pixelsPerSecond - scrollPos.x;
+                float rightX = (draggingNode.Delay + draggingNode.Duration) * pixelsPerSecond - scrollPos.x;
+                if (leftX >= 0f && leftX <= area.width)
+                    XGUI.gui_box(new Rect(leftX, 0, 1f, area.height), ColorClipEdgeGuide);
+                if (rightX >= 0f && rightX <= area.width)
+                    XGUI.gui_box(new Rect(rightX, 0, 1f, area.height), ColorClipEdgeGuide);
+            }
+
+            // 音效 Clip：Move 拖拽时同样绘制左右边界参考线
+            if (dragMode == DragMode.移动 && draggingKind == TrackKind.Sound && draggingIndex >= 0 && draggingIndex < Sounds.Count)
+            {
+                TweenSound draggingSound = Sounds[draggingIndex];
+                float sLen = draggingSound.Sound != null ? draggingSound.Sound.length : DefaultSoundClipSeconds;
+                float sLeftX = draggingSound.Delay * pixelsPerSecond - scrollPos.x;
+                float sRightX = (draggingSound.Delay + sLen) * pixelsPerSecond - scrollPos.x;
+                if (sLeftX >= 0f && sLeftX <= area.width)
+                    XGUI.gui_box(new Rect(sLeftX, 0, 1f, area.height), ColorClipEdgeGuide);
+                if (sRightX >= 0f && sRightX <= area.width)
+                    XGUI.gui_box(new Rect(sRightX, 0, 1f, area.height), ColorClipEdgeGuide);
+            }
             #endregion
 
             // ★ 注意：这里不再调用 DrawTimelineHorizontalScrollbar，已经挪到阶段 2 了
