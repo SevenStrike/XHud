@@ -295,7 +295,47 @@ namespace SevenStrikeModules.XHud.Editor
         private XHud_Module_Option HudOption;
         #endregion
 
+        #region 字段：SerializedObject 缓存
+
+        /// <summary>
+        /// 参数面板共用的 SerializedObject。
+        /// <para/>缓存策略：与 <see cref="cachedSO_target"/> 引用相等时复用，否则重建。
+        /// 目标对象切换（OpenWith 或 target 被替换）时缓存自动失效。
+        /// </summary>
+        private SerializedObject cachedSO;
+
+        /// <summary>
+        /// cachedSO 对应的目标对象。用于判断缓存是否还有效。
+        /// 当 target 变化时，cachedSO_target != target，触发重建。
+        /// </summary>
+        private UnityEngine.Object cachedSO_target;
+
+        /// <summary>
+        /// 缓存 <see cref="cachedSO"/> 里的 PrimitiveTweenNodes 数组属性。
+        /// <para/>每次选中变化时重建，避免每帧 FindProperty 的开销。
+        /// </summary>
+        private SerializedProperty cachedNodesProp;
+
+        /// <summary>
+        /// 缓存 <see cref="cachedSO"/> 里的 PrimitiveTweenSounds 数组属性。
+        /// </summary>
+        private SerializedProperty cachedSoundsProp;
+
+        /// <summary>
+        /// 上一帧选中的轨道种类，用于判断是否需要重建子属性缓存。
+        /// </summary>
+        private TrackKind cachedSOKind = TrackKind.无;
+
+        /// <summary>
+        /// 上一帧选中的索引，用于判断是否需要重建子属性缓存。
+        /// </summary>
+        private int cachedSOIndex = -1;
+
+        #endregion
+
         #region 常量：颜色
+        private string Theme_PrimaryColor = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary);
+        private string DisableTextColor = XGUI_Utilitys.Color_To_HexString(Color.white * 0.85f);
         /// <summary> 
         ///轨道基础底色
         ///</summary>
@@ -579,6 +619,11 @@ namespace SevenStrikeModules.XHud.Editor
         /// 添加动画图标（按下）
         /// </summary>
         private Texture2D icon_add_tween_p;
+        /// <summary>
+        /// 时间飞梭头部图标。
+        /// <para/>建议做成倒三角 / 播放头形状，尺寸与 PlayheadHeadWidth × PlayheadHeadHeight 匹配。
+        /// </summary>
+        private Texture2D icon_playhead;
         #endregion
 
         #region 字段：视图参数
@@ -739,6 +784,47 @@ namespace SevenStrikeModules.XHud.Editor
         private TrackKind draggingKind = TrackKind.无;
         #endregion
 
+        #region 字段：时间飞梭
+        /// <summary>
+        /// 时间飞梭当前位置（秒）。
+        /// <para/>这是"内容时间"，与 scrollPos.x / pixelsPerSecond 无关，
+        /// 转换到屏幕坐标需减去 scrollPos.x。
+        /// </summary>
+        private float playheadSecond = 0f;
+        /// <summary>
+        /// 是否正在拖拽时间飞梭。
+        /// </summary>
+        private bool isDraggingPlayhead = false;
+        /// <summary>
+        /// 拖拽飞梭时占用的 ControlID。
+        /// </summary>
+        private int playheadControlID = 0;
+        /// <summary>
+        /// 飞梭头部（刻度尺上那个可抓取的小方块）的宽度（像素）。
+        /// </summary>
+        private const float PlayheadHeadWidth = 25f;
+        /// <summary>
+        /// 飞梭头部的高度（像素）。
+        /// </summary>
+        private const float PlayheadHeadHeight = 25f;
+        /// <summary>
+        /// 飞梭头部命中判定额外扩展的容差（像素），让头部更好抓。
+        /// </summary>
+        private const float PlayheadHeadHitPadding = 4f;
+        /// <summary>
+        /// 飞梭竖线颜色。
+        /// </summary>
+        private static readonly Color ColorPlayheadLine = new Color(1f, 0.35f, 0.35f, 1f);
+        /// <summary>
+        /// 飞梭头部颜色。
+        /// </summary>
+        private static readonly Color ColorPlayheadHead = new Color(1f, 0.35f, 0.35f, 1f);
+        /// <summary>
+        /// 飞梭头部悬停时的颜色（更亮）。
+        /// </summary>
+        private static readonly Color ColorPlayheadHeadHover = new Color(1f, 0.6f, 0.6f, 1f);
+        #endregion
+
         #region 字段：名字列宽度拖拽状态
         /// <summary> 
         ///是否正在拖拽调整名字列宽度
@@ -867,7 +953,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="tween">要编辑的图元动画器</param>
         public static void OpenWith(XHud_Module_Primitive_Tween tween)
         {
-            Editor_XHud_Module_Primitive_Tween_Tracker window = (Editor_XHud_Module_Primitive_Tween_Tracker)EditorWindow.GetWindow(typeof(Editor_XHud_Module_Primitive_Tween_Tracker), false, "XHUD 图元动画轨道编辑器", true);
+            Editor_XHud_Module_Primitive_Tween_Tracker window = (Editor_XHud_Module_Primitive_Tween_Tracker)EditorWindow.GetWindow(typeof(Editor_XHud_Module_Primitive_Tween_Tracker), false, "XHud 图元动画轨道编辑器", true);
 
             window.minSize = MinWindowSize;
             Vector2 savedSize = LoadPersistedWindowSize();
@@ -882,6 +968,15 @@ namespace SevenStrikeModules.XHud.Editor
                 window.selectedNodeIndices.Clear();
                 window.selectedSoundIndices.Clear();
                 window.selectedKind = TrackKind.无;
+
+                // ★ 新增：target 换了，缓存的 SO 失效
+                window.cachedSO = null;
+                window.cachedSO_target = null;
+                window.cachedNodesProp = null;
+                window.cachedSoundsProp = null;
+                window.cachedSOKind = TrackKind.无;
+                window.cachedSOIndex = -1;
+
                 window.LoadPersistedViewState();
                 window.RefreshHostComponentCache();
             }
@@ -973,7 +1068,8 @@ namespace SevenStrikeModules.XHud.Editor
             icon_add_sound_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_add_sound_p");
             icon_add_tween_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_add_tween_r");
             icon_add_tween_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_add_tween_p");
-
+            // ── 时间飞梭头部图标 ──
+            icon_playhead = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_playhead");
             icon_led = XGUI.GetBasedIcon("icon_field_status");
         }
         /// <summary> 
@@ -1066,6 +1162,15 @@ namespace SevenStrikeModules.XHud.Editor
                     selectedKind = TrackKind.无;
                 }
             }
+
+            // ★ 新增：Undo 后强制重建 SO，避免引用失效
+            cachedSO = null;
+            cachedSO_target = null;
+            cachedNodesProp = null;
+            cachedSoundsProp = null;
+            cachedSOKind = TrackKind.无;
+            cachedSOIndex = -1;
+
             Repaint();
         }
         /// <summary>
@@ -1374,6 +1479,26 @@ namespace SevenStrikeModules.XHud.Editor
                     SavePersistedViewState();
                 }
                 #endregion
+
+                #region 分割线
+                XGUI.layout_seperator(
+                    thickness: 1,
+                    dir: XGUISeplineDir.垂直,
+                    color: Color.black * 0.4f,
+                    padding: new RectOffset(0, 0, 0, 0),
+                    margin: new RectOffset(0, 10, 0, 0));
+                #endregion
+
+                XGUI.layout_label(
+                    text: $"<color=#{DisableTextColor}>当前预览时间点：  </color> <color=#{Theme_PrimaryColor}>{playheadSecond}   </color>s",
+                    size: XGUIFontSize.M,
+                    text_color: Color.white,
+                    margin: new RectOffset(20, 10, 0, 0),
+                    offset: new Vector2(0, 1),
+                    clipping: TextClipping.Clip,
+                    width: 150,
+                    font_style: FontStyle.Normal,
+                    anchor: TextAnchor.MiddleLeft);
             }
 
             #region 分割线
@@ -2239,9 +2364,12 @@ namespace SevenStrikeModules.XHud.Editor
             scrollPos.y = Mathf.Clamp(scrollPos.y, 0f, CalculateMaxVerticalScroll());
             nameScroll.y = scrollPos.y;
 
+            // ★★★ 新增：绘制飞梭（在参考线之前，让参考线覆盖在飞梭上方更显眼）★★★
+            DrawPlayhead(new Rect(0, 0, area.width, area.height));
+
             #region 参考线（覆盖刻度尺 + 轨道区）
             // 吸附参考线：拖拽中且本帧吸附到有效时间时，绘制一条白色竖线（按住 Shift 更亮）
-            if (dragMode != DragMode.无 && snapGuideSecond >= 0f)
+            if ((dragMode != DragMode.无 || isDraggingPlayhead) && snapGuideSecond >= 0f)
             {
                 float gx = snapGuideSecond * pixelsPerSecond - scrollPos.x;
                 if (gx >= 0f && gx <= area.width)
@@ -2283,10 +2411,24 @@ namespace SevenStrikeModules.XHud.Editor
 
             // ★ 注意：这里不再调用 DrawTimelineHorizontalScrollbar，已经挪到阶段 2 了
 
-            // ── 阶段 7：三类交互处理 ──
-            HandleTimeRulerClick(new Rect(0, 0, area.width, rulerHeight));
-            HandleClipAreaEmptyClick(scrollViewportRect);
-            HandleViewPan(new Rect(0, 0, area.width, area.height));
+            // ── 阶段 7：交互处理 ──
+            // ★ 飞梭交互：命中范围是刻度尺（不是整个 Clip 区），必须最先
+            HandlePlayheadInteraction(
+                new Rect(0, 0, area.width, rulerHeight),   // 刻度尺矩形
+                new Rect(0, 0, area.width, area.height));  // Clip 区整体矩形
+
+            if (!isDraggingPlayhead)
+            {
+                // 拖拽飞梭期间，跳过这些交互，避免冲突
+                // 注意：HandleTimeRulerClick 现在基本不会被触发（飞梭已接管刻度尺左键），
+                //       保留它是为了兜底——比如未来飞梭交互被禁用时仍能清焦点。
+                HandleTimeRulerClick(new Rect(0, 0, area.width, rulerHeight));
+                HandleClipAreaEmptyClick(scrollViewportRect);
+                HandleViewPan(new Rect(0, 0, area.width, area.height));
+            }
+
+            // ── 阶段 8：飞梭光标 ──
+            DrawPlayheadCursor(new Rect(0, 0, area.width, rulerHeight));
 
             GUI.EndGroup();
         }
@@ -2499,6 +2641,204 @@ namespace SevenStrikeModules.XHud.Editor
                         anchor: TextAnchor.MiddleLeft,
                         font_style: FontStyle.Normal);
                 }
+            }
+        }
+        #endregion
+
+        #region 绘制/交互：时间飞梭
+        /// <summary>
+        /// 飞梭头部在 Clip 区局部坐标系中的矩形。
+        /// <para/>头部始终贴在刻度尺顶部，横坐标随飞梭时间变化。
+        /// <para/>中心 X 经过取整，避免图标因半像素坐标而模糊。
+        /// </summary>
+        private Rect GetPlayheadHeadRect()
+        {
+            float x = playheadSecond * pixelsPerSecond - scrollPos.x;
+            // ★ 中心对齐到整数像素，图标更锐利
+            float centerX = Mathf.Round(x);
+            float headX = centerX - PlayheadHeadWidth * 0.5f;
+            return new Rect(headX, 0f, PlayheadHeadWidth, rulerHeight);
+        }
+        /// <summary>
+        /// 判断鼠标是否落在飞梭头部的命中区域内。
+        /// <para/>命中区域比视觉矩形大 <see cref="PlayheadHeadHitPadding"/> 像素，
+        /// 让用户更容易抓到。
+        /// </summary>
+        private bool HitPlayheadHead(Vector2 mouseLocal)
+        {
+            Rect head = GetPlayheadHeadRect();
+            Rect hit = new Rect(
+                head.x - PlayheadHeadHitPadding,
+                head.y,
+                head.width + PlayheadHeadHitPadding * 2f,
+                head.height + PlayheadHeadHitPadding);
+            return hit.Contains(mouseLocal);
+        }
+        /// <summary>
+        /// 处理飞梭交互：刻度尺任意位置点击/拖动 → 飞梭跳转并跟随。
+        /// <para/>命中规则：
+        /// <list type="bullet">
+        /// <item><description>MouseDown 落在刻度尺矩形内（含头部）→ 进入拖拽飞梭状态，并立即跳一次；</description></item>
+        /// <item><description>MouseDrag 期间不检查是否还在刻度尺内，只按鼠标 X 计算时间；</description></item>
+        /// <item><description>MouseUp 结束拖拽。</description></item>
+        /// </list>
+        /// <para/>必须在 <see cref="HandleTimeRulerClick"/> 与 <see cref="HandleViewPan"/> 之前调用，
+        /// 否则会被它们抢走事件。
+        /// </summary>
+        /// <param name="rulerRect">刻度尺局部矩形（Clip 区坐标，通常是 (0,0,width,rulerHeight)）</param>
+        /// <param name="clipAreaLocalRect">Clip 区整体局部矩形（用于算内容总时长钳制）</param>
+        private void HandlePlayheadInteraction(Rect rulerRect, Rect clipAreaLocalRect)
+        {
+            Event e = Event.current;
+            int controlID = GUIUtility.GetControlID(FocusType.Passive);
+
+            switch (e.type)
+            {
+                case EventType.MouseDown:
+                    // 左键 + 非 Alt + 落在刻度尺内 + 当前无其他 hotControl
+                    if (e.button == 0 && !e.alt && GUIUtility.hotControl == 0
+                        && rulerRect.Contains(e.mousePosition))
+                    {
+                        isDraggingPlayhead = true;
+                        playheadControlID = controlID;
+                        GUIUtility.hotControl = controlID;
+                        GUIUtility.keyboardControl = 0;
+
+                        // ★ 关键：按下即跳转，不管点的是头部还是空白
+                        UpdatePlayheadFromMouse(e.mousePosition, clipAreaLocalRect);
+
+                        e.Use();
+                        Repaint();
+                    }
+                    break;
+
+                case EventType.MouseDrag:
+                    if (isDraggingPlayhead && GUIUtility.hotControl == playheadControlID)
+                    {
+                        // 拖动期间不限制在刻度尺内，鼠标跑到轨道区甚至窗口外也继续跟随 X
+                        UpdatePlayheadFromMouse(e.mousePosition, clipAreaLocalRect);
+                        e.Use();
+                        Repaint();
+                    }
+                    break;
+
+                case EventType.MouseUp:
+                    if (isDraggingPlayhead && e.button == 0)
+                    {
+                        isDraggingPlayhead = false;
+                        GUIUtility.hotControl = 0;
+                        playheadControlID = 0;
+                        snapGuideSecond = -1f;   // ★ 清掉吸附线，避免残留
+                        e.Use();
+                        Repaint();
+                    }
+                    break;
+            }
+        }
+        /// <summary>
+        /// 根据鼠标位置更新飞梭时间。
+        /// <para/>按住 Shift 时，会尝试把飞梭吸附到所有 Clip（动画 + 音效）的左右两端；
+        /// 吸附成功时把命中时间写入 <see cref="snapGuideSecond"/>，由 <see cref="DrawClipTimelineArea"/>
+        /// 统一绘制吸附参考线。
+        /// </summary>
+        private void UpdatePlayheadFromMouse(Vector2 mouseLocal, Rect clipAreaLocalRect)
+        {
+            // 鼠标 X 相对视口左边缘 → 加 scrollPos.x → 除以 pixelsPerSecond → 内容时间
+            float contentPixelX = mouseLocal.x + scrollPos.x;
+            float rawSecond = contentPixelX / Mathf.Max(1f, pixelsPerSecond);
+
+            // 钳制到 [0, 内容总时长]，避免飞梭跑出内容范围
+            float totalSeconds = CalculateContentWidthPixels() / Mathf.Max(1f, pixelsPerSecond);
+            float clamped = Mathf.Clamp(rawSecond, 0f, totalSeconds);
+
+            // 先量化，再做吸附（吸附方法内部也会量化，这里保持一致的手感基准）
+            clamped = QuantizeTime(clamped);
+
+            // ── 按住 Shift 时启用吸附 ──
+            if (Event.current != null && Event.current.shift)
+            {
+                float snapped;
+                bool hit = TrySnapTimeForPlayhead(clamped, out snapped);
+                if (hit)
+                {
+                    playheadSecond = snapped;
+                    snapGuideSecond = snapped;   // ★ 让吸附线可见
+                }
+                else
+                {
+                    playheadSecond = clamped;
+                    snapGuideSecond = -1f;
+                }
+            }
+            else
+            {
+                playheadSecond = clamped;
+                snapGuideSecond = -1f;
+            }
+
+            //// ★ 你要的 Debug.Log
+            //Debug.Log($"[XHud] 时间飞梭：{playheadSecond:F3} 秒");
+        }
+        /// <summary>
+        /// 绘制飞梭：贯穿刻度尺 + 轨道区的竖线 + 顶部头部。
+        /// <para/>必须在 <see cref="GUI.EndScrollView"/> 之后绘制，
+        /// 否则会被 ScrollView 裁剪掉超出内容区的部分。
+        /// </summary>
+        /// <param name="clipAreaLocalRect">Clip 区局部矩形</param>
+        private void DrawPlayhead(Rect clipAreaLocalRect)
+        {
+            float x = playheadSecond * pixelsPerSecond - scrollPos.x;
+
+            // 飞梭在视口外 → 不绘制
+            if (x < -PlayheadHeadWidth || x > clipAreaLocalRect.width + PlayheadHeadWidth)
+                return;
+
+            // ── 竖线：从刻度尺底部一直画到 Clip 区底部（水平滚动条之上）──
+            float lineTop = rulerHeight * 0.5f;   // 从刻度尺中线开始
+            float lineBottom = clipAreaLocalRect.height - HorizontalScrollbarHeight;
+            if (lineBottom > lineTop)
+            {
+                XGUI.gui_box(
+                    new Rect(x, lineTop, 1f, lineBottom - lineTop),
+                    ColorPlayheadLine);
+            }
+
+            // ── 头部：自定义图标 ──
+            Rect head = GetPlayheadHeadRect();
+            bool hover = !isDraggingPlayhead && HitPlayheadHead(Event.current.mousePosition);
+            Color headColor = (hover || isDraggingPlayhead) ? ColorPlayheadHeadHover : ColorPlayheadHead;
+
+            if (icon_playhead != null)
+            {
+                XGUI.gui_icon(
+                    rect: head,
+                    icon: icon_playhead,
+                    color: headColor);
+            }
+            else
+            {
+                // 兜底：图标未加载时退回纯色方块，避免完全看不见
+                XGUI.gui_box(head, headColor);
+            }
+        }
+        /// <summary>
+        /// 在 Repaint 阶段为飞梭头部设置鼠标光标。
+        /// </summary>
+        private void DrawPlayheadCursor(Rect rulerRect)
+        {
+            if (Event.current.type != EventType.Repaint) return;
+
+            // 拖拽中 → 整个刻度尺显示横向光标
+            if (isDraggingPlayhead)
+            {
+                EditorGUIUtility.AddCursorRect(rulerRect, MouseCursor.ResizeHorizontal);
+                return;
+            }
+
+            // 悬停在刻度尺内 → 显示横向光标（头部/空白一视同仁，因为都能拖）
+            if (rulerRect.Contains(Event.current.mousePosition))
+            {
+                EditorGUIUtility.AddCursorRect(rulerRect, MouseCursor.ResizeHorizontal);
             }
         }
         #endregion
@@ -2947,13 +3287,14 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DrawSoundParameterFields(Rect area, TweenSound sound)
         {
-            SerializedObject so = new SerializedObject(target);
+            // ★ 换成缓存入口
+            SerializedObject so = GetParameterSerializedObject();
+            if (so == null) return;
 
-            SerializedProperty prop_sounds = so.FindProperty("PrimitiveTweenSounds");
+            // ★ 复用缓存好的数组属性，不要每帧 FindProperty
+            SerializedProperty prop_sounds = cachedSoundsProp;
             if (prop_sounds == null || selectedIndex < 0 || selectedIndex >= prop_sounds.arraySize)
-            {
                 return;
-            }
 
             SerializedProperty prop_sound = prop_sounds.GetArrayElementAtIndex(selectedIndex);
             SerializedProperty ser_sound = prop_sound.FindPropertyRelative("Sound");
@@ -3145,6 +3486,8 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_space(6);
 
+            so.ApplyModifiedProperties();
+
             if (XGUI.ChangedCheck_End())
             {
                 if (dragMode == DragMode.无 && !IsPreviewing)
@@ -3153,8 +3496,6 @@ namespace SevenStrikeModules.XHud.Editor
                 EditorUtility.SetDirty(target);
                 Repaint();
             }
-
-            so.ApplyModifiedProperties();
         }
         /// <summary> 
         ///绘制选中节点的参数字段
@@ -3162,10 +3503,16 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DrawNodeParameterFields(Rect area, Texture2D type_icon, TweenNode node)
         {
-            SerializedObject so = new SerializedObject(target);
+            // ★ 换成缓存入口
+            SerializedObject so = GetParameterSerializedObject();
+            if (so == null) return;
 
-            #region 序列化字段
-            SerializedProperty prop_node = so.FindProperty("PrimitiveTweenNodes").GetArrayElementAtIndex(selectedIndex);
+            // ★ 复用缓存好的数组属性
+            SerializedProperty prop_nodes = cachedNodesProp;
+            if (prop_nodes == null || selectedIndex < 0 || selectedIndex >= prop_nodes.arraySize)
+                return;
+
+            SerializedProperty prop_node = prop_nodes.GetArrayElementAtIndex(selectedIndex);
             SerializedProperty ser_indicator = prop_node.FindPropertyRelative("Indicator");
             SerializedProperty ser_type = prop_node.FindPropertyRelative("Type");
             SerializedProperty ser_duration = prop_node.FindPropertyRelative("Duration");
@@ -3176,7 +3523,6 @@ namespace SevenStrikeModules.XHud.Editor
             SerializedProperty ser_ease = prop_node.FindPropertyRelative("Ease");
             SerializedProperty ser_curve = prop_node.FindPropertyRelative("Curve");
             SerializedProperty ser_rotate_mode = prop_node.FindPropertyRelative("RotateMode");
-            #endregion
 
             so.Update();
 
@@ -3451,12 +3797,10 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     List<XGUIDialogListDatas> infos = new List<XGUIDialogListDatas>();
 
-                    string hexcolor = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary);
-
-                    infos.Add(new XGUIDialogListDatas($"起始 - 默认", $"<b><color=#{hexcolor}>S</color></b>  -  <b><color=#{hexcolor}>D</color></b>", $"<color=#c1c1c1>从</color>  起始值  <color=#c1c1c1>到</color>  默认值  <color=#c1c1c1>的动画</color>"));
-                    infos.Add(new XGUIDialogListDatas($"默认 - 结束", $"<b><color=#{hexcolor}>D</color></b>  -  <b><color=#{hexcolor}>E</color></b>", $"<color=#c1c1c1>从</color>  默认值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
-                    infos.Add(new XGUIDialogListDatas($"起始 - 结束", $"<b><color=#{hexcolor}>S</color></b>  -  <b><color=#{hexcolor}>E</color></b>", $"<color=#c1c1c1>从</color>  起始值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
-                    infos.Add(new XGUIDialogListDatas($"当前 - 结束", $"<b><color=#{hexcolor}>C</color></b>  -  <b><color=#{hexcolor}>E</color></b>", $"<color=#c1c1c1>从</color>  当前值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
+                    infos.Add(new XGUIDialogListDatas($"起始 - 默认", $"<b><color=#{Theme_PrimaryColor}>S</color></b>  -  <b><color=#{Theme_PrimaryColor}>D</color></b>", $"<color=#c1c1c1>从</color>  起始值  <color=#c1c1c1>到</color>  默认值  <color=#c1c1c1>的动画</color>"));
+                    infos.Add(new XGUIDialogListDatas($"默认 - 结束", $"<b><color=#{Theme_PrimaryColor}>D</color></b>  -  <b><color=#{Theme_PrimaryColor}>E</color></b>", $"<color=#c1c1c1>从</color>  默认值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
+                    infos.Add(new XGUIDialogListDatas($"起始 - 结束", $"<b><color=#{Theme_PrimaryColor}>S</color></b>  -  <b><color=#{Theme_PrimaryColor}>E</color></b>", $"<color=#c1c1c1>从</color>  起始值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
+                    infos.Add(new XGUIDialogListDatas($"当前 - 结束", $"<b><color=#{Theme_PrimaryColor}>C</color></b>  -  <b><color=#{Theme_PrimaryColor}>E</color></b>", $"<color=#c1c1c1>从</color>  当前值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
 
                     XGUI.dialog_listview(
                         datas: infos.ToArray(),
@@ -5296,45 +5640,45 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>true 表示命中吸附；false 表示未命中</returns>
         private bool TrySnapTimeToReference(float time, HashSet<int> exclude, out float snappedTime)
         {
-            // 阈值 = 像素阈值 / 每秒像素数，换算成秒；
-            // 缩放越大 → 阈值越小（像素固定但对应秒数更小），反之亦然。
             float threshold = SnapThresholdSeconds;
 
-            // bestTime / bestDist 记录当前最优候选：
-            // bestDist 初值为 threshold，配合「严格小于」判定，
-            // 保证只有距离更近的候选才会覆盖 bestTime。
             float bestTime = time;
             float bestDist = threshold;
             bool snapped = false;
 
+            // ── 优先级 0：飞梭（如果存在有效值）──
+            // 飞梭没有索引，不参与 exclude，永远作为候选。
+            // 只要 playheadSecond 在合法范围内就纳入比较。
+            {
+                float dPlayhead = Mathf.Abs(time - playheadSecond);
+                if (dPlayhead < bestDist)
+                {
+                    bestDist = dPlayhead;
+                    bestTime = playheadSecond;
+                    snapped = true;
+                }
+            }
+
             // ── 优先级 1 / 2：遍历其他 Clip 的起始与结束边界 ──
             for (int i = 0; i < Nodes.Count; i++)
             {
-                // exclude 用于排除「正在被拖拽的节点自身」，
-                // 否则节点会吸附到自己原来的位置上，导致拖不动。
                 if (exclude != null && exclude.Contains(i)) continue;
                 TweenNode other = Nodes[i];
                 float otherStart = other.Delay;
                 float otherEnd = other.Delay + other.Duration;
 
-                // 优先比较起始边界：距离更近才更新最优候选
                 float dStart = Mathf.Abs(time - otherStart);
                 if (dStart < bestDist) { bestDist = dStart; bestTime = otherStart; snapped = true; }
 
-                // 再比较结束边界
                 float dEnd = Mathf.Abs(time - otherEnd);
                 if (dEnd < bestDist) { bestDist = dEnd; bestTime = otherEnd; snapped = true; }
             }
 
             // ── 优先级 3：整秒网格 ──
-            // 放在 Clip 边界之后比较，配合「严格小于」判定，
-            // 当整秒与 Clip 边界距离完全相同时，Clip 边界优先（先遍历到的胜出）。
             float rounded = Mathf.Round(time);
             float distToSecond = Mathf.Abs(time - rounded);
             if (distToSecond < bestDist) { bestDist = distToSecond; bestTime = rounded; snapped = true; }
 
-            // 命中时对最佳候选做量化，保证与节点 Delay / Duration 精度一致；
-            // 未命中时直接返回原始 time（不做量化，避免引入无谓的舍入）。
             snappedTime = snapped ? QuantizeTime(bestTime) : time;
             return snapped;
         }
@@ -5348,7 +5692,18 @@ namespace SevenStrikeModules.XHud.Editor
             float bestDist = threshold;
             bool snapped = false;
 
-            // 动画节点边界
+            // ── 优先级 0：飞梭 ──
+            {
+                float dPlayhead = Mathf.Abs(time - playheadSecond);
+                if (dPlayhead < bestDist)
+                {
+                    bestDist = dPlayhead;
+                    bestTime = playheadSecond;
+                    snapped = true;
+                }
+            }
+
+            // ── 动画节点边界 ──
             for (int i = 0; i < Nodes.Count; i++)
             {
                 TweenNode other = Nodes[i];
@@ -5360,7 +5715,7 @@ namespace SevenStrikeModules.XHud.Editor
                 if (de < bestDist) { bestDist = de; bestTime = e; snapped = true; }
             }
 
-            // 其他音效边界
+            // ── 其他音效边界 ──
             for (int i = 0; i < Sounds.Count; i++)
             {
                 if (excludeSoundIndices != null && excludeSoundIndices.Contains(i)) continue;
@@ -5374,7 +5729,62 @@ namespace SevenStrikeModules.XHud.Editor
                 if (de < bestDist) { bestDist = de; bestTime = e; snapped = true; }
             }
 
-            // 整秒网格
+            // ── 整秒网格 ──
+            float rounded = Mathf.Round(time);
+            float distToSecond = Mathf.Abs(time - rounded);
+            if (distToSecond < bestDist) { bestDist = distToSecond; bestTime = rounded; snapped = true; }
+
+            snappedTime = snapped ? QuantizeTime(bestTime) : time;
+            return snapped;
+        }
+        /// <summary>
+        /// 飞梭吸附：参照物 = 所有动画节点边界 + 所有音效边界 + 整秒网格。
+        /// <para/>与 <see cref="TrySnapTimeToReference"/> / <see cref="TrySnapTimeToReferenceForSound"/>
+        /// 的差异：飞梭不占用任何轨道数据，因此不做任何排除，
+        /// 所有 Clip（动画 + 音效）的左右两端都是它的吸附目标。
+        /// <para/>优先级：Clip 边界（先动画后音效）> 整秒网格。
+        /// 命中判定使用严格小于，先遍历到的候选在距离相同时胜出。
+        /// </summary>
+        /// <param name="time">待吸附的时间（秒）</param>
+        /// <param name="snappedTime">输出：吸附后的时间（已量化）；未命中时等于 <paramref name="time"/></param>
+        /// <returns>true 表示命中吸附；false 表示未命中</returns>
+        private bool TrySnapTimeForPlayhead(float time, out float snappedTime)
+        {
+            float threshold = SnapThresholdSeconds;
+            float bestTime = time;
+            float bestDist = threshold;
+            bool snapped = false;
+
+            // ── 动画节点边界 ──
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                TweenNode other = Nodes[i];
+                float s = other.Delay;
+                float e = other.Delay + other.Duration;
+
+                float ds = Mathf.Abs(time - s);
+                if (ds < bestDist) { bestDist = ds; bestTime = s; snapped = true; }
+
+                float de = Mathf.Abs(time - e);
+                if (de < bestDist) { bestDist = de; bestTime = e; snapped = true; }
+            }
+
+            // ── 音效边界 ──
+            for (int i = 0; i < Sounds.Count; i++)
+            {
+                TweenSound other = Sounds[i];
+                float s = other.Delay;
+                float len = other.Sound != null ? other.Sound.length : DefaultSoundClipSeconds;
+                float e = other.Delay + len;
+
+                float ds = Mathf.Abs(time - s);
+                if (ds < bestDist) { bestDist = ds; bestTime = s; snapped = true; }
+
+                float de = Mathf.Abs(time - e);
+                if (de < bestDist) { bestDist = de; bestTime = e; snapped = true; }
+            }
+
+            // ── 整秒网格（兜底）──
             float rounded = Mathf.Round(time);
             float distToSecond = Mathf.Abs(time - rounded);
             if (distToSecond < bestDist) { bestDist = distToSecond; bestTime = rounded; snapped = true; }
@@ -6372,5 +6782,50 @@ namespace SevenStrikeModules.XHud.Editor
             Repaint();
         }
         #endregion
+
+        /// <summary>
+        /// 获取参数面板专用的 SerializedObject（带缓存）。
+        /// <para/>同一 target、同一 selectedKind、同一 selectedIndex 时复用；
+        /// 任一变化则重建并刷新子属性缓存。
+        /// </summary>
+        /// <returns>缓存的 SerializedObject；target 为空时返回 null</returns>
+        private SerializedObject GetParameterSerializedObject()
+        {
+            if (target == null || target.Equals(null)) return null;
+
+            // ── 判断是否需要重建 SO ──
+            bool needRebuildSO = cachedSO == null
+                || cachedSO_target != target
+                || cachedSO.targetObject == null;
+
+            if (needRebuildSO)
+            {
+                cachedSO = new SerializedObject(target);
+                cachedSO_target = target;
+                cachedNodesProp = null;
+                cachedSoundsProp = null;
+                cachedSOKind = TrackKind.无;
+                cachedSOIndex = -1;
+            }
+
+            // ── 判断是否需要刷新子属性缓存 ──
+            bool needRebuildSubProps = cachedSOKind != selectedKind
+                || cachedSOIndex != selectedIndex
+                || (selectedKind == TrackKind.Node && cachedNodesProp == null)
+                || (selectedKind == TrackKind.Sound && cachedSoundsProp == null);
+
+            if (needRebuildSubProps)
+            {
+                if (selectedKind == TrackKind.Node)
+                    cachedNodesProp = cachedSO.FindProperty("PrimitiveTweenNodes");
+                else if (selectedKind == TrackKind.Sound)
+                    cachedSoundsProp = cachedSO.FindProperty("PrimitiveTweenSounds");
+
+                cachedSOKind = selectedKind;
+                cachedSOIndex = selectedIndex;
+            }
+
+            return cachedSO;
+        }
     }
 }
