@@ -2893,7 +2893,7 @@ MonoBehaviour:
     Type: 0
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
-    Delay: 1.634
+    Delay: 1.693
     Progress: 0
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
@@ -3388,7 +3388,7 @@ MonoBehaviour:
     TotalTime: 0
     DelayTime: 0
   PrimitivesIsFold: 1
-  PrimitivesTweenMaxDuration: 2.727
+  PrimitivesTweenMaxDuration: 3.612
   PrimitivesTweenGlobalDuration: 1
   AutoPlayPrimitivesTween: 1
   RMS_Enabled: 1
@@ -3552,7 +3552,7 @@ MonoBehaviour:
     Euler: {x: -0, y: 0, z: 0}
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
-    Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
     Size: {x: 256, y: 256}
     Fill: 1
   FirstSaveFeatures: 1
