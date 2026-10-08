@@ -902,54 +902,49 @@ namespace SevenStrikeModules.XTween
                 return null;
             }
 
-            string startText = text.text;
+            string startText = null;
+            bool startCaptured = false;
 
             if (Application.isPlaying)
             {
                 var tweener = XTween_Pool.CreateTween<XTween_Specialized_String>();
-
-                if (extended)
-                {
-                    endValue = startText + endValue;
-                }
-
-                tweener.Initialize(startText, endValue, duration * XTween_Dashboard.DurationMultiply);
+                tweener.Initialize("", endValue, duration * XTween_Dashboard.DurationMultiply);
 
                 tweener.OnUpdate((currentText, linearProgress, time) =>
                 {
-                    if (text == null)
+                    if (text == null) return;
+
+                    // ★ 首帧抓起点
+                    if (!startCaptured)
+                    {
+                        startText = text.text;
+                        startCaptured = true;
                         return;
+                    }
+
                     bool showCursor = false;
                     if (!string.IsNullOrEmpty(cursor))
                     {
-                        // 直接使用Time.time计算，每blinkInterval秒切换一次
                         float t = Time.time / blinkInterval;
                         showCursor = Mathf.FloorToInt(t) % 2 == 0;
                     }
-                    if (extended) { text.text = startText + currentText + (showCursor ? cursor : ""); } else { text.text = currentText + (showCursor ? cursor : ""); }
+
+                    if (extended)
+                        text.text = startText + currentText + (showCursor ? cursor : "");
+                    else
+                        text.text = currentText + (showCursor ? cursor : "");
                 })
                 .OnRewind(() =>
                 {
-                    if (text == null)
-                        return;
-                    if (rewind_set_startvalue)
+                    if (text == null) return;
+                    if (rewind_set_startvalue && startCaptured)
                         text.text = startText;
                 })
-                .OnComplete((duration) =>
+                .OnComplete((d) =>
                 {
-                    if (text == null)
-                        return;
-                    if (complete_set_endvalue)
-                    {
-                        if (extended)
-                        {
-                            text.text = startText + endValue;
-                        }
-                        else
-                        {
-                            text.text = endValue;
-                        }
-                    }
+                    if (text == null) return;
+                    if (complete_set_endvalue && startCaptured)
+                        text.text = extended ? startText + endValue : endValue;
                 })
                 .SetAutokill(autokill);
 
@@ -958,43 +953,43 @@ namespace SevenStrikeModules.XTween
             else
             {
                 XTween_Interface tweener;
-                tweener = new XTween_Specialized_String(startText, endValue, duration * XTween_Dashboard.DurationMultiply).OnUpdate((currentText, linearProgress, time) =>
-                {
-                    if (text == null)
-                        return;
-                    bool showCursor = false;
-                    if (!string.IsNullOrEmpty(cursor))
+                tweener = new XTween_Specialized_String("", endValue, duration * XTween_Dashboard.DurationMultiply)
+                    .OnUpdate((currentText, linearProgress, time) =>
                     {
-                        // 直接使用Time.time计算，每blinkInterval秒切换一次
-                        float t = Time.time / blinkInterval;
-                        showCursor = Mathf.FloorToInt(t) % 2 == 0;
-                    }
-                    if (extended) { text.text = startText + currentText + (showCursor ? cursor : ""); } else { text.text = currentText + (showCursor ? cursor : ""); }
-                })
-                .OnRewind(() =>
-                {
-                    if (text == null)
-                        return;
-                    if (rewind_set_startvalue)
-                        text.text = startText;
-                })
-                .OnComplete((duration) =>
-                {
-                    if (text == null)
-                        return;
-                    if (complete_set_endvalue)
-                    {
+                        if (text == null) return;
+
+                        if (!startCaptured)
+                        {
+                            startText = text.text;
+                            startCaptured = true;
+                            return;
+                        }
+
+                        bool showCursor = false;
+                        if (!string.IsNullOrEmpty(cursor))
+                        {
+                            float t = Time.time / blinkInterval;
+                            showCursor = Mathf.FloorToInt(t) % 2 == 0;
+                        }
+
                         if (extended)
-                        {
-                            text.text = startText + endValue;
-                        }
+                            text.text = startText + currentText + (showCursor ? cursor : "");
                         else
-                        {
-                            text.text = endValue;
-                        }
-                    }
-                })
-                .SetAutokill(false);
+                            text.text = currentText + (showCursor ? cursor : "");
+                    })
+                    .OnRewind(() =>
+                    {
+                        if (text == null) return;
+                        if (rewind_set_startvalue && startCaptured)
+                            text.text = startText;
+                    })
+                    .OnComplete((d) =>
+                    {
+                        if (text == null) return;
+                        if (complete_set_endvalue && startCaptured)
+                            text.text = extended ? startText + endValue : endValue;
+                    })
+                    .SetAutokill(false);
 
                 return tweener;
             }
@@ -1022,294 +1017,117 @@ namespace SevenStrikeModules.XTween
                 return null;
             }
 
-            string startText = text.text;
+            // ★ 起点延迟捕获
+            string startText = null;
+            bool startCaptured = false;
 
             if (Application.isPlaying)
             {
                 var tweener = XTween_Pool.CreateTween<XTween_Specialized_String>();
 
-                if (extended)
-                {
-                    endValue = startText + endValue;
-                }
+                // ★ 用占位起点初始化
+                tweener.Initialize("", endValue, duration * XTween_Dashboard.DurationMultiply);
 
-                tweener.Initialize(startText, endValue, duration * XTween_Dashboard.DurationMultiply);
-
-                // 从目标源值开始
-                if (isFromMode)
+                tweener.OnUpdate((currentText, linearProgress, time) =>
                 {
-                    // 获取目标源值
-                    string fromval = fromvalue();
-                    if (useCurve)// 使用曲线
+                    if (text == null)
+                        return;
+
+                    // ★ 首帧：抓起点，本帧不写文本
+                    if (!startCaptured)
                     {
-                        tweener.OnUpdate((currentText, linearProgress, time) =>
-                        {
-                            if (text == null)
-                                return;
-
-                            bool showCursor = false;
-                            if (!string.IsNullOrEmpty(cursor))
-                            {
-                                // 直接使用Time.time计算，每blinkInterval秒切换一次
-                                float t = Time.time / blinkInterval;
-                                showCursor = Mathf.FloorToInt(t) % 2 == 0;
-                            }
-                            if (extended) { text.text = startText + currentText + (showCursor ? cursor : ""); } else { text.text = currentText + (showCursor ? cursor : ""); }
-                        })
-                        .OnRewind(() =>
-                        {
-                            if (text == null)
-                                return;
-                            text.text = startText;
-                        })
-                        .OnComplete((duration) =>
-                        {
-                            if (text == null)
-                                return;
-                            if (extended) { text.text = startText + endValue; } else { text.text = endValue; }
-                        })
-                        .SetFrom(fromval)
-                        .SetEase(curve)
-                        .SetAutokill(autokill);
+                        startText = text.text;
+                        startCaptured = true;
+                        return;
                     }
+
+                    bool showCursor = false;
+                    if (!string.IsNullOrEmpty(cursor))
+                    {
+                        float t = Time.time / blinkInterval;
+                        showCursor = Mathf.FloorToInt(t) % 2 == 0;
+                    }
+
+                    if (extended)
+                        text.text = startText + currentText + (showCursor ? cursor : "");
                     else
-                    {
-                        tweener.OnUpdate((currentText, linearProgress, time) =>
-                        {
-                            if (text == null)
-                                return;
-                            bool showCursor = false;
-                            if (!string.IsNullOrEmpty(cursor))
-                            {
-                                // 直接使用Time.time计算，每blinkInterval秒切换一次
-                                float t = Time.time / blinkInterval;
-                                showCursor = Mathf.FloorToInt(t) % 2 == 0;
-                            }
-                            if (extended) { text.text = startText + currentText + (showCursor ? cursor : ""); } else { text.text = currentText + (showCursor ? cursor : ""); }
-                        })
-                        .OnRewind(() =>
-                        {
-                            if (text == null)
-                                return;
-                            text.text = startText;
-                        })
-                        .OnComplete((duration) =>
-                        {
-                            if (text == null)
-                                return;
-                            if (extended) { text.text = startText + endValue; } else { text.text = endValue; }
-                        })
-                        .SetFrom(fromval)
-                        .SetEase(easeMode)
-                        .SetAutokill(autokill);
-                    }
-                }
+                        text.text = currentText + (showCursor ? cursor : "");
+                })
+                .OnRewind(() =>
+                {
+                    if (text == null)
+                        return;
+                    if (startCaptured)
+                        text.text = startText;
+                })
+                .OnComplete((duration) =>
+                {
+                    if (text == null)
+                        return;
+                    if (startCaptured)
+                        text.text = extended ? startText + endValue : endValue;
+                });
+
+                // ★ 缓动：曲线优先，否则用枚举
+                if (useCurve && curve != null)
+                    tweener.SetEase(curve);
                 else
-                {
-                    if (useCurve)// 使用曲线
-                    {
-                        tweener.OnUpdate((currentText, linearProgress, time) =>
-                        {
-                            if (text == null)
-                                return;
-                            bool showCursor = false;
-                            if (!string.IsNullOrEmpty(cursor))
-                            {
-                                // 直接使用Time.time计算，每blinkInterval秒切换一次
-                                float t = Time.time / blinkInterval;
-                                showCursor = Mathf.FloorToInt(t) % 2 == 0;
-                            }
+                    tweener.SetEase(easeMode);
 
-                            if (extended) { text.text = startText + currentText + (showCursor ? cursor : ""); } else { text.text = currentText + (showCursor ? cursor : ""); }
-                        })
-                        .OnRewind(() =>
-                        {
-                            if (text == null)
-                                return;
-                            text.text = startText;
-                        })
-                        .OnComplete((duration) =>
-                        {
-                            if (text == null)
-                                return;
-                            if (extended) { text.text = startText + endValue; } else { text.text = endValue; }
-                        })
-                        .SetEase(curve)
-                        .SetAutokill(autokill);
-                    }
-                    else
-                    {
-                        tweener.OnUpdate((currentText, linearProgress, time) =>
-                        {
-                            if (text == null)
-                                return;
-                            bool showCursor = false;
-                            if (!string.IsNullOrEmpty(cursor))
-                            {
-                                // 直接使用Time.time计算，每blinkInterval秒切换一次
-                                float t = Time.time / blinkInterval;
-                                showCursor = Mathf.FloorToInt(t) % 2 == 0;
-                            }
-                            if (extended) { text.text = startText + currentText + (showCursor ? cursor : ""); } else { text.text = currentText + (showCursor ? cursor : ""); }
-                        })
-                        .OnRewind(() =>
-                        {
-                            if (text == null)
-                                return;
-                            text.text = startText;
-                        })
-                        .OnComplete((duration) =>
-                        {
-                            if (text == null)
-                                return;
-                            if (extended) { text.text = startText + endValue; } else { text.text = endValue; }
-                        })
-                        .SetEase(easeMode)
-                        .SetAutokill(autokill);
-                    }
-                }
+                tweener.SetAutokill(autokill);
 
                 return tweener;
             }
             else
             {
                 XTween_Interface tweener;
+                tweener = new XTween_Specialized_String("", endValue, duration * XTween_Dashboard.DurationMultiply)
+                    .OnUpdate((currentText, linearProgress, time) =>
+                    {
+                        if (text == null)
+                            return;
 
-                // 从目标源值开始
-                if (isFromMode)
-                {
-                    // 获取目标源值
-                    string fromval = fromvalue();
-                    if (useCurve)// 使用曲线
+                        if (!startCaptured)
+                        {
+                            startText = text.text;
+                            startCaptured = true;
+                            return;
+                        }
+
+                        bool showCursor = false;
+                        if (!string.IsNullOrEmpty(cursor))
+                        {
+                            float t = Time.time / blinkInterval;
+                            showCursor = Mathf.FloorToInt(t) % 2 == 0;
+                        }
+
+                        if (extended)
+                            text.text = startText + currentText + (showCursor ? cursor : "");
+                        else
+                            text.text = currentText + (showCursor ? cursor : "");
+                    })
+                    .OnRewind(() =>
                     {
-                        tweener = new XTween_Specialized_String(startText, endValue, duration * XTween_Dashboard.DurationMultiply)
-                        .OnUpdate((currentText, linearProgress, time) =>
-                        {
-                            if (text == null)
-                                return;
-                            bool showCursor = false;
-                            if (!string.IsNullOrEmpty(cursor))
-                            {
-                                // 直接使用Time.time计算，每blinkInterval秒切换一次
-                                float t = Time.time / blinkInterval;
-                                showCursor = Mathf.FloorToInt(t) % 2 == 0;
-                            }
-                            if (extended) { text.text = startText + currentText + (showCursor ? cursor : ""); } else { text.text = currentText + (showCursor ? cursor : ""); }
-                        })
-                        .OnRewind(() =>
-                        {
-                            if (text == null)
-                                return;
+                        if (text == null)
+                            return;
+                        if (startCaptured)
                             text.text = startText;
-                        })
-                        .OnComplete((duration) =>
-                        {
-                            if (text == null)
-                                return;
-                            if (extended) { text.text = startText + endValue; } else { text.text = endValue; }
-                        })
-                        .SetFrom(fromval)
-                        .SetEase(curve)
-                        .SetAutokill(false);
-                    }
-                    else
+                    })
+                    .OnComplete((duration) =>
                     {
-                        tweener = new XTween_Specialized_String(startText, endValue, duration * XTween_Dashboard.DurationMultiply)
-                        .OnUpdate((currentText, linearProgress, time) =>
-                        {
-                            if (text == null)
-                                return;
-                            bool showCursor = false;
-                            if (!string.IsNullOrEmpty(cursor))
-                            {
-                                // 直接使用Time.time计算，每blinkInterval秒切换一次
-                                float t = Time.time / blinkInterval;
-                                showCursor = Mathf.FloorToInt(t) % 2 == 0;
-                            }
-                            if (extended) { text.text = startText + currentText + (showCursor ? cursor : ""); } else { text.text = currentText + (showCursor ? cursor : ""); }
-                        })
-                        .OnRewind(() =>
-                        {
-                            if (text == null)
-                                return;
-                            text.text = startText;
-                        })
-                        .OnComplete((duration) =>
-                        {
-                            if (text == null)
-                                return;
-                            if (extended) { text.text = startText + endValue; } else { text.text = endValue; }
-                        })
-                        .SetFrom(fromval)
-                        .SetEase(easeMode)
-                        .SetAutokill(false);
-                    }
-                }
+                        if (text == null)
+                            return;
+                        if (startCaptured)
+                            text.text = extended ? startText + endValue : endValue;
+                    });
+
+                // ★ 缓动：曲线优先，否则用枚举
+                if (useCurve && curve != null)
+                    tweener.SetEase(curve);
                 else
-                {
-                    if (useCurve)// 使用曲线
-                    {
-                        tweener = new XTween_Specialized_String(startText, endValue, duration * XTween_Dashboard.DurationMultiply)
-                        .OnUpdate((currentText, linearProgress, time) =>
-                        {
-                            if (text == null)
-                                return;
-                            bool showCursor = false;
-                            if (!string.IsNullOrEmpty(cursor))
-                            {
-                                // 直接使用Time.time计算，每blinkInterval秒切换一次
-                                float t = Time.time / blinkInterval;
-                                showCursor = Mathf.FloorToInt(t) % 2 == 0;
-                            }
-                            if (extended) { text.text = startText + currentText + (showCursor ? cursor : ""); } else { text.text = currentText + (showCursor ? cursor : ""); }
-                        })
-                        .OnRewind(() =>
-                        {
-                            if (text == null)
-                                return;
-                            text.text = startText;
-                        })
-                        .OnComplete((duration) =>
-                        {
-                            if (text == null)
-                                return;
-                            if (extended) { text.text = startText + endValue; } else { text.text = endValue; }
-                        })
-                        .SetEase(curve)
-                        .SetAutokill(false);
-                    }
-                    else
-                    {
-                        tweener = new XTween_Specialized_String(startText, endValue, duration * XTween_Dashboard.DurationMultiply)
-                        .OnUpdate((currentText, linearProgress, time) =>
-                        {
-                            if (text == null)
-                                return;
-                            bool showCursor = false;
-                            if (!string.IsNullOrEmpty(cursor))
-                            {
-                                // 直接使用Time.time计算，每blinkInterval秒切换一次
-                                float t = Time.time / blinkInterval;
-                                showCursor = Mathf.FloorToInt(t) % 2 == 0;
-                            }
-                            if (extended) { text.text = startText + currentText + (showCursor ? cursor : ""); } else { text.text = currentText + (showCursor ? cursor : ""); }
-                        })
-                        .OnRewind(() =>
-                        {
-                            if (text == null)
-                                return;
-                            text.text = startText;
-                        })
-                        .OnComplete((duration) =>
-                        {
-                            if (text == null)
-                                return;
-                            if (extended) { text.text = startText + endValue; } else { text.text = endValue; }
-                        })
-                        .SetEase(easeMode)
-                        .SetAutokill(false);
-                    }
-                }
+                    tweener.SetEase(easeMode);
+
+                tweener.SetAutoKill(false);
 
                 return tweener;
             }

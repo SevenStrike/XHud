@@ -277,6 +277,10 @@ namespace SevenStrikeModules.XHud.Editor
             SerializedProperty ser_ease = prop_node.FindPropertyRelative("Ease");
             SerializedProperty ser_curve = prop_node.FindPropertyRelative("Curve");
             SerializedProperty ser_rotate_mode = prop_node.FindPropertyRelative("RotateMode");
+            SerializedProperty ser_written_extended = prop_node.FindPropertyRelative("TextExtended");
+            SerializedProperty ser_written_text_cursor = prop_node.FindPropertyRelative("TextCursor");
+            SerializedProperty ser_written_text_cursorblinkspeed = prop_node.FindPropertyRelative("TextCursorBlinkSpeed");
+
 
             #region 类型图标
             //XGUI.layout_group_start(
@@ -486,6 +490,29 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
+            #region 光标字符
+            XGUI.layout_property_field(
+                title: "光标字符",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 80,
+                prop: ser_written_text_cursor,
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(5, 5, 0, 0));
+            ser_written_text_cursor.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            #region 光标字符闪烁频率
+            XGUI.layout_property_field(
+                title: "光标字符闪烁频率",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 80,
+                prop: ser_written_text_cursorblinkspeed,
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(5, 5, 0, 0));
+            ser_written_text_cursorblinkspeed.serializedObject.ApplyModifiedProperties();
+            #endregion
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
@@ -599,6 +626,10 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 动画开关
             node.Enabled = DrawLabeledToggle("动画开关", node.Enabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+            #endregion
+
+            #region 动画开关
+            node.TextExtended = DrawLabeledToggle("延伸内容", node.TextExtended, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
             #endregion
 
             #region 重置设为起始值

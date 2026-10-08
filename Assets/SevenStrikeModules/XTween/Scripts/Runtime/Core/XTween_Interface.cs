@@ -226,6 +226,22 @@ namespace SevenStrikeModules.XTween
         /// 清除所有回调函数
         /// </summary>
         void ClearCallbacks();
+        /// <summary>
+        /// 将动画求值定位到指定的已耗时位置，并触发一次 OnUpdate 回调。
+        /// <para/>
+        /// 用于编辑器时间轴拖动预览：由外部传入时刻，不依赖真实时钟推进。
+        /// 仅做"按给定时刻采样 + 写值"，不修改 IsPlaying / IsPaused / IsCompleted 等播放状态，
+        /// 也不触发 Complete / Progress / EaseProgress / StepUpdate / Start 等回调。
+        /// </summary>
+        /// <param name="elapsedSeconds">已耗时（秒），内部会 clamp 到 [0, Duration]</param>
+        void EvaluateAt(float elapsedSeconds);
+        /// <summary>
+        /// 标记动态起点需要在下一次求值时重新捕获。
+        /// <para/>
+        /// 用于 C-E（当前到结束）模式下，飞梭每次从区间外进入区间时，
+        /// 以物体"进入瞬间的实际值"作为本次插值的起点。
+        /// </summary>
+        void ResetDynamicStart();
         #endregion
 
         #region 扩展

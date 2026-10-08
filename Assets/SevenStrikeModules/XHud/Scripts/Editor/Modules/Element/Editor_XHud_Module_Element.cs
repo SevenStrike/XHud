@@ -546,1001 +546,1006 @@ namespace SevenStrikeModules.XHud.Editor
                 TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
                 #endregion
 
-                XGUI.layout_seperator(
-                        thickness: 1,
-                        color: XHud_Dashboard.Theme_SeperateLine,
-                        margin: new RectOffset(15, 15, 5, 25));
-
-                #region 选项          
-                XGUI.layout_group_start(
-                    type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
-                    bg_color: XGUIColor.亮白,
-                    bg_color_gui: XHud_Dashboard.Theme_Group,
-                    title: "选项",
-                    title_text_color: XHud_Dashboard.Theme_Primary,
-                    title_size: XGUIFontSize.M,
-                    title_clipping: TextClipping.Clip,
-                    title_offset: new Vector2(10, 0),
-                    absolute_margin: true,
-                    absolute_padding: true,
-                    margin: new RectOffset(0, 0, 20, 15),
-                    padding: new RectOffset(15, 0, 20, 20));
-
-                DrawToggle("包含子级图元", PreviewIncludePrimitivesTween, 140, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_include, (b) => { });
-                DrawToggle("指定位置 - 生成", Crc_Preview_SetPosition, 140, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
-                DrawToggle("指定位置 - 回收", Rec_Preview_SetPosition, 140, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
-
-                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-                #endregion
-
-                #region 参数
-                if (Crc_Preview_SetPosition.boolValue || Rec_Preview_SetPosition.boolValue)
+                if (!TweensPreivew_In_State.boolValue && !TweensPreivew_Out_State.boolValue)
                 {
+                    XGUI.layout_seperator(
+                            thickness: 1,
+                            color: XHud_Dashboard.Theme_SeperateLine,
+                            margin: new RectOffset(15, 15, 5, 25));
+
+                    #region 选项          
                     XGUI.layout_group_start(
                         type: XGUIContainerType.Vertical,
                         bg_fill: XGUIFilled.缺口纯色边框,
                         bg_color: XGUIColor.亮白,
                         bg_color_gui: XHud_Dashboard.Theme_Group,
-                        title: "参数",
+                        title: "选项",
                         title_text_color: XHud_Dashboard.Theme_Primary,
                         title_size: XGUIFontSize.M,
                         title_clipping: TextClipping.Clip,
                         title_offset: new Vector2(10, 0),
                         absolute_margin: true,
                         absolute_padding: true,
-                        margin: new RectOffset(0, 0, 10, 15),
-                        padding: new RectOffset(15, 10, 20, 20));
+                        margin: new RectOffset(0, 0, 20, 15),
+                        padding: new RectOffset(15, 0, 20, 20));
 
-                    #region 目标位置
-                    if (Crc_Preview_SetPosition.boolValue)
-                    {
-                        XGUI.layout_property_field(
-                            title: "目标位置",
-                            title_size: XGUIFontSize.M,
-                            title_hover_color: XHud_Dashboard.Theme_Primary,
-                            title_width: 90,
-                            prop: Crc_Preview_Position,
-                            prop_margin: new RectOffset(0, 0, 5, 0));
-                    }
-                    #endregion
-
-                    #region 目标位置
-                    if (Rec_Preview_SetPosition.boolValue)
-                    {
-                        XGUI.layout_property_field(
-                            title: "目标位置",
-                            title_size: XGUIFontSize.M,
-                            title_hover_color: XHud_Dashboard.Theme_Primary,
-                            title_width: 90,
-                            prop: Rec_Preview_Position,
-                            prop_margin: new RectOffset(0, 0, 5, 0));
-                    }
-                    #endregion
+                    DrawToggle("包含子级图元", PreviewIncludePrimitivesTween, 140, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_include, (b) => { });
+                    DrawToggle("指定位置 - 生成", Crc_Preview_SetPosition, 140, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                    DrawToggle("指定位置 - 回收", Rec_Preview_SetPosition, 140, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
 
                     XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-                }
-                #endregion
+                    #endregion
 
-                #region 动效
-                XGUI.layout_group_start(
-                     type: XGUIContainerType.Vertical,
-                        bg_fill: XGUIFilled.缺口纯色边框,
-                        bg_color: XGUIColor.亮白,
-                        bg_color_gui: XHud_Dashboard.Theme_Group,
-                        title: "动效",
-                        title_text_color: XHud_Dashboard.Theme_Primary,
-                        title_size: XGUIFontSize.M,
-                        title_clipping: TextClipping.Clip,
-                        title_offset: new Vector2(10, 0),
-                        absolute_margin: true,
-                        absolute_padding: true,
-                        margin: new RectOffset(0, 0, 10, 15),
-                        padding: new RectOffset(15, 10, 20, 20));
-
-                #region 生成
-                #region 模版库 - 生成
-                if (HudManager.Hud_Motions != null)
-                {
-                    //确保动效库不是空的
-                    if (HudManager.Hud_Motions.ElementMotionList != null && HudManager.Hud_Motions.ElementMotionList.Count > 0)
+                    #region 参数
+                    if (Crc_Preview_SetPosition.boolValue || Rec_Preview_SetPosition.boolValue)
                     {
-                        //动效列表
-                        string[] motnames = HudManager.Hud_Motions.ElementMotion_GetAllName_With_Create();
-                        XGUI.layout_string_popup(
-                            title: "生成",
-                            title_width: 60,
-                            title_size: XGUIFontSize.M,
-                            title_anchor: TextAnchor.MiddleLeft,
-                            prop: Crc_Lib_Name,
-                            options: motnames,
-                            opt_text_size: XGUIFontSize.M,
-                            opt_text_color: Color.black,
-                            opt_text_padding: new RectOffset(10, 10, 0, 0),
-                            opt_anchor: TextAnchor.MiddleCenter,
-                            opt_font_style: FontStyle.Normal,
-                            opt_bg_fill: XGUIFilled.实体,
-                            opt_bg_color: XGUIColor.亮白,
-                            opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
-                            icon_arrow_color: Color.black,
-                            margin: new RectOffset(0, 0, 5, 5),
-                            padding: new RectOffset(5, 5, 0, 0),
-                            title_margin: new RectOffset(0, 0, 0, 0),
-                            act_on_changed: (value) =>
-                            {
-                                Crc_Lib_Name.stringValue = value;
-                                Crc_Lib_Name.serializedObject.ApplyModifiedProperties();
-
-                                Motion_Creator crc = HudManager.Hud_Motions.ElementMotion_GetElementCreator_At_Create(Crc_Lib_Name.stringValue);
-
-                                CreateArgs.FindPropertyRelative("anchor").enumValueIndex = (int)crc.anchor;
-                                CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)crc.Movement.Movement;
-                                CreateArgs.FindPropertyRelative("Movement.Distance").floatValue = crc.Movement.Distance;
-                                CreateArgs.FindPropertyRelative("Movement.Duration").floatValue = crc.Movement.Duration;
-                                CreateArgs.FindPropertyRelative("Movement.Delay").floatValue = crc.Movement.Delay;
-                                CreateArgs.FindPropertyRelative("Movement.Curve").animationCurveValue = crc.Movement.Curve;
-                                CreateArgs.FindPropertyRelative("Movement.CurveName").stringValue = crc.Movement.CurveName;
-                                CreateArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)crc.Movement.Ease;
-                                CreateArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)crc.Rotation.Rotation;
-                                CreateArgs.FindPropertyRelative("Rotation.Degree").floatValue = crc.Rotation.Degree;
-                                CreateArgs.FindPropertyRelative("Rotation.Duration").floatValue = crc.Rotation.Duration;
-                                CreateArgs.FindPropertyRelative("Rotation.Delay").floatValue = crc.Rotation.Delay;
-                                CreateArgs.FindPropertyRelative("Rotation.Curve").animationCurveValue = crc.Rotation.Curve;
-                                CreateArgs.FindPropertyRelative("Rotation.CurveName").stringValue = crc.Rotation.CurveName;
-                                CreateArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)crc.Rotation.Ease;
-                                CreateArgs.FindPropertyRelative("Alpha.Duration").floatValue = crc.Alpha.Duration;
-                                CreateArgs.FindPropertyRelative("Alpha.Delay").floatValue = crc.Alpha.Delay;
-                                CreateArgs.FindPropertyRelative("Alpha.Curve").animationCurveValue = crc.Alpha.Curve;
-                                CreateArgs.FindPropertyRelative("Alpha.CurveName").stringValue = crc.Alpha.CurveName;
-                                CreateArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)crc.Alpha.Ease;
-                                CreateArgs.FindPropertyRelative("MotionAnimateEndState").enumValueIndex = (int)crc.MotionAnimateEndState;
-                                CreateArgs.serializedObject.ApplyModifiedProperties();
-                            });
-
-                        XGUI.layout_space(12);
-
-                        #region 保存 & 定位模板
                         XGUI.layout_group_start(
-                            type: XGUIContainerType.Horizontal,
-                            title_clipping: TextClipping.Clip,
-                            absolute_padding: true,
-                            absolute_margin: true,
-                            margin: new RectOffset(0, 0, 0, 0),
-                            padding: new RectOffset(5, 10, 0, 0));
-
-                        if (XGUI.layout_button(
-                            tooltip: "保存",
-                            tex_release: save_r,
-                            tex_press: save_p,
-                            tex_gui_color: Color.white,
-                            border: new RectOffset(0, 0, 0, 0),
-                            width: save_r.width,
-                            height: save_r.height))
-                        {
-                            OpenParameterSetter(HudElementMotionType.Creator);
-                            return;
-                        }
-
-                        GUILayout.FlexibleSpace();
-
-                        if (XGUI.layout_button(
-                          tooltip: "定位",
-                          tex_release: locate_r,
-                          tex_press: locate_p,
-                          tex_gui_color: Color.white,
-                          border: new RectOffset(0, 0, 0, 0),
-                          width: locate_r.width,
-                          height: locate_r.height))
-                        {
-                            if (!HudManager.Hud_Motions.ElementMotion_IsExist(Crc_Lib_Name.stringValue))
-                                return;
-                            Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
-                            HudManager.Hud_Motions.ElementMotionLibrary_Location(Crc_Lib_Name.stringValue);
-                            return;
-                        }
-
-                        GUILayout.FlexibleSpace();
-
-                        if (XGUI.layout_button(
-                          tooltip: "重置",
-                          tex_release: reset_r,
-                          tex_press: reset_p,
-                          tex_gui_color: Color.white,
-                          border: new RectOffset(0, 0, 0, 0),
-                          width: reset_r.width,
-                          height: reset_r.height))
-                        {
-                            XGUI.dialog(
-                                type: XGUIDialogType.警告,
-                                windowtitle: "XHud - 元素消息",
-                                title: "重置动效参数",
-                                msg: "确定要将动效参数重置吗？您将丢失当前的动效参数！",
-                                ok: "重置",
-                                cancel: "暂不",
-                                PrimaryIndex: 0,
-                                usemodal: true,
-                                themecolor: XHud_Dashboard.Theme_Primary,
-                                on_selected: (d) =>
-                                {
-                                    if (d == "重置")
-                                    {
-                                        Crc_Lib_Name.stringValue = null;
-                                        Crc_Lib_Name.serializedObject.ApplyModifiedProperties();
-                                        ResetMotionParams("c");
-                                    }
-                                });
-                            return;
-                        }
-
-                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
-                        #endregion
-                    }
-                    else
-                    {
-                        XGUI.layout_helpbox(
-                            state: XGUIHelboxState.警告,
-                            title_text: "未在动效库中发现任何动效资源，请先为其添加动效资源！",
+                            type: XGUIContainerType.Vertical,
+                            bg_fill: XGUIFilled.缺口纯色边框,
+                            bg_color: XGUIColor.亮白,
+                            bg_color_gui: XHud_Dashboard.Theme_Group,
+                            title: "参数",
+                            title_text_color: XHud_Dashboard.Theme_Primary,
                             title_size: XGUIFontSize.M,
-                            title_style: FontStyle.Normal,
-                            title_color: Color.white * 0.75f);
+                            title_clipping: TextClipping.Clip,
+                            title_offset: new Vector2(10, 0),
+                            absolute_margin: true,
+                            absolute_padding: true,
+                            margin: new RectOffset(0, 0, 10, 15),
+                            padding: new RectOffset(15, 10, 20, 20));
+
+                        #region 目标位置
+                        if (Crc_Preview_SetPosition.boolValue)
+                        {
+                            XGUI.layout_property_field(
+                                title: "目标位置",
+                                title_size: XGUIFontSize.M,
+                                title_hover_color: XHud_Dashboard.Theme_Primary,
+                                title_width: 90,
+                                prop: Crc_Preview_Position,
+                                prop_margin: new RectOffset(0, 0, 5, 0));
+                        }
+                        #endregion
+
+                        #region 目标位置
+                        if (Rec_Preview_SetPosition.boolValue)
+                        {
+                            XGUI.layout_property_field(
+                                title: "目标位置",
+                                title_size: XGUIFontSize.M,
+                                title_hover_color: XHud_Dashboard.Theme_Primary,
+                                title_width: 90,
+                                prop: Rec_Preview_Position,
+                                prop_margin: new RectOffset(0, 0, 5, 0));
+                        }
+                        #endregion
+
+                        XGUI.layout_group_end(type: XGUIContainerType.Vertical);
                     }
-                }
-                else
-                {
-                    XGUI.layout_helpbox(
-                          state: XGUIHelboxState.警告,
-                          title_text: "XHud管理器中未指定动效库，请先配置动效库！",
-                          title_size: XGUIFontSize.M,
-                          title_style: FontStyle.Normal,
-                          title_color: Color.white * 0.75f);
-                }
-                #endregion
+                    #endregion
 
-                XGUI.layout_seperator(
-                   thickness: 1,
-                   color: XHud_Dashboard.Theme_SeperateLine,
-                   margin: new RectOffset(15, 15, 18, 15));
+                    #region 动效
+                    XGUI.layout_group_start(
+                         type: XGUIContainerType.Vertical,
+                            bg_fill: XGUIFilled.缺口纯色边框,
+                            bg_color: XGUIColor.亮白,
+                            bg_color_gui: XHud_Dashboard.Theme_Group,
+                            title: "动效",
+                            title_text_color: XHud_Dashboard.Theme_Primary,
+                            title_size: XGUIFontSize.M,
+                            title_clipping: TextClipping.Clip,
+                            title_offset: new Vector2(10, 0),
+                            absolute_margin: true,
+                            absolute_padding: true,
+                            margin: new RectOffset(0, 0, 10, 15),
+                            padding: new RectOffset(15, 10, 20, 20));
 
-                #region 参数 - 生成
-                SerializedProperty sp_def_create_anchor = CreateArgs.FindPropertyRelative("anchor");
-
-                #region 锚点
-                XGUI.layout_property_field(
-                title: "锚点",
-                title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
-                title_width: 90,
-                prop: sp_def_create_anchor,
-                prop_margin: new RectOffset(0, 0, 5, 0));
-                #endregion
-
-                XGUI.layout_group_start(
-                    type: XGUIContainerType.Vertical,
-                    absolute_padding: true,
-                    absolute_margin: true,
-                    margin: new RectOffset(0, 0, 10, 0),
-                    padding: new RectOffset(15, 0, 0, 0));
-
-                #region 位移
-                def_create_fold_move = EditorGUILayout.Foldout(def_create_fold_move, "位移", true);
-
-                if (def_create_fold_move)
-                {
-                    SerializedProperty sp_def_create_move_type = CreateArgs.FindPropertyRelative("Movement.Movement");
-                    XGUI.layout_property_field(
-                        title: "方式",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_create_move_type,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_create_move_dis = CreateArgs.FindPropertyRelative("Movement.Distance");
-                    XGUI.layout_property_field(
-                        title: "距离",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_create_move_dis,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_create_move_dur = CreateArgs.FindPropertyRelative("Movement.Duration");
-                    XGUI.layout_property_field(
-                        title: "耗时",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_create_move_dur,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_create_move_delay = CreateArgs.FindPropertyRelative("Movement.Delay");
-                    XGUI.layout_property_field(
-                        title: "延迟",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_create_move_delay,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_create_move_curve = CreateArgs.FindPropertyRelative("Movement.Curve");
-                    XGUI.layout_property_field(
-                        title: "曲线",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_create_move_curve,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_create_move_ease = CreateArgs.FindPropertyRelative("Movement.Ease");
-                    XGUI.layout_property_field(
-                        title: "缓动",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_create_move_ease,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                }
-                #endregion
-
-                XGUI.layout_space(5);
-
-                #region 旋转
-                def_create_fold_rotate = EditorGUILayout.Foldout(def_create_fold_rotate, "旋转", true);
-
-                if (def_create_fold_rotate)
-                {
-                    SerializedProperty sp_def_create_rot_type = CreateArgs.FindPropertyRelative("Rotation.Rotation");
-                    XGUI.layout_property_field(
-                      title: "方式",
-                      title_size: XGUIFontSize.M,
-                      title_hover_color: XHud_Dashboard.Theme_Primary,
-                      title_width: 90,
-                      prop: sp_def_create_rot_type,
-                      prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_create_rot_deg = CreateArgs.FindPropertyRelative("Rotation.Degree");
-                    XGUI.layout_property_field(
-                      title: "角度",
-                      title_size: XGUIFontSize.M,
-                      title_hover_color: XHud_Dashboard.Theme_Primary,
-                      title_width: 90,
-                      prop: sp_def_create_rot_deg,
-                      prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_create_rot_dur = CreateArgs.FindPropertyRelative("Rotation.Duration");
-                    XGUI.layout_property_field(
-                      title: "耗时",
-                      title_size: XGUIFontSize.M,
-                      title_hover_color: XHud_Dashboard.Theme_Primary,
-                      title_width: 90,
-                      prop: sp_def_create_rot_dur,
-                      prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_create_rot_delay = CreateArgs.FindPropertyRelative("Rotation.Delay");
-                    XGUI.layout_property_field(
-                      title: "延迟",
-                      title_size: XGUIFontSize.M,
-                      title_hover_color: XHud_Dashboard.Theme_Primary,
-                      title_width: 90,
-                      prop: sp_def_create_rot_delay,
-                      prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_create_rot_curve = CreateArgs.FindPropertyRelative("Rotation.Curve");
-                    XGUI.layout_property_field(
-                      title: "曲线",
-                      title_size: XGUIFontSize.M,
-                      title_hover_color: XHud_Dashboard.Theme_Primary,
-                      title_width: 90,
-                      prop: sp_def_create_rot_curve,
-                      prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_create_rot_ease = CreateArgs.FindPropertyRelative("Rotation.Ease");
-                    XGUI.layout_property_field(
-                      title: "缓动",
-                      title_size: XGUIFontSize.M,
-                      title_hover_color: XHud_Dashboard.Theme_Primary,
-                      title_width: 90,
-                      prop: sp_def_create_rot_ease,
-                      prop_margin: new RectOffset(0, 0, 5, 0));
-                }
-                #endregion
-
-                XGUI.layout_space(5);
-
-                #region 透明度                   
-                def_create_fold_alpha = EditorGUILayout.Foldout(def_create_fold_alpha, "透明度", true);
-
-                if (def_create_fold_alpha)
-                {
-                    SerializedProperty sp_def_create_alpha_type = CreateArgs.FindPropertyRelative("Alpha.Duration");
-                    XGUI.layout_property_field(
-                        title: "耗时",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_create_alpha_type,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_create_alpha_delay = CreateArgs.FindPropertyRelative("Alpha.Delay");
-                    XGUI.layout_property_field(
-                        title: "延迟",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_create_alpha_delay,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_create_alpha_curve = CreateArgs.FindPropertyRelative("Alpha.Curve");
-                    XGUI.layout_property_field(
-                        title: "曲线",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_create_alpha_curve,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_create_alpha_ease = CreateArgs.FindPropertyRelative("Alpha.Ease");
-                    XGUI.layout_property_field(
-                        title: "缓动",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_create_alpha_ease,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-                }
-                #endregion
-
-                XGUI.editor_layout_group_end(XGUIContainerType.Vertical);
-
-                #region 动效结束时机
-                XGUI.ChangedCheck_Start();
-                XGUI.layout_property_field(
-                       title: "动效结束时机",
-                       title_size: XGUIFontSize.M,
-                       title_hover_color: XHud_Dashboard.Theme_Primary,
-                       title_width: 90,
-                       prop: CreateArgs_MotionAnimateEndState,
-                       prop_margin: new RectOffset(0, 0, 15, 0));
-                if (XGUI.ChangedCheck_End())
-                {
-                    MotionAnimateEndState state = (MotionAnimateEndState)CreateArgs_MotionAnimateEndState.enumValueIndex;
-                    switch (state)
+                    #region 生成
+                    #region 模版库 - 生成
+                    if (HudManager.Hud_Motions != null)
                     {
-                        case MotionAnimateEndState.以_移动为准:
-                            HudMotion_Movement m = (HudMotion_Movement)CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex;
-                            if (m == HudMotion_Movement.A_无运动)
+                        //确保动效库不是空的
+                        if (HudManager.Hud_Motions.ElementMotionList != null && HudManager.Hud_Motions.ElementMotionList.Count > 0)
+                        {
+                            //动效列表
+                            string[] motnames = HudManager.Hud_Motions.ElementMotion_GetAllName_With_Create();
+                            XGUI.layout_string_popup(
+                                title: "生成",
+                                title_width: 60,
+                                title_size: XGUIFontSize.M,
+                                title_anchor: TextAnchor.MiddleLeft,
+                                prop: Crc_Lib_Name,
+                                options: motnames,
+                                opt_text_size: XGUIFontSize.M,
+                                opt_text_color: Color.black,
+                                opt_text_padding: new RectOffset(10, 10, 0, 0),
+                                opt_anchor: TextAnchor.MiddleCenter,
+                                opt_font_style: FontStyle.Normal,
+                                opt_bg_fill: XGUIFilled.实体,
+                                opt_bg_color: XGUIColor.亮白,
+                                opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                                icon_arrow_color: Color.black,
+                                margin: new RectOffset(0, 0, 5, 5),
+                                padding: new RectOffset(5, 5, 0, 0),
+                                title_margin: new RectOffset(0, 0, 0, 0),
+                                act_on_changed: (value) =>
+                                {
+                                    Crc_Lib_Name.stringValue = value;
+                                    Crc_Lib_Name.serializedObject.ApplyModifiedProperties();
+
+                                    Motion_Creator crc = HudManager.Hud_Motions.ElementMotion_GetElementCreator_At_Create(Crc_Lib_Name.stringValue);
+
+                                    CreateArgs.FindPropertyRelative("anchor").enumValueIndex = (int)crc.anchor;
+                                    CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)crc.Movement.Movement;
+                                    CreateArgs.FindPropertyRelative("Movement.Distance").floatValue = crc.Movement.Distance;
+                                    CreateArgs.FindPropertyRelative("Movement.Duration").floatValue = crc.Movement.Duration;
+                                    CreateArgs.FindPropertyRelative("Movement.Delay").floatValue = crc.Movement.Delay;
+                                    CreateArgs.FindPropertyRelative("Movement.Curve").animationCurveValue = crc.Movement.Curve;
+                                    CreateArgs.FindPropertyRelative("Movement.CurveName").stringValue = crc.Movement.CurveName;
+                                    CreateArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)crc.Movement.Ease;
+                                    CreateArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)crc.Rotation.Rotation;
+                                    CreateArgs.FindPropertyRelative("Rotation.Degree").floatValue = crc.Rotation.Degree;
+                                    CreateArgs.FindPropertyRelative("Rotation.Duration").floatValue = crc.Rotation.Duration;
+                                    CreateArgs.FindPropertyRelative("Rotation.Delay").floatValue = crc.Rotation.Delay;
+                                    CreateArgs.FindPropertyRelative("Rotation.Curve").animationCurveValue = crc.Rotation.Curve;
+                                    CreateArgs.FindPropertyRelative("Rotation.CurveName").stringValue = crc.Rotation.CurveName;
+                                    CreateArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)crc.Rotation.Ease;
+                                    CreateArgs.FindPropertyRelative("Alpha.Duration").floatValue = crc.Alpha.Duration;
+                                    CreateArgs.FindPropertyRelative("Alpha.Delay").floatValue = crc.Alpha.Delay;
+                                    CreateArgs.FindPropertyRelative("Alpha.Curve").animationCurveValue = crc.Alpha.Curve;
+                                    CreateArgs.FindPropertyRelative("Alpha.CurveName").stringValue = crc.Alpha.CurveName;
+                                    CreateArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)crc.Alpha.Ease;
+                                    CreateArgs.FindPropertyRelative("MotionAnimateEndState").enumValueIndex = (int)crc.MotionAnimateEndState;
+                                    CreateArgs.serializedObject.ApplyModifiedProperties();
+                                });
+
+                            XGUI.layout_space(12);
+
+                            #region 保存 & 定位模板
+                            XGUI.layout_group_start(
+                                type: XGUIContainerType.Horizontal,
+                                title_clipping: TextClipping.Clip,
+                                absolute_padding: true,
+                                absolute_margin: true,
+                                margin: new RectOffset(0, 0, 0, 0),
+                                padding: new RectOffset(5, 10, 0, 0));
+
+                            if (XGUI.layout_button(
+                                tooltip: "保存",
+                                tex_release: save_r,
+                                tex_press: save_p,
+                                tex_gui_color: Color.white,
+                                border: new RectOffset(0, 0, 0, 0),
+                                width: save_r.width,
+                                height: save_r.height))
+                            {
+                                OpenParameterSetter(HudElementMotionType.Creator);
+                                return;
+                            }
+
+                            GUILayout.FlexibleSpace();
+
+                            if (XGUI.layout_button(
+                              tooltip: "定位",
+                              tex_release: locate_r,
+                              tex_press: locate_p,
+                              tex_gui_color: Color.white,
+                              border: new RectOffset(0, 0, 0, 0),
+                              width: locate_r.width,
+                              height: locate_r.height))
+                            {
+                                if (!HudManager.Hud_Motions.ElementMotion_IsExist(Crc_Lib_Name.stringValue))
+                                    return;
+                                Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
+                                HudManager.Hud_Motions.ElementMotionLibrary_Location(Crc_Lib_Name.stringValue);
+                                return;
+                            }
+
+                            GUILayout.FlexibleSpace();
+
+                            if (XGUI.layout_button(
+                              tooltip: "重置",
+                              tex_release: reset_r,
+                              tex_press: reset_p,
+                              tex_gui_color: Color.white,
+                              border: new RectOffset(0, 0, 0, 0),
+                              width: reset_r.width,
+                              height: reset_r.height))
                             {
                                 XGUI.dialog(
                                     type: XGUIDialogType.警告,
                                     windowtitle: "XHud - 元素消息",
-                                    title: "设定动画结束时机",
-                                    msg: $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！",
-                                    ok: "明白",
+                                    title: "重置动效参数",
+                                    msg: "确定要将动效参数重置吗？您将丢失当前的动效参数！",
+                                    ok: "重置",
+                                    cancel: "暂不",
                                     PrimaryIndex: 0,
                                     usemodal: true,
-                                    themecolor: XHud_Dashboard.Theme_Primary);
-
-                                CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
-                            }
-                            break;
-                        case MotionAnimateEndState.以_旋转为准:
-                            HudMotion_Rotation r = (HudMotion_Rotation)CreateArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
-                            if (r == HudMotion_Rotation.A_无旋转)
-                            {
-                                XGUI.dialog(
-                                    type: XGUIDialogType.警告,
-                                    windowtitle: "XHud - 元素消息",
-                                    title: "设定动画结束时机",
-                                    msg: $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！",
-                                    ok: "明白",
-                                    PrimaryIndex: 0,
-                                    usemodal: true,
-                                    themecolor: XHud_Dashboard.Theme_Primary);
-
-                                CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
-                            }
-                            break;
-                    }
-                }
-                #endregion
-                #endregion
-                #endregion
-
-                XGUI.layout_seperator(
-                    thickness: 3,
-                    color: XHud_Dashboard.Theme_SeperateLine * 1.5f,
-                    margin: new RectOffset(15, 15, 18, 15));
-
-                #region 回收
-                #region 模版库 - 回收
-                if (HudManager.Hud_Motions != null)
-                {
-                    //确保动效库不是空的
-                    if (HudManager.Hud_Motions.ElementMotionList != null && HudManager.Hud_Motions.ElementMotionList.Count > 0)
-                    {
-                        //动效列表
-                        string[] motnames = HudManager.Hud_Motions.ElementMotion_GetAllName_With_Recycle();
-                        XGUI.layout_string_popup(
-                            title: "回收",
-                            title_width: 60,
-                            title_size: XGUIFontSize.M,
-                            title_anchor: TextAnchor.MiddleLeft,
-                            prop: Rec_Lib_Name,
-                            options: motnames,
-                            opt_text_size: XGUIFontSize.M,
-                            opt_text_color: Color.black,
-                            opt_text_padding: new RectOffset(10, 10, 0, 0),
-                            opt_anchor: TextAnchor.MiddleCenter,
-                            opt_font_style: FontStyle.Normal,
-                            opt_bg_fill: XGUIFilled.实体,
-                            opt_bg_color: XGUIColor.亮白,
-                            opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
-                            icon_arrow_color: Color.black,
-                            margin: new RectOffset(0, 0, 5, 5),
-                            padding: new RectOffset(5, 5, 0, 0),
-                            title_margin: new RectOffset(0, 0, 0, 0),
-                            act_on_changed: (value) =>
-                            {
-                                Rec_Lib_Name.stringValue = value;
-                                Rec_Lib_Name.serializedObject.ApplyModifiedProperties();
-
-                                Motion_Recycler rec = HudManager.Hud_Motions.ElementMotion_GetElementCreator_At_Recycle(Rec_Lib_Name.stringValue);
-
-                                RecycleArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)rec.Movement.Movement;
-                                RecycleArgs.FindPropertyRelative("Movement.Distance").floatValue = rec.Movement.Distance;
-                                RecycleArgs.FindPropertyRelative("Movement.Duration").floatValue = rec.Movement.Duration;
-                                RecycleArgs.FindPropertyRelative("Movement.Delay").floatValue = rec.Movement.Delay;
-                                RecycleArgs.FindPropertyRelative("Movement.Curve").animationCurveValue = rec.Movement.Curve;
-                                RecycleArgs.FindPropertyRelative("Movement.CurveName").stringValue = rec.Movement.CurveName;
-                                RecycleArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)rec.Movement.Ease;
-                                RecycleArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)rec.Rotation.Rotation;
-                                RecycleArgs.FindPropertyRelative("Rotation.Degree").floatValue = rec.Rotation.Degree;
-                                RecycleArgs.FindPropertyRelative("Rotation.Duration").floatValue = rec.Rotation.Duration;
-                                RecycleArgs.FindPropertyRelative("Rotation.Delay").floatValue = rec.Rotation.Delay;
-                                RecycleArgs.FindPropertyRelative("Rotation.Curve").animationCurveValue = rec.Rotation.Curve;
-                                RecycleArgs.FindPropertyRelative("Rotation.CurveName").stringValue = rec.Rotation.CurveName;
-                                RecycleArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)rec.Rotation.Ease;
-                                RecycleArgs.FindPropertyRelative("Alpha.Duration").floatValue = rec.Alpha.Duration;
-                                RecycleArgs.FindPropertyRelative("Alpha.Delay").floatValue = rec.Alpha.Delay;
-                                RecycleArgs.FindPropertyRelative("Alpha.Curve").animationCurveValue = rec.Alpha.Curve;
-                                RecycleArgs.FindPropertyRelative("Alpha.CurveName").stringValue = rec.Alpha.CurveName;
-                                RecycleArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)rec.Alpha.Ease;
-                                RecycleArgs.FindPropertyRelative("MotionAnimateEndState").enumValueIndex = (int)rec.MotionAnimateEndState;
-                                RecycleArgs.serializedObject.ApplyModifiedProperties();
-                            });
-
-                        XGUI.layout_space(12);
-
-                        #region 保存 & 定位模板
-                        XGUI.layout_group_start(
-                            type: XGUIContainerType.Horizontal,
-                            title_clipping: TextClipping.Clip,
-                            absolute_padding: true,
-                            absolute_margin: true,
-                            margin: new RectOffset(0, 0, 0, 0),
-                            padding: new RectOffset(5, 10, 0, 0));
-
-                        if (XGUI.layout_button(
-                            tooltip: "保存",
-                            tex_release: save_r,
-                            tex_press: save_p,
-                            tex_gui_color: Color.white,
-                            border: new RectOffset(0, 0, 0, 0),
-                            width: save_r.width,
-                            height: save_r.height))
-                        {
-                            OpenParameterSetter(HudElementMotionType.Recycler);
-                            return;
-                        }
-
-                        GUILayout.FlexibleSpace();
-
-                        if (XGUI.layout_button(
-                          tooltip: "定位",
-                          tex_release: locate_r,
-                          tex_press: locate_p,
-                          tex_gui_color: Color.white,
-                          border: new RectOffset(0, 0, 0, 0),
-                          width: locate_r.width,
-                          height: locate_r.height))
-                        {
-                            if (!HudManager.Hud_Motions.ElementMotion_IsExist(Rec_Lib_Name.stringValue))
-                                return;
-                            Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
-                            HudManager.Hud_Motions.ElementMotionLibrary_Location(Rec_Lib_Name.stringValue);
-                            return;
-                        }
-
-                        GUILayout.FlexibleSpace();
-
-                        if (XGUI.layout_button(
-                          tooltip: "重置",
-                          tex_release: reset_r,
-                          tex_press: reset_p,
-                          tex_gui_color: Color.white,
-                          border: new RectOffset(0, 0, 0, 0),
-                          width: reset_r.width,
-                          height: reset_r.height))
-                        {
-                            XGUI.dialog(
-                                type: XGUIDialogType.警告,
-                                windowtitle: "XHud - 元素消息",
-                                title: "重置动效参数",
-                                msg: "确定要将动效参数重置吗？您将丢失当前的动效参数！",
-                                ok: "重置",
-                                cancel: "暂不",
-                                PrimaryIndex: 0,
-                                usemodal: true,
-                                themecolor: XHud_Dashboard.Theme_Primary,
-                                on_selected: (d) =>
-                                {
-                                    if (d == "重置")
+                                    themecolor: XHud_Dashboard.Theme_Primary,
+                                    on_selected: (d) =>
                                     {
-                                        ResetMotionParams("r");
-                                    }
-                                });
-                            return;
-                        }
+                                        if (d == "重置")
+                                        {
+                                            Crc_Lib_Name.stringValue = null;
+                                            Crc_Lib_Name.serializedObject.ApplyModifiedProperties();
+                                            ResetMotionParams("c");
+                                        }
+                                    });
+                                return;
+                            }
 
-                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
-                        #endregion
+                            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+                            #endregion
+                        }
+                        else
+                        {
+                            XGUI.layout_helpbox(
+                                state: XGUIHelboxState.警告,
+                                title_text: "未在动效库中发现任何动效资源，请先为其添加动效资源！",
+                                title_size: XGUIFontSize.M,
+                                title_style: FontStyle.Normal,
+                                title_color: Color.white * 0.75f);
+                        }
                     }
                     else
                     {
                         XGUI.layout_helpbox(
-                            state: XGUIHelboxState.警告,
-                            title_text: "未在动效库中发现任何动效资源，请先为其添加动效资源！",
-                            title_size: XGUIFontSize.M,
-                            title_style: FontStyle.Normal,
-                            title_color: Color.white * 0.75f);
+                              state: XGUIHelboxState.警告,
+                              title_text: "XHud管理器中未指定动效库，请先配置动效库！",
+                              title_size: XGUIFontSize.M,
+                              title_style: FontStyle.Normal,
+                              title_color: Color.white * 0.75f);
                     }
-                }
-                else
-                {
-                    XGUI.layout_helpbox(
-                          state: XGUIHelboxState.警告,
-                          title_text: "XHud管理器中未指定动效库，请先配置动效库！",
-                          title_size: XGUIFontSize.M,
-                          title_style: FontStyle.Normal,
-                          title_color: Color.white * 0.75f);
-                }
-                #endregion
+                    #endregion
 
-                XGUI.layout_seperator(
-                    thickness: 1,
-                    color: XHud_Dashboard.Theme_SeperateLine,
-                    margin: new RectOffset(15, 15, 18, 15));
+                    XGUI.layout_seperator(
+                       thickness: 1,
+                       color: XHud_Dashboard.Theme_SeperateLine,
+                       margin: new RectOffset(15, 15, 18, 15));
 
-                #region 参数 - 回收
-                XGUI.layout_group_start(
-                  type: XGUIContainerType.Vertical,
-                  absolute_padding: true,
-                  absolute_margin: true,
-                  margin: new RectOffset(0, 0, 10, 0),
-                  padding: new RectOffset(15, 0, 0, 0));
+                    #region 参数 - 生成
+                    SerializedProperty sp_def_create_anchor = CreateArgs.FindPropertyRelative("anchor");
 
-                #region 位移          
-                def_recycle_fold_move = EditorGUILayout.Foldout(def_recycle_fold_move, "位移", true);
-
-                if (def_recycle_fold_move)
-                {
-                    SerializedProperty sp_def_recycle_move_type = RecycleArgs.FindPropertyRelative("Movement.Movement");
+                    #region 锚点
                     XGUI.layout_property_field(
-                        title: "方式",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_move_type,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_recycle_move_dis = RecycleArgs.FindPropertyRelative("Movement.Distance");
-                    XGUI.layout_property_field(
-                        title: "距离",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_move_dis,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_recycle_move_dur = RecycleArgs.FindPropertyRelative("Movement.Duration");
-                    XGUI.layout_property_field(
-                        title: "耗时",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_move_dur,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_recycle_move_delay = RecycleArgs.FindPropertyRelative("Movement.Delay");
-                    XGUI.layout_property_field(
-                        title: "延迟",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_move_delay,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_recycle_move_curve = RecycleArgs.FindPropertyRelative("Movement.Curve");
-                    XGUI.layout_property_field(
-                        title: "曲线",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_move_curve,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_recycle_move_ease = RecycleArgs.FindPropertyRelative("Movement.Ease");
-                    XGUI.layout_property_field(
-                        title: "缓动",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_move_ease,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-                }
-                #endregion
-
-                XGUI.layout_space(5);
-
-                #region 旋转      
-                def_recycle_fold_rotate = EditorGUILayout.Foldout(def_recycle_fold_rotate, "旋转", true);
-
-                if (def_recycle_fold_rotate)
-                {
-                    SerializedProperty sp_def_recycle_rot_type = RecycleArgs.FindPropertyRelative("Rotation.Rotation");
-                    XGUI.layout_property_field(
-                        title: "方式",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_rot_type,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_recycle_rot_deg = RecycleArgs.FindPropertyRelative("Rotation.Degree");
-                    XGUI.layout_property_field(
-                        title: "角度",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_rot_deg,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_recycle_rot_dur = RecycleArgs.FindPropertyRelative("Rotation.Duration");
-                    XGUI.layout_property_field(
-                        title: "耗时",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_rot_dur,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_recycle_rot_delay = RecycleArgs.FindPropertyRelative("Rotation.Delay");
-                    XGUI.layout_property_field(
-                        title: "延迟",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_rot_delay,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_recycle_rot_curve = RecycleArgs.FindPropertyRelative("Rotation.Curve");
-                    XGUI.layout_property_field(
-                        title: "曲线",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_rot_curve,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_recycle_rot_ease = RecycleArgs.FindPropertyRelative("Rotation.Ease");
-                    XGUI.layout_property_field(
-                        title: "缓动",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_rot_ease,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-                }
-                #endregion
-
-                XGUI.layout_space(5);
-
-                #region 透明度      
-                def_recycle_fold_alpha = EditorGUILayout.Foldout(def_recycle_fold_alpha, "透明度", true);
-
-                if (def_recycle_fold_alpha)
-                {
-                    SerializedProperty sp_def_recycle_alpha_type = RecycleArgs.FindPropertyRelative("Alpha.Duration");
-                    XGUI.layout_property_field(
-                        title: "耗时",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_alpha_type,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_recycle_alpha_delay = RecycleArgs.FindPropertyRelative("Alpha.Delay");
-                    XGUI.layout_property_field(
-                        title: "延迟",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_alpha_delay,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_recycle_alpha_curve = RecycleArgs.FindPropertyRelative("Alpha.Curve");
-                    XGUI.layout_property_field(
-                        title: "曲线",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_alpha_curve,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-
-                    XGUI.layout_space(5);
-
-                    SerializedProperty sp_def_recycle_alpha_ease = RecycleArgs.FindPropertyRelative("Alpha.Ease");
-                    XGUI.layout_property_field(
-                        title: "缓动",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: sp_def_recycle_alpha_ease,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-                }
-                #endregion
-
-                XGUI.editor_layout_group_end(XGUIContainerType.Vertical);
-
-                #region 动效结束时机
-                XGUI.ChangedCheck_Start();
-                XGUI.layout_property_field(
-                    title: "动效结束时机",
+                    title: "锚点",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.Theme_Primary,
                     title_width: 90,
-                    prop: RecycleArgs_MotionAnimateEndState,
-                    prop_margin: new RectOffset(0, 0, 15, 0));
-                if (XGUI.ChangedCheck_End())
-                {
-                    MotionAnimateEndState state = (MotionAnimateEndState)RecycleArgs_MotionAnimateEndState.enumValueIndex;
-                    switch (state)
+                    prop: sp_def_create_anchor,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
+
+                    XGUI.layout_group_start(
+                        type: XGUIContainerType.Vertical,
+                        absolute_padding: true,
+                        absolute_margin: true,
+                        margin: new RectOffset(0, 0, 10, 0),
+                        padding: new RectOffset(15, 0, 0, 0));
+
+                    #region 位移
+                    def_create_fold_move = EditorGUILayout.Foldout(def_create_fold_move, "位移", true);
+
+                    if (def_create_fold_move)
                     {
-                        case MotionAnimateEndState.以_移动为准:
-                            HudMotion_Movement m = (HudMotion_Movement)RecycleArgs.FindPropertyRelative("Movement.Movement").enumValueIndex;
-                            if (m == HudMotion_Movement.A_无运动)
-                            {
-                                XGUI.dialog(
-                                    type: XGUIDialogType.警告,
-                                    windowtitle: "XHud - 元素消息",
-                                    title: "设定动画结束时机",
-                                    msg: $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！",
-                                    ok: "明白",
-                                    PrimaryIndex: 0,
-                                    usemodal: true,
-                                    themecolor: XHud_Dashboard.Theme_Primary);
+                        SerializedProperty sp_def_create_move_type = CreateArgs.FindPropertyRelative("Movement.Movement");
+                        XGUI.layout_property_field(
+                            title: "方式",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_create_move_type,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
 
-                                RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
-                            }
-                            break;
-                        case MotionAnimateEndState.以_旋转为准:
-                            HudMotion_Rotation r = (HudMotion_Rotation)RecycleArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
-                            if (r == HudMotion_Rotation.A_无旋转)
-                            {
-                                XGUI.dialog(
-                                    type: XGUIDialogType.警告,
-                                    windowtitle: "XHud - 元素消息",
-                                    title: "设定动画结束时机",
-                                    msg: $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！",
-                                    ok: "明白",
-                                    PrimaryIndex: 0,
-                                    usemodal: true,
-                                    themecolor: XHud_Dashboard.Theme_Primary);
+                        XGUI.layout_space(5);
 
-                                RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
-                            }
-                            break;
+                        SerializedProperty sp_def_create_move_dis = CreateArgs.FindPropertyRelative("Movement.Distance");
+                        XGUI.layout_property_field(
+                            title: "距离",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_create_move_dis,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_create_move_dur = CreateArgs.FindPropertyRelative("Movement.Duration");
+                        XGUI.layout_property_field(
+                            title: "耗时",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_create_move_dur,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_create_move_delay = CreateArgs.FindPropertyRelative("Movement.Delay");
+                        XGUI.layout_property_field(
+                            title: "延迟",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_create_move_delay,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_create_move_curve = CreateArgs.FindPropertyRelative("Movement.Curve");
+                        XGUI.layout_property_field(
+                            title: "曲线",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_create_move_curve,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_create_move_ease = CreateArgs.FindPropertyRelative("Movement.Ease");
+                        XGUI.layout_property_field(
+                            title: "缓动",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_create_move_ease,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
                     }
-                }
-                #endregion
-                #endregion
-                #endregion
+                    #endregion
 
-                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-                #endregion
+                    XGUI.layout_space(5);
 
-                #region 添加运行时预览组件
-                if (XGUI.layout_button(
-                    text: "添加运行时预览组件",
-                    tooltip: "",
-                    bg_fill: XGUIFilled.实体,
-                    bg_color: XGUIColor.亮白,
-                    bg_color_gui: XHud_Dashboard.Theme_Primary,
-                    button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white,
-                    press_fill: XGUIFilled.实体,
-                    press_color: XGUIColor.深空灰,
-                    press_text_color: Color.white,
-                    font_size: XGUIFontSize.M,
-                    height: 30,
-                    anchor: TextAnchor.MiddleCenter,
-                    margin: new RectOffset(0, 0, 0, 0),
-                    padding: new RectOffset(0, 0, 0, 0),
-                    button_text_font: XGUI.GetFont("xg-medium")))
-                {
-                    XHud_Element_Preview xHud_Element_Preview = BaseScript.GetComponent<XHud_Element_Preview>();
-                    if (xHud_Element_Preview == null)
+                    #region 旋转
+                    def_create_fold_rotate = EditorGUILayout.Foldout(def_create_fold_rotate, "旋转", true);
+
+                    if (def_create_fold_rotate)
                     {
-                        xHud_Element_Preview = Undo.AddComponent<XHud_Element_Preview>(BaseScript.gameObject);
-                        EditorApplication.delayCall += () =>
+                        SerializedProperty sp_def_create_rot_type = CreateArgs.FindPropertyRelative("Rotation.Rotation");
+                        XGUI.layout_property_field(
+                          title: "方式",
+                          title_size: XGUIFontSize.M,
+                          title_hover_color: XHud_Dashboard.Theme_Primary,
+                          title_width: 90,
+                          prop: sp_def_create_rot_type,
+                          prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_create_rot_deg = CreateArgs.FindPropertyRelative("Rotation.Degree");
+                        XGUI.layout_property_field(
+                          title: "角度",
+                          title_size: XGUIFontSize.M,
+                          title_hover_color: XHud_Dashboard.Theme_Primary,
+                          title_width: 90,
+                          prop: sp_def_create_rot_deg,
+                          prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_create_rot_dur = CreateArgs.FindPropertyRelative("Rotation.Duration");
+                        XGUI.layout_property_field(
+                          title: "耗时",
+                          title_size: XGUIFontSize.M,
+                          title_hover_color: XHud_Dashboard.Theme_Primary,
+                          title_width: 90,
+                          prop: sp_def_create_rot_dur,
+                          prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_create_rot_delay = CreateArgs.FindPropertyRelative("Rotation.Delay");
+                        XGUI.layout_property_field(
+                          title: "延迟",
+                          title_size: XGUIFontSize.M,
+                          title_hover_color: XHud_Dashboard.Theme_Primary,
+                          title_width: 90,
+                          prop: sp_def_create_rot_delay,
+                          prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_create_rot_curve = CreateArgs.FindPropertyRelative("Rotation.Curve");
+                        XGUI.layout_property_field(
+                          title: "曲线",
+                          title_size: XGUIFontSize.M,
+                          title_hover_color: XHud_Dashboard.Theme_Primary,
+                          title_width: 90,
+                          prop: sp_def_create_rot_curve,
+                          prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_create_rot_ease = CreateArgs.FindPropertyRelative("Rotation.Ease");
+                        XGUI.layout_property_field(
+                          title: "缓动",
+                          title_size: XGUIFontSize.M,
+                          title_hover_color: XHud_Dashboard.Theme_Primary,
+                          title_width: 90,
+                          prop: sp_def_create_rot_ease,
+                          prop_margin: new RectOffset(0, 0, 5, 0));
+                    }
+                    #endregion
+
+                    XGUI.layout_space(5);
+
+                    #region 透明度                   
+                    def_create_fold_alpha = EditorGUILayout.Foldout(def_create_fold_alpha, "透明度", true);
+
+                    if (def_create_fold_alpha)
+                    {
+                        SerializedProperty sp_def_create_alpha_type = CreateArgs.FindPropertyRelative("Alpha.Duration");
+                        XGUI.layout_property_field(
+                            title: "耗时",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_create_alpha_type,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_create_alpha_delay = CreateArgs.FindPropertyRelative("Alpha.Delay");
+                        XGUI.layout_property_field(
+                            title: "延迟",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_create_alpha_delay,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_create_alpha_curve = CreateArgs.FindPropertyRelative("Alpha.Curve");
+                        XGUI.layout_property_field(
+                            title: "曲线",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_create_alpha_curve,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_create_alpha_ease = CreateArgs.FindPropertyRelative("Alpha.Ease");
+                        XGUI.layout_property_field(
+                            title: "缓动",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_create_alpha_ease,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+                    }
+                    #endregion
+
+                    XGUI.editor_layout_group_end(XGUIContainerType.Vertical);
+
+                    #region 动效结束时机
+                    XGUI.ChangedCheck_Start();
+                    XGUI.layout_property_field(
+                           title: "动效结束时机",
+                           title_size: XGUIFontSize.M,
+                           title_hover_color: XHud_Dashboard.Theme_Primary,
+                           title_width: 90,
+                           prop: CreateArgs_MotionAnimateEndState,
+                           prop_margin: new RectOffset(0, 0, 15, 0));
+                    if (XGUI.ChangedCheck_End())
+                    {
+                        MotionAnimateEndState state = (MotionAnimateEndState)CreateArgs_MotionAnimateEndState.enumValueIndex;
+                        switch (state)
                         {
-                            // 收集原始姿态数据
-                            xHud_Element_Preview.OriginalDataCollect();
+                            case MotionAnimateEndState.以_移动为准:
+                                HudMotion_Movement m = (HudMotion_Movement)CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex;
+                                if (m == HudMotion_Movement.A_无运动)
+                                {
+                                    XGUI.dialog(
+                                        type: XGUIDialogType.警告,
+                                        windowtitle: "XHud - 元素消息",
+                                        title: "设定动画结束时机",
+                                        msg: $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！",
+                                        ok: "明白",
+                                        PrimaryIndex: 0,
+                                        usemodal: true,
+                                        themecolor: XHud_Dashboard.Theme_Primary);
 
-                            xHud_Element_Preview.CreateArgs.Movement.Movement = HudMotion_Movement.S_从下至上;
-                            xHud_Element_Preview.CreateArgs.Movement.Distance = 100;
-                            xHud_Element_Preview.RecycleArgs.Movement.Movement = HudMotion_Movement.D_从上至下;
-                            xHud_Element_Preview.RecycleArgs.Movement.Distance = 100;
-                        };
+                                    CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
+                                }
+                                break;
+                            case MotionAnimateEndState.以_旋转为准:
+                                HudMotion_Rotation r = (HudMotion_Rotation)CreateArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
+                                if (r == HudMotion_Rotation.A_无旋转)
+                                {
+                                    XGUI.dialog(
+                                        type: XGUIDialogType.警告,
+                                        windowtitle: "XHud - 元素消息",
+                                        title: "设定动画结束时机",
+                                        msg: $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！",
+                                        ok: "明白",
+                                        PrimaryIndex: 0,
+                                        usemodal: true,
+                                        themecolor: XHud_Dashboard.Theme_Primary);
+
+                                    CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
+                                }
+                                break;
+                        }
                     }
+                    #endregion
+                    #endregion
+                    #endregion
+
+                    XGUI.layout_seperator(
+                        thickness: 3,
+                        color: XHud_Dashboard.Theme_SeperateLine * 1.5f,
+                        margin: new RectOffset(15, 15, 18, 15));
+
+                    #region 回收
+                    #region 模版库 - 回收
+                    if (HudManager.Hud_Motions != null)
+                    {
+                        //确保动效库不是空的
+                        if (HudManager.Hud_Motions.ElementMotionList != null && HudManager.Hud_Motions.ElementMotionList.Count > 0)
+                        {
+                            //动效列表
+                            string[] motnames = HudManager.Hud_Motions.ElementMotion_GetAllName_With_Recycle();
+                            XGUI.layout_string_popup(
+                                title: "回收",
+                                title_width: 60,
+                                title_size: XGUIFontSize.M,
+                                title_anchor: TextAnchor.MiddleLeft,
+                                prop: Rec_Lib_Name,
+                                options: motnames,
+                                opt_text_size: XGUIFontSize.M,
+                                opt_text_color: Color.black,
+                                opt_text_padding: new RectOffset(10, 10, 0, 0),
+                                opt_anchor: TextAnchor.MiddleCenter,
+                                opt_font_style: FontStyle.Normal,
+                                opt_bg_fill: XGUIFilled.实体,
+                                opt_bg_color: XGUIColor.亮白,
+                                opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                                icon_arrow_color: Color.black,
+                                margin: new RectOffset(0, 0, 5, 5),
+                                padding: new RectOffset(5, 5, 0, 0),
+                                title_margin: new RectOffset(0, 0, 0, 0),
+                                act_on_changed: (value) =>
+                                {
+                                    Rec_Lib_Name.stringValue = value;
+                                    Rec_Lib_Name.serializedObject.ApplyModifiedProperties();
+
+                                    Motion_Recycler rec = HudManager.Hud_Motions.ElementMotion_GetElementCreator_At_Recycle(Rec_Lib_Name.stringValue);
+
+                                    RecycleArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)rec.Movement.Movement;
+                                    RecycleArgs.FindPropertyRelative("Movement.Distance").floatValue = rec.Movement.Distance;
+                                    RecycleArgs.FindPropertyRelative("Movement.Duration").floatValue = rec.Movement.Duration;
+                                    RecycleArgs.FindPropertyRelative("Movement.Delay").floatValue = rec.Movement.Delay;
+                                    RecycleArgs.FindPropertyRelative("Movement.Curve").animationCurveValue = rec.Movement.Curve;
+                                    RecycleArgs.FindPropertyRelative("Movement.CurveName").stringValue = rec.Movement.CurveName;
+                                    RecycleArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)rec.Movement.Ease;
+                                    RecycleArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)rec.Rotation.Rotation;
+                                    RecycleArgs.FindPropertyRelative("Rotation.Degree").floatValue = rec.Rotation.Degree;
+                                    RecycleArgs.FindPropertyRelative("Rotation.Duration").floatValue = rec.Rotation.Duration;
+                                    RecycleArgs.FindPropertyRelative("Rotation.Delay").floatValue = rec.Rotation.Delay;
+                                    RecycleArgs.FindPropertyRelative("Rotation.Curve").animationCurveValue = rec.Rotation.Curve;
+                                    RecycleArgs.FindPropertyRelative("Rotation.CurveName").stringValue = rec.Rotation.CurveName;
+                                    RecycleArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)rec.Rotation.Ease;
+                                    RecycleArgs.FindPropertyRelative("Alpha.Duration").floatValue = rec.Alpha.Duration;
+                                    RecycleArgs.FindPropertyRelative("Alpha.Delay").floatValue = rec.Alpha.Delay;
+                                    RecycleArgs.FindPropertyRelative("Alpha.Curve").animationCurveValue = rec.Alpha.Curve;
+                                    RecycleArgs.FindPropertyRelative("Alpha.CurveName").stringValue = rec.Alpha.CurveName;
+                                    RecycleArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)rec.Alpha.Ease;
+                                    RecycleArgs.FindPropertyRelative("MotionAnimateEndState").enumValueIndex = (int)rec.MotionAnimateEndState;
+                                    RecycleArgs.serializedObject.ApplyModifiedProperties();
+                                });
+
+                            XGUI.layout_space(12);
+
+                            #region 保存 & 定位模板
+                            XGUI.layout_group_start(
+                                type: XGUIContainerType.Horizontal,
+                                title_clipping: TextClipping.Clip,
+                                absolute_padding: true,
+                                absolute_margin: true,
+                                margin: new RectOffset(0, 0, 0, 0),
+                                padding: new RectOffset(5, 10, 0, 0));
+
+                            if (XGUI.layout_button(
+                                tooltip: "保存",
+                                tex_release: save_r,
+                                tex_press: save_p,
+                                tex_gui_color: Color.white,
+                                border: new RectOffset(0, 0, 0, 0),
+                                width: save_r.width,
+                                height: save_r.height))
+                            {
+                                OpenParameterSetter(HudElementMotionType.Recycler);
+                                return;
+                            }
+
+                            GUILayout.FlexibleSpace();
+
+                            if (XGUI.layout_button(
+                              tooltip: "定位",
+                              tex_release: locate_r,
+                              tex_press: locate_p,
+                              tex_gui_color: Color.white,
+                              border: new RectOffset(0, 0, 0, 0),
+                              width: locate_r.width,
+                              height: locate_r.height))
+                            {
+                                if (!HudManager.Hud_Motions.ElementMotion_IsExist(Rec_Lib_Name.stringValue))
+                                    return;
+                                Editor_XHud_MenuItemsAction_OpenLibrary.open_elementmotion();
+                                HudManager.Hud_Motions.ElementMotionLibrary_Location(Rec_Lib_Name.stringValue);
+                                return;
+                            }
+
+                            GUILayout.FlexibleSpace();
+
+                            if (XGUI.layout_button(
+                              tooltip: "重置",
+                              tex_release: reset_r,
+                              tex_press: reset_p,
+                              tex_gui_color: Color.white,
+                              border: new RectOffset(0, 0, 0, 0),
+                              width: reset_r.width,
+                              height: reset_r.height))
+                            {
+                                XGUI.dialog(
+                                    type: XGUIDialogType.警告,
+                                    windowtitle: "XHud - 元素消息",
+                                    title: "重置动效参数",
+                                    msg: "确定要将动效参数重置吗？您将丢失当前的动效参数！",
+                                    ok: "重置",
+                                    cancel: "暂不",
+                                    PrimaryIndex: 0,
+                                    usemodal: true,
+                                    themecolor: XHud_Dashboard.Theme_Primary,
+                                    on_selected: (d) =>
+                                    {
+                                        if (d == "重置")
+                                        {
+                                            ResetMotionParams("r");
+                                        }
+                                    });
+                                return;
+                            }
+
+                            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+                            #endregion
+                        }
+                        else
+                        {
+                            XGUI.layout_helpbox(
+                                state: XGUIHelboxState.警告,
+                                title_text: "未在动效库中发现任何动效资源，请先为其添加动效资源！",
+                                title_size: XGUIFontSize.M,
+                                title_style: FontStyle.Normal,
+                                title_color: Color.white * 0.75f);
+                        }
+                    }
+                    else
+                    {
+                        XGUI.layout_helpbox(
+                              state: XGUIHelboxState.警告,
+                              title_text: "XHud管理器中未指定动效库，请先配置动效库！",
+                              title_size: XGUIFontSize.M,
+                              title_style: FontStyle.Normal,
+                              title_color: Color.white * 0.75f);
+                    }
+                    #endregion
+
+                    XGUI.layout_seperator(
+                        thickness: 1,
+                        color: XHud_Dashboard.Theme_SeperateLine,
+                        margin: new RectOffset(15, 15, 18, 15));
+
+                    #region 参数 - 回收
+                    XGUI.layout_group_start(
+                      type: XGUIContainerType.Vertical,
+                      absolute_padding: true,
+                      absolute_margin: true,
+                      margin: new RectOffset(0, 0, 10, 0),
+                      padding: new RectOffset(15, 0, 0, 0));
+
+                    #region 位移          
+                    def_recycle_fold_move = EditorGUILayout.Foldout(def_recycle_fold_move, "位移", true);
+
+                    if (def_recycle_fold_move)
+                    {
+                        SerializedProperty sp_def_recycle_move_type = RecycleArgs.FindPropertyRelative("Movement.Movement");
+                        XGUI.layout_property_field(
+                            title: "方式",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_move_type,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_recycle_move_dis = RecycleArgs.FindPropertyRelative("Movement.Distance");
+                        XGUI.layout_property_field(
+                            title: "距离",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_move_dis,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_recycle_move_dur = RecycleArgs.FindPropertyRelative("Movement.Duration");
+                        XGUI.layout_property_field(
+                            title: "耗时",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_move_dur,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_recycle_move_delay = RecycleArgs.FindPropertyRelative("Movement.Delay");
+                        XGUI.layout_property_field(
+                            title: "延迟",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_move_delay,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_recycle_move_curve = RecycleArgs.FindPropertyRelative("Movement.Curve");
+                        XGUI.layout_property_field(
+                            title: "曲线",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_move_curve,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_recycle_move_ease = RecycleArgs.FindPropertyRelative("Movement.Ease");
+                        XGUI.layout_property_field(
+                            title: "缓动",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_move_ease,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+                    }
+                    #endregion
+
+                    XGUI.layout_space(5);
+
+                    #region 旋转      
+                    def_recycle_fold_rotate = EditorGUILayout.Foldout(def_recycle_fold_rotate, "旋转", true);
+
+                    if (def_recycle_fold_rotate)
+                    {
+                        SerializedProperty sp_def_recycle_rot_type = RecycleArgs.FindPropertyRelative("Rotation.Rotation");
+                        XGUI.layout_property_field(
+                            title: "方式",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_rot_type,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_recycle_rot_deg = RecycleArgs.FindPropertyRelative("Rotation.Degree");
+                        XGUI.layout_property_field(
+                            title: "角度",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_rot_deg,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_recycle_rot_dur = RecycleArgs.FindPropertyRelative("Rotation.Duration");
+                        XGUI.layout_property_field(
+                            title: "耗时",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_rot_dur,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_recycle_rot_delay = RecycleArgs.FindPropertyRelative("Rotation.Delay");
+                        XGUI.layout_property_field(
+                            title: "延迟",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_rot_delay,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_recycle_rot_curve = RecycleArgs.FindPropertyRelative("Rotation.Curve");
+                        XGUI.layout_property_field(
+                            title: "曲线",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_rot_curve,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_recycle_rot_ease = RecycleArgs.FindPropertyRelative("Rotation.Ease");
+                        XGUI.layout_property_field(
+                            title: "缓动",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_rot_ease,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+                    }
+                    #endregion
+
+                    XGUI.layout_space(5);
+
+                    #region 透明度      
+                    def_recycle_fold_alpha = EditorGUILayout.Foldout(def_recycle_fold_alpha, "透明度", true);
+
+                    if (def_recycle_fold_alpha)
+                    {
+                        SerializedProperty sp_def_recycle_alpha_type = RecycleArgs.FindPropertyRelative("Alpha.Duration");
+                        XGUI.layout_property_field(
+                            title: "耗时",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_alpha_type,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_recycle_alpha_delay = RecycleArgs.FindPropertyRelative("Alpha.Delay");
+                        XGUI.layout_property_field(
+                            title: "延迟",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_alpha_delay,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_recycle_alpha_curve = RecycleArgs.FindPropertyRelative("Alpha.Curve");
+                        XGUI.layout_property_field(
+                            title: "曲线",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_alpha_curve,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+
+                        XGUI.layout_space(5);
+
+                        SerializedProperty sp_def_recycle_alpha_ease = RecycleArgs.FindPropertyRelative("Alpha.Ease");
+                        XGUI.layout_property_field(
+                            title: "缓动",
+                            title_size: XGUIFontSize.M,
+                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_width: 90,
+                            prop: sp_def_recycle_alpha_ease,
+                            prop_margin: new RectOffset(0, 0, 5, 0));
+                    }
+                    #endregion
+
+                    XGUI.editor_layout_group_end(XGUIContainerType.Vertical);
+
+                    #region 动效结束时机
+                    XGUI.ChangedCheck_Start();
+                    XGUI.layout_property_field(
+                        title: "动效结束时机",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: RecycleArgs_MotionAnimateEndState,
+                        prop_margin: new RectOffset(0, 0, 15, 0));
+                    if (XGUI.ChangedCheck_End())
+                    {
+                        MotionAnimateEndState state = (MotionAnimateEndState)RecycleArgs_MotionAnimateEndState.enumValueIndex;
+                        switch (state)
+                        {
+                            case MotionAnimateEndState.以_移动为准:
+                                HudMotion_Movement m = (HudMotion_Movement)RecycleArgs.FindPropertyRelative("Movement.Movement").enumValueIndex;
+                                if (m == HudMotion_Movement.A_无运动)
+                                {
+                                    XGUI.dialog(
+                                        type: XGUIDialogType.警告,
+                                        windowtitle: "XHud - 元素消息",
+                                        title: "设定动画结束时机",
+                                        msg: $"当前位移方式为 <color={hexcol}> A_无运动 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 位移方式 </color>改为<color={hexcol}> 非无运动方式 </color>！",
+                                        ok: "明白",
+                                        PrimaryIndex: 0,
+                                        usemodal: true,
+                                        themecolor: XHud_Dashboard.Theme_Primary);
+
+                                    RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
+                                }
+                                break;
+                            case MotionAnimateEndState.以_旋转为准:
+                                HudMotion_Rotation r = (HudMotion_Rotation)RecycleArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
+                                if (r == HudMotion_Rotation.A_无旋转)
+                                {
+                                    XGUI.dialog(
+                                        type: XGUIDialogType.警告,
+                                        windowtitle: "XHud - 元素消息",
+                                        title: "设定动画结束时机",
+                                        msg: $"当前旋转方式为 <color={hexcol}> A_无旋转 </color>，将发生<color={hexcol}> 动效动画无法正常结束</color>从而导致<color={hexcol}> 相应的事件和动作委托 </color>不能正确触发的情况 </color>！请将<color={hexcol}> 旋转方式 </color>改为<color={hexcol}> 非无旋转方式 </color>！",
+                                        ok: "明白",
+                                        PrimaryIndex: 0,
+                                        usemodal: true,
+                                        themecolor: XHud_Dashboard.Theme_Primary);
+
+                                    RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
+                                }
+                                break;
+                        }
+                    }
+                    #endregion
+                    #endregion
+                    #endregion
+
+                    XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                    #endregion
+
+                    #region 添加运行时预览组件
+                    if (XGUI.layout_button(
+                        text: "添加运行时预览组件",
+                        tooltip: "",
+                        bg_fill: XGUIFilled.实体,
+                        bg_color: XGUIColor.亮白,
+                        bg_color_gui: XHud_Dashboard.Theme_Primary,
+                        button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white,
+                        press_fill: XGUIFilled.实体,
+                        press_color: XGUIColor.深空灰,
+                        press_text_color: Color.white,
+                        font_size: XGUIFontSize.M,
+                        height: 30,
+                        anchor: TextAnchor.MiddleCenter,
+                        margin: new RectOffset(0, 0, 0, 0),
+                        padding: new RectOffset(0, 0, 0, 0),
+                        button_text_font: XGUI.GetFont("xg-medium")))
+                    {
+                        XHud_Element_Preview xHud_Element_Preview = BaseScript.GetComponent<XHud_Element_Preview>();
+                        if (xHud_Element_Preview == null)
+                        {
+                            xHud_Element_Preview = Undo.AddComponent<XHud_Element_Preview>(BaseScript.gameObject);
+                            EditorApplication.delayCall += () =>
+                            {
+                                // 收集原始姿态数据
+                                xHud_Element_Preview.OriginalDataCollect();
+
+                                xHud_Element_Preview.CreateArgs.Movement.Movement = HudMotion_Movement.S_从下至上;
+                                xHud_Element_Preview.CreateArgs.Movement.Distance = 100;
+                                xHud_Element_Preview.RecycleArgs.Movement.Movement = HudMotion_Movement.D_从上至下;
+                                xHud_Element_Preview.RecycleArgs.Movement.Distance = 100;
+                            };
+                        }
+                    }
+                    #endregion
                 }
-                #endregion
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 参数          
-            BaseScript.fold_param = XGUI.layout_group_start(
+            if (!TweensPreivew_In_State.boolValue && !TweensPreivew_Out_State.boolValue)
+            {
+                BaseScript.fold_param = XGUI.layout_group_start(
                type: XGUIContainerType.Vertical,
                bg_fill: XGUIFilled.缺口纯色边框,
                bg_color: XGUIColor.亮白,
@@ -1552,111 +1557,143 @@ namespace SevenStrikeModules.XHud.Editor
                padding: new RectOffset(5, 5, 20, 15),
                foldout: BaseScript.fold_param);
 
-            if (!BaseScript.fold_param)
-            {
-                #region 标识名称
-                XGUI.ChangedCheck_Start();
-                XGUI.layout_property_field(
-                    title: "标识名称",
-                    title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
-                    title_width: 90,
-                    prop: Indicator,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
-                if (XGUI.ChangedCheck_End())
+                if (!BaseScript.fold_param)
                 {
-                    if (Targets_Selected())
+                    #region 标识名称
+                    XGUI.ChangedCheck_Start();
+                    XGUI.layout_property_field(
+                        title: "标识名称",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: Indicator,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    if (XGUI.ChangedCheck_End())
                     {
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        if (Targets_Selected())
                         {
-                            SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                            SerializedProperty sp_indicator = so_ele.FindProperty("Indicator");
-                            so_ele.Update();
-                            sp_indicator.stringValue = Indicator.stringValue;
-                            sp_indicator.serializedObject.ApplyModifiedProperties();
-                            so_ele.ApplyModifiedProperties();
+                            for (int i = 0; i < SelectedObjects.Length; i++)
+                            {
+                                SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
+                                SerializedProperty sp_indicator = so_ele.FindProperty("Indicator");
+                                so_ele.Update();
+                                sp_indicator.stringValue = Indicator.stringValue;
+                                sp_indicator.serializedObject.ApplyModifiedProperties();
+                                so_ele.ApplyModifiedProperties();
+                            }
                         }
                     }
+                    #endregion
+
+                    #region 透明度
+                    XGUI.ChangedCheck_Start();
+                    XGUI.layout_property_field(
+                        title: "透明度",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: Alpha,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    if (XGUI.ChangedCheck_End())
+                    {
+                        ChangeAlpha();
+                    }
+                    #endregion
+
+                    #region 速率倍增
+                    XGUI.layout_property_field(
+                        title: "速率倍增",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: PrimitivesTweenGlobalDuration,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
+
+                    #region 当前锚点
+                    XGUI.SetEnabled(false);
+                    XGUI.layout_property_field(
+                        title: "当前锚点",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: CurrentPivot,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    XGUI.SetEnabled(true);
+                    #endregion
                 }
-                #endregion
-
-                #region 透明度
-                XGUI.ChangedCheck_Start();
-                XGUI.layout_property_field(
-                    title: "透明度",
-                    title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
-                    title_width: 90,
-                    prop: Alpha,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
-                if (XGUI.ChangedCheck_End())
-                {
-                    ChangeAlpha();
-                }
-                #endregion
-
-                #region 速率倍增
-                XGUI.layout_property_field(
-                    title: "速率倍增",
-                    title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
-                    title_width: 90,
-                    prop: PrimitivesTweenGlobalDuration,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
-                #endregion
-
-                #region 当前锚点
-                XGUI.SetEnabled(false);
-                XGUI.layout_property_field(
-                    title: "当前锚点",
-                    title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
-                    title_width: 90,
-                    prop: CurrentPivot,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
-                XGUI.SetEnabled(true);
-                #endregion
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             }
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 选项
-            BaseScript.fold_option = XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
-                title: "选项",
-                title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
-                title_clipping: TextClipping.Clip,
-                padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_option);
-
-            if (!BaseScript.fold_option)
+            if (!TweensPreivew_In_State.boolValue && !TweensPreivew_Out_State.boolValue)
             {
-                #region 状态调试
-                DrawToggle("状态调试", DebugState, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_debug, (b) => { });
-                #endregion
+                BaseScript.fold_option = XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    title: "选项",
+                    title_size: XGUIFontSize.M,
+                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_clipping: TextClipping.Clip,
+                    padding: new RectOffset(10, 10, 15, 15),
+                    foldout: BaseScript.fold_option);
 
-                #region 预览自动停止
-                DrawToggle("预览自动停止", AutoKillPreviewTweens, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) =>
+                if (!BaseScript.fold_option)
                 {
-                    AutoKillPreviewTweens.boolValue = b;
-                    AutoKillPreviewTweens.serializedObject.ApplyModifiedProperties();
+                    #region 状态调试
+                    DrawToggle("状态调试", DebugState, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_debug, (b) => { });
+                    #endregion
 
-
-                    XHud_Dashboard.Set_PreviewOption_AutoKillPreviewTweens(AutoKillPreviewTweens.boolValue);
-                    Editor_XTween_Previewer.AutoKillWithDuration = AutoKillPreviewTweens.boolValue;
-
-                    // 如果为自动杀死动画则会强制开启：杀死前重置动画 / 杀死后清空预览列表
-                    if (AutoKillPreviewTweens.boolValue)
+                    #region 预览自动停止
+                    DrawToggle("预览自动停止", AutoKillPreviewTweens, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) =>
                     {
-                        // 强制开启：杀死前重置动画 / 杀死后清空预览列表
-                        RewindPreviewTweensWithKill.boolValue = true;
+                        AutoKillPreviewTweens.boolValue = b;
+                        AutoKillPreviewTweens.serializedObject.ApplyModifiedProperties();
+
+
+                        XHud_Dashboard.Set_PreviewOption_AutoKillPreviewTweens(AutoKillPreviewTweens.boolValue);
+                        Editor_XTween_Previewer.AutoKillWithDuration = AutoKillPreviewTweens.boolValue;
+
+                        // 如果为自动杀死动画则会强制开启：杀死前重置动画 / 杀死后清空预览列表
+                        if (AutoKillPreviewTweens.boolValue)
+                        {
+                            // 强制开启：杀死前重置动画 / 杀死后清空预览列表
+                            RewindPreviewTweensWithKill.boolValue = true;
+                            RewindPreviewTweensWithKill.serializedObject.ApplyModifiedProperties();
+                            ClearPreviewTweensWithKill.boolValue = true;
+                            ClearPreviewTweensWithKill.serializedObject.ApplyModifiedProperties();
+
+                            // 保存配置数据：杀死前重置动画
+                            XHud_Dashboard.Set_PreviewOption_RewindPreviewTweensWithKill(RewindPreviewTweensWithKill.boolValue);
+
+                            // 预览器设置：杀死预览动画前重置动画
+                            Editor_XTween_Previewer.BeforeKillRewind = RewindPreviewTweensWithKill.boolValue;
+
+                            // 保存配置数据：杀死后清空预览列表
+                            XHud_Dashboard.Set_PreviewOption_ClearPreviewTweensWithKill(ClearPreviewTweensWithKill.boolValue);
+
+                            // 预览器设置：杀死后清空预览列表
+                            Editor_XTween_Previewer.AfterKillClear = ClearPreviewTweensWithKill.boolValue;
+                        }
+
+                        // 保存预览自动停止开关状态
+                        AutoKillPreviewTweens.serializedObject.ApplyModifiedProperties();
+
+                        // 保存XHud元素的动画预览配置数据
+                        XHud_Dashboard.ElementPreviewOptionsConfig_Save();
+                    });
+                    #endregion
+
+                    #region 预览杀死前先重置
+                    if (!AutoKillPreviewTweens.boolValue)
+                    {
+                        DrawToggle("预览杀死前先重置", RewindPreviewTweensWithKill, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[2] { "禁用", "启用" }, (b) =>
+                    {
+                        RewindPreviewTweensWithKill.boolValue = b;
                         RewindPreviewTweensWithKill.serializedObject.ApplyModifiedProperties();
-                        ClearPreviewTweensWithKill.boolValue = true;
-                        ClearPreviewTweensWithKill.serializedObject.ApplyModifiedProperties();
 
                         // 保存配置数据：杀死前重置动画
                         XHud_Dashboard.Set_PreviewOption_RewindPreviewTweensWithKill(RewindPreviewTweensWithKill.boolValue);
@@ -1664,762 +1701,641 @@ namespace SevenStrikeModules.XHud.Editor
                         // 预览器设置：杀死预览动画前重置动画
                         Editor_XTween_Previewer.BeforeKillRewind = RewindPreviewTweensWithKill.boolValue;
 
+                        // 保存XHud元素的动画预览配置数据
+                        XHud_Dashboard.ElementPreviewOptionsConfig_Save();
+
+                    });
+                    }
+                    #endregion
+
+                    #region 预览杀死后清空预览器列表
+                    if (!AutoKillPreviewTweens.boolValue)
+                    {
+                        DrawToggle("预览杀死后清空预览器列表", ClearPreviewTweensWithKill, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[2] { "禁用", "启用" }, (b) =>
+                    {
+                        ClearPreviewTweensWithKill.boolValue = b;
+                        ClearPreviewTweensWithKill.serializedObject.ApplyModifiedProperties();
+
                         // 保存配置数据：杀死后清空预览列表
                         XHud_Dashboard.Set_PreviewOption_ClearPreviewTweensWithKill(ClearPreviewTweensWithKill.boolValue);
 
                         // 预览器设置：杀死后清空预览列表
                         Editor_XTween_Previewer.AfterKillClear = ClearPreviewTweensWithKill.boolValue;
+
+                        // 保存XHud元素的动画预览配置数据
+                        XHud_Dashboard.ElementPreviewOptionsConfig_Save();
+                    });
                     }
-
-                    // 保存预览自动停止开关状态
-                    AutoKillPreviewTweens.serializedObject.ApplyModifiedProperties();
-
-                    // 保存XHud元素的动画预览配置数据
-                    XHud_Dashboard.ElementPreviewOptionsConfig_Save();
-                });
-                #endregion
-
-                #region 预览杀死前先重置
-                if (!AutoKillPreviewTweens.boolValue)
-                {
-                    DrawToggle("预览杀死前先重置", RewindPreviewTweensWithKill, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[2] { "禁用", "启用" }, (b) =>
-                {
-                    RewindPreviewTweensWithKill.boolValue = b;
-                    RewindPreviewTweensWithKill.serializedObject.ApplyModifiedProperties();
-
-                    // 保存配置数据：杀死前重置动画
-                    XHud_Dashboard.Set_PreviewOption_RewindPreviewTweensWithKill(RewindPreviewTweensWithKill.boolValue);
-
-                    // 预览器设置：杀死预览动画前重置动画
-                    Editor_XTween_Previewer.BeforeKillRewind = RewindPreviewTweensWithKill.boolValue;
-
-                    // 保存XHud元素的动画预览配置数据
-                    XHud_Dashboard.ElementPreviewOptionsConfig_Save();
-
-                });
-                }
-                #endregion
-
-                #region 预览杀死后清空预览器列表
-                if (!AutoKillPreviewTweens.boolValue)
-                {
-                    DrawToggle("预览杀死后清空预览器列表", ClearPreviewTweensWithKill, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[2] { "禁用", "启用" }, (b) =>
-                {
-                    ClearPreviewTweensWithKill.boolValue = b;
-                    ClearPreviewTweensWithKill.serializedObject.ApplyModifiedProperties();
-
-                    // 保存配置数据：杀死后清空预览列表
-                    XHud_Dashboard.Set_PreviewOption_ClearPreviewTweensWithKill(ClearPreviewTweensWithKill.boolValue);
-
-                    // 预览器设置：杀死后清空预览列表
-                    Editor_XTween_Previewer.AfterKillClear = ClearPreviewTweensWithKill.boolValue;
-
-                    // 保存XHud元素的动画预览配置数据
-                    XHud_Dashboard.ElementPreviewOptionsConfig_Save();
-                });
-                }
-                #endregion
-
-                XGUI.layout_seperator(
-                    thickness: 1,
-                    color: XHud_Dashboard.Theme_SeperateLine,
-                    margin: new RectOffset(15, 15, 15, 15));
-
-                #region 图元动画器自动播放
-                DrawToggle("图元动画器自动播放", AutoPlayPrimitivesTween, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_auto, (b) => { });
-                #endregion
-
-                #region 使用设计布局
-                DrawToggle("使用设计布局", RMS_Enabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
-                #endregion
-
-                #region 说明
-                if (RMS_Enabled.boolValue)
-                {
-                    string msg = "此元素在生成时会优先使用自身记录的设计布局信息来进行定位和位置尺寸的匹配（但前提是在您制作好此元素时需要手动点击\"记录布局信息\"按钮）";
-
-                    XGUI.layout_label(
-                        text: msg,
-                        bg_fill: XGUIFilled.实体,
-                        bg_color: XGUIColor.深空灰,
-                        size: XGUIFontSize.S,
-                        anchor: TextAnchor.MiddleLeft,
-                        text_color: Color.white * 0.85f,
-                        offset: new Vector2(0, 0),
-                        padding: new RectOffset(10, 10, 10, 10),
-                        margin: new RectOffset(0, 0, 6, 0),
-                        clipping: clipping,
-                        wrap: true,
-                        font: XGUI.GetFont("xg-regular"),
-                        font_style: FontStyle.Normal);
-                }
-                #endregion
-
-                XGUI.layout_seperator(
-                    thickness: 1,
-                    color: XHud_Dashboard.Theme_SeperateLine,
-                    margin: new RectOffset(15, 15, 15, 15));
-
-                #region 从库中生成时清空委托
-                DrawToggle("从库中生成时清空委托", ClearActions_With_Spawn, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
-                #endregion
-
-                #region 从库中生成时清空事件
-                DrawToggle("从库中生成时清空事件", ClearEvents_With_Spawn, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
-                #endregion
-            }
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-            #endregion
-
-            #region 状态
-            string statu_title = "状态";
-            if (Targets_Selected())
-                statu_title = "状态 - ( 批量模式 )";
-
-            BaseScript.fold_state = XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
-                title: statu_title,
-                title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
-                title_clipping: TextClipping.Clip,
-                padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_state);
-
-            if (!BaseScript.fold_state)
-            {
-                if (!Targets_Selected())
-                {
-                    #region 使用状态
-                    XGUI.layout_state_displayer_text(
-                        title: "使用状态",
-                        title_size: XGUIFontSize.M,
-                        subtitle: (XHudElementCreateState)CreateState.enumValueIndex == XHudElementCreateState.Created ? "已被生成" : "已被回收",
-                        subtitle_size: XGUIFontSize.M,
-                        subtitle_color: (XHudElementCreateState)CreateState.enumValueIndex == XHudElementCreateState.Created ? XHud_Dashboard.Theme_Primary : Color.gray,
-                        margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 动画相关
-                    if (PrimitiveControllerNodes != null && PrimitiveControllerNodes.arraySize > 0)
-                    {
-                        #region 动画状态
-                        XGUI.layout_state_displayer_text(
-                          title: "动画状态",
-                          title_size: XGUIFontSize.M,
-                          subtitle: (XHudElementAnimateState)AnimateState.enumValueIndex == XHudElementAnimateState.Animating ? "动画中" : "静止状态",
-                          subtitle_size: XGUIFontSize.M,
-                          subtitle_color: AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray,
-                          margin: new RectOffset(5, 5, 0, 5));
-                        #endregion
-
-                        #region 最大耗时（速率倍增）
-                        XGUI.layout_state_displayer_text(
-                        title: "最大耗时<color=#909090>（速率倍增）</color>",
-                        title_size: XGUIFontSize.M,
-                        subtitle: PrimitivesTweenMaxDuration.floatValue.ToString() + " 秒",
-                        subtitle_size: XGUIFontSize.M,
-                        subtitle_color: (XHudElementCreateState)CreateState.enumValueIndex == XHudElementCreateState.Created ? XHud_Dashboard.Theme_Primary : Color.white * 0.75f,
-                        margin: new RectOffset(5, 5, 0, 5));
-                        #endregion
-
-                        #region 最大耗时（XHud 倍增）
-                        XGUI.layout_state_displayer_text(
-                        title: "最大耗时<color=#909090>（XHud 倍增）</color>",
-                        title_size: XGUIFontSize.M,
-                        subtitle: (HudManager.DurationMultiply * PrimitivesTweenMaxDuration.floatValue).ToString() + " 秒",
-                        subtitle_size: XGUIFontSize.M,
-                        subtitle_color: (XHudElementCreateState)CreateState.enumValueIndex == XHudElementCreateState.Created ? XHud_Dashboard.Theme_Primary : Color.white * 0.75f,
-                        margin: new RectOffset(5, 5, 0, 5));
-                    }
-                    #endregion
-
-                    #endregion
-
-                    #region 物体跟踪状态
-                    if (ObjectTracker.objectReferenceValue != null)
-                    {
-                        XHud_ObjectTracker tracker = (XHud_ObjectTracker)ObjectTracker.objectReferenceValue;
-                        if (tracker.SelfObject != null && tracker.TargetObject != null)
-                        {
-                            XGUI.layout_state_displayer_text(
-                                title: "物体跟踪状态",
-                                title_size: XGUIFontSize.M,
-                                subtitle: tracker.SelfObject.name + "  >  " + tracker.TargetObject.name,
-                                subtitle_size: XGUIFontSize.M,
-                                subtitle_color: XHud_Dashboard.Theme_Primary,
-                                margin: new RectOffset(5, 5, 0, 5));
-                        }
-                    }
-                    #endregion
-
-                    #region 元素库源
-                    if (Application.isPlaying)
-                    {
-                        bool lib_exist = false;
-
-                        if (!string.IsNullOrEmpty(OriginPoolName.stringValue))
-                        {
-                            //遍历元素库集合找到目标元素库
-                            foreach (XHud_Library_Element lib in HudManager.Hud_ElementLibrarys)
-                            {
-                                if (lib.LibraryName == OriginPoolName.stringValue)
-                                {
-                                    if (lib.ElementLibrary_IsExist(OriginalName.stringValue))
-                                    {
-                                        lib_exist = true;
-                                        break;
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (lib_exist)
-                        {
-                            XGUI.layout_state_displayer_btn(
-                                title: "元素库源",
-                                title_size: XGUIFontSize.M,
-                                btn_bg: XGUIFilled.实体,
-                                btn_color: XGUIColor.亮白,
-                                btn_text: OriginPoolName.stringValue,
-                                btn_tooltip: "定位",
-                                btn_text_size: XGUIFontSize.M,
-                                btn_layout_width: 120,
-                                btn_gui_color: Color.white,
-                                padding: new RectOffset(0, 0, 0, 0),
-                                callback_clicked: () =>
-                                {
-                                    if (!lib_exist)
-                                    {
-                                        XGUI.dialog(
-                                            type: XGUIDialogType.警告,
-                                            windowtitle: "XHud - 元素消息",
-                                            title: "定位元素",
-                                            msg: $"此元素并非由元素库生成，无法为其进行定位！",
-                                            ok: "明白",
-                                            PrimaryIndex: 0,
-                                            usemodal: true,
-                                            themecolor: XHud_Dashboard.Theme_Primary);
-
-                                        return;
-                                    }
-                                    //打开目标元素库
-                                    Editor_XHud_MenuItemsAction_OpenLibrary.open_target_elements(OriginPoolName.stringValue).ElementLibrary_Location_Find(OriginalName.stringValue);
-                                });
-                        }
-                        else
-                        {
-                            XGUI.layout_state_displayer_text(
-                                title: "元素库源",
-                                title_size: XGUIFontSize.M,
-                                subtitle: "非元素库资源",
-                                subtitle_size: XGUIFontSize.M,
-                                subtitle_color: XHud_Dashboard.Theme_Primary,
-                                margin: new RectOffset(5, 5, 0, 5));
-                        }
-                    }
-                    else
-                    {
-                        //编辑器模式下，通过遍历所有元素库来找到当前这个元素在哪个库里
-                    }
-                    #endregion
-                }
-                else
-                {
-                    #region 控制区
-                    XGUI.layout_group_start(
-                        type: XGUIContainerType.Horizontal,
-                        bg_fill: XGUIFilled.透明,
-                        bg_color: XGUIColor.亮白,
-                        bg_color_gui: XHud_Dashboard.Theme_Group,
-                        absolute_margin: true,
-                        absolute_padding: true,
-                        margin: new RectOffset(0, 0, 0, 0),
-                        padding: new RectOffset(15, 15, 5, 10));
-
-                    #region 标题按钮
-                    if (XGUI.layout_button(
-                        text: $"{SelectedObjects[ElementStatu_Index].name} ( {SelectedObjects[ElementStatu_Index].Indicator} )",
-                        tooltip: "",
-                        bg_fill: XGUIFilled.透明,
-                        button_text_color: Color.gray,
-                        press_fill: XGUIFilled.透明,
-                        press_text_color: XHud_Dashboard.Theme_Primary,
-                        font_size: XGUIFontSize.M,
-                        anchor: TextAnchor.MiddleLeft,
-                        margin: new RectOffset(0, 0, 0, 0),
-                        padding: new RectOffset(0, 0, 0, 0),
-                        layout_width: 150,
-                        button_text_font: XGUI.GetFont("xg-medium")))
-                    {
-                        EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
-                    }
-                    #endregion
-
-                    XGUI.layout_flexspace();
-
-                    #region 上一个
-                    if (XGUI.layout_button(
-                        tooltip: "上一个",
-                        tex_release: left_arrow_r,
-                        tex_press: left_arrow_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 12,
-                        height: 12))
-                    {
-                        if (ElementStatu_Index <= 0)
-                        {
-                            ElementStatu_Index = SelectedObjects.Length - 1;
-                        }
-                        else
-                        {
-                            ElementStatu_Index--;
-                        }
-                        EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
-                    }
-                    #endregion
-
-                    XGUI.layout_space(20);
-
-                    #region 下一个
-                    if (XGUI.layout_button(
-                        tooltip: "下一个",
-                        tex_release: right_arrow_r,
-                        tex_press: right_arrow_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 12,
-                        height: 12))
-                    {
-                        if (ElementStatu_Index >= SelectedObjects.Length - 1)
-                        {
-                            ElementStatu_Index = 0;
-                        }
-                        else
-                        {
-                            ElementStatu_Index++;
-                        }
-                        EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
-                    }
-                    #endregion
-
-                    XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
                     #endregion
 
                     XGUI.layout_seperator(
-                            thickness: 1,
-                            color: XHud_Dashboard.Theme_SeperateLine,
-                            margin: new RectOffset(15, 15, 5, 25));
+                        thickness: 1,
+                        color: XHud_Dashboard.Theme_SeperateLine,
+                        margin: new RectOffset(15, 15, 15, 15));
 
-                    #region 使用状态
-                    XGUI.layout_state_displayer_text(
-                        title: "使用状态",
-                        title_size: XGUIFontSize.M,
-                        subtitle: SelectedObjects[ElementStatu_Index].CreateState == XHudElementCreateState.Created ? "已被生成" : "已被回收",
-                        subtitle_size: XGUIFontSize.M,
-                        subtitle_color: SelectedObjects[ElementStatu_Index].CreateState == XHudElementCreateState.Created ? XHud_Dashboard.Theme_Primary : Color.gray,
-                        margin: new RectOffset(5, 5, 0, 5));
+                    #region 图元动画器自动播放
+                    DrawToggle("图元动画器自动播放", AutoPlayPrimitivesTween, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_auto, (b) => { });
                     #endregion
 
-                    #region 动画相关
-                    if (PrimitiveControllerNodes != null && PrimitiveControllerNodes.arraySize > 0)
+                    #region 使用设计布局
+                    DrawToggle("使用设计布局", RMS_Enabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                    #endregion
+
+                    #region 说明
+                    if (RMS_Enabled.boolValue)
                     {
-                        #region 动画状态
+                        string msg = "此元素在生成时会优先使用自身记录的设计布局信息来进行定位和位置尺寸的匹配（但前提是在您制作好此元素时需要手动点击\"记录布局信息\"按钮）";
+
+                        XGUI.layout_label(
+                            text: msg,
+                            bg_fill: XGUIFilled.实体,
+                            bg_color: XGUIColor.深空灰,
+                            size: XGUIFontSize.S,
+                            anchor: TextAnchor.MiddleLeft,
+                            text_color: Color.white * 0.85f,
+                            offset: new Vector2(0, 0),
+                            padding: new RectOffset(10, 10, 10, 10),
+                            margin: new RectOffset(0, 0, 6, 0),
+                            clipping: clipping,
+                            wrap: true,
+                            font: XGUI.GetFont("xg-regular"),
+                            font_style: FontStyle.Normal);
+                    }
+                    #endregion
+
+                    XGUI.layout_seperator(
+                        thickness: 1,
+                        color: XHud_Dashboard.Theme_SeperateLine,
+                        margin: new RectOffset(15, 15, 15, 15));
+
+                    #region 从库中生成时清空委托
+                    DrawToggle("从库中生成时清空委托", ClearActions_With_Spawn, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                    #endregion
+
+                    #region 从库中生成时清空事件
+                    DrawToggle("从库中生成时清空事件", ClearEvents_With_Spawn, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                    #endregion
+                }
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            }
+            #endregion
+
+            #region 状态
+            if (!TweensPreivew_In_State.boolValue && !TweensPreivew_Out_State.boolValue)
+            {
+                string statu_title = "状态";
+                if (Targets_Selected())
+                    statu_title = "状态 - ( 批量模式 )";
+
+                BaseScript.fold_state = XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    title: statu_title,
+                    title_size: XGUIFontSize.M,
+                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_clipping: TextClipping.Clip,
+                    padding: new RectOffset(10, 10, 15, 15),
+                    foldout: BaseScript.fold_state);
+
+                if (!BaseScript.fold_state)
+                {
+                    if (!Targets_Selected())
+                    {
+                        #region 使用状态
                         XGUI.layout_state_displayer_text(
-                            title: "动画状态",
+                            title: "使用状态",
                             title_size: XGUIFontSize.M,
-                            subtitle: SelectedObjects[ElementStatu_Index].AnimateState == XHudElementAnimateState.Animating ? "动画中" : "静止状态",
+                            subtitle: (XHudElementCreateState)CreateState.enumValueIndex == XHudElementCreateState.Created ? "已被生成" : "已被回收",
                             subtitle_size: XGUIFontSize.M,
-                            subtitle_color: (int)SelectedObjects[ElementStatu_Index].AnimateState == 1 ? XHud_Dashboard.Theme_Primary : Color.gray,
+                            subtitle_color: (XHudElementCreateState)CreateState.enumValueIndex == XHudElementCreateState.Created ? XHud_Dashboard.Theme_Primary : Color.gray,
                             margin: new RectOffset(5, 5, 0, 5));
                         #endregion
 
-                        #region 最大耗时（速率倍增）
-                        XGUI.layout_state_displayer_text(
+                        #region 动画相关
+                        if (PrimitiveControllerNodes != null && PrimitiveControllerNodes.arraySize > 0)
+                        {
+                            #region 动画状态
+                            XGUI.layout_state_displayer_text(
+                              title: "动画状态",
+                              title_size: XGUIFontSize.M,
+                              subtitle: (XHudElementAnimateState)AnimateState.enumValueIndex == XHudElementAnimateState.Animating ? "动画中" : "静止状态",
+                              subtitle_size: XGUIFontSize.M,
+                              subtitle_color: AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray,
+                              margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+
+                            #region 最大耗时（速率倍增）
+                            XGUI.layout_state_displayer_text(
                             title: "最大耗时<color=#909090>（速率倍增）</color>",
                             title_size: XGUIFontSize.M,
-                            subtitle: SelectedObjects[ElementStatu_Index].PrimitivesTweenMaxDuration.ToString() + " 秒",
+                            subtitle: PrimitivesTweenMaxDuration.floatValue.ToString() + " 秒",
                             subtitle_size: XGUIFontSize.M,
                             subtitle_color: (XHudElementCreateState)CreateState.enumValueIndex == XHudElementCreateState.Created ? XHud_Dashboard.Theme_Primary : Color.white * 0.75f,
                             margin: new RectOffset(5, 5, 0, 5));
-                        #endregion
+                            #endregion
 
-                        #region 最大耗时（XHud 倍增）
-                        XGUI.layout_state_displayer_text(
+                            #region 最大耗时（XHud 倍增）
+                            XGUI.layout_state_displayer_text(
                             title: "最大耗时<color=#909090>（XHud 倍增）</color>",
                             title_size: XGUIFontSize.M,
-                            subtitle: (HudManager.DurationMultiply * SelectedObjects[ElementStatu_Index].PrimitivesTweenMaxDuration).ToString() + " 秒",
+                            subtitle: (HudManager.DurationMultiply * PrimitivesTweenMaxDuration.floatValue).ToString() + " 秒",
                             subtitle_size: XGUIFontSize.M,
-                            subtitle_color: (XHudElementCreateState)SelectedObjects[ElementStatu_Index].CreateState == XHudElementCreateState.Created ? XHud_Dashboard.Theme_Primary : Color.white * 0.75f,
+                            subtitle_color: (XHudElementCreateState)CreateState.enumValueIndex == XHudElementCreateState.Created ? XHud_Dashboard.Theme_Primary : Color.white * 0.75f,
                             margin: new RectOffset(5, 5, 0, 5));
-                    }
-                    #endregion
-
-                    #endregion
-
-                    #region 物体跟踪状态
-                    if (ObjectTracker.objectReferenceValue != null)
-                    {
-                        XHud_ObjectTracker tracker = (XHud_ObjectTracker)SelectedObjects[ElementStatu_Index].ObjectTracker;
-                        if (tracker.SelfObject != null && tracker.TargetObject != null)
-                        {
-                            XGUI.layout_state_displayer_text(
-                                title: "物体跟踪状态",
-                                title_size: XGUIFontSize.M,
-                                subtitle: tracker.SelfObject.name + "  >  " + tracker.TargetObject.name,
-                                subtitle_size: XGUIFontSize.M,
-                                subtitle_color: XHud_Dashboard.Theme_Primary,
-                                margin: new RectOffset(5, 5, 0, 5));
                         }
-                    }
-                    #endregion
+                        #endregion
 
-                    #region 元素库源
-                    if (Application.isPlaying)
-                    {
-                        bool lib_exist = false;
+                        #endregion
 
-                        if (!string.IsNullOrEmpty(SelectedObjects[ElementStatu_Index].OriginPoolName))
+                        #region 物体跟踪状态
+                        if (ObjectTracker.objectReferenceValue != null)
                         {
-                            //遍历元素库集合找到目标元素库
-                            foreach (XHud_Library_Element lib in HudManager.Hud_ElementLibrarys)
+                            XHud_ObjectTracker tracker = (XHud_ObjectTracker)ObjectTracker.objectReferenceValue;
+                            if (tracker.SelfObject != null && tracker.TargetObject != null)
                             {
-                                if (lib.LibraryName == SelectedObjects[ElementStatu_Index].OriginPoolName)
+                                XGUI.layout_state_displayer_text(
+                                    title: "物体跟踪状态",
+                                    title_size: XGUIFontSize.M,
+                                    subtitle: tracker.SelfObject.name + "  >  " + tracker.TargetObject.name,
+                                    subtitle_size: XGUIFontSize.M,
+                                    subtitle_color: XHud_Dashboard.Theme_Primary,
+                                    margin: new RectOffset(5, 5, 0, 5));
+                            }
+                        }
+                        #endregion
+
+                        #region 元素库源
+                        if (Application.isPlaying)
+                        {
+                            bool lib_exist = false;
+
+                            if (!string.IsNullOrEmpty(OriginPoolName.stringValue))
+                            {
+                                //遍历元素库集合找到目标元素库
+                                foreach (XHud_Library_Element lib in HudManager.Hud_ElementLibrarys)
                                 {
-                                    if (lib.ElementLibrary_IsExist(SelectedObjects[ElementStatu_Index].OriginalName))
+                                    if (lib.LibraryName == OriginPoolName.stringValue)
                                     {
-                                        lib_exist = true;
+                                        if (lib.ElementLibrary_IsExist(OriginalName.stringValue))
+                                        {
+                                            lib_exist = true;
+                                            break;
+                                        }
                                         break;
                                     }
-                                    break;
                                 }
                             }
-                        }
 
-                        if (lib_exist)
-                        {
-                            XGUI.layout_state_displayer_btn(
-                                title: "元素库源",
-                                title_size: XGUIFontSize.M,
-                                btn_bg: XGUIFilled.实体,
-                                btn_color: XGUIColor.亮白,
-                                btn_text: SelectedObjects[ElementStatu_Index].OriginPoolName,
-                                btn_tooltip: "定位",
-                                btn_text_size: XGUIFontSize.M,
-                                btn_layout_width: 120,
-                                btn_gui_color: Color.white,
-                                padding: new RectOffset(0, 0, 0, 0),
-                                callback_clicked: () =>
-                                {
-                                    if (!lib_exist)
-                                    {
-                                        XGUI.dialog(
-                                            type: XGUIDialogType.警告,
-                                            windowtitle: "XHud - 元素消息",
-                                            title: "定位元素",
-                                            msg: $"此元素并非由元素库生成，无法为其进行定位！",
-                                            ok: "明白",
-                                            PrimaryIndex: 0,
-                                            usemodal: true,
-                                            themecolor: XHud_Dashboard.Theme_Primary);
-
-                                        return;
-                                    }
-                                    //打开目标元素库
-                                    Editor_XHud_MenuItemsAction_OpenLibrary.open_target_elements(SelectedObjects[ElementStatu_Index].OriginPoolName).ElementLibrary_Location_Find(SelectedObjects[ElementStatu_Index].OriginalName);
-                                });
-                        }
-                        else
-                        {
-                            XGUI.layout_state_displayer_text(
-                                title: "元素库源",
-                                title_size: XGUIFontSize.M,
-                                subtitle: "非元素库资源",
-                                subtitle_size: XGUIFontSize.M,
-                                subtitle_color: XHud_Dashboard.Theme_Primary,
-                                margin: new RectOffset(5, 5, 0, 5));
-                        }
-                    }
-                    else
-                    {
-                        //编辑器模式下，通过遍历所有元素库来找到当前这个元素在哪个库里
-                    }
-                    #endregion
-                }
-            }
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-            #endregion
-
-            #region RMS 布局信息
-            string rms_lay_title = "RMS 布局信息";
-            if (Targets_Selected())
-                rms_lay_title = "RMS 布局信息 - ( 批量模式 )";
-
-            BaseScript.fold_rms = XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
-                title: rms_lay_title,
-                title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
-                title_clipping: TextClipping.Clip,
-                padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_rms);
-
-            if (!BaseScript.fold_rms)
-            {
-                if (HudManager != null)
-                {
-                    string[] nodesName = HudManager.hm_RMS_GetResolutionNodeNames();
-                    if (nodesName.Length > 0)
-                    {
-                        XGUI.layout_helpbox(
-                                state: XGUIHelboxState.通知,
-                                title_text: "RMS方案列表仅用于切换和预览，在取消选择元素后会自动回到Hud管理器当前选中的RMS方案",
-                                title_size: XGUIFontSize.M,
-                                title_style: FontStyle.Normal,
-                                wrap: true,
-                                title_color: Color.white * 0.75f);
-
-                        RMS_Name.stringValue = XGUI.layout_string_popup(
-                            title: "R M S 方案",
-                            title_width: 120,
-                            title_color: Color.white,
-                            title_size: XGUIFontSize.M,
-                            title_anchor: TextAnchor.MiddleLeft,
-                            prop: RMS_Name,
-                            options: nodesName,
-                            opt_text_size: XGUIFontSize.M,
-                            opt_text_color: Color.black,
-                            opt_text_padding: new RectOffset(10, 10, 0, 0),
-                            opt_anchor: TextAnchor.MiddleLeft,
-                            opt_font_style: FontStyle.Normal,
-                            opt_bg_fill: XGUIFilled.实体,
-                            opt_bg_color: XGUIColor.亮白,
-                            opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(0, 0, 5, 5),
-                            padding: new RectOffset(5, 5, 0, 0),
-                            title_margin: new RectOffset(0, 0, 0, 0),
-                            icon_arrow_color: Color.black,
-                            act_on_changed: (v) =>
+                            if (lib_exist)
                             {
-                                RMS_Name.stringValue = v;
-                                RMS_Name.serializedObject.ApplyModifiedProperties();
-
-                                if (!Application.isPlaying)
-                                {
-                                    if (Targets_Selected())
+                                XGUI.layout_state_displayer_btn(
+                                    title: "元素库源",
+                                    title_size: XGUIFontSize.M,
+                                    btn_bg: XGUIFilled.实体,
+                                    btn_color: XGUIColor.亮白,
+                                    btn_text: OriginPoolName.stringValue,
+                                    btn_tooltip: "定位",
+                                    btn_text_size: XGUIFontSize.M,
+                                    btn_layout_width: 120,
+                                    btn_gui_color: Color.white,
+                                    padding: new RectOffset(0, 0, 0, 0),
+                                    callback_clicked: () =>
                                     {
-                                        for (int i = 0; i < SelectedObjects.Length; i++)
+                                        if (!lib_exist)
                                         {
-                                            if (!string.IsNullOrEmpty(SelectedObjects[i].gameObject.scene.name))
-                                                RMS_Preview(SelectedObjects[i], SelectedObjects[i].Alpha, Vector3.zero, SelectedObjects[i].RMS_Name, true);
+                                            XGUI.dialog(
+                                                type: XGUIDialogType.警告,
+                                                windowtitle: "XHud - 元素消息",
+                                                title: "定位元素",
+                                                msg: $"此元素并非由元素库生成，无法为其进行定位！",
+                                                ok: "明白",
+                                                PrimaryIndex: 0,
+                                                usemodal: true,
+                                                themecolor: XHud_Dashboard.Theme_Primary);
+
+                                            return;
                                         }
-                                    }
-                                    else
-                                    {
-                                        if (!string.IsNullOrEmpty(BaseScript.gameObject.scene.name))
-                                            RMS_Preview(BaseScript, Alpha.floatValue, Vector3.zero, RMS_Name.stringValue, true);
-                                    }
-                                }
-                            });
-
-                        #region RMS方案信息查看
-                        if (Targets_Selected())
-                        {
-                            #region 控制区
-                            XGUI.layout_group_start(
-                                type: XGUIContainerType.Horizontal,
-                                bg_fill: XGUIFilled.透明,
-                                bg_color: XGUIColor.亮白,
-                                bg_color_gui: XHud_Dashboard.Theme_Group,
-                                absolute_margin: true,
-                                absolute_padding: true,
-                                margin: new RectOffset(0, 0, 0, 0),
-                                padding: new RectOffset(15, 15, 5, 10));
-
-                            #region 标题按钮
-                            if (XGUI.layout_button(
-                                text: $"{SelectedObjects[ElementStatu_Index].name} ( {SelectedObjects[ElementStatu_Index].Indicator} )",
-                                tooltip: "",
-                                bg_fill: XGUIFilled.透明,
-                                button_text_color: Color.gray,
-                                press_fill: XGUIFilled.透明,
-                                press_text_color: XHud_Dashboard.Theme_Primary,
-                                font_size: XGUIFontSize.M,
-                                anchor: TextAnchor.MiddleLeft,
-                                margin: new RectOffset(0, 0, 0, 0),
-                                padding: new RectOffset(0, 0, 0, 0),
-                                layout_width: 150,
-                                button_text_font: XGUI.GetFont("xg-medium")))
-                            {
-                                EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
-                            }
-                            #endregion
-
-                            XGUI.layout_flexspace();
-
-                            #region 上一个
-                            if (XGUI.layout_button(
-                                tooltip: "上一个",
-                                tex_release: left_arrow_r,
-                                tex_press: left_arrow_p,
-                                tex_gui_color: Color.white,
-                                border: new RectOffset(0, 0, 0, 0),
-                                width: 12,
-                                height: 12))
-                            {
-                                if (ElementStatu_Index <= 0)
-                                {
-                                    ElementStatu_Index = SelectedObjects.Length - 1;
-                                }
-                                else
-                                {
-                                    ElementStatu_Index--;
-                                }
-                                EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
-                            }
-                            #endregion
-
-                            XGUI.layout_space(20);
-
-                            #region 下一个
-                            if (XGUI.layout_button(
-                                tooltip: "下一个",
-                                tex_release: right_arrow_r,
-                                tex_press: right_arrow_p,
-                                tex_gui_color: Color.white,
-                                border: new RectOffset(0, 0, 0, 0),
-                                width: 12,
-                                height: 12))
-                            {
-                                if (ElementStatu_Index >= SelectedObjects.Length - 1)
-                                {
-                                    ElementStatu_Index = 0;
-                                }
-                                else
-                                {
-                                    ElementStatu_Index++;
-                                }
-                                EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
-                            }
-                            #endregion
-
-                            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
-                            #endregion
-
-                            XGUI.layout_seperator(
-                                    thickness: 1,
-                                    color: XHud_Dashboard.Theme_SeperateLine,
-                                    margin: new RectOffset(15, 15, 5, 25));
-
-                            if (SelectedObjects[ElementStatu_Index].RMS_LayoutDatas.Count <= 0)
-                            {
-                                XGUI.layout_label(
-                                    text: "暂无对应方案的布局设计数据",
-                                    size: XGUIFontSize.S,
-                                    anchor: TextAnchor.MiddleCenter,
-                                    text_color: Color.white * 0.85f,
-                                    offset: new Vector2(0, 0),
-                                    padding: new RectOffset(10, 10, 10, 10),
-                                    margin: new RectOffset(0, 0, 6, 0),
-                                    clipping: clipping,
-                                    wrap: true,
-                                    font: XGUI.GetFont("xg-regular"),
-                                    font_style: FontStyle.Normal);
+                                        //打开目标元素库
+                                        Editor_XHud_MenuItemsAction_OpenLibrary.open_target_elements(OriginPoolName.stringValue).ElementLibrary_Location_Find(OriginalName.stringValue);
+                                    });
                             }
                             else
                             {
-                                bool exist_lay = false;
-                                for (int s = 0; s < SelectedObjects[ElementStatu_Index].RMS_LayoutDatas.Count; s++)
+                                XGUI.layout_state_displayer_text(
+                                    title: "元素库源",
+                                    title_size: XGUIFontSize.M,
+                                    subtitle: "非元素库资源",
+                                    subtitle_size: XGUIFontSize.M,
+                                    subtitle_color: XHud_Dashboard.Theme_Primary,
+                                    margin: new RectOffset(5, 5, 0, 5));
+                            }
+                        }
+                        else
+                        {
+                            //编辑器模式下，通过遍历所有元素库来找到当前这个元素在哪个库里
+                        }
+                        #endregion
+                    }
+                    else
+                    {
+                        #region 控制区
+                        XGUI.layout_group_start(
+                            type: XGUIContainerType.Horizontal,
+                            bg_fill: XGUIFilled.透明,
+                            bg_color: XGUIColor.亮白,
+                            bg_color_gui: XHud_Dashboard.Theme_Group,
+                            absolute_margin: true,
+                            absolute_padding: true,
+                            margin: new RectOffset(0, 0, 0, 0),
+                            padding: new RectOffset(15, 15, 5, 10));
+
+                        #region 标题按钮
+                        if (XGUI.layout_button(
+                            text: $"{SelectedObjects[ElementStatu_Index].name} ( {SelectedObjects[ElementStatu_Index].Indicator} )",
+                            tooltip: "",
+                            bg_fill: XGUIFilled.透明,
+                            button_text_color: Color.gray,
+                            press_fill: XGUIFilled.透明,
+                            press_text_color: XHud_Dashboard.Theme_Primary,
+                            font_size: XGUIFontSize.M,
+                            anchor: TextAnchor.MiddleLeft,
+                            margin: new RectOffset(0, 0, 0, 0),
+                            padding: new RectOffset(0, 0, 0, 0),
+                            layout_width: 150,
+                            button_text_font: XGUI.GetFont("xg-medium")))
+                        {
+                            EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
+                        }
+                        #endregion
+
+                        XGUI.layout_flexspace();
+
+                        #region 上一个
+                        if (XGUI.layout_button(
+                            tooltip: "上一个",
+                            tex_release: left_arrow_r,
+                            tex_press: left_arrow_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: 12,
+                            height: 12))
+                        {
+                            if (ElementStatu_Index <= 0)
+                            {
+                                ElementStatu_Index = SelectedObjects.Length - 1;
+                            }
+                            else
+                            {
+                                ElementStatu_Index--;
+                            }
+                            EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
+                        }
+                        #endregion
+
+                        XGUI.layout_space(20);
+
+                        #region 下一个
+                        if (XGUI.layout_button(
+                            tooltip: "下一个",
+                            tex_release: right_arrow_r,
+                            tex_press: right_arrow_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: 12,
+                            height: 12))
+                        {
+                            if (ElementStatu_Index >= SelectedObjects.Length - 1)
+                            {
+                                ElementStatu_Index = 0;
+                            }
+                            else
+                            {
+                                ElementStatu_Index++;
+                            }
+                            EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
+                        }
+                        #endregion
+
+                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+                        #endregion
+
+                        XGUI.layout_seperator(
+                                thickness: 1,
+                                color: XHud_Dashboard.Theme_SeperateLine,
+                                margin: new RectOffset(15, 15, 5, 25));
+
+                        #region 使用状态
+                        XGUI.layout_state_displayer_text(
+                            title: "使用状态",
+                            title_size: XGUIFontSize.M,
+                            subtitle: SelectedObjects[ElementStatu_Index].CreateState == XHudElementCreateState.Created ? "已被生成" : "已被回收",
+                            subtitle_size: XGUIFontSize.M,
+                            subtitle_color: SelectedObjects[ElementStatu_Index].CreateState == XHudElementCreateState.Created ? XHud_Dashboard.Theme_Primary : Color.gray,
+                            margin: new RectOffset(5, 5, 0, 5));
+                        #endregion
+
+                        #region 动画相关
+                        if (PrimitiveControllerNodes != null && PrimitiveControllerNodes.arraySize > 0)
+                        {
+                            #region 动画状态
+                            XGUI.layout_state_displayer_text(
+                                title: "动画状态",
+                                title_size: XGUIFontSize.M,
+                                subtitle: SelectedObjects[ElementStatu_Index].AnimateState == XHudElementAnimateState.Animating ? "动画中" : "静止状态",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: (int)SelectedObjects[ElementStatu_Index].AnimateState == 1 ? XHud_Dashboard.Theme_Primary : Color.gray,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+
+                            #region 最大耗时（速率倍增）
+                            XGUI.layout_state_displayer_text(
+                                title: "最大耗时<color=#909090>（速率倍增）</color>",
+                                title_size: XGUIFontSize.M,
+                                subtitle: SelectedObjects[ElementStatu_Index].PrimitivesTweenMaxDuration.ToString() + " 秒",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: (XHudElementCreateState)CreateState.enumValueIndex == XHudElementCreateState.Created ? XHud_Dashboard.Theme_Primary : Color.white * 0.75f,
+                                margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+
+                            #region 最大耗时（XHud 倍增）
+                            XGUI.layout_state_displayer_text(
+                                title: "最大耗时<color=#909090>（XHud 倍增）</color>",
+                                title_size: XGUIFontSize.M,
+                                subtitle: (HudManager.DurationMultiply * SelectedObjects[ElementStatu_Index].PrimitivesTweenMaxDuration).ToString() + " 秒",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: (XHudElementCreateState)SelectedObjects[ElementStatu_Index].CreateState == XHudElementCreateState.Created ? XHud_Dashboard.Theme_Primary : Color.white * 0.75f,
+                                margin: new RectOffset(5, 5, 0, 5));
+                        }
+                        #endregion
+
+                        #endregion
+
+                        #region 物体跟踪状态
+                        if (ObjectTracker.objectReferenceValue != null)
+                        {
+                            XHud_ObjectTracker tracker = (XHud_ObjectTracker)SelectedObjects[ElementStatu_Index].ObjectTracker;
+                            if (tracker.SelfObject != null && tracker.TargetObject != null)
+                            {
+                                XGUI.layout_state_displayer_text(
+                                    title: "物体跟踪状态",
+                                    title_size: XGUIFontSize.M,
+                                    subtitle: tracker.SelfObject.name + "  >  " + tracker.TargetObject.name,
+                                    subtitle_size: XGUIFontSize.M,
+                                    subtitle_color: XHud_Dashboard.Theme_Primary,
+                                    margin: new RectOffset(5, 5, 0, 5));
+                            }
+                        }
+                        #endregion
+
+                        #region 元素库源
+                        if (Application.isPlaying)
+                        {
+                            bool lib_exist = false;
+
+                            if (!string.IsNullOrEmpty(SelectedObjects[ElementStatu_Index].OriginPoolName))
+                            {
+                                //遍历元素库集合找到目标元素库
+                                foreach (XHud_Library_Element lib in HudManager.Hud_ElementLibrarys)
                                 {
-                                    Element_RMS_LayoutData dat = SelectedObjects[ElementStatu_Index].RMS_LayoutDatas[s];
-
-                                    if (dat.LayoutName == SelectedObjects[ElementStatu_Index].RMS_Name)
+                                    if (lib.LibraryName == SelectedObjects[ElementStatu_Index].OriginPoolName)
                                     {
-                                        exist_lay = true;
-
-                                        #region 锚点
-                                        XGUI.layout_state_displayer_text(
-                                            title: "锚点",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: dat.Anchor.ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
-
-                                        #region 最小锚点
-                                        XGUI.layout_state_displayer_text(
-                                            title: "最小锚点",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: dat.AnchorMin.ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
-
-                                        #region 最大锚点
-                                        XGUI.layout_state_displayer_text(
-                                            title: "最大锚点",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: dat.AnchorMax.ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
-
-                                        #region 位置
-                                        XGUI.layout_state_displayer_text(
-                                            title: "位置",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: dat.Position.ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
-
-                                        #region 角度
-                                        XGUI.layout_state_displayer_text(
-                                            title: "角度",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: dat.Euler.ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
-
-                                        #region 缩放
-                                        XGUI.layout_state_displayer_text(
-                                            title: "缩放",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: dat.Scale.ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
-
-                                        #region 轴心
-                                        XGUI.layout_state_displayer_text(
-                                            title: "轴心",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: dat.Pivot.ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
+                                        if (lib.ElementLibrary_IsExist(SelectedObjects[ElementStatu_Index].OriginalName))
+                                        {
+                                            lib_exist = true;
+                                            break;
+                                        }
+                                        break;
                                     }
                                 }
+                            }
 
-                                if (!exist_lay)
+                            if (lib_exist)
+                            {
+                                XGUI.layout_state_displayer_btn(
+                                    title: "元素库源",
+                                    title_size: XGUIFontSize.M,
+                                    btn_bg: XGUIFilled.实体,
+                                    btn_color: XGUIColor.亮白,
+                                    btn_text: SelectedObjects[ElementStatu_Index].OriginPoolName,
+                                    btn_tooltip: "定位",
+                                    btn_text_size: XGUIFontSize.M,
+                                    btn_layout_width: 120,
+                                    btn_gui_color: Color.white,
+                                    padding: new RectOffset(0, 0, 0, 0),
+                                    callback_clicked: () =>
+                                    {
+                                        if (!lib_exist)
+                                        {
+                                            XGUI.dialog(
+                                                type: XGUIDialogType.警告,
+                                                windowtitle: "XHud - 元素消息",
+                                                title: "定位元素",
+                                                msg: $"此元素并非由元素库生成，无法为其进行定位！",
+                                                ok: "明白",
+                                                PrimaryIndex: 0,
+                                                usemodal: true,
+                                                themecolor: XHud_Dashboard.Theme_Primary);
+
+                                            return;
+                                        }
+                                        //打开目标元素库
+                                        Editor_XHud_MenuItemsAction_OpenLibrary.open_target_elements(SelectedObjects[ElementStatu_Index].OriginPoolName).ElementLibrary_Location_Find(SelectedObjects[ElementStatu_Index].OriginalName);
+                                    });
+                            }
+                            else
+                            {
+                                XGUI.layout_state_displayer_text(
+                                    title: "元素库源",
+                                    title_size: XGUIFontSize.M,
+                                    subtitle: "非元素库资源",
+                                    subtitle_size: XGUIFontSize.M,
+                                    subtitle_color: XHud_Dashboard.Theme_Primary,
+                                    margin: new RectOffset(5, 5, 0, 5));
+                            }
+                        }
+                        else
+                        {
+                            //编辑器模式下，通过遍历所有元素库来找到当前这个元素在哪个库里
+                        }
+                        #endregion
+                    }
+                }
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            }
+            #endregion
+
+            #region RMS 布局信息
+            if (!TweensPreivew_In_State.boolValue && !TweensPreivew_Out_State.boolValue)
+            {
+                string rms_lay_title = "RMS 布局信息";
+                if (Targets_Selected())
+                    rms_lay_title = "RMS 布局信息 - ( 批量模式 )";
+
+                BaseScript.fold_rms = XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    title: rms_lay_title,
+                    title_size: XGUIFontSize.M,
+                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_clipping: TextClipping.Clip,
+                    padding: new RectOffset(10, 10, 15, 15),
+                    foldout: BaseScript.fold_rms);
+
+                if (!BaseScript.fold_rms)
+                {
+                    if (HudManager != null)
+                    {
+                        string[] nodesName = HudManager.hm_RMS_GetResolutionNodeNames();
+                        if (nodesName.Length > 0)
+                        {
+                            XGUI.layout_helpbox(
+                                    state: XGUIHelboxState.通知,
+                                    title_text: "RMS方案列表仅用于切换和预览，在取消选择元素后会自动回到Hud管理器当前选中的RMS方案",
+                                    title_size: XGUIFontSize.M,
+                                    title_style: FontStyle.Normal,
+                                    wrap: true,
+                                    title_color: Color.white * 0.75f);
+
+                            RMS_Name.stringValue = XGUI.layout_string_popup(
+                                title: "R M S 方案",
+                                title_width: 120,
+                                title_color: Color.white,
+                                title_size: XGUIFontSize.M,
+                                title_anchor: TextAnchor.MiddleLeft,
+                                prop: RMS_Name,
+                                options: nodesName,
+                                opt_text_size: XGUIFontSize.M,
+                                opt_text_color: Color.black,
+                                opt_text_padding: new RectOffset(10, 10, 0, 0),
+                                opt_anchor: TextAnchor.MiddleLeft,
+                                opt_font_style: FontStyle.Normal,
+                                opt_bg_fill: XGUIFilled.实体,
+                                opt_bg_color: XGUIColor.亮白,
+                                opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(0, 0, 5, 5),
+                                padding: new RectOffset(5, 5, 0, 0),
+                                title_margin: new RectOffset(0, 0, 0, 0),
+                                icon_arrow_color: Color.black,
+                                act_on_changed: (v) =>
+                                {
+                                    RMS_Name.stringValue = v;
+                                    RMS_Name.serializedObject.ApplyModifiedProperties();
+
+                                    if (!Application.isPlaying)
+                                    {
+                                        if (Targets_Selected())
+                                        {
+                                            for (int i = 0; i < SelectedObjects.Length; i++)
+                                            {
+                                                if (!string.IsNullOrEmpty(SelectedObjects[i].gameObject.scene.name))
+                                                    RMS_Preview(SelectedObjects[i], SelectedObjects[i].Alpha, Vector3.zero, SelectedObjects[i].RMS_Name, true);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (!string.IsNullOrEmpty(BaseScript.gameObject.scene.name))
+                                                RMS_Preview(BaseScript, Alpha.floatValue, Vector3.zero, RMS_Name.stringValue, true);
+                                        }
+                                    }
+                                });
+
+                            #region RMS方案信息查看
+                            if (Targets_Selected())
+                            {
+                                #region 控制区
+                                XGUI.layout_group_start(
+                                    type: XGUIContainerType.Horizontal,
+                                    bg_fill: XGUIFilled.透明,
+                                    bg_color: XGUIColor.亮白,
+                                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                                    absolute_margin: true,
+                                    absolute_padding: true,
+                                    margin: new RectOffset(0, 0, 0, 0),
+                                    padding: new RectOffset(15, 15, 5, 10));
+
+                                #region 标题按钮
+                                if (XGUI.layout_button(
+                                    text: $"{SelectedObjects[ElementStatu_Index].name} ( {SelectedObjects[ElementStatu_Index].Indicator} )",
+                                    tooltip: "",
+                                    bg_fill: XGUIFilled.透明,
+                                    button_text_color: Color.gray,
+                                    press_fill: XGUIFilled.透明,
+                                    press_text_color: XHud_Dashboard.Theme_Primary,
+                                    font_size: XGUIFontSize.M,
+                                    anchor: TextAnchor.MiddleLeft,
+                                    margin: new RectOffset(0, 0, 0, 0),
+                                    padding: new RectOffset(0, 0, 0, 0),
+                                    layout_width: 150,
+                                    button_text_font: XGUI.GetFont("xg-medium")))
+                                {
+                                    EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
+                                }
+                                #endregion
+
+                                XGUI.layout_flexspace();
+
+                                #region 上一个
+                                if (XGUI.layout_button(
+                                    tooltip: "上一个",
+                                    tex_release: left_arrow_r,
+                                    tex_press: left_arrow_p,
+                                    tex_gui_color: Color.white,
+                                    border: new RectOffset(0, 0, 0, 0),
+                                    width: 12,
+                                    height: 12))
+                                {
+                                    if (ElementStatu_Index <= 0)
+                                    {
+                                        ElementStatu_Index = SelectedObjects.Length - 1;
+                                    }
+                                    else
+                                    {
+                                        ElementStatu_Index--;
+                                    }
+                                    EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
+                                }
+                                #endregion
+
+                                XGUI.layout_space(20);
+
+                                #region 下一个
+                                if (XGUI.layout_button(
+                                    tooltip: "下一个",
+                                    tex_release: right_arrow_r,
+                                    tex_press: right_arrow_p,
+                                    tex_gui_color: Color.white,
+                                    border: new RectOffset(0, 0, 0, 0),
+                                    width: 12,
+                                    height: 12))
+                                {
+                                    if (ElementStatu_Index >= SelectedObjects.Length - 1)
+                                    {
+                                        ElementStatu_Index = 0;
+                                    }
+                                    else
+                                    {
+                                        ElementStatu_Index++;
+                                    }
+                                    EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
+                                }
+                                #endregion
+
+                                XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+                                #endregion
+
+                                XGUI.layout_seperator(
+                                        thickness: 1,
+                                        color: XHud_Dashboard.Theme_SeperateLine,
+                                        margin: new RectOffset(15, 15, 5, 25));
+
+                                if (SelectedObjects[ElementStatu_Index].RMS_LayoutDatas.Count <= 0)
                                 {
                                     XGUI.layout_label(
-                                        text: $"暂无对应 {SelectedObjects[ElementStatu_Index].RMS_Name} 方案的布局设计数据",
+                                        text: "暂无对应方案的布局设计数据",
                                         size: XGUIFontSize.S,
                                         anchor: TextAnchor.MiddleCenter,
                                         text_color: Color.white * 0.85f,
@@ -2431,302 +2347,386 @@ namespace SevenStrikeModules.XHud.Editor
                                         font: XGUI.GetFont("xg-regular"),
                                         font_style: FontStyle.Normal);
                                 }
-                            }
-                        }
-                        else
-                        {
-                            if (RMS_LayoutDatas.arraySize <= 0)
-                            {
-                                XGUI.layout_label(
-                                    text: "暂无对应方案的布局设计数据",
-                                    size: XGUIFontSize.S,
-                                    anchor: TextAnchor.MiddleCenter,
-                                    text_color: Color.white * 0.85f,
-                                    offset: new Vector2(0, 0),
-                                    padding: new RectOffset(10, 10, 10, 10),
-                                    margin: new RectOffset(0, 0, 6, 0),
-                                    clipping: clipping,
-                                    wrap: true,
-                                    font: XGUI.GetFont("xg-regular"),
-                                    font_style: FontStyle.Normal);
+                                else
+                                {
+                                    bool exist_lay = false;
+                                    for (int s = 0; s < SelectedObjects[ElementStatu_Index].RMS_LayoutDatas.Count; s++)
+                                    {
+                                        Element_RMS_LayoutData dat = SelectedObjects[ElementStatu_Index].RMS_LayoutDatas[s];
+
+                                        if (dat.LayoutName == SelectedObjects[ElementStatu_Index].RMS_Name)
+                                        {
+                                            exist_lay = true;
+
+                                            #region 锚点
+                                            XGUI.layout_state_displayer_text(
+                                                title: "锚点",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: dat.Anchor.ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+
+                                            #region 最小锚点
+                                            XGUI.layout_state_displayer_text(
+                                                title: "最小锚点",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: dat.AnchorMin.ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+
+                                            #region 最大锚点
+                                            XGUI.layout_state_displayer_text(
+                                                title: "最大锚点",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: dat.AnchorMax.ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+
+                                            #region 位置
+                                            XGUI.layout_state_displayer_text(
+                                                title: "位置",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: dat.Position.ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+
+                                            #region 角度
+                                            XGUI.layout_state_displayer_text(
+                                                title: "角度",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: dat.Euler.ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+
+                                            #region 缩放
+                                            XGUI.layout_state_displayer_text(
+                                                title: "缩放",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: dat.Scale.ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+
+                                            #region 轴心
+                                            XGUI.layout_state_displayer_text(
+                                                title: "轴心",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: dat.Pivot.ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+                                        }
+                                    }
+
+                                    if (!exist_lay)
+                                    {
+                                        XGUI.layout_label(
+                                            text: $"暂无对应 {SelectedObjects[ElementStatu_Index].RMS_Name} 方案的布局设计数据",
+                                            size: XGUIFontSize.S,
+                                            anchor: TextAnchor.MiddleCenter,
+                                            text_color: Color.white * 0.85f,
+                                            offset: new Vector2(0, 0),
+                                            padding: new RectOffset(10, 10, 10, 10),
+                                            margin: new RectOffset(0, 0, 6, 0),
+                                            clipping: clipping,
+                                            wrap: true,
+                                            font: XGUI.GetFont("xg-regular"),
+                                            font_style: FontStyle.Normal);
+                                    }
+                                }
                             }
                             else
                             {
-                                for (int i = 0; i < RMS_LayoutDatas.arraySize; i++)
+                                if (RMS_LayoutDatas.arraySize <= 0)
                                 {
-                                    SerializedProperty sp_item = RMS_LayoutDatas.GetArrayElementAtIndex(i);
-                                    SerializedProperty sp_item_Name = sp_item.FindPropertyRelative("LayoutName");
-
-                                    if (sp_item_Name.stringValue == RMS_Name.stringValue)
+                                    XGUI.layout_label(
+                                        text: "暂无对应方案的布局设计数据",
+                                        size: XGUIFontSize.S,
+                                        anchor: TextAnchor.MiddleCenter,
+                                        text_color: Color.white * 0.85f,
+                                        offset: new Vector2(0, 0),
+                                        padding: new RectOffset(10, 10, 10, 10),
+                                        margin: new RectOffset(0, 0, 6, 0),
+                                        clipping: clipping,
+                                        wrap: true,
+                                        font: XGUI.GetFont("xg-regular"),
+                                        font_style: FontStyle.Normal);
+                                }
+                                else
+                                {
+                                    for (int i = 0; i < RMS_LayoutDatas.arraySize; i++)
                                     {
-                                        SerializedProperty sp_item_Anchor = sp_item.FindPropertyRelative("Anchor");
-                                        SerializedProperty sp_item_Position = sp_item.FindPropertyRelative("Position");
-                                        SerializedProperty sp_item_Euler = sp_item.FindPropertyRelative("Euler");
-                                        SerializedProperty sp_item_Scale = sp_item.FindPropertyRelative("Scale");
-                                        SerializedProperty sp_item_AnchorMin = sp_item.FindPropertyRelative("AnchorMin");
-                                        SerializedProperty sp_item_AnchorMax = sp_item.FindPropertyRelative("AnchorMax");
-                                        SerializedProperty sp_item_Pivot = sp_item.FindPropertyRelative("Pivot");
+                                        SerializedProperty sp_item = RMS_LayoutDatas.GetArrayElementAtIndex(i);
+                                        SerializedProperty sp_item_Name = sp_item.FindPropertyRelative("LayoutName");
 
-                                        #region 锚点
-                                        XGUI.layout_state_displayer_text(
-                                            title: "锚点",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: ((XHudAnchor)sp_item_Anchor.enumValueIndex).ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
-
-                                        #region 最小锚点
-                                        XGUI.layout_state_displayer_text(
-                                            title: "最小锚点",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: sp_item_AnchorMin.vector2Value.ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
-
-                                        #region 最大锚点
-                                        XGUI.layout_state_displayer_text(
-                                            title: "最大锚点",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: sp_item_AnchorMax.vector2Value.ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
-
-                                        #region 位置
-                                        XGUI.layout_state_displayer_text(
-                                            title: "位置",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: sp_item_Position.vector3Value.ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
-
-                                        #region 角度
-                                        XGUI.layout_state_displayer_text(
-                                            title: "角度",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: sp_item_Euler.vector3Value.ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
-
-                                        #region 缩放
-                                        XGUI.layout_state_displayer_text(
-                                            title: "缩放",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: sp_item_Scale.vector3Value.ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
-
-                                        #region 轴心
-                                        XGUI.layout_state_displayer_text(
-                                            title: "轴心",
-                                            title_size: XGUIFontSize.M,
-                                            subtitle: sp_item_Pivot.vector2Value.ToString(),
-                                            subtitle_size: XGUIFontSize.M,
-                                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                                            margin: new RectOffset(5, 5, 0, 5));
-                                        #endregion
-
-                                        #region 控制按钮
-                                        XGUI.layout_group_start(
-                                            type: XGUIContainerType.Horizontal,
-                                            bg_fill: XGUIFilled.透明,
-                                            bg_color: XGUIColor.亮白,
-                                            bg_color_gui: XHud_Dashboard.Theme_Group,
-                                            absolute_margin: true,
-                                            absolute_padding: true,
-                                            margin: new RectOffset(0, 0, 0, 0),
-                                            padding: new RectOffset(0, 0, 5, 10));
-
-                                        #region 清空所有方案
-                                        if (RMS_LayoutDatas.arraySize > 0)
+                                        if (sp_item_Name.stringValue == RMS_Name.stringValue)
                                         {
-                                            if (XGUI.layout_button(
-                                            text: "清空所有方案",
-                                            tooltip: "清空所有分辨率匹配方案列表",
-                                            bg_fill: XGUIFilled.实体,
-                                            bg_color: XGUIColor.亮白,
-                                            bg_color_gui: Color.red * 0.75f,
-                                            button_text_color: Color.white,
-                                            press_fill: XGUIFilled.实体,
-                                            press_color: XGUIColor.深空灰,
-                                            press_text_color: Color.white,
-                                            font_size: XGUIFontSize.M,
-                                            anchor: TextAnchor.MiddleCenter,
-                                            margin: new RectOffset(0, 5, 0, 0),
-                                            padding: new RectOffset(0, 0, 0, 0),
-                                            //width: ButtonWidth,
-                                            height: 20,
-                                            button_text_font: XGUI.GetFont("xg-medium")))
+                                            SerializedProperty sp_item_Anchor = sp_item.FindPropertyRelative("Anchor");
+                                            SerializedProperty sp_item_Position = sp_item.FindPropertyRelative("Position");
+                                            SerializedProperty sp_item_Euler = sp_item.FindPropertyRelative("Euler");
+                                            SerializedProperty sp_item_Scale = sp_item.FindPropertyRelative("Scale");
+                                            SerializedProperty sp_item_AnchorMin = sp_item.FindPropertyRelative("AnchorMin");
+                                            SerializedProperty sp_item_AnchorMax = sp_item.FindPropertyRelative("AnchorMax");
+                                            SerializedProperty sp_item_Pivot = sp_item.FindPropertyRelative("Pivot");
+
+                                            #region 锚点
+                                            XGUI.layout_state_displayer_text(
+                                                title: "锚点",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: ((XHudAnchor)sp_item_Anchor.enumValueIndex).ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+
+                                            #region 最小锚点
+                                            XGUI.layout_state_displayer_text(
+                                                title: "最小锚点",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: sp_item_AnchorMin.vector2Value.ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+
+                                            #region 最大锚点
+                                            XGUI.layout_state_displayer_text(
+                                                title: "最大锚点",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: sp_item_AnchorMax.vector2Value.ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+
+                                            #region 位置
+                                            XGUI.layout_state_displayer_text(
+                                                title: "位置",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: sp_item_Position.vector3Value.ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+
+                                            #region 角度
+                                            XGUI.layout_state_displayer_text(
+                                                title: "角度",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: sp_item_Euler.vector3Value.ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+
+                                            #region 缩放
+                                            XGUI.layout_state_displayer_text(
+                                                title: "缩放",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: sp_item_Scale.vector3Value.ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+
+                                            #region 轴心
+                                            XGUI.layout_state_displayer_text(
+                                                title: "轴心",
+                                                title_size: XGUIFontSize.M,
+                                                subtitle: sp_item_Pivot.vector2Value.ToString(),
+                                                subtitle_size: XGUIFontSize.M,
+                                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                                margin: new RectOffset(5, 5, 0, 5));
+                                            #endregion
+
+                                            #region 控制按钮
+                                            XGUI.layout_group_start(
+                                                type: XGUIContainerType.Horizontal,
+                                                bg_fill: XGUIFilled.透明,
+                                                bg_color: XGUIColor.亮白,
+                                                bg_color_gui: XHud_Dashboard.Theme_Group,
+                                                absolute_margin: true,
+                                                absolute_padding: true,
+                                                margin: new RectOffset(0, 0, 0, 0),
+                                                padding: new RectOffset(0, 0, 5, 10));
+
+                                            #region 清空所有方案
+                                            if (RMS_LayoutDatas.arraySize > 0)
                                             {
-                                                string res = XGUI.dialog(
-                                                    type: XGUIDialogType.警告,
-                                                    windowtitle: "XHud - 元素消息",
-                                                    title: "RMS方案操作",
-                                                    msg: $"如果清空匹配分辨率信息列表，会导致您之前为不同分辨率记录的坐标信息全部清空，请谨慎此操作！",
-                                                    ok: "清空",
-                                                    cancel: "暂不",
-                                                    PrimaryIndex: 0,
-                                                    usemodal: true,
-                                                    themecolor: XHud_Dashboard.Theme_Primary);
-
-                                                if (res == "清空")
-                                                {
-                                                    RMS_LayoutDatas.ClearArray();
-                                                    RMS_LayoutDatas.serializedObject.ApplyModifiedProperties();
-                                                }
-                                                return;
-                                            }
-                                        }
-                                        #endregion
-
-                                        //XGUI.layout_flexspace();
-
-                                        #region 移除当前方案
-                                        if (RMS_IsExist())
-                                        {
-                                            if (XGUI.layout_button(
-                                                text: "移除当前方案",
-                                                tooltip: "移除当前选择的分辨率匹配方案",
+                                                if (XGUI.layout_button(
+                                                text: "清空所有方案",
+                                                tooltip: "清空所有分辨率匹配方案列表",
                                                 bg_fill: XGUIFilled.实体,
                                                 bg_color: XGUIColor.亮白,
-                                                bg_color_gui: Color.white,
-                                                button_text_color: Color.black,
+                                                bg_color_gui: Color.red * 0.75f,
+                                                button_text_color: Color.white,
                                                 press_fill: XGUIFilled.实体,
                                                 press_color: XGUIColor.深空灰,
                                                 press_text_color: Color.white,
                                                 font_size: XGUIFontSize.M,
                                                 anchor: TextAnchor.MiddleCenter,
-                                                margin: new RectOffset(5, 0, 0, 0),
+                                                margin: new RectOffset(0, 5, 0, 0),
                                                 padding: new RectOffset(0, 0, 0, 0),
                                                 //width: ButtonWidth,
                                                 height: 20,
                                                 button_text_font: XGUI.GetFont("xg-medium")))
-                                            {
-                                                string res = XGUI.dialog(
-                                                    type: XGUIDialogType.警告,
-                                                    windowtitle: "XHud - 元素消息",
-                                                    title: "RMS方案操作",
-                                                    msg: $"此操作会导致您为当前分辨率匹配的方案会被移除，请谨慎此操作！",
-                                                    ok: "清空",
-                                                    cancel: "暂不",
-                                                    PrimaryIndex: 0,
-                                                    usemodal: true,
-                                                    themecolor: XHud_Dashboard.Theme_Primary);
-                                                if (res == "暂不")
-                                                    return;
-                                                for (int s = 0; s < RMS_LayoutDatas.arraySize; s++)
                                                 {
-                                                    SerializedProperty sp_Name = RMS_LayoutDatas.GetArrayElementAtIndex(s).FindPropertyRelative("LayoutName");
-                                                    if (sp_Name.stringValue == RMS_Name.stringValue)
+                                                    string res = XGUI.dialog(
+                                                        type: XGUIDialogType.警告,
+                                                        windowtitle: "XHud - 元素消息",
+                                                        title: "RMS方案操作",
+                                                        msg: $"如果清空匹配分辨率信息列表，会导致您之前为不同分辨率记录的坐标信息全部清空，请谨慎此操作！",
+                                                        ok: "清空",
+                                                        cancel: "暂不",
+                                                        PrimaryIndex: 0,
+                                                        usemodal: true,
+                                                        themecolor: XHud_Dashboard.Theme_Primary);
+
+                                                    if (res == "清空")
                                                     {
-                                                        RMS_LayoutDatas.DeleteArrayElementAtIndex(s);
+                                                        RMS_LayoutDatas.ClearArray();
                                                         RMS_LayoutDatas.serializedObject.ApplyModifiedProperties();
-                                                        break;
                                                     }
+                                                    return;
                                                 }
-                                                return;
                                             }
+                                            #endregion
+
+                                            //XGUI.layout_flexspace();
+
+                                            #region 移除当前方案
+                                            if (RMS_IsExist())
+                                            {
+                                                if (XGUI.layout_button(
+                                                    text: "移除当前方案",
+                                                    tooltip: "移除当前选择的分辨率匹配方案",
+                                                    bg_fill: XGUIFilled.实体,
+                                                    bg_color: XGUIColor.亮白,
+                                                    bg_color_gui: Color.white,
+                                                    button_text_color: Color.black,
+                                                    press_fill: XGUIFilled.实体,
+                                                    press_color: XGUIColor.深空灰,
+                                                    press_text_color: Color.white,
+                                                    font_size: XGUIFontSize.M,
+                                                    anchor: TextAnchor.MiddleCenter,
+                                                    margin: new RectOffset(5, 0, 0, 0),
+                                                    padding: new RectOffset(0, 0, 0, 0),
+                                                    //width: ButtonWidth,
+                                                    height: 20,
+                                                    button_text_font: XGUI.GetFont("xg-medium")))
+                                                {
+                                                    string res = XGUI.dialog(
+                                                        type: XGUIDialogType.警告,
+                                                        windowtitle: "XHud - 元素消息",
+                                                        title: "RMS方案操作",
+                                                        msg: $"此操作会导致您为当前分辨率匹配的方案会被移除，请谨慎此操作！",
+                                                        ok: "清空",
+                                                        cancel: "暂不",
+                                                        PrimaryIndex: 0,
+                                                        usemodal: true,
+                                                        themecolor: XHud_Dashboard.Theme_Primary);
+                                                    if (res == "暂不")
+                                                        return;
+                                                    for (int s = 0; s < RMS_LayoutDatas.arraySize; s++)
+                                                    {
+                                                        SerializedProperty sp_Name = RMS_LayoutDatas.GetArrayElementAtIndex(s).FindPropertyRelative("LayoutName");
+                                                        if (sp_Name.stringValue == RMS_Name.stringValue)
+                                                        {
+                                                            RMS_LayoutDatas.DeleteArrayElementAtIndex(s);
+                                                            RMS_LayoutDatas.serializedObject.ApplyModifiedProperties();
+                                                            break;
+                                                        }
+                                                    }
+                                                    return;
+                                                }
+                                            }
+                                            #endregion
+
+                                            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+                                            TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
+                                            TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
+                                            #endregion
                                         }
-                                        #endregion
-
-                                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
-
-                                        TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
-                                        TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
-                                        #endregion
                                     }
                                 }
                             }
+                            #endregion
                         }
-                        #endregion
+                        else
+                        {
+                            XGUI.layout_label(
+                                text: "暂未在管理器中配置 R M S 列表",
+                                //bg_fill: XGUIFilled.无,
+                                //bg_color: XGUIColor.深空灰,
+                                size: XGUIFontSize.S,
+                                anchor: TextAnchor.MiddleCenter,
+                                text_color: Color.white * 0.85f,
+                                offset: new Vector2(0, 0),
+                                padding: new RectOffset(10, 10, 10, 10),
+                                margin: new RectOffset(0, 0, 6, 0),
+                                clipping: clipping,
+                                wrap: true,
+                                font: XGUI.GetFont("xg-regular"),
+                                font_style: FontStyle.Normal);
+                        }
                     }
                     else
                     {
                         XGUI.layout_label(
-                            text: "暂未在管理器中配置 R M S 列表",
-                            //bg_fill: XGUIFilled.无,
-                            //bg_color: XGUIColor.深空灰,
-                            size: XGUIFontSize.S,
-                            anchor: TextAnchor.MiddleCenter,
-                            text_color: Color.white * 0.85f,
-                            offset: new Vector2(0, 0),
-                            padding: new RectOffset(10, 10, 10, 10),
-                            margin: new RectOffset(0, 0, 6, 0),
-                            clipping: clipping,
-                            wrap: true,
-                            font: XGUI.GetFont("xg-regular"),
-                            font_style: FontStyle.Normal);
+                               text: "暂未发现 XHud 管理器",
+                               //bg_fill: XGUIFilled.无,
+                               //bg_color: XGUIColor.深空灰,
+                               size: XGUIFontSize.S,
+                               anchor: TextAnchor.MiddleCenter,
+                               text_color: Color.white * 0.85f,
+                               offset: new Vector2(0, 0),
+                               padding: new RectOffset(10, 10, 10, 10),
+                               margin: new RectOffset(0, 0, 6, 0),
+                               clipping: clipping,
+                               wrap: true,
+                               font: XGUI.GetFont("xg-regular"),
+                               font_style: FontStyle.Normal);
                     }
                 }
-                else
-                {
-                    XGUI.layout_label(
-                           text: "暂未发现 XHud 管理器",
-                           //bg_fill: XGUIFilled.无,
-                           //bg_color: XGUIColor.深空灰,
-                           size: XGUIFontSize.S,
-                           anchor: TextAnchor.MiddleCenter,
-                           text_color: Color.white * 0.85f,
-                           offset: new Vector2(0, 0),
-                           padding: new RectOffset(10, 10, 10, 10),
-                           margin: new RectOffset(0, 0, 6, 0),
-                           clipping: clipping,
-                           wrap: true,
-                           font: XGUI.GetFont("xg-regular"),
-                           font_style: FontStyle.Normal);
-                }
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             }
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 子组件
-            BaseScript.fold_list = XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
-                title: "子组件",
-                title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
-                title_clipping: TextClipping.Clip,
-                padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_list);
-
-            if (!BaseScript.fold_list)
+            if (!TweensPreivew_In_State.boolValue && !TweensPreivew_Out_State.boolValue)
             {
-                #region 列表
-                if (Targets_Selected())
+                BaseScript.fold_list = XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    title: "子组件",
+                    title_size: XGUIFontSize.M,
+                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_clipping: TextClipping.Clip,
+                    padding: new RectOffset(10, 10, 15, 15),
+                    foldout: BaseScript.fold_list);
+
+                if (!BaseScript.fold_list)
                 {
-                    XGUI.layout_label(
-                        text: "列表不支持批量操作",
-                        size: XGUIFontSize.S,
-                        anchor: TextAnchor.MiddleCenter,
-                        text_color: Color.white * 0.85f,
-                        offset: new Vector2(0, 0),
-                        padding: new RectOffset(10, 10, 10, 10),
-                        margin: new RectOffset(0, 0, 6, 0),
-                        clipping: clipping,
-                        wrap: true,
-                        font: XGUI.GetFont("xg-regular"),
-                        font_style: FontStyle.Normal);
-                }
-                else
-                {
-                    if (SounderNodes.arraySize == 0 && PrimitiveControllerNodes.arraySize == 0 && ButtonNodes.arraySize == 0 && TextNodes.arraySize == 0 && TmpTextNodes.arraySize == 0 && OptionNodes.arraySize == 0 && SliderNodes.arraySize == 0 && ProgressNodes.arraySize == 0 && ToggleNodes.arraySize == 0)
+                    #region 列表
+                    if (Targets_Selected())
                     {
                         XGUI.layout_label(
-                            text: "暂无有效子组件列表",
+                            text: "列表不支持批量操作",
                             size: XGUIFontSize.S,
                             anchor: TextAnchor.MiddleCenter,
                             text_color: Color.white * 0.85f,
@@ -2740,633 +2740,657 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     else
                     {
-                        XGUI.layout_space(20);
+                        if (SounderNodes.arraySize == 0 && PrimitiveControllerNodes.arraySize == 0 && ButtonNodes.arraySize == 0 && TextNodes.arraySize == 0 && TmpTextNodes.arraySize == 0 && OptionNodes.arraySize == 0 && SliderNodes.arraySize == 0 && ProgressNodes.arraySize == 0 && ToggleNodes.arraySize == 0)
+                        {
+                            XGUI.layout_label(
+                                text: "暂无有效子组件列表",
+                                size: XGUIFontSize.S,
+                                anchor: TextAnchor.MiddleCenter,
+                                text_color: Color.white * 0.85f,
+                                offset: new Vector2(0, 0),
+                                padding: new RectOffset(10, 10, 10, 10),
+                                margin: new RectOffset(0, 0, 6, 0),
+                                clipping: clipping,
+                                wrap: true,
+                                font: XGUI.GetFont("xg-regular"),
+                                font_style: FontStyle.Normal);
+                        }
+                        else
+                        {
+                            XGUI.layout_space(20);
+
+                            #region 图元控制器
+                            if (PrimitiveControllerNodes.arraySize > 0)
+                            {
+                                PrimitivesIsFold.boolValue = XGUI.layout_group_start(
+                                    type: XGUIContainerType.Vertical,
+                                    bg_fill: XGUIFilled.缺口纯色边框,
+                                    bg_color: XGUIColor.亮白,
+                                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                                    title: "图元控制器",
+                                    title_size: XGUIFontSize.M,
+                                    title_text_color: XHud_Dashboard.Theme_Primary,
+                                    title_clipping: TextClipping.Clip,
+                                    title_offset: new Vector2(10, 0),
+                                    padding: new RectOffset(10, 10, 15, 15),
+                                    foldout: PrimitivesIsFold.boolValue);
+
+                                if (!PrimitivesIsFold.boolValue)
+                                    PrimitivesTweenList.DoLayoutList();
+
+                                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                            }
+                            #endregion
+
+                            #region 文字
+                            if (TextNodes.arraySize > 0)
+                            {
+                                TextIsFold.boolValue = XGUI.layout_group_start(
+                                    type: XGUIContainerType.Vertical,
+                                    bg_fill: XGUIFilled.缺口纯色边框,
+                                    bg_color: XGUIColor.亮白,
+                                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                                    title: "文字",
+                                    title_size: XGUIFontSize.M,
+                                    title_text_color: XHud_Dashboard.Theme_Primary,
+                                    title_clipping: TextClipping.Clip,
+                                    title_offset: new Vector2(10, 0),
+                                    padding: new RectOffset(10, 10, 15, 15),
+                                    foldout: TextIsFold.boolValue);
+
+                                if (!TextIsFold.boolValue)
+                                    TextList.DoLayoutList();
+
+                                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                            }
+                            #endregion
+
+                            #region Tmp 文字
+                            if (TmpTextNodes.arraySize > 0)
+                            {
+                                TmpTextIsFold.boolValue = XGUI.layout_group_start(
+                                    type: XGUIContainerType.Vertical,
+                                    bg_fill: XGUIFilled.缺口纯色边框,
+                                    bg_color: XGUIColor.亮白,
+                                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                                    title: "Tmp 文字",
+                                    title_size: XGUIFontSize.M,
+                                    title_text_color: XHud_Dashboard.Theme_Primary,
+                                    title_clipping: TextClipping.Clip,
+                                    title_offset: new Vector2(10, 0),
+                                    padding: new RectOffset(10, 10, 15, 15),
+                                    foldout: TmpTextIsFold.boolValue);
+
+                                if (!TmpTextIsFold.boolValue)
+                                    TmpTextList.DoLayoutList();
+
+                                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                            }
+                            #endregion
+
+                            #region 按钮
+                            if (ButtonNodes.arraySize > 0)
+                            {
+                                ButtonIsFold.boolValue = XGUI.layout_group_start(
+                                    type: XGUIContainerType.Vertical,
+                                    bg_fill: XGUIFilled.缺口纯色边框,
+                                    bg_color: XGUIColor.亮白,
+                                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                                    title: "按钮",
+                                    title_size: XGUIFontSize.M,
+                                    title_text_color: XHud_Dashboard.Theme_Primary,
+                                    title_clipping: TextClipping.Clip,
+                                    title_offset: new Vector2(10, 0),
+                                    padding: new RectOffset(10, 10, 15, 15),
+                                    foldout: ButtonIsFold.boolValue);
+
+                                if (!ButtonIsFold.boolValue)
+                                    ButtonList.DoLayoutList();
+
+                                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                            }
+                            #endregion
+
+                            #region 选项
+                            if (OptionNodes.arraySize > 0)
+                            {
+                                OptionIsFold.boolValue = XGUI.layout_group_start(
+                                    type: XGUIContainerType.Vertical,
+                                    bg_fill: XGUIFilled.缺口纯色边框,
+                                    bg_color: XGUIColor.亮白,
+                                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                                    title: "选项",
+                                    title_size: XGUIFontSize.M,
+                                    title_text_color: XHud_Dashboard.Theme_Primary,
+                                    title_clipping: TextClipping.Clip,
+                                    title_offset: new Vector2(10, 0),
+                                    padding: new RectOffset(10, 10, 15, 15),
+                                    foldout: OptionIsFold.boolValue);
+
+                                if (!OptionIsFold.boolValue)
+                                    OptionList.DoLayoutList();
+
+                                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                            }
+                            #endregion
+
+                            #region 滑动条
+                            if (SliderNodes.arraySize > 0)
+                            {
+                                SliderIsFold.boolValue = XGUI.layout_group_start(
+                                    type: XGUIContainerType.Vertical,
+                                    bg_fill: XGUIFilled.缺口纯色边框,
+                                    bg_color: XGUIColor.亮白,
+                                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                                    title: "滑动条",
+                                    title_size: XGUIFontSize.M,
+                                    title_text_color: XHud_Dashboard.Theme_Primary,
+                                    title_clipping: TextClipping.Clip,
+                                    title_offset: new Vector2(10, 0),
+                                    padding: new RectOffset(10, 10, 15, 15),
+                                    foldout: SliderIsFold.boolValue);
+
+                                if (!SliderIsFold.boolValue)
+                                    SliderList.DoLayoutList();
+
+                                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                            }
+                            #endregion
+
+                            #region 进度条
+                            if (ProgressNodes.arraySize > 0)
+                            {
+                                ProgressIsFold.boolValue = XGUI.layout_group_start(
+                                    type: XGUIContainerType.Vertical,
+                                    bg_fill: XGUIFilled.缺口纯色边框,
+                                    bg_color: XGUIColor.亮白,
+                                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                                    title: "进度条",
+                                    title_size: XGUIFontSize.M,
+                                    title_text_color: XHud_Dashboard.Theme_Primary,
+                                    title_clipping: TextClipping.Clip,
+                                    title_offset: new Vector2(10, 0),
+                                    padding: new RectOffset(10, 10, 15, 15),
+                                    foldout: ProgressIsFold.boolValue);
+
+                                if (!ProgressIsFold.boolValue)
+                                    ProgressList.DoLayoutList();
+
+                                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                            }
+                            #endregion
+
+                            #region 开关
+                            if (ToggleNodes.arraySize > 0)
+                            {
+                                ToggleIsFold.boolValue = XGUI.layout_group_start(
+                                    type: XGUIContainerType.Vertical,
+                                    bg_fill: XGUIFilled.缺口纯色边框,
+                                    bg_color: XGUIColor.亮白,
+                                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                                    title: "开关",
+                                    title_size: XGUIFontSize.M,
+                                    title_text_color: XHud_Dashboard.Theme_Primary,
+                                    title_clipping: TextClipping.Clip,
+                                    title_offset: new Vector2(10, 0),
+                                    padding: new RectOffset(10, 10, 15, 15),
+                                    foldout: ToggleIsFold.boolValue);
+
+                                if (!ToggleIsFold.boolValue)
+                                    ToggleList.DoLayoutList();
+
+                                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                            }
+                            #endregion
+
+                            #region 音效器
+                            if (SounderNodes.arraySize > 0)
+                            {
+                                SounderIsFold.boolValue = XGUI.layout_group_start(
+                                    type: XGUIContainerType.Vertical,
+                                    bg_fill: XGUIFilled.缺口纯色边框,
+                                    bg_color: XGUIColor.亮白,
+                                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                                    title: "音效器",
+                                    title_size: XGUIFontSize.M,
+                                    title_text_color: XHud_Dashboard.Theme_Primary,
+                                    title_clipping: TextClipping.Clip,
+                                    title_offset: new Vector2(10, 0),
+                                    padding: new RectOffset(10, 10, 15, 15),
+                                    foldout: SounderIsFold.boolValue);
+
+                                if (!SounderIsFold.boolValue)
+                                    SounderList.DoLayoutList();
+
+                                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                            }
+                            #endregion
+
+                        }
+                    }
+                    #endregion
+                }
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            }
+            #endregion
+
+            #region 统计
+            if (!TweensPreivew_In_State.boolValue && !TweensPreivew_Out_State.boolValue)
+            {
+                string statu_statistic = "统计";
+                if (Targets_Selected())
+                    statu_statistic = "统计 - ( 批量模式 )";
+
+                BaseScript.fold_statistic = XGUI.layout_group_start(
+                  type: XGUIContainerType.Vertical,
+                  bg_fill: XGUIFilled.缺口纯色边框,
+                  bg_color: XGUIColor.亮白,
+                  bg_color_gui: XHud_Dashboard.Theme_Group,
+                  title: statu_statistic,
+                  title_size: XGUIFontSize.M,
+                  title_text_color: XHud_Dashboard.Theme_Primary,
+                  title_clipping: TextClipping.Clip,
+                  padding: new RectOffset(10, 10, 15, 15),
+                  foldout: BaseScript.fold_statistic);
+
+                if (!BaseScript.fold_statistic)
+                {
+                    if (!Targets_Selected())
+                    {
+                        if (SounderNodes.arraySize == 0 && PrimitiveControllerNodes.arraySize == 0 && ButtonNodes.arraySize == 0 && TextNodes.arraySize == 0 && TmpTextNodes.arraySize == 0 && OptionNodes.arraySize == 0 && SliderNodes.arraySize == 0 && ProgressNodes.arraySize == 0 && ToggleNodes.arraySize == 0)
+                        {
+                            XGUI.layout_label(
+                                text: "暂无有效子组件列表",
+                                size: XGUIFontSize.S,
+                                anchor: TextAnchor.MiddleCenter,
+                                text_color: Color.white * 0.85f,
+                                offset: new Vector2(0, 0),
+                                padding: new RectOffset(10, 10, 10, 10),
+                                margin: new RectOffset(0, 0, 6, 0),
+                                clipping: clipping,
+                                wrap: true,
+                                font: XGUI.GetFont("xg-regular"),
+                                font_style: FontStyle.Normal);
+                        }
+
+                        #region 音效器
+                        if (SounderNodes.arraySize > 0)
+                            XGUI.layout_state_displayer_text(
+                                title: "音效器",
+                                title_size: XGUIFontSize.M,
+                                subtitle: SounderNodes.arraySize.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                        #endregion
 
                         #region 图元控制器
                         if (PrimitiveControllerNodes.arraySize > 0)
-                        {
-                            PrimitivesIsFold.boolValue = XGUI.layout_group_start(
-                                type: XGUIContainerType.Vertical,
-                                bg_fill: XGUIFilled.缺口纯色边框,
-                                bg_color: XGUIColor.亮白,
-                                bg_color_gui: XHud_Dashboard.Theme_Group,
+                            XGUI.layout_state_displayer_text(
                                 title: "图元控制器",
                                 title_size: XGUIFontSize.M,
-                                title_text_color: XHud_Dashboard.Theme_Primary,
-                                title_clipping: TextClipping.Clip,
-                                title_offset: new Vector2(10, 0),
-                                padding: new RectOffset(10, 10, 15, 15),
-                                foldout: PrimitivesIsFold.boolValue);
-
-                            if (!PrimitivesIsFold.boolValue)
-                                PrimitivesTweenList.DoLayoutList();
-
-                            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-                        }
-                        #endregion
-
-                        #region 文字
-                        if (TextNodes.arraySize > 0)
-                        {
-                            TextIsFold.boolValue = XGUI.layout_group_start(
-                                type: XGUIContainerType.Vertical,
-                                bg_fill: XGUIFilled.缺口纯色边框,
-                                bg_color: XGUIColor.亮白,
-                                bg_color_gui: XHud_Dashboard.Theme_Group,
-                                title: "文字",
-                                title_size: XGUIFontSize.M,
-                                title_text_color: XHud_Dashboard.Theme_Primary,
-                                title_clipping: TextClipping.Clip,
-                                title_offset: new Vector2(10, 0),
-                                padding: new RectOffset(10, 10, 15, 15),
-                                foldout: TextIsFold.boolValue);
-
-                            if (!TextIsFold.boolValue)
-                                TextList.DoLayoutList();
-
-                            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-                        }
-                        #endregion
-
-                        #region Tmp 文字
-                        if (TmpTextNodes.arraySize > 0)
-                        {
-                            TmpTextIsFold.boolValue = XGUI.layout_group_start(
-                                type: XGUIContainerType.Vertical,
-                                bg_fill: XGUIFilled.缺口纯色边框,
-                                bg_color: XGUIColor.亮白,
-                                bg_color_gui: XHud_Dashboard.Theme_Group,
-                                title: "Tmp 文字",
-                                title_size: XGUIFontSize.M,
-                                title_text_color: XHud_Dashboard.Theme_Primary,
-                                title_clipping: TextClipping.Clip,
-                                title_offset: new Vector2(10, 0),
-                                padding: new RectOffset(10, 10, 15, 15),
-                                foldout: TmpTextIsFold.boolValue);
-
-                            if (!TmpTextIsFold.boolValue)
-                                TmpTextList.DoLayoutList();
-
-                            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-                        }
+                                subtitle: PrimitiveControllerNodes.arraySize.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
                         #endregion
 
                         #region 按钮
                         if (ButtonNodes.arraySize > 0)
-                        {
-                            ButtonIsFold.boolValue = XGUI.layout_group_start(
-                                type: XGUIContainerType.Vertical,
-                                bg_fill: XGUIFilled.缺口纯色边框,
-                                bg_color: XGUIColor.亮白,
-                                bg_color_gui: XHud_Dashboard.Theme_Group,
+                            XGUI.layout_state_displayer_text(
                                 title: "按钮",
                                 title_size: XGUIFontSize.M,
-                                title_text_color: XHud_Dashboard.Theme_Primary,
-                                title_clipping: TextClipping.Clip,
-                                title_offset: new Vector2(10, 0),
-                                padding: new RectOffset(10, 10, 15, 15),
-                                foldout: ButtonIsFold.boolValue);
-
-                            if (!ButtonIsFold.boolValue)
-                                ButtonList.DoLayoutList();
-
-                            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-                        }
+                                subtitle: ButtonNodes.arraySize.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
                         #endregion
 
                         #region 选项
                         if (OptionNodes.arraySize > 0)
-                        {
-                            OptionIsFold.boolValue = XGUI.layout_group_start(
-                                type: XGUIContainerType.Vertical,
-                                bg_fill: XGUIFilled.缺口纯色边框,
-                                bg_color: XGUIColor.亮白,
-                                bg_color_gui: XHud_Dashboard.Theme_Group,
+                            XGUI.layout_state_displayer_text(
                                 title: "选项",
                                 title_size: XGUIFontSize.M,
-                                title_text_color: XHud_Dashboard.Theme_Primary,
-                                title_clipping: TextClipping.Clip,
-                                title_offset: new Vector2(10, 0),
-                                padding: new RectOffset(10, 10, 15, 15),
-                                foldout: OptionIsFold.boolValue);
-
-                            if (!OptionIsFold.boolValue)
-                                OptionList.DoLayoutList();
-
-                            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-                        }
+                                subtitle: OptionNodes.arraySize.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
                         #endregion
 
                         #region 滑动条
                         if (SliderNodes.arraySize > 0)
-                        {
-                            SliderIsFold.boolValue = XGUI.layout_group_start(
-                                type: XGUIContainerType.Vertical,
-                                bg_fill: XGUIFilled.缺口纯色边框,
-                                bg_color: XGUIColor.亮白,
-                                bg_color_gui: XHud_Dashboard.Theme_Group,
+                            XGUI.layout_state_displayer_text(
                                 title: "滑动条",
                                 title_size: XGUIFontSize.M,
-                                title_text_color: XHud_Dashboard.Theme_Primary,
-                                title_clipping: TextClipping.Clip,
-                                title_offset: new Vector2(10, 0),
-                                padding: new RectOffset(10, 10, 15, 15),
-                                foldout: SliderIsFold.boolValue);
-
-                            if (!SliderIsFold.boolValue)
-                                SliderList.DoLayoutList();
-
-                            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-                        }
+                                subtitle: SliderNodes.arraySize.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
                         #endregion
 
                         #region 进度条
                         if (ProgressNodes.arraySize > 0)
-                        {
-                            ProgressIsFold.boolValue = XGUI.layout_group_start(
-                                type: XGUIContainerType.Vertical,
-                                bg_fill: XGUIFilled.缺口纯色边框,
-                                bg_color: XGUIColor.亮白,
-                                bg_color_gui: XHud_Dashboard.Theme_Group,
+                            XGUI.layout_state_displayer_text(
                                 title: "进度条",
                                 title_size: XGUIFontSize.M,
-                                title_text_color: XHud_Dashboard.Theme_Primary,
-                                title_clipping: TextClipping.Clip,
-                                title_offset: new Vector2(10, 0),
-                                padding: new RectOffset(10, 10, 15, 15),
-                                foldout: ProgressIsFold.boolValue);
-
-                            if (!ProgressIsFold.boolValue)
-                                ProgressList.DoLayoutList();
-
-                            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-                        }
+                                subtitle: ProgressNodes.arraySize.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
                         #endregion
 
                         #region 开关
                         if (ToggleNodes.arraySize > 0)
-                        {
-                            ToggleIsFold.boolValue = XGUI.layout_group_start(
-                                type: XGUIContainerType.Vertical,
-                                bg_fill: XGUIFilled.缺口纯色边框,
-                                bg_color: XGUIColor.亮白,
-                                bg_color_gui: XHud_Dashboard.Theme_Group,
+                            XGUI.layout_state_displayer_text(
                                 title: "开关",
                                 title_size: XGUIFontSize.M,
-                                title_text_color: XHud_Dashboard.Theme_Primary,
-                                title_clipping: TextClipping.Clip,
-                                title_offset: new Vector2(10, 0),
-                                padding: new RectOffset(10, 10, 15, 15),
-                                foldout: ToggleIsFold.boolValue);
+                                subtitle: ToggleNodes.arraySize.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                        #endregion
 
-                            if (!ToggleIsFold.boolValue)
-                                ToggleList.DoLayoutList();
+                        #region 文字
+                        if (TextNodes.arraySize > 0)
+                            XGUI.layout_state_displayer_text(
+                                title: "文字",
+                                title_size: XGUIFontSize.M,
+                                subtitle: TextNodes.arraySize.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                        #endregion
 
-                            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                        #region Tmp文字
+                        if (TmpTextNodes.arraySize > 0)
+                            XGUI.layout_state_displayer_text(
+                                title: "Tmp文字",
+                                title_size: XGUIFontSize.M,
+                                subtitle: TmpTextNodes.arraySize.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                        #endregion
+                    }
+                    else
+                    {
+                        #region 批量控件
+                        #region 控制区
+                        XGUI.layout_group_start(
+                            type: XGUIContainerType.Horizontal,
+                            bg_fill: XGUIFilled.透明,
+                            bg_color: XGUIColor.亮白,
+                            bg_color_gui: XHud_Dashboard.Theme_Group,
+                            absolute_margin: true,
+                            absolute_padding: true,
+                            margin: new RectOffset(0, 0, 0, 0),
+                            padding: new RectOffset(15, 15, 5, 10));
+
+                        #region 标题按钮
+                        if (XGUI.layout_button(
+                            text: $"{SelectedObjects[ElementStatu_Index].name} ( {SelectedObjects[ElementStatu_Index].Indicator} )",
+                            tooltip: "",
+                            bg_fill: XGUIFilled.透明,
+                            button_text_color: Color.gray,
+                            press_fill: XGUIFilled.透明,
+                            press_text_color: XHud_Dashboard.Theme_Primary,
+                            font_size: XGUIFontSize.M,
+                            anchor: TextAnchor.MiddleLeft,
+                            margin: new RectOffset(0, 0, 0, 0),
+                            padding: new RectOffset(0, 0, 0, 0),
+                            layout_width: 150,
+                            button_text_font: XGUI.GetFont("xg-medium")))
+                        {
+                            EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
                         }
                         #endregion
+
+                        XGUI.layout_flexspace();
+
+                        #region 上一个
+                        if (XGUI.layout_button(
+                            tooltip: "上一个",
+                            tex_release: left_arrow_r,
+                            tex_press: left_arrow_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: 12,
+                            height: 12))
+                        {
+                            if (ElementStatu_Index <= 0)
+                            {
+                                ElementStatu_Index = SelectedObjects.Length - 1;
+                            }
+                            else
+                            {
+                                ElementStatu_Index--;
+                            }
+                            EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
+                        }
+                        #endregion
+
+                        XGUI.layout_space(20);
+
+                        #region 下一个
+                        if (XGUI.layout_button(
+                            tooltip: "下一个",
+                            tex_release: right_arrow_r,
+                            tex_press: right_arrow_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: 12,
+                            height: 12))
+                        {
+                            if (ElementStatu_Index >= SelectedObjects.Length - 1)
+                            {
+                                ElementStatu_Index = 0;
+                            }
+                            else
+                            {
+                                ElementStatu_Index++;
+                            }
+                            EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
+                        }
+                        #endregion
+
+                        XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+                        #endregion
+
+                        XGUI.layout_seperator(
+                                thickness: 1,
+                                color: XHud_Dashboard.Theme_SeperateLine,
+                                margin: new RectOffset(15, 15, 5, 25));
+
+                        XHud_Module_Element ele = SelectedObjects[ElementStatu_Index];
+
+                        if (ele.SounderNodes.Count == 0 && ele.PrimitiveControllerNodes.Count == 0 && ele.ButtonNodes.Count == 0 && ele.TextNodes.Count == 0 && ele.TmpTextNodes.Count == 0 && ele.OptionNodes.Count == 0 && ele.SliderNodes.Count == 0 && ele.ProgressNodes.Count == 0 && ele.ToggleNodes.Count == 0)
+                        {
+                            XGUI.layout_label(
+                                text: "暂无有效子组件列表",
+                                size: XGUIFontSize.S,
+                                anchor: TextAnchor.MiddleCenter,
+                                text_color: Color.white * 0.85f,
+                                offset: new Vector2(0, 0),
+                                padding: new RectOffset(10, 10, 10, 10),
+                                margin: new RectOffset(0, 0, 6, 0),
+                                clipping: clipping,
+                                wrap: true,
+                                font: XGUI.GetFont("xg-regular"),
+                                font_style: FontStyle.Normal);
+                        }
 
                         #region 音效器
-                        if (SounderNodes.arraySize > 0)
-                        {
-                            SounderIsFold.boolValue = XGUI.layout_group_start(
-                                type: XGUIContainerType.Vertical,
-                                bg_fill: XGUIFilled.缺口纯色边框,
-                                bg_color: XGUIColor.亮白,
-                                bg_color_gui: XHud_Dashboard.Theme_Group,
+                        if (ele.SounderNodes.Count > 0)
+                            XGUI.layout_state_displayer_text(
                                 title: "音效器",
                                 title_size: XGUIFontSize.M,
-                                title_text_color: XHud_Dashboard.Theme_Primary,
-                                title_clipping: TextClipping.Clip,
-                                title_offset: new Vector2(10, 0),
-                                padding: new RectOffset(10, 10, 15, 15),
-                                foldout: SounderIsFold.boolValue);
-
-                            if (!SounderIsFold.boolValue)
-                                SounderList.DoLayoutList();
-
-                            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-                        }
+                                subtitle: ele.SounderNodes.Count.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
                         #endregion
 
+                        #region 图元控制器
+                        if (ele.PrimitiveControllerNodes.Count > 0)
+                            XGUI.layout_state_displayer_text(
+                                title: "图元控制器",
+                                title_size: XGUIFontSize.M,
+                                subtitle: ele.PrimitiveControllerNodes.Count.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                        #endregion
+
+                        #region 按钮
+                        if (ele.ButtonNodes.Count > 0)
+                            XGUI.layout_state_displayer_text(
+                                title: "按钮",
+                                title_size: XGUIFontSize.M,
+                                subtitle: ele.ButtonNodes.Count.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                        #endregion
+
+                        #region 选项
+                        if (ele.OptionNodes.Count > 0)
+                            XGUI.layout_state_displayer_text(
+                                title: "选项",
+                                title_size: XGUIFontSize.M,
+                                subtitle: ele.OptionNodes.Count.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                        #endregion
+
+                        #region 滑动条
+                        if (ele.SliderNodes.Count > 0)
+                            XGUI.layout_state_displayer_text(
+                                title: "滑动条",
+                                title_size: XGUIFontSize.M,
+                                subtitle: ele.SliderNodes.Count.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                        #endregion
+
+                        #region 进度条
+                        if (ele.ProgressNodes.Count > 0)
+                            XGUI.layout_state_displayer_text(
+                                title: "进度条",
+                                title_size: XGUIFontSize.M,
+                                subtitle: ele.ProgressNodes.Count.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                        #endregion
+
+                        #region 开关
+                        if (ele.ToggleNodes.Count > 0)
+                            XGUI.layout_state_displayer_text(
+                                title: "开关",
+                                title_size: XGUIFontSize.M,
+                                subtitle: ele.ToggleNodes.Count.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                        #endregion
+
+                        #region 文字
+                        if (ele.TextNodes.Count > 0)
+                            XGUI.layout_state_displayer_text(
+                                title: "文字",
+                                title_size: XGUIFontSize.M,
+                                subtitle: ele.TextNodes.Count.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                        #endregion
+
+                        #region Tmp文字
+                        if (ele.TmpTextNodes.Count > 0)
+                            XGUI.layout_state_displayer_text(
+                                title: "Tmp文字",
+                                title_size: XGUIFontSize.M,
+                                subtitle: ele.TmpTextNodes.Count.ToString() + " 个",
+                                subtitle_size: XGUIFontSize.M,
+                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                margin: new RectOffset(5, 5, 0, 5));
+                        #endregion
+                        #endregion
                     }
                 }
-                #endregion
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             }
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-            #endregion
-
-            #region 统计
-            string statu_statistic = "统计";
-            if (Targets_Selected())
-                statu_statistic = "统计 - ( 批量模式 )";
-
-            BaseScript.fold_statistic = XGUI.layout_group_start(
-              type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
-              bg_color: XGUIColor.亮白,
-              bg_color_gui: XHud_Dashboard.Theme_Group,
-              title: statu_statistic,
-              title_size: XGUIFontSize.M,
-              title_text_color: XHud_Dashboard.Theme_Primary,
-              title_clipping: TextClipping.Clip,
-              padding: new RectOffset(10, 10, 15, 15),
-              foldout: BaseScript.fold_statistic);
-
-            if (!BaseScript.fold_statistic)
-            {
-                if (!Targets_Selected())
-                {
-                    if (SounderNodes.arraySize == 0 && PrimitiveControllerNodes.arraySize == 0 && ButtonNodes.arraySize == 0 && TextNodes.arraySize == 0 && TmpTextNodes.arraySize == 0 && OptionNodes.arraySize == 0 && SliderNodes.arraySize == 0 && ProgressNodes.arraySize == 0 && ToggleNodes.arraySize == 0)
-                    {
-                        XGUI.layout_label(
-                            text: "暂无有效子组件列表",
-                            size: XGUIFontSize.S,
-                            anchor: TextAnchor.MiddleCenter,
-                            text_color: Color.white * 0.85f,
-                            offset: new Vector2(0, 0),
-                            padding: new RectOffset(10, 10, 10, 10),
-                            margin: new RectOffset(0, 0, 6, 0),
-                            clipping: clipping,
-                            wrap: true,
-                            font: XGUI.GetFont("xg-regular"),
-                            font_style: FontStyle.Normal);
-                    }
-
-                    #region 音效器
-                    if (SounderNodes.arraySize > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "音效器",
-                            title_size: XGUIFontSize.M,
-                            subtitle: SounderNodes.arraySize.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 图元控制器
-                    if (PrimitiveControllerNodes.arraySize > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "图元控制器",
-                            title_size: XGUIFontSize.M,
-                            subtitle: PrimitiveControllerNodes.arraySize.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 按钮
-                    if (ButtonNodes.arraySize > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "按钮",
-                            title_size: XGUIFontSize.M,
-                            subtitle: ButtonNodes.arraySize.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 选项
-                    if (OptionNodes.arraySize > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "选项",
-                            title_size: XGUIFontSize.M,
-                            subtitle: OptionNodes.arraySize.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 滑动条
-                    if (SliderNodes.arraySize > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "滑动条",
-                            title_size: XGUIFontSize.M,
-                            subtitle: SliderNodes.arraySize.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 进度条
-                    if (ProgressNodes.arraySize > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "进度条",
-                            title_size: XGUIFontSize.M,
-                            subtitle: ProgressNodes.arraySize.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 开关
-                    if (ToggleNodes.arraySize > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "开关",
-                            title_size: XGUIFontSize.M,
-                            subtitle: ToggleNodes.arraySize.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 文字
-                    if (TextNodes.arraySize > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "文字",
-                            title_size: XGUIFontSize.M,
-                            subtitle: TextNodes.arraySize.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region Tmp文字
-                    if (TmpTextNodes.arraySize > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "Tmp文字",
-                            title_size: XGUIFontSize.M,
-                            subtitle: TmpTextNodes.arraySize.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-                }
-                else
-                {
-                    #region 批量控件
-                    #region 控制区
-                    XGUI.layout_group_start(
-                        type: XGUIContainerType.Horizontal,
-                        bg_fill: XGUIFilled.透明,
-                        bg_color: XGUIColor.亮白,
-                        bg_color_gui: XHud_Dashboard.Theme_Group,
-                        absolute_margin: true,
-                        absolute_padding: true,
-                        margin: new RectOffset(0, 0, 0, 0),
-                        padding: new RectOffset(15, 15, 5, 10));
-
-                    #region 标题按钮
-                    if (XGUI.layout_button(
-                        text: $"{SelectedObjects[ElementStatu_Index].name} ( {SelectedObjects[ElementStatu_Index].Indicator} )",
-                        tooltip: "",
-                        bg_fill: XGUIFilled.透明,
-                        button_text_color: Color.gray,
-                        press_fill: XGUIFilled.透明,
-                        press_text_color: XHud_Dashboard.Theme_Primary,
-                        font_size: XGUIFontSize.M,
-                        anchor: TextAnchor.MiddleLeft,
-                        margin: new RectOffset(0, 0, 0, 0),
-                        padding: new RectOffset(0, 0, 0, 0),
-                        layout_width: 150,
-                        button_text_font: XGUI.GetFont("xg-medium")))
-                    {
-                        EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
-                    }
-                    #endregion
-
-                    XGUI.layout_flexspace();
-
-                    #region 上一个
-                    if (XGUI.layout_button(
-                        tooltip: "上一个",
-                        tex_release: left_arrow_r,
-                        tex_press: left_arrow_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 12,
-                        height: 12))
-                    {
-                        if (ElementStatu_Index <= 0)
-                        {
-                            ElementStatu_Index = SelectedObjects.Length - 1;
-                        }
-                        else
-                        {
-                            ElementStatu_Index--;
-                        }
-                        EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
-                    }
-                    #endregion
-
-                    XGUI.layout_space(20);
-
-                    #region 下一个
-                    if (XGUI.layout_button(
-                        tooltip: "下一个",
-                        tex_release: right_arrow_r,
-                        tex_press: right_arrow_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 12,
-                        height: 12))
-                    {
-                        if (ElementStatu_Index >= SelectedObjects.Length - 1)
-                        {
-                            ElementStatu_Index = 0;
-                        }
-                        else
-                        {
-                            ElementStatu_Index++;
-                        }
-                        EditorGUIUtility.PingObject(SelectedObjects[ElementStatu_Index]);
-                    }
-                    #endregion
-
-                    XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
-                    #endregion
-
-                    XGUI.layout_seperator(
-                            thickness: 1,
-                            color: XHud_Dashboard.Theme_SeperateLine,
-                            margin: new RectOffset(15, 15, 5, 25));
-
-                    XHud_Module_Element ele = SelectedObjects[ElementStatu_Index];
-
-                    if (ele.SounderNodes.Count == 0 && ele.PrimitiveControllerNodes.Count == 0 && ele.ButtonNodes.Count == 0 && ele.TextNodes.Count == 0 && ele.TmpTextNodes.Count == 0 && ele.OptionNodes.Count == 0 && ele.SliderNodes.Count == 0 && ele.ProgressNodes.Count == 0 && ele.ToggleNodes.Count == 0)
-                    {
-                        XGUI.layout_label(
-                            text: "暂无有效子组件列表",
-                            size: XGUIFontSize.S,
-                            anchor: TextAnchor.MiddleCenter,
-                            text_color: Color.white * 0.85f,
-                            offset: new Vector2(0, 0),
-                            padding: new RectOffset(10, 10, 10, 10),
-                            margin: new RectOffset(0, 0, 6, 0),
-                            clipping: clipping,
-                            wrap: true,
-                            font: XGUI.GetFont("xg-regular"),
-                            font_style: FontStyle.Normal);
-                    }
-
-                    #region 音效器
-                    if (ele.SounderNodes.Count > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "音效器",
-                            title_size: XGUIFontSize.M,
-                            subtitle: ele.SounderNodes.Count.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 图元控制器
-                    if (ele.PrimitiveControllerNodes.Count > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "图元控制器",
-                            title_size: XGUIFontSize.M,
-                            subtitle: ele.PrimitiveControllerNodes.Count.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 按钮
-                    if (ele.ButtonNodes.Count > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "按钮",
-                            title_size: XGUIFontSize.M,
-                            subtitle: ele.ButtonNodes.Count.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 选项
-                    if (ele.OptionNodes.Count > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "选项",
-                            title_size: XGUIFontSize.M,
-                            subtitle: ele.OptionNodes.Count.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 滑动条
-                    if (ele.SliderNodes.Count > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "滑动条",
-                            title_size: XGUIFontSize.M,
-                            subtitle: ele.SliderNodes.Count.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 进度条
-                    if (ele.ProgressNodes.Count > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "进度条",
-                            title_size: XGUIFontSize.M,
-                            subtitle: ele.ProgressNodes.Count.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 开关
-                    if (ele.ToggleNodes.Count > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "开关",
-                            title_size: XGUIFontSize.M,
-                            subtitle: ele.ToggleNodes.Count.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region 文字
-                    if (ele.TextNodes.Count > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "文字",
-                            title_size: XGUIFontSize.M,
-                            subtitle: ele.TextNodes.Count.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-
-                    #region Tmp文字
-                    if (ele.TmpTextNodes.Count > 0)
-                        XGUI.layout_state_displayer_text(
-                            title: "Tmp文字",
-                            title_size: XGUIFontSize.M,
-                            subtitle: ele.TmpTextNodes.Count.ToString() + " 个",
-                            subtitle_size: XGUIFontSize.M,
-                            subtitle_color: XHud_Dashboard.Theme_Primary,
-                            margin: new RectOffset(5, 5, 0, 5));
-                    #endregion
-                    #endregion
-                }
-            }
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 组件
-            BaseScript.fold_component = XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
-                title: "组件",
-                title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
-                title_clipping: TextClipping.Clip,
-                padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_component);
-
-            if (!BaseScript.fold_component)
+            if (!TweensPreivew_In_State.boolValue && !TweensPreivew_Out_State.boolValue)
             {
-                #region 基础图像组件
-                XGUI.layout_property_field(
-                    title: "基础图像组件",
-                    title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
-                    title_width: 90,
-                    status_icon: "icon_field_status",
-                    status_icon_color: CanvasGroup.objectReferenceValue == null ? Color.gray : XHud_Dashboard.Theme_Primary,
-                    prop: CanvasGroup,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
-                #endregion
+                BaseScript.fold_component = XGUI.layout_group_start(
+type: XGUIContainerType.Vertical,
+bg_fill: XGUIFilled.缺口纯色边框,
+bg_color: XGUIColor.亮白,
+bg_color_gui: XHud_Dashboard.Theme_Group,
+title: "组件",
+title_size: XGUIFontSize.M,
+title_text_color: XHud_Dashboard.Theme_Primary,
+title_clipping: TextClipping.Clip,
+padding: new RectOffset(10, 10, 15, 15),
+foldout: BaseScript.fold_component);
 
-                #region 变换组件
-                XGUI.layout_property_field(
-                    title: "变换组件",
-                    title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
-                    title_width: 90,
-                    status_icon: "icon_field_status",
-                    status_icon_color: RectTransform.objectReferenceValue == null ? Color.gray : XHud_Dashboard.Theme_Primary,
-                    prop: RectTransform,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
-                #endregion
+                if (!BaseScript.fold_component)
+                {
+                    #region 基础图像组件
+                    XGUI.layout_property_field(
+                        title: "基础图像组件",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        status_icon: "icon_field_status",
+                        status_icon_color: CanvasGroup.objectReferenceValue == null ? Color.gray : XHud_Dashboard.Theme_Primary,
+                        prop: CanvasGroup,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
 
-                #region 触发器
-                XGUI.layout_property_field(
-                    title: "触发器",
-                    title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
-                    title_width: 90,
-                    status_icon: "icon_field_status",
-                    status_icon_color: TriggerAction.objectReferenceValue == null ? Color.gray : XHud_Dashboard.Theme_Primary,
-                    prop: TriggerAction,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
-                #endregion
+                    #region 变换组件
+                    XGUI.layout_property_field(
+                        title: "变换组件",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        status_icon: "icon_field_status",
+                        status_icon_color: RectTransform.objectReferenceValue == null ? Color.gray : XHud_Dashboard.Theme_Primary,
+                        prop: RectTransform,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
 
-                #region 追踪器
-                XGUI.layout_property_field(
-                    title: "追踪器",
-                    title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
-                    title_width: 90,
-                    status_icon: "icon_field_status",
-                    status_icon_color: ObjectTracker.objectReferenceValue == null ? Color.gray : XHud_Dashboard.Theme_Primary,
-                    prop: ObjectTracker,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
-                #endregion
+                    #region 触发器
+                    XGUI.layout_property_field(
+                        title: "触发器",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        status_icon: "icon_field_status",
+                        status_icon_color: TriggerAction.objectReferenceValue == null ? Color.gray : XHud_Dashboard.Theme_Primary,
+                        prop: TriggerAction,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
+
+                    #region 追踪器
+                    XGUI.layout_property_field(
+                        title: "追踪器",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        status_icon: "icon_field_status",
+                        status_icon_color: ObjectTracker.objectReferenceValue == null ? Color.gray : XHud_Dashboard.Theme_Primary,
+                        prop: ObjectTracker,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
+                }
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             }
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 弹出菜单
@@ -3924,7 +3948,9 @@ namespace SevenStrikeModules.XHud.Editor
             CheckModulesValid();
 
             #region 源脚本
-            BaseScript.fold_based = XGUI.layout_group_start(
+            if (!TweensPreivew_In_State.boolValue && !TweensPreivew_Out_State.boolValue)
+            {
+                BaseScript.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIFilled.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -3936,17 +3962,48 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_based);
 
-            if (!BaseScript.fold_based)
-            {
-                DrawDefaultInspector();
-            }
+                if (!BaseScript.fold_based)
+                {
+                    DrawDefaultInspector();
+                }
 
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            }
             #endregion
 
-            PrimitiveTweens_MaxDuration_Calculate();
+            #region 预览时警告面板
+            if (TweensPreivew_In_State.boolValue || TweensPreivew_Out_State.boolValue)
+            {
+                XGUI.layout_group_start(
+                   type: XGUIContainerType.Vertical,
+                   bg_fill: XGUIFilled.缺口纯色边框,
+                   bg_color: XGUIColor.亮白,
+                   bg_color_gui: XHud_Dashboard.Theme_Group,
+                   title: "预览状态",
+                   title_size: XGUIFontSize.M,
+                   title_text_color: XHud_Dashboard.Theme_Primary,
+                   title_clipping: TextClipping.Clip,
+                   padding: new RectOffset(10, 10, 15, 15));
+
+                XGUI.layout_label(
+                  text: "正在预览动画 >>>",
+                  size: XGUIFontSize.S,
+                  anchor: TextAnchor.MiddleCenter,
+                  text_color: XHud_Dashboard.Theme_Primary,
+                  offset: new Vector2(0, 0),
+                  padding: new RectOffset(0, 0, 0, 0),
+                  margin: new RectOffset(0, 0, 6, 0),
+                  clipping: TextClipping.Clip);
+
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            }
+            #endregion
 
             serializedObject.ApplyModifiedProperties();
+
+            if (!TweensPreivew_In_State.boolValue && !TweensPreivew_Out_State.boolValue)
+                PrimitiveTweens_MaxDuration_Calculate();
+
         }
 
         #region 辅助

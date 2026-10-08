@@ -877,6 +877,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// 飞梭头部悬停时的颜色（更亮）。
         /// </summary>
         private static readonly Color ColorPlayheadHeadHover = new Color(1f, 0.6f, 0.6f, 1f);
+        /// <summary> 
+        ///飞梭线进入C-E模式Clip的颜色
+        ///</summary>
+        private static readonly Color ColorPlayhead_C_E = Color.white;
         #endregion
 
         #region 字段：名字列宽度拖拽状态
@@ -1078,6 +1082,9 @@ namespace SevenStrikeModules.XHud.Editor
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
             SavePersistedViewState();
             SavePersistedWindowSize();
+
+            // ★ 新增：飞梭预览还原
+            CleanupPlayheadPreviewOnDisable();
         }
         /// <summary> 
         ///Undo / Redo 执行后回调：清拖拽状态，强制重绘
@@ -2045,6 +2052,9 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Event e = Event.current;
             if (e.type != EventType.KeyDown) return;
+
+            // ★ 新增：拖拽飞梭期间禁用快捷键，避免拖拽中增删节点导致索引错乱
+            if (isDraggingPlayhead) return;
 
             if (e.keyCode == KeyCode.Escape)
             {

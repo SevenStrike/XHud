@@ -1164,6 +1164,69 @@ namespace SevenStrikeModules.XTween
             act_on_EaseProgressCallbacks = null;
         }
         /// <summary>
+        /// 将动画求值定位到指定的已耗时位置，并触发一次 OnUpdate 回调。
+        /// <para/>
+        /// 与 <see cref="Update(float)"/> 的区别：
+        /// <list type="bullet">
+        /// <item><description><see cref="Update"/>：由真实时钟推进，内部计算 _ElapsedTime；</description></item>
+        /// <item><description><see cref="EvaluateAt"/>：由外部直接给定 _ElapsedTime，不读时钟。</description></item>
+        /// </list>
+        /// <para/>
+        /// 本方法<b>不</b>修改 _IsPlaying / _IsPaused / _IsCompleted / _hasStarted / _StartTime 等播放状态，
+        /// 仅做"按给定时刻采样 + 触发 OnUpdate"。
+        /// <para/>
+        /// 回调范围：仅触发 <c>act_on_UpdateCallbacks</c>（xt_*_To 里注册的、真正把值写到组件的那条），
+        /// 不触发 Complete / Progress / EaseProgress / StepUpdate / Start / Stop 等任何其他回调。
+        /// <para/>
+        /// 完成分支：不处理 _ElapsedTime &gt;= Duration 的完成逻辑，
+        /// 不触发 <c>act_on_CompleteCallbacks</c>、不置 _IsCompleted、不触发 _AutoKill、不置 _IsPlaying = false。
+        /// 飞到末端时由 <see cref="CalculateCurrentValue"/> 内部的 progress 容差分支自然返回 _EndValue。
+        /// <para/>
+        /// 动态起点（<see cref="SetFrom(Func{TArg})"/>）语义：
+        /// 当 _StartValueResolved 为 false 且存在 getter 时，本方法会先求值一次并置 _StartValueResolved = true。
+        /// 之后再次调用不会重复求值——若需重新捕获，先调用 <see cref="ResetDynamicStart"/>。
+        /// </summary>
+        /// <param name="elapsedSeconds">已耗时（秒），内部会 clamp 到 [0, Duration]</param>
+        public void EvaluateAt(float elapsedSeconds)
+        {
+            // ── 采样时刻 ──
+            _ElapsedTime = Mathf.Clamp(elapsedSeconds, 0f, Duration);
+            _CurrentLinearProgress = Duration > 0f ? Mathf.Clamp01(_ElapsedTime / Duration) : 1f;
+
+            // ── 动态起点求值（C-E 的 SetFromDynamic 语义）──
+            // 与 Update 内同款逻辑：仅在"尚未解析"时求值一次。
+            if (!_StartValueResolved && _StartValueGetter != null)
+            {
+                _StartValue = _StartValueGetter();
+                _StartValueResolved = true;
+                _CurrentValue = _StartValue;
+            }
+
+            // ── 缓动进度 ──
+            _CurrentEasedProgress = CalculateEasedProgress(_CurrentLinearProgress);
+            if (_loopType == XTween_LoopType.Yoyo && _IsReversing)
+                _CurrentEasedProgress = 1f - _CurrentEasedProgress;
+
+            // ── 当前值 ──
+            _CurrentValue = CalculateCurrentValue();
+
+            // ── 写回目标组件（OnUpdate 回调即 xt_*_To 里注册的 setter）──
+            if (act_on_UpdateCallbacks != null)
+                act_on_UpdateCallbacks(_CurrentValue, _CurrentLinearProgress, _ElapsedTime);
+        }
+        /// <summary>
+        /// 标记动态起点需要在下一次求值时重新捕获。
+        /// <para/>
+        /// 将 _StartValueResolved 置为 false，使下一次 <see cref="EvaluateAt"/> 时
+        /// 重新调用 _StartValueGetter 求值。
+        /// <para/>
+        /// 使用场景：飞梭每次"从区间外进入区间"时，C-E 模式需要以进入瞬间的物体实际值为起点。
+        /// </summary>
+        public void ResetDynamicStart()
+        {
+            _StartValueResolved = false;
+        }
+        /// <summary>
         /// 创建动画的唯一标识符和短标识符
         /// </summary>
         public void CreateIDs()

@@ -21,6 +21,7 @@
 namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEngine;
 
@@ -109,6 +110,10 @@ namespace SevenStrikeModules.XHud.Editor
                         GUIUtility.hotControl = 0;
                         playheadControlID = 0;
                         snapGuideSecond = -1f;   // ★ 清掉吸附线，避免残留
+
+                        // ★ 新增：飞梭拖动结束收尾（清空预览 tween + 区间标记）
+                        OnPlayheadDragEnd();
+
                         e.Use();
                         Repaint();
                     }
@@ -156,6 +161,9 @@ namespace SevenStrikeModules.XHud.Editor
                 snapGuideSecond = -1f;
             }
 
+            // ★ 新增：驱动飞梭预览
+            DrivePlayheadPreview(playheadSecond);
+
             //// ★ 你要的 Debug.Log
             //Debug.Log($"[XHud] 时间飞梭：{playheadSecond:F3} 秒");
         }
@@ -178,11 +186,16 @@ namespace SevenStrikeModules.XHud.Editor
             float lineBottom = clipAreaLocalRect.height - HorizontalScrollbarHeight;
             if (lineBottom > lineTop)
             {
-                // 改为：
                 float lineX = Mathf.Round(x);
+
+                // ★ 飞梭落在 C-E 区间内时，竖线用绿色以示区别
+                Color lineColor = IsPlayheadInCEInterval(playheadSecond)
+                    ? ColorPlayhead_C_E
+                    : ColorPlayheadLine;
+
                 XGUI.gui_box(
                     new Rect(lineX, lineTop, 1f, lineBottom - lineTop),
-                    ColorPlayheadLine);
+                    lineColor);
             }
 
             // ── 头部：自定义图标 ──
@@ -202,6 +215,35 @@ namespace SevenStrikeModules.XHud.Editor
                 // 兜底：图标未加载时退回纯色方块，避免完全看不见
                 XGUI.gui_box(head, headColor);
             }
+        }
+        /// <summary>
+        /// 判断飞梭当前时间是否落在任意一个 C-E 节点的区间内。
+        /// <para/>用于 <see cref="DrawPlayhead"/> 决定竖线颜色：
+        /// 落在 C-E 区间时竖线变绿，提示"此段是动作式，反向拖动不回退"。
+        /// <para/>判定范围：所有 Enabled 节点，所有 TweenNodeType，不区分是否已实现飞梭驱动。
+        /// <para/>区间定义：t ∈ [Delay, Delay + Duration]。
+        /// </summary>
+        /// <param name="t">飞梭时间（内容绝对秒）</param>
+        /// <returns>true 表示落在至少一个 C-E 区间内</returns>
+        private bool IsPlayheadInCEInterval(float t)
+        {
+            if (Nodes == null || Nodes.Count == 0) return false;
+
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                TweenNode node = Nodes[i];
+                if (node == null) continue;
+                if (!node.Enabled) continue;
+                if (node.TweenValueMode != TweenValueMode.当前到结束_C_E) continue;
+
+                // 零时长节点无区间，跳过（与 DrivePlayheadPreview 的守卫一致）
+                if (node.Duration <= 0f) continue;
+
+                if (t >= node.Delay && t <= node.Delay + node.Duration)
+                    return true;
+            }
+
+            return false;
         }
         /// <summary>
         /// 在 Repaint 阶段为飞梭头部设置鼠标光标。

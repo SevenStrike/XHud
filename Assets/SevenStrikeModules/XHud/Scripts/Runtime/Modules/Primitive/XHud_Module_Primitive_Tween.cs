@@ -223,6 +223,10 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public string TextCursor = "|";
         /// <summary>
+        /// 动画参数 - 文字动画的内容是否使用从当前延展，如果为False就是直接替换当前内容，否则就是在当前基础上继续延展文字内容
+        /// </summary>
+        public bool TextExtended;
+        /// <summary>
         /// 动画参数 - 动画倒退后是否将值设为起始值
         /// </summary>
         public bool Rewind_Set_Startvalue = true;
@@ -1995,7 +1999,7 @@ namespace SevenStrikeModules.XHud
                 true,
                 node.Rewind_Set_Startvalue,
                 node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay + delay)
+                .SetDelay(node.Delay * duration + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
             // 仅在需要 From 时设置起始值
@@ -2113,7 +2117,7 @@ namespace SevenStrikeModules.XHud
                 true,
                 XTweenRotationSpace.世界坐标,
                 node.RotateMode)
-                .SetDelay(node.Delay + delay)
+                .SetDelay(node.Delay * duration + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
             // 仅在需要 From 时设置起始值
@@ -2218,7 +2222,7 @@ namespace SevenStrikeModules.XHud
                 true,
                 node.Rewind_Set_Startvalue,
                 node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay + delay)
+                .SetDelay(node.Delay * duration + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
             // 仅在需要 From 时设置起始值
@@ -2355,7 +2359,7 @@ namespace SevenStrikeModules.XHud
                 true,
                 node.Rewind_Set_Startvalue,
                 node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay + delay)
+                .SetDelay(node.Delay * duration + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
             // 仅在需要 From 时设置起始值
@@ -2462,7 +2466,7 @@ namespace SevenStrikeModules.XHud
                 true,
                 node.Rewind_Set_Startvalue,
                 node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay + delay)
+                .SetDelay(node.Delay * duration + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
             // 仅在需要 From 时设置起始值
@@ -2573,7 +2577,7 @@ namespace SevenStrikeModules.XHud
             }
 
             twn = controller.mod_Text.xt_Text_To(
-                false,
+                node.TextExtended,
                 node.TextCursor,
                 target_value,
                 node.Duration * duration,
@@ -2581,17 +2585,21 @@ namespace SevenStrikeModules.XHud
                 node.TextCursorBlinkSpeed > 0 ? node.TextCursorBlinkSpeed : 0.5f,
                 node.Rewind_Set_Startvalue,
                 node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay + delay)
+                .SetDelay(node.Delay * duration + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
-            if (isfrom)
-                twn = twn.SetFrom(node.From_String);
+            //if (isfrom)
 
             // C-E 模式：动态起点
             if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
                 twn = twn.SetFromDynamic(() => controller.mod_Text.text);
+            else
+            {
+                if (isfrom)
+                    twn = twn.SetFrom(node.From_String);
+            }
 
             if (node.Ease == EaseMode.None)
                 twn = twn.SetEase(node.Curve);
@@ -2685,13 +2693,15 @@ namespace SevenStrikeModules.XHud
             }
 
             twn = controller.mod_TmpText.xt_Text_To(
-                false,
+                node.TextExtended,
+                node.TextCursor,
                 target_value,
                 node.Duration * duration,
                 true,
+                node.TextCursorBlinkSpeed,
                 node.Rewind_Set_Startvalue,
                 node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay + delay)
+                .SetDelay(node.Delay * duration + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
             // 仅在需要 From 时设置起始值
@@ -2801,7 +2811,7 @@ namespace SevenStrikeModules.XHud
                 true,
                 node.Rewind_Set_Startvalue,
                 node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay + delay)
+                .SetDelay(node.Delay * duration + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
             // 仅在需要 From 时设置起始值
@@ -2912,7 +2922,7 @@ namespace SevenStrikeModules.XHud
                 true,
                 node.Rewind_Set_Startvalue,
                 node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay + delay)
+                .SetDelay(node.Delay * duration + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
 
             // 仅在需要 From 时设置起始值
