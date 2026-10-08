@@ -21,14 +21,14 @@ MonoBehaviour:
     LiquidBlinker: 1
     LiquidColor_Playing: {r: 0.5803922, g: 0.6745098, b: 0.3490196, a: 1}
     LiquidColor_Idle: {r: 0.4666667, g: 0.5176471, b: 0.3372549, a: 1}
-    PoolCount_Int: 250
-    PoolCount_Float: 250
-    PoolCount_String: 250
-    PoolCount_Vector2: 250
-    PoolCount_Vector3: 250
-    PoolCount_Vector4: 250
-    PoolCount_Quaternion: 250
-    PoolCount_Color: 250
+    PoolCount_Int: 5
+    PoolCount_Float: 5
+    PoolCount_String: 5
+    PoolCount_Vector2: 5
+    PoolCount_Vector3: 5
+    PoolCount_Vector4: 5
+    PoolCount_Quaternion: 5
+    PoolCount_Color: 5
     PoolRecyleAllOnSceneUnloaded: 1
     PoolRecyleAllOnSceneLoaded: 0
     PerformanceLiquidMode: 0

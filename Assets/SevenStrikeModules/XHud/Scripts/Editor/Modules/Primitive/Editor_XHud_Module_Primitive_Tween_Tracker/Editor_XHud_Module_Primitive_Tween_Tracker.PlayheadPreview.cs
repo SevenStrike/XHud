@@ -95,12 +95,24 @@ namespace SevenStrikeModules.XHud.Editor
                 bool inRange = (t >= D && t <= D + U);
                 bool wasInRange = playheadPrevInRange.Contains(i);
 
+                //if (!inRange)
+                //{
+                //    // ── 不在区间：不驱动、不还原 ──
+                //    // 只清区间标记，让下次"进入"时重新走刚进入逻辑（重建 tween / 重置 C-E 起点）。
+                //    // 注意：此处**不** Kill 预览 tween、**不**还原物体——
+                //    // 需求规定 t > Delay+Duration 时物体保持当前状态。
+                //    playheadPrevInRange.Remove(i);
+                //    continue;
+                //}
                 if (!inRange)
                 {
-                    // ── 不在区间：不驱动、不还原 ──
-                    // 只清区间标记，让下次"进入"时重新走刚进入逻辑（重建 tween / 重置 C-E 起点）。
-                    // 注意：此处**不** Kill 预览 tween、**不**还原物体——
-                    // 需求规定 t > Delay+Duration 时物体保持当前状态。
+                    //  飞梭离开区间时，把节点驱动到对应端点，避免停在"最后一帧采样值"上
+                    if (wasInRange && playheadPreviewTweens.TryGetValue(i, out XTween_Interface tw))
+                    {
+                        float endElapsed = (t > D + U) ? U : 0f;
+                        tw.EvaluateAt(endElapsed);
+                        // 注意：此处不 Cleanup，保留 tween 以便下次进入区间时清理
+                    }
                     playheadPrevInRange.Remove(i);
                     continue;
                 }
@@ -108,7 +120,7 @@ namespace SevenStrikeModules.XHud.Editor
                 // ── 在区间 ──
                 if (!wasInRange)
                 {
-                    // ★ 刚进入区间（方案 a）：
+                    //  刚进入区间（方案 a）：
                     // 1. 清理可能残留的旧 tween（例如上一次进入后未被替换的实例）
                     CleanupPreviewTween(i);
 

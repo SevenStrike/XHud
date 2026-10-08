@@ -58,12 +58,17 @@ namespace SevenStrikeModules.XTween
 
         protected override string CalculateCurrentValue()
         {
-            // 计算当前应该显示的字符数量
+            // 端点容差：线性进度接近端点时，直接返回精确端点值
+            if (_CurrentLinearProgress >= 0.9999f)
+                return _EndValue;
+            if (_CurrentLinearProgress <= 0.0001f)
+                return string.Empty;
+
+            // 原逻辑：按缓动进度切字符
             float easedProgress = CalculateEasedProgress(_CurrentLinearProgress);
             int charCount = Mathf.RoundToInt(easedProgress * _EndValue.Length);
             charCount = Mathf.Clamp(charCount, 0, _EndValue.Length);
 
-            // 构建当前显示的字符串
             return _EndValue.Substring(0, charCount);
         }
     }

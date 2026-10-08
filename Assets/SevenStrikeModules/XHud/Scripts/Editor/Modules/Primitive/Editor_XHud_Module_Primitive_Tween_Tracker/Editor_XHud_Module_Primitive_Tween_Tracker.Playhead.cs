@@ -35,7 +35,7 @@ namespace SevenStrikeModules.XHud.Editor
         private Rect GetPlayheadHeadRect()
         {
             float x = playheadSecond * pixelsPerSecond - scrollPos.x;
-            // ★ 中心对齐到整数像素，图标更锐利
+            //  中心对齐到整数像素，图标更锐利
             float centerX = Mathf.Round(x);
             float headX = centerX - PlayheadHeadWidth * 0.5f;
             return new Rect(headX, 0f, PlayheadHeadWidth, rulerHeight);
@@ -85,7 +85,7 @@ namespace SevenStrikeModules.XHud.Editor
                         GUIUtility.hotControl = controlID;
                         GUIUtility.keyboardControl = 0;
 
-                        // ★ 关键：按下即跳转，不管点的是头部还是空白
+                        //  关键：按下即跳转，不管点的是头部还是空白
                         UpdatePlayheadFromMouse(e.mousePosition, clipAreaLocalRect);
 
                         e.Use();
@@ -109,9 +109,9 @@ namespace SevenStrikeModules.XHud.Editor
                         isDraggingPlayhead = false;
                         GUIUtility.hotControl = 0;
                         playheadControlID = 0;
-                        snapGuideSecond = -1f;   // ★ 清掉吸附线，避免残留
+                        snapGuideSecond = -1f;   //  清掉吸附线，避免残留
 
-                        // ★ 新增：飞梭拖动结束收尾（清空预览 tween + 区间标记）
+                        //  新增：飞梭拖动结束收尾（清空预览 tween + 区间标记）
                         OnPlayheadDragEnd();
 
                         e.Use();
@@ -147,7 +147,7 @@ namespace SevenStrikeModules.XHud.Editor
                 if (hit)
                 {
                     playheadSecond = snapped;
-                    snapGuideSecond = snapped;   // ★ 让吸附线可见
+                    snapGuideSecond = snapped;   //  让吸附线可见
                 }
                 else
                 {
@@ -161,10 +161,10 @@ namespace SevenStrikeModules.XHud.Editor
                 snapGuideSecond = -1f;
             }
 
-            // ★ 新增：驱动飞梭预览
+            //  新增：驱动飞梭预览
             DrivePlayheadPreview(playheadSecond);
 
-            //// ★ 你要的 Debug.Log
+            ////  你要的 Debug.Log
             //Debug.Log($"[XHud] 时间飞梭：{playheadSecond:F3} 秒");
         }
         /// <summary>
@@ -188,7 +188,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 float lineX = Mathf.Round(x);
 
-                // ★ 飞梭落在 C-E 区间内时，竖线用绿色以示区别
+                //  飞梭落在 C-E 区间内时，竖线用绿色以示区别
                 Color lineColor = IsPlayheadInCEInterval(playheadSecond)
                     ? ColorPlayhead_C_E
                     : ColorPlayheadLine;

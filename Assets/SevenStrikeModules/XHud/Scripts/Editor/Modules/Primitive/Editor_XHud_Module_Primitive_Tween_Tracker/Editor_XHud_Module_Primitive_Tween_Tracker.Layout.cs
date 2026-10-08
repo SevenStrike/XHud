@@ -123,7 +123,7 @@ namespace SevenStrikeModules.XHud.Editor
                 + Sounds.Count * trackHeight
                 + (HasTrackKindGap ? trackKindGapHeight : 0f);
 
-            // ★ 无条件追加底部留白
+            //  无条件追加底部留白
             return rowsHeight + contentBottomPadding;
         }
         /// <summary> 

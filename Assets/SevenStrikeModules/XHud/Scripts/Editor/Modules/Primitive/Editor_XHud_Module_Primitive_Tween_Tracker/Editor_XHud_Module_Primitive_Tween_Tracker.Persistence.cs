@@ -112,7 +112,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 // 把选中内容的最左端对齐到视口左侧（留 padding）
                 scrollPos.x = minDelaySel * pixelsPerSecond - padding;
-                ClampScrollX();   // ★ 仍要钳制，因为 minDelaySel 可能为 0 导致 scrollPos.x 变负
+                ClampScrollX();   //  仍要钳制，因为 minDelaySel 可能为 0 导致 scrollPos.x 变负
                 scrollPos.y = 0f;
                 nameScroll.y = 0f;
                 Repaint();
@@ -139,7 +139,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     pixelsPerSecond = tempPixelsPerSecond;
                     scrollPos.x = node.Delay * pixelsPerSecond - padding;
-                    ClampScrollX();   // ★ 替换原来的 Mathf.Max(0f, ...)
+                    ClampScrollX();   //  替换原来的 Mathf.Max(0f, ...)
                 }
                 else
                 {
@@ -177,7 +177,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     pixelsPerSecond = tempPixelsPerSecond;
                     scrollPos.x = sound.Delay * pixelsPerSecond - padding;
-                    ClampScrollX();   // ★ 替换
+                    ClampScrollX();   //  替换
                 }
                 else
                 {

@@ -1876,17 +1876,9 @@ namespace SevenStrikeModules.XHud
         {
             XTween_Interface twn = null;
 
-            // ========== 前置状态处理 ==========
-            // 非"仅到结束"模式：先复位到起始值，避免旧动画残留
-            // "仅到结束"模式：直接杀死旧动画，无需复位（因为不复位也无意义）
-            if (node.TweenValueMode != TweenValueMode.当前到结束_C_E)
-            {
-                Tween_Rewind(node, true);
-            }
-            else
-            {
-                Tween_Kill(node, true);
-            }
+            //  不再前置 Rewind / Kill
+            // 旧实例的销毁由调用方负责（或由下一次 Tween_Create 的返回覆盖）
+            // 组件的起点写入由 tween 首次 Update 时完成
 
             // ========== 按类型分派 ==========
             switch (node.Type)
@@ -1959,20 +1951,25 @@ namespace SevenStrikeModules.XHud
 
             // ========== 按数值模式解析目标值与是否 SetFrom ==========
             Vector3 target_value;
+            Vector3 from_value = default;   // 
+
             bool isfrom;
             switch (node.TweenValueMode)
             {
                 case TweenValueMode.起始到默认_S_D:
                     target_value = node.Original_Vector3;
+                    from_value = node.From_Vector3;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
                     target_value = node.End_Vector3;
+                    from_value = node.From_Vector3;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
                     target_value = node.End_Vector3;
-                    isfrom = false;
+                    from_value = node.Original_Vector3;   // 
+                    isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
                     target_value = node.End_Vector3;
@@ -2005,7 +2002,7 @@ namespace SevenStrikeModules.XHud
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
             if (isfrom)
-                twn = twn.SetFrom(node.From_Vector3);
+                twn = twn.SetFrom(from_value);
 
             // C-E 模式：动态起点
             if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
@@ -2084,20 +2081,25 @@ namespace SevenStrikeModules.XHud
             bool sw = false;
 
             Vector3 target_value;
+            Vector3 from_value = default;   // 
+
             bool isfrom;
             switch (node.TweenValueMode)
             {
                 case TweenValueMode.起始到默认_S_D:
                     target_value = node.Original_Vector3;
+                    from_value = node.From_Vector3;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
                     target_value = node.End_Vector3;
+                    from_value = node.From_Vector3;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
                     target_value = node.End_Vector3;
-                    isfrom = false;
+                    from_value = node.Original_Vector3;   // 
+                    isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
                     target_value = node.End_Vector3;
@@ -2123,7 +2125,7 @@ namespace SevenStrikeModules.XHud
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
             if (isfrom)
-                twn = twn.SetFrom(node.From_Vector3);
+                twn = twn.SetFrom(from_value);
 
             // C-E 模式：动态起点
             if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
@@ -2190,20 +2192,25 @@ namespace SevenStrikeModules.XHud
             bool sw = false;
 
             Vector3 target_value;
+            Vector3 from_value = default;   // 
+
             bool isfrom;
             switch (node.TweenValueMode)
             {
                 case TweenValueMode.起始到默认_S_D:
                     target_value = node.Original_Vector3;
+                    from_value = node.From_Vector3;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
                     target_value = node.End_Vector3;
+                    from_value = node.From_Vector3;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
                     target_value = node.End_Vector3;
-                    isfrom = false;
+                    from_value = node.Original_Vector3;   // 
+                    isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
                     target_value = node.End_Vector3;
@@ -2228,7 +2235,7 @@ namespace SevenStrikeModules.XHud
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
             if (isfrom)
-                twn = twn.SetFrom(node.From_Vector3);
+                twn = twn.SetFrom(from_value);
 
             // C-E 模式：动态起点
             if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
@@ -2327,20 +2334,25 @@ namespace SevenStrikeModules.XHud
             bool sw = false;
 
             Color target_value;
+            Color from_value = default;   // 
+
             bool isfrom;
             switch (node.TweenValueMode)
             {
                 case TweenValueMode.起始到默认_S_D:
                     target_value = node.Original_Color;
+                    from_value = node.From_Color;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
                     target_value = node.End_Color;
+                    from_value = node.From_Color;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
                     target_value = node.End_Color;
-                    isfrom = false;
+                    from_value = node.Original_Color;   // 
+                    isfrom = true;                       // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
                     target_value = node.End_Color;
@@ -2365,7 +2377,7 @@ namespace SevenStrikeModules.XHud
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
             if (isfrom)
-                twn = twn.SetFrom(node.From_Color);
+                twn = twn.SetFrom(from_value);
 
             // C-E 模式：动态起点
             if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
@@ -2435,20 +2447,25 @@ namespace SevenStrikeModules.XHud
             bool sw = false;
 
             float target_value;
+            float from_value = 0f;
+
             bool isfrom;
             switch (node.TweenValueMode)
             {
                 case TweenValueMode.起始到默认_S_D:
                     target_value = node.Original_Float;
+                    from_value = node.From_Float;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
                     target_value = node.End_Float;
+                    from_value = node.From_Float;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
                     target_value = node.End_Float;
-                    isfrom = false;
+                    from_value = node.Original_Float;   // 
+                    isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
                     target_value = node.End_Float;
@@ -2472,7 +2489,7 @@ namespace SevenStrikeModules.XHud
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
             if (isfrom)
-                twn = twn.SetFrom(node.From_Float);
+                twn = twn.SetFrom(from_value);
 
             // C-E 模式：动态起点
             if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
@@ -2551,20 +2568,26 @@ namespace SevenStrikeModules.XHud
             bool sw = false;
 
             string target_value;
+            string from_value = null;   //  改为 null，跟"没有起点"区分
+
             bool isfrom;
+
             switch (node.TweenValueMode)
             {
                 case TweenValueMode.起始到默认_S_D:
                     target_value = node.Original_String;
+                    from_value = node.From_String;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
                     target_value = node.End_String;
+                    from_value = node.From_String;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
                     target_value = node.End_String;
-                    isfrom = false;
+                    from_value = node.Original_String;   // 
+                    isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
                     target_value = node.End_String;
@@ -2584,22 +2607,10 @@ namespace SevenStrikeModules.XHud
                 true,
                 node.TextCursorBlinkSpeed > 0 ? node.TextCursorBlinkSpeed : 0.5f,
                 node.Rewind_Set_Startvalue,
-                node.Complete_Set_Endvalue)
+                node.Complete_Set_Endvalue,
+                isfrom ? from_value : null)
                 .SetDelay(node.Delay * duration + delay)
                 .SetLoop(node.LoopCount, node.LoopType);
-
-            // 仅在需要 From 时设置起始值
-            // S-* 模式：静态起点
-            //if (isfrom)
-
-            // C-E 模式：动态起点
-            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
-                twn = twn.SetFromDynamic(() => controller.mod_Text.text);
-            else
-            {
-                if (isfrom)
-                    twn = twn.SetFrom(node.From_String);
-            }
 
             if (node.Ease == EaseMode.None)
                 twn = twn.SetEase(node.Curve);
@@ -2667,20 +2678,25 @@ namespace SevenStrikeModules.XHud
             bool sw = false;
 
             string target_value;
+            string from_value = null;   //  改为 null
+
             bool isfrom;
             switch (node.TweenValueMode)
             {
                 case TweenValueMode.起始到默认_S_D:
                     target_value = node.Original_String;
+                    from_value = node.From_String;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
                     target_value = node.End_String;
+                    from_value = node.From_String;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
                     target_value = node.End_String;
-                    isfrom = false;
+                    from_value = node.Original_String;   // 
+                    isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
                     target_value = node.End_String;
@@ -2700,18 +2716,19 @@ namespace SevenStrikeModules.XHud
                 true,
                 node.TextCursorBlinkSpeed,
                 node.Rewind_Set_Startvalue,
-                node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay * duration + delay)
-                .SetLoop(node.LoopCount, node.LoopType);
+                node.Complete_Set_Endvalue,
+                isfrom ? from_value : null)                //  显式起点
+                .SetDelay(node.Delay * duration + delay)   // ← 保留
+                .SetLoop(node.LoopCount, node.LoopType);   // ← 保留
 
-            // 仅在需要 From 时设置起始值
-            // S-* 模式：静态起点
-            if (isfrom)
-                twn = twn.SetFrom(node.From_String);
-
-            // C-E 模式：动态起点
-            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
-                twn = twn.SetFromDynamic(() => controller.mod_TmpText.text);
+            //  删掉 SetFrom / SetFromDynamic（打字机不读 _StartValue）
+            // if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
+            //     twn = twn.SetFromDynamic(() => controller.mod_TmpText.text);
+            // else
+            // {
+            //     if (isfrom)
+            //         twn = twn.SetFrom(node.From_String);
+            // }
 
             if (node.Ease == EaseMode.None)
                 twn = twn.SetEase(node.Curve);
@@ -2779,20 +2796,25 @@ namespace SevenStrikeModules.XHud
             bool sw = false;
 
             Vector2 target_value;
+            Vector2 from_value = default;   // 
+
             bool isfrom;
             switch (node.TweenValueMode)
             {
                 case TweenValueMode.起始到默认_S_D:
                     target_value = node.Original_Vector2;
+                    from_value = node.From_Vector2;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
                     target_value = node.End_Vector2;
+                    from_value = node.From_Vector2;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
                     target_value = node.End_Vector2;
-                    isfrom = false;
+                    from_value = node.Original_Vector2;   //2
+                    isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
                     target_value = node.End_Vector2;
@@ -2817,7 +2839,7 @@ namespace SevenStrikeModules.XHud
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
             if (isfrom)
-                twn = twn.SetFrom(node.From_Vector2);
+                twn = twn.SetFrom(from_value);
 
             // C-E 模式：动态起点
             if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
@@ -2890,20 +2912,25 @@ namespace SevenStrikeModules.XHud
             bool sw = false;
 
             float target_value;
+            float from_value = 0f;
+
             bool isfrom;
             switch (node.TweenValueMode)
             {
                 case TweenValueMode.起始到默认_S_D:
                     target_value = node.Original_Float;
+                    from_value = node.From_Float;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
                     target_value = node.End_Float;
+                    from_value = node.From_Float;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
                     target_value = node.End_Float;
-                    isfrom = false;
+                    from_value = node.Original_Float;   // 
+                    isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
                     target_value = node.End_Float;
@@ -2928,7 +2955,7 @@ namespace SevenStrikeModules.XHud
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
             if (isfrom)
-                twn = twn.SetFrom(Mathf.Clamp01(node.From_Float));
+                twn = twn.SetFrom(Mathf.Clamp01(from_value));
 
             // C-E 模式：动态起点
             if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)

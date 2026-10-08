@@ -119,6 +119,8 @@ namespace SevenStrikeModules.XTween
 
             _StartValueGetter = null;
             _StartValueResolved = false;
+
+            _IsFromMode = false;   //  新增：初始化后不处于"显式起点"状态
         }
 
         #region 私有字段
@@ -523,7 +525,7 @@ namespace SevenStrikeModules.XTween
                 _ElapsedTime = 0f;
                 _hasStarted = false;
 
-                // ★ 新增：允许重新求值动态起点
+                //  新增：允许重新求值动态起点
                 _StartValueResolved = false;
             }
 
@@ -676,7 +678,7 @@ namespace SevenStrikeModules.XTween
                 _CurrentLinearProgress = Duration > 0 ? Mathf.Clamp01(_ElapsedTime / Duration) : 1f;
             }
 
-            // ★ 新增：Delay 未结束，不写属性，直接返回
+            //  新增：Delay 未结束，不写属性，直接返回
             if (_ElapsedTime < 0f)
             {
                 return true;
@@ -1141,6 +1143,8 @@ namespace SevenStrikeModules.XTween
 
             _StartValueGetter = null;
             _StartValueResolved = false;
+
+            _IsFromMode = false;   //  新增：清除"显式起点"标记
 
             // 重置步长状态
             ResetStepState();
@@ -2148,21 +2152,45 @@ namespace SevenStrikeModules.XTween
         /// <returns>当前的动画值</returns>
         protected virtual TArg CalculateCurrentValue()
         {
-            // 添加精度容差 - 当接近1.0时直接返回结束值
             float progress = _ElapsedTime / Duration;
-            if (progress >= 0.9999f) // 使用容差值避免浮点精度问题
+
+            // ① 线性进度接近 1 → 返回终点
+            if (progress >= 0.9999f)
             {
-                return _loopType == XTween_LoopType.Yoyo && _IsReversing ? (_IsFromMode ? _StartValue : _DefaultValue) : _EndValue;
+                return _loopType == XTween_LoopType.Yoyo && _IsReversing
+                    ? (_IsFromMode ? _StartValue : _DefaultValue)
+                    : _EndValue;
+            }
+            // ② 线性进度接近 0 → 返回起点
+            if (progress <= 0.0001f)
+            {
+                return _loopType == XTween_LoopType.Yoyo && _IsReversing
+                    ? _EndValue
+                    : (_IsFromMode ? _StartValue : _DefaultValue);
             }
 
             float easedT = CalculateEasedProgress(progress);
-
             if (_loopType == XTween_LoopType.Yoyo && _IsReversing)
             {
-                easedT = 1f - easedT; // 反向计算
+                easedT = 1f - easedT;
             }
 
-            TArg startVal = _IsFromMode ? _StartValue/*显式设置的起始值*/: _DefaultValue;/*默认起始值*/
+            //  ③ 缓动进度接近 1 → 返回终点（新增）
+            if (easedT >= 0.9999f)
+            {
+                return _loopType == XTween_LoopType.Yoyo && _IsReversing
+                    ? (_IsFromMode ? _StartValue : _DefaultValue)
+                    : _EndValue;
+            }
+            //  ④ 缓动进度接近 0 → 返回起点（新增）
+            if (easedT <= 0.0001f)
+            {
+                return _loopType == XTween_LoopType.Yoyo && _IsReversing
+                    ? _EndValue
+                    : (_IsFromMode ? _StartValue : _DefaultValue);
+            }
+
+            TArg startVal = _IsFromMode ? _StartValue : _DefaultValue;
             return Lerp(startVal, _EndValue, easedT);
         }
         /// <summary>

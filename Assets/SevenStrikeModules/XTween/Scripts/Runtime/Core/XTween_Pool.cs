@@ -174,7 +174,6 @@ namespace SevenStrikeModules.XTween
                 // 确保上一次动画挂的"动态起点委托"不会残留到本次使用——
                 // 否则会读到旧目标的属性值，或持有已销毁对象的闭包引用。
                 tween.ResetState();
-                tween.ResetState();
 
                 // 再标记为使用中
                 tween.IsInUse = true;

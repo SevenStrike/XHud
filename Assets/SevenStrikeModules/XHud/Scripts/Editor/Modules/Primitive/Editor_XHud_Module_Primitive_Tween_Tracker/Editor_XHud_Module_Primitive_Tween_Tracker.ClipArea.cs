@@ -55,7 +55,7 @@ namespace SevenStrikeModules.XHud.Editor
             float endSecond = (scrollPos.x + area.width) / pixelsPerSecond;
             DrawTimeRuler(rulerRect, startSecond, endSecond);
 
-            // ★★★ 阶段 2：绘制底部水平滚动条（必须在 BeginScrollView 之前）★★★
+            //  阶段 2：绘制底部水平滚动条（必须在 BeginScrollView 之前）
             // 原因：GUI.HorizontalScrollbar 拖拽期间需要独占 Event.current，
             // 若画在 ScrollView 之后，ScrollView 的垂直滚动条会抢占鼠标热区，
             // 导致水平滚动条在鼠标靠近右边缘时丢失 hotControl，表现为"拖到某个位置就拖不动"。
@@ -110,7 +110,7 @@ namespace SevenStrikeModules.XHud.Editor
             scrollPos.y = Mathf.Clamp(scrollPos.y, 0f, CalculateMaxVerticalScroll());
             nameScroll.y = scrollPos.y;
 
-            // ★★★ 新增：绘制飞梭（在参考线之前，让参考线覆盖在飞梭上方更显眼）★★★
+            //  新增：绘制飞梭（在参考线之前，让参考线覆盖在飞梭上方更显眼）
             DrawPlayhead(new Rect(0, 0, area.width, area.height));
 
             #region 参考线（覆盖刻度尺 + 轨道区）
@@ -125,7 +125,7 @@ namespace SevenStrikeModules.XHud.Editor
                         : Color.white * 0.7f;
                     guideColor.a = 1f;
 
-                    float guideX = Mathf.Round(gx);   // ★ 新增
+                    float guideX = Mathf.Round(gx);   //  新增
                     XGUI.gui_box(new Rect(guideX, 0, 1f, area.height), guideColor);
                 }
             }
@@ -157,10 +157,10 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
-            // ★ 注意：这里不再调用 DrawTimelineHorizontalScrollbar，已经挪到阶段 2 了
+            //  注意：这里不再调用 DrawTimelineHorizontalScrollbar，已经挪到阶段 2 了
 
             // ── 阶段 7：交互处理 ──
-            // ★ 飞梭交互：命中范围是刻度尺（不是整个 Clip 区），必须最先
+            //  飞梭交互：命中范围是刻度尺（不是整个 Clip 区），必须最先
             HandlePlayheadInteraction(
                 new Rect(0, 0, area.width, rulerHeight),   // 刻度尺矩形
                 new Rect(0, 0, area.width, area.height));  // Clip 区整体矩形
@@ -204,7 +204,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (contentWidth <= viewWidth)
             {
                 EditorGUI.DrawRect(rect, new Color(0.15f, 0.15f, 0.15f));
-                scrollPos.x = 0f;   // ★ 归零，避免残留旧滚动值
+                scrollPos.x = 0f;   //  归零，避免残留旧滚动值
                 return;
             }
 
@@ -217,7 +217,7 @@ namespace SevenStrikeModules.XHud.Editor
                 0f,
                 contentWidth);
 
-            // ★ 归零保护 + 上限钳制
+            //  归零保护 + 上限钳制
             scrollPos.x = Mathf.Clamp(scrollPos.x, 0f, contentWidth - viewWidth);
         }
         /// <summary>
@@ -232,7 +232,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="gapRect">间距行的完整矩形（内容坐标，高 = <see cref="trackKindGapHeight"/>）</param>
         private void DrawTrackKindGapRow(Rect gapRect)
         {
-            // ★ 同名字列：上下各扩展 1px
+            //  同名字列：上下各扩展 1px
             gapRect = new Rect(
                 gapRect.x,
                 gapRect.y - RowVerticalPadding,

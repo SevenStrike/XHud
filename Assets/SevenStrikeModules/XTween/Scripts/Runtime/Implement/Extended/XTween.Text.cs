@@ -894,7 +894,7 @@ namespace SevenStrikeModules.XTween
         /// <param name="duration">动画持续时间，单位为秒</param>
         /// <param name="autokill">动画完成后是否自动销毁</param>
         /// <returns>创建的动画对象</returns>
-        public static XTween_Interface xt_Text_To(this Text text, bool extended, string cursor, string endValue, float duration, bool autokill = false, float blinkInterval = 0.5f, bool rewind_set_startvalue = true, bool complete_set_endvalue = true)
+        public static XTween_Interface xt_Text_To(this Text text, bool extended, string cursor, string endValue, float duration, bool autokill = false, float blinkInterval = 0.5f, bool rewind_set_startvalue = true, bool complete_set_endvalue = true, string explicitStartText = null)
         {
             if (text == null)
             {
@@ -912,13 +912,19 @@ namespace SevenStrikeModules.XTween
 
                 tweener.OnUpdate((currentText, linearProgress, time) =>
                 {
-                    if (text == null) return;
+                    if (text == null)
+                        return;
 
-                    // ★ 首帧抓起点
                     if (!startCaptured)
                     {
-                        startText = text.text;
+                        //  有显式起点就用显式起点，否则抓当前 text.text
+                        startText = explicitStartText ?? text.text;
                         startCaptured = true;
+
+                        //  有显式起点时：立刻把 text.text 设成起点，让本帧视觉"跳"到起点
+                        if (explicitStartText != null)
+                            text.text = explicitStartText;
+
                         return;
                     }
 
@@ -936,13 +942,15 @@ namespace SevenStrikeModules.XTween
                 })
                 .OnRewind(() =>
                 {
-                    if (text == null) return;
+                    if (text == null)
+                        return;
                     if (rewind_set_startvalue && startCaptured)
                         text.text = startText;
                 })
-                .OnComplete((d) =>
+                .OnComplete((duration) =>
                 {
-                    if (text == null) return;
+                    if (text == null)
+                        return;
                     if (complete_set_endvalue && startCaptured)
                         text.text = extended ? startText + endValue : endValue;
                 })
@@ -956,12 +964,18 @@ namespace SevenStrikeModules.XTween
                 tweener = new XTween_Specialized_String("", endValue, duration * XTween_Dashboard.DurationMultiply)
                     .OnUpdate((currentText, linearProgress, time) =>
                     {
-                        if (text == null) return;
+                        if (text == null)
+                            return;
 
                         if (!startCaptured)
                         {
-                            startText = text.text;
+                            // 
+                            startText = explicitStartText ?? text.text;
                             startCaptured = true;
+
+                            if (explicitStartText != null)
+                                text.text = explicitStartText;
+
                             return;
                         }
 
@@ -979,13 +993,15 @@ namespace SevenStrikeModules.XTween
                     })
                     .OnRewind(() =>
                     {
-                        if (text == null) return;
+                        if (text == null)
+                            return;
                         if (rewind_set_startvalue && startCaptured)
                             text.text = startText;
                     })
-                    .OnComplete((d) =>
+                    .OnComplete((duration) =>
                     {
-                        if (text == null) return;
+                        if (text == null)
+                            return;
                         if (complete_set_endvalue && startCaptured)
                             text.text = extended ? startText + endValue : endValue;
                     })
@@ -1017,7 +1033,7 @@ namespace SevenStrikeModules.XTween
                 return null;
             }
 
-            // ★ 起点延迟捕获
+            //  起点延迟捕获
             string startText = null;
             bool startCaptured = false;
 
@@ -1025,7 +1041,7 @@ namespace SevenStrikeModules.XTween
             {
                 var tweener = XTween_Pool.CreateTween<XTween_Specialized_String>();
 
-                // ★ 用占位起点初始化
+                //  用占位起点初始化
                 tweener.Initialize("", endValue, duration * XTween_Dashboard.DurationMultiply);
 
                 tweener.OnUpdate((currentText, linearProgress, time) =>
@@ -1033,7 +1049,7 @@ namespace SevenStrikeModules.XTween
                     if (text == null)
                         return;
 
-                    // ★ 首帧：抓起点，本帧不写文本
+                    //  首帧：抓起点，本帧不写文本
                     if (!startCaptured)
                     {
                         startText = text.text;
@@ -1068,7 +1084,7 @@ namespace SevenStrikeModules.XTween
                         text.text = extended ? startText + endValue : endValue;
                 });
 
-                // ★ 缓动：曲线优先，否则用枚举
+                //  缓动：曲线优先，否则用枚举
                 if (useCurve && curve != null)
                     tweener.SetEase(curve);
                 else
@@ -1121,7 +1137,7 @@ namespace SevenStrikeModules.XTween
                             text.text = extended ? startText + endValue : endValue;
                     });
 
-                // ★ 缓动：曲线优先，否则用枚举
+                //  缓动：曲线优先，否则用枚举
                 if (useCurve && curve != null)
                     tweener.SetEase(curve);
                 else

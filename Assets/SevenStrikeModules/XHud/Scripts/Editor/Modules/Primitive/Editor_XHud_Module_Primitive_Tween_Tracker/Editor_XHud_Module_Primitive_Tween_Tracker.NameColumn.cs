@@ -518,7 +518,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="gapRect">间距行的完整矩形（内容坐标）</param>
         private void DrawNameColumnKindGapRow(Rect gapRect)
         {
-            // ★ 关键：Gap 行上下各扩展 1px，吃掉相邻行的内缩空间，
+            //  关键：Gap 行上下各扩展 1px，吃掉相邻行的内缩空间，
             // 让分隔带在视觉上紧贴上下相邻行。
             gapRect = new Rect(
                 gapRect.x,

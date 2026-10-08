@@ -38,13 +38,13 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DrawSoundParameterFields(Rect area, TweenSound sound)
         {
-            // ★ 换成缓存入口
+            //  换成缓存入口
             SerializedObject so = GetParameterSerializedObject();
             if (so == null) return;
 
             so.Update();
 
-            // ★ 复用缓存好的数组属性，不要每帧 FindProperty
+            //  复用缓存好的数组属性，不要每帧 FindProperty
             SerializedProperty prop_sounds = cachedSoundsProp;
             if (prop_sounds == null || selectedIndex < 0 || selectedIndex >= prop_sounds.arraySize)
                 return;
@@ -255,13 +255,13 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DrawNodeParameterFields(Rect area, Texture2D type_icon, TweenNode node)
         {
-            // ★ 换成缓存入口
+            //  换成缓存入口
             SerializedObject so = GetParameterSerializedObject();
             if (so == null) return;
 
             so.Update();
 
-            // ★ 复用缓存好的数组属性
+            //  复用缓存好的数组属性
             SerializedProperty prop_nodes = cachedNodesProp;
             if (prop_nodes == null || selectedIndex < 0 || selectedIndex >= prop_nodes.arraySize)
                 return;
@@ -491,7 +491,8 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 光标字符
-            XGUI.layout_property_field(
+            if (node.Type == TweenNodeType.w_打字机)
+                XGUI.layout_property_field(
                 title: "光标字符",
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.Theme_Primary,
@@ -503,14 +504,15 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 光标字符闪烁频率
-            XGUI.layout_property_field(
-                title: "光标字符闪烁频率",
-                title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
-                title_width: 80,
-                prop: ser_written_text_cursorblinkspeed,
-                prop_padding: new RectOffset(5, 5, 0, 5),
-                prop_margin: new RectOffset(5, 5, 0, 0));
+            if (node.Type == TweenNodeType.w_打字机)
+                XGUI.layout_property_field(
+                    title: "光标字符闪烁频率",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 80,
+                    prop: ser_written_text_cursorblinkspeed,
+                    prop_padding: new RectOffset(5, 5, 0, 5),
+                    prop_margin: new RectOffset(5, 5, 0, 0));
             ser_written_text_cursorblinkspeed.serializedObject.ApplyModifiedProperties();
             #endregion
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
@@ -628,8 +630,9 @@ namespace SevenStrikeModules.XHud.Editor
             node.Enabled = DrawLabeledToggle("动画开关", node.Enabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
             #endregion
 
-            #region 动画开关
-            node.TextExtended = DrawLabeledToggle("延伸内容", node.TextExtended, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+            #region 延伸内容
+            if (node.Type == TweenNodeType.w_打字机 && node.TweenValueMode == TweenValueMode.当前到结束_C_E)
+                node.TextExtended = DrawLabeledToggle("延伸内容", node.TextExtended, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
             #endregion
 
             #region 重置设为起始值

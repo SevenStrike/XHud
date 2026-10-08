@@ -971,7 +971,7 @@ namespace SevenStrikeModules.XHud.Editor
                 window.selectedSoundIndices.Clear();
                 window.selectedKind = TrackKind.无;
 
-                // ★ 新增：target 换了，缓存的 SO 失效
+                //  新增：target 换了，缓存的 SO 失效
                 window.cachedSO = null;
                 window.cachedSO_target = null;
                 window.cachedNodesProp = null;
@@ -1083,7 +1083,7 @@ namespace SevenStrikeModules.XHud.Editor
             SavePersistedViewState();
             SavePersistedWindowSize();
 
-            // ★ 新增：飞梭预览还原
+            //  新增：飞梭预览还原
             CleanupPlayheadPreviewOnDisable();
         }
         /// <summary> 
@@ -1168,7 +1168,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
 
-            // ★ 新增：Undo 后强制重建 SO，避免引用失效
+            //  新增：Undo 后强制重建 SO，避免引用失效
             cachedSO = null;
             cachedSO_target = null;
             cachedNodesProp = null;
@@ -2028,7 +2028,7 @@ namespace SevenStrikeModules.XHud.Editor
                 dragStartNodeDelays.Clear();
                 dragStartNodeDurations.Clear();
                 dragStartSoundDelays.Clear();
-                // ★ 这里
+                //  这里
                 if (dragUndoGroup >= 0)
                 {
                     Undo.CollapseUndoOperations(dragUndoGroup);
@@ -2053,7 +2053,7 @@ namespace SevenStrikeModules.XHud.Editor
             Event e = Event.current;
             if (e.type != EventType.KeyDown) return;
 
-            // ★ 新增：拖拽飞梭期间禁用快捷键，避免拖拽中增删节点导致索引错乱
+            //  新增：拖拽飞梭期间禁用快捷键，避免拖拽中增删节点导致索引错乱
             if (isDraggingPlayhead) return;
 
             if (e.keyCode == KeyCode.Escape)

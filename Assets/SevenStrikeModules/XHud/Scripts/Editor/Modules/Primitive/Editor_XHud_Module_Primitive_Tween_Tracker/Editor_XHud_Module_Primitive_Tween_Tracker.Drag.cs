@@ -34,7 +34,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Event e = Event.current;
 
-            // ★ 右键菜单
+            //  右键菜单
             if (e.type == EventType.MouseDown && e.button == 1 && clipRect.Contains(e.mousePosition))
             {
                 ShowClipContextMenu(TrackKind.Node, index);
@@ -151,7 +151,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Event e = Event.current;
 
-            // ★ 右键菜单
+            //  右键菜单
             if (e.type == EventType.MouseDown && e.button == 1 && clipRect.Contains(e.mousePosition))
             {
                 ShowClipContextMenu(TrackKind.Sound, soundIndex);
@@ -188,7 +188,7 @@ namespace SevenStrikeModules.XHud.Editor
             draggingIndex = soundIndex;
             primaryDragIndex = soundIndex;
 
-            // ★ 与动画 Clip 一致：按鼠标点在 Clip 左半 / 右半锁定吸附锚定侧
+            //  与动画 Clip 一致：按鼠标点在 Clip 左半 / 右半锁定吸附锚定侧
             float clipCenterX = (clipRect.xMin + clipRect.xMax) * 0.5f;
             moveDragAnchorSide = e.mousePosition.x < clipCenterX ? 1 : 2;
 
@@ -661,7 +661,7 @@ namespace SevenStrikeModules.XHud.Editor
                     if (isPanning && GUIUtility.hotControl == panControlID)
                     {
                         scrollPos.x -= e.delta.x;
-                        ClampScrollX();   // ★ 替换
+                        ClampScrollX();   //  替换
                         float maxScrollY = CalculateMaxVerticalScroll();
                         scrollPos.y = Mathf.Clamp(scrollPos.y - e.delta.y, 0f, maxScrollY);
                         nameScroll.y = scrollPos.y;
@@ -697,7 +697,7 @@ namespace SevenStrikeModules.XHud.Editor
                 float zoomFactor = 1f - e.delta.y * 0.03f;
                 pixelsPerSecond = Mathf.Clamp(pixelsPerSecond * zoomFactor, 1f, 20000f);
                 scrollPos.x = mouseSecond * pixelsPerSecond - mouseLocalX;
-                ClampScrollX();   // ★ 替换
+                ClampScrollX();   //  替换
                 e.Use();
                 Repaint();
                 return;
@@ -731,7 +731,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
             const float panSpeed = 5f;
             scrollPos.x += e.delta.y * panSpeed;
-            ClampScrollX();   // ★ 替换
+            ClampScrollX();   //  替换
             e.Use();
             Repaint();
         }
