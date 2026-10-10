@@ -2663,15 +2663,123 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1452913949}
     - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: MaxTimer
+      value: 2.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: fold_list
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: fold_based
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: fold_param
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: GlobalDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
       propertyPath: TweenIsPreviewing
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: Timeline_TrackHeight
+      value: 31.166876
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: Timeline_TrackPosition
+      value: 270.63492
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: Timeline_TrackScroll.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: Timeline_TrackSnapEnabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: MaxTimerWithGlobalDuration
+      value: 2.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: MinTimerWithGlobalDuration
+      value: 0.581
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: Timeline_TrackSoundPreviewer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[0].ID
+      value: 5426
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[3].ID
+      value: 1701
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[1].Type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[1].Delay
+      value: 1.079
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[3].Delay
+      value: 1.153
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenSounds.Array.data[0].Path
+      value: "Assets/SevenStrikeModules/XHud/Sound/\u7535\u5B50\u6FC0\u5149\u58F011.wav"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenSounds.Array.data[1].Path
+      value: "Assets/SevenStrikeModules/XHud/Sound/\u7535\u5B50\u6FC0\u5149\u58F015.wav"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[0].IsFold
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenSounds.Array.data[0].Delay
+      value: 0.246
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenSounds.Array.data[0].Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: 3b0d6c66aeca5ad48807e549004a9a11, type: 3}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenSounds.Array.data[1].Delay
+      value: 1.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenSounds.Array.data[1].Sound
+      value: 
+      objectReference: {fileID: 8300000, guid: 87824fcca5af67047825e110a7a19fd4, type: 3}
     - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
       propertyPath: PrimitiveTweenNodes.Array.data[0].Progress
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[1].Progress
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
       propertyPath: PrimitiveTweenNodes.Array.data[2].Progress
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[3].Duration
+      value: 1.367
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[3].Progress
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4223686060993486647, guid: db17f898becf3154da3471122b978bc0, type: 3}
@@ -2689,6 +2797,10 @@ PrefabInstance:
     - target: {fileID: 5755098906041804970, guid: db17f898becf3154da3471122b978bc0, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197335552179945544, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: PrimitiveTweenNodes.Array.data[0].Progress
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

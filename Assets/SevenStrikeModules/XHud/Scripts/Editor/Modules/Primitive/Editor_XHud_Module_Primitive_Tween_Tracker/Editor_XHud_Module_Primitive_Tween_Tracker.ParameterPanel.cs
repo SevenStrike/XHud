@@ -24,6 +24,7 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XTween;
+    using System;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
@@ -50,6 +51,7 @@ namespace SevenStrikeModules.XHud.Editor
                 return;
 
             SerializedProperty prop_sound = prop_sounds.GetArrayElementAtIndex(selectedIndex);
+            SerializedProperty ser_id = prop_sound.FindPropertyRelative("ID");
             SerializedProperty ser_sound = prop_sound.FindPropertyRelative("Sound");
             SerializedProperty ser_path = prop_sound.FindPropertyRelative("Path");
             SerializedProperty ser_timing = prop_sound.FindPropertyRelative("Timing");
@@ -57,7 +59,6 @@ namespace SevenStrikeModules.XHud.Editor
             SerializedProperty ser_volume = prop_sound.FindPropertyRelative("Volume");
             SerializedProperty ser_minPitch = prop_sound.FindPropertyRelative("MinPitch");
             SerializedProperty ser_maxPitch = prop_sound.FindPropertyRelative("MaxPitch");
-
 
             XGUI.ChangedCheck_Start();
 
@@ -76,7 +77,35 @@ namespace SevenStrikeModules.XHud.Editor
                 absolute_margin: true,
                 absolute_padding: true,
                 margin: new RectOffset(10, 10, 25, 0),
-                padding: new RectOffset(10, 10, 15, 15));
+                padding: new RectOffset(10, 10, 15, 15),
+                 can_foldout: false);
+
+            #region ID
+            XGUI.layout_property_field(
+                title: "ID",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 80,
+                prop: ser_id,
+                prop_padding: new RectOffset(5, 5, 0, 5),
+                prop_margin: new RectOffset(5, 5, 0, 0));
+            ser_sound.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            Rect rect_refreshid = XGUI.GetLastRect();
+            if (XGUI.gui_button(
+                rect: new Rect(rect_refreshid.x + (rect_refreshid.width - 25), rect_refreshid.y - 30, 20, 20),
+                tooltip: $"重新分配 ID",
+                tex_release: icon_refresh_id_r,
+                tex_press: icon_refresh_id_p,
+                tex_gui_color: XHud_Dashboard.Theme_Primary,
+                border: new RectOffset(0, 0, 0, 0),
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                focus_name: "fav_btn"))
+            {
+                sound.ID = target.TweenSound_GenerateId();
+            }
 
             #region 音效资源
             XGUI.layout_property_field(
@@ -272,6 +301,7 @@ namespace SevenStrikeModules.XHud.Editor
                 return;
 
             SerializedProperty prop_node = prop_nodes.GetArrayElementAtIndex(selectedIndex);
+            SerializedProperty ser_id = prop_node.FindPropertyRelative("ID");
             SerializedProperty ser_indicator = prop_node.FindPropertyRelative("Indicator");
             SerializedProperty ser_type = prop_node.FindPropertyRelative("Type");
             SerializedProperty ser_duration = prop_node.FindPropertyRelative("Duration");
@@ -328,7 +358,8 @@ namespace SevenStrikeModules.XHud.Editor
                 absolute_margin: true,
                 absolute_padding: true,
                 margin: new RectOffset(10, 10, 25, 0),
-                padding: new RectOffset(10, 10, 15, 15));
+                padding: new RectOffset(10, 10, 15, 15),
+                can_foldout: false);
 
             #region 标识
             XGUI.layout_property_field(
@@ -337,6 +368,33 @@ namespace SevenStrikeModules.XHud.Editor
               title_hover_color: XHud_Dashboard.Theme_Primary,
               title_width: 80,
               prop: ser_indicator,
+              prop_padding: new RectOffset(5, 5, 0, 5),
+              prop_margin: new RectOffset(5, 5, 0, 0));
+            ser_indicator.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            Rect rect_refreshid = XGUI.GetLastRect();
+            if (XGUI.gui_button(
+                rect: new Rect(rect_refreshid.x + (rect_refreshid.width - 25), rect_refreshid.y - 30, 20, 20),
+                tooltip: $"重新分配 ID",
+                tex_release: icon_refresh_id_r,
+                tex_press: icon_refresh_id_p,
+                tex_gui_color: XHud_Dashboard.Theme_Primary,
+                border: new RectOffset(0, 0, 0, 0),
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                focus_name: "fav_btn"))
+            {
+                node.ID = target.TweenNode_GenerateId();
+            }
+
+            #region ID
+            XGUI.layout_property_field(
+              title: "ID",
+              title_size: XGUIFontSize.M,
+              title_hover_color: XHud_Dashboard.Theme_Primary,
+              title_width: 80,
+              prop: ser_id,
               prop_padding: new RectOffset(5, 5, 0, 5),
               prop_margin: new RectOffset(5, 5, 0, 0));
             ser_indicator.serializedObject.ApplyModifiedProperties();
@@ -352,57 +410,6 @@ namespace SevenStrikeModules.XHud.Editor
                prop_padding: new RectOffset(5, 5, 0, 5),
               prop_margin: new RectOffset(5, 5, 0, 0));
             ser_type.serializedObject.ApplyModifiedProperties();
-            #endregion
-
-            #region 时机
-            string[] TimingTypes = null;
-
-            if (HudButton != null)
-            {
-                TimingTypes = new string[9] { "无", "鼠标进入", "鼠标退出", "鼠标按下", "鼠标松开", "鼠标长按", "鼠标点击", "鼠标选中", "鼠标取消选中" };
-            }
-            else if (HudProgress != null)
-            {
-                TimingTypes = new string[5] { "无", "进度开始时", "进度变化时", "进度结束时", "进度重置时" };
-            }
-            else if (HudToggle != null)
-            {
-                TimingTypes = new string[7] { "无", "开关打开时", "开关关闭时", "开关按下时", "开关抬起时", "开关变化时", "开关变化中" };
-            }
-            else if (HudSlider != null)
-            {
-                TimingTypes = new string[5] { "无", "按下滑动条", "松开滑动条", "滑动条数值改变", "滑动条数值变化中" };
-            }
-            else if (HudOption != null)
-            {
-                TimingTypes = new string[5] { "无", "点击选项", "光标移动开始", "光标移动结束", "光标位置改变" };
-            }
-            else
-            {
-                TimingTypes = new string[4] { "元素进入时", "元素进入后", "元素退出时", "自定义" };
-            }
-
-            ser_timing.stringValue = XGUI.layout_string_popup(
-                   title: "时机",
-                   title_width: 80,
-                   title_size: XGUIFontSize.M,
-                   title_anchor: TextAnchor.MiddleLeft,
-                   prop: ser_timing,
-                   options: TimingTypes,
-                   opt_text_size: XGUIFontSize.M,
-                   opt_text_color: Color.black,
-                   opt_text_padding: new RectOffset(10, 10, 0, 0),
-                   opt_anchor: TextAnchor.MiddleLeft,
-                   opt_font_style: FontStyle.Normal,
-                   opt_bg_fill: XGUIFilled.实体,
-                   opt_bg_color: XGUIColor.亮白,
-                   opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
-                   margin: new RectOffset(0, 0, 0, 0),
-                   padding: new RectOffset(10, 9, 0, 5),
-                   title_margin: new RectOffset(0, 0, 0, 0),
-                   icon_arrow_color: Color.black);
-
-            ser_timing.serializedObject.ApplyModifiedProperties();
             #endregion
 
             #region 耗时
@@ -519,6 +526,57 @@ namespace SevenStrikeModules.XHud.Editor
                     prop_padding: new RectOffset(5, 5, 0, 5),
                     prop_margin: new RectOffset(5, 5, 0, 0));
             ser_written_text_cursorblinkspeed.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            #region 时机
+            string[] TimingTypes = null;
+
+            if (HudButton != null)
+            {
+                TimingTypes = new string[9] { "无", "鼠标进入", "鼠标退出", "鼠标按下", "鼠标松开", "鼠标长按", "鼠标点击", "鼠标选中", "鼠标取消选中" };
+            }
+            else if (HudProgress != null)
+            {
+                TimingTypes = new string[5] { "无", "进度开始时", "进度变化时", "进度结束时", "进度重置时" };
+            }
+            else if (HudToggle != null)
+            {
+                TimingTypes = new string[7] { "无", "开关打开时", "开关关闭时", "开关按下时", "开关抬起时", "开关变化时", "开关变化中" };
+            }
+            else if (HudSlider != null)
+            {
+                TimingTypes = new string[5] { "无", "按下滑动条", "松开滑动条", "滑动条数值改变", "滑动条数值变化中" };
+            }
+            else if (HudOption != null)
+            {
+                TimingTypes = new string[5] { "无", "点击选项", "光标移动开始", "光标移动结束", "光标位置改变" };
+            }
+            else
+            {
+                TimingTypes = new string[4] { "元素进入时", "元素进入后", "元素退出时", "自定义" };
+            }
+
+            ser_timing.stringValue = XGUI.layout_string_popup(
+                   title: "时机",
+                   title_width: 80,
+                   title_size: XGUIFontSize.M,
+                   title_anchor: TextAnchor.MiddleLeft,
+                   prop: ser_timing,
+                   options: TimingTypes,
+                   opt_text_size: XGUIFontSize.M,
+                   opt_text_color: Color.black,
+                   opt_text_padding: new RectOffset(10, 10, 0, 0),
+                   opt_anchor: TextAnchor.MiddleLeft,
+                   opt_font_style: FontStyle.Normal,
+                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_color: XGUIColor.亮白,
+                   opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                   margin: new RectOffset(0, 0, 0, 0),
+                   padding: new RectOffset(10, 9, 0, 5),
+                   title_margin: new RectOffset(0, 0, 0, 0),
+                   icon_arrow_color: Color.black);
+
+            ser_timing.serializedObject.ApplyModifiedProperties();
             #endregion
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion

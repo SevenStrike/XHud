@@ -380,29 +380,47 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 概述信息
             bool is_minmal = clipRect.width < 150;
-            string twn_content = $"{(is_minmal ? "" : "延迟：")}{node.Delay:F3}   /   {(is_minmal ? "" : "耗时：")}{node.Duration:F3}";
-            XGUI.gui_label(
-                rect: new Rect(clipRect.x + 4, clipRect.y, clipRect.width - 8, clipRect.height),
-                text: new GUIContent(twn_content),
-                text_color: isSelected ? (!node.Enabled ? Color.white * 0.7f : Color.black) : Color.white,
-                size: XGUIFontSize.M,
-                clipping: TextClipping.Clip,
-                anchor: TextAnchor.MiddleCenter,
-                font_style: FontStyle.Normal);
+            bool is_very_minmal = clipRect.width <= 90;
+
+            if (!is_very_minmal)
+            {
+                string twn_content = $"{(is_minmal ? "" : "延迟：")}{node.Delay:F3}   /   {(is_minmal ? "" : "耗时：")}{node.Duration:F3}";
+                XGUI.gui_label(
+                    rect: new Rect(clipRect.x + 4, clipRect.y, clipRect.width - 8, clipRect.height),
+                    text: new GUIContent(twn_content),
+                    text_color: isSelected ? (!node.Enabled ? Color.white * 0.7f : Color.black) : Color.white,
+                    size: XGUIFontSize.M,
+                    clipping: TextClipping.Clip,
+                    anchor: TextAnchor.MiddleCenter,
+                    font_style: FontStyle.Normal);
+            }
             #endregion
 
             #region 类型图标
-            if (clipRect.width >= 220)
+            if (is_very_minmal)
             {
                 XGUI.gui_icon(
-                    rect: new Rect(clipRect.x + 15, clipRect.y + (trackHeight / 2 - 7), 10, 10),
-                    icon: GetTweenTypeIcon(node.Type),
-                    color: isSelected ? Color.black : Color.white * 0.9f);
+                      rect: new Rect(clipRect.x + (clipRect.width / 2 - 6), clipRect.y + (trackHeight / 2 - 7), 12, 12),
+                      icon: GetTweenTypeIcon(node.Type, false),
+                      border: new RectOffset(0, 0, 0, 0),
+                      color: isSelected ? Color.black : Color.white * 0.9f);
+            }
+            else
+            {
+                if (clipRect.width >= 220)
+                {
+                    XGUI.gui_icon(
+                        rect: new Rect(clipRect.x + 15, clipRect.y + (trackHeight / 2 - 7), 12, 12),
+                        icon: GetTweenTypeIcon(node.Type, false),
+                        border: new RectOffset(0, 0, 0, 0),
+                        color: isSelected ? Color.black : Color.white * 0.9f);
 
-                XGUI.gui_icon(
-                    rect: new Rect(clipRect.x + (clipRect.width - 25), clipRect.y + (trackHeight / 2 - 7), 10, 10),
-                    icon: GetTweenTypeIcon(node.Type),
-                    color: isSelected ? Color.black : Color.white * 0.9f);
+                    XGUI.gui_icon(
+                        rect: new Rect(clipRect.x + (clipRect.width - 25), clipRect.y + (trackHeight / 2 - 7), 12, 12),
+                        icon: GetTweenTypeIcon(node.Type, false),
+                        border: new RectOffset(0, 0, 0, 0),
+                        color: isSelected ? Color.black : Color.white * 0.9f);
+                }
             }
             #endregion
 
@@ -472,7 +490,7 @@ namespace SevenStrikeModules.XHud.Editor
                     typeicon = big_mode ? b_anim_type_move : icon_type_move;
                     break;
                 case TweenNodeType.r_旋转:
-                    typeicon = big_mode ? b_anim_type_rotate : icon_type_rotator;
+                    typeicon = big_mode ? b_anim_type_rotate : icon_type_rotate;
                     break;
                 case TweenNodeType.s_缩放:
                     typeicon = big_mode ? b_anim_type_scale : icon_type_scale;

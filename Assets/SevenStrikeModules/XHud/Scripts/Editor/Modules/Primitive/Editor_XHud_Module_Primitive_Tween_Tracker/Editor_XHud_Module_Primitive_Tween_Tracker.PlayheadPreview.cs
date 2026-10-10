@@ -147,6 +147,11 @@ namespace SevenStrikeModules.XHud.Editor
                 float elapsed = t - D;
                 playheadPreviewTweens[i].EvaluateAt(elapsed);
             }
+
+            // 驱动音效预览
+            // 受工具栏「预览音效」开关控制
+            if (soundPreviewer)
+                DrivePlayheadSoundPreview(t);
         }
 
         #endregion

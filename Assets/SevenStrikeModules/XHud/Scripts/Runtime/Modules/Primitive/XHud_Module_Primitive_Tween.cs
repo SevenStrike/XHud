@@ -1014,23 +1014,27 @@ namespace SevenStrikeModules.XHud
         }
         #endregion
 
-        #region 编辑器视图状态
-        /// <summary>动
-        /// 画轨道时间轴 - 每秒像素数（缩放）
+        #region 时间线编辑器视图状态
+        /// <summary>
+        /// 时间线编辑器 - 每秒像素数（缩放）
         /// </summary>
         [SerializeField] public float Timeline_TrackPosition = 100f;
         /// <summary>
-        /// 动画轨道时间轴 - 水平滚动量（像素）
+        /// 时间线编辑器 - 水平滚动量（像素）
         /// </summary>
         [SerializeField] public Vector2 Timeline_TrackScroll = Vector2.zero;
         /// <summary>
-        /// 动画轨道时间轴 - 轨道高度（像素）
+        /// 时间线编辑器 - 轨道高度（像素）
         /// </summary>
         [SerializeField] public float Timeline_TrackHeight = 0f;
         /// <summary>
-        /// 动画轨道时间轴 - 轨道吸附（像素）
+        /// 时间线编辑器 - 轨道吸附
         /// </summary>
         [SerializeField] public bool Timeline_TrackSnapEnabled = false;
+        /// <summary>
+        /// 时间线编辑器 - 拖拽飞梭经过音效Clip时自动播放音效
+        /// </summary>
+        [SerializeField] public bool Timeline_TrackSoundPreviewer = true;
         #endregion
 
         #region 运行时 - 音效批次
@@ -1060,13 +1064,13 @@ namespace SevenStrikeModules.XHud
          *       ┌─────────────────────────────┐
          *       │         Awake()             │
          *       │                             │
-         *       │  ① TweenNode_AllTweenPro... │  ← 进度归零
+         *       │  ① TweenNode_AllTweenPro... │   进度归零
          *       │         Progress_Reset()    │
          *       │                             │
-         *       │  ② act_on_Tween_Initialized │  ← 代码回调
+         *       │  ② act_on_Tween_Initialized │   代码回调
          *       │         ?.Invoke()          │
          *       │                             │
-         *       │  ③ eve_on_Tween_Initialized │  ← Inspector 事件
+         *       │  ③ eve_on_Tween_Initialized │   Inspector 事件
          *       │         .Invoke()           │
          *       └─────────────────────────────┘
          *                 │
@@ -1992,13 +1996,13 @@ namespace SevenStrikeModules.XHud
                 for (int i = 0; i < batch.Sounds.Count; i++)
                 {
                     TweenSound sod = batch.Sounds[i];
-                    if (batch.Triggered.Contains(sod))   // ← 改成引用比较
+                    if (batch.Triggered.Contains(sod))   //  改成引用比较
                         continue;
 
                     float actualDelay = sod.Delay * batch.Mul;
                     if (elapsed >= actualDelay)
                     {
-                        batch.Triggered.Add(sod);        // ← 改成引用
+                        batch.Triggered.Add(sod);        //  改成引用
                         PlayTweenSound(sod);
                     }
                 }
@@ -2950,8 +2954,8 @@ namespace SevenStrikeModules.XHud
                 node.Rewind_Set_Startvalue,
                 node.Complete_Set_Endvalue,
                 isfrom ? from_value : null)                //  显式起点
-                .SetDelay(node.Delay * duration + delay)   // ← 保留
-                .SetLoop(node.LoopCount, node.LoopType);   // ← 保留
+                .SetDelay(node.Delay * duration + delay)   //  保留
+                .SetLoop(node.LoopCount, node.LoopType);   //  保留
 
             //  删掉 SetFrom / SetFromDynamic（打字机不读 _StartValue）
             // if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)

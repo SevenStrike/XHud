@@ -27,7 +27,6 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XTween;
     using SevenStrikeModules.XTween.Editor;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditorInternal;
@@ -149,13 +148,24 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 字段 - 音效预览
         /// <summary>
-        /// 预览音效播放时生成的 AudioSource 列表，用于停止时统一销毁
+        /// 预览音效播放时生成的 AudioSource 列表，用于停止时统一销毁。
         /// </summary>
         private List<AudioSource> Preview_PrimitiveTweens_SoundList = new List<AudioSource>();
         /// <summary>
-        /// 预览音效播放的协程句柄列表，用于停止时统一终止
+        /// 预览音效的"待触发"记录。
+        /// <para/>用 EditorApplication.update 手动计时，
+        /// 避免编辑器模式下协程不驱动 / 立即恢复的问题。
         /// </summary>
-        private List<XCoroutine> Preview_PrimitiveTweens_SoundCoroutineList_Stop = new List<XCoroutine>();
+        private class PendingPreviewSound
+        {
+            public TweenSound Sod;
+            public AudioClip Clip;
+            public double TriggerAtTime;   // EditorApplication.timeSinceStartup + delay
+        }
+        /// <summary>
+        /// 当前待触发的预览音效列表。
+        /// </summary>
+        private List<PendingPreviewSound> PendingPreviewSounds = new List<PendingPreviewSound>();
         #endregion
 
         #region 字段 - 颜色
@@ -935,6 +945,9 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             };
             #endregion
+
+            Preview_PrimitiveTweens_SoundList = new List<AudioSource>();
+            PendingPreviewSounds = new List<PendingPreviewSound>();
 
             // 收集动画列表所有动画时机名称
             CollectPreviewTimings(BaseScript);
@@ -2770,15 +2783,16 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                 }
                 tweens = mo.ToArray();
-                // 预览收集到的有效的音效
-                //PreviewTweenSounds(sp_PreviewTiming.stringValue, SelectedObjects);
+
+                // 新：使用新重载，每个组件各用各的 PreviewTiming
+                PreviewTweenSounds(SelectedObjects);
             }
             else
             {
                 tweens = CollectPreviewTweens(BaseScript, sp_PreviewTiming.stringValue);
 
-                // 预览收集到的有效的音效
-                //PreviewTweenSounds(sp_PreviewTiming.stringValue, BaseScript);
+                // 新：使用新重载，每个组件各用各的 PreviewTiming
+                PreviewTweenSounds(sp_PreviewTiming.stringValue, BaseScript);
             }
 
             // 使用XTween预览器预览收集到的有效的动画
@@ -2824,6 +2838,9 @@ namespace SevenStrikeModules.XHud.Editor
 
                 isPreviewing = false;
             }
+
+            //  停止所有音效预览：清空待触发 + 停并销毁正在播的
+            StopAllPreviewSounds();
 
             Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
         }
@@ -2892,135 +2909,237 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 工具 - 音效预览实现
+
         /// <summary>
-        /// 预览单个图元动画器上匹配指定时机的所有音效
-        /// <para/>
-        /// 音效的延迟时间计算公式：
-        /// <c>音效百分比 × 节点时长 × 全局倍增 + 节点延迟</c>
+        /// 从音效库安全取出一条 AudioClip。
         /// </summary>
-        /// <param name="Timings">目标时机名称</param>
-        /// <param name="tweener">目标图元动画器</param>
-        private void PreviewTweenSounds(string Timings, XHud_Module_Primitive_Tween tweener)
+        private AudioClip ResolvePreviewClip(TweenSound sod)
         {
+            if (sod == null || sod.Sound == null)
+                return null;
+
+            if (HudManager != null && HudManager.Hud_Sounds != null)
+            {
+                string soundName = sod.Sound.name;
+                if (!string.IsNullOrEmpty(soundName))
+                {
+                    AudioClip clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(soundName);
+                    if (clip != null)
+                        return clip;
+                }
+            }
+            return sod.Sound;
+        }
+
+        /// <summary>
+        /// 计算音效预览的延迟。
+        /// <para/>公式：<c>Delay = sod.Delay × DurationMultiply × GlobalDuration</c>
+        /// </summary>
+        private float ResolvePreviewSoundDelay(TweenSound sod, float globalDuration)
+        {
+            if (sod == null) return 0f;
+
+            float mul = 1f;
+            if (HudManager != null && HudManager.DurationMultiply > 0f)
+                mul = HudManager.DurationMultiply;
+            mul *= globalDuration;
+
+            return Mathf.Max(0f, sod.Delay * mul);
+        }
+
+        /// <summary>
+        /// 预览单个图元动画器上匹配指定时机的所有音效。
+        /// </summary>
+        private void PreviewTweenSounds(string timing, XHud_Module_Primitive_Tween tweener)
+        {
+            if (tweener == null) return;
+            if (tweener.MutePlay) return;
+            if (EditorUtility.audioMasterMute) return;
+            if (string.IsNullOrEmpty(timing)) return;
+
+            double now = EditorApplication.timeSinceStartup;
+            bool anyAdded = false;
+
             for (int s = 0; s < tweener.PrimitiveTweenSounds.Count; s++)
             {
                 TweenSound sod = tweener.PrimitiveTweenSounds[s];
+                if (sod == null) continue;
+                if (sod.Mute) continue;
+                if (sod.Timing != timing) continue;
 
-                // 判断该音效的播放时机是否匹配，如果不匹配则跳过
-                if (Timings != sod.Timing)
+                AudioClip clip = ResolvePreviewClip(sod);
+                if (clip == null)
+                {
+                    Debug.LogWarning($"[XHud] 预览音效失败：时机「{timing}」上的音效无法取到 AudioClip");
                     continue;
+                }
 
-                float x_vol = sod.Volume;
-                float x_pit_min = sod.MinPitch;
-                float x_pit_max = sod.MaxPitch;
-                float x_delay = sod.Delay;
-                bool x_userandom = !(sod.MinPitch == 1 && sod.MaxPitch == 1);
-                string x_soundname = sod.Sound.name;
+                float delay = ResolvePreviewSoundDelay(sod, tweener.GlobalDuration);
 
-                AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
-                Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(PlayPreviewSoundCoroutine(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
+                PendingPreviewSounds.Add(new PendingPreviewSound
+                {
+                    Sod = sod,
+                    Clip = clip,
+                    TriggerAtTime = now + delay,
+                });
+                anyAdded = true;
+
+                //Debug.Log($"[音效预览] 加入待触发：{clip.name} delay={delay}s");
+            }
+
+            if (anyAdded)
+            {
+                EditorApplication.update -= PreviewSoundTick;
+                EditorApplication.update += PreviewSoundTick;
+                Repaint();
             }
         }
+
         /// <summary>
-        /// 预览多个图元动画器上匹配指定时机的所有音效（批量模式）
+        /// 预览多个图元动画器上匹配各自预览时机的所有音效（批量模式）。
         /// </summary>
-        /// <param name="Timings">目标时机名称</param>
-        /// <param name="tweeners">目标图元动画器数组</param>
-        private void PreviewTweenSounds(string Timings, XHud_Module_Primitive_Tween[] tweeners)
+        private void PreviewTweenSounds(XHud_Module_Primitive_Tween[] tweeners)
         {
+            if (tweeners == null || tweeners.Length == 0) return;
+
             for (int i = 0; i < tweeners.Length; i++)
             {
-                XHud_Module_Primitive_Tween tweener = tweeners[i];
-                for (int k = 0; k < tweener.PrimitiveTweenSounds.Count; k++)
-                {
-                    TweenSound sod = tweener.PrimitiveTweenSounds[k];
-
-                    if (sod.Timing != Timings)
-                        continue;
-
-                    float x_vol = sod.Volume;
-                    float x_pit_min = sod.MinPitch;
-                    float x_pit_max = sod.MaxPitch;
-                    float x_delay = sod.Delay;
-                    bool x_userandom = !(sod.MinPitch == 1 && sod.MaxPitch == 1);
-                    string x_soundname = sod.Sound.name;
-
-                    AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(x_soundname);
-                    Preview_PrimitiveTweens_SoundCoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(PlayPreviewSoundCoroutine(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
-                }
+                var t = tweeners[i];
+                if (t == null) continue;
+                PreviewTweenSounds(t.PreviewTiming, t);
             }
         }
+
         /// <summary>
-        /// 音效预览协程：延迟指定时间后创建 AudioSource 播放，播放完成后销毁
+        /// 每帧检查待触发音效列表，到点的立即播放。
+        /// <para/>由 EditorApplication.update 驱动。
         /// </summary>
-        IEnumerator PlayPreviewSoundCoroutine(float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_userandom, AudioClip clip, float delay)
+        private void PreviewSoundTick()
         {
-            yield return new XCoroutineWaitForSeconds(delay);
-            Preview_PrimitiveTweens_SoundList.Add(CreatePreviewAudioSource(sp_vol, sp_pitch_min, sp_pitch_max, sp_userandom, clip));
-            AudioSource au = Preview_PrimitiveTweens_SoundList[Preview_PrimitiveTweens_SoundList.Count - 1];
-            while (true)
+            // 顺便清理已播完的 AudioSource
+            CleanupFinishedPreviewAudioSources();
+
+            if (PendingPreviewSounds == null || PendingPreviewSounds.Count == 0)
             {
-                if (au != null && !au.isPlaying)
-                {
-                    break;
-                }
-                yield return null;
+                EditorApplication.update -= PreviewSoundTick;
+                return;
             }
-            DestroyImmediate(au.gameObject, true);
+
+            double now = EditorApplication.timeSinceStartup;
+
+            for (int i = PendingPreviewSounds.Count - 1; i >= 0; i--)
+            {
+                PendingPreviewSound p = PendingPreviewSounds[i];
+                if (now >= p.TriggerAtTime)
+                {
+                    PlayPreviewSoundImmediate(p.Sod, p.Clip);
+                    PendingPreviewSounds.RemoveAt(i);
+                }
+            }
+
+            if (PendingPreviewSounds.Count == 0)
+            {
+                EditorApplication.update -= PreviewSoundTick;
+            }
+
+            Repaint();
         }
+
         /// <summary>
-        /// 停止所有音效预览协程，并销毁所有已生成的预览 AudioSource
+        /// 清理已播完的预览 AudioSource（避免长期持有）。
+        /// </summary>
+        private void CleanupFinishedPreviewAudioSources()
+        {
+            if (Preview_PrimitiveTweens_SoundList == null) return;
+
+            for (int i = Preview_PrimitiveTweens_SoundList.Count - 1; i >= 0; i--)
+            {
+                AudioSource au = Preview_PrimitiveTweens_SoundList[i];
+                if (au == null || !au.isPlaying)
+                {
+                    if (au != null && au.gameObject != null)
+                        DestroyImmediate(au.gameObject, true);
+                    Preview_PrimitiveTweens_SoundList.RemoveAt(i);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 立即播放一个预览音效（创建 AudioSource 并播放）。
+        /// </summary>
+        private void PlayPreviewSoundImmediate(TweenSound sod, AudioClip clip)
+        {
+            if (clip == null) return;
+
+            AudioSource au = CreatePreviewAudioSource(sod, clip);
+            if (au == null) return;
+
+            Preview_PrimitiveTweens_SoundList.Add(au);
+            //Debug.Log($"[音效预览] 播放 {clip.name}（当前时间 {EditorApplication.timeSinceStartup:F2}）");
+        }
+
+        /// <summary>
+        /// 停止所有音效预览：清空待触发、停并销毁所有 AudioSource。
         /// </summary>
         private void StopAllPreviewSounds()
         {
-            for (int i = 0; i < Preview_PrimitiveTweens_SoundCoroutineList_Stop.Count; i++)
-            {
-                if (Preview_PrimitiveTweens_SoundCoroutineList_Stop[i] != null)
-                    XCoroutineUtility.xec_StopCoroutine(Preview_PrimitiveTweens_SoundCoroutineList_Stop[i]);
-            }
-            Preview_PrimitiveTweens_SoundCoroutineList_Stop.Clear();
+            // 清空待触发
+            if (PendingPreviewSounds != null)
+                PendingPreviewSounds.Clear();
 
+            // 注销 tick
+            EditorApplication.update -= PreviewSoundTick;
+
+            // 停并销毁已播放的
             if (Preview_PrimitiveTweens_SoundList != null)
             {
                 for (int i = 0; i < Preview_PrimitiveTweens_SoundList.Count; i++)
                 {
-                    if (Preview_PrimitiveTweens_SoundList[i] != null)
+                    AudioSource au = Preview_PrimitiveTweens_SoundList[i];
+                    if (au != null)
                     {
-                        Preview_PrimitiveTweens_SoundList[i].Stop();
-                        DestroyImmediate(Preview_PrimitiveTweens_SoundList[i].gameObject, true);
-                        Preview_PrimitiveTweens_SoundList[i] = null;
+                        au.Stop();
+                        if (au.gameObject != null)
+                            DestroyImmediate(au.gameObject, true);
                     }
+                    Preview_PrimitiveTweens_SoundList[i] = null;
                 }
                 Preview_PrimitiveTweens_SoundList.Clear();
             }
 
             SceneView.RepaintAll();
         }
+
         /// <summary>
-        /// 创建一个用于音效预览的临时 AudioSource 并立即播放
-        /// <para/>
-        /// 附带 <see cref="XHud_AudioStoper"/> 组件以支持自动停止。
+        /// 创建一个用于音效预览的临时 AudioSource 并立即播放。
         /// </summary>
-        public AudioSource CreatePreviewAudioSource(float sp_vol, float sp_pitch_min, float sp_pitch_max, bool sp_userandom, AudioClip clip)
+        public AudioSource CreatePreviewAudioSource(TweenSound sod, AudioClip clip)
         {
+            if (sod == null || clip == null)
+                return null;
+
             GameObject obj = new GameObject();
-            obj.name = "PrimitiveTweens_Sound_Previewer-" + "[" + clip.length.ToString("F2") + " s]-" + "[" + clip.channels + " ch]-" + "[" + clip.frequency + " hz]";
+            obj.name = $"PrimitiveTweens_Sound_Previewer-[{clip.length:F2}s]-{clip.name}";
+            obj.hideFlags = HideFlags.HideAndDontSave;
+
             AudioSource au = obj.AddComponent<AudioSource>();
+            au.playOnAwake = false;
             au.clip = clip;
-            au.volume = sp_vol;
-            if (sp_userandom)
-            {
-                au.pitch = Random.Range(sp_pitch_min, sp_pitch_max);
-            }
-            else
-            {
-                au.pitch = 1.0f;
-            }
+            au.volume = Mathf.Clamp01(sod.Volume);
+            au.spatialBlend = 0f;
+
+            float pMin = Mathf.Min(sod.MinPitch, sod.MaxPitch);
+            float pMax = Mathf.Max(sod.MinPitch, sod.MaxPitch);
+            bool useRandomPitch = !Mathf.Approximately(pMin, 1f) || !Mathf.Approximately(pMax, 1f);
+            au.pitch = useRandomPitch ? Random.Range(pMin, pMax) : 1f;
+
             au.Play();
-            XHud_AudioStoper sp = au.gameObject.AddComponent<XHud_AudioStoper>();
+
+            XHud_AudioStoper sp = obj.AddComponent<XHud_AudioStoper>();
             sp.SetAudioSource(au);
             return au;
         }
+
         #endregion
     }
 }

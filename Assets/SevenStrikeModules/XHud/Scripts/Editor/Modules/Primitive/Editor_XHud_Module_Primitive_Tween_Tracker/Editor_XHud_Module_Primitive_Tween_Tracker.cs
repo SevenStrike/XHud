@@ -442,6 +442,10 @@ namespace SevenStrikeModules.XHud.Editor
         private bool snapEnabled = true;
         #endregion
 
+        #region 字段：预览时播放音效
+        private bool soundPreviewer = true;
+        #endregion
+
         #region 字段：平移状态
         /// <summary> 
         ///是否正在使用中键 / Alt+左键平移视图
@@ -564,7 +568,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 动画类型图标 - 旋转
         /// </summary>
-        private Texture2D icon_type_rotator;
+        private Texture2D icon_type_rotate;
         /// <summary>
         /// 动画类型图标 - 缩放
         /// </summary>
@@ -726,6 +730,14 @@ namespace SevenStrikeModules.XHud.Editor
         /// 播放控制图标 - 跳转到轨道尾（按下）
         /// </summary>
         private Texture2D icon_playback_end_p;
+        /// <summary>
+        /// 刷新ID图标（常规）
+        /// </summary>
+        private Texture2D icon_refresh_id_r;
+        /// <summary>
+        /// 刷新ID图标（按下）
+        /// </summary>
+        private Texture2D icon_refresh_id_p;
         #endregion
 
         #region 字段：视图参数
@@ -963,6 +975,13 @@ namespace SevenStrikeModules.XHud.Editor
         private string cachedTargetName = "";
         #endregion
 
+        #region 字段：样式
+        /// <summary>
+        /// 暂时用一下，后面XGUI会支持专用的Toolbar控件
+        /// </summary>
+        public GUIStyle style_toolbar_toggle;
+        #endregion
+
         #region 嵌套类型：拖拽模式
         /// <summary> 
         ///Clip 拖拽模式，描述当前鼠标拖拽的是 Clip 的哪个部分
@@ -1050,7 +1069,7 @@ namespace SevenStrikeModules.XHud.Editor
                 window.LoadPersistedViewState();
                 window.RefreshHostComponentCache();
 
-                //  ← 新增：每次绑定新 target 时记录一次特性基线，
+                //   新增：每次绑定新 target 时记录一次特性基线，
                 // 保证关窗口时 PrimitiveFeature_Load 能还原到"本次打开前"的状态
                 SaveFeatureBaseline(tween);
             }
@@ -1148,6 +1167,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             string iconRoot = XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path() + "gui_module_primitive_tween/";
 
+            #region 获取图标
             icon_param_nullselected_warning = XGUI.GetBasedIcon("icon_warning");
             icon_param_mixedselected_warning = XGUI.GetBasedIcon("icon_warning");
             icon_del_r = XGUI.GetCustomIcon($"{iconRoot}icon_del_r");
@@ -1162,18 +1182,18 @@ namespace SevenStrikeModules.XHud.Editor
             icon_disabled_p = XGUI.GetCustomIcon($"{iconRoot}icon_disabled_p");
             icon_help_r = XGUI.GetCustomIcon($"{iconRoot}icon_help_r");
             icon_help_p = XGUI.GetCustomIcon($"{iconRoot}icon_help_p");
+            icon_null_check = XGUI.GetCustomIcon($"{iconRoot}icon_null_check");
+            icon_null_add_r = XGUI.GetCustomIcon($"{iconRoot}icon_null_add_r");
+            icon_null_add_p = XGUI.GetCustomIcon($"{iconRoot}icon_null_add_p");
+            icon_timeline_logo = XGUI.GetCustomIcon($"{iconRoot}icon_timeline_logo");
             icon_type_color = XGUI.GetCustomIcon($"{iconRoot}anim_type_color");
             icon_type_fade = XGUI.GetCustomIcon($"{iconRoot}anim_type_fade");
             icon_type_fill = XGUI.GetCustomIcon($"{iconRoot}anim_type_fill");
             icon_type_move = XGUI.GetCustomIcon($"{iconRoot}anim_type_move");
-            icon_type_rotator = XGUI.GetCustomIcon($"{iconRoot}anim_type_rotator");
+            icon_type_rotate = XGUI.GetCustomIcon($"{iconRoot}anim_type_rotate");
             icon_type_scale = XGUI.GetCustomIcon($"{iconRoot}anim_type_scale");
             icon_type_size = XGUI.GetCustomIcon($"{iconRoot}anim_type_size");
             icon_type_writter = XGUI.GetCustomIcon($"{iconRoot}anim_type_writter");
-            icon_timeline_logo = XGUI.GetCustomIcon($"{iconRoot}icon_timeline_logo");
-            icon_null_check = XGUI.GetCustomIcon($"{iconRoot}icon_null_check");
-            icon_null_add_r = XGUI.GetCustomIcon($"{iconRoot}icon_null_add_r");
-            icon_null_add_p = XGUI.GetCustomIcon($"{iconRoot}icon_null_add_p");
             b_anim_type_move = XGUI.GetCustomIcon($"{iconRoot}b_anim_type_move");
             b_anim_type_rotate = XGUI.GetCustomIcon($"{iconRoot}b_anim_type_rotate");
             b_anim_type_scale = XGUI.GetCustomIcon($"{iconRoot}b_anim_type_scale");
@@ -1215,6 +1235,13 @@ namespace SevenStrikeModules.XHud.Editor
             icon_playback_stepforward_p = XGUI.GetCustomIcon($"{iconRoot}icon_playback_stepforward_p");
             icon_playback_end_r = XGUI.GetCustomIcon($"{iconRoot}icon_playback_end_r");
             icon_playback_end_p = XGUI.GetCustomIcon($"{iconRoot}icon_playback_end_p");
+
+            icon_refresh_id_r = XGUI.GetCustomIcon($"{iconRoot}icon_refreshid_r");
+            icon_refresh_id_p = XGUI.GetCustomIcon($"{iconRoot}icon_refreshid_p");
+            #endregion
+
+            style_toolbar_toggle = new GUIStyle(EditorStyles.toolbarButton);
+            style_toolbar_toggle.fixedHeight = TopBarHeight;
         }
         /// <summary> 
         ///Unity 禁用回调：注销 Undo/Redo 监听，并保存视图状态
@@ -1236,6 +1263,9 @@ namespace SevenStrikeModules.XHud.Editor
 
             //  播放状态清理
             CleanupPlaybackOnDisable();
+
+            //  音效预览清理（先停音效再销毁宿主对象）
+            DestroyPreviewAudioSource();
         }
         /// <summary>
         /// Play 模式状态变化回调。
@@ -1712,39 +1742,12 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 #endregion
 
-                #region 分割线
-                XGUI.layout_seperator(
-                    thickness: 1,
-                    dir: XGUISeplineDir.垂直,
-                    color: Color.black * 0.4f,
-                padding: new RectOffset(0, 0, 0, 0),
-                    margin: new RectOffset(0, 10, 0, 0));
-                #endregion
-
                 #region 开关 - 轨道吸附
-                bool newSnap = XGUI.layout_toggle(
-                    title: "轨道吸附",
-                    tooltip: "拖拽时按住 Shift 可临时强制吸附",
-                    title_size: XGUIFontSize.M,
-                    title_font_style: FontStyle.Normal,
-                    title_padding: new RectOffset(0, 10, 0, 2),
-                    title_width: 60,
-                    prop: snapEnabled,
-                    tog_style: XGUIToggleStyle.实体,
-                    tog_padding: new RectOffset(5, 8, 3, 0),
-                    tog_margin: new RectOffset(0, 0, 0, 0),
-                    tog_mixed_options: new string[] { "禁用", "启用" },
-                    tog_mixed_text_size: XGUIFontSize.M,
-                    tog_mixed_text_color: Color.black,
-                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
-                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
-                    tog_mixed_font_style: FontStyle.Normal,
-                    tog_bg_off_color: Color.white * 0.65f,
-                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
-                    tog_handler_off_color: Color.white,
-                    tog_handler_on_color: Color.white,
-                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
-                    act_on_changed: null);
+                bool newSnap = GUILayout.Toggle(
+                    snapEnabled,
+                    "轨道吸附",
+                    style_toolbar_toggle,
+                    GUILayout.Width(80));
                 if (newSnap != snapEnabled)
                 {
                     snapEnabled = newSnap;
@@ -1752,13 +1755,17 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 #endregion
 
-                #region 分割线
-                XGUI.layout_seperator(
-                    thickness: 1,
-                    dir: XGUISeplineDir.垂直,
-                    color: Color.black * 0.4f,
-                    padding: new RectOffset(0, 0, 0, 0),
-                    margin: new RectOffset(0, 10, 0, 0));
+                #region 开关 - 预览音效      
+                bool sound_previewer = GUILayout.Toggle(
+                    soundPreviewer,
+                    "预览音效",
+                    style_toolbar_toggle,
+                    GUILayout.Width(80));
+                if (sound_previewer != soundPreviewer)
+                {
+                    soundPreviewer = sound_previewer;
+                    SavePersistedViewState();
+                }
                 #endregion
 
                 XGUI.layout_label(
@@ -1815,6 +1822,8 @@ namespace SevenStrikeModules.XHud.Editor
                 anchor: TextAnchor.MiddleRight,
                 font: XGUI.GetFont("xg-medium"));
             #endregion
+
+            //toolbarbutton style
 
             #region 按钮 - 帮助
             if (XGUI.layout_button(

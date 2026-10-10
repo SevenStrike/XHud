@@ -121,6 +121,9 @@ namespace SevenStrikeModules.XHud.Editor
             StopPlayback();
             playheadSecond = QuantizeTime(Mathf.Max(0f, playheadSecond - playheadStepSeconds));
             snapGuideSecond = -1f;
+
+            ResetSoundDriveBaseline();
+
             RefreshPlayheadPreview(playheadSecond);
             Repaint();
         }
@@ -136,6 +139,9 @@ namespace SevenStrikeModules.XHud.Editor
             float contentEnd = GetLastClipEndSecond();
             playheadSecond = QuantizeTime(Mathf.Min(contentEnd, playheadSecond + playheadStepSeconds));
             snapGuideSecond = -1f;
+
+            ResetSoundDriveBaseline();
+
             RefreshPlayheadPreview(playheadSecond);
             Repaint();
         }
@@ -170,6 +176,9 @@ namespace SevenStrikeModules.XHud.Editor
             if (playheadSecond >= contentEnd - 0.0001f)
                 playheadSecond = 0f;
 
+            // 从头播放时清空音效标记，让 0 秒附近的音效可以触发
+            ResetSoundDriveBaseline();
+
             isPlayheadPlaying = true;
             playheadLastTime = EditorApplication.timeSinceStartup;
 
@@ -188,6 +197,9 @@ namespace SevenStrikeModules.XHud.Editor
 
             isPlayheadPlaying = false;
             EditorApplication.update -= OnPlaybackEditorUpdate;
+
+            // 停止播放时同时停掉正在播放的音效
+            ResetSoundDriveBaseline();
 
             //  重编译 / 关闭窗口期间 this 可能已失效，Repaint 前判空
             if (this != null)

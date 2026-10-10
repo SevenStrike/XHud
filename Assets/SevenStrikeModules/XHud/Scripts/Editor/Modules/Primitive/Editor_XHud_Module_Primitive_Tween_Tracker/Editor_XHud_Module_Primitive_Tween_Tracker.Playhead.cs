@@ -77,8 +77,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 case EventType.MouseDown:
                     // 左键 + 非 Alt + 落在刻度尺内 + 当前无其他 hotControl
-                    if (e.button == 0 && !e.alt && GUIUtility.hotControl == 0
-                        && rulerRect.Contains(e.mousePosition))
+                    if (e.button == 0 && !e.alt && GUIUtility.hotControl == 0 && rulerRect.Contains(e.mousePosition))
                     {
                         //  [新增] 播放中拖飞梭，先停播放。
                         // 否则 OnPlaybackEditorUpdate 与 UpdatePlayheadFromMouse
@@ -90,10 +89,12 @@ namespace SevenStrikeModules.XHud.Editor
                         GUIUtility.hotControl = controlID;
                         GUIUtility.keyboardControl = 0;
 
+                        // 开始新的拖拽时，先清空音效触发标记，
+                        // 让本次拖拽经过的每个区间都能重新触发
+                        ResetSoundDriveBaseline();
+
                         //  关键：按下即跳转，不管点的是头部还是空白
                         UpdatePlayheadFromMouse(e.mousePosition, clipAreaLocalRect);
-
-                        //EditorApplication.QueuePlayerLoopUpdate();
 
                         e.Use();
                         Repaint();
@@ -120,10 +121,10 @@ namespace SevenStrikeModules.XHud.Editor
                         playheadControlID = 0;
                         snapGuideSecond = -1f;
 
-                        //  飞梭拖动结束收尾（清空预览 tween + 区间标记）
+                        // 飞梭拖动结束收尾（清空预览 tween + 区间标记）
                         OnPlayheadDragEnd();
 
-                        //EditorApplication.QueuePlayerLoopUpdate();
+                        ResetSoundDriveBaseline();
 
                         e.Use();
                         Repaint();

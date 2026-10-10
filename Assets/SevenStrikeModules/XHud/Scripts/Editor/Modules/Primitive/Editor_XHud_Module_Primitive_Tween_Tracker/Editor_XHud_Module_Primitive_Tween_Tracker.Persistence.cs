@@ -263,7 +263,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             trackHeight = Mathf.Clamp(target.Timeline_TrackHeight, MinTrackHeight, MaxTrackHeight);
             snapEnabled = target.Timeline_TrackSnapEnabled;
-
+            soundPreviewer = target.Timeline_TrackSoundPreviewer;
             nameColumnWidth = LoadClampedFloatPreference(PrefKey_NameWidthWidth, DefaultNameColumnWidth, MinNameColumnWidth, MaxNameColumnWidth);
             paramPanelWidth = LoadClampedFloatPreference(PrefKey_ParamWidthHeight, DefaultParamPanelWidth, MinParamPanelWidth, MaxParamPanelWidth);
         }
@@ -275,7 +275,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (target == null) return;
             target.Timeline_TrackPosition = pixelsPerSecond;
             target.Timeline_TrackScroll = scrollPos;
-
+            target.Timeline_TrackSoundPreviewer = soundPreviewer;
             target.Timeline_TrackHeight = trackHeight;
             target.Timeline_TrackSnapEnabled = snapEnabled;
 

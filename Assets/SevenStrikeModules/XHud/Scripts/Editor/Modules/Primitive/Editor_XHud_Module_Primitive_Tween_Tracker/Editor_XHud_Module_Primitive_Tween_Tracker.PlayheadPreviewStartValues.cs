@@ -55,7 +55,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (Nodes == null || Nodes.Count == 0) return;
             if (target.controller == null) return;
 
-            //  ← 新增：标记"曾对组件写过值"，让窗口关闭时能正确还原
+            //   新增：标记"曾对组件写过值"，让窗口关闭时能正确还原
             hasModifiedComponent = true;
 
             // ── 按类型分组，取每组 Delay 最小的节点 ──
@@ -193,6 +193,9 @@ namespace SevenStrikeModules.XHud.Editor
 
             //  清预览缓存：飞梭位置发生大跳跃，缓存里的"上帧状态"已失效
             OnPlayheadDragEnd();
+
+            // 跳转时重置音效区间标记（避免飞梭跳跃后残留旧音效）
+            ResetSoundDriveBaseline();
 
             // 硬写每类型第一个 Clip 的起点值
             ApplyFirstClipStartValuesByType();
