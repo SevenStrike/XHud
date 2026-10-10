@@ -54,8 +54,8 @@ namespace SevenStrikeModules.XHud.Editor
             }
             EditorUtility.OpenPropertyEditor(lib);
         }
-        [MenuItem(("Tools/XHud/Library/CurrentLibrary-Curve #F2"))]
-        public static void open_curve()
+        [MenuItem(("Tools/XHud/Library/CurrentLibrary-PrimitiveTween #F2"))]
+        public static void open_primitive_tween()
         {
             XHud_Library_Curves lib = (XHud_Library_Curves)FindFirstObjectByType<XHud_Manager>().Hud_Curves;
             if (lib == null)
@@ -239,6 +239,33 @@ namespace SevenStrikeModules.XHud.Editor
                        cancel: "前往",
                        PrimaryIndex: 1,
                        themecolor: XHud_Dashboard.Theme_Primary);
+                    if (res == "前往")
+                    {
+                        Transform man = FindFirstObjectByType<XHud_Manager>().transform;
+                        EditorGUIUtility.PingObject(man);
+                    }
+                    return;
+                };
+            }
+            EditorUtility.OpenPropertyEditor(lib);
+        }
+        [MenuItem(("Tools/XHud/Library/CurrentLibrary-Curve #F8"))]
+        public static void open_curve()
+        {
+            XHud_Library_Curves lib = (XHud_Library_Curves)FindFirstObjectByType<XHud_Manager>().Hud_Curves;
+            if (lib == null)
+            {
+                EditorApplication.delayCall += () =>
+                {
+                    string res = XGUI.dialog(
+                      type: XGUIDialogType.警告,
+                      windowtitle: "XHud - 曲线库消息",
+                      title: "未指定曲线库",
+                      msg: "未在XHudManager中配置曲线库！请先前往XHud管理器指定一个曲线库！",
+                      ok: "明白",
+                      cancel: "前往",
+                      PrimaryIndex: 1,
+                      themecolor: XHud_Dashboard.Theme_Primary);
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;

@@ -80,6 +80,11 @@ namespace SevenStrikeModules.XHud.Editor
                     if (e.button == 0 && !e.alt && GUIUtility.hotControl == 0
                         && rulerRect.Contains(e.mousePosition))
                     {
+                        //  [新增] 播放中拖飞梭，先停播放。
+                        // 否则 OnPlaybackEditorUpdate 与 UpdatePlayheadFromMouse
+                        // 会同时写 playheadSecond，互相打架（拖不动 / 跳来跳去）。
+                        StopPlayback();
+
                         isDraggingPlayhead = true;
                         playheadControlID = controlID;
                         GUIUtility.hotControl = controlID;
@@ -87,6 +92,8 @@ namespace SevenStrikeModules.XHud.Editor
 
                         //  关键：按下即跳转，不管点的是头部还是空白
                         UpdatePlayheadFromMouse(e.mousePosition, clipAreaLocalRect);
+
+                        //EditorApplication.QueuePlayerLoopUpdate();
 
                         e.Use();
                         Repaint();
@@ -97,7 +104,9 @@ namespace SevenStrikeModules.XHud.Editor
                     if (isDraggingPlayhead && GUIUtility.hotControl == playheadControlID)
                     {
                         // 拖动期间不限制在刻度尺内，鼠标跑到轨道区甚至窗口外也继续跟随 X
+                        //  [不动] 这里绝不能再加 rulerRect.Contains 判断，否则越界跟随失效
                         UpdatePlayheadFromMouse(e.mousePosition, clipAreaLocalRect);
+
                         e.Use();
                         Repaint();
                     }
@@ -109,10 +118,12 @@ namespace SevenStrikeModules.XHud.Editor
                         isDraggingPlayhead = false;
                         GUIUtility.hotControl = 0;
                         playheadControlID = 0;
-                        snapGuideSecond = -1f;   //  清掉吸附线，避免残留
+                        snapGuideSecond = -1f;
 
-                        //  新增：飞梭拖动结束收尾（清空预览 tween + 区间标记）
+                        //  飞梭拖动结束收尾（清空预览 tween + 区间标记）
                         OnPlayheadDragEnd();
+
+                        //EditorApplication.QueuePlayerLoopUpdate();
 
                         e.Use();
                         Repaint();
@@ -161,8 +172,8 @@ namespace SevenStrikeModules.XHud.Editor
                 snapGuideSecond = -1f;
             }
 
-            //  新增：驱动飞梭预览
-            DrivePlayheadPreview(playheadSecond);
+            //  驱动飞梭预览（仅写属性，刷新由调用方按场景决定）
+            RefreshPlayheadPreview(playheadSecond);
 
             ////  你要的 Debug.Log
             //Debug.Log($"[XHud] 时间飞梭：{playheadSecond:F3} 秒");

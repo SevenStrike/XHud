@@ -32,7 +32,6 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
-    using UnityEngine.InputSystem.LowLevel;
     using UnityEngine.UI;
     using Random = UnityEngine.Random;
 
@@ -110,10 +109,25 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 字段 - 图标
-        /// <summary>
-        /// 图标集合：预览播放/停止、左右箭头、数值连接器、数值圆点、展开/折叠、组件标题、打开时间轴
-        /// </summary>
-        private Texture2D prw_play_r, prw_play_p, prw_stop_r, prw_stop_p, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, dir_connector_r, dir_connector_p, anim_dot_r, anim_dot_p, icon_unfold_r, icon_unfold_p, icon_fold_r, icon_fold_p, icon_main, opentrack_r, opentrack_p;
+        private Texture2D prw_play_r;
+        private Texture2D prw_play_p;
+        private Texture2D prw_stop_r;
+        private Texture2D prw_stop_p;
+        private Texture2D left_arrow_r;
+        private Texture2D left_arrow_p;
+        private Texture2D right_arrow_r;
+        private Texture2D right_arrow_p;
+        private Texture2D dir_connector_r;
+        private Texture2D dir_connector_p;
+        private Texture2D anim_dot_r;
+        private Texture2D anim_dot_p;
+        private Texture2D icon_unfold_r;
+        private Texture2D icon_unfold_p;
+        private Texture2D icon_fold_r;
+        private Texture2D icon_fold_p;
+        private Texture2D icon_main;
+        private Texture2D opentrack_r;
+        private Texture2D opentrack_p;
         #endregion
 
         #region 字段 - 宿主组件缓存
@@ -1275,9 +1289,14 @@ namespace SevenStrikeModules.XHud.Editor
                                margin: new RectOffset(5, 5, 0, 5));
                             #endregion
 
-                            #region 最大耗时（图元动画器倍增）
+                            XGUI.layout_seperator(
+                                thickness: 1,
+                                color: XHud_Dashboard.Theme_SeperateLine,
+                                margin: new RectOffset(15, 15, 15, 15));
+
+                            #region 最小耗时（自身倍增）
                             XGUI.layout_state_displayer_text(
-                               title: "最大耗时<color=#909090>（图元动画器倍增）</color>",
+                               title: "最小耗时<color=#909090>（图元动画器倍增）</color>",
                                title_size: XGUIFontSize.M,
                                subtitle: sp_MinTimerWithGlobalDuration.floatValue.ToString() + " 秒",
                                subtitle_size: XGUIFontSize.M,
@@ -1285,7 +1304,32 @@ namespace SevenStrikeModules.XHud.Editor
                                margin: new RectOffset(5, 5, 0, 5));
                             #endregion
 
-                            #region 最大耗时（XHUD倍增）
+                            #region 最大耗时（自身倍增）
+                            XGUI.layout_state_displayer_text(
+                               title: "最大耗时<color=#909090>（图元动画器倍增）</color>",
+                               title_size: XGUIFontSize.M,
+                               subtitle: sp_MaxTimerWithGlobalDuration.floatValue.ToString() + " 秒",
+                               subtitle_size: XGUIFontSize.M,
+                               subtitle_color: XHud_Dashboard.Theme_Primary,
+                               margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+
+                            XGUI.layout_seperator(
+                                thickness: 1,
+                                color: XHud_Dashboard.Theme_SeperateLine,
+                                margin: new RectOffset(15, 15, 15, 15));
+
+                            #region 最小耗时（XHud 全局倍增）
+                            XGUI.layout_state_displayer_text(
+                               title: "最小耗时<color=#909090>（XHUD倍增）</color>",
+                               title_size: XGUIFontSize.M,
+                               subtitle: (sp_MinTimerWithGlobalDuration.floatValue * HudManager.DurationMultiply).ToString() + " 秒",
+                               subtitle_size: XGUIFontSize.M,
+                               subtitle_color: XHud_Dashboard.Theme_Primary,
+                               margin: new RectOffset(5, 5, 0, 5));
+                            #endregion
+
+                            #region 最大耗时（XHud 全局倍增）
                             XGUI.layout_state_displayer_text(
                                title: "最大耗时<color=#909090>（XHUD倍增）</color>",
                                title_size: XGUIFontSize.M,
@@ -2727,14 +2771,14 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 tweens = mo.ToArray();
                 // 预览收集到的有效的音效
-                PreviewTweenSounds(sp_PreviewTiming.stringValue, SelectedObjects);
+                //PreviewTweenSounds(sp_PreviewTiming.stringValue, SelectedObjects);
             }
             else
             {
                 tweens = CollectPreviewTweens(BaseScript, sp_PreviewTiming.stringValue);
 
                 // 预览收集到的有效的音效
-                PreviewTweenSounds(sp_PreviewTiming.stringValue, BaseScript);
+                //PreviewTweenSounds(sp_PreviewTiming.stringValue, BaseScript);
             }
 
             // 使用XTween预览器预览收集到的有效的动画
@@ -2764,16 +2808,18 @@ namespace SevenStrikeModules.XHud.Editor
 
                 if (IsMultiSelection())
                 {
-                    for (int i = 0; i < SelectedObjects.Length; i++)
-                    {
-                        if (LoadOriginalState && SelectedObjects[i] != null)
-                            SelectedObjects[i].controller.pt_Feature.PrimitiveFeature_Load();
-                    }
+                    if (!EditorWindow.HasOpenInstances<Editor_XHud_Module_Primitive_Tween_Tracker>())
+                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        {
+                            if (LoadOriginalState && SelectedObjects[i] != null)
+                                SelectedObjects[i].controller.pt_Feature.PrimitiveFeature_Load();
+                        }
                 }
                 else
                 {
                     if (LoadOriginalState && target != null)
-                        BaseScript.controller.pt_Feature.PrimitiveFeature_Load();
+                        if (!EditorWindow.HasOpenInstances<Editor_XHud_Module_Primitive_Tween_Tracker>())
+                            BaseScript.controller.pt_Feature.PrimitiveFeature_Load();
                 }
 
                 isPreviewing = false;

@@ -130,6 +130,11 @@ namespace SevenStrikeModules.XHud.Editor
                 TimingTypes = new string[4] { "元素进入时", "元素进入后", "元素退出时", "自定义" };
             }
 
+            if (string.IsNullOrEmpty(ser_timing.stringValue))
+            {
+                ser_timing.stringValue = TimingTypes[0];
+            }
+
             ser_timing.stringValue = XGUI.layout_string_popup(
                    title: "时机",
                    title_width: 80,

@@ -52,7 +52,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>用于 <see cref="CleanupPlayheadPreviewOnDisable"/> 决定是否调用
         /// <c>PrimitiveFeature_Load()</c> 还原物体——只在驱动过时才还原，避免无谓副作用。
         /// </summary>
-        private bool playheadPreviewEverDriven = false;
+        public bool hasModifiedComponent = false;
 
         #endregion
 
@@ -76,7 +76,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (target == null || target.Equals(null)) return;
             if (Nodes == null || Nodes.Count == 0) return;
 
-            playheadPreviewEverDriven = true;
+            hasModifiedComponent = true;
 
             for (int i = 0; i < Nodes.Count; i++)
             {
@@ -125,7 +125,7 @@ namespace SevenStrikeModules.XHud.Editor
                     CleanupPreviewTween(i);
 
                     // 2. 创建新的预览 tween
-                    XTween_Interface tw = CreatePreviewTweenForNode(node, i);
+                    XTween_Interface tw = CreatePreviewTween(node, i);
                     if (tw == null)
                     {
                         // 创建失败（组件缺失 / 类型未实现）：跳过该节点，不标记区间
@@ -167,8 +167,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="node">目标节点</param>
         /// <param name="index">节点索引（当前未使用，保留供调试/扩展）</param>
         /// <returns>创建好的预览 tween；失败返回 null</returns>
-        private XTween_Interface CreatePreviewTweenForNode(TweenNode node, int index)
+        private XTween_Interface CreatePreviewTween(TweenNode node, int index)
         {
+            //return null;
+
             if (node == null) return null;
             if (target == null || target.controller == null) return null;
 
@@ -943,7 +945,6 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 飞梭预览驱动 - 清理
-
         /// <summary>
         /// 清理指定节点的预览 tween（Kill 并移出字典）。
         /// <para/>**不**还原物体——按需求，飞梭驱动只在窗口关闭时统一还原。
@@ -956,7 +957,6 @@ namespace SevenStrikeModules.XHud.Editor
                 playheadPreviewTweens.Remove(index);
             }
         }
-
         /// <summary>
         /// 拖动飞梭结束时（MouseUp）的收尾。
         /// <para/>按决策 (B)：清空预览 tween + 区间标记，使下次拖动必然重建。
@@ -969,7 +969,6 @@ namespace SevenStrikeModules.XHud.Editor
             playheadPreviewTweens.Clear();
             playheadPrevInRange.Clear();
         }
-
         /// <summary>
         /// 窗口关闭时的飞梭预览收尾。
         /// <para/>清空预览 tween（不还原），并在曾驱动过预览时调用
@@ -978,22 +977,30 @@ namespace SevenStrikeModules.XHud.Editor
         private void CleanupPlayheadPreviewOnDisable()
         {
             foreach (var kv in playheadPreviewTweens)
-                kv.Value?.Kill(false);
+            {
+                //  XTween 可能在重编译后失效，用 try-catch 兜底
+                try
+                {
+                    kv.Value?.Kill(false);
+                }
+                catch { }
+            }
             playheadPreviewTweens.Clear();
             playheadPrevInRange.Clear();
 
-            if (playheadPreviewEverDriven)
+            if (hasModifiedComponent)
             {
-                if (target != null && !target.Equals(null)
-                    && target.controller != null
-                    && target.controller.pt_Feature != null)
+                if (target != null && !target.Equals(null) && target.controller != null && target.controller.pt_Feature != null)
                 {
-                    target.controller.pt_Feature.PrimitiveFeature_Load();
+                    try
+                    {
+                        target.controller.pt_Feature.PrimitiveFeature_Load();
+                    }
+                    catch { }
                 }
-                playheadPreviewEverDriven = false;
+                hasModifiedComponent = false;
             }
         }
-
         #endregion
     }
 }

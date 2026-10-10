@@ -39,3 +39,11 @@ MonoBehaviour:
     Root: {fileID: 0}
     Target: {fileID: 3738649134357389805, guid: 363f6f66d530e4a4089889476c66397f, type: 3}
     PreloadElements: []
+  - Name: Cat
+    InitializeCount: 1
+    UsedCount: 0
+    RecycledCount: 0
+    NextIndex: 0
+    Root: {fileID: 0}
+    Target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
+    PreloadElements: []

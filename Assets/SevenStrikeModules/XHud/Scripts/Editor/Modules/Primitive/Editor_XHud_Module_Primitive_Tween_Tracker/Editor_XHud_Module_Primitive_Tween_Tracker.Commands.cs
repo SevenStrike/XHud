@@ -332,9 +332,9 @@ namespace SevenStrikeModules.XHud.Editor
                 Undo.RegisterCompleteObjectUndo(target, "Insert Tween Sound");
 
             TweenSound s = new TweenSound();
+            s.ID = target.TweenSound_GenerateId();
             s.Sound = null;
             s.Path = "";
-            s.Timing = "";
             s.Delay = 0f;
             s.Volume = 1f;
             s.MinPitch = 1f;

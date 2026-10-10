@@ -141,6 +141,9 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (!Application.isPlaying)
             {
+                if (EditorWindow.HasOpenInstances<Editor_XHud_Module_Primitive_Tween_Tracker>())
+                    return;
+
                 #region 记录特性
                 if (Targets_Selected())
                 {

@@ -36,35 +36,39 @@ namespace SevenStrikeModules.XHud
     public class TweenSound
     {
         /// <summary>
-        /// 音效剪辑
+        ///音效参数 - 标识ID
+        /// </summary>
+        public int ID;
+        /// <summary>
+        /// 音效参数 - 音效剪辑
         /// </summary>
         [SerializeField] public AudioClip Sound;
         /// <summary>
-        /// 音效路径
+        /// 音效参数 - 音效路径
         /// </summary>
         [SerializeField] public string Path;
         /// <summary>
-        /// 音效Timings
+        /// 音效参数 - 音效Timings
         /// </summary>
         [SerializeField] public string Timing;
         /// <summary>
-        /// 音效延迟播放时间
+        /// 音效参数 - 音效延迟播放时间
         /// </summary>
         [SerializeField] public float Delay;
         /// <summary>
-        /// 音量
+        /// 音效参数 - 音量
         /// </summary>
         [SerializeField] public float Volume = 1f;
         /// <summary>
-        /// 最大音高
+        /// 音效参数 - 最大音高
         /// </summary>
         [SerializeField] public float MaxPitch = 1f;
         /// <summary>
-        /// 最小音高
+        /// 音效参数 - 最小音高
         /// </summary>
         [SerializeField] public float MinPitch = 1f;
         /// <summary>
-        /// 静音开关
+        /// 音效参数 - 静音开关
         /// </summary>
         [SerializeField] public bool Mute;
 
@@ -148,6 +152,7 @@ namespace SevenStrikeModules.XHud
         {
             TweenSound sod = new TweenSound();
 
+            // ID 不复制：由调用方通过 TweenSound_GenerateId() 重新分配，避免与原节点冲突
             sod.Sound = this.Sound;               // AudioClip 是 UnityEngine.Object，引用共享即可
             sod.Path = this.Path;
             sod.Timing = this.Timing;
@@ -167,6 +172,7 @@ namespace SevenStrikeModules.XHud
         {
             if (source == null) return;
 
+            // ID 不复制：由调用方通过 TweenSound_GenerateId() 重新分配，避免与原节点冲突
             source.Sound = this.Sound;
             source.Delay = this.Delay;
             source.Path = this.Path;
@@ -530,7 +536,6 @@ namespace SevenStrikeModules.XHud
 
             // ========== 基础属性 ==========
             // ID 不复制：由调用方通过 TweenNode_GenerateId() 重新分配，避免与原节点冲突
-            //newNode.ID = this.ID;
             newNode.Indicator = this.Indicator;
             newNode.Enabled = this.Enabled;
             newNode.Type = this.Type;
@@ -615,6 +620,8 @@ namespace SevenStrikeModules.XHud
         {
             if (source == null) return;
 
+            // 注意：ID 不复制，保持原节点的 ID 或由调用方重新生成
+
             // 基础属性
             this.Indicator = source.Indicator;
             this.Enabled = source.Enabled;
@@ -669,7 +676,6 @@ namespace SevenStrikeModules.XHud
             this.TextCursorBlinkSpeed = source.TextCursorBlinkSpeed;
             this.TextCursor = source.TextCursor;
 
-            // 注意：ID 不复制，保持原节点的 ID 或由调用方重新生成
             // Tweener 不复制
             // 委托事件不复制
         }
@@ -1027,6 +1033,27 @@ namespace SevenStrikeModules.XHud
         [SerializeField] public bool Timeline_TrackSnapEnabled = false;
         #endregion
 
+        #region 运行时 - 音效批次
+        /// <summary>
+        /// 运行时 - 音效播放批次
+        /// <para/>每次按时机批量播放动画时创建一批，独立计时，按各自 Delay 触发。
+        /// <para/>音效与动画节点无绑定关系，仅通过 Timing/Timings 字符串共享"时机"。
+        /// </summary>
+        private class SoundPlayBatch
+        {
+            public float StartTime;
+            public List<TweenSound> Sounds = new List<TweenSound>();
+            /// <summary>已触发过的音效（按对象引用去重，不依赖 ID 唯一性）</summary>
+            public HashSet<TweenSound> Triggered = new HashSet<TweenSound>();
+            public float Mul = 1f;
+        }
+        /// <summary>
+        /// 运行时 - 当前活跃的所有音效批次
+        /// <para/>同 timing 可叠加多个批次；KillAll/RewindAll/OnDestroy 时统一清空。
+        /// </summary>
+        private List<SoundPlayBatch> SoundBatches = new List<SoundPlayBatch>();
+        #endregion
+
         /*               Unity 引擎加载 GameObject
          *                 │
          *                 ▼
@@ -1117,12 +1144,15 @@ namespace SevenStrikeModules.XHud
         private void OnDestroy()
         {
             Tween_KillAll(false);
+            StopAllSoundBatches();
         }
 
         void Update()
         {
             TweenNode_AllTweenProgress_Calculation();
             TweenNode_IsAllAnimating();
+            //  新增：音效批次驱动
+            UpdateSoundBatches();
         }
         #endregion
 
@@ -1416,6 +1446,117 @@ namespace SevenStrikeModules.XHud
             for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
             {
                 ids.Add(PrimitiveTweenNodes[i].ID);
+            }
+
+            // ========== 步骤 2：首次尝试（4 位数范围） ==========
+            // 1111-9999 共约 8888 个候选项，节点数少时几乎必中
+            int ran_id = Random.Range(1111, 9999);
+
+            // ========== 步骤 3：冲突检测循环 ==========
+            while (true)
+            {
+                if (ids.Contains(ran_id))
+                {
+                    // 冲突：扩大到 6 位数范围重新生成
+                    // 111111-999999 共约 888888 个候选项，几乎不会再次冲突
+                    ran_id = Random.Range(111111, 999999);
+                }
+                else
+                {
+                    // 无冲突：跳出循环
+                    break;
+                }
+            }
+
+            return ran_id;
+        }
+        #endregion
+
+        #region 音效节点列表操作
+
+        public TweenSound TweenSound_Create()
+        {
+            // 步骤 1：创建默认动画节点实例
+            TweenSound sod = new TweenSound();
+
+            // 步骤 2：分配唯一 ID（避免与现有节点冲突）
+            sod.ID = TweenSound_GenerateId();
+
+            // 步骤 3：加入节点列表，纳入统一管理
+            PrimitiveTweenSounds.Add(sod);
+
+            // 返回引用，便于外部继续配置该节点
+            return sod;
+        }
+
+        public TweenSound TweenSound_Create(TweenSound sod)
+        {
+            // 覆盖原 ID，确保在本节点列表内唯一
+            sod.ID = TweenSound_GenerateId();
+
+            // 直接引用加入列表
+            PrimitiveTweenSounds.Add(sod);
+
+            // 返回传入的实例，便于链式调用
+            return sod;
+        }
+
+        public void TweenSound_RemoveByName(string name)
+        {
+            // 逆序遍历：删除后不影响未检查元素的索引
+            for (int i = PrimitiveTweenSounds.Count - 1; i >= 0; i--)
+            {
+                if (PrimitiveTweenSounds[i].Sound.name == name)
+                {
+                    PrimitiveTweenSounds.RemoveAt(i);
+                }
+            }
+        }
+
+        public void TweenSound_RemoveById(int id)
+        {
+            // 逆序遍历：删除后不影响未检查元素的索引
+            for (int i = PrimitiveTweenSounds.Count - 1; i >= 0; i--)
+            {
+                if (PrimitiveTweenSounds[i].ID == id)
+                {
+                    PrimitiveTweenSounds.RemoveAt(i);
+                }
+            }
+        }
+
+        public TweenSound TweenSound_GetByIndex(int index)
+        {
+            // 直接按索引访问（无判空、无越界保护）
+            return PrimitiveTweenSounds[index];
+        }
+
+        public TweenSound TweenSound_GetByID(int ID)
+        {
+            TweenSound node = null;
+
+            // 线性查找
+            for (int i = 0; i < PrimitiveTweenSounds.Count; i++)
+            {
+                if (PrimitiveTweenSounds[i].ID == ID)
+                {
+                    node = PrimitiveTweenSounds[i];
+                    break;  // ID 唯一，命中即可退出
+                }
+            }
+
+            return node;
+        }
+
+        public int TweenSound_GenerateId()
+        {
+            // ========== 步骤 1：收集现有所有 ID ==========
+            // 用于后续 Contains 冲突检测
+            // 注意：每次调用都重新构建列表，存在重复内存分配
+            List<int> ids = new List<int>();
+            for (int i = 0; i < PrimitiveTweenSounds.Count; i++)
+            {
+                ids.Add(PrimitiveTweenSounds[i].ID);
             }
 
             // ========== 步骤 2：首次尝试（4 位数范围） ==========
@@ -1786,52 +1927,143 @@ namespace SevenStrikeModules.XHud
 
         #region 音效播放
         /// <summary>
-        /// 播放动画音效
+        /// 启动一批音效：筛选指定时机的音效，快照倍率，按 Delay 排序后加入批次列表
+        /// <para/>由 UpdateSoundBatches 每帧驱动触发。
+        /// <para/>同 timing 可叠加多个批次（不替换旧的）。
         /// </summary>
-        /// <param name="clip">要播放的音频剪辑</param>
-        /// <param name="volume">音量系数（0-1），最终音量 = 系统音量 × 系数</param>
-        /// <param name="pitchMin">最小音高（随机范围下限）</param>
-        /// <param name="pitchMax">最大音高（随机范围上限）</param>
-        /// <returns>播放音效的 AudioSource，如果播放失败则返回 null</returns>
-        private AudioSource PlayTweenSound(AudioClip clip, float volume, float pitchMin, float pitchMax)
+        /// <param name="timing">时机名称（对应 TweenSound.Timing）</param>
+        private void StartSoundBatch(string timing)
+        {
+            if (MutePlay)
+                return;
+            if (PrimitiveTweenSounds == null || PrimitiveTweenSounds.Count == 0)
+                return;
+            if (string.IsNullOrEmpty(timing))
+                return;
+
+            // 倍率快照：XHud管理器倍率 × 本动画器倍率
+            float mul = 1f;
+            if (XHud_Manager.Instance != null && XHud_Manager.Instance.DurationMultiply > 0f)
+                mul = XHud_Manager.Instance.DurationMultiply;
+            mul *= GlobalDuration;
+
+            SoundPlayBatch batch = new SoundPlayBatch();
+            batch.StartTime = Time.time;
+            batch.Mul = mul;
+
+            // 筛选：时机匹配 + 未静音 + 有音频剪辑
+            for (int i = 0; i < PrimitiveTweenSounds.Count; i++)
+            {
+                TweenSound sod = PrimitiveTweenSounds[i];
+                if (sod == null || sod.Sound == null || sod.Mute)
+                    continue;
+                if (sod.Timing != timing)
+                    continue;
+                batch.Sounds.Add(sod);
+            }
+
+            if (batch.Sounds.Count == 0)
+                return;
+
+            // 按实际触发时刻排序（Delay × Mul），便于后续顺序触发
+            batch.Sounds.Sort((a, b) => (a.Delay * mul).CompareTo(b.Delay * mul));
+
+            SoundBatches.Add(batch);
+        }
+        /// <summary>
+        /// 每帧驱动：检查所有音效批次，按各自 Delay 触发到点的音效
+        /// <para/>一轮内同一条音效只触发一次（Triggered 去重）。
+        /// <para/>已触发的音效交给音效池自行播放，本脚本不再追踪其生命周期。
+        /// </summary>
+        private void UpdateSoundBatches()
+        {
+            if (SoundBatches.Count == 0)
+                return;
+            if (MutePlay)
+                return;
+
+            float now = Time.time;
+
+            for (int b = SoundBatches.Count - 1; b >= 0; b--)
+            {
+                SoundPlayBatch batch = SoundBatches[b];
+                float elapsed = now - batch.StartTime;
+
+                for (int i = 0; i < batch.Sounds.Count; i++)
+                {
+                    TweenSound sod = batch.Sounds[i];
+                    if (batch.Triggered.Contains(sod))   // ← 改成引用比较
+                        continue;
+
+                    float actualDelay = sod.Delay * batch.Mul;
+                    if (elapsed >= actualDelay)
+                    {
+                        batch.Triggered.Add(sod);        // ← 改成引用
+                        PlayTweenSound(sod);
+                    }
+                }
+
+                if (batch.Triggered.Count >= batch.Sounds.Count)
+                    SoundBatches.RemoveAt(b);
+            }
+        }
+        /// <summary>
+        /// 停止并清空所有音效批次（仅阻止未来触发，不影响已触发正在播的音效）
+        /// <para/>在 Tween_KillAll / Tween_RewindAll / OnDestroy 中调用。
+        /// </summary>
+        public void StopAllSoundBatches()
+        {
+            SoundBatches.Clear();
+        }
+        /// <summary>
+        /// 播放动画音效（通过 XHud_Manager 音效池）
+        /// </summary>
+        private AudioSource PlayTweenSound(TweenSound sound)
         {
             // ========== 1. 静音检查 ==========
             if (MutePlay)
                 return null;
 
-            // ========== 2. 音频剪辑有效性检查 ==========
-            if (clip == null)
+            // ========== 2. 有效性检查 ==========
+            if (sound == null || sound.Sound == null)
             {
-                UnityEngine.Debug.LogWarning("PlayTweenSound: 音频剪辑为空，无法播放");
+                Debug.LogWarning("[XHud] PlayTweenSound: 音效或 AudioClip 为空，跳过播放");
                 return null;
             }
+            if (sound.Mute)
+                return null;
 
             // ========== 3. 触发外部事件 ==========
-            act_on_Tween_SoundPlay?.Invoke(clip);
-            eve_on_Tween_SoundPlay.Invoke(clip);
+            act_on_Tween_SoundPlay?.Invoke(sound.Sound);
+            eve_on_Tween_SoundPlay.Invoke(sound.Sound);
 
             // ========== 4. 获取音效播放器 ==========
             XHud_Manager manager = XHud_Manager.Instance;
             if (manager == null)
             {
-                UnityEngine.Debug.LogWarning("PlayTweenSound: XHud_Manager 实例不存在，无法播放音效");
+                Debug.LogWarning("[XHud] PlayTweenSound: XHud_Manager 实例不存在");
                 return null;
             }
 
             AudioSource player = manager.hm_LibrarySounds_GetSounder();
             if (player == null)
             {
-                UnityEngine.Debug.LogWarning("PlayTweenSound: 音效池中没有可用的 AudioSource");
+                Debug.LogWarning("[XHud] PlayTweenSound: 音效池无可用 AudioSource");
                 return null;
             }
 
-            // ========== 5. 配置并播放音效 ==========
-            player.clip = clip;
-            player.volume = manager.Volume * 0.01f * Mathf.Clamp01(volume);
+            // ========== 5. 配置并播放 ==========
+            player.clip = sound.Sound;
+            player.volume = manager.Volume * 0.01f * Mathf.Clamp01(sound.Volume);
             player.mute = manager.VolumeMute;
-            player.pitch = Random.Range(pitchMin, pitchMax);
-            player.Play();
+            player.time = 0f;
+            // 音高：对称范围，避免 Min > Max 时 Random.Range 出错
+            float pMin = Mathf.Min(sound.MinPitch, sound.MaxPitch);
+            float pMax = Mathf.Max(sound.MinPitch, sound.MaxPitch);
+            bool useRandomPitch = !Mathf.Approximately(pMin, 1f) || !Mathf.Approximately(pMax, 1f);
+            player.pitch = useRandomPitch ? Random.Range(pMin, pMax) : 1f;
 
+            player.Play();
             return player;
         }
         #endregion
@@ -3098,28 +3330,7 @@ namespace SevenStrikeModules.XHud
         #endregion
 
         #region 动画播放
-        /// <summary>
-        /// 动画播放（重载一：直接传入 TweenNode 实例）
-        /// 
-        /// 【使用前提】
-        /// - 传入的 node.Tweener 必须已被创建（非 null）
-        ///   通常通过 Tween_Create / Tween_CreateByIndex / Tween_CreateById / Tween_CreateByIndicator 得到
-        /// - 若 node.Tweener 为 null，会在 node.Tweener.Play() 处抛 NullReferenceException
-        /// 
-        /// 【执行流程】
-        /// 1. 调用底层 XTween_Interface.Play() 启动播放
-        /// 2. 触发 act_on_Tween_Play_At_Node（代码绑定委托）
-        /// 3. 触发 eve_on_Tween_Play_At_Node（Inspector 绑定事件）
-        /// 
-        /// 【适用场景】
-        /// - 已持有节点引用，且已调用过 Tween_Create 系列方法创建过动画实例
-        /// - 需要"创建后播放"分离控制的场景（例如提前创建、延迟播放）
-        /// 
-        /// 【注意事项】
-        /// - 本方法只负责"播放"，不负责"创建"
-        /// - 若需"创建 + 播放"一步到位，请使用 Tween_Play(int id) 或 Tween_Play(string indicator)
-        /// </summary>
-        /// <param name="node">已创建好 Tweener 的动画节点</param>
+
         public void Tween_Play(TweenNode node)
         {
             // 直接调用底层动画实例的播放接口
@@ -3132,26 +3343,7 @@ namespace SevenStrikeModules.XHud
             // 触发 Inspector 绑定事件（内部已判空）
             eve_on_Tween_Play_At_Node.Invoke(node);
         }
-        /// <summary>
-        /// 动画播放（重载二：直接传入 XTween_Interface 实例）
-        /// 
-        /// 【使用前提】
-        /// - 传入的 tween 必须为有效实例（非 null 且未被 Kill）
-        /// 
-        /// 【执行流程】
-        /// 1. 调用 tween.Play() 启动播放
-        /// 2. 触发 act_on_Tween_Play（携带 XTween_Interface）
-        /// 3. 触发 eve_on_Tween_Play
-        /// 
-        /// 【与重载一的区别】
-        /// - 重载一：以 TweenNode 为单位，隐含"节点 = 动画"的语义
-        /// - 重载二：以底层 XTween_Interface 为单位，适合外部持有原始实例的场景
-        /// 
-        /// 【适用场景】
-        /// - 外部系统直接持有 XTween_Interface 引用，无需通过 TweenNode 中转
-        /// - 由 Tween_Create 系列方法返回后直接调用本重载
-        /// </summary>
-        /// <param name="tween">底层动画实例</param>
+
         public void Tween_Play(XTween_Interface tween)
         {
             // 直接播放底层实例
@@ -3164,31 +3356,8 @@ namespace SevenStrikeModules.XHud
             // 触发 Inspector 绑定事件
             eve_on_Tween_Play.Invoke(tween);
         }
-        /// <summary>
-        /// 动画播放（重载三：按唯一 ID 创建并播放）
-        /// 
-        /// 【执行流程】
-        /// 1. 调用 Tween_CreateById(id) 创建动画实例
-        ///    （内部会查找节点、创建 Tweener、赋值给 node.Tweener、触发 Create 事件）
-        /// 2. 立即调用返回值的 Play() 启动播放
-        /// 3. 触发 act_on_Tween_Play_At_ID / eve_on_Tween_Play_At_ID
-        /// 
-        /// 【与重载一/二的区别】
-        /// - 重载一/二：假设 Tweener 已存在，只负责"播放"
-        /// - 重载三：一步到位"创建 + 播放"，适合外部只持有 ID 的场景
-        /// 
-        /// 【适用场景】
-        /// - 外部系统通过保存的 ID 触发某条动画
-        /// - 数据驱动的动画播放（如配置表中记录的动画 ID）
-        /// - UI 按钮点击直接播放指定动画
-        /// 
-        /// 【注意事项】
-        /// - 每次调用都会重新创建 Tweener 实例（旧实例被 Kill 或 Rewind）
-        /// - 若 ID 不存在，Tween_CreateById 内部会因 arg 为 null 而抛异常
-        /// - 播放事件参数为 int（ID），而非 TweenNode
-        /// </summary>
-        /// <param name="id">动画节点的唯一 ID</param>
-        public void Tween_Play(int id)
+
+        public void Tween_Create_And_Play(int id)
         {
             // 创建动画实例并立即播放
             Tween_CreateById(id).Play();
@@ -3200,30 +3369,8 @@ namespace SevenStrikeModules.XHud
             // 触发 Inspector 绑定事件（携带 ID）
             eve_on_Tween_Play_At_ID.Invoke(id);
         }
-        /// <summary>
-        /// 动画播放（重载四：按名称标识创建并播放）
-        /// 
-        /// 【执行流程】
-        /// 1. 调用 Tween_CreateByIndicator(indicator) 创建动画实例
-        /// 2. 立即调用返回值的 Play() 启动播放
-        /// 3. 触发 act_on_Tween_Play_At_Indicator / eve_on_Tween_Play_At_Indicator
-        /// 
-        /// 【与重载三的区别】
-        /// - 重载三：按 ID 定位（唯一，可信任）
-        /// - 重载四：按 Indicator 定位（可重名，返回首个匹配项）
-        /// 
-        /// 【适用场景】
-        /// - 代码中以语义化名称直接播放动画（如 "FadeIn"、"Shake"）
-        /// - 编辑器/工具中以名称快速调试
-        /// - 上层 Element 系统通过 MainTweenNode 名称播放主入口动画
-        /// 
-        /// 【注意事项】
-        /// - 若名称不存在，Tween_CreateByIndicator 返回的节点为 null，会抛异常
-        /// - Indicator 允许重名，只返回列表中的首个匹配项
-        /// - 播放事件参数为 string（Indicator），而非 TweenNode
-        /// </summary>
-        /// <param name="indicator">动画节点的名称标识</param>
-        public void Tween_Play(string indicator)
+
+        public void Tween_Create_And_Play(string indicator)
         {
             // 创建动画实例并立即播放
             Tween_CreateByIndicator(indicator).Play();
@@ -3381,6 +3528,10 @@ namespace SevenStrikeModules.XHud
                     continue;   // 未启用节点直接跳过（此 continue 实际可省略，因为已在 if 分支内）
             }
 
+            // ========== 启动音效批次（仅按时机播放时） ==========
+            if (MatchTiming)
+                StartSoundBatch(tim);
+
             // ========== 触发"全部播放"事件 ==========
             // 代码绑定委托（需判空）
             if (act_on_Tween_PlayAll != null)
@@ -3420,6 +3571,8 @@ namespace SevenStrikeModules.XHud
                 // 逐个节点复位（内部含类型判别与值恢复）
                 Tween_Rewind(PrimitiveTweenNodes[i], complete);
             }
+
+            StopAllSoundBatches();
 
             // 代码绑定委托（需判空）
             if (act_on_Tween_RewindAll != null)
@@ -3466,6 +3619,8 @@ namespace SevenStrikeModules.XHud
                 // 逐个节点杀死动画实例
                 Tween_Kill(PrimitiveTweenNodes[i], complete);
             }
+
+            StopAllSoundBatches();
 
             // 代码绑定委托（需判空）
             if (act_on_Tween_KillAll != null)

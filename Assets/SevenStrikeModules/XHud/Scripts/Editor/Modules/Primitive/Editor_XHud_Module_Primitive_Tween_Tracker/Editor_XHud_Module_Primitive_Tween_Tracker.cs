@@ -678,6 +678,54 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>建议做成倒三角 / 播放头形状，尺寸与 PlayheadHeadWidth × PlayheadHeadHeight 匹配。
         /// </summary>
         private Texture2D icon_playhead;
+        /// <summary>
+        /// 播放控制图标 - 跳转到轨道头（常规）
+        /// </summary>
+        private Texture2D icon_playback_home_r;
+        /// <summary>
+        /// 播放控制图标 - 跳转到轨道头（按下）
+        /// </summary>
+        private Texture2D icon_playback_home_p;
+        /// <summary>
+        /// 播放控制图标 - 步进后退（常规）
+        /// </summary>
+        private Texture2D icon_playback_stepback_r;
+        /// <summary>
+        /// 播放控制图标 - 步进后退（按下）
+        /// </summary>
+        private Texture2D icon_playback_stepback_p;
+        /// <summary>
+        /// 播放控制图标 - 播放（常规）
+        /// </summary>
+        private Texture2D icon_playback_play_r;
+        /// <summary>
+        /// 播放控制图标 - 播放（按下）
+        /// </summary>
+        private Texture2D icon_playback_play_p;
+        /// <summary>
+        /// 播放控制图标 - 停止（常规）
+        /// </summary>
+        private Texture2D icon_playback_stop_r;
+        /// <summary>
+        /// 播放控制图标 - 停止（按下）
+        /// </summary>
+        private Texture2D icon_playback_stop_p;
+        /// <summary>
+        /// 播放控制图标 - 步进前进（常规）
+        /// </summary>
+        private Texture2D icon_playback_stepforward_r;
+        /// <summary>
+        /// 播放控制图标 - 步进前进（按下）
+        /// </summary>
+        private Texture2D icon_playback_stepforward_p;
+        /// <summary>
+        /// 播放控制图标 - 跳转到轨道尾（常规）
+        /// </summary>
+        private Texture2D icon_playback_end_r;
+        /// <summary>
+        /// 播放控制图标 - 跳转到轨道尾（按下）
+        /// </summary>
+        private Texture2D icon_playback_end_p;
         #endregion
 
         #region 字段：视图参数
@@ -898,6 +946,23 @@ namespace SevenStrikeModules.XHud.Editor
         private bool isHoveringNameResizeZone = false;
         #endregion
 
+        #region 字段：Play 模式冻结
+        /// <summary>
+        /// 进入 Play 前缓存的 target 引用（用于退出 Play 后恢复）。
+        /// <para/>Unity Play 时场景重载，编辑器里的组件实例被销毁，
+        /// 退出 Play 后编辑器场景恢复，但 C# 引用已断，需要用 instanceID 重新查找。
+        /// </summary>
+        private int cachedTargetInstanceID = 0;
+        /// <summary>
+        /// 是否正在被 Play 模式冻结（Play 期间为 true）。
+        /// </summary>
+        private bool isFrozenByPlayMode = false;
+        /// <summary>
+        /// 进入 Play 前缓存的目标 GameObject 名称（用于恢复失败时提示）。
+        /// </summary>
+        private string cachedTargetName = "";
+        #endregion
+
         #region 嵌套类型：拖拽模式
         /// <summary> 
         ///Clip 拖拽模式，描述当前鼠标拖拽的是 Clip 的哪个部分
@@ -950,12 +1015,15 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 窗口入口
         /// <summary> 
-        ///打开（或复用）迷你时间轴窗口，并绑定指定的图元动画器
+        /// 打开（或复用）迷你时间轴窗口，并绑定指定的图元动画器
         /// </summary>
         /// <param name="tween">要编辑的图元动画器</param>
         public static void OpenWith(XHud_Module_Primitive_Tween tween)
         {
-            Editor_XHud_Module_Primitive_Tween_Tracker window = (Editor_XHud_Module_Primitive_Tween_Tracker)EditorWindow.GetWindow(typeof(Editor_XHud_Module_Primitive_Tween_Tracker), false, "XHud 图元动画轨道编辑器", true);
+            Editor_XHud_Module_Primitive_Tween_Tracker window =
+                (Editor_XHud_Module_Primitive_Tween_Tracker)EditorWindow.GetWindow(
+                    typeof(Editor_XHud_Module_Primitive_Tween_Tracker),
+                    false, "XHud 图元动画轨道编辑器", true);
 
             window.minSize = MinWindowSize;
             Vector2 savedSize = LoadPersistedWindowSize();
@@ -971,7 +1039,7 @@ namespace SevenStrikeModules.XHud.Editor
                 window.selectedSoundIndices.Clear();
                 window.selectedKind = TrackKind.无;
 
-                //  新增：target 换了，缓存的 SO 失效
+                //  target 换了，缓存的 SO 失效
                 window.cachedSO = null;
                 window.cachedSO_target = null;
                 window.cachedNodesProp = null;
@@ -981,12 +1049,59 @@ namespace SevenStrikeModules.XHud.Editor
 
                 window.LoadPersistedViewState();
                 window.RefreshHostComponentCache();
+
+                //  ← 新增：每次绑定新 target 时记录一次特性基线，
+                // 保证关窗口时 PrimitiveFeature_Load 能还原到"本次打开前"的状态
+                SaveFeatureBaseline(tween);
             }
             window.Repaint();
             window.Focus();
         }
+        /// <summary>
+        /// 记录图元特性基线（每次打开窗口绑定新 target 时调用）。
+        /// <para/>
+        /// 用"本次打开窗口前的组件状态"作为关闭窗口时的还原目标。
+        /// <para/>
+        /// 与"只在 FirstSaveFeatures == false 时记录"不同：本方法<b>无条件</b>覆盖基线。
+        /// 原因：历史上有过"关窗口没还原"的不可复现问题，宁可每次重记一次，
+        /// 也不依赖上一次留下的基线（可能已被污染 / 未持久化 / 状态错乱）。
+        /// <para/>
+        /// 副作用：会覆盖 FirstSaveFeatures 标志为 true，并标记组件脏以持久化。
+        /// <para/>
+        /// 注意：本方法只在 <c>window.target != tween</c> 分支里调用，
+        /// 同一 target 重复打开不会重复 Save，天然避免"把预览残留当基线"。
+        /// </summary>
+        private static void SaveFeatureBaseline(XHud_Module_Primitive_Tween tween)
+        {
+            if (tween == null || tween.Equals(null)) return;
+
+            // 补全 controller 引用（可能尚未绑定）
+            if (tween.controller == null)
+                tween.Tween_GetController();
+            if (tween.controller == null) return;
+
+            // 取 Feature（优先 controller.pt_Feature，兜底 GetComponent）
+            XHud_Module_Primitive_Feature feature = tween.controller.pt_Feature;
+            if (feature == null)
+            {
+                feature = tween.GetComponent<XHud_Module_Primitive_Feature>();
+                if (feature != null)
+                {
+                    tween.controller.pt_Feature = feature;
+                    feature.FindController();   // 反向绑定
+                }
+            }
+            if (feature == null) return;
+
+            // 无条件记录基线
+            feature.PrimitiveFeature_Save();
+            feature.FirstSaveFeatures = true;
+
+            // 标记脏，让改动持久化
+            UnityEditor.EditorUtility.SetDirty(feature);
+        }
         /// <summary> 
-        ///根据当前 target 刷新其所在的 XHud 宿主组件缓存
+        /// 根据当前 target 刷新其所在的 XHud 宿主组件缓存
         /// </summary>
         private void RefreshHostComponentCache()
         {
@@ -1018,73 +1133,220 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
+            //  Play 模式监听
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+
+            //  防御：重编译后 OnEnable 重跑，先把可能残留的静态回调摘掉
+            EditorApplication.update -= OnPlaybackEditorUpdate;
+            EditorApplication.focusChanged -= OnEditorFocusChanged;
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+
+            // 然后按正常流程重新注册
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
+            EditorApplication.focusChanged += OnEditorFocusChanged;
+
+            string iconRoot = XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path() + "gui_module_primitive_tween/";
+
             icon_param_nullselected_warning = XGUI.GetBasedIcon("icon_warning");
             icon_param_mixedselected_warning = XGUI.GetBasedIcon("icon_warning");
-            icon_del_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_del_r");
-            icon_del_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_del_p");
-            icon_add_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_add_r");
-            icon_add_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_add_p");
-            icon_menu_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_menu_r");
-            icon_menu_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_menu_p");
-            icon_enabled_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_enabled_r");
-            icon_enabled_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_enabled_p");
-            icon_disabled_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_disabled_r");
-            icon_disabled_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_disabled_p");
-            icon_help_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_help_r");
-            icon_help_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_help_p");
-            icon_type_color = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_color");
-            icon_type_fade = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_fade");
-            icon_type_fill = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_fill");
-            icon_type_move = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_move");
-            icon_type_rotator = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_rotator");
-            icon_type_scale = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_scale");
-            icon_type_size = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_size");
-            icon_type_writter = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/anim_type_writter");
-            icon_timeline_logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_timeline_logo");
-            icon_null_check = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_null_check");
-            icon_null_add_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_null_add_r");
-            icon_null_add_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_null_add_p");
-            b_anim_type_move = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_move");
-            b_anim_type_rotate = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_rotate");
-            b_anim_type_scale = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_scale");
-            b_anim_type_color = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_color");
-            b_anim_type_fade = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_fade");
-            b_anim_type_writter = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_writter");
-            b_anim_type_fill = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_fill");
-            b_anim_type_size = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/b_anim_type_size");
-            icon_track_param_record_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_record_r");
-            icon_track_param_record_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_record_p");
-            icon_track_param_apply_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_apply_r");
-            icon_track_param_apply_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_apply_p");
-            icon_track_param_reset_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_reset_r");
-            icon_track_param_reset_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_reset_p");
-            icon_track_param_connector_status_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_connector_status_r");
-            icon_track_param_connector_status_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_track_param_connector_status_p");
-            icon_mute_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_mute_r");
-            icon_mute_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_mute_p");
-            icon_unmute_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_unmute_r");
-            icon_unmute_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_unmute_p");
-            icon_add_sound_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_add_sound_r");
-            icon_add_sound_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_add_sound_p");
-            icon_add_tween_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_add_tween_r");
-            icon_add_tween_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_add_tween_p");
+            icon_del_r = XGUI.GetCustomIcon($"{iconRoot}icon_del_r");
+            icon_del_p = XGUI.GetCustomIcon($"{iconRoot}icon_del_p");
+            icon_add_r = XGUI.GetCustomIcon($"{iconRoot}icon_add_r");
+            icon_add_p = XGUI.GetCustomIcon($"{iconRoot}icon_add_p");
+            icon_menu_r = XGUI.GetCustomIcon($"{iconRoot}icon_menu_r");
+            icon_menu_p = XGUI.GetCustomIcon($"{iconRoot}icon_menu_p");
+            icon_enabled_r = XGUI.GetCustomIcon($"{iconRoot}icon_enabled_r");
+            icon_enabled_p = XGUI.GetCustomIcon($"{iconRoot}icon_enabled_p");
+            icon_disabled_r = XGUI.GetCustomIcon($"{iconRoot}icon_disabled_r");
+            icon_disabled_p = XGUI.GetCustomIcon($"{iconRoot}icon_disabled_p");
+            icon_help_r = XGUI.GetCustomIcon($"{iconRoot}icon_help_r");
+            icon_help_p = XGUI.GetCustomIcon($"{iconRoot}icon_help_p");
+            icon_type_color = XGUI.GetCustomIcon($"{iconRoot}anim_type_color");
+            icon_type_fade = XGUI.GetCustomIcon($"{iconRoot}anim_type_fade");
+            icon_type_fill = XGUI.GetCustomIcon($"{iconRoot}anim_type_fill");
+            icon_type_move = XGUI.GetCustomIcon($"{iconRoot}anim_type_move");
+            icon_type_rotator = XGUI.GetCustomIcon($"{iconRoot}anim_type_rotator");
+            icon_type_scale = XGUI.GetCustomIcon($"{iconRoot}anim_type_scale");
+            icon_type_size = XGUI.GetCustomIcon($"{iconRoot}anim_type_size");
+            icon_type_writter = XGUI.GetCustomIcon($"{iconRoot}anim_type_writter");
+            icon_timeline_logo = XGUI.GetCustomIcon($"{iconRoot}icon_timeline_logo");
+            icon_null_check = XGUI.GetCustomIcon($"{iconRoot}icon_null_check");
+            icon_null_add_r = XGUI.GetCustomIcon($"{iconRoot}icon_null_add_r");
+            icon_null_add_p = XGUI.GetCustomIcon($"{iconRoot}icon_null_add_p");
+            b_anim_type_move = XGUI.GetCustomIcon($"{iconRoot}b_anim_type_move");
+            b_anim_type_rotate = XGUI.GetCustomIcon($"{iconRoot}b_anim_type_rotate");
+            b_anim_type_scale = XGUI.GetCustomIcon($"{iconRoot}b_anim_type_scale");
+            b_anim_type_color = XGUI.GetCustomIcon($"{iconRoot}b_anim_type_color");
+            b_anim_type_fade = XGUI.GetCustomIcon($"{iconRoot}b_anim_type_fade");
+            b_anim_type_writter = XGUI.GetCustomIcon($"{iconRoot}b_anim_type_writter");
+            b_anim_type_fill = XGUI.GetCustomIcon($"{iconRoot}b_anim_type_fill");
+            b_anim_type_size = XGUI.GetCustomIcon($"{iconRoot}b_anim_type_size");
+            icon_track_param_record_r = XGUI.GetCustomIcon($"{iconRoot}icon_track_param_record_r");
+            icon_track_param_record_p = XGUI.GetCustomIcon($"{iconRoot}icon_track_param_record_p");
+            icon_track_param_apply_r = XGUI.GetCustomIcon($"{iconRoot}icon_track_param_apply_r");
+            icon_track_param_apply_p = XGUI.GetCustomIcon($"{iconRoot}icon_track_param_apply_p");
+            icon_track_param_reset_r = XGUI.GetCustomIcon($"{iconRoot}icon_track_param_reset_r");
+            icon_track_param_reset_p = XGUI.GetCustomIcon($"{iconRoot}icon_track_param_reset_p");
+            icon_track_param_connector_status_r = XGUI.GetCustomIcon($"{iconRoot}icon_track_param_connector_status_r");
+            icon_track_param_connector_status_p = XGUI.GetCustomIcon($"{iconRoot}icon_track_param_connector_status_p");
+            icon_mute_r = XGUI.GetCustomIcon($"{iconRoot}icon_mute_r");
+            icon_mute_p = XGUI.GetCustomIcon($"{iconRoot}icon_mute_p");
+            icon_unmute_r = XGUI.GetCustomIcon($"{iconRoot}icon_unmute_r");
+            icon_unmute_p = XGUI.GetCustomIcon($"{iconRoot}icon_unmute_p");
+            icon_add_sound_r = XGUI.GetCustomIcon($"{iconRoot}icon_add_sound_r");
+            icon_add_sound_p = XGUI.GetCustomIcon($"{iconRoot}icon_add_sound_p");
+            icon_add_tween_r = XGUI.GetCustomIcon($"{iconRoot}icon_add_tween_r");
+            icon_add_tween_p = XGUI.GetCustomIcon($"{iconRoot}icon_add_tween_p");
             // ── 时间飞梭头部图标 ──
-            icon_playhead = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_tween/icon_playhead");
+            icon_playhead = XGUI.GetCustomIcon($"{iconRoot}icon_playhead");
             icon_led = XGUI.GetBasedIcon("icon_field_status");
+
+            // ── 播放控制图标 ──
+            icon_playback_home_r = XGUI.GetCustomIcon($"{iconRoot}icon_playback_home_r");
+            icon_playback_home_p = XGUI.GetCustomIcon($"{iconRoot}icon_playback_home_p");
+            icon_playback_stepback_r = XGUI.GetCustomIcon($"{iconRoot}icon_playback_stepback_r");
+            icon_playback_stepback_p = XGUI.GetCustomIcon($"{iconRoot}icon_playback_stepback_p");
+            icon_playback_play_r = XGUI.GetCustomIcon($"{iconRoot}icon_playback_play_r");
+            icon_playback_play_p = XGUI.GetCustomIcon($"{iconRoot}icon_playback_play_p");
+            icon_playback_stop_r = XGUI.GetCustomIcon($"{iconRoot}icon_playback_stop_r");
+            icon_playback_stop_p = XGUI.GetCustomIcon($"{iconRoot}icon_playback_stop_p");
+            icon_playback_stepforward_r = XGUI.GetCustomIcon($"{iconRoot}icon_playback_stepforward_r");
+            icon_playback_stepforward_p = XGUI.GetCustomIcon($"{iconRoot}icon_playback_stepforward_p");
+            icon_playback_end_r = XGUI.GetCustomIcon($"{iconRoot}icon_playback_end_r");
+            icon_playback_end_p = XGUI.GetCustomIcon($"{iconRoot}icon_playback_end_p");
         }
         /// <summary> 
         ///Unity 禁用回调：注销 Undo/Redo 监听，并保存视图状态
         /// </summary>
         private void OnDisable()
         {
-            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
-            SavePersistedViewState();
-            SavePersistedWindowSize();
+            try { EditorApplication.playModeStateChanged -= OnPlayModeStateChanged; } catch { }
 
-            //  新增：飞梭预览还原
+            //  防御：重编译 / 关闭窗口时，清理可能因对象失效抛异常
+            try { EditorApplication.update -= OnPlaybackEditorUpdate; } catch { }
+            try { EditorApplication.focusChanged -= OnEditorFocusChanged; } catch { }
+            try { Undo.undoRedoPerformed -= OnUndoRedoPerformed; } catch { }
+
+            try { SavePersistedViewState(); } catch { }
+            try { SavePersistedWindowSize(); } catch { }
+
+            //  飞梭预览还原
             CleanupPlayheadPreviewOnDisable();
+
+            //  播放状态清理
+            CleanupPlaybackOnDisable();
+        }
+        /// <summary>
+        /// Play 模式状态变化回调。
+        /// <para/>策略：
+        /// <list type="bullet">
+        /// <item><description>ExitingEditMode（即将进入 Play）：缓存 target 的 instanceID，置冻结标志；</description></item>
+        /// <item><description>EnteredPlayMode：保持冻结，什么都不做；</description></item>
+        /// <item><description>ExitingPlayMode（即将退出 Play）：等待场景恢复；</description></item>
+        /// <item><description>EnteredEditMode（已回到编辑）：按 instanceID 找原 target，找到就恢复，找不到就关窗。</description></item>
+        /// </list>
+        /// </summary>
+        private void OnPlayModeStateChanged(PlayModeStateChange state)
+        {
+            switch (state)
+            {
+                case PlayModeStateChange.ExitingEditMode:
+                    // 即将进入 Play：缓存 target 身份信息
+                    if (target != null && !target.Equals(null))
+                    {
+                        cachedTargetInstanceID = target.GetInstanceID();
+                        cachedTargetName = target.name;
+                    }
+                    else
+                    {
+                        cachedTargetInstanceID = 0;
+                        cachedTargetName = "";
+                    }
+                    isFrozenByPlayMode = true;
+                    Repaint();
+                    break;
+
+                case PlayModeStateChange.EnteredPlayMode:
+                    // 已进入 Play：保持冻结
+                    isFrozenByPlayMode = true;
+                    Repaint();
+                    break;
+
+                case PlayModeStateChange.ExitingPlayMode:
+                    // 即将退出 Play：保持冻结（场景恢复中）
+                    isFrozenByPlayMode = true;
+                    break;
+
+                case PlayModeStateChange.EnteredEditMode:
+                    // 已回到编辑：尝试恢复 target
+                    RestoreTargetAfterPlay();
+                    break;
+            }
+        }
+        /// <summary>
+        /// 退出 Play 后尝试恢复 target。
+        /// <para/>通过进入 Play 前缓存的 instanceID 在场景中重新查找同名组件。
+        /// <list type="bullet">
+        /// <item><description>找到 → 恢复编辑状态；</description></item>
+        /// <item><description>找不到 → 关闭窗口。</description></item>
+        /// </list>
+        /// </summary>
+        private void RestoreTargetAfterPlay()
+        {
+            isFrozenByPlayMode = false;
+
+            if (cachedTargetInstanceID == 0)
+            {
+                Close();
+                return;
+            }
+
+            XHud_Module_Primitive_Tween[] allTweens =
+                Resources.FindObjectsOfTypeAll<XHud_Module_Primitive_Tween>();
+
+            XHud_Module_Primitive_Tween restored = null;
+            for (int i = 0; i < allTweens.Length; i++)
+            {
+                if (allTweens[i] == null) continue;
+
+                //  不要用 scene.IsValid() 过滤，Prefab Stage 里可能返回 false
+                // 直接按 instanceID 匹配——唯一性由 instanceID 保证
+                if (allTweens[i].GetInstanceID() == cachedTargetInstanceID)
+                {
+                    restored = allTweens[i];
+                    break;
+                }
+            }
+
+            if (restored != null)
+            {
+                target = restored;
+
+                // 清 SO 缓存
+                cachedSO = null;
+                cachedSO_target = null;
+                cachedNodesProp = null;
+                cachedSoundsProp = null;
+                cachedSOKind = TrackKind.无;
+                cachedSOIndex = -1;
+
+                // 清空选中
+                selectedIndex = -1;
+                selectedNodeIndices.Clear();
+                selectedSoundIndices.Clear();
+                selectedKind = TrackKind.无;
+
+                RefreshHostComponentCache();
+                Repaint();
+            }
+            else
+            {
+                Close();
+            }
+
+            cachedTargetInstanceID = 0;
+            cachedTargetName = "";
         }
         /// <summary> 
         ///Undo / Redo 执行后回调：清拖拽状态，强制重绘
@@ -1291,11 +1553,14 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 布局：名字列宽度拖拽热区
+                //  从刻度尺下方开始，避免与飞梭头部（刻度尺上）重叠。
+                // 若热区纵跨刻度尺，飞梭拖到 0 时鼠标会落在重叠区，
+                // 被 HandleNameColumnResizeInput 抢先消费 MouseUp，导致 isDraggingPlayhead 卡住。
                 Rect nameResizeZone = new Rect(
                     nameArea.xMax - NameColumnResizeZone,
-                    TopBarHeight,
+                    TopBarHeight + rulerHeight,
                     NameColumnResizeZone * 2f,
-                    viewHeight);
+                    viewHeight - rulerHeight);
                 #endregion
 
                 #region 布局：参数面板宽度拖拽热区
@@ -1377,8 +1642,10 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 目标名称
+            //  防御：target 已销毁时用占位名，避免 GetName() 抛异常
+            string targetName = (target == null || target.Equals(null)) ? "(已失效)" : target.name;
             XGUI.layout_label(
-                text: target.name,
+                text: targetName,
                 size: XGUIFontSize.M,
                 text_color: XHud_Dashboard.Theme_Primary,
                 margin: new RectOffset(0, 10, 0, 0),
@@ -1505,6 +1772,19 @@ namespace SevenStrikeModules.XHud.Editor
                     font_style: FontStyle.Normal,
                     anchor: TextAnchor.MiddleLeft);
             }
+
+            #region 分割线
+            XGUI.layout_seperator(
+                thickness: 1,
+                dir: XGUISeplineDir.垂直,
+                color: Color.black * 0.4f,
+                padding: new RectOffset(0, 0, 0, 0),
+                margin: new RectOffset(10, 10, 0, 0));
+            #endregion
+
+            #region 播放控制按钮组
+            DrawPlaybackToolbarButtons();
+            #endregion
 
             #region 分割线
             XGUI.layout_seperator(
@@ -2016,6 +2296,22 @@ namespace SevenStrikeModules.XHud.Editor
                 GUIUtility.hotControl = 0;
                 handled = true;
             }
+            //  [新增] 飞梭拖拽兜底：即使飞梭 MouseUp 分支被别的控件抢先消费，
+            // 这里也能强制收尾，避免 isDraggingPlayhead 卡住导致：
+            //   - 飞梭头部持续高亮
+            //   - HandlePlaybackShortcuts 吞掉 Space
+            if (isDraggingPlayhead)
+            {
+                isDraggingPlayhead = false;
+                GUIUtility.hotControl = 0;
+                playheadControlID = 0;
+                snapGuideSecond = -1f;
+
+                // 清缓存，让下次进入区间时重建（与飞梭 MouseUp 分支一致）
+                OnPlayheadDragEnd();
+
+                handled = true;
+            }
             if (dragMode != DragMode.无)
             {
                 GUIUtility.hotControl = 0;
@@ -2052,6 +2348,9 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Event e = Event.current;
             if (e.type != EventType.KeyDown) return;
+
+            // ── 播放控制快捷键优先处理 ──
+            if (HandlePlaybackShortcuts()) return;
 
             //  新增：拖拽飞梭期间禁用快捷键，避免拖拽中增删节点导致索引错乱
             if (isDraggingPlayhead) return;

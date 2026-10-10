@@ -47,7 +47,7 @@ namespace SevenStrikeModules.XHud.Editor
         private void DrawClipTimelineArea(Rect area)
         {
             GUI.BeginGroup(area);
-            EditorGUI.DrawRect(new Rect(0, 0, area.width, area.height), ColorBasedBg);
+            XGUI.gui_box(new Rect(0, 0, area.width, area.height), ColorBasedBg);
 
             // ── 阶段 1：绘制顶部刻度尺 ──
             Rect rulerRect = new Rect(0, 0, area.width, rulerHeight);
