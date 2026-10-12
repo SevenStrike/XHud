@@ -471,7 +471,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.gui_group_start(
                rect_group: rect_transitionlist_group,
-               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
                bg_color_gui: XHud_Dashboard.Theme_Group,
                bg_height: 0,
@@ -505,7 +505,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 控制区
             XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 absolute_margin: true,
@@ -685,11 +685,11 @@ namespace SevenStrikeModules.XHud.Editor
             if (XGUI.layout_button(
                text: stopmode,
                tooltip: "",
-               bg_fill: XGUIFilled.无,
+               bg_fill: XGUIGroup.无,
                bg_color: XGUIColor.亮白,
                bg_color_gui: Color.white,
                button_text_color: Color.white,
-               press_fill: XGUIFilled.透明,
+               press_fill: XGUIGroup.透明,
                press_color: XGUIColor.无,
                press_text_color: XHud_Dashboard.Theme_Primary,
                font_size: XGUIFontSize.B,
@@ -720,11 +720,11 @@ namespace SevenStrikeModules.XHud.Editor
             if (XGUI.layout_button(
                text: inverted,
                tooltip: "",
-               bg_fill: XGUIFilled.无,
+               bg_fill: XGUIGroup.无,
                bg_color: XGUIColor.亮白,
                bg_color_gui: Color.white,
                button_text_color: Color.white,
-               press_fill: XGUIFilled.透明,
+               press_fill: XGUIGroup.透明,
                press_color: XGUIColor.无,
                press_text_color: XHud_Dashboard.Theme_Primary,
                font_size: XGUIFontSize.B,
@@ -753,7 +753,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 信息区
             XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 absolute_margin: true,
@@ -828,7 +828,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 转场帧信息
             XGUI.layout_label(
                 text: $"<color={colorhex}>{PreviewData_Index.ToString()}</color> / 帧",
-                bg_fill: XGUIFilled.无,
+                bg_fill: XGUIGroup.无,
                 bg_color: XGUIColor.无,
                 size: XGUIFontSize.L,
                 anchor: TextAnchor.MiddleCenter,
@@ -928,7 +928,7 @@ namespace SevenStrikeModules.XHud.Editor
                 draw_rect.Set(rect_preview.x + rect_preview.width - 90, rect_preview.y + rect_preview.height - 12, 70, 25);
                 XGUI.gui_label(
                     rect: draw_rect,
-                    bg_fill: XGUIFilled.实体,
+                    bg_fill: XGUIGroup.实体,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Primary,
                     text: new GUIContent($"{PreviewData_Index} / {sp_TotalFramesCount.intValue - 1}"),
@@ -1189,11 +1189,11 @@ namespace SevenStrikeModules.XHud.Editor
             if (XGUI.layout_button(
                 text: ButtonText_Cancel,
                 tooltip: "",
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: Color.white,
                 button_text_color: Color.black,
-                press_fill: XGUIFilled.实体,
+                press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
                 press_text_color: Color.white,
                 font_size: XGUIFontSize.B,
@@ -1213,11 +1213,11 @@ namespace SevenStrikeModules.XHud.Editor
             if (XGUI.layout_button(
                 text: ButtonText_Ok,
                 tooltip: "",
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Primary,
                 button_text_color: Color.black,
-                press_fill: XGUIFilled.实体,
+                press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
                 press_text_color: Color.white,
                 font_size: XGUIFontSize.B,

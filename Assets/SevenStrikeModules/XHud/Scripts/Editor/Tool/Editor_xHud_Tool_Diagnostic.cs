@@ -192,8 +192,8 @@ namespace SevenStrikeModules.XHud.Editor
             diagnostic_panel_index = XGUI.layout_toolbar(
                index: ref diagnostic_panel_index,
                names: new string[] { "诊断", "库配置", "分辨率", "统计" },
-               bg_normal: XGUIFilled.纯色边框,
-               bg_selected: XGUIFilled.实体,
+               bg_normal: XGUIGroup.纯色边框,
+               bg_selected: XGUIGroup.实体,
                bg_color: XGUIColor.亮白,
                bg_gui_color: Color.black * 0.5f,
                text_color_normal: Color.white,
@@ -209,12 +209,12 @@ namespace SevenStrikeModules.XHud.Editor
                bg_width_offset: 5,
                bg_height_offset: 2,
                navigate_style: true,
-               navigate_style_bg: XGUIFilled.纯色边框,
+               navigate_style_bg: XGUIGroup.纯色边框,
                navigate_style_bg_color: Color.black * 0.5f);
 
             XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.无,
+                bg_fill: XGUIGroup.无,
                 bg_color: XGUIColor.无,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "",
@@ -283,7 +283,7 @@ namespace SevenStrikeModules.XHud.Editor
                             #region 背景
                             XGUI.gui_box(
                                 rect: rect_bg,
-                                bg: XGUI.GetFillTexture(XGUIFilled.实体, XGUIColor.亮白),
+                                bg: XGUI.GetGroupTexture(XGUIGroup.实体, XGUIColor.亮白),
                                 bg_color_gui: Color.black * 0.33f,
                                 offset: Vector2.zero,
                                 border: new RectOffset(10, 10, 10, 10),
@@ -324,11 +324,11 @@ namespace SevenStrikeModules.XHud.Editor
                                 rect: new Rect(rect_bg.x + (rect_bg.width - 70), rect_bg.y + (rect_bg.height / 2 - (XGUI.GetSingleLineHeight() / 2)), 60, 22),
                                 text: "查看",
                                 tooltip: "查看元素库",
-                                btn_fill: XGUIFilled.实体,
+                                btn_fill: XGUIGroup.实体,
                                 btn_color: XGUIColor.亮白,
                                 btn_color_gui: Color.white * 0.9f,
                                 btn_text_color: Color.black,
-                                press_fill: XGUIFilled.实体,
+                                press_fill: XGUIGroup.实体,
                                 press_color: XGUIColor.深空灰,
                                 press_text_color: Color.white,
                                 font_size: XGUIFontSize.S,
@@ -403,7 +403,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.gui_icon(
                         rect: res,
                         border: new RectOffset(15, 15, 15, 15),
-                        icon: XGUI.GetFillTexture(XGUIFilled.纯色边框, XGUIColor.亮白),
+                        icon: XGUI.GetGroupTexture(XGUIGroup.纯色边框, XGUIColor.亮白),
                         color: Color.gray);
 
                     XGUI.gui_label(
@@ -540,7 +540,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
-                bg_fill: XGUIFilled.无,
+                bg_fill: XGUIGroup.无,
                 bg_color: XGUIColor.无,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "",

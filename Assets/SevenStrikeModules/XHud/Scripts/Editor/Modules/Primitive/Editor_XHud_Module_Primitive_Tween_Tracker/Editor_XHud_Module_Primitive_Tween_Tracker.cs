@@ -738,6 +738,18 @@ namespace SevenStrikeModules.XHud.Editor
         /// 刷新ID图标（按下）
         /// </summary>
         private Texture2D icon_refresh_id_p;
+        /// <summary>
+        /// 循环播放预览动画
+        /// </summary>
+        private Texture2D icon_toolbar_loop_previewer;
+        /// <summary>
+        /// 图标 - 工具栏开关 - 吸附Clip
+        /// </summary>
+        private Texture2D icon_toolbar_clip_snap;
+        /// <summary>
+        /// 图标 - 工具栏开关 - 预览音效
+        /// </summary>
+        private Texture2D icon_toolbar_preview_sound;
         #endregion
 
         #region 字段：视图参数
@@ -975,13 +987,6 @@ namespace SevenStrikeModules.XHud.Editor
         private string cachedTargetName = "";
         #endregion
 
-        #region 字段：样式
-        /// <summary>
-        /// 暂时用一下，后面XGUI会支持专用的Toolbar控件
-        /// </summary>
-        public GUIStyle style_toolbar_toggle;
-        #endregion
-
         #region 嵌套类型：拖拽模式
         /// <summary> 
         ///Clip 拖拽模式，描述当前鼠标拖拽的是 Clip 的哪个部分
@@ -1042,7 +1047,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_Module_Primitive_Tween_Tracker window =
                 (Editor_XHud_Module_Primitive_Tween_Tracker)EditorWindow.GetWindow(
                     typeof(Editor_XHud_Module_Primitive_Tween_Tracker),
-                    false, "XHud 图元动画轨道编辑器", true);
+                    false, "XHud 图元动画时间线编辑器", true);
 
             window.minSize = MinWindowSize;
             Vector2 savedSize = LoadPersistedWindowSize();
@@ -1165,9 +1170,8 @@ namespace SevenStrikeModules.XHud.Editor
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
             EditorApplication.focusChanged += OnEditorFocusChanged;
 
-            string iconRoot = XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path() + "gui_module_primitive_tween/";
-
             #region 获取图标
+            string iconRoot = XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path() + "gui_module_primitive_tween/";
             icon_param_nullselected_warning = XGUI.GetBasedIcon("icon_warning");
             icon_param_mixedselected_warning = XGUI.GetBasedIcon("icon_warning");
             icon_del_r = XGUI.GetCustomIcon($"{iconRoot}icon_del_r");
@@ -1238,10 +1242,12 @@ namespace SevenStrikeModules.XHud.Editor
 
             icon_refresh_id_r = XGUI.GetCustomIcon($"{iconRoot}icon_refreshid_r");
             icon_refresh_id_p = XGUI.GetCustomIcon($"{iconRoot}icon_refreshid_p");
-            #endregion
 
-            style_toolbar_toggle = new GUIStyle(EditorStyles.toolbarButton);
-            style_toolbar_toggle.fixedHeight = TopBarHeight;
+            icon_toolbar_loop_previewer = XGUI.GetCustomIcon($"{iconRoot}icon_toolbar_loop_previewer");
+            icon_toolbar_clip_snap = XGUI.GetCustomIcon($"{iconRoot}icon_toolbar_clip_snap");
+            icon_toolbar_preview_sound = XGUI.GetCustomIcon($"{iconRoot}icon_toolbar_preview_sound");
+
+            #endregion
         }
         /// <summary> 
         ///Unity 禁用回调：注销 Undo/Redo 监听，并保存视图状态
@@ -1505,7 +1511,7 @@ namespace SevenStrikeModules.XHud.Editor
                 float dis = (position.height - TopBarHeight) / 2 - 30;
                 XGUI.layout_group_start(
                     type: XGUIContainerType.Horizontal,
-                    bg_fill: XGUIFilled.透明,
+                    bg_fill: XGUIGroup.透明,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: Color.white,
                     absolute_margin: true,
@@ -1546,7 +1552,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 XGUI.layout_group_start(
                  type: XGUIContainerType.Horizontal,
-                 bg_fill: XGUIFilled.透明,
+                 bg_fill: XGUIGroup.透明,
                  bg_color: XGUIColor.亮白,
                  bg_color_gui: Color.white,
                  absolute_margin: true,
@@ -1649,7 +1655,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             XGUI.layout_group_start(
                type: XGUIContainerType.Horizontal,
-               bg_fill: XGUIFilled.透明,
+               bg_fill: XGUIGroup.透明,
                bg_color: XGUIColor.亮白,
                bg_color_gui: Color.white,
                absolute_margin: true,
@@ -1689,87 +1695,102 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (valid)
             {
-
-                #region 分割线
-                XGUI.layout_seperator(
-                    thickness: 1,
-                    dir: XGUISeplineDir.垂直,
-                    color: Color.black * 0.4f,
-                    padding: new RectOffset(0, 0, 0, 0),
-                    margin: new RectOffset(10, 0, 0, 0));
-                #endregion
-
                 #region 按钮 - 添加音效
-                if (XGUI.layout_button(
+                if (XGUI.toolbar_button(
                     tooltip: "添加一个音效",
-                    tex_release: icon_add_sound_r,
-                    tex_press: icon_add_sound_p,
-                    tex_gui_color: Color.white,
-                    absolute_margin: true,
-                    absolute_padding: true,
+                    icon_release: icon_add_sound_r,
+                    icon_press: icon_add_sound_p,
+                    press_icon_color: Color.white,
                     margin: new RectOffset(0, 0, 0, 0),
-                    border: new RectOffset(0, 0, 0, 0),
-                    width: icon_add_sound_r.width,
-                    height: TopBarHeight))
+                    padding: new RectOffset(0, 0, 0, 0),
+                    layout_width: icon_add_sound_r.width,
+                    content_offset: new Vector2(0, 0),
+                    sepline_color: Color.black * 0.55f,
+                    edge: XGUIEdge.左))
                 {
                     InsertSoundAt(Sounds.Count);
                 }
                 #endregion
 
-                #region 分割线
-                XGUI.layout_seperator(
-                    thickness: 1,
-                    dir: XGUISeplineDir.垂直,
-                    color: Color.black * 0.4f,
-                    padding: new RectOffset(0, 0, 0, 0),
-                    margin: new RectOffset(0, 0, 0, 0));
-                #endregion
-
                 #region 按钮 - 添加动画
-                if (XGUI.layout_button(
+                if (XGUI.toolbar_button(
                     tooltip: "添加一个动画",
-                    tex_release: icon_add_tween_r,
-                    tex_press: icon_add_tween_p,
-                    tex_gui_color: Color.white,
-                    absolute_margin: true,
-                    absolute_padding: true,
+                    icon_release: icon_add_tween_r,
+                    icon_press: icon_add_tween_p,
+                    press_icon_color: Color.white,
                     margin: new RectOffset(0, 0, 0, 0),
-                    border: new RectOffset(0, 0, 0, 0),
-                    width: icon_add_tween_r.width,
-                    height: TopBarHeight))
+                    padding: new RectOffset(0, 0, 0, 0),
+                    layout_width: icon_add_tween_r.width,
+                    content_offset: new Vector2(0, 0),
+                    sepline_color: Color.black * 0.55f,
+                    edge: XGUIEdge.左))
                 {
                     InsertTweenNodeAt(Nodes.Count);
                 }
                 #endregion
 
-                #region 开关 - 轨道吸附
-                bool newSnap = GUILayout.Toggle(
-                    snapEnabled,
-                    "轨道吸附",
-                    style_toolbar_toggle,
-                    GUILayout.Width(80));
-                if (newSnap != snapEnabled)
-                {
-                    snapEnabled = newSnap;
-                    SavePersistedViewState();
-                }
+                #region 轨道吸附
+                snapEnabled = XGUI.toolbar_toggle(
+                   tooltip: "拖动Clip会自动吸附到整秒或是飞梭位置",
+                   icon: icon_toolbar_clip_snap,
+                   prop: snapEnabled,
+                   anchor: TextAnchor.MiddleCenter,
+                   margin: new RectOffset(0, 0, 0, 0),
+                   padding: new RectOffset(0, 0, 0, 0),
+                   content_offset: new Vector2(0, 0),
+                   sepline_color: Color.black * 0.55f,
+                   layout_width: icon_toolbar_loop_previewer.width,
+                   layout_min_width: icon_toolbar_loop_previewer.width,
+                   fixed_height: TopBarHeight,
+                   edge: XGUIEdge.左,
+                   on_clicked_toggle: (val) =>
+                   {
+                       SavePersistedViewState();
+                   });
                 #endregion
 
-                #region 开关 - 预览音效      
-                bool sound_previewer = GUILayout.Toggle(
-                    soundPreviewer,
-                    "预览音效",
-                    style_toolbar_toggle,
-                    GUILayout.Width(80));
-                if (sound_previewer != soundPreviewer)
-                {
-                    soundPreviewer = sound_previewer;
-                    SavePersistedViewState();
-                }
+                #region 预览音效
+                soundPreviewer = XGUI.toolbar_toggle(
+                   tooltip: "飞梭经过音效Clip时会播放对应的音效",
+                   icon: icon_toolbar_preview_sound,
+                   prop: soundPreviewer,
+                   anchor: TextAnchor.MiddleCenter,
+                   margin: new RectOffset(0, 0, 0, 0),
+                   padding: new RectOffset(0, 0, 0, 0),
+                   content_offset: new Vector2(0, 0),
+                   sepline_color: Color.black * 0.55f,
+                   layout_width: icon_toolbar_loop_previewer.width,
+                   layout_min_width: icon_toolbar_loop_previewer.width,
+                   fixed_height: TopBarHeight,
+                   edge: XGUIEdge.左,
+                   on_clicked_toggle: (val) =>
+                   {
+                       SavePersistedViewState();
+                   });
+                #endregion
+
+                #region 循环预览动画
+                playheadPreviewLoop = XGUI.toolbar_toggle(
+                   tooltip: "循环预览动画",
+                   icon: icon_toolbar_loop_previewer,
+                   prop: playheadPreviewLoop,
+                   anchor: TextAnchor.MiddleCenter,
+                   margin: new RectOffset(0, 0, 0, 0),
+                   padding: new RectOffset(0, 0, 0, 0),
+                   content_offset: new Vector2(0, 0),
+                   sepline_color: Color.black * 0.55f,
+                   layout_width: icon_toolbar_loop_previewer.width,
+                   layout_min_width: icon_toolbar_loop_previewer.width,
+                   fixed_height: TopBarHeight,
+                   edge: XGUIEdge.全部,
+                   on_clicked_toggle: (val) =>
+                   {
+
+                   });
                 #endregion
 
                 XGUI.layout_label(
-                    text: $"<color=#{DisableTextColor}>当前预览时间点：  </color> <color=#{Theme_PrimaryColor}>{playheadSecond}   </color>s",
+                    text: $"<color=#{DisableTextColor}>当前预览时间：  </color> <color=#{Theme_PrimaryColor}>{playheadSecond}   </color>s",
                     size: XGUIFontSize.M,
                     text_color: Color.white,
                     margin: new RectOffset(20, 10, 0, 0),
@@ -1780,26 +1801,8 @@ namespace SevenStrikeModules.XHud.Editor
                     anchor: TextAnchor.MiddleLeft);
             }
 
-            #region 分割线
-            XGUI.layout_seperator(
-                thickness: 1,
-                dir: XGUISeplineDir.垂直,
-                color: Color.black * 0.4f,
-                padding: new RectOffset(0, 0, 0, 0),
-                margin: new RectOffset(10, 10, 0, 0));
-            #endregion
-
             #region 播放控制按钮组
             DrawPlaybackToolbarButtons();
-            #endregion
-
-            #region 分割线
-            XGUI.layout_seperator(
-                thickness: 1,
-                dir: XGUISeplineDir.垂直,
-                color: Color.black * 0.4f,
-                padding: new RectOffset(0, 0, 0, 0),
-                margin: new RectOffset(10, 10, 0, 0));
             #endregion
 
             #region 自适应间距
@@ -1808,7 +1811,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 开发者标识
             XGUI.layout_label(
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: Color.white * 0.85f,
                 text: "SevenStrike Media",
@@ -1822,8 +1825,6 @@ namespace SevenStrikeModules.XHud.Editor
                 anchor: TextAnchor.MiddleRight,
                 font: XGUI.GetFont("xg-medium"));
             #endregion
-
-            //toolbarbutton style
 
             #region 按钮 - 帮助
             if (XGUI.layout_button(
@@ -1858,19 +1859,21 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
-                bg_fill: XGUIFilled.透明,
+                bg_fill: XGUIGroup.透明,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: Color.white,
                 absolute_margin: true,
                 absolute_padding: true,
                 margin: new RectOffset(0, 0, 0, 0),
-                padding: new RectOffset(10, 10, 3, 0));
+                padding: new RectOffset(10, 10, 0, 0));
+
             XGUI.layout_label(
                 text: $"动画轨道：{Nodes.Count}    音效轨道：{Sounds.Count}    选中：{TotalSelectedCount}",
                 size: XGUIFontSize.M,
                 text_color: Color.white * 0.85f,
                 margin: new RectOffset(0, 0, 0, 0),
-                offset: new Vector2(0, 0),
+                padding: new RectOffset(0, 0, 0, 0),
+                offset: new Vector2(0, 3),
                 clipping: TextClipping.Clip,
                 font_style: FontStyle.Normal,
                 anchor: TextAnchor.MiddleLeft,
@@ -1887,67 +1890,46 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_flexspace();
 
-            #region 分割线
-            XGUI.layout_seperator(
-                thickness: 1,
-                dir: XGUISeplineDir.垂直,
-                color: Color.black * 0.4f,
-                padding: new RectOffset(0, 0, 0, 0),
-                margin: new RectOffset(10, 10, 0, 0));
-            #endregion
-
             #region 按钮 - 重置轨道
-            if (XGUI.layout_button(
+            if (XGUI.toolbar_button(
                 text: "重置轨道",
                 tooltip: "",
-                bg_fill: XGUIFilled.无,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: Color.white,
-                button_text_color: Color.white * 0.9f,
-                press_fill: XGUIFilled.透明,
-                press_color: XGUIColor.无,
+                button_text_color: Color.white,
                 press_text_color: XHud_Dashboard.Theme_Primary,
                 font_size: XGUIFontSize.M,
                 anchor: TextAnchor.MiddleCenter,
                 margin: new RectOffset(0, 0, 0, 0),
-                padding: new RectOffset(0, 0, 1, 0),
-                layout_min_width: 0,
-                layout_width: 80, button_text_font: XGUI.GetFont("xg-regular")))
+                padding: new RectOffset(0, 0, 0, 0),
+                content_offset: new Vector2(0, 0),
+                sepline_color: Color.black * 0.55f,
+                layout_width: 80,
+                fixed_height: TopBarHeight,
+                edge: XGUIEdge.左))
             {
                 ResetTimelineView();
             }
             #endregion
 
-            #region 分割线
-            XGUI.layout_seperator(
-                thickness: 1,
-                dir: XGUISeplineDir.垂直,
-                color: Color.black * 0.4f,
-                padding: new RectOffset(0, 0, 0, 0),
-                margin: new RectOffset(10, 10, 0, 0));
-            #endregion
-
             #region 按钮 - 合适范围
-            if (XGUI.layout_button(
+            if (XGUI.toolbar_button(
                 text: "合适范围",
                 tooltip: "",
-                bg_fill: XGUIFilled.无,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: Color.white,
-                button_text_color: Color.white * 0.9f,
-                press_fill: XGUIFilled.透明,
-                press_color: XGUIColor.无,
+                button_text_color: Color.white,
                 press_text_color: XHud_Dashboard.Theme_Primary,
                 font_size: XGUIFontSize.M,
                 anchor: TextAnchor.MiddleCenter,
                 margin: new RectOffset(0, 0, 0, 0),
-                padding: new RectOffset(0, 0, 1, 0),
-                layout_min_width: 0,
-                layout_width: 80, button_text_font: XGUI.GetFont("xg-regular")))
+                padding: new RectOffset(0, 0, 0, 0),
+                content_offset: new Vector2(0, 0),
+                sepline_color: Color.black * 0.55f,
+                layout_width: 80,
+                fixed_height: TopBarHeight,
+                edge: XGUIEdge.左))
             {
                 FitViewToContent();
             }
             #endregion
+
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
 
             GUILayout.EndArea();

@@ -108,7 +108,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 标题
             XGUI.layout_banner(
-             bg_fill: XGUIFilled.实体,
+             bg_fill: XGUIGroup.实体,
              bg_color: XGUIColor.深空灰,
              bg_height: 30,
              icon: icon_main,
@@ -127,7 +127,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 选项
             BaseScript.fold_option = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "选项",
@@ -148,7 +148,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 参数
             BaseScript.fold_param = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "参数",
@@ -220,7 +220,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 源脚本
             BaseScript.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "源脚本",

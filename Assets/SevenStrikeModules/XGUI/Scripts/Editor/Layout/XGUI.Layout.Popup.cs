@@ -54,13 +54,13 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <param name="act_on_changed">当选中项发生改变时的回调委托，参数为新选中的索引值。</param>
         /// <returns>用户选择后的整数值（索引）。</returns>
         /// <remarks>
-        /// 该方法与 <see cref="gui_int_popup(Rect, string, Color, XGUIFontSize, FontStyle, RectOffset, float, float, SerializedProperty, string[], Font, XGUIFontSize, Color, RectOffset, TextAnchor, FontStyle, XGUIFilled, XGUIColor, Color, float, Color)"/> 
+        /// 该方法与 <see cref="gui_int_popup(Rect, string, Color, XGUIFontSize, FontStyle, RectOffset, float, float, SerializedProperty, string[], Font, XGUIFontSize, Color, RectOffset, TextAnchor, FontStyle, XGUIGroup, XGUIColor, Color, float, Color)"/> 
         /// 功能相同，但使用 <see cref="EditorGUILayout"/> 自动布局系统，无需手动指定矩形位置。
         /// <para>
         /// 支持多选混合状态显示（显示 "—"），当 <paramref name="prop"/> 存在多个不同值时自动切换为混合模式。
         /// </para>
         /// </remarks>
-        public static int layout_int_popup(string title = null, float title_width = 80, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, SerializedProperty prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, Action<int> act_on_changed = null, RectOffset padding = default, RectOffset margin = default, RectOffset title_margin = default)
+        public static int layout_int_popup(string title = null, float title_width = 80, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, SerializedProperty prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIGroup opt_bg_fill = XGUIGroup.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, Action<int> act_on_changed = null, RectOffset padding = default, RectOffset margin = default, RectOffset title_margin = default)
         {
             if (opt_text_padding == null)
                 opt_text_padding = new RectOffset(0, 0, 0, 0);
@@ -85,7 +85,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
-                bg_fill: XGUIFilled.无,
+                bg_fill: XGUIGroup.无,
                 bg_color: XGUIColor.无,
                 title_clipping: TextClipping.Clip,
                 absolute_padding: true,
@@ -105,7 +105,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             #region 下拉菜单样式
             GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
-            style.normal.background = GetFillTexture(opt_bg_fill, opt_bg_color);
+            style.normal.background = GetGroupTexture(opt_bg_fill, opt_bg_color);
             style.normal.textColor = opt_text_color;
             style.fontSize = XGUI.GetFontSize(opt_text_size);
 
@@ -200,13 +200,13 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <param name="act_on_changed">当选中项发生改变时的回调委托，参数为新选中的字符串值。</param>
         /// <returns>用户选择后的字符串值。</returns>
         /// <remarks>
-        /// 该方法与 <see cref="gui_string_popup(Rect, string, Color, XGUIFontSize, FontStyle, RectOffset, float, float, SerializedProperty, string[], Font, XGUIFontSize, Color, RectOffset, TextAnchor, FontStyle, XGUIFilled, XGUIColor, Color, float, Color)"/> 
+        /// 该方法与 <see cref="gui_string_popup(Rect, string, Color, XGUIFontSize, FontStyle, RectOffset, float, float, SerializedProperty, string[], Font, XGUIFontSize, Color, RectOffset, TextAnchor, FontStyle, XGUIGroup, XGUIColor, Color, float, Color)"/> 
         /// 功能相同，但使用 <see cref="EditorGUILayout"/> 自动布局系统，无需手动指定矩形位置。
         /// <para>
         /// 支持多选混合状态显示（显示 "—"），当 <paramref name="prop"/> 存在多个不同值时自动切换为混合模式。
         /// </para>
         /// </remarks>
-        public static string layout_string_popup(string title = null, float title_width = 80, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, SerializedProperty prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, Action<string> act_on_changed = null, RectOffset padding = default, RectOffset margin = default, RectOffset title_margin = default)
+        public static string layout_string_popup(string title = null, float title_width = 80, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, SerializedProperty prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIGroup opt_bg_fill = XGUIGroup.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, Action<string> act_on_changed = null, RectOffset padding = default, RectOffset margin = default, RectOffset title_margin = default)
         {
             if (opt_text_padding == null)
                 opt_text_padding = new RectOffset(0, 0, 0, 0);
@@ -234,7 +234,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
-                bg_fill: XGUIFilled.无,
+                bg_fill: XGUIGroup.无,
                 bg_color: XGUIColor.无,
                 title_clipping: TextClipping.Clip,
                 absolute_padding: true,
@@ -254,7 +254,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             #region 下拉菜单样式
             GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
-            style.normal.background = GetFillTexture(opt_bg_fill, opt_bg_color);
+            style.normal.background = GetGroupTexture(opt_bg_fill, opt_bg_color);
             style.normal.textColor = opt_text_color;
             style.fontSize = XGUI.GetFontSize(opt_text_size);
 

@@ -63,14 +63,14 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <param name="act_on_changed">开关状态改变时的回调委托，参数为新的布尔值。</param>
         /// <returns>当前开关的布尔值。</returns>
         /// <remarks>
-        /// 该方法与 <see cref="gui_toggle(Rect, string, Color, XGUIFontSize, FontStyle, TextAnchor, float, Font, RectOffset, SerializedProperty, float, XGUIToggleStyle, Color, Color, Color, Color, XGUIFilled, XGUIColor, Color, XGUIFontSize, FontStyle, Color, TextAnchor, RectOffset, Font, float, string[])"/> 
+        /// 该方法与 <see cref="gui_toggle(Rect, string, Color, XGUIFontSize, FontStyle, TextAnchor, float, Font, RectOffset, SerializedProperty, float, XGUIToggleStyle, Color, Color, Color, Color, XGUIGroup, XGUIColor, Color, XGUIFontSize, FontStyle, Color, TextAnchor, RectOffset, Font, float, string[])"/> 
         /// 功能相同，但使用 <see cref="EditorGUILayout"/> 自动布局系统。
         /// <para>
         /// 支持多选混合状态显示（显示 "—"），当 <paramref name="prop"/> 存在多个不同值时自动切换为混合模式。
         /// 标签宽度会根据窗口宽度自适应，窄屏时自动缩小。
         /// </para>
         /// </remarks>
-        public static bool layout_toggle(string title = null, string tooltip = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, TextAnchor title_anchor = TextAnchor.MiddleLeft, float title_width = 80, Font title_font = null, RectOffset title_padding = default, SerializedProperty prop = null, RectOffset tog_padding = default, RectOffset tog_margin = default, XGUIToggleStyle tog_style = XGUIToggleStyle.实体, Color tog_bg_off_color = default, Color tog_bg_on_color = default, Color tog_handler_off_color = default, Color tog_handler_on_color = default, XGUIFilled tog_mixed_bg_fill = XGUIFilled.实体, XGUIColor tog_mixed_bg_color = XGUIColor.亮白, Color tog_mixed_bg_color_gui = default, XGUIFontSize tog_mixed_text_size = XGUIFontSize.M, FontStyle tog_mixed_font_style = FontStyle.Normal, Color tog_mixed_text_color = default, TextAnchor tog_mixed_text_anchor = TextAnchor.MiddleCenter, RectOffset tog_mixed_text_padding = default, Font tog_mixed_text_font = null, float tog_mixed_added_height = 0, string[] tog_mixed_options = null, Action<bool> act_on_changed = null)
+        public static bool layout_toggle(string title = null, string tooltip = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, TextAnchor title_anchor = TextAnchor.MiddleLeft, float title_width = 80, Font title_font = null, RectOffset title_padding = default, SerializedProperty prop = null, RectOffset tog_padding = default, RectOffset tog_margin = default, XGUIToggleStyle tog_style = XGUIToggleStyle.实体, Color tog_bg_off_color = default, Color tog_bg_on_color = default, Color tog_handler_off_color = default, Color tog_handler_on_color = default, XGUIGroup tog_mixed_bg_fill = XGUIGroup.实体, XGUIColor tog_mixed_bg_color = XGUIColor.亮白, Color tog_mixed_bg_color_gui = default, XGUIFontSize tog_mixed_text_size = XGUIFontSize.M, FontStyle tog_mixed_font_style = FontStyle.Normal, Color tog_mixed_text_color = default, TextAnchor tog_mixed_text_anchor = TextAnchor.MiddleCenter, RectOffset tog_mixed_text_padding = default, Font tog_mixed_text_font = null, float tog_mixed_added_height = 0, string[] tog_mixed_options = null, Action<bool> act_on_changed = null)
         {
             if (tog_mixed_text_padding == null)
                 tog_mixed_text_padding = new RectOffset(0, 0, 0, 0);
@@ -123,7 +123,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             #region 下拉菜单样式
             GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
-            style.normal.background = GetFillTexture(tog_mixed_bg_fill, tog_mixed_bg_color);
+            style.normal.background = GetGroupTexture(tog_mixed_bg_fill, tog_mixed_bg_color);
             style.normal.textColor = tog_mixed_text_color;
             style.fontSize = XGUI.GetFontSize(tog_mixed_text_size);
 
@@ -272,7 +272,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 该版本基于值类型（bool），适用于非序列化属性的场景，不处理多选混合状态。
         /// 标签宽度会根据窗口宽度自适应，窄屏时自动缩小。
         /// </remarks>
-        public static bool layout_toggle(string title = null, string tooltip = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, TextAnchor title_anchor = TextAnchor.MiddleLeft, float title_width = 80, Font title_font = null, RectOffset title_padding = default, bool prop = false, RectOffset tog_padding = default, RectOffset tog_margin = default, XGUIToggleStyle tog_style = XGUIToggleStyle.实体, Color tog_bg_off_color = default, Color tog_bg_on_color = default, Color tog_handler_off_color = default, Color tog_handler_on_color = default, XGUIFilled tog_mixed_bg_fill = XGUIFilled.实体, XGUIColor tog_mixed_bg_color = XGUIColor.亮白, Color tog_mixed_bg_color_gui = default, XGUIFontSize tog_mixed_text_size = XGUIFontSize.M, FontStyle tog_mixed_font_style = FontStyle.Normal, Color tog_mixed_text_color = default, TextAnchor tog_mixed_text_anchor = TextAnchor.MiddleCenter, RectOffset tog_mixed_text_padding = default, Font tog_mixed_text_font = null, float tog_mixed_added_height = 0, string[] tog_mixed_options = null, Action<bool> act_on_changed = null)
+        public static bool layout_toggle(string title = null, string tooltip = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, TextAnchor title_anchor = TextAnchor.MiddleLeft, float title_width = 80, Font title_font = null, RectOffset title_padding = default, bool prop = false, RectOffset tog_padding = default, RectOffset tog_margin = default, XGUIToggleStyle tog_style = XGUIToggleStyle.实体, Color tog_bg_off_color = default, Color tog_bg_on_color = default, Color tog_handler_off_color = default, Color tog_handler_on_color = default, XGUIGroup tog_mixed_bg_fill = XGUIGroup.实体, XGUIColor tog_mixed_bg_color = XGUIColor.亮白, Color tog_mixed_bg_color_gui = default, XGUIFontSize tog_mixed_text_size = XGUIFontSize.M, FontStyle tog_mixed_font_style = FontStyle.Normal, Color tog_mixed_text_color = default, TextAnchor tog_mixed_text_anchor = TextAnchor.MiddleCenter, RectOffset tog_mixed_text_padding = default, Font tog_mixed_text_font = null, float tog_mixed_added_height = 0, string[] tog_mixed_options = null, Action<bool> act_on_changed = null)
         {
             if (tog_mixed_text_padding == null)
                 tog_mixed_text_padding = new RectOffset(0, 0, 0, 0);
@@ -325,7 +325,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             #region 下拉菜单样式
             GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
-            style.normal.background = GetFillTexture(tog_mixed_bg_fill, tog_mixed_bg_color);
+            style.normal.background = GetGroupTexture(tog_mixed_bg_fill, tog_mixed_bg_color);
             style.normal.textColor = tog_mixed_text_color;
             style.fontSize = XGUI.GetFontSize(tog_mixed_text_size);
 

@@ -65,7 +65,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 参数
             XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "参数",
@@ -176,7 +176,7 @@ namespace SevenStrikeModules.XHud.Editor
                    opt_text_padding: new RectOffset(10, 10, 0, 0),
                    opt_anchor: TextAnchor.MiddleLeft,
                    opt_font_style: FontStyle.Normal,
-                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_fill: XGUIGroup.实体,
                    opt_bg_color: XGUIColor.亮白,
                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                    margin: new RectOffset(0, 0, 0, 0),
@@ -245,7 +245,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 时长（只读）
             XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "信息",
@@ -346,7 +346,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 参数
             XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "参数",
@@ -568,7 +568,7 @@ namespace SevenStrikeModules.XHud.Editor
                    opt_text_padding: new RectOffset(10, 10, 0, 0),
                    opt_anchor: TextAnchor.MiddleLeft,
                    opt_font_style: FontStyle.Normal,
-                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_fill: XGUIGroup.实体,
                    opt_bg_color: XGUIColor.亮白,
                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                    margin: new RectOffset(0, 0, 0, 0),
@@ -584,7 +584,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 起始值 / 结束值（按类型动态显示）
             XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "数值",
@@ -603,8 +603,8 @@ namespace SevenStrikeModules.XHud.Editor
             int value_mode_index = node.ValueModeIndex = XGUI.layout_toolbar(
                       index: node.ValueModeIndex,
                       names: new string[] { "S - D", "D - E", "S - E", "C - E" },
-                      bg_normal: XGUIFilled.纯色边框,
-                      bg_selected: XGUIFilled.实体,
+                      bg_normal: XGUIGroup.纯色边框,
+                      bg_selected: XGUIGroup.实体,
                       bg_color: XGUIColor.亮白,
                       bg_gui_color: Color.black * 0.5f,
                       text_color_normal: Color.white,
@@ -619,7 +619,7 @@ namespace SevenStrikeModules.XHud.Editor
                       bg_width_offset: 5,
                       bg_height_offset: 2,
                       navigate_style: true,
-                      navigate_style_bg: XGUIFilled.纯色边框,
+                      navigate_style_bg: XGUIGroup.纯色边框,
                       navigate_style_bg_color: Color.black * 0.5f);
             #endregion
 
@@ -675,7 +675,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 选项
             XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "选项",

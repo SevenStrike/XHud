@@ -112,7 +112,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 目标元素库名称
             XGUI.layout_label(
                 text: TargetElementLibrary.LibraryName,
-                bg_fill: XGUIFilled.无,
+                bg_fill: XGUIGroup.无,
                 bg_color: XGUIColor.无,
                 size: XGUIFontSize.M,
                 anchor: TextAnchor.MiddleCenter,
@@ -177,11 +177,11 @@ namespace SevenStrikeModules.XHud.Editor
             if (XGUI.layout_button(
                 text: "关闭",
                 tooltip: "",
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: Color.white,
                 button_text_color: Color.black,
-                press_fill: XGUIFilled.实体,
+                press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
                 press_text_color: Color.white,
                 font_size: XGUIFontSize.B,
@@ -204,11 +204,11 @@ namespace SevenStrikeModules.XHud.Editor
             if (XGUI.layout_button(
                 text: "更新",
                 tooltip: "",
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Primary,
                 button_text_color: Color.black,
-                press_fill: XGUIFilled.实体,
+                press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
                 press_text_color: Color.white,
                 font_size: XGUIFontSize.B,

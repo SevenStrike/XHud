@@ -205,7 +205,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 按钮文本颜色会根据背景亮度自动调整（亮背景使用黑色文本，暗背景使用白色文本），确保可读性。
         /// </para>
         /// </remarks>
-        public static void layout_state_displayer_btn(string title = null, XGUIFontSize title_size = XGUIFontSize.M, Color title_color = default, XGUIFilled btn_bg = XGUIFilled.实体, XGUIColor btn_color = XGUIColor.亮白, string btn_text = null, string btn_tooltip = null, XGUIFontSize btn_text_size = XGUIFontSize.M, float btn_width = 0, float btn_layout_width = 0, Color btn_gui_color = default, RectOffset padding = null, RectOffset margin = null, Action callback_clicked = null)
+        public static void layout_state_displayer_btn(string title = null, XGUIFontSize title_size = XGUIFontSize.M, Color title_color = default, XGUIGroup btn_bg = XGUIGroup.实体, XGUIColor btn_color = XGUIColor.亮白, string btn_text = null, string btn_tooltip = null, XGUIFontSize btn_text_size = XGUIFontSize.M, float btn_width = 0, float btn_layout_width = 0, Color btn_gui_color = default, RectOffset padding = null, RectOffset margin = null, Action callback_clicked = null)
         {
             if (title_color == Color.clear)
                 title_color = Color.white * 0.9f;
@@ -245,7 +245,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 bg_color: btn_color,
                 bg_color_gui: btn_gui_color,
                 button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(btn_gui_color) ? Color.black : Color.white,
-                press_fill: XGUIFilled.实体,
+                press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
                 press_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(btn_gui_color) ? Color.white : Color.black,
                 font_size: btn_text_size,

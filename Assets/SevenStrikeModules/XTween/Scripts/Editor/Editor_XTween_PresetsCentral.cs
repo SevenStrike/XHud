@@ -810,14 +810,14 @@ namespace SevenStrikeModules.XTween.Editor
                 if (pret.isPressing)
                     XGUI.gui_box(
                         rect: itemRect,
-                        bg: XGUI.GetBtnFillTexture(XGUIFilled.实体, XGUIColor.亮白),
+                        bg: XGUI.GetBtnFillTexture(XGUIGroup.实体, XGUIColor.亮白),
                         bg_color_gui: ItemPressColor,
                         border: new RectOffset(15, 15, 15, 15),
                         offset: new Vector2(0, 0));
                 else
                     XGUI.gui_box(
                         rect: itemRect,
-                        bg: XGUI.GetBtnFillTexture(XGUIFilled.实体, XGUIColor.亮白),
+                        bg: XGUI.GetBtnFillTexture(XGUIGroup.实体, XGUIColor.亮白),
                         bg_color_gui: ItemColor,
                         border: new RectOffset(15, 15, 15, 15),
                         offset: new Vector2(0, 0));
@@ -1004,7 +1004,7 @@ namespace SevenStrikeModules.XTween.Editor
             float left_margin = 20;
             XGUI.gui_box(
                 rect: rect_info,
-                bg: XGUI.GetFillTexture(XGUIFilled.实体, XGUIColor.亮白),
+                bg: XGUI.GetGroupTexture(XGUIGroup.实体, XGUIColor.亮白),
                 bg_color_gui: Color.white * 0.35f,
                 border: new RectOffset(10, 10, 10, 10));
 
@@ -1450,7 +1450,7 @@ namespace SevenStrikeModules.XTween.Editor
 
             XGUI.gui_box(
                  rect: rect_editor,
-                 bg: XGUI.GetFillTexture(XGUIFilled.实体, XGUIColor.亮白),
+                 bg: XGUI.GetGroupTexture(XGUIGroup.实体, XGUIColor.亮白),
                  bg_color_gui: Color.white * 0.35f,
                  border: new RectOffset(10, 10, 10, 10));
 
@@ -3101,7 +3101,7 @@ namespace SevenStrikeModules.XTween.Editor
                   opt_text_padding: new RectOffset(10, 10, 0, 0),
                   opt_anchor: TextAnchor.MiddleCenter,
                   opt_font_style: FontStyle.Normal,
-                  opt_bg_fill: XGUIFilled.实体,
+                  opt_bg_fill: XGUIGroup.实体,
                   opt_bg_color: XGUIColor.亮白,
                   opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
                   icon_arrow_color: Color.black);

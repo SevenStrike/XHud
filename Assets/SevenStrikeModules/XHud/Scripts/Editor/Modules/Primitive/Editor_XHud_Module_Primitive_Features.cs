@@ -189,7 +189,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 标题
             XGUI.layout_banner(
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.深空灰,
                 bg_height: 30,
                 icon: icon_main,
@@ -208,7 +208,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 快捷功能          
             XGUI.layout_group_start(
                type: XGUIContainerType.Horizontal,
-               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
                bg_color_gui: XHud_Dashboard.Theme_Group,
                title: "快捷功能",
@@ -257,7 +257,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             BaseScript.fold_param = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: statu_title,
@@ -356,7 +356,7 @@ namespace SevenStrikeModules.XHud.Editor
                     #region 控制区
                     XGUI.layout_group_start(
                         type: XGUIContainerType.Horizontal,
-                        bg_fill: XGUIFilled.透明,
+                        bg_fill: XGUIGroup.透明,
                         bg_color: XGUIColor.亮白,
                         bg_color_gui: XHud_Dashboard.Theme_Group,
                         absolute_margin: true,
@@ -368,9 +368,9 @@ namespace SevenStrikeModules.XHud.Editor
                     if (XGUI.layout_button(
                         text: $"{SelectedObjects[MultiPrimitiveFeature_Index].name}",
                         tooltip: "",
-                        bg_fill: XGUIFilled.透明,
+                        bg_fill: XGUIGroup.透明,
                         button_text_color: Color.gray,
-                        press_fill: XGUIFilled.透明,
+                        press_fill: XGUIGroup.透明,
                         press_text_color: XHud_Dashboard.Theme_Primary,
                         font_size: XGUIFontSize.M,
                         anchor: TextAnchor.MiddleLeft,
@@ -518,7 +518,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 选项
             BaseScript.fold_option = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "选项",
@@ -586,7 +586,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 源脚本
             BaseScript.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "源脚本",

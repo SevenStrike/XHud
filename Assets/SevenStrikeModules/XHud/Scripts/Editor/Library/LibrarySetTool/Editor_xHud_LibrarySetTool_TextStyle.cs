@@ -194,7 +194,6 @@ namespace SevenStrikeModules.XHud.Editor
             SerializedProperty prop_Type = sp_StyleInfo.FindPropertyRelative("Type");
             SerializedProperty prop_Raycast = sp_StyleInfo.FindPropertyRelative("Raycast");
             SerializedProperty prop_Maskable = sp_StyleInfo.FindPropertyRelative("Maskable");
-            SerializedProperty prop_SyncPrimitivePaintingColor = sp_StyleInfo.FindPropertyRelative("SyncPrimitivePaintingColor");
 
             #region Text属性
             SerializedProperty prop_overflow_h = sp_StyleInfo.FindPropertyRelative("Overflow_Horizon");
@@ -248,7 +247,7 @@ namespace SevenStrikeModules.XHud.Editor
             Rect rect_mark = new Rect(rect.x + (rect.width - 80), rect.y + 15, 65, XGUI.GetSingleLineHeight());
             XGUI.gui_label(
                 rect: rect_mark,
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: Color.white,
                 text: new GUIContent(textType.ToString()),
@@ -263,7 +262,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 样式信息
             XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "样式信息",
@@ -327,7 +326,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 参数
                 XGUI.layout_group_start(
                   type: XGUIContainerType.Vertical,
-                  bg_fill: XGUIFilled.缺口纯色边框,
+                  bg_fill: XGUIGroup.缺口纯色边框,
                   bg_color: XGUIColor.亮白,
                   bg_color_gui: XHud_Dashboard.Theme_Group,
                   title: "参数",
@@ -350,7 +349,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                     opt_anchor: TextAnchor.MiddleLeft,
                     opt_font_style: FontStyle.Normal,
-                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
                     opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                     icon_arrow_color: Color.black,
@@ -388,7 +387,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                     opt_anchor: TextAnchor.MiddleLeft,
                     opt_font_style: FontStyle.Normal,
-                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
                     opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                     icon_arrow_color: Color.black,
@@ -415,7 +414,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                     opt_anchor: TextAnchor.MiddleLeft,
                     opt_font_style: FontStyle.Normal,
-                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
                     opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                     icon_arrow_color: Color.black,
@@ -442,7 +441,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                     opt_anchor: TextAnchor.MiddleLeft,
                     opt_font_style: FontStyle.Normal,
-                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
                     opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                     icon_arrow_color: Color.black,
@@ -539,7 +538,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 选项
                 XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "选项",
@@ -548,31 +547,6 @@ namespace SevenStrikeModules.XHud.Editor
                     title_clipping: TextClipping.Clip,
                     margin: new RectOffset(10, 10, 0, 0),
                     padding: new RectOffset(10, 10, 15, 15));
-
-                #region 颜色接管
-                XGUI.layout_toggle(
-                    title: "颜色接管",
-                    title_size: XGUIFontSize.M,
-                    title_font_style: FontStyle.Normal,
-                    title_padding: new RectOffset(0, 10, 0, 0),
-                    title_width: 60,
-                    prop: prop_SyncPrimitivePaintingColor,
-                    tog_style: XGUIToggleStyle.实体,
-                    tog_padding: new RectOffset(5, 8, 0, 0),
-                    tog_margin: new RectOffset(0, 0, 0, 5),
-                    tog_mixed_options: new string[] { "禁用", "启用" },
-                    tog_mixed_text_size: XGUIFontSize.M,
-                    tog_mixed_text_color: Color.black,
-                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
-                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
-                    tog_mixed_font_style: FontStyle.Normal,
-                    tog_bg_off_color: Color.white * 0.65f,
-                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
-                    tog_handler_off_color: Color.white,
-                    tog_handler_on_color: Color.white,
-                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
-                    act_on_changed: null);
-                #endregion
 
                 #region 自动尺寸
                 XGUI.layout_toggle(
@@ -707,7 +681,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 参数
                 XGUI.layout_group_start(
                   type: XGUIContainerType.Vertical,
-                  bg_fill: XGUIFilled.缺口纯色边框,
+                  bg_fill: XGUIGroup.缺口纯色边框,
                   bg_color: XGUIColor.亮白,
                   bg_color_gui: XHud_Dashboard.Theme_Group,
                   title: "参数",
@@ -720,8 +694,8 @@ namespace SevenStrikeModules.XHud.Editor
                 ToolbarIndex = XGUI.layout_toolbar(
                     index: ref ToolbarIndex,
                     names: new string[] { "特征", "间距", "渐变色" },
-                    bg_normal: XGUIFilled.无,
-                    bg_selected: XGUIFilled.实体,
+                    bg_normal: XGUIGroup.无,
+                    bg_selected: XGUIGroup.实体,
                     bg_color: XGUIColor.亮白,
                     bg_gui_color: Color.black * 0.5f,
                     text_color_normal: Color.white,
@@ -737,7 +711,7 @@ namespace SevenStrikeModules.XHud.Editor
                     bg_width_offset: 5,
                     bg_height_offset: 2,
                     navigate_style: true,
-                    navigate_style_bg: XGUIFilled.纯色边框,
+                    navigate_style_bg: XGUIGroup.纯色边框,
                     navigate_style_bg_color: Color.black * 0.5f);
 
                 switch (ToolbarIndex)
@@ -756,7 +730,7 @@ namespace SevenStrikeModules.XHud.Editor
                             opt_text_padding: new RectOffset(10, 10, 0, 0),
                             opt_anchor: TextAnchor.MiddleLeft,
                             opt_font_style: FontStyle.Normal,
-                            opt_bg_fill: XGUIFilled.实体,
+                            opt_bg_fill: XGUIGroup.实体,
                             opt_bg_color: XGUIColor.亮白,
                             opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                             icon_arrow_color: Color.black,
@@ -1170,7 +1144,7 @@ namespace SevenStrikeModules.XHud.Editor
                             opt_text_padding: new RectOffset(10, 10, 0, 0),
                             opt_anchor: TextAnchor.MiddleLeft,
                             opt_font_style: FontStyle.Normal,
-                            opt_bg_fill: XGUIFilled.实体,
+                            opt_bg_fill: XGUIGroup.实体,
                             opt_bg_color: XGUIColor.亮白,
                             opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                             icon_arrow_color: Color.black,
@@ -1255,7 +1229,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 选项
                 XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "选项",
@@ -1264,31 +1238,6 @@ namespace SevenStrikeModules.XHud.Editor
                     title_clipping: TextClipping.Clip,
                     margin: new RectOffset(10, 10, 0, 0),
                     padding: new RectOffset(10, 10, 15, 15));
-
-                #region 颜色接管
-                XGUI.layout_toggle(
-                    title: "颜色接管",
-                    title_size: XGUIFontSize.M,
-                    title_font_style: FontStyle.Normal,
-                    title_padding: new RectOffset(0, 10, 0, 0),
-                    title_width: 60,
-                    prop: prop_SyncPrimitivePaintingColor,
-                    tog_style: XGUIToggleStyle.实体,
-                    tog_padding: new RectOffset(5, 8, 0, 0),
-                    tog_margin: new RectOffset(0, 0, 0, 5),
-                    tog_mixed_options: new string[] { "禁用", "启用" },
-                    tog_mixed_text_size: XGUIFontSize.M,
-                    tog_mixed_text_color: Color.black,
-                    tog_mixed_text_padding: new RectOffset(10, 10, 0, 0),
-                    tog_mixed_text_anchor: TextAnchor.MiddleCenter,
-                    tog_mixed_font_style: FontStyle.Normal,
-                    tog_bg_off_color: Color.white * 0.65f,
-                    tog_bg_on_color: XHud_Dashboard.Theme_Primary,
-                    tog_handler_off_color: Color.white,
-                    tog_handler_on_color: Color.white,
-                    tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
-                    act_on_changed: null);
-                #endregion
 
                 #region 自动尺寸
                 XGUI.layout_toggle(
@@ -1503,28 +1452,31 @@ namespace SevenStrikeModules.XHud.Editor
         {
             string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
 
-            string res = XGUI.dialog(
-                type: XGUIDialogType.警告,
-                windowtitle: "XHud - 文字样式库采集器消息",
-                title: "更新文字样式模版",
-                msg: $"即将更新文字样式库中名称为： <color={colorhex}> {OriginStyleInfo.Name} </color> 且类型为： {OriginStyleInfo.Type} 的文字样式模版参数，确认更新参数吗？",
-                ok: "更新",
-                cancel: "暂不",
-                PrimaryIndex: 0,
-                usemodal: true,
-                themecolor: XHud_Dashboard.Theme_Primary);
-
-            if (res == "更新")
+            EditorApplication.delayCall += () =>
             {
-                XHud_LibraryArg_TextStyle info = new XHud_LibraryArg_TextStyle();
-                info.CopyData_Ignored_LibraryToggle(StyleInfo);
-                info.Name = sp_LibName.stringValue;
-                info.Type = StyleInfo.Type;
-                info.Description = sp_Description.stringValue;
-                Target_Hud_TextStyleLibrary.TextStyle_Library_Replace(ModifiedIndex, info);
+                string res = XGUI.dialog(
+                        type: XGUIDialogType.警告,
+                        windowtitle: "XHud - 文字样式库采集器消息",
+                        title: "更新文字样式模版",
+                        msg: $"即将更新文字样式库中名称为： <color={colorhex}> {OriginStyleInfo.Name} </color> 且类型为： {OriginStyleInfo.Type} 的文字样式模版参数，确认更新参数吗？",
+                        ok: "更新",
+                        cancel: "暂不",
+                        PrimaryIndex: 0,
+                        usemodal: true,
+                        themecolor: XHud_Dashboard.Theme_Primary);
 
-                Close();
-            }
+                if (res == "更新")
+                {
+                    XHud_LibraryArg_TextStyle info = new XHud_LibraryArg_TextStyle();
+                    info.CopyData_Ignored_LibraryToggle(StyleInfo);
+                    info.Name = sp_LibName.stringValue;
+                    info.Type = StyleInfo.Type;
+                    info.Description = sp_Description.stringValue;
+                    Target_Hud_TextStyleLibrary.TextStyle_Library_Replace(ModifiedIndex, info);
+
+                    Close();
+                }
+            };
         }
 
         /// <summary>
@@ -1624,11 +1576,11 @@ namespace SevenStrikeModules.XHud.Editor
             if (XGUI.layout_button(
                 text: ButtonText_Cancel,
                 tooltip: "",
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: Color.white,
                 button_text_color: Color.black,
-                press_fill: XGUIFilled.实体,
+                press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
                 press_text_color: Color.white,
                 font_size: XGUIFontSize.B,
@@ -1648,11 +1600,11 @@ namespace SevenStrikeModules.XHud.Editor
             if (XGUI.layout_button(
                 text: ButtonText_Ok,
                 tooltip: "",
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Primary,
                 button_text_color: Color.black,
-                press_fill: XGUIFilled.实体,
+                press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
                 press_text_color: Color.white,
                 font_size: XGUIFontSize.B,

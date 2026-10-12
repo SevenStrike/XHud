@@ -51,10 +51,10 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <param name="focus_name">按钮的控件名称，用于 <see cref="GUI.FocusControl"/> 和键盘导航。</param>
         /// <returns>如果按钮被点击则返回 <c>true</c>，否则返回 <c>false</c>。</returns>
         /// <remarks>
-        /// 该方法与 <see cref="gui_button(Rect, string, string, XGUIFilled, XGUIColor, Color, Color, XGUIFilled, XGUIColor, Color, XGUIFontSize, TextAnchor, RectOffset, RectOffset, float, float, Font, string)"/> 
+        /// 该方法与 <see cref="gui_button(Rect, string, string, XGUIGroup, XGUIColor, Color, Color, XGUIGroup, XGUIColor, Color, XGUIFontSize, TextAnchor, RectOffset, RectOffset, float, float, Font, string)"/> 
         /// 功能相同，但使用 <see cref="GUILayout"/> 自动布局系统，无需手动指定矩形位置。
         /// </remarks>
-        public static bool layout_button(string text = "button", string tooltip = "clicked", XGUIFilled bg_fill = XGUIFilled.实体, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, Color button_text_color = default, XGUIFilled press_fill = XGUIFilled.实体, XGUIColor press_color = XGUIColor.阴影灰, Color press_text_color = default, XGUIFontSize font_size = XGUIFontSize.B, TextAnchor anchor = TextAnchor.MiddleCenter, bool absolute_margin = false, bool absolute_padding = false, RectOffset margin = default, RectOffset padding = default, float width = 0, float layout_width = 0, float layout_min_width = 0, float height = 0, Font button_text_font = null, string focus_name = null, FontStyle button_text_style = FontStyle.Normal)
+        public static bool layout_button(string text = "button", string tooltip = "clicked", XGUIGroup bg_fill = XGUIGroup.实体, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, Color button_text_color = default, XGUIGroup press_fill = XGUIGroup.实体, XGUIColor press_color = XGUIColor.阴影灰, Color press_text_color = default, XGUIFontSize font_size = XGUIFontSize.B, TextAnchor anchor = TextAnchor.MiddleCenter, bool absolute_margin = false, bool absolute_padding = false, RectOffset margin = default, RectOffset padding = default, float width = 0, float layout_width = 0, float layout_min_width = 0, float height = 0, Font button_text_font = null, string focus_name = null, FontStyle button_text_style = FontStyle.Normal)
         {
             if (button_text_color == Color.clear)
                 button_text_color = Color.white;
@@ -72,12 +72,12 @@ namespace SevenStrikeModules.XGUI.Editor
                 padding = new RectOffset(0, 0, 0, 0);
 
             GUIStyle style = new GUIStyle(style_xg_button);
-            if (bg_fill != XGUIFilled.无)
+            if (bg_fill != XGUIGroup.无)
                 style.normal.background = GetBtnFillTexture(bg_fill, bg_color);
             else
                 style.normal.background = null;
 
-            if (press_fill != XGUIFilled.无)
+            if (press_fill != XGUIGroup.无)
             {
                 style.active.background = GetBtnFillTexture(press_fill, press_color);
                 style.active.textColor = press_text_color;

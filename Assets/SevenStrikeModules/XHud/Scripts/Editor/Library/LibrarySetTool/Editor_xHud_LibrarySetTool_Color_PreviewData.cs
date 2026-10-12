@@ -56,7 +56,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 标题
             XGUI.layout_banner(
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.深空灰,
                 bg_height: 30,
                 icon: logo,
@@ -73,7 +73,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 快捷功能          
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "快捷功能",
@@ -136,7 +136,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 源脚本
             fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "源脚本",

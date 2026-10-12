@@ -417,11 +417,6 @@ namespace SevenStrikeModules.XHud
         /// 蒙版
         /// </summary>
         public bool Maskable;
-        [SerializeField]
-        /// <summary>
-        /// 同步 图元配色器 颜色
-        /// </summary>
-        public bool SyncPrimitivePaintingColor;
         #endregion
 
         /// <summary>
@@ -506,7 +501,6 @@ namespace SevenStrikeModules.XHud
             //----------------------------------------Features----------------------------------------//
             Raycast = target.Raycast;
             Maskable = target.Maskable;
-            SyncPrimitivePaintingColor = target.SyncPrimitivePaintingColor;
         }
 
         /// <summary>
@@ -589,7 +583,6 @@ namespace SevenStrikeModules.XHud
             //----------------------------------------Features----------------------------------------//
             Raycast = target.Raycast;
             Maskable = target.Maskable;
-            SyncPrimitivePaintingColor = target.SyncPrimitivePaintingColor;
         }
 
         /// <summary>
@@ -681,21 +674,9 @@ namespace SevenStrikeModules.XHud
             //----------------------------------------Features----------------------------------------//
             Raycast = target.Raycast;
             Maskable = target.Maskable;
-            SyncPrimitivePaintingColor = target.SyncPrimitivePaintingColor;
         }
 
         //------------------------通用参数设置
-
-        /// <summary>
-        /// 控制文字颜色是否受到 图元配色器 颜色控制
-        /// </summary>
-        /// <param name="treeState"></param>
-        public void gen_Set_SyncPrimitivePaintingColor(bool state)
-        {
-            if (SyncPrimitivePaintingColor == state)
-                return;
-            SyncPrimitivePaintingColor = state;
-        }
 
         /// <summary>
         /// 设置射线检测可用性

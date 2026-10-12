@@ -147,11 +147,11 @@ namespace SevenStrikeModules.XGUI.Editor
             if (XGUI.layout_button(
                 text: path_type == XGUIPathType.保存文件 ? "保存" : "浏览",
                 tooltip: "",
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: btn_color,
                 button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(Color.white) ? Color.black : Color.white,
-                press_fill: XGUIFilled.实体,
+                press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
                 press_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(Color.white) ? Color.white : Color.black,
                 font_size: btn_fontsize,

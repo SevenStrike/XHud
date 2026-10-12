@@ -41,7 +41,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <param name="margin">分组的外边距。</param>
         /// <param name="padding">分组的内边距。</param>
         /// <param name="title">分组的标题文本。为 <c>null</c> 或空时不显示标题。</param>
-        /// <param name="title_bg_fill">标题背景的填充样式。为 <see cref="XGUIFilled.无"/> 时不绘制标题背景。</param>
+        /// <param name="title_bg_fill">标题背景的填充样式。为 <see cref="XGUIGroup.无"/> 时不绘制标题背景。</param>
         /// <param name="title_bg_color">标题背景的颜色主题。</param>
         /// <param name="title_bg_color_gui">标题背景的叠加颜色。传入默认值时使用白色。</param>
         /// <param name="title_size">标题文本的字体大小。</param>
@@ -59,7 +59,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <returns>更新后的折叠状态。点击标题或图标区域时会切换状态。</returns>
         /// <remarks>
         /// 该方法与 <see cref="gui_group_end"/> 成对使用。支持可折叠功能，点击标题文字或图标区域可切换折叠状态。
-        /// 当 <paramref name="title_bg_fill"/> 不为 <see cref="XGUIFilled.无"/> 时，标题背景宽度会根据文本长度自动计算。
+        /// 当 <paramref name="title_bg_fill"/> 不为 <see cref="XGUIGroup.无"/> 时，标题背景宽度会根据文本长度自动计算。
         /// 返回的折叠状态应传递给下次调用，以实现状态持久化。
         /// </remarks>
         /// <example>
@@ -87,7 +87,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// XGUI.gui_group_end();
         /// </code>
         /// </example>
-        public static bool gui_group_start(Rect rect_group, XGUIFilled bg_fill = XGUIFilled.无, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, float bg_height = 0, bool absolute_padding = false, bool absolute_margin = false, RectOffset margin = default, RectOffset padding = default, string title = null, XGUIFilled title_bg_fill = XGUIFilled.无, XGUIColor title_bg_color = XGUIColor.无, Color title_bg_color_gui = default, XGUIFontSize title_size = XGUIFontSize.B, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_text_color = default, Vector2 title_offset = default, RectOffset title_padding = default, Font title_font = null, FontStyle title_font_style = FontStyle.Normal, TextClipping title_clipping = TextClipping.Clip, Texture2D icon = null, Color icon_color = default, RectOffset icon_padding = default, bool foldout = true)
+        public static bool gui_group_start(Rect rect_group, XGUIGroup bg_fill = XGUIGroup.无, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, float bg_height = 0, bool absolute_padding = false, bool absolute_margin = false, RectOffset margin = default, RectOffset padding = default, string title = null, XGUIGroup title_bg_fill = XGUIGroup.无, XGUIColor title_bg_color = XGUIColor.无, Color title_bg_color_gui = default, XGUIFontSize title_size = XGUIFontSize.B, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_text_color = default, Vector2 title_offset = default, RectOffset title_padding = default, Font title_font = null, FontStyle title_font_style = FontStyle.Normal, TextClipping title_clipping = TextClipping.Clip, Texture2D icon = null, Color icon_color = default, RectOffset icon_padding = default, bool foldout = true)
         {
             #region group
             if (bg_color_gui == default)
@@ -101,8 +101,8 @@ namespace SevenStrikeModules.XGUI.Editor
 
             // 样式 - 背景
             GUIStyle style_group = new GUIStyle(style_xg_group);
-            if (bg_fill != XGUIFilled.无)
-                style_group.normal.background = GetFillTexture(bg_fill, bg_color);
+            if (bg_fill != XGUIGroup.无)
+                style_group.normal.background = GetGroupTexture(bg_fill, bg_color);
             else
                 style_group.normal.background = null;
 
@@ -138,7 +138,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 Rect rect_title = rect_group;
 
                 // 如果设定为有标题背景则使用根据标题文字长度自动计算宽度，否则使用窗口宽度减去阈值
-                if (title_bg_fill != XGUIFilled.无)
+                if (title_bg_fill != XGUIGroup.无)
                 {
                     GUIStyle style = new GUIStyle(style_xg_label);  // 直接使用
                     style.fontSize = XGUI.GetFontSize(title_size);
@@ -167,10 +167,10 @@ namespace SevenStrikeModules.XGUI.Editor
                     bg_color: title_bg_color,
                     bg_color_gui: title_bg_color_gui,
                     size: title_size,
-                    anchor: title_bg_fill != XGUIFilled.无 ? TextAnchor.MiddleCenter : title_anchor,
+                    anchor: title_bg_fill != XGUIGroup.无 ? TextAnchor.MiddleCenter : title_anchor,
                     text_color: title_text_color,
                     offset: title_offset + new Vector2(0, -1),
-                    padding: title_bg_fill != XGUIFilled.无 ? new RectOffset(11 + title_padding.left, 11 + title_padding.right, title_padding.top, title_padding.bottom) : new RectOffset(5 + title_padding.left, 5 + title_padding.right, 0 + title_padding.top, 0 + title_padding.bottom),
+                    padding: title_bg_fill != XGUIGroup.无 ? new RectOffset(11 + title_padding.left, 11 + title_padding.right, title_padding.top, title_padding.bottom) : new RectOffset(5 + title_padding.left, 5 + title_padding.right, 0 + title_padding.top, 0 + title_padding.bottom),
                     clipping: title_clipping,
                     font: title_font != null ? title_font : style_group.font,
                     font_style: title_font_style, act_on_press_label: () =>

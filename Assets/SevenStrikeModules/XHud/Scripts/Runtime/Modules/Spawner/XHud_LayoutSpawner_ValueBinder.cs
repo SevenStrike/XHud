@@ -149,13 +149,14 @@ namespace SevenStrikeModules.XHud
                         if (con.pt_Painting != null &&
                             con.pt_Painting.SyncImageColor &&
                             !con.pt_Painting.SyncLibraryColor &&
-                            con.mod_Text.TextStyleInfo.SyncPrimitivePaintingColor)
+                             con.mod_Text.TextColorOwner == TextColorOwner.Painting)
                         {
                             con.pt_Painting.OriginalColor = binder.val_color;
                         }
                         else
                         {
-                            con.mod_Text.TextStyleInfo.FontColor = binder.val_color;
+                            if (con.mod_Text.TextColorOwner == TextColorOwner.Manual)
+                                con.mod_Text.TextStyleInfo.FontColor = binder.val_color;
                         }
                         break;
                     case ModuleType.TmpText:
@@ -165,13 +166,14 @@ namespace SevenStrikeModules.XHud
                         if (con.pt_Painting != null &&
                           con.pt_Painting.SyncImageColor &&
                           !con.pt_Painting.SyncLibraryColor &&
-                          con.mod_TmpText.TextStyleInfo.SyncPrimitivePaintingColor)
+                          con.mod_TmpText.TextColorOwner == TextColorOwner.Painting)
                         {
                             con.pt_Painting.OriginalColor = binder.val_color;
                         }
                         else
                         {
-                            con.mod_TmpText.TextStyleInfo.tmp_color = binder.val_color;
+                            if (con.mod_TmpText.TextColorOwner == TextColorOwner.Manual)
+                                con.mod_TmpText.TextStyleInfo.tmp_color = binder.val_color;
                         }
                         break;
                     case ModuleType.Image:

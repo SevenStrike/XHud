@@ -1301,4 +1301,23 @@ namespace SevenStrikeModules.XHud.Enums
         右上 = 2,
         右下 = 3
     }
+    public enum TextColorOwner
+    {
+        /// <summary>
+        /// 样式库接管（含库同步、本地样式刷新）
+        /// </summary>
+        StyleLibrary,
+        /// <summary>
+        /// 图元配色器接管
+        /// </summary>
+        Painting,
+        /// <summary>
+        /// 动画接管
+        /// </summary>
+        Tween,
+        /// <summary>
+        /// 手动/默认，谁都不接管
+        /// </summary>
+        Manual
+    }
 }

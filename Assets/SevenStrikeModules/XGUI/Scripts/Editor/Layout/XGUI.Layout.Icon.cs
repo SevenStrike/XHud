@@ -116,7 +116,7 @@ namespace SevenStrikeModules.XGUI.Editor
             if (icon_alignment == XGUIIconAlignment.右 || icon_alignment == XGUIIconAlignment.左 || icon_alignment == XGUIIconAlignment.中心)
             {
                 XGUI.layout_group_start(
-                bg_fill: XGUIFilled.无,
+                bg_fill: XGUIGroup.无,
                 type: XGUIContainerType.Horizontal,
                 padding: new RectOffset(0, 0, 0, 0),
                 margin: layout_margin,

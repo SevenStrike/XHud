@@ -160,7 +160,7 @@ namespace SevenStrikeModules.XHud.Editor
             Rect rect_mark = new Rect(rect.x + (rect.width - 80), rect.y + 15, 65, XGUI.GetSingleLineHeight());
             XGUI.gui_label(
                 rect: rect_mark,
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: Color.white,
                 text: new GUIContent(Type.ToString()),
@@ -278,7 +278,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "模版信息",
@@ -341,7 +341,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 动效类型
             XGUI.layout_group_start(
            type: XGUIContainerType.Vertical,
-           bg_fill: XGUIFilled.缺口纯色边框,
+           bg_fill: XGUIGroup.缺口纯色边框,
            bg_color: XGUIColor.亮白,
            bg_color_gui: XHud_Dashboard.Theme_Group,
            title: "动效类型",
@@ -371,7 +371,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 生成锚点
                 XGUI.layout_group_start(
                type: XGUIContainerType.Vertical,
-               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
                bg_color_gui: XHud_Dashboard.Theme_Group,
                title: "生成锚点",
@@ -399,7 +399,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 参数
             XGUI.layout_group_start(
                type: XGUIContainerType.Vertical,
-               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
                bg_color_gui: XHud_Dashboard.Theme_Group,
                title: "位移参数",
@@ -412,8 +412,8 @@ namespace SevenStrikeModules.XHud.Editor
             ToolbarIndex = XGUI.layout_toolbar(
                 index: ref ToolbarIndex,
                 names: new string[] { "位移", "旋转", "透明度" },
-                bg_normal: XGUIFilled.无,
-                bg_selected: XGUIFilled.实体,
+                bg_normal: XGUIGroup.无,
+                bg_selected: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_gui_color: Color.black * 0.5f,
                 text_color_normal: Color.white,
@@ -429,7 +429,7 @@ namespace SevenStrikeModules.XHud.Editor
                 bg_width_offset: 5,
                 bg_height_offset: 2,
                 navigate_style: true,
-                navigate_style_bg: XGUIFilled.纯色边框,
+                navigate_style_bg: XGUIGroup.纯色边框,
                 navigate_style_bg_color: Color.black * 0.5f);
 
             switch (ToolbarIndex)
@@ -624,7 +624,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 动效类型
             XGUI.layout_group_start(
             type: XGUIContainerType.Vertical,
-            bg_fill: XGUIFilled.缺口纯色边框,
+            bg_fill: XGUIGroup.缺口纯色边框,
             bg_color: XGUIColor.亮白,
             bg_color_gui: XHud_Dashboard.Theme_Group,
             title: "回收 & 生成动作",
@@ -860,11 +860,11 @@ namespace SevenStrikeModules.XHud.Editor
                 if (XGUI.layout_button(
                 text: ButtonText_Cancel,
                 tooltip: "",
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: Color.white,
                 button_text_color: Color.black,
-                press_fill: XGUIFilled.实体,
+                press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
                 press_text_color: Color.white,
                 font_size: XGUIFontSize.B,
@@ -885,11 +885,11 @@ namespace SevenStrikeModules.XHud.Editor
             if (XGUI.layout_button(
                 text: ButtonText_Ok,
                 tooltip: "",
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Primary,
                 button_text_color: Color.black,
-                press_fill: XGUIFilled.实体,
+                press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
                 press_text_color: Color.white,
                 font_size: XGUIFontSize.B,

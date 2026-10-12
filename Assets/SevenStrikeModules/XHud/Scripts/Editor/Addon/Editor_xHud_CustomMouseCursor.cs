@@ -299,7 +299,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 标题
             XGUI.layout_banner(
-             bg_fill: XGUIFilled.实体,
+             bg_fill: XGUIGroup.实体,
              bg_color: XGUIColor.深空灰,
              bg_height: 30,
              icon: icon_main,
@@ -318,7 +318,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 当前光标预览
             XGUI.layout_group_start(
                type: XGUIContainerType.Vertical,
-               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
                bg_color_gui: XHud_Dashboard.Theme_Group,
                title: "当前光标预览",
@@ -370,7 +370,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 XGUI.layout_label(
                     text: "光标  X轴： " + mpos.x,
-                    bg_fill: XGUIFilled.无,
+                    bg_fill: XGUIGroup.无,
                     bg_color: XGUIColor.无,
                     size: XGUIFontSize.S,
                     anchor: TextAnchor.MiddleLeft,
@@ -384,7 +384,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 XGUI.layout_label(
                     text: "光标  Y轴： " + mpos.y,
-                    bg_fill: XGUIFilled.无,
+                    bg_fill: XGUIGroup.无,
                     bg_color: XGUIColor.无,
                     size: XGUIFontSize.S,
                     anchor: TextAnchor.MiddleRight,
@@ -406,7 +406,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 选项         
             BaseScript.fold_options = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "选项",
@@ -433,7 +433,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                     opt_anchor: TextAnchor.MiddleLeft,
                     opt_font_style: FontStyle.Normal,
-                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
                     opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                     margin: new RectOffset(0, 0, 5, 5),
@@ -458,7 +458,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                     opt_anchor: TextAnchor.MiddleLeft,
                     opt_font_style: FontStyle.Normal,
-                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
                     opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                     margin: new RectOffset(0, 0, 5, 5),
@@ -473,7 +473,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 参数
             BaseScript.fold_params = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "参数",
@@ -632,7 +632,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 光标样式表
             BaseScript.fold_styles = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: XHud_Dashboard.Theme_Group,
               title: "光标样式表",
@@ -653,7 +653,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 源脚本
             BaseScript.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "源脚本",

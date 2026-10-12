@@ -264,6 +264,8 @@ namespace SevenStrikeModules.XHud.Editor
             trackHeight = Mathf.Clamp(target.Timeline_TrackHeight, MinTrackHeight, MaxTrackHeight);
             snapEnabled = target.Timeline_TrackSnapEnabled;
             soundPreviewer = target.Timeline_TrackSoundPreviewer;
+            playheadPreviewLoop = target.Timeline_TrackPreviewLoop;
+
             nameColumnWidth = LoadClampedFloatPreference(PrefKey_NameWidthWidth, DefaultNameColumnWidth, MinNameColumnWidth, MaxNameColumnWidth);
             paramPanelWidth = LoadClampedFloatPreference(PrefKey_ParamWidthHeight, DefaultParamPanelWidth, MinParamPanelWidth, MaxParamPanelWidth);
         }
@@ -278,6 +280,7 @@ namespace SevenStrikeModules.XHud.Editor
             target.Timeline_TrackSoundPreviewer = soundPreviewer;
             target.Timeline_TrackHeight = trackHeight;
             target.Timeline_TrackSnapEnabled = snapEnabled;
+            target.Timeline_TrackPreviewLoop = playheadPreviewLoop;
 
             XGUI.x_Editor_Data_Set_With_Float(PrefKey_NameWidthWidth, nameColumnWidth);
             XGUI.x_Editor_Data_Set_With_Float(PrefKey_ParamWidthHeight, paramPanelWidth);

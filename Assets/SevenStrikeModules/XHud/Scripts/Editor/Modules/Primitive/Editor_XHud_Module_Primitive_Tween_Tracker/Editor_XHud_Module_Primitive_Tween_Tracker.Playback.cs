@@ -21,32 +21,29 @@
 namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
     using UnityEditor;
     using UnityEngine;
 
     public partial class Editor_XHud_Module_Primitive_Tween_Tracker
     {
         #region 字段：播放控制
-
         /// <summary>
         /// 飞梭步进的时间间隔（秒），后期可调。
         /// <para/>默认 0.01 秒，用于 &lt; / &gt; 快捷键与工具栏按钮的单步跳转。
         /// </summary>
         private float playheadStepSeconds = 0.01f;
-
         /// <summary>
         /// 是否正在播放（播放模式下飞梭自动前进）。
         /// <para/>与 <see cref="isDraggingPlayhead"/> 互斥：
         /// 播放中拖拽飞梭会暂停播放，松开后不会自动恢复（需再次按 Space）。
         /// </summary>
         private bool isPlayheadPlaying = false;
-
         /// <summary>
         /// 播放模式下，上一帧飞梭所在的时间（秒）。
         /// <para/>用于按真实时间推进飞梭，避免帧率波动导致播放速度不一致。
         /// </summary>
         private double playheadLastTime = 0.0;
-
         /// <summary>
         /// 播放模式下的播放速率倍率（1 = 正常速度）。
         /// <para/>实际推进速度 = Editor 时间增量 × 播放速率。
@@ -54,7 +51,13 @@ namespace SevenStrikeModules.XHud.Editor
         /// 因为该值用于动画时长缩放（&gt;1 表示减速），而飞梭前进需要的是时间流速。
         /// </summary>
         private float playheadPlaySpeed = 1.0f;
-
+        /// <summary>
+        /// 预览播放循环开关。
+        /// <para/>true：飞梭走到末尾后自动回到 0 继续播放；
+        /// <para/>false：走到末尾后停在末尾并停止播放。
+        /// <para/>仅影响编辑器预览，不影响运行时动画的 LoopType / LoopCount。
+        /// </summary>
+        private bool playheadPreviewLoop = false;
         #endregion
 
         #region 播放控制 - 对外方法
@@ -251,6 +254,25 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (playheadSecond >= contentEnd)
             {
+                if (playheadPreviewLoop)
+                {
+                    // 循环模式：飞梭归零，继续走下一轮
+                    // 归零前先把预览驱动到末尾（让动画视觉上有个"到头"的收尾）
+                    playheadSecond = contentEnd;
+                    RefreshPlayheadPreview(playheadSecond);
+
+                    // 清音效驱动基准，避免跨循环时把末尾到 0 的跳跃误判成跨线
+                    ResetSoundDriveBaseline();
+
+                    playheadSecond = 0f;
+                    playheadLastTime = now;   // 重置时间基准，避免下一帧一次性跳一大段
+                    RefreshPlayheadPreview(playheadSecond);
+
+                    // 不 StopPlayback，继续下一轮
+                    return;
+                }
+
+                // 非循环模式：停在末尾并停止
                 playheadSecond = contentEnd;
                 RefreshPlayheadPreview(playheadSecond);
                 StopPlayback();
@@ -326,106 +348,122 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DrawPlaybackToolbarButtons()
         {
-            const float btnSize = 30f;
             const float btnGap = 5f;
 
             XGUI.layout_space(10);
 
-            // ── 跳转到轨道头 ──
-            if (XGUI.layout_button(
+            #region 跳转到轨道头
+            if (XGUI.toolbar_button(
                 tooltip: "跳转到轨道头 (Home)",
-                tex_release: icon_playback_home_r,
-                tex_press: icon_playback_home_p,
-                tex_gui_color: Color.white,
+                icon_release: icon_playback_home_r,
+                icon_press: icon_playback_home_p,
+                press_icon_color: Color.white,
                 margin: new RectOffset(0, 0, 0, 0),
-                border: new RectOffset(0, 0, 0, 0),
-                width: btnSize,
-                height: TopBarHeight))
+                padding: new RectOffset(0, 0, 0, 0),
+                layout_width: icon_playback_home_r.width,
+                content_offset: new Vector2(0, 0),
+                sepline_color: Color.black * 0.55f,
+                edge: XGUIEdge.左))
             {
                 JumpToTimelineStart();
             }
+            #endregion
 
             XGUI.layout_space(btnGap);
 
-            // ── 步进后退 ──
-            if (XGUI.layout_button(
+            #region 步进后退
+            if (XGUI.toolbar_button(
                 tooltip: $"后退 {playheadStepSeconds:F2}s (<)",
-                tex_release: icon_playback_stepback_r,
-                tex_press: icon_playback_stepback_p,
-                tex_gui_color: Color.white,
+                icon_release: icon_playback_stepback_r,
+                icon_press: icon_playback_stepback_p,
+                press_icon_color: Color.white,
                 margin: new RectOffset(0, 0, 0, 0),
-                border: new RectOffset(0, 0, 0, 0),
-                width: btnSize,
-                height: TopBarHeight))
+                padding: new RectOffset(0, 0, 0, 0),
+                layout_width: icon_playback_home_r.width,
+                content_offset: new Vector2(0, 0),
+                sepline_color: Color.black * 0.55f,
+                edge: XGUIEdge.无))
             {
                 StepPlayheadBackward();
             }
+            #endregion
 
             XGUI.layout_space(btnGap);
 
-            // ── 播放 / 停止（状态切换）──
+            #region 播放 / 停止（状态切
             if (isPlayheadPlaying)
             {
-                if (XGUI.layout_button(
+                if (XGUI.toolbar_button(
                     tooltip: "停止播放 (Space)",
-                    tex_release: icon_playback_stop_r,
-                    tex_press: icon_playback_stop_p,
-                    tex_gui_color: XHud_Dashboard.Theme_Primary,
+                    icon_release: icon_playback_stop_r,
+                    icon_press: icon_playback_stop_p,
+                    press_icon_color: Color.white,
                     margin: new RectOffset(0, 0, 0, 0),
-                    border: new RectOffset(0, 0, 0, 0),
-                    width: btnSize,
-                    height: TopBarHeight))
+                    padding: new RectOffset(0, 0, 0, 0),
+                    layout_width: icon_playback_home_r.width,
+                    content_offset: new Vector2(0, 0),
+                    sepline_color: Color.black * 0.55f,
+                    edge: XGUIEdge.无))
                 {
                     StopPlayback();
                 }
             }
             else
             {
-                if (XGUI.layout_button(
+                if (XGUI.toolbar_button(
                     tooltip: "开始播放 (Space)",
-                    tex_release: icon_playback_play_r,
-                    tex_press: icon_playback_play_p,
-                    tex_gui_color: Color.white,
+                    icon_release: icon_playback_play_r,
+                    icon_press: icon_playback_play_p,
+                    press_icon_color: Color.white,
                     margin: new RectOffset(0, 0, 0, 0),
-                    border: new RectOffset(0, 0, 0, 0),
-                    width: btnSize,
-                    height: TopBarHeight))
+                    padding: new RectOffset(0, 0, 0, 0),
+                    layout_width: icon_playback_home_r.width,
+                    content_offset: new Vector2(0, 0),
+                    sepline_color: Color.black * 0.55f,
+                   edge: XGUIEdge.无))
                 {
                     StartPlayback();
                 }
             }
+            #endregion
 
             XGUI.layout_space(btnGap);
 
-            // ── 步进前进 ──
-            if (XGUI.layout_button(
+            #region 步进前进
+            if (XGUI.toolbar_button(
                 tooltip: $"前进 {playheadStepSeconds:F2}s (>)",
-                tex_release: icon_playback_stepforward_r,
-                tex_press: icon_playback_stepforward_p,
-                tex_gui_color: Color.white,
+                icon_release: icon_playback_stepforward_r,
+                icon_press: icon_playback_stepforward_p,
+                press_icon_color: Color.white,
                 margin: new RectOffset(0, 0, 0, 0),
-                border: new RectOffset(0, 0, 0, 0),
-                width: btnSize,
-                height: TopBarHeight))
+                padding: new RectOffset(0, 0, 0, 0),
+                layout_width: icon_playback_home_r.width,
+                content_offset: new Vector2(0, 0),
+                sepline_color: Color.black * 0.55f,
+                edge: XGUIEdge.无))
             {
                 StepPlayheadForward();
             }
+            #endregion
 
             XGUI.layout_space(btnGap);
 
-            // ── 跳转到轨道尾 ──
-            if (XGUI.layout_button(
+            #region 跳转到轨道尾
+            if (XGUI.toolbar_button(
                 tooltip: "跳转到轨道尾 (End)",
-                tex_release: icon_playback_end_r,
-                tex_press: icon_playback_end_p,
-                tex_gui_color: Color.white,
+                icon_release: icon_playback_end_r,
+                icon_press: icon_playback_end_p,
+                press_icon_color: Color.white,
                 margin: new RectOffset(0, 0, 0, 0),
-                border: new RectOffset(0, 0, 0, 0),
-                width: btnSize,
-                height: TopBarHeight))
+                padding: new RectOffset(0, 0, 0, 0),
+                layout_width: icon_playback_home_r.width,
+                content_offset: new Vector2(0, 0),
+                sepline_color: Color.black * 0.55f,
+                edge: XGUIEdge.右))
             {
                 JumpToTimelineEnd();
             }
+            #endregion
 
             XGUI.layout_space(10);
         }

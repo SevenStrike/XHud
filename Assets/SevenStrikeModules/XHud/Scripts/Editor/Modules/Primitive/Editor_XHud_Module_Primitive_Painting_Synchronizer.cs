@@ -111,7 +111,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 标题
             XGUI.layout_banner(
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.深空灰,
                 bg_height: 30,
                 icon: icon_main,
@@ -128,7 +128,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 同步指示状态
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "同步指示状态",
@@ -136,8 +136,6 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.Theme_Primary,
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 25, 15));
-
-            float scale = 0.5f;
 
             XGUI.layout_flexspace();
 
@@ -170,7 +168,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 源脚本
             BaseScript.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "源脚本",

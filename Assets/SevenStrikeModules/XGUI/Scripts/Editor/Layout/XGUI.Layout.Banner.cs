@@ -72,7 +72,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// );
         /// </code>
         /// </example>
-        public static void layout_banner(XGUIFilled bg_fill = XGUIFilled.实体, XGUIColor bg_color = XGUIColor.深空灰, float bg_height = 0, RectOffset bg_margin = default, Texture2D icon = null, Color icon_color = default, Vector2 icon_offset = default, RectOffset icon_margin = default, RectOffset icon_padding = default, string title_text = null, TextAnchor title_anchor = TextAnchor.MiddleLeft, FontStyle title_style = FontStyle.Normal, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.B, TextClipping title_clipping = TextClipping.Clip, Vector2 title_offset = default)
+        public static void layout_banner(XGUIGroup bg_fill = XGUIGroup.实体, XGUIColor bg_color = XGUIColor.深空灰, float bg_height = 0, RectOffset bg_margin = default, Texture2D icon = null, Color icon_color = default, Vector2 icon_offset = default, RectOffset icon_margin = default, RectOffset icon_padding = default, string title_text = null, TextAnchor title_anchor = TextAnchor.MiddleLeft, FontStyle title_style = FontStyle.Normal, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.B, TextClipping title_clipping = TextClipping.Clip, Vector2 title_offset = default)
         {
             if (bg_margin == null)
                 bg_margin = new RectOffset(0, 0, 0, 0);
@@ -111,7 +111,7 @@ namespace SevenStrikeModules.XGUI.Editor
             // 标题
             XGUI.layout_label(
                 text: title_text,
-                bg_fill: XGUIFilled.无,
+                bg_fill: XGUIGroup.无,
                 bg_color: XGUIColor.无,
                 size: title_size,
                 anchor: title_anchor,

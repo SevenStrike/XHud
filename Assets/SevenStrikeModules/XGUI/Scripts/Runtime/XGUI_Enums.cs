@@ -181,7 +181,7 @@ namespace SevenStrikeModules.XGUI.Runtime
     /// <summary>
     /// 填充类型
     /// </summary>
-    public enum XGUIFilled
+    public enum XGUIGroup
     {
         无 = 0,
         实体 = 1,
@@ -317,5 +317,15 @@ namespace SevenStrikeModules.XGUI.Runtime
         垂直,
         /// <summary>水平分割（横线）</summary>
         水平,
+    }
+    /// <summary>
+    /// 工具栏控件边框类型
+    /// </summary>
+    public enum XGUIEdge
+    {
+        无,
+        左,
+        右,
+        全部
     }
 }

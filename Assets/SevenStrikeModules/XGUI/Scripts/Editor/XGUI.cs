@@ -49,7 +49,7 @@ namespace SevenStrikeModules.XGUI.Editor
             GUICreator = AssetDatabase.LoadAssetAtPath<GUISkin>($"{XGUI_Dashboard.get_path_xgui_root()}XGUI.guiskin");
 
             InitialFontsGet();
-            InitialFillTextures();
+            InitialGroupTextures();
             InitialBtnFillTextures();
             InitialBasedTextures();
             InitialCurves();
@@ -310,11 +310,11 @@ namespace SevenStrikeModules.XGUI.Editor
         }
         #endregion
 
-        #region Preget Bg
+        #region Preget
         /// <summary>
         /// 缓存已加载的填充纹理（Group 样式），键为 "{模式}_{颜色}"。
         /// </summary>
-        private static Dictionary<string, Texture2D> fillTextureCache = new Dictionary<string, Texture2D>();
+        private static Dictionary<string, Texture2D> groupTextureCache = new Dictionary<string, Texture2D>();
         /// <summary>
         /// 缓存已加载的开关纹理（Toggle 样式），键为纹理名称。
         /// </summary>
@@ -336,22 +336,22 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 初始化并缓存 Group 样式填充纹理。
         /// </summary>
         /// <remarks>
-        /// 该方法会遍历所有 <see cref="XGUIFilled"/> 模式（实体、纯色边框、边框、缺口边框、缺口纯色边框）
+        /// 该方法会遍历所有 <see cref="XGUIGroup"/> 模式（实体、纯色边框、边框、缺口边框、缺口纯色边框）
         /// 和所有 <see cref="XGUIColor"/> 颜色组合，从 "XGUI/Shapes/Group/" 路径加载对应的 PNG 纹理，
-        /// 并存储到 <see cref="fillTextureCache"/> 中供后续快速访问。
+        /// 并存储到 <see cref="groupTextureCache"/> 中供后续快速访问。
         /// </remarks>
-        public static void InitialFillTextures()
+        public static void InitialGroupTextures()
         {
-            fillTextureCache.Clear();
+            groupTextureCache.Clear();
 
-            string shapesPath = XGUI_Dashboard.get_path_xgui_shapes() + "Group/";
-            XGUIFilled[] modes =
+            string path = XGUI_Dashboard.get_path_xgui_shapes() + "Group/";
+            XGUIGroup[] modes =
             {
-                XGUIFilled.实体,
-                XGUIFilled.纯色边框,
-                XGUIFilled.边框,
-                XGUIFilled.缺口边框,
-                XGUIFilled.缺口纯色边框
+                XGUIGroup.实体,
+                XGUIGroup.纯色边框,
+                XGUIGroup.边框,
+                XGUIGroup.缺口边框,
+                XGUIGroup.缺口纯色边框
             };
             XGUIColor[] colors =
             {
@@ -375,15 +375,15 @@ namespace SevenStrikeModules.XGUI.Editor
             };
 
             // 预加载普通纹理
-            foreach (XGUIFilled mode in modes)
+            foreach (XGUIGroup mode in modes)
             {
                 foreach (XGUIColor col in colors)
                 {
                     string normalKey = $"{mode}_{col}";
-                    string path = shapesPath + $"Group_{mode}_{col}.png";
-                    Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                    string t_path = path + $"Group_{mode}_{col}.png";
+                    Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(t_path);
                     if (tex != null)
-                        fillTextureCache[normalKey] = tex;
+                        groupTextureCache[normalKey] = tex;
                 }
             }
         }
@@ -391,7 +391,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 初始化并缓存 Button 样式填充纹理。
         /// </summary>
         /// <remarks>
-        /// 该方法会遍历所有 <see cref="XGUIFilled"/> 模式（实体、纯色边框、边框）
+        /// 该方法会遍历所有 <see cref="XGUIGroup"/> 模式（实体、纯色边框、边框）
         /// 和所有 <see cref="XGUIColor"/> 颜色组合，从 "XGUI/Shapes/Button/" 路径加载对应的 PNG 纹理。
         /// 透明按钮作为特殊项单独加载，所有纹理存储到 <see cref="btnFillTextureCache"/> 中供后续快速访问。
         /// </remarks>
@@ -399,12 +399,12 @@ namespace SevenStrikeModules.XGUI.Editor
         {
             btnFillTextureCache.Clear();
 
-            string btnPath = XGUI_Dashboard.get_path_xgui_shapes() + "Button/";
-            XGUIFilled[] modes =
+            string path = XGUI_Dashboard.get_path_xgui_shapes() + "Button/";
+            XGUIGroup[] modes =
             {
-                XGUIFilled.实体,
-                XGUIFilled.纯色边框,
-                XGUIFilled.边框
+                XGUIGroup.实体,
+                XGUIGroup.纯色边框,
+                XGUIGroup.边框
             };
             XGUIColor[] colors =
             {
@@ -428,19 +428,19 @@ namespace SevenStrikeModules.XGUI.Editor
             };
 
             // 预加载透明按钮（特殊处理）
-            string transparentPath = btnPath + "Btn_透明.png";
-            Texture2D transparentTex = AssetDatabase.LoadAssetAtPath<Texture2D>(transparentPath);
+            string t_path = path + "Btn_透明.png";
+            Texture2D transparentTex = AssetDatabase.LoadAssetAtPath<Texture2D>(t_path);
             if (transparentTex != null)
                 btnFillTextureCache["透明_无"] = transparentTex;
 
             // 预加载普通按钮纹理
-            foreach (XGUIFilled mode in modes)
+            foreach (XGUIGroup mode in modes)
             {
                 foreach (XGUIColor color in colors)
                 {
                     string key = $"{mode}_{color}";
-                    string path = btnPath + $"Btn_{mode}_{color}.png";
-                    Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                    string s_path = path + $"Btn_{mode}_{color}.png";
+                    Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(s_path);
                     if (tex != null)
                         btnFillTextureCache[key] = tex;
                 }
@@ -456,8 +456,8 @@ namespace SevenStrikeModules.XGUI.Editor
         public static void InitialBasedTextures()
         {
             basedTextureCache.Clear();
-            string iconPath = XGUI_Dashboard.get_path_xgui_icons() + "Based/";
-            List<Texture2D> texs = XGUI.LoadAllAssetsAtPathWithPattern<Texture2D>(iconPath, ".png");
+            string path = XGUI_Dashboard.get_path_xgui_icons() + "Based/";
+            List<Texture2D> texs = XGUI.LoadAllAssetsAtPathWithPattern<Texture2D>(path, ".png");
 
             foreach (Texture2D tex in texs)
             {
@@ -476,8 +476,8 @@ namespace SevenStrikeModules.XGUI.Editor
         public static void InitialHelpboxTextures()
         {
             helpboxTextureCache.Clear();
-            string iconPath = XGUI_Dashboard.get_path_xgui_icons() + "Helpbox/";
-            List<Texture2D> texs = XGUI.LoadAllAssetsAtPathWithPattern<Texture2D>(iconPath, ".png");
+            string path = XGUI_Dashboard.get_path_xgui_icons() + "Helpbox/";
+            List<Texture2D> texs = XGUI.LoadAllAssetsAtPathWithPattern<Texture2D>(path, ".png");
 
             foreach (Texture2D tex in texs)
             {
@@ -585,7 +585,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 获取背景填充
         /// </summary>
         /// <param name="Color"></param>
-        public static Texture2D GetFillTexture(XGUIFilled Mode, XGUIColor Color)
+        public static Texture2D GetGroupTexture(XGUIGroup Mode, XGUIColor Color)
         {
             if (GUICreator == null)
             {
@@ -594,7 +594,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             string key = $"{Mode}_{Color}";
 
-            if (fillTextureCache.TryGetValue(key, out Texture2D tex))
+            if (groupTextureCache.TryGetValue(key, out Texture2D tex))
                 return tex;
 
             // 缓存未命中时实时加载（兜底）
@@ -602,7 +602,7 @@ namespace SevenStrikeModules.XGUI.Editor
             tex = AssetDatabase.LoadAssetAtPath<Texture2D>(shapesPath + $"Group_{Mode}_{Color}.png");
 
             // 将加载结果加入缓存（即使是 null 也缓存，避免重复加载）
-            fillTextureCache[key] = tex;
+            groupTextureCache[key] = tex;
 
             return tex;
         }
@@ -611,21 +611,21 @@ namespace SevenStrikeModules.XGUI.Editor
         /// </summary>
         /// <param name="Mode">类型</param>
         /// <param name="Color">颜色（具体请查看工程目录中文件的实际名称）</param>
-        public static Texture2D GetBtnFillTexture(XGUIFilled Mode, XGUIColor Color)
+        public static Texture2D GetBtnFillTexture(XGUIGroup Mode, XGUIColor Color)
         {
             if (GUICreator == null)
             {
                 Gui_Layout_Initia();
             }
 
-            string key = Mode == XGUIFilled.透明 ? "透明_无" : $"{Mode}_{Color}";
+            string key = Mode == XGUIGroup.透明 ? "透明_无" : $"{Mode}_{Color}";
 
             if (btnFillTextureCache.TryGetValue(key, out Texture2D tex))
                 return tex;
 
             // 缓存未命中时实时加载（兜底）
             string btnPath = XGUI_Dashboard.get_path_xgui_shapes() + "Button/";
-            if (Mode == XGUIFilled.透明)
+            if (Mode == XGUIGroup.透明)
             {
                 tex = AssetDatabase.LoadAssetAtPath<Texture2D>(btnPath + $"Btn_{Mode}.png");
             }
@@ -673,7 +673,26 @@ namespace SevenStrikeModules.XGUI.Editor
                 Gui_Layout_Initia();
             }
 
+            if (basedTextureCache.TryGetValue(str, out Texture2D tex))
+                return tex;
+
             return AssetDatabase.LoadAssetAtPath<Texture2D>(XGUI_Dashboard.get_path_xgui_icons() + $"{str}.png");
+        }
+        /// <summary>
+        /// 获取填充背景
+        /// </summary>
+        /// <param name="round">是否是圆角</param>
+        public static Texture2D GetFill(bool round = false)
+        {
+            if (GUICreator == null)
+            {
+                Gui_Layout_Initia();
+            }
+
+            if (basedTextureCache.TryGetValue(round ? "filled_round" : "filled_rect", out Texture2D tex))
+                return tex;
+
+            return AssetDatabase.LoadAssetAtPath<Texture2D>(XGUI_Dashboard.get_path_xgui_icons() + $"{(round ? "filled_round" : "filled_rect")}.png");
         }
         /// <summary>
         /// 获取开关背景填充

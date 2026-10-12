@@ -44,7 +44,7 @@ namespace SevenStrikeModules.XHud.Editor
         private bool OriginalDisplay;
 
         #region 序列化属性
-        private SerializedProperty sp_Indicator, sp_StyleName, sp_SyncGlobalFontSize, sp_StyleLibSynching, sp_TextStyleInfo, sp_Text;
+        private SerializedProperty sp_Indicator, sp_StyleName, sp_SyncGlobalFontSize, sp_StyleLibSynching, sp_TextStyleInfo, sp_Text, sp_TextColorOwner;
         #endregion
 
         #region 图标
@@ -195,7 +195,6 @@ namespace SevenStrikeModules.XHud.Editor
             //--------------------------------- Features ---------------------------------//
             SerializedProperty sp_Raycast = sp_TextStyleInfo.FindPropertyRelative("Raycast");
             SerializedProperty sp_Maskable = sp_TextStyleInfo.FindPropertyRelative("Maskable");
-            SerializedProperty sp_SyncPrimitivePaintingColor = sp_TextStyleInfo.FindPropertyRelative("SyncPrimitivePaintingColor");
             #endregion
 
             #region 标题
@@ -255,7 +254,6 @@ namespace SevenStrikeModules.XHud.Editor
                         info.gra_ColorModeName = sp_gra_ColorModeName.stringValue;
                         info.Raycast = sp_Raycast.boolValue;
                         info.Maskable = sp_Maskable.boolValue;
-                        info.SyncPrimitivePaintingColor = sp_SyncPrimitivePaintingColor.boolValue;
 
                         Open_Hud_Library_TextStyle_Setter(info);
                     }
@@ -344,10 +342,6 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("全局尺寸增量", stroptions_syncsize, ref sp_SyncGlobalFontSize, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
             #endregion
 
-            #region PrimitivePainting 接管字体颜色        
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("图元配色器接管颜色", stroptions_synccolor, ref sp_SyncPrimitivePaintingColor, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
-            #endregion
-
             #region 渐变色支持      
             if (!sp_LibStyle_Effect_gradientcolor.boolValue || !sp_StyleLibSynching.boolValue)
                 Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("渐变色支持", stroptions_enabled, ref sp_gra_Used, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
@@ -412,7 +406,13 @@ namespace SevenStrikeModules.XHud.Editor
             if (HudManager != null && HudManager.Hud_TextStyleLibrary != null)
             {
                 if (!HudManager.Hud_TextStyleLibrary.TextStyle_Library_IsEmpty())
+                {
                     Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_TmpText>("实时匹配库", stroptions_enabled, ref sp_StyleLibSynching, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+                    if (sp_StyleLibSynching.boolValue)
+                    {
+                        sp_TextColorOwner.enumValueIndex = (int)TextColorOwner.StyleLibrary;
+                    }
+                }
                 else
                 {
                     Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
@@ -856,7 +856,12 @@ namespace SevenStrikeModules.XHud.Editor
             if (!sp_LibStyle_Effect_color.boolValue || !sp_StyleLibSynching.boolValue)
             {
                 Editor_XHud_GUI.Gui_Layout_Property_Field("颜色", sp_tmp_color);
+                Editor_XHud_GUI.Gui_Layout_Space(5);
             }
+            #endregion
+
+            #region 颜色接管者 
+            Editor_XHud_GUI.Gui_Layout_Property_Field("颜色接管者", sp_TextColorOwner);
             #endregion
 
             Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -1295,6 +1300,7 @@ namespace SevenStrikeModules.XHud.Editor
             sp_SyncGlobalFontSize = serializedObject.FindProperty("SyncGlobalFontSize");
             sp_TextStyleInfo = serializedObject.FindProperty("TextStyleInfo");
             sp_Text = serializedObject.FindProperty("m_text");
+            sp_TextColorOwner = serializedObject.FindProperty("TextColorOwner");
         }
         #endregion
 

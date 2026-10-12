@@ -100,6 +100,10 @@ namespace SevenStrikeModules.XHud
         /// Hud管理器
         /// </summary>
         private XHud_Manager mgr;
+        /// <summary>
+        /// 指定文字颜色接管的拥有者
+        /// </summary>
+        public TextColorOwner TextColorOwner;
 
         [SerializeField]
         /// <summary>
@@ -575,9 +579,12 @@ namespace SevenStrikeModules.XHud
             }
 
             //--同步 - 颜色_Color
-            if (color != TextStyleInfo.tmp_color)
+            if (TextColorOwner != TextColorOwner.Tween)
             {
-                color = TextStyleInfo.tmp_color;
+                if (color != TextStyleInfo.tmp_color)
+                {
+                    color = TextStyleInfo.tmp_color;
+                }
             }
 
             //--同步 - 渐变色开关

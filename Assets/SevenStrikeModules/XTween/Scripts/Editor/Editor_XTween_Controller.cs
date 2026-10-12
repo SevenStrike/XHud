@@ -341,7 +341,7 @@ namespace SevenStrikeModules.XTween.Editor
             }
 
             XGUI.layout_banner(
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.深空灰,
                 bg_height: 30,
                 icon: icon_main,
@@ -356,7 +356,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 预览
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XTween_Dashboard.Theme_Group,
                 title: "预览",
@@ -435,7 +435,7 @@ namespace SevenStrikeModules.XTween.Editor
 
             BaseScript.fold_status = XGUI.layout_group_start(
                type: XGUIContainerType.Horizontal,
-               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
                bg_color_gui: XTween_Dashboard.Theme_Group,
                title: "状态",
@@ -834,7 +834,7 @@ namespace SevenStrikeModules.XTween.Editor
 
                         XGUI.layout_group_start(
                             type: XGUIContainerType.Vertical,
-                            bg_fill: XGUIFilled.无,
+                            bg_fill: XGUIGroup.无,
                             bg_color: XGUIColor.无,
                             margin: new RectOffset(0, 0, 0, 0),
                             padding: new RectOffset(0, 0, 0, 0));
@@ -918,7 +918,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 预设
             BaseScript.fold_preset = XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XTween_Dashboard.Theme_Group,
                 title: "预设",
@@ -933,9 +933,9 @@ namespace SevenStrikeModules.XTween.Editor
                 if (XGUI.layout_button(
                     text: "保存预设",
                     tooltip: "保存当前动画参数到预设",
-                    bg_fill: XGUIFilled.实体,
+                    bg_fill: XGUIGroup.实体,
                     bg_color: XGUIColor.亮白,
-                    press_fill: XGUIFilled.实体,
+                    press_fill: XGUIGroup.实体,
                     press_color: XGUIColor.阴影灰,
                     bg_color_gui: XTween_Dashboard.Theme_Primary,
                     button_text_color: Color.black,
@@ -952,9 +952,9 @@ namespace SevenStrikeModules.XTween.Editor
                 if (XGUI.layout_button(
                     text: "选择预设",
                     tooltip: "在预设中心挑选预设并应用到当前动画控制器",
-                    bg_fill: XGUIFilled.实体,
+                    bg_fill: XGUIGroup.实体,
                     bg_color: XGUIColor.亮白,
-                    press_fill: XGUIFilled.实体,
+                    press_fill: XGUIGroup.实体,
                     press_color: XGUIColor.阴影灰,
                     bg_color_gui: XTween_Dashboard.Theme_Primary,
                     button_text_color: Color.black,
@@ -975,7 +975,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 类型选项
             BaseScript.fold_type = XGUI.layout_group_start(
              type: XGUIContainerType.Vertical,
-             bg_fill: XGUIFilled.缺口纯色边框,
+             bg_fill: XGUIGroup.缺口纯色边框,
              bg_color: XGUIColor.亮白,
              bg_color_gui: XTween_Dashboard.Theme_Group,
              title: "类型选项",
@@ -1001,7 +1001,7 @@ namespace SevenStrikeModules.XTween.Editor
                    opt_text_padding: new RectOffset(10, 10, 0, 0),
                    opt_anchor: TextAnchor.MiddleLeft,
                    opt_font_style: FontStyle.Normal,
-                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_fill: XGUIGroup.实体,
                    opt_bg_color: XGUIColor.亮白,
                    opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
                    margin: new RectOffset(0, 0, 5, 5),
@@ -1075,7 +1075,7 @@ namespace SevenStrikeModules.XTween.Editor
                      opt_text_padding: new RectOffset(10, 10, 0, 0),
                      opt_anchor: TextAnchor.MiddleLeft,
                      opt_font_style: FontStyle.Normal,
-                     opt_bg_fill: XGUIFilled.实体,
+                     opt_bg_fill: XGUIGroup.实体,
                      opt_bg_color: XGUIColor.亮白,
                      opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
                      icon_arrow_color: Color.black,
@@ -1105,7 +1105,7 @@ namespace SevenStrikeModules.XTween.Editor
                    opt_text_padding: new RectOffset(10, 10, 0, 0),
                    opt_anchor: TextAnchor.MiddleLeft,
                    opt_font_style: FontStyle.Normal,
-                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_fill: XGUIGroup.实体,
                    opt_bg_color: XGUIColor.亮白,
                    opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
                    icon_arrow_color: Color.black,
@@ -1130,7 +1130,7 @@ namespace SevenStrikeModules.XTween.Editor
             {
                 BaseScript.fold_endvalue = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XTween_Dashboard.Theme_Group,
                     title: "动画值",
@@ -1310,7 +1310,7 @@ namespace SevenStrikeModules.XTween.Editor
             {
                 BaseScript.fold_current_or_components = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XTween_Dashboard.Theme_Group,
                     title: BaseScript.TweenTypes == XTweenTypes.原生动画_To ? "当前值" : "组件",
@@ -1513,7 +1513,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 动画参数
             BaseScript.fold_params = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XTween_Dashboard.Theme_Group,
                 title: "动画参数",
@@ -1565,7 +1565,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 选项
             BaseScript.fold_option = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XTween_Dashboard.Theme_Group,
                 title: "选项",
@@ -1645,7 +1645,7 @@ namespace SevenStrikeModules.XTween.Editor
             {
                 BaseScript.fold_keycontrol = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XTween_Dashboard.Theme_Group,
                     title: "控制按键",
@@ -1726,7 +1726,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 原始类
             fold_raw = XGUI.layout_group_start(
                  type: XGUIContainerType.Vertical,
-                 bg_fill: XGUIFilled.缺口纯色边框,
+                 bg_fill: XGUIGroup.缺口纯色边框,
                  bg_color: XGUIColor.亮白,
                  bg_color_gui: XTween_Dashboard.Theme_Group,
                  title: "原始类",

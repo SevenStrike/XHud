@@ -209,7 +209,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 标题
             XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.无,
+                bg_fill: XGUIGroup.无,
                 bg_color: XGUIColor.无,
                 bg_color_gui: BaseScript.ThemeColor_Group,
                 title: "",
@@ -260,7 +260,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 opt_text_padding: new RectOffset(10, 10, 0, 0),
                 opt_anchor: TextAnchor.MiddleCenter,
                 opt_font_style: FontStyle.Normal,
-                opt_bg_fill: XGUIFilled.实体,
+                opt_bg_fill: XGUIGroup.实体,
                 opt_bg_color: XGUIColor.亮白,
                 opt_bg_color_gui: BaseScript.ThemeColor_Primary,
                 icon_arrow_color: Color.black);
@@ -268,7 +268,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             #region 组件标题
             XGUI.layout_banner(
-              bg_fill: XGUIFilled.实体,
+              bg_fill: XGUIGroup.实体,
               bg_color: XGUIColor.深空灰,
               bg_height: 30,
               icon: XGUI.GetBasedIcon("icon_recycle_r"),
@@ -282,7 +282,7 @@ namespace SevenStrikeModules.XGUI.Editor
               bg_margin: new RectOffset(0, 0, 5, 5));
 
             XGUI.layout_banner(
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.警示黄,
                 bg_height: 30,
                 icon: XGUI.GetBasedIcon("icon_rewind_r"),
@@ -296,7 +296,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 bg_margin: new RectOffset(0, 0, 5, 5));
 
             XGUI.layout_banner(
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.深空灰,
                 bg_height: 30,
                 //icon: XGUI.GetBasedIcon("icon_recycle_r"),
@@ -314,7 +314,7 @@ namespace SevenStrikeModules.XGUI.Editor
             Rect rect_last = XGUI.GetLastRect();
             XGUI.gui_group_start(
                rect_group: new Rect(rect_last.x, rect_last.y + 55, rect_last.width, 80),
-               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
                bg_color_gui: BaseScript.ThemeColor_Group,
                bg_height: 0,
@@ -323,7 +323,7 @@ namespace SevenStrikeModules.XGUI.Editor
                margin: new RectOffset(0, 0, 0, 0),
                padding: new RectOffset(0, 0, 0, 0),
                title: "手动编组布局",
-               title_bg_fill: XGUIFilled.实体,
+               title_bg_fill: XGUIGroup.实体,
                title_bg_color: XGUIColor.亮白,
                title_bg_color_gui: Color.black,
                title_size: XGUIFontSize.M,
@@ -360,7 +360,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 按钮容器
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: BaseScript.ThemeColor_Group,
                 title: "按钮容器",
@@ -521,7 +521,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 工具条（自动布局）
             BaseScript.fold_toolbar_layout = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "工具条（自动布局）",
@@ -539,8 +539,8 @@ namespace SevenStrikeModules.XGUI.Editor
                 BaseScript.toolbar_index = XGUI.layout_toolbar(
                     index: ref BaseScript.toolbar_index,
                     names: new string[] { "菜单", "配置", "系统", "导出" },
-                    bg_normal: XGUIFilled.纯色边框,
-                    bg_selected: XGUIFilled.实体,
+                    bg_normal: XGUIGroup.纯色边框,
+                    bg_selected: XGUIGroup.实体,
                     bg_color: XGUIColor.亮白,
                     bg_gui_color: Color.black * 0.5f,
                     text_color_normal: Color.white,
@@ -555,7 +555,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     bg_width_offset: 5,
                     bg_height_offset: 2,
                     navigate_style: true,
-                    navigate_style_bg: XGUIFilled.纯色边框,
+                    navigate_style_bg: XGUIGroup.纯色边框,
                     navigate_style_bg_color: Color.black * 0.5f);
             }
 
@@ -565,7 +565,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 工具条（手动布局）
             BaseScript.fold_toolbar_gui = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "工具条（手动布局）",
@@ -589,8 +589,8 @@ namespace SevenStrikeModules.XGUI.Editor
                     rect: rect_bar,
                     index: ref BaseScript.toolbar_manual_index,
                     names: new string[] { "菜单", "配置", "系统" },
-                    bg_normal: XGUIFilled.纯色边框,
-                    bg_selected: XGUIFilled.实体,
+                    bg_normal: XGUIGroup.纯色边框,
+                    bg_selected: XGUIGroup.实体,
                     bg_color: XGUIColor.亮白,
                     bg_gui_color: Color.black * 0.5f,
                     text_color_normal: Color.white,
@@ -603,7 +603,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     text_font: XGUI.GetFont("xg-regular"),
                     text_fontstyle: FontStyle.Normal,
                     navigate_style: false,
-                    navigate_style_bg: XGUIFilled.纯色边框,
+                    navigate_style_bg: XGUIGroup.纯色边框,
                     navigate_style_bg_color: Color.black * 0.5f);
             }
 
@@ -613,7 +613,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 路径选择（自动布局）
             BaseScript.fold_pathselector_layout = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "路径选择（自动布局）",
@@ -723,7 +723,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 路径选择（手动布局）
             BaseScript.fold_pathselector_manual = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "路径选择（手动布局）",
@@ -815,7 +815,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 状态
             BaseScript.fold_tweenstate_gui = XGUI.layout_group_start(
                  type: XGUIContainerType.Horizontal,
-                 bg_fill: XGUIFilled.缺口纯色边框,
+                 bg_fill: XGUIGroup.缺口纯色边框,
                  bg_color: XGUIColor.亮白,
                  bg_color_gui: BaseScript.ThemeColor_Group,
                  title: "状态",
@@ -854,7 +854,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                     opt_anchor: TextAnchor.MiddleCenter,
                     opt_font_style: FontStyle.Normal,
-                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
                     opt_bg_color_gui: BaseScript.ThemeColor_Primary,
                     icon_arrow_color: Color.black);
@@ -880,7 +880,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 #region 文字内容
                 XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                                bg_fill: XGUIFilled.无,
+                                bg_fill: XGUIGroup.无,
                                 bg_color: XGUIColor.无,
                                 margin: new RectOffset(0, 0, 0, 0),
                                 padding: new RectOffset(0, 0, 0, 0));
@@ -983,7 +983,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 列表
             BaseScript.fold_listview = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "列表",
@@ -1013,7 +1013,7 @@ namespace SevenStrikeModules.XGUI.Editor
                         rect_content.Set(rect.x, rect.y, rect.width, rect.height - 1);
                         XGUI.gui_box(
                             rect: rect_content,
-                            bg: XGUI.GetFillTexture(XGUIFilled.实体, XGUIColor.亮白),
+                            bg: XGUI.GetGroupTexture(XGUIGroup.实体, XGUIColor.亮白),
                             bg_color_gui: Color.black * 0.33f,
                             offset: Vector2.zero,
                             border: new RectOffset(10, 10, 10, 10),
@@ -1069,7 +1069,7 @@ namespace SevenStrikeModules.XGUI.Editor
                         rect_content.Set(rect.x + (rect.width - 80), rect.y + 1, 100, rect.height - 6);
                         XGUI.gui_group_start(
                             rect_group: rect_content,
-                            bg_fill: XGUIFilled.无,
+                            bg_fill: XGUIGroup.无,
                             bg_color: XGUIColor.无,
                             bg_color_gui: Color.red * 0.3f,
                             bg_height: 0,
@@ -1107,7 +1107,7 @@ namespace SevenStrikeModules.XGUI.Editor
                             rect: rect_content,
                             text: new GUIContent($"{type._level}"),
                             text_color: Color.black,
-                            bg_fill: XGUIFilled.实体,
+                            bg_fill: XGUIGroup.实体,
                             bg_color: XGUIColor.亮白,
                             bg_color_gui: Color.white,
                             size: XGUIFontSize.L,
@@ -1131,7 +1131,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 卡片（自动布局）
             BaseScript.fold_card = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "卡片（自动布局）",
@@ -1228,7 +1228,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 卡片（手动布局）
             BaseScript.fold_card_manual = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "卡片（手动布局）",
@@ -1288,7 +1288,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 下拉选择菜单
             BaseScript.fold_pops_layout = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: BaseScript.ThemeColor_Group,
                 title: "下拉选择菜单",
@@ -1313,7 +1313,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                     opt_anchor: TextAnchor.MiddleLeft,
                     opt_font_style: FontStyle.Normal,
-                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
                     opt_bg_color_gui: BaseScript.ThemeColor_Primary,
                     margin: new RectOffset(0, 0, 5, 5),
@@ -1343,7 +1343,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                     opt_anchor: TextAnchor.MiddleLeft,
                     opt_font_style: FontStyle.Normal,
-                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
                     opt_bg_color_gui: BaseScript.ThemeColor_Primary,
                     margin: new RectOffset(0, 0, 5, 5),
@@ -1365,7 +1365,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 可折叠参数 - 自动布局
             BaseScript.fold_param_layout = XGUI.layout_group_start(
                   type: XGUIContainerType.Vertical,
-                  bg_fill: XGUIFilled.缺口纯色边框,
+                  bg_fill: XGUIGroup.缺口纯色边框,
                   bg_color: XGUIColor.亮白,
                   bg_color_gui: BaseScript.ThemeColor_Group,
                   title: "可折叠参数 - 自动布局",
@@ -1398,7 +1398,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 可折叠参数 - 手动布局
             BaseScript.fold_param_gui = XGUI.layout_group_start(
                   type: XGUIContainerType.Vertical,
-                  bg_fill: XGUIFilled.缺口纯色边框,
+                  bg_fill: XGUIGroup.缺口纯色边框,
                   bg_color: XGUIColor.亮白,
                   bg_color_gui: BaseScript.ThemeColor_Group,
                   title: "可折叠参数 - 手动布局",
@@ -1432,7 +1432,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 状态控件 - 自动布局
             BaseScript.fold_state_layout = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: BaseScript.ThemeColor_Group,
                 title: "状态控件 - 自动布局",
@@ -1465,7 +1465,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 XGUI.layout_state_displayer_btn(
                     title: "检测状态",
                     title_size: XGUIFontSize.M,
-                    btn_bg: XGUIFilled.实体,
+                    btn_bg: XGUIGroup.实体,
                     btn_color: XGUIColor.亮白,
                     btn_text: "clicked",
                     btn_tooltip: "tooltip",
@@ -1484,7 +1484,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 状态控件 - 手动布局
             BaseScript.fold_state_gui = XGUI.layout_group_start(
                type: XGUIContainerType.Vertical,
-               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
                bg_color_gui: BaseScript.ThemeColor_Group,
                title: "状态控件 - 手动布局（无折叠）",
@@ -1532,14 +1532,14 @@ namespace SevenStrikeModules.XGUI.Editor
                     rect: rect_prop,
                     title: new GUIContent("检测状态："),
                     title_size: XGUIFontSize.M,
-                    btn_bg: XGUIFilled.实体,
+                    btn_bg: XGUIGroup.实体,
                     btn_color: XGUIColor.亮白,
                     btn_width: 100,
                     btn_gui_color: Color.white,
                     btn_text: "点击检测",
                     btn_text_color: Color.black,
                     btn_text_size: XGUIFontSize.M,
-                    btn_press_bg: XGUIFilled.实体,
+                    btn_press_bg: XGUIGroup.实体,
                     btn_press_color: XGUIColor.深空灰,
                     btn_press_text_color: Color.white,
                     btn_tooltip: "点击检测状态",
@@ -1557,7 +1557,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 开关 - 自动布局
             BaseScript.fold_toggle_layout = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: BaseScript.ThemeColor_Group,
                 title: "开关 - 自动布局",
@@ -1597,7 +1597,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 滑动条
             BaseScript.fold_sliders_layout = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "滑动条",
@@ -1673,7 +1673,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 输入框
             BaseScript.fold_inputfield_layout = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "输入框",
@@ -1818,7 +1818,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 输入框（手动布局）
             BaseScript.fold_inputfield_Manual = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "输入框 （手动布局）",
@@ -1999,7 +1999,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 滑动条（手动布局）
             BaseScript.fold_sliders_gui = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "滑动条 （手动布局）",
@@ -2084,7 +2084,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 颜色（自动布局）
             BaseScript.fold_color_gui_layout = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "颜色（自动布局）",
@@ -2116,7 +2116,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 颜色（手动布局）
             BaseScript.fold_color_gui = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "颜色（手动布局）",
@@ -2168,7 +2168,7 @@ namespace SevenStrikeModules.XGUI.Editor
             #region 曲线（手动布局）
             BaseScript.fold_curve_gui = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: BaseScript.ThemeColor_Group,
               title: "曲线（手动布局）",

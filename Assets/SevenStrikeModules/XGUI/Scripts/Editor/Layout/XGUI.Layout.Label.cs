@@ -34,7 +34,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 使用自动布局绘制一个带有丰富样式配置的标签。
         /// </summary>
         /// <param name="text">要显示的文本内容。</param>
-        /// <param name="bg_fill">标签背景的填充样式。为 <see cref="XGUIFilled.无"/> 时不绘制背景。</param>
+        /// <param name="bg_fill">标签背景的填充样式。为 <see cref="XGUIGroup.无"/> 时不绘制背景。</param>
         /// <param name="bg_color">标签背景的颜色主题。</param>
         /// <param name="bg_color_gui">标签背景的叠加颜色。传入 <see cref="Color.clear"/> 时使用白色。</param>
         /// <param name="size">文本的字体大小。</param>
@@ -52,7 +52,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <param name="singleLineHeight">是否强制使用单行高度。为 <c>true</c> 且 <paramref name="wrap"/> 为 <c>false</c> 时使用 <see cref="GetSingleLineHeight"/>。</param>
         /// <param name="tooltip">标签的提示文本，鼠标悬停时显示。</param>
         /// <remarks>
-        /// 该方法与 <see cref="gui_label(Rect, string, XGUIFilled, XGUIColor, Color, XGUIFontSize, TextAnchor, Color, Vector2, TextClipping, RectOffset, RectOffset, Font, FontStyle, bool, float, float)"/> 
+        /// 该方法与 <see cref="gui_label(Rect, string, XGUIGroup, XGUIColor, Color, XGUIFontSize, TextAnchor, Color, Vector2, TextClipping, RectOffset, RectOffset, Font, FontStyle, bool, float, float)"/> 
         /// 功能相同，但使用 <see cref="GUILayout"/> 自动布局系统，无需手动指定矩形位置。
         /// <para>
         /// 高度行为说明：
@@ -63,7 +63,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// </list>
         /// </para>
         /// </remarks>
-        public static void layout_label(string text, XGUIFilled bg_fill = XGUIFilled.无, XGUIColor bg_color = XGUIColor.无, Color bg_color_gui = default, XGUIFontSize size = XGUIFontSize.B, TextAnchor anchor = TextAnchor.MiddleLeft, Color text_color = default, Vector2 offset = default, TextClipping clipping = TextClipping.Clip, RectOffset margin = default, RectOffset padding = default, Font font = null, FontStyle font_style = FontStyle.Normal, bool wrap = false, float width = 0, float height = 0, bool singleLineHeight = true, string tooltip = null, Action act_on_press_label = null)
+        public static void layout_label(string text, XGUIGroup bg_fill = XGUIGroup.无, XGUIColor bg_color = XGUIColor.无, Color bg_color_gui = default, XGUIFontSize size = XGUIFontSize.B, TextAnchor anchor = TextAnchor.MiddleLeft, Color text_color = default, Vector2 offset = default, TextClipping clipping = TextClipping.Clip, RectOffset margin = default, RectOffset padding = default, Font font = null, FontStyle font_style = FontStyle.Normal, bool wrap = false, float width = 0, float height = 0, bool singleLineHeight = true, string tooltip = null, Action act_on_press_label = null)
         {
             if (text_color == Color.clear)
                 text_color = Color.white;
@@ -81,7 +81,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 margin = new RectOffset(0, 0, 0, 0);
 
             GUIStyle style = new GUIStyle(style_xg_label);
-            style.normal.background = GetFillTexture(bg_fill, bg_color);
+            style.normal.background = GetGroupTexture(bg_fill, bg_color);
             style.normal.textColor = text_color;
             style.fontSize = XGUI.GetFontSize(size);
 

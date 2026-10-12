@@ -326,7 +326,7 @@ namespace SevenStrikeModules.XTween.Editor
             }
 
             XGUI.layout_banner(
-               bg_fill: XGUIFilled.实体,
+               bg_fill: XGUIGroup.实体,
                bg_color: XGUIColor.深空灰,
                bg_height: 30,
                icon: icon_main,
@@ -341,7 +341,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 快捷功能
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XTween_Dashboard.Theme_Group,
                 title: "快捷功能",
@@ -418,7 +418,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 路径列表
             BaseScript.fold_points = XGUI.layout_group_start(
                  type: XGUIContainerType.Vertical,
-                 bg_fill: XGUIFilled.缺口纯色边框,
+                 bg_fill: XGUIGroup.缺口纯色边框,
                  bg_color: XGUIColor.亮白,
                  bg_color_gui: XTween_Dashboard.Theme_Group,
                  title: "路径列表",
@@ -453,7 +453,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 有效路径百分比
             XGUI.layout_group_start(
                type: XGUIContainerType.Vertical,
-               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
                bg_color_gui: XTween_Dashboard.Theme_Group,
                title: "有效路径百分比",
@@ -489,7 +489,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 选项
             BaseScript.fold_options = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XTween_Dashboard.Theme_Group,
                 title: "选项",
@@ -514,7 +514,7 @@ namespace SevenStrikeModules.XTween.Editor
                    opt_text_padding: new RectOffset(10, 10, 0, 0),
                    opt_anchor: TextAnchor.MiddleLeft,
                    opt_font_style: FontStyle.Normal,
-                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_fill: XGUIGroup.实体,
                    opt_bg_color: XGUIColor.亮白,
                    opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
                    icon_arrow_color: Color.black,
@@ -540,7 +540,7 @@ namespace SevenStrikeModules.XTween.Editor
                    opt_text_padding: new RectOffset(10, 10, 0, 0),
                    opt_anchor: TextAnchor.MiddleLeft,
                    opt_font_style: FontStyle.Normal,
-                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_fill: XGUIGroup.实体,
                    opt_bg_color: XGUIColor.亮白,
                    opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
                    icon_arrow_color: Color.black,
@@ -568,7 +568,7 @@ namespace SevenStrikeModules.XTween.Editor
                    opt_text_padding: new RectOffset(10, 10, 0, 0),
                    opt_anchor: TextAnchor.MiddleLeft,
                    opt_font_style: FontStyle.Normal,
-                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_fill: XGUIGroup.实体,
                    opt_bg_color: XGUIColor.亮白,
                    opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
                    icon_arrow_color: Color.black,
@@ -595,7 +595,7 @@ namespace SevenStrikeModules.XTween.Editor
                    opt_text_padding: new RectOffset(10, 10, 0, 0),
                    opt_anchor: TextAnchor.MiddleLeft,
                    opt_font_style: FontStyle.Normal,
-                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_fill: XGUIGroup.实体,
                    opt_bg_color: XGUIColor.亮白,
                    opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
                    icon_arrow_color: Color.black,
@@ -621,7 +621,7 @@ namespace SevenStrikeModules.XTween.Editor
                    opt_text_padding: new RectOffset(10, 10, 0, 0),
                    opt_anchor: TextAnchor.MiddleLeft,
                    opt_font_style: FontStyle.Normal,
-                   opt_bg_fill: XGUIFilled.实体,
+                   opt_bg_fill: XGUIGroup.实体,
                    opt_bg_color: XGUIColor.亮白,
                    opt_bg_color_gui: XTween_Dashboard.Theme_Primary,
                    icon_arrow_color: Color.black,
@@ -692,7 +692,7 @@ namespace SevenStrikeModules.XTween.Editor
             {
                 XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XTween_Dashboard.Theme_Group,
                 title: "注视参数",
@@ -722,7 +722,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 路径状态
             BaseScript.fold_status = XGUI.layout_group_start(
                    type: XGUIContainerType.Vertical,
-                   bg_fill: XGUIFilled.缺口纯色边框,
+                   bg_fill: XGUIGroup.缺口纯色边框,
                    bg_color: XGUIColor.亮白,
                    bg_color_gui: XTween_Dashboard.Theme_Group,
                    title: "路径状态",
@@ -774,7 +774,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 路径参数
             BaseScript.fold_params = XGUI.layout_group_start(
             type: XGUIContainerType.Vertical,
-            bg_fill: XGUIFilled.缺口纯色边框,
+            bg_fill: XGUIGroup.缺口纯色边框,
             bg_color: XGUIColor.亮白,
             bg_color_gui: XTween_Dashboard.Theme_Group,
             title: "路径参数",
@@ -796,7 +796,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 路径样式
             BaseScript.fold_style = XGUI.layout_group_start(
                    type: XGUIContainerType.Vertical,
-                   bg_fill: XGUIFilled.缺口纯色边框,
+                   bg_fill: XGUIGroup.缺口纯色边框,
                    bg_color: XGUIColor.亮白,
                    bg_color_gui: XTween_Dashboard.Theme_Group,
                    title: "路径样式",
@@ -831,7 +831,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 路径标记生成
             BaseScript.fold_marks = XGUI.layout_group_start(
                    type: XGUIContainerType.Vertical,
-                   bg_fill: XGUIFilled.缺口纯色边框,
+                   bg_fill: XGUIGroup.缺口纯色边框,
                    bg_color: XGUIColor.亮白,
                    bg_color_gui: XTween_Dashboard.Theme_Group,
                    title: "路径标记生成",
@@ -913,7 +913,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 原始类
             fold_raw = XGUI.layout_group_start(
                  type: XGUIContainerType.Vertical,
-                 bg_fill: XGUIFilled.缺口纯色边框,
+                 bg_fill: XGUIGroup.缺口纯色边框,
                  bg_color: XGUIColor.亮白,
                  bg_color_gui: XTween_Dashboard.Theme_Group,
                  title: "原始类",

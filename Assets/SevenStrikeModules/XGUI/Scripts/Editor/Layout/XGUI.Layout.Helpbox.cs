@@ -76,7 +76,7 @@ namespace SevenStrikeModules.XGUI.Editor
             // 水平容器
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
-                bg_fill: XGUIFilled.纯色边框,
+                bg_fill: XGUIGroup.纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: Color.white * 0.5f,
                 bg_height: bg_height,
@@ -99,7 +99,7 @@ namespace SevenStrikeModules.XGUI.Editor
             // 标题
             XGUI.layout_label(
                 text: title_text,
-                bg_fill: XGUIFilled.无,
+                bg_fill: XGUIGroup.无,
                 bg_color: XGUIColor.无,
                 size: title_size,
                 anchor: title_anchor,

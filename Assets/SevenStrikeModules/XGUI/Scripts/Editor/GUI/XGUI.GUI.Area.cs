@@ -33,7 +33,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// </summary>
         /// <param name="rect_area">定义区域的位置和尺寸的矩形。</param>
         /// <param name="refer">输出参数，返回实际用于布局的矩形区域（在 Repaint 事件中更新）。</param>
-        /// <param name="bg_fill">区域的背景填充样式类型。传入 <see cref="XGUIFilled.无"/> 时不绘制背景。</param>
+        /// <param name="bg_fill">区域的背景填充样式类型。传入 <see cref="XGUIGroup.无"/> 时不绘制背景。</param>
         /// <param name="bg_color">区域的背景颜色主题，与 <paramref name="bg_fill"/> 配合使用。</param>
         /// <param name="bg_color_gui">区域背景的叠加颜色。传入非默认值时可实现颜色混合效果。</param>
         /// <remarks>
@@ -63,15 +63,15 @@ namespace SevenStrikeModules.XGUI.Editor
         /// XGUI.gui_area_end();
         /// </code>
         /// </example>
-        public static void gui_area_start(Rect rect_area, ref Rect refer, XGUIFilled bg_fill = XGUIFilled.无, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default)
+        public static void gui_area_start(Rect rect_area, ref Rect refer, XGUIGroup bg_fill = XGUIGroup.无, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default)
         {
             if (bg_color_gui == default)
                 bg_color_gui = Color.white;
 
             // 样式 - 背景
             GUIStyle style_area = new GUIStyle(style_xg_area);
-            if (bg_fill != XGUIFilled.无)
-                style_area.normal.background = GetFillTexture(bg_fill, bg_color);
+            if (bg_fill != XGUIGroup.无)
+                style_area.normal.background = GetGroupTexture(bg_fill, bg_color);
             else
                 style_area.normal.background = null;
 

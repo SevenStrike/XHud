@@ -1351,7 +1351,7 @@
                                 con.pt_Painting.SyncImageColor &&
                                 !con.pt_Painting.SyncLibraryColor)
                             {
-                                if (con.mod_Text.TextStyleInfo.SyncPrimitivePaintingColor)
+                                if (con.mod_Text.TextColorOwner == TextColorOwner.Painting)
                                     binder.val_color = con.pt_Painting.OriginalColor;
                             }
                             else
@@ -1363,7 +1363,7 @@
                                 con.pt_Painting.SyncImageColor &&
                                 !con.pt_Painting.SyncLibraryColor)
                             {
-                                if (con.mod_TmpText.TextStyleInfo.SyncPrimitivePaintingColor)
+                                if (con.mod_TmpText.TextColorOwner == TextColorOwner.Painting)
                                     binder.val_color = con.pt_Painting.OriginalColor;
                             }
                             else
@@ -1417,7 +1417,7 @@
                             con.pt_Painting.SyncImageColor &&
                             !con.pt_Painting.SyncLibraryColor)
                         {
-                            if (con.mod_Text.TextStyleInfo.SyncPrimitivePaintingColor)
+                            if (con.mod_Text.TextColorOwner == TextColorOwner.Painting)
                                 p_binder.val_color = con.pt_Painting.OriginalColor;
                         }
                         else
@@ -1429,7 +1429,7 @@
                             con.pt_Painting.SyncImageColor &&
                             !con.pt_Painting.SyncLibraryColor)
                         {
-                            if (con.mod_TmpText.TextStyleInfo.SyncPrimitivePaintingColor)
+                            if (con.mod_TmpText.TextColorOwner == TextColorOwner.Painting)
                                 p_binder.val_color = con.pt_Painting.OriginalColor;
                         }
                         else

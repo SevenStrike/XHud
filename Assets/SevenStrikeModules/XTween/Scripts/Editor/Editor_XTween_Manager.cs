@@ -210,7 +210,7 @@ namespace SevenStrikeModules.XTween.Editor
             #region 动画批量操作
             XGUI.layout_group_start(
              type: XGUIContainerType.Horizontal,
-             bg_fill: XGUIFilled.缺口纯色边框,
+             bg_fill: XGUIGroup.缺口纯色边框,
              bg_color: XGUIColor.亮白,
              bg_color_gui: XTween_Dashboard.Theme_Group,
              title: "动画批量操作",
@@ -295,12 +295,12 @@ namespace SevenStrikeModules.XTween.Editor
 
             BaseScript.fold_statistic = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XTween_Dashboard.Theme_Group,
                 title: "统计",
                 title_size: XGUIFontSize.M,
-                title_bg_fill: XGUIFilled.无,
+                title_bg_fill: XGUIGroup.无,
                 title_bg_color: XGUIColor.无,
                 title_bg_color_gui: Color.white,
                 title_text_color: XTween_Dashboard.Theme_Primary,
@@ -631,7 +631,7 @@ namespace SevenStrikeModules.XTween.Editor
 
             BaseScript.fold_tweenlist = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XTween_Dashboard.Theme_Group,
                 title: "活跃动画",
@@ -759,7 +759,7 @@ namespace SevenStrikeModules.XTween.Editor
                                rect_content.Set(rect.x, rect.y, rect.width, rect.height - 1);
                                XGUI.gui_box(
                                    rect: rect_content,
-                                   bg: XGUI.GetFillTexture(XGUIFilled.纯色边框, XGUIColor.亮白),
+                                   bg: XGUI.GetGroupTexture(XGUIGroup.纯色边框, XGUIColor.亮白),
                                    bg_color_gui: Color.black * 0.65f,
                                    offset: Vector2.zero,
                                    border: new RectOffset(10, 10, 10, 10),
@@ -902,7 +902,7 @@ namespace SevenStrikeModules.XTween.Editor
                                rect_content.Set(rect.x, rect.y, rect.width, rect.height - 1);
                                XGUI.gui_box(
                                    rect: rect_content,
-                                   bg: XGUI.GetFillTexture(XGUIFilled.纯色边框, XGUIColor.亮白),
+                                   bg: XGUI.GetGroupTexture(XGUIGroup.纯色边框, XGUIColor.亮白),
                                    bg_color_gui: Color.white * 0.45f,
                                    offset: Vector2.zero,
                                    border: new RectOffset(10, 10, 10, 10),

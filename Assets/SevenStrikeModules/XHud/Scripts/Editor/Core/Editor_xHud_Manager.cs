@@ -668,7 +668,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 基础
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "基础",
@@ -752,7 +752,6 @@ namespace SevenStrikeModules.XHud.Editor
                 info_text.RichText = true;
                 info_text.Maskable = false;
                 info_text.Raycast = false;
-                info_text.SyncPrimitivePaintingColor = false;
                 info_text.BestFit = false;
                 info_text.GeometreAlign = false;
                 info_text.Font = AssetDatabase.LoadAssetAtPath<Font>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Text/sx_light.otf");
@@ -771,7 +770,6 @@ namespace SevenStrikeModules.XHud.Editor
                 info_tmptext.tmp_rich = true;
                 info_tmptext.Maskable = false;
                 info_tmptext.Raycast = false;
-                info_tmptext.SyncPrimitivePaintingColor = false;
                 info_tmptext.tmp_EnableAutoSizing = false;
                 info_tmptext.tmp_font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Tmp/sx_light SDF.asset");
                 info_tmptext.tmp_color = Color.white;
@@ -1016,7 +1014,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 分辨率信息
                 XGUI.layout_group_start(
                     type: XGUIContainerType.Horizontal,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "分辨率",
@@ -1058,7 +1056,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 选项
                 BaseScript.fold_options = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "选项",
@@ -1511,7 +1509,7 @@ namespace SevenStrikeModules.XHud.Editor
                        opt_text_padding: new RectOffset(10, 10, 0, 0),
                        opt_anchor: TextAnchor.MiddleLeft,
                        opt_font_style: FontStyle.Normal,
-                       opt_bg_fill: XGUIFilled.实体,
+                       opt_bg_fill: XGUIGroup.实体,
                        opt_bg_color: XGUIColor.亮白,
                        opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                        icon_arrow_color: Color.black,
@@ -1558,7 +1556,7 @@ namespace SevenStrikeModules.XHud.Editor
                        opt_text_padding: new RectOffset(10, 10, 0, 0),
                        opt_anchor: TextAnchor.MiddleLeft,
                        opt_font_style: FontStyle.Normal,
-                       opt_bg_fill: XGUIFilled.实体,
+                       opt_bg_fill: XGUIGroup.实体,
                        opt_bg_color: XGUIColor.亮白,
                        opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                        icon_arrow_color: Color.black,
@@ -1581,7 +1579,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 画布 
                 BaseScript.fold_canvasset = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "画布",
@@ -1652,11 +1650,11 @@ namespace SevenStrikeModules.XHud.Editor
                     if (XGUI.layout_button(
                         text: "获取分辨率",
                         tooltip: "",
-                        bg_fill: XGUIFilled.实体,
+                        bg_fill: XGUIGroup.实体,
                         bg_color: XGUIColor.亮白,
                         bg_color_gui: XHud_Dashboard.Theme_Primary,
                         button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white,
-                        press_fill: XGUIFilled.实体,
+                        press_fill: XGUIGroup.实体,
                         press_color: XGUIColor.深空灰,
                         press_text_color: Color.white,
                         font_size: XGUIFontSize.M,
@@ -1682,7 +1680,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     XGUI.layout_label(
                         text: msg,
-                        bg_fill: XGUIFilled.实体,
+                        bg_fill: XGUIGroup.实体,
                         bg_color: XGUIColor.深空灰,
                         size: XGUIFontSize.S,
                         anchor: TextAnchor.MiddleLeft,
@@ -1703,7 +1701,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 相机 
                 BaseScript.fold_camera = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "相机",
@@ -1876,7 +1874,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 比例图例 
                 BaseScript.fold_ratiorefer = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "比例图例 (单位 cm)",
@@ -2054,11 +2052,11 @@ namespace SevenStrikeModules.XHud.Editor
                     if (XGUI.layout_button(
                         text: "创建比例参考图形",
                         tooltip: "",
-                        bg_fill: XGUIFilled.实体,
+                        bg_fill: XGUIGroup.实体,
                         bg_color: XGUIColor.亮白,
                         bg_color_gui: XHud_Dashboard.Theme_Primary,
                         button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white,
-                        press_fill: XGUIFilled.实体,
+                        press_fill: XGUIGroup.实体,
                         press_color: XGUIColor.深空灰,
                         press_text_color: Color.white,
                         font_size: XGUIFontSize.M,
@@ -2080,7 +2078,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     BaseScript.fold_compguid = XGUI.layout_group_start(
                         type: XGUIContainerType.Vertical,
-                        bg_fill: XGUIFilled.缺口纯色边框,
+                        bg_fill: XGUIGroup.缺口纯色边框,
                         bg_color: XGUIColor.亮白,
                         bg_color_gui: XHud_Dashboard.Theme_Group,
                         title: "构图参考",
@@ -2146,7 +2144,7 @@ namespace SevenStrikeModules.XHud.Editor
                            opt_text_padding: new RectOffset(10, 10, 0, 0),
                            opt_anchor: TextAnchor.MiddleCenter,
                            opt_font_style: FontStyle.Normal,
-                           opt_bg_fill: XGUIFilled.实体,
+                           opt_bg_fill: XGUIGroup.实体,
                            opt_bg_color: XGUIColor.亮白,
                            opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                            icon_arrow_color: Color.black,
@@ -2200,7 +2198,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                                     opt_anchor: TextAnchor.MiddleCenter,
                                     opt_font_style: FontStyle.Normal,
-                                    opt_bg_fill: XGUIFilled.实体,
+                                    opt_bg_fill: XGUIGroup.实体,
                                     opt_bg_color: XGUIColor.亮白,
                                     opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                                     icon_arrow_color: Color.black,
@@ -2244,11 +2242,11 @@ namespace SevenStrikeModules.XHud.Editor
                                 if (XGUI.layout_button(
                                     text: "复位校正",
                                     tooltip: "",
-                                    bg_fill: XGUIFilled.实体,
+                                    bg_fill: XGUIGroup.实体,
                                     bg_color: XGUIColor.深空灰,
                                     bg_color_gui: Color.white,
                                     button_text_color: color_important,
-                                    press_fill: XGUIFilled.实体,
+                                    press_fill: XGUIGroup.实体,
                                     press_color: XGUIColor.深空灰,
                                     press_text_color: Color.white,
                                     font_size: XGUIFontSize.M,
@@ -2286,7 +2284,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                                     opt_anchor: TextAnchor.MiddleCenter,
                                     opt_font_style: FontStyle.Normal,
-                                    opt_bg_fill: XGUIFilled.实体,
+                                    opt_bg_fill: XGUIGroup.实体,
                                     opt_bg_color: XGUIColor.亮白,
                                     opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                                     icon_arrow_color: Color.black,
@@ -2331,11 +2329,11 @@ namespace SevenStrikeModules.XHud.Editor
                                 if (XGUI.layout_button(
                                     text: "复位校正",
                                     tooltip: "",
-                                    bg_fill: XGUIFilled.实体,
+                                    bg_fill: XGUIGroup.实体,
                                     bg_color: XGUIColor.深空灰,
                                     bg_color_gui: Color.white,
                                     button_text_color: color_important,
-                                    press_fill: XGUIFilled.实体,
+                                    press_fill: XGUIGroup.实体,
                                     press_color: XGUIColor.深空灰,
                                     press_text_color: Color.white,
                                     font_size: XGUIFontSize.M,
@@ -2373,7 +2371,7 @@ namespace SevenStrikeModules.XHud.Editor
                                    opt_text_padding: new RectOffset(10, 10, 0, 0),
                                    opt_anchor: TextAnchor.MiddleCenter,
                                    opt_font_style: FontStyle.Normal,
-                                   opt_bg_fill: XGUIFilled.实体,
+                                   opt_bg_fill: XGUIGroup.实体,
                                    opt_bg_color: XGUIColor.亮白,
                                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                                    icon_arrow_color: Color.black,
@@ -2391,11 +2389,11 @@ namespace SevenStrikeModules.XHud.Editor
                                 if (XGUI.layout_button(
                                     text: "复位校正",
                                     tooltip: "",
-                                    bg_fill: XGUIFilled.实体,
+                                    bg_fill: XGUIGroup.实体,
                                     bg_color: XGUIColor.深空灰,
                                     bg_color_gui: Color.white,
                                     button_text_color: color_important,
-                                    press_fill: XGUIFilled.实体,
+                                    press_fill: XGUIGroup.实体,
                                     press_color: XGUIColor.深空灰,
                                     press_text_color: Color.white,
                                     font_size: XGUIFontSize.M,
@@ -2453,11 +2451,11 @@ namespace SevenStrikeModules.XHud.Editor
                                 if (XGUI.layout_button(
                                     text: "复位校正",
                                     tooltip: "",
-                                    bg_fill: XGUIFilled.实体,
+                                    bg_fill: XGUIGroup.实体,
                                     bg_color: XGUIColor.深空灰,
                                     bg_color_gui: Color.white,
                                     button_text_color: color_important,
-                                    press_fill: XGUIFilled.实体,
+                                    press_fill: XGUIGroup.实体,
                                     press_color: XGUIColor.深空灰,
                                     press_text_color: Color.white,
                                     font_size: XGUIFontSize.M,
@@ -2521,11 +2519,11 @@ namespace SevenStrikeModules.XHud.Editor
                                 if (XGUI.layout_button(
                                     text: "平均等分",
                                     tooltip: "",
-                                    bg_fill: XGUIFilled.实体,
+                                    bg_fill: XGUIGroup.实体,
                                     bg_color: XGUIColor.深空灰,
                                     bg_color_gui: Color.white,
                                     button_text_color: XHud_Dashboard.Theme_Primary,
-                                    press_fill: XGUIFilled.实体,
+                                    press_fill: XGUIGroup.实体,
                                     press_color: XGUIColor.深空灰,
                                     press_text_color: Color.white,
                                     font_size: XGUIFontSize.M,
@@ -2554,11 +2552,11 @@ namespace SevenStrikeModules.XHud.Editor
                                 if (XGUI.layout_button(
                                     text: "复位校正",
                                     tooltip: "",
-                                    bg_fill: XGUIFilled.实体,
+                                    bg_fill: XGUIGroup.实体,
                                     bg_color: XGUIColor.深空灰,
                                     bg_color_gui: Color.white,
                                     button_text_color: color_important,
-                                    press_fill: XGUIFilled.实体,
+                                    press_fill: XGUIGroup.实体,
                                     press_color: XGUIColor.深空灰,
                                     press_text_color: Color.white,
                                     font_size: XGUIFontSize.M,
@@ -2649,11 +2647,11 @@ namespace SevenStrikeModules.XHud.Editor
                                 if (XGUI.layout_button(
                                     text: "复位校正",
                                     tooltip: "",
-                                    bg_fill: XGUIFilled.实体,
+                                    bg_fill: XGUIGroup.实体,
                                     bg_color: XGUIColor.深空灰,
                                     bg_color_gui: Color.white,
                                     button_text_color: color_important,
-                                    press_fill: XGUIFilled.实体,
+                                    press_fill: XGUIGroup.实体,
                                     press_color: XGUIColor.深空灰,
                                     press_text_color: Color.white,
                                     font_size: XGUIFontSize.M,
@@ -2750,11 +2748,11 @@ namespace SevenStrikeModules.XHud.Editor
                                 if (XGUI.layout_button(
                                     text: "复位校正",
                                     tooltip: "",
-                                    bg_fill: XGUIFilled.实体,
+                                    bg_fill: XGUIGroup.实体,
                                     bg_color: XGUIColor.深空灰,
                                     bg_color_gui: Color.white,
                                     button_text_color: color_important,
-                                    press_fill: XGUIFilled.实体,
+                                    press_fill: XGUIGroup.实体,
                                     press_color: XGUIColor.深空灰,
                                     press_text_color: Color.white,
                                     font_size: XGUIFontSize.M,
@@ -2831,11 +2829,11 @@ namespace SevenStrikeModules.XHud.Editor
                                 if (XGUI.layout_button(
                                     text: "复位校正",
                                     tooltip: "",
-                                    bg_fill: XGUIFilled.实体,
+                                    bg_fill: XGUIGroup.实体,
                                     bg_color: XGUIColor.深空灰,
                                     bg_color_gui: Color.white,
                                     button_text_color: color_important,
-                                    press_fill: XGUIFilled.实体,
+                                    press_fill: XGUIGroup.实体,
                                     press_color: XGUIColor.深空灰,
                                     press_text_color: Color.gray,
                                     font_size: XGUIFontSize.M,
@@ -2871,7 +2869,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 资源库 
                 BaseScript.fold_reslibs = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "资源库",
@@ -2952,7 +2950,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 元素库 
                 BaseScript.fold_elementlibs = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "元素库",
@@ -2981,7 +2979,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 音效池 
                 BaseScript.fold_soundslib = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "音效池",
@@ -2997,7 +2995,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     XGUI.layout_label(
                         text: msg,
-                        bg_fill: XGUIFilled.实体,
+                        bg_fill: XGUIGroup.实体,
                         bg_color: XGUIColor.深空灰,
                         size: XGUIFontSize.S,
                         anchor: TextAnchor.MiddleLeft,
@@ -3029,7 +3027,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 遮罩 / 内容透明度 
                 BaseScript.fold_masks = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "遮罩 / 内容透明度",
@@ -3132,7 +3130,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 全局
                 BaseScript.fold_global = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "全局",
@@ -3210,7 +3208,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 工具
                 BaseScript.fold_tool = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "工具",
@@ -3229,11 +3227,11 @@ namespace SevenStrikeModules.XHud.Editor
                     if (XGUI.layout_button(
                         text: "截屏工具",
                         tooltip: "",
-                        bg_fill: XGUIFilled.实体,
+                        bg_fill: XGUIGroup.实体,
                         bg_color: XGUIColor.深空灰,
                         bg_color_gui: Color.white,
                         button_text_color: Color.white,
-                        press_fill: XGUIFilled.实体,
+                        press_fill: XGUIGroup.实体,
                         press_color: XGUIColor.深空灰,
                         press_text_color: Color.gray,
                         font_size: XGUIFontSize.M,
@@ -3283,11 +3281,11 @@ namespace SevenStrikeModules.XHud.Editor
                     if (XGUI.layout_button(
                         text: "创建效能面板",
                         tooltip: "",
-                        bg_fill: XGUIFilled.实体,
+                        bg_fill: XGUIGroup.实体,
                         bg_color: XGUIColor.深空灰,
                         bg_color_gui: Color.white,
                         button_text_color: Color.white,
-                        press_fill: XGUIFilled.实体,
+                        press_fill: XGUIGroup.实体,
                         press_color: XGUIColor.深空灰,
                         press_text_color: Color.gray,
                         font_size: XGUIFontSize.M,
@@ -3626,7 +3624,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 布局
                 BaseScript.fold_layout = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "布局",
@@ -3764,7 +3762,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     BaseScript.fold_visualsafe = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "辅助",
@@ -3898,11 +3896,11 @@ namespace SevenStrikeModules.XHud.Editor
                         if (XGUI.layout_button(
                             text: "重置参数",
                             tooltip: "",
-                            bg_fill: XGUIFilled.实体,
+                            bg_fill: XGUIGroup.实体,
                             bg_color: XGUIColor.深空灰,
                             bg_color_gui: Color.white,
                             button_text_color: new Color(1, 0.4f, 0.4f),
-                            press_fill: XGUIFilled.实体,
+                            press_fill: XGUIGroup.实体,
                             press_color: XGUIColor.深空灰,
                             press_text_color: Color.gray,
                             font_size: XGUIFontSize.M,
@@ -3943,7 +3941,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     BaseScript.fold_blueprint = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "蓝图",
@@ -4079,7 +4077,7 @@ namespace SevenStrikeModules.XHud.Editor
                             opt_text_padding: new RectOffset(10, 10, 0, 0),
                             opt_anchor: TextAnchor.MiddleCenter,
                             opt_font_style: FontStyle.Normal,
-                            opt_bg_fill: XGUIFilled.实体,
+                            opt_bg_fill: XGUIGroup.实体,
                             opt_bg_color: XGUIColor.亮白,
                             opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                             icon_arrow_color: Color.black,
@@ -4114,7 +4112,7 @@ namespace SevenStrikeModules.XHud.Editor
                             opt_text_padding: new RectOffset(10, 10, 0, 0),
                             opt_anchor: TextAnchor.MiddleCenter,
                             opt_font_style: FontStyle.Normal,
-                            opt_bg_fill: XGUIFilled.实体,
+                            opt_bg_fill: XGUIGroup.实体,
                             opt_bg_color: XGUIColor.亮白,
                             opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                             icon_arrow_color: Color.black,
@@ -4137,7 +4135,7 @@ namespace SevenStrikeModules.XHud.Editor
                             opt_text_padding: new RectOffset(10, 10, 0, 0),
                             opt_anchor: TextAnchor.MiddleCenter,
                             opt_font_style: FontStyle.Normal,
-                            opt_bg_fill: XGUIFilled.实体,
+                            opt_bg_fill: XGUIGroup.实体,
                             opt_bg_color: XGUIColor.亮白,
                             opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                             icon_arrow_color: Color.black,
@@ -4457,7 +4455,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     BaseScript.fold_RMS = XGUI.layout_group_start(
                         type: XGUIContainerType.Vertical,
-                        bg_fill: XGUIFilled.缺口纯色边框,
+                        bg_fill: XGUIGroup.缺口纯色边框,
                         bg_color: XGUIColor.亮白,
                         bg_color_gui: XHud_Dashboard.Theme_Group,
                         title: "RMS",
@@ -4476,7 +4474,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                             XGUI.layout_label(
                                 text: msg,
-                                bg_fill: XGUIFilled.实体,
+                                bg_fill: XGUIGroup.实体,
                                 bg_color: XGUIColor.深空灰,
                                 size: XGUIFontSize.S,
                                 anchor: TextAnchor.MiddleLeft,
@@ -4506,11 +4504,11 @@ namespace SevenStrikeModules.XHud.Editor
                         if (XGUI.layout_button(
                             text: "清空列表",
                             tooltip: "清空分辨率列表",
-                            bg_fill: XGUIFilled.实体,
+                            bg_fill: XGUIGroup.实体,
                             bg_color: XGUIColor.深空灰,
                             bg_color_gui: Color.white,
                             button_text_color: color_important,
-                            press_fill: XGUIFilled.实体,
+                            press_fill: XGUIGroup.实体,
                             press_color: XGUIColor.深空灰,
                             press_text_color: Color.gray,
                             font_size: XGUIFontSize.M,
@@ -4552,7 +4550,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 动效默认参数
                 BaseScript.fold_motion_default = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "动效默认参数",
@@ -4585,7 +4583,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 opt_text_padding: new RectOffset(10, 10, 0, 0),
                                 opt_anchor: TextAnchor.MiddleCenter,
                                 opt_font_style: FontStyle.Normal,
-                                opt_bg_fill: XGUIFilled.实体,
+                                opt_bg_fill: XGUIGroup.实体,
                                 opt_bg_color: XGUIColor.亮白,
                                 opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                                 icon_arrow_color: Color.black,
@@ -5025,7 +5023,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 opt_text_padding: new RectOffset(10, 10, 0, 0),
                                 opt_anchor: TextAnchor.MiddleCenter,
                                 opt_font_style: FontStyle.Normal,
-                                opt_bg_fill: XGUIFilled.实体,
+                                opt_bg_fill: XGUIGroup.实体,
                                 opt_bg_color: XGUIColor.亮白,
                                 opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                                 icon_arrow_color: Color.black,
@@ -5430,7 +5428,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 主题色
                 BaseScript.fold_themes = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "主题色",
@@ -5446,11 +5444,11 @@ namespace SevenStrikeModules.XHud.Editor
                     if (XGUI.layout_button(
                         text: "重置主题色",
                         tooltip: "",
-                        bg_fill: XGUIFilled.实体,
+                        bg_fill: XGUIGroup.实体,
                         bg_color: XGUIColor.深空灰,
                         bg_color_gui: Color.white,
                         button_text_color: Color.white,
-                        press_fill: XGUIFilled.实体,
+                        press_fill: XGUIGroup.实体,
                         press_color: XGUIColor.深空灰,
                         press_text_color: Color.gray,
                         font_size: XGUIFontSize.M,
@@ -5479,7 +5477,7 @@ namespace SevenStrikeModules.XHud.Editor
                       opt_text_padding: new RectOffset(10, 10, 0, 0),
                       opt_anchor: TextAnchor.MiddleCenter,
                       opt_font_style: FontStyle.Normal,
-                      opt_bg_fill: XGUIFilled.实体,
+                      opt_bg_fill: XGUIGroup.实体,
                       opt_bg_color: XGUIColor.亮白,
                       opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                       icon_arrow_color: Color.black,
@@ -5572,7 +5570,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                     opt_anchor: TextAnchor.MiddleCenter,
                     opt_font_style: FontStyle.Normal,
-                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
                     opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                     icon_arrow_color: Color.black,
@@ -5872,7 +5870,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 源脚本
                 BaseScript.fold_based = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "源脚本",

@@ -207,7 +207,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 标题
             XGUI.layout_banner(
-             bg_fill: XGUIFilled.实体,
+             bg_fill: XGUIGroup.实体,
              bg_color: XGUIColor.深空灰,
              bg_height: 30,
              icon: icon_main,
@@ -226,7 +226,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 参数
             BaseScript.fold_param = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "参数",
@@ -285,7 +285,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 预览按键
             BaseScript.fold_key = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "预览按键",
@@ -324,7 +324,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 状态
             BaseScript.fold_state = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "状态",
@@ -353,7 +353,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 选项
             BaseScript.fold_options = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "选项",
@@ -386,7 +386,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     XGUI.layout_label(
                         text: msg,
-                        bg_fill: XGUIFilled.实体,
+                        bg_fill: XGUIGroup.实体,
                         bg_color: XGUIColor.深空灰,
                         size: XGUIFontSize.S,
                         anchor: TextAnchor.MiddleLeft,
@@ -408,7 +408,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 预设变换信息
             BaseScript.fold_preset_trans = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "预设变换信息",
@@ -427,11 +427,11 @@ namespace SevenStrikeModules.XHud.Editor
                 if (XGUI.layout_button(
                     text: "记录当前位置 & 角度",
                     tooltip: "",
-                    bg_fill: XGUIFilled.实体,
+                    bg_fill: XGUIGroup.实体,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Primary,
                     button_text_color: Color.black,
-                    press_fill: XGUIFilled.实体,
+                    press_fill: XGUIGroup.实体,
                     press_color: XGUIColor.深空灰,
                     press_text_color: Color.white,
                     font_size: XGUIFontSize.M,
@@ -472,7 +472,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 BaseScript.fold_rms = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "RMS 布局信息",
@@ -501,7 +501,7 @@ namespace SevenStrikeModules.XHud.Editor
                           opt_text_padding: new RectOffset(10, 10, 0, 0),
                           opt_anchor: TextAnchor.MiddleLeft,
                           opt_font_style: FontStyle.Normal,
-                          opt_bg_fill: XGUIFilled.实体,
+                          opt_bg_fill: XGUIGroup.实体,
                           opt_bg_color: XGUIColor.亮白,
                           opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                           icon_arrow_color: Color.black,
@@ -628,7 +628,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 元素动效参数
             BaseScript.fold_motion = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "元素动效参数",
@@ -660,7 +660,7 @@ namespace SevenStrikeModules.XHud.Editor
                             opt_text_padding: new RectOffset(10, 10, 0, 0),
                             opt_anchor: TextAnchor.MiddleCenter,
                             opt_font_style: FontStyle.Normal,
-                            opt_bg_fill: XGUIFilled.实体,
+                            opt_bg_fill: XGUIGroup.实体,
                             opt_bg_color: XGUIColor.亮白,
                             opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                             icon_arrow_color: Color.black,
@@ -1098,7 +1098,7 @@ namespace SevenStrikeModules.XHud.Editor
                             opt_text_padding: new RectOffset(10, 10, 0, 0),
                             opt_anchor: TextAnchor.MiddleCenter,
                             opt_font_style: FontStyle.Normal,
-                            opt_bg_fill: XGUIFilled.实体,
+                            opt_bg_fill: XGUIGroup.实体,
                             opt_bg_color: XGUIColor.亮白,
                             opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                             icon_arrow_color: Color.black,
@@ -1944,7 +1944,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 源脚本
             BaseScript.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "源脚本",

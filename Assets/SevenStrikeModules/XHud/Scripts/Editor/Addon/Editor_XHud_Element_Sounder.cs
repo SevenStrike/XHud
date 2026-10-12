@@ -243,7 +243,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 标题
             XGUI.layout_banner(
-             bg_fill: XGUIFilled.实体,
+             bg_fill: XGUIGroup.实体,
              bg_color: XGUIColor.深空灰,
              bg_height: 30,
              icon: icon_main,
@@ -262,7 +262,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 快捷功能
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "快捷功能",
@@ -344,7 +344,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 选项
             BaseScript.fold_option = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "选项",
@@ -367,7 +367,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 统计
             BaseScript.fold_state = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "统计",
@@ -468,11 +468,11 @@ namespace SevenStrikeModules.XHud.Editor
                             if (XGUI.layout_button(
                                 text: $"{SelectedObjects[SounderStatistic_Index].name} ( {SelectedObjects[SounderStatistic_Index].Indicator} )",
                                 tooltip: "",
-                                bg_fill: XGUIFilled.透明,
+                                bg_fill: XGUIGroup.透明,
                                 bg_color: XGUIColor.亮白,
                                 bg_color_gui: XHud_Dashboard.Theme_Primary,
                                 button_text_color: Color.white,
-                                press_fill: XGUIFilled.透明,
+                                press_fill: XGUIGroup.透明,
                                 press_color: XGUIColor.深空灰,
                                 press_text_color: XHud_Dashboard.Theme_Primary,
                                 font_size: XGUIFontSize.B,
@@ -581,7 +581,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 参数
             BaseScript.fold_param = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "参数",
@@ -650,7 +650,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                     opt_anchor: TextAnchor.MiddleCenter,
                     opt_font_style: FontStyle.Normal,
-                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
                     opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                     icon_arrow_color: Color.black,
@@ -681,7 +681,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                     opt_anchor: TextAnchor.MiddleCenter,
                     opt_font_style: FontStyle.Normal,
-                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
                     opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                     icon_arrow_color: Color.black,
@@ -829,7 +829,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 源脚本
             BaseScript.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
-                bg_fill: XGUIFilled.缺口纯色边框,
+                bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: XHud_Dashboard.Theme_Group,
                 title: "源脚本",

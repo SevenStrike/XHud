@@ -428,7 +428,7 @@ namespace SevenStrikeModules.XHud.Editor
                             opt_text_padding: new RectOffset(10, 10, 0, 0),
                             opt_anchor: TextAnchor.MiddleCenter,
                             opt_font_style: FontStyle.Normal,
-                            opt_bg_fill: XGUIFilled.实体,
+                            opt_bg_fill: XGUIGroup.实体,
                             opt_bg_color: XGUIColor.亮白,
                             opt_bg_color_gui: Color.white,
                             icon_arrow_color: Color.black,
@@ -472,9 +472,9 @@ namespace SevenStrikeModules.XHud.Editor
                                     text: $"{sp_ID.intValue}",
                                     tooltip: "此ID值代表该动画节点的身份标识",
                                     anchor: TextAnchor.MiddleCenter,
-                                    btn_fill: XGUIFilled.透明,
+                                    btn_fill: XGUIGroup.透明,
                                     btn_text_color: XHud_Dashboard.Theme_Primary,
-                                    press_fill: XGUIFilled.透明,
+                                    press_fill: XGUIGroup.透明,
                                     press_color: XGUIColor.深空灰,
                                     press_text_color: Color.white,
                                     font_size: XGUIFontSize.S,
@@ -592,7 +592,7 @@ namespace SevenStrikeModules.XHud.Editor
                                         opt_text_padding: new RectOffset(10, 10, 0, 0),
                                         opt_anchor: TextAnchor.MiddleCenter,
                                         opt_font_style: FontStyle.Normal,
-                                        opt_bg_fill: XGUIFilled.实体,
+                                        opt_bg_fill: XGUIGroup.实体,
                                         opt_bg_color: XGUIColor.亮白,
                                         opt_bg_color_gui: Color.black * 0.6f,
                                         icon_arrow_color: Color.white,
@@ -661,7 +661,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 opt_text_padding: new RectOffset(10, 10, 0, 0),
                                 opt_anchor: TextAnchor.MiddleCenter,
                                 opt_font_style: FontStyle.Normal,
-                                opt_bg_fill: XGUIFilled.实体,
+                                opt_bg_fill: XGUIGroup.实体,
                                 opt_bg_color: XGUIColor.亮白,
                                 opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                                 width_limite: 100,
@@ -694,7 +694,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 opt_text_padding: new RectOffset(10, 10, 0, 0),
                                 opt_anchor: TextAnchor.MiddleCenter,
                                 opt_font_style: FontStyle.Normal,
-                                opt_bg_fill: XGUIFilled.实体,
+                                opt_bg_fill: XGUIGroup.实体,
                                 opt_bg_color: XGUIColor.亮白,
                                 opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                                 width_limite: 110,
@@ -981,7 +981,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 标题
             XGUI.layout_banner(
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.深空灰,
                 bg_height: 30,
                 icon: icon_main,
@@ -998,7 +998,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 快捷功能
             XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
-              bg_fill: XGUIFilled.缺口纯色边框,
+              bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
               bg_color_gui: XHud_Dashboard.Theme_Group,
               title: "快捷功能",
@@ -1092,7 +1092,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_text_padding: new RectOffset(10, 10, 0, 0),
                     opt_anchor: TextAnchor.MiddleLeft,
                     opt_font_style: FontStyle.Normal,
-                    opt_bg_fill: XGUIFilled.实体,
+                    opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
                     opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                     margin: new RectOffset(0, 0, 5, 5),
@@ -1124,7 +1124,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 BaseScript.fold_param = XGUI.layout_group_start(
                     type: XGUIContainerType.Horizontal,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "参数",
@@ -1156,7 +1156,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 BaseScript.fold_list = XGUI.layout_group_start(
                     type: XGUIContainerType.Horizontal,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "动画节点列表",
@@ -1195,7 +1195,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 BaseScript.fold_option = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "选项",
@@ -1234,7 +1234,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 BaseScript.fold_state = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: statu_title,
@@ -1358,7 +1358,7 @@ namespace SevenStrikeModules.XHud.Editor
                         #region 控制区
                         XGUI.layout_group_start(
                             type: XGUIContainerType.Horizontal,
-                            bg_fill: XGUIFilled.透明,
+                            bg_fill: XGUIGroup.透明,
                             bg_color: XGUIColor.亮白,
                             bg_color_gui: XHud_Dashboard.Theme_Group,
                             absolute_margin: true,
@@ -1370,9 +1370,9 @@ namespace SevenStrikeModules.XHud.Editor
                         if (XGUI.layout_button(
                             text: $"{SelectedObjects[MultiPrimitiveTween_Index].name}",
                             tooltip: "",
-                            bg_fill: XGUIFilled.透明,
+                            bg_fill: XGUIGroup.透明,
                             button_text_color: Color.gray,
-                            press_fill: XGUIFilled.透明,
+                            press_fill: XGUIGroup.透明,
                             press_text_color: XHud_Dashboard.Theme_Primary,
                             font_size: XGUIFontSize.M,
                             anchor: TextAnchor.MiddleLeft,
@@ -1824,7 +1824,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 BaseScript.fold_based = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "源脚本",
@@ -1847,7 +1847,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 XGUI.layout_group_start(
                    type: XGUIContainerType.Vertical,
-                   bg_fill: XGUIFilled.缺口纯色边框,
+                   bg_fill: XGUIGroup.缺口纯色边框,
                    bg_color: XGUIColor.亮白,
                    bg_color_gui: XHud_Dashboard.Theme_Group,
                    title: "预览状态",
@@ -2844,7 +2844,6 @@ namespace SevenStrikeModules.XHud.Editor
 
             Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
         }
-        //------------------------------------------------------------------------------------
         /// <summary>
         /// 启动 XTween 预览器并播放传入的所有动画
         /// </summary>
@@ -2905,11 +2904,9 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Editor_XTween_Previewer.Rewind();
         }
-        //------------------------------------------------------------------------------------
         #endregion
 
         #region 工具 - 音效预览实现
-
         /// <summary>
         /// 从音效库安全取出一条 AudioClip。
         /// </summary>
@@ -2930,7 +2927,6 @@ namespace SevenStrikeModules.XHud.Editor
             }
             return sod.Sound;
         }
-
         /// <summary>
         /// 计算音效预览的延迟。
         /// <para/>公式：<c>Delay = sod.Delay × DurationMultiply × GlobalDuration</c>
@@ -2946,7 +2942,6 @@ namespace SevenStrikeModules.XHud.Editor
 
             return Mathf.Max(0f, sod.Delay * mul);
         }
-
         /// <summary>
         /// 预览单个图元动画器上匹配指定时机的所有音效。
         /// </summary>
@@ -2994,7 +2989,6 @@ namespace SevenStrikeModules.XHud.Editor
                 Repaint();
             }
         }
-
         /// <summary>
         /// 预览多个图元动画器上匹配各自预览时机的所有音效（批量模式）。
         /// </summary>
@@ -3009,7 +3003,6 @@ namespace SevenStrikeModules.XHud.Editor
                 PreviewTweenSounds(t.PreviewTiming, t);
             }
         }
-
         /// <summary>
         /// 每帧检查待触发音效列表，到点的立即播放。
         /// <para/>由 EditorApplication.update 驱动。
@@ -3044,7 +3037,6 @@ namespace SevenStrikeModules.XHud.Editor
 
             Repaint();
         }
-
         /// <summary>
         /// 清理已播完的预览 AudioSource（避免长期持有）。
         /// </summary>
@@ -3063,7 +3055,6 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
         }
-
         /// <summary>
         /// 立即播放一个预览音效（创建 AudioSource 并播放）。
         /// </summary>
@@ -3077,7 +3068,6 @@ namespace SevenStrikeModules.XHud.Editor
             Preview_PrimitiveTweens_SoundList.Add(au);
             //Debug.Log($"[音效预览] 播放 {clip.name}（当前时间 {EditorApplication.timeSinceStartup:F2}）");
         }
-
         /// <summary>
         /// 停止所有音效预览：清空待触发、停并销毁所有 AudioSource。
         /// </summary>
@@ -3109,7 +3099,6 @@ namespace SevenStrikeModules.XHud.Editor
 
             SceneView.RepaintAll();
         }
-
         /// <summary>
         /// 创建一个用于音效预览的临时 AudioSource 并立即播放。
         /// </summary>
@@ -3139,7 +3128,6 @@ namespace SevenStrikeModules.XHud.Editor
             sp.SetAudioSource(au);
             return au;
         }
-
         #endregion
     }
 }

@@ -30,6 +30,8 @@ namespace SevenStrikeModules.XHud
 #endif
     using UnityEngine.Events;
     using UnityEngine.UI;
+    using SevenStrikeModules.XGUI.Editor;
+    using UnityEngine.InputSystem.XR;
 
     [SerializeField]
     [System.Serializable]
@@ -148,7 +150,7 @@ namespace SevenStrikeModules.XHud
         /// </list>
         /// </summary>
         /// <returns>新的 TweenSound 实例</returns>
-        public TweenSound Clone()
+        public TweenSound Clone(bool createid = false)
         {
             TweenSound sod = new TweenSound();
 
@@ -686,6 +688,7 @@ namespace SevenStrikeModules.XHud
     public class TweenNodeArray
     {
         public List<TweenNode> TweenNodeList = new List<TweenNode>();
+        public List<TweenSound> TweenSoundList = new List<TweenSound>();
     }
 
     public class XHud_Module_Primitive_Tween : MonoBehaviour
@@ -1035,6 +1038,10 @@ namespace SevenStrikeModules.XHud
         /// 时间线编辑器 - 拖拽飞梭经过音效Clip时自动播放音效
         /// </summary>
         [SerializeField] public bool Timeline_TrackSoundPreviewer = true;
+        /// <summary>
+        /// 时间线编辑器 - 预览播放循环开关
+        /// </summary>
+        [SerializeField] public bool Timeline_TrackPreviewLoop = false;
         #endregion
 
         #region 运行时 - 音效批次
@@ -1477,7 +1484,13 @@ namespace SevenStrikeModules.XHud
         #endregion
 
         #region 音效节点列表操作
-
+        /// <summary>
+        /// 创建音效节点（无参重载）。
+        /// <para>【流程】new TweenSound() → 分配唯一 ID → 加入 <see cref="PrimitiveTweenSounds"/>。</para>
+        /// <para>【用途】编辑器"新建音效"按钮、代码动态追加一条音效。</para>
+        /// <para>【注意】新节点的 Sound、Path、Timing 均为空，需调用方自行配置；ID 由 <see cref="TweenSound_GenerateId"/> 保证在当前列表内唯一。</para>
+        /// </summary>
+        /// <returns>新创建的 TweenSound 实例（已加入列表）</returns>
         public TweenSound TweenSound_Create()
         {
             // 步骤 1：创建默认动画节点实例
@@ -1492,7 +1505,15 @@ namespace SevenStrikeModules.XHud
             // 返回引用，便于外部继续配置该节点
             return sod;
         }
-
+        /// <summary>
+        /// 创建音效节点（带参重载）。
+        /// <para>【流程】覆盖传入节点的 ID 为当前列表内唯一值 → 直接引用加入列表。</para>
+        /// <para>【与无参版的区别】无参版新建空白节点；带参版复用外部已配置好的节点。</para>
+        /// <para>【用途】从预制配置批量导入音效、从其他图元复制音效后重新分配 ID 再加入。</para>
+        /// <para>【注意】传入节点的原 ID 会被覆盖；传参为 null 时未做保护，调用方需自行判空；若希望保留传入对象请先 Clone。</para>
+        /// </summary>
+        /// <param name="sod">已配置好的音效节点（ID 会被重新分配）</param>
+        /// <returns>传入的同一个节点实例（ID 已更新）</returns>
         public TweenSound TweenSound_Create(TweenSound sod)
         {
             // 覆盖原 ID，确保在本节点列表内唯一
@@ -1504,19 +1525,33 @@ namespace SevenStrikeModules.XHud
             // 返回传入的实例，便于链式调用
             return sod;
         }
-
+        /// <summary>
+        /// 移除音效节点（按 AudioClip 名称）。
+        /// <para>【匹配规则】<c>TweenSound.Sound.name == name</c>，因此 Sound 为 null 的节点会抛 NullReferenceException。</para>
+        /// <para>【注意】AudioClip 名称可重名，会移除所有同名音效；如需精确移除请改用 <see cref="TweenSound_RemoveById(int)"/>。</para>
+        /// <para>【建议】调用前确保所有音效节点的 Sound 已绑定，或改用 ID 定位。</para>
+        /// </summary>
+        /// <param name="name">音效剪辑的名称（AudioClip.name）</param>
         public void TweenSound_RemoveByName(string name)
         {
             // 逆序遍历：删除后不影响未检查元素的索引
             for (int i = PrimitiveTweenSounds.Count - 1; i >= 0; i--)
             {
-                if (PrimitiveTweenSounds[i].Sound.name == name)
+                TweenSound sod = PrimitiveTweenSounds[i];
+                if (sod.Sound != null && sod.Sound.name == name)
                 {
+                    TweenSound_SoundBatch_RemoveSound(sod);  // 新增
                     PrimitiveTweenSounds.RemoveAt(i);
                 }
             }
         }
-
+        /// <summary>
+        /// 移除音效节点（按唯一 ID）。
+        /// <para>【匹配规则】<c>TweenSound.ID == id</c>，ID 在当前列表内唯一，至多命中一项。</para>
+        /// <para>【用途】编辑器删除指定音效、外部系统通过保存的 ID 精确定位后清理。</para>
+        /// <para>【注意】移除后该音效的 ID 被释放，后续 <see cref="TweenSound_GenerateId"/> 可能重新分配相同值，但不影响已存在的其他节点。</para>
+        /// </summary>
+        /// <param name="id">音效节点的唯一 ID</param>
         public void TweenSound_RemoveById(int id)
         {
             // 逆序遍历：删除后不影响未检查元素的索引
@@ -1524,17 +1559,53 @@ namespace SevenStrikeModules.XHud
             {
                 if (PrimitiveTweenSounds[i].ID == id)
                 {
+                    TweenSound_SoundBatch_RemoveSound(PrimitiveTweenSounds[i]);  // 新增
                     PrimitiveTweenSounds.RemoveAt(i);
                 }
             }
         }
+        /// <summary>
+        /// 从所有活跃音效批次中剔除指定音效（防止已移除的音效仍被触发）。
+        /// <para>【调用时机】TweenSound_RemoveById / RemoveByName 内部。</para>
+        /// <para>【注意】仅阻止未来触发，不影响已播放中的 AudioSource。</para>
+        /// </summary>
+        private void TweenSound_SoundBatch_RemoveSound(TweenSound sod)
+        {
+            if (sod == null || SoundBatches.Count == 0)
+                return;
 
+            for (int b = SoundBatches.Count - 1; b >= 0; b--)
+            {
+                SoundPlayBatch batch = SoundBatches[b];
+                batch.Sounds.Remove(sod);
+                batch.Triggered.Remove(sod);
+
+                // 批次空了就移除，避免空批次残留
+                if (batch.Sounds.Count == 0)
+                    SoundBatches.RemoveAt(b);
+            }
+        }
+        /// <summary>
+        /// 获取音效节点（按列表索引）。
+        /// <para>【特性】O(1) 时间复杂度，最快；不做越界检查，越界时由 List 抛 ArgumentOutOfRangeException。</para>
+        /// <para>【用途】遍历所有音效、编辑器列表 UI 的行点击定位。</para>
+        /// <para>【注意】索引随增删变动，不适合持久化引用；调用方需保证 0 &lt;= index &lt; Count。</para>
+        /// </summary>
+        /// <param name="index">列表索引</param>
+        /// <returns>对应索引的 TweenSound 实例</returns>
         public TweenSound TweenSound_GetByIndex(int index)
         {
             // 直接按索引访问（无判空、无越界保护）
             return PrimitiveTweenSounds[index];
         }
-
+        /// <summary>
+        /// 获取音效节点（按唯一 ID）。
+        /// <para>【特性】O(n) 线性查找，找到即 break；ID 唯一，命中即终止。</para>
+        /// <para>【用途】外部系统通过保存的 ID 精确定位音效（推荐做法）。</para>
+        /// <para>【注意】未找到时返回 null，调用方需判空。</para>
+        /// </summary>
+        /// <param name="ID">音效节点的唯一 ID</param>
+        /// <returns>匹配的节点，未找到返回 null</returns>
         public TweenSound TweenSound_GetByID(int ID)
         {
             TweenSound node = null;
@@ -1551,7 +1622,15 @@ namespace SevenStrikeModules.XHud
 
             return node;
         }
-
+        /// <summary>
+        /// 生成音效节点的唯一标识 ID。
+        /// <para>【原理】收集现有所有 ID → 在 1111-9999 范围随机 → 冲突则扩大到 111111-999999 重新生成，直到不重复。</para>
+        /// <para>【为什么需要】音效可通过 Sound 名称重名，但 ID 必须唯一，用于精确删除、定位与播放追踪。</para>
+        /// <para>【用途】创建新音效节点、编辑器"重新生成 ID"按钮、复制/粘贴时避免冲突。</para>
+        /// <para>【注意】每次调用都重新构建现有 ID 列表，存在内存分配；节点数量少（&lt; 1000）时性能可忽略。</para>
+        /// <para>【优化建议】可改为 GUID 或 static 自增计数器彻底避免冲突与循环开销。</para>
+        /// </summary>
+        /// <returns>在当前音效节点列表中不重复的唯一整数 ID</returns>
         public int TweenSound_GenerateId()
         {
             // ========== 步骤 1：收集现有所有 ID ==========
@@ -1584,6 +1663,92 @@ namespace SevenStrikeModules.XHud
             }
 
             return ran_id;
+        }
+        #endregion
+
+        #region 动画列表数据转化
+        /// <summary>
+        /// 将当前动画器全部动画节点与音效节点序列化为 JSON 字符串，并复制到系统剪贴板。
+        /// <para>【包含】ID、Indicator、Type、Duration、From/End/Original 值、Ease、Curve 等可序列化字段。</para>
+        /// <para>【不含】UnityAction 委托、UnityEvent 事件、Tweener 实例引用。</para>
+        /// <para>【用途】编辑器"导出配置"按钮、调试查看、配合 <see cref="TweenNodeArray_FromJson(string)"/> 实现复制粘贴。</para>
+        /// <para>【注意】JsonUtility 不支持 null 集合（本方法已初始化）；运行时调用剪贴板在部分平台无效；AudioClip 仅保留 Path，导入后需重新绑定。</para>
+        /// </summary>
+        /// <returns>序列化后的 JSON 字符串（同时已写入系统剪贴板）</returns>
+        public string TweenNodeArray_ToJson()
+        {
+            TweenNodeArray t = new TweenNodeArray();
+            t.TweenNodeList = new List<TweenNode>();
+            t.TweenSoundList = new List<TweenSound>();
+
+            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            {
+                t.TweenNodeList.Add(PrimitiveTweenNodes[i]);
+            }
+
+            for (int i = 0; i < PrimitiveTweenSounds.Count; i++)
+            {
+                t.TweenSoundList.Add(PrimitiveTweenSounds[i]);
+            }
+
+            string json = JsonUtility.ToJson(t);
+
+            XGUI_Utilitys.CopyToSystemBuffer(json);
+            Debug.Log(json);
+
+            return json;
+        }
+        /// <summary>
+        /// 从 JSON 字符串反序列化动画节点与音效节点，<b>覆盖</b>当前动画器的全部配置。
+        /// <para>【流程】解析 JSON → 清理旧实例 → 逐个 Clone 并重新生成 ID → 替换原列表。</para>
+        /// <para>【为什么要 Clone + 重新生成 ID】Clone 确保副本独立（避免 AnimationCurve 等共享引用）；重新生成 ID 避免与当前列表冲突。</para>
+        /// <para>【用途】编辑器"导入配置"按钮、跨图元复制动画节点、从文件加载动画数据。</para>
+        /// <para>【注意】</para>
+        /// <list type="bullet">
+        /// <item><description>⚠ 完全替换现有列表，原节点与音效全部丢失，不做合并。</description></item>
+        /// <item><description>导入后 UnityAction 委托丢失，需重新绑定回调。</description></item>
+        /// <item><description>导入后 TweenSound.Sound 为 null（JSON 仅保留 Path），需重新绑定 AudioClip。</description></item>
+        /// <item><description>Indicator 保留原值，可能重名（ID 唯一即可）。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="json">由 <see cref="TweenNodeArray_ToJson"/> 导出的 JSON 字符串</param>
+        public void TweenNodeArray_FromJson(string json)
+        {
+            if (string.IsNullOrEmpty(json))
+            {
+                Debug.LogWarning("[XHud] TweenNodeArray_FromJson: JSON 为空，跳过导入");
+                return;
+            }
+
+            TweenNodeArray tnc = JsonUtility.FromJson<TweenNodeArray>(json);
+
+            if (tnc == null)
+            {
+                Debug.LogWarning("[XHud] TweenNodeArray_FromJson: JSON 解析失败");
+                return;
+            }
+
+            Tween_KillAll(false);  // 先清理旧实例
+            StopAllSoundBatches(); // 清空音效批次
+
+            List<TweenNode> tweenNodes = new List<TweenNode>();
+            List<TweenSound> tweenSounds = new List<TweenSound>();
+
+            for (int s = 0; s < tnc.TweenNodeList.Count; s++)
+            {
+                TweenNode node = tnc.TweenNodeList[s].Clone();
+                node.ID = TweenNode_GenerateId();
+                tweenNodes.Add(node);
+            }
+            PrimitiveTweenNodes = tweenNodes;
+
+            for (int s = 0; s < tnc.TweenSoundList.Count; s++)
+            {
+                TweenSound sod = tnc.TweenSoundList[s].Clone();
+                sod.ID = TweenSound_GenerateId();
+                tweenSounds.Add(sod);
+            }
+            PrimitiveTweenSounds = tweenSounds;
         }
         #endregion
 
@@ -2543,24 +2708,53 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private XTween_Interface Tween_Create_Color(TweenNode node, float duration, float delay, float percentage_threshold, UnityAction on_update = null, UnityAction on_percentage = null, UnityAction on_complete = null, UnityAction on_rewind = null)
         {
-            #region 判断文字组件是否为库同步样式状态
-            bool IsTextColorMode = false;
-            if ((controller.mod_Text && controller.mod_Text.StyleLibSynching &&
-                controller.mod_Text.TextStyleInfo.LibStyle_Effect_color) ||
-                (controller.mod_TmpText && controller.mod_TmpText.StyleLibSynching &&
-                controller.mod_TmpText.TextStyleInfo.LibStyle_Effect_color))
+            #region 接管判定
+            bool IsTextColorSynching = false;
+            if ((controller.mod_Text && controller.mod_Text.StyleLibSynching && controller.mod_Text.TextStyleInfo.LibStyle_Effect_color) ||
+                (controller.mod_TmpText && controller.mod_TmpText.StyleLibSynching && controller.mod_TmpText.TextStyleInfo.LibStyle_Effect_color))
             {
-                IsTextColorMode = true;
+                IsTextColorSynching = true;
             }
-            if (IsTextColorMode)
+
+            if (IsTextColorSynching)
+            {
+                // 尝试切到 Tween Owner 时，明确告诉用户问题所在
+                XGUI_Utilitys.Console(
+                    "XHud - 图元动画器消息",
+                    "颜色动画无法播放：该文字组件正在从样式库同步颜色（LibStyle_Effect_color 已勾选）。" +
+                    "请先关闭样式库的\"颜色\"同步项，或者把 Owner 设为 Tween 并确保样式库颜色同步关闭。",
+                    XGUIMsgState.警告);
                 return null;
-            #endregion
+            }
 
             // 配色器接管状态检查：接管状态下无法通过动画改变颜色
-            if (controller.GetModuleType() == ModuleType.Image && controller.pt_Painting.SyncLibraryColor)
+            if (controller.GetModuleType() == ModuleType.Image && controller.pt_Painting.SyncImageColor)
+            {
+                XGUI_Utilitys.Console("XHud - 图元动画器消息", "Image 图像颜色动画无法播放！请检查并关闭图元配色器的接管状态！", XGUIMsgState.警告);
                 return null;
-            if (controller.GetModuleType() == ModuleType.RawImage && controller.pt_Painting.SyncLibraryColor)
+            }
+            if (controller.GetModuleType() == ModuleType.RawImage && controller.pt_Painting.SyncImageColor)
+            {
+                XGUI_Utilitys.Console("XHud - 图元动画器消息", "RawImage 图像颜色动画无法播放！请检查并关闭图元配色器的接管状态！", XGUIMsgState.警告);
                 return null;
+            }
+            if (controller.GetModuleType() == ModuleType.Text)
+            {
+                if (controller.mod_Text.TextColorOwner != TextColorOwner.Tween)
+                {
+                    XGUI_Utilitys.Console("XHud - 图元动画器消息", "Text 文字颜色动画无法播放！请检查并确保 XHud_Module_Text 组件的颜色接管者为 Tween，并且关闭文字组件的实时匹配库开关！", XGUIMsgState.警告);
+                    return null;
+                }
+            }
+            if (controller.GetModuleType() == ModuleType.TmpText)
+            {
+                if (controller.mod_TmpText.TextColorOwner != TextColorOwner.Tween)
+                {
+                    XGUI_Utilitys.Console("XHud - 图元动画器消息", "TmpText 文字颜色动画无法播放！请检查并确保 XHud_Module_TmpText 组件的颜色接管者为 Tween，并且关闭文字组件的实时匹配库开关！", XGUIMsgState.警告);
+                    return null;
+                }
+            }
+            #endregion
 
             Graphic gc = controller.RecognizeType();
             if (gc == null)

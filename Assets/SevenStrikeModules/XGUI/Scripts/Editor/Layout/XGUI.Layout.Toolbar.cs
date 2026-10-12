@@ -61,7 +61,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// </list>
         /// </para>
         /// </remarks>
-        public static int layout_toolbar(ref int index, string[] names, XGUIFilled bg_normal = XGUIFilled.实体, XGUIFilled bg_selected = XGUIFilled.实体, XGUIColor bg_color = XGUIColor.亮白, Color bg_gui_color = default, Color text_color_normal = default, Color text_color_selected = default, float bar_height = 25, Vector2 bar_offset = default, TextAnchor text_anchor = TextAnchor.MiddleCenter, RectOffset text_padding = null, RectOffset bar_margin = null, Vector2 text_offset = default, Font text_font = null, FontStyle text_fontstyle = FontStyle.Normal, XGUIFontSize text_size = XGUIFontSize.M, bool navigate_style = false, XGUIFilled navigate_style_bg = XGUIFilled.纯色边框, Color navigate_style_bg_color = default, float bg_width_offset = 0, float bg_height_offset = 0)
+        public static int layout_toolbar(ref int index, string[] names, XGUIGroup bg_normal = XGUIGroup.实体, XGUIGroup bg_selected = XGUIGroup.实体, XGUIColor bg_color = XGUIColor.亮白, Color bg_gui_color = default, Color text_color_normal = default, Color text_color_selected = default, float bar_height = 25, Vector2 bar_offset = default, TextAnchor text_anchor = TextAnchor.MiddleCenter, RectOffset text_padding = null, RectOffset bar_margin = null, Vector2 text_offset = default, Font text_font = null, FontStyle text_fontstyle = FontStyle.Normal, XGUIFontSize text_size = XGUIFontSize.M, bool navigate_style = false, XGUIGroup navigate_style_bg = XGUIGroup.纯色边框, Color navigate_style_bg_color = default, float bg_width_offset = 0, float bg_height_offset = 0)
         {
             if (text_color_normal == Color.clear)
                 text_color_normal = Color.black;
@@ -80,13 +80,13 @@ namespace SevenStrikeModules.XGUI.Editor
 
             GUIStyle style = new GUIStyle(style_xg_toolbar);
             if (navigate_style)
-                style.normal.background = XGUI.GetFillTexture(XGUIFilled.无, XGUIColor.无);
+                style.normal.background = XGUI.GetGroupTexture(XGUIGroup.无, XGUIColor.无);
             else
-                style.normal.background = XGUI.GetFillTexture(bg_normal, bg_color);
+                style.normal.background = XGUI.GetGroupTexture(bg_normal, bg_color);
 
             style.normal.textColor = text_color_normal;
 
-            style.onNormal.background = XGUI.GetFillTexture(bg_selected, bg_color);
+            style.onNormal.background = XGUI.GetGroupTexture(bg_selected, bg_color);
             style.onNormal.textColor = text_color_selected;
 
             style.alignment = text_anchor;
@@ -109,7 +109,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 Rect rect_bg = new Rect(rect.x - 3 + bar_offset.x, rect.y - bg_height_offset + bar_offset.y, rect.width + bg_width_offset, bar_height + 5);
                 XGUI.gui_box(
                     rect: rect_bg,
-                    bg: XGUI.GetFillTexture(navigate_style_bg, XGUIColor.亮白),
+                    bg: XGUI.GetGroupTexture(navigate_style_bg, XGUIColor.亮白),
                     bg_color_gui: navigate_style_bg_color,
                     offset: new Vector2(0, 0),
                     border: new RectOffset(10, 10, 10, 10));
@@ -151,7 +151,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// </list>
         /// </para>
         /// </remarks>
-        public static int layout_toolbar(int index, string[] names, XGUIFilled bg_normal = XGUIFilled.实体, XGUIFilled bg_selected = XGUIFilled.实体, XGUIColor bg_color = XGUIColor.亮白, Color bg_gui_color = default, Color text_color_normal = default, Color text_color_selected = default, float bar_height = 25, Vector2 bar_offset = default, TextAnchor text_anchor = TextAnchor.MiddleCenter, RectOffset text_padding = null, RectOffset bar_margin = null, Vector2 text_offset = default, Font text_font = null, FontStyle text_fontstyle = FontStyle.Normal, XGUIFontSize text_size = XGUIFontSize.M, bool navigate_style = false, XGUIFilled navigate_style_bg = XGUIFilled.纯色边框, Color navigate_style_bg_color = default, float bg_width_offset = 0, float bg_height_offset = 0)
+        public static int layout_toolbar(int index, string[] names, XGUIGroup bg_normal = XGUIGroup.实体, XGUIGroup bg_selected = XGUIGroup.实体, XGUIColor bg_color = XGUIColor.亮白, Color bg_gui_color = default, Color text_color_normal = default, Color text_color_selected = default, float bar_height = 25, Vector2 bar_offset = default, TextAnchor text_anchor = TextAnchor.MiddleCenter, RectOffset text_padding = null, RectOffset bar_margin = null, Vector2 text_offset = default, Font text_font = null, FontStyle text_fontstyle = FontStyle.Normal, XGUIFontSize text_size = XGUIFontSize.M, bool navigate_style = false, XGUIGroup navigate_style_bg = XGUIGroup.纯色边框, Color navigate_style_bg_color = default, float bg_width_offset = 0, float bg_height_offset = 0)
         {
             if (text_color_normal == Color.clear)
                 text_color_normal = Color.black;
@@ -172,13 +172,13 @@ namespace SevenStrikeModules.XGUI.Editor
 
             GUIStyle style = new GUIStyle(style_xg_toolbar);
             if (navigate_style)
-                style.normal.background = XGUI.GetFillTexture(XGUIFilled.无, XGUIColor.无);
+                style.normal.background = XGUI.GetGroupTexture(XGUIGroup.无, XGUIColor.无);
             else
-                style.normal.background = XGUI.GetFillTexture(bg_normal, bg_color);
+                style.normal.background = XGUI.GetGroupTexture(bg_normal, bg_color);
 
             style.normal.textColor = text_color_normal;
 
-            style.onNormal.background = XGUI.GetFillTexture(bg_selected, bg_color);
+            style.onNormal.background = XGUI.GetGroupTexture(bg_selected, bg_color);
             style.onNormal.textColor = text_color_selected;
 
             style.alignment = text_anchor;
@@ -201,7 +201,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 Rect rect_bg = new Rect(rect.x - 3 + bar_offset.x, rect.y - bg_height_offset + bar_offset.y, rect.width + bg_width_offset, bar_height + 5);
                 XGUI.gui_box(
                     rect: rect_bg,
-                    bg: XGUI.GetFillTexture(navigate_style_bg, XGUIColor.亮白),
+                    bg: XGUI.GetGroupTexture(navigate_style_bg, XGUIColor.亮白),
                     bg_color_gui: navigate_style_bg_color,
                     offset: new Vector2(0, 0),
                     border: new RectOffset(10, 10, 10, 10));

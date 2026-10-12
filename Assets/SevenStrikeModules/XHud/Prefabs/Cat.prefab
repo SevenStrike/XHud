@@ -40,8 +40,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 133.3}
-  m_SizeDelta: {x: 120, y: 30}
+  m_AnchoredPosition: {x: 7.1, y: 367.5}
+  m_SizeDelta: {x: 284.06, y: 59.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3929604278141804968
 CanvasRenderer:
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.3529412, g: 0.69803923, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 0
@@ -72,47 +72,48 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: dc6c33facc175e745ae390557bad77ad, type: 3}
-    m_FontSize: 18
+    m_Font: {fileID: 12800000, guid: 12e55bc559028404e842d85bca13f045, type: 3}
+    m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 3
+    m_MaxSize: 50
+    m_Alignment: 4
     m_AlignByGeometry: 0
-    m_RichText: 0
+    m_RichText: 1
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 
   Indicator: Text
-  StyleName: NewTextStyle_HudText
+  StyleName: NewTextStyle_HudText_R
   StyleLibSynching: 0
   PreviousText: 333
   TextIsChanged: 1
   SyncGlobalFontSize: 1
   mgr: {fileID: 0}
+  TextColorOwner: 2
   TextStyleInfo:
-    Name: 
-    Description: 
+    Name: NewTextStyle_HudText_R
+    Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
     Type: 0
     Style: 0
-    ContentAnchor: 2
-    Font: {fileID: 12800000, guid: dc6c33facc175e745ae390557bad77ad, type: 3}
+    ContentAnchor: 4
+    Font: {fileID: 12800000, guid: 12e55bc559028404e842d85bca13f045, type: 3}
     Font_AssetPath: 
-    Size: 18
+    Size: 50
     LineHeight: 1
     Overflow_Horizon: 1
     Overflow_Vertical: 1
-    RichText: 0
+    RichText: 1
     GeometreAlign: 0
     BestFit: 0
     Fit_Min: 1
     Fit_Min_GlobalScaled: 0
     Fit_Max: 50
     Fit_Max_GlobalScaled: 0
-    Size_GlobalScaled: 18
-    FontColor: {r: 1, g: 1, b: 1, a: 1}
+    Size_GlobalScaled: 50
+    FontColor: {r: 0.3529412, g: 0.69803923, b: 1, a: 1}
     tmp_rich: 0
     tmp_contentwrap: 0
     tmp_overflow: 0
@@ -166,20 +167,19 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
-    Name: 
-    Description: 
+    Name: NewTextStyle_HudText_R
+    Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
     Type: 0
     Style: 0
     ContentAnchor: 4
-    Font: {fileID: 0}
+    Font: {fileID: 12800000, guid: 12e55bc559028404e842d85bca13f045, type: 3}
     Font_AssetPath: 
-    Size: 13
+    Size: 50
     LineHeight: 1
-    Overflow_Horizon: 0
-    Overflow_Vertical: 0
-    RichText: 0
+    Overflow_Horizon: 1
+    Overflow_Vertical: 1
+    RichText: 1
     GeometreAlign: 0
     BestFit: 0
     Fit_Min: 1
@@ -187,7 +187,7 @@ MonoBehaviour:
     Fit_Max: 50
     Fit_Max_GlobalScaled: 0
     Size_GlobalScaled: 0
-    FontColor: {r: 1, g: 1, b: 1, a: 1}
+    FontColor: {r: 1, g: 0, b: 0.06987047, a: 1}
     tmp_rich: 0
     tmp_contentwrap: 0
     tmp_overflow: 0
@@ -241,7 +241,6 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncPrimitivePaintingColor: 0
 --- !u!114 &3902099935940337274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,7 +265,7 @@ MonoBehaviour:
   mod_RawImage: {fileID: 0}
   mod_HudButton: {fileID: 0}
   Debug: 0
-  fold_param: 1
+  fold_param: 0
   fold_option: 1
   fold_based: 1
   pt_Painting: {fileID: 7879231173614876191}
@@ -310,14 +309,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 3902099935940337274}
-  OriginalColor: {r: 1, g: 1, b: 1, a: 1}
-  ColoriseName: 
+  OriginalColor: {r: 0.3, g: 0.5, b: 0.3, a: 1}
+  ColoriseName: "\u4EAE\u94B4\u84DD"
   Debug: 0
-  SyncLibraryColor: 0
-  SyncImageColor: 0
-  fold_param: 1
-  fold_option: 1
-  fold_based: 1
+  SyncLibraryColor: 1
+  SyncImageColor: 1
+  fold_param: 0
+  fold_option: 0
+  fold_based: 0
 --- !u!114 &7336761279296146366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,16 +331,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 3902099935940337274}
   PrimitiveFeatures:
-    Position: {x: 0, y: 133.3, z: 0}
+    Position: {x: 7.1, y: 367.5, z: 0}
     Euler: {x: -0, y: 0, z: 0}
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Size: {x: 120, y: 30}
+    Color: {r: 0.3529412, g: 0.69803923, b: 1, a: 1}
+    Size: {x: 284.06, y: 59.9}
     Fill: 0
   FirstSaveFeatures: 1
   Debug: 0
-  fold_param: 1
+  fold_param: 0
   fold_option: 1
   fold_based: 1
 --- !u!114 &6197335552179945544
@@ -370,7 +369,7 @@ MonoBehaviour:
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
     Delay: 0
-    Progress: 0.9414676
+    Progress: 0
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
     TextExtended: 0
@@ -494,7 +493,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
   - ID: 7484
     Indicator: NewTween
     Enabled: 1
@@ -560,7 +559,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
   - ID: 4245
     Indicator: NewTween
     Enabled: 1
@@ -626,6 +625,72 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
+    IsFold: 1
+  - ID: 5445
+    Indicator: NewTween
+    Enabled: 1
+    Type: 3
+    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Duration: 2.432
+    Delay: 0
+    Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
+    TextExtended: 0
+    Rewind_Set_Startvalue: 1
+    Complete_Set_Endvalue: 1
+    Ease: 10
+    AnimationCurveName: 
+    ValueModeIndex: 0
+    TweenValueMode: 0
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Original_Int: 0
+    Original_Float: 0
+    Original_Vector2: {x: 0, y: 0}
+    Original_Vector3: {x: 0, y: 0, z: 0}
+    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    Original_Color: {r: 0, g: 0.5964391, b: 1, a: 1}
+    Original_String: 
+    From_Int: 0
+    From_Float: 0
+    From_Vector2: {x: 0, y: 0}
+    From_Vector3: {x: 0, y: 0, z: 0}
+    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    From_Color: {r: 1, g: 1, b: 1, a: 1}
+    From_String: 
+    End_Int: 0
+    End_Float: 0
+    End_Vector2: {x: 0, y: 0}
+    End_Vector3: {x: 0, y: 0, z: 0}
+    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    End_Color: {r: 1, g: 1, b: 1, a: 1}
+    End_String: 
+    RotateMode: 0
+    LoopType: 0
+    LoopCount: 0
     IsFold: 0
   PrimitiveTweenSounds: []
   GlobalDuration: 1
@@ -688,13 +753,15 @@ MonoBehaviour:
   PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
   fold_param: 0
   fold_option: 1
-  fold_based: 1
-  fold_list: 0
+  fold_based: 0
+  fold_list: 1
   fold_state: 1
   Timeline_TrackPosition: 118.90707
   Timeline_TrackScroll: {x: 0, y: 0}
   Timeline_TrackHeight: 37.38897
   Timeline_TrackSnapEnabled: 0
+  Timeline_TrackSoundPreviewer: 1
+  Timeline_TrackPreviewLoop: 0
 --- !u!1 &5586265402159010148
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,7 +805,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 256, y: 256}
+  m_SizeDelta: {x: 512, y: 641.1628}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3077325663351724641
 MonoBehaviour:
@@ -760,14 +827,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 57c88cb2504485740b7217dbd07e3ba0, type: 3}
+  m_Sprite: {fileID: 1336717337, guid: 3b9d1a7bcfda9824abaa120e601ae1b3, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
-  m_FillClockwise: 0
-  m_FillOrigin: 0
+  m_FillClockwise: 1
+  m_FillOrigin: 1
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!222 &2275790019657544720
@@ -818,7 +885,7 @@ CanvasGroup:
   m_Enabled: 1
   m_Alpha: 1
   m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!114 &8259106006528024215
 MonoBehaviour:
@@ -873,7 +940,7 @@ MonoBehaviour:
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
-    Size: {x: 256, y: 256}
+    Size: {x: 512, y: 641.1628}
     Fill: 1
   FirstSaveFeatures: 1
   Debug: 0
@@ -899,7 +966,7 @@ MonoBehaviour:
   TweenIsPreviewing: 0
   MainTweenNode: 
   PrimitiveTweenNodes:
-  - ID: 2633
+  - ID: 5426
     Indicator: NewTween
     Enabled: 1
     Type: 3
@@ -970,8 +1037,8 @@ MonoBehaviour:
     Enabled: 1
     Type: 3
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 1
-    Delay: 1.151
+    Duration: 1.366
+    Delay: 1.079
     Progress: 0
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
@@ -1011,7 +1078,7 @@ MonoBehaviour:
     Original_Vector2: {x: 150, y: 150}
     Original_Vector3: {x: 2, y: 2, z: 2}
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    Original_Color: {r: 0.010703921, g: 1, b: 0, a: 1}
+    Original_Color: {r: 0, g: 0, b: 0, a: 0}
     Original_String: 
     From_Int: 0
     From_Float: 0.5
@@ -1097,13 +1164,13 @@ MonoBehaviour:
     LoopType: 0
     LoopCount: 0
     IsFold: 1
-  - ID: 5136
+  - ID: 1701
     Indicator: NewTween
     Enabled: 1
     Type: 6
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 0.521
-    Delay: 1.558
+    Duration: 0.598
+    Delay: 1.524
     Progress: 0
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
@@ -1165,28 +1232,28 @@ MonoBehaviour:
     IsFold: 1
   PrimitiveTweenSounds:
   - ID: 2731
-    Sound: {fileID: 8300000, guid: 9fae4bdf24cc72d4999b0f025390c11a, type: 3}
-    Path: Assets/SevenStrikeModules/XHud/Sound/warning.wav
+    Sound: {fileID: 8300000, guid: 3b0d6c66aeca5ad48807e549004a9a11, type: 3}
+    Path: "Assets/SevenStrikeModules/XHud/Sound/\u7535\u5B50\u6FC0\u5149\u58F011.wav"
     Timing: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Delay: 0.345
+    Delay: 0.176
     Volume: 1
     MaxPitch: 1
     MinPitch: 1
     Mute: 0
   - ID: 4268
-    Sound: {fileID: 8300000, guid: 6286f82dee450e442884e65777cc3200, type: 3}
-    Path: Assets/SevenStrikeModules/XHud/Sound/buttonclickrelease.wav
+    Sound: {fileID: 8300000, guid: 87824fcca5af67047825e110a7a19fd4, type: 3}
+    Path: "Assets/SevenStrikeModules/XHud/Sound/\u7535\u5B50\u6FC0\u5149\u58F015.wav"
     Timing: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Delay: 1.642
+    Delay: 1.436
     Volume: 1
     MaxPitch: 1
     MinPitch: 1
     Mute: 0
   GlobalDuration: 1
   MinTimer: 0.581
-  MaxTimer: 2.151
+  MaxTimer: 2.4450002
   MinTimerWithGlobalDuration: 0.581
-  MaxTimerWithGlobalDuration: 2.151
+  MaxTimerWithGlobalDuration: 2.4450002
   eve_on_Tween_Play:
     m_PersistentCalls:
       m_Calls: []
@@ -1245,10 +1312,12 @@ MonoBehaviour:
   fold_based: 1
   fold_list: 1
   fold_state: 1
-  Timeline_TrackPosition: 336.12274
+  Timeline_TrackPosition: 307.56644
   Timeline_TrackScroll: {x: 0, y: 0}
-  Timeline_TrackHeight: 28.653547
+  Timeline_TrackHeight: 26
   Timeline_TrackSnapEnabled: 0
+  Timeline_TrackSoundPreviewer: 1
+  Timeline_TrackPreviewLoop: 1
 --- !u!1 &5755098906041804970
 GameObject:
   m_ObjectHideFlags: 0
@@ -1711,7 +1780,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -51.6, y: 89.8}
+  m_AnchoredPosition: {x: 110, y: 290}
   m_SizeDelta: {x: 120, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9001394214252907755
@@ -1742,7 +1811,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 000000000
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3d6405d940e228d4b85a181d7ed3204f, type: 2}
   m_sharedMaterial: {fileID: 8758288759659929589, guid: 3d6405d940e228d4b85a181d7ed3204f, type: 2}
@@ -1820,6 +1889,7 @@ MonoBehaviour:
   TextIsChanged: 1
   SyncGlobalFontSize: 1
   mgr: {fileID: 0}
+  TextColorOwner: 2
   TextStyleInfo:
     Name: 
     Description: 
@@ -1894,16 +1964,15 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncPrimitivePaintingColor: 0
   TextStyleInfo_Library:
-    Name: 
-    Description: 
-    Type: 0
+    Name: NewTextStyle_HudTmpText
+    Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudTmpText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
+    Type: 1
     Style: 0
     ContentAnchor: 4
     Font: {fileID: 0}
     Font_AssetPath: 
-    Size: 13
+    Size: 50
     LineHeight: 1
     Overflow_Horizon: 0
     Overflow_Vertical: 0
@@ -1916,18 +1985,18 @@ MonoBehaviour:
     Fit_Max_GlobalScaled: 0
     Size_GlobalScaled: 0
     FontColor: {r: 1, g: 1, b: 1, a: 1}
-    tmp_rich: 0
+    tmp_rich: 1
     tmp_contentwrap: 0
     tmp_overflow: 0
     tmp_style: 0
     tmp_anchor: 14
-    tmp_font: {fileID: 0}
+    tmp_font: {fileID: 11400000, guid: 3d6405d940e228d4b85a181d7ed3204f, type: 2}
     tmp_fontasset_assetpath: 
     tmp_size: 13
     tmp_size_globalscaled: 0
     tmp_space_character: 0
     tmp_space_word: 0
-    tmp_space_lineheight: 0
+    tmp_space_lineheight: 1
     tmp_space_paragraph: 0
     tmp_WrappingRatios: 0
     tmp_contentmargin: {x: 0, y: 0, z: 0, w: 0}
@@ -1940,13 +2009,13 @@ MonoBehaviour:
     tmp_CharWidthMaxAdj: 0
     tmp_LineSpacingMax: 0
     gra_A: {r: 1, g: 1, b: 1, a: 1}
-    gra_B: {r: 1, g: 1, b: 1, a: 1}
+    gra_B: {r: 1, g: 0, b: 0, a: 1}
     gra_C: {r: 1, g: 1, b: 1, a: 1}
     gra_D: {r: 1, g: 1, b: 1, a: 1}
     gra_Invert: 0
-    gra_Used: 0
-    gra_ColorMode: 0
-    gra_ColorModeName: 
+    gra_Used: 1
+    gra_ColorMode: 1
+    gra_ColorModeName: "\u6C34\u5E73\u6E10\u53D8"
     LibStyle_Effect_geometre_align: 0
     LibStyle_Effect_align: 0
     LibStyle_Effect_font: 0
@@ -1969,7 +2038,6 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
-    SyncPrimitivePaintingColor: 0
 --- !u!114 &830724219823893641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2038,13 +2106,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 830724219823893641}
-  OriginalColor: {r: 1, g: 1, b: 1, a: 1}
+  OriginalColor: {r: 1, g: 0, b: 0, a: 1}
   ColoriseName: 
   Debug: 0
   SyncLibraryColor: 0
   SyncImageColor: 0
-  fold_param: 1
-  fold_option: 1
+  fold_param: 0
+  fold_option: 0
   fold_based: 1
 --- !u!114 &1598372777947110936
 MonoBehaviour:
@@ -2060,7 +2128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 830724219823893641}
   PrimitiveFeatures:
-    Position: {x: -51.6, y: 89.8, z: 0}
+    Position: {x: 110, y: 290, z: 0}
     Euler: {x: -0, y: 0, z: 0}
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
@@ -2091,87 +2159,21 @@ MonoBehaviour:
   TweenIsPreviewing: 0
   MainTweenNode: 
   PrimitiveTweenNodes:
-  - ID: 6607
+  - ID: 0
     Indicator: NewTween
     Enabled: 1
-    Type: 5
+    Type: 3
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 1.874
-    Delay: 0.786
-    Progress: 0.08296147
-    TextCursorBlinkSpeed: 0.1
-    TextCursor: _
-    TextExtended: 1
-    Rewind_Set_Startvalue: 1
-    Complete_Set_Endvalue: 1
-    Ease: 1
-    AnimationCurveName: 
-    ValueModeIndex: 3
-    TweenValueMode: 3
-    Curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    Original_Int: 0
-    Original_Float: 0
-    Original_Vector2: {x: 0, y: 0}
-    Original_Vector3: {x: 0, y: 0, z: 0}
-    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    Original_Color: {r: 1, g: 1, b: 1, a: 1}
-    Original_String: AAAAAAAAAAA
-    From_Int: 0
-    From_Float: 0
-    From_Vector2: {x: 0, y: 0}
-    From_Vector3: {x: 0, y: 0, z: 0}
-    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    From_Color: {r: 1, g: 1, b: 1, a: 1}
-    From_String: 00000000000000
-    End_Int: 0
-    End_Float: 0
-    End_Vector2: {x: 0, y: 0}
-    End_Vector3: {x: 0, y: 0, z: 0}
-    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
-    End_Color: {r: 1, g: 1, b: 1, a: 1}
-    End_String: "\u8BF6\uFF1F \u4EBA\u5462\uFF1F\u90FD\u53BB\u54EA\u4E86\uFF1F"
-    RotateMode: 0
-    LoopType: 0
-    LoopCount: 0
-    IsFold: 1
-  - ID: 6443
-    Indicator: NewTween
-    Enabled: 1
-    Type: 5
-    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Duration: 0.563
+    Duration: 1
     Delay: 0
     Progress: 0
-    TextCursorBlinkSpeed: 0.1
-    TextCursor: _
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
     TextExtended: 0
     Rewind_Set_Startvalue: 1
     Complete_Set_Endvalue: 1
-    Ease: 1
-    AnimationCurveName: 
+    Ease: 10
+    AnimationCurveName: DefaultCurve
     ValueModeIndex: 0
     TweenValueMode: 0
     Curve:
@@ -2199,36 +2201,234 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     Original_Int: 0
+    Original_Float: 0.35
+    Original_Vector2: {x: 300, y: 300}
+    Original_Vector3: {x: 1, y: 1, z: 1}
+    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    Original_Color: {r: 1, g: 1, b: 1, a: 1}
+    Original_String: 
+    From_Int: 0
+    From_Float: 0.5
+    From_Vector2: {x: 100, y: 100}
+    From_Vector3: {x: 0, y: 0, z: 0}
+    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    From_Color: {r: 0, g: 0.50931406, b: 1, a: 1}
+    From_String: 
+    End_Int: 0
+    End_Float: 0
+    End_Vector2: {x: 150, y: 150}
+    End_Vector3: {x: 2, y: 2, z: 2}
+    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    End_Color: {r: 1, g: 0, b: 0, a: 1}
+    End_String: 
+    RotateMode: 0
+    LoopType: 0
+    LoopCount: 0
+    IsFold: 1
+  - ID: 0
+    Indicator: NewTween
+    Enabled: 1
+    Type: 3
+    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Duration: 1.366
+    Delay: 1.079
+    Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
+    TextExtended: 0
+    Rewind_Set_Startvalue: 1
+    Complete_Set_Endvalue: 1
+    Ease: 19
+    AnimationCurveName: DefaultCurve
+    ValueModeIndex: 0
+    TweenValueMode: 0
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Original_Int: 0
+    Original_Float: 0.35
+    Original_Vector2: {x: 150, y: 150}
+    Original_Vector3: {x: 2, y: 2, z: 2}
+    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    Original_Color: {r: 0, g: 0, b: 0, a: 0}
+    Original_String: 
+    From_Int: 0
+    From_Float: 0.5
+    From_Vector2: {x: 100, y: 100}
+    From_Vector3: {x: 50, y: 50, z: 0}
+    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    From_Color: {r: 1, g: 1, b: 1, a: 1}
+    From_String: 
+    End_Int: 0
+    End_Float: 0
+    End_Vector2: {x: 50, y: 50}
+    End_Vector3: {x: 0, y: 0, z: 0}
+    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    End_Color: {r: 0.6814869, g: 0.19339621, b: 1, a: 1}
+    End_String: 
+    RotateMode: 0
+    LoopType: 0
+    LoopCount: 0
+    IsFold: 1
+  - ID: 0
+    Indicator: NewTween
+    Enabled: 1
+    Type: 6
+    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Duration: 0.581
+    Delay: 0
+    Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
+    TextExtended: 0
+    Rewind_Set_Startvalue: 1
+    Complete_Set_Endvalue: 1
+    Ease: 10
+    AnimationCurveName: 
+    ValueModeIndex: 1
+    TweenValueMode: 1
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Original_Int: 0
     Original_Float: 0
     Original_Vector2: {x: 0, y: 0}
     Original_Vector3: {x: 0, y: 0, z: 0}
     Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
     Original_Color: {r: 1, g: 1, b: 1, a: 1}
-    Original_String: ZZZZZZZZZ
+    Original_String: 
     From_Int: 0
     From_Float: 0
     From_Vector2: {x: 0, y: 0}
     From_Vector3: {x: 0, y: 0, z: 0}
     From_Vector4: {x: 0, y: 0, z: 0, w: 0}
     From_Color: {r: 1, g: 1, b: 1, a: 1}
-    From_String: 000000000
+    From_String: 
+    End_Int: 0
+    End_Float: 1
+    End_Vector2: {x: 0, y: 0}
+    End_Vector3: {x: 0, y: 0, z: 0}
+    End_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    End_Color: {r: 1, g: 1, b: 1, a: 1}
+    End_String: 
+    RotateMode: 0
+    LoopType: 0
+    LoopCount: 0
+    IsFold: 1
+  - ID: 0
+    Indicator: NewTween
+    Enabled: 1
+    Type: 6
+    Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
+    Duration: 0.598
+    Delay: 1.524
+    Progress: 0
+    TextCursorBlinkSpeed: 0.5
+    TextCursor: '|'
+    TextExtended: 0
+    Rewind_Set_Startvalue: 1
+    Complete_Set_Endvalue: 1
+    Ease: 10
+    AnimationCurveName: 
+    ValueModeIndex: 1
+    TweenValueMode: 1
+    Curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Original_Int: 0
+    Original_Float: 1
+    Original_Vector2: {x: 0, y: 0}
+    Original_Vector3: {x: 0, y: 0, z: 0}
+    Original_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    Original_Color: {r: 1, g: 1, b: 1, a: 1}
+    Original_String: 
+    From_Int: 0
+    From_Float: 1
+    From_Vector2: {x: 0, y: 0}
+    From_Vector3: {x: 0, y: 0, z: 0}
+    From_Vector4: {x: 0, y: 0, z: 0, w: 0}
+    From_Color: {r: 1, g: 1, b: 1, a: 1}
+    From_String: 
     End_Int: 0
     End_Float: 0
     End_Vector2: {x: 0, y: 0}
     End_Vector3: {x: 0, y: 0, z: 0}
     End_Vector4: {x: 0, y: 0, z: 0, w: 0}
     End_Color: {r: 1, g: 1, b: 1, a: 1}
-    End_String: AAXXCCVV
+    End_String: 
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
     IsFold: 1
   PrimitiveTweenSounds: []
   GlobalDuration: 1
-  MinTimer: 0.563
-  MaxTimer: 2.6599998
-  MinTimerWithGlobalDuration: 0.563
-  MaxTimerWithGlobalDuration: 2.6599998
+  MinTimer: 0.581
+  MaxTimer: 2.4450002
+  MinTimerWithGlobalDuration: 0.581
+  MaxTimerWithGlobalDuration: 2.4450002
   eve_on_Tween_Play:
     m_PersistentCalls:
       m_Calls: []
@@ -2284,10 +2484,12 @@ MonoBehaviour:
   PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
   fold_param: 0
   fold_option: 1
-  fold_based: 1
+  fold_based: 0
   fold_list: 0
   fold_state: 1
-  Timeline_TrackPosition: 336.12274
+  Timeline_TrackPosition: 307.56644
   Timeline_TrackScroll: {x: 0, y: 0}
   Timeline_TrackHeight: 28.653547
   Timeline_TrackSnapEnabled: 0
+  Timeline_TrackSoundPreviewer: 1
+  Timeline_TrackPreviewLoop: 0

@@ -42,7 +42,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <param name="absolute_margin">是否使用绝对外边距。为 <c>true</c> 时直接使用 <paramref name="margin"/> 覆盖样式默认值。</param>
         /// <param name="padding">容器的内边距。</param>
         /// <param name="title">容器的标题文本。为 <c>null</c> 或空时不显示标题。</param>
-        /// <param name="title_bg_fill">标题背景的填充样式。为 <see cref="XGUIFilled.无"/> 时不绘制标题背景。</param>
+        /// <param name="title_bg_fill">标题背景的填充样式。为 <see cref="XGUIGroup.无"/> 时不绘制标题背景。</param>
         /// <param name="title_bg_color">标题背景的颜色主题。</param>
         /// <param name="title_bg_color_gui">标题背景的叠加颜色。传入默认值时使用白色。</param>
         /// <param name="title_size">标题文本的字体大小。</param>
@@ -66,7 +66,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 无需手动指定矩形位置。
         /// </para>
         /// </remarks>
-        public static bool layout_group_start(XGUIContainerType type = XGUIContainerType.Vertical, XGUIFilled bg_fill = XGUIFilled.无, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, float bg_height = 0, RectOffset margin = default, bool absolute_padding = false, bool absolute_margin = false, RectOffset padding = default, string title = null, XGUIFilled title_bg_fill = XGUIFilled.无, XGUIColor title_bg_color = XGUIColor.无, Color title_bg_color_gui = default, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_text_color = default, Vector2 title_offset = default, RectOffset title_padding = default, Font title_font = null, FontStyle title_font_style = FontStyle.Normal, TextClipping title_clipping = TextClipping.Clip, Texture2D icon = null, Color icon_color = default, RectOffset icon_padding = default, bool can_foldout = true, bool foldout = true, bool title_manual_offset = false, float title_manual_offset_space = 0, float group_width = 0)
+        public static bool layout_group_start(XGUIContainerType type = XGUIContainerType.Vertical, XGUIGroup bg_fill = XGUIGroup.无, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, float bg_height = 0, RectOffset margin = default, bool absolute_padding = false, bool absolute_margin = false, RectOffset padding = default, string title = null, XGUIGroup title_bg_fill = XGUIGroup.无, XGUIColor title_bg_color = XGUIColor.无, Color title_bg_color_gui = default, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_text_color = default, Vector2 title_offset = default, RectOffset title_padding = default, Font title_font = null, FontStyle title_font_style = FontStyle.Normal, TextClipping title_clipping = TextClipping.Clip, Texture2D icon = null, Color icon_color = default, RectOffset icon_padding = default, bool can_foldout = true, bool foldout = true, bool title_manual_offset = false, float title_manual_offset_space = 0, float group_width = 0)
         {
             #region group
             if (bg_color_gui == default)
@@ -80,8 +80,8 @@ namespace SevenStrikeModules.XGUI.Editor
 
             // 样式 - 背景
             GUIStyle style_group = new GUIStyle(style_xg_group);
-            if (bg_fill != XGUIFilled.无)
-                style_group.normal.background = GetFillTexture(bg_fill, bg_color);
+            if (bg_fill != XGUIGroup.无)
+                style_group.normal.background = GetGroupTexture(bg_fill, bg_color);
             else
                 style_group.normal.background = null;
 
@@ -139,7 +139,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 Rect rect_title = rect_last;
 
                 // 如果设定为有标题背景则使用根据标题文字长度自动计算宽度，否则使用窗口宽度减去阈值
-                if (title_bg_fill != XGUIFilled.无)
+                if (title_bg_fill != XGUIGroup.无)
                 {
                     GUIStyle style = new GUIStyle(style_xg_label);  // 直接使用
                     style.fontSize = XGUI.GetFontSize(title_size);
@@ -166,10 +166,10 @@ namespace SevenStrikeModules.XGUI.Editor
                     bg_color: title_bg_color,
                     bg_color_gui: title_bg_color_gui,
                     size: title_size,
-                    anchor: title_bg_fill != XGUIFilled.无 ? TextAnchor.MiddleCenter : title_anchor,
+                    anchor: title_bg_fill != XGUIGroup.无 ? TextAnchor.MiddleCenter : title_anchor,
                     text_color: title_text_color,
                     offset: title_offset + new Vector2(0, -1),
-                    padding: title_bg_fill != XGUIFilled.无 ? new RectOffset(11, 11, 0, 0) : new RectOffset(5, 5, 0, 0),
+                    padding: title_bg_fill != XGUIGroup.无 ? new RectOffset(11, 11, 0, 0) : new RectOffset(5, 5, 0, 0),
                     clipping: title_clipping,
                     font: title_font != null ? title_font : style_group.font,
                     font_style: title_font_style,
@@ -243,7 +243,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <param name="absolute_margin">是否使用绝对外边距。为 <c>true</c> 时直接使用 <paramref name="margin"/> 覆盖样式默认值。</param>
         /// <param name="padding">容器的内边距。</param>
         /// <param name="title">容器的标题文本。为 <c>null</c> 或空时不显示标题。</param>
-        /// <param name="title_bg_fill">标题背景的填充样式。为 <see cref="XGUIFilled.无"/> 时不绘制标题背景。</param>
+        /// <param name="title_bg_fill">标题背景的填充样式。为 <see cref="XGUIGroup.无"/> 时不绘制标题背景。</param>
         /// <param name="title_bg_color">标题背景的颜色主题。</param>
         /// <param name="title_bg_color_gui">标题背景的叠加颜色。传入默认值时使用白色。</param>
         /// <param name="title_size">标题文本的字体大小。</param>
@@ -263,7 +263,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 该方法与 <see cref="editor_layout_group_end"/> 成对使用，基于 <see cref="EditorGUILayout"/> 自动布局系统。
         /// 与 <see cref="layout_group_start"/> 功能类似，但返回分组的矩形区域，便于需要精确位置信息的场景。
         /// </remarks>
-        public static Rect editor_layout_group_start(XGUIContainerType type = XGUIContainerType.Vertical, XGUIFilled bg_fill = XGUIFilled.无, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, float bg_height = 0, RectOffset margin = default, bool absolute_padding = false, bool absolute_margin = false, RectOffset padding = default, string title = null, XGUIFilled title_bg_fill = XGUIFilled.无, XGUIColor title_bg_color = XGUIColor.无, Color title_bg_color_gui = default, XGUIFontSize title_size = XGUIFontSize.B, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_text_color = default, Vector2 title_offset = default, RectOffset title_padding = default, Font title_font = null, FontStyle title_font_style = FontStyle.Normal, TextClipping title_clipping = TextClipping.Clip, Texture2D icon = null, Color icon_color = default, RectOffset icon_padding = default, bool can_foldout = true, bool foldout = true, bool title_manual_offset = false, float title_manual_offset_space = 0)
+        public static Rect editor_layout_group_start(XGUIContainerType type = XGUIContainerType.Vertical, XGUIGroup bg_fill = XGUIGroup.无, XGUIColor bg_color = XGUIColor.亮白, Color bg_color_gui = default, float bg_height = 0, RectOffset margin = default, bool absolute_padding = false, bool absolute_margin = false, RectOffset padding = default, string title = null, XGUIGroup title_bg_fill = XGUIGroup.无, XGUIColor title_bg_color = XGUIColor.无, Color title_bg_color_gui = default, XGUIFontSize title_size = XGUIFontSize.B, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_text_color = default, Vector2 title_offset = default, RectOffset title_padding = default, Font title_font = null, FontStyle title_font_style = FontStyle.Normal, TextClipping title_clipping = TextClipping.Clip, Texture2D icon = null, Color icon_color = default, RectOffset icon_padding = default, bool can_foldout = true, bool foldout = true, bool title_manual_offset = false, float title_manual_offset_space = 0)
         {
             Rect rect_group;
 
@@ -279,8 +279,8 @@ namespace SevenStrikeModules.XGUI.Editor
 
             // 样式 - 背景
             GUIStyle style_group = new GUIStyle(style_xg_group);
-            if (bg_fill != XGUIFilled.无)
-                style_group.normal.background = GetFillTexture(bg_fill, bg_color);
+            if (bg_fill != XGUIGroup.无)
+                style_group.normal.background = GetGroupTexture(bg_fill, bg_color);
             else
                 style_group.normal.background = null;
 
@@ -332,7 +332,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 Rect rect_title = rect_last;
 
                 // 如果设定为有标题背景则使用根据标题文字长度自动计算宽度，否则使用窗口宽度减去阈值
-                if (title_bg_fill != XGUIFilled.无)
+                if (title_bg_fill != XGUIGroup.无)
                 {
                     GUIStyle style = new GUIStyle(style_xg_label);  // 直接使用
                     style.fontSize = XGUI.GetFontSize(title_size);
@@ -359,10 +359,10 @@ namespace SevenStrikeModules.XGUI.Editor
                     bg_color: title_bg_color,
                     bg_color_gui: title_bg_color_gui,
                     size: title_size,
-                    anchor: title_bg_fill != XGUIFilled.无 ? TextAnchor.MiddleCenter : title_anchor,
+                    anchor: title_bg_fill != XGUIGroup.无 ? TextAnchor.MiddleCenter : title_anchor,
                     text_color: title_text_color,
                     offset: title_offset + new Vector2(0, -1),
-                    padding: title_bg_fill != XGUIFilled.无 ? new RectOffset(11, 11, 0, 0) : new RectOffset(5, 5, 0, 0),
+                    padding: title_bg_fill != XGUIGroup.无 ? new RectOffset(11, 11, 0, 0) : new RectOffset(5, 5, 0, 0),
                     clipping: title_clipping,
                     font: title_font != null ? title_font : style_group.font,
                     font_style: title_font_style,

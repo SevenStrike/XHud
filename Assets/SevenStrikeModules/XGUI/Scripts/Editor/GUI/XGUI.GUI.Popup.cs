@@ -56,7 +56,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <returns>用户选择后的整数值（索引）。</returns>
         /// <remarks>
         /// 该版本基于 <see cref="SerializedProperty"/>，支持多选混合状态显示（显示 "—"）。
-        public static int gui_int_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, SerializedProperty prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleLeft, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, float width_limite = 0, bool usearrow = true)
+        public static int gui_int_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, SerializedProperty prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleLeft, FontStyle opt_font_style = FontStyle.Normal, XGUIGroup opt_bg_fill = XGUIGroup.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, float width_limite = 0, bool usearrow = true)
         {
             if (title_color == Color.clear)
                 title_color = Color.white * 0.9f;
@@ -99,7 +99,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             #region 下拉菜单样式
             GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
-            style.normal.background = GetFillTexture(opt_bg_fill, opt_bg_color);
+            style.normal.background = GetGroupTexture(opt_bg_fill, opt_bg_color);
             style.normal.textColor = opt_text_color;
             style.fontSize = XGUI.GetFontSize(opt_text_size);
 
@@ -194,7 +194,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <remarks>
         /// 该版本基于值类型（int），适用于非序列化属性的场景，不处理多选混合状态。
         /// </remarks>
-        public static int gui_int_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, int prop = 0, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleLeft, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, float width_limite = 0, bool usearrow = true)
+        public static int gui_int_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, int prop = 0, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleLeft, FontStyle opt_font_style = FontStyle.Normal, XGUIGroup opt_bg_fill = XGUIGroup.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, float width_limite = 0, bool usearrow = true)
         {
             if (title_color == Color.clear)
                 title_color = Color.white * 0.9f;
@@ -233,7 +233,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             #region 下拉菜单样式
             GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
-            style.normal.background = GetFillTexture(opt_bg_fill, opt_bg_color);
+            style.normal.background = GetGroupTexture(opt_bg_fill, opt_bg_color);
             style.normal.textColor = opt_text_color;
             style.fontSize = XGUI.GetFontSize(opt_text_size);
 
@@ -305,7 +305,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 该版本基于 <see cref="SerializedProperty"/>，支持多选混合状态显示（显示 "—"）。
         /// 通过将字符串值与选项数组匹配来确定当前选中项，选中后通过 <see cref="SerializedProperty.stringValue"/> 设置值。
         /// </remarks>
-        public static string gui_string_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, SerializedProperty prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, float width_limite = 0, bool usearrow = true)
+        public static string gui_string_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, SerializedProperty prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIGroup opt_bg_fill = XGUIGroup.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, float width_limite = 0, bool usearrow = true)
         {
             if (title_color == Color.clear)
                 title_color = Color.white * 0.9f;
@@ -348,7 +348,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             #region 下拉菜单样式
             GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
-            style.normal.background = GetFillTexture(opt_bg_fill, opt_bg_color);
+            style.normal.background = GetGroupTexture(opt_bg_fill, opt_bg_color);
             style.normal.textColor = opt_text_color;
             style.fontSize = XGUI.GetFontSize(opt_text_size);
 
@@ -445,7 +445,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// 该版本基于值类型（string），适用于非序列化属性的场景，不处理多选混合状态。
         /// 通过将当前值与选项数组匹配来确定选中索引，用户选择后更新值并返回。
         /// </remarks>
-        public static string gui_string_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, string prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIFilled opt_bg_fill = XGUIFilled.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, float width_limite = 0, bool usearrow = true)
+        public static string gui_string_popup(Rect rect = default, string title = null, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, RectOffset title_padding = default, float title_width = 60, string prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIGroup opt_bg_fill = XGUIGroup.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, float width_limite = 0, bool usearrow = true)
         {
             if (title_color == Color.clear)
                 title_color = Color.white * 0.9f;
@@ -491,7 +491,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             #region 下拉菜单样式
             GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
-            style.normal.background = GetFillTexture(opt_bg_fill, opt_bg_color);
+            style.normal.background = GetGroupTexture(opt_bg_fill, opt_bg_color);
             style.normal.textColor = opt_text_color;
             style.fontSize = XGUI.GetFontSize(opt_text_size);
 

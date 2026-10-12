@@ -473,7 +473,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 标题
             XGUI.layout_banner(
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.深空灰,
                 bg_height: 30,
                 title_text: "XHud  -  元素库",
@@ -491,7 +491,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 参数区
             XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIFilled.缺口纯色边框,
+                    bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.Theme_Group,
                     title: "参数",
@@ -560,7 +560,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     XGUI.layout_group_start(
                        type: XGUIContainerType.Horizontal,
-                       bg_fill: XGUIFilled.缺口纯色边框,
+                       bg_fill: XGUIGroup.缺口纯色边框,
                        bg_color: XGUIColor.亮白,
                        bg_color_gui: XHud_Dashboard.Theme_Group,
                        title: "快捷功能",
@@ -723,7 +723,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 元素库列表
             XGUI.layout_group_start(
                type: XGUIContainerType.Vertical,
-               bg_fill: XGUIFilled.缺口纯色边框,
+               bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
                bg_color_gui: XHud_Dashboard.Theme_Group,
                title: "元素库列表",

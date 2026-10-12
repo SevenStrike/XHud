@@ -165,7 +165,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 标题
             XGUI.gui_label(
                 rect: rect_title,
-                bg_fill: XGUIFilled.实体,
+                bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
                 bg_color_gui: Color.white * 0.88f,
                 text: new GUIContent(title),

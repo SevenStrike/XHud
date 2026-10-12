@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XHud.Enums;
     using UnityEngine;
 
     public class XHud_Module_Primitive_Painting : MonoBehaviour
@@ -123,21 +124,19 @@ namespace SevenStrikeModules.XHud
             //--否则 - 如果 - 文字组件存在则使用color覆盖文字组件的颜色
             else if (controller.mod_Text != null)
             {
-                if (!controller.mod_Text.TextStyleInfo.SyncPrimitivePaintingColor)
+                if (controller.mod_Text.TextColorOwner != TextColorOwner.Painting)
                     return;
-                if (controller.mod_Text.StyleLibSynching)
-                    if (controller.mod_Text.TextStyleInfo.LibStyle_Effect_color)
-                        return;
+                if (controller.mod_Text.StyleLibSynching && controller.mod_Text.TextStyleInfo.LibStyle_Effect_color)
+                    return;
                 controller.mod_Text.TextStyleInfo.txt_Set_FontColor(color);
             }
             //--否则 - 如果 - 文字组件存在则使用color覆盖文字组件的颜色
             else if (controller.mod_TmpText != null)
             {
-                if (!controller.mod_TmpText.TextStyleInfo.SyncPrimitivePaintingColor)
+                if (controller.mod_TmpText.TextColorOwner != TextColorOwner.Painting)
                     return;
-                if (controller.mod_TmpText.StyleLibSynching)
-                    if (controller.mod_TmpText.TextStyleInfo.LibStyle_Effect_color)
-                        return;
+                if (controller.mod_TmpText.StyleLibSynching && controller.mod_TmpText.TextStyleInfo.LibStyle_Effect_color)
+                    return;
                 controller.mod_TmpText.TextStyleInfo.tmp_Set_FontColor(color);
             }
             //--否则 - 如果 - 原始图像组件存在则使用color覆盖原始图像组件的颜色

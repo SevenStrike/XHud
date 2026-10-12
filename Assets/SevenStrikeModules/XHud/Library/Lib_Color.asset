@@ -16,7 +16,7 @@ MonoBehaviour:
   ColorLibrary:
   - Painting: {fileID: 0}
     Name: "\u739B\u7459\u7EA2(Agate Red)"
-    Color: {r: 1, g: 0.6117647, b: 0.6444564, a: 1}
+    Color: {r: 0.6117647, g: 0.63425833, b: 1, a: 1}
   - Painting: {fileID: 0}
     Name: "\u7FE1\u7FE0\u7EFF(Jade Green)"
     Color: {r: 0, g: 0.5, b: 0.2, a: 1}

@@ -225,7 +225,7 @@ namespace SevenStrikeModules.XGUI.Editor
         /// );
         /// </code>
         /// </example>
-        public static void gui_state_displayer_btn(Rect rect = default, GUIContent title = null, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, Color title_color = default, float btn_width = 0, string btn_tooltip = null, string btn_text = null, XGUIFilled btn_bg = XGUIFilled.实体, XGUIColor btn_color = XGUIColor.亮白, Color btn_gui_color = default, Color btn_text_color = default, XGUIFontSize btn_text_size = XGUIFontSize.M, XGUIFilled btn_press_bg = XGUIFilled.实体, XGUIColor btn_press_color = XGUIColor.亮白, Color btn_press_text_color = default, RectOffset padding = null, RectOffset margin = null, Action callback_clicked = null)
+        public static void gui_state_displayer_btn(Rect rect = default, GUIContent title = null, XGUIFontSize title_size = XGUIFontSize.M, FontStyle title_font_style = FontStyle.Normal, Color title_color = default, float btn_width = 0, string btn_tooltip = null, string btn_text = null, XGUIGroup btn_bg = XGUIGroup.实体, XGUIColor btn_color = XGUIColor.亮白, Color btn_gui_color = default, Color btn_text_color = default, XGUIFontSize btn_text_size = XGUIFontSize.M, XGUIGroup btn_press_bg = XGUIGroup.实体, XGUIColor btn_press_color = XGUIColor.亮白, Color btn_press_text_color = default, RectOffset padding = null, RectOffset margin = null, Action callback_clicked = null)
         {
             if (title_color == Color.clear)
                 title_color = Color.white * 0.9f;

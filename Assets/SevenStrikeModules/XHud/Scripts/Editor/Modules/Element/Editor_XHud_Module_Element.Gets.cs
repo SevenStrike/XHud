@@ -160,7 +160,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     rect: new Rect(rect.x + 20, rect.y + (rect.height / 2) - 5, rect.width - 30, XGUI.GetSingleLineHeight() * 2),
                                     text: new GUIContent("未初始化动画模块"),
                                     text_color: Color.gray,
-                                    bg_fill: XGUIFilled.纯色边框,
+                                    bg_fill: XGUIGroup.纯色边框,
                                     bg_color: XGUIColor.亮白,
                                     bg_color_gui: Color.gray * 0.85f,
                                     size: XGUIFontSize.S,
@@ -851,7 +851,7 @@ namespace SevenStrikeModules.XHud.Editor
                                         opt_text_padding: new RectOffset(10, 10, 0, 0),
                                         opt_anchor: TextAnchor.MiddleCenter,
                                         opt_font_style: FontStyle.Normal,
-                                        opt_bg_fill: XGUIFilled.实体,
+                                        opt_bg_fill: XGUIGroup.实体,
                                         opt_bg_color: XGUIColor.亮白,
                                         opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
                                         icon_arrow_color: Color.black);
