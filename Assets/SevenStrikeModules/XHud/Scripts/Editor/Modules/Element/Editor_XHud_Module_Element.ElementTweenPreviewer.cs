@@ -93,6 +93,7 @@ namespace SevenStrikeModules.XHud.Editor
                         }
                     }
                     #endregion
+
                     Preview_XHudSounds("元素进入时", ele.SounderNodes);
                 }
 
@@ -345,7 +346,9 @@ namespace SevenStrikeModules.XHud.Editor
                 if (tweener.PrimitiveTweenNodes[i].Timings != tim)
                     continue;
                 XTween_Interface tween = tweener.Tween_Create(tweener.PrimitiveTweenNodes[i], tweener.GlobalDuration * HudManager.DurationMultiply * dur);
-                tween.SetDelay(tween.Delay + delay);
+
+                if (tween != null)
+                    tween.SetDelay(tween.Delay + delay);
 
                 if (tween != null)
                     tweens.Add(tween);

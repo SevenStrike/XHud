@@ -28,6 +28,8 @@ namespace SevenStrikeModules.XHud.Editor
 
     public partial class Editor_XHud_Module_Primitive_Tween_Tracker
     {
+        GUIStyle style_war_line;
+
         /// <summary> 
         /// 绘制 Clip 时间轴区：刻度尺（固定）+ 双向 ScrollView（轨道 + Clip）+ 自绘水平滚动条
         /// <para/>
@@ -368,61 +370,109 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_box(clipRect, clipColor);
             #endregion
 
-            #region 类型指示条
-            Color clip_type_Color = GetTweenTypeColor(node.Type);
-            if (!node.Enabled)
-                clip_type_Color *= 0.55f;
-            if (isSelected)
-                clip_type_Color = Color.Lerp(clip_type_Color, Color.white, 0.25f);
-            if (!isSelected)
-                XGUI.gui_box(new Rect(clipRect.x, clipRect.y + clipRect.height - ClipTypeLineThickness, clipRect.width, ClipTypeLineThickness), clip_type_Color);
-            #endregion
-
-            #region 概述信息
             bool is_minmal = clipRect.width < 150;
             bool is_very_minmal = clipRect.width <= 90;
 
-            if (!is_very_minmal)
-            {
-                string twn_content = $"{(is_minmal ? "" : "延迟：")}{node.Delay:F3}   /   {(is_minmal ? "" : "耗时：")}{node.Duration:F3}";
-                XGUI.gui_label(
-                    rect: new Rect(clipRect.x + 4, clipRect.y, clipRect.width - 8, clipRect.height),
-                    text: new GUIContent(twn_content),
-                    text_color: isSelected ? (!node.Enabled ? Color.white * 0.7f : Color.black) : Color.white,
-                    size: XGUIFontSize.M,
-                    clipping: TextClipping.Clip,
-                    anchor: TextAnchor.MiddleCenter,
-                    font_style: FontStyle.Normal);
-            }
-            #endregion
+            ModuleType moduleType = target.controller.GetModuleType();
+            bool type_not_matched = (moduleType == ModuleType.TmpText || moduleType == ModuleType.Text) && node.Type == TweenNodeType.f_图像填充;
 
-            #region 类型图标
-            if (is_very_minmal)
+            if ((moduleType != ModuleType.TmpText && moduleType != ModuleType.Text) && node.Type == TweenNodeType.w_打字机)
+                type_not_matched = true;
+
+            if (type_not_matched)
             {
-                XGUI.gui_icon(
-                      rect: new Rect(clipRect.x + (clipRect.width / 2 - 6), clipRect.y + (trackHeight / 2 - 7), 12, 12),
-                      icon: GetTweenTypeIcon(node.Type, false),
-                      border: new RectOffset(0, 0, 0, 0),
-                      color: isSelected ? Color.black : Color.white * 0.9f);
+                XGUI.gui_box(clipRect, Color.white * 0.5f);
+
+                #region 警告斜纹覆盖
+                // UV：宽高按 "目标宽高 / 纹理宽高" 计算，得到重复次数
+                Rect sourceRect = new Rect(0, 0, clipRect.width / icon_war_lines.width * 3, clipRect.height / icon_war_lines.height * 3);
+                Graphics.DrawTexture(clipRect, icon_war_lines, sourceRect, 0, 0, 0, 0, Color.black * 0.15f);
+                #endregion
+
+                if (!is_minmal)
+                {
+                    XGUI.gui_icon(
+                        rect: new Rect(clipRect.x + 15, clipRect.y + (clipRect.height / 2) - 7, 14, 14),
+                        icon: icon_war,
+                        color: new Color(1f, 0.7f, 0.3f));
+
+                    XGUI.gui_icon(
+                       rect: new Rect(clipRect.x + (clipRect.width - 26), clipRect.y + (clipRect.height / 2) - 7, 14, 14),
+                       icon: icon_war,
+                       color: new Color(1f, 0.7f, 0.3f));
+
+                    XGUI.gui_label(
+                        rect: new Rect(clipRect.x + (clipRect.width / 2) - ((clipRect.width - 50) / 2), clipRect.y + (clipRect.height / 2) - (clipRect.height / 2), clipRect.width - 50, clipRect.height),
+                        text: new GUIContent("动画类型不兼容"),
+                        text_color: isSelected ? (!node.Enabled ? Color.white * 0.7f : Color.black) : Color.white,
+                        size: XGUIFontSize.M,
+                        clipping: TextClipping.Clip,
+                        anchor: TextAnchor.MiddleCenter,
+                        font_style: FontStyle.Normal);
+                }
+                else
+                {
+                    XGUI.gui_icon(
+                       rect: new Rect(clipRect.x + (clipRect.width / 2) - 7, clipRect.y + (clipRect.height / 2) - 7, 14, 14),
+                       icon: icon_war,
+                       color: new Color(1f, 0.7f, 0.3f));
+                }
             }
             else
             {
-                if (clipRect.width >= 220)
+                #region 类型指示条
+                Color clip_type_Color = GetTweenTypeColor(node.Type);
+                if (!node.Enabled)
+                    clip_type_Color *= 0.55f;
+                if (isSelected)
+                    clip_type_Color = Color.Lerp(clip_type_Color, Color.white, 0.25f);
+                if (!isSelected)
+                    XGUI.gui_box(new Rect(clipRect.x, clipRect.y + clipRect.height - ClipTypeLineThickness, clipRect.width, ClipTypeLineThickness), clip_type_Color);
+                #endregion
+
+                #region 概述信息
+                if (!is_very_minmal)
+                {
+                    string twn_content = $"{(is_minmal ? "" : "延迟：")}{node.Delay:F3}   /   {(is_minmal ? "" : "耗时：")}{node.Duration:F3}";
+                    XGUI.gui_label(
+                        rect: new Rect(clipRect.x + 4, clipRect.y, clipRect.width - 8, clipRect.height),
+                        text: new GUIContent(twn_content),
+                        text_color: isSelected ? (!node.Enabled ? Color.white * 0.7f : Color.black) : Color.white,
+                        size: XGUIFontSize.M,
+                        clipping: TextClipping.Clip,
+                        anchor: TextAnchor.MiddleCenter,
+                        font_style: FontStyle.Normal);
+                }
+                #endregion
+
+                #region 类型图标
+                if (is_very_minmal)
                 {
                     XGUI.gui_icon(
-                        rect: new Rect(clipRect.x + 15, clipRect.y + (trackHeight / 2 - 7), 12, 12),
-                        icon: GetTweenTypeIcon(node.Type, false),
-                        border: new RectOffset(0, 0, 0, 0),
-                        color: isSelected ? Color.black : Color.white * 0.9f);
-
-                    XGUI.gui_icon(
-                        rect: new Rect(clipRect.x + (clipRect.width - 25), clipRect.y + (trackHeight / 2 - 7), 12, 12),
-                        icon: GetTweenTypeIcon(node.Type, false),
-                        border: new RectOffset(0, 0, 0, 0),
-                        color: isSelected ? Color.black : Color.white * 0.9f);
+                          rect: new Rect(clipRect.x + (clipRect.width / 2 - 6), clipRect.y + (trackHeight / 2 - 7), 12, 12),
+                          icon: GetTweenTypeIcon(node.Type, false),
+                          border: new RectOffset(0, 0, 0, 0),
+                          color: isSelected ? Color.black : Color.white * 0.9f);
                 }
+                else
+                {
+                    if (clipRect.width >= 220)
+                    {
+                        XGUI.gui_icon(
+                            rect: new Rect(clipRect.x + 15, clipRect.y + (trackHeight / 2 - 7), 12, 12),
+                            icon: GetTweenTypeIcon(node.Type, false),
+                            border: new RectOffset(0, 0, 0, 0),
+                            color: isSelected ? Color.black : Color.white * 0.9f);
+
+                        XGUI.gui_icon(
+                            rect: new Rect(clipRect.x + (clipRect.width - 25), clipRect.y + (trackHeight / 2 - 7), 12, 12),
+                            icon: GetTweenTypeIcon(node.Type, false),
+                            border: new RectOffset(0, 0, 0, 0),
+                            color: isSelected ? Color.black : Color.white * 0.9f);
+                    }
+                }
+                #endregion
             }
-            #endregion
 
             ApplyClipMouseCursors(clipRect);
         }
@@ -577,30 +627,107 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DrawSoundClipVisual(Rect clipRect, TweenSound sound, bool isSelected)
         {
-            #region 背景
-            Color bg = sound.Mute ? ColorSoundTrackBG_muted : (sound.Sound != null ? ColorSoundClipBG : ColorSoundClipBG_Empty);
+            bool is_minmal = clipRect.width < 180;
+            bool is_very_minmal = clipRect.width <= 90;
 
-            if (isSelected)
+            bool sound_null = sound.Sound == null;
+
+            XGUI.gui_box(clipRect, Color.gray * 0.75f);
+
+            if (sound_null)
             {
-                bg = sound.Mute ? ColorSoundTrackBG_muted_Selected : (sound.Sound != null ? ColorSoundClipBG_Selected : ColorSoundClipBG_Empty_Selected);
+                #region 警告斜纹覆盖
+                // UV：宽高按 "目标宽高 / 纹理宽高" 计算，得到重复次数
+                Rect sourceRect = new Rect(0, 0, clipRect.width / icon_war_lines.width * 3, clipRect.height / icon_war_lines.height * 3);
+                Graphics.DrawTexture(clipRect, icon_war_lines, sourceRect, 0, 0, 0, 0, Color.black * 0.15f);
+                #endregion
+
+                if (!is_minmal)
+                {
+                    XGUI.gui_icon(
+                        rect: new Rect(clipRect.x + 15, clipRect.y + (clipRect.height / 2) - 7, 14, 14),
+                        icon: icon_war,
+                        color: new Color(1f, 0.7f, 0.3f));
+
+                    XGUI.gui_icon(
+                       rect: new Rect(clipRect.x + (clipRect.width - 26), clipRect.y + (clipRect.height / 2) - 7, 14, 14),
+                       icon: icon_war,
+                       color: new Color(1f, 0.7f, 0.3f));
+
+                    XGUI.gui_label(
+                        rect: new Rect(clipRect.x + (clipRect.width / 2) - ((clipRect.width - 50) / 2), clipRect.y + (clipRect.height / 2) - (clipRect.height / 2), clipRect.width - 50, clipRect.height),
+                        text: new GUIContent("音效剪辑未指定"),
+                        text_color: isSelected ? (!sound.Mute ? Color.white * 0.7f : Color.black) : Color.white,
+                        size: XGUIFontSize.M,
+                        clipping: TextClipping.Clip,
+                        anchor: TextAnchor.MiddleCenter,
+                        font_style: FontStyle.Normal);
+                }
+                else
+                {
+                    XGUI.gui_icon(
+                       rect: new Rect(clipRect.x + (clipRect.width / 2) - 7, clipRect.y + (clipRect.height / 2) - 7, 14, 14),
+                       icon: icon_war,
+                       color: new Color(1f, 0.7f, 0.3f));
+                }
+            }
+            else
+            {
+                #region 背景
+                Color bg = sound.Mute ? ColorSoundTrackBG_muted : (sound.Sound != null ? ColorSoundClipBG : ColorSoundClipBG_Empty);
+
+                if (isSelected)
+                {
+                    bg = sound.Mute ? ColorSoundTrackBG_muted_Selected : (sound.Sound != null ? ColorSoundClipBG_Selected : ColorSoundClipBG_Empty_Selected);
+                }
+
+                XGUI.gui_box(clipRect, bg);
+                #endregion
+
+                #region 概述信息
+                if (!is_very_minmal)
+                {
+                    string state = sound.Mute ? "已静音" : sound.Sound != null ? is_minmal ? $"{sound.Sound.length:F2}  s   /   {sound.Delay:F3}  s" : $"延迟：{sound.Delay:F3}  s   /   时长：{sound.Sound.length:F2}  s" : "空音效";
+                    XGUI.gui_label(
+                        rect: new Rect(clipRect.x + 4, clipRect.y, clipRect.width - 8, clipRect.height),
+                        text: new GUIContent(state),
+                        text_color: sound.Mute ? Color.white * 0.7f : Color.white,
+                        size: XGUIFontSize.M,
+                        clipping: TextClipping.Clip,
+                        anchor: TextAnchor.MiddleCenter,
+                        font_style: FontStyle.Normal);
+                }
+                #endregion
+
+                #region 图标
+                if (is_very_minmal)
+                {
+                    XGUI.gui_icon(
+                          rect: new Rect(clipRect.x + (clipRect.width / 2 - (icon_unmute_r.width / 2)), clipRect.y + (trackHeight / 2 - (icon_unmute_r.height / 2)), icon_unmute_r.width, icon_unmute_r.height),
+                          icon: icon_unmute_r,
+                          border: new RectOffset(0, 0, 0, 0),
+                          color: isSelected ? Color.black : Color.white * 0.9f);
+                }
+                else
+                {
+                    if (clipRect.width >= 240)
+                    {
+                        XGUI.gui_icon(
+                            rect: new Rect(clipRect.x + 15, clipRect.y + (trackHeight / 2 - (icon_unmute_r.height / 2)), icon_unmute_r.width, icon_unmute_r.height),
+                            icon: icon_unmute_r,
+                            border: new RectOffset(0, 0, 0, 0),
+                            color: isSelected ? Color.black : Color.white * 0.9f);
+
+                        XGUI.gui_icon(
+                            rect: new Rect(clipRect.x + (clipRect.width - icon_unmute_r.width - 10), clipRect.y + (trackHeight / 2 - (icon_unmute_r.height / 2)), icon_unmute_r.width, icon_unmute_r.height),
+                            icon: icon_unmute_r,
+                            border: new RectOffset(0, 0, 0, 0),
+                            color: isSelected ? Color.black : Color.white * 0.9f);
+                    }
+                }
+                #endregion
             }
 
-            XGUI.gui_box(clipRect, bg);
-            #endregion
-
-            #region 概述信息
-            bool minimal = clipRect.width < 120;
-            string state = sound.Mute ? "已静音" : sound.Sound != null ? $"时长：{sound.Sound.length:F2}  s" : "空音效";
-            string content = minimal ? $"延迟：{sound.Delay:F3}  s" : $"{state}   /   延迟：{sound.Delay:F3}  s";
-            XGUI.gui_label(
-                rect: new Rect(clipRect.x + 4, clipRect.y, clipRect.width - 8, clipRect.height),
-                text: new GUIContent(content),
-                text_color: sound.Mute ? Color.white * 0.7f : Color.white,
-                size: XGUIFontSize.M,
-                clipping: TextClipping.Clip,
-                anchor: TextAnchor.MiddleCenter,
-                font_style: FontStyle.Normal);
-            #endregion
 
             // 音效只做整体移动，光标固定为 MoveArrow
             EditorGUIUtility.AddCursorRect(clipRect, MouseCursor.MoveArrow);

@@ -24,7 +24,6 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XTween;
-    using System;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
@@ -343,6 +342,20 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.ChangedCheck_Start();
 
+            // 获取动画类型
+            TweenNodeType node_type = (TweenNodeType)ser_type.enumValueIndex;
+            ModuleType mod_type = target.controller.GetModuleType();
+
+            bool type_matched = true;
+            if ((mod_type == ModuleType.Text || mod_type == ModuleType.TmpText) && node_type == TweenNodeType.f_图像填充)
+            {
+                type_matched = false;
+            }
+            if ((mod_type != ModuleType.Text && mod_type != ModuleType.TmpText) && node_type == TweenNodeType.w_打字机)
+            {
+                type_matched = false;
+            }
+
             #region 参数
             XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
@@ -578,136 +591,186 @@ namespace SevenStrikeModules.XHud.Editor
 
             ser_timing.serializedObject.ApplyModifiedProperties();
             #endregion
+
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
-            #region 起始值 / 结束值（按类型动态显示）
-            XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
-                bg_fill: XGUIGroup.缺口纯色边框,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
-                title: "数值",
-                title_text_color: XHud_Dashboard.Theme_Primary,
-                title_clipping: XGUI.TryEllipsisClipping(),
-                title_size: XGUIFontSize.M,
-                title_manual_offset: true,
-                title_manual_offset_space: 5,
-                absolute_margin: true,
-                absolute_padding: true,
-                margin: new RectOffset(10, 10, 20, 0),
-                padding: new RectOffset(10, 10, 15, 10),
-                can_foldout: false);
-
-            #region 动画数值过渡模式选项卡
-            int value_mode_index = node.ValueModeIndex = XGUI.layout_toolbar(
-                      index: node.ValueModeIndex,
-                      names: new string[] { "S - D", "D - E", "S - E", "C - E" },
-                      bg_normal: XGUIGroup.纯色边框,
-                      bg_selected: XGUIGroup.实体,
-                      bg_color: XGUIColor.亮白,
-                      bg_gui_color: Color.black * 0.5f,
-                      text_color_normal: Color.white,
-                      text_color_selected: XHud_Dashboard.Theme_Primary,
-                      bar_height: 25,
-                      text_anchor: TextAnchor.MiddleCenter,
-                      text_padding: new RectOffset(10, 10, 0, 0),
-                      bar_margin: new RectOffset(0, 0, 5, 5),
-                      text_offset: new Vector2(0, -2),
-                      text_font: XGUI.GetFont("xg-regular"),
-                      text_fontstyle: FontStyle.Bold,
-                      bg_width_offset: 5,
-                      bg_height_offset: 2,
-                      navigate_style: true,
-                      navigate_style_bg: XGUIGroup.纯色边框,
-                      navigate_style_bg_color: Color.black * 0.5f);
-            #endregion
-
-            // 数值模式枚举值同步
-            node.TweenValueMode = (TweenValueMode)value_mode_index;
-
-            #region 模式说明按钮（弹出说明弹窗）
-            Rect rect_toolbar = XGUI.GetLastRect();
-            if (XGUI.gui_button(
-                rect: new Rect(rect_toolbar.x + (rect_toolbar.width - icon_help_r.width) + 5, rect_toolbar.y - icon_help_r.height - 2, icon_help_r.width - 5, icon_help_r.height - 5),
-                tooltip: "",
-                tex_release: icon_help_r,
-                tex_press: icon_help_p,
-                tex_gui_color: Color.white,
-                margin: new RectOffset(0, 0, 0, 0),
-                padding: new RectOffset(0, 0, 0, 0)))
+            if (!type_matched)
             {
-                EditorApplication.delayCall += () =>
-                {
-                    List<XGUIDialogListDatas> infos = new List<XGUIDialogListDatas>();
+                #region 类型匹配错误判定
+                XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIGroup.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    title: "类型匹配警告",
+                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_clipping: XGUI.TryEllipsisClipping(),
+                    title_size: XGUIFontSize.M,
+                    title_manual_offset: true,
+                    title_manual_offset_space: 5,
+                    absolute_margin: true,
+                    absolute_padding: true,
+                    margin: new RectOffset(10, 10, 25, 0),
+                    padding: new RectOffset(10, 10, 15, 15),
+                    can_foldout: false);
 
-                    infos.Add(new XGUIDialogListDatas($"起始 - 默认", $"<b><color=#{Theme_PrimaryColor}>S</color></b>  -  <b><color=#{Theme_PrimaryColor}>D</color></b>", $"<color=#c1c1c1>从</color>  起始值  <color=#c1c1c1>到</color>  默认值  <color=#c1c1c1>的动画</color>"));
-                    infos.Add(new XGUIDialogListDatas($"默认 - 结束", $"<b><color=#{Theme_PrimaryColor}>D</color></b>  -  <b><color=#{Theme_PrimaryColor}>E</color></b>", $"<color=#c1c1c1>从</color>  默认值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
-                    infos.Add(new XGUIDialogListDatas($"起始 - 结束", $"<b><color=#{Theme_PrimaryColor}>S</color></b>  -  <b><color=#{Theme_PrimaryColor}>E</color></b>", $"<color=#c1c1c1>从</color>  起始值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
-                    infos.Add(new XGUIDialogListDatas($"当前 - 结束", $"<b><color=#{Theme_PrimaryColor}>C</color></b>  -  <b><color=#{Theme_PrimaryColor}>E</color></b>", $"<color=#c1c1c1>从</color>  当前值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
+                XGUI.layout_space(20);
 
-                    XGUI.dialog_listview(
-                        datas: infos.ToArray(),
-                        type: XGUIDialogType.通知,
-                        windowtitle: "XHud - 图元动画时间线编辑器消息",
-                        title: "数值模式说明",
-                        msg: "以下是数值模式的简码对应的解释",
-                        ok: "明白",
-                        PrimaryIndex: 0,
-                        show_index: false,
-                        usemodal: false,
-                        themecolor: XHud_Dashboard.Theme_Primary);
-                };
+                XGUI.layout_icon(
+                    icon: icon_param_nullselected_warning,
+                    icon_color: new Color(1f, 0.7f, 0.3f),
+                    width: 18,
+                    height: 18,
+                    icon_border: new RectOffset(0, 0, 0, 0),
+                    icon_offset: new Vector2(0, 0),
+                    icon_margin: new RectOffset(0, 0, 0, 10),
+                    icon_padding: new RectOffset(0, 0, 0, 0),
+                    icon_alignment: XGUIIconAlignment.中心);
+
+                XGUI.layout_label(
+                     text: "目标对象不支持此动画类型\n该动画将被忽略",
+                     size: XGUIFontSize.S,
+                     anchor: TextAnchor.MiddleCenter,
+                     text_color: Color.white * 0.85f,
+                     offset: new Vector2(0, 0),
+                     padding: new RectOffset(0, 0, 0, 0),
+                     margin: new RectOffset(0, 0, 0, 0),
+                     height: 35,
+                     clipping: TextClipping.Clip);
+
+                XGUI.layout_space(20);
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                #endregion
             }
-            #endregion
+            else
+            {
 
-            XGUI.layout_space(5);
+                #region 起始值 / 结束值（按类型动态显示）
+                XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIGroup.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    title: "数值",
+                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_clipping: XGUI.TryEllipsisClipping(),
+                    title_size: XGUIFontSize.M,
+                    title_manual_offset: true,
+                    title_manual_offset_space: 5,
+                    absolute_margin: true,
+                    absolute_padding: true,
+                    margin: new RectOffset(10, 10, 20, 0),
+                    padding: new RectOffset(10, 10, 15, 10),
+                    can_foldout: false);
 
-            // 获取动画类型
-            TweenNodeType node_type = (TweenNodeType)ser_type.enumValueIndex;
+                #region 动画数值过渡模式选项卡
+                int value_mode_index = node.ValueModeIndex = XGUI.layout_toolbar(
+                          index: node.ValueModeIndex,
+                          names: new string[] { "S - D", "D - E", "S - E", "C - E" },
+                          bg_normal: XGUIGroup.纯色边框,
+                          bg_selected: XGUIGroup.实体,
+                          bg_color: XGUIColor.亮白,
+                          bg_gui_color: Color.black * 0.5f,
+                          text_color_normal: Color.white,
+                          text_color_selected: XHud_Dashboard.Theme_Primary,
+                          bar_height: 25,
+                          text_anchor: TextAnchor.MiddleCenter,
+                          text_padding: new RectOffset(10, 10, 0, 0),
+                          bar_margin: new RectOffset(0, 0, 5, 5),
+                          text_offset: new Vector2(0, -2),
+                          text_font: XGUI.GetFont("xg-regular"),
+                          text_fontstyle: FontStyle.Bold,
+                          bg_width_offset: 5,
+                          bg_height_offset: 2,
+                          navigate_style: true,
+                          navigate_style_bg: XGUIGroup.纯色边框,
+                          navigate_style_bg_color: Color.black * 0.5f);
+                #endregion
 
-            // 绘制动画数值控件逻辑
-            DrawTweenValueEditor(ResolveTweenValueProperties(node_type, prop_node), value_mode_index);
+                // 数值模式枚举值同步
+                node.TweenValueMode = (TweenValueMode)value_mode_index;
 
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-            #endregion
+                #region 模式说明按钮（弹出说明弹窗）
+                Rect rect_toolbar = XGUI.GetLastRect();
+                if (XGUI.gui_button(
+                    rect: new Rect(rect_toolbar.x + (rect_toolbar.width - icon_help_r.width) + 5, rect_toolbar.y - icon_help_r.height - 2, icon_help_r.width - 5, icon_help_r.height - 5),
+                    tooltip: "",
+                    tex_release: icon_help_r,
+                    tex_press: icon_help_p,
+                    tex_gui_color: Color.white,
+                    margin: new RectOffset(0, 0, 0, 0),
+                    padding: new RectOffset(0, 0, 0, 0)))
+                {
+                    EditorApplication.delayCall += () =>
+                    {
+                        List<XGUIDialogListDatas> infos = new List<XGUIDialogListDatas>();
 
-            #region 选项
-            XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
-                bg_fill: XGUIGroup.缺口纯色边框,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
-                title: "选项",
-                title_text_color: XHud_Dashboard.Theme_Primary,
-                title_clipping: XGUI.TryEllipsisClipping(),
-                title_size: XGUIFontSize.M,
-                title_manual_offset: true,
-                title_manual_offset_space: 5,
-                absolute_margin: true,
-                absolute_padding: true,
-                margin: new RectOffset(10, 10, 25, 0),
-                padding: new RectOffset(10, 10, 15, 15));
+                        infos.Add(new XGUIDialogListDatas($"起始 - 默认", $"<b><color=#{Theme_PrimaryColor}>S</color></b>  -  <b><color=#{Theme_PrimaryColor}>D</color></b>", $"<color=#c1c1c1>从</color>  起始值  <color=#c1c1c1>到</color>  默认值  <color=#c1c1c1>的动画</color>"));
+                        infos.Add(new XGUIDialogListDatas($"默认 - 结束", $"<b><color=#{Theme_PrimaryColor}>D</color></b>  -  <b><color=#{Theme_PrimaryColor}>E</color></b>", $"<color=#c1c1c1>从</color>  默认值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
+                        infos.Add(new XGUIDialogListDatas($"起始 - 结束", $"<b><color=#{Theme_PrimaryColor}>S</color></b>  -  <b><color=#{Theme_PrimaryColor}>E</color></b>", $"<color=#c1c1c1>从</color>  起始值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
+                        infos.Add(new XGUIDialogListDatas($"当前 - 结束", $"<b><color=#{Theme_PrimaryColor}>C</color></b>  -  <b><color=#{Theme_PrimaryColor}>E</color></b>", $"<color=#c1c1c1>从</color>  当前值  <color=#c1c1c1>到</color>  结束值  <color=#c1c1c1>的动画</color>"));
 
-            #region 动画开关
-            node.Enabled = DrawLabeledToggle("动画开关", node.Enabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
-            #endregion
+                        XGUI.dialog_listview(
+                            datas: infos.ToArray(),
+                            type: XGUIDialogType.通知,
+                            windowtitle: "XHud - 图元动画时间线编辑器消息",
+                            title: "数值模式说明",
+                            msg: "以下是数值模式的简码对应的解释",
+                            ok: "明白",
+                            PrimaryIndex: 0,
+                            show_index: false,
+                            usemodal: false,
+                            themecolor: XHud_Dashboard.Theme_Primary);
+                    };
+                }
+                #endregion
 
-            #region 延伸内容
-            if (node.Type == TweenNodeType.w_打字机 && node.TweenValueMode == TweenValueMode.当前到结束_C_E)
-                node.TextExtended = DrawLabeledToggle("延伸内容", node.TextExtended, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
-            #endregion
+                XGUI.layout_space(5);
 
-            #region 重置设为起始值
-            node.Rewind_Set_Startvalue = DrawLabeledToggle("重置设为起始值", node.Rewind_Set_Startvalue, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
-            #endregion
+                // 绘制动画数值控件逻辑
+                DrawTweenValueEditor(ResolveTweenValueProperties(node_type, prop_node), value_mode_index);
 
-            #region 完成设为结束值
-            node.Complete_Set_Endvalue = DrawLabeledToggle("完成设为结束值", node.Complete_Set_Endvalue, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
-            #endregion
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                #endregion
 
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-            #endregion
+                #region 选项
+                XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIGroup.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    title: "选项",
+                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_clipping: XGUI.TryEllipsisClipping(),
+                    title_size: XGUIFontSize.M,
+                    title_manual_offset: true,
+                    title_manual_offset_space: 5,
+                    absolute_margin: true,
+                    absolute_padding: true,
+                    margin: new RectOffset(10, 10, 25, 0),
+                    padding: new RectOffset(10, 10, 15, 15));
+
+                #region 动画开关
+                node.Enabled = DrawLabeledToggle("动画开关", node.Enabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+                #endregion
+
+                #region 延伸内容
+                if (node.Type == TweenNodeType.w_打字机 && node.TweenValueMode == TweenValueMode.当前到结束_C_E)
+                    node.TextExtended = DrawLabeledToggle("延伸内容", node.TextExtended, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+                #endregion
+
+                #region 重置设为起始值
+                node.Rewind_Set_Startvalue = DrawLabeledToggle("重置设为起始值", node.Rewind_Set_Startvalue, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+                #endregion
+
+                #region 完成设为结束值
+                node.Complete_Set_Endvalue = DrawLabeledToggle("完成设为结束值", node.Complete_Set_Endvalue, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+                #endregion
+
+                XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+                #endregion
+            }
 
             XGUI.layout_space(6);
 

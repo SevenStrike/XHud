@@ -169,25 +169,31 @@ namespace SevenStrikeModules.XHud
         public TweenNode GetPrimitiveTweenNode_With_Indicator(string primitive_indicator, int tween_id)
         {
             XHud_Module_Primitive_Controller anim = GetPrimitiveController_With_Indicator(primitive_indicator);
-            TweenNode node = anim.pt_Tween.TweenNode_GetByID(tween_id);
 
-            if (anim == null)
+            // 前置判空：控制器不存在，或控制器上没有动画器
+            if (anim == null || anim.pt_Tween == null)
             {
                 if (DebugState)
-                    XGUI_Utilitys.Console("XHud - 元素控件通知", "未获取到名为 " + primitive_indicator + " 的子级图元控制器！ ", XGUIMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "未获取到名为 " + primitive_indicator + " 的子级图元控制器或其动画器！ ", XGUIMsgState.错误);
+                return null;
+            }
+
+            TweenNode node = anim.pt_Tween.TweenNode_GetByID(tween_id);
+
+            if (node == null)
+            {
+                if (DebugState)
+                    XGUI_Utilitys.Console("XHud - 元素控件通知",
+                        "已获取子级图元控制器 " + primitive_indicator
+                        + "，但并未在其中找到 ID 号为 " + tween_id + " 的动画节点！",
+                        XGUIMsgState.警告);
             }
             else
             {
-                if (node == null)
-                {
-                    if (DebugState)
-                        XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取子级图元控制器 " + primitive_indicator, XGUIMsgState.通知);
-                }
-                else
-                {
-                    if (DebugState)
-                        XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取子级图元控制器 " + primitive_indicator + "，但并未在其中找到索引号为 " + tween_id + " 的动画效果！", XGUIMsgState.警告);
-                }
+                if (DebugState)
+                    XGUI_Utilitys.Console("XHud - 元素控件通知",
+                        "已获取到 " + primitive_indicator + " 上的动画节点（ID=" + tween_id + "）！",
+                        XGUIMsgState.通知);
             }
 
             return node;
@@ -201,25 +207,26 @@ namespace SevenStrikeModules.XHud
         public TweenNode GetPrimitiveTweenNode_With_ID(string primitive_id, int tween_id)
         {
             XHud_Module_Primitive_Controller anim = GetPrimitiveController_With_ID(primitive_id);
-            TweenNode node = anim.pt_Tween.TweenNode_GetByID(tween_id);
 
-            if (anim == null)
+            // 前置判空：控制器不存在，或控制器上没有动画器
+            if (anim == null || anim.pt_Tween == null)
             {
                 if (DebugState)
-                    XGUI_Utilitys.Console("XHud - 元素控件通知", "未获取到ID为 " + primitive_id + " 的子级图元控制器！ ", XGUIMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "未获取到ID为 " + primitive_id + " 的子级图元控制器或其动画器！ ", XGUIMsgState.错误);
+                return null;
+            }
+
+            TweenNode node = anim.pt_Tween.TweenNode_GetByID(tween_id);
+
+            if (node == null)
+            {
+                if (DebugState)
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取ID为 " + primitive_id + " 子级图元控制器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", XGUIMsgState.警告);
             }
             else
             {
-                if (node == null)
-                {
-                    if (DebugState)
-                        XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取ID为 " + primitive_id + " 子级图元控制器", XGUIMsgState.通知);
-                }
-                else
-                {
-                    if (DebugState)
-                        XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取ID为 " + primitive_id + " 子级图元控制器，但并未在其中找到ID号为 " + tween_id + " 的动画节点！", XGUIMsgState.警告);
-                }
+                if (DebugState)
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取ID为 " + primitive_id + " 子级图元控制器，并找到ID号为 " + tween_id + " 的动画节点！", XGUIMsgState.通知);
             }
 
             return node;
@@ -233,25 +240,26 @@ namespace SevenStrikeModules.XHud
         public TweenNode GetPrimitiveTween(string primitive_indicator, string tween_indicator)
         {
             XHud_Module_Primitive_Controller anim = GetPrimitiveController_With_Indicator(primitive_indicator);
-            TweenNode node = anim.pt_Tween.TweenNode_GetByIndicator(tween_indicator);
 
-            if (anim == null)
+            // 前置判空：控制器不存在，或控制器上没有动画器
+            if (anim == null || anim.pt_Tween == null)
             {
                 if (DebugState)
-                    XGUI_Utilitys.Console("XHud - 元素控件通知", "未获取到名为 " + primitive_indicator + " 的子级图元控制器！ ", XGUIMsgState.错误);
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "未获取到名为 " + primitive_indicator + " 的子级图元控制器或其动画器！ ", XGUIMsgState.错误);
+                return null;
+            }
+
+            TweenNode node = anim.pt_Tween.TweenNode_GetByIndicator(tween_indicator);
+
+            if (node == null)
+            {
+                if (DebugState)
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取子级图元控制器 " + primitive_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", XGUIMsgState.警告);
             }
             else
             {
-                if (node == null)
-                {
-                    if (DebugState)
-                        XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取子级图元控制器 " + primitive_indicator, XGUIMsgState.通知);
-                }
-                else
-                {
-                    if (DebugState)
-                        XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取子级图元控制器 " + primitive_indicator + "，但并未在其中找到名称为 " + tween_indicator + " 的动画效果！", XGUIMsgState.警告);
-                }
+                if (DebugState)
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取子级图元控制器 " + primitive_indicator + "，并找到名称为 " + tween_indicator + " 的动画效果！", XGUIMsgState.通知);
             }
 
             return node;

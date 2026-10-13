@@ -750,6 +750,14 @@ namespace SevenStrikeModules.XHud.Editor
         /// 图标 - 工具栏开关 - 预览音效
         /// </summary>
         private Texture2D icon_toolbar_preview_sound;
+        /// <summary>
+        /// 图标 - 警告条纹
+        /// </summary>
+        private Texture2D icon_war_lines;
+        /// <summary>
+        /// 图标 - 警告
+        /// </summary>
+        private Texture2D icon_war;
         #endregion
 
         #region 字段：视图参数
@@ -1247,6 +1255,8 @@ namespace SevenStrikeModules.XHud.Editor
             icon_toolbar_clip_snap = XGUI.GetCustomIcon($"{iconRoot}icon_toolbar_clip_snap");
             icon_toolbar_preview_sound = XGUI.GetCustomIcon($"{iconRoot}icon_toolbar_preview_sound");
 
+            icon_war_lines = XGUI.GetBasedIcon("war_lines");
+            icon_war = XGUI.GetBasedIcon("icon_warning_solid");
             #endregion
         }
         /// <summary> 

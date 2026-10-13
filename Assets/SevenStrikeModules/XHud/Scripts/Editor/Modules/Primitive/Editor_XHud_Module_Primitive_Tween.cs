@@ -3114,8 +3114,12 @@ namespace SevenStrikeModules.XHud.Editor
             AudioSource au = obj.AddComponent<AudioSource>();
             au.playOnAwake = false;
             au.clip = clip;
-            au.volume = Mathf.Clamp01(sod.Volume);
             au.spatialBlend = 0f;
+
+            float masterVol = (HudManager != null) ? HudManager.Volume : 1f;
+            bool masterMute = (HudManager != null) && HudManager.VolumeMute;
+            au.volume = masterVol * Mathf.Clamp01(sod.Volume);
+            au.mute = masterMute || sod.Mute;
 
             float pMin = Mathf.Min(sod.MinPitch, sod.MaxPitch);
             float pMax = Mathf.Max(sod.MinPitch, sod.MaxPitch);
