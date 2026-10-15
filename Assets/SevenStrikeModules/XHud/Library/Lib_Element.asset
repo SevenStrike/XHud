@@ -24,7 +24,7 @@ MonoBehaviour:
   ElementInfoList_Original_Scroller: {x: 0, y: 0}
   ElementLibrary:
   - Name: XHudIcon
-    InitializeCount: 5
+    InitializeCount: 3
     UsedCount: 0
     RecycledCount: 0
     NextIndex: 0
@@ -32,7 +32,7 @@ MonoBehaviour:
     Target: {fileID: 2484565434626366029, guid: 54cb949a8cef5ca44a27602c14cb9919, type: 3}
     PreloadElements: []
   - Name: Gear
-    InitializeCount: 1
+    InitializeCount: 3
     UsedCount: 0
     RecycledCount: 0
     NextIndex: 0
@@ -40,18 +40,10 @@ MonoBehaviour:
     Target: {fileID: 3738649134357389805, guid: 363f6f66d530e4a4089889476c66397f, type: 3}
     PreloadElements: []
   - Name: Cat
-    InitializeCount: 1
+    InitializeCount: 3
     UsedCount: 0
     RecycledCount: 0
     NextIndex: 0
     Root: {fileID: 0}
     Target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
-    PreloadElements: []
-  - Name: f
-    InitializeCount: 1
-    UsedCount: 0
-    RecycledCount: 0
-    NextIndex: 0
-    Root: {fileID: 0}
-    Target: {fileID: 8223402592710810590, guid: fba0bb68a4c26ea49a24c5ffe772c7c6, type: 3}
     PreloadElements: []

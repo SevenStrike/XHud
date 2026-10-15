@@ -25,19 +25,54 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEngine;
     using UnityEngine.UIElements;
 
+    /// <summary>
+    /// Unity 内建图标合集获取器。
+    /// <para/>
+    /// <list type="bullet">
+    /// <item><description>扫描当前 Unity 编辑器可访问的全部 Texture2D，筛选出可作为图标使用的项。</description></item>
+    /// <item><description>以网格形式列出图标，点击图标按钮即把图标名称拷贝到系统剪贴板。</description></item>
+    /// <item><description>基于 UI Toolkit 构建界面。</description></item>
+    /// </list>
+    /// </summary>
     public class Editor_XHud_Tool_UnityBuiltinIconsCollector : EditorWindow
     {
+        #region 字段
+        /// <summary>
+        /// 收集到的有效图标名称列表。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>Awake</c> 中扫描填充。</description></item>
+        /// </list>
+        /// </summary>
+        List<string> m_Icons = null;
+        #endregion
 
-        [MenuItem(("Tools/XHud/UnityBuiltinIconsGet"))]
-        static void Init()
+        #region 菜单
+        /// <summary>
+        /// 打开内建图标合集获取器窗口。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>菜单路径：<c>Tools/XHud/UnityBuiltinIconsGet</c>。</description></item>
+        /// </list>
+        /// </summary>
+        [MenuItem("Tools/XHud/UnityBuiltinIconsGet")]
+        private static void Init()
         {
             EditorWindow.GetWindow<Editor_XHud_Tool_UnityBuiltinIconsCollector>("Unity内建图标合集获取器");
         }
+        #endregion
 
-        Vector2 m_Scroll;
-        List<string> m_Icons = null;
-
-        void Awake()
+        #region 生命周期
+        /// <summary>
+        /// 窗口唤醒时构建界面。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>扫描全部 Texture2D，筛选出可作为图标的项。</description></item>
+        /// <item><description>构建 ScrollView 容器并按行布局图标按钮与名称标签。</description></item>
+        /// <item><description>点击图标按钮即把图标名拷贝到剪贴板并提示。</description></item>
+        /// </list>
+        /// </summary>
+        private void Awake()
         {
             m_Icons = new List<string>();
             Texture2D[] t = Resources.FindObjectsOfTypeAll<Texture2D>();
@@ -87,5 +122,6 @@ namespace SevenStrikeModules.XHud.Editor
                 scroll.Add(viewEle);
             }
         }
+        #endregion
     }
 }

@@ -28,8 +28,6 @@ namespace SevenStrikeModules.XHud.Editor
 
     public partial class Editor_XHud_Module_Primitive_Tween_Tracker
     {
-        GUIStyle style_war_line;
-
         /// <summary> 
         /// 绘制 Clip 时间轴区：刻度尺（固定）+ 双向 ScrollView（轨道 + Clip）+ 自绘水平滚动条
         /// <para/>

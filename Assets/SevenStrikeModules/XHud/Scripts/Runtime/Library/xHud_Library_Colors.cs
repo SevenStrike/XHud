@@ -21,7 +21,6 @@
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XGUI.Runtime;
-    using SevenStrikeModules.XHud.Utilitys;
     using System.Collections.Generic;
     using System.IO;
     using UnityEditor;

@@ -28,132 +28,156 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEngine;
 
+    /// <summary>
+    /// 元素视觉放置器。
+    /// <para/>
+    /// <list type="bullet">
+    /// <item><description>在 SceneView 中把元素预制体拖拽到九宫格锚点上进行放置。</description></item>
+    /// <item><description>通过 <c>[InitializeOnLoad]</c> 自动订阅 <c>SceneView.duringSceneGui</c>。</description></item>
+    /// <item><description>提供外部开关与格子颜色自定义接口。</description></item>
+    /// </list>
+    /// </summary>
     [InitializeOnLoad]
     public class Editor_XHud_Tool_ElementVisualPlacer
     {
+        #region 字段 - 状态
         /// <summary>
-        /// 存储屏幕九宫格划分后的矩形区域列表，用于鼠标位置到锚点格子的映射。
-        /// 索引对应锚点位置：0-左上，1-上，2-右上，3-左，4-中心，5-右，6-左下，7-下，8-右下。
+        /// 是否启动拖拽放置功能。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>为 <c>true</c> 时响应 SceneView 拖拽事件。</description></item>
+        /// <item><description>可由 <c>SetEnabled</c> 动态切换。</description></item>
+        /// </list>
         /// </summary>
-        private static List<Rect> gridRects = new List<Rect>();
-
+        private static bool isEnabled = true;
         /// <summary>
         /// 标识是否正在拖拽一个有效的目标预制体。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在拖拽过程中为 <c>true</c>。</description></item>
+        /// </list>
         /// </summary>
         private static bool isDraggingTarget = false;
-
         /// <summary>
-        /// 当前拖拽的、包含目标组件（XHud_Module_Element）的预制体数组。
+        /// 当前拖拽的、包含目标组件的预制体数组。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>拖拽结束后清空。</description></item>
+        /// </list>
         /// </summary>
         private static GameObject[] draggedPrefabs = null;
-
         /// <summary>
-        /// 目标组件名称，用于过滤拖拽对象。
-        /// 只有包含该组件的预制体才被视为有效的放置目标。
-        /// </summary>
-        private static string targetComponentName = "XHud_Module_Element";
-
-        /// <summary>
-        /// XHud 系统的主管理器引用，用于获取锚点布局等核心功能。
-        /// </summary>
-        private static XHud_Manager mgr;
-
-        /// <summary>
-        /// 当前鼠标悬停的格子索引，-1 表示没有悬停在任何格子上。
-        /// 该值用于在拖拽过程中高亮对应的锚点区域。
+        /// 当前鼠标悬停的格子索引。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>取值范围 0-8，<c>-1</c> 表示未悬停在任何格子上。</description></item>
+        /// </list>
         /// </summary>
         private static int hoverGridIndex = -1;
-
-        #region 颜色配置
-
-        /// <summary>
-        /// 九宫格每个格子的非高亮（默认）背景色数组。
-        /// 索引顺序与 gridRects 一致，每个格子初始为半透明黑色。
-        /// </summary>
-        private static Color[] Colors_Grid_UnHighlight = new Color[]
-        {
-    // 格子0 - 左上 (LU)
-    Color.black * 0.4f,
-    // 格子1 - 上 (U)
-    Color.black * 0.4f,
-    // 格子2 - 右上 (RU)
-    Color.black * 0.4f,
-    // 格子3 - 左 (L)
-    Color.black * 0.4f,
-    // 格子4 - 中心 (C)
-    Color.black * 0.4f,
-    // 格子5 - 右 (R)
-    Color.black * 0.4f,
-    // 格子6 - 左下 (LD)
-    Color.black * 0.4f,
-    // 格子7 - 下 (D)
-    Color.black * 0.4f,
-    // 格子8 - 右下 (RD)
-    Color.black * 0.4f
-        };
-
-        /// <summary>
-        /// 拖拽过程中，鼠标悬停格子的高亮背景色。
-        /// 使用 XHud 仪表盘的主色调并降低饱和度/亮度，以达到半透明高亮效果。
-        /// </summary>
-        private static Color Color_Grid_Highlight = XHud_Dashboard.Theme_Primary * 0.5f;
-
-        /// <summary>
-        /// 拖拽过程中，悬停格子的边框高亮颜色。
-        /// </summary>
-        private static Color Color_Edge_Highlight = Color.white * 0.6f;
-
-        /// <summary>
-        /// 非悬停状态下的格子边框颜色。
-        /// </summary>
-        private static Color Color_Edge_UnHighlight = Color.black;
-
-        /// <summary>
-        /// 悬停状态下，格子标签文字的颜色。
-        /// </summary>
-        private static Color Color_Label_Highlight = Color.white;
-
         #endregion
 
+        #region 字段 - 映射
         /// <summary>
-        /// 静态初始化
+        /// 九宫格矩形区域列表。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>索引对应锚点位置：0-左上，1-上，2-右上，3-左，4-中心，5-右，6-左下，7-下，8-右下。</description></item>
+        /// <item><description>由 <c>UpdateGridRects</c> 根据 SceneView 视口大小重建。</description></item>
+        /// </list>
+        /// </summary>
+        private static List<Rect> gridRects = new List<Rect>();
+        /// <summary>
+        /// 目标组件名称，用于过滤拖拽对象。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>只有包含该组件的预制体才被视为有效的放置目标。</description></item>
+        /// </list>
+        /// </summary>
+        private static string targetComponentName = "XHud_Module_Element";
+        /// <summary>
+        /// XHud 系统的主管理器引用。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>用于获取锚点布局等核心功能。</description></item>
+        /// <item><description>首次使用时懒加载。</description></item>
+        /// </list>
+        /// </summary>
+        private static XHud_Manager mgr;
+        #endregion
+
+        #region 字段 - 颜色配置
+        /// <summary>
+        /// 九宫格每个格子的非高亮（默认）背景色数组。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>长度 9，索引顺序与 <c>gridRects</c> 一致。</description></item>
+        /// <item><description>每个格子初始为半透明黑色。</description></item>
+        /// </list>
+        /// </summary>
+        private static Color[] Colors_Grid_UnHighlight = new Color[9]
+        {
+            Color.black * 0.4f, Color.black * 0.4f, Color.black * 0.4f,
+            Color.black * 0.4f, Color.black * 0.4f, Color.black * 0.4f,
+            Color.black * 0.4f, Color.black * 0.4f, Color.black * 0.4f,
+        };
+        /// <summary>
+        /// 拖拽过程中，鼠标悬停格子的高亮背景色。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>使用主色调并降低亮度，以达到半透明高亮效果。</description></item>
+        /// </list>
+        /// </summary>
+        private static Color Color_Grid_Highlight = XHud_Dashboard.Theme_Primary * 0.5f;
+        /// <summary>
+        /// 拖拽过程中，悬停格子的边框高亮颜色。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>默认为半透明白色。</description></item>
+        /// </list>
+        /// </summary>
+        private static Color Color_Edge_Highlight = Color.white * 0.6f;
+        /// <summary>
+        /// 非悬停状态下的格子边框颜色。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>默认为纯黑。</description></item>
+        /// </list>
+        /// </summary>
+        private static Color Color_Edge_UnHighlight = Color.black;
+        /// <summary>
+        /// 悬停状态下，格子标签文字的颜色。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>默认为纯白。</description></item>
+        /// </list>
+        /// </summary>
+        private static Color Color_Label_Highlight = Color.white;
+        #endregion
+
+        #region 生命周期
+        /// <summary>
+        /// 静态构造函数。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由 <c>[InitializeOnLoad]</c> 触发。</description></item>
+        /// <item><description>订阅 <c>SceneView.duringSceneGui</c>。</description></item>
+        /// </list>
         /// </summary>
         static Editor_XHud_Tool_ElementVisualPlacer()
         {
             SceneView.duringSceneGui += OnSceneGUI;
         }
+        #endregion
 
-        /// <summary>
-        /// 更新九宫格矩形区域列表。
-        /// 根据当前 SceneView 的视口大小，将屏幕均匀划分为 3x3 的九宫格区域，
-        /// 每个格子的宽高分别为视口宽高的 1/3。
-        /// 这些矩形区域用于后续的鼠标位置检测和高亮绘制。
-        /// </summary>
-        /// <param name="sceneView">当前的 SceneView 窗口，用于获取视口位置和尺寸。</param>
-        private static void UpdateGridRects(SceneView sceneView)
-        {
-            gridRects.Clear();
-            Rect viewRect = sceneView.position;
-            float w = viewRect.width / 3;
-            float h = viewRect.height / 3;
-
-            for (int row = 0; row < 3; row++)
-            {
-                for (int col = 0; col < 3; col++)
-                {
-                    gridRects.Add(new Rect(col * w, row * h, w, h));
-                }
-            }
-        }
+        #region 绘制 - 九宫格
         /// <summary>
         /// SceneView 的 GUI 事件处理函数。
-        /// 在场景视图中处理拖拽放置 XHud 元素预制体的完整流程，包括：
-        /// 1. 更新九宫格区域划分
-        /// 2. 更新鼠标悬停的格子索引
-        /// 3. 处理拖拽进入/更新事件（DragUpdated）
-        /// 4. 处理拖拽释放事件（DragPerform）- 执行元素放置
-        /// 5. 处理拖拽取消事件（DragExited）- 清理拖拽状态
-        /// 6. 拖拽过程中绘制九宫格高亮界面
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>更新九宫格区域划分与鼠标悬停索引。</description></item>
+        /// <item><description>处理 DragUpdated / DragPerform / DragExited 事件。</description></item>
+        /// <item><description>拖拽过程中绘制九宫格高亮界面。</description></item>
+        /// </list>
         /// </summary>
         /// <param name="sceneView">当前的 SceneView 窗口实例。</param>
         private static void OnSceneGUI(SceneView sceneView)
@@ -236,252 +260,36 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 批量处理拖入的元素预制体
+        /// 更新九宫格矩形区域列表。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>根据当前 SceneView 的视口大小，将屏幕均匀划分为 3x3 的九宫格区域。</description></item>
+        /// <item><description>每个格子的宽高分别为视口宽高的 1/3。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="gridIndex">拖拽释放的格子索引</param>
-        /// <param name="prefabs">拖拽的预制体数组</param>
-        private static void ProcessDropedElements(int gridIndex, GameObject[] prefabs)
+        /// <param name="sceneView">当前的 SceneView 窗口，用于获取视口位置和尺寸。</param>
+        private static void UpdateGridRects(SceneView sceneView)
         {
-            if (prefabs == null || prefabs.Length == 0) return;
+            gridRects.Clear();
+            Rect viewRect = sceneView.position;
+            float w = viewRect.width / 3;
+            float h = viewRect.height / 3;
 
-            XGUI_Utilitys.Console("XHud - 元素视觉放置器", $"已将所选元素放置到屏幕锚点 \" {GetGridNameWithIndex(gridIndex)} \"，放置的数量：{prefabs.Length} 个", XGUIMsgState.确认);
-
-            foreach (GameObject prefab in prefabs)
+            for (int row = 0; row < 3; row++)
             {
-                if (prefab == null) continue;
-
-                XHud_Module_Element ele = prefab.GetComponent<XHud_Module_Element>();
-                if (ele != null)
+                for (int col = 0; col < 3; col++)
                 {
-                    ProcessDropedElement(gridIndex, ele);
+                    gridRects.Add(new Rect(col * w, row * h, w, h));
                 }
             }
         }
         /// <summary>
-        /// 处理单个拖入的元素预制体
-        /// </summary>
-        /// <param name="gridIndex"></param>
-        /// <param name="ele"></param>
-        private static void ProcessDropedElement(int gridIndex, XHud_Module_Element ele)
-        {
-            switch (gridIndex)
-            {
-                case 0: Dragged_To_LU(ele); break;
-                case 1: Dragged_To_U(ele); break;
-                case 2: Dragged_To_RU(ele); break;
-                case 3: Dragged_To_L(ele); break;
-                case 4: Dragged_To_C(ele); break;
-                case 5: Dragged_To_R(ele); break;
-                case 6: Dragged_To_LD(ele); break;
-                case 7: Dragged_To_D(ele); break;
-                case 8: Dragged_To_RD(ele); break;
-                default: XGUI_Utilitys.Console("XHud - 元素视觉放置器", $"未知的锚点索引！", XGUIMsgState.错误); break;
-            }
-        }
-
-        #region 拖拽放置处理方法
-        /// <summary>
-        /// 拖拽放置到左上角 (Left-Up)
-        /// </summary>
-        /// <param name="element">被拖拽的 XHud_Module_Element 元素</param>
-        private static void Dragged_To_LU(XHud_Module_Element element)
-        {
-            //Debug.Log($"Dragged_To_LU - 预制体: {element?.name ?? "null"}");
-            Placer(element, XHudAnchor.左上);
-        }
-        /// <summary>
-        /// 拖拽放置到上 (Up)
-        /// </summary>
-        /// <param name="element">被拖拽的 XHud_Module_Element 元素</param>
-        private static void Dragged_To_U(XHud_Module_Element element)
-        {
-            //Debug.Log($"Dragged_To_C - 预制体: {element?.name ?? "null"}");
-            Placer(element, XHudAnchor.上);
-        }
-        /// <summary>
-        /// 拖拽放置到右上角 (Right-Up)
-        /// </summary>
-        /// <param name="element">被拖拽的 XHud_Module_Element 元素</param>
-        private static void Dragged_To_RU(XHud_Module_Element element)
-        {
-            //Debug.Log($"Dragged_To_RU - 预制体: {element?.name ?? "null"}");
-            Placer(element, XHudAnchor.右上);
-        }
-        /// <summary>
-        /// 拖拽放置到中心 (Center)
-        /// </summary>
-        /// <param name="element">被拖拽的 XHud_Module_Element 元素</param>
-        private static void Dragged_To_C(XHud_Module_Element element)
-        {
-            //Debug.Log($"Dragged_To_C - 预制体: {element?.name ?? "null"}");
-            Placer(element, XHudAnchor.中心);
-        }
-        /// <summary>
-        /// 拖拽放置到左 (Left)
-        /// </summary>
-        /// <param name="element">被拖拽的 XHud_Module_Element 元素</param>
-        private static void Dragged_To_L(XHud_Module_Element element)
-        {
-            //Debug.Log($"Dragged_To_L - 预制体: {element?.name ?? "null"}");
-            Placer(element, XHudAnchor.左);
-        }
-        /// <summary>
-        /// 拖拽放置到右 (Right)
-        /// </summary>
-        /// <param name="element">被拖拽的 XHud_Module_Element 元素</param>
-        private static void Dragged_To_R(XHud_Module_Element element)
-        {
-            //Debug.Log($"Dragged_To_R - 预制体: {element?.name ?? "null"}");
-            Placer(element, XHudAnchor.右);
-        }
-        /// <summary>
-        /// 拖拽放置到左下角 (Left-Down)
-        /// </summary>
-        /// <param name="element">被拖拽的 XHud_Module_Element 元素</param>
-        private static void Dragged_To_LD(XHud_Module_Element element)
-        {
-            //Debug.Log($"Dragged_To_LD - 预制体: {element?.name ?? "null"}");
-            Placer(element, XHudAnchor.左下);
-        }
-        /// <summary>
-        /// 拖拽放置到下 (Down)
-        /// </summary>
-        /// <param name="element">被拖拽的 XHud_Module_Element 元素</param>
-        private static void Dragged_To_D(XHud_Module_Element element)
-        {
-            //Debug.Log($"Dragged_To_D - 预制体: {element?.name ?? "null"}");
-            Placer(element, XHudAnchor.下);
-        }
-        /// <summary>
-        /// 拖拽放置到右下角 (Right-Down)
-        /// </summary>
-        /// <param name="element">被拖拽的 XHud_Module_Element 元素</param>
-        private static void Dragged_To_RD(XHud_Module_Element element)
-        {
-            //Debug.Log($"Dragged_To_RD - 预制体: {element?.name ?? "null"}");
-            Placer(element, XHudAnchor.右下);
-        }
-        #endregion
-
-        #region 辅助方法
-        /// <summary>
-        /// 实例化到锚点中
-        /// </summary>
-        /// <param name="element"></param>
-        /// <param name="anchor"></param>
-        private static void Placer(XHud_Module_Element element, XHudAnchor anchor)
-        {
-            Anchor_Layout anchor_Layout = mgr.hm_ScreenElement_Matched_AnchoredType(anchor);
-
-            GameObject obj = PrefabUtility.InstantiatePrefab(element.gameObject, anchor_Layout.Anchor) as GameObject;
-
-            if (obj != null)
-            {
-                Undo.RegisterCreatedObjectUndo(obj, "Place XHud Element");
-            }
-
-            Selection.activeObject = obj;
-        }
-        /// <summary>
-        /// 检查当前拖拽的对象中是否包含有效的目标预制体（包含 XHud_Module_Element 组件）。
-        /// 如果存在有效预制体，则设置拖拽状态为 true，并存储这些预制体。
-        /// 该方法仅在拖拽未激活时执行，避免重复检测。
-        /// </summary>
-        private static void CheckAndSetDragTarget()
-        {
-            if (isDraggingTarget) return;
-            if (DragAndDrop.objectReferences.Length == 0) return;
-
-            List<GameObject> validPrefabs = new List<GameObject>();
-
-            foreach (Object obj in DragAndDrop.objectReferences)
-            {
-                if (PrefabUtility.GetPrefabAssetType(obj) == PrefabAssetType.NotAPrefab)
-                    continue;
-
-                GameObject prefab = obj as GameObject;
-                if (prefab == null) continue;
-
-                if (prefab.GetComponent(targetComponentName) != null)
-                {
-                    validPrefabs.Add(prefab);
-                }
-            }
-
-            if (validPrefabs.Count > 0)
-            {
-                isDraggingTarget = true;
-                draggedPrefabs = validPrefabs.ToArray();
-
-                XGUI_Utilitys.Console("XHud - 元素视觉放置器", $"检测到目标预制体 {validPrefabs.Count} 个！", XGUIMsgState.设置);
-            }
-        }
-        /// <summary>
-        /// 根据鼠标位置获取其所在的九宫格索引。
-        /// 遍历预先生成的 gridRects 列表，判断鼠标位置属于哪个格子区域。
-        /// </summary>
-        /// <param name="mousePos">鼠标在 SceneView 中的屏幕坐标位置。</param>
-        /// <returns>
-        /// 返回鼠标所在格子的索引（0-8），如果鼠标不在任何格子范围内则返回 -1。
-        /// 索引对应关系：0-左上，1-上，2-右上，3-左，4-中心，5-右，6-左下，7-下，8-右下。
-        /// </returns>
-        private static int GetGridIndex(Vector2 mousePos)
-        {
-            for (int i = 0; i < gridRects.Count; i++)
-            {
-                if (gridRects[i].Contains(mousePos))
-                    return i;
-            }
-            return -1;
-        }
-        /// <summary>
-        /// 根据格子索引获取对应的锚点名称字符串。
-        /// 将内部使用的格子索引转换为 XHudAnchor 枚举对应的可读名称。
-        /// </summary>
-        /// <param name="index">格子索引（0-8），对应九宫格中的九个锚点位置。</param>
-        /// <returns>
-        /// 返回锚点名称字符串（如 "左上"、"中心"、"右下" 等）。
-        /// 如果索引无效，默认返回 "中心"。
-        /// </returns>
-        private static string GetGridNameWithIndex(int index)
-        {
-            XHudAnchor anchor = XHudAnchor.中心;
-
-            switch (index)
-            {
-                case 0:
-                    anchor = XHudAnchor.左上;
-                    break;
-                case 1:
-                    anchor = XHudAnchor.上;
-                    break;
-                case 2:
-                    anchor = XHudAnchor.右上;
-                    break;
-                case 3:
-                    anchor = XHudAnchor.左;
-                    break;
-                case 4:
-                    anchor = XHudAnchor.中心;
-                    break;
-                case 5:
-                    anchor = XHudAnchor.右;
-                    break;
-                case 6:
-                    anchor = XHudAnchor.左下;
-                    break;
-                case 7:
-                    anchor = XHudAnchor.下;
-                    break;
-                case 8:
-                    anchor = XHudAnchor.右下;
-                    break;
-            }
-
-            return anchor.ToString();
-        }
-        /// <summary>
-        /// 绘制锚点宫格
+        /// 绘制锚点宫格。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>绘制 9 个格子的背景、边框、主标签与缩写标签。</description></item>
+        /// <item><description>悬停格子使用高亮颜色。</description></item>
+        /// </list>
         /// </summary>
         private static void DrawGrid()
         {
@@ -545,21 +353,198 @@ namespace SevenStrikeModules.XHud.Editor
 
             Handles.EndGUI();
         }
+        #endregion
+
+        #region 工具 - 拖拽处理
         /// <summary>
-        /// 根据背景色自动获取对比文字颜色（深色背景用白字，浅色背景用黑字）
+        /// 批量处理拖入的元素预制体。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>输出提示并逐个调用 <c>ProcessDropedElement</c>。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="backgroundColor"></param>
-        /// <returns></returns>
-        private static Color GetContrastColor(Color backgroundColor)
+        /// <param name="gridIndex">拖拽释放的格子索引。</param>
+        /// <param name="prefabs">拖拽的预制体数组。</param>
+        private static void ProcessDropedElements(int gridIndex, GameObject[] prefabs)
         {
-            float brightness = backgroundColor.r * 0.299f + backgroundColor.g * 0.587f + backgroundColor.b * 0.114f;
-            return brightness > 0.5f ? Color.black : Color.white;
+            if (prefabs == null || prefabs.Length == 0) return;
+
+            XGUI_Utilitys.Console("XHud - 元素视觉放置器", $"已将所选元素放置到屏幕锚点 \" {GetGridNameWithIndex(gridIndex)} \"，放置的数量：{prefabs.Length} 个", XGUIMsgState.确认);
+
+            foreach (GameObject prefab in prefabs)
+            {
+                if (prefab == null) continue;
+
+                XHud_Module_Element ele = prefab.GetComponent<XHud_Module_Element>();
+                if (ele != null)
+                {
+                    ProcessDropedElement(gridIndex, ele);
+                }
+            }
         }
         /// <summary>
-        /// 获取宫格的名称
+        /// 处理单个拖入的元素预制体。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>按格子索引直接调用 <c>Placer</c> 并传入对应锚点。</description></item>
+        /// <item><description>索引无效时输出错误提示。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="gridIndex"></param>
-        /// <returns></returns>
+        /// <param name="gridIndex">格子索引。</param>
+        /// <param name="ele">被拖拽的元素。</param>
+        private static void ProcessDropedElement(int gridIndex, XHud_Module_Element ele)
+        {
+            switch (gridIndex)
+            {
+                case 0: Placer(ele, XHudAnchor.左上); break;
+                case 1: Placer(ele, XHudAnchor.上); break;
+                case 2: Placer(ele, XHudAnchor.右上); break;
+                case 3: Placer(ele, XHudAnchor.左); break;
+                case 4: Placer(ele, XHudAnchor.中心); break;
+                case 5: Placer(ele, XHudAnchor.右); break;
+                case 6: Placer(ele, XHudAnchor.左下); break;
+                case 7: Placer(ele, XHudAnchor.下); break;
+                case 8: Placer(ele, XHudAnchor.右下); break;
+                default: XGUI_Utilitys.Console("XHud - 元素视觉放置器", $"未知的锚点索引！", XGUIMsgState.错误); break;
+            }
+        }
+        /// <summary>
+        /// 实例化到锚点中。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>按锚点匹配实际锚点布局并实例化预制体。</description></item>
+        /// <item><description>注册撤销并选中新对象。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="element">被拖拽的元素。</param>
+        /// <param name="anchor">目标锚点。</param>
+        private static void Placer(XHud_Module_Element element, XHudAnchor anchor)
+        {
+            Anchor_Layout anchor_Layout = mgr.hm_ScreenElement_Matched_AnchoredType(anchor);
+
+            GameObject obj = PrefabUtility.InstantiatePrefab(element.gameObject, anchor_Layout.Anchor) as GameObject;
+
+            if (obj != null)
+            {
+                Undo.RegisterCreatedObjectUndo(obj, "Place XHud Element");
+            }
+
+            Selection.activeObject = obj;
+        }
+        /// <summary>
+        /// 检查当前拖拽的对象中是否包含有效的目标预制体。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>仅在拖拽未激活时执行，避免重复检测。</description></item>
+        /// <item><description>符合条件时设置 <c>isDraggingTarget</c> 并缓存预制体数组。</description></item>
+        /// </list>
+        /// </summary>
+        private static void CheckAndSetDragTarget()
+        {
+            if (isDraggingTarget) return;
+            if (DragAndDrop.objectReferences.Length == 0) return;
+
+            List<GameObject> validPrefabs = new List<GameObject>();
+
+            foreach (Object obj in DragAndDrop.objectReferences)
+            {
+                if (PrefabUtility.GetPrefabAssetType(obj) == PrefabAssetType.NotAPrefab)
+                    continue;
+
+                GameObject prefab = obj as GameObject;
+                if (prefab == null) continue;
+
+                if (prefab.GetComponent(targetComponentName) != null)
+                {
+                    validPrefabs.Add(prefab);
+                }
+            }
+
+            if (validPrefabs.Count > 0)
+            {
+                isDraggingTarget = true;
+                draggedPrefabs = validPrefabs.ToArray();
+
+                XGUI_Utilitys.Console("XHud - 元素视觉放置器", $"检测到目标预制体 {validPrefabs.Count} 个！", XGUIMsgState.设置);
+            }
+        }
+        #endregion
+
+        #region 工具 - 索引换算
+        /// <summary>
+        /// 根据鼠标位置获取其所在的九宫格索引。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>遍历 <c>gridRects</c> 判断鼠标所在格子。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="mousePos">鼠标在 SceneView 中的屏幕坐标位置。</param>
+        /// <returns>格子索引 0-8；不在任何格子内时返回 -1。</returns>
+        private static int GetGridIndex(Vector2 mousePos)
+        {
+            for (int i = 0; i < gridRects.Count; i++)
+            {
+                if (gridRects[i].Contains(mousePos))
+                    return i;
+            }
+            return -1;
+        }
+        /// <summary>
+        /// 根据格子索引获取对应的锚点名称字符串。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>把格子索引转换为 <c>XHudAnchor</c> 枚举对应名称。</description></item>
+        /// <item><description>索引无效时默认返回「中心」。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="index">格子索引（0-8）。</param>
+        /// <returns>锚点名称字符串。</returns>
+        private static string GetGridNameWithIndex(int index)
+        {
+            XHudAnchor anchor = XHudAnchor.中心;
+
+            switch (index)
+            {
+                case 0:
+                    anchor = XHudAnchor.左上;
+                    break;
+                case 1:
+                    anchor = XHudAnchor.上;
+                    break;
+                case 2:
+                    anchor = XHudAnchor.右上;
+                    break;
+                case 3:
+                    anchor = XHudAnchor.左;
+                    break;
+                case 4:
+                    anchor = XHudAnchor.中心;
+                    break;
+                case 5:
+                    anchor = XHudAnchor.右;
+                    break;
+                case 6:
+                    anchor = XHudAnchor.左下;
+                    break;
+                case 7:
+                    anchor = XHudAnchor.下;
+                    break;
+                case 8:
+                    anchor = XHudAnchor.右下;
+                    break;
+            }
+
+            return anchor.ToString();
+        }
+        /// <summary>
+        /// 获取宫格的名称。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>返回中文全称，如「左上角」「顶部」等。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="gridIndex">格子索引。</param>
+        /// <returns>中文名称。</returns>
         private static string GetGridLabel(int gridIndex)
         {
             switch (gridIndex)
@@ -577,10 +562,14 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 获取宫格的缩写名称
+        /// 获取宫格的缩写名称。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>返回英文缩写，如「Left-U Corner」「Top」等。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="gridIndex"></param>
-        /// <returns></returns>
+        /// <param name="gridIndex">格子索引。</param>
+        /// <returns>英文缩写名称。</returns>
         private static string GetGridLabel_Abbr(int gridIndex)
         {
             switch (gridIndex)
@@ -597,11 +586,33 @@ namespace SevenStrikeModules.XHud.Editor
                 default: return "";
             }
         }
+        #endregion
+
+        #region 工具 - 颜色
         /// <summary>
-        /// 公开方法：设置指定格子的颜色
+        /// 根据背景色自动获取对比文字颜色。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>深色背景返回白色，浅色背景返回黑色。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="gridIndex"></param>
-        /// <param name="color"></param>
+        /// <param name="backgroundColor">背景色。</param>
+        /// <returns>对比色。</returns>
+        private static Color GetContrastColor(Color backgroundColor)
+        {
+            float brightness = backgroundColor.r * 0.299f + backgroundColor.g * 0.587f + backgroundColor.b * 0.114f;
+            return brightness > 0.5f ? Color.black : Color.white;
+        }
+        /// <summary>
+        /// 公开方法：设置指定格子的颜色。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>索引越界时输出警告提示。</description></item>
+        /// <item><description>设置后触发 SceneView 全量重绘。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="gridIndex">格子索引。</param>
+        /// <param name="color">目标颜色。</param>
         public static void SetGridColor(int gridIndex, Color color)
         {
             if (gridIndex >= 0 && gridIndex < Colors_Grid_UnHighlight.Length)
@@ -615,9 +626,14 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 设置所有格子颜色
+        /// 设置所有格子颜色。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>统一覆盖全部 9 个格子的默认背景色。</description></item>
+        /// <item><description>设置后触发 SceneView 全量重绘。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="color"></param>
+        /// <param name="color">目标颜色。</param>
         public static void SetAllGridColors(Color color)
         {
             for (int i = 0; i < Colors_Grid_UnHighlight.Length; i++)
@@ -627,9 +643,13 @@ namespace SevenStrikeModules.XHud.Editor
             SceneView.RepaintAll();
         }
         /// <summary>
-        /// 获取当前颜色数组 
+        /// 获取当前颜色数组。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>返回内部数组的克隆，避免外部修改内部状态。</description></item>
+        /// </list>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>颜色数组副本。</returns>
         public static Color[] GetGridColors()
         {
             return (Color[])Colors_Grid_UnHighlight.Clone();
@@ -638,13 +658,13 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 外部控制开关
         /// <summary>
-        /// 是否启动拖拽放置功能
+        /// 设置拖拽功能是否启用。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>禁用时重置拖拽状态并触发 SceneView 重绘。</description></item>
+        /// </list>
         /// </summary>
-        private static bool isEnabled = true;
-        /// <summary>
-        /// 设置拖拽功能是否启用
-        /// </summary>
-        /// <param name="enabled">true=启用, false=禁用</param>
+        /// <param name="enabled">true=启用, false=禁用。</param>
         public static void SetEnabled(bool enabled)
         {
             isEnabled = enabled;
@@ -661,15 +681,23 @@ namespace SevenStrikeModules.XHud.Editor
             //XHud_Utilitys.Func_PrintInfo("XHud - 元素视觉放置器", $"已{(isEnabled ? "启用" : "禁用")} ！", HudMsgState.确认);
         }
         /// <summary>
-        /// 获取拖拽功能是否启用
+        /// 获取拖拽功能是否启用。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>直接返回内部开关状态。</description></item>
+        /// </list>
         /// </summary>
-        /// <returns>true=启用, false=禁用</returns>
+        /// <returns>true=启用, false=禁用。</returns>
         public static bool GetEnabled()
         {
             return isEnabled;
         }
         /// <summary>
-        /// 切换启用状态
+        /// 切换启用状态。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>内部调用 <c>SetEnabled(!isEnabled)</c>。</description></item>
+        /// </list>
         /// </summary>
         public static void ToggleEnabled()
         {

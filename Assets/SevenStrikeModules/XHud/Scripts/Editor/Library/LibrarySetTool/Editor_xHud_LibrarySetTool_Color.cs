@@ -29,12 +29,32 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEngine;
 
+    #region 数据模型
+    /// <summary>
+    /// HSV 颜色数据。
+    /// <para/>
+    /// 用于色相 / 饱和度 / 明度的相互转换与色系判定。
+    /// </summary>
     public struct HSV
     {
-        public float H; // 色相 (Hue)
-        public float S; // 饱和度 (Saturation)
-        public float V; // 明度 (Value)
-
+        /// <summary>
+        /// 色相（Hue）。
+        /// </summary>
+        public float H;
+        /// <summary>
+        /// 饱和度（Saturation）。
+        /// </summary>
+        public float S;
+        /// <summary>
+        /// 明度（Value）。
+        /// </summary>
+        public float V;
+        /// <summary>
+        /// 构造 HSV 数据。
+        /// </summary>
+        /// <param name="hue">色相</param>
+        /// <param name="saturation">饱和度</param>
+        /// <param name="value">明度</param>
         public HSV(float hue, float saturation, float value)
         {
             H = hue;
@@ -42,78 +62,185 @@ namespace SevenStrikeModules.XHud.Editor
             V = value;
         }
     }
+    #endregion
 
+    #region 编辑器窗口
+    /// <summary>
+    /// XHud 色卡库的采集 / 修改工具窗口。
+    /// <para/>
+    /// 提供色卡的名称编辑、颜色拾取、RGBA 预览、动画效果预览、
+    /// 添加到库 / 修改库源参数等功能。
+    /// </summary>
     public class Editor_XHud_LibrarySetTool_Color : EditorWindow
     {
+        #region 字段 - 序列化对象 / 属性
+        /// <summary>
+        /// 用于序列化当前窗口的自定义字段。
+        /// </summary>
         private SerializedObject BaseObject;
+        /// <summary>
+        /// 本窗口用到的全部序列化属性引用。
+        /// <para/>
+        /// 统一在 <see cref="OnEnable"/> 里初始化。
+        /// 覆盖：色卡名称 / 原始名称 / 颜色值。
+        /// </summary>
         private SerializedProperty
             sp_ColorName,
             sp_OriginColorName,
             sp_Color;
+        #endregion
 
-        private Texture2D icon_libsetter_color;
-
-        private Texture2D leftarr_r;
-        private Texture2D leftarr_p;
-        private Texture2D rightarr_r;
-        private Texture2D rightarr_p;
-
-        private float PreviewDataDuration = 0.035f;
-        private int PreviewData_Index = 0;
-        private XCoroutine PreviewCoroutine;
-        private Texture2D PreviewTex = null;
-
-        public LibrarySetterMode LibrarySetterMode;
-
+        #region 字段 - 图标
         /// <summary>
-        /// 源配色器
+        /// 窗口 Logo 图标。
+        /// </summary>
+        private Texture2D icon_libsetter_color;
+        /// <summary>
+        /// 左箭头释放图标。
+        /// </summary>
+        private Texture2D leftarr_r;
+        /// <summary>
+        /// 左箭头按下图标。
+        /// </summary>
+        private Texture2D leftarr_p;
+        /// <summary>
+        /// 右箭头释放图标。
+        /// </summary>
+        private Texture2D rightarr_r;
+        /// <summary>
+        /// 右箭头按下图标。
+        /// </summary>
+        private Texture2D rightarr_p;
+        #endregion
+
+        #region 字段 - 预览
+        /// <summary>
+        /// 每帧预览动画的持续时间间隔。
+        /// </summary>
+        private float PreviewDataDuration = 0.035f;
+        /// <summary>
+        /// 当前预览动画数据的索引。
+        /// </summary>
+        private int PreviewData_Index = 0;
+        /// <summary>
+        /// 预览动画协程句柄。
+        /// </summary>
+        private XCoroutine PreviewCoroutine;
+        /// <summary>
+        /// 当前预览纹理。
+        /// </summary>
+        private Texture2D PreviewTex = null;
+        /// <summary>
+        /// 预览序列帧数据数组。
+        /// </summary>
+        public XHud_LibrarySetTool_Color_PreviewData[] PreviewDatas;
+        /// <summary>
+        /// 预览区背景色。
+        /// </summary>
+        Color PreviewBgColor = Color.black;
+        #endregion
+
+        #region 字段 - 模式与源
+        /// <summary>
+        /// 库设置模式（添加到库 / 修改库源参数）。
+        /// </summary>
+        public LibrarySetterMode LibrarySetterMode;
+        /// <summary>
+        /// 源图元配色器。
+        /// <para/>
+        /// 用于从图元配色器中采集颜色或回写色卡信息。
         /// </summary>
         public XHud_Module_Primitive_Painting SourcePainting;
+        /// <summary>
+        /// 目标色卡库。
+        /// </summary>
+        private XHud_Library_Colors Target_Hud_ColorsLibrary;
+        #endregion
+
+        #region 字段 - 数据
+        /// <summary>
+        /// 色卡名称。
+        /// </summary>
         [SerializeField]
         public string ColorName;
+        /// <summary>
+        /// 日期时间标识。
+        /// </summary>
         [SerializeField]
         public string DateTimes;
+        /// <summary>
+        /// 色卡颜色。
+        /// </summary>
         [SerializeField]
         public Color Color;
-
         /// <summary>
-        /// 按钮高度
+        /// 原始色卡名称。
+        /// <para/>
+        /// 修改库源参数模式下用于定位原始项。
+        /// </summary>
+        [SerializeField]
+        public string OriginColorName;
+        /// <summary>
+        /// 修改的库项索引。
+        /// </summary>
+        public int ModifiedIndex;
+        #endregion
+
+        #region 字段 - 布局
+        /// <summary>
+        /// 按钮高度。
         /// </summary>
         private float ButtonHeight = 25;
         /// <summary>
-        /// 按钮间距
+        /// 按钮间距。
         /// </summary>
         private float ButtonDistance = 10;
         /// <summary>
-        /// 标题文字
+        /// 窗口标题文字。
         /// </summary>
         public string Title;
-
+        /// <summary>
+        /// 是否使用预览背景。
+        /// </summary>
         [SerializeField]
         public bool UseBg = true;
-
+        /// <summary>
+        /// 确认按钮文字。
+        /// </summary>
         [SerializeField]
         public string ButtonText_Ok;
+        /// <summary>
+        /// 取消按钮文字。
+        /// </summary>
         [SerializeField]
         public string ButtonText_Cancel;
-        [SerializeField]
-        public string OriginColorName;
-
-        Color PreviewBgColor = Color.black;
-
+        /// <summary>
+        /// 通用绘制矩形缓存。
+        /// </summary>
         Rect draw_rect = new Rect(0, 0, 0, 0);
+        #endregion
 
-        public int ModifiedIndex;
-
-        public XHud_LibrarySetTool_Color_PreviewData[] PreviewDatas;
-
-        private XHud_Library_Colors Target_Hud_ColorsLibrary;
-
+        #region 生命周期
+        /// <summary>
+        /// Unity 禁用回调。
+        /// <para/>
+        /// 停止预览动画。
+        /// </summary>
         private void OnDisable()
         {
             StopPreviewUpdate();
         }
-
+        /// <summary>
+        /// Unity 启用回调。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>启动预览动画；</description></item>
+        /// <item><description>绑定序列化属性；</description></item>
+        /// <item><description>加载全部图标资源；</description></item>
+        /// <item><description>初始化色卡名称与预览索引。</description></item>
+        /// </list>
+        /// </summary>
         private void OnEnable()
         {
             StartPreviewUpdate();
@@ -134,23 +261,30 @@ namespace SevenStrikeModules.XHud.Editor
             PreviewData_Index = XGUI.x_Editor_Data_Get_With_Int("xData_library_color_previewdata_index");
 
         }
-
+        /// <summary>
+        /// Unity 销毁回调。
+        /// <para/>
+        /// 关闭窗口时让场景视图重新获得焦点。
+        /// </summary>
         private void OnDestroy()
         {
             GetWindow<SceneView>().Focus();
         }
-
+        /// <summary>
+        /// 绘制窗口 GUI。
+        /// <para/>
+        /// 按自上而下的顺序绘制：
+        /// 抬头 → 预览（含翻页 / 背景切换） → 参数（标识 / 颜色 / 颜色信息 / RGBA） → 按钮。
+        /// <para/>
+        /// 支持 Escape 键关闭窗口与点击空白区域失焦。
+        /// </summary>
         private void OnGUI()
         {
             BaseObject.Update();
 
             Rect rect = new Rect(0, 0, position.width, position.height);
 
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             #region 抬头
             // 图标
@@ -170,7 +304,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent(Title),
                 text_color: Color.white,
                 size: XGUIFontSize.L,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 font: XGUI.GetFont("xg-heavy"));
 
             // 分割线
@@ -189,7 +323,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent("以下为目标色卡的颜色参数与效果的预览"),
                 text_color: Color.white * 0.7f,
                 size: XGUIFontSize.M,
-                clipping: clipping);
+                clipping: clipping_ellipsis);
             #endregion
 
             XGUI.layout_space(100);
@@ -284,7 +418,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
-            #region 翻页按钮           
+            #region 翻页按钮
             draw_rect.Set(rect_preview.x - 5, rect_preview.y + (rect_preview.height - 65), 64, 64);
             if (XGUI.gui_button(
                 rect: draw_rect,
@@ -344,7 +478,7 @@ namespace SevenStrikeModules.XHud.Editor
               title: "参数",
               title_size: XGUIFontSize.M,
               title_text_color: Color.white,
-              title_clipping: clipping,
+              title_clipping: clipping_ellipsis,
               margin: new RectOffset(10, 10, 0, 0),
               padding: new RectOffset(10, 10, 15, 15));
 
@@ -507,10 +641,20 @@ namespace SevenStrikeModules.XHud.Editor
                 Close();
             }
         }
+        #endregion
 
-        #region 辅助
+        #region 工具 - 数据操作
         /// <summary>
-        /// 发送到元素库
+        /// 发送色卡到目标色卡库（添加到库模式）。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>校验名称是否为空；</description></item>
+        /// <item><description>检测色卡名称是否重复；</description></item>
+        /// <item><description>向目标库添加色卡；</description></item>
+        /// <item><description>弹窗提示是否打开色卡库；</description></item>
+        /// <item><description>询问是否开启源配色器的色卡模式并同步。</description></item>
+        /// </list>
         /// </summary>
         private void SendToLibrary()
         {
@@ -617,7 +761,11 @@ namespace SevenStrikeModules.XHud.Editor
 
             this.Close();
         }
-
+        /// <summary>
+        /// 更新到目标色卡库（修改库源参数模式）。
+        /// <para/>
+        /// 用当前编辑的名称与颜色替换目标库中指定索引与原始名称的色卡项，然后关闭窗口。
+        /// </summary>
         private void UpdateToLibrary()
         {
             string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
@@ -628,14 +776,18 @@ namespace SevenStrikeModules.XHud.Editor
 
             Close();
         }
+        #endregion
 
+        #region 工具 - 资源加载
         /// <summary>
-        /// 获取目标文件夹下的指定类型所有资源
+        /// 获取目标文件夹下的指定类型所有资源。
+        /// <para/>
+        /// 相对工程目录搜索，并按扩展名匹配文件。
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="path"></param>
-        /// <param name="pattern"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">资源类型</typeparam>
+        /// <param name="path">相对工程根目录的文件夹路径</param>
+        /// <param name="pattern">文件扩展名匹配模式（如 <c>.asset</c>）</param>
+        /// <returns>已加载的资源列表</returns>
         List<T> LoadAllAssetsAtPathWithPattern<T>(string path, string pattern) where T : UnityEngine.Object
         {
             List<T> _out = new();
@@ -658,24 +810,24 @@ namespace SevenStrikeModules.XHud.Editor
 
             return _out;
         }
+        #endregion
 
+        #region 设置接口
         /// <summary>
-        /// 设置按钮文字
+        /// 设置按钮文字。
         /// </summary>
-        /// <param name="ok"></param>
-        /// <param name="cancel"></param>
+        /// <param name="ok">确认按钮文字</param>
+        /// <param name="cancel">取消按钮文字</param>
         public void SetButtonText(string ok, string cancel)
         {
             ButtonText_Cancel = cancel;
             ButtonText_Ok = ok;
         }
-
         /// <summary>
-        /// 设置模版基础信息（针对从库源修改更新使用）
+        /// 设置模版基础信息（针对从库源修改更新使用）。
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="decription"></param>
-        /// <param name="color"></param>
+        /// <param name="name">色卡名称</param>
+        /// <param name="color">色卡颜色</param>
         public void SetInfo(string name, Color color)
         {
             sp_ColorName.stringValue = name;
@@ -684,55 +836,54 @@ namespace SevenStrikeModules.XHud.Editor
             sp_ColorName.serializedObject.ApplyModifiedProperties();
             sp_Color.serializedObject.ApplyModifiedProperties();
         }
-
         /// <summary>
-        /// 设置标题
+        /// 设置标题。
         /// </summary>
-        /// <param name="title"></param>
+        /// <param name="title">标题文字</param>
         public void SetTitle(string title)
         {
             Title = title;
             Repaint();
         }
-
         /// <summary>
-        /// 设置原始名称
+        /// 设置原始名称。
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">原始色卡名称</param>
         public void Set_OriginColorName(string name)
         {
             OriginColorName = name;
         }
-
         /// <summary>
-        /// 设置为添加到库模式还是修改库源参数模式
+        /// 设置为添加到库模式还是修改库源参数模式。
         /// </summary>
-        /// <param name="mode"></param>
+        /// <param name="mode">库设置模式</param>
         public void SetLibrarySetterMode(LibrarySetterMode mode)
         {
             LibrarySetterMode = mode;
         }
-
         /// <summary>
-        /// 设置源
+        /// 设置源图元配色器。
         /// </summary>
-        /// <param name="painting"></param>
+        /// <param name="painting">源配色器</param>
         public void SetPainting(XHud_Module_Primitive_Painting painting)
         {
             SourcePainting = painting;
         }
-
         /// <summary>
-        /// 设置目标库
+        /// 设置目标色卡库。
         /// </summary>
-        /// <param name="lib"></param>
+        /// <param name="lib">目标色卡库</param>
         public void SetTarget_Hud_ColorsLibrary(XHud_Library_Colors lib)
         {
             Target_Hud_ColorsLibrary = lib;
         }
+        #endregion
 
+        #region 按钮
         /// <summary>
-        /// 控件按钮
+        /// 绘制底部按钮区（取消 / 确认）。
+        /// <para/>
+        /// 确认按钮根据 <see cref="LibrarySetterMode"/> 决定调用 <see cref="SendToLibrary"/> 或 <see cref="UpdateToLibrary"/>。
         /// </summary>
         private void Buttons()
         {
@@ -802,8 +953,16 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
         }
+        #endregion
 
-        // 将 RGB 转换为 HSV
+        #region 工具 - 颜色分析
+        /// <summary>
+        /// 将 RGB 颜色转换为 HSV。
+        /// </summary>
+        /// <param name="color">源 RGB 颜色</param>
+        /// <param name="hue">输出色相</param>
+        /// <param name="saturation">输出饱和度</param>
+        /// <param name="value">输出明度</param>
         private static void RGBToHSV(Color color, out float hue, out float saturation, out float value)
         {
             float r = color.r;
@@ -837,7 +996,14 @@ namespace SevenStrikeModules.XHud.Editor
             saturation = max == 0 ? 0 : delta / max;
             value = max;
         }
-
+        /// <summary>
+        /// 根据 HSV 判断颜色所属色系（如枫叶红 / 松石绿等）。
+        /// <para/>
+        /// 灰度高则返回 白色系 / 黑色系 / 灰色系；
+        /// 否则按色相 10° 一档细分命名。
+        /// </summary>
+        /// <param name="color">源颜色</param>
+        /// <returns>色系名称</returns>
         public string GetColorTone(Color color)
         {
             float hue, saturation, value;
@@ -891,23 +1057,29 @@ namespace SevenStrikeModules.XHud.Editor
 
             return "未知色";
         }
+        #endregion
 
+        #region 工具 - 预览动画
         /// <summary>
-        /// 开始预览
+        /// 开始预览序列帧动画。
         /// </summary>
         public void StartPreviewUpdate()
         {
             PreviewCoroutine = XCoroutineUtility.xec_StartCoroutineOwnerless(PreviewUpdater());
         }
-
         /// <summary>
-        /// 停止预览
+        /// 停止预览序列帧动画。
         /// </summary>
         public void StopPreviewUpdate()
         {
             XCoroutineUtility.xec_StopCoroutine(PreviewCoroutine);
         }
-
+        /// <summary>
+        /// 预览序列帧协程。
+        /// <para/>
+        /// 从资源目录加载所有 <see cref="XHud_LibrarySetTool_Color_PreviewData"/>，
+        /// 并按固定时间间隔循环切换当前预览数据的纹理序列。
+        /// </summary>
         IEnumerator PreviewUpdater()
         {
             string path = $"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/samples";
@@ -926,4 +1098,5 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
     }
+    #endregion
 }

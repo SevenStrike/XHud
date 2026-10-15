@@ -116,8 +116,8 @@
         {
             isInitialized = false;
 
-            CrosshairTool.AimDisplay(false);
-            CrosshairTool.ClearTarget();
+            Editor_XHud_Tool_Crosshair.AimDisplay(false);
+            Editor_XHud_Tool_Crosshair.ClearTarget();
         }
 
         /// <summary>
@@ -467,7 +467,7 @@
                 EditorGUIUtility.PingObject(target);
                 Selection.activeObject = target;
 
-                CrosshairTool.AimTo(target.RectTransform);
+                Editor_XHud_Tool_Crosshair.AimTo(target.RectTransform);
                 return;
             }
             #endregion
@@ -614,7 +614,7 @@
                 EditorGUIUtility.PingObject(prim.gameObject);
                 Selection.activeObject = prim.gameObject;
 
-                CrosshairTool.AimTo(prim.mod_Rect);
+                Editor_XHud_Tool_Crosshair.AimTo(prim.mod_Rect);
                 return;
             }
 

@@ -27,50 +27,172 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEngine;
 
+    /// <summary>
+    /// 构图参考说明数据项。
+    /// <para/>
+    /// <list type="bullet">
+    /// <item><description>对应 JSON 配置表 <c>XHudGuideRefer.json</c> 中的单条记录。</description></item>
+    /// <item><description>保存构图类型名称、缩写与详细说明。</description></item>
+    /// </list>
+    /// </summary>
     [Serializable]
     public class GuideReferDataItem
     {
+        /// <summary>
+        /// 构图类型名称。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>与 <c>GuideType</c> 匹配时使用。</description></item>
+        /// </list>
+        /// </summary>
         [SerializeField]
         public string name;
+        /// <summary>
+        /// 构图类型缩写。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>用于标题栏显示。</description></item>
+        /// </list>
+        /// </summary>
         [SerializeField]
         public string abbr;
+        /// <summary>
+        /// 构图类型详细说明。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>用于图片下方的说明文本。</description></item>
+        /// </list>
+        /// </summary>
         [SerializeField]
         public string des;
     }
 
+    /// <summary>
+    /// 构图参考说明数据列表。
+    /// <para/>
+    /// <list type="bullet">
+    /// <item><description>作为 JSON 反序列化的根容器。</description></item>
+    /// </list>
+    /// </summary>
     [Serializable]
     public class GuideReferDataList
     {
+        /// <summary>
+        /// 构图参考数据项集合。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由 <c>JsonUtility.FromJson</c> 填充。</description></item>
+        /// </list>
+        /// </summary>
         [SerializeField]
         public List<GuideReferDataItem> GuideReferDatas;
     }
 
+    /// <summary>
+    /// 构图参考说明书窗口。
+    /// <para/>
+    /// <list type="bullet">
+    /// <item><description>展示各构图参考类型的示意图与文字说明。</description></item>
+    /// <item><description>支持上一张 / 下一张翻页浏览参考图。</description></item>
+    /// <item><description>按 Esc 关闭窗口。</description></item>
+    /// </list>
+    /// </summary>
     public class Editor_XHud_Tool_GuideReference : EditorWindow
     {
+        #region 字段 - 序列化
+        /// <summary>
+        /// 当前窗口的序列化对象。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中构造。</description></item>
+        /// </list>
+        /// </summary>
         private SerializedObject BaseObject;
-
-        private Texture2D logo, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p;
-
+        /// <summary>
+        /// 构图参考数据列表。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>LoadReferDes</c> 中由 JSON 反序列化得到。</description></item>
+        /// </list>
+        /// </summary>
         public GuideReferDataList GuideReferDataList;
-
+        /// <summary>
+        /// 当前构图类型的参考图片数组。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>LoadReferImages</c> 中按类型加载。</description></item>
+        /// </list>
+        /// </summary>
         [SerializeField]
         private Texture2D[] ReferImages;
+        #endregion
 
+        #region 字段 - 图标
+        /// <summary>
+        /// 本窗口所使用的图标资源集合。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description><c>logo</c>：窗口标题图标。</description></item>
+        /// <item><description><c>left_arrow_r</c> / <c>left_arrow_p</c>：左翻页按钮常态 / 按下图标。</description></item>
+        /// <item><description><c>right_arrow_r</c> / <c>right_arrow_p</c>：右翻页按钮常态 / 按下图标。</description></item>
+        /// </list>
+        /// </summary>
+        private Texture2D logo, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p;
+        #endregion
+
+        #region 字段 - 状态
+        /// <summary>
+        /// 当前展示的构图类型名称。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>默认「垂直对称」。</description></item>
+        /// <item><description>由 <c>SetGuideType</c> 设置。</description></item>
+        /// </list>
+        /// </summary>
         public string GuideType = "垂直对称";
+        /// <summary>
+        /// 当前参考图片的索引。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由左右翻页按钮调整。</description></item>
+        /// </list>
+        /// </summary>
         private int referIndex = 0;
-
+        /// <summary>
+        /// 参考图片的横向溢出边距。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>默认 35。</description></item>
+        /// </list>
+        /// </summary>
         public float refer_img_overflow = 35;
-
-        // 构图参考说明 - 简要名称
+        /// <summary>
+        /// 当前构图类型的缩写。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>LoadReferDes</c> 中根据 <c>GuideType</c> 匹配填充。</description></item>
+        /// </list>
+        /// </summary>
         string abbr = "";
-        // 构图参考说明 - 说明内容
+        /// <summary>
+        /// 当前构图类型的详细说明。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>LoadReferDes</c> 中根据 <c>GuideType</c> 匹配填充。</description></item>
+        /// </list>
+        /// </summary>
         string des = "";
+        #endregion
 
-        private void OnDisable()
-        {
-
-        }
-
+        #region 生命周期
+        /// <summary>
+        /// 窗口启用时初始化。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>构造序列化对象。</description></item>
+        /// <item><description>加载全部图标资源。</description></item>
+        /// </list>
+        /// </summary>
         private void OnEnable()
         {
             BaseObject = new SerializedObject(this);
@@ -81,6 +203,28 @@ namespace SevenStrikeModules.XHud.Editor
             right_arrow_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/right_arrow_r");
             right_arrow_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/right_arrow_p");
         }
+        /// <summary>
+        /// 窗口销毁时清理。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>将焦点交还给场景视图。</description></item>
+        /// </list>
+        /// </summary>
+        private void OnDestroy()
+        {
+            GetWindow<SceneView>().Focus();
+        }
+        #endregion
+
+        #region 数据加载
+        /// <summary>
+        /// 加载当前构图类型的参考说明。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>从 JSON 配置表读取数据并反序列化。</description></item>
+        /// <item><description>按 <c>GuideType</c> 匹配对应记录的缩写与详细说明。</description></item>
+        /// </list>
+        /// </summary>
         private void LoadReferDes()
         {
             // 读取配置表
@@ -98,7 +242,15 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
         }
-
+        /// <summary>
+        /// 加载指定类型的参考图片。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>仅在 <c>ReferImages</c> 为空时加载，避免重复读取。</description></item>
+        /// <item><description>从约定路径加载 5 张参考图。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="type">构图类型名称。</param>
         private void LoadReferImages(string type)
         {
             if (ReferImages == null)
@@ -110,12 +262,35 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
         }
-
-        private void OnDestroy()
+        /// <summary>
+        /// 设置参考说明类型。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>更新 <c>GuideType</c> 并重新加载说明与图片。</description></item>
+        /// <item><description>重置图片索引为 0。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="type">构图类型名称。</param>
+        public void SetGuideType(string type)
         {
-            GetWindow<SceneView>().Focus();
+            GuideType = type;
+            ReferImages = null;
+            referIndex = 0;
+            LoadReferDes();
+            LoadReferImages(GuideType);
         }
+        #endregion
 
+        #region 绘制 - 主界面
+        /// <summary>
+        /// 绘制构图参考说明书主界面。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>绘制抬头区（图标、大标题、分割线、小标题）。</description></item>
+        /// <item><description>绘制参考图片、翻页按钮、类型标题与说明文本。</description></item>
+        /// <item><description>处理 Esc 键关闭窗口。</description></item>
+        /// </list>
+        /// </summary>
         private void OnGUI()
         {
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
@@ -201,7 +376,7 @@ namespace SevenStrikeModules.XHud.Editor
             // 左翻页
             if (XGUI.gui_button(
                 rect: new Rect(rect_refer.x - 5, rect_refer.y + (rect_refer.height + 5), 32, 32),
-                tooltip: "收藏的预设",
+                tooltip: "上一张",
                 tex_release: left_arrow_r,
                 tex_press: left_arrow_p,
                 tex_gui_color: Color.white,
@@ -218,13 +393,13 @@ namespace SevenStrikeModules.XHud.Editor
             // 右翻页
             if (XGUI.gui_button(
                rect: new Rect(rect_refer.x + (rect_refer.width - 25), rect_refer.y + (rect_refer.height + 5), 32, 32),
-               tooltip: "收藏的预设",
+               tooltip: "下一张",
                tex_release: right_arrow_r,
                tex_press: right_arrow_p,
                tex_gui_color: Color.white,
                margin: new RectOffset(0, 0, 0, 0),
                padding: new RectOffset(0, 0, 0, 0),
-               focus_name: "prev_btn"))
+               focus_name: "next_btn"))
             {
                 if (referIndex >= ReferImages.Length - 1)
                     referIndex = 0;
@@ -279,18 +454,7 @@ namespace SevenStrikeModules.XHud.Editor
                 e.Use();
                 Close();
             }
-
-            return;
         }
-
-        /// <summary>
-        /// 设置参考说明类型
-        /// </summary>
-        /// <param name="type"></param>
-        public void SetGuideType(string type)
-        {
-            GuideType = type;
-            LoadReferDes();
-        }
+        #endregion
     }
 }

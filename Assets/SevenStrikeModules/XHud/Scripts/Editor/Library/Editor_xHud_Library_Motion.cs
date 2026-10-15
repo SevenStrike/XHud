@@ -31,46 +31,119 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEngine;
     using Path = System.IO.Path;
 
+    #region 数据模型
+    /// <summary>
+    /// 动效参数导出容器。
+    /// <para/>
+    /// 序列化为 JSON 后写入磁盘，用于元素动效库的导入 / 导出。
+    /// </summary>
     [System.Serializable]
     public class ExportMotions
     {
+        /// <summary>
+        /// 元素动效参数列表。
+        /// </summary>
         public List<XHud.XHud_LibraryArg_Motion> ElementMotionList;
     }
+    #endregion
 
+    #region 编辑器主体
+    /// <summary>
+    /// XHud 元素动效库的自定义编辑器。
+    /// <para/>
+    /// 提供动效列表的可视化编辑、右键菜单（代码块 / 修改 / 复制 / 粘贴 / 导出）、导入导出、增删清空等功能。
+    /// </summary>
     [CustomEditor(typeof(XHud_Library_Motion))]
     public class Editor_XHud_Library_Motion : Editor
     {
-        #region 组件 / 列表
+        #region 字段 - 组件 / 列表
         /// <summary>
-        /// 基础脚本
+        /// 目标脚本实例。
+        /// <para/>
+        /// 在 <see cref="OnEnable"/> 中缓存。
         /// </summary>
         private XHud_Library_Motion BaseScript;
         /// <summary>
-        /// 动效参数列表
+        /// 动效参数列表（可重排列表）。
+        /// <para/>
+        /// 用于驱动 ReorderableList 的绘制与交互。
         /// </summary>
         private ReorderableList ElementMotionList;
         #endregion
 
-        #region 序列化属性
+        #region 字段 - 序列化属性
         /// <summary>
-        /// 序列化 - 动效参数列表
+        /// 本 Inspector 用到的全部序列化属性引用。
+        /// <para/>
+        /// 统一在 <see cref="OnEnable"/> 里初始化。
+        /// <para/>
+        /// 覆盖：
+        /// <list type="bullet">
+        /// <item><description>动效参数列表；</description></item>
+        /// <item><description>选中 / 定位索引；</description></item>
+        /// <item><description>过滤 / 查找字符串；</description></item>
+        /// <item><description>列表滚动位置与项高；</description></item>
+        /// <item><description>库名称。</description></item>
+        /// </list>
         /// </summary>
         private SerializedProperty sp_ElementMotionList, sp_SelectedIndex, sp_LocationSelectedIndex, sp_ElementMotionList_Scroller, sp_LibraryName, sp_itemHeight, sp_visibleItemCount, sp_Find, sp_Highlight;
         #endregion
 
+        #region 字段 - 参数
         /// <summary>
-        /// 屏蔽颜色
+        /// 屏蔽颜色。
+        /// <para/>
+        /// 用于在过滤模式下叠加在非匹配项上的半透明遮罩。
         /// </summary>
         private Color blocked_col;
         /// <summary>
-        /// 屏蔽颜色透明度
+        /// 屏蔽颜色透明度。
         /// </summary>
         private float blocked_alp = 0.45f;
+        #endregion
 
-        #region 图标
+        #region 字段 - 图标
+        /// <summary>
+        /// 标题 / 按钮 / 图标资源缓存。
+        /// <para/>
+        /// 统一在 <see cref="OnEnable"/> 里加载。
+        /// </summary>
         private Texture2D btn_icon_details_released, btn_icon_details_press, Icon_eleparam_type_move, Icon_eleparam_type_rot, import_p, import_r, export_p, export_r, clear_p, clear_r, create_p, create_r, delete_p, delete_r;
         #endregion
 
+        #region 字段 - 绘制缓存
+        /// <summary>
+        /// 绘制元素矩形。
+        /// </summary>
+        private Rect drawelement_rect;
+        /// <summary>
+        /// 滚动视图矩形。
+        /// </summary>
+        private Rect scrollview_rect;
+        /// <summary>
+        /// 列表项矩形。
+        /// </summary>
+        private Rect item_rect;
+        /// <summary>
+        /// 选中背景色。
+        /// </summary>
+        private Color SelectedBg = new Color(0, 0, 0, 0.2f);
+        #endregion
+
+        #region 生命周期
+        /// <summary>
+        /// Unity 启用回调。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>缓存目标脚本实例；</description></item>
+        /// <item><description>获取全部序列化属性；</description></item>
+        /// <item><description>加载全部图标资源；</description></item>
+        /// <item><description>初始化列表项高度与可见数量；</description></item>
+        /// <item><description>初始化屏蔽色；</description></item>
+        /// <item><description>构造 ReorderableList。</description></item>
+        /// </list>
+        /// </summary>
         private void OnEnable()
         {
             BaseScript = (XHud_Library_Motion)target;
@@ -118,14 +191,278 @@ namespace SevenStrikeModules.XHud.Editor
             ElementMotionList.drawElementCallback = MotionList_DrawElementCallback;
             #endregion
         }
+        /// <summary>
+        /// Unity 禁用回调。
+        /// <para/>
+        /// 清理运行时状态：
+        /// <list type="bullet">
+        /// <item><description>重置滚动位置；</description></item>
+        /// <item><description>清空选中索引与定位索引；</description></item>
+        /// <item><description>清空查找与过滤字符串。</description></item>
+        /// </list>
+        /// </summary>
+        private void OnDisable()
+        {
+            if (target != null)
+            {
+                sp_ElementMotionList_Scroller.vector2Value = Vector2.zero;
+                sp_ElementMotionList_Scroller.serializedObject.ApplyModifiedProperties();
 
-        #region ElementMotionList_Original      
+                sp_LocationSelectedIndex.intValue = -1;
+                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
 
-        Rect drawelement_rect;
-        Rect scrollview_rect;
-        Rect item_rect;
-        Color SelectedBg = new Color(0, 0, 0, 0.2f);
+                sp_SelectedIndex.intValue = -1;
+                sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
 
+                sp_Find.stringValue = string.Empty;
+                sp_Find.serializedObject.ApplyModifiedProperties();
+
+                sp_Highlight.stringValue = string.Empty;
+                sp_Highlight.serializedObject.ApplyModifiedProperties();
+            }
+        }
+        /// <summary>
+        /// 绘制 Inspector 主入口。
+        /// <para/>
+        /// 按自上而下的顺序绘制所有面板：
+        /// 标题 → 参数 → 快捷功能 → 元素动效库列表。
+        /// </summary>
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
+
+            #region 标题
+            XGUI.layout_banner(
+                bg_fill: XGUIGroup.实体,
+                bg_color: XGUIColor.深空灰,
+                bg_height: 30,
+                title_text: "XHud  -  元素动效库",
+                title_anchor: TextAnchor.MiddleLeft,
+                title_style: FontStyle.Normal,
+                title_color: Color.white,
+                title_size: XGUIFontSize.B,
+                title_clipping: clipping_ellipsis,
+                title_offset: new Vector2(-10, 0),
+                bg_margin: new RectOffset(0, 0, 5, 5));
+            #endregion
+
+            XGUI.layout_space(5);
+
+            #region 参数区
+            XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIGroup.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    title: "参数",
+                    title_size: XGUIFontSize.M,
+                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_clipping: TextClipping.Clip,
+                    padding: new RectOffset(10, 10, 15, 15));
+
+            #region 库名称
+            XGUI.layout_property_field(
+                title: "库名称",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 90,
+                prop: sp_LibraryName,
+                prop_margin: new RectOffset(0, 0, 5, 0));
+            #endregion
+
+            #region 过滤（包含）
+            XGUI.ChangedCheck_Start();
+            XGUI.layout_property_field(
+                title: "过滤（包含）",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 90,
+                prop: sp_Highlight,
+                prop_margin: new RectOffset(0, 0, 5, 0));
+            if (XGUI.ChangedCheck_End())
+            {
+                sp_LocationSelectedIndex.intValue = -1;
+                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+            }
+            #endregion
+
+            #region 查找（精确）
+            XGUI.ChangedCheck_Start();
+            XGUI.layout_property_field(
+                title: "查找（精确）",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 90,
+                prop: sp_Find,
+                prop_margin: new RectOffset(0, 0, 5, 0));
+            if (XGUI.ChangedCheck_End())
+            {
+                if (!string.IsNullOrEmpty(sp_Find.stringValue))
+                    BaseScript.ElementMotionLibrary_Location_Find(sp_Find.stringValue);
+                else
+                {
+                    sp_SelectedIndex.intValue = -1;
+                    sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+
+                    sp_LocationSelectedIndex.intValue = -1;
+                    sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                }
+            }
+            #endregion
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            #region 快捷功能
+            if (string.IsNullOrEmpty(sp_Highlight.stringValue))
+            {
+                if (!Application.isPlaying)
+                {
+                    XGUI.layout_group_start(
+                        type: XGUIContainerType.Horizontal,
+                        bg_fill: XGUIGroup.缺口纯色边框,
+                        bg_color: XGUIColor.亮白,
+                        bg_color_gui: XHud_Dashboard.Theme_Group,
+                        title: "快捷功能",
+                        title_size: XGUIFontSize.M,
+                        title_text_color: XHud_Dashboard.Theme_Primary,
+                        title_clipping: TextClipping.Clip,
+                        padding: new RectOffset(15, 15, 20, 15));
+
+                    #region 导入元素动效参数模版
+                    if (XGUI.layout_button(
+                        tooltip: "导入元素动效参数模版",
+                        tex_release: import_r,
+                        tex_press: import_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
+                    {
+                        ImportMotions();
+                        return;
+                    }
+                    #endregion
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 导出元素动效参数模版
+                    if (XGUI.layout_button(
+                        tooltip: "导出元素动效参数模版",
+                        tex_release: export_r,
+                        tex_press: export_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
+                    {
+                        ExportMotions();
+                        return;
+                    }
+                    #endregion
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 移除所有元素动效参数模版
+                    if (XGUI.layout_button(
+                        tooltip: "移除所有元素动效参数模版",
+                        tex_release: clear_r,
+                        tex_press: clear_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
+                    {
+                        string res = XGUI.dialog(
+                            type: XGUIDialogType.警告,
+                            windowtitle: "XHud - 元素动效库消息",
+                            title: "清空动效项",
+                            msg: "此操作会清空所有动效模版，确认要这样做吗？",
+                            ok: "暂不",
+                            cancel: "清空",
+                            PrimaryIndex: 1,
+                            usemodal: true,
+                            themecolor: XHud_Dashboard.Theme_Primary);
+
+                        if (res == "暂不")
+                        {
+                            return;
+                        }
+                        sp_ElementMotionList.ClearArray();
+                        sp_ElementMotionList.serializedObject.ApplyModifiedProperties();
+                        return;
+                    }
+                    #endregion
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 添加项
+                    if (XGUI.layout_button(
+                        tooltip: "添加项",
+                        tex_release: create_r,
+                        tex_press: create_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
+                    {
+                        MotionList_Add(ElementMotionList);
+                        return;
+                    }
+                    #endregion
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 删除项
+                    if (XGUI.layout_button(
+                        tooltip: "删除项",
+                        tex_release: delete_r,
+                        tex_press: delete_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
+                    {
+                        MotionList_Remove(ElementMotionList);
+                        return;
+                    }
+                    #endregion
+
+                    XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+                }
+            }
+            #endregion
+
+            #region 元素动效库列表
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIGroup.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "元素动效库列表",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15));
+
+            DrawMotionList();
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            serializedObject.ApplyModifiedProperties();
+        }
+        #endregion
+
+        #region 列表绘制
+        /// <summary>
+        /// 根据高亮过滤条件屏蔽或启用 GUI。
+        /// <para/>
+        /// 若名称不包含 <see cref="sp_Highlight"/> 的当前值，则禁用 GUI。
+        /// </summary>
+        /// <param name="name">待检查的名称</param>
         private void BlockGUI(string name)
         {
             if (!name.Contains(sp_Highlight.stringValue))
@@ -137,14 +474,25 @@ namespace SevenStrikeModules.XHud.Editor
                 GUI.enabled = true;
             }
         }
-
         /// <summary>
-        /// 绘制元素
+        /// 绘制元素回调。
+        /// <para/>
+        /// 绘制内容：
+        /// <list type="bullet">
+        /// <item><description>序号（灰色，D2 格式）；</description></item>
+        /// <item><description>运动形式图标（位移 / 旋转）；</description></item>
+        /// <item><description>样式名称（含 C / R 模式标记）；</description></item>
+        /// <item><description>动效说明；</description></item>
+        /// <item><description>参数简要（位移 / 旋转名称与锚点图标）；</description></item>
+        /// <item><description>查看详细信息按钮；</description></item>
+        /// <item><description>右键菜单（获取代码块 / 修改 / 复制 / 粘贴 / 导出）；</description></item>
+        /// <item><description>过滤遮罩与定位标记。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="index"></param>
-        /// <param name="isActive"></param>
-        /// <param name="isFocused"></param>
+        /// <param name="rect">绘制矩形</param>
+        /// <param name="index">索引</param>
+        /// <param name="isActive">是否激活</param>
+        /// <param name="isFocused">是否聚焦</param>
         private void MotionList_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty prop = sp_ElementMotionList.GetArrayElementAtIndex(index);
@@ -180,7 +528,7 @@ namespace SevenStrikeModules.XHud.Editor
               font_style: FontStyle.Normal);
             #endregion
 
-            #region 运动形式            
+            #region 运动形式
             #region 位置
             drawelement_rect.Set(rect.x + 40, rect.y + 55, 15, 15);
             XGUI.gui_icon(
@@ -416,7 +764,7 @@ namespace SevenStrikeModules.XHud.Editor
                         Motion_Recycler hr = MotionParam_Convert_Rec(sp_rec);
                         #region 代码块
                         str_codeblock = $"Motion_Recycler rec = new Motion_Recycler();\n rec.Movement = new MotionNode_Movement();\n rec.Movement.Movement = HudMotion_Movement. {hr.Movement.Movement.ToString()} ;\n rec.Movement.Distance = {hr.Movement.Distance}f;\n rec.Movement.Duration = {hr.Movement.Duration}f;\n rec.Movement.Delay = {hr.Movement.Delay}f;\n rec.Movement.CurveName = \"\";\n rec.Movement.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Movement.CurveName);\n rec.Movement.Ease = EaseMode. {hr.Movement.Ease.ToString()} ;\n rec.Rotation = new MotionNode_Rotation();\n rec.Rotation.Rotation = HudMotion_Rotation. {hr.Rotation.Rotation.ToString()} ;\n rec.Rotation.Degree = {hr.Rotation.Degree}f;\n rec.Rotation.Duration = {hr.Rotation.Duration}f;\n rec.Rotation.Delay = {hr.Rotation.Delay}f;\n rec.Rotation.CurveName = \"\";\n rec.Rotation.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Rotation.CurveName);\n rec.Rotation.Ease = EaseMode. {hr.Rotation.Ease.ToString()} ;\n rec.Alpha = new MotionNode_Alpha();\n rec.Alpha.Duration = {hr.Alpha.Duration}f;\n rec.Alpha.Delay = {hr.Alpha.Delay}f;\n rec.Alpha.CurveName = \"\";\n rec.Alpha.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Alpha.CurveName);\n rec.Alpha.Ease = EaseMode. {hr.Alpha.Ease} ;";
-                        #endregion                       
+                        #endregion
                     }
                     GUIUtility.systemCopyBuffer = str_codeblock;
 
@@ -722,72 +1070,10 @@ namespace SevenStrikeModules.XHud.Editor
                     font_style: FontStyle.Normal);
             }
         }
-
         /// <summary>
-        /// 创建便于导出参数的数据结构 - MotionCreate
-        /// </summary>
-        /// <param name="prop"></param>
-        /// <returns></returns>
-        private Motion_Creator MotionParam_Convert_Crc(SerializedProperty prop)
-        {
-            Motion_Creator hc = new Motion_Creator();
-            hc.anchor = (XHudAnchor)prop.FindPropertyRelative("anchor").enumValueIndex;
-            hc.Movement.Movement = (HudMotion_Movement)prop.FindPropertyRelative("Movement.Movement").enumValueIndex;
-            hc.Movement.Distance = prop.FindPropertyRelative("Movement.Distance").floatValue;
-            hc.Movement.Duration = prop.FindPropertyRelative("Movement.Duration").floatValue;
-            hc.Movement.Delay = prop.FindPropertyRelative("Movement.Delay").floatValue;
-            hc.Movement.Curve = prop.FindPropertyRelative("Movement.Curve").animationCurveValue;
-            hc.Movement.CurveName = prop.FindPropertyRelative("Movement.CurveName").stringValue;
-            hc.Movement.Ease = (EaseMode)prop.FindPropertyRelative("Movement.Ease").enumValueIndex;
-            hc.Rotation.Rotation = (HudMotion_Rotation)prop.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
-            hc.Rotation.Degree = prop.FindPropertyRelative("Rotation.Degree").floatValue;
-            hc.Rotation.Duration = prop.FindPropertyRelative("Rotation.Duration").floatValue;
-            hc.Rotation.Delay = prop.FindPropertyRelative("Rotation.Delay").floatValue;
-            hc.Rotation.Curve = prop.FindPropertyRelative("Rotation.Curve").animationCurveValue;
-            hc.Rotation.CurveName = prop.FindPropertyRelative("Rotation.CurveName").stringValue;
-            hc.Rotation.Ease = (EaseMode)prop.FindPropertyRelative("Rotation.Ease").enumValueIndex;
-            hc.Alpha.Duration = prop.FindPropertyRelative("Alpha.Duration").floatValue;
-            hc.Alpha.Delay = prop.FindPropertyRelative("Alpha.Delay").floatValue;
-            hc.Alpha.Curve = prop.FindPropertyRelative("Alpha.Curve").animationCurveValue;
-            hc.Alpha.CurveName = prop.FindPropertyRelative("Alpha.CurveName").stringValue;
-            hc.Alpha.Ease = (EaseMode)prop.FindPropertyRelative("Alpha.Ease").enumValueIndex;
-
-            return hc;
-        }
-
-        /// <summary>
-        /// 创建便于导出参数的数据结构 - MotionRecycle
-        /// </summary>
-        /// <param name="prop"></param>
-        /// <returns></returns>
-        private Motion_Recycler MotionParam_Convert_Rec(SerializedProperty prop)
-        {
-            Motion_Recycler hr = new Motion_Recycler();
-            hr.Movement.Movement = (HudMotion_Movement)prop.FindPropertyRelative("Movement.Movement").enumValueIndex;
-            hr.Movement.Distance = prop.FindPropertyRelative("Movement.Distance").floatValue;
-            hr.Movement.Duration = prop.FindPropertyRelative("Movement.Duration").floatValue;
-            hr.Movement.Delay = prop.FindPropertyRelative("Movement.Delay").floatValue;
-            hr.Movement.Curve = prop.FindPropertyRelative("Movement.Curve").animationCurveValue;
-            hr.Movement.CurveName = prop.FindPropertyRelative("Movement.CurveName").stringValue;
-            hr.Movement.Ease = (EaseMode)prop.FindPropertyRelative("Movement.Ease").enumValueIndex;
-            hr.Rotation.Rotation = (HudMotion_Rotation)prop.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
-            hr.Rotation.Degree = prop.FindPropertyRelative("Rotation.Degree").floatValue;
-            hr.Rotation.Duration = prop.FindPropertyRelative("Rotation.Duration").floatValue;
-            hr.Rotation.Delay = prop.FindPropertyRelative("Rotation.Delay").floatValue;
-            hr.Rotation.Curve = prop.FindPropertyRelative("Rotation.Curve").animationCurveValue;
-            hr.Rotation.CurveName = prop.FindPropertyRelative("Rotation.CurveName").stringValue;
-            hr.Rotation.Ease = (EaseMode)prop.FindPropertyRelative("Rotation.Ease").enumValueIndex;
-            hr.Alpha.Duration = prop.FindPropertyRelative("Alpha.Duration").floatValue;
-            hr.Alpha.Delay = prop.FindPropertyRelative("Alpha.Delay").floatValue;
-            hr.Alpha.Curve = prop.FindPropertyRelative("Alpha.Curve").animationCurveValue;
-            hr.Alpha.CurveName = prop.FindPropertyRelative("Alpha.CurveName").stringValue;
-            hr.Alpha.Ease = (EaseMode)prop.FindPropertyRelative("Alpha.Ease").enumValueIndex;
-
-            return hr;
-        }
-
-        /// <summary>
-        /// 绘制列表
+        /// 绘制动效列表。
+        /// <para/>
+        /// 只绘制滚动视图可视区域内的元素，以优化大列表性能。
         /// </summary>
         private void DrawMotionList()
         {
@@ -846,11 +1132,12 @@ namespace SevenStrikeModules.XHud.Editor
 
             GUI.EndScrollView();
         }
-
         /// <summary>
-        /// 列表移除
+        /// 列表移除项。
+        /// <para/>
+        /// 移除当前 ReorderableList 索引对应的动效项。
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="list">可重排列表</param>
         private void MotionList_Remove(ReorderableList list)
         {
             if (list.count <= 0)
@@ -859,11 +1146,14 @@ namespace SevenStrikeModules.XHud.Editor
             sp_ElementMotionList.DeleteArrayElementAtIndex(list.index);
             sp_ElementMotionList.serializedObject.ApplyModifiedProperties();
         }
-
         /// <summary>
-        /// 列表增加
+        /// 列表增加项。
+        /// <para/>
+        /// 若列表为空则插入到索引 0；否则插入到当前位置。
+        /// 新项默认名称 <c>NewMotion</c>，模式为生成（Mode = 0），
+        /// 并初始化生成与回收的全部动效参数默认值。
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="list">可重排列表</param>
         private void MotionList_Add(ReorderableList list)
         {
             SerializedProperty prop = null;
@@ -928,261 +1218,84 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        public override void OnInspectorGUI()
-        {
-            serializedObject.Update();
-
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
-            #region 标题
-            XGUI.layout_banner(
-                bg_fill: XGUIGroup.实体,
-                bg_color: XGUIColor.深空灰,
-                bg_height: 30,
-                title_text: "XHud  -  元素动效库",
-                title_anchor: TextAnchor.MiddleLeft,
-                title_style: FontStyle.Normal,
-                title_color: Color.white,
-                title_size: XGUIFontSize.B,
-                title_clipping: clipping,
-                title_offset: new Vector2(-10, 0),
-                bg_margin: new RectOffset(0, 0, 5, 5));
-            #endregion
-
-            XGUI.layout_space(5);
-
-            #region 参数区
-            XGUI.layout_group_start(
-                    type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIGroup.缺口纯色边框,
-                    bg_color: XGUIColor.亮白,
-                    bg_color_gui: XHud_Dashboard.Theme_Group,
-                    title: "参数",
-                    title_size: XGUIFontSize.M,
-                    title_text_color: XHud_Dashboard.Theme_Primary,
-                    title_clipping: TextClipping.Clip,
-                    padding: new RectOffset(10, 10, 15, 15));
-
-            #region 库名称
-            XGUI.layout_property_field(
-                title: "库名称",
-                title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
-                title_width: 90,
-                prop: sp_LibraryName,
-                prop_margin: new RectOffset(0, 0, 5, 0));
-            #endregion
-
-            #region 过滤（包含）
-            XGUI.ChangedCheck_Start();
-            XGUI.layout_property_field(
-                title: "过滤（包含）",
-                title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
-                title_width: 90,
-                prop: sp_Highlight,
-                prop_margin: new RectOffset(0, 0, 5, 0));
-            if (XGUI.ChangedCheck_End())
-            {
-                sp_LocationSelectedIndex.intValue = -1;
-                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
-            }
-            #endregion
-
-            #region 查找（精确）
-            XGUI.ChangedCheck_Start();
-            XGUI.layout_property_field(
-                title: "查找（精确）",
-                title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
-                title_width: 90,
-                prop: sp_Find,
-                prop_margin: new RectOffset(0, 0, 5, 0));
-            if (XGUI.ChangedCheck_End())
-            {
-                if (!string.IsNullOrEmpty(sp_Find.stringValue))
-                    BaseScript.ElementMotionLibrary_Location_Find(sp_Find.stringValue);
-                else
-                {
-                    sp_SelectedIndex.intValue = -1;
-                    sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
-
-                    sp_LocationSelectedIndex.intValue = -1;
-                    sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
-                }
-            }
-            #endregion
-
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-            #endregion
-
-            #region 快捷功能
-            if (string.IsNullOrEmpty(sp_Highlight.stringValue))
-            {
-                if (!Application.isPlaying)
-                {
-                    XGUI.layout_group_start(
-                        type: XGUIContainerType.Horizontal,
-                        bg_fill: XGUIGroup.缺口纯色边框,
-                        bg_color: XGUIColor.亮白,
-                        bg_color_gui: XHud_Dashboard.Theme_Group,
-                        title: "快捷功能",
-                        title_size: XGUIFontSize.M,
-                        title_text_color: XHud_Dashboard.Theme_Primary,
-                        title_clipping: TextClipping.Clip,
-                        padding: new RectOffset(15, 15, 20, 15));
-
-                    #region 导入元素动效参数模版
-                    if (XGUI.layout_button(
-                        tooltip: "导入元素动效参数模版",
-                        tex_release: import_r,
-                        tex_press: import_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 14,
-                        height: 14))
-                    {
-                        ImportMotions();
-                        return;
-                    }
-                    #endregion
-
-                    GUILayout.FlexibleSpace();
-
-                    #region 导出元素动效参数模版
-                    if (XGUI.layout_button(
-                        tooltip: "导出元素动效参数模版",
-                        tex_release: export_r,
-                        tex_press: export_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 14,
-                        height: 14))
-                    {
-                        ExportMotions();
-                        return;
-                    }
-                    #endregion
-
-                    GUILayout.FlexibleSpace();
-
-                    #region 移除所有元素动效参数模版
-                    if (XGUI.layout_button(
-                        tooltip: "移除所有元素动效参数模版",
-                        tex_release: clear_r,
-                        tex_press: clear_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 14,
-                        height: 14))
-                    {
-                        string res = XGUI.dialog(
-                            type: XGUIDialogType.警告,
-                            windowtitle: "XHud - 元素动效库消息",
-                            title: "清空动效项",
-                            msg: "此操作会清空所有动效模版，确认要这样做吗？",
-                            ok: "暂不",
-                            cancel: "清空",
-                            PrimaryIndex: 1,
-                            usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
-
-                        if (res == "暂不")
-                        {
-                            return;
-                        }
-                        sp_ElementMotionList.ClearArray();
-                        sp_ElementMotionList.serializedObject.ApplyModifiedProperties();
-                        return;
-                    }
-                    #endregion
-
-                    GUILayout.FlexibleSpace();
-
-                    #region 添加项
-                    if (XGUI.layout_button(
-                        tooltip: "添加项",
-                        tex_release: create_r,
-                        tex_press: create_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 14,
-                        height: 14))
-                    {
-                        MotionList_Add(ElementMotionList);
-                        return;
-                    }
-                    #endregion
-
-                    GUILayout.FlexibleSpace();
-
-                    #region 删除项
-                    if (XGUI.layout_button(
-                        tooltip: "删除项",
-                        tex_release: delete_r,
-                        tex_press: delete_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 14,
-                        height: 14))
-                    {
-                        MotionList_Remove(ElementMotionList);
-                        return;
-                    }
-                    #endregion
-
-                    XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
-                }
-            }
-            #endregion
-
-            #region 元素动效库列表
-            XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
-                bg_fill: XGUIGroup.缺口纯色边框,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
-                title: "元素动效库列表",
-                title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
-                title_clipping: TextClipping.Clip,
-                padding: new RectOffset(10, 10, 15, 15));
-
-            DrawMotionList();
-
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-            #endregion
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void OnDisable()
-        {
-            if (target != null)
-            {
-                sp_ElementMotionList_Scroller.vector2Value = Vector2.zero;
-                sp_ElementMotionList_Scroller.serializedObject.ApplyModifiedProperties();
-
-                sp_LocationSelectedIndex.intValue = -1;
-                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
-
-                sp_SelectedIndex.intValue = -1;
-                sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
-
-                sp_Find.stringValue = string.Empty;
-                sp_Find.serializedObject.ApplyModifiedProperties();
-
-                sp_Highlight.stringValue = string.Empty;
-                sp_Highlight.serializedObject.ApplyModifiedProperties();
-            }
-        }
-
-        #region 辅助
+        #region 工具 - 动效转换
         /// <summary>
-        /// 导入动效参数
+        /// 将序列化属性转换为 <see cref="Motion_Creator"/> 数据结构（生成动效）。
+        /// <para/>
+        /// 用于导出参数、生成代码块、复制到剪贴板等场景。
+        /// </summary>
+        /// <param name="prop">动效生成参数的序列化属性</param>
+        /// <returns>转换后的 <see cref="Motion_Creator"/> 实例</returns>
+        private Motion_Creator MotionParam_Convert_Crc(SerializedProperty prop)
+        {
+            Motion_Creator hc = new Motion_Creator();
+            hc.anchor = (XHudAnchor)prop.FindPropertyRelative("anchor").enumValueIndex;
+            hc.Movement.Movement = (HudMotion_Movement)prop.FindPropertyRelative("Movement.Movement").enumValueIndex;
+            hc.Movement.Distance = prop.FindPropertyRelative("Movement.Distance").floatValue;
+            hc.Movement.Duration = prop.FindPropertyRelative("Movement.Duration").floatValue;
+            hc.Movement.Delay = prop.FindPropertyRelative("Movement.Delay").floatValue;
+            hc.Movement.Curve = prop.FindPropertyRelative("Movement.Curve").animationCurveValue;
+            hc.Movement.CurveName = prop.FindPropertyRelative("Movement.CurveName").stringValue;
+            hc.Movement.Ease = (EaseMode)prop.FindPropertyRelative("Movement.Ease").enumValueIndex;
+            hc.Rotation.Rotation = (HudMotion_Rotation)prop.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
+            hc.Rotation.Degree = prop.FindPropertyRelative("Rotation.Degree").floatValue;
+            hc.Rotation.Duration = prop.FindPropertyRelative("Rotation.Duration").floatValue;
+            hc.Rotation.Delay = prop.FindPropertyRelative("Rotation.Delay").floatValue;
+            hc.Rotation.Curve = prop.FindPropertyRelative("Rotation.Curve").animationCurveValue;
+            hc.Rotation.CurveName = prop.FindPropertyRelative("Rotation.CurveName").stringValue;
+            hc.Rotation.Ease = (EaseMode)prop.FindPropertyRelative("Rotation.Ease").enumValueIndex;
+            hc.Alpha.Duration = prop.FindPropertyRelative("Alpha.Duration").floatValue;
+            hc.Alpha.Delay = prop.FindPropertyRelative("Alpha.Delay").floatValue;
+            hc.Alpha.Curve = prop.FindPropertyRelative("Alpha.Curve").animationCurveValue;
+            hc.Alpha.CurveName = prop.FindPropertyRelative("Alpha.CurveName").stringValue;
+            hc.Alpha.Ease = (EaseMode)prop.FindPropertyRelative("Alpha.Ease").enumValueIndex;
+
+            return hc;
+        }
+        /// <summary>
+        /// 将序列化属性转换为 <see cref="Motion_Recycler"/> 数据结构（回收动效）。
+        /// <para/>
+        /// 用于导出参数、生成代码块、复制到剪贴板等场景。
+        /// </summary>
+        /// <param name="prop">动效回收参数的序列化属性</param>
+        /// <returns>转换后的 <see cref="Motion_Recycler"/> 实例</returns>
+        private Motion_Recycler MotionParam_Convert_Rec(SerializedProperty prop)
+        {
+            Motion_Recycler hr = new Motion_Recycler();
+            hr.Movement.Movement = (HudMotion_Movement)prop.FindPropertyRelative("Movement.Movement").enumValueIndex;
+            hr.Movement.Distance = prop.FindPropertyRelative("Movement.Distance").floatValue;
+            hr.Movement.Duration = prop.FindPropertyRelative("Movement.Duration").floatValue;
+            hr.Movement.Delay = prop.FindPropertyRelative("Movement.Delay").floatValue;
+            hr.Movement.Curve = prop.FindPropertyRelative("Movement.Curve").animationCurveValue;
+            hr.Movement.CurveName = prop.FindPropertyRelative("Movement.CurveName").stringValue;
+            hr.Movement.Ease = (EaseMode)prop.FindPropertyRelative("Movement.Ease").enumValueIndex;
+            hr.Rotation.Rotation = (HudMotion_Rotation)prop.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
+            hr.Rotation.Degree = prop.FindPropertyRelative("Rotation.Degree").floatValue;
+            hr.Rotation.Duration = prop.FindPropertyRelative("Rotation.Duration").floatValue;
+            hr.Rotation.Delay = prop.FindPropertyRelative("Rotation.Delay").floatValue;
+            hr.Rotation.Curve = prop.FindPropertyRelative("Rotation.Curve").animationCurveValue;
+            hr.Rotation.CurveName = prop.FindPropertyRelative("Rotation.CurveName").stringValue;
+            hr.Rotation.Ease = (EaseMode)prop.FindPropertyRelative("Rotation.Ease").enumValueIndex;
+            hr.Alpha.Duration = prop.FindPropertyRelative("Alpha.Duration").floatValue;
+            hr.Alpha.Delay = prop.FindPropertyRelative("Alpha.Delay").floatValue;
+            hr.Alpha.Curve = prop.FindPropertyRelative("Alpha.Curve").animationCurveValue;
+            hr.Alpha.CurveName = prop.FindPropertyRelative("Alpha.CurveName").stringValue;
+            hr.Alpha.Ease = (EaseMode)prop.FindPropertyRelative("Alpha.Ease").enumValueIndex;
+
+            return hr;
+        }
+        #endregion
+
+        #region 工具 - 动效库
+        /// <summary>
+        /// 导入动效参数。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>弹窗询问用户选择"追加"或"替换"模式；</description></item>
+        /// <item><description>打开文件选择面板选取 JSON 文件；</description></item>
+        /// <item><description>解析并写入动效库列表（追加模式逐项添加，替换模式整体覆盖）。</description></item>
+        /// </list>
         /// </summary>
         private void ImportMotions()
         {
@@ -1236,9 +1349,10 @@ namespace SevenStrikeModules.XHud.Editor
                     break;
             }
         }
-
         /// <summary>
-        /// 导出动效参数
+        /// 导出动效参数。
+        /// <para/>
+        /// 将当前动效库的全部动效项序列化为 JSON 文件并写入磁盘。
         /// </summary>
         private void ExportMotions()
         {
@@ -1279,10 +1393,18 @@ namespace SevenStrikeModules.XHud.Editor
                 usemodal: true,
                 themecolor: XHud_Dashboard.Theme_Primary);
         }
+        #endregion
 
+        #region 工具 - 动效修改器
         /// <summary>
-        /// 动效参数修改器
+        /// 打开元素动效参数修改器窗口。
+        /// <para/>
+        /// 将指定动效项与其生成 / 回收参数传入修改器，用于编辑动效的详细参数。
         /// </summary>
+        /// <param name="motion">动效数据</param>
+        /// <param name="type">动效类型（生成 / 回收）</param>
+        /// <param name="motionName">动效名称</param>
+        /// <param name="index">索引</param>
         public void OpenParameterSetter(XHud.XHud_LibraryArg_Motion motion, HudElementMotionType type, string motionName, int index)
         {
             Editor_XHud_LibrarySetTool_Motion window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_Motion>(false);
@@ -1304,4 +1426,5 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
     }
+    #endregion
 }

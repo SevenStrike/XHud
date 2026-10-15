@@ -30,8 +30,31 @@ namespace SevenStrikeModules.XHud.Editor
     [CustomEditor(typeof(XHud_ObjectTracker), true)]
     public class Editor_XHud_ObjectTracker : Editor
     {
+        #region 字段 - 组件 / 列表
+        /// <summary>
+        /// 当前编辑的目标脚本实例。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中由 <c>target</c> 强制转换获得。</description></item>
+        /// <item><description>仅用于单选模式下的直接读写操作。</description></item>
+        /// </list>
+        /// </summary>
         private XHud_ObjectTracker BaseScript;
+        #endregion
 
+        #region 字段 - 序列化属性
+        /// <summary>
+        /// 序列化属性集合。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description><c>SelfObject</c>：自身物体属性。</description></item>
+        /// <item><description><c>RelativeObject</c>：相对物体属性。</description></item>
+        /// <item><description><c>TargetObject</c>：目标物体属性。</description></item>
+        /// <item><description><c>UseSmoothTracker</c>：平滑追踪开关属性。</description></item>
+        /// <item><description><c>TrackerOffset</c>：追踪位置偏移属性。</description></item>
+        /// <item><description><c>SmoothTime</c>：平滑速率属性。</description></item>
+        /// </list>
+        /// </summary>
         private SerializedProperty
             SelfObject,
             RelativeObject,
@@ -39,13 +62,185 @@ namespace SevenStrikeModules.XHud.Editor
             UseSmoothTracker,
             TrackerOffset,
             SmoothTime;
+        #endregion
 
+        #region 字段 - 图标
+        /// <summary>
+        /// 标题主图标。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中加载。</description></item>
+        /// </list>
+        /// </summary>
         private Texture2D icon_main;
+        #endregion
 
-        #region 批量化操作
+        #region 字段 - 批量化操作
+        /// <summary>
+        /// 批量选择脚本数组。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>GetAllTargets</c> 中根据 <c>targets</c> 填充。</description></item>
+        /// <item><description>单选时长度为 1，多选时长度等于选中对象数量。</description></item>
+        /// </list>
+        /// </summary>
         private XHud_ObjectTracker[] SelectedObjects;
+        #endregion
 
-        private void GetAllTargets()
+        #region 生命周期    
+        void OnEnable()
+        {
+            BaseScript = (XHud_ObjectTracker)target;
+            SelfObject = serializedObject.FindProperty("SelfObject");
+            RelativeObject = serializedObject.FindProperty("RelativeObject");
+            TargetObject = serializedObject.FindProperty("TargetObject");
+            UseSmoothTracker = serializedObject.FindProperty("UseSmoothTracker");
+            SmoothTime = serializedObject.FindProperty("SmoothTime");
+            TrackerOffset = serializedObject.FindProperty("TrackerOffset");
+            icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_object_tracker/icon_main");
+            Targets_Get();
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+            TextClipping clipping = TextClipping.Clip;
+#endif
+            #region 标题
+            XGUI.layout_banner(
+             bg_fill: XGUIGroup.实体,
+             bg_color: XGUIColor.深空灰,
+             bg_height: 30,
+             icon: icon_main,
+             icon_color: XHud_Dashboard.Theme_Primary,
+             title_text: "XHud  -  物体追踪器",
+             title_anchor: TextAnchor.MiddleLeft,
+             title_style: FontStyle.Normal,
+             title_color: Color.white,
+             title_size: XGUIFontSize.B,
+             title_clipping: clipping,
+             bg_margin: new RectOffset(0, 0, 5, 5));
+            #endregion
+            XGUI.layout_space(5);
+            #region 选项
+            BaseScript.fold_option = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIGroup.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "选项",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_option);
+            if (!BaseScript.fold_option)
+            {
+                DrawToggle("使用平滑追踪", UseSmoothTracker, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            }
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+            #region 参数
+            BaseScript.fold_param = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIGroup.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "参数",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_param);
+            if (!BaseScript.fold_param)
+            {
+                #region XHud元素
+                XGUI.layout_property_field(
+                    title: "XHud元素",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: SelfObject,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+                #region XHud元素父物体
+                XGUI.layout_property_field(
+                    title: "XHud元素父物体",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: RelativeObject,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+                #region 场景目标物体
+                XGUI.layout_property_field(
+                    title: "场景目标物体",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: TargetObject,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+                if (UseSmoothTracker.boolValue)
+                {
+                    #region 平滑速率
+                    XGUI.layout_property_field(
+                        title: "平滑速率",
+                        title_size: XGUIFontSize.M,
+                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_width: 90,
+                        prop: SmoothTime,
+                        prop_margin: new RectOffset(0, 0, 5, 0));
+                    #endregion
+                }
+                #region 位置偏移
+                XGUI.layout_property_field(
+                    title: "位置偏移",
+                    title_size: XGUIFontSize.M,
+                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_width: 90,
+                    prop: TrackerOffset,
+                    prop_margin: new RectOffset(0, 0, 5, 0));
+                #endregion
+            }
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+            #region 源脚本
+            BaseScript.fold_based = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIGroup.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "源脚本",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: BaseScript.fold_based);
+            if (!BaseScript.fold_based)
+            {
+                DrawDefaultInspector();
+            }
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+            serializedObject.ApplyModifiedProperties();
+        }
+        #endregion
+
+        #region 工具 - 批量化操作
+        /// <summary>
+        /// 获取所有批量脚本目标。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>多选时创建与 <c>targets</c> 等长的数组并逐个填充。</description></item>
+        /// <item><description>单选时创建长度为 1 的数组并填充当前目标。</description></item>
+        /// </list>
+        /// </summary>
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
@@ -62,8 +257,16 @@ namespace SevenStrikeModules.XHud.Editor
                 SelectedObjects[0] = (XHud_ObjectTracker)target;
             }
         }
-
-        private bool IsMultiSelected()
+        /// <summary>
+        /// 判断是否是多选状态。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>当 <c>SelectedObjects</c> 为 null 时返回 false。</description></item>
+        /// <item><description>当 <c>SelectedObjects.Length > 1</c> 时返回 true。</description></item>
+        /// </list>
+        /// </summary>
+        /// <returns>是否为多选状态。</returns>
+        private bool Targets_Selected()
         {
             if (SelectedObjects == null)
                 return false;
@@ -78,172 +281,14 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        void OnEnable()
-        {
-            BaseScript = (XHud_ObjectTracker)target;
-
-            SelfObject = serializedObject.FindProperty("SelfObject");
-            RelativeObject = serializedObject.FindProperty("RelativeObject");
-            TargetObject = serializedObject.FindProperty("TargetObject");
-            UseSmoothTracker = serializedObject.FindProperty("UseSmoothTracker");
-            SmoothTime = serializedObject.FindProperty("SmoothTime");
-            TrackerOffset = serializedObject.FindProperty("TrackerOffset");
-
-            icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_object_tracker/icon_main");
-
-            GetAllTargets();
-        }
-
-        public override void OnInspectorGUI()
-        {
-            serializedObject.Update();
-
-            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
-
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
-
-            #region 标题
-            XGUI.layout_banner(
-             bg_fill: XGUIGroup.实体,
-             bg_color: XGUIColor.深空灰,
-             bg_height: 30,
-             icon: icon_main,
-             icon_color: XHud_Dashboard.Theme_Primary,
-             title_text: "XHud  -  物体追踪器",
-             title_anchor: TextAnchor.MiddleLeft,
-             title_style: FontStyle.Normal,
-             title_color: Color.white,
-             title_size: XGUIFontSize.B,
-             title_clipping: clipping,
-             bg_margin: new RectOffset(0, 0, 5, 5));
-            #endregion
-
-            XGUI.layout_space(5);
-
-            #region 选项
-            BaseScript.fold_option = XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
-                bg_fill: XGUIGroup.缺口纯色边框,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
-                title: "选项",
-                title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
-                title_clipping: TextClipping.Clip,
-                padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_option);
-
-            if (!BaseScript.fold_option)
-            {
-                DrawToggle("使用平滑追踪", UseSmoothTracker, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
-            }
-
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-            #endregion
-
-            #region 参数
-            BaseScript.fold_param = XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
-                bg_fill: XGUIGroup.缺口纯色边框,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
-                title: "参数",
-                title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
-                title_clipping: TextClipping.Clip,
-                padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_param);
-
-            if (!BaseScript.fold_param)
-            {
-                #region XHud元素
-                XGUI.layout_property_field(
-                    title: "XHud元素",
-                    title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
-                    title_width: 90,
-                    prop: SelfObject,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
-                #endregion
-
-                #region XHud元素父物体
-                XGUI.layout_property_field(
-                    title: "XHud元素父物体",
-                    title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
-                    title_width: 90,
-                    prop: RelativeObject,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
-                #endregion
-
-                #region 场景目标物体
-                XGUI.layout_property_field(
-                    title: "场景目标物体",
-                    title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
-                    title_width: 90,
-                    prop: TargetObject,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
-                #endregion
-
-                if (UseSmoothTracker.boolValue)
-                {
-                    #region 平滑速率
-                    XGUI.layout_property_field(
-                        title: "平滑速率",
-                        title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
-                        title_width: 90,
-                        prop: SmoothTime,
-                        prop_margin: new RectOffset(0, 0, 5, 0));
-                    #endregion
-                }
-
-                #region 位置偏移
-                XGUI.layout_property_field(
-                    title: "位置偏移",
-                    title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
-                    title_width: 90,
-                    prop: TrackerOffset,
-                    prop_margin: new RectOffset(0, 0, 5, 0));
-                #endregion
-            }
-
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-            #endregion
-
-            #region 源脚本
-            BaseScript.fold_based = XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
-                bg_fill: XGUIGroup.缺口纯色边框,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
-                title: "源脚本",
-                title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
-                title_clipping: TextClipping.Clip,
-                padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_based);
-
-            if (!BaseScript.fold_based)
-            {
-                DrawDefaultInspector();
-            }
-
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-            #endregion
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        #region Draw
+        #region 绘制控件
         /// <summary>
-        /// 通用方法：绘制开关
+        /// 通用方法：绘制开关。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>封装 <c>XGUI.layout_toggle</c> 调用。</description></item>
+        /// <item><description>提供标题、宽度、样式、颜色等参数。</description></item>
+        /// </list>
         /// </summary>
         private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, Action<bool> act_on_changed = null)
         {

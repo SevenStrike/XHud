@@ -32,12 +32,39 @@ namespace SevenStrikeModules.XHud.Editor
     [CustomEditor(typeof(XHud_Module_Primitive_Painting))]
     public class Editor_XHud_Module_Primitive_Painting : Editor
     {
-        #region 组件 / 列表
+        #region 字段 - 组件 / 列表
+        /// <summary>
+        /// 当前编辑的目标脚本实例。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中由 <c>target</c> 强制转换获得。</description></item>
+        /// <item><description>仅用于单选模式下的直接读写操作。</description></item>
+        /// </list>
+        /// </summary>
         private XHud_Module_Primitive_Painting BaseScript;
+        /// <summary>
+        /// HUD 管理器引用。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中通过 <c>XHud_Dashboard.HudManagerGet()</c> 获取。</description></item>
+        /// <item><description>用于访问色卡库等全局数据。</description></item>
+        /// </list>
+        /// </summary>
         private XHud_Manager HudManager;
         #endregion
 
-        #region 序列化属性
+        #region 字段 - 序列化属性
+        /// <summary>
+        /// 序列化属性集合。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description><c>sp_OriginalColor</c>：原始颜色属性。</description></item>
+        /// <item><description><c>sp_ColoriseName</c>：色卡名称属性。</description></item>
+        /// <item><description><c>sp_Debug</c>：调试开关属性。</description></item>
+        /// <item><description><c>sp_SyncLibraryColor</c>：同步色卡库开关属性。</description></item>
+        /// <item><description><c>sp_SyncImageColor</c>：接管图像颜色开关属性。</description></item>
+        /// </list>
+        /// </summary>
         private SerializedProperty
             sp_OriginalColor,
             sp_ColoriseName,
@@ -46,70 +73,76 @@ namespace SevenStrikeModules.XHud.Editor
             sp_SyncImageColor;
         #endregion
 
-        #region 选项文字
+        #region 字段 - 选项文字
+        /// <summary>
+        /// 调试开关的选项文字。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>索引 0：关闭。</description></item>
+        /// <item><description>索引 1：调试。</description></item>
+        /// </list>
+        /// </summary>
         string[] stroptions_debug = new string[2] { "关闭", "调试" };
+        /// <summary>
+        /// 接管状态开关的选项文字。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>索引 0：关闭。</description></item>
+        /// <item><description>索引 1：接管。</description></item>
+        /// </list>
+        /// </summary>
         string[] stroptions_sync = new string[2] { "关闭", "接管" };
         #endregion
 
-        #region 图标
+        #region 字段 - 图标
+        /// <summary>
+        /// 本编辑器所使用的图标资源集合。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description><c>icon_main</c>：标题主图标。</description></item>
+        /// <item><description><c>colormode_lib_r / colormode_lib_p</c>：色卡库模式常态/按下图标。</description></item>
+        /// <item><description><c>colormode_ori_r / colormode_ori_p</c>：原始色模式常态/按下图标。</description></item>
+        /// <item><description><c>colormode_mix_r / colormode_mix_p</c>：混合模式常态/按下图标。</description></item>
+        /// <item><description><c>Add_r / Add_p</c>：添加到库按钮常态/按下图标。</description></item>
+        /// <item><description><c>locate_r / locate_p</c>：定位色卡按钮常态/按下图标。</description></item>
+        /// <item><description><c>copycolor_r / copycolor_p</c>：拷贝色卡按钮常态/按下图标。</description></item>
+        /// <item><description><c>recogcolor_r / recogcolor_p</c>：识别色卡按钮常态/按下图标。</description></item>
+        /// </list>
+        /// </summary>
         private Texture2D icon_main, colormode_lib_r, colormode_lib_p, colormode_ori_r, colormode_ori_p, colormode_mix_r, colormode_mix_p, Add_r, Add_p, locate_r, locate_p, copycolor_r, copycolor_p, recogcolor_r, recogcolor_p;
         #endregion
 
-        #region 批量化操作
+        #region 字段 - 批量化操作
         /// <summary>
-        /// 批量选择脚本数组
+        /// 批量选择脚本数组。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>Targets_Get</c> 中根据 <c>targets</c> 填充。</description></item>
+        /// <item><description>单选时长度为 1，多选时长度等于选中对象数量。</description></item>
+        /// </list>
         /// </summary>
         XHud_Module_Primitive_Painting[] SelectedObjects;
-        /// <summary>
-        /// 获取所有批量脚本目标
-        /// </summary>
-        private void Targets_Get()
-        {
-            if (targets.Length > 1)
-            {
-                SelectedObjects = new XHud_Module_Primitive_Painting[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    var t = targets[i];
-                    SelectedObjects[i] = (XHud_Module_Primitive_Painting)t;
-                }
-            }
-            else
-            {
-                SelectedObjects = new XHud_Module_Primitive_Painting[targets.Length];
-                SelectedObjects[0] = (XHud_Module_Primitive_Painting)target;
-            }
-        }
-        /// <summary>
-        /// 判断是否是多选状态
-        /// </summary>
-        /// <returns></returns>
-        private bool Targets_Selected()
-        {
-            if (SelectedObjects == null)
-                return false;
-            if (SelectedObjects.Length > 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         #endregion
 
+        #region 生命周期
+        /// <summary>
+        /// Unity 编辑器启用回调。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>获取 HUD 管理器引用。</description></item>
+        /// <item><description>初始化目标脚本引用。</description></item>
+        /// <item><description>采集批量目标。</description></item>
+        /// <item><description>获取序列化字段。</description></item>
+        /// <item><description>加载图标资源。</description></item>
+        /// </list>
+        /// </summary>
         private void OnEnable()
         {
             HudManager = XHud_Dashboard.HudManagerGet();
-
             BaseScript = (XHud_Module_Primitive_Painting)target;
-
             Targets_Get();
-
             // 获取所有序列化字段
             GetSerializeFields();
-
             #region 获取图标          
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_painting/icon_main");
             colormode_lib_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_painting/col_lib_r");
@@ -128,13 +161,23 @@ namespace SevenStrikeModules.XHud.Editor
             recogcolor_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_painting/recogcolor_p");
             #endregion
         }
-
+        /// <summary>
+        /// 绘制 Inspector 界面。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>绘制标题横幅。</description></item>
+        /// <item><description>检测多选模式下颜色模式一致性。</description></item>
+        /// <item><description>绘制快捷功能按钮组。</description></item>
+        /// <item><description>绘制配色参数折叠组。</description></item>
+        /// <item><description>绘制选项折叠组。</description></item>
+        /// <item><description>处理右键菜单。</description></item>
+        /// <item><description>绘制源脚本折叠组。</description></item>
+        /// </list>
+        /// </summary>
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-
             TextClipping clipping = XGUI.TryEllipsisClipping();
-
             #region 标题
             XGUI.layout_banner(
                 bg_fill: XGUIGroup.实体,
@@ -150,9 +193,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_clipping: clipping,
                 bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
-
             Rect rect = GUILayoutUtility.GetLastRect();
-
             #region 检测多选模式下的颜色模式是否一致
             // 该字段用于检测多选情况下每个Painting的颜色模式是否是一致的
             bool MultiColorModeSame = true;
@@ -169,7 +210,6 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
             #endregion
-
             #region 快捷功能          
             XGUI.layout_group_start(
                type: XGUIContainerType.Horizontal,
@@ -181,7 +221,6 @@ namespace SevenStrikeModules.XHud.Editor
                title_text_color: XHud_Dashboard.Theme_Primary,
                title_clipping: TextClipping.Clip,
                padding: new RectOffset(15, 15, 20, 15));
-
             #region 切换模式
             if (XGUI.layout_button(
                 tooltip: "切换模式",
@@ -194,9 +233,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 if (Targets_Selected())
                 {
-
                     List<XGUIDialogListDatas> datas = new List<XGUIDialogListDatas>();
-
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
                         XGUIDialogListDatas data = new XGUIDialogListDatas();
@@ -218,7 +255,6 @@ namespace SevenStrikeModules.XHud.Editor
                             PrimaryIndex: 0,
                             usemodal: true,
                             themecolor: XHud_Dashboard.Theme_Primary);
-
                         if (res_x == "切换")
                         {
                             string res_y = XGUI.dialog(
@@ -231,7 +267,6 @@ namespace SevenStrikeModules.XHud.Editor
                                 PrimaryIndex: 1,
                                 usemodal: true,
                                 themecolor: XHud_Dashboard.Theme_Primary);
-
                             if (res_y == "原始色")
                             {
                                 for (int i = 0; i < SelectedObjects.Length; i++)
@@ -244,7 +279,6 @@ namespace SevenStrikeModules.XHud.Editor
                                 for (int i = 0; i < SelectedObjects.Length; i++)
                                 {
                                     SelectedObjects[i].SyncLibraryColor = true;
-
                                     if (!Application.isPlaying)
                                     {
                                         //--检查色卡名称是否失效
@@ -282,7 +316,6 @@ namespace SevenStrikeModules.XHud.Editor
                               PrimaryIndex: 1,
                               usemodal: true,
                               themecolor: XHud_Dashboard.Theme_Primary);
-
                     if (res == "原始色")
                     {
                         sp_SyncLibraryColor.boolValue = false;
@@ -292,7 +325,6 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         sp_SyncLibraryColor.boolValue = true;
                         sp_SyncLibraryColor.serializedObject.ApplyModifiedProperties();
-
                         if (!Application.isPlaying)
                         {
                             //--检查色卡名称是否失效
@@ -316,9 +348,7 @@ namespace SevenStrikeModules.XHud.Editor
                 return;
             }
             #endregion
-
             XGUI.layout_flexspace();
-
             #region 拷贝色卡
             if (sp_SyncLibraryColor.boolValue && !Targets_Selected())
             {
@@ -339,9 +369,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
             #endregion
-
             XGUI.layout_flexspace();
-
             #region 识别色卡
             if (XGUI.layout_button(
                 tooltip: "识别色卡",
@@ -356,10 +384,8 @@ namespace SevenStrikeModules.XHud.Editor
                 return;
             }
             #endregion
-
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
-
             #region 配色参数          
             BaseScript.fold_param = XGUI.layout_group_start(
                   type: XGUIContainerType.Horizontal,
@@ -372,11 +398,8 @@ namespace SevenStrikeModules.XHud.Editor
                   title_clipping: TextClipping.Clip,
                   padding: new RectOffset(15, 10, 20, 15),
                   foldout: BaseScript.fold_param);
-
             bool TextSyncing = false;
-
             XHud_Module_Primitive_Controller con = BaseScript.controller;
-
             #region 如果存在文字组件
             // 如果是 XHud_Text 受控组件类型，则获取文字组件的“同步库颜色状态开关”到 TextSyncing 状态开关
             // 表明文字组件的文字颜色是否是使用同步到库状态
@@ -403,7 +426,6 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
             #endregion
-
             if (!BaseScript.fold_param)
             {
                 if (!TextSyncing)
@@ -420,7 +442,6 @@ namespace SevenStrikeModules.XHud.Editor
                             absolute_margin: true,
                             margin: new RectOffset(0, 0, 0, 0),
                             padding: new RectOffset(0, 0, 5, 5));
-
                         #region 添加到库按钮
                         if (!Targets_Selected())
                         {
@@ -450,9 +471,7 @@ namespace SevenStrikeModules.XHud.Editor
                             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
                         }
                         #endregion
-
                         XGUI.layout_space(20);
-
                         #region 颜色
                         XGUI.ChangedCheck_Start();
                         XGUI.layout_property_field(
@@ -473,7 +492,6 @@ namespace SevenStrikeModules.XHud.Editor
                             }
                         }
                         #endregion
-
                         XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
                         #endregion
                     }
@@ -493,7 +511,6 @@ namespace SevenStrikeModules.XHud.Editor
                                     absolute_margin: true,
                                     margin: new RectOffset(0, 0, 0, 0),
                                     padding: new RectOffset(0, 0, 5, 5));
-
                                 #region 定位到库按钮
                                 if (!Targets_Selected())
                                 {
@@ -506,7 +523,6 @@ namespace SevenStrikeModules.XHud.Editor
                                         absolute_margin: true,
                                         margin: new RectOffset(0, 0, 7, 0),
                                         padding: new RectOffset(0, 0, 0, 0));
-
                                     if (XGUI.layout_button(
                                         tooltip: "定位色卡",
                                         tex_release: locate_r,
@@ -531,16 +547,12 @@ namespace SevenStrikeModules.XHud.Editor
                                             HudManager.Hud_Colors.ColorsLibrary_Location(sp_ColoriseName.stringValue);
                                         }
                                     }
-
                                     XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-
                                     XGUI.layout_space(20);
                                 }
                                 #endregion
-
                                 #region 色卡下拉菜单
                                 string[] collist = HudManager.Hud_Colors.ColorsLibrary_GetColorNames();
-
                                 #region 单/多选控件背景色逻辑
                                 Color cc = Color.white;
                                 bool SameColor = true;
@@ -560,7 +572,6 @@ namespace SevenStrikeModules.XHud.Editor
                                         }
                                     }
                                 }
-
                                 if (SameColor)
                                 {
                                     cc = HudManager.Hud_Colors.ColorsLibrary_GetColor(FirstColoriseName);
@@ -570,7 +581,6 @@ namespace SevenStrikeModules.XHud.Editor
                                     cc = Color.gray;
                                 }
                                 #endregion
-
                                 #region 记录撤销行为
                                 if (Targets_Selected())
                                 {
@@ -586,7 +596,6 @@ namespace SevenStrikeModules.XHud.Editor
                                     Undo.RecordObject(sp_ColoriseName.serializedObject.targetObject, "Selected ColoriseName");
                                 }
                                 #endregion
-
                                 #region 下拉菜单
                                 sp_ColoriseName.stringValue = XGUI.layout_string_popup(
                                     title: "色卡",
@@ -610,9 +619,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     icon_arrow_color: Color.black);
                                 sp_ColoriseName.serializedObject.ApplyModifiedProperties();
                                 #endregion
-
                                 #endregion
-
                                 XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
                             }
                             else
@@ -641,10 +648,8 @@ namespace SevenStrikeModules.XHud.Editor
                            title_color: Color.white * 0.75f);
                 }
             }
-
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
-
             #region 选项
             BaseScript.fold_option = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
@@ -657,20 +662,17 @@ namespace SevenStrikeModules.XHud.Editor
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_option);
-
             if (!BaseScript.fold_option)
             {
                 #region 接管状态
                 DrawToggle("接管状态", sp_SyncImageColor, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_sync, (b) => { });
                 #endregion
-
                 #region 状态调试
                 DrawToggle("状态调试", sp_Debug, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_debug, (b) => { });
                 #endregion
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
-
             #region 菜单功能
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
             {
@@ -717,7 +719,6 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.ShowAsContext();
             }
             #endregion
-
             #region 源脚本
             BaseScript.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
@@ -730,18 +731,26 @@ namespace SevenStrikeModules.XHud.Editor
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_based);
-
             if (!BaseScript.fold_based)
             {
                 DrawDefaultInspector();
             }
-
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
-
             serializedObject.ApplyModifiedProperties();
         }
+        #endregion
 
+        #region 工具 - 色卡拷贝
+        /// <summary>
+        /// 拷贝当前色卡信息到编辑器数据。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>将原始色、色卡名称、索引序列化为 JSON。</description></item>
+        /// <item><description>写入编辑器数据 <c>xData_ColorInfo</c>。</description></item>
+        /// <item><description>弹出提示对话框。</description></item>
+        /// </list>
+        /// </summary>
         private void Copy_Color()
         {
             CopyHudColor chc = new CopyHudColor();
@@ -750,11 +759,8 @@ namespace SevenStrikeModules.XHud.Editor
             chc.name = sp_ColoriseName.stringValue;
             chc.type = "HudCopyColor";
             string json = JsonUtility.ToJson(chc);
-
             XGUI.x_Editor_Data_Set_With_String("xData_ColorInfo", json);
-
             string hexcol = XGUI_Utilitys.Color_To_HexString(sp_OriginalColor.colorValue, true);
-
             XGUI.dialog(
                type: XGUIDialogType.确认,
                windowtitle: "XHud - 图元配色器消息",
@@ -765,14 +771,24 @@ namespace SevenStrikeModules.XHud.Editor
                usemodal: true,
                themecolor: XHud_Dashboard.Theme_Primary);
         }
+        #endregion
 
+        #region 工具 - 色卡识别
+        /// <summary>
+        /// 识别编辑器数据中的色卡信息并应用到当前目标。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>从 <c>xData_ColorInfo</c> 读取 JSON 并反序列化。</description></item>
+        /// <item><description>多选时逐个询问并应用色卡或原始色。</description></item>
+        /// <item><description>单选时根据当前模式询问并应用。</description></item>
+        /// <item><description>异常时弹出提示对话框。</description></item>
+        /// </list>
+        /// </summary>
         private void Recognize_Color()
         {
             string buff = XGUI.x_Editor_Data_Get_With_String("xData_ColorInfo");
-
             CopyHudColor copyHudColor = JsonUtility.FromJson<CopyHudColor>(buff);
             string hexcol = XGUI_Utilitys.Color_To_HexString(XGUI_Utilitys.String_To_Color(copyHudColor.color, false), true);
-
             try
             {
                 if (copyHudColor != null)
@@ -795,7 +811,6 @@ namespace SevenStrikeModules.XHud.Editor
                                PrimaryIndex: 1,
                                usemodal: true,
                                themecolor: XHud_Dashboard.Theme_Primary);
-
                                 if (res == "原始颜色")
                                 {
                                     SelectedObjects[i].OriginalColor = XGUI_Utilitys.String_To_Color(copyHudColor.color, false);
@@ -811,16 +826,12 @@ namespace SevenStrikeModules.XHud.Editor
                                 SelectedObjects[i].SyncLibraryColor = true;
                                 SelectedObjects[i].ColoriseName = copyHudColor.name;
                             }
-
                             XGUIDialogListDatas dataitem = new XGUIDialogListDatas();
-
                             dataitem.Title = $"色卡 <color={hexcol}>{SelectedObjects[i].ColoriseName} </color>";
                             dataitem.SubTitle = "已应用到图元配色器";
                             dataitem.Message = $"{SelectedObjects[i].name} ( {SelectedObjects[i].controller.Indicator} )";
-
                             datas.Add(dataitem);
                         }
-
                         if (datas.Count > 0)
                         {
                             string res_x = XGUI.dialog_listview(
@@ -854,7 +865,6 @@ namespace SevenStrikeModules.XHud.Editor
                                 PrimaryIndex: 1,
                                 usemodal: true,
                                 themecolor: XHud_Dashboard.Theme_Primary);
-
                             if (res == "直接赋值原始颜色")
                             {
                                 sp_OriginalColor.colorValue = XGUI_Utilitys.String_To_Color(copyHudColor.color, false);
@@ -868,7 +878,6 @@ namespace SevenStrikeModules.XHud.Editor
                                 sp_ColoriseName.serializedObject.ApplyModifiedProperties();
                             }
                         }
-
                         XGUI.dialog(
                             type: XGUIDialogType.确认,
                             windowtitle: "XHud - 图元配色器消息",
@@ -884,7 +893,6 @@ namespace SevenStrikeModules.XHud.Editor
             catch (System.Exception e)
             {
                 string msg = e.Message;
-
                 XGUI.dialog(
                     type: XGUIDialogType.确认,
                     windowtitle: "XHud - 图元配色器消息",
@@ -896,9 +904,19 @@ namespace SevenStrikeModules.XHud.Editor
                     themecolor: XHud_Dashboard.Theme_Primary);
             }
         }
+        #endregion
 
+        #region 工具 - 序列化缓存
         /// <summary>
-        /// 获取所有序列化字段
+        /// 获取所有序列化字段。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>缓存 <c>OriginalColor</c> 属性。</description></item>
+        /// <item><description>缓存 <c>ColoriseName</c> 属性。</description></item>
+        /// <item><description>缓存 <c>Debug</c> 属性。</description></item>
+        /// <item><description>缓存 <c>SyncLibraryColor</c> 属性。</description></item>
+        /// <item><description>缓存 <c>SyncImageColor</c> 属性。</description></item>
+        /// </list>
         /// </summary>
         private void GetSerializeFields()
         {
@@ -908,17 +926,23 @@ namespace SevenStrikeModules.XHud.Editor
             sp_SyncLibraryColor = serializedObject.FindProperty("SyncLibraryColor");
             sp_SyncImageColor = serializedObject.FindProperty("SyncImageColor");
         }
+        #endregion
 
+        #region 工具 - 色卡库设置器
         /// <summary>
-        /// 色卡库采集设置器
+        /// 色卡库采集设置器。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>打开 <c>Editor_XHud_LibrarySetTool_Color</c> 窗口。</description></item>
+        /// <item><description>设置窗口标题、尺寸、模式、信息、目标库等。</description></item>
+        /// <item><description>显示窗口。</description></item>
+        /// </list>
         /// </summary>
         public void OpenLibrarySetTool(xHud_LibraryArg_Color info)
         {
             Editor_XHud_LibrarySetTool_Color window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_Color>(true);
-
             window.titleContent = new GUIContent("色卡库采集器");
             XGUI.CenterEditorWindow(new Vector2Int(348, 730), window);
-
             window.SetLibrarySetterMode(LibrarySetterMode.添加到库);
             window.SetInfo(info.Name, info.Color);
             window.SetPainting(info.Painting);
@@ -928,10 +952,66 @@ namespace SevenStrikeModules.XHud.Editor
             window.Show();
             window.SetTitle("色卡库采集器");
         }
+        #endregion
 
-        #region Draw
+        #region 工具 - 批量化操作
         /// <summary>
-        /// 通用方法：绘制开关
+        /// 获取所有批量脚本目标。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>多选时创建与 <c>targets</c> 等长的数组并逐个填充。</description></item>
+        /// <item><description>单选时创建长度为 1 的数组并填充当前目标。</description></item>
+        /// </list>
+        /// </summary>
+        private void Targets_Get()
+        {
+            if (targets.Length > 1)
+            {
+                SelectedObjects = new XHud_Module_Primitive_Painting[targets.Length];
+                for (int i = 0; i < SelectedObjects.Length; i++)
+                {
+                    var t = targets[i];
+                    SelectedObjects[i] = (XHud_Module_Primitive_Painting)t;
+                }
+            }
+            else
+            {
+                SelectedObjects = new XHud_Module_Primitive_Painting[targets.Length];
+                SelectedObjects[0] = (XHud_Module_Primitive_Painting)target;
+            }
+        }
+        /// <summary>
+        /// 判断是否是多选状态。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>当 <c>SelectedObjects</c> 为 null 时返回 false。</description></item>
+        /// <item><description>当 <c>SelectedObjects.Length > 1</c> 时返回 true。</description></item>
+        /// </list>
+        /// </summary>
+        /// <returns>是否为多选状态。</returns>
+        private bool Targets_Selected()
+        {
+            if (SelectedObjects == null)
+                return false;
+            if (SelectedObjects.Length > 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region 绘制控件
+        /// <summary>
+        /// 通用方法：绘制开关。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>封装 <c>XGUI.layout_toggle</c> 调用。</description></item>
+        /// <item><description>提供标题、宽度、样式、颜色、选项等参数。</description></item>
+        /// </list>
         /// </summary>
         private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, string[] options = null, Action<bool> act_on_changed = null)
         {

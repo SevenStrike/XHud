@@ -23,7 +23,6 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using SevenStrikeModules.XTween;
     using SevenStrikeModules.XTween.Editor;
     using System;
@@ -32,23 +31,7 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditorInternal;
     using UnityEngine;
     using UnityEngine.UI;
-    using Random = UnityEngine.Random;
 
-    /// <summary>
-    /// 图元动画器的自定义 Inspector 编辑器
-    /// <para/>
-    /// 负责绘制 <see cref="XHud_Module_Primitive_Tween"/> 组件的完整检视面板，包含：
-    /// <list type="bullet">
-    /// <item><description>快捷功能栏：预览播放 / 停止、打开时间轴编辑器；</description></item>
-    /// <item><description>动画节点列表：基于 <see cref="ReorderableList"/> 的可拖拽列表；</description></item>
-    /// <item><description>节点参数面板：类型 / 时长 / 延迟 / 循环 / 缓动 / 曲线 / 时机 / 动向 / 数值；</description></item>
-    /// <item><description>全局选项：调试 / 静音 / 元素联动；</description></item>
-    /// <item><description>状态统计：节点数、耗时、倍增耗时；</description></item>
-    /// <item><description>批量模式：多选组件时的切换与统计。</description></item>
-    /// </list>
-    /// <para/>
-    /// 支持多选编辑（<see cref="CanEditMultipleObjects"/>），但动画节点列表本身不支持批量操作。
-    /// </summary>
     [CanEditMultipleObjects]
     [CustomEditor(typeof(XHud_Module_Primitive_Tween))]
     public class Editor_XHud_Module_Primitive_Tween : Editor
@@ -146,28 +129,6 @@ namespace SevenStrikeModules.XHud.Editor
         private XHud_Module_Option HudOption;
         #endregion
 
-        #region 字段 - 音效预览
-        /// <summary>
-        /// 预览音效播放时生成的 AudioSource 列表，用于停止时统一销毁。
-        /// </summary>
-        private List<AudioSource> Preview_PrimitiveTweens_SoundList = new List<AudioSource>();
-        /// <summary>
-        /// 预览音效的"待触发"记录。
-        /// <para/>用 EditorApplication.update 手动计时，
-        /// 避免编辑器模式下协程不驱动 / 立即恢复的问题。
-        /// </summary>
-        private class PendingPreviewSound
-        {
-            public TweenSound Sod;
-            public AudioClip Clip;
-            public double TriggerAtTime;   // EditorApplication.timeSinceStartup + delay
-        }
-        /// <summary>
-        /// 当前待触发的预览音效列表。
-        /// </summary>
-        private List<PendingPreviewSound> PendingPreviewSounds = new List<PendingPreviewSound>();
-        #endregion
-
         #region 字段 - 颜色
         /// <summary>
         /// 数值圆点按钮使用的红色（起始值标识色）
@@ -180,69 +141,16 @@ namespace SevenStrikeModules.XHud.Editor
         /// 当前多选状态下所有被选中的组件数组
         /// </summary>
         XHud_Module_Primitive_Tween[] SelectedObjects;
-        /// <summary>
-        /// 缓存当前所有被选中的组件引用到 <see cref="SelectedObjects"/>
-        /// <para/>
-        /// 多选时逐个转换，单选时只填充一个元素。
-        /// </summary>
-        private void CacheSelectedTargets()
-        {
-            if (targets.Length > 1)
-            {
-                SelectedObjects = new XHud_Module_Primitive_Tween[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    var t = targets[i];
-                    SelectedObjects[i] = (XHud_Module_Primitive_Tween)t;
-                }
-            }
-            else
-            {
-                SelectedObjects = new XHud_Module_Primitive_Tween[targets.Length];
-                SelectedObjects[0] = (XHud_Module_Primitive_Tween)target;
-            }
-        }
-        /// <summary>
-        /// 判断当前是否处于多选状态
-        /// </summary>
-        /// <returns>true 表示选中了多个组件</returns>
-        private bool IsMultiSelection()
-        {
-            if (SelectedObjects == null)
-                return false;
-            if (SelectedObjects.Length > 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         #endregion
 
         #region 生命周期
-        /// <summary>
-        /// Unity 启用回调
-        /// <para/>
-        /// 执行流程：
-        /// <list type="number">
-        /// <item><description>获取 HudManager 单例；</description></item>
-        /// <item><description>缓存目标组件与所有选中组件；</description></item>
-        /// <item><description>缓存所有序列化属性引用；</description></item>
-        /// <item><description>加载所有图标资源；</description></item>
-        /// <item><description>缓存宿主组件（用于时机判断）；</description></item>
-        /// <item><description>构造 ReorderableList 并绑定所有回调；</description></item>
-        /// <item><description>首次收集预览时机名称。</description></item>
-        /// </list>
-        /// </summary>
         private void OnEnable()
         {
             HudManager = XHud_Dashboard.HudManagerGet();
 
             BaseScript = (XHud_Module_Primitive_Tween)target;
 
-            CacheSelectedTargets();
+            Targets_Get();
 
             #region 序列化属性缓存
             sp_UseDebug = serializedObject.FindProperty("UseDebug");
@@ -946,17 +854,12 @@ namespace SevenStrikeModules.XHud.Editor
             };
             #endregion
 
-            Preview_PrimitiveTweens_SoundList = new List<AudioSource>();
-            PendingPreviewSounds = new List<PendingPreviewSound>();
+            // 音效预览池由 Editor_XHud_EditorSoundPlayer 统一管理
 
             // 收集动画列表所有动画时机名称
             CollectPreviewTimings(BaseScript);
         }
-        /// <summary>
-        /// Unity 禁用回调
-        /// <para/>
-        /// 编辑器非播放模式下停止所有预览动画与音效，并关闭子窗口。
-        /// </summary>
+
         private void OnDisable()
         {
             if (!Application.isPlaying)
@@ -967,12 +870,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
         }
-        /// <summary>
-        /// 绘制 Inspector 主入口
-        /// <para/>
-        /// 按自上而下的顺序绘制所有面板：标题栏 → 快捷功能 → 动画参数 → 动画节点列表 → 选项 → 状态 → 源脚本。
-        /// 右键菜单在最后统一处理。
-        /// </summary>
+
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -1053,7 +951,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_flexspace();
 
             #region 打开时间线轨道编辑器
-            if (!IsMultiSelection())
+            if (!Targets_Selected())
             {
                 if (XGUI.layout_button(
                 tooltip: "打开时间线轨道编辑器",
@@ -1078,7 +976,7 @@ namespace SevenStrikeModules.XHud.Editor
                 margin: new RectOffset(15, 15, 15, 15));
 
             #region 预览时机
-            if (!IsMultiSelection())
+            if (!Targets_Selected())
             {
                 sp_PreviewTiming.stringValue = XGUI.layout_string_popup(
                     title: "预览时机",
@@ -1168,7 +1066,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 if (!BaseScript.fold_list)
                 {
-                    if (!IsMultiSelection())
+                    if (!Targets_Selected())
                     {
                         AnimateTweenNodesList.DoLayoutList();
                         sp_PrimitiveTweenNodes.serializedObject.ApplyModifiedProperties();
@@ -1227,7 +1125,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (!isPreviewing)
             {
                 string statu_title = "状态";
-                if (IsMultiSelection())
+                if (Targets_Selected())
                     statu_title = "状态 - ( 批量模式 )";
 
                 RefreshTimerStatistics();
@@ -1246,7 +1144,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 if (!BaseScript.fold_state)
                 {
-                    if (!IsMultiSelection())
+                    if (!Targets_Selected())
                     {
                         if (sp_PrimitiveTweenNodes.arraySize <= 0)
                         {
@@ -1541,7 +1439,7 @@ namespace SevenStrikeModules.XHud.Editor
                     });
                 }
                 menu.AddSeparator("");
-                if (!IsMultiSelection())
+                if (!Targets_Selected())
                 {
                     menu.AddItem(new GUIContent("A (拷贝动画列表)"), false, () =>
                     {
@@ -1574,7 +1472,7 @@ namespace SevenStrikeModules.XHud.Editor
                     string json = XGUI.x_Editor_Data_Get_With_String("xData_PrimitiveTween_Copied_TweenNodes");
                     TweenNodeArray tnc = JsonUtility.FromJson<TweenNodeArray>(json);
 
-                    if (IsMultiSelection())
+                    if (Targets_Selected())
                     {
                         #region 询问
                         List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
@@ -1697,7 +1595,7 @@ namespace SevenStrikeModules.XHud.Editor
                         return;
                     }
 
-                    if (IsMultiSelection())
+                    if (Targets_Selected())
                     {
                         List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
                         for (int s = 0; s < SelectedObjects.Length; s++)
@@ -1748,7 +1646,7 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("Q (折叠编组)"), false, () =>
                 {
-                    if (IsMultiSelection())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -1762,7 +1660,7 @@ namespace SevenStrikeModules.XHud.Editor
                 });
                 menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
                 {
-                    if (IsMultiSelection())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -1777,7 +1675,7 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("F (动画列表 - 全部折叠)"), false, () =>
                 {
-                    if (IsMultiSelection())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -1797,7 +1695,7 @@ namespace SevenStrikeModules.XHud.Editor
                 });
                 menu.AddItem(new GUIContent("D (动画列表 - 全部展开)"), false, () =>
                 {
-                    if (IsMultiSelection())
+                    if (Targets_Selected())
                     {
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
@@ -2616,7 +2514,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void RefreshTimerStatistics()
         {
-            if (!IsMultiSelection())
+            if (!Targets_Selected())
             {
                 BaseScript.TweenNode_GetTimers();
             }
@@ -2771,7 +2669,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XTween_Interface[] tweens = null;
 
-            if (IsMultiSelection())
+            if (Targets_Selected())
             {
                 List<XTween_Interface> mo = new List<XTween_Interface>();
                 for (int i = 0; i < SelectedObjects.Length; i++)
@@ -2820,7 +2718,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 KillXTweenPreview();
 
-                if (IsMultiSelection())
+                if (Targets_Selected())
                 {
                     if (!EditorWindow.HasOpenInstances<Editor_XHud_Module_Primitive_Tween_Tracker>())
                         for (int i = 0; i < SelectedObjects.Length; i++)
@@ -2878,7 +2776,7 @@ namespace SevenStrikeModules.XHud.Editor
             sp_TweenIsPreviewing.boolValue = false;
             sp_TweenIsPreviewing.serializedObject.ApplyModifiedPropertiesWithoutUndo();
 
-            if (IsMultiSelection())
+            if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
@@ -2908,13 +2806,28 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 工具 - 音效预览实现
         /// <summary>
-        /// 从音效库安全取出一条 AudioClip。
+        /// 从音效库安全取出一条 AudioClip；取不到则回退到 TweenSound 手动指定的 clip。
+        /// <para/>
+        /// 【取法优先级】
+        /// <list type="number">
+        /// <item><description>优先：用 <c>sod.Sound.name</c> 去音效库 <see cref="HudManager.Hud_Sounds"/> 查；</description></item>
+        /// <item><description>回退：库中不存在同名音效时，直接返回 <c>sod.Sound</c>（动画节点上手动指定的 AudioClip）。</description></item>
+        /// </list>
+        /// <para/>
+        /// 【为什么可以"库优先"】音效库添加时已做防重，库里不会出现与 sod.Sound 同名但内容不同的 clip；
+        /// 因此库优先与手动指定在语义上等价，只是让图元侧也能受益于"音效库统一替换"的能力。
+        /// <para/>
+        /// 【与子图元音效预览一致】元素侧 <c>ResolvePrimitiveSoundClip</c> 使用同样的"库优先 + 手动回退"策略，
+        /// 两处口径保持一致。
+        /// <para/>
+        /// 【空安全】sod 或 sod.Sound 为空时返回 null，由调用方决定是否跳过。
         /// </summary>
         private AudioClip ResolvePreviewClip(TweenSound sod)
         {
             if (sod == null || sod.Sound == null)
                 return null;
 
+            // ── 优先：音效库同名查询 ──
             if (HudManager != null && HudManager.Hud_Sounds != null)
             {
                 string soundName = sod.Sound.name;
@@ -2925,6 +2838,8 @@ namespace SevenStrikeModules.XHud.Editor
                         return clip;
                 }
             }
+
+            // ── 回退：库中没有 → 用手动指定的 ──
             return sod.Sound;
         }
         /// <summary>
@@ -2944,6 +2859,9 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary>
         /// 预览单个图元动画器上匹配指定时机的所有音效。
+        /// <para/>
+        /// 本方法负责"算好参数"——取 clip、算 volume、算 mute、算 pitch、算 delay，
+        /// 然后交给 helper 入队。
         /// </summary>
         private void PreviewTweenSounds(string timing, XHud_Module_Primitive_Tween tweener)
         {
@@ -2952,9 +2870,6 @@ namespace SevenStrikeModules.XHud.Editor
             if (EditorUtility.audioMasterMute) return;
             if (string.IsNullOrEmpty(timing)) return;
 
-            double now = EditorApplication.timeSinceStartup;
-            bool anyAdded = false;
-
             for (int s = 0; s < tweener.PrimitiveTweenSounds.Count; s++)
             {
                 TweenSound sod = tweener.PrimitiveTweenSounds[s];
@@ -2962,6 +2877,10 @@ namespace SevenStrikeModules.XHud.Editor
                 if (sod.Mute) continue;
                 if (sod.Timing != timing) continue;
 
+                // ── 取 clip：优先从音效库按 sod.Sound.name 查，查不到则回退到手动指定的 sod.Sound ──
+                // 图元侧的音效是手动挂在动画节点上的 AudioClip（sod.Sound）；
+                // 若音效库里恰好存在同名音效，则以库中的为准（音效库添加时已做防重，不存在同名不同 clip 的冲突）；
+                // 若库里没有，则直接用 sod.Sound 本身。
                 AudioClip clip = ResolvePreviewClip(sod);
                 if (clip == null)
                 {
@@ -2969,25 +2888,23 @@ namespace SevenStrikeModules.XHud.Editor
                     continue;
                 }
 
+                // ── 算好参数 ──
                 float delay = ResolvePreviewSoundDelay(sod, tweener.GlobalDuration);
 
-                PendingPreviewSounds.Add(new PendingPreviewSound
-                {
-                    Sod = sod,
-                    Clip = clip,
-                    TriggerAtTime = now + delay,
-                });
-                anyAdded = true;
+                float masterVol = (HudManager != null) ? HudManager.Volume * 0.01f : 1f;
+                bool masterMute = (HudManager != null) && HudManager.VolumeMute;
+                float volume = masterVol * Mathf.Clamp01(sod.Volume);
+                bool mute = masterMute || sod.Mute;
 
-                //Debug.Log($"[音效预览] 加入待触发：{clip.name} delay={delay}s");
+                float pMin = Mathf.Min(sod.MinPitch, sod.MaxPitch);
+                float pMax = Mathf.Max(sod.MinPitch, sod.MaxPitch);
+                bool useRandomPitch = !Mathf.Approximately(pMin, 1f) || !Mathf.Approximately(pMax, 1f);
+
+                Editor_XHud_Tool_SoundPlayer.Enqueue(
+                    clip, delay, volume, mute, useRandomPitch, pMin, pMax);
             }
 
-            if (anyAdded)
-            {
-                EditorApplication.update -= PreviewSoundTick;
-                EditorApplication.update += PreviewSoundTick;
-                Repaint();
-            }
+            Repaint();
         }
         /// <summary>
         /// 预览多个图元动画器上匹配各自预览时机的所有音效（批量模式）。
@@ -3004,133 +2921,55 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 每帧检查待触发音效列表，到点的立即播放。
-        /// <para/>由 EditorApplication.update 驱动。
-        /// </summary>
-        private void PreviewSoundTick()
-        {
-            // 顺便清理已播完的 AudioSource
-            CleanupFinishedPreviewAudioSources();
-
-            if (PendingPreviewSounds == null || PendingPreviewSounds.Count == 0)
-            {
-                EditorApplication.update -= PreviewSoundTick;
-                return;
-            }
-
-            double now = EditorApplication.timeSinceStartup;
-
-            for (int i = PendingPreviewSounds.Count - 1; i >= 0; i--)
-            {
-                PendingPreviewSound p = PendingPreviewSounds[i];
-                if (now >= p.TriggerAtTime)
-                {
-                    PlayPreviewSoundImmediate(p.Sod, p.Clip);
-                    PendingPreviewSounds.RemoveAt(i);
-                }
-            }
-
-            if (PendingPreviewSounds.Count == 0)
-            {
-                EditorApplication.update -= PreviewSoundTick;
-            }
-
-            Repaint();
-        }
-        /// <summary>
-        /// 清理已播完的预览 AudioSource（避免长期持有）。
-        /// </summary>
-        private void CleanupFinishedPreviewAudioSources()
-        {
-            if (Preview_PrimitiveTweens_SoundList == null) return;
-
-            for (int i = Preview_PrimitiveTweens_SoundList.Count - 1; i >= 0; i--)
-            {
-                AudioSource au = Preview_PrimitiveTweens_SoundList[i];
-                if (au == null || !au.isPlaying)
-                {
-                    if (au != null && au.gameObject != null)
-                        DestroyImmediate(au.gameObject, true);
-                    Preview_PrimitiveTweens_SoundList.RemoveAt(i);
-                }
-            }
-        }
-        /// <summary>
-        /// 立即播放一个预览音效（创建 AudioSource 并播放）。
-        /// </summary>
-        private void PlayPreviewSoundImmediate(TweenSound sod, AudioClip clip)
-        {
-            if (clip == null) return;
-
-            AudioSource au = CreatePreviewAudioSource(sod, clip);
-            if (au == null) return;
-
-            Preview_PrimitiveTweens_SoundList.Add(au);
-            //Debug.Log($"[音效预览] 播放 {clip.name}（当前时间 {EditorApplication.timeSinceStartup:F2}）");
-        }
-        /// <summary>
-        /// 停止所有音效预览：清空待触发、停并销毁所有 AudioSource。
+        /// 停止所有音效预览。
+        /// <para/>
+        /// 待触发全丢 + 正在播立即掐断并销毁。
         /// </summary>
         private void StopAllPreviewSounds()
         {
-            // 清空待触发
-            if (PendingPreviewSounds != null)
-                PendingPreviewSounds.Clear();
+            Editor_XHud_Tool_SoundPlayer.Stop();
+        }
+        #endregion
 
-            // 注销 tick
-            EditorApplication.update -= PreviewSoundTick;
-
-            // 停并销毁已播放的
-            if (Preview_PrimitiveTweens_SoundList != null)
+        #region 工具 - 批量化操作
+        /// <summary>
+        /// 缓存当前所有被选中的组件引用到 <see cref="SelectedObjects"/>
+        /// <para/>
+        /// 多选时逐个转换，单选时只填充一个元素。
+        /// </summary>
+        private void Targets_Get()
+        {
+            if (targets.Length > 1)
             {
-                for (int i = 0; i < Preview_PrimitiveTweens_SoundList.Count; i++)
+                SelectedObjects = new XHud_Module_Primitive_Tween[targets.Length];
+                for (int i = 0; i < SelectedObjects.Length; i++)
                 {
-                    AudioSource au = Preview_PrimitiveTweens_SoundList[i];
-                    if (au != null)
-                    {
-                        au.Stop();
-                        if (au.gameObject != null)
-                            DestroyImmediate(au.gameObject, true);
-                    }
-                    Preview_PrimitiveTweens_SoundList[i] = null;
+                    var t = targets[i];
+                    SelectedObjects[i] = (XHud_Module_Primitive_Tween)t;
                 }
-                Preview_PrimitiveTweens_SoundList.Clear();
             }
-
-            SceneView.RepaintAll();
+            else
+            {
+                SelectedObjects = new XHud_Module_Primitive_Tween[targets.Length];
+                SelectedObjects[0] = (XHud_Module_Primitive_Tween)target;
+            }
         }
         /// <summary>
-        /// 创建一个用于音效预览的临时 AudioSource 并立即播放。
+        /// 判断当前是否处于多选状态
         /// </summary>
-        public AudioSource CreatePreviewAudioSource(TweenSound sod, AudioClip clip)
+        /// <returns>true 表示选中了多个组件</returns>
+        private bool Targets_Selected()
         {
-            if (sod == null || clip == null)
-                return null;
-
-            GameObject obj = new GameObject();
-            obj.name = $"PrimitiveTweens_Sound_Previewer-[{clip.length:F2}s]-{clip.name}";
-            obj.hideFlags = HideFlags.HideAndDontSave;
-
-            AudioSource au = obj.AddComponent<AudioSource>();
-            au.playOnAwake = false;
-            au.clip = clip;
-            au.spatialBlend = 0f;
-
-            float masterVol = (HudManager != null) ? HudManager.Volume : 1f;
-            bool masterMute = (HudManager != null) && HudManager.VolumeMute;
-            au.volume = masterVol * Mathf.Clamp01(sod.Volume);
-            au.mute = masterMute || sod.Mute;
-
-            float pMin = Mathf.Min(sod.MinPitch, sod.MaxPitch);
-            float pMax = Mathf.Max(sod.MinPitch, sod.MaxPitch);
-            bool useRandomPitch = !Mathf.Approximately(pMin, 1f) || !Mathf.Approximately(pMax, 1f);
-            au.pitch = useRandomPitch ? Random.Range(pMin, pMax) : 1f;
-
-            au.Play();
-
-            XHud_AudioStoper sp = obj.AddComponent<XHud_AudioStoper>();
-            sp.SetAudioSource(au);
-            return au;
+            if (SelectedObjects == null)
+                return false;
+            if (SelectedObjects.Length > 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         #endregion
     }

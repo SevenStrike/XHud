@@ -27,64 +27,179 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEngine;
 
+    #region 编辑器窗口
+    /// <summary>
+    /// XHud 文字样式库采集 / 修改工具窗口。
+    /// <para/>
+    /// 支持 Text 与 TmpText 两种样式类型，分别暴露各自的完整参数面板；
+    /// 提供实时预览（对源组件反向写入）、名称 / 说明编辑、
+    /// 添加到库 / 修改库源参数两种模式。
+    /// </summary>
     public class Editor_XHud_LibrarySetTool_TextStyle : EditorWindow
     {
+        #region 字段 - 序列化对象 / 属性
+        /// <summary>
+        /// 用于序列化当前窗口的自定义字段。
+        /// </summary>
         private SerializedObject BaseObject;
+        /// <summary>
+        /// 本窗口用到的全部序列化属性引用。
+        /// <para/>
+        /// 统一在 <see cref="OnEnable"/> 里初始化。
+        /// 覆盖：样式名称 / 说明 / 样式数据。
+        /// </summary>
         private SerializedProperty sp_LibName, sp_Description, sp_StyleInfo;
+        #endregion
 
+        #region 字段 - 数据
+        /// <summary>
+        /// 当前编辑的文字样式数据（工作副本）。
+        /// </summary>
         [SerializeField]
         private XHud_LibraryArg_TextStyle StyleInfo;
+        /// <summary>
+        /// 文字样式的原始数据（用于恢复）。
+        /// </summary>
         [SerializeField]
         private XHud_LibraryArg_TextStyle OriginStyleInfo;
-
-        private Texture2D icon_logo;
-
-        public LibrarySetterMode LibrarySetterMode;
-
-        public int ModifiedIndex;
-
+        /// <summary>
+        /// 样式名称。
+        /// </summary>
         [SerializeField]
         public string LibName;
+        /// <summary>
+        /// 样式说明。
+        /// </summary>
         [SerializeField]
         public string Description;
+        /// <summary>
+        /// 原始样式名称。
+        /// </summary>
         [SerializeField]
         public string OriginLibName;
-
         /// <summary>
-        /// 按钮高度
+        /// 修改的库项索引。
+        /// </summary>
+        public int ModifiedIndex;
+        /// <summary>
+        /// 目标文字样式库。
+        /// </summary>
+        private XHud_Library_TextStyle Target_Hud_TextStyleLibrary;
+        /// <summary>
+        /// 库设置模式（添加到库 / 修改库源参数）。
+        /// </summary>
+        public LibrarySetterMode LibrarySetterMode;
+        #endregion
+
+        #region 字段 - 组件
+        /// <summary>
+        /// 源 Text 组件。
+        /// <para/>
+        /// 用于实时预览并反向写入样式修改。
+        /// </summary>
+        public XHud_Module_Text Component_Text;
+        /// <summary>
+        /// 源 TmpText 组件。
+        /// <para/>
+        /// 用于实时预览并反向写入样式修改。
+        /// </summary>
+        public XHud_Module_TmpText Component_TmpText;
+        #endregion
+
+        #region 字段 - 图标
+        /// <summary>
+        /// 窗口 Logo 图标。
+        /// </summary>
+        private Texture2D icon_logo;
+        #endregion
+
+        #region 字段 - 布局
+        /// <summary>
+        /// 按钮高度。
         /// </summary>
         private float ButtonHeight = 25;
         /// <summary>
-        /// 按钮间距
+        /// 按钮间距。
         /// </summary>
         private float ButtonDistance = 15;
-
+        /// <summary>
+        /// 确认按钮文字。
+        /// </summary>
         public string ButtonText_Ok;
+        /// <summary>
+        /// 取消按钮文字。
+        /// </summary>
         public string ButtonText_Cancel;
-
-        public XHud_Module_Text Component_Text;
-        public XHud_Module_TmpText Component_TmpText;
-
-        public Motion_Creator CreateArgs;
-        public Motion_Recycler RecycleArgs;
-
+        /// <summary>
+        /// 窗口标题。
+        /// </summary>
         string Title;
+        /// <summary>
+        /// 参数面板工具栏当前索引。
+        /// </summary>
         private int ToolbarIndex;
+        /// <summary>
+        /// 窗口是否正在关闭。
+        /// <para/>
+        /// 用于跳过关闭阶段的实时预览反向写入。
+        /// </summary>
         private bool isClosing;
+        #endregion
 
+        #region 字段 - 选项文字
+        /// <summary>
+        /// 类型选项文字（Text / TmpText）。
+        /// </summary>
         string[] optnames_a = new string[] { "Text", "TmpText" };
+        /// <summary>
+        /// 水平溢出选项文字。
+        /// </summary>
         string[] optnames_d = new string[] { "换行", "溢出" };
+        /// <summary>
+        /// 垂直溢出选项文字。
+        /// </summary>
         string[] optnames_e = new string[] { "截断", "溢出" };
+        /// <summary>
+        /// 字体样式选项文字。
+        /// </summary>
         string[] optnames_f = new string[] { "常规", "加粗", "斜体", "斜粗" };
+        /// <summary>
+        /// 渐变模式选项文字。
+        /// </summary>
         string[] optnames_g = new string[] { "单色", "水平", "垂直", "四角" };
+        #endregion
 
-        private XHud_Library_TextStyle Target_Hud_TextStyleLibrary;
+        #region 字段 - 动效参数
+        /// <summary>
+        /// 生成动效参数。
+        /// </summary>
+        public Motion_Creator CreateArgs;
+        /// <summary>
+        /// 回收动效参数。
+        /// </summary>
+        public Motion_Recycler RecycleArgs;
+        #endregion
 
+        #region 生命周期
+        /// <summary>
+        /// Unity 禁用回调。
+        /// <para/>
+        /// 标记窗口正在关闭，用于跳过关闭阶段的实时预览反向写入。
+        /// </summary>
         private void OnDisable()
         {
             isClosing = true;
         }
-
+        /// <summary>
+        /// Unity 启用回调。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>构建序列化对象并绑定属性；</description></item>
+        /// <item><description>加载窗口 Logo 图标；</description></item>
+        /// <item><description>初始化默认名称与说明文字。</description></item>
+        /// </list>
+        /// </summary>
         private void OnEnable()
         {
             BaseObject = new SerializedObject(this);
@@ -97,7 +212,14 @@ namespace SevenStrikeModules.XHud.Editor
             Description = "文字样式参数说明内容";
             LibName = "文字样式名称";
         }
-
+        /// <summary>
+        /// Unity 销毁回调。
+        /// <para/>
+        /// 若当前处于添加到库模式且样式数据已变更，
+        /// 弹窗询问用户恢复原有样式或保持现有样式效果。
+        /// </para>
+        /// 最后让场景视图重新获得焦点。
+        /// </summary>
         private void OnDestroy()
         {
             #region 是否恢复到未改动的原有参数，还是保持调整后的状态
@@ -137,7 +259,15 @@ namespace SevenStrikeModules.XHud.Editor
 
             GetWindow<SceneView>().Focus();
         }
-
+        /// <summary>
+        /// 绘制窗口 GUI。
+        /// <para/>
+        /// 按自上而下的顺序绘制：
+        /// 抬头 → 样式信息 → 参数（Text / TmpText 分支） → 选项 → 按钮。
+        /// <para/>
+        /// 实时将样式变更反向写入源 Text / TmpText 组件，实现即时预览。
+        /// 支持 Escape 键关闭窗口与点击空白区域失焦。
+        /// </summary>
         private void OnGUI()
         {
             BaseObject.Update();
@@ -374,7 +504,7 @@ namespace SevenStrikeModules.XHud.Editor
                     });
                 #endregion
 
-                #region 水平溢出           
+                #region 水平溢出
                 XGUI.layout_int_popup(
                     title: "水平溢出",
                     title_width: 60,
@@ -401,7 +531,7 @@ namespace SevenStrikeModules.XHud.Editor
                     });
                 #endregion
 
-                #region 垂直溢出           
+                #region 垂直溢出
                 XGUI.layout_int_popup(
                     title: "垂直溢出",
                     title_width: 60,
@@ -428,7 +558,7 @@ namespace SevenStrikeModules.XHud.Editor
                     });
                 #endregion
 
-                #region 样式           
+                #region 样式
                 XGUI.layout_int_popup(
                     title: "样式",
                     title_width: 60,
@@ -1383,10 +1513,19 @@ namespace SevenStrikeModules.XHud.Editor
                     Component_TmpText.tmp_Update_Style_LibrarySetter(StyleInfo);
             }
         }
+        #endregion
 
-        #region 辅助
+        #region 工具 - 数据操作
         /// <summary>
-        /// 发送到库
+        /// 发送文字样式到目标样式库（添加到库模式）。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>校验名称是否为空；</description></item>
+        /// <item><description>检测名称是否重复；</description></item>
+        /// <item><description>构造样式数据并添加到目标库；</description></item>
+        /// <item><description>弹窗提示添加完成并关闭窗口。</description></item>
+        /// </list>
         /// </summary>
         private void SendToLibrary()
         {
@@ -1444,9 +1583,10 @@ namespace SevenStrikeModules.XHud.Editor
                 Close();
             }
         }
-
         /// <summary>
-        /// 从库更新
+        /// 更新到目标样式库（修改库源参数模式）。
+        /// <para/>
+        /// 弹窗确认后，用当前编辑的名称、类型、说明与样式数据替换目标库中指定索引的样式项，然后关闭窗口。
         /// </summary>
         private void UpdateToLibrary()
         {
@@ -1478,90 +1618,93 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             };
         }
+        #endregion
 
+        #region 设置接口
         /// <summary>
-        /// 设置按钮文字
+        /// 设置按钮文字（确认 / 取消）。
         /// </summary>
-        /// <param name="ok"></param>
-        /// <param name="cancel"></param>
+        /// <param name="ok">确认按钮文字</param>
+        /// <param name="cancel">取消按钮文字</param>
         public void SetButtonText(string ok, string cancel)
         {
             ButtonText_Cancel = cancel;
             ButtonText_Ok = ok;
         }
-
         /// <summary>
-        /// 设置模版基础信息（针对从库源修改更新使用）
+        /// 设置模版基础信息（针对从库源修改更新使用）。
         /// </summary>
-        /// <param name="libname"></param>
-        /// <param name="decription"></param>
+        /// <param name="name">样式名称</param>
+        /// <param name="description">样式说明</param>
         public void SetInfo(string name, string description)
         {
             LibName = name;
             Description = description;
         }
-
         /// <summary>
-        /// 设置模版样式信息
+        /// 设置模版样式信息（工作副本）。
         /// </summary>
-        /// <param name="info"></param>        
+        /// <param name="info">样式数据</param>
         public void SetStyle(XHud_LibraryArg_TextStyle info)
         {
             StyleInfo.CopyData(info);
         }
-
         /// <summary>
-        /// 设置模版样式信息
+        /// 设置模版样式信息（原始副本）。
         /// </summary>
-        /// <param name="info"></param>        
+        /// <param name="info">样式数据</param>
         public void SetOriginStyle(XHud_LibraryArg_TextStyle info)
         {
             OriginStyleInfo.CopyData(info);
         }
-
         /// <summary>
-        /// 设置组件
+        /// 设置源 Text 组件。
         /// </summary>
-        /// <param name="info"></param>        
+        /// <param name="com">Text 组件</param>
         public void SetComponent(XHud_Module_Text com)
         {
             Component_Text = com;
         }
-
         /// <summary>
-        /// 设置组件
+        /// 设置源 TmpText 组件。
         /// </summary>
-        /// <param name="info"></param>        
+        /// <param name="com">TmpText 组件</param>
         public void SetComponent(XHud_Module_TmpText com)
         {
             Component_TmpText = com;
         }
-
         /// <summary>
-        /// 设置标题
+        /// 设置标题。
         /// </summary>
-        /// <param name="title"></param>
+        /// <param name="title">标题文字</param>
         public void SetTitle(string title)
         {
             Title = title;
         }
-
         /// <summary>
-        /// 设置为添加到库模式还是修改库源参数模式
+        /// 设置库设置模式（添加到库 / 修改库源参数）。
         /// </summary>
-        /// <param name="mode"></param>
+        /// <param name="mode">库设置模式</param>
         public void SetLibrarySetterMode(LibrarySetterMode mode)
         {
             LibrarySetterMode = mode;
         }
-
+        /// <summary>
+        /// 设置目标文字样式库。
+        /// </summary>
+        /// <param name="lib">目标文字样式库</param>
         public void Set_Target_Hud_TextStyleLibrary(XHud_Library_TextStyle lib)
         {
             Target_Hud_TextStyleLibrary = lib;
         }
+        #endregion
 
+        #region 按钮
         /// <summary>
-        /// 控件按钮
+        /// 绘制底部按钮区（取消 / 确认）。
+        /// <para/>
+        /// 确认按钮根据 <see cref="LibrarySetterMode"/> 决定调用
+        /// <see cref="SendToLibrary"/> 或 <see cref="UpdateToLibrary"/>。
         /// </summary>
         private void Buttons()
         {
@@ -1634,4 +1777,5 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
     }
+    #endregion
 }

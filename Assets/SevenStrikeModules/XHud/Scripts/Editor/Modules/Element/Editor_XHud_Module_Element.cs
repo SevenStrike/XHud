@@ -34,34 +34,64 @@ namespace SevenStrikeModules.XHud.Editor
     using Color = UnityEngine.Color;
     using Object = UnityEngine.Object;
 
-    public enum ElementStatu
-    {
-        None = 0,
-        InProject = 1,
-        InScene = 2,
-        InSceneNotPrefab = 3
-    }
-
     [CanEditMultipleObjects]
     [CustomEditor(typeof(XHud_Module_Element), true)]
     public partial class Editor_XHud_Module_Element : Editor
     {
-        #region 组件 / 列表
+        #region 字段 - 组件 / 列表
+        /// <summary>
+        /// 当前编辑的元素组件。
+        /// <para/>
+        /// 单选模式下使用；多选时通过 <see cref="SelectedObjects"/> 访问全部目标。
+        /// </summary>
         private XHud_Module_Element BaseScript;
+        /// <summary>
+        /// XHud 管理器实例。
+        /// <para/>
+        /// 用于访问：
+        /// <list type="bullet">
+        /// <item><description>音效库 / 动效库 / 曲线库；</description></item>
+        /// <item><description>RMS 分辨率节点；</description></item>
+        /// <item><description>全局音量、倍增系数等。</description></item>
+        /// </list>
+        /// </summary>
         private XHud_Manager HudManager;
         #endregion
 
-        #region 序列化属性
+        #region 字段 - 序列化属性
+        /// <summary>
+        /// 本 Inspector 用到的全部序列化属性引用。
+        /// <para/>
+        /// 统一在 <see cref="GetSerializeFields"/> 里初始化。
+        /// <para/>
+        /// 覆盖：
+        /// <list type="bullet">
+        /// <item><description>子组件列表（Sounder / Primitive / Button / ...）；</description></item>
+        /// <item><description>折叠状态（TextIsFold / ...）；</description></item>
+        /// <item><description>预览状态（TweensPreivew_In_State / ...）；</description></item>
+        /// <item><description>动效参数（CreateArgs / RecycleArgs / ...）；</description></item>
+        /// <item><description>RMS / 批量选项 / 基础组件引用。</description></item>
+        /// </list>
+        /// </summary>
         private SerializedProperty
             CanvasGroup, SounderNodes, PrimitiveControllerNodes, OptionNodes, ButtonNodes, TextIsFold, TmpTextIsFold, SliderNodes, TextNodes, TmpTextNodes, DebugState, ProgressNodes, ToggleNodes, Indicator, PrimitivesTweenMaxDuration, RectTransform, TriggerAction, ObjectTracker, CreateState, AnimateState, PrimitivesTweenGlobalDuration, OriginPoolName, PrimitivesIsFold, ButtonIsFold, OptionIsFold, SliderIsFold, SounderIsFold, ProgressIsFold, ToggleIsFold, EventIsFold, AutoPlayPrimitivesTween, AutoKillPreviewTweens, Alpha, RMS_Enabled, RMS_LayoutDatas, RMS_Name, CurrentPivot, OriginalName, TweensPreivew_In_State, TweensPreivew_Out_State, RewindPreviewTweensWithKill, ClearPreviewTweensWithKill, CreateArgs, RecycleArgs, Crc_Lib_Name, Rec_Lib_Name, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, Crc_Preview_Position, Rec_Preview_Position, Crc_Preview_SetPosition, Rec_Preview_SetPosition, PreviewIncludePrimitivesTween, ClearActions_With_Spawn, ClearEvents_With_Spawn, Highlighter;
-        #endregion       
-
-        #region 图标
-        private Texture2D icon_main, icon_sound, icon_anim, icon_button, icon_option, icon_slider, icon_progress, icon_toggle, icon_text, icon_tmptext, icon_scan_r, icon_scan_p, icon_record_rms_r, icon_record_rms_p, resetanchorpos_r, resetanchorpos_p, locate_r, locate_p, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, prw_play_out_r, prw_play_out_p, prw_play_in_p, prw_play_in_r, save_r, save_p, reset_r, reset_p, icon_recreateid_r, icon_recreateid_p;
-
         #endregion
 
-        #region 开关
+        #region 字段 - 图标
+        /// <summary>
+        /// 标题 / 按钮 / 图标资源缓存。
+        /// <para/>
+        /// 统一在 <see cref="OnEnable"/> 里加载。
+        /// </summary>
+        private Texture2D icon_main, icon_sound, icon_anim, icon_button, icon_option, icon_slider, icon_progress, icon_toggle, icon_text, icon_tmptext, icon_scan_r, icon_scan_p, icon_record_rms_r, icon_record_rms_p, resetanchorpos_r, resetanchorpos_p, locate_r, locate_p, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, prw_play_out_r, prw_play_out_p, prw_play_in_p, prw_play_in_r, save_r, save_p, reset_r, reset_p, icon_recreateid_r, icon_recreateid_p;
+        #endregion
+
+        #region 字段 - 开关
+        /// <summary>
+        /// 动效参数面板的折叠状态。
+        /// <para/>
+        /// 生成与回收各自的位移 / 旋转 / 透明度折叠开关。
+        /// </summary>
         private bool
             def_recycle_fold_move,
             def_recycle_fold_rotate,
@@ -71,18 +101,37 @@ namespace SevenStrikeModules.XHud.Editor
             def_create_fold_alpha;
         #endregion
 
-        #region 批量模式查看索引
-        private int ElementStatu_Index;
-        #endregion
-
-        #region 选项文字
+        #region 字段 - 选项文字
+        /// <summary>
+        /// 开关控件的"混合选项"文字。
+        /// <para/>
+        /// 包含：关闭 / 开启、不包含 / 包含、关闭 / 调试、手动 / 自动。
+        /// </summary>
         string[] stroptions_enabled = new string[2] { "关闭", "开启" }, stroptions_include = new string[2] { "不包含", "包含" }, stroptions_debug = new string[2] { "关闭", "调试" }, stroptions_auto = new string[2] { "手动", "自动" };
         #endregion
 
-        #region 批量化操作
+        #region 字段 - 批量模式查看索引
+        /// <summary>
+        /// 多选时当前查看的组件索引。
+        /// <para/>
+        /// 状态 / RMS / 统计 等面板共用。
+        /// </summary>
+        private int ElementStatu_Index;
+        #endregion
 
+        #region 字段 - 批量化操作
+        /// <summary>
+        /// 当前 Inspector 选中的所有目标组件缓存。
+        /// </summary>
         private XHud_Module_Element[] SelectedObjects;
+        #endregion
 
+        #region 工具 - 批量化操作
+        /// <summary>
+        /// 缓存当前 Inspector 选中的所有目标组件到 <see cref="SelectedObjects"/>。
+        /// <para/>
+        /// 多选时逐个转换，单选时只填充一个元素。
+        /// </summary>
         private void Targets_Get()
         {
             if (targets.Length > 1)
@@ -100,7 +149,10 @@ namespace SevenStrikeModules.XHud.Editor
                 SelectedObjects[0] = (XHud_Module_Element)target;
             }
         }
-
+        /// <summary>
+        /// 判断当前是否处于多选状态。
+        /// </summary>
+        /// <returns>true 表示选中了多个组件</returns>
         private bool Targets_Selected()
         {
             if (SelectedObjects == null)
@@ -116,6 +168,23 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
+        #region 生命周期
+        /// <summary>
+        /// Unity 启用回调。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>获取 HudManager 单例；</description></item>
+        /// <item><description>缓存目标组件；</description></item>
+        /// <item><description>缓存序列化属性与组件引用；</description></item>
+        /// <item><description>清理无效子组件节点；</description></item>
+        /// <item><description>加载所有图标资源；</description></item>
+        /// <item><description>构造所有 ReorderableList；</description></item>
+        /// <item><description>处理 RMS 残留信息；</description></item>
+        /// <item><description>缓存所有选中组件；</description></item>
+        /// <item><description>加载动画预览配置。</description></item>
+        /// </list>
+        /// </summary>
         private void OnEnable()
         {
             HudManager = XHud_Dashboard.HudManagerGet();
@@ -203,9 +272,17 @@ namespace SevenStrikeModules.XHud.Editor
 
             Targets_Get();
 
-            LoadXHudElementPreviewConfig();
+            Preview_Config_Load();
         }
-
+        /// <summary>
+        /// Unity 禁用回调。
+        /// <para/>
+        /// 编辑器非播放模式下：
+        /// <list type="bullet">
+        /// <item><description>停止预览动画与音效；</description></item>
+        /// <item><description>关闭场景视图激活标记。</description></item>
+        /// </list>
+        /// </summary>
         private void OnDisable()
         {
             if (!Application.isPlaying)
@@ -213,8 +290,8 @@ namespace SevenStrikeModules.XHud.Editor
                 if (BaseScript != null)
                 {
                     RMS_Redraw();
-                    Preview_XHudSounder_Coroutine_Stop();
-                    XTween_Preview_Kill();
+                    Editor_XHud_Tool_SoundPlayer.Stop();
+                    Preview_Kill();
                 }
             }
 
@@ -222,18 +299,21 @@ namespace SevenStrikeModules.XHud.Editor
 
             Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
         }
-
+        /// <summary>
+        /// 绘制 Inspector 主入口。
+        /// <para/>
+        /// 按自上而下的顺序绘制所有面板：
+        /// 标题 → 快捷功能 → 预览 → 参数 → 选项 → 状态 → RMS 布局信息 → 子组件 → 统计 → 组件 → 源脚本。
+        /// <para/>
+        /// 右键菜单在最后统一处理。
+        /// </summary>
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
             string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
 
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             #region 标题
             XGUI.layout_banner(
@@ -247,7 +327,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_style: FontStyle.Normal,
                 title_color: Color.white,
                 title_size: XGUIFontSize.B,
-                title_clipping: clipping,
+                title_clipping: clipping_ellipsis,
                 bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
 
@@ -513,9 +593,9 @@ namespace SevenStrikeModules.XHud.Editor
                     height: 14))
                 {
                     if (!TweensPreivew_In_State.boolValue)
-                        ElementTweens_Preview_In_Play();
+                        Preview_ElementTween_In_Play();
                     else
-                        ElementTweens_Preview_In_Stop();
+                        Preview_ElementTween_In_Stop();
                 }
                 #endregion
 
@@ -533,9 +613,9 @@ namespace SevenStrikeModules.XHud.Editor
                 height: 14))
                 {
                     if (!TweensPreivew_Out_State.boolValue)
-                        ElementTweens_Preview_Out_Play();
+                        Preview_ElementTween_Out_Play();
                     else
-                        ElementTweens_Preview_Out_Stop();
+                        Preview_ElementTween_Out_Stop();
                 }
                 XGUI.SetEnabled(true);
                 #endregion
@@ -719,7 +799,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 width: save_r.width,
                                 height: save_r.height))
                             {
-                                OpenParameterSetter(HudElementMotionType.Creator);
+                                Open_MotionLibrarySetter(HudElementMotionType.Creator);
                                 return;
                             }
 
@@ -768,7 +848,7 @@ namespace SevenStrikeModules.XHud.Editor
                                         {
                                             Crc_Lib_Name.stringValue = null;
                                             Crc_Lib_Name.serializedObject.ApplyModifiedProperties();
-                                            ResetMotionParams("c");
+                                            MotionParams_Reset("c");
                                         }
                                     });
                                 return;
@@ -1158,7 +1238,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 width: save_r.width,
                                 height: save_r.height))
                             {
-                                OpenParameterSetter(HudElementMotionType.Recycler);
+                                Open_MotionLibrarySetter(HudElementMotionType.Recycler);
                                 return;
                             }
 
@@ -1205,7 +1285,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     {
                                         if (d == "重置")
                                         {
-                                            ResetMotionParams("r");
+                                            MotionParams_Reset("r");
                                         }
                                     });
                                 return;
@@ -1756,7 +1836,7 @@ namespace SevenStrikeModules.XHud.Editor
                             offset: new Vector2(0, 0),
                             padding: new RectOffset(10, 10, 10, 10),
                             margin: new RectOffset(0, 0, 6, 0),
-                            clipping: clipping,
+                            clipping: clipping_ellipsis,
                             wrap: true,
                             font: XGUI.GetFont("xg-regular"),
                             font_style: FontStyle.Normal);
@@ -2342,7 +2422,7 @@ namespace SevenStrikeModules.XHud.Editor
                                         offset: new Vector2(0, 0),
                                         padding: new RectOffset(10, 10, 10, 10),
                                         margin: new RectOffset(0, 0, 6, 0),
-                                        clipping: clipping,
+                                        clipping: clipping_ellipsis,
                                         wrap: true,
                                         font: XGUI.GetFont("xg-regular"),
                                         font_style: FontStyle.Normal);
@@ -2440,7 +2520,7 @@ namespace SevenStrikeModules.XHud.Editor
                                             offset: new Vector2(0, 0),
                                             padding: new RectOffset(10, 10, 10, 10),
                                             margin: new RectOffset(0, 0, 6, 0),
-                                            clipping: clipping,
+                                            clipping: clipping_ellipsis,
                                             wrap: true,
                                             font: XGUI.GetFont("xg-regular"),
                                             font_style: FontStyle.Normal);
@@ -2459,7 +2539,7 @@ namespace SevenStrikeModules.XHud.Editor
                                         offset: new Vector2(0, 0),
                                         padding: new RectOffset(10, 10, 10, 10),
                                         margin: new RectOffset(0, 0, 6, 0),
-                                        clipping: clipping,
+                                        clipping: clipping_ellipsis,
                                         wrap: true,
                                         font: XGUI.GetFont("xg-regular"),
                                         font_style: FontStyle.Normal);
@@ -2677,7 +2757,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 offset: new Vector2(0, 0),
                                 padding: new RectOffset(10, 10, 10, 10),
                                 margin: new RectOffset(0, 0, 6, 0),
-                                clipping: clipping,
+                                clipping: clipping_ellipsis,
                                 wrap: true,
                                 font: XGUI.GetFont("xg-regular"),
                                 font_style: FontStyle.Normal);
@@ -2695,7 +2775,7 @@ namespace SevenStrikeModules.XHud.Editor
                                offset: new Vector2(0, 0),
                                padding: new RectOffset(10, 10, 10, 10),
                                margin: new RectOffset(0, 0, 6, 0),
-                               clipping: clipping,
+                               clipping: clipping_ellipsis,
                                wrap: true,
                                font: XGUI.GetFont("xg-regular"),
                                font_style: FontStyle.Normal);
@@ -2733,7 +2813,7 @@ namespace SevenStrikeModules.XHud.Editor
                             offset: new Vector2(0, 0),
                             padding: new RectOffset(10, 10, 10, 10),
                             margin: new RectOffset(0, 0, 6, 0),
-                            clipping: clipping,
+                            clipping: clipping_ellipsis,
                             wrap: true,
                             font: XGUI.GetFont("xg-regular"),
                             font_style: FontStyle.Normal);
@@ -2750,7 +2830,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 offset: new Vector2(0, 0),
                                 padding: new RectOffset(10, 10, 10, 10),
                                 margin: new RectOffset(0, 0, 6, 0),
-                                clipping: clipping,
+                                clipping: clipping_ellipsis,
                                 wrap: true,
                                 font: XGUI.GetFont("xg-regular"),
                                 font_style: FontStyle.Normal);
@@ -3007,7 +3087,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 offset: new Vector2(0, 0),
                                 padding: new RectOffset(10, 10, 10, 10),
                                 margin: new RectOffset(0, 0, 6, 0),
-                                clipping: clipping,
+                                clipping: clipping_ellipsis,
                                 wrap: true,
                                 font: XGUI.GetFont("xg-regular"),
                                 font_style: FontStyle.Normal);
@@ -3213,7 +3293,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 offset: new Vector2(0, 0),
                                 padding: new RectOffset(10, 10, 10, 10),
                                 margin: new RectOffset(0, 0, 6, 0),
-                                clipping: clipping,
+                                clipping: clipping_ellipsis,
                                 wrap: true,
                                 font: XGUI.GetFont("xg-regular"),
                                 font_style: FontStyle.Normal);
@@ -3767,7 +3847,7 @@ foldout: BaseScript.fold_component);
 
                                 return;
                             }
-                            ElementTweens_Preview_In_Play();
+                            Preview_ElementTween_In_Play();
                         });
                     }
                     else
@@ -3788,7 +3868,7 @@ foldout: BaseScript.fold_component);
 
                                 return;
                             }
-                            ElementTweens_Preview_In_Stop();
+                            Preview_ElementTween_In_Stop();
                         });
                     }
                 }
@@ -3815,7 +3895,7 @@ foldout: BaseScript.fold_component);
 
                                 return;
                             }
-                            ElementTweens_Preview_Out_Play();
+                            Preview_ElementTween_Out_Play();
                         });
                     }
                     else
@@ -3836,7 +3916,7 @@ foldout: BaseScript.fold_component);
 
                                 return;
                             }
-                            ElementTweens_Preview_Out_Stop();
+                            Preview_ElementTween_Out_Stop();
                         });
                     }
                 }
@@ -4005,49 +4085,148 @@ foldout: BaseScript.fold_component);
                 PrimitiveTweens_MaxDuration_Calculate();
 
         }
+        #endregion
 
-        #region 辅助
+        #region 工具 - 组件缓存
         /// <summary>
-        /// 元素回到锚点初始位置
+        /// 缓存元素自身的基础组件引用。
+        /// <para/>
+        /// 覆盖：
+        /// <list type="bullet">
+        /// <item><description>RectTransform；</description></item>
+        /// <item><description>CanvasGroup；</description></item>
+        /// <item><description>Highlighter（Image）；</description></item>
+        /// <item><description>TriggerAction；</description></item>
+        /// <item><description>ObjectTracker。</description></item>
+        /// </list>
+        /// <para/>
+        /// 仅在引用为空时填充，避免覆盖用户手动指定的引用。
         /// </summary>
-        private void RestoreToAnchorPosition()
+        private void GetComponents()
         {
-            string res = XGUI.dialog(
-                type: XGUIDialogType.警告,
-                windowtitle: "XHud - 元素消息",
-                title: "锚点初始化",
-                msg: $"是否需要将元素回到当前所在的锚点初始位置？",
-                ok: "确定",
-                cancel: "暂不",
-                PrimaryIndex: 0,
-                usemodal: true,
-                themecolor: XHud_Dashboard.Theme_Primary);
-
-            if (res == "暂不")
+            if (RectTransform.objectReferenceValue == null)
             {
-                return;
+                RectTransform.objectReferenceValue = BaseScript.GetComponent<RectTransform>();
+                RectTransform.serializedObject.ApplyModifiedProperties();
             }
-            if (Targets_Selected())
+            if (CanvasGroup.objectReferenceValue == null)
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    SerializedObject so = new SerializedObject(SelectedObjects[i]);
-                    XHud_Module_Element ele = (XHud_Module_Element)so.targetObject;
-                    Undo.RegisterCompleteObjectUndo(ele.transform, "MoveToAnchorPosition" + i);
-                    ele.element_PositionResetZero();
-                    so.Update();
-
-                    so.ApplyModifiedProperties();
-                }
+                CanvasGroup.objectReferenceValue = BaseScript.GetComponent<CanvasGroup>();
+                CanvasGroup.serializedObject.ApplyModifiedProperties();
             }
-            else
+            if (Highlighter.objectReferenceValue == null)
             {
-                Undo.RegisterCompleteObjectUndo(BaseScript.transform, "MoveToAnchorPosition");
-                BaseScript.element_PositionResetZero();
+                Highlighter.objectReferenceValue = BaseScript.GetComponent<Image>();
+                Highlighter.serializedObject.ApplyModifiedProperties();
+            }
+
+            if (BaseScript.Highlighter != null)
+            {
+                BaseScript.Highlighter.type = Image.Type.Sliced;
+                BaseScript.Highlighter.color = new Color(1, 1, 1, 0);
+            }
+
+            if (BaseScript.Highlighter.sprite == null)
+            {
+                BaseScript.Highlighter.type = Image.Type.Sliced;
+                BaseScript.Highlighter.sprite = (Sprite)AssetDatabase.LoadAssetAtPath($"{XHud_Dashboard.Get_Path_XHUD_SPRITES_Path()}Others/Rect_SolidBlur.png", typeof(Sprite));
+            }
+
+            if (TriggerAction.objectReferenceValue == null)
+            {
+                TriggerAction.objectReferenceValue = BaseScript.GetComponent<XHud_Element_TriggerAction>();
+                TriggerAction.serializedObject.ApplyModifiedProperties();
+            }
+            if (ObjectTracker.objectReferenceValue == null)
+            {
+                ObjectTracker.objectReferenceValue = BaseScript.GetComponent<XHud_ObjectTracker>();
+                ObjectTracker.serializedObject.ApplyModifiedProperties();
             }
         }
         /// <summary>
-        /// 判断模组列表是否存在
+        /// 缓存本 Inspector 用到的全部序列化属性引用。
+        /// <para/>
+        /// 包含子组件列表 / 折叠状态 / 预览状态 / 动效参数 / RMS / 批量选项等。
+        /// </summary>
+        private void GetSerializeFields()
+        {
+            SounderNodes = serializedObject.FindProperty("SounderNodes");
+            ButtonNodes = serializedObject.FindProperty("ButtonNodes");
+            OptionNodes = serializedObject.FindProperty("OptionNodes");
+            SliderNodes = serializedObject.FindProperty("SliderNodes");
+            ProgressNodes = serializedObject.FindProperty("ProgressNodes");
+            TextNodes = serializedObject.FindProperty("TextNodes");
+            TmpTextNodes = serializedObject.FindProperty("TmpTextNodes");
+            ToggleNodes = serializedObject.FindProperty("ToggleNodes");
+            DebugState = serializedObject.FindProperty("DebugState");
+            CanvasGroup = serializedObject.FindProperty("CanvasGroup");
+            Alpha = serializedObject.FindProperty("Alpha");
+            RectTransform = serializedObject.FindProperty("RectTransform");
+            TriggerAction = serializedObject.FindProperty("TriggerAction");
+            ObjectTracker = serializedObject.FindProperty("ObjectTracker");
+            AutoKillPreviewTweens = serializedObject.FindProperty("AutoKillPreviewTweens");
+            TextIsFold = serializedObject.FindProperty("TextIsFold");
+            TmpTextIsFold = serializedObject.FindProperty("TmpTextIsFold");
+            Indicator = serializedObject.FindProperty("Indicator");
+            CreateState = serializedObject.FindProperty("CreateState");
+            AnimateState = serializedObject.FindProperty("AnimateState");
+            OriginPoolName = serializedObject.FindProperty("OriginPoolName");
+            OriginalName = serializedObject.FindProperty("OriginalName");
+            CurrentPivot = serializedObject.FindProperty("CurrentPivot");
+            ButtonIsFold = serializedObject.FindProperty("ButtonIsFold");
+            OptionIsFold = serializedObject.FindProperty("OptionIsFold");
+            SliderIsFold = serializedObject.FindProperty("SliderIsFold");
+            ProgressIsFold = serializedObject.FindProperty("ProgressIsFold");
+            ToggleIsFold = serializedObject.FindProperty("ToggleIsFold");
+            EventIsFold = serializedObject.FindProperty("EventIsFold");
+            SounderIsFold = serializedObject.FindProperty("SounderIsFold");
+            RMS_Enabled = serializedObject.FindProperty("RMS_Enabled");
+            RMS_LayoutDatas = serializedObject.FindProperty("RMS_LayoutDatas");
+            RMS_Name = serializedObject.FindProperty("RMS_Name");
+            TweensPreivew_In_State = serializedObject.FindProperty("TweensPreivew_In_State");
+            TweensPreivew_Out_State = serializedObject.FindProperty("TweensPreivew_Out_State");
+            RewindPreviewTweensWithKill = serializedObject.FindProperty("RewindPreviewTweensWithKill");
+            ClearPreviewTweensWithKill = serializedObject.FindProperty("ClearPreviewTweensWithKill");
+            CreateArgs = serializedObject.FindProperty("CreateArgs");
+            RecycleArgs = serializedObject.FindProperty("RecycleArgs");
+            Crc_Lib_Name = serializedObject.FindProperty("Crc_Lib_Name");
+            Rec_Lib_Name = serializedObject.FindProperty("Rec_Lib_Name");
+            CreateArgs_MotionAnimateEndState = CreateArgs.FindPropertyRelative("MotionAnimateEndState");
+            RecycleArgs_MotionAnimateEndState = RecycleArgs.FindPropertyRelative("MotionAnimateEndState");
+
+            PreviewIncludePrimitivesTween = serializedObject.FindProperty("PreviewIncludePrimitivesTween");
+            Crc_Preview_Position = serializedObject.FindProperty("Crc_Preview_Position");
+            Rec_Preview_Position = serializedObject.FindProperty("Rec_Preview_Position");
+            Crc_Preview_SetPosition = serializedObject.FindProperty("Crc_Preview_SetPosition");
+            Rec_Preview_SetPosition = serializedObject.FindProperty("Rec_Preview_SetPosition");
+
+            AutoPlayPrimitivesTween = serializedObject.FindProperty("AutoPlayPrimitivesTween");
+            PrimitivesTweenMaxDuration = serializedObject.FindProperty("PrimitivesTweenMaxDuration");
+            PrimitivesTweenGlobalDuration = serializedObject.FindProperty("PrimitivesTweenGlobalDuration");
+            PrimitivesIsFold = serializedObject.FindProperty("PrimitivesIsFold");
+            PrimitiveControllerNodes = serializedObject.FindProperty("PrimitiveControllerNodes");
+
+            ClearActions_With_Spawn = serializedObject.FindProperty("ClearActions_With_Spawn");
+            ClearEvents_With_Spawn = serializedObject.FindProperty("ClearEvents_With_Spawn");
+
+            Highlighter = serializedObject.FindProperty("Highlighter");
+        }
+        #endregion
+
+        #region 工具 - 模块校验
+        /// <summary>
+        /// 校验所有子组件列表，清理已失效（引用为 null）的节点条目。
+        /// <para/>
+        /// 覆盖：
+        /// <list type="bullet">
+        /// <item><description>Button；</description></item>
+        /// <item><description>Toggle；</description></item>
+        /// <item><description>Progress；</description></item>
+        /// <item><description>Slider；</description></item>
+        /// <item><description>Option；</description></item>
+        /// <item><description>Sounder；</description></item>
+        /// <item><description>PrimitiveController。</description></item>
+        /// </list>
         /// </summary>
         private void CheckModulesValid()
         {
@@ -4164,7 +4343,9 @@ foldout: BaseScript.fold_component);
             #endregion
         }
         /// <summary>
-        /// 弹窗显示获取组件结果
+        /// 扫描完成后弹窗显示所有收集到的子组件列表。
+        /// <para/>
+        /// 多选时逐个元素分别展示，单选时只展示当前元素。
         /// </summary>
         private void GetModulesResult()
         {
@@ -4401,52 +4582,54 @@ foldout: BaseScript.fold_component);
                 }
             }
         }
+        #endregion
+
+        #region 工具 - 元素状态
         /// <summary>
-        /// 获取组件
+        /// 将元素重置到当前锚点的初始位置。
+        /// <para/>
+        /// 支持多选批量操作，并注册 Undo 以支持 Ctrl+Z。
         /// </summary>
-        private void GetComponents()
+        private void RestoreToAnchorPosition()
         {
-            if (RectTransform.objectReferenceValue == null)
-            {
-                RectTransform.objectReferenceValue = BaseScript.GetComponent<RectTransform>();
-                RectTransform.serializedObject.ApplyModifiedProperties();
-            }
-            if (CanvasGroup.objectReferenceValue == null)
-            {
-                CanvasGroup.objectReferenceValue = BaseScript.GetComponent<CanvasGroup>();
-                CanvasGroup.serializedObject.ApplyModifiedProperties();
-            }
-            if (Highlighter.objectReferenceValue == null)
-            {
-                Highlighter.objectReferenceValue = BaseScript.GetComponent<Image>();
-                Highlighter.serializedObject.ApplyModifiedProperties();
-            }
+            string res = XGUI.dialog(
+                type: XGUIDialogType.警告,
+                windowtitle: "XHud - 元素消息",
+                title: "锚点初始化",
+                msg: $"是否需要将元素回到当前所在的锚点初始位置？",
+                ok: "确定",
+                cancel: "暂不",
+                PrimaryIndex: 0,
+                usemodal: true,
+                themecolor: XHud_Dashboard.Theme_Primary);
 
-            if (BaseScript.Highlighter != null)
+            if (res == "暂不")
             {
-                BaseScript.Highlighter.type = Image.Type.Sliced;
-                BaseScript.Highlighter.color = new Color(1, 1, 1, 0);
+                return;
             }
+            if (Targets_Selected())
+            {
+                for (int i = 0; i < SelectedObjects.Length; i++)
+                {
+                    SerializedObject so = new SerializedObject(SelectedObjects[i]);
+                    XHud_Module_Element ele = (XHud_Module_Element)so.targetObject;
+                    Undo.RegisterCompleteObjectUndo(ele.transform, "MoveToAnchorPosition" + i);
+                    ele.element_PositionResetZero();
+                    so.Update();
 
-            if (BaseScript.Highlighter.sprite == null)
-            {
-                BaseScript.Highlighter.type = Image.Type.Sliced;
-                BaseScript.Highlighter.sprite = (Sprite)AssetDatabase.LoadAssetAtPath($"{XHud_Dashboard.Get_Path_XHUD_SPRITES_Path()}Others/Rect_SolidBlur.png", typeof(Sprite));
+                    so.ApplyModifiedProperties();
+                }
             }
-
-            if (TriggerAction.objectReferenceValue == null)
+            else
             {
-                TriggerAction.objectReferenceValue = BaseScript.GetComponent<XHud_Element_TriggerAction>();
-                TriggerAction.serializedObject.ApplyModifiedProperties();
-            }
-            if (ObjectTracker.objectReferenceValue == null)
-            {
-                ObjectTracker.objectReferenceValue = BaseScript.GetComponent<XHud_ObjectTracker>();
-                ObjectTracker.serializedObject.ApplyModifiedProperties();
+                Undo.RegisterCompleteObjectUndo(BaseScript.transform, "MoveToAnchorPosition");
+                BaseScript.element_PositionResetZero();
             }
         }
         /// <summary>
-        /// 改变元素透明度
+        /// 修改元素透明度（写入 CanvasGroup.alpha）。
+        /// <para/>
+        /// 支持多选批量操作，并注册 Undo。
         /// </summary>
         private void ChangeAlpha()
         {
@@ -4482,9 +4665,11 @@ foldout: BaseScript.fold_component);
             }
         }
         /// <summary>
-        /// 折叠列表
+        /// 折叠 / 展开所有子组件列表。
+        /// <para/>
+        /// 支持多选批量操作。
         /// </summary>
-        /// <param name="state"></param>
+        /// <param name="state">true = 折叠；false = 展开</param>
         private void AllListFoldState(bool state)
         {
             if (Targets_Selected())
@@ -4562,6 +4747,14 @@ foldout: BaseScript.fold_component);
                 }
             }
         }
+        #endregion
+
+        #region 工具 - 图元动画器
+        /// <summary>
+        /// 刷新所有目标组件的动画耗时统计缓存。
+        /// <para/>
+        /// 单选时刷新当前元素，多选时遍历刷新所有选中元素。
+        /// </summary>
         private void PrimitiveTweens_MaxDuration_Calculate()
         {
             if (!Targets_Selected())
@@ -4580,9 +4773,14 @@ foldout: BaseScript.fold_component);
 
         }
         /// <summary>
-        /// 从所有子图元控制器的动画器中获取最大耗时
+        /// 从所有子图元控制器的动画器中获取最大耗时。
+        /// <para/>
+        /// 耗时公式：
+        /// <code>(每条动画的 MaxTimerWithGlobalDuration + 控制器延迟) 的最大值 × 全局倍增</code>
         /// </summary>
-        /// <returns></returns>
+        /// <param name="list">图元控制器节点列表</param>
+        /// <param name="globaldur">图元动画器的全局速率倍增</param>
+        /// <returns>最大耗时（秒）</returns>
         public float PrimitiveTweens_MaxDuration_Get(List<PrimitiveControllerNode> list, float globaldur)
         {
             if (list.Count <= 0)
@@ -4603,9 +4801,11 @@ foldout: BaseScript.fold_component);
             return v * globaldur;
         }
         /// <summary>
-        /// 获取图元控制器的动画器中是否存在循环模式
+        /// 判断当前元素的所有子图元动画器中是否存在无限循环节点。
+        /// <para/>
+        /// 无限循环判定：<c>LoopCount == -1</c>。
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true 表示存在无限循环</returns>
         public bool PrimitiveTweens_HasLoopMode()
         {
             bool hasLoop = false;
@@ -4643,9 +4843,12 @@ foldout: BaseScript.fold_component);
             return hasLoop;
         }
         /// <summary>
-        /// 获取图元控制器的动画器中是否存在循环模式
+        /// 判断指定动画节点列表中是否存在无限循环节点。
+        /// <para/>
+        /// 无限循环判定：<c>LoopCount == -1</c>。
         /// </summary>
-        /// <returns></returns>
+        /// <param name="tweenlist">动画节点列表</param>
+        /// <returns>true 表示存在无限循环</returns>
         public bool PrimitiveTweenNodes_HasLoopMode(List<TweenNode> tweenlist)
         {
             bool hasLoop = false;
@@ -4660,10 +4863,13 @@ foldout: BaseScript.fold_component);
             }
             return hasLoop;
         }
+        #endregion
+
+        #region 工具 - 预制体状态
         /// <summary>
-        /// 判断当前物体及是否处于预制体独立场景模式中
+        /// 判断当前是否处于预制体独立场景模式（Prefab Stage）。
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true 表示在 Prefab Stage 中</returns>
         private bool IsInPrefabStageMode()
         {
             bool IsInPrefabStage = false;
@@ -4682,92 +4888,39 @@ foldout: BaseScript.fold_component);
 
             return IsInPrefabStage;
         }
-        public ElementStatu GetPrefabStatus(GameObject gameObject)
+        /// <summary>
+        /// 获取指定 GameObject 的预制体状态。
+        /// <para/>
+        /// 返回值：
+        /// <list type="bullet">
+        /// <item><description><c>InProject</c>：属于工程内的预制体资源；</description></item>
+        /// <item><description><c>InScene</c>：属于场景中的预制体实例；</description></item>
+        /// <item><description><c>InSceneNotPrefab</c>：场景中非预制体对象。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="gameObject">目标 GameObject</param>
+        public ElementPrefabStatus GetPrefabStatus(GameObject gameObject)
         {
             if (PrefabUtility.IsPartOfPrefabAsset(gameObject))
             {
-                return ElementStatu.InProject;
+                return ElementPrefabStatus.InProject;
             }
             else if (PrefabUtility.IsPartOfPrefabInstance(gameObject))
             {
-                return ElementStatu.InScene;
+                return ElementPrefabStatus.InScene;
             }
             else
             {
-                return ElementStatu.InSceneNotPrefab;
+                return ElementPrefabStatus.InSceneNotPrefab;
             }
-        }
-        /// <summary>
-        /// 获取序列化变量
-        /// </summary>
-        private void GetSerializeFields()
-        {
-            SounderNodes = serializedObject.FindProperty("SounderNodes");
-            ButtonNodes = serializedObject.FindProperty("ButtonNodes");
-            OptionNodes = serializedObject.FindProperty("OptionNodes");
-            SliderNodes = serializedObject.FindProperty("SliderNodes");
-            ProgressNodes = serializedObject.FindProperty("ProgressNodes");
-            TextNodes = serializedObject.FindProperty("TextNodes");
-            TmpTextNodes = serializedObject.FindProperty("TmpTextNodes");
-            ToggleNodes = serializedObject.FindProperty("ToggleNodes");
-            DebugState = serializedObject.FindProperty("DebugState");
-            CanvasGroup = serializedObject.FindProperty("CanvasGroup");
-            Alpha = serializedObject.FindProperty("Alpha");
-            RectTransform = serializedObject.FindProperty("RectTransform");
-            TriggerAction = serializedObject.FindProperty("TriggerAction");
-            ObjectTracker = serializedObject.FindProperty("ObjectTracker");
-            AutoKillPreviewTweens = serializedObject.FindProperty("AutoKillPreviewTweens");
-            TextIsFold = serializedObject.FindProperty("TextIsFold");
-            TmpTextIsFold = serializedObject.FindProperty("TmpTextIsFold");
-            Indicator = serializedObject.FindProperty("Indicator");
-            CreateState = serializedObject.FindProperty("CreateState");
-            AnimateState = serializedObject.FindProperty("AnimateState");
-            OriginPoolName = serializedObject.FindProperty("OriginPoolName");
-            OriginalName = serializedObject.FindProperty("OriginalName");
-            CurrentPivot = serializedObject.FindProperty("CurrentPivot");
-            ButtonIsFold = serializedObject.FindProperty("ButtonIsFold");
-            OptionIsFold = serializedObject.FindProperty("OptionIsFold");
-            SliderIsFold = serializedObject.FindProperty("SliderIsFold");
-            ProgressIsFold = serializedObject.FindProperty("ProgressIsFold");
-            ToggleIsFold = serializedObject.FindProperty("ToggleIsFold");
-            EventIsFold = serializedObject.FindProperty("EventIsFold");
-            SounderIsFold = serializedObject.FindProperty("SounderIsFold");
-            RMS_Enabled = serializedObject.FindProperty("RMS_Enabled");
-            RMS_LayoutDatas = serializedObject.FindProperty("RMS_LayoutDatas");
-            RMS_Name = serializedObject.FindProperty("RMS_Name");
-            TweensPreivew_In_State = serializedObject.FindProperty("TweensPreivew_In_State");
-            TweensPreivew_Out_State = serializedObject.FindProperty("TweensPreivew_Out_State");
-            RewindPreviewTweensWithKill = serializedObject.FindProperty("RewindPreviewTweensWithKill");
-            ClearPreviewTweensWithKill = serializedObject.FindProperty("ClearPreviewTweensWithKill");
-            CreateArgs = serializedObject.FindProperty("CreateArgs");
-            RecycleArgs = serializedObject.FindProperty("RecycleArgs");
-            Crc_Lib_Name = serializedObject.FindProperty("Crc_Lib_Name");
-            Rec_Lib_Name = serializedObject.FindProperty("Rec_Lib_Name");
-            CreateArgs_MotionAnimateEndState = CreateArgs.FindPropertyRelative("MotionAnimateEndState");
-            RecycleArgs_MotionAnimateEndState = RecycleArgs.FindPropertyRelative("MotionAnimateEndState");
-
-            PreviewIncludePrimitivesTween = serializedObject.FindProperty("PreviewIncludePrimitivesTween");
-            Crc_Preview_Position = serializedObject.FindProperty("Crc_Preview_Position");
-            Rec_Preview_Position = serializedObject.FindProperty("Rec_Preview_Position");
-            Crc_Preview_SetPosition = serializedObject.FindProperty("Crc_Preview_SetPosition");
-            Rec_Preview_SetPosition = serializedObject.FindProperty("Rec_Preview_SetPosition");
-
-            AutoPlayPrimitivesTween = serializedObject.FindProperty("AutoPlayPrimitivesTween");
-            PrimitivesTweenMaxDuration = serializedObject.FindProperty("PrimitivesTweenMaxDuration");
-            PrimitivesTweenGlobalDuration = serializedObject.FindProperty("PrimitivesTweenGlobalDuration");
-            PrimitivesIsFold = serializedObject.FindProperty("PrimitivesIsFold");
-            PrimitiveControllerNodes = serializedObject.FindProperty("PrimitiveControllerNodes");
-
-            ClearActions_With_Spawn = serializedObject.FindProperty("ClearActions_With_Spawn");
-            ClearEvents_With_Spawn = serializedObject.FindProperty("ClearEvents_With_Spawn");
-
-            Highlighter = serializedObject.FindProperty("Highlighter");
         }
         #endregion
 
-        #region Draw
+        #region 绘制控件
         /// <summary>
-        /// 通用方法：绘制开关
+        /// 通用方法：绘制带标题的开关控件。
+        /// <para/>
+        /// 封装 <see cref="XGUI.layout_toggle"/>，统一标题宽度、字体、混合选项样式。
         /// </summary>
         private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, string[] options = null, Action<bool> act_on_changed = null)
         {

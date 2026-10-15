@@ -32,11 +32,11 @@ namespace SevenStrikeModules.XHud.Editor
     [CustomEditor(typeof(XHud_Module_Primitive_Controller))]
     public class Editor_XHud_Module_Primitive_Controller : Editor
     {
-        #region 组件 / 列表
+        #region 字段 - 组件
         private XHud_Module_Primitive_Controller BaseScript;
         #endregion
 
-        #region 序列化属性
+        #region 字段 - 序列化属性
         private SerializedProperty
             sp_ID,
             sp_Indicator,
@@ -45,71 +45,24 @@ namespace SevenStrikeModules.XHud.Editor
             sp_IsInitial;
         #endregion
 
-        #region GUI 参数
-        /// <summary>
-        /// 原始脚本参数显示开关
-        /// </summary>
-        private bool OriginalDisplay;
-        /// <summary>
-        /// 系统默认GUI行高
-        /// </summary>
-        private float LineHeight;
-        #endregion
-
-        #region 选项文字
+        #region 字段 - 选项文字
         string[] stroptions_debug = new string[2] { "关闭", "调试" },
             stroptions_mute = new string[] { "正常", "静音" },
             stroptions_control = new string[] { "可控", "忽略" };
         #endregion
 
-        #region 图标
+        #region 字段 - 图标
         private Texture2D icon_type, icon_text, icon_tmptext, icon_image, icon_rawimage, icon_main, icon_initial_r, icon_initial_p, icon_recreate_id_r, icon_recreate_id_p, icon_clear_mods_r, icon_clear_mods_p;
         #endregion
 
-        #region 批量化操作
+        #region 字段 - 批量化操作
         /// <summary>
         /// 批量选择脚本数组
         /// </summary>
         XHud_Module_Primitive_Controller[] SelectedObjects;
-        /// <summary>
-        /// 获取所有批量脚本目标
-        /// </summary>
-        private void Targets_Get()
-        {
-            if (targets.Length > 1)
-            {
-                SelectedObjects = new XHud_Module_Primitive_Controller[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    var t = targets[i];
-                    SelectedObjects[i] = (XHud_Module_Primitive_Controller)t;
-                }
-            }
-            else
-            {
-                SelectedObjects = new XHud_Module_Primitive_Controller[targets.Length];
-                SelectedObjects[0] = (XHud_Module_Primitive_Controller)target;
-            }
-        }
-        /// <summary>
-        /// 判断是否是多选状态
-        /// </summary>
-        /// <returns></returns>
-        private bool Targets_Selected()
-        {
-            if (SelectedObjects == null)
-                return false;
-            if (SelectedObjects.Length > 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         #endregion
 
+        #region 生命周期
         private void OnEnable()
         {
             BaseScript = (XHud_Module_Primitive_Controller)target;
@@ -539,19 +492,19 @@ namespace SevenStrikeModules.XHud.Editor
                 });
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("Q (折叠编组)"), false, () =>
-    {
-        if (Targets_Selected())
-        {
-            for (int i = 0; i < SelectedObjects.Length; i++)
-            {
-                SelectedObjects[i].GroupFold(true);
-            }
-        }
-        else
-        {
-            BaseScript.GroupFold(true);
-        }
-    });
+                {
+                    if (Targets_Selected())
+                    {
+                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        {
+                            SelectedObjects[i].GroupFold(true);
+                        }
+                    }
+                    else
+                    {
+                        BaseScript.GroupFold(true);
+                    }
+                });
                 menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
                 {
                     if (Targets_Selected())
@@ -594,7 +547,23 @@ namespace SevenStrikeModules.XHud.Editor
 
             serializedObject.ApplyModifiedProperties();
         }
+        #endregion
 
+        #region 工具 - 序列化缓存
+        /// <summary>
+        /// 获取所有序列化字段
+        /// </summary>
+        private void GetSerializeFields()
+        {
+            sp_ID = serializedObject.FindProperty("ID");
+            sp_Indicator = serializedObject.FindProperty("Indicator");
+            sp_ModuleType = serializedObject.FindProperty("ModuleType");
+            sp_Debug = serializedObject.FindProperty("Debug");
+            sp_IsInitial = serializedObject.FindProperty("IsInitial");
+        }
+        #endregion
+
+        #region 工具 - ID 刷新
         private void RefreshID()
         {
             if (Targets_Selected())
@@ -676,7 +645,6 @@ namespace SevenStrikeModules.XHud.Editor
                 };
             }
         }
-
         private string[] CollectIDs()
         {
             XHud_Module_Element parent_ele = BaseScript.GetComponentInParent<XHud_Module_Element>();
@@ -695,20 +663,9 @@ namespace SevenStrikeModules.XHud.Editor
 
             return list.ToArray();
         }
+        #endregion
 
-        /// <summary>
-        /// 获取所有序列化字段
-        /// </summary>
-        private void GetSerializeFields()
-        {
-            sp_ID = serializedObject.FindProperty("ID");
-            sp_Indicator = serializedObject.FindProperty("Indicator");
-            sp_ModuleType = serializedObject.FindProperty("ModuleType");
-            sp_Debug = serializedObject.FindProperty("Debug");
-            sp_IsInitial = serializedObject.FindProperty("IsInitial");
-        }
-
-        #region Draw
+        #region 绘制控件
         /// <summary>
         /// 通用方法：绘制开关
         /// </summary>
@@ -736,6 +693,46 @@ namespace SevenStrikeModules.XHud.Editor
                 tog_handler_on_color: color_on,
                 tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
                 act_on_changed: act_on_changed);
+        }
+        #endregion
+
+        #region 工具 - 批量化操作
+        /// <summary>
+        /// 获取所有批量脚本目标
+        /// </summary>
+        private void Targets_Get()
+        {
+            if (targets.Length > 1)
+            {
+                SelectedObjects = new XHud_Module_Primitive_Controller[targets.Length];
+                for (int i = 0; i < SelectedObjects.Length; i++)
+                {
+                    var t = targets[i];
+                    SelectedObjects[i] = (XHud_Module_Primitive_Controller)t;
+                }
+            }
+            else
+            {
+                SelectedObjects = new XHud_Module_Primitive_Controller[targets.Length];
+                SelectedObjects[0] = (XHud_Module_Primitive_Controller)target;
+            }
+        }
+        /// <summary>
+        /// 判断是否是多选状态
+        /// </summary>
+        /// <returns></returns>
+        private bool Targets_Selected()
+        {
+            if (SelectedObjects == null)
+                return false;
+            if (SelectedObjects.Length > 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         #endregion
     }

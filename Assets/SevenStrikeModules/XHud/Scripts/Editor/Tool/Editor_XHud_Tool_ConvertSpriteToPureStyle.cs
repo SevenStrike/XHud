@@ -28,38 +28,29 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEngine.UI;
 
     /// <summary>
-    /// 图片组件编辑器扩展工具
-    /// 在 Image 组件的右键菜单中添加 "ConvertToPureSprite" 选项
-    /// 用于将彩色图片转换为去饱和度的纯色精灵图（保留透明度）
-    /// 
-    /// 使用场景：
-    /// - UI 设计时，需要将彩色图标转换为纯色版本（如白色图标）
-    /// - 制作遮罩、轮廓、辉光效果时，需要纯色贴图
-    /// - 快速生成图标的不同颜色变体
-    /// - 处理导入的 PSD 文件，生成去色版本用于 UI
-    /// 
-    /// 工作流程：
-    /// 1. 右键点击 Image 组件 → 选择 ConvertToPureSprite
-    /// 2. 弹出确认对话框，询问是否创建纯净 Sprite
-    /// 3. 获取当前 Image 的 Sprite 对应的原始纹理
-    /// 4. 对纹理进行去色处理（非透明部分变为纯白色）
-    /// 5. 保存处理后的纹理为 PNG 文件（原文件名_Desaturated.png）
-    /// 6. 将 PNG 导入为 Sprite 资源
-    /// 7. 自动将 Image 的 Sprite 替换为新生成的纯净 Sprite
-    /// 
-    /// 注意事项：
-    /// - 此工具仅在编辑器中可用，不会影响运行时性能
-    /// - 生成的新贴图会保存在原贴图相同目录下
-    /// - 新贴图命名格式：原文件名_Desaturated.png
+    /// 图片组件编辑器扩展工具。
+    /// <para/>
+    /// <list type="bullet">
+    /// <item><description>在 Image 组件的右键菜单中添加 <c>ConvertToPureSprite</c> 选项。</description></item>
+    /// <item><description>用于将彩色图片转换为去饱和度的纯色精灵图（保留透明度）。</description></item>
+    /// <item><description>使用场景：彩色图标转纯色版本、制作遮罩/轮廓/辉光、快速生成不同颜色变体、处理导入的 PSD 文件。</description></item>
+    /// <item><description>工作流程：右键 Image → 确认 → 取原始纹理 → 去色 → 保存 PNG → 导入为 Sprite → 替换 Image 的 Sprite。</description></item>
+    /// <item><description>注意事项：仅在编辑器中可用；新贴图保存在原贴图同目录下；命名格式为 <c>原文件名_Desaturated.png</c>。</description></item>
+    /// </list>
     /// </summary>
     [CustomEditor(typeof(Image))]
     public class Editor_XHud_Tool_ConvertSpriteToPureStyle : UnityEditor.UI.ImageEditor
     {
+        #region 菜单 - 图片组件
         /// <summary>
-        /// 在 Image 组件的上下文菜单中添加自定义选项
-        /// 菜单路径：CONTEXT/Image/ConvertToPureSprite
-        /// priority = 100 控制菜单项的显示顺序（数值越大越靠下）
+        /// 在 Image 组件的上下文菜单中添加自定义选项。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>菜单路径：<c>CONTEXT/Image/ConvertToPureSprite</c>。</description></item>
+        /// <item><description><c>priority = 100</c> 控制菜单项的显示顺序（数值越大越靠下）。</description></item>
+        /// </list>
         /// </summary>
+        /// <param name="command">菜单命令上下文。</param>
         [MenuItem("CONTEXT/Image/ConvertToPureSprite", priority = 100)]
         private static void ConvertPureSprite(MenuCommand command)
         {
@@ -121,23 +112,21 @@ namespace SevenStrikeModules.XHud.Editor
             // ========== 7. 将 Image 的 Sprite 替换为新生成的纯净 Sprite ==========
             selectedImage.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(newPath);
         }
+        #endregion
 
+        #region 工具 - 贴图去色
         /// <summary>
-        /// 去色处理：将贴图中所有不透明的像素转换为纯白色，同时保留透明度
-        /// 透明像素保持完全透明
-        /// 
-        /// 处理逻辑：
-        /// - 不透明像素（alpha > 0）：颜色设为纯白色 (1, 1, 1)，保留原始透明度
-        /// - 透明像素（alpha = 0）：颜色设为完全透明 (0, 0, 0, 0)
-        /// 
-        /// 使用场景：
-        /// - 将彩色图标转换为白色轮廓，用于 UI 着色或发光效果
-        /// - 生成遮罩贴图
-        /// - 创建纯色版本的精灵图
-        /// 
+        /// 去色处理：将贴图中所有不透明的像素转换为纯白色，同时保留透明度。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>透明像素保持完全透明。</description></item>
+        /// <item><description>不透明像素（alpha &gt; 0）：颜色设为纯白色 (1, 1, 1)，保留原始透明度。</description></item>
+        /// <item><description>透明像素（alpha = 0）：颜色设为完全透明 (0, 0, 0, 0)。</description></item>
+        /// <item><description>使用场景：彩色图标转白色轮廓、生成遮罩贴图、创建纯色版本精灵图。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="input">原始纹理</param>
-        /// <returns>处理后的纯色纹理</returns>
+        /// <param name="input">原始纹理。</param>
+        /// <returns>处理后的纯色纹理。</returns>
         public static Texture2D Desaturator(Texture2D input)
         {
             // 确保贴图可读写（临时开启）
@@ -180,12 +169,19 @@ namespace SevenStrikeModules.XHud.Editor
 
             return output;
         }
+        #endregion
 
+        #region 工具 - 贴图保存
         /// <summary>
-        /// 使用 AssetDatabase 将 Texture2D 保存为 PNG 文件
+        /// 使用 AssetDatabase 将 Texture2D 保存为 PNG 文件。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>将纹理编码为 PNG 字节数组后写入磁盘。</description></item>
+        /// <item><description>写入后导入资源并刷新 AssetDatabase。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="texture">要保存的纹理</param>
-        /// <param name="path">保存路径（相对于项目根目录）</param>
+        /// <param name="texture">要保存的纹理。</param>
+        /// <param name="path">保存路径（相对于项目根目录）。</param>
         public static void SaveTexture(Texture2D texture, string path)
         {
             // 将 Texture2D 编码为 PNG 格式的字节数组
@@ -198,17 +194,20 @@ namespace SevenStrikeModules.XHud.Editor
             AssetDatabase.ImportAsset(path);
             AssetDatabase.Refresh();
         }
+        #endregion
 
+        #region 工具 - 精灵导入
         /// <summary>
-        /// 将 PNG 文件导入为 Sprite 资源，并配置 Sprite 属性
-        /// 
-        /// 配置参数：
-        /// - textureType: Sprite (2D and UI) - 设置为精灵图类型
-        /// - spriteImportMode: Single - 单图模式（非图集）
-        /// - spritePixelsPerUnit: 100 - 每单位像素数
-        /// - isReadable: true - 允许从脚本访问纹理像素数据
+        /// 将 PNG 文件导入为 Sprite 资源，并配置 Sprite 属性。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description><c>textureType</c>：Sprite (2D and UI)，设置为精灵图类型。</description></item>
+        /// <item><description><c>spriteImportMode</c>：Single，单图模式（非图集）。</description></item>
+        /// <item><description><c>spritePixelsPerUnit</c>：100，每单位像素数。</description></item>
+        /// <item><description><c>isReadable</c>：true，允许从脚本访问纹理像素数据。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="assetPath">PNG 文件的资源路径</param>
+        /// <param name="assetPath">PNG 文件的资源路径。</param>
         public static void ConvertSprite(string assetPath)
         {
             // 获取 TextureImporter（纹理导入器）
@@ -236,17 +235,20 @@ namespace SevenStrikeModules.XHud.Editor
                 Debug.LogError("Failed to get TextureImporter for the asset.");
             }
         }
+        #endregion
 
+        #region 工具 - 读写控制
         /// <summary>
-        /// 确保贴图的 Read/Write 属性正确设置
-        /// 
-        /// 为什么需要这个功能？
-        /// - 使用 GetPixels() 读取像素数据前，必须开启贴图的 Read/Write
-        /// - 处理完成后可以关闭 Read/Write 以节省内存
-        /// 
+        /// 确保贴图的 Read/Write 属性正确设置。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>使用 <c>GetPixels()</c> 读取像素数据前，必须开启贴图的 Read/Write。</description></item>
+        /// <item><description>处理完成后可以关闭 Read/Write 以节省内存。</description></item>
+        /// <item><description>当前状态已是目标状态时不做任何操作。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="texture">需要处理的 Texture2D 对象</param>
-        /// <param name="state">目标状态（true: 开启, false: 关闭）</param>
+        /// <param name="texture">需要处理的 Texture2D 对象。</param>
+        /// <param name="state">目标状态（true: 开启, false: 关闭）。</param>
         public static void EnsureTextureReadWrite(Texture2D texture, bool state)
         {
             if (texture == null)
@@ -278,5 +280,6 @@ namespace SevenStrikeModules.XHud.Editor
             // 重新导入贴图以应用更改
             AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
         }
+        #endregion
     }
 }

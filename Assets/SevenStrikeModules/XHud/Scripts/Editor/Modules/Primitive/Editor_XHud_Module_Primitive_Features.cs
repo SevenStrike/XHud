@@ -31,78 +31,98 @@ namespace SevenStrikeModules.XHud.Editor
     [CustomEditor(typeof(XHud_Module_Primitive_Feature))]
     public class Editor_XHud_Module_Primitive_Features : Editor
     {
-        #region 组件 / 列表
+        #region 字段 - 组件 / 列表
+        /// <summary>
+        /// 当前编辑的目标脚本实例。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中由 <c>target</c> 强制转换获得。</description></item>
+        /// <item><description>仅用于单选模式下的直接读写操作。</description></item>
+        /// </list>
+        /// </summary>
         private XHud_Module_Primitive_Feature BaseScript;
         #endregion
 
-        #region 序列化属性
+        #region 字段 - 序列化属性
+        /// <summary>
+        /// 序列化属性集合。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description><c>sp_Debug</c>：调试开关属性。</description></item>
+        /// <item><description><c>sp_PrimitiveFeatures</c>：图元特性数据属性。</description></item>
+        /// <item><description><c>FirstSaveFeatures</c>：首次记录标记属性。</description></item>
+        /// </list>
+        /// </summary>
         private SerializedProperty
             sp_Debug,
             sp_PrimitiveFeatures,
             FirstSaveFeatures;
         #endregion
 
-        #region GUI 参数
+        #region 字段 - GUI 参数
         /// <summary>
-        /// 多选特性的索引
+        /// 多选模式下当前查看的特性索引。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>取值范围为 <c>0</c> 到 <c>SelectedObjects.Length - 1</c>。</description></item>
+        /// <item><description>通过上一个/下一个按钮循环切换。</description></item>
+        /// </list>
         /// </summary>
         private int MultiPrimitiveFeature_Index;
         #endregion
 
-        #region 选项文字
+        #region 字段 - 选项文字
+
+        /// <summary>
+        /// 调试开关的选项文字。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>索引 0：关闭。</description></item>
+        /// <item><description>索引 1：调试。</description></item>
+        /// </list>
+        /// </summary>
         string[] stroptions_debug = new string[2] { "关闭", "调试" };
         #endregion
 
-        #region 图标
+        #region 字段 - 图标
+        /// <summary>
+        /// 本编辑器所使用的图标资源集合。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description><c>icon_main</c>：标题主图标。</description></item>
+        /// <item><description><c>f_pos / f_rot / f_sca / f_size / f_alp / f_fill / f_color</c>：各特性字段图标。</description></item>
+        /// <item><description><c>left_arrow_r / left_arrow_p</c>：上一个按钮常态/按下图标。</description></item>
+        /// <item><description><c>right_arrow_r / right_arrow_p</c>：下一个按钮常态/按下图标。</description></item>
+        /// <item><description><c>f_save_r / f_save_p</c>：记录特性按钮常态/按下图标。</description></item>
+        /// <item><description><c>f_load_r / f_load_p</c>：读取特性按钮常态/按下图标。</description></item>
+        /// <item><description><c>icon_col_mark</c>：颜色标记图标。</description></item>
+        /// </list>
+        /// </summary>
         private Texture2D icon_main, f_pos, f_rot, f_sca, f_size, f_alp, f_fill, f_color, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, f_save_r, f_save_p, f_load_r, f_load_p, icon_col_mark;
         #endregion
 
-        #region 批量化操作
+        #region 字段 - 批量化操作
         /// <summary>
-        /// 批量选择脚本数组
+        /// 批量选择脚本数组。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>Targets_Get</c> 中根据 <c>targets</c> 填充。</description></item>
+        /// <item><description>单选时长度为 1，多选时长度等于选中对象数量。</description></item>
+        /// </list>
         /// </summary>
         XHud_Module_Primitive_Feature[] SelectedObjects;
         /// <summary>
-        /// 获取所有批量脚本目标
+        /// 采集的特性数据数组。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>PrimitiveFeature_Capture</c> 中根据批量目标填充。</description></item>
+        /// <item><description>仅用于缓存当前批量目标的特性快照。</description></item>
+        /// </list>
         /// </summary>
-        private void Targets_Get()
-        {
-            if (targets.Length > 1)
-            {
-                SelectedObjects = new XHud_Module_Primitive_Feature[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    var t = targets[i];
-                    SelectedObjects[i] = (XHud_Module_Primitive_Feature)t;
-                }
-            }
-            else
-            {
-                SelectedObjects = new XHud_Module_Primitive_Feature[targets.Length];
-                SelectedObjects[0] = (XHud_Module_Primitive_Feature)target;
-            }
-        }
-        /// <summary>
-        /// 判断是否是多选状态
-        /// </summary>
-        /// <returns></returns>
-        private bool Targets_Selected()
-        {
-            if (SelectedObjects == null)
-                return false;
-            if (SelectedObjects.Length > 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        private PrimitiveFeatures[] PrimitiveFeatures;
         #endregion
 
-        private PrimitiveFeatures[] PrimitiveFeatures;
-
+        #region 生命周期
         private void OnEnable()
         {
             BaseScript = (XHud_Module_Primitive_Feature)target;
@@ -606,9 +626,17 @@ namespace SevenStrikeModules.XHud.Editor
 
             serializedObject.ApplyModifiedProperties();
         }
+        #endregion
 
+        #region 工具 - 序列化缓存
         /// <summary>
-        /// 获取所有序列化字段
+        /// 获取所有序列化字段。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>缓存 <c>PrimitiveFeatures</c> 属性。</description></item>
+        /// <item><description>缓存 <c>Debug</c> 属性。</description></item>
+        /// <item><description>缓存 <c>FirstSaveFeatures</c> 属性。</description></item>
+        /// </list>
         /// </summary>
         private void GetSerializeFields()
         {
@@ -616,9 +644,16 @@ namespace SevenStrikeModules.XHud.Editor
             sp_Debug = serializedObject.FindProperty("Debug");
             FirstSaveFeatures = serializedObject.FindProperty("FirstSaveFeatures");
         }
+        #endregion
 
+        #region 工具 - 特性状态
         /// <summary>
-        /// 检测图元特性首次初始状态
+        /// 检测图元特性首次初始状态。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>多选时逐个检查并首次记录特性。</description></item>
+        /// <item><description>单选时检查并首次记录特性。</description></item>
+        /// </list>
         /// </summary>
         private void CheckFirstCreatedFeature()
         {
@@ -651,10 +686,17 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
         }
+        #endregion
 
-        #region 特性参数
+        #region 工具 - 特性参数
         /// <summary>
-        /// 记录 PrimitiveFeature 特性参数
+        /// 记录 PrimitiveFeature 特性参数。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>保存 Rect 的位置、角度、缩放、尺寸。</description></item>
+        /// <item><description>保存 CanvasGroup 的透明度。</description></item>
+        /// <item><description>保存 Image/Text/TmpText/RawImage 的颜色与填充。</description></item>
+        /// </list>
         /// </summary>
         private void PrimitiveFeature_Save(XHud_Module_Primitive_Feature features)
         {
@@ -716,7 +758,13 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 还原 PrimitiveFeature 特性参数
+        /// 还原 PrimitiveFeature 特性参数。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>读取 Rect 的位置、角度、缩放、尺寸。</description></item>
+        /// <item><description>读取 CanvasGroup 的透明度。</description></item>
+        /// <item><description>读取 Image/Text/TmpText/RawImage 的颜色与填充。</description></item>
+        /// </list>
         /// </summary>
         private void PrimitiveFeature_Load(XHud_Module_Primitive_Feature features)
         {
@@ -780,7 +828,12 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 采集 PrimitiveFeature 特性参数
+        /// 采集 PrimitiveFeature 特性参数。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>根据传入的脚本数组创建特性快照。</description></item>
+        /// <item><description>缓存到 <c>PrimitiveFeatures</c> 字段。</description></item>
+        /// </list>
         /// </summary>
         private void PrimitiveFeature_Capture(XHud_Module_Primitive_Feature[] features)
         {
@@ -791,7 +844,12 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 批处理特性保存（含确认弹窗）
+        /// 批处理特性保存（含确认弹窗）。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>多选时逐个保存并弹出列表通知。</description></item>
+        /// <item><description>单选时保存并弹出确认对话框。</description></item>
+        /// </list>
         /// </summary>
         private void PrimitiveFeature_Dual_Save_WithDialog()
         {
@@ -844,7 +902,12 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 批处理特性读取（含确认弹窗）
+        /// 批处理特性读取（含确认弹窗）。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>多选时逐个读取并弹出列表通知。</description></item>
+        /// <item><description>单选时读取并弹出确认对话框。</description></item>
+        /// </list>
         /// </summary>
         private void PrimitiveFeature_Dual_Load_WithDialog()
         {
@@ -899,9 +962,64 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        #region Draw
+        #region 工具 - 批量化操作
         /// <summary>
-        /// 通用方法：绘制开关
+        /// 获取所有批量脚本目标。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>多选时创建与 <c>targets</c> 等长的数组并逐个填充。</description></item>
+        /// <item><description>单选时创建长度为 1 的数组并填充当前目标。</description></item>
+        /// </list>
+        /// </summary>
+        private void Targets_Get()
+        {
+            if (targets.Length > 1)
+            {
+                SelectedObjects = new XHud_Module_Primitive_Feature[targets.Length];
+                for (int i = 0; i < SelectedObjects.Length; i++)
+                {
+                    var t = targets[i];
+                    SelectedObjects[i] = (XHud_Module_Primitive_Feature)t;
+                }
+            }
+            else
+            {
+                SelectedObjects = new XHud_Module_Primitive_Feature[targets.Length];
+                SelectedObjects[0] = (XHud_Module_Primitive_Feature)target;
+            }
+        }
+        /// <summary>
+        /// 判断是否是多选状态。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>当 <c>SelectedObjects</c> 为 null 时返回 false。</description></item>
+        /// <item><description>当 <c>SelectedObjects.Length > 1</c> 时返回 true。</description></item>
+        /// </list>
+        /// </summary>
+        /// <returns>是否为多选状态。</returns>
+        private bool Targets_Selected()
+        {
+            if (SelectedObjects == null)
+                return false;
+            if (SelectedObjects.Length > 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region 绘制控件
+        /// <summary>
+        /// 通用方法：绘制开关。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>封装 <c>XGUI.layout_toggle</c> 调用。</description></item>
+        /// <item><description>提供标题、宽度、样式、颜色、选项等参数。</description></item>
+        /// </list>
         /// </summary>
         private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, string[] options = null, Action<bool> act_on_changed = null)
         {

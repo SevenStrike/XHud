@@ -30,20 +30,62 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditorInternal;
     using UnityEngine;
 
+    #region 数据模型
+    /// <summary>
+    /// 文字样式导出容器。
+    /// <para/>
+    /// 序列化为 JSON 后写入磁盘，用于文字样式库的导入 / 导出。
+    /// </summary>
     public class ExportTextStyles
     {
+        /// <summary>
+        /// 文字样式库列表。
+        /// </summary>
         public List<XHud_LibraryArg_TextStyle> TextStyleLibrary = new List<XHud_LibraryArg_TextStyle>();
     }
+    #endregion
 
+    #region 编辑器主体
+    /// <summary>
+    /// XHud 文字样式库的自定义编辑器。
+    /// <para/>
+    /// 提供样式列表的可视化编辑、右键菜单（修改 / 获取 / 粘贴 / 克隆）、导入导出（含字体资源拷贝）、
+    /// 预览、增删清空等功能。
+    /// </summary>
     [CustomEditor(typeof(XHud_Library_TextStyle))]
     public class Editor_XHud_Library_TextStyle : Editor
     {
-        #region 组件 / 列表
+        #region 字段 - 组件 / 列表
+        /// <summary>
+        /// 目标脚本实例。
+        /// <para/>
+        /// 在 <see cref="OnEnable"/> 中缓存。
+        /// </summary>
         private XHud_Library_TextStyle BaseScript;
+        /// <summary>
+        /// 文字样式库列表（可重排列表）。
+        /// <para/>
+        /// 用于驱动 ReorderableList 的绘制与交互。
+        /// </summary>
         private ReorderableList sp_TextStyleLibraryList;
         #endregion
 
-        #region 序列化属性
+        #region 字段 - 序列化属性
+        /// <summary>
+        /// 本 Inspector 用到的全部序列化属性引用。
+        /// <para/>
+        /// 统一在 <see cref="OnEnable"/> 里初始化。
+        /// <para/>
+        /// 覆盖：
+        /// <list type="bullet">
+        /// <item><description>文字样式库列表；</description></item>
+        /// <item><description>预览字体 / 颜色 / 样式 / 内容；</description></item>
+        /// <item><description>选中 / 定位索引；</description></item>
+        /// <item><description>过滤 / 查找字符串；</description></item>
+        /// <item><description>列表滚动位置与项高；</description></item>
+        /// <item><description>库名称。</description></item>
+        /// </list>
+        /// </summary>
         private SerializedProperty
             sp_TextStyleLibrary,
             sp_PreviewFontColor,
@@ -61,23 +103,74 @@ namespace SevenStrikeModules.XHud.Editor
             sp_PreviewContent;
         #endregion
 
-        #region 图标
+        #region 字段 - 图标
+        /// <summary>
+        /// 标题 / 按钮 / 图标资源缓存。
+        /// <para/>
+        /// 统一在 <see cref="OnEnable"/> 里加载。
+        /// </summary>
         private Texture2D warnIcon, btn_icon_details_released, btn_icon_details_press, import_p, import_r, export_p, export_r, clear_p, clear_r, create_p, create_r, delete_p, delete_r;
         #endregion
 
-        private GUIContent warning_content;
-
+        #region 字段 - 参数
         /// <summary>
-        /// 屏蔽颜色
+        /// 警告图标 GUIContent 缓存。
+        /// <para/>
+        /// 用于字体丢失时的提示。
+        /// </summary>
+        private GUIContent warning_content;
+        /// <summary>
+        /// 屏蔽颜色。
+        /// <para/>
+        /// 用于在过滤模式下叠加在非匹配项上的半透明遮罩。
         /// </summary>
         private Color blocked_col;
         /// <summary>
-        /// 屏蔽颜色透明度
+        /// 屏蔽颜色透明度。
         /// </summary>
         private float blocked_alp = 0.45f;
-
+        /// <summary>
+        /// 是否显示预览面板。
+        /// <para/>
+        /// 有列表项被选中时置为 true。
+        /// </summary>
         bool sws;
+        #endregion
 
+        #region 字段 - 绘制缓存
+        /// <summary>
+        /// 绘制元素矩形。
+        /// </summary>
+        private Rect drawelement_rect;
+        /// <summary>
+        /// 滚动视图矩形。
+        /// </summary>
+        private Rect scrollview_rect;
+        /// <summary>
+        /// 列表项矩形。
+        /// </summary>
+        private Rect item_rect;
+        /// <summary>
+        /// 选中背景色。
+        /// </summary>
+        private Color SelectedBg = new Color(0, 0, 0, 0.2f);
+        #endregion
+
+        #region 生命周期
+        /// <summary>
+        /// Unity 启用回调。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>缓存目标脚本实例；</description></item>
+        /// <item><description>获取全部序列化属性；</description></item>
+        /// <item><description>初始化屏蔽色；</description></item>
+        /// <item><description>加载全部图标资源；</description></item>
+        /// <item><description>初始化预览文字类型；</description></item>
+        /// <item><description>初始化列表项高度与可见数量；</description></item>
+        /// <item><description>构造 ReorderableList。</description></item>
+        /// </list>
+        /// </summary>
         private void OnEnable()
         {
             BaseScript = (XHud_Library_TextStyle)target;
@@ -134,7 +227,17 @@ namespace SevenStrikeModules.XHud.Editor
             sp_TextStyleLibraryList.onRemoveCallback = TextStyleInfoList_Original_RemoveCallback;
             #endregion
         }
-
+        /// <summary>
+        /// Unity 禁用回调。
+        /// <para/>
+        /// 清理运行时状态：
+        /// <list type="bullet">
+        /// <item><description>重置滚动位置；</description></item>
+        /// <item><description>清空选中索引与定位索引；</description></item>
+        /// <item><description>清空查找与过滤字符串；</description></item>
+        /// <item><description>重置预览文字类型、颜色与样式。</description></item>
+        /// </list>
+        /// </summary>
         private void OnDisable()
         {
             sp_ColorInfoList_Original_Scroller.vector2Value = Vector2.zero;
@@ -161,14 +264,252 @@ namespace SevenStrikeModules.XHud.Editor
             sp_PreviewFontStyle.enumValueIndex = (int)FontStyle.Normal;
             sp_PreviewFontStyle.serializedObject.ApplyModifiedProperties();
         }
+        /// <summary>
+        /// 绘制 Inspector 主入口。
+        /// <para/>
+        /// 按自上而下的顺序绘制所有面板：
+        /// 标题 → 参数 → 快捷功能 → 样式列表。
+        /// </summary>
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
 
-        #region TextStyleInfoList_Original      
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
-        Rect drawelement_rect;
-        Rect scrollview_rect;
-        Rect item_rect;
-        Color SelectedBg = new Color(0, 0, 0, 0.2f);
+            #region 标题
+            XGUI.layout_banner(
+                bg_fill: XGUIGroup.实体,
+                bg_color: XGUIColor.深空灰,
+                bg_height: 30,
+                title_text: "XHud  -  字体样式库",
+                title_anchor: TextAnchor.MiddleLeft,
+                title_style: FontStyle.Normal,
+                title_color: Color.white,
+                title_size: XGUIFontSize.B,
+                title_clipping: clipping_ellipsis,
+                title_offset: new Vector2(-10, 0),
+                bg_margin: new RectOffset(0, 0, 5, 5));
+            #endregion
 
+            XGUI.layout_space(5);
+
+            #region 参数区
+            XGUI.layout_group_start(
+                    type: XGUIContainerType.Vertical,
+                    bg_fill: XGUIGroup.缺口纯色边框,
+                    bg_color: XGUIColor.亮白,
+                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    title: "参数",
+                    title_size: XGUIFontSize.M,
+                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_clipping: TextClipping.Clip,
+                    padding: new RectOffset(10, 10, 15, 15));
+
+            #region 库名称
+            XGUI.layout_property_field(
+                title: "库名称",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 90,
+                prop: sp_LibraryName,
+                prop_margin: new RectOffset(0, 0, 5, 0));
+            #endregion
+
+            #region 过滤（包含）
+            XGUI.ChangedCheck_Start();
+            XGUI.layout_property_field(
+                title: "过滤（包含）",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 90,
+                prop: sp_Highlight,
+                prop_margin: new RectOffset(0, 0, 5, 0));
+            if (XGUI.ChangedCheck_End())
+            {
+                sp_LocationSelectedIndex.intValue = -1;
+                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+            }
+            #endregion
+
+            #region 查找（精确）
+            XGUI.ChangedCheck_Start();
+            XGUI.layout_property_field(
+                title: "查找（精确）",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 90,
+                prop: sp_Find,
+                prop_margin: new RectOffset(0, 0, 5, 0));
+            if (XGUI.ChangedCheck_End())
+            {
+                if (!string.IsNullOrEmpty(sp_Find.stringValue))
+                    BaseScript.TextStyleLibrary_Location_Find(sp_Find.stringValue);
+                else
+                {
+                    sp_SelectedIndex.intValue = -1;
+                    sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+
+                    sp_LocationSelectedIndex.intValue = -1;
+                    sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                }
+            }
+            #endregion
+
+            #region 样例文字内容
+            XGUI.layout_property_field(
+                title: "样例文字内容",
+                title_size: XGUIFontSize.M,
+                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_width: 90,
+                prop: sp_PreviewContent,
+                prop_margin: new RectOffset(0, 0, 5, 0));
+            #endregion
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            #region 快捷功能
+            if (string.IsNullOrEmpty(sp_Highlight.stringValue))
+            {
+                if (!Application.isPlaying)
+                {
+                    XGUI.layout_group_start(
+                        type: XGUIContainerType.Horizontal,
+                        bg_fill: XGUIGroup.缺口纯色边框,
+                        bg_color: XGUIColor.亮白,
+                        bg_color_gui: XHud_Dashboard.Theme_Group,
+                        title: "快捷功能",
+                        title_size: XGUIFontSize.M,
+                        title_text_color: XHud_Dashboard.Theme_Primary,
+                        title_clipping: TextClipping.Clip,
+                        padding: new RectOffset(15, 15, 20, 15));
+
+                    #region 导入字体样式模版
+                    if (XGUI.layout_button(
+                        tooltip: "导入字体样式模版",
+                        tex_release: import_r,
+                        tex_press: import_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
+                    {
+                        ImportTextStyles();
+                    }
+                    #endregion
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 导出字体样式模版
+                    if (XGUI.layout_button(
+                        tooltip: "导出字体样式模版",
+                        tex_release: export_r,
+                        tex_press: export_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
+                    {
+                        ExportTextStyles();
+                    }
+                    #endregion
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 清空所有文字样式模版
+                    if (XGUI.layout_button(
+                        tooltip: "清空所有文字样式模版",
+                        tex_release: clear_r,
+                        tex_press: clear_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
+                    {
+                        string res = XGUI.dialog(
+                            type: XGUIDialogType.警告,
+                            windowtitle: "XHud - 文字样式库消息",
+                            title: "清空所有字体样式",
+                            msg: "是否清空所有字体样式项？请注意！如果您的场景中或是预制体中的文字组件用到了该字体样式库中的字体样式，清空后会导致组件的字体样式信息丢失，请谨慎操作！",
+                            ok: "清空",
+                            cancel: "暂不",
+                            PrimaryIndex: 0,
+                            usemodal: true,
+                            themecolor: XHud_Dashboard.Theme_Primary);
+
+                        if (res == "暂不")
+                            return;
+
+                        sp_TextStyleLibrary.ClearArray();
+                        sp_TextStyleLibrary.serializedObject.ApplyModifiedProperties();
+                    }
+                    #endregion
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 添加项
+                    if (XGUI.layout_button(
+                        tooltip: "添加项",
+                        tex_release: create_r,
+                        tex_press: create_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
+                    {
+                        TextStyleInfoList_Original_Add(sp_TextStyleLibraryList);
+                    }
+                    #endregion
+
+                    GUILayout.FlexibleSpace();
+
+                    #region 删除项
+                    if (XGUI.layout_button(
+                        tooltip: "删除项",
+                        tex_release: delete_r,
+                        tex_press: delete_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: 14,
+                        height: 14))
+                    {
+                        TextStyleInfoList_Original_Remove(sp_TextStyleLibraryList);
+                    }
+                    #endregion
+
+                    XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+                }
+            }
+            #endregion
+
+            #region 样式列表
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIGroup.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.Theme_Group,
+                title: "样式列表",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15));
+
+            DrawTextStyleInfoList_Original();
+
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
+            #endregion
+
+            serializedObject.ApplyModifiedProperties();
+        }
+        #endregion
+
+        #region 列表绘制
+        /// <summary>
+        /// 根据高亮过滤条件屏蔽或启用 GUI。
+        /// <para/>
+        /// 若名称不包含 <see cref="sp_Highlight"/> 的当前值，则禁用 GUI。
+        /// </summary>
+        /// <param name="name">待检查的名称</param>
         private void BlockGUI(string name)
         {
             if (!name.Contains(sp_Highlight.stringValue))
@@ -180,34 +521,47 @@ namespace SevenStrikeModules.XHud.Editor
                 GUI.enabled = true;
             }
         }
-
         /// <summary>
-        /// 添加样式
+        /// 列表添加回调。
+        /// <para/>
+        /// 在 ReorderableList 完成添加后触发文字样式变更回调。
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="list">可重排列表</param>
         private void TextStyleInfoList_Original_AddCallback(ReorderableList list)
         {
             if (BaseScript.act_on_TextStyleChanged != null)
                 BaseScript.act_on_TextStyleChanged();
         }
-
         /// <summary>
-        /// 移除样式
+        /// 列表移除回调。
+        /// <para/>
+        /// 在 ReorderableList 完成移除后触发文字样式变更回调。
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="list">可重排列表</param>
         private void TextStyleInfoList_Original_RemoveCallback(ReorderableList list)
         {
             if (BaseScript.act_on_TextStyleChanged != null)
                 BaseScript.act_on_TextStyleChanged();
         }
-
         /// <summary>
-        /// 绘制元素
+        /// 绘制元素回调。
+        /// <para/>
+        /// 绘制内容：
+        /// <list type="bullet">
+        /// <item><description>序号（灰色，D2 格式）；</description></item>
+        /// <item><description>样式名称（含 T / M 类型标记）；</description></item>
+        /// <item><description>样式解释；</description></item>
+        /// <item><description>样式颜色与渐变色块（TmpText）；</description></item>
+        /// <item><description>字体丢失警告图标；</description></item>
+        /// <item><description>查看详细信息按钮；</description></item>
+        /// <item><description>右键菜单（修改 / 获取 / 粘贴 / 克隆）；</description></item>
+        /// <item><description>过滤遮罩与定位标记。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="index"></param>
-        /// <param name="isActive"></param>
-        /// <param name="isFocused"></param>
+        /// <param name="rect">绘制矩形</param>
+        /// <param name="index">索引</param>
+        /// <param name="isActive">是否激活</param>
+        /// <param name="isFocused">是否聚焦</param>
         private void TextStyleInfoList_Original_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty prop = sp_TextStyleLibrary.GetArrayElementAtIndex(index);
@@ -453,9 +807,11 @@ namespace SevenStrikeModules.XHud.Editor
                     font_style: FontStyle.Normal);
             }
         }
-
         /// <summary>
-        /// 绘制列表
+        /// 绘制文字样式列表。
+        /// <para/>
+        /// 只绘制滚动视图可视区域内的元素，以优化大列表性能。
+        /// 单击列表项时更新右侧预览信息（字体 / 颜色 / 样式 / 类型）。
         /// </summary>
         private void DrawTextStyleInfoList_Original()
         {
@@ -539,11 +895,12 @@ namespace SevenStrikeModules.XHud.Editor
             }
             GUI.EndScrollView();
         }
-
         /// <summary>
-        /// 列表移除
+        /// 列表移除项。
+        /// <para/>
+        /// 移除当前 ReorderableList 索引对应的文字样式项。
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="list">可重排列表</param>
         private void TextStyleInfoList_Original_Remove(ReorderableList list)
         {
             if (list.count <= 0)
@@ -551,11 +908,13 @@ namespace SevenStrikeModules.XHud.Editor
             sp_TextStyleLibrary.DeleteArrayElementAtIndex(list.index);
             sp_TextStyleLibrary.serializedObject.ApplyModifiedProperties();
         }
-
         /// <summary>
-        /// 列表增加
+        /// 列表增加项。
+        /// <para/>
+        /// 弹窗询问用户创建 Text 还是 TmpText 类型的样式项，
+        /// 并根据类型初始化全部默认参数（字体 / 尺寸 / 锚点 / 换行 / 富文本等）。
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="list">可重排列表</param>
         private void TextStyleInfoList_Original_Add(ReorderableList list)
         {
             string res = XGUI.dialog(
@@ -667,244 +1026,16 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        public override void OnInspectorGUI()
-        {
-            serializedObject.Update();
-
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
-            #region 标题
-            XGUI.layout_banner(
-                bg_fill: XGUIGroup.实体,
-                bg_color: XGUIColor.深空灰,
-                bg_height: 30,
-                title_text: "XHud  -  字体样式库",
-                title_anchor: TextAnchor.MiddleLeft,
-                title_style: FontStyle.Normal,
-                title_color: Color.white,
-                title_size: XGUIFontSize.B,
-                title_clipping: clipping,
-                title_offset: new Vector2(-10, 0),
-                bg_margin: new RectOffset(0, 0, 5, 5));
-            #endregion
-
-            XGUI.layout_space(5);
-
-            #region 参数区
-            XGUI.layout_group_start(
-                    type: XGUIContainerType.Vertical,
-                    bg_fill: XGUIGroup.缺口纯色边框,
-                    bg_color: XGUIColor.亮白,
-                    bg_color_gui: XHud_Dashboard.Theme_Group,
-                    title: "参数",
-                    title_size: XGUIFontSize.M,
-                    title_text_color: XHud_Dashboard.Theme_Primary,
-                    title_clipping: TextClipping.Clip,
-                    padding: new RectOffset(10, 10, 15, 15));
-
-            #region 库名称
-            XGUI.layout_property_field(
-                title: "库名称",
-                title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
-                title_width: 90,
-                prop: sp_LibraryName,
-                prop_margin: new RectOffset(0, 0, 5, 0));
-            #endregion
-
-            #region 过滤（包含）
-            XGUI.ChangedCheck_Start();
-            XGUI.layout_property_field(
-                title: "过滤（包含）",
-                title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
-                title_width: 90,
-                prop: sp_Highlight,
-                prop_margin: new RectOffset(0, 0, 5, 0));
-            if (XGUI.ChangedCheck_End())
-            {
-                sp_LocationSelectedIndex.intValue = -1;
-                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
-            }
-            #endregion
-
-            #region 查找（精确）
-            XGUI.ChangedCheck_Start();
-            XGUI.layout_property_field(
-                title: "查找（精确）",
-                title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
-                title_width: 90,
-                prop: sp_Find,
-                prop_margin: new RectOffset(0, 0, 5, 0));
-            if (XGUI.ChangedCheck_End())
-            {
-                if (!string.IsNullOrEmpty(sp_Find.stringValue))
-                    BaseScript.TextStyleLibrary_Location_Find(sp_Find.stringValue);
-                else
-                {
-                    sp_SelectedIndex.intValue = -1;
-                    sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
-
-                    sp_LocationSelectedIndex.intValue = -1;
-                    sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
-                }
-            }
-            #endregion
-
-            #region 样例文字内容
-            XGUI.layout_property_field(
-                title: "样例文字内容",
-                title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
-                title_width: 90,
-                prop: sp_PreviewContent,
-                prop_margin: new RectOffset(0, 0, 5, 0));
-            #endregion
-
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-            #endregion
-
-            #region 快捷功能
-            if (string.IsNullOrEmpty(sp_Highlight.stringValue))
-            {
-                if (!Application.isPlaying)
-                {
-                    XGUI.layout_group_start(
-                        type: XGUIContainerType.Horizontal,
-                        bg_fill: XGUIGroup.缺口纯色边框,
-                        bg_color: XGUIColor.亮白,
-                        bg_color_gui: XHud_Dashboard.Theme_Group,
-                        title: "快捷功能",
-                        title_size: XGUIFontSize.M,
-                        title_text_color: XHud_Dashboard.Theme_Primary,
-                        title_clipping: TextClipping.Clip,
-                        padding: new RectOffset(15, 15, 20, 15));
-
-                    #region 导入字体样式模版
-                    if (XGUI.layout_button(
-                        tooltip: "导入字体样式模版",
-                        tex_release: import_r,
-                        tex_press: import_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 14,
-                        height: 14))
-                    {
-                        ImportTextStyles();
-                    }
-                    #endregion
-
-                    GUILayout.FlexibleSpace();
-
-                    #region 导出字体样式模版
-                    if (XGUI.layout_button(
-                        tooltip: "导出字体样式模版",
-                        tex_release: export_r,
-                        tex_press: export_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 14,
-                        height: 14))
-                    {
-                        ExportTextStyles();
-                    }
-                    #endregion
-
-                    GUILayout.FlexibleSpace();
-
-                    #region 清空所有文字样式模版
-                    if (XGUI.layout_button(
-                        tooltip: "清空所有文字样式模版",
-                        tex_release: clear_r,
-                        tex_press: clear_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 14,
-                        height: 14))
-                    {
-                        string res = XGUI.dialog(
-                            type: XGUIDialogType.警告,
-                            windowtitle: "XHud - 文字样式库消息",
-                            title: "清空所有字体样式",
-                            msg: "是否清空所有字体样式项？请注意！如果您的场景中或是预制体中的文字组件用到了该字体样式库中的字体样式，清空后会导致组件的字体样式信息丢失，请谨慎操作！",
-                            ok: "清空",
-                            cancel: "暂不",
-                            PrimaryIndex: 0,
-                            usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
-
-                        if (res == "暂不")
-                            return;
-
-                        sp_TextStyleLibrary.ClearArray();
-                        sp_TextStyleLibrary.serializedObject.ApplyModifiedProperties();
-                    }
-                    #endregion
-
-                    GUILayout.FlexibleSpace();
-
-                    #region 添加项
-                    if (XGUI.layout_button(
-                        tooltip: "添加项",
-                        tex_release: create_r,
-                        tex_press: create_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 14,
-                        height: 14))
-                    {
-                        TextStyleInfoList_Original_Add(sp_TextStyleLibraryList);
-                    }
-                    #endregion
-
-                    GUILayout.FlexibleSpace();
-
-                    #region 删除项
-                    if (XGUI.layout_button(
-                        tooltip: "删除项",
-                        tex_release: delete_r,
-                        tex_press: delete_p,
-                        tex_gui_color: Color.white,
-                        border: new RectOffset(0, 0, 0, 0),
-                        width: 14,
-                        height: 14))
-                    {
-                        TextStyleInfoList_Original_Remove(sp_TextStyleLibraryList);
-                    }
-                    #endregion
-
-                    XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
-                }
-            }
-            #endregion
-
-            #region 样式列表
-            XGUI.layout_group_start(
-                type: XGUIContainerType.Vertical,
-                bg_fill: XGUIGroup.缺口纯色边框,
-                bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
-                title: "样式列表",
-                title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
-                title_clipping: TextClipping.Clip,
-                padding: new RectOffset(10, 10, 15, 15));
-
-            DrawTextStyleInfoList_Original();
-
-            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
-            #endregion
-
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        #region 辅助
+        #region 工具 - 文字样式库
         /// <summary>
-        /// 导出文字样式表
+        /// 导出文字样式表。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>创建 TextStyleLibrary / Dynamic / TmpAsset 目录结构；</description></item>
+        /// <item><description>遍历样式库，将字体文件 / Tmp 字体资源拷贝到对应目录；</description></item>
+        /// <item><description>将样式库序列化为 JSON 并写入磁盘。</description></item>
+        /// </list>
         /// </summary>
         private void ExportTextStyles()
         {
@@ -954,9 +1085,17 @@ namespace SevenStrikeModules.XHud.Editor
 
             File.WriteAllText(save_path, json);
         }
-
         /// <summary>
-        /// 导入文字样式表
+        /// 导入文字样式表。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>弹窗询问用户选择"追加"或"替换"模式；</description></item>
+        /// <item><description>打开文件选择面板选取 JSON 文件；</description></item>
+        /// <item><description>解析并写入文字样式库列表；</description></item>
+        /// <item><description>询问是否导入附带的字体文件 / Tmp 字体资源；</description></item>
+        /// <item><description>将字体文件拷贝到用户指定目录并刷新资源数据库。</description></item>
+        /// </list>
         /// </summary>
         private void ImportTextStyles()
         {
@@ -1064,10 +1203,14 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        #region 打开字体样式修改器
+        #region 工具 - 文字样式修改器
         /// <summary>
-        /// 字体库修改器
+        /// 打开文字样式修改器窗口。
+        /// <para/>
+        /// 将指定文字样式传入修改器，用于编辑样式名称、描述与全部字体参数。
         /// </summary>
+        /// <param name="info">文字样式数据</param>
+        /// <param name="index">索引</param>
         public void Open_Hud_Library_TextStyle_Setter(XHud_LibraryArg_TextStyle info, int index)
         {
             Editor_XHud_LibrarySetTool_TextStyle window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_TextStyle>(false);
@@ -1091,26 +1234,50 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 预览
+        /// <summary>
+        /// 是否有可用的预览界面。
+        /// <para/>
+        /// 有列表项被选中时返回 true。
+        /// </summary>
+        /// <returns>true 表示可以显示预览</returns>
         public override bool HasPreviewGUI()
         {
             return sws;
         }
-
+        /// <summary>
+        /// 获取预览面板标题。
+        /// </summary>
+        /// <returns>预览标题</returns>
         public override GUIContent GetPreviewTitle()
         {
             return new GUIContent("HudTextStyle");
         }
-
+        /// <summary>
+        /// 绘制预览工具栏。
+        /// </summary>
         public override void OnPreviewSettings()
         {
             base.OnPreviewSettings();
         }
-
+        /// <summary>
+        /// 绘制预览 GUI（静态）。
+        /// <para/>
+        /// 当前实现为空。
+        /// </summary>
+        /// <param name="rect">预览区域矩形</param>
+        /// <param name="background">背景样式</param>
         public override void OnPreviewGUI(Rect rect, GUIStyle background)
         {
             //util_XHUDGUI.Gui_Icon(new Rect(rect.x, rect.y, rect.height * 0.75f, rect.height * 0.75f), util_XHUDGUI.GetIcon("Icon_Assets_Font_Iso"));
         }
-
+        /// <summary>
+        /// 绘制可交互预览 GUI。
+        /// <para/>
+        /// 使用当前样式的字体、颜色与预览内容绘制示例文字，
+        /// 并在底部显示样式类型（Hud Text / Hud TmpText）。
+        /// </summary>
+        /// <param name="r">预览区域矩形</param>
+        /// <param name="background">背景样式</param>
         public override void OnInteractivePreviewGUI(Rect r, GUIStyle background)
         {
 #if UNITY_6000_0_OR_NEWER
@@ -1145,4 +1312,5 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
     }
+    #endregion
 }

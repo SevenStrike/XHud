@@ -32,71 +32,67 @@ namespace SevenStrikeModules.XHud.Editor
     [CustomEditor(typeof(XHud_Element_TriggerAction), true)]
     public class Editor_XHud_Element_TriggerAction : EventTriggerEditor
     {
+        #region 字段 - 组件 / 列表
+        /// <summary>
+        /// 当前编辑的目标脚本实例。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中由 <c>target</c> 强制转换获得。</description></item>
+        /// <item><description>仅用于单选模式下的直接读写操作。</description></item>
+        /// </list>
+        /// </summary>
         private XHud_Element_TriggerAction BaseScript;
+        #endregion
 
-        #region 序列化属性
+        #region 字段 - 序列化属性
+        /// <summary>
+        /// 序列化属性集合。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description><c>AutoClearActionsAndEvents</c>：回收时清空事件和委托开关属性。</description></item>
+        /// <item><description><c>Enabled</c>：触发器启用开关属性。</description></item>
+        /// </list>
+        /// </summary>
         private SerializedProperty AutoClearActionsAndEvents, Enabled;
         #endregion
 
-        #region 图标
+        #region 字段 - 图标
+        /// <summary>
+        /// 标题主图标。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中加载。</description></item>
+        /// </list>
+        /// </summary>
         private Texture2D icon_main;
         #endregion
 
-        #region 批量化操作
+        #region 字段 - 批量化操作
+        /// <summary>
+        /// 批量选择脚本数组。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>GetAllTargets</c> 中根据 <c>targets</c> 填充。</description></item>
+        /// <item><description>单选时长度为 1，多选时长度等于选中对象数量。</description></item>
+        /// </list>
+        /// </summary>
         private XHud_Element_TriggerAction[] SelectedObjects;
-
-        private void GetAllTargets()
-        {
-            if (targets.Length > 1)
-            {
-                SelectedObjects = new XHud_Element_TriggerAction[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    var t = targets[i];
-                    SelectedObjects[i] = (XHud_Element_TriggerAction)t;
-                }
-            }
-            else
-            {
-                SelectedObjects = new XHud_Element_TriggerAction[targets.Length];
-                SelectedObjects[0] = (XHud_Element_TriggerAction)target;
-            }
-        }
-
-        private bool IsMultiSelected()
-        {
-            if (SelectedObjects == null)
-                return false;
-            if (SelectedObjects.Length > 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         #endregion
 
+        #region 生命周期     
         protected override void OnEnable()
         {
             base.OnEnable();
-
             BaseScript = (XHud_Element_TriggerAction)target;
-
             AutoClearActionsAndEvents = serializedObject.FindProperty("AutoClearActionsAndEvents");
             Enabled = serializedObject.FindProperty("Enabled");
-
             if (BaseScript.TriggerImage == null)
                 BaseScript.TriggerImage = BaseScript.GetComponent<Image>();
             if (BaseScript.HudElement == null)
                 BaseScript.HudElement = BaseScript.GetComponent<XHud_Module_Element>();
-
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_trigger_action/icon_main");
-
             Vector2 ButtonSize = new Vector2(18, 18);
-
-            GetAllTargets();
+            Targets_Get();
         }
 
         private void OnDisable()
@@ -107,15 +103,12 @@ namespace SevenStrikeModules.XHud.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-
             string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
-
 #if UNITY_6000_0_OR_NEWER
             TextClipping clipping = TextClipping.Ellipsis;
 #else
-    TextClipping clipping = TextClipping.Clip;
+            TextClipping clipping = TextClipping.Clip;
 #endif
-
             #region 标题
             XGUI.layout_banner(
              bg_fill: XGUIGroup.实体,
@@ -131,9 +124,7 @@ namespace SevenStrikeModules.XHud.Editor
              title_clipping: clipping,
              bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
-
             XGUI.layout_space(5);
-
             #region 选项
             BaseScript.fold_option = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
@@ -146,16 +137,13 @@ namespace SevenStrikeModules.XHud.Editor
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_option);
-
             if (!BaseScript.fold_option)
             {
                 DrawToggle("是否启用触发器", Enabled, 140, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
                 DrawToggle("回收时清空事件和委托", AutoClearActionsAndEvents, 140, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
             }
-
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
-
             if (Application.isPlaying)
             {
                 XGUI.layout_label(
@@ -173,7 +161,6 @@ namespace SevenStrikeModules.XHud.Editor
                 if (BaseScript.TriggerImage != null)
                     BaseScript.TriggerImage.color = Color.clear;
             }
-
             #region 参数
             BaseScript.fold_param = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
@@ -186,15 +173,12 @@ namespace SevenStrikeModules.XHud.Editor
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_param);
-
             if (!BaseScript.fold_param)
             {
 
             }
-
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
-
             #region 源脚本
             BaseScript.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
@@ -207,21 +191,74 @@ namespace SevenStrikeModules.XHud.Editor
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_based);
-
             if (!BaseScript.fold_based)
             {
                 DrawDefaultInspector();
             }
-
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
-
             serializedObject.ApplyModifiedProperties();
         }
+        #endregion
 
-        #region Draw
+        #region 工具 - 批量化操作
         /// <summary>
-        /// 通用方法：绘制开关
+        /// 获取所有批量脚本目标。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>多选时创建与 <c>targets</c> 等长的数组并逐个填充。</description></item>
+        /// <item><description>单选时创建长度为 1 的数组并填充当前目标。</description></item>
+        /// </list>
+        /// </summary>
+        private void Targets_Get()
+        {
+            if (targets.Length > 1)
+            {
+                SelectedObjects = new XHud_Element_TriggerAction[targets.Length];
+                for (int i = 0; i < SelectedObjects.Length; i++)
+                {
+                    var t = targets[i];
+                    SelectedObjects[i] = (XHud_Element_TriggerAction)t;
+                }
+            }
+            else
+            {
+                SelectedObjects = new XHud_Element_TriggerAction[targets.Length];
+                SelectedObjects[0] = (XHud_Element_TriggerAction)target;
+            }
+        }
+        /// <summary>
+        /// 判断是否是多选状态。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>当 <c>SelectedObjects</c> 为 null 时返回 false。</description></item>
+        /// <item><description>当 <c>SelectedObjects.Length > 1</c> 时返回 true。</description></item>
+        /// </list>
+        /// </summary>
+        /// <returns>是否为多选状态。</returns>
+        private bool Targets_Selected()
+        {
+            if (SelectedObjects == null)
+                return false;
+            if (SelectedObjects.Length > 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region 绘制控件
+        /// <summary>
+        /// 通用方法：绘制开关。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>封装 <c>XGUI.layout_toggle</c> 调用。</description></item>
+        /// <item><description>提供标题、宽度、样式、颜色等参数。</description></item>
+        /// </list>
         /// </summary>
         private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, Action<bool> act_on_changed = null)
         {

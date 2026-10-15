@@ -29,17 +29,67 @@ namespace SevenStrikeModules.XHud.Editor
 
     public partial class Editor_XHud_Module_Element : Editor
     {
-        private ReorderableList
-            PrimitivesTweenList,
-            SounderList,
-            ButtonList,
-            OptionList,
-            SliderList,
-            ProgressList,
-            ToggleList,
-            TextList,
-            TmpTextList;
+        #region 字段 - 列表
+        /// <summary>
+        /// 图元控制器列表。
+        /// </summary>
+        private ReorderableList PrimitivesTweenList;
 
+        /// <summary>
+        /// 音效器列表。
+        /// </summary>
+        private ReorderableList SounderList;
+
+        /// <summary>
+        /// 按钮列表。
+        /// </summary>
+        private ReorderableList ButtonList;
+
+        /// <summary>
+        /// 选项列表。
+        /// </summary>
+        private ReorderableList OptionList;
+
+        /// <summary>
+        /// 滑动条列表。
+        /// </summary>
+        private ReorderableList SliderList;
+
+        /// <summary>
+        /// 进度条列表。
+        /// </summary>
+        private ReorderableList ProgressList;
+
+        /// <summary>
+        /// 开关列表。
+        /// </summary>
+        private ReorderableList ToggleList;
+
+        /// <summary>
+        /// 文字列表。
+        /// </summary>
+        private ReorderableList TextList;
+
+        /// <summary>
+        /// Tmp 文字列表。
+        /// </summary>
+        private ReorderableList TmpTextList;
+        #endregion
+
+        #region 绘制 - 图元控制器列表
+        /// <summary>
+        /// 绘制图元控制器列表。
+        /// <para/>
+        /// 每条目显示：
+        /// <list type="bullet">
+        /// <item><description>控制器标识（Indicator / 物体名）；</description></item>
+        /// <item><description>控制器 ID（未分配时显示"未分配ID"）；</description></item>
+        /// <item><description>速率滑块（GlobalDuration）；</description></item>
+        /// <item><description>延迟输入框（DelayTime）。</description></item>
+        /// </list>
+        /// <para/>
+        /// 点击条目：定位控制器并触发 <c>Preview_PrimitiveTween_OnSelect</c> 预览。
+        /// </summary>
         public void ReorderableList_Draw_PrimitiveController()
         {
             PrimitivesTweenList = new ReorderableList(serializedObject, PrimitiveControllerNodes)
@@ -47,152 +97,189 @@ namespace SevenStrikeModules.XHud.Editor
                 displayAdd = false,
                 displayRemove = true,
                 draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    XGUI.gui_label(
-                      rect: rect,
-                      text: new GUIContent("图元控制器列表"),
-                      text_color: Color.white * 0.85f,
-                      size: XGUIFontSize.M,
-                      offset: new Vector2(5, 0),
-                      clipping: XGUI.TryEllipsisClipping(),
-                      anchor: TextAnchor.MiddleLeft,
-                      font_style: FontStyle.Normal);
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    if (PrimitiveControllerNodes == null)
-                        return;
-                    if (PrimitiveControllerNodes.arraySize <= 0)
-                        return;
-                    SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(index);
-                    if (sp_node != null)
-                    {
-                        SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
-                        SerializedProperty sp_delay = sp_node.FindPropertyRelative("DelayTime");
-
-                        XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
-
-                        if (sp_con != null)
-                        {
-                            #region 图标
-                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
-                            {
-                                XGUI.gui_icon(
-                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
-                                    icon: icon_anim,
-                                    color: XHud_Dashboard.Theme_Primary);
-                            }
-                            #endregion
-
-                            #region 名称
-                            string title = "";
-                            string indicator = sp_con.GetIndicator();
-                            if (!string.IsNullOrEmpty(indicator))
-                                title += indicator;
-                            else
-                                title += sp_con.gameObject.name;
-
-                            XGUI.gui_state_displayer_text(
-                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
-                                title: new GUIContent(title),
-                                title_size: XGUIFontSize.M,
-                                subtitle: new GUIContent(!string.IsNullOrEmpty(sp_con.ID) ? sp_con.ID : "未分配ID"),
-                                subtitle_size: XGUIFontSize.S,
-                                subtitle_color: !string.IsNullOrEmpty(sp_con.ID) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
-                                margin: new RectOffset(5, 5, 0, 5));
-                            #endregion
-
-                            if (sp_con.pt_Tween != null)
-                            {
-                                #region 速率      
-                                if (XGUI.CurrentWindowWidthThreshold(">", 150f))
-                                {
-                                    SerializedObject so_tween = new SerializedObject(sp_con.pt_Tween);
-                                    so_tween.Update();
-
-                                    SerializedProperty sp_glodur = so_tween.FindProperty("GlobalDuration");
-                                    SerializedProperty sp_maxdur = so_tween.FindProperty("MaxTimerWithGlobalDuration");
-
-                                    sp_glodur.floatValue = XGUI.gui_slider(
-                                        rect: new Rect(rect.x + 5, rect.y + 28, rect.width - 15, XGUI.GetSingleLineHeight()),
-                                        title: "速率",
-                                        title_size: XGUIFontSize.M,
-                                        title_anchor: TextAnchor.MiddleLeft,
-                                        title_color: Color.white,
-                                        title_width: 30,
-                                        title_offset: new Vector2(0, -3),
-                                        prop: sp_glodur.floatValue,
-                                        left: 0,
-                                        right: 1,
-                                        slider_height: 20,
-                                        limite_width: 230);
-                                    sp_glodur.serializedObject.ApplyModifiedProperties();
-                                    so_tween.ApplyModifiedProperties();
-                                }
-                                #endregion
-
-                                #region 延迟
-                                if (XGUI.CurrentWindowWidthThreshold(">", 150f))
-                                {
-                                    sp_delay.floatValue = XGUI.gui_inputfield(
-                                    rect: new Rect(rect.x + 5, rect.y + 52, rect.width - 15, XGUI.GetSingleLineHeight()),
-                                    title: "延迟",
-                                    prop: sp_delay.floatValue,
-                                    field_fontsize: XGUIFontSize.M,
-                                    field_text_offset: Vector2.zero,
-                                    field_height: 20,
-                                    field_text_color: Color.white,
-                                    title_width: 30,
-                                    field_text_style: FontStyle.Normal,
-                                    field_text_anchor: TextAnchor.MiddleLeft,
-                                    field_padding: new RectOffset(5, 5, 0, 0),
-                                    field_margin: new RectOffset(0, 0, 0, 0),
-                                    limite_width: 230);
-                                    sp_delay.serializedObject.ApplyModifiedProperties();
-                                }
-                                #endregion
-                            }
-                            else
-                            {
-                                XGUI.gui_label(
-                                    rect: new Rect(rect.x + 20, rect.y + (rect.height / 2) - 5, rect.width - 30, XGUI.GetSingleLineHeight() * 2),
-                                    text: new GUIContent("未初始化动画模块"),
-                                    text_color: Color.gray,
-                                    bg_fill: XGUIGroup.纯色边框,
-                                    bg_color: XGUIColor.亮白,
-                                    bg_color_gui: Color.gray * 0.85f,
-                                    size: XGUIFontSize.S,
-                                    clipping: XGUI.TryEllipsisClipping(),
-                                    anchor: TextAnchor.MiddleCenter,
-                                    offset: new Vector2(0, -2),
-                                    padding: new RectOffset(0, 0, 10, 10),
-                                    font_style: FontStyle.Normal);
-                            }
-
-                            sp_node_con.serializedObject.ApplyModifiedProperties();
-                            sp_node.serializedObject.ApplyModifiedProperties();
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(list.index);
-                    if (sp_node != null)
-                    {
-                        SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
-                        EditorGUIUtility.PingObject(sp_node_con.objectReferenceValue);
-
-                        Preview_PrimitiveTween(BaseScript.PrimitiveControllerNodes[list.index]);
-                    }
-                },
-                elementHeightCallback = index =>
-                {
-                    return 4.5f * XGUI.GetSingleLineHeight();
-                }
+                drawHeaderCallback = PrimitiveController_DrawHeader,
+                drawElementCallback = PrimitiveController_DrawElement,
+                onSelectCallback = PrimitiveController_OnSelect,
+                elementHeightCallback = PrimitiveController_ElementHeight,
             };
         }
+        /// <summary>
+        /// 绘制图元控制器列表的表头。
+        /// </summary>
+        private void PrimitiveController_DrawHeader(Rect rect)
+        {
+            XGUI.gui_label(
+                rect: rect,
+                text: new GUIContent("图元控制器列表"),
+                text_color: Color.white * 0.85f,
+                size: XGUIFontSize.M,
+                offset: new Vector2(5, 0),
+                clipping: XGUI.TryEllipsisClipping(),
+                anchor: TextAnchor.MiddleLeft,
+                font_style: FontStyle.Normal);
+        }
+        /// <summary>
+        /// 绘制图元控制器列表的单个条目。
+        /// <para/>
+        /// 每条目显示：
+        /// <list type="bullet">
+        /// <item><description>图标；</description></item>
+        /// <item><description>控制器标识与 ID；</description></item>
+        /// <item><description>速率滑块（GlobalDuration）；</description></item>
+        /// <item><description>延迟输入框（DelayTime）。</description></item>
+        /// </list>
+        /// <para/>
+        /// 若控制器未挂载图元动画器（<c>pt_Tween == null</c>），显示"未初始化动画模块"提示。
+        /// </summary>
+        private void PrimitiveController_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            if (PrimitiveControllerNodes == null)
+                return;
+            if (PrimitiveControllerNodes.arraySize <= 0)
+                return;
+            SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(index);
+            if (sp_node != null)
+            {
+                SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                SerializedProperty sp_delay = sp_node.FindPropertyRelative("DelayTime");
+
+                XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
+
+                if (sp_con != null)
+                {
+                    #region 图标
+                    if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                    {
+                        XGUI.gui_icon(
+                            rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                            icon: icon_anim,
+                            color: XHud_Dashboard.Theme_Primary);
+                    }
+                    #endregion
+
+                    #region 名称
+                    string title = "";
+                    string indicator = sp_con.GetIndicator();
+                    if (!string.IsNullOrEmpty(indicator))
+                        title += indicator;
+                    else
+                        title += sp_con.gameObject.name;
+
+                    XGUI.gui_state_displayer_text(
+                        rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                        title: new GUIContent(title),
+                        title_size: XGUIFontSize.M,
+                        subtitle: new GUIContent(!string.IsNullOrEmpty(sp_con.ID) ? sp_con.ID : "未分配ID"),
+                        subtitle_size: XGUIFontSize.S,
+                        subtitle_color: !string.IsNullOrEmpty(sp_con.ID) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+
+                    if (sp_con.pt_Tween != null)
+                    {
+                        #region 速率      
+                        if (XGUI.CurrentWindowWidthThreshold(">", 150f))
+                        {
+                            SerializedObject so_tween = new SerializedObject(sp_con.pt_Tween);
+                            so_tween.Update();
+
+                            SerializedProperty sp_glodur = so_tween.FindProperty("GlobalDuration");
+                            SerializedProperty sp_maxdur = so_tween.FindProperty("MaxTimerWithGlobalDuration");
+
+                            sp_glodur.floatValue = XGUI.gui_slider(
+                                rect: new Rect(rect.x + 5, rect.y + 28, rect.width - 15, XGUI.GetSingleLineHeight()),
+                                title: "速率",
+                                title_size: XGUIFontSize.M,
+                                title_anchor: TextAnchor.MiddleLeft,
+                                title_color: Color.white,
+                                title_width: 30,
+                                title_offset: new Vector2(0, -3),
+                                prop: sp_glodur.floatValue,
+                                left: 0,
+                                right: 1,
+                                slider_height: 20,
+                                limite_width: 230);
+                            sp_glodur.serializedObject.ApplyModifiedProperties();
+                            so_tween.ApplyModifiedProperties();
+                        }
+                        #endregion
+
+                        #region 延迟
+                        if (XGUI.CurrentWindowWidthThreshold(">", 150f))
+                        {
+                            sp_delay.floatValue = XGUI.gui_inputfield(
+                            rect: new Rect(rect.x + 5, rect.y + 52, rect.width - 15, XGUI.GetSingleLineHeight()),
+                            title: "延迟",
+                            prop: sp_delay.floatValue,
+                            field_fontsize: XGUIFontSize.M,
+                            field_text_offset: Vector2.zero,
+                            field_height: 20,
+                            field_text_color: Color.white,
+                            title_width: 30,
+                            field_text_style: FontStyle.Normal,
+                            field_text_anchor: TextAnchor.MiddleLeft,
+                            field_padding: new RectOffset(5, 5, 0, 0),
+                            field_margin: new RectOffset(0, 0, 0, 0),
+                            limite_width: 230);
+                            sp_delay.serializedObject.ApplyModifiedProperties();
+                        }
+                        #endregion
+                    }
+                    else
+                    {
+                        XGUI.gui_label(
+                            rect: new Rect(rect.x + 20, rect.y + (rect.height / 2) - 5, rect.width - 30, XGUI.GetSingleLineHeight() * 2),
+                            text: new GUIContent("未初始化动画模块"),
+                            text_color: Color.gray,
+                            bg_fill: XGUIGroup.纯色边框,
+                            bg_color: XGUIColor.亮白,
+                            bg_color_gui: Color.gray * 0.85f,
+                            size: XGUIFontSize.S,
+                            clipping: XGUI.TryEllipsisClipping(),
+                            anchor: TextAnchor.MiddleCenter,
+                            offset: new Vector2(0, -2),
+                            padding: new RectOffset(0, 0, 10, 10),
+                            font_style: FontStyle.Normal);
+                    }
+
+                    sp_node_con.serializedObject.ApplyModifiedProperties();
+                    sp_node.serializedObject.ApplyModifiedProperties();
+                }
+            }
+        }
+        /// <summary>
+        /// 图元控制器列表条目选中回调。
+        /// <para/>
+        /// 点击条目：定位控制器并触发 <c>Preview_PrimitiveTween_OnSelect</c> 预览。
+        /// </summary>
+        private void PrimitiveController_OnSelect(ReorderableList list)
+        {
+            SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(list.index);
+            if (sp_node != null)
+            {
+                SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                EditorGUIUtility.PingObject(sp_node_con.objectReferenceValue);
+
+                Preview_PrimitiveTween_OnSelect(BaseScript.PrimitiveControllerNodes[list.index]);
+            }
+        }
+        /// <summary>
+        /// 图元控制器列表条目高度。
+        /// </summary>
+        private float PrimitiveController_ElementHeight(int index)
+        {
+            return 4.5f * XGUI.GetSingleLineHeight();
+        }
+        #endregion
+
+        #region 绘制 - 文字列表
+        /// <summary>
+        /// 绘制文字列表。
+        /// <para/>
+        /// 每条目显示文字组件的标识名（Indicator / 物体名）。
+        /// <para/>
+        /// 点击条目：定位文字组件。
+        /// </summary>
         public void ReorderableList_Draw_Text()
         {
             TextList = new ReorderableList(serializedObject, TextNodes)
@@ -200,72 +287,102 @@ namespace SevenStrikeModules.XHud.Editor
                 displayAdd = false,
                 displayRemove = true,
                 draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    XGUI.gui_label(
-                      rect: rect,
-                      text: new GUIContent("文字列表"),
-                      text_color: Color.white * 0.85f,
-                      size: XGUIFontSize.M,
-                      offset: new Vector2(5, 0),
-                      clipping: XGUI.TryEllipsisClipping(),
-                      anchor: TextAnchor.MiddleLeft,
-                      font_style: FontStyle.Normal);
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = TextNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_text = sp_root.FindPropertyRelative("Text");
-                        XHud_Module_Text txt = (XHud_Module_Text)sp_text.objectReferenceValue;
-                        if (txt != null)
-                        {
-                            #region 图标
-                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
-                            {
-                                XGUI.gui_icon(
-                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
-                                    icon: icon_text,
-                                    color: XHud_Dashboard.Theme_Primary);
-                            }
-                            #endregion
-
-                            #region 名称
-                            string title = "";
-                            string indicator = txt.Indicator;
-                            if (!string.IsNullOrEmpty(indicator))
-                                title += indicator;
-                            else
-                                title += txt.gameObject.name;
-
-                            XGUI.gui_state_displayer_text(
-                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
-                                title: new GUIContent(title),
-                                title_size: XGUIFontSize.M,
-                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
-                                subtitle_size: XGUIFontSize.S,
-                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
-                                margin: new RectOffset(5, 5, 0, 5));
-                            #endregion
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_text = TextNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Text");
-                    EditorGUIUtility.PingObject(sp_text.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * XGUI.GetSingleLineHeight();
-                }
+                drawHeaderCallback = Text_DrawHeader,
+                drawElementCallback = Text_DrawElement,
+                onSelectCallback = Text_OnSelect,
+                elementHeightCallback = Text_ElementHeight,
             };
         }
+        /// <summary>
+        /// 绘制文字列表的表头。
+        /// </summary>
+        private void Text_DrawHeader(Rect rect)
+        {
+            XGUI.gui_label(
+                rect: rect,
+                text: new GUIContent("文字列表"),
+                text_color: Color.white * 0.85f,
+                size: XGUIFontSize.M,
+                offset: new Vector2(5, 0),
+                clipping: XGUI.TryEllipsisClipping(),
+                anchor: TextAnchor.MiddleLeft,
+                font_style: FontStyle.Normal);
+        }
+        /// <summary>
+        /// 绘制文字列表的单个条目。
+        /// <para/>
+        /// 每条目显示：
+        /// <list type="bullet">
+        /// <item><description>图标；</description></item>
+        /// <item><description>文字组件标识名（Indicator / 物体名）。</description></item>
+        /// </list>
+        /// </summary>
+        private void Text_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            SerializedProperty sp_root = TextNodes.GetArrayElementAtIndex(index);
+            if (sp_root != null)
+            {
+                SerializedProperty sp_text = sp_root.FindPropertyRelative("Text");
+                XHud_Module_Text txt = (XHud_Module_Text)sp_text.objectReferenceValue;
+                if (txt != null)
+                {
+                    #region 图标
+                    if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                    {
+                        XGUI.gui_icon(
+                            rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                            icon: icon_text,
+                            color: XHud_Dashboard.Theme_Primary);
+                    }
+                    #endregion
+
+                    #region 名称
+                    string title = "";
+                    string indicator = txt.Indicator;
+                    if (!string.IsNullOrEmpty(indicator))
+                        title += indicator;
+                    else
+                        title += txt.gameObject.name;
+
+                    XGUI.gui_state_displayer_text(
+                        rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                        title: new GUIContent(title),
+                        title_size: XGUIFontSize.M,
+                        subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                        subtitle_size: XGUIFontSize.S,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+                }
+            }
+        }
+        /// <summary>
+        /// 文字列表条目选中回调。
+        /// <para/>
+        /// 点击条目：定位文字组件。
+        /// </summary>
+        private void Text_OnSelect(ReorderableList list)
+        {
+            SerializedProperty sp_text = TextNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Text");
+            EditorGUIUtility.PingObject(sp_text.objectReferenceValue);
+        }
+        /// <summary>
+        /// 文字列表条目高度。
+        /// </summary>
+        private float Text_ElementHeight(int index)
+        {
+            return 1.5f * XGUI.GetSingleLineHeight();
+        }
+        #endregion
+
+        #region 绘制 - Tmp文字列表
+        /// <summary>
+        /// 绘制 Tmp 文字列表。
+        /// <para/>
+        /// 每条目显示 TmpText 组件的标识名（Indicator / 物体名）。
+        /// <para/>
+        /// 点击条目：定位 TmpText 组件。
+        /// </summary>
         public void ReorderableList_Draw_TmpText()
         {
             TmpTextList = new ReorderableList(serializedObject, TmpTextNodes)
@@ -273,72 +390,102 @@ namespace SevenStrikeModules.XHud.Editor
                 displayAdd = false,
                 displayRemove = true,
                 draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    XGUI.gui_label(
-                      rect: rect,
-                      text: new GUIContent("Tmp文字列表"),
-                      text_color: Color.white * 0.85f,
-                      size: XGUIFontSize.M,
-                      offset: new Vector2(5, 0),
-                      clipping: XGUI.TryEllipsisClipping(),
-                      anchor: TextAnchor.MiddleLeft,
-                      font_style: FontStyle.Normal);
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = TmpTextNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_text = sp_root.FindPropertyRelative("TmpText");
-                        XHud_Module_TmpText tmp_txt = (XHud_Module_TmpText)sp_text.objectReferenceValue;
-                        if (tmp_txt != null)
-                        {
-                            #region 图标
-                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
-                            {
-                                XGUI.gui_icon(
-                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
-                                    icon: icon_tmptext,
-                                    color: XHud_Dashboard.Theme_Primary);
-                            }
-                            #endregion
-
-                            #region 名称
-                            string title = "";
-                            string indicator = tmp_txt.Indicator;
-                            if (!string.IsNullOrEmpty(indicator))
-                                title += indicator;
-                            else
-                                title += tmp_txt.gameObject.name;
-
-                            XGUI.gui_state_displayer_text(
-                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
-                                title: new GUIContent(title),
-                                title_size: XGUIFontSize.M,
-                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
-                                subtitle_size: XGUIFontSize.S,
-                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
-                                margin: new RectOffset(5, 5, 0, 5));
-                            #endregion
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_text = TmpTextNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("TmpText");
-                    EditorGUIUtility.PingObject(sp_text.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * XGUI.GetSingleLineHeight();
-                }
+                drawHeaderCallback = TmpText_DrawHeader,
+                drawElementCallback = TmpText_DrawElement,
+                onSelectCallback = TmpText_OnSelect,
+                elementHeightCallback = TmpText_ElementHeight,
             };
         }
+        /// <summary>
+        /// 绘制 Tmp 文字列表的表头。
+        /// </summary>
+        private void TmpText_DrawHeader(Rect rect)
+        {
+            XGUI.gui_label(
+                rect: rect,
+                text: new GUIContent("Tmp文字列表"),
+                text_color: Color.white * 0.85f,
+                size: XGUIFontSize.M,
+                offset: new Vector2(5, 0),
+                clipping: XGUI.TryEllipsisClipping(),
+                anchor: TextAnchor.MiddleLeft,
+                font_style: FontStyle.Normal);
+        }
+        /// <summary>
+        /// 绘制 Tmp 文字列表的单个条目。
+        /// <para/>
+        /// 每条目显示：
+        /// <list type="bullet">
+        /// <item><description>图标；</description></item>
+        /// <item><description>TmpText 组件标识名（Indicator / 物体名）。</description></item>
+        /// </list>
+        /// </summary>
+        private void TmpText_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            SerializedProperty sp_root = TmpTextNodes.GetArrayElementAtIndex(index);
+            if (sp_root != null)
+            {
+                SerializedProperty sp_text = sp_root.FindPropertyRelative("TmpText");
+                XHud_Module_TmpText tmp_txt = (XHud_Module_TmpText)sp_text.objectReferenceValue;
+                if (tmp_txt != null)
+                {
+                    #region 图标
+                    if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                    {
+                        XGUI.gui_icon(
+                            rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                            icon: icon_tmptext,
+                            color: XHud_Dashboard.Theme_Primary);
+                    }
+                    #endregion
+
+                    #region 名称
+                    string title = "";
+                    string indicator = tmp_txt.Indicator;
+                    if (!string.IsNullOrEmpty(indicator))
+                        title += indicator;
+                    else
+                        title += tmp_txt.gameObject.name;
+
+                    XGUI.gui_state_displayer_text(
+                        rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                        title: new GUIContent(title),
+                        title_size: XGUIFontSize.M,
+                        subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                        subtitle_size: XGUIFontSize.S,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+                }
+            }
+        }
+        /// <summary>
+        /// Tmp 文字列表条目选中回调。
+        /// <para/>
+        /// 点击条目：定位 TmpText 组件。
+        /// </summary>
+        private void TmpText_OnSelect(ReorderableList list)
+        {
+            SerializedProperty sp_text = TmpTextNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("TmpText");
+            EditorGUIUtility.PingObject(sp_text.objectReferenceValue);
+        }
+        /// <summary>
+        /// Tmp 文字列表条目高度。
+        /// </summary>
+        private float TmpText_ElementHeight(int index)
+        {
+            return 1.5f * XGUI.GetSingleLineHeight();
+        }
+        #endregion
+
+        #region 绘制 - 按钮列表
+        /// <summary>
+        /// 绘制按钮列表。
+        /// <para/>
+        /// 每条目显示按钮组件的标识名（Indicator / 物体名）。
+        /// <para/>
+        /// 点击条目：定位按钮组件。
+        /// </summary>
         public void ReorderableList_Draw_Button()
         {
             ButtonList = new ReorderableList(serializedObject, ButtonNodes)
@@ -346,70 +493,103 @@ namespace SevenStrikeModules.XHud.Editor
                 displayAdd = false,
                 displayRemove = true,
                 draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    XGUI.gui_label(
-                      rect: rect,
-                      text: new GUIContent("按钮列表"),
-                      text_color: Color.white * 0.85f,
-                      size: XGUIFontSize.M,
-                      offset: new Vector2(5, 0),
-                      clipping: XGUI.TryEllipsisClipping(),
-                      anchor: TextAnchor.MiddleLeft,
-                      font_style: FontStyle.Normal);
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    SerializedProperty sp_root = ButtonNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_btn = sp_root.FindPropertyRelative("Button");
-                        XHud_Module_Button btn = (XHud_Module_Button)sp_btn.objectReferenceValue;
-                        if (btn != null)
-                        {
-                            #region 图标
-                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
-                            {
-                                XGUI.gui_icon(
-                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
-                                    icon: icon_button,
-                                    color: XHud_Dashboard.Theme_Primary);
-                            }
-                            #endregion
-
-                            #region 名称
-                            string title = "";
-                            string indicator = btn.Indicator;
-                            if (!string.IsNullOrEmpty(indicator))
-                                title += indicator;
-                            else
-                                title += btn.gameObject.name;
-
-                            XGUI.gui_state_displayer_text(
-                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
-                                title: new GUIContent(title),
-                                title_size: XGUIFontSize.M,
-                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
-                                subtitle_size: XGUIFontSize.S,
-                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
-                                margin: new RectOffset(5, 5, 0, 5));
-                            #endregion
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_btn = ButtonNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Button");
-                    //Hud_Button btn = (Hud_Button)sp_btn.objectReferenceValue;
-                    EditorGUIUtility.PingObject(sp_btn.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * XGUI.GetSingleLineHeight();
-                }
+                drawHeaderCallback = Button_DrawHeader,
+                drawElementCallback = Button_DrawElement,
+                onSelectCallback = Button_OnSelect,
+                elementHeightCallback = Button_ElementHeight,
             };
         }
+        /// <summary>
+        /// 绘制按钮列表的表头。
+        /// </summary>
+        private void Button_DrawHeader(Rect rect)
+        {
+            XGUI.gui_label(
+                rect: rect,
+                text: new GUIContent("按钮列表"),
+                text_color: Color.white * 0.85f,
+                size: XGUIFontSize.M,
+                offset: new Vector2(5, 0),
+                clipping: XGUI.TryEllipsisClipping(),
+                anchor: TextAnchor.MiddleLeft,
+                font_style: FontStyle.Normal);
+        }
+        /// <summary>
+        /// 绘制按钮列表的单个条目。
+        /// <para/>
+        /// 每条目显示：
+        /// <list type="bullet">
+        /// <item><description>图标；</description></item>
+        /// <item><description>按钮组件标识名（Indicator / 物体名）。</description></item>
+        /// </list>
+        /// </summary>
+        private void Button_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            SerializedProperty sp_root = ButtonNodes.GetArrayElementAtIndex(index);
+            if (sp_root != null)
+            {
+                SerializedProperty sp_btn = sp_root.FindPropertyRelative("Button");
+                XHud_Module_Button btn = (XHud_Module_Button)sp_btn.objectReferenceValue;
+                if (btn != null)
+                {
+                    #region 图标
+                    if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                    {
+                        XGUI.gui_icon(
+                            rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                            icon: icon_button,
+                            color: XHud_Dashboard.Theme_Primary);
+                    }
+                    #endregion
+
+                    #region 名称
+                    string title = "";
+                    string indicator = btn.Indicator;
+                    if (!string.IsNullOrEmpty(indicator))
+                        title += indicator;
+                    else
+                        title += btn.gameObject.name;
+
+                    XGUI.gui_state_displayer_text(
+                        rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                        title: new GUIContent(title),
+                        title_size: XGUIFontSize.M,
+                        subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                        subtitle_size: XGUIFontSize.S,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+                }
+            }
+        }
+        /// <summary>
+        /// 按钮列表条目选中回调。
+        /// <para/>
+        /// 点击条目：定位按钮组件。
+        /// </summary>
+        private void Button_OnSelect(ReorderableList list)
+        {
+            SerializedProperty sp_btn = ButtonNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Button");
+            //Hud_Button btn = (Hud_Button)sp_btn.objectReferenceValue;
+            EditorGUIUtility.PingObject(sp_btn.objectReferenceValue);
+        }
+        /// <summary>
+        /// 按钮列表条目高度。
+        /// </summary>
+        private float Button_ElementHeight(int index)
+        {
+            return 1.5f * XGUI.GetSingleLineHeight();
+        }
+        #endregion
+
+        #region 绘制 - 选项列表
+        /// <summary>
+        /// 绘制选项列表。
+        /// <para/>
+        /// 每条目显示选项组件的标识名（Indicator / 物体名）。
+        /// <para/>
+        /// 点击条目：定位选项组件。
+        /// </summary>
         public void ReorderableList_Draw_Option()
         {
             OptionList = new ReorderableList(serializedObject, OptionNodes)
@@ -417,72 +597,102 @@ namespace SevenStrikeModules.XHud.Editor
                 displayAdd = false,
                 displayRemove = true,
                 draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    XGUI.gui_label(
-                      rect: rect,
-                      text: new GUIContent("选项列表"),
-                      text_color: Color.white * 0.85f,
-                      size: XGUIFontSize.M,
-                      offset: new Vector2(5, 0),
-                      clipping: XGUI.TryEllipsisClipping(),
-                      anchor: TextAnchor.MiddleLeft,
-                      font_style: FontStyle.Normal);
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = OptionNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_opt = sp_root.FindPropertyRelative("Option");
-                        XHud_Module_Option opt = (XHud_Module_Option)sp_opt.objectReferenceValue;
-                        if (opt != null)
-                        {
-                            #region 图标
-                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
-                            {
-                                XGUI.gui_icon(
-                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
-                                    icon: icon_option,
-                                    color: XHud_Dashboard.Theme_Primary);
-                            }
-                            #endregion
-
-                            #region 名称
-                            string title = "";
-                            string indicator = opt.Indicator;
-                            if (!string.IsNullOrEmpty(indicator))
-                                title += indicator;
-                            else
-                                title += opt.gameObject.name;
-
-                            XGUI.gui_state_displayer_text(
-                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
-                                title: new GUIContent(title),
-                                title_size: XGUIFontSize.M,
-                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
-                                subtitle_size: XGUIFontSize.S,
-                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
-                                margin: new RectOffset(5, 5, 0, 5));
-                            #endregion
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_opt = OptionNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Option");
-                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * XGUI.GetSingleLineHeight();
-                }
+                drawHeaderCallback = Option_DrawHeader,
+                drawElementCallback = Option_DrawElement,
+                onSelectCallback = Option_OnSelect,
+                elementHeightCallback = Option_ElementHeight,
             };
         }
+        /// <summary>
+        /// 绘制选项列表的表头。
+        /// </summary>
+        private void Option_DrawHeader(Rect rect)
+        {
+            XGUI.gui_label(
+                rect: rect,
+                text: new GUIContent("选项列表"),
+                text_color: Color.white * 0.85f,
+                size: XGUIFontSize.M,
+                offset: new Vector2(5, 0),
+                clipping: XGUI.TryEllipsisClipping(),
+                anchor: TextAnchor.MiddleLeft,
+                font_style: FontStyle.Normal);
+        }
+        /// <summary>
+        /// 绘制选项列表的单个条目。
+        /// <para/>
+        /// 每条目显示：
+        /// <list type="bullet">
+        /// <item><description>图标；</description></item>
+        /// <item><description>选项组件标识名（Indicator / 物体名）。</description></item>
+        /// </list>
+        /// </summary>
+        private void Option_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            SerializedProperty sp_root = OptionNodes.GetArrayElementAtIndex(index);
+            if (sp_root != null)
+            {
+                SerializedProperty sp_opt = sp_root.FindPropertyRelative("Option");
+                XHud_Module_Option opt = (XHud_Module_Option)sp_opt.objectReferenceValue;
+                if (opt != null)
+                {
+                    #region 图标
+                    if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                    {
+                        XGUI.gui_icon(
+                            rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                            icon: icon_option,
+                            color: XHud_Dashboard.Theme_Primary);
+                    }
+                    #endregion
+
+                    #region 名称
+                    string title = "";
+                    string indicator = opt.Indicator;
+                    if (!string.IsNullOrEmpty(indicator))
+                        title += indicator;
+                    else
+                        title += opt.gameObject.name;
+
+                    XGUI.gui_state_displayer_text(
+                        rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                        title: new GUIContent(title),
+                        title_size: XGUIFontSize.M,
+                        subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                        subtitle_size: XGUIFontSize.S,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+                }
+            }
+        }
+        /// <summary>
+        /// 选项列表条目选中回调。
+        /// <para/>
+        /// 点击条目：定位选项组件。
+        /// </summary>
+        private void Option_OnSelect(ReorderableList list)
+        {
+            SerializedProperty sp_opt = OptionNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Option");
+            EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
+        }
+        /// <summary>
+        /// 选项列表条目高度。
+        /// </summary>
+        private float Option_ElementHeight(int index)
+        {
+            return 1.5f * XGUI.GetSingleLineHeight();
+        }
+        #endregion
+
+        #region 绘制 - 滑动条列表
+        /// <summary>
+        /// 绘制滑动条列表。
+        /// <para/>
+        /// 每条目显示滑动条组件的标识名（Indicator / 物体名）。
+        /// <para/>
+        /// 点击条目：定位滑动条组件。
+        /// </summary>
         public void ReorderableList_Draw_Slider()
         {
             SliderList = new ReorderableList(serializedObject, SliderNodes)
@@ -490,72 +700,102 @@ namespace SevenStrikeModules.XHud.Editor
                 displayAdd = false,
                 displayRemove = true,
                 draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    XGUI.gui_label(
-                      rect: rect,
-                      text: new GUIContent("滑动条列表"),
-                      text_color: Color.white * 0.85f,
-                      size: XGUIFontSize.M,
-                      offset: new Vector2(5, 0),
-                      clipping: XGUI.TryEllipsisClipping(),
-                      anchor: TextAnchor.MiddleLeft,
-                      font_style: FontStyle.Normal);
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = SliderNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_sli = sp_root.FindPropertyRelative("Slider");
-                        XHud_Module_Slider sli = (XHud_Module_Slider)sp_sli.objectReferenceValue;
-                        if (sli != null)
-                        {
-                            #region 图标
-                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
-                            {
-                                XGUI.gui_icon(
-                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
-                                    icon: icon_slider,
-                                    color: XHud_Dashboard.Theme_Primary);
-                            }
-                            #endregion
-
-                            #region 名称
-                            string title = "";
-                            string indicator = sli.Indicator;
-                            if (!string.IsNullOrEmpty(indicator))
-                                title += indicator;
-                            else
-                                title += sli.gameObject.name;
-
-                            XGUI.gui_state_displayer_text(
-                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
-                                title: new GUIContent(title),
-                                title_size: XGUIFontSize.M,
-                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
-                                subtitle_size: XGUIFontSize.S,
-                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
-                                margin: new RectOffset(5, 5, 0, 5));
-                            #endregion
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_opt = SliderNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Slider");
-                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * XGUI.GetSingleLineHeight();
-                }
+                drawHeaderCallback = Slider_DrawHeader,
+                drawElementCallback = Slider_DrawElement,
+                onSelectCallback = Slider_OnSelect,
+                elementHeightCallback = Slider_ElementHeight,
             };
         }
+        /// <summary>
+        /// 绘制滑动条列表的表头。
+        /// </summary>
+        private void Slider_DrawHeader(Rect rect)
+        {
+            XGUI.gui_label(
+                rect: rect,
+                text: new GUIContent("滑动条列表"),
+                text_color: Color.white * 0.85f,
+                size: XGUIFontSize.M,
+                offset: new Vector2(5, 0),
+                clipping: XGUI.TryEllipsisClipping(),
+                anchor: TextAnchor.MiddleLeft,
+                font_style: FontStyle.Normal);
+        }
+        /// <summary>
+        /// 绘制滑动条列表的单个条目。
+        /// <para/>
+        /// 每条目显示：
+        /// <list type="bullet">
+        /// <item><description>图标；</description></item>
+        /// <item><description>滑动条组件标识名（Indicator / 物体名）。</description></item>
+        /// </list>
+        /// </summary>
+        private void Slider_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            SerializedProperty sp_root = SliderNodes.GetArrayElementAtIndex(index);
+            if (sp_root != null)
+            {
+                SerializedProperty sp_sli = sp_root.FindPropertyRelative("Slider");
+                XHud_Module_Slider sli = (XHud_Module_Slider)sp_sli.objectReferenceValue;
+                if (sli != null)
+                {
+                    #region 图标
+                    if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                    {
+                        XGUI.gui_icon(
+                            rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                            icon: icon_slider,
+                            color: XHud_Dashboard.Theme_Primary);
+                    }
+                    #endregion
+
+                    #region 名称
+                    string title = "";
+                    string indicator = sli.Indicator;
+                    if (!string.IsNullOrEmpty(indicator))
+                        title += indicator;
+                    else
+                        title += sli.gameObject.name;
+
+                    XGUI.gui_state_displayer_text(
+                        rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                        title: new GUIContent(title),
+                        title_size: XGUIFontSize.M,
+                        subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                        subtitle_size: XGUIFontSize.S,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+                }
+            }
+        }
+        /// <summary>
+        /// 滑动条列表条目选中回调。
+        /// <para/>
+        /// 点击条目：定位滑动条组件。
+        /// </summary>
+        private void Slider_OnSelect(ReorderableList list)
+        {
+            SerializedProperty sp_opt = SliderNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Slider");
+            EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
+        }
+        /// <summary>
+        /// 滑动条列表条目高度。
+        /// </summary>
+        private float Slider_ElementHeight(int index)
+        {
+            return 1.5f * XGUI.GetSingleLineHeight();
+        }
+        #endregion
+
+        #region 绘制 - 进度条列表
+        /// <summary>
+        /// 绘制进度条列表。
+        /// <para/>
+        /// 每条目显示进度条组件的标识名（Indicator / 物体名）。
+        /// <para/>
+        /// 点击条目：定位进度条组件。
+        /// </summary>
         public void ReorderableList_Draw_Progress()
         {
             ProgressList = new ReorderableList(serializedObject, ProgressNodes)
@@ -563,72 +803,102 @@ namespace SevenStrikeModules.XHud.Editor
                 displayAdd = false,
                 displayRemove = true,
                 draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    XGUI.gui_label(
-                      rect: rect,
-                      text: new GUIContent("进度条列表"),
-                      text_color: Color.white * 0.85f,
-                      size: XGUIFontSize.M,
-                      offset: new Vector2(5, 0),
-                      clipping: XGUI.TryEllipsisClipping(),
-                      anchor: TextAnchor.MiddleLeft,
-                      font_style: FontStyle.Normal);
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = ProgressNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_pro = sp_root.FindPropertyRelative("Progress");
-                        XHud_Module_Progress pro = (XHud_Module_Progress)sp_pro.objectReferenceValue;
-                        if (pro != null)
-                        {
-                            #region 图标
-                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
-                            {
-                                XGUI.gui_icon(
-                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
-                                    icon: icon_progress,
-                                    color: XHud_Dashboard.Theme_Primary);
-                            }
-                            #endregion
-
-                            #region 名称
-                            string title = "";
-                            string indicator = pro.Indicator;
-                            if (!string.IsNullOrEmpty(indicator))
-                                title += indicator;
-                            else
-                                title += pro.gameObject.name;
-
-                            XGUI.gui_state_displayer_text(
-                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
-                                title: new GUIContent(title),
-                                title_size: XGUIFontSize.M,
-                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
-                                subtitle_size: XGUIFontSize.S,
-                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
-                                margin: new RectOffset(5, 5, 0, 5));
-                            #endregion
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_opt = ProgressNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Progress");
-                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * XGUI.GetSingleLineHeight();
-                }
+                drawHeaderCallback = Progress_DrawHeader,
+                drawElementCallback = Progress_DrawElement,
+                onSelectCallback = Progress_OnSelect,
+                elementHeightCallback = Progress_ElementHeight,
             };
         }
+        /// <summary>
+        /// 绘制进度条列表的表头。
+        /// </summary>
+        private void Progress_DrawHeader(Rect rect)
+        {
+            XGUI.gui_label(
+                rect: rect,
+                text: new GUIContent("进度条列表"),
+                text_color: Color.white * 0.85f,
+                size: XGUIFontSize.M,
+                offset: new Vector2(5, 0),
+                clipping: XGUI.TryEllipsisClipping(),
+                anchor: TextAnchor.MiddleLeft,
+                font_style: FontStyle.Normal);
+        }
+        /// <summary>
+        /// 绘制进度条列表的单个条目。
+        /// <para/>
+        /// 每条目显示：
+        /// <list type="bullet">
+        /// <item><description>图标；</description></item>
+        /// <item><description>进度条组件标识名（Indicator / 物体名）。</description></item>
+        /// </list>
+        /// </summary>
+        private void Progress_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            SerializedProperty sp_root = ProgressNodes.GetArrayElementAtIndex(index);
+            if (sp_root != null)
+            {
+                SerializedProperty sp_pro = sp_root.FindPropertyRelative("Progress");
+                XHud_Module_Progress pro = (XHud_Module_Progress)sp_pro.objectReferenceValue;
+                if (pro != null)
+                {
+                    #region 图标
+                    if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                    {
+                        XGUI.gui_icon(
+                            rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                            icon: icon_progress,
+                            color: XHud_Dashboard.Theme_Primary);
+                    }
+                    #endregion
+
+                    #region 名称
+                    string title = "";
+                    string indicator = pro.Indicator;
+                    if (!string.IsNullOrEmpty(indicator))
+                        title += indicator;
+                    else
+                        title += pro.gameObject.name;
+
+                    XGUI.gui_state_displayer_text(
+                        rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                        title: new GUIContent(title),
+                        title_size: XGUIFontSize.M,
+                        subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                        subtitle_size: XGUIFontSize.S,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+                }
+            }
+        }
+        /// <summary>
+        /// 进度条列表条目选中回调。
+        /// <para/>
+        /// 点击条目：定位进度条组件。
+        /// </summary>
+        private void Progress_OnSelect(ReorderableList list)
+        {
+            SerializedProperty sp_opt = ProgressNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Progress");
+            EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
+        }
+        /// <summary>
+        /// 进度条列表条目高度。
+        /// </summary>
+        private float Progress_ElementHeight(int index)
+        {
+            return 1.5f * XGUI.GetSingleLineHeight();
+        }
+        #endregion
+
+        #region 绘制 - 开关列表
+        /// <summary>
+        /// 绘制开关列表。
+        /// <para/>
+        /// 每条目显示开关组件的标识名（Indicator / 物体名）。
+        /// <para/>
+        /// 点击条目：定位开关组件。
+        /// </summary>
         public void ReorderableList_Draw_Toggle()
         {
             ToggleList = new ReorderableList(serializedObject, ToggleNodes)
@@ -636,72 +906,109 @@ namespace SevenStrikeModules.XHud.Editor
                 displayAdd = false,
                 displayRemove = true,
                 draggable = true,
-
-                drawHeaderCallback = rect =>
-                {
-                    XGUI.gui_label(
-                      rect: rect,
-                      text: new GUIContent("开关列表"),
-                      text_color: Color.white * 0.85f,
-                      size: XGUIFontSize.M,
-                      offset: new Vector2(5, 0),
-                      clipping: XGUI.TryEllipsisClipping(),
-                      anchor: TextAnchor.MiddleLeft,
-                      font_style: FontStyle.Normal);
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    float titleheight = rect.y + 7;
-                    float baseheight = rect.y + (rect.height - 25);
-
-                    SerializedProperty sp_root = ToggleNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
-                    {
-                        SerializedProperty sp_tog = sp_root.FindPropertyRelative("Toggle");
-                        XHud_Module_Toggle tog = (XHud_Module_Toggle)sp_tog.objectReferenceValue;
-                        if (tog != null)
-                        {
-                            #region 图标
-                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
-                            {
-                                XGUI.gui_icon(
-                                    rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
-                                    icon: icon_toggle,
-                                    color: XHud_Dashboard.Theme_Primary);
-                            }
-                            #endregion
-
-                            #region 名称
-                            string title = "";
-                            string indicator = tog.Indicator;
-                            if (!string.IsNullOrEmpty(indicator))
-                                title += indicator;
-                            else
-                                title += tog.gameObject.name;
-
-                            XGUI.gui_state_displayer_text(
-                                rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
-                                title: new GUIContent(title),
-                                title_size: XGUIFontSize.M,
-                                subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
-                                subtitle_size: XGUIFontSize.S,
-                                subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
-                                margin: new RectOffset(5, 5, 0, 5));
-                            #endregion
-                        }
-                    }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_opt = ToggleNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Toggle");
-                    EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
-                },
-                elementHeightCallback = index =>
-                {
-                    return 1.5f * XGUI.GetSingleLineHeight();
-                }
+                drawHeaderCallback = Toggle_DrawHeader,
+                drawElementCallback = Toggle_DrawElement,
+                onSelectCallback = Toggle_OnSelect,
+                elementHeightCallback = Toggle_ElementHeight,
             };
         }
+        /// <summary>
+        /// 绘制开关列表的表头。
+        /// </summary>
+        private void Toggle_DrawHeader(Rect rect)
+        {
+            XGUI.gui_label(
+                rect: rect,
+                text: new GUIContent("开关列表"),
+                text_color: Color.white * 0.85f,
+                size: XGUIFontSize.M,
+                offset: new Vector2(5, 0),
+                clipping: XGUI.TryEllipsisClipping(),
+                anchor: TextAnchor.MiddleLeft,
+                font_style: FontStyle.Normal);
+        }
+        /// <summary>
+        /// 绘制开关列表的单个条目。
+        /// <para/>
+        /// 每条目显示：
+        /// <list type="bullet">
+        /// <item><description>图标；</description></item>
+        /// <item><description>开关组件标识名（Indicator / 物体名）。</description></item>
+        /// </list>
+        /// </summary>
+        private void Toggle_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            SerializedProperty sp_root = ToggleNodes.GetArrayElementAtIndex(index);
+            if (sp_root != null)
+            {
+                SerializedProperty sp_tog = sp_root.FindPropertyRelative("Toggle");
+                XHud_Module_Toggle tog = (XHud_Module_Toggle)sp_tog.objectReferenceValue;
+                if (tog != null)
+                {
+                    #region 图标
+                    if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                    {
+                        XGUI.gui_icon(
+                            rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
+                            icon: icon_toggle,
+                            color: XHud_Dashboard.Theme_Primary);
+                    }
+                    #endregion
+
+                    #region 名称
+                    string title = "";
+                    string indicator = tog.Indicator;
+                    if (!string.IsNullOrEmpty(indicator))
+                        title += indicator;
+                    else
+                        title += tog.gameObject.name;
+
+                    XGUI.gui_state_displayer_text(
+                        rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                        title: new GUIContent(title),
+                        title_size: XGUIFontSize.M,
+                        subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
+                        subtitle_size: XGUIFontSize.S,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        margin: new RectOffset(5, 5, 0, 5));
+                    #endregion
+                }
+            }
+        }
+        /// <summary>
+        /// 开关列表条目选中回调。
+        /// <para/>
+        /// 点击条目：定位开关组件。
+        /// </summary>
+        private void Toggle_OnSelect(ReorderableList list)
+        {
+            SerializedProperty sp_opt = ToggleNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Toggle");
+            EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
+        }
+        /// <summary>
+        /// 开关列表条目高度。
+        /// </summary>
+        private float Toggle_ElementHeight(int index)
+        {
+            return 1.5f * XGUI.GetSingleLineHeight();
+        }
+        #endregion
+
+        #region 绘制 - 音效器列表
+        /// <summary>
+        /// 绘制音效器列表。
+        /// <para/>
+        /// 每条目显示：
+        /// <list type="bullet">
+        /// <item><description>音效器标识（Indicator / 物体名）；</description></item>
+        /// <item><description>音量滑块；</description></item>
+        /// <item><description>音高范围滑块；</description></item>
+        /// <item><description>延迟输入框；</description></item>
+        /// <item><description>音效库选择下拉框。</description></item>
+        /// </list>
+        /// <para/>
+        /// 点击条目：定位音效器并触发 <c>Preview_ElementSounder_Item</c> 试听。
+        /// </summary>
         public void ReorderableList_Draw_Sounder()
         {
             SounderList = new ReorderableList(serializedObject, SounderNodes)
@@ -709,198 +1016,217 @@ namespace SevenStrikeModules.XHud.Editor
                 displayAdd = false,
                 displayRemove = true,
                 draggable = true,
-
-                drawHeaderCallback = rect =>
+                drawHeaderCallback = Sounder_DrawHeader,
+                drawElementCallback = Sounder_DrawElement,
+                onSelectCallback = Sounder_OnSelect,
+                elementHeightCallback = Sounder_ElementHeight,
+            };
+        }
+        /// <summary>
+        /// 绘制音效器列表的表头。
+        /// </summary>
+        private void Sounder_DrawHeader(Rect rect)
+        {
+            XGUI.gui_label(
+                rect: rect,
+                text: new GUIContent("音效器列表"),
+                text_color: Color.white * 0.85f,
+                size: XGUIFontSize.M,
+                offset: new Vector2(5, 0),
+                clipping: XGUI.TryEllipsisClipping(),
+                anchor: TextAnchor.MiddleLeft,
+                font_style: FontStyle.Normal);
+        }
+        /// <summary>
+        /// 绘制音效器列表的单个条目。
+        /// <para/>
+        /// 每条目显示：
+        /// <list type="bullet">
+        /// <item><description>图标；</description></item>
+        /// <item><description>音效器标识（Indicator / 物体名）；</description></item>
+        /// <item><description>音量滑块；</description></item>
+        /// <item><description>音高范围滑块；</description></item>
+        /// <item><description>延迟输入框；</description></item>
+        /// <item><description>音效库选择下拉框。</description></item>
+        /// </list>
+        /// </summary>
+        private void Sounder_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            SerializedProperty sp_root = SounderNodes.GetArrayElementAtIndex(index);
+            if (sp_root != null)
+            {
+                SerializedProperty sp_sounder = sp_root.FindPropertyRelative("Sounder");
+                XHud_Element_Sounder sounder = (XHud_Element_Sounder)sp_sounder.objectReferenceValue;
+                if (sounder != null)
                 {
+                    #region 图标
+                    if (XGUI.CurrentWindowWidthThreshold(">", 135f))
+                    {
+                        XGUI.gui_icon(
+                            rect: new Rect(rect.x + 5, rect.y + 6, 10, 10),
+                            icon: icon_sound,
+                            color: XHud_Dashboard.Theme_Primary);
+                    }
+                    #endregion
+
+                    #region 名称
+                    string title = "";
+                    if (!string.IsNullOrEmpty(sounder.Indicator))
+                        title += sounder.Indicator;
+                    else
+                        title += sounder.gameObject.name;
+
                     XGUI.gui_label(
-                        rect: rect,
-                        text: new GUIContent("音效器列表"),
+                        rect: new Rect(rect.x + 20, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
+                        text: new GUIContent(title),
                         text_color: Color.white * 0.85f,
                         size: XGUIFontSize.M,
                         offset: new Vector2(5, 0),
                         clipping: XGUI.TryEllipsisClipping(),
                         anchor: TextAnchor.MiddleLeft,
                         font_style: FontStyle.Normal);
-                },
-                drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    SerializedProperty sp_root = SounderNodes.GetArrayElementAtIndex(index);
-                    if (sp_root != null)
+                    #endregion
+
+                    SerializedObject so_sounder = new SerializedObject(sounder);
+
+                    SerializedProperty sp_PitchMin = so_sounder.FindProperty("Pitch_Min");
+                    SerializedProperty sp_PitchMax = so_sounder.FindProperty("Pitch_Max");
+                    SerializedProperty sp_Delay = so_sounder.FindProperty("DelayTime");
+                    SerializedProperty sp_Vol = so_sounder.FindProperty("Volume");
+                    SerializedProperty sp_SoundName = so_sounder.FindProperty("SoundName");
+
+                    so_sounder.Update();
+
+                    if (XGUI.CurrentWindowWidthThreshold(">", 145f))
                     {
-                        SerializedProperty sp_sounder = sp_root.FindPropertyRelative("Sounder");
-                        XHud_Element_Sounder sounder = (XHud_Element_Sounder)sp_sounder.objectReferenceValue;
-                        if (sounder != null)
+                        #region 音量      
+                        sp_Vol.floatValue = XGUI.gui_slider(
+                            rect: new Rect(rect.x + 5, rect.y + 26, rect.width - 15, XGUI.GetSingleLineHeight()),
+                            title: "音量",
+                            title_size: XGUIFontSize.M,
+                            title_anchor: TextAnchor.MiddleLeft,
+                            title_color: Color.white,
+                            title_width: 30,
+                            title_offset: new Vector2(0, -3),
+                            prop: sp_Vol.floatValue,
+                            left: 0,
+                            right: 1,
+                            slider_height: 20,
+                            limite_width: 230);
+                        sp_Vol.serializedObject.ApplyModifiedProperties();
+                        #endregion
+
+                        #region 音高
+                        xgui_minmax_value mimax = XGUI.gui_slider_min_max(
+                            ref_min: ref BaseScript.SounderNodes[index].Sounder.Pitch_Min,
+                            ref_max: ref BaseScript.SounderNodes[index].Sounder.Pitch_Max,
+                            rect: new Rect(rect.x + 5, rect.y + 50, rect.width - 15, XGUI.GetSingleLineHeight()),
+                            title: "音高",
+                            title_size: XGUIFontSize.M,
+                            title_anchor: TextAnchor.MiddleLeft,
+                            title_color: Color.white,
+                            title_width: 30,
+                            limite_width: 230,
+                            slider_height: 20,
+                            min_field_text: null,
+                            max_field_text: null,
+                            min_limite: -2,
+                            max_limite: 3,
+                            displaystate: XGUI.CurrentWindowWidthThreshold(">", 190f));
+                        sp_PitchMin.floatValue = mimax.min;
+                        sp_PitchMax.floatValue = mimax.max;
+
+                        sp_PitchMin.serializedObject.ApplyModifiedProperties();
+                        sp_PitchMax.serializedObject.ApplyModifiedProperties();
+                        #endregion
+
+                        #region 延迟
+                        sp_Delay.floatValue = XGUI.gui_inputfield(
+                            rect: new Rect(rect.x + 5, rect.y + (XGUI.CurrentWindowWidthThreshold(">", 190f) ? 100 : 75), rect.width - 15, XGUI.GetSingleLineHeight()),
+                            title: "延迟",
+                            prop: sp_Delay.floatValue,
+                            field_fontsize: XGUIFontSize.M,
+                            field_text_offset: Vector2.zero,
+                            field_height: 20,
+                            field_text_color: Color.white,
+                            title_width: 30,
+                            field_text_style: FontStyle.Normal,
+                            field_text_anchor: TextAnchor.MiddleLeft,
+                            field_padding: new RectOffset(5, 5, 0, 0),
+                            field_margin: new RectOffset(0, 0, 0, 0));
+                        sp_Delay.serializedObject.ApplyModifiedProperties();
+                        #endregion
+                    }
+
+                    #region 音效列表
+                    if (HudManager.Hud_Sounds != null)
+                    {
+                        if (XGUI.CurrentWindowWidthThreshold(">", 170f))
                         {
-                            #region 图标
-                            if (XGUI.CurrentWindowWidthThreshold(">", 135f))
-                            {
-                                XGUI.gui_icon(
-                                    rect: new Rect(rect.x + 5, rect.y + 6, 10, 10),
-                                    icon: icon_sound,
-                                    color: XHud_Dashboard.Theme_Primary);
-                            }
-                            #endregion
+                            string[] collist = HudManager.Hud_Sounds.SoundLibrary_GetSoundNames();
+                            sp_SoundName.stringValue = XGUI.gui_string_popup(
+                                rect: new Rect(rect.x + 5, rect.y + (XGUI.CurrentWindowWidthThreshold(">", 190f) ? 128 : 103), XGUI.GetCurrentWindowWidth() - 58, XGUI.GetSingleLineHeight()),
+                                title: "音效",
+                                title_color: Color.white,
+                                title_size: XGUIFontSize.M,
+                                title_font_style: FontStyle.Normal,
+                                title_padding: new RectOffset(0, 0, 0, 0),
+                                title_width: 40,
+                                prop: sp_SoundName,
+                                options: collist,
+                                opt_text_size: XGUIFontSize.M,
+                                opt_text_color: Color.black,
+                                opt_text_padding: new RectOffset(10, 10, 0, 0),
+                                opt_anchor: TextAnchor.MiddleCenter,
+                                opt_font_style: FontStyle.Normal,
+                                opt_bg_fill: XGUIGroup.实体,
+                                opt_bg_color: XGUIColor.亮白,
+                                opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                                icon_arrow_color: Color.black);
 
-                            #region 名称
-                            string title = "";
-                            if (!string.IsNullOrEmpty(sounder.Indicator))
-                                title += sounder.Indicator;
-                            else
-                                title += sounder.gameObject.name;
-
-                            XGUI.gui_label(
-                                rect: new Rect(rect.x + 20, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
-                                text: new GUIContent(title),
-                                text_color: Color.white * 0.85f,
-                                size: XGUIFontSize.M,
-                                offset: new Vector2(5, 0),
-                                clipping: XGUI.TryEllipsisClipping(),
-                                anchor: TextAnchor.MiddleLeft,
-                                font_style: FontStyle.Normal);
-                            #endregion
-
-                            SerializedObject so_sounder = new SerializedObject(sounder);
-
-                            SerializedProperty sp_PitchMin = so_sounder.FindProperty("Pitch_Min");
-                            SerializedProperty sp_PitchMax = so_sounder.FindProperty("Pitch_Max");
-                            SerializedProperty sp_Delay = so_sounder.FindProperty("DelayTime");
-                            SerializedProperty sp_Vol = so_sounder.FindProperty("Volume");
-                            SerializedProperty sp_SoundName = so_sounder.FindProperty("SoundName");
-
-                            so_sounder.Update();
-
-                            if (XGUI.CurrentWindowWidthThreshold(">", 145f))
-                            {
-                                #region 音量      
-                                sp_Vol.floatValue = XGUI.gui_slider(
-                                    rect: new Rect(rect.x + 5, rect.y + 26, rect.width - 15, XGUI.GetSingleLineHeight()),
-                                    title: "音量",
-                                    title_size: XGUIFontSize.M,
-                                    title_anchor: TextAnchor.MiddleLeft,
-                                    title_color: Color.white,
-                                    title_width: 30,
-                                    title_offset: new Vector2(0, -3),
-                                    prop: sp_Vol.floatValue,
-                                    left: 0,
-                                    right: 1,
-                                    slider_height: 20,
-                                    limite_width: 230);
-                                sp_Vol.serializedObject.ApplyModifiedProperties();
-                                #endregion
-
-                                #region 音高
-                                xgui_minmax_value mimax = XGUI.gui_slider_min_max(
-                                    ref_min: ref BaseScript.SounderNodes[index].Sounder.Pitch_Min,
-                                    ref_max: ref BaseScript.SounderNodes[index].Sounder.Pitch_Max,
-                                    rect: new Rect(rect.x + 5, rect.y + 50, rect.width - 15, XGUI.GetSingleLineHeight()),
-                                    title: "音高",
-                                    title_size: XGUIFontSize.M,
-                                    title_anchor: TextAnchor.MiddleLeft,
-                                    title_color: Color.white,
-                                    title_width: 30,
-                                    limite_width: 230,
-                                    slider_height: 20,
-                                    min_field_text: null,
-                                    max_field_text: null,
-                                    min_limite: -2,
-                                    max_limite: 3,
-                                    displaystate: XGUI.CurrentWindowWidthThreshold(">", 190f));
-                                sp_PitchMin.floatValue = mimax.min;
-                                sp_PitchMax.floatValue = mimax.max;
-
-                                sp_PitchMin.serializedObject.ApplyModifiedProperties();
-                                sp_PitchMax.serializedObject.ApplyModifiedProperties();
-                                #endregion
-
-                                #region 延迟
-                                sp_Delay.floatValue = XGUI.gui_inputfield(
-                                    rect: new Rect(rect.x + 5, rect.y + (XGUI.CurrentWindowWidthThreshold(">", 190f) ? 100 : 75), rect.width - 15, XGUI.GetSingleLineHeight()),
-                                    title: "延迟",
-                                    prop: sp_Delay.floatValue,
-                                    field_fontsize: XGUIFontSize.M,
-                                    field_text_offset: Vector2.zero,
-                                    field_height: 20,
-                                    field_text_color: Color.white,
-                                    title_width: 30,
-                                    field_text_style: FontStyle.Normal,
-                                    field_text_anchor: TextAnchor.MiddleLeft,
-                                    field_padding: new RectOffset(5, 5, 0, 0),
-                                    field_margin: new RectOffset(0, 0, 0, 0));
-                                sp_Delay.serializedObject.ApplyModifiedProperties();
-                                #endregion
-                            }
-
-                            #region 音效列表
-                            if (HudManager.Hud_Sounds != null)
-                            {
-                                if (XGUI.CurrentWindowWidthThreshold(">", 170f))
-                                {
-                                    string[] collist = HudManager.Hud_Sounds.SoundLibrary_GetSoundNames();
-                                    sp_SoundName.stringValue = XGUI.gui_string_popup(
-                                        rect: new Rect(rect.x + 5, rect.y + (XGUI.CurrentWindowWidthThreshold(">", 190f) ? 128 : 103), XGUI.GetCurrentWindowWidth() - 58, XGUI.GetSingleLineHeight()),
-                                        title: "音效",
-                                        title_color: Color.white,
-                                        title_size: XGUIFontSize.M,
-                                        title_font_style: FontStyle.Normal,
-                                        title_padding: new RectOffset(0, 0, 0, 0),
-                                        title_width: 40,
-                                        prop: sp_SoundName,
-                                        options: collist,
-                                        opt_text_size: XGUIFontSize.M,
-                                        opt_text_color: Color.black,
-                                        opt_text_padding: new RectOffset(10, 10, 0, 0),
-                                        opt_anchor: TextAnchor.MiddleCenter,
-                                        opt_font_style: FontStyle.Normal,
-                                        opt_bg_fill: XGUIGroup.实体,
-                                        opt_bg_color: XGUIColor.亮白,
-                                        opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
-                                        icon_arrow_color: Color.black);
-
-                                    sp_SoundName.serializedObject.ApplyModifiedProperties();
-                                }
-                            }
-                            #endregion
-
-                            so_sounder.ApplyModifiedProperties();
+                            sp_SoundName.serializedObject.ApplyModifiedProperties();
                         }
                     }
-                },
-                onSelectCallback = (ReorderableList list) =>
-                {
-                    SerializedProperty sp_sounder = SounderNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Sounder");
-                    EditorGUIUtility.PingObject(sp_sounder.objectReferenceValue);
-
-                    #region 播放音效
-                    SerializedObject so_sod = new SerializedObject((XHud_Element_Sounder)sp_sounder.objectReferenceValue);
-                    SerializedProperty sp_name = so_sod.FindProperty("SoundName");
-                    SerializedProperty sp_vol = so_sod.FindProperty("Volume");
-                    SerializedProperty sp_delay = so_sod.FindProperty("DelayTime");
-                    SerializedProperty sp_pit_min = so_sod.FindProperty("Pitch_Min");
-                    SerializedProperty sp_pit_max = so_sod.FindProperty("Pitch_Max");
-                    SerializedProperty sp_userandom = so_sod.FindProperty("UseRandomPitch");
-
-                    float x_vol = sp_vol.floatValue;
-                    float x_pit_min = sp_pit_min.floatValue;
-                    float x_pit_max = sp_pit_max.floatValue;
-                    float x_delay = sp_delay.floatValue;
-                    bool x_userandom = false;
-                    if (sp_userandom.intValue == 1)
-                        x_userandom = true;
-
-                    AudioClip x_clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(sp_name.stringValue);
-                    Preivew_HudSounder_CoroutineList_Stop.Add(XCoroutineUtility.xec_StartCoroutineOwnerless(Preview_XHudSounder_Play(x_vol, x_pit_min, x_pit_max, x_userandom, x_clip, x_delay)));
                     #endregion
-                },
-                elementHeightCallback = index =>
-                {
-                    return (XGUI.CurrentWindowWidthThreshold(">", 190f) ? 8.5f : 7) * XGUI.GetSingleLineHeight();
-                }
-            };
-        }
 
-        #region Gets
+                    so_sounder.ApplyModifiedProperties();
+                }
+            }
+        }
         /// <summary>
-        /// 获取所有图元控制器
+        /// 音效器列表条目选中回调。
+        /// <para/>
+        /// 点击条目：定位音效器并触发 <c>Preview_ElementSounder_Item</c> 试听。
+        /// </summary>
+        private void Sounder_OnSelect(ReorderableList list)
+        {
+            SerializedProperty sp_sounder = SounderNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Sounder");
+            EditorGUIUtility.PingObject(sp_sounder.objectReferenceValue);
+
+            #region 播放音效
+            XHud_Element_Sounder sounder = (XHud_Element_Sounder)sp_sounder.objectReferenceValue;
+            if (sounder != null)
+            {
+                Preview_ElementSounder_Item(sounder);
+            }
+            #endregion
+        }
+        /// <summary>
+        /// 音效器列表条目高度。
+        /// </summary>
+        private float Sounder_ElementHeight(int index)
+        {
+            return (XGUI.CurrentWindowWidthThreshold(">", 190f) ? 8.5f : 7) * XGUI.GetSingleLineHeight();
+        }
+        #endregion
+
+        #region 工具 - 子组件收集
+        /// <summary>
+        /// 收集所有子图元控制器。
+        /// <para/>
+        /// 过滤规则：父级为按钮 / 选项 / 滑动条 / 进度条 / 开关的控制器不收集。
+        /// <para/>
+        /// 增量更新：移除已不存在的控制器，添加新增的控制器。
         /// </summary>
         private void GetPrimitivesTween()
         {
@@ -1107,8 +1433,11 @@ namespace SevenStrikeModules.XHud.Editor
             }
             serializedObject.ApplyModifiedProperties();
         }
+
         /// <summary>
-        /// 获取所有文字
+        /// 收集所有文字组件（XHud_Module_Text）。
+        /// <para/>
+        /// 过滤规则：父级为按钮 / 选项 / 滑动条 / 进度条 / 开关的文字不收集。
         /// </summary>
         private void GetAllText()
         {
@@ -1263,8 +1592,11 @@ namespace SevenStrikeModules.XHud.Editor
             }
             serializedObject.ApplyModifiedProperties();
         }
+
         /// <summary>
-        /// 获取所有Tmp文字
+        /// 收集所有 Tmp 文字组件（XHud_Module_TmpText）。
+        /// <para/>
+        /// 过滤规则：父级为按钮 / 选项 / 滑动条 / 进度条 / 开关的文字不收集。
         /// </summary>
         private void GetAllTmpText()
         {
@@ -1419,8 +1751,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             serializedObject.ApplyModifiedProperties();
         }
+
         /// <summary>
-        /// 获取所有选项
+        /// 收集所有选项组件（XHud_Module_Option）。
         /// </summary>
         private void GetAllOptions()
         {
@@ -1533,8 +1866,9 @@ namespace SevenStrikeModules.XHud.Editor
                 sp_nodes.serializedObject.ApplyModifiedProperties();
             }
         }
+
         /// <summary>
-        /// 获取所有滑动条
+        /// 收集所有滑动条组件（XHud_Module_Slider）。
         /// </summary>
         private void GetAllSliders()
         {
@@ -1647,8 +1981,11 @@ namespace SevenStrikeModules.XHud.Editor
                 sp_nodes.serializedObject.ApplyModifiedProperties();
             }
         }
+
         /// <summary>
-        /// 获取所有按钮
+        /// 收集所有按钮组件（XHud_Module_Button）。
+        /// <para/>
+        /// 过滤规则：父级为选项的按钮不收集。
         /// </summary>
         private void GetAllButtons()
         {
@@ -1767,8 +2104,9 @@ namespace SevenStrikeModules.XHud.Editor
                 sp_nodes.serializedObject.ApplyModifiedProperties();
             }
         }
+
         /// <summary>
-        /// 获取所有进度条
+        /// 收集所有进度条组件（XHud_Module_Progress）。
         /// </summary>
         private void GetAllProgress()
         {
@@ -1881,8 +2219,9 @@ namespace SevenStrikeModules.XHud.Editor
                 sp_nodes.serializedObject.ApplyModifiedProperties();
             }
         }
+
         /// <summary>
-        /// 获取所有开关
+        /// 收集所有开关组件（XHud_Module_Toggle）。
         /// </summary>
         private void GetAllToggle()
         {
@@ -1995,8 +2334,11 @@ namespace SevenStrikeModules.XHud.Editor
                 sp_nodes.serializedObject.ApplyModifiedProperties();
             }
         }
+
         /// <summary>
-        /// 获取所有音效器
+        /// 收集所有音效器组件（XHud_Element_Sounder）。
+        /// <para/>
+        /// 过滤规则：父级为按钮 / 选项 / 滑动条 / 进度条 / 开关的音效器不收集。
         /// </summary>
         private void GetAllSounder()
         {
@@ -2127,8 +2469,17 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
+        #region 工具 - 清理
         /// <summary>
-        /// 清理所有无效控件节点
+        /// 清理所有无效的子组件节点。
+        /// <para/>
+        /// 判定：节点中对应的组件引用为 null。
+        /// <para/>
+        /// 覆盖：
+        /// <list type="bullet">
+        /// <item><description>TmpText / Text；</description></item>
+        /// <item><description>Button / Slider / Option / Progress / Toggle。</description></item>
+        /// </list>
         /// </summary>
         private void ClearEmptyNodes()
         {
@@ -2157,7 +2508,7 @@ namespace SevenStrikeModules.XHud.Editor
                 // 检查是否为 null 或类型不匹配
                 if (BaseScript.ButtonNodes[i].Button == null)
                 {
-                    TextNodes.DeleteArrayElementAtIndex(i);
+                    ButtonNodes.DeleteArrayElementAtIndex(i);
                 }
             }
             ButtonNodes.serializedObject.ApplyModifiedProperties();
@@ -2202,5 +2553,6 @@ namespace SevenStrikeModules.XHud.Editor
             }
             ToggleNodes.serializedObject.ApplyModifiedProperties();
         }
+        #endregion
     }
 }

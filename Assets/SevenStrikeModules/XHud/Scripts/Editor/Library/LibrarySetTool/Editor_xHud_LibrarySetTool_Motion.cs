@@ -26,58 +26,155 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEngine;
 
+    #region 编辑器窗口
+    /// <summary>
+    /// XHud 元素动效资源修改器窗口。
+    /// <para/>
+    /// 提供动效模版的名称 / 说明 / 类型编辑，位移 / 旋转 / 透明度三类参数调整，
+    /// 以及动画结束基准的快速切换功能。
+    /// <para/>
+    /// 支持添加到库 / 修改库源参数 / 修改生成器项参数三种模式。
+    /// </summary>
     public class Editor_XHud_LibrarySetTool_Motion : EditorWindow
     {
+        #region 字段 - 序列化对象 / 属性
+        /// <summary>
+        /// 用于序列化当前窗口的自定义字段。
+        /// </summary>
         private SerializedObject BaseObject;
+        /// <summary>
+        /// 本窗口用到的全部序列化属性引用。
+        /// <para/>
+        /// 统一在 <see cref="OnEnable"/> 里初始化。
+        /// 覆盖：动效名称 / 说明 / 生成参数 / 回收参数 / 动效类型。
+        /// </summary>
         private SerializedProperty sp_LibName, sp_Description, sp_CreateArgs, sp_RecycleArgs, sp_Type;
+        #endregion
 
+        #region 字段 - 数据
+        /// <summary>
+        /// 动效类型（生成器 / 回收器）。
+        /// </summary>
         [SerializeField]
         private HudElementMotionType Type;
-        private Texture2D icon;
-
-        private Texture2D icon_libsetter_motion_movement_r;
-        private Texture2D icon_libsetter_motion_movement_p;
-        private Texture2D icon_libsetter_motion_rotator_r;
-        private Texture2D icon_libsetter_motion_rotator_p;
-        private Texture2D icon_libsetter_motion_alpha_r;
-        private Texture2D icon_libsetter_motion_alpha_p;
-
-        public LibrarySetterMode LibrarySetterMode;
-
+        /// <summary>
+        /// 动效名称。
+        /// </summary>
         [SerializeField]
         public string LibName;
+        /// <summary>
+        /// 动效说明文字。
+        /// </summary>
         [SerializeField]
         public string Description;
-
         /// <summary>
-        /// 按钮高度
+        /// 生成动效参数。
+        /// </summary>
+        public Motion_Creator CreateArgs;
+        /// <summary>
+        /// 回收动效参数。
+        /// </summary>
+        public Motion_Recycler RecycleArgs;
+        /// <summary>
+        /// 修改的库项索引。
+        /// </summary>
+        public int ModifiedIndex;
+        /// <summary>
+        /// 目标元素动效库。
+        /// </summary>
+        private XHud_Library_Motion Target_Hud_MotionLibrary;
+        /// <summary>
+        /// 库设置模式（添加到库 / 修改库源参数 / 修改生成器项参数）。
+        /// </summary>
+        public LibrarySetterMode LibrarySetterMode;
+        #endregion
+
+        #region 字段 - 图标
+        /// <summary>
+        /// 窗口 Logo 图标。
+        /// </summary>
+        private Texture2D icon;
+        /// <summary>
+        /// 位移基准释放图标。
+        /// </summary>
+        private Texture2D icon_libsetter_motion_movement_r;
+        /// <summary>
+        /// 位移基准按下图标。
+        /// </summary>
+        private Texture2D icon_libsetter_motion_movement_p;
+        /// <summary>
+        /// 旋转基准释放图标。
+        /// </summary>
+        private Texture2D icon_libsetter_motion_rotator_r;
+        /// <summary>
+        /// 旋转基准按下图标。
+        /// </summary>
+        private Texture2D icon_libsetter_motion_rotator_p;
+        /// <summary>
+        /// 透明度基准释放图标。
+        /// </summary>
+        private Texture2D icon_libsetter_motion_alpha_r;
+        /// <summary>
+        /// 透明度基准按下图标。
+        /// </summary>
+        private Texture2D icon_libsetter_motion_alpha_p;
+        #endregion
+
+        #region 字段 - 布局
+        /// <summary>
+        /// 按钮高度。
         /// </summary>
         private float ButtonHeight = 25;
         /// <summary>
-        /// 按钮间距
+        /// 按钮间距。
         /// </summary>
         private float ButtonDistance = 15;
-
+        /// <summary>
+        /// 确认按钮文字。
+        /// </summary>
         public string ButtonText_Ok;
+        /// <summary>
+        /// 取消按钮文字。
+        /// </summary>
         public string ButtonText_Cancel;
-
+        /// <summary>
+        /// 基准按钮图标尺寸。
+        /// </summary>
         private float IconSize = 35;
+        /// <summary>
+        /// 参数面板工具栏当前索引。
+        /// </summary>
         private int ToolbarIndex = 0;
-
-        public Motion_Creator CreateArgs;
-        public Motion_Recycler RecycleArgs;
-
-        public int ModifiedIndex;
-        private XHud_Library_Motion Target_Hud_MotionLibrary;
+        /// <summary>
+        /// 窗口标题。
+        /// </summary>
         string Title;
-
+        /// <summary>
+        /// 模版信息区矩形缓存。
+        /// </summary>
         Rect rect_info;
+        #endregion
 
+        #region 生命周期
+        /// <summary>
+        /// Unity 禁用回调。
+        /// <para/>
+        /// 当前实现为空，保留以支持后续清理逻辑。
+        /// </summary>
         private void OnDisable()
         {
 
         }
-
+        /// <summary>
+        /// Unity 启用回调。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>构建序列化对象并绑定属性；</description></item>
+        /// <item><description>加载全部图标资源；</description></item>
+        /// <item><description>初始化默认名称与说明文字。</description></item>
+        /// </list>
+        /// </summary>
         private void OnEnable()
         {
             BaseObject = new SerializedObject(this);
@@ -99,21 +196,29 @@ namespace SevenStrikeModules.XHud.Editor
             Description = "动效参数说明内容";
             LibName = "动效名称";
         }
-
+        /// <summary>
+        /// Unity 销毁回调。
+        /// <para/>
+        /// 关闭窗口时让场景视图重新获得焦点。
+        /// </summary>
         private void OnDestroy()
         {
             GetWindow<SceneView>().Focus();
         }
-
+        /// <summary>
+        /// 绘制窗口 GUI。
+        /// <para/>
+        /// 按自上而下的顺序绘制：
+        /// 抬头 → 结束基准切换 → 模版信息 → 动效类型 → 生成锚点（生成器模式） →
+        /// 位移 / 旋转 / 透明度参数（Tab 工具栏） → 结束时机 → 按钮。
+        /// <para/>
+        /// 支持 Escape 键关闭窗口与点击空白区域失焦。
+        /// </summary>
         private void OnGUI()
         {
             BaseObject.Update();
 
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             #region 抬头
             Rect rect = new Rect(0, 0, position.width, position.height);
@@ -134,7 +239,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent(Title),
                 text_color: Color.white,
                 size: XGUIFontSize.L,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 font: XGUI.GetFont("xg-heavy"));
 
             // 分割线
@@ -154,7 +259,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text_color: Color.white * 0.7f,
                 size: XGUIFontSize.M,
                 anchor: TextAnchor.UpperLeft,
-                clipping: clipping);
+                clipping: clipping_ellipsis);
             #endregion
 
             Rect rect_mark = new Rect(rect.x + (rect.width - 80), rect.y + 15, 65, XGUI.GetSingleLineHeight());
@@ -168,7 +273,7 @@ namespace SevenStrikeModules.XHud.Editor
                 size: XGUIFontSize.S,
                 anchor: TextAnchor.MiddleCenter,
                 offset: new Vector2(0, -2),
-                clipping: clipping);
+                clipping: clipping_ellipsis);
 
             //动效动画结束基准状态
             SerializedProperty sp_MotionAnimateEndState_crc = sp_CreateArgs.FindPropertyRelative("MotionAnimateEndState");
@@ -675,9 +780,19 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
         }
+        #endregion
 
+        #region 工具 - 数据操作
         /// <summary>
-        /// 发送到库
+        /// 发送动效到目标动效库（添加到库模式）。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>校验名称是否为空；</description></item>
+        /// <item><description>检测名称是否重复；</description></item>
+        /// <item><description>构造动效数据并添加到目标库；</description></item>
+        /// <item><description>弹窗提示添加完成并关闭窗口。</description></item>
+        /// </list>
         /// </summary>
         private void SendToLibrary()
         {
@@ -743,9 +858,10 @@ namespace SevenStrikeModules.XHud.Editor
                 Close();
             }
         }
-
         /// <summary>
-        /// 从库更新
+        /// 更新到目标动效库（修改库源参数模式）。
+        /// <para/>
+        /// 用当前编辑的名称、类型、说明与动效参数替换目标库中指定索引的动效项，然后关闭窗口。
         /// </summary>
         private void UpdateToLibrary()
         {
@@ -756,94 +872,103 @@ namespace SevenStrikeModules.XHud.Editor
 
             Close();
         }
+        #endregion
 
+        #region 设置接口
         /// <summary>
-        /// 设置动效- 类型
+        /// 设置动效类型。
         /// </summary>
-        /// <param name="eles"></param>
+        /// <param name="type">动效类型（生成器 / 回收器）</param>
         public void SetElementMotionType(HudElementMotionType type)
         {
             Type = type;
         }
-
         /// <summary>
-        /// 设置动效- 生成
+        /// 设置生成动效参数。
         /// </summary>
-        /// <param name="eles"></param>
+        /// <param name="creator">生成动效参数</param>
         public void SetElementMotion(Motion_Creator creator)
         {
             CreateArgs = creator;
         }
-
         /// <summary>
-        /// 设置动效 - 回收
+        /// 设置回收动效参数。
         /// </summary>
-        /// <param name="eles"></param>
+        /// <param name="recycle">回收动效参数</param>
         public void SetElementMotion(Motion_Recycler recycle)
         {
             RecycleArgs = recycle;
         }
-
         /// <summary>
-        /// 设置动效 - 全部
+        /// 同时设置生成与回收动效参数。
         /// </summary>
+        /// <param name="creator">生成动效参数</param>
+        /// <param name="recycle">回收动效参数</param>
         public void SetElementMotion(Motion_Creator creator, Motion_Recycler recycle)
         {
             CreateArgs = creator;
             RecycleArgs = recycle;
         }
-
         /// <summary>
-        /// 设置按钮文字
+        /// 设置按钮文字（确认 / 取消）。
         /// </summary>
-        /// <param name="ok"></param>
-        /// <param name="cancel"></param>
+        /// <param name="ok">确认按钮文字</param>
+        /// <param name="cancel">取消按钮文字</param>
         public void SetButtonText(string ok, string cancel)
         {
             ButtonText_Cancel = cancel;
             ButtonText_Ok = ok;
         }
-
         /// <summary>
-        /// 设置按钮文字
+        /// 设置确认按钮文字。
         /// </summary>
-        /// <param name="ok"></param>
+        /// <param name="ok">确认按钮文字</param>
         public void SetButtonText(string ok)
         {
             ButtonText_Ok = ok;
         }
-
         /// <summary>
-        /// 设置模版基础信息（针对从库源修改更新使用）
+        /// 设置模版基础信息（针对从库源修改更新使用）。
         /// </summary>
-        /// <param name="libname"></param>
-        /// <param name="decription"></param>
+        /// <param name="libname">动效名称</param>
+        /// <param name="decription">动效说明</param>
         public void SetInfo(string libname, string decription)
         {
             LibName = libname;
             Description = decription;
         }
-
         /// <summary>
-        /// 设置标题
+        /// 设置标题。
         /// </summary>
-        /// <param name="title"></param>
+        /// <param name="title">标题文字</param>
         public void SetTitle(string title)
         {
             Title = title;
         }
-
         /// <summary>
-        /// 设置为添加到库模式还是修改库源参数模式
+        /// 设置库设置模式（添加到库 / 修改库源参数 / 修改生成器项参数）。
         /// </summary>
-        /// <param name="mode"></param>
+        /// <param name="mode">库设置模式</param>
         public void SetLibrarySetterMode(LibrarySetterMode mode)
         {
             LibrarySetterMode = mode;
         }
-
         /// <summary>
-        /// 控件按钮
+        /// 设置目标元素动效库。
+        /// </summary>
+        /// <param name="lib">目标动效库</param>
+        public void SetTarget_Hud_MotionLibrary(XHud_Library_Motion lib)
+        {
+            Target_Hud_MotionLibrary = lib;
+        }
+        #endregion
+
+        #region 按钮
+        /// <summary>
+        /// 绘制底部按钮区（取消 / 确认）。
+        /// <para/>
+        /// 确认按钮根据 <see cref="LibrarySetterMode"/> 决定调用
+        /// <see cref="SendToLibrary"/> / <see cref="UpdateToLibrary"/> 或直接关闭窗口。
         /// </summary>
         private void Buttons()
         {
@@ -920,10 +1045,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
         }
-
-        public void SetTarget_Hud_MotionLibrary(XHud_Library_Motion lib)
-        {
-            Target_Hud_MotionLibrary = lib;
-        }
+        #endregion
     }
+    #endregion
 }

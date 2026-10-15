@@ -28,64 +28,221 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor.Callbacks;
     using UnityEngine;
 
+    /// <summary>
+    /// XHud 诊断/概况面板窗口。
+    /// <para/>
+    /// <list type="bullet">
+    /// <item><description>提供「诊断」「库配置」「分辨率」「统计」四个分页面板。</description></item>
+    /// <item><description>诊断页：检查管理器基础配置与可选模组装配状态。</description></item>
+    /// <item><description>库配置页：展示各资源库与元素库的装配与元素数量，支持一键打开。</description></item>
+    /// <item><description>分辨率页：可视化展示当前分辨率与相机参数概览。</description></item>
+    /// <item><description>统计页：分类统计场景中元素/图元/音效/控件/文字数量。</description></item>
+    /// </list>
+    /// </summary>
     public class Editor_XHud_Tool_Diagnostic : EditorWindow
     {
+        #region 字段 - 序列化
+        /// <summary>
+        /// 当前窗口的序列化对象。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中构造，用于序列化窗口内字段。</description></item>
+        /// </list>
+        /// </summary>
         private SerializedObject BaseObject;
-
-        private static Editor_XHud_Tool_Diagnostic window;
-
+        /// <summary>
+        /// 渐变色卡颜色列表。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>序列化字段，随窗口状态保存。</description></item>
+        /// </list>
+        /// </summary>
         [SerializeField]
         public List<Color> ColorGradient = new List<Color>();
+        #endregion
 
-        private Vector2 list_scrollPosition;
-        private List<float> list_cachedItemHeights;
-        private bool list_heightsDirty = true;
-
-        private Texture2D logo, icon_element, icon_primitive, icon_sounder, icon_button, icon_toggle, icon_progress, icon_slider, icon_option, icon_text, icon_tmptext, sizebg, perspective, orthorgrphic, status_dot;
-
+        #region 字段 - 窗口引用
         /// <summary>
-        /// Editor列表项高度
+        /// 当前窗口实例引用。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由 <c>Init</c> 创建窗口时赋值。</description></item>
+        /// </list>
+        /// </summary>
+        private static Editor_XHud_Tool_Diagnostic window;
+        #endregion
+
+        #region 字段 - 列表滚动
+        /// <summary>
+        /// 列表滚动位置。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>用于「库配置」页中元素库列表的滚动。</description></item>
+        /// </list>
+        /// </summary>
+        private Vector2 list_scrollPosition;
+        /// <summary>
+        /// 列表项高度缓存。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由滚动视图内部维护，用于计算总高度。</description></item>
+        /// </list>
+        /// </summary>
+        private List<float> list_cachedItemHeights;
+        /// <summary>
+        /// 列表高度脏标记。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>为 <c>true</c> 时表示需要重算列表项高度。</description></item>
+        /// </list>
+        /// </summary>
+        private bool list_heightsDirty = true;
+        #endregion
+
+        #region 字段 - 图标
+        /// <summary>
+        /// 本窗口所使用的图标资源集合。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>诊断页图标：<c>logo</c> / <c>sizebg</c> / <c>perspective</c> / <c>orthorgrphic</c> / <c>status_dot</c>。</description></item>
+        /// <item><description>统计页图标：<c>icon_element</c> / <c>icon_primitive</c> / <c>icon_sounder</c> / <c>icon_option</c> / <c>icon_button</c>。</description></item>
+        /// <item><description>统计页图标续：<c>icon_toggle</c> / <c>icon_progress</c> / <c>icon_slider</c> / <c>icon_text</c> / <c>icon_tmptext</c>。</description></item>
+        /// </list>
+        /// </summary>
+        private Texture2D logo, icon_element, icon_primitive, icon_sounder, icon_button, icon_toggle, icon_progress, icon_slider, icon_option, icon_text, icon_tmptext, sizebg, perspective, orthorgrphic, status_dot;
+        #endregion
+
+        #region 字段 - 布局参数
+        /// <summary>
+        /// Editor 列表项高度。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>默认 26。</description></item>
+        /// </list>
         /// </summary>
         public float itemHeight = 26;
         /// <summary>
-        /// 可视区域显示的元素数量
+        /// 可视区域显示的元素数量。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>默认 20。</description></item>
+        /// </list>
         /// </summary>
         public int visibleItemCount = 20;
         /// <summary>
-        /// 列表滚动位置
+        /// 渐变色卡滚动位置。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>用于渐变色卡区域的滚动。</description></item>
+        /// </list>
         /// </summary>
         public Vector2 GradientColors_Scroller;
+        #endregion
 
+        #region 字段 - 状态
         /// <summary>
-        /// 选中项索引号
+        /// 选中项索引号。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>默认 0。</description></item>
+        /// </list>
         /// </summary>
         public int SelectedIndex = 0;
         /// <summary>
-        /// 状态面板索引号
+        /// 状态面板索引号。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>0 诊断 / 1 库配置 / 2 分辨率 / 3 统计。</description></item>
+        /// </list>
         /// </summary>
         public int diagnostic_panel_index = 0;
+        /// <summary>
+        /// 主色十六进制字符串缓存。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中由主题色生成。</description></item>
+        /// </list>
+        /// </summary>
+        public string HexPrimaryColor;
+        #endregion
 
-        #region 模组检测开关
-        // 图元遮罩
+        #region 字段 - 模组检测开关
+        /// <summary>
+        /// 图元遮罩模组是否存在。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由 <c>CheckToolsExists</c> 检测。</description></item>
+        /// </list>
+        /// </summary>
         private static bool mod_isexist_softmask;
-        // 模糊遮罩
+        /// <summary>
+        /// 模糊遮罩模组是否存在。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由 <c>CheckToolsExists</c> 检测。</description></item>
+        /// </list>
+        /// </summary>
         private static bool mod_isexist_blurmask;
-        // PSD 重建器
+        /// <summary>
+        /// PSD 重建器模组是否存在。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由 <c>CheckToolsExists</c> 检测。</description></item>
+        /// </list>
+        /// </summary>
         private static bool mod_isexist_psd;
-        // 色调提取器
+        /// <summary>
+        /// 色调提取器模组是否存在。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由 <c>CheckToolsExists</c> 检测。</description></item>
+        /// </list>
+        /// </summary>
         private static bool mod_isexist_color_capture;
-        // 渐变色卡
+        /// <summary>
+        /// 渐变色卡模组是否存在。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由 <c>CheckToolsExists</c> 检测。</description></item>
+        /// </list>
+        /// </summary>
         private static bool mod_isexist_gradient;
-        // 旋转轴心矫正器
+        /// <summary>
+        /// 旋转轴心矫正器模组是否存在。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由 <c>CheckToolsExists</c> 检测。</description></item>
+        /// </list>
+        /// </summary>
         private static bool mod_isexist_rotate_correct;
-        // 白模生成器
+        /// <summary>
+        /// 白模生成器模组是否存在。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由 <c>CheckToolsExists</c> 检测。</description></item>
+        /// </list>
+        /// </summary>
         private static bool mod_isexist_mod_create;
-        // 材质清理器
+        /// <summary>
+        /// 材质清理器模组是否存在。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由 <c>CheckToolsExists</c> 检测。</description></item>
+        /// </list>
+        /// </summary>
         private static bool mod_isexist_mat_clean;
         #endregion
 
-        public string HexPrimaryColor;
-
+        #region 菜单
+        /// <summary>
+        /// 打开诊断窗口。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>菜单路径：<c>Tools/XHud/Diagnostic</c>，快捷键 <c>Ctrl+Shift+D</c>。</description></item>
+        /// <item><description>若场景中不存在 XHud_Manager 则直接返回。</description></item>
+        /// <item><description>创建并居中窗口后显示。</description></item>
+        /// </list>
+        /// </summary>
         [MenuItem("Tools/XHud/Diagnostic ^#d")]
         static void Init()
         {
@@ -95,12 +252,19 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.CenterEditorWindow(new Vector2Int(300, 560), window, false);
             window.Show();
         }
+        #endregion
 
-        private void OnDisable()
-        {
-
-        }
-
+        #region 生命周期
+        /// <summary>
+        /// 窗口启用时初始化。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>构造序列化对象。</description></item>
+        /// <item><description>检测各可选模组是否存在。</description></item>
+        /// <item><description>加载全部图标资源。</description></item>
+        /// <item><description>生成主色十六进制缓存。</description></item>
+        /// </list>
+        /// </summary>
         private void OnEnable()
         {
             BaseObject = new SerializedObject(this);
@@ -125,12 +289,40 @@ namespace SevenStrikeModules.XHud.Editor
 
             HexPrimaryColor = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, false);
         }
+        /// <summary>
+        /// 窗口禁用时清理。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>当前无额外清理逻辑。</description></item>
+        /// </list>
+        /// </summary>
+        private void OnDisable()
+        {
 
+        }
+        /// <summary>
+        /// 窗口销毁时清理。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>将焦点交还给场景视图。</description></item>
+        /// </list>
+        /// </summary>
         private void OnDestroy()
         {
             GetWindow<SceneView>().Focus();
         }
+        #endregion
 
+        #region 绘制 - 主界面
+        /// <summary>
+        /// 绘制诊断窗口主界面。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>绘制抬头区（图标、大标题、分割线、小标题）。</description></item>
+        /// <item><description>绘制分页工具栏并调度四个分页面板。</description></item>
+        /// <item><description>处理 Esc 键关闭窗口。</description></item>
+        /// </list>
+        /// </summary>
         private void OnGUI()
         {
             XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
@@ -522,8 +714,20 @@ namespace SevenStrikeModules.XHud.Editor
                 Close();
             }
         }
+        #endregion
 
-        #region Draw
+        #region 绘制 - 状态行
+        /// <summary>
+        /// 绘制「图标 + 标题 + 着色」状态行。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>标题在左、状态图标在右。</description></item>
+        /// <item><description>用于诊断页与库配置页的状态列表。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="title">状态文本。</param>
+        /// <param name="icon">状态图标。</param>
+        /// <param name="col_icon">图标着色。</param>
         public void state_displayer(string title, Texture2D icon, Color col_icon)
         {
             XGUI.layout_state_displayer_icon(
@@ -536,6 +740,18 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0),
                 margin: new RectOffset(0, 0, 0, 5));
         }
+        /// <summary>
+        /// 绘制「图标 + 标题 + 数值」状态行。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>水平布局：图标 + 标题 + 数值。</description></item>
+        /// <item><description>用于统计页的分类计数展示。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="icon">类别图标。</param>
+        /// <param name="title">类别标题。</param>
+        /// <param name="content">数值内容。</param>
+        /// <param name="col_icon">数值着色。</param>
         public void state_displayer(Texture2D icon, string title, string content, Color col_icon)
         {
             XGUI.layout_group_start(
@@ -570,10 +786,17 @@ namespace SevenStrikeModules.XHud.Editor
                 subtitle_color: col_icon,
                 margin: new RectOffset(5, 10, 0, 5)); XGUI.layout_group_end(XGUIContainerType.Horizontal);
         }
-
         #endregion
 
-        #region 辅助
+        #region 工具 - 模组检测
+        /// <summary>
+        /// 检测各可选模组是否存在。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>通过 <c>File.Exists</c> 检查约定路径下的脚本文件。</description></item>
+        /// <item><description>使用 <c>[DidReloadScripts]</c> 在脚本重载后自动执行。</description></item>
+        /// </list>
+        /// </summary>
         [DidReloadScripts]
         public static void CheckToolsExists()
         {

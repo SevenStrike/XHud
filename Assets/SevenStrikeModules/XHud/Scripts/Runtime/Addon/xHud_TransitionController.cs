@@ -21,8 +21,6 @@
 namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XGUI.Runtime;
-    using SevenStrikeModules.XHud.Enums;
-    using SevenStrikeModules.XHud.Utilitys;
     using System;
     using System.Collections;
     using UnityEngine;

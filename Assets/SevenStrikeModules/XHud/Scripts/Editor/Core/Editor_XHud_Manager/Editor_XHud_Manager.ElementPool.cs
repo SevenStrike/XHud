@@ -1,4 +1,4 @@
-/*
+﻿/*
  * ============================================================================
  * ⚠ 版权声明（禁止删除、禁止修改、衍生作品必须保留此注释）⚠
  * ============================================================================
@@ -18,42 +18,42 @@
  * ============================================================================
  * 违反本注释保留要求，将违反 AGPL 3.0 授权协议，需承担相应法律责任
  */
-namespace SevenStrikeModules.XHud.Utilitys
+namespace SevenStrikeModules.XHud.Editor
 {
-    using UnityEngine;
+    using UnityEditor;
 
-    [ExecuteInEditMode]
-    public class XHud_AudioStoper : MonoBehaviour
+    public partial class Editor_XHud_Manager : Editor
     {
-        public AudioSource AudioSource;
-
+        #region 元素池
         /// <summary>
-        /// 设置播放器
+        /// 获取元素池的每项元素的标识名称。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>遍历管理器中所有元素库，将条目名称同步为目标物体的 transform 名称。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="au"></param>
-        public void SetAudioSource(AudioSource au)
+        private void xHud_GetElementPoolIndicators()
         {
-            AudioSource = au;
-        }
-
-        private void Update()
-        {
-            if (AudioSource != null)
+            if (BaseScript.Hud_ElementLibrarys != null && BaseScript.Hud_ElementLibrarys.Count > 0)
             {
-                if (!AudioSource.isPlaying)
+                for (int i = 0; i < BaseScript.Hud_ElementLibrarys.Count; i++)
                 {
-                    transform.localPosition = Vector3.zero;
-                    transform.localEulerAngles = Vector3.zero;
-                    transform.localScale = Vector3.one;
-
-                    Invoke("DestroyAudioObject", 0.3f);
+                    XHud_Library_Element lib = BaseScript.Hud_ElementLibrarys[i];
+                    if (lib != null)
+                    {
+                        for (int s = 0; s < lib.ElementLibrary.Count; s++)
+                        {
+                            XHud_LibraryArg_Element_Item item = lib.ElementLibrary[s];
+                            if (item.Target != null)
+                            {
+                                if (item.Name != item.Target.transform.name)
+                                    item.Name = item.Target.transform.name;
+                            }
+                        }
+                    }
                 }
             }
         }
-
-        private void DestroyAudioObject()
-        {
-            DestroyImmediate(gameObject, true);
-        }
+        #endregion
     }
 }

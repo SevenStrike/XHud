@@ -1301,6 +1301,9 @@ namespace SevenStrikeModules.XHud.Enums
         右上 = 2,
         右下 = 3
     }
+    /// <summary>
+    /// 文字颜色接管者
+    /// </summary>
     public enum TextColorOwner
     {
         /// <summary>
@@ -1319,5 +1322,37 @@ namespace SevenStrikeModules.XHud.Enums
         /// 手动/默认，谁都不接管
         /// </summary>
         Manual
+    }
+    /// <summary>
+    /// 元素的预制体状态枚举。
+    /// <para/>
+    /// 用于描述当前元素在 Unity 中的归属情况：
+    /// <list type="bullet">
+    /// <item><description><c>None</c>：未定义 / 初始状态；</description></item>
+    /// <item><description><c>InProject</c>：属于工程内的预制体资源（Project 视图中的 .prefab）；</description></item>
+    /// <item><description><c>InScene</c>：属于场景中的预制体实例（Hierarchy 中的 Prefab Instance）；</description></item>
+    /// <item><description><c>InSceneNotPrefab</c>：场景中的普通对象，未关联任何预制体。</description></item>
+    /// </list>
+    /// <para/>
+    /// 由 <see cref="Editor_XHud_Module_Element.GetPrefabStatus"/> 返回。
+    /// </summary>
+    public enum ElementPrefabStatus
+    {
+        /// <summary>
+        /// 未定义 / 初始状态。
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// 属于工程内的预制体资源。
+        /// </summary>
+        InProject = 1,
+        /// <summary>
+        /// 属于场景中的预制体实例。
+        /// </summary>
+        InScene = 2,
+        /// <summary>
+        /// 场景中的普通对象，未关联任何预制体。
+        /// </summary>
+        InSceneNotPrefab = 3
     }
 }

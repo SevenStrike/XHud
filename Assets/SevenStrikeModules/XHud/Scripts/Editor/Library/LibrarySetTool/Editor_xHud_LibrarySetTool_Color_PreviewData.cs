@@ -27,18 +27,62 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEngine;
 
+    #region 编辑器主体
+    /// <summary>
+    /// 色卡编辑器预览视觉包资源的自定义编辑器。
+    /// <para/>
+    /// 提供序列帧的收集与清空功能，并可在折叠面板中查看源脚本的默认 Inspector。
+    /// </summary>
     [CustomEditor(typeof(XHud_LibrarySetTool_Color_PreviewData))]
     public class Editor_XHud_LibrarySetTool_Color_PreviewData : Editor
     {
+        #region 字段 - 组件
+        /// <summary>
+        /// 目标脚本实例。
+        /// <para/>
+        /// 在 <see cref="OnEnable"/> 中缓存。
+        /// </summary>
         private XHud.XHud_LibrarySetTool_Color_PreviewData BaseScript;
+        #endregion
+
+        #region 字段 - 图标
+        /// <summary>
+        /// 标题 / 按钮 / 图标资源缓存。
+        /// <para/>
+        /// 统一在 <see cref="OnEnable"/> 里加载。
+        /// </summary>
         private Texture2D collect_r;
+        /// <summary>
+        /// 收集按钮按下图标。
+        /// </summary>
         private Texture2D collect_p;
+        /// <summary>
+        /// 清空按钮释放图标。
+        /// </summary>
         private Texture2D clear_r;
+        /// <summary>
+        /// 清空按钮按下图标。
+        /// </summary>
         private Texture2D clear_p;
+        /// <summary>
+        /// 资源 Logo 图标。
+        /// </summary>
         private Texture2D logo;
+        #endregion
 
+        #region 字段 - 折叠状态
+        /// <summary>
+        /// 源脚本面板的折叠状态。
+        /// </summary>
         private bool fold_based;
+        #endregion
 
+        #region 生命周期
+        /// <summary>
+        /// Unity 启用回调。
+        /// <para/>
+        /// 缓存目标脚本实例并加载全部图标资源。
+        /// </summary>
         private void OnEnable()
         {
             BaseScript = (XHud_LibrarySetTool_Color_PreviewData)target;
@@ -49,7 +93,12 @@ namespace SevenStrikeModules.XHud.Editor
             clear_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/clear_p");
             logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/preview_data");
         }
-
+        /// <summary>
+        /// 绘制 Inspector 主入口。
+        /// <para/>
+        /// 按自上而下的顺序绘制所有面板：
+        /// 标题 → 快捷功能 → 源脚本。
+        /// </summary>
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -70,7 +119,7 @@ namespace SevenStrikeModules.XHud.Editor
                 bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
 
-            #region 快捷功能          
+            #region 快捷功能
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
                 bg_fill: XGUIGroup.缺口纯色边框,
@@ -156,5 +205,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             serializedObject.ApplyModifiedProperties();
         }
+        #endregion
     }
+    #endregion
 }

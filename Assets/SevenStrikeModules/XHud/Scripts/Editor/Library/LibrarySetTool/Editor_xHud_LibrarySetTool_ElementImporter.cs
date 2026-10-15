@@ -27,66 +27,170 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditorInternal;
     using UnityEngine;
 
+    #region 数据模型
+    /// <summary>
+    /// 待入库元素的简要信息。
+    /// <para/>
+    /// 用于在元素库添加器中展示元素的基础参数。
+    /// </summary>
     [System.Serializable]
     public class ReadyElementInfo
     {
+        /// <summary>
+        /// 元素名称。
+        /// </summary>
         public string Name;
+        /// <summary>
+        /// 元素标识名称。
+        /// </summary>
         public string Indicator;
+        /// <summary>
+        /// 元素尺寸（RectTransform.sizeDelta）。
+        /// </summary>
         public Vector2 Size;
+        /// <summary>
+        /// 元素位置（anchoredPosition3D）。
+        /// </summary>
         public Vector3 Pos;
+        /// <summary>
+        /// 元素旋转（localEulerAngles）。
+        /// </summary>
         public Vector3 Rot;
     }
-
+    /// <summary>
+    /// 待入库元素项。
+    /// <para/>
+    /// 组合元素引用与简要信息，构成添加器列表的单项数据。
+    /// </summary>
     [System.Serializable]
     public class ReadyLibElement
     {
+        /// <summary>
+        /// 元素组件引用。
+        /// </summary>
         [SerializeField]
         public XHud_Module_Element Element;
+        /// <summary>
+        /// 元素简要信息。
+        /// </summary>
         [SerializeField]
         public ReadyElementInfo Info;
     }
+    #endregion
 
+    #region 编辑器窗口
+    /// <summary>
+    /// XHud 元素库添加器窗口。
+    /// <para/>
+    /// 从工程视图或层级视图批量选取 <see cref="XHud_Module_Element"/>，
+    /// 校验并添加到目标元素库，支持重复项替换 / 跳过。
+    /// <para/>
+    /// 通过右键菜单 <c>Assets/XHud/SendToElementLibrary</c> 唤起。
+    /// </summary>
     public class Editor_XHud_LibrarySetTool_ElementImporter : EditorWindow
     {
-        private XHud_Manager HudManager;
-        private SerializedObject BaseObject;
-        private SerializedProperty sp_library_name, sp_element_list;
-
+        #region 字段 - 数据
         /// <summary>
-        /// 数据列表
+        /// XHud 管理器实例。
+        /// <para/>
+        /// 用于获取元素库集合与执行入库操作。
+        /// </summary>
+        private XHud_Manager HudManager;
+        /// <summary>
+        /// 待入库元素列表。
+        /// </summary>
+        public List<ReadyLibElement> element_list = new List<ReadyLibElement>();
+        /// <summary>
+        /// 目标元素库名称。
+        /// </summary>
+        [SerializeField]
+        public string library_name;
+        /// <summary>
+        /// 日期时间标识。
+        /// </summary>
+        [SerializeField]
+        public string DateTimes;
+        /// <summary>
+        /// 元素库名称缓存。
+        /// </summary>
+        string[] libnames;
+        #endregion
+
+        #region 字段 - 序列化对象 / 属性
+        /// <summary>
+        /// 用于序列化当前窗口的自定义字段。
+        /// </summary>
+        private SerializedObject BaseObject;
+        /// <summary>
+        /// 目标元素库名称的序列化属性。
+        /// </summary>
+        private SerializedProperty sp_library_name;
+        /// <summary>
+        /// 待入库元素列表的序列化属性。
+        /// </summary>
+        private SerializedProperty sp_element_list;
+        #endregion
+
+        #region 字段 - 列表
+        /// <summary>
+        /// 待入库元素列表（可重排列表）。
         /// </summary>
         public ReorderableList ReorderableList;
         /// <summary>
-        /// Editor列表项高度
+        /// 列表项高度。
         /// </summary>
         public float itemHeight = 25;
         /// <summary>
-        /// 可视区域显示的元素数量
+        /// 可视区域显示的元素数量。
         /// </summary>
         public int visibleItemCount = 8;
         /// <summary>
-        /// 列表滚动位置
+        /// 列表滚动位置。
         /// </summary>
         public Vector2 DataList_Scroller;
         /// <summary>
-        /// 选中项索引号
+        /// 选中项索引号。
         /// </summary>
         public int SelectedIndex = 0;
+        #endregion
 
-        public List<ReadyLibElement> element_list = new List<ReadyLibElement>();
-
+        #region 字段 - 图标
+        /// <summary>
+        /// 窗口 Logo 图标。
+        /// </summary>
         private Texture2D icon_libsetter_element;
+        #endregion
 
-        string[] libnames;
-
-        [SerializeField]
-        public string library_name;
-        [SerializeField]
-        public string DateTimes;
-
+        #region 字段 - 绘制缓存
+        /// <summary>
+        /// 元素库选择区矩形。
+        /// </summary>
         Rect LibSelector_rect;
+        /// <summary>
+        /// 滚动视图矩形。
+        /// </summary>
+        Rect scrollview_rect;
+        /// <summary>
+        /// 列表项矩形。
+        /// </summary>
+        Rect item_rect;
+        /// <summary>
+        /// 列表项选中标记矩形。
+        /// </summary>
+        Rect itemmark_rect;
+        /// <summary>
+        /// 列表项选中背景矩形。
+        /// </summary>
+        Rect itemmarkBg_rect;
+        #endregion
 
-        #region 将工程预制体添加到元素库
+        #region 菜单项
+        /// <summary>
+        /// 校验右键菜单是否可用。
+        /// <para/>
+        /// 仅当选中对象包含 <see cref="XHud_Module_Element"/> 组件时返回 true。
+        /// </summary>
+        /// <returns>true 表示可以显示菜单项</returns>
         [MenuItem("Assets/XHud/SendToElementLibrary (将元素预制体添加到元素库)", priority = 3000, validate = true)]
         private static bool Valid_OpenElementLibrarySetter()
         {
@@ -110,7 +214,16 @@ namespace SevenStrikeModules.XHud.Editor
                 return false;
             }
         }
-
+        /// <summary>
+        /// 打开元素库添加器窗口。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>校验 XHud 管理器与元素库是否配置；</description></item>
+        /// <item><description>收集所有选中对象上的 <see cref="XHud_Module_Element"/>；</description></item>
+        /// <item><description>打开并初始化添加器窗口。</description></item>
+        /// </list>
+        /// </summary>
         [MenuItem("Assets/XHud/SendToElementLibrary (将元素预制体添加到元素库)", priority = 3000)]
         private static void OpenElementLibrarySetter()
         {
@@ -160,27 +273,273 @@ namespace SevenStrikeModules.XHud.Editor
             window.SetElements(Hud_Elements);
             window.Show();
         }
-
         #endregion
 
-        #region DataList
-        Rect scrollview_rect;
-        Rect item_rect;
-        Rect itemmark_rect;
-        Rect itemmarkBg_rect;
+        #region 生命周期
+        /// <summary>
+        /// Unity 禁用回调。
+        /// <para/>
+        /// 当前实现为空，保留以支持后续清理逻辑。
+        /// </summary>
+        private void OnDisable()
+        {
 
+        }
+        /// <summary>
+        /// Unity 启用回调。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>构建序列化对象并绑定属性；</description></item>
+        /// <item><description>获取 XHud 管理器；</description></item>
+        /// <item><description>加载窗口 Logo 图标；</description></item>
+        /// <item><description>构造待入库元素列表；</description></item>
+        /// <item><description>初始化默认目标元素库名称。</description></item>
+        /// </list>
+        /// </summary>
+        private void OnEnable()
+        {
+            BaseObject = new SerializedObject(this);
+            sp_library_name = BaseObject.FindProperty("library_name");
+            sp_element_list = BaseObject.FindProperty("element_list");
+
+            HudManager = XHud_Dashboard.HudManagerGet();
+
+            icon_libsetter_element = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_element_setter/icon");
+
+            #region ReorderableList
+            ReorderableList = new ReorderableList(BaseObject, sp_element_list, true, true, true, true);
+            ReorderableList.drawElementCallback = DrawElementCallback;
+            ReorderableList.onRemoveCallback = Remove;
+            #endregion
+
+            #region 获取首个元素库名称
+            /* 默认获取到的第一个元素库的名称，否则后面会报空，因为下拉菜单需要点击不同的项才会有反馈
+             * 所以，如果只有一个元素库的时候，sp_library_name 默认是空的，
+             * 就会导致后面获取不到，在这里处理一下就可以保证后面能正常获取到目标元素库
+             */
+
+            sp_library_name.stringValue = UpdateElementLibraryNames()[0];
+            sp_library_name.serializedObject.ApplyModifiedProperties();
+            #endregion
+        }
+        /// <summary>
+        /// 绘制窗口 GUI。
+        /// <para/>
+        /// 按自上而下的顺序绘制：
+        /// 抬头 → 目标入库选择 → 元素信息（名称 / 标识 / 尺寸 / 位置 / 旋转） → 待入库列表 → 按钮。
+        /// <para/>
+        /// 支持 Escape 键关闭窗口。
+        /// </summary>
+        private void OnGUI()
+        {
+            BaseObject.Update();
+
+            #region 抬头
+            Rect rect = new Rect(0, 0, position.width, position.height);
+
+            // 图标
+            Rect rect_icon = new Rect(15, 15, icon_libsetter_element.width, icon_libsetter_element.height);
+            XGUI.gui_icon(
+                rect: rect_icon,
+                icon: icon_libsetter_element,
+                padding: new RectOffset(0, 0, 0, 0),
+                border: new RectOffset(0, 0, 0, 0),
+                color: Color.white);
+
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
+
+            // 大标题
+            Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
+            XGUI.gui_label(
+                rect: rect_title,
+                text: new GUIContent("元素库添加器"),
+                text_color: Color.white,
+                size: XGUIFontSize.L,
+                clipping: clipping_ellipsis,
+                font: XGUI.GetFont("xg-heavy"));
+
+            // 分割线
+            Rect rect_seperate = new Rect(rect.x + 68, rect.y + 43, 200, 1);
+            XGUI.gui_seperator(
+                rect: rect_seperate,
+                thickness: 1,
+                color: XHud_Dashboard.Theme_SeperateLine,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0));
+
+            // 小标题
+            Rect rect_subtitle = new Rect(rect.x + 18, rect.y + 53, rect.width, 30);
+            XGUI.gui_label(
+                rect: rect_subtitle,
+                text: new GUIContent("以下列表中的元素为待入库的Hud元素物体，您可以检查或剔除不需要入库的元素项，点击列表可查看元素的基础信息"),
+                text_color: Color.white * 0.7f,
+                size: XGUIFontSize.M,
+                anchor: TextAnchor.UpperLeft,
+                wrap: true,
+                clipping: TextClipping.Overflow);
+            #endregion
+
+            LibSelector_rect = rect;
+
+            string colorhex_value = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string colorhex_title = XGUI_Utilitys.Color_To_HexString(Color.white * 0.65f, true);
+
+            #region 统计数量
+            LibSelector_rect.Set(rect.x + rect.width - 120, rect.y + 15, 100, XGUI.GetSingleLineHeight());
+            XGUI.gui_label(
+               rect: LibSelector_rect,
+               text: new GUIContent($"<color={colorhex_value}>{element_list.Count.ToString()}</color> <color={colorhex_title}> 项</color>"),
+               text_color: Color.white,
+               size: XGUIFontSize.M,
+               anchor: TextAnchor.MiddleRight,
+               clipping: TextClipping.Overflow);
+            #endregion
+
+            #region 目标入库选择
+            LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 110, rect.width - 15, XGUI.GetSingleLineHeight());
+            sp_library_name.stringValue = XGUI.gui_string_popup(
+                  rect: LibSelector_rect,
+                  title: "类型",
+                  title_color: Color.white,
+                  title_size: XGUIFontSize.M,
+                  title_font_style: FontStyle.Normal,
+                  title_padding: new RectOffset(0, 0, 0, 0),
+                  title_width: 40,
+                  prop: sp_library_name,
+                  options: libnames,
+                  opt_text_size: XGUIFontSize.M,
+                  opt_text_color: Color.black,
+                  opt_text_padding: new RectOffset(10, 10, 0, 0),
+                  opt_anchor: TextAnchor.MiddleCenter,
+                  opt_font_style: FontStyle.Normal,
+                  opt_bg_fill: XGUIGroup.实体,
+                  opt_bg_color: XGUIColor.亮白,
+                  opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                  icon_arrow_color: Color.black);
+            sp_library_name.serializedObject.ApplyModifiedProperties();
+            #endregion
+
+            #region 元素信息标题
+            LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 160, 100, 15);
+            XGUI.gui_label(
+                   rect: LibSelector_rect,
+                   text: new GUIContent("元素信息"),
+                   text_color: Color.white,
+                   size: XGUIFontSize.M,
+                   clipping: clipping_ellipsis,
+                   anchor: TextAnchor.MiddleLeft,
+                   offset: new Vector2(0, 0),
+                   wrap: true,
+                   font_style: FontStyle.Bold);
+
+            if (element_list != null && element_list.Count > 0)
+            {
+                #region 名称
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 190, rect.width - 15, 20);
+                XGUI.gui_label(
+                    rect: LibSelector_rect,
+                    text: new GUIContent($"名称： <color={colorhex_value}>{element_list[SelectedIndex].Info.Name}</color>"),
+                    text_color: Color.white,
+                    size: XGUIFontSize.M,
+                    clipping: clipping_ellipsis,
+                    anchor: TextAnchor.MiddleLeft,
+                    font_style: FontStyle.Normal);
+                #endregion
+
+                #region 标识
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 220, rect.width - 15, 20);
+                XGUI.gui_label(
+                    rect: LibSelector_rect,
+                    text: new GUIContent($"标识： <color={colorhex_value}>{(!string.IsNullOrEmpty(element_list[SelectedIndex].Info.Indicator) ? element_list[SelectedIndex].Info.Indicator : "未设置标识名称")} </color>"),
+                    text_color: Color.white,
+                    size: XGUIFontSize.M,
+                    clipping: clipping_ellipsis,
+                    anchor: TextAnchor.MiddleLeft,
+                    font_style: FontStyle.Normal);
+                #endregion
+
+                #region 尺寸
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 245, rect.width - 15, 20);
+                XGUI.gui_label(
+                    rect: LibSelector_rect,
+                    text: new GUIContent($"尺寸： <color={colorhex_value}>{element_list[SelectedIndex].Info.Size} </color>"),
+                    text_color: Color.white,
+                    size: XGUIFontSize.M,
+                    clipping: clipping_ellipsis,
+                    anchor: TextAnchor.MiddleLeft,
+                    font_style: FontStyle.Normal);
+                #endregion
+
+                #region 位置
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 270, rect.width - 15, 20);
+                XGUI.gui_label(
+                    rect: LibSelector_rect,
+                    text: new GUIContent($"位置： <color={colorhex_value}>{element_list[SelectedIndex].Info.Pos} </color>"),
+                    text_color: Color.white,
+                    size: XGUIFontSize.M,
+                    clipping: clipping_ellipsis,
+                    anchor: TextAnchor.MiddleLeft,
+                    font_style: FontStyle.Normal);
+                #endregion
+
+                #region 旋转
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 295, rect.width - 15, 20);
+                XGUI.gui_label(
+                    rect: LibSelector_rect,
+                    text: new GUIContent($"旋转： <color={colorhex_value}>{element_list[SelectedIndex].Info.Rot} </color>"),
+                    text_color: Color.white,
+                    size: XGUIFontSize.M,
+                    clipping: clipping_ellipsis,
+                    anchor: TextAnchor.MiddleLeft,
+                    font_style: FontStyle.Normal);
+                #endregion
+            }
+            #endregion
+
+            XGUI.layout_space(110);
+
+            #region 列表
+            DrawDataList();
+            #endregion
+
+            BaseObject.ApplyModifiedProperties();
+
+            Repaint();
+
+            XGUI.layout_space(50);
+
+            Buttons();
+
+            Event e = Event.current;
+            if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape)
+            {
+                e.Use();
+                Close();
+            }
+        }
+        #endregion
+
+        #region 列表绘制
+        /// <summary>
+        /// 列表移除回调。
+        /// <para/>
+        /// 当前实现为调试占位。
+        /// </summary>
+        /// <param name="list">可重排列表</param>
         private void Remove(ReorderableList list)
         {
             Debug.Log(1);
         }
-
         /// <summary>
-        /// 绘制元素
+        /// 绘制元素回调。
+        /// <para/>
+        /// 绘制内容：序号（灰色，D2 格式）+ 待入库元素名称。
         /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="index"></param>
-        /// <param name="isActive"></param>
-        /// <param name="isFocused"></param>
+        /// <param name="rect">绘制矩形</param>
+        /// <param name="index">索引</param>
+        /// <param name="isActive">是否激活</param>
+        /// <param name="isFocused">是否聚焦</param>
         private void DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty prop = sp_element_list.GetArrayElementAtIndex(index);
@@ -213,7 +572,12 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Bold);
             #endregion
         }
-
+        /// <summary>
+        /// 删除待入库列表中的指定索引项。
+        /// <para/>
+        /// 删除后自动调整当前选中索引，并刷新界面。
+        /// </summary>
+        /// <param name="index">要删除的索引</param>
         private void DeleteElementAtIndex(int index)
         {
             if (index < 0 || index >= sp_element_list.arraySize)
@@ -232,9 +596,12 @@ namespace SevenStrikeModules.XHud.Editor
             // 刷新 UI
             Repaint();
         }
-
         /// <summary>
-        /// 绘制列表
+        /// 绘制待入库元素列表。
+        /// <para/>
+        /// 只绘制滚动视图可视区域内的元素，以优化大列表性能。
+        /// 单击列表项时更新右侧元素信息。
+        /// 支持 Delete 键从列表中移除选中项。
         /// </summary>
         private void DrawDataList()
         {
@@ -308,232 +675,16 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        private void OnDisable()
-        {
-
-        }
-
-        private void OnEnable()
-        {
-            BaseObject = new SerializedObject(this);
-            sp_library_name = BaseObject.FindProperty("library_name");
-            sp_element_list = BaseObject.FindProperty("element_list");
-
-            HudManager = XHud_Dashboard.HudManagerGet();
-
-            icon_libsetter_element = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_element_setter/icon");
-
-            #region ReorderableList
-            ReorderableList = new ReorderableList(BaseObject, sp_element_list, true, true, true, true);
-            ReorderableList.drawElementCallback = DrawElementCallback;
-            ReorderableList.onRemoveCallback = Remove;
-            #endregion
-
-            #region 获取首个元素库名称
-            /* 默认获取到的第一个元素库的名称，否则后面会报空，因为下拉菜单需要点击不同的项才会有反馈
-             * 所以，如果只有一个元素库的时候，sp_library_name 默认是空的，
-             * 就会导致后面获取不到，在这里处理一下就可以保证后面能正常获取到目标元素库
-             */
-
-            sp_library_name.stringValue = UpdateElementLibraryNames()[0];
-            sp_library_name.serializedObject.ApplyModifiedProperties();
-            #endregion
-        }
-
-        private void OnGUI()
-        {
-            BaseObject.Update();
-
-            #region 抬头
-            Rect rect = new Rect(0, 0, position.width, position.height);
-
-            // 图标
-            Rect rect_icon = new Rect(15, 15, icon_libsetter_element.width, icon_libsetter_element.height);
-            XGUI.gui_icon(
-                rect: rect_icon,
-                icon: icon_libsetter_element,
-                padding: new RectOffset(0, 0, 0, 0),
-                border: new RectOffset(0, 0, 0, 0),
-                color: Color.white);
-
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
-
-            // 大标题
-            Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
-            XGUI.gui_label(
-                rect: rect_title,
-                text: new GUIContent("元素库添加器"),
-                text_color: Color.white,
-                size: XGUIFontSize.L,
-                clipping: clipping,
-                font: XGUI.GetFont("xg-heavy"));
-
-            // 分割线
-            Rect rect_seperate = new Rect(rect.x + 68, rect.y + 43, 200, 1);
-            XGUI.gui_seperator(
-                rect: rect_seperate,
-                thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
-                margin: new RectOffset(0, 0, 0, 0),
-                padding: new RectOffset(0, 0, 0, 0));
-
-            // 小标题
-            Rect rect_subtitle = new Rect(rect.x + 18, rect.y + 53, rect.width, 30);
-            XGUI.gui_label(
-                rect: rect_subtitle,
-                text: new GUIContent("以下列表中的元素为待入库的Hud元素物体，您可以检查或剔除不需要入库的元素项，点击列表可查看元素的基础信息"),
-                text_color: Color.white * 0.7f,
-                size: XGUIFontSize.M,
-                anchor: TextAnchor.UpperLeft,
-                wrap: true,
-                clipping: TextClipping.Overflow);
-            #endregion
-
-            LibSelector_rect = rect;
-
-            string colorhex_value = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
-            string colorhex_title = XGUI_Utilitys.Color_To_HexString(Color.white * 0.65f, true);
-
-            #region 统计数量
-            LibSelector_rect.Set(rect.x + rect.width - 120, rect.y + 15, 100, XGUI.GetSingleLineHeight());
-            XGUI.gui_label(
-               rect: LibSelector_rect,
-               text: new GUIContent($"<color={colorhex_value}>{element_list.Count.ToString()}</color> <color={colorhex_title}> 项</color>"),
-               text_color: Color.white,
-               size: XGUIFontSize.M,
-               anchor: TextAnchor.MiddleRight,
-               clipping: TextClipping.Overflow);
-            #endregion
-
-            #region 目标入库选择           
-            LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 110, rect.width - 15, XGUI.GetSingleLineHeight());
-            sp_library_name.stringValue = XGUI.gui_string_popup(
-                  rect: LibSelector_rect,
-                  title: "类型",
-                  title_color: Color.white,
-                  title_size: XGUIFontSize.M,
-                  title_font_style: FontStyle.Normal,
-                  title_padding: new RectOffset(0, 0, 0, 0),
-                  title_width: 40,
-                  prop: sp_library_name,
-                  options: libnames,
-                  opt_text_size: XGUIFontSize.M,
-                  opt_text_color: Color.black,
-                  opt_text_padding: new RectOffset(10, 10, 0, 0),
-                  opt_anchor: TextAnchor.MiddleCenter,
-                  opt_font_style: FontStyle.Normal,
-                  opt_bg_fill: XGUIGroup.实体,
-                  opt_bg_color: XGUIColor.亮白,
-                  opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
-                  icon_arrow_color: Color.black);
-            sp_library_name.serializedObject.ApplyModifiedProperties();
-            #endregion
-
-            #region 元素信息标题
-            LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 160, 100, 15);
-            XGUI.gui_label(
-                   rect: LibSelector_rect,
-                   text: new GUIContent("元素信息"),
-                   text_color: Color.white,
-                   size: XGUIFontSize.M,
-                   clipping: clipping,
-                   anchor: TextAnchor.MiddleLeft,
-                   offset: new Vector2(0, 0),
-                   wrap: true,
-                   font_style: FontStyle.Bold);
-
-            if (element_list != null && element_list.Count > 0)
-            {
-                #region 名称
-                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 190, rect.width - 15, 20);
-                XGUI.gui_label(
-                    rect: LibSelector_rect,
-                    text: new GUIContent($"名称： <color={colorhex_value}>{element_list[SelectedIndex].Info.Name}</color>"),
-                    text_color: Color.white,
-                    size: XGUIFontSize.M,
-                    clipping: clipping,
-                    anchor: TextAnchor.MiddleLeft,
-                    font_style: FontStyle.Normal);
-                #endregion
-
-                #region 标识
-                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 220, rect.width - 15, 20);
-                XGUI.gui_label(
-                    rect: LibSelector_rect,
-                    text: new GUIContent($"标识： <color={colorhex_value}>{(!string.IsNullOrEmpty(element_list[SelectedIndex].Info.Indicator) ? element_list[SelectedIndex].Info.Indicator : "未设置标识名称")} </color>"),
-                    text_color: Color.white,
-                    size: XGUIFontSize.M,
-                    clipping: clipping,
-                    anchor: TextAnchor.MiddleLeft,
-                    font_style: FontStyle.Normal);
-                #endregion
-
-                #region 尺寸
-                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 245, rect.width - 15, 20);
-                XGUI.gui_label(
-                    rect: LibSelector_rect,
-                    text: new GUIContent($"尺寸： <color={colorhex_value}>{element_list[SelectedIndex].Info.Size} </color>"),
-                    text_color: Color.white,
-                    size: XGUIFontSize.M,
-                    clipping: clipping,
-                    anchor: TextAnchor.MiddleLeft,
-                    font_style: FontStyle.Normal);
-                #endregion
-
-                #region 位置
-                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 270, rect.width - 15, 20);
-                XGUI.gui_label(
-                    rect: LibSelector_rect,
-                    text: new GUIContent($"位置： <color={colorhex_value}>{element_list[SelectedIndex].Info.Pos} </color>"),
-                    text_color: Color.white,
-                    size: XGUIFontSize.M,
-                    clipping: clipping,
-                    anchor: TextAnchor.MiddleLeft,
-                    font_style: FontStyle.Normal);
-                #endregion
-
-                #region 旋转
-                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 295, rect.width - 15, 20);
-                XGUI.gui_label(
-                    rect: LibSelector_rect,
-                    text: new GUIContent($"旋转： <color={colorhex_value}>{element_list[SelectedIndex].Info.Rot} </color>"),
-                    text_color: Color.white,
-                    size: XGUIFontSize.M,
-                    clipping: clipping,
-                    anchor: TextAnchor.MiddleLeft,
-                    font_style: FontStyle.Normal);
-                #endregion
-            }
-            #endregion
-
-            XGUI.layout_space(110);
-
-            #region 列表
-            DrawDataList();
-            #endregion
-
-            BaseObject.ApplyModifiedProperties();
-
-            Repaint();
-
-            XGUI.layout_space(50);
-
-            Buttons();
-
-            Event e = Event.current;
-            if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape)
-            {
-                e.Use();
-                Close();
-            }
-        }
-
+        #region 工具 - 元素入库
         /// <summary>
-        /// 发送到元素库
+        /// 将待入库元素列表发送到目标元素库。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>获取目标元素库；</description></item>
+        /// <item><description>遍历待入库元素，重复项弹窗询问更新替换或跳过；</description></item>
+        /// <item><description>收集操作结果并在结束时弹窗显示。</description></item>
+        /// </list>
         /// </summary>
         private void SendToLibrary()
         {
@@ -595,10 +746,16 @@ namespace SevenStrikeModules.XHud.Editor
                     themecolor: XHud_Dashboard.Theme_Primary);
             }
         }
+        #endregion
+
+        #region 设置接口
         /// <summary>
-        /// 设置元素
+        /// 设置待入库元素列表。
+        /// <para/>
+        /// 从传入的元素组件中采集名称 / 标识 / 尺寸 / 位置 / 旋转信息，
+        /// 并填充到 <see cref="element_list"/> 中。
         /// </summary>
-        /// <param name="eles"></param>
+        /// <param name="eles">待入库元素组件列表</param>
         public void SetElements(List<XHud_Module_Element> eles)
         {
             if (element_list == null)
@@ -619,8 +776,13 @@ namespace SevenStrikeModules.XHud.Editor
                 element_list.Add(ready);
             }
         }
+        #endregion
+
+        #region 按钮
         /// <summary>
-        /// 控件按钮
+        /// 绘制底部按钮区（关闭 / 添加）。
+        /// <para/>
+        /// 播放模式下禁用添加按钮，防止运行时修改元素库数据。
         /// </summary>
         private void Buttons()
         {
@@ -682,13 +844,20 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
         }
+        #endregion
+
+        #region 工具 - 元素库
         /// <summary>
-        /// 获取所有已装配的元素库名称列表
+        /// 获取所有已装配的元素库名称列表。
+        /// <para/>
+        /// 结果同时被缓存到 <see cref="libnames"/> 中供下拉菜单使用。
         /// </summary>
-        /// <returns></returns>
+        /// <returns>元素库名称数组</returns>
         private string[] UpdateElementLibraryNames()
         {
             return libnames = HudManager.hm_ElementLibrary_GetAllLibraryNames();
         }
+        #endregion
     }
+    #endregion
 }

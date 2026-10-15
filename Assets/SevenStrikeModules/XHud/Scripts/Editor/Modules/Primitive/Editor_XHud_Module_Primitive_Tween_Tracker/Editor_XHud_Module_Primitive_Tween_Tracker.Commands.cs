@@ -530,6 +530,8 @@ namespace SevenStrikeModules.XHud.Editor
                     // 调用 TweenSound.Clone()
                     TweenSound copy = src.Clone();
 
+                    copy.ID = target.TweenSound_GenerateId();
+
                     int insertAt = i + 1;
                     Sounds.Insert(insertAt, copy);
                     newSelectedSounds.Add(insertAt);

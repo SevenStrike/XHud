@@ -22,26 +22,56 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
-    using SevenStrikeModules.XHud.Utilitys;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using UnityEditor;
     using UnityEngine;
     using Object = UnityEngine.Object;
-    using Random = UnityEngine.Random;
 
     [CanEditMultipleObjects]
     [CustomEditor(typeof(XHud_Element_Sounder))]
     public class Editor_XHud_Element_Sounder : Editor
     {
-        #region 组件
+        #region 字段 - 组件 / 列表
+        /// <summary>
+        /// 当前编辑的目标脚本实例。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中由 <c>target</c> 强制转换获得。</description></item>
+        /// <item><description>仅用于单选模式下的直接读写操作。</description></item>
+        /// </list>
+        /// </summary>
         private XHud_Element_Sounder BaseScript;
+        /// <summary>
+        /// HUD 管理器引用。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中通过 <c>XHud_Dashboard.HudManagerGet()</c> 获取。</description></item>
+        /// <item><description>用于访问音效库等全局数据。</description></item>
+        /// </list>
+        /// </summary>
         private XHud_Manager HudManager;
         #endregion
 
-        #region 序列化属性
+        #region 字段 - 序列化属性
+        /// <summary>
+        /// 序列化属性集合。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description><c>UseRandomPitch</c>：随机音高开关属性。</description></item>
+        /// <item><description><c>IsLoop</c>：循环播放开关属性。</description></item>
+        /// <item><description><c>Pitch_Min / Pitch_Max</c>：音高范围属性。</description></item>
+        /// <item><description><c>DebugState</c>：调试开关属性。</description></item>
+        /// <item><description><c>Volume</c>：音量属性。</description></item>
+        /// <item><description><c>Indicator</c>：音效标识属性。</description></item>
+        /// <item><description><c>DelayTime</c>：延迟时间属性。</description></item>
+        /// <item><description><c>PreviewKey / UnPreviewKey</c>：预览快捷键属性。</description></item>
+        /// <item><description><c>SoundName</c>：音效名称属性。</description></item>
+        /// <item><description><c>Element / Toggle / Slider / Progress / Option / Button</c>：关联组件属性。</description></item>
+        /// <item><description><c>Timings</c>：播放时机属性。</description></item>
+        /// </list>
+        /// </summary>
         SerializedProperty
             UseRandomPitch,
             IsLoop,
@@ -63,72 +93,118 @@ namespace SevenStrikeModules.XHud.Editor
             Timings;
         #endregion
 
-        #region 选择弹窗音效文件
+        #region 字段 - 选择弹窗音效文件
+        /// <summary>
+        /// 当前编辑器命令名称。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnInspectorGUI</c> 中由 <c>Event.current.commandName</c> 获取。</description></item>
+        /// <item><description>用于判断对象选择器状态。</description></item>
+        /// </list>
+        /// </summary>
         string commandName;
+        /// <summary>
+        /// 是否已进行过选择。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>防止同一对象被重复加入音效库。</description></item>
+        /// </list>
+        /// </summary>
         private bool IsSelection;
+        /// <summary>
+        /// 是否处于对象选择器模式。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>点击"添加音效到库"时置为 true。</description></item>
+        /// </list>
+        /// </summary>
         private bool IsObjectSelector;
+        /// <summary>
+        /// 当前选中的音频剪辑。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>作为对象选择器的初始选中项。</description></item>
+        /// </list>
+        /// </summary>
         private AudioClip SelectedClip;
         #endregion
 
-        #region 预览音效
-        public List<AudioSource> Preivew_HudSound_SoundList = new List<AudioSource>();
-        private List<XCoroutine> Preivew_HudSound_CoroutineList_Play = new List<XCoroutine>();
-        #endregion
-
-        #region 批量模式查看索引
+        #region 字段 - 批量模式查看索引
+        /// <summary>
+        /// 批量模式下当前查看的音效器索引。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>取值范围为 <c>0</c> 到 <c>SelectedObjects.Length - 1</c>。</description></item>
+        /// <item><description>通过上一个/下一个按钮循环切换。</description></item>
+        /// </list>
+        /// </summary>
         private int SounderStatistic_Index;
         #endregion
 
-        #region 图标
+        #region 字段 - 图标
+        /// <summary>
+        /// 本编辑器所使用的图标资源集合。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description><c>left_arrow_r / left_arrow_p</c>：上一个按钮常态/按下图标。</description></item>
+        /// <item><description><c>right_arrow_r / right_arrow_p</c>：下一个按钮常态/按下图标。</description></item>
+        /// <item><description><c>locate_r / locate_p</c>：定位按钮常态/按下图标。</description></item>
+        /// <item><description><c>play_r / play_p</c>：预览按钮常态/按下图标。</description></item>
+        /// <item><description><c>add_r / add_p</c>：添加按钮常态/按下图标。</description></item>
+        /// <item><description><c>icon_main</c>：标题主图标。</description></item>
+        /// <item><description><c>play_r_mul / play_p_mul</c>：批量预览按钮常态/按下图标。</description></item>
+        /// </list>
+        /// </summary>
         private Texture2D left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, locate_r, locate_p, play_r, play_p, add_r, add_p, icon_main, play_r_mul, play_p_mul;
         #endregion
 
-        #region 选项文字
-        string[] stroptions_random = new string[2] { "规律", "随机" }, stroptions_debug = new string[2] { "关闭", "调试" }, stroptions_cycle = new string[2] { "单次", "循环" };
+        #region 字段 - 选项文字
+        /// <summary>
+        /// 随机音高选项文字。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>索引 0：规律。</description></item>
+        /// <item><description>索引 1：随机。</description></item>
+        /// </list>
+        /// </summary>
+        string[] stroptions_random = new string[2] { "规律", "随机" };
+        /// <summary>
+        /// 调试开关选项文字。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>索引 0：关闭。</description></item>
+        /// <item><description>索引 1：调试。</description></item>
+        /// </list>
+        /// </summary>
+        string[] stroptions_debug = new string[2] { "关闭", "调试" };
+        /// <summary>
+        /// 循环播放选项文字。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>索引 0：单次。</description></item>
+        /// <item><description>索引 1：循环。</description></item>
+        /// </list>
+        /// </summary>
+        string[] stroptions_cycle = new string[2] { "单次", "循环" };
         #endregion
 
-        #region 批量化操作
+        #region 字段 - 批量化操作
+        /// <summary>
+        /// 批量选择脚本数组。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>Targets_Get</c> 中根据 <c>targets</c> 填充。</description></item>
+        /// <item><description>单选时长度为 1，多选时长度等于选中对象数量。</description></item>
+        /// </list>
+        /// </summary>
         private XHud_Element_Sounder[] SelectedObjects;
-
-        private void GetAllTargets()
-        {
-            if (targets.Length > 1)
-            {
-                SelectedObjects = new XHud_Element_Sounder[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
-                {
-                    var t = targets[i];
-                    SelectedObjects[i] = (XHud_Element_Sounder)t;
-                }
-            }
-            else
-            {
-                SelectedObjects = new XHud_Element_Sounder[targets.Length];
-                SelectedObjects[0] = (XHud_Element_Sounder)target;
-            }
-        }
-
-        private bool IsMultiSelected()
-        {
-            if (SelectedObjects == null)
-                return false;
-            if (SelectedObjects.Length > 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         #endregion
 
+        #region 生命周期
         private void OnEnable()
         {
             HudManager = XHud_Dashboard.HudManagerGet();
-
             BaseScript = (XHud_Element_Sounder)target;
-
             UseRandomPitch = serializedObject.FindProperty("UseRandomPitch");
             Pitch_Min = serializedObject.FindProperty("Pitch_Min");
             Pitch_Max = serializedObject.FindProperty("Pitch_Max");
@@ -147,7 +223,6 @@ namespace SevenStrikeModules.XHud.Editor
             Button = serializedObject.FindProperty("Button");
             PreviewKey = serializedObject.FindProperty("PreviewKey");
             UnPreviewKey = serializedObject.FindProperty("UnPreviewKey");
-
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/icon_main");
             locate_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/locate_r");
             locate_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/locate_p");
@@ -161,9 +236,7 @@ namespace SevenStrikeModules.XHud.Editor
             right_arrow_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/right_arrow_p");
             play_r_mul = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/play_r_mul");
             play_p_mul = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_sounder/play_p_mul");
-
-            GetAllTargets();
-
+            Targets_Get();
             if (Element.objectReferenceValue == null)
             {
                 Element.objectReferenceValue = BaseScript.GetComponent<XHud_Module_Element>();
@@ -194,10 +267,8 @@ namespace SevenStrikeModules.XHud.Editor
                 Button.objectReferenceValue = BaseScript.GetComponent<XHud_Module_Button>();
                 Button.serializedObject.ApplyModifiedProperties();
             }
-
             #region 如果音效名称是空的检查音效名称是否有效
-
-            if (!IsMultiSelected())
+            if (!Targets_Selected())
             {
                 if (string.IsNullOrEmpty(SoundName.stringValue))
                 {
@@ -232,15 +303,12 @@ namespace SevenStrikeModules.XHud.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-
             string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
-
 #if UNITY_6000_0_OR_NEWER
             TextClipping clipping = TextClipping.Ellipsis;
 #else
-    TextClipping clipping = TextClipping.Clip;
+            TextClipping clipping = TextClipping.Clip;
 #endif
-
             #region 标题
             XGUI.layout_banner(
              bg_fill: XGUIGroup.实体,
@@ -256,9 +324,7 @@ namespace SevenStrikeModules.XHud.Editor
              title_clipping: clipping,
              bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
-
             XGUI.layout_space(5);
-
             #region 快捷功能
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
@@ -270,30 +336,25 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.Theme_Primary,
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(15, 15, 20, 15));
-
             #region 预览当前声音
             if (Application.isPlaying)
                 XGUI.SetEnabled(false);
             else
                 XGUI.SetEnabled(true);
-
             if (XGUI.layout_button(
                 tooltip: "预览当前声音",
-                tex_release: IsMultiSelected() ? play_r_mul : play_r,
-                tex_press: IsMultiSelected() ? play_p_mul : play_p,
+                tex_release: Targets_Selected() ? play_r_mul : play_r,
+                tex_press: Targets_Selected() ? play_p_mul : play_p,
                 tex_gui_color: Color.white,
                 border: new RectOffset(0, 0, 0, 0),
                 width: 14,
                 height: 14))
             {
-                Preview_HudSound_Play(DelayTime.floatValue);
+                Preview_HudSound_Play();
             }
-
             XGUI.SetEnabled(true);
             #endregion
-
             GUILayout.FlexibleSpace();
-
             #region 定位到音效资源
             if (XGUI.layout_button(
                 tooltip: "定位到音效资源",
@@ -315,9 +376,7 @@ namespace SevenStrikeModules.XHud.Editor
                 HudManager.Hud_Sounds.SoundLibrary_Location(SoundName.stringValue);
             }
             #endregion
-
             GUILayout.FlexibleSpace();
-
             #region 添加音效到库
             if (XGUI.layout_button(
                 tooltip: "添加音效到库",
@@ -337,10 +396,8 @@ namespace SevenStrikeModules.XHud.Editor
                 EditorGUIUtility.ShowObjectPicker<AudioClip>(SelectedClip, false, "", 0);
             }
             #endregion
-
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
-
             #region 选项
             BaseScript.fold_option = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
@@ -353,17 +410,14 @@ namespace SevenStrikeModules.XHud.Editor
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_option);
-
             if (!BaseScript.fold_option)
             {
                 DrawToggle("状态调试", DebugState, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { }, stroptions_debug);
                 DrawToggle("随机音高", UseRandomPitch, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { }, stroptions_random);
                 DrawToggle("循环播放", IsLoop, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { }, stroptions_cycle);
             }
-
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
-
             #region 统计
             BaseScript.fold_state = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
@@ -376,7 +430,6 @@ namespace SevenStrikeModules.XHud.Editor
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_state);
-
             if (!BaseScript.fold_state)
             {
                 if (HudManager.Hud_Sounds == null)
@@ -407,10 +460,9 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     else
                     {
-                        if (!IsMultiSelected())
+                        if (!Targets_Selected())
                         {
                             XHud_LibraryArg_Sound soundInfo = HudManager.Hud_Sounds.SoundLibrary_GetSoundInfo(SoundName.stringValue);
-
                             if (soundInfo != null)
                             {
                                 #region 名称
@@ -422,7 +474,6 @@ namespace SevenStrikeModules.XHud.Editor
                                     subtitle_color: XHud_Dashboard.Theme_Primary,
                                     margin: new RectOffset(5, 5, 0, 5));
                                 #endregion
-
                                 #region 声道
                                 XGUI.layout_state_displayer_text(
                                     title: "声道",
@@ -432,7 +483,6 @@ namespace SevenStrikeModules.XHud.Editor
                                     subtitle_color: XHud_Dashboard.Theme_Primary,
                                     margin: new RectOffset(5, 5, 0, 5));
                                 #endregion
-
                                 #region 频率
                                 XGUI.layout_state_displayer_text(
                                     title: "频率",
@@ -442,7 +492,6 @@ namespace SevenStrikeModules.XHud.Editor
                                     subtitle_color: XHud_Dashboard.Theme_Primary,
                                     margin: new RectOffset(5, 5, 0, 5));
                                 #endregion
-
                                 #region 时长
                                 XGUI.layout_state_displayer_text(
                                     title: "时长",
@@ -464,7 +513,6 @@ namespace SevenStrikeModules.XHud.Editor
                                 margin: new RectOffset(0, 0, 0, 0),
                                 padding: new RectOffset(0, 0, 10, 15),
                                 foldout: BaseScript.fold_option);
-
                             if (XGUI.layout_button(
                                 text: $"{SelectedObjects[SounderStatistic_Index].name} ( {SelectedObjects[SounderStatistic_Index].Indicator} )",
                                 tooltip: "",
@@ -483,7 +531,6 @@ namespace SevenStrikeModules.XHud.Editor
                             {
                                 EditorGUIUtility.PingObject(SelectedObjects[SounderStatistic_Index]);
                             }
-
                             if (XGUI.layout_button(
                                 tooltip: "",
                                 tex_release: left_arrow_r,
@@ -504,7 +551,6 @@ namespace SevenStrikeModules.XHud.Editor
                                 }
                                 EditorGUIUtility.PingObject(SelectedObjects[SounderStatistic_Index]);
                             }
-
                             if (XGUI.layout_button(
                                 tooltip: "",
                                 tex_release: right_arrow_r,
@@ -525,12 +571,9 @@ namespace SevenStrikeModules.XHud.Editor
                                 }
                                 EditorGUIUtility.PingObject(SelectedObjects[SounderStatistic_Index]);
                             }
-
                             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
                             #endregion
-
                             XHud_LibraryArg_Sound soundInfo = HudManager.Hud_Sounds.SoundLibrary_GetSoundInfo(SelectedObjects[SounderStatistic_Index].SoundName);
-
                             #region 名称
                             XGUI.layout_state_displayer_text(
                                 title: "名称",
@@ -540,7 +583,6 @@ namespace SevenStrikeModules.XHud.Editor
                                 subtitle_color: XHud_Dashboard.Theme_Primary,
                                 margin: new RectOffset(5, 5, 0, 5));
                             #endregion
-
                             #region 声道
                             XGUI.layout_state_displayer_text(
                                 title: "声道",
@@ -550,7 +592,6 @@ namespace SevenStrikeModules.XHud.Editor
                                 subtitle_color: XHud_Dashboard.Theme_Primary,
                                 margin: new RectOffset(5, 5, 0, 5));
                             #endregion
-
                             #region 频率
                             XGUI.layout_state_displayer_text(
                                 title: "频率",
@@ -560,7 +601,6 @@ namespace SevenStrikeModules.XHud.Editor
                                 subtitle_color: XHud_Dashboard.Theme_Primary,
                                 margin: new RectOffset(5, 5, 0, 5));
                             #endregion
-
                             #region 时长
                             XGUI.layout_state_displayer_text(
                                 title: "时长",
@@ -574,10 +614,8 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                 }
             }
-
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
-
             #region 参数
             BaseScript.fold_param = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
@@ -590,54 +628,46 @@ namespace SevenStrikeModules.XHud.Editor
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_param);
-
             if (!BaseScript.fold_param)
             {
                 #region 播放时机
                 string[] str_tims = new string[1] { "无" };
-
                 #region Element
                 if (Element.objectReferenceValue != null)
                 {
                     str_tims = new string[4] { "元素进入时", "元素进入后", "元素退出时", "自定义" };
                 }
                 #endregion
-
                 #region Slider
                 if (Slider.objectReferenceValue != null)
                 {
                     str_tims = new string[] { "无", "按下滑动条", "松开滑动条", "滑动条数值改变" };
                 }
                 #endregion
-
                 #region Toggle
                 if (Toggle.objectReferenceValue != null)
                 {
                     str_tims = new string[] { "无", "开关打开时", "开关关闭时", "开关按下时", "开关抬起时", "开关变化时" };
                 }
                 #endregion
-
                 #region Progress
                 if (Progress.objectReferenceValue != null)
                 {
                     str_tims = new string[] { "无", "进度开始时", "进度变化时", "进度结束时" };
                 }
                 #endregion
-
                 #region Button
                 if (Button.objectReferenceValue != null)
                 {
                     str_tims = new string[] { "无", "鼠标进入", "鼠标退出", "鼠标按下", "鼠标松开", "鼠标长按", "鼠标点击", "鼠标选中", "鼠标取消选中" };
                 }
                 #endregion
-
                 #region Option
                 if (Option.objectReferenceValue != null)
                 {
                     str_tims = new string[] { "无", "点击选项", "光标移动开始", "光标移动结束", "光标位置改变" };
                 }
                 #endregion
-
                 Timings.stringValue = XGUI.layout_string_popup(
                     title: "播放时机",
                     title_width: 100,
@@ -663,12 +693,10 @@ namespace SevenStrikeModules.XHud.Editor
                     });
                 Timings.serializedObject.ApplyModifiedProperties();
                 #endregion
-
                 #region 音效列表
                 if (HudManager.Hud_Sounds != null)
                 {
                     string[] collist = HudManager.Hud_Sounds.SoundLibrary_GetSoundNames();
-
                     SoundName.stringValue = XGUI.layout_string_popup(
                     title: "音效列表",
                     title_width: 100,
@@ -695,12 +723,10 @@ namespace SevenStrikeModules.XHud.Editor
                     SoundName.serializedObject.ApplyModifiedProperties();
                 }
                 #endregion
-
                 XGUI.layout_seperator(
                     thickness: 1,
                     color: XHud_Dashboard.Theme_SeperateLine,
                     margin: new RectOffset(15, 15, 15, 15));
-
                 #region 音效标识
                 XGUI.layout_property_field(
                     title: "音效标识",
@@ -710,7 +736,6 @@ namespace SevenStrikeModules.XHud.Editor
                     prop: Indicator,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
-
                 #region 音效音量
                 XGUI.layout_property_field(
                     title: "音效音量",
@@ -720,7 +745,6 @@ namespace SevenStrikeModules.XHud.Editor
                     prop: Volume,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
-
                 if (UseRandomPitch.intValue == 1)
                 {
                     #region 最小音高
@@ -732,7 +756,6 @@ namespace SevenStrikeModules.XHud.Editor
                     prop: Pitch_Min,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                     #endregion
-
                     #region 最大音高
                     XGUI.layout_property_field(
                         title: "最大音高",
@@ -742,7 +765,6 @@ namespace SevenStrikeModules.XHud.Editor
                         prop: Pitch_Max,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                     #endregion
-
                     #region 音高范围
                     xgui_minmax_value minmax = XGUI.layout_slider_min_max(
                      title: "音高范围",
@@ -760,7 +782,6 @@ namespace SevenStrikeModules.XHud.Editor
                      prop_margin: new RectOffset(0, 0, 5, 0));
                     #endregion
                 }
-
                 #region 延迟时间
                 XGUI.layout_property_field(
                     title: "延迟时间",
@@ -770,7 +791,6 @@ namespace SevenStrikeModules.XHud.Editor
                     prop: DelayTime,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
-
                 #region 开始预览
                 XGUI.layout_property_field(
                     title: "开始预览",
@@ -780,7 +800,6 @@ namespace SevenStrikeModules.XHud.Editor
                     prop: PreviewKey,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
-
                 #region 停止预览
                 XGUI.layout_property_field(
                     title: "停止预览",
@@ -791,13 +810,10 @@ namespace SevenStrikeModules.XHud.Editor
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
             }
-
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
-
             ///------------选择音效
             commandName = Event.current.commandName;
-
             if (commandName == "ObjectSelectorUpdated")
             {
                 UpdateSoundParams();
@@ -807,9 +823,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 if (!IsObjectSelector)
                     return;
-
                 Object obj = EditorGUIUtility.GetObjectPickerObject();
-
                 if (obj != null)
                 {
                     if (!IsSelection)
@@ -825,7 +839,6 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                 }
             }
-
             #region 源脚本
             BaseScript.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
@@ -838,21 +851,24 @@ namespace SevenStrikeModules.XHud.Editor
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_based);
-
             if (!BaseScript.fold_based)
             {
                 DrawDefaultInspector();
             }
-
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
-
             serializedObject.ApplyModifiedProperties();
         }
+        #endregion
 
-        #region 辅助
+        #region 工具 - 音效库更新
         /// <summary>
-        /// 更新音效库的每一项音效信息
+        /// 更新音效库的每一项音效信息。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>遍历音效库并刷新声道、频率、时长。</description></item>
+        /// <item><description>在 <c>HudManager</c> 或音效库为 null 时直接返回。</description></item>
+        /// </list>
         /// </summary>
         private void UpdateSoundParams()
         {
@@ -875,8 +891,18 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        #region 预览音效
-        private void Preview_HudSound_Play(float Time)
+        #region 工具 - 音效预览
+        /// <summary>
+        /// 预览音效（统一入口）。
+        /// <para/>
+        /// 【迁移说明】原实现走 XCoroutineUtility 协程 + 自建 AudioSource 列表，
+        /// 现统一迁移到 <see cref="Editor_XHud_Tool_SoundPlayer"/>。
+        /// 本方法只负责"决定要预览哪些 Sounder"，具体参数计算与入队交给 <see cref="EnqueueSounderSound"/>。
+        /// <para/>
+        /// 【多选行为】多选时逐个 Sounder 各自取 SoundName / DelayTime / Volume / Pitch，
+        /// 不再共用当前查看对象的 SerializedProperty 值（修正原实现的隐藏 bug）。
+        /// </summary>
+        private void Preview_HudSound_Play()
         {
             if (HudManager.Hud_Sounds == null)
             {
@@ -904,85 +930,120 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                if (IsMultiSelected())
+                if (Targets_Selected())
                 {
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
-                        XCoroutine cor = XCoroutineUtility.xec_StartCoroutineOwnerless(Preview_HudSound_Play(SelectedObjects[i].SoundName, SelectedObjects[i].DelayTime));
-                        Preivew_HudSound_CoroutineList_Play.Add(cor);
+                        EnqueueSounderSound(SelectedObjects[i]);
                     }
                 }
                 else
                 {
-                    XCoroutine cor = XCoroutineUtility.xec_StartCoroutineOwnerless(Preview_HudSound_Play(SoundName.stringValue, DelayTime.floatValue));
-                    Preivew_HudSound_CoroutineList_Play.Add(cor);
+                    EnqueueSounderSound(BaseScript);
                 }
             }
         }
-
-        IEnumerator Preview_HudSound_Play(string name, float time)
-        {
-            yield return new XCoroutineWaitForSeconds(time);
-            if (HudManager.Hud_Sounds.SoundLibrary_NameIsValid(name))
-            {
-                Preivew_HudSound_SoundList.Add(Preview_HudSound_Creator(HudManager.Hud_Sounds.SoundLibrary_GetSound(name)));
-            }
-            Repaint();
-        }
-
         /// <summary>
-        /// 预览声音
+        /// 把单个 Sounder 的预览音效"算好参数"后交给 helper 入队。
+        /// <para/>
+        /// 【参数来源】
+        /// <list type="bullet">
+        /// <item><description>clip：从音效库按 SoundName 取；取不到则跳过。</description></item>
+        /// <item><description>delay：sounder.DelayTime 原值（不乘任何倍增系数）。</description></item>
+        /// <item><description>volume：sounder.Volume × HudManager.Volume（对齐运行时 DelayPlay 算法）。</description></item>
+        /// <item><description>mute：HudManager.VolumeMute（对齐运行时）。</description></item>
+        /// <item><description>pitch：sounder.UseRandomPitch 为 true 时在 [Pitch_Min, Pitch_Max] 随机，否则 1。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="info"></param>
-        public AudioSource Preview_HudSound_Creator(AudioClip clip)
+        private void EnqueueSounderSound(XHud_Element_Sounder sounder)
         {
-            GameObject obj = new GameObject();
-            obj.name = "SoundPreviewer-" + "[" + clip.length.ToString("F2") + " s]-" + "[" + clip.channels + " ch]-" + "[" + clip.frequency + " hz]";
-            AudioSource au = obj.AddComponent<AudioSource>();
-            au.clip = clip;
-            au.volume = Volume.floatValue;
-            if (UseRandomPitch.intValue == 1)
-            {
-                au.pitch = Random.Range(Pitch_Min.floatValue, Pitch_Max.floatValue);
-            }
-            else
-            {
-                au.pitch = 1.0f;
-            }
-            au.Play();
-            XHud_AudioStoper sp = au.gameObject.AddComponent<XHud_AudioStoper>();
-            sp.AudioSource = au;
-            return au;
+            if (sounder == null) return;
+            if (string.IsNullOrEmpty(sounder.SoundName)) return;
+            if (HudManager == null || HudManager.Hud_Sounds == null) return;
+            AudioClip clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(sounder.SoundName);
+            if (clip == null) return;
+            // ── 算好参数 ──
+            float delay = Mathf.Max(0f, sounder.DelayTime);
+            float masterVol = (HudManager != null) ? HudManager.Volume * 0.01f : 1f;
+            bool masterMute = (HudManager != null) && HudManager.VolumeMute;
+            float volume = masterVol * Mathf.Clamp01(sounder.Volume);
+            bool mute = masterMute;
+            bool useRandomPitch = sounder.UseRandomPitch;
+            float pMin = sounder.Pitch_Min;
+            float pMax = sounder.Pitch_Max;
+            Editor_XHud_Tool_SoundPlayer.Enqueue(
+                clip, delay, volume, mute, useRandomPitch, pMin, pMax);
         }
-
+        /// <summary>
+        /// 停止所有音效预览。
+        /// <para/>
+        /// 委托给 <see cref="Editor_XHud_Tool_SoundPlayer.Stop()"/>，
+        /// 语义完全一致：待触发全丢 + 正在播立即掐断并销毁。
+        /// </summary>
         private void Preview_HudSound_Stop()
         {
-            if (Preivew_HudSound_SoundList != null)
-            {
-                for (int i = 0; i < Preivew_HudSound_SoundList.Count; i++)
-                {
-                    if (Preivew_HudSound_SoundList[i] != null)
-                    {
-                        Preivew_HudSound_SoundList[i].Stop();
-                        DestroyImmediate(Preivew_HudSound_SoundList[i].gameObject, true);
-                        Preivew_HudSound_SoundList[i] = null;
-                    }
-                }
-                Preivew_HudSound_SoundList.Clear();
-            }
-            for (int i = 0; i < Preivew_HudSound_CoroutineList_Play.Count; i++)
-            {
-                if (Preivew_HudSound_CoroutineList_Play[i] != null)
-                    XCoroutineUtility.xec_StopCoroutine(Preivew_HudSound_CoroutineList_Play[i]);
-            }
-            Preivew_HudSound_CoroutineList_Play.Clear();
-            SceneView.RepaintAll();
+            Editor_XHud_Tool_SoundPlayer.Stop();
         }
         #endregion
 
-        #region Draw
+        #region 工具 - 批量化操作
         /// <summary>
-        /// 通用方法：绘制开关
+        /// 获取所有批量脚本目标。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>多选时创建与 <c>targets</c> 等长的数组并逐个填充。</description></item>
+        /// <item><description>单选时创建长度为 1 的数组并填充当前目标。</description></item>
+        /// </list>
+        /// </summary>
+        private void Targets_Get()
+        {
+            if (targets.Length > 1)
+            {
+                SelectedObjects = new XHud_Element_Sounder[targets.Length];
+                for (int i = 0; i < SelectedObjects.Length; i++)
+                {
+                    var t = targets[i];
+                    SelectedObjects[i] = (XHud_Element_Sounder)t;
+                }
+            }
+            else
+            {
+                SelectedObjects = new XHud_Element_Sounder[targets.Length];
+                SelectedObjects[0] = (XHud_Element_Sounder)target;
+            }
+        }
+        /// <summary>
+        /// 判断是否是多选状态。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>当 <c>SelectedObjects</c> 为 null 时返回 false。</description></item>
+        /// <item><description>当 <c>SelectedObjects.Length > 1</c> 时返回 true。</description></item>
+        /// </list>
+        /// </summary>
+        /// <returns>是否为多选状态。</returns>
+        private bool Targets_Selected()
+        {
+            if (SelectedObjects == null)
+                return false;
+            if (SelectedObjects.Length > 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region 绘制控件
+        /// <summary>
+        /// 通用方法：绘制开关。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>封装 <c>XGUI.layout_toggle</c> 调用。</description></item>
+        /// <item><description>提供标题、宽度、样式、颜色、选项等参数。</description></item>
+        /// </list>
         /// </summary>
         private void DrawToggle(string title, SerializedProperty prop, float width, XGUIToggleStyle style = XGUIToggleStyle.实体, Color color_bg_on = default, Color color_bg_off = default, Color color_on = default, Color color_off = default, Action<bool> act_on_changed = null, string[] options = null)
         {

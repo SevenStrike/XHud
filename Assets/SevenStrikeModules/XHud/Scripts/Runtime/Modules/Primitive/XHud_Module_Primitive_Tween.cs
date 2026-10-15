@@ -2223,7 +2223,7 @@ namespace SevenStrikeModules.XHud
 
             // ========== 5. 配置并播放 ==========
             player.clip = sound.Sound;
-            player.volume = manager.Volume * Mathf.Clamp01(sound.Volume);
+            player.volume = (manager.Volume * 0.01f) * Mathf.Clamp01(sound.Volume);
             player.mute = sound.Mute || manager.VolumeMute;
             player.time = 0f;
             // 音高：对称范围，避免 Min > Max 时 Random.Range 出错

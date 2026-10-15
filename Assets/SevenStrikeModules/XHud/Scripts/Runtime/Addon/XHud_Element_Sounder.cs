@@ -500,7 +500,7 @@ namespace SevenStrikeModules.XHud
                     if (player != null)
                     {
                         player.clip = XHud_Manager.Instance.Hud_Sounds.SoundLibrary_GetSound(SoundName);
-                        player.volume = Volume * XHud_Manager.Instance.Volume;
+                        player.volume = Volume * XHud_Manager.Instance.Volume * 0.01f;
                         player.mute = XHud_Manager.Instance.VolumeMute;
                         if (UseRandomPitch)
                         {
@@ -523,7 +523,7 @@ namespace SevenStrikeModules.XHud
                 if (player != null)
                 {
                     player.clip = XHud_Manager.Instance.Hud_Sounds.SoundLibrary_GetSound(SoundName);
-                    player.volume = Volume * XHud_Manager.Instance.Volume;
+                    player.volume = Volume * XHud_Manager.Instance.Volume * 0.01f;
                     player.mute = XHud_Manager.Instance.VolumeMute;
                     if (UseRandomPitch)
                     {
@@ -537,7 +537,5 @@ namespace SevenStrikeModules.XHud
                 }
             }
         }
-
-
     }
 }

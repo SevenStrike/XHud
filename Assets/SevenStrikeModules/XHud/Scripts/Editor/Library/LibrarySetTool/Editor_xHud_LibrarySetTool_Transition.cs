@@ -29,9 +29,32 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEngine;
     using Object = UnityEngine.Object;
 
+    #region 编辑器窗口
+    /// <summary>
+    /// XHud 转场资源修改器窗口。
+    /// <para/>
+    /// 提供转场序列帧的编辑与预览功能，包括：
+    /// <list type="bullet">
+    /// <item><description>序列帧列表（拖放 / 键盘上下键切换）；</description></item>
+    /// <item><description>转场方向与跳帧、背景平铺、颜色等视觉配置；</description></item>
+    /// <item><description>序列帧预览（自动 / 手动播放、逐帧切换）；</description></item>
+    /// <item><description>转场名称 / 说明编辑与库更新。</description></item>
+    /// </list>
+    /// </summary>
     public class Editor_XHud_LibrarySetTool_Transition : EditorWindow
     {
+        #region 字段 - 序列化对象 / 属性
+        /// <summary>
+        /// 用于序列化当前窗口的自定义字段。
+        /// </summary>
         private SerializedObject BaseObject;
+        /// <summary>
+        /// 本窗口用到的全部序列化属性引用。
+        /// <para/>
+        /// 统一在 <see cref="OnEnable"/> 里初始化。
+        /// 覆盖：转场节点 / 名称 / 说明 / 预览背景 / 预览颜色 /
+        /// 网格平铺与颜色 / 列表项高与可见数量 / 选中索引 / 滚动位置 / 预览数据索引。
+        /// </summary>
         private SerializedProperty
             sp_TransitionNode,
             sp_TransitionName,
@@ -46,104 +69,244 @@ namespace SevenStrikeModules.XHud.Editor
             sp_SelectedIndex,
             sp_TransitionInfoList_Scroller,
             sp_PreviewData_Index;
+        #endregion
 
+        #region 字段 - 列表
+        /// <summary>
+        /// 序列帧列表（可重排列表）。
+        /// </summary>
         private ReorderableList TrasitionInfoList;
+        #endregion
 
+        #region 字段 - 数据
+        /// <summary>
+        /// 当前编辑的转场数据（工作副本）。
+        /// </summary>
+        [SerializeField]
+        private XHud_LibraryArg_Transition TransitionNode;
+        /// <summary>
+        /// 转场的原始数据（用于对比）。
+        /// </summary>
+        [SerializeField]
+        private XHud_LibraryArg_Transition OriginTransitionNode;
+        /// <summary>
+        /// 目标转场库。
+        /// </summary>
+        private XHud_Library_Transition Target_Hud_TransitionLibrary;
+        /// <summary>
+        /// 修改的库项索引。
+        /// </summary>
+        public int ModifiedIndex;
+        /// <summary>
+        /// 转场名称。
+        /// </summary>
+        [SerializeField]
+        public string TransitionName;
+        /// <summary>
+        /// 日期时间标识。
+        /// </summary>
+        [SerializeField]
+        public string DateTimes;
+        /// <summary>
+        /// 转场说明。
+        /// </summary>
+        [SerializeField]
+        public string TransitionDescription;
+        #endregion
+
+        #region 字段 - 图标
+        /// <summary>
+        /// 窗口 Logo 图标。
+        /// </summary>
         private Texture2D icon;
-
+        /// <summary>
+        /// 左箭头释放图标。
+        /// </summary>
         private Texture2D leftarr_r;
+        /// <summary>
+        /// 左箭头按下图标。
+        /// </summary>
         private Texture2D leftarr_p;
+        /// <summary>
+        /// 右箭头释放图标。
+        /// </summary>
         private Texture2D rightarr_r;
+        /// <summary>
+        /// 右箭头按下图标。
+        /// </summary>
         private Texture2D rightarr_p;
+        /// <summary>
+        /// 停止按钮释放图标。
+        /// </summary>
         private Texture2D stop_r;
+        /// <summary>
+        /// 停止按钮按下图标。
+        /// </summary>
         private Texture2D stop_p;
+        /// <summary>
+        /// 播放按钮释放图标。
+        /// </summary>
         private Texture2D play_r;
+        /// <summary>
+        /// 播放按钮按下图标。
+        /// </summary>
         private Texture2D play_p;
+        /// <summary>
+        /// 序列帧列表图标。
+        /// </summary>
         private Texture2D seq_list_logo;
+        #endregion
 
+        #region 字段 - 预览
+        /// <summary>
+        /// 当前预览索引。
+        /// </summary>
         [SerializeField]
         private int PreviewData_Index;
+        /// <summary>
+        /// 是否正在播放预览动画。
+        /// </summary>
         private bool IsPreviewing;
+        /// <summary>
+        /// 停止模式（自动复位 / 手动复位）。
+        /// </summary>
         private bool StoppedResetMode = true;
+        /// <summary>
+        /// 预览协程句柄。
+        /// </summary>
         private XCoroutine PreviewCoroutine;
+        /// <summary>
+        /// 每帧预览动画的持续时间间隔。
+        /// </summary>
         private float PreviewDataDuration = 0.035f;
         /// <summary>
-        /// 反色通道
+        /// 反色通道。
         /// </summary>
         private bool InvertChannel = false;
-
+        /// <summary>
+        /// 预览材质。
+        /// </summary>
         private Material Preview_Material;
+        /// <summary>
+        /// 预览背景纹理。
+        /// </summary>
         [SerializeField]
         private Texture2D Preview_Texture_Bg;
+        /// <summary>
+        /// 预览颜色。
+        /// </summary>
         [SerializeField]
         private Color Preview_Color = Color.white;
+        /// <summary>
+        /// 网格平铺倍数（缓存字段，兼容序列化）。
+        /// </summary>
         [SerializeField]
 #pragma warning disable CS0414
         private float BgGrid_Tilling_multiply = 14;
 #pragma warning restore CS0414
+        /// <summary>
+        /// 网格平铺倍数 - 水平。
+        /// </summary>
         [SerializeField]
         private float BgGrid_Tilling_x = 14;
+        /// <summary>
+        /// 网格平铺倍数 - 垂直。
+        /// </summary>
         [SerializeField]
         private float BgGrid_Tilling_y = 14;
+        /// <summary>
+        /// 网格主色。
+        /// </summary>
         [SerializeField]
         private Color BgGrid_Color_A = Color.white * 0.509f;
+        /// <summary>
+        /// 网格副色。
+        /// </summary>
         [SerializeField]
         private Color BgGrid_Color_B = Color.white * 0.376f;
+        #endregion
 
-        [SerializeField]
+        #region 字段 - 列表参数
         /// <summary>
-        /// Editor列表项高度
+        /// 列表项高度。
         /// </summary>
+        [SerializeField]
         public float itemHeight = 25;
-        [SerializeField]
         /// <summary>
-        /// 可视区域显示的元素数量
+        /// 可视区域显示的元素数量。
         /// </summary>
+        [SerializeField]
         public int visibleItemCount = 19;
-        [SerializeField]
         /// <summary>
-        /// 选中项索引号
+        /// 选中项索引号。
         /// </summary>
+        [SerializeField]
         public int SelectedIndex;
-        [SerializeField]
         /// <summary>
-        /// 列表滚动位置
+        /// 列表滚动位置。
         /// </summary>
+        [SerializeField]
         public Vector2 TransitionInfoList_Scroller;
+        #endregion
 
-        public int ModifiedIndex;
-
-        [SerializeField]
-        public string TransitionName;
-        [SerializeField]
-        public string DateTimes;
-        [SerializeField]
-        public string TransitionDescription;
-
+        #region 字段 - 布局
         /// <summary>
-        /// 按钮高度
+        /// 按钮高度。
         /// </summary>
         private float ButtonHeight = 25;
         /// <summary>
-        /// 按钮间距
+        /// 按钮间距。
         /// </summary>
         private float ButtonDistance = 15;
-
+        /// <summary>
+        /// 确认按钮文字。
+        /// </summary>
         [SerializeField]
         public string ButtonText_Ok;
+        /// <summary>
+        /// 取消按钮文字。
+        /// </summary>
         [SerializeField]
         public string ButtonText_Cancel;
-
-        [SerializeField]
-        private XHud_LibraryArg_Transition TransitionNode;
-        [SerializeField]
-        private XHud_LibraryArg_Transition OriginTransitionNode;
-
+        /// <summary>
+        /// 通用绘制矩形缓存。
+        /// </summary>
         private Rect draw_rect;
+        /// <summary>
+        /// 拖放区矩形缓存。
+        /// </summary>
         private Rect dragarea;
-        private XHud_Library_Transition Target_Hud_TransitionLibrary;
+        /// <summary>
+        /// 窗口标题。
+        /// </summary>
         private string Title;
+        #endregion
 
+        #region 字段 - 绘制缓存
+        /// <summary>
+        /// 绘制元素矩形。
+        /// </summary>
+        Rect drawelement_rect;
+        /// <summary>
+        /// 滚动视图矩形。
+        /// </summary>
+        Rect scrollview_rect;
+        /// <summary>
+        /// 列表项矩形。
+        /// </summary>
+        Rect item_rect;
+        /// <summary>
+        /// 选中背景色。
+        /// </summary>
+        Color SelectedBg = new Color(0, 0, 0, 0.2f);
+        #endregion
+
+        #region 生命周期
+        /// <summary>
+        /// Unity 禁用回调。
+        /// <para/>
+        /// 将背景网格颜色 / 平铺 / 背景图路径保存到 xData 中，供下次打开恢复。
+        /// </summary>
         private void OnDisable()
         {
             XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_ColorA", XGUI_Utilitys.Color_To_String(sp_BgGrid_Color_A.colorValue));
@@ -151,7 +314,19 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_Tilling", sp_BgGrid_Tilling_multiply.floatValue.ToString("F2"));
             XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Path", AssetDatabase.GetAssetPath(sp_Preview_Texture_Bg.objectReferenceValue));
         }
-
+        /// <summary>
+        /// Unity 启用回调。
+        /// <para/>
+        /// 执行流程：
+        /// <list type="number">
+        /// <item><description>构建序列化对象并绑定全部属性；</description></item>
+        /// <item><description>初始化预览材质与背景纹理；</description></item>
+        /// <item><description>恢复上次保存的网格平铺与颜色；</description></item>
+        /// <item><description>加载全部图标资源；</description></item>
+        /// <item><description>初始化默认名称与说明；</description></item>
+        /// <item><description>构造序列帧 ReorderableList。</description></item>
+        /// </list>
+        /// </summary>
         private void OnEnable()
         {
             BaseObject = new SerializedObject(this);
@@ -223,178 +398,24 @@ namespace SevenStrikeModules.XHud.Editor
             TrasitionInfoList.drawElementCallback = TransitionInfoList_Original_DrawElementCallback;
             #endregion
         }
-
+        /// <summary>
+        /// Unity 销毁回调。
+        /// <para/>
+        /// 关闭窗口时让场景视图重新获得焦点。
+        /// </summary>
         private void OnDestroy()
         {
             GetWindow<SceneView>().Focus();
         }
-
-        #region TransitionInfoList_Original      
-
-        Rect drawelement_rect;
-        Rect scrollview_rect;
-        Rect item_rect;
-        Color SelectedBg = new Color(0, 0, 0, 0.2f);
-
         /// <summary>
-        /// 绘制元素
+        /// 绘制窗口 GUI。
+        /// <para/>
+        /// 按自上而下的顺序绘制：
+        /// 抬头 → 序列帧列表 → 控制区（视觉配置 / 预览操作 / 播放控制） →
+        /// 信息区（名称 / 说明 / 帧计数） → 预览（材质渲染 / 帧控制） → 按钮。
+        /// <para/>
+        /// 支持拖放添加序列帧、键盘上下左右切换帧、Escape 关闭窗口。
         /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="index"></param>
-        /// <param name="isActive"></param>
-        /// <param name="isFocused"></param>
-        private void TransitionInfoList_Original_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
-        {
-            SerializedProperty prop = sp_TransitionNode;
-            SerializedProperty sp_texlist = prop.FindPropertyRelative("Frames");
-            SerializedProperty sp_tex = sp_texlist.GetArrayElementAtIndex(index);
-
-            Texture2D tex = sp_tex.objectReferenceValue as Texture2D;
-
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
-
-            #region 序号
-            drawelement_rect.Set(rect.x + 15, rect.y + 3, 30, 20);
-            XGUI.gui_label(
-                rect: drawelement_rect,
-                text: new GUIContent(index.ToString("D2")),
-                text_color: Color.gray,
-                size: XGUIFontSize.S,
-                clipping: clipping,
-                anchor: TextAnchor.MiddleLeft,
-                offset: new Vector2(0, 0),
-                font_style: FontStyle.Normal);
-            #endregion
-
-            #region 名称
-            drawelement_rect.Set(rect.x + 40, rect.y, rect.width - 80, rect.height);
-            XGUI.gui_label(
-             rect: drawelement_rect,
-             text: new GUIContent(tex.name),
-             text_color: XHud_Dashboard.Theme_Primary,
-             size: XGUIFontSize.M,
-             clipping: clipping,
-             anchor: TextAnchor.MiddleLeft,
-             offset: new Vector2(0, 0),
-             font_style: FontStyle.Normal);
-            #endregion
-
-            #region 贴图
-            drawelement_rect.Set(rect.width - 50, rect.y + rect.height * (0.3f / 2), rect.height * 0.7f, rect.height * 0.7f);
-            XGUI.gui_icon(
-                 rect: drawelement_rect,
-                 icon: tex,
-                 color: Color.white);
-            #endregion           
-        }
-
-        /// <summary>
-        /// 绘制列表
-        /// </summary>
-        private void DrawTransitionInfoList_Original(Rect rect)
-        {
-            // 绘制滚动视图
-            scrollview_rect.Set(rect.x + 10, rect.y + 18, rect.width - 20, sp_visibleItemCount.intValue * sp_itemHeight.floatValue);
-            sp_TransitionInfoList_Scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_TransitionInfoList_Scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, TrasitionInfoList.count * sp_itemHeight.floatValue), false, true);
-
-            // 计算可视区域的起始和结束索引
-            int startIndex = Mathf.FloorToInt(sp_TransitionInfoList_Scroller.vector2Value.y / sp_itemHeight.floatValue);
-            int endIndex = Mathf.CeilToInt((sp_TransitionInfoList_Scroller.vector2Value.y + scrollview_rect.height) / sp_itemHeight.floatValue);
-
-            // 只绘制可视区域内的元素
-            for (int i = startIndex; i < endIndex && i < TrasitionInfoList.count; i++)
-            {
-                SerializedProperty sp_texlist = sp_TransitionNode.FindPropertyRelative("Frames");
-                SerializedProperty sp_tex = sp_texlist.GetArrayElementAtIndex(i);
-
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
-
-                if (sp_SelectedIndex.intValue == i)
-                {
-                    // 高亮标记表示选中
-                    item_rect.Set(1, i * sp_itemHeight.floatValue + 10, 5, 5);
-                    EditorGUI.DrawRect(item_rect, XHud_Dashboard.Theme_Primary);
-                    // 高亮背景表示选中
-                    item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
-                    EditorGUI.DrawRect(item_rect, SelectedBg);
-                }
-
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
-
-                TrasitionInfoList.drawElementCallback.Invoke(item_rect, i, i == TrasitionInfoList.index, true);
-
-                // 检测鼠标是否在当前元素区域内
-                Event e = Event.current;
-                if (item_rect.Contains(e.mousePosition))
-                {
-                    #region 切换序列帧索引
-                    if (e.type == EventType.KeyDown)
-                    {
-                        if (e.keyCode == KeyCode.UpArrow)
-                        {
-                            StopPreviewUpdate();
-                            IsPreviewing = false;
-
-                            if (sp_SelectedIndex.intValue <= 0)
-                            {
-                                sp_SelectedIndex.intValue = 0;
-                            }
-                            else
-
-                            {
-                                sp_SelectedIndex.intValue--;
-                            }
-                            PreviewData_Index = sp_SelectedIndex.intValue;
-                            CalculateListScroller();
-                        }
-                        if (e.keyCode == KeyCode.DownArrow)
-                        {
-                            StopPreviewUpdate();
-                            IsPreviewing = false;
-                            if (sp_SelectedIndex.intValue >= TransitionNode.Frames.Count - 1)
-                            {
-                                sp_SelectedIndex.intValue = TransitionNode.Frames.Count - 1;
-                            }
-                            else
-
-                            {
-                                sp_SelectedIndex.intValue++;
-                            }
-                            PreviewData_Index = sp_SelectedIndex.intValue;
-                            CalculateListScroller();
-                        }
-                        e.Use();
-                    }
-                    #endregion
-
-                    #region 选中序列帧索引
-                    if (e.type == EventType.MouseDown)
-                    {
-                        // 更新选中项
-                        sp_SelectedIndex.intValue = i;
-
-                        PreviewData_Index = sp_SelectedIndex.intValue;
-
-                        // 标记界面需要更新
-                        GUI.changed = true;
-                        e.Use();
-                    }
-                    #endregion
-                }
-
-                // 绘制元素
-                //EditorGUI.PropertyField(item_rect, sp_tex, GUIContent.none);
-            }
-
-            GUI.EndScrollView();
-        }
-
-        #endregion
-
         private void OnGUI()
         {
             BaseObject.Update();
@@ -1071,7 +1092,183 @@ namespace SevenStrikeModules.XHud.Editor
             if (BaseObject.targetObject != null)
                 BaseObject.ApplyModifiedProperties();
         }
+        #endregion
 
+        #region 列表绘制
+        /// <summary>
+        /// 绘制元素回调。
+        /// <para/>
+        /// 绘制内容：
+        /// <list type="bullet">
+        /// <item><description>序号（灰色，D2 格式）；</description></item>
+        /// <item><description>纹理名称（主题色）；</description></item>
+        /// <item><description>纹理缩略图。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="rect">绘制矩形</param>
+        /// <param name="index">索引</param>
+        /// <param name="isActive">是否激活</param>
+        /// <param name="isFocused">是否聚焦</param>
+        private void TransitionInfoList_Original_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            SerializedProperty prop = sp_TransitionNode;
+            SerializedProperty sp_texlist = prop.FindPropertyRelative("Frames");
+            SerializedProperty sp_tex = sp_texlist.GetArrayElementAtIndex(index);
+
+            Texture2D tex = sp_tex.objectReferenceValue as Texture2D;
+
+#if UNITY_6000_0_OR_NEWER
+            TextClipping clipping = TextClipping.Ellipsis;
+#else
+    TextClipping clipping = TextClipping.Clip;
+#endif
+
+            #region 序号
+            drawelement_rect.Set(rect.x + 15, rect.y + 3, 30, 20);
+            XGUI.gui_label(
+                rect: drawelement_rect,
+                text: new GUIContent(index.ToString("D2")),
+                text_color: Color.gray,
+                size: XGUIFontSize.S,
+                clipping: clipping,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Normal);
+            #endregion
+
+            #region 名称
+            drawelement_rect.Set(rect.x + 40, rect.y, rect.width - 80, rect.height);
+            XGUI.gui_label(
+             rect: drawelement_rect,
+             text: new GUIContent(tex.name),
+             text_color: XHud_Dashboard.Theme_Primary,
+             size: XGUIFontSize.M,
+             clipping: clipping,
+             anchor: TextAnchor.MiddleLeft,
+             offset: new Vector2(0, 0),
+             font_style: FontStyle.Normal);
+            #endregion
+
+            #region 贴图
+            drawelement_rect.Set(rect.width - 50, rect.y + rect.height * (0.3f / 2), rect.height * 0.7f, rect.height * 0.7f);
+            XGUI.gui_icon(
+                 rect: drawelement_rect,
+                 icon: tex,
+                 color: Color.white);
+            #endregion
+        }
+        /// <summary>
+        /// 绘制序列帧列表。
+        /// <para/>
+        /// 只绘制滚动视图可视区域内的元素，以优化大列表性能。
+        /// 单击列表项切换帧，键盘上下键切换帧。
+        /// </summary>
+        /// <param name="rect">绘制区域矩形</param>
+        private void DrawTransitionInfoList_Original(Rect rect)
+        {
+            // 绘制滚动视图
+            scrollview_rect.Set(rect.x + 10, rect.y + 18, rect.width - 20, sp_visibleItemCount.intValue * sp_itemHeight.floatValue);
+            sp_TransitionInfoList_Scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_TransitionInfoList_Scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, TrasitionInfoList.count * sp_itemHeight.floatValue), false, true);
+
+            // 计算可视区域的起始和结束索引
+            int startIndex = Mathf.FloorToInt(sp_TransitionInfoList_Scroller.vector2Value.y / sp_itemHeight.floatValue);
+            int endIndex = Mathf.CeilToInt((sp_TransitionInfoList_Scroller.vector2Value.y + scrollview_rect.height) / sp_itemHeight.floatValue);
+
+            // 只绘制可视区域内的元素
+            for (int i = startIndex; i < endIndex && i < TrasitionInfoList.count; i++)
+            {
+                SerializedProperty sp_texlist = sp_TransitionNode.FindPropertyRelative("Frames");
+                SerializedProperty sp_tex = sp_texlist.GetArrayElementAtIndex(i);
+
+                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+
+                if (sp_SelectedIndex.intValue == i)
+                {
+                    // 高亮标记表示选中
+                    item_rect.Set(1, i * sp_itemHeight.floatValue + 10, 5, 5);
+                    EditorGUI.DrawRect(item_rect, XHud_Dashboard.Theme_Primary);
+                    // 高亮背景表示选中
+                    item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                    EditorGUI.DrawRect(item_rect, SelectedBg);
+                }
+
+                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+
+                TrasitionInfoList.drawElementCallback.Invoke(item_rect, i, i == TrasitionInfoList.index, true);
+
+                // 检测鼠标是否在当前元素区域内
+                Event e = Event.current;
+                if (item_rect.Contains(e.mousePosition))
+                {
+                    #region 切换序列帧索引
+                    if (e.type == EventType.KeyDown)
+                    {
+                        if (e.keyCode == KeyCode.UpArrow)
+                        {
+                            StopPreviewUpdate();
+                            IsPreviewing = false;
+
+                            if (sp_SelectedIndex.intValue <= 0)
+                            {
+                                sp_SelectedIndex.intValue = 0;
+                            }
+                            else
+
+                            {
+                                sp_SelectedIndex.intValue--;
+                            }
+                            PreviewData_Index = sp_SelectedIndex.intValue;
+                            CalculateListScroller();
+                        }
+                        if (e.keyCode == KeyCode.DownArrow)
+                        {
+                            StopPreviewUpdate();
+                            IsPreviewing = false;
+                            if (sp_SelectedIndex.intValue >= TransitionNode.Frames.Count - 1)
+                            {
+                                sp_SelectedIndex.intValue = TransitionNode.Frames.Count - 1;
+                            }
+                            else
+
+                            {
+                                sp_SelectedIndex.intValue++;
+                            }
+                            PreviewData_Index = sp_SelectedIndex.intValue;
+                            CalculateListScroller();
+                        }
+                        e.Use();
+                    }
+                    #endregion
+
+                    #region 选中序列帧索引
+                    if (e.type == EventType.MouseDown)
+                    {
+                        // 更新选中项
+                        sp_SelectedIndex.intValue = i;
+
+                        PreviewData_Index = sp_SelectedIndex.intValue;
+
+                        // 标记界面需要更新
+                        GUI.changed = true;
+                        e.Use();
+                    }
+                    #endregion
+                }
+
+                // 绘制元素
+                //EditorGUI.PropertyValue(item_rect, sp_tex, GUIContent.none);
+            }
+
+            GUI.EndScrollView();
+        }
+        #endregion
+
+        #region 帧操作
+        /// <summary>
+        /// 向前移动一帧。
+        /// <para/>
+        /// 停止预览，将 <see cref="PreviewData_Index"/> 与 <see cref="SelectedIndex"/> 向前移动并刷新界面。
+        /// </summary>
         private void FrameMoveForward()
         {
             StopPreviewUpdate();
@@ -1091,7 +1288,11 @@ namespace SevenStrikeModules.XHud.Editor
 
             Repaint();
         }
-
+        /// <summary>
+        /// 向后移动一帧。
+        /// <para/>
+        /// 停止预览，将 <see cref="PreviewData_Index"/> 与 <see cref="SelectedIndex"/> 向后移动并刷新界面。
+        /// </summary>
         private void FrameMoveBackward()
         {
             StopPreviewUpdate();
@@ -1111,8 +1312,15 @@ namespace SevenStrikeModules.XHud.Editor
 
             Repaint();
         }
+        #endregion
 
-        #region 辅助
+        #region 工具 - 数据操作
+        /// <summary>
+        /// 更新到目标转场库。
+        /// <para/>
+        /// 用当前编辑的名称、说明与转场数据替换目标库中指定索引的转场项，
+        /// 然后弹窗提示并关闭窗口。
+        /// </summary>
         private void UpdateToLibrary()
         {
             string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
@@ -1135,24 +1343,24 @@ namespace SevenStrikeModules.XHud.Editor
 
             Close();
         }
+        #endregion
 
+        #region 设置接口
         /// <summary>
-        /// 设置按钮文字
+        /// 设置按钮文字（确认 / 取消）。
         /// </summary>
-        /// <param name="ok"></param>
-        /// <param name="cancel"></param>
+        /// <param name="ok">确认按钮文字</param>
+        /// <param name="cancel">取消按钮文字</param>
         public void SetButtonText(string ok, string cancel)
         {
             ButtonText_Cancel = cancel;
             ButtonText_Ok = ok;
         }
-
         /// <summary>
-        /// 设置模版基础信息（针对从库源修改更新使用）
+        /// 设置模版基础信息（针对从库源修改更新使用）。
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="decription"></param>
-        /// <param name="color"></param>
+        /// <param name="name">转场名称</param>
+        /// <param name="decription">转场说明</param>
         public void SetInfo(string name, string decription)
         {
             sp_TransitionName.stringValue = name;
@@ -1163,18 +1371,45 @@ namespace SevenStrikeModules.XHud.Editor
 
             PreviewData_Index = 0;
         }
-
         /// <summary>
-        /// 设置标题
+        /// 设置标题。
         /// </summary>
-        /// <param name="title"></param>
+        /// <param name="title">标题文字</param>
         public void SetTitle(string title)
         {
             Title = title;
         }
-
         /// <summary>
-        /// 控件按钮
+        /// 设置转场节点（工作副本）。
+        /// </summary>
+        /// <param name="node">转场数据</param>
+        public void Set_TransitionNode(XHud_LibraryArg_Transition node)
+        {
+            TransitionNode.CopyData(node);
+        }
+        /// <summary>
+        /// 设置目标转场库。
+        /// </summary>
+        /// <param name="lib">目标转场库</param>
+        public void Set_Target_Hud_TransitionLibrary(XHud_Library_Transition lib)
+        {
+            Target_Hud_TransitionLibrary = lib;
+        }
+        /// <summary>
+        /// 设置转场节点（原始副本）。
+        /// </summary>
+        /// <param name="node">转场数据</param>
+        public void Set_OriginTransitionNode(XHud_LibraryArg_Transition node)
+        {
+            OriginTransitionNode.CopyData(node);
+        }
+        #endregion
+
+        #region 按钮
+        /// <summary>
+        /// 绘制底部按钮区（取消 / 更新）。
+        /// <para/>
+        /// 点击"更新"调用 <see cref="UpdateToLibrary"/>。
         /// </summary>
         private void Buttons()
         {
@@ -1238,32 +1473,18 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
         }
+        #endregion
 
-        public void Set_TransitionNode(XHud_LibraryArg_Transition node)
-        {
-            TransitionNode.CopyData(node);
-        }
-
-        public void Set_Target_Hud_TransitionLibrary(XHud_Library_Transition lib)
-        {
-            Target_Hud_TransitionLibrary = lib;
-        }
-
-        public void Set_OriginTransitionNode(XHud_LibraryArg_Transition node)
-        {
-            OriginTransitionNode.CopyData(node);
-        }
-
+        #region 工具 - 预览动画
         /// <summary>
-        /// 开始预览
+        /// 开始预览序列帧动画。
         /// </summary>
         public void StartPreviewUpdate()
         {
             PreviewCoroutine = XCoroutineUtility.xec_StartCoroutineOwnerless(PreviewUpdater());
         }
-
         /// <summary>
-        /// 停止预览
+        /// 停止预览序列帧动画。
         /// </summary>
         public void StopPreviewUpdate()
         {
@@ -1271,7 +1492,12 @@ namespace SevenStrikeModules.XHud.Editor
                 return;
             XCoroutineUtility.xec_StopCoroutine(PreviewCoroutine);
         }
-
+        /// <summary>
+        /// 预览序列帧协程。
+        /// <para/>
+        /// 按 <see cref="TransitionNode"/> 的跳帧间隔循环推进 <see cref="PreviewData_Index"/>，
+        /// 播放到末尾时根据 <see cref="StoppedResetMode"/> 决定自动复位或停在末帧。
+        /// </summary>
         IEnumerator PreviewUpdater()
         {
             var waitForOneSecond = new XCoroutineWaitForSeconds(PreviewDataDuration);
@@ -1300,18 +1526,20 @@ namespace SevenStrikeModules.XHud.Editor
                 yield return waitForOneSecond;
             }
         }
-
         /// <summary>
-        /// 初始化预览转场材质
+        /// 初始化预览转场材质。
+        /// <para/>
+        /// 通过 <see cref="Shader.Find(string)"/> 加载 <c>XHud/EditorTransition</c> 并构造材质实例。
         /// </summary>
         private void InitializePreviewMaterial()
         {
             Shader shader = Shader.Find("XHud/EditorTransition");
             Preview_Material = new Material(shader);
         }
-
         /// <summary>
-        /// 初始化预览背景图
+        /// 初始化预览背景图。
+        /// <para/>
+        /// 从 xData 中读取上次保存的背景图路径，若资源无效则使用默认背景。
         /// </summary>
         private void LoadPreviewTexture()
         {
@@ -1322,7 +1550,14 @@ namespace SevenStrikeModules.XHud.Editor
             else
                 sp_Preview_Texture_Bg.objectReferenceValue = tex;
         }
+        #endregion
 
+        #region 工具 - 列表滚动
+        /// <summary>
+        /// 根据当前选中索引计算列表滚动位置。
+        /// <para/>
+        /// 若选中项超过可视区域，则滚动到接近选中项的位置，否则回到顶部。
+        /// </summary>
         private void CalculateListScroller()
         {
             if (SelectedIndex >= visibleItemCount)
@@ -1334,4 +1569,5 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
     }
+    #endregion
 }

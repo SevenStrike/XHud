@@ -23,58 +23,117 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
     using System;
-    using System.Diagnostics;
     using UnityEditor;
     using UnityEngine;
 
-    [Serializable]
     /// <summary>
-    /// XHUD开发信息
+    /// XHud 开发信息数据类。
+    /// <para/>
+    /// <list type="bullet">
+    /// <item><description>由 <c>XHudDevsInfo.json</c> 反序列化而来。</description></item>
+    /// <item><description>用于在关于窗口中展示版本、简介、官网与文档地址。</description></item>
+    /// </list>
     /// </summary>
+    [Serializable]
     public class XHudDevInfos
     {
-        [SerializeField]
         /// <summary>
-        /// 
+        /// 版本号。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>从 JSON 中读取。</description></item>
+        /// </list>
         /// </summary>
+        [SerializeField]
         public string ver;
-        [SerializeField]
         /// <summary>
-        /// 
+        /// 副标题。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>从 JSON 中读取。</description></item>
+        /// </list>
         /// </summary>
+        [SerializeField]
         public string sub;
-        [SerializeField]
         /// <summary>
-        /// 
+        /// 插件简介。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>从 JSON 中读取。</description></item>
+        /// </list>
         /// </summary>
+        [SerializeField]
         public string intro;
-        [SerializeField]
         /// <summary>
-        /// 
+        /// 官网地址。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>从 JSON 中读取。</description></item>
+        /// </list>
         /// </summary>
+        [SerializeField]
         public string website;
-        [SerializeField]
         /// <summary>
-        /// 
+        /// 文档地址。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>从 JSON 中读取。</description></item>
+        /// </list>
         /// </summary>
+        [SerializeField]
         public string document;
     }
 
+    /// <summary>
+    /// XHud 关于窗口。
+    /// <para/>
+    /// <list type="bullet">
+    /// <item><description>通过菜单 <c>Tools/XHud/About #a</c> 打开。</description></item>
+    /// <item><description>展示 Logo、版本信息、简介、官网与教程手册按钮。</description></item>
+    /// </list>
+    /// </summary>
     public class Editor_XHud_About : EditorWindow
     {
-        static Editor_XHud_About Window;
-
+        #region 字段 - 组件 / 列表
         /// <summary>
-        /// 版本信息
+        /// 当前窗口实例。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>Init</c> 中赋值。</description></item>
+        /// <item><description>用于设置窗口尺寸与显示。</description></item>
+        /// </list>
+        /// </summary>
+        static Editor_XHud_About Window;
+        #endregion
+
+        #region 字段 - 序列化属性
+        /// <summary>
+        /// 版本信息数据。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中从 JSON 反序列化。</description></item>
+        /// <item><description>用于在 <c>OnGUI</c> 中展示版本、简介等信息。</description></item>
+        /// </list>
         /// </summary>
         public XHudDevInfos HudDevInfos;
+        #endregion
 
+        #region 字段 - 图标
+        /// <summary>
+        /// 关于窗口 Logo 图标。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在 <c>OnEnable</c> 中加载。</description></item>
+        /// </list>
+        /// </summary>
         private Texture2D icon_logo;
+        #endregion
 
+        #region 生命周期   
         [MenuItem("Tools/XHud/About #a")]
         static void Init()
         {
-            Window = (Editor_XHud_About)EditorWindow.GetWindow(typeof(Editor_XHud_About), true, "关于XHUD的信息", true);
+            Window = (Editor_XHud_About)EditorWindow.GetWindow(typeof(Editor_XHud_About), true, "关于XHud的信息", true);
             Window.minSize = new Vector2(350, 430);
             Window.maxSize = Window.minSize;
             Window.Show();
@@ -109,7 +168,6 @@ namespace SevenStrikeModules.XHud.Editor
                 icon_margin: new RectOffset(0, 0, 50, 0),
                 icon_padding: new RectOffset(0, 0, 0, 0),
                 icon_alignment: XGUIIconAlignment.中心);
-
             XGUI.layout_label(
                 text: $"{HudDevInfos.sub}  /  Version : {HudDevInfos.ver}",
                 size: XGUIFontSize.M,
@@ -120,13 +178,11 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Normal,
                 anchor: TextAnchor.MiddleCenter,
                 font: XGUI.GetFont("xg-medium"));
-
             XGUI.layout_seperator(
                 thickness: 1,
                 color: Color.white * 0.5f,
                 margin: new RectOffset(30, 30, 30, 30),
                 padding: new RectOffset(0, 0, 0, 0));
-
             XGUI.layout_label(
                 text: $"此插件由 （南京塞维斯传媒）SevenStrikeMedia 独家开发",
                 size: XGUIFontSize.M,
@@ -137,7 +193,6 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Normal,
                 anchor: TextAnchor.MiddleCenter,
                 font: XGUI.GetFont("xg-medium"));
-
             XGUI.layout_label(
                 text: HudDevInfos.intro,
                 size: XGUIFontSize.M,
@@ -149,13 +204,11 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Normal,
                 anchor: TextAnchor.MiddleLeft,
                 font: XGUI.GetFont("xg-medium"));
-
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
                 absolute_margin: true,
                 margin: new RectOffset(15, 15, 40, 0),
                 padding: new RectOffset(0, 0, 0, 0));
-
             if (XGUI.layout_button(
                 text: "访问XHud官网",
                 tooltip: "",
@@ -175,9 +228,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 XGUI_Utilitys.OpenURL(HudDevInfos.website);
             }
-
             XGUI.layout_space(10);
-
             if (XGUI.layout_button(
                 text: "教程手册",
                 tooltip: "",
@@ -197,8 +248,8 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 XGUI_Utilitys.OpenURL(HudDevInfos.document);
             }
-
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
         }
+        #endregion
     }
 }

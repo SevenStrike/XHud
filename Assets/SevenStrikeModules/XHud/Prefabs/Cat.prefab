@@ -1067,7 +1067,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 512, y: 641.1628}
+  m_SizeDelta: {x: 492, y: 492}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3077325663351724641
 MonoBehaviour:
@@ -1089,7 +1089,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1336717337, guid: 3b9d1a7bcfda9824abaa120e601ae1b3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 29a677815c310f0498e846cb8addd268, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1202,7 +1202,7 @@ MonoBehaviour:
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
-    Size: {x: 512, y: 641.1628}
+    Size: {x: 492, y: 492}
     Fill: 1
   FirstSaveFeatures: 1
   Debug: 0
@@ -1506,14 +1506,14 @@ MonoBehaviour:
     Sound: {fileID: 8300000, guid: 87824fcca5af67047825e110a7a19fd4, type: 3}
     Path: "Assets/SevenStrikeModules/XHud/Sound/\u7535\u5B50\u6FC0\u5149\u58F015.wav"
     Timing: "\u5143\u7D20\u8FDB\u5165\u65F6"
-    Delay: 0.227
+    Delay: 0.27
     Volume: 1
     MaxPitch: 1
     MinPitch: 1
     Mute: 0
-  - ID: 0
-    Sound: {fileID: 8300000, guid: 6286f82dee450e442884e65777cc3200, type: 3}
-    Path: Assets/SevenStrikeModules/XHud/Sound/buttonclickrelease.wav
+  - ID: 3248
+    Sound: {fileID: 8300000, guid: 87824fcca5af67047825e110a7a19fd4, type: 3}
+    Path: "Assets/SevenStrikeModules/XHud/Sound/\u7535\u5B50\u6FC0\u5149\u58F015.wav"
     Timing: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Delay: 1.159
     Volume: 1
@@ -1578,12 +1578,12 @@ MonoBehaviour:
       m_Calls: []
   UseDebug: 0
   PreviewTiming: "\u5143\u7D20\u8FDB\u5165\u65F6"
-  fold_param: 1
+  fold_param: 0
   fold_option: 1
-  fold_based: 1
-  fold_list: 0
-  fold_state: 1
-  Timeline_TrackPosition: 550
+  fold_based: 0
+  fold_list: 1
+  fold_state: 0
+  Timeline_TrackPosition: 393.5
   Timeline_TrackScroll: {x: 0, y: 0}
   Timeline_TrackHeight: 32.840187
   Timeline_TrackSnapEnabled: 0
@@ -2696,7 +2696,7 @@ MonoBehaviour:
   fold_state: 1
   Timeline_TrackPosition: 321.88138
   Timeline_TrackScroll: {x: 0, y: 0}
-  Timeline_TrackHeight: 46.412834
+  Timeline_TrackHeight: 31.560215
   Timeline_TrackSnapEnabled: 0
   Timeline_TrackSoundPreviewer: 1
   Timeline_TrackPreviewLoop: 0

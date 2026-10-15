@@ -28,20 +28,90 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEngine;
 
+    /// <summary>
+    /// SceneView 快速操作工具。
+    /// <para/>
+    /// <list type="bullet">
+    /// <item><description>在 SceneView 右下角提供「XHud 管理器」与「XHud 快速操作」两个按钮。</description></item>
+    /// <item><description>通过 <c>[InitializeOnLoad]</c> 自动订阅 <c>SceneView.duringSceneGui</c>。</description></item>
+    /// <item><description>菜单项提供选中锚点/画布/元素、切换放置器、切换图元 ID 显示、刷新场景、清除控制台等快捷操作。</description></item>
+    /// </list>
+    /// </summary>
     [InitializeOnLoad]
     public class Editor_XHud_Tool_FastSceneView
     {
-        // 按钮尺寸常量
+        #region 常量 - 按钮布局
+        /// <summary>
+        /// 按钮宽度（像素）。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>默认 120。</description></item>
+        /// </list>
+        /// </summary>
         private const int BUTTON_WIDTH = 120;
+        /// <summary>
+        /// 按钮高度（像素）。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>默认 30。</description></item>
+        /// </list>
+        /// </summary>
         private const int BUTTON_HEIGHT = 30;
-        private const int BUTTON_SPACING = 5;  // 按钮之间的间距
-        private const int RIGHT_MARGIN = 20;   // 右边距
-        private const int BOTTOM_MARGIN = 40;  // 下边距
+        /// <summary>
+        /// 按钮之间的间距（像素）。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>默认 5。</description></item>
+        /// </list>
+        /// </summary>
+        private const int BUTTON_SPACING = 5;
+        /// <summary>
+        /// 按钮距离 SceneView 右边距（像素）。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>默认 20。</description></item>
+        /// </list>
+        /// </summary>
+        private const int RIGHT_MARGIN = 20;
+        /// <summary>
+        /// 按钮距离 SceneView 下边距（像素）。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>默认 40。</description></item>
+        /// </list>
+        /// </summary>
+        private const int BOTTOM_MARGIN = 40;
+        #endregion
 
-        // 菜单项 ID（用于保存勾选状态）
+        #region 常量 - 菜单键
+        /// <summary>
+        /// 元素视觉放置器菜单键。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>用于 EditorPrefs 存储放置器的启用状态。</description></item>
+        /// </list>
+        /// </summary>
         private const string MENU_KEY_VISUAL_PLACER = "XHud_ElementVisualPlacer_Enabled";
+        /// <summary>
+        /// 图元控制器 ID 显示菜单键。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>用于 EditorPrefs 存储图元 ID 在场景中显示的状态。</description></item>
+        /// </list>
+        /// </summary>
         private const string MENU_KEY_PRIMITIVE_CONTROLLER_ID_DISPLAY = "XHudPrimitiveController_ID_Displayer";
+        #endregion
 
+        #region 生命周期
+        /// <summary>
+        /// 静态构造函数。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>由 <c>[InitializeOnLoad]</c> 触发。</description></item>
+        /// <item><description>订阅 <c>SceneView.duringSceneGui</c>。</description></item>
+        /// <item><description>从 EditorPrefs 读取并恢复放置器与图元 ID 显示的开关状态。</description></item>
+        /// </list>
+        /// </summary>
         static Editor_XHud_Tool_FastSceneView()
         {
             SceneView.duringSceneGui += OnSceneGUI;
@@ -53,7 +123,19 @@ namespace SevenStrikeModules.XHud.Editor
             bool idDisplay = XGUI.x_Editor_Data_Get_With_Bool(MENU_KEY_PRIMITIVE_CONTROLLER_ID_DISPLAY);
             XHud_Dashboard.DisplayPrimitiveControllerIDConfig.XHudPrimitiveController_ID_Displayer = idDisplay;
         }
+        #endregion
 
+        #region 绘制 - SceneView 按钮
+        /// <summary>
+        /// SceneView 的 GUI 事件处理函数。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>在右下角绘制「XHud 管理器」与「XHud 快速操作」两个按钮。</description></item>
+        /// <item><description>「XHud 管理器」点击后选中场景中的管理器对象。</description></item>
+        /// <item><description>「XHud 快速操作」点击后弹出快捷菜单。</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="sceneView">当前的 SceneView 窗口实例。</param>
         private static void OnSceneGUI(SceneView sceneView)
         {
             Handles.BeginGUI();
@@ -63,20 +145,15 @@ namespace SevenStrikeModules.XHud.Editor
             float viewWidth = sceneView.position.width;
             float viewHeight = sceneView.position.height;
 
-            // 第一个按钮（XHud 管理器）的 X 坐标 = 窗口宽度 - 按钮宽度 - 右边距
-            float btn1_x = viewWidth - BUTTON_WIDTH - RIGHT_MARGIN;
-            // 第一个按钮的 Y 坐标 = 窗口高度 - 按钮高度 - 下边距
-            float btn1_y = viewHeight - BUTTON_HEIGHT - BOTTOM_MARGIN;
+            // 两个按钮的 X 坐标相同 = 窗口宽度 - 按钮宽度 - 右边距
+            float btn_x = viewWidth - BUTTON_WIDTH - RIGHT_MARGIN;
 
-            // 第二个按钮（XHud 快速操作）的 X 坐标 = 窗口宽度 - 按钮宽度 - 右边距
-            float btn2_x = viewWidth - BUTTON_WIDTH - RIGHT_MARGIN;
-            // 第二个按钮的 Y 坐标 = 第一个按钮 Y 坐标 - 按钮高度 - 按钮间距
-            float btn2_y = btn1_y - BUTTON_HEIGHT - BUTTON_SPACING;
+            // 下方按钮（XHud 管理器）的 Y 坐标 = 窗口高度 - 按钮高度 - 下边距
+            float btn_mgr_y = viewHeight - BUTTON_HEIGHT - BOTTOM_MARGIN;
+            // 上方按钮（XHud 快速操作）的 Y 坐标 = 下方按钮 Y 坐标 - 按钮高度 - 按钮间距
+            float btn_faster_y = btn_mgr_y - BUTTON_HEIGHT - BUTTON_SPACING;
 
-            // 第三个按钮（元素视觉放置器）的 Y 坐标 = 第二个按钮 Y 坐标 - 按钮高度 - 按钮间距
-            float btn3_y = btn2_y - BUTTON_HEIGHT - BUTTON_SPACING;
-
-            Rect btn_rect_mgr = new Rect(btn2_x, btn2_y, BUTTON_WIDTH, BUTTON_HEIGHT);
+            Rect btn_rect_mgr = new Rect(btn_x, btn_mgr_y, BUTTON_WIDTH, BUTTON_HEIGHT);
 
             if (XGUI.gui_button(
                rect: btn_rect_mgr,
@@ -121,7 +198,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
 
-            Rect btn_rect_faster = new Rect(btn1_x, btn1_y, BUTTON_WIDTH, BUTTON_HEIGHT);
+            Rect btn_rect_faster = new Rect(btn_x, btn_faster_y, BUTTON_WIDTH, BUTTON_HEIGHT);
             if (Editor_XHud_GUI.Gui_Button(btn_rect_faster, null, null, false, "XHud 快速操作", "", Editor_XHud_GUI.GetColor(HudColor.深空灰), Color.white, HudFilled.实体))
             {
                 GenericMenu menu = new GenericMenu();
@@ -154,7 +231,7 @@ namespace SevenStrikeModules.XHud.Editor
                     });
                 }
 
-                if (mgr.HudCanvas_Screen != null)
+                if (mgr.HudCanvas_World != null)
                 {
                     menu.AddItem(new GUIContent("W 选中世界画布"), false, () =>
                     {
@@ -215,5 +292,6 @@ namespace SevenStrikeModules.XHud.Editor
             }
             Handles.EndGUI();
         }
+        #endregion
     }
 }
