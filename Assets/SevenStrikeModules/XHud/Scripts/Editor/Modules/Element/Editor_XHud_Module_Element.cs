@@ -290,7 +290,7 @@ namespace SevenStrikeModules.XHud.Editor
                 if (BaseScript != null)
                 {
                     RMS_Redraw();
-                    Editor_XHud_Tool_SoundPlayer.Stop();
+                    XGUI.EditorPlayer_Sound.Stop();
                     Preview_Kill();
                 }
             }

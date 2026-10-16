@@ -202,7 +202,7 @@ namespace SevenStrikeModules.XHud.Editor
             Preview_Kill();
 
             // 点停止预览立即静音（原实现只在 OnDisable 或播完自灭时停）
-            Editor_XHud_Tool_SoundPlayer.Stop();
+            XGUI.EditorPlayer_Sound.Stop();
         }
         /// <summary>
         /// 播放预览：元素 - 退出
@@ -365,7 +365,7 @@ namespace SevenStrikeModules.XHud.Editor
             Preview_Kill();
 
             // 点停止预览立即静音（原实现只在 OnDisable 或播完自灭时停）
-            Editor_XHud_Tool_SoundPlayer.Stop();
+            XGUI.EditorPlayer_Sound.Stop();
         }
         #endregion
 
@@ -605,7 +605,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 【时机】固定为 "元素进入时"，与 <see cref="Preview_PrimitiveTween_Collect"/> 里收集动画时使用的时机保持一致。
         /// <para/>
-        /// 【先停后播】入口先调 <see cref="Editor_XHud_Tool_SoundPlayer.Stop()"/> 清掉上一次的预览音效，
+        /// 【先停后播】入口先调 <see cref="XGUI_Player_Sound.Stop()"/> 清掉上一次的预览音效，
         /// 再入队新的；避免连续点条目时旧音效残留叠加。
         /// </summary>
         private void Preview_PrimitiveTween_OnSelect(PrimitiveControllerNode node)
@@ -613,7 +613,7 @@ namespace SevenStrikeModules.XHud.Editor
             Preview_Kill();
 
             // 先掐断上一次的预览音效，避免连续点条目时旧音效残留
-            Editor_XHud_Tool_SoundPlayer.Stop();
+            XGUI.EditorPlayer_Sound.Stop();
 
             // 预览列表
             List<XTween_Interface> preview_twns = new List<XTween_Interface>();

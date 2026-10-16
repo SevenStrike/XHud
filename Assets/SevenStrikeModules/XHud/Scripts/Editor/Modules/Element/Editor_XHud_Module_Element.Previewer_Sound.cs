@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
@@ -31,8 +32,6 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 【参数来源】SerializedProperty（serializedObject 即当前 target）。
         /// <para/>
-        /// 【迁移说明】原实现走 XCoroutineUtility 协程 + 自建 AudioSource 列表，
-        /// 现统一迁移到 <see cref="Editor_XHud_Tool_SoundPlayer"/>。
         /// 本方法只负责"筛选出要预览的 Sounder"，参数计算交给 <see cref="Preview_ElementSounder_Item"/>。
         /// </summary>
         /// <param name="Timings">匹配时机</param>
@@ -106,7 +105,7 @@ namespace SevenStrikeModules.XHud.Editor
             float pMin = sounder.Pitch_Min;
             float pMax = sounder.Pitch_Max;
 
-            Editor_XHud_Tool_SoundPlayer.Enqueue(
+            XGUI.EditorPlayer_Sound.Enqueue(
                 clip, delay, volume, mute, useRandomPitch, pMin, pMax);
         }
         /// <summary>
@@ -150,7 +149,7 @@ namespace SevenStrikeModules.XHud.Editor
                 float pMax = Mathf.Max(sod.MinPitch, sod.MaxPitch);
                 bool useRandomPitch = !Mathf.Approximately(pMin, 1f) || !Mathf.Approximately(pMax, 1f);
 
-                Editor_XHud_Tool_SoundPlayer.Enqueue(
+                XGUI.EditorPlayer_Sound.Enqueue(
                     clip, delay, volume, mute, useRandomPitch, pMin, pMax);
             }
         }

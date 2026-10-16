@@ -328,4 +328,21 @@ namespace SevenStrikeModules.XGUI.Runtime
         右,
         全部
     }
+    /// <summary>
+    /// 缓动模式（与 XTween 的 EaseMode 对齐）。
+    /// </summary>
+    public enum XGUIEaseMode
+    {
+        Linear,
+        InQuad, OutQuad, InOutQuad,
+        InCubic, OutCubic, InOutCubic,
+        InQuart, OutQuart, InOutQuart,
+        InQuint, OutQuint, InOutQuint,
+        InSine, OutSine, InOutSine,
+        InExpo, OutExpo, InOutExpo,
+        InCirc, OutCirc, InOutCirc,
+        InBack, OutBack, InOutBack,
+        InElastic, OutElastic, InOutElastic,
+        InBounce, OutBounce, InOutBounce,
+    }
 }

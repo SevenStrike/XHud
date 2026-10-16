@@ -333,7 +333,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
             XGUI.gui_label(
                 rect: rect_title,
-                text: new GUIContent(title),
+                text: new GUIContent(rect.width < width_limite ? "" : title),
                 text_color: title_color,
                 offset: new Vector2(0, -1),
                 size: title_size,

@@ -2900,7 +2900,7 @@ namespace SevenStrikeModules.XHud.Editor
                 float pMax = Mathf.Max(sod.MinPitch, sod.MaxPitch);
                 bool useRandomPitch = !Mathf.Approximately(pMin, 1f) || !Mathf.Approximately(pMax, 1f);
 
-                Editor_XHud_Tool_SoundPlayer.Enqueue(
+                XGUI.EditorPlayer_Sound.Enqueue(
                     clip, delay, volume, mute, useRandomPitch, pMin, pMax);
             }
 
@@ -2927,7 +2927,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void StopAllPreviewSounds()
         {
-            Editor_XHud_Tool_SoundPlayer.Stop();
+            XGUI.EditorPlayer_Sound.Stop();
         }
         #endregion
 

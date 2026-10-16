@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XTween;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditorInternal;
@@ -397,15 +398,15 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 目标入库选择
-            LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 110, rect.width - 15, XGUI.GetSingleLineHeight());
+            LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 110, rect.width - (rect.x + (rect.width - 220)), XGUI.GetSingleLineHeight());
             sp_library_name.stringValue = XGUI.gui_string_popup(
                   rect: LibSelector_rect,
-                  title: "类型",
+                  title: "目标库",
                   title_color: Color.white,
                   title_size: XGUIFontSize.M,
                   title_font_style: FontStyle.Normal,
                   title_padding: new RectOffset(0, 0, 0, 0),
-                  title_width: 40,
+                  title_width: 45,
                   prop: sp_library_name,
                   options: libnames,
                   opt_text_size: XGUIFontSize.M,
@@ -416,9 +417,20 @@ namespace SevenStrikeModules.XHud.Editor
                   opt_bg_fill: XGUIGroup.实体,
                   opt_bg_color: XGUIColor.亮白,
                   opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
-                  icon_arrow_color: Color.black);
+                  icon_arrow_color: Color.black,
+                  usearrow: true,
+                  width_limite: 100);
             sp_library_name.serializedObject.ApplyModifiedProperties();
             #endregion
+
+            // 分割线
+            rect_seperate.Set(rect.x + (rect.width - 240), rect.y + 145, 200, 1);
+            XGUI.gui_seperator(
+                rect: rect_seperate,
+                thickness: 1,
+                color: XHud_Dashboard.Theme_SeperateLine,
+                margin: new RectOffset(0, 0, 0, 0),
+                padding: new RectOffset(0, 0, 0, 0));
 
             #region 元素信息标题
             LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 160, 100, 15);
@@ -433,10 +445,14 @@ namespace SevenStrikeModules.XHud.Editor
                    wrap: true,
                    font_style: FontStyle.Bold);
 
+            float margin = 165;
+            float step = 30;
+
             if (element_list != null && element_list.Count > 0)
             {
                 #region 名称
-                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 190, rect.width - 15, 20);
+                margin += step;
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + margin, rect.width - 15, 20);
                 XGUI.gui_label(
                     rect: LibSelector_rect,
                     text: new GUIContent($"名称： <color={colorhex_value}>{element_list[SelectedIndex].Info.Name}</color>"),
@@ -448,7 +464,8 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 标识
-                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 220, rect.width - 15, 20);
+                margin += step;
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + margin, rect.width - 15, 20);
                 XGUI.gui_label(
                     rect: LibSelector_rect,
                     text: new GUIContent($"标识： <color={colorhex_value}>{(!string.IsNullOrEmpty(element_list[SelectedIndex].Info.Indicator) ? element_list[SelectedIndex].Info.Indicator : "未设置标识名称")} </color>"),
@@ -460,7 +477,8 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 尺寸
-                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 245, rect.width - 15, 20);
+                margin += step;
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + margin, rect.width - 15, 20);
                 XGUI.gui_label(
                     rect: LibSelector_rect,
                     text: new GUIContent($"尺寸： <color={colorhex_value}>{element_list[SelectedIndex].Info.Size} </color>"),
@@ -472,7 +490,8 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 位置
-                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 270, rect.width - 15, 20);
+                margin += step;
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + margin, rect.width - 15, 20);
                 XGUI.gui_label(
                     rect: LibSelector_rect,
                     text: new GUIContent($"位置： <color={colorhex_value}>{element_list[SelectedIndex].Info.Pos} </color>"),
@@ -484,7 +503,8 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 旋转
-                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 295, rect.width - 15, 20);
+                margin += step;
+                LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + margin, rect.width - 15, 20);
                 XGUI.gui_label(
                     rect: LibSelector_rect,
                     text: new GUIContent($"旋转： <color={colorhex_value}>{element_list[SelectedIndex].Info.Rot} </color>"),

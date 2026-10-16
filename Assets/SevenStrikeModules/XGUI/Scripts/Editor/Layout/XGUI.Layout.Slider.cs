@@ -104,7 +104,7 @@ namespace SevenStrikeModules.XGUI.Editor
             return prop.floatValue;
         }
         /// <summary>
-        /// 使用自动布局绘制一个带有标签和状态图标的滑块（基于 SerializedProperty）。
+        /// 使用自动布局绘制一个带有标签和状态图标的滑块（基于值类型）。
         /// </summary>
         /// <param name="title">滑块左侧显示的标签文本。为 <c>null</c> 或空时不显示标签。</param>
         /// <param name="title_size">标签文本的字体大小。</param>
@@ -113,7 +113,77 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <param name="title_width">标签的固定宽度。为 0 时自动计算宽度。</param>
         /// <param name="status_icon">状态图标的名称。为 <c>null</c> 时不显示图标。</param>
         /// <param name="status_icon_color">状态图标的叠加颜色。传入 <see cref="Color.clear"/> 时使用白色。</param>
-        /// <param name="prop">包含当前浮点值的序列化属性。</param>
+        /// <param name="prop">滑块的当前值。</param>
+        /// <param name="left">滑块的最小值。</param>
+        /// <param name="right">滑块的最大值。</param>
+        /// <param name="prop_margin">滑块的外边距，覆盖样式默认值。</param>
+        /// <param name="prop_padding">滑块的内边距，覆盖样式默认值。</param>
+        /// <returns>用户调整后的浮点数值。</returns>
+        /// <remarks>
+        /// 该版本基于值类型（float），适用于非序列化属性的场景。
+        /// 参数列表与 <see cref="layout_slider(string, XGUIFontSize, TextAnchor, Color, float, string, Color, SerializedProperty, float, float, RectOffset, RectOffset)"/>
+        /// 完全对齐，只是 <c>prop</c> 为 float。
+        /// </remarks>
+        public static float layout_slider(string title = null, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_color = default, float title_width = 0, string status_icon = null, Color status_icon_color = default, float prop = 0, float left = 0, float right = 1, RectOffset prop_margin = default, RectOffset prop_padding = default)
+        {
+            if (title_color == Color.clear)
+                title_color = Color.white * 0.9f;
+
+            if (prop_margin == null)
+                prop_margin = new RectOffset(0, 0, 0, 0);
+
+            if (prop_padding == null)
+                prop_padding = new RectOffset(0, 0, 0, 0);
+
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                absolute_margin: true,
+                margin: prop_margin,
+                padding: prop_padding);
+
+            #region 标题
+            XGUI.layout_label(
+                text: title,
+                size: title_size,
+                text_color: title_color,
+                margin: new RectOffset(0, 0, 0, 0),
+                offset: new Vector2(0, 1),
+                clipping: TextClipping.Clip,
+                font_style: FontStyle.Normal,
+                width: title_width,
+                anchor: title_anchor,
+                font: XGUI.GetFont("xg-medium"));
+            #endregion
+
+            prop = EditorGUILayout.Slider(prop, left, right, GUILayout.MinWidth(0));
+
+            if (status_icon != null)
+            {
+                XGUI.layout_icon(
+                    icon: XGUI.GetBasedIcon(status_icon),
+                    width: 5,
+                    height: 5,
+                    icon_offset: new Vector2(0, 9),
+                    icon_color: status_icon_color,
+                    icon_margin: new RectOffset(10, 0, 0, 0),
+                    icon_alignment: XGUIIconAlignment.默认);
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+            return prop;
+        }
+        /// <summary>
+        /// 使用自动布局绘制一个带有标签和状态图标的整数滑块（基于 SerializedProperty）。
+        /// </summary>
+        /// <param name="title">滑块左侧显示的标签文本。为 <c>null</c> 或空时不显示标签。</param>
+        /// <param name="title_size">标签文本的字体大小。</param>
+        /// <param name="title_anchor">标签文本的对齐方式。</param>
+        /// <param name="title_color">标签文本的颜色。传入 <see cref="Color.clear"/> 时使用半透明白色。</param>
+        /// <param name="title_width">标签的固定宽度。为 0 时自动计算宽度。</param>
+        /// <param name="status_icon">状态图标的名称。为 <c>null</c> 时不显示图标。</param>
+        /// <param name="status_icon_color">状态图标的叠加颜色。传入 <see cref="Color.clear"/> 时使用白色。</param>
+        /// <param name="prop">包含当前整数值的序列化属性。</param>
         /// <param name="left">滑块的最小值。</param>
         /// <param name="right">滑块的最大值。</param>
         /// <param name="prop_margin">滑块的外边距，覆盖样式默认值。</param>
@@ -176,6 +246,76 @@ namespace SevenStrikeModules.XGUI.Editor
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
 
             return prop.intValue;
+        }
+        /// <summary>
+        /// 使用自动布局绘制一个带有标签和状态图标的整数滑块（基于值类型）。
+        /// </summary>
+        /// <param name="title">滑块左侧显示的标签文本。为 <c>null</c> 或空时不显示标签。</param>
+        /// <param name="title_size">标签文本的字体大小。</param>
+        /// <param name="title_anchor">标签文本的对齐方式。</param>
+        /// <param name="title_color">标签文本的颜色。传入 <see cref="Color.clear"/> 时使用半透明白色。</param>
+        /// <param name="title_width">标签的固定宽度。为 0 时自动计算宽度。</param>
+        /// <param name="status_icon">状态图标的名称。为 <c>null</c> 时不显示图标。</param>
+        /// <param name="status_icon_color">状态图标的叠加颜色。传入 <see cref="Color.clear"/> 时使用白色。</param>
+        /// <param name="prop">滑块的当前值。</param>
+        /// <param name="left">滑块的最小值。</param>
+        /// <param name="right">滑块的最大值。</param>
+        /// <param name="prop_margin">滑块的外边距，覆盖样式默认值。</param>
+        /// <param name="prop_padding">滑块的内边距，覆盖样式默认值。</param>
+        /// <returns>用户调整后的整数值。</returns>
+        /// <remarks>
+        /// 该版本基于值类型（int），适用于非序列化属性的场景。
+        /// 参数列表与 <see cref="layout_slider_int(string, XGUIFontSize, TextAnchor, Color, float, string, Color, SerializedProperty, int, int, RectOffset, RectOffset)"/>
+        /// 完全对齐，只是 <c>prop</c> 为 int。
+        /// </remarks>
+        public static int layout_slider_int(string title = null, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, Color title_color = default, float title_width = 0, string status_icon = null, Color status_icon_color = default, int prop = 0, int left = 0, int right = 1, RectOffset prop_margin = default, RectOffset prop_padding = default)
+        {
+            if (title_color == Color.clear)
+                title_color = Color.white * 0.9f;
+
+            if (prop_margin == null)
+                prop_margin = new RectOffset(0, 0, 0, 0);
+
+            if (prop_padding == null)
+                prop_padding = new RectOffset(0, 0, 0, 0);
+
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                absolute_margin: true,
+                margin: prop_margin,
+                padding: prop_padding);
+
+            #region 标题
+            XGUI.layout_label(
+                text: title,
+                size: title_size,
+                text_color: title_color,
+                margin: new RectOffset(0, 0, 0, 0),
+                offset: new Vector2(0, 1),
+                clipping: TextClipping.Clip,
+                font_style: FontStyle.Normal,
+                width: title_width,
+                anchor: title_anchor,
+                font: XGUI.GetFont("xg-medium"));
+            #endregion
+
+            prop = EditorGUILayout.IntSlider(prop, left, right, GUILayout.MinWidth(0));
+
+            if (status_icon != null)
+            {
+                XGUI.layout_icon(
+                    icon: XGUI.GetBasedIcon(status_icon),
+                    width: 5,
+                    height: 5,
+                    icon_offset: new Vector2(0, 9),
+                    icon_color: status_icon_color,
+                    icon_margin: new RectOffset(10, 0, 0, 0),
+                    icon_alignment: XGUIIconAlignment.默认);
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+            return prop;
         }
         /// <summary>
         /// 使用自动布局绘制一个带有标签、最小值和最大值输入框的范围滑块（MinMaxSlider）。

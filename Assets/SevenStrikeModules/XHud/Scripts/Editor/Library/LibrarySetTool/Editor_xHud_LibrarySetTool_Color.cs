@@ -23,7 +23,6 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using UnityEditor;
@@ -115,21 +114,18 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 字段 - 预览
         /// <summary>
-        /// 每帧预览动画的持续时间间隔。
+        /// 每帧预览动画的持续时间间隔（秒）。
         /// </summary>
-        private float PreviewDataDuration = 0.035f;
+        private float PreviewInterval = 0.035f;
         /// <summary>
         /// 当前预览动画数据的索引。
         /// </summary>
         private int PreviewData_Index = 0;
         /// <summary>
-        /// 预览动画协程句柄。
-        /// </summary>
-        private XCoroutine PreviewCoroutine;
-        /// <summary>
-        /// 当前预览纹理。
+        /// 当前预览纹理（由 SequencePreviewer 的 Current 同步过来）。
         /// </summary>
         private Texture2D PreviewTex = null;
+        [System.NonSerialized]
         /// <summary>
         /// 预览序列帧数据数组。
         /// </summary>
@@ -228,7 +224,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnDisable()
         {
-            StopPreviewUpdate();
+            XGUI.EditorPlayer_Sequence.Stop();
         }
         /// <summary>
         /// Unity 启用回调。
@@ -243,8 +239,6 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            StartPreviewUpdate();
-
             BaseObject = new SerializedObject(this);
             sp_ColorName = BaseObject.FindProperty("ColorName");
             sp_Color = BaseObject.FindProperty("Color");
@@ -260,6 +254,9 @@ namespace SevenStrikeModules.XHud.Editor
 
             PreviewData_Index = XGUI.x_Editor_Data_Get_With_Int("xData_library_color_previewdata_index");
 
+            // 新增：加载 + 启动预览
+            LoadPreviewDatas();
+            PlayCurrentPreview();
         }
         /// <summary>
         /// Unity 销毁回调。
@@ -378,11 +375,15 @@ namespace SevenStrikeModules.XHud.Editor
             }
 
             #region 预览图片（尺寸300 x 265）
-            draw_rect.Set(rect_preview.x + ((rect_preview.width / 2) - (PreviewTex ? PreviewTex.width / 2 : 0)), rect_preview.y + 10, 300, 265);
+            Texture2D frame = XGUI.EditorPlayer_Sequence.IsPlaying
+                ? XGUI.EditorPlayer_Sequence.Current
+                : PreviewTex;
+
+            draw_rect.Set(rect_preview.x + ((rect_preview.width / 2) - (frame ? frame.width / 2 : 0)), rect_preview.y + 10, 300, 265);
 
             XGUI.gui_icon(
                 rect: draw_rect,
-                icon: PreviewTex,
+                icon: frame,
                 border: new RectOffset(0, 0, 0, 0),
                 color: sp_Color.colorValue);
             #endregion
@@ -419,6 +420,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 翻页按钮
+            #region 左翻页
             draw_rect.Set(rect_preview.x - 5, rect_preview.y + (rect_preview.height - 65), 64, 64);
             if (XGUI.gui_button(
                 rect: draw_rect,
@@ -428,20 +430,26 @@ namespace SevenStrikeModules.XHud.Editor
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0)))
             {
+                if (PreviewDatas == null || PreviewDatas.Length == 0)
+                {
+                    Debug.LogWarning("[ColorPreview] PreviewDatas 为空，无法翻页");
+                    return;
+                }
+
                 if (PreviewData_Index <= 0)
                 {
                     PreviewData_Index = PreviewDatas.Length - 1;
                 }
                 else
-
                 {
                     PreviewData_Index--;
                 }
-                StopPreviewUpdate();
-                StartPreviewUpdate();
                 XGUI.x_Editor_Data_Set_With_Int("xData_library_color_previewdata_index", PreviewData_Index);
+                PlayCurrentPreview();
             }
+            #endregion
 
+            #region 右翻页
             draw_rect.Set(rect_preview.x + (rect_preview.width - 60), rect_preview.y + (rect_preview.height - 65), 64, 64);
             if (XGUI.gui_button(
                rect: draw_rect,
@@ -451,19 +459,24 @@ namespace SevenStrikeModules.XHud.Editor
                margin: new RectOffset(0, 0, 0, 0),
                padding: new RectOffset(0, 0, 0, 0)))
             {
+                if (PreviewDatas == null || PreviewDatas.Length == 0)
+                {
+                    Debug.LogWarning("[ColorPreview] PreviewDatas 为空，无法翻页");
+                    return;
+                }
+
                 if (PreviewData_Index >= PreviewDatas.Length - 1)
                 {
                     PreviewData_Index = 0;
                 }
                 else
-
                 {
                     PreviewData_Index++;
                 }
-                StopPreviewUpdate();
-                StartPreviewUpdate();
                 XGUI.x_Editor_Data_Set_With_Int("xData_library_color_previewdata_index", PreviewData_Index);
+                PlayCurrentPreview();
             }
+            #endregion
             #endregion
 
             GUI.backgroundColor = Color.white;
@@ -608,8 +621,6 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             BaseObject.ApplyModifiedProperties();
-
-            Repaint();
 
             XGUI.layout_space(10);
 
@@ -809,6 +820,59 @@ namespace SevenStrikeModules.XHud.Editor
             }
 
             return _out;
+        }
+        /// <summary>
+        /// 加载所有序列帧预览资源（只加载一次，已加载则跳过）。
+        /// </summary>
+        private void LoadPreviewDatas()
+        {
+            if (PreviewDatas != null && PreviewDatas.Length > 0) return;
+
+            string path = $"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/samples";
+            PreviewDatas = LoadAllAssetsAtPathWithPattern<XHud_LibrarySetTool_Color_PreviewData>(path, ".asset").ToArray();
+        }
+
+        /// <summary>
+        /// 按当前 PreviewData_Index 播放对应的序列帧。
+        /// <para/>
+        /// - 数据为空 / 索引越界 → 停止播放并清空 PreviewTex；
+        /// - 否则交给 Editor_XHud_Tool_SequencePreviewer 播放，回调里同步 PreviewTex 并 Repaint。
+        /// </summary>
+        private void PlayCurrentPreview()
+        {
+            if (PreviewDatas == null || PreviewDatas.Length == 0)
+            {
+                XGUI.EditorPlayer_Sequence.Stop();
+                PreviewTex = null;
+                return;
+            }
+
+            if (PreviewData_Index < 0 || PreviewData_Index >= PreviewDatas.Length)
+            {
+                PreviewData_Index = 0;
+            }
+
+            XHud_LibrarySetTool_Color_PreviewData data = PreviewDatas[PreviewData_Index];
+            if (data == null || data.Textures == null || data.Textures.Count == 0)
+            {
+                XGUI.EditorPlayer_Sequence.Stop();
+                PreviewTex = null;
+                return;
+            }
+
+            XGUI.EditorPlayer_Sequence.Play(
+                frames: data.Textures,
+                interval: PreviewInterval,
+                loopCount: -1,
+                onFrame: () =>
+                {
+                    PreviewTex = XGUI.EditorPlayer_Sequence.Current;
+                    Repaint();
+                });
+
+
+            // 立即给一次初值，避免下一帧前 PreviewTex 还是旧值
+            PreviewTex = XGUI.EditorPlayer_Sequence.Current;
         }
         #endregion
 
@@ -1056,45 +1120,6 @@ namespace SevenStrikeModules.XHud.Editor
             if (hue >= 350 && hue < 360) return "浅粉红"; // 350°-360°
 
             return "未知色";
-        }
-        #endregion
-
-        #region 工具 - 预览动画
-        /// <summary>
-        /// 开始预览序列帧动画。
-        /// </summary>
-        public void StartPreviewUpdate()
-        {
-            PreviewCoroutine = XCoroutineUtility.xec_StartCoroutineOwnerless(PreviewUpdater());
-        }
-        /// <summary>
-        /// 停止预览序列帧动画。
-        /// </summary>
-        public void StopPreviewUpdate()
-        {
-            XCoroutineUtility.xec_StopCoroutine(PreviewCoroutine);
-        }
-        /// <summary>
-        /// 预览序列帧协程。
-        /// <para/>
-        /// 从资源目录加载所有 <see cref="XHud_LibrarySetTool_Color_PreviewData"/>，
-        /// 并按固定时间间隔循环切换当前预览数据的纹理序列。
-        /// </summary>
-        IEnumerator PreviewUpdater()
-        {
-            string path = $"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/samples";
-            //获取预览序列帧
-            PreviewDatas = LoadAllAssetsAtPathWithPattern<XHud_LibrarySetTool_Color_PreviewData>(path, ".asset").ToArray();
-
-            var waitForOneSecond = new XCoroutineWaitForSeconds(PreviewDataDuration);
-            while (true)
-            {
-                for (int i = 0; i < PreviewDatas[PreviewData_Index].Textures.Count; i++)
-                {
-                    PreviewTex = PreviewDatas[PreviewData_Index].Textures[i];
-                    yield return waitForOneSecond;
-                }
-            }
         }
         #endregion
     }

@@ -177,6 +177,132 @@ namespace SevenStrikeModules.XGUI.Editor
             return prop.intValue;
         }
         /// <summary>
+        /// 使用自动布局绘制一个带有标签的整数下拉选择框（基于值类型）。
+        /// </summary>
+        /// <param name="title">下拉框的标签文本。为 <c>null</c> 或空时不显示标签。</param>
+        /// <param name="title_width">标签的固定宽度。</param>
+        /// <param name="title_color">标签文本的颜色。传入 <see cref="Color.clear"/> 时使用半透明白色。</param>
+        /// <param name="title_size">标签文本的字体大小。</param>
+        /// <param name="title_anchor">标签文本的对齐方式。</param>
+        /// <param name="prop">当前选中的整数值（索引）。</param>
+        /// <param name="options">下拉选项的显示文本数组。</param>
+        /// <param name="font">下拉框文本的字体。为 <c>null</c> 时使用样式默认字体。</param>
+        /// <param name="opt_text_size">下拉框选项文本的字体大小。</param>
+        /// <param name="opt_text_color">下拉框选项文本的颜色。传入 <see cref="Color.clear"/> 时使用白色。</param>
+        /// <param name="opt_text_padding">下拉框文本的内边距。</param>
+        /// <param name="opt_anchor">下拉框选项文本的对齐方式。</param>
+        /// <param name="opt_font_style">下拉框选项文本的字体样式。</param>
+        /// <param name="opt_bg_fill">下拉框背景的填充样式。</param>
+        /// <param name="opt_bg_color">下拉框背景的颜色主题。</param>
+        /// <param name="opt_bg_color_gui">下拉框背景的叠加颜色。传入 <see cref="Color.clear"/> 时使用白色。</param>
+        /// <param name="added_height">下拉框额外增加的高度。</param>
+        /// <param name="icon_arrow_color">下拉箭头图标的叠加颜色。传入 <see cref="Color.clear"/> 时使用白色。</param>
+        /// <param name="act_on_changed">当选中项发生改变时的回调委托，参数为新选中的索引值。</param>
+        /// <returns>用户选择后的整数值（索引）。</returns>
+        /// <remarks>
+        /// 该版本基于值类型（int），适用于非序列化属性的场景，不处理多选混合状态。
+        /// 参数列表与 <see cref="layout_string_popup(string, float, Color, XGUIFontSize, TextAnchor, string, string[], Font, XGUIFontSize, Color, RectOffset, TextAnchor, FontStyle, XGUIGroup, XGUIColor, Color, float, Color, Action{string}, RectOffset, RectOffset, RectOffset)"/>
+        /// 完全对齐，只是 <c>prop</c> 为 int。
+        /// </remarks>
+        public static int layout_int_popup(string title = null, float title_width = 80, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, int prop = 0, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIGroup opt_bg_fill = XGUIGroup.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, Action<int> act_on_changed = null, RectOffset padding = default, RectOffset margin = default, RectOffset title_margin = default)
+        {
+            if (opt_text_padding == null)
+                opt_text_padding = new RectOffset(0, 0, 0, 0);
+
+            if (padding == null)
+                padding = new RectOffset(0, 0, 0, 0);
+
+            if (margin == null)
+                margin = new RectOffset(0, 0, 0, 0);
+
+            if (title_margin == null)
+                title_margin = new RectOffset(0, 0, 0, 0);
+
+            if (title_color == Color.clear)
+                title_color = Color.white * 0.9f;
+
+            if (icon_arrow_color == Color.clear)
+                icon_arrow_color = Color.white;
+
+            if (opt_text_color == Color.clear)
+                opt_text_color = Color.white;
+
+            if (opt_bg_color_gui == Color.clear)
+                opt_bg_color_gui = Color.white;
+
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                bg_fill: XGUIGroup.无,
+                bg_color: XGUIColor.无,
+                title_clipping: TextClipping.Clip,
+                absolute_padding: true,
+                absolute_margin: true,
+                padding: padding,
+                margin: margin);
+
+            XGUI.layout_label(
+                text: title,
+                size: title_size,
+                text_color: title_color,
+                offset: new Vector2(0, 0),
+                margin: title_margin,
+                clipping: TextClipping.Clip,
+                anchor: title_anchor,
+                width: title_width);
+
+            #region 下拉菜单样式
+            GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
+            style.normal.background = GetGroupTexture(opt_bg_fill, opt_bg_color);
+            style.normal.textColor = opt_text_color;
+            style.fontSize = XGUI.GetFontSize(opt_text_size);
+
+            if (font != null)
+                style.font = font;
+
+            RectOffset _p = style.padding;
+            style.padding = new RectOffset(_p.left + opt_text_padding.left, _p.right + opt_text_padding.right, _p.top + opt_text_padding.top, _p.bottom + opt_text_padding.bottom);
+
+            if (added_height != 0)
+                style.fixedHeight += added_height;
+            style.alignment = opt_anchor;
+            #endregion
+
+            EditorGUI.BeginChangeCheck();
+
+            #region 下拉菜单控件
+            Color col = GUI.backgroundColor;
+            GUI.backgroundColor = opt_bg_color_gui;
+
+            int x_index = EditorGUILayout.Popup(
+                prop,
+                options,
+                style,
+                GUILayout.MinWidth(20),
+                GUILayout.Height(XGUI.GetSingleLineHeight()));
+
+            GUI.backgroundColor = col;
+            #endregion
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                if (act_on_changed != null)
+                    act_on_changed(x_index);
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+            Rect rect_arrow_last = XGUI.GetLastRect();
+            Rect rect_arrow = new Rect(rect_arrow_last.x + rect_arrow_last.width - 25, rect_arrow_last.y + 5, 6, 6);
+
+            // 箭头图标
+            XGUI.gui_icon(
+                rect: rect_arrow,
+                icon: XGUI.GetBasedIcon("icon_arrow"),
+                color: icon_arrow_color);
+
+            return x_index;
+        }
+        /// <summary>
         /// 使用自动布局绘制一个带有标签的字符串下拉选择框（基于 SerializedProperty）。
         /// </summary>
         /// <param name="title">下拉框的标签文本。为 <c>null</c> 或空时不显示标签。</param>
@@ -325,6 +451,133 @@ namespace SevenStrikeModules.XGUI.Editor
                 color: icon_arrow_color);
 
             return prop.stringValue;
+        }
+        /// <summary>
+        /// 使用自动布局绘制一个带有标签的字符串下拉选择框（基于 SerializedProperty）。
+        /// </summary>
+        /// <param name="title">下拉框的标签文本。为 <c>null</c> 或空时不显示标签。</param>
+        /// <param name="title_width">标签的固定宽度。</param>
+        /// <param name="title_color">标签文本的颜色。传入 <see cref="Color.clear"/> 时使用半透明白色。</param>
+        /// <param name="title_size">标签文本的字体大小。</param>
+        /// <param name="title_anchor">标签文本的对齐方式。</param>
+        /// <param name="prop">当前选中字符串值。</param>
+        /// <param name="options">下拉选项的显示文本数组。</param>
+        /// <param name="font">下拉框文本的字体。为 <c>null</c> 时使用样式默认字体。</param>
+        /// <param name="opt_text_size">下拉框选项文本的字体大小。</param>
+        /// <param name="opt_text_color">下拉框选项文本的颜色。传入 <see cref="Color.clear"/> 时使用白色。</param>
+        /// <param name="opt_text_padding">下拉框文本的内边距。</param>
+        /// <param name="opt_anchor">下拉框选项文本的对齐方式。</param>
+        /// <param name="opt_font_style">下拉框选项文本的字体样式。</param>
+        /// <param name="opt_bg_fill">下拉框背景的填充样式。</param>
+        /// <param name="opt_bg_color">下拉框背景的颜色主题。</param>
+        /// <param name="opt_bg_color_gui">下拉框背景的叠加颜色。传入 <see cref="Color.clear"/> 时使用白色。</param>
+        /// <param name="added_height">下拉框额外增加的高度。</param>
+        /// <param name="icon_arrow_color">下拉箭头图标的叠加颜色。传入 <see cref="Color.clear"/> 时使用白色。</param>
+        /// <param name="act_on_changed">当选中项发生改变时的回调委托，参数为新选中的字符串值。</param>
+        /// <returns>用户选择后的字符串值。</returns>
+        /// <remarks>
+        /// 该方法与 <see cref="gui_string_popup(Rect, string, Color, XGUIFontSize, FontStyle, RectOffset, float, float, SerializedProperty, string[], Font, XGUIFontSize, Color, RectOffset, TextAnchor, FontStyle, XGUIGroup, XGUIColor, Color, float, Color)"/> 
+        /// 功能相同，但使用 <see cref="EditorGUILayout"/> 自动布局系统，无需手动指定矩形位置。
+        /// <para>
+        /// 支持多选混合状态显示（显示 "—"），当 <paramref name="prop"/> 存在多个不同值时自动切换为混合模式。
+        /// </para>
+        /// </remarks>
+        public static string layout_string_popup(string title = null, float title_width = 80, Color title_color = default, XGUIFontSize title_size = XGUIFontSize.M, TextAnchor title_anchor = TextAnchor.MiddleLeft, string prop = null, string[] options = null, Font font = null, XGUIFontSize opt_text_size = XGUIFontSize.M, Color opt_text_color = default, RectOffset opt_text_padding = default, TextAnchor opt_anchor = TextAnchor.MiddleCenter, FontStyle opt_font_style = FontStyle.Normal, XGUIGroup opt_bg_fill = XGUIGroup.实体, XGUIColor opt_bg_color = XGUIColor.亮白, Color opt_bg_color_gui = default, float added_height = 0, Color icon_arrow_color = default, Action<string> act_on_changed = null, RectOffset padding = default, RectOffset margin = default, RectOffset title_margin = default)
+        {
+            if (opt_text_padding == null)
+                opt_text_padding = new RectOffset(0, 0, 0, 0);
+
+            if (padding == null)
+                padding = new RectOffset(0, 0, 0, 0);
+
+            if (margin == null)
+                margin = new RectOffset(0, 0, 0, 0);
+
+            if (title_margin == null)
+                title_margin = new RectOffset(0, 0, 0, 0);
+
+            if (title_color == Color.clear)
+                title_color = Color.white * 0.9f;
+
+            if (icon_arrow_color == Color.clear)
+                icon_arrow_color = Color.white;
+
+            if (opt_text_color == Color.clear)
+                opt_text_color = Color.white;
+
+            if (opt_bg_color_gui == Color.clear)
+                opt_bg_color_gui = Color.white;
+
+            XGUI.layout_group_start(
+                type: XGUIContainerType.Horizontal,
+                bg_fill: XGUIGroup.无,
+                bg_color: XGUIColor.无,
+                title_clipping: TextClipping.Clip,
+                absolute_padding: true,
+                absolute_margin: true,
+                padding: padding,
+                margin: margin);
+
+            XGUI.layout_label(
+                text: title,
+                size: title_size,
+                text_color: title_color,
+                offset: new Vector2(0, 0),
+                margin: title_margin,
+                clipping: TextClipping.Clip,
+                anchor: title_anchor,
+                width: title_width);
+
+            #region 下拉菜单样式
+            GUIStyle style = new GUIStyle(XGUI.style_xg_popup);
+            style.normal.background = GetGroupTexture(opt_bg_fill, opt_bg_color);
+            style.normal.textColor = opt_text_color;
+            style.fontSize = XGUI.GetFontSize(opt_text_size);
+
+            if (font != null)
+                style.font = font;
+
+            RectOffset _p = style.padding;
+            style.padding = new RectOffset(_p.left + opt_text_padding.left, _p.right + opt_text_padding.right, _p.top + opt_text_padding.top, _p.bottom + opt_text_padding.bottom);
+
+            if (added_height != 0)
+                style.fixedHeight += added_height;
+            style.alignment = opt_anchor;
+            #endregion
+
+            int _index = GetStringOptionIndex(prop, options);
+            EditorGUI.BeginChangeCheck();
+
+            #region 下拉菜单控件
+            Color col = GUI.backgroundColor;
+            GUI.backgroundColor = opt_bg_color_gui;
+            // 正常显示 Popup
+            int x_index = EditorGUILayout.Popup(_index, options, style, GUILayout.MinWidth(20), GUILayout.Height(XGUI.GetSingleLineHeight()));
+            if (x_index != _index)
+            {
+                SetStringOption(ref prop, options[x_index]);
+            }
+            GUI.backgroundColor = col;
+            #endregion
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                if (act_on_changed != null)
+                    act_on_changed(prop);
+            }
+
+            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+
+            Rect rect_arrow_last = XGUI.GetLastRect();
+            Rect rect_arrow = new Rect(rect_arrow_last.x + rect_arrow_last.width - 25, rect_arrow_last.y + 5, 6, 6);
+
+            // 箭头图标
+            XGUI.gui_icon(
+                rect: rect_arrow,
+                icon: XGUI.GetBasedIcon("icon_arrow"),
+                color: icon_arrow_color);
+
+            return prop;
         }
         /// <summary>
         /// 设置序列化属性的整数值（用于泛型菜单回调）。

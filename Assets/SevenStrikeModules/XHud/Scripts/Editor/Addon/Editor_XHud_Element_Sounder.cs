@@ -895,8 +895,6 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 预览音效（统一入口）。
         /// <para/>
-        /// 【迁移说明】原实现走 XCoroutineUtility 协程 + 自建 AudioSource 列表，
-        /// 现统一迁移到 <see cref="Editor_XHud_Tool_SoundPlayer"/>。
         /// 本方法只负责"决定要预览哪些 Sounder"，具体参数计算与入队交给 <see cref="EnqueueSounderSound"/>。
         /// <para/>
         /// 【多选行为】多选时逐个 Sounder 各自取 SoundName / DelayTime / Volume / Pitch，
@@ -971,18 +969,18 @@ namespace SevenStrikeModules.XHud.Editor
             bool useRandomPitch = sounder.UseRandomPitch;
             float pMin = sounder.Pitch_Min;
             float pMax = sounder.Pitch_Max;
-            Editor_XHud_Tool_SoundPlayer.Enqueue(
+            XGUI.EditorPlayer_Sound.Enqueue(
                 clip, delay, volume, mute, useRandomPitch, pMin, pMax);
         }
         /// <summary>
         /// 停止所有音效预览。
         /// <para/>
-        /// 委托给 <see cref="Editor_XHud_Tool_SoundPlayer.Stop()"/>，
+        /// 委托给 <see cref="XGUI_Player_Sound.Stop()"/>，
         /// 语义完全一致：待触发全丢 + 正在播立即掐断并销毁。
         /// </summary>
         private void Preview_HudSound_Stop()
         {
-            Editor_XHud_Tool_SoundPlayer.Stop();
+            XGUI.EditorPlayer_Sound.Stop();
         }
         #endregion
 

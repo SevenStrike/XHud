@@ -172,13 +172,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private bool StoppedResetMode = true;
         /// <summary>
-        /// 预览协程句柄。
-        /// </summary>
-        private XCoroutine PreviewCoroutine;
-        /// <summary>
         /// 每帧预览动画的持续时间间隔。
         /// </summary>
-        private float PreviewDataDuration = 0.035f;
+        private float PreviewDataDuration = 0.01f;
         /// <summary>
         /// 反色通道。
         /// </summary>
@@ -309,6 +305,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnDisable()
         {
+            StopPreview();
+
             XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_ColorA", XGUI_Utilitys.Color_To_String(sp_BgGrid_Color_A.colorValue));
             XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_ColorB", XGUI_Utilitys.Color_To_String(sp_BgGrid_Color_B.colorValue));
             XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_Tilling", sp_BgGrid_Tilling_multiply.floatValue.ToString("F2"));
@@ -648,8 +646,7 @@ namespace SevenStrikeModules.XHud.Editor
                 prop_margin: new RectOffset(0, 0, 0, 0));
             if (XGUI.ChangedCheck_End())
             {
-                StopPreviewUpdate();
-                IsPreviewing = false;
+                StopPreview();
 
                 sp_SelectedIndex.intValue = sp_PreviewData_Index.intValue;
 
@@ -670,8 +667,8 @@ namespace SevenStrikeModules.XHud.Editor
                 width: 14,
                 height: 14))
             {
-                IsPreviewing = true;
-                StartPreviewUpdate();
+                StartPreview();
+                BaseObject.ApplyModifiedProperties();
                 return;
             }
             if (IsPreviewing && XGUI.layout_button(
@@ -684,9 +681,11 @@ namespace SevenStrikeModules.XHud.Editor
                width: 14,
                height: 14))
             {
-                IsPreviewing = false;
-                StopPreviewUpdate();
+                StopPreview();
                 PreviewData_Index = 0;
+                sp_SelectedIndex.intValue = 0;
+                sp_PreviewData_Index.intValue = 0;
+                BaseObject.ApplyModifiedProperties();
                 return;
             }
             #endregion
@@ -758,9 +757,7 @@ namespace SevenStrikeModules.XHud.Editor
                button_text_font: XGUI.GetFont("xg-medium")))
             {
                 InvertChannel = !InvertChannel;
-                StopPreviewUpdate();
-                IsPreviewing = false;
-
+                StopPreview();
                 PreviewData_Index = 0;
             }
             #endregion
@@ -1066,24 +1063,63 @@ namespace SevenStrikeModules.XHud.Editor
             }
             if (e.type == EventType.KeyDown)
             {
-                if (rect_preview_group.Contains(e.mousePosition))
+                // 有输入控件被聚焦时，不响应快捷键
+                if (!string.IsNullOrEmpty(GUI.GetNameOfFocusedControl()))
+                    return;
+
+                bool handled = false;
+
+                // 列表区域：上下键
+                if (scrollview_rect.Contains(e.mousePosition))
                 {
-                    if (e.keyCode == KeyCode.RightArrow)
+                    if (e.keyCode == KeyCode.UpArrow)
                     {
-                        FrameMoveForward();
+                        StopPreview();
+                        if (sp_SelectedIndex.intValue <= 0)
+                            sp_SelectedIndex.intValue = 0;
+                        else
+                            sp_SelectedIndex.intValue--;
+                        PreviewData_Index = sp_SelectedIndex.intValue;
                         CalculateListScroller();
+                        handled = true;
                     }
-                    if (e.keyCode == KeyCode.LeftArrow)
+                    else if (e.keyCode == KeyCode.DownArrow)
                     {
-                        FrameMoveBackward();
+                        StopPreview();
+                        if (sp_SelectedIndex.intValue >= TransitionNode.Frames.Count - 1)
+                            sp_SelectedIndex.intValue = TransitionNode.Frames.Count - 1;
+                        else
+                            sp_SelectedIndex.intValue++;
+                        PreviewData_Index = sp_SelectedIndex.intValue;
                         CalculateListScroller();
+                        handled = true;
                     }
                 }
+
+                // 预览区域：< / > 步进
+                if (rect_preview_group.Contains(e.mousePosition))
+                {
+                    if (e.keyCode == KeyCode.Period)   // >
+                    {
+                        FrameMoveForward();
+                        handled = true;
+                    }
+                    else if (e.keyCode == KeyCode.Comma)   // <
+                    {
+                        FrameMoveBackward();
+                        handled = true;
+                    }
+                }
+
+                // 全局 Escape
                 if (e.keyCode == KeyCode.Escape)
                 {
                     Close();
+                    handled = true;
                 }
-                e.Use();
+
+                if (handled)
+                    e.Use();
             }
             #endregion
 
@@ -1205,7 +1241,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         if (e.keyCode == KeyCode.UpArrow)
                         {
-                            StopPreviewUpdate();
+                            StopPreview();
                             IsPreviewing = false;
 
                             if (sp_SelectedIndex.intValue <= 0)
@@ -1222,7 +1258,7 @@ namespace SevenStrikeModules.XHud.Editor
                         }
                         if (e.keyCode == KeyCode.DownArrow)
                         {
-                            StopPreviewUpdate();
+                            StopPreview();
                             IsPreviewing = false;
                             if (sp_SelectedIndex.intValue >= TransitionNode.Frames.Count - 1)
                             {
@@ -1264,52 +1300,53 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 帧操作
-        /// <summary>
-        /// 向前移动一帧。
-        /// <para/>
-        /// 停止预览，将 <see cref="PreviewData_Index"/> 与 <see cref="SelectedIndex"/> 向前移动并刷新界面。
-        /// </summary>
         private void FrameMoveForward()
         {
-            StopPreviewUpdate();
-            IsPreviewing = false;
+            StopPreview();
 
-            if (sp_PreviewData_Index.intValue >= TransitionNode.Frames.Count - 1)
-            {
-                sp_PreviewData_Index.intValue = TransitionNode.Frames.Count - 1;
-            }
-            else
+            if (TransitionNode.Frames == null || TransitionNode.Frames.Count == 0)
+                return;
 
-            {
-                sp_PreviewData_Index.intValue++;
-            }
+            int lastIndex = TransitionNode.Frames.Count - 1;
+            int skip = Mathf.Max(1, TransitionNode.SkipFrame);
 
-            sp_SelectedIndex.intValue = sp_PreviewData_Index.intValue;
+            // 前进 skip 帧
+            int newIndex = sp_PreviewData_Index.intValue + skip;
 
+            // 到末尾就跳回 0
+            if (newIndex > lastIndex)
+                newIndex = 0;
+
+            sp_PreviewData_Index.intValue = newIndex;
+            sp_SelectedIndex.intValue = newIndex;
+            PreviewData_Index = newIndex;
+
+            CalculateListScroller();
             Repaint();
         }
-        /// <summary>
-        /// 向后移动一帧。
-        /// <para/>
-        /// 停止预览，将 <see cref="PreviewData_Index"/> 与 <see cref="SelectedIndex"/> 向后移动并刷新界面。
-        /// </summary>
+
         private void FrameMoveBackward()
         {
-            StopPreviewUpdate();
-            IsPreviewing = false;
+            StopPreview();
 
-            if (sp_PreviewData_Index.intValue <= 0)
-            {
-                sp_PreviewData_Index.intValue = 0;
-            }
-            else
+            if (TransitionNode.Frames == null || TransitionNode.Frames.Count == 0)
+                return;
 
-            {
-                sp_PreviewData_Index.intValue--;
-            }
+            int lastIndex = TransitionNode.Frames.Count - 1;
+            int skip = Mathf.Max(1, TransitionNode.SkipFrame);
 
-            sp_SelectedIndex.intValue = sp_PreviewData_Index.intValue;
+            // 后退 skip 帧
+            int newIndex = sp_PreviewData_Index.intValue - skip;
 
+            // 到 0 以下就跳到末尾
+            if (newIndex < 0)
+                newIndex = lastIndex;
+
+            sp_PreviewData_Index.intValue = newIndex;
+            sp_SelectedIndex.intValue = newIndex;
+            PreviewData_Index = newIndex;
+
+            CalculateListScroller();
             Repaint();
         }
         #endregion
@@ -1476,55 +1513,51 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 工具 - 预览动画
-        /// <summary>
-        /// 开始预览序列帧动画。
-        /// </summary>
-        public void StartPreviewUpdate()
+        private void StartPreview()
         {
-            PreviewCoroutine = XCoroutineUtility.xec_StartCoroutineOwnerless(PreviewUpdater());
-        }
-        /// <summary>
-        /// 停止预览序列帧动画。
-        /// </summary>
-        public void StopPreviewUpdate()
-        {
-            if (PreviewCoroutine == null)
+            if (TransitionNode.Frames == null || TransitionNode.Frames.Count == 0)
                 return;
-            XCoroutineUtility.xec_StopCoroutine(PreviewCoroutine);
-        }
-        /// <summary>
-        /// 预览序列帧协程。
-        /// <para/>
-        /// 按 <see cref="TransitionNode"/> 的跳帧间隔循环推进 <see cref="PreviewData_Index"/>，
-        /// 播放到末尾时根据 <see cref="StoppedResetMode"/> 决定自动复位或停在末帧。
-        /// </summary>
-        IEnumerator PreviewUpdater()
-        {
-            var waitForOneSecond = new XCoroutineWaitForSeconds(PreviewDataDuration);
-            while (true)
-            {
-                if (PreviewData_Index >= TransitionNode.Frames.Count - 1 - TransitionNode.SkipFrame)
-                {
-                    if (!StoppedResetMode)
-                    {
-                        IsPreviewing = false;
-                        PreviewData_Index = 0;
-                    }
-                    else
-                    {
-                        PreviewData_Index = TransitionNode.Frames.Count - 1;
-                    }
-                    StopPreviewUpdate();
-                    break;
-                }
-                else
-                {
-                    PreviewData_Index += TransitionNode.SkipFrame;
-                }
-                SelectedIndex = PreviewData_Index;
 
-                yield return waitForOneSecond;
-            }
+            int skip = Mathf.Max(1, TransitionNode.SkipFrame);
+            int lastIndex = TransitionNode.Frames.Count - 1;
+
+            // 从当前帧开始
+            int startIndex = Mathf.Clamp(PreviewData_Index, 0, lastIndex);
+
+            // 剩余帧数（按 skip 步进）
+            int remainingSteps = 0;
+            for (int i = startIndex; i <= lastIndex; i += skip)
+                remainingSteps++;
+
+            if (remainingSteps <= 0)
+                remainingSteps = 1;
+
+            var dummyFrames = new List<Texture2D>(remainingSteps);
+            for (int i = 0; i < remainingSteps; i++) dummyFrames.Add(null);
+
+            IsPreviewing = true;
+
+            XGUI.EditorPlayer_Sequence.Play(
+                frames: dummyFrames,
+                interval: PreviewDataDuration,
+                onFrame: () =>
+                {
+                    int step = XGUI.EditorPlayer_Sequence.CurrentIndex;
+                    PreviewData_Index = Mathf.Min(startIndex + step * skip, lastIndex);
+                    sp_SelectedIndex.intValue = PreviewData_Index;
+
+                    if (StoppedResetMode && step >= remainingSteps - 1)
+                        IsPreviewing = false;
+
+                    Repaint();
+                },
+                loopCount: StoppedResetMode ? 0 : -1);
+        }
+
+        private void StopPreview()
+        {
+            XGUI.EditorPlayer_Sequence.Stop();
+            IsPreviewing = false;
         }
         /// <summary>
         /// 初始化预览转场材质。
