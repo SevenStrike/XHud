@@ -1549,17 +1549,17 @@ MonoBehaviour:
   UseDebug: 0
   IsInitialized: 1
   FoldAllPanelWithDisabled: 0
-  fold_options: 1
+  fold_options: 0
   fold_canvasset: 1
   fold_camera: 1
   fold_ratiorefer: 1
-  fold_compguid: 0
+  fold_compguid: 1
   fold_reslibs: 1
   fold_elementlibs: 1
   fold_soundslib: 1
   fold_masks: 1
-  fold_global: 1
-  fold_tool: 0
+  fold_global: 0
+  fold_tool: 1
   fold_RMS: 1
   fold_layout: 1
   fold_visualsafe: 1
@@ -2364,38 +2364,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1469781040}
     m_Modifications:
-    - target: {fileID: 3093053317171108072, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: Volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3093053317171108072, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: DelayTime
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3093053317171108072, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: Indicator
-      value: ssdd
-      objectReference: {fileID: 0}
-    - target: {fileID: 3093053317171108072, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: Pitch_Max
-      value: 2.34
-      objectReference: {fileID: 0}
-    - target: {fileID: 3093053317171108072, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: Pitch_Min
-      value: 0.29
-      objectReference: {fileID: 0}
-    - target: {fileID: 3093053317171108072, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: fold_param
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3093053317171108072, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: fold_option
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3093053317171108072, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: UseRandomPitch
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3141893240754762256, guid: db17f898becf3154da3471122b978bc0, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2480,293 +2448,33 @@ PrefabInstance:
       propertyPath: mgr
       value: 
       objectReference: {fileID: 1452913949}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: fold_list
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: fold_based
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: fold_param
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: fold_state
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: fold_option
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: TweenIsPreviewing
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenSounds.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].ID
-      value: 3573
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenSounds.Array.data[3].ID
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Ease
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Type
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Delay
-      value: 1.245
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenSounds.Array.data[3].Path
-      value: "Assets/SevenStrikeModules/XHud/Sound/\u7535\u5B50\u6FC0\u5149\u58F015.wav"
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[0].IsFold
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenSounds.Array.data[0].Delay
-      value: 0.04
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenSounds.Array.data[1].Delay
-      value: 0.191
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenSounds.Array.data[2].Delay
-      value: 1.098
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenSounds.Array.data[3].Delay
-      value: 1.098
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenSounds.Array.data[3].Sound
-      value: 
-      objectReference: {fileID: 8300000, guid: 87824fcca5af67047825e110a7a19fd4, type: 3}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Timings
-      value: "\u5143\u7D20\u8FDB\u5165\u65F6"
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenSounds.Array.data[3].Timing
-      value: "\u5143\u7D20\u8FDB\u5165\u65F6"
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenSounds.Array.data[3].Volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[0].Progress
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[1].Progress
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[2].Progress
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[3].Progress
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Duration
-      value: 0.598
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Indicator
-      value: NewTween
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenSounds.Array.data[3].MaxPitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenSounds.Array.data[3].MinPitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].From_Float
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].TextCursor
-      value: '|'
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].End_Color.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].End_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].End_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].End_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].From_Color.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].From_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].From_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].From_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Original_Float
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].TweenValueMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].ValueModeIndex
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Original_Color.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Original_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Original_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Original_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Curve.m_PreInfinity
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Curve.m_PostInfinity
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].TextCursorBlinkSpeed
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Complete_Set_Endvalue
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Curve.m_RotationOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Rewind_Set_Startvalue
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Curve.m_Curve.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Curve.m_Curve.Array.data[1].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[4].Curve.m_Curve.Array.data[1].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4016231534562583080, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4223686060993486647, guid: db17f898becf3154da3471122b978bc0, type: 3}
       propertyPath: mgr
       value: 
       objectReference: {fileID: 1452913949}
+    - target: {fileID: 4223686060993486647, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: m_text
+      value: ASDFER
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223686060993486647, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: m_Maskable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223686060993486647, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223686060993486647, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: TextStyleInfo.Raycast
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223686060993486647, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: TextStyleInfo.Maskable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5755098906041804970, guid: db17f898becf3154da3471122b978bc0, type: 3}
       propertyPath: m_Name
       value: Cat
-      objectReference: {fileID: 0}
-    - target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: fold_list
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: TextIsFold
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: fold_param
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: fold_preview
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: SounderIsFold
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: TmpTextIsFold
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitivesIsFold
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: TweensPreivew_In_State
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: TweensPreivew_Out_State
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6197335552179945544, guid: db17f898becf3154da3471122b978bc0, type: 3}
-      propertyPath: PrimitiveTweenNodes.Array.data[8].Progress
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

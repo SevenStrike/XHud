@@ -368,15 +368,18 @@ namespace SevenStrikeModules.XGUI.Editor
                 padding: padding,
                 margin: margin);
 
-            XGUI.layout_label(
-                text: title,
-                size: title_size,
-                text_color: title_color,
-                offset: new Vector2(0, 0),
-                margin: title_margin,
-                clipping: TextClipping.Clip,
-                anchor: title_anchor,
-                width: title_width);
+            if (!string.IsNullOrEmpty(title))
+            {
+                XGUI.layout_label(
+                    text: title,
+                    size: title_size,
+                    text_color: title_color,
+                    offset: new Vector2(0, 0),
+                    margin: title_margin,
+                    clipping: TextClipping.Clip,
+                    anchor: title_anchor,
+                    width: title_width);
+            }
 
             #region 下拉菜单样式
             GUIStyle style = new GUIStyle(XGUI.style_xg_popup);

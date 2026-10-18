@@ -30,8 +30,6 @@ namespace SevenStrikeModules.XHud
 #endif
     using UnityEngine.Events;
     using UnityEngine.UI;
-    using SevenStrikeModules.XGUI.Editor;
-    using UnityEngine.InputSystem.XR;
 
     [SerializeField]
     [System.Serializable]

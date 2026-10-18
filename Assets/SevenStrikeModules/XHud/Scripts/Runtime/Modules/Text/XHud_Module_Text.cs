@@ -74,6 +74,30 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public TextColorOwner TextColorOwner;
 
+        #region 折叠
+        public bool
+            fold_param = true,
+            fold_option = true,
+            fold_based = true,
+            fold_sync = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_param = state;
+            fold_option = state;
+            fold_based = state;
+            fold_sync = state;
+        }
+
+        public void GroupFold(bool param = true, bool option = true, bool based = true, bool sync = true)
+        {
+            fold_param = param;
+            fold_option = option;
+            fold_based = based;
+            fold_sync = sync;
+        }
+        #endregion
+
         [SerializeField]
         /// <summary>
         /// 字体样式 - 本地
