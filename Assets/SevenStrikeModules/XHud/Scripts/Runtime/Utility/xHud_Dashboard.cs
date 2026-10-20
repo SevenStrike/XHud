@@ -67,7 +67,6 @@ namespace SevenStrikeModules.XHud
         public static XHudElementPreviewConfig XHudElementPreviewConfig;
         public static DisplayPrimitiveControllerIDConfig DisplayPrimitiveControllerIDConfig = new DisplayPrimitiveControllerIDConfig();
 
-
         #region ThemeColor 主题色
 #pragma warning disable CS0414
         private static readonly string PrefsKeyColor_Theme = "XHUD-MANAGER-COLOR-THEME";
@@ -128,16 +127,21 @@ namespace SevenStrikeModules.XHud
         #endregion
 
         #region 获取HudManger
+        public static XHud_Manager manager;
         /// <summary>
         /// 获取HudManager
         /// </summary>
         /// <returns></returns>
-        public static XHud_Manager HudManagerGet()
+        public static XHud_Manager GetManager()
         {
             if (Application.isPlaying)
                 return XHud_Manager.Instance;
             else
-                return Transform.FindFirstObjectByType<XHud_Manager>(FindObjectsInactive.Exclude);
+            {
+                if (manager == null)
+                    manager = Transform.FindFirstObjectByType<XHud_Manager>(FindObjectsInactive.Exclude);
+                return manager;
+            }
         }
         #endregion
 

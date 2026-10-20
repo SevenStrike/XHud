@@ -138,7 +138,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            HudManager = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.GetManager();
             BaseScript = (XHud_Module_Primitive_Painting)target;
             Targets_Get();
             // 获取所有序列化字段

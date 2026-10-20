@@ -111,7 +111,7 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem(("Tools/XHud/Library/CurrentLibrary-Element #F4"))]
         public static void open_elements()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.GetManager();
 
             if (mgr.Hud_ElementLibrarys.Count <= 0)
             {
@@ -155,7 +155,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             XHud_Library_Element ele_lib = null;
 
-            XHud_Manager man = XHud_Dashboard.HudManagerGet();
+            XHud_Manager man = XHud_Dashboard.GetManager();
             for (int i = 0; i < man.Hud_ElementLibrarys.Count; i++)
             {
                 XHud_Library_Element lib = man.Hud_ElementLibrarys[i];

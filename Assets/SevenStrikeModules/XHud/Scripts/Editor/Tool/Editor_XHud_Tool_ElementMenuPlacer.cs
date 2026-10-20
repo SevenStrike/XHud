@@ -50,7 +50,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="anchor">目标锚点类型。</param>
         private static void SendObjects(XHudAnchor anchor)
         {
-            XHud_Manager manager = XHud_Dashboard.HudManagerGet();
+            XHud_Manager manager = XHud_Dashboard.GetManager();
             if (manager == null)
             {
                 XGUI_Utilitys.Console("XHud - 元素放置器通知", "未找到XHudManager管理器！", XGUIMsgState.错误);
@@ -205,7 +205,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private static void SendObjects_World()
         {
-            XHud_Manager manager = XHud_Dashboard.HudManagerGet();
+            XHud_Manager manager = XHud_Dashboard.GetManager();
             if (manager == null)
             {
                 XGUI_Utilitys.Console("XHud - 元素放置器通知", "未找到XHudManager管理器！", XGUIMsgState.错误);
@@ -287,7 +287,7 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem("Assets/XHud/PlaceToAnchor (放置到锚点) /SendAuto(自动识别)", priority = 500)]
         private static void PlaceToAnchor_Auto()
         {
-            XHud_Manager manager = XHud_Dashboard.HudManagerGet();
+            XHud_Manager manager = XHud_Dashboard.GetManager();
 
             Object[] obj = Selection.objects;
             List<Object> CreatedObjs = new List<Object>();

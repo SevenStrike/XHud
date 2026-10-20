@@ -310,10 +310,6 @@ namespace SevenStrikeModules.XHud
         ///</summary>
         [SerializeField] public bool FoldWorld = true;
         /// <summary>
-        ///编辑器预览模式
-        ///</summary>
-        [SerializeField] public bool IsPreviewing = false;
-        /// <summary>
         ///所有动效播放状态（是否有任何元素正在播放动效）
         ///</summary>
         [SerializeField] private bool spawnerisRunning = false;
@@ -969,7 +965,7 @@ namespace SevenStrikeModules.XHud
                 return;
 
             // 匹配元素库
-            XHud_Library_Element ele_lib = Application.isPlaying ? XHud_Manager.Instance.hm_ElementLibrary_GetTargetLibrary(LibName) : XHud_Dashboard.HudManagerGet().hm_ElementLibrary_GetTargetLibrary(LibName);
+            XHud_Library_Element ele_lib = Application.isPlaying ? XHud_Manager.Instance.hm_ElementLibrary_GetTargetLibrary(LibName) : XHud_Dashboard.GetManager().hm_ElementLibrary_GetTargetLibrary(LibName);
 
             if (ele_lib == null)
                 return;

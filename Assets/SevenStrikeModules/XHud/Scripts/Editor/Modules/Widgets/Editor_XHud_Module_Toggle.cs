@@ -142,7 +142,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             base.OnEnable();
 
-            HudManager = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.GetManager();
 
             BaseScript = (XHud_Module_Toggle)target;
 

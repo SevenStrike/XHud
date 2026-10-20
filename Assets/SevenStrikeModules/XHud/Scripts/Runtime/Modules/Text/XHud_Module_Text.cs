@@ -22,65 +22,82 @@ namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
+    using System.Diagnostics;
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.UI;
 
     public class XHud_Module_Text : Text
     {
-        [SerializeField]
+        #region 字段 - 基础参数
         /// <summary>
-        /// 标识
+        /// 标识名称。
         /// </summary>
+        [SerializeField]
         public string Indicator;
-        [SerializeField]
         /// <summary>
-        /// 文字字体样式索引名称
+        /// 文字字体样式索引名称。
         /// </summary>
+        [SerializeField]
         public string StyleName;
-        [SerializeField]
         /// <summary>
-        /// 是否使用实时同步字体样式库
+        /// 是否使用实时同步字体样式库。
         /// </summary>
+        [SerializeField]
         public bool StyleLibSynching;
-        [SerializeField]
         /// <summary>
-        /// 判断内容是否改变
+        /// 判断内容是否改变。
         /// </summary>
+        [SerializeField]
         private string PreviousText;
-        [SerializeField]
         /// <summary>
-        /// 内容已改变
+        /// 内容已改变。
         /// </summary>
+        [SerializeField]
         private bool TextIsChanged;
-        [SerializeField]
         /// <summary>
-        /// 事件内容改变
+        /// 事件内容改变。
         /// </summary>
-        public UnityAction Act_OnTextChanged;
         [SerializeField]
+        public UnityAction<string> Act_OnTextChanged;
         /// <summary>
-        /// 同步全局字体尺寸
+        /// 同步全局字体尺寸。
         /// </summary>
+        [SerializeField]
         public bool SyncGlobalFontSize = true;
-        [SerializeField]
         /// <summary>
-        /// Hud管理器
+        /// 指定文字颜色接管的拥有者。
         /// </summary>
-        private XHud_Manager mgr;
         [SerializeField]
-        /// <summary>
-        /// 指定文字颜色接管的拥有者
-        /// </summary>
         public TextColorOwner TextColorOwner;
+        #endregion
 
-        #region 折叠
+        #region 字段 - 样式
+        /// <summary>
+        /// 字体样式 - 本地。
+        /// </summary>
+        [SerializeField]
+        public XHud_LibraryArg_TextStyle TextStyleInfo = new XHud_LibraryArg_TextStyle();
+        /// <summary>
+        /// 字体样式 - 库。
+        /// </summary>
+        [SerializeField]
+        public XHud_LibraryArg_TextStyle TextStyleInfo_Library = new XHud_LibraryArg_TextStyle();
+        #endregion
+
+        #region 字段 - 折叠状态
+        /// <summary>
+        /// 参数面板折叠状态。
+        /// </summary>
         public bool
             fold_param = true,
             fold_option = true,
             fold_based = true,
             fold_sync = true;
-
+        /// <summary>
+        /// 统一设置所有折叠状态。
+        /// </summary>
+        /// <param name="state">true = 折叠；false = 展开</param>
         public void GroupFold(bool state)
         {
             fold_param = state;
@@ -88,7 +105,13 @@ namespace SevenStrikeModules.XHud
             fold_based = state;
             fold_sync = state;
         }
-
+        /// <summary>
+        /// 分别设置各面板折叠状态。
+        /// </summary>
+        /// <param name="param">参数面板</param>
+        /// <param name="option">选项面板</param>
+        /// <param name="based">源脚本面板</param>
+        /// <param name="sync">库同步项面板</param>
         public void GroupFold(bool param = true, bool option = true, bool based = true, bool sync = true)
         {
             fold_param = param;
@@ -98,25 +121,21 @@ namespace SevenStrikeModules.XHud
         }
         #endregion
 
-        [SerializeField]
+        #region 生命周期
         /// <summary>
-        /// 字体样式 - 本地
+        /// Unity 启用回调。
+        /// <para/>
+        /// 在非运行时获取 XHud 管理器，供样式同步使用。
         /// </summary>
-        public XHud_LibraryArg_TextStyle TextStyleInfo = new XHud_LibraryArg_TextStyle();
-        [SerializeField]
-        /// <summary>
-        /// 字体样式 - 库
-        /// </summary>
-        public XHud_LibraryArg_TextStyle TextStyleInfo_Library = new XHud_LibraryArg_TextStyle();
-
         protected override void OnEnable()
         {
             base.OnEnable();
-            if (!Application.isPlaying)
-                if (mgr == null)
-                    mgr = FindFirstObjectByType<XHud_Manager>();
         }
-
+        /// <summary>
+        /// Unity 启动回调。
+        /// <para/>
+        /// 运行时记录初始文字内容，用于变更检测。
+        /// </summary>
         protected override void Start()
         {
             base.Start();
@@ -125,21 +144,26 @@ namespace SevenStrikeModules.XHud
                 PreviousText = text;
             }
         }
-
+        /// <summary>
+        /// Unity 每帧回调。
+        /// <para/>
+        /// 执行内容变更检测、运行时样式刷新与全局字体尺寸同步。
+        /// </summary>
         private void Update()
         {
             //-------------------内容变动检测
             txt_Detect_Content();
             //-------------------运行时样式刷新
             txt_Update_Style_Runtime();
-            //--------------------同步全局字体尺寸
-            txt_Set_SyncGlobalFontSize(SyncGlobalFontSize);
         }
+        #endregion
 
         #region 实时刷新类
-
         /// <summary>
-        /// 内容改变事件
+        /// 内容改变检测。
+        /// <para/>
+        /// 对比 <see cref="PreviousText"/> 与当前 <c>text</c>，
+        /// 若发生变化则触发 <see cref="Act_OnTextChanged"/>。
         /// </summary>
         private void txt_Detect_Content()
         {
@@ -150,7 +174,7 @@ namespace SevenStrikeModules.XHud
                     TextIsChanged = true;
                     PreviousText = text;
                     if (Act_OnTextChanged != null)
-                        Act_OnTextChanged();
+                        Act_OnTextChanged(text);
                 }
             }
             else
@@ -158,25 +182,24 @@ namespace SevenStrikeModules.XHud
                 TextIsChanged = false;
             }
         }
-
         /// <summary>
-        /// 从字体样式库中切换样式
+        /// 从字体样式库中切换样式并刷新文字效果。
+        /// <para/>
+        /// 若 <see cref="StyleLibSynching"/> 开启，则从样式库读取对应样式，
+        /// 按各 <c>LibStyle_Effect_*</c> 开关决定哪些属性同步到本地样式；
+        /// 最后调用 <see cref="txt_Syncing_Style"/> 将本地样式写入 Text 组件。
         /// </summary>
         /// <param name="StyleName">样式名称</param>
         public void txt_Update_Style_Runtime()
         {
-            // 在未运行时获取HudManager
-            if (!Application.isPlaying)
-            {
-                if (mgr == null)
-                {
-                    mgr = FindFirstObjectByType<XHud_Manager>();
-                }
-            }
+            //--------------------同步全局字体尺寸
+            txt_Set_SyncGlobalFontSize(SyncGlobalFontSize);
 
             #region 如果同步库样式
             if (StyleLibSynching)
             {
+                XHud_Manager mgr = XHud_Dashboard.GetManager();
+
                 #region 样式集合为空判断
                 if (mgr == null)
                     return;
@@ -286,9 +309,13 @@ namespace SevenStrikeModules.XHud
             txt_Syncing_Style();
             #endregion
         }
-
         /// <summary>
-        /// 将TextStyleInfo的值同步给字体样式
+        /// 将 <see cref="TextStyleInfo"/> 的值同步给 Text 组件。
+        /// <para/>
+        /// 涵盖：富文本 / 溢出 / 字体样式 / 对齐 / 几何对齐 / 字体 /
+        /// 自适应尺寸 / 全局尺寸倍率 / 行高 / 颜色 / 射线检测 / 遮罩。
+        /// </para>
+        /// 颜色仅在 <see cref="TextColorOwner"/> 不为 Tween 时同步。
         /// </summary>
         public void txt_Syncing_Style()
         {
@@ -373,7 +400,7 @@ namespace SevenStrikeModules.XHud
                 {
                     if (!Application.isPlaying)
                     {
-                        TextStyleInfo.Size_GlobalScaled = mgr.FontSizeMultiply * TextStyleInfo.Size;
+                        TextStyleInfo.Size_GlobalScaled = XHud_Dashboard.GetManager().FontSizeMultiply * TextStyleInfo.Size;
                     }
                     else
                     {
@@ -400,7 +427,7 @@ namespace SevenStrikeModules.XHud
                 {
                     if (!Application.isPlaying)
                     {
-                        TextStyleInfo.Fit_Min_GlobalScaled = mgr.FontSizeMultiply * TextStyleInfo.Fit_Min;
+                        TextStyleInfo.Fit_Min_GlobalScaled = XHud_Dashboard.GetManager().FontSizeMultiply * TextStyleInfo.Fit_Min;
                     }
                     else
                     {
@@ -425,7 +452,7 @@ namespace SevenStrikeModules.XHud
                 {
                     if (!Application.isPlaying)
                     {
-                        TextStyleInfo.Fit_Max_GlobalScaled = mgr.FontSizeMultiply * TextStyleInfo.Fit_Max;
+                        TextStyleInfo.Fit_Max_GlobalScaled = XHud_Dashboard.GetManager().FontSizeMultiply * TextStyleInfo.Fit_Max;
                     }
                     else
                     {
@@ -474,35 +501,32 @@ namespace SevenStrikeModules.XHud
                 maskable = TextStyleInfo.Maskable;
             }
         }
-
         #endregion
 
         #region 参数设置
-
         /// <summary>
-        /// 设置全局尺寸影响可用性
+        /// 设置全局尺寸影响可用性。
         /// </summary>
-        /// <param name="treeState"></param>
+        /// <param name="state">true = 启用全局尺寸倍增</param>
         public void txt_Set_SyncGlobalFontSize(bool state)
         {
             if (SyncGlobalFontSize == state)
                 return;
             SyncGlobalFontSize = state;
         }
-
         /// <summary>
-        /// 设置字体模板样式名称
+        /// 设置字体模板样式名称。
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">样式名称</param>
         public void txt_Set_StyleName(string name)
         {
             StyleName = name;
         }
-
         /// <summary>
-        /// 改变文字内容
+        /// 改变文字内容。
         /// </summary>
         /// <param name="content">内容</param>
+        /// <param name="ParseEscape">是否解析转义字符</param>
         public void txt_Set_Content(string content, bool ParseEscape = true)
         {
             if (ParseEscape)
@@ -510,11 +534,10 @@ namespace SevenStrikeModules.XHud
             else
                 base.text = content;
         }
-
         /// <summary>
-        /// 从文字样式添加器反向更新文字样式
+        /// 从文字样式添加器反向更新文字样式。
         /// </summary>
-        /// <param name="styleinfo"></param>
+        /// <param name="styleinfo">样式数据</param>
         public void txt_Set_Style_ForSetter(XHud_LibraryArg_TextStyle styleinfo)
         {
             TextStyleInfo = styleinfo;
@@ -532,7 +555,6 @@ namespace SevenStrikeModules.XHud
             //Text_Set_FontBestSize_Max(styleinfo.Fit_Max);
             ////Text_Set_SyncGlobalFontSize(styleinfo.SyncGlobalFontSize);
         }
-
         #endregion
     }
 }

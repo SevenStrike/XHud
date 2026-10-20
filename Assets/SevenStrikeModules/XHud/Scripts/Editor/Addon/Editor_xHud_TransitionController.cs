@@ -172,7 +172,7 @@ namespace SevenStrikeModules.XHud.Editor
             Flip_Hor = serializedObject.FindProperty("Flip_Hor");
             Flip_Ver = serializedObject.FindProperty("Flip_Ver");
             UseKeyControl = serializedObject.FindProperty("UseKeyControl");
-            HudManager = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.GetManager();
             #endregion
             #region 获取图标
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_transition_controller/icon_main");

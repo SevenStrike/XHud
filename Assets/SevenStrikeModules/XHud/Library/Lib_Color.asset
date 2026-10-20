@@ -46,13 +46,13 @@ MonoBehaviour:
     Color: {r: 1, g: 0.5, b: 0.3, a: 1}
   - Painting: {fileID: 0}
     Name: "\u94BB\u77F3\u84DD(Diamond Blue)"
-    Color: {r: 0, g: 0.5, b: 1, a: 1}
+    Color: {r: 0.13948512, g: 1, b: 0, a: 1}
   - Painting: {fileID: 0}
     Name: "\u8336\u8272(Tea Brown)"
     Color: {r: 0.5, g: 0.4, b: 0.3, a: 1}
   - Painting: {fileID: 0}
     Name: "\u73CD\u73E0\u7070(Pearl Grey)"
-    Color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+    Color: {r: 1, g: 0.7942022, b: 0, a: 1}
   - Painting: {fileID: 0}
     Name: "\u7FE0\u9E1F\u84DD(Kingfisher Blue)"
     Color: {r: 0, g: 0.7, b: 0.9, a: 1}

@@ -203,7 +203,7 @@ namespace SevenStrikeModules.XHud.Editor
         #region 生命周期
         private void OnEnable()
         {
-            HudManager = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.GetManager();
             BaseScript = (XHud_Element_Sounder)target;
             UseRandomPitch = serializedObject.FindProperty("UseRandomPitch");
             Pitch_Min = serializedObject.FindProperty("Pitch_Min");

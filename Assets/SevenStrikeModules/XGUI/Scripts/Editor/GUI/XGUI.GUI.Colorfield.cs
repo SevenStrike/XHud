@@ -29,7 +29,7 @@ namespace SevenStrikeModules.XGUI.Editor
     /// </summary>
     public static partial class XGUI
     {
-        public static Color gui_colorfield(Rect rect, Color prop = default, string title = null, float title_width = 40, Color title_color = default, string icon = "icon_field_status", Color icon_color = default, string state_title = "当前", string state_value = "-", Color state_value_color = default, bool display_hex = false)
+        public static Color gui_colorfield(Rect rect, Color prop = default, string title = null, float title_width = 40, Color title_color = default, string icon = null, Color icon_color = default, string state_title = "当前", string state_value = "-", Color state_value_color = default, bool display_hex = false)
         {
             if (prop == Color.clear)
                 prop = Color.white;

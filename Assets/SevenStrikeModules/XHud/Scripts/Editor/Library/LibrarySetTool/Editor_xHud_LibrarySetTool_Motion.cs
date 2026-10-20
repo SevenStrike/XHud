@@ -796,7 +796,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void SendToLibrary()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.GetManager();
 
             if (sp_LibName.stringValue == "动效名称")
             {

@@ -135,7 +135,7 @@ namespace SevenStrikeModules.XHud.Editor
         #region 生命周期        
         private void OnEnable()
         {
-            HudManager = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.GetManager();
             BaseScript = (XHud_Element_Preview)target;
             #region 获取序列化属性
             HudElement = serializedObject.FindProperty("HudElement");

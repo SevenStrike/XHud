@@ -228,7 +228,7 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem("Assets/XHud/SendToElementLibrary (将元素预制体添加到元素库)", priority = 3000)]
         private static void OpenElementLibrarySetter()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.GetManager();
 
             if (mgr == null)
             {
@@ -304,7 +304,7 @@ namespace SevenStrikeModules.XHud.Editor
             sp_library_name = BaseObject.FindProperty("library_name");
             sp_element_list = BaseObject.FindProperty("element_list");
 
-            HudManager = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.GetManager();
 
             icon_libsetter_element = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_element_setter/icon");
 

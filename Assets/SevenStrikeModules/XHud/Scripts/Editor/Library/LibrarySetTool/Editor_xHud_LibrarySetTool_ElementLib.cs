@@ -225,7 +225,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             BaseObject = new SerializedObject(this);
 
-            HudManager = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.GetManager();
 
             icon_logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_elements_selector/icon");
 

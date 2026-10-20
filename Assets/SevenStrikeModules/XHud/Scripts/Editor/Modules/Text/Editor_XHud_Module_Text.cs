@@ -1,4 +1,4 @@
-/*
+﻿/*
  * ============================================================================
  * ⚠ 版权声明（禁止删除、禁止修改、衍生作品必须保留此注释）⚠
  * ============================================================================
@@ -27,8 +27,6 @@ namespace SevenStrikeModules.XHud.Editor
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
-    using UnityEngine.UI;
-    using UnityEngine.UIElements;
     using TextEditor = UnityEditor.UI.TextEditor;
 
     [CanEditMultipleObjects]
@@ -350,6 +348,33 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 生命周期
         /// <summary>
+        /// 禁用预览窗口
+        /// </summary>
+        /// <returns></returns>
+        public override bool HasPreviewGUI()
+        {
+            // 返回 false 即隐藏预览窗口
+            return true;
+        }
+        public override void OnPreviewGUI(Rect r, GUIStyle background)
+        {
+            string h_color = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary);
+
+            XGUI.gui_icon(
+                rect: new Rect(r.x + (r.width / 2) - 30, r.y + (r.height / 2) - 40, 60, 60),
+                icon: clickselector_args[sp_TextColorOwner.enumValueIndex].btn_icon_r);
+
+            XGUI.gui_label(
+                rect: new Rect(r.x + (r.width / 2) - (r.width / 2), r.y + (r.height / 2) + 15, r.width, XGUI.GetSingleLineHeight()),
+                text: new GUIContent($"文字颜色接管者为：<color=#{h_color}> {tooltip_owner_names[sp_TextColorOwner.enumValueIndex]}</color>"),
+                text_color: Color.white,
+                size: XGUIFontSize.M,
+                clipping: TextClipping.Clip,
+                anchor: TextAnchor.MiddleCenter,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Normal);
+        }
+        /// <summary>
         /// Unity 启用回调。
         /// <para/>
         /// 执行流程：
@@ -367,7 +392,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             base.OnEnable();
 
-            HudManager = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.GetManager();
 
             BaseScript = (XHud_Module_Text)target;
 
@@ -1204,13 +1229,22 @@ namespace SevenStrikeModules.XHud.Editor
                     info.CopyData_Ignored_LibraryToggle(BaseScript.TextStyleInfo);
 
                     string json = JsonUtility.ToJson(info);
-                    Editor_XHud_GUI.EditorData_Set_With_String("xData_XHud_TextStyle", json);
 
-                    Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式复制", $"已将当前文字样式存入 xData ！", "好的");
+                    XGUI.x_Editor_Data_Set_With_String("xData_XHud_TextStyle", json);
+
+                    XGUI.dialog(
+                        type: XGUIDialogType.确认,
+                        windowtitle: "XHud - 文字组件消息",
+                        title: "文字样式复制",
+                        msg: $"已将当前文字样式存入 xData ！",
+                        ok: "明白",
+                        PrimaryIndex: 0,
+                        usemodal: true,
+                        themecolor: XHud_Dashboard.Theme_Primary);
                 });
                 menu.AddItem(new GUIContent("V (粘贴样式)"), false, () =>
                 {
-                    XHud_LibraryArg_TextStyle info = JsonUtility.FromJson<XHud_LibraryArg_TextStyle>(Editor_XHud_GUI.EditorData_Get_With_String("xData_XHud_TextStyle"));
+                    XHud_LibraryArg_TextStyle info = JsonUtility.FromJson<XHud_LibraryArg_TextStyle>(XGUI.x_Editor_Data_Get_With_String("xData_XHud_TextStyle"));
 
                     if (Targets_Selected())
                     {
@@ -1221,35 +1255,58 @@ namespace SevenStrikeModules.XHud.Editor
                             SelectedObjects[i].TextStyleInfo.CopyData(info);
                         }
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式粘贴", $"已从 xData 中获取文字样式并应用到当前文字组件！", "好的");
+                        XGUI.dialog(
+                            type: XGUIDialogType.确认,
+                            windowtitle: "XHud - 文字组件消息",
+                            title: "文字样式粘贴",
+                            msg: $"已从 xData 中获取文字样式并应用到当前所选的文字组件！",
+                            ok: "明白",
+                            PrimaryIndex: 0,
+                            usemodal: true,
+                            themecolor: XHud_Dashboard.Theme_Primary);
                     }
                     else
                     {
                         // 使用 Undo.RecordObject 来记录对目标对象的修改
                         Undo.RecordObject(BaseScript, "Paste Style Name");
-
                         BaseScript.TextStyleInfo.CopyData(info);
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式粘贴", $"已从 xData 中获取文字样式并应用到当前文字组件！", "好的");
+                        XGUI.dialog(
+                            type: XGUIDialogType.确认,
+                            windowtitle: "XHud - 文字组件消息",
+                            title: "文字样式粘贴",
+                            msg: $"已从 xData 中获取文字样式并应用到当前文字组件！",
+                            ok: "明白",
+                            PrimaryIndex: 0,
+                            usemodal: true,
+                            themecolor: XHud_Dashboard.Theme_Primary);
                     }
                 });
                 menu.AddSeparator("");
                 menu.AddDisabledItem(new GUIContent("文字样式库"));
                 menu.AddItem(new GUIContent("X (识别)"), false, () =>
                 {
-                    XHud_LibraryArg_TextStyle info = JsonUtility.FromJson<XHud_LibraryArg_TextStyle>(Editor_XHud_GUI.EditorData_Get_With_String("xData_XHud_TextStyle"));
+                    XHud_LibraryArg_TextStyle info = JsonUtility.FromJson<XHud_LibraryArg_TextStyle>(XGUI.x_Editor_Data_Get_With_String("xData_XHud_TextStyle"));
 
                     if (Targets_Selected())
                     {
-                        List<XHud_GUI_Dialog_ListDatas> datas = new List<XHud_GUI_Dialog_ListDatas>();
+                        List<XGUIDialogListDatas> datas = new List<XGUIDialogListDatas>();
 
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
-                            XHud_GUI_Dialog_ListDatas data = new XHud_GUI_Dialog_ListDatas();
+                            XGUIDialogListDatas data = new XGUIDialogListDatas();
 
                             if (info.Type != xHud_TextType.Text)
                             {
-                                Editor_XHud_GUI.Open(XHud_DialogType.错误, "XHud - 文字组件消息", "文字样式识别", $"从 XData 中识别的文字样式似乎并不是用于 {SelectedObjects[i].name} ( {SelectedObjects[i].Indicator} ) 的文字组件的规范样式！请检查您复制的样式类型是否和当前组件一致？", "好的");
+                                XGUI.dialog(
+                                    type: XGUIDialogType.帮助,
+                                    windowtitle: "XHud - 文字组件消息",
+                                    title: "文字样式识别",
+                                    msg: $"从 XData 中识别的文字样式似乎并不是用于 {SelectedObjects[i].name} ( {SelectedObjects[i].Indicator} ) 的文字组件的规范样式！请检查您复制的样式类型是否和当前组件一致？",
+                                    ok: "明白",
+                                    PrimaryIndex: 0,
+                                    usemodal: true,
+                                    themecolor: XHud_Dashboard.Theme_Primary);
 
                                 data.Title = info.Name;
                                 data.SubTitle = "文字样式类型未能匹配到";
@@ -1260,7 +1317,6 @@ namespace SevenStrikeModules.XHud.Editor
                             }
                             else
                             {
-
                                 // 使用 Undo.RecordObject 来记录对目标对象的修改
                                 Undo.RecordObject(SelectedObjects[i], "Paste Style Name");
 
@@ -1273,13 +1329,30 @@ namespace SevenStrikeModules.XHud.Editor
                             }
                         }
 
-                        Editor_XHud_GUI.Open(datas.ToArray(), XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式识别", $"已从 xData 中识别到文字样式并应用到如下文字组件中！", "好的");
+                        XGUI.dialog_listview(
+                            datas: datas.ToArray(),
+                            type: XGUIDialogType.确认,
+                            windowtitle: "XHud - 文字组件消息",
+                            title: "文字样式识别",
+                            msg: $"已从 xData 中识别到文字样式并应用到如下文字组件中！",
+                            ok: "明白",
+                            PrimaryIndex: 0,
+                            usemodal: true,
+                            themecolor: XHud_Dashboard.Theme_Primary);
                     }
                     else
                     {
                         if (info.Type != xHud_TextType.Text)
                         {
-                            Editor_XHud_GUI.Open(XHud_DialogType.错误, "XHud - 文字组件消息", "文字样式识别", $"从 xData 中识别的文字样式似乎并不是用于当前文字组件的规范样式！请检查您复制的样式类型是否和当前组件一致？", "好的");
+                            XGUI.dialog(
+                                type: XGUIDialogType.帮助,
+                                windowtitle: "XHud - 文字组件消息",
+                                title: "文字样式识别",
+                                msg: $"从 xData 中识别的文字样式似乎并不是用于当前文字组件的规范样式！请检查您复制的样式类型是否和当前组件一致？",
+                                ok: "明白",
+                                PrimaryIndex: 0,
+                                usemodal: true,
+                                themecolor: XHud_Dashboard.Theme_Primary);
                             return;
                         }
 
@@ -1288,7 +1361,15 @@ namespace SevenStrikeModules.XHud.Editor
 
                         BaseScript.TextStyleInfo.CopyData_Ignored_LibraryToggle(info);
 
-                        Editor_XHud_GUI.Open(XHud_DialogType.确认, "XHud - 文字组件消息", "文字样式识别", $"已从 xData 中识别到文字样式并应用到当前文字组件！", "好的");
+                        XGUI.dialog(
+                            type: XGUIDialogType.确认,
+                            windowtitle: "XHud - 文字组件消息",
+                            title: "文字样式识别",
+                            msg: $"已从 xData 中识别到文字样式并应用到当前文字组件！",
+                            ok: "明白",
+                            PrimaryIndex: 0,
+                            usemodal: true,
+                            themecolor: XHud_Dashboard.Theme_Primary);
                     }
                 });
                 menu.AddSeparator("");
@@ -1426,105 +1507,71 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     XHud_Module_Text tt = (XHud_Module_Text)t;
 
-                    if (Application.isPlaying)
+                    if (HudManager.Hud_TextStyleLibrary.TextStyle_Library_NameIsValid(tt.StyleName))
                     {
-                        if (HudManager.Hud_TextStyleLibrary.TextStyle_Library_NameIsValid(tt.StyleName))
-                        {
-                            s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(tt.StyleName, xHud_TextType.Text);
-                        }
-                        else
-                        {
-                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字组件消息", "刷新文字库样式", "似乎 {tt.name} ( {tt.Indicator} ) 文字组件的样式库名称并不在文字样式库中存在，请检查文字样式库名称是否合法，或者可以快速选择文字样式库默认首个样式。是否要选择首个样式？", "暂不", "选择", 0);
-                            if (res == "选择")
-                            {
-                                s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType.Text);
-
-                                // 使用 Undo.RecordObject 来记录对目标对象的修改
-                                Undo.RecordObject(tt, "Change Style Name");
-
-                                tt.StyleName = s_info.Name;
-                            }
-                            else
-                            {
-                                continue;
-                            }
-                        }
+                        s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(tt.StyleName, xHud_TextType.Text);
                     }
                     else
                     {
-                        if (HudManager.Hud_TextStyleLibrary.TextStyle_Library_NameIsValid(tt.StyleName))
+                        string res = XGUI.dialog(
+                             type: XGUIDialogType.警告,
+                             windowtitle: "XHud - 文字组件消息",
+                             title: "刷新文字库样式",
+                             msg: $"似乎 {tt.name} ( {tt.Indicator} ) 文字组件的样式库名称并不在文字样式库中存在，请检查文字样式库名称是否合法，或者可以快速选择文字样式库默认首个样式。是否要选择首个样式？",
+                             ok: "暂不",
+                             cancel: "选择",
+                             PrimaryIndex: 0,
+                             usemodal: true,
+                             themecolor: XHud_Dashboard.Theme_Primary);
+
+                        if (res == "选择")
                         {
-                            s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(tt.StyleName, xHud_TextType.Text);
+                            s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType.Text);
+
+                            // 使用 Undo.RecordObject 来记录对目标对象的修改
+                            Undo.RecordObject(tt, "Change TextStyle Name");
+
+                            tt.StyleName = s_info.Name;
                         }
                         else
                         {
-                            string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字组件消息", "刷新文字库样式", $"似乎 {tt.name} ( {tt.Indicator} ) 文字组件指定的样式库名称并不在文字样式库中存在，请检查文字样式库名称是否合法，或者可以快速选择文字样式库默认首个样式。是否要选择首个样式？", "暂不", "选择", 0);
-                            if (res == "选择")
-                            {
-                                s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType.Text);
-
-                                // 使用 Undo.RecordObject 来记录对目标对象的修改
-                                Undo.RecordObject(tt, "Change Style Name");
-
-                                tt.StyleName = s_info.Name;
-                            }
-                            else
-                            {
-                                continue;
-                            }
+                            continue;
                         }
                     }
+
                     tt.TextStyleInfo.CopyData_Ignored_LibraryToggle(s_info);
                 }
             }
             else
             {
-                if (Application.isPlaying)
-                {
-                    if (HudManager.Hud_TextStyleLibrary.TextStyle_Library_NameIsValid(sp_StyleName.stringValue))
-                        s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(sp_StyleName.stringValue, xHud_TextType.Text);
-                    else
-                    {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字组件消息", "刷新文字库样式", "似乎您指定的样式库名称并不在文字样式库中存在，请检查文字样式库名称是否合法，或者可以快速选择文字样式库默认首个样式。是否要选择首个样式？", "暂不", "选择", 0);
-                        if (res == "选择")
-                        {
-                            s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType.Text);
-
-                            // 使用 Undo.RecordObject 来记录对目标对象的修改
-                            Undo.RecordObject(sp_StyleName.serializedObject.targetObject, "Change Style Name");
-
-                            sp_StyleName.stringValue = s_info.Name;
-                            sp_StyleName.serializedObject.ApplyModifiedPropertiesWithoutUndo();
-                        }
-                        else
-                        {
-                            return;
-                        }
-                    }
-                }
+                if (HudManager.Hud_TextStyleLibrary.TextStyle_Library_NameIsValid(sp_StyleName.stringValue))
+                    s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(sp_StyleName.stringValue, xHud_TextType.Text);
                 else
                 {
-                    if (HudManager.Hud_TextStyleLibrary.TextStyle_Library_NameIsValid(sp_StyleName.stringValue))
+                    string res = XGUI.dialog(
+                        type: XGUIDialogType.警告,
+                        windowtitle: "XHud - 文字组件消息",
+                        title: "刷新文字库样式",
+                        msg: $"似乎您指定的样式库名称并不在文字样式库中存在，请检查文字样式库名称是否合法，或者可以快速选择文字样式库默认首个样式。是否要选择首个样式？",
+                        ok: "暂不",
+                        cancel: "选择",
+                        PrimaryIndex: 0,
+                        usemodal: true,
+                        themecolor: XHud_Dashboard.Theme_Primary);
+
+                    if (res == "选择")
                     {
-                        s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(sp_StyleName.stringValue, xHud_TextType.Text);
+                        s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType.Text);
+
+                        // 使用 Undo.RecordObject 来记录对目标对象的修改
+                        Undo.RecordObject(sp_StyleName.serializedObject.targetObject, "Change TextStyle Name");
+
+                        sp_StyleName.stringValue = s_info.Name;
+                        sp_StyleName.serializedObject.ApplyModifiedPropertiesWithoutUndo();
                     }
                     else
                     {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 文字组件消息", "刷新文字库样式", $"似乎 {BaseScript.name} ( {BaseScript.Indicator} ) 文字组件样式库名称并不在文字样式库中存在，请检查文字样式库名称是否合法，或者可以快速选择文字样式库默认首个样式。是否要选择首个样式？", "暂不", "选择", 0);
-                        if (res == "选择")
-                        {
-                            s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType.Text);
-
-                            // 使用 Undo.RecordObject 来记录对目标对象的修改
-                            Undo.RecordObject(sp_StyleName.serializedObject.targetObject, "Change Style Name");
-
-                            sp_StyleName.stringValue = s_info.Name;
-                            sp_StyleName.serializedObject.ApplyModifiedPropertiesWithoutUndo();
-                        }
-                        else
-                        {
-                            return;
-                        }
+                        return;
                     }
                 }
 
@@ -1546,7 +1593,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_LibrarySetTool_TextStyle window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_TextStyle>(true);
 
             window.titleContent = new GUIContent("XHud - 文字样式采集器");
-            Editor_XHud_GUI.CenterEditorWindow(new Vector2Int(348, info.Type == xHud_TextType.Text ? 820 : 800), window);
+            XGUI.CenterEditorWindow(new Vector2Int(348, info.Type == xHud_TextType.Text ? 820 : 800), window);
 
             window.SetComponent(BaseScript);
             window.SetStyle(info);

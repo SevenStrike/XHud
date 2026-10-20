@@ -1529,7 +1529,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void SendToLibrary()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.GetManager();
 
             XHud_LibraryArg_TextStyle info = new XHud_LibraryArg_TextStyle();
             info.CopyData(StyleInfo);

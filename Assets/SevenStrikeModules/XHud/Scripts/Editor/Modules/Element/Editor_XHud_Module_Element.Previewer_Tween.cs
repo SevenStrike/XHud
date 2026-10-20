@@ -587,6 +587,9 @@ namespace SevenStrikeModules.XHud.Editor
                     continue;
                 if (tweener.PrimitiveTweenNodes[i].Timings != tim)
                     continue;
+                if (!tweener.Tween_CreateRuleValidCheck(tweener.PrimitiveTweenNodes[i]))
+                    continue;
+
                 XTween_Interface tween = tweener.Tween_Create(tweener.PrimitiveTweenNodes[i], tweener.GlobalDuration * HudManager.DurationMultiply * dur);
 
                 if (tween != null)

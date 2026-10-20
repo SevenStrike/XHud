@@ -183,7 +183,7 @@ namespace SevenStrikeModules.XHud.Editor
         private static void OnSceneGUI(SceneView sceneView)
         {
             if (mgr == null)
-                mgr = XHud_Dashboard.HudManagerGet();
+                mgr = XHud_Dashboard.GetManager();
 
             // 如果功能被禁用，不处理任何事件
             if (!isEnabled) return;

@@ -129,7 +129,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             BaseScript = (XHud_Library_Element)target;
 
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.GetManager();
 
             #region 获取序列化属性
             sp_ElementLibrary = serializedObject.FindProperty("ElementLibrary");
@@ -648,7 +648,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="isFocused">是否聚焦</param>
         private void ElementInfoList_Original_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.GetManager();
 
             SerializedProperty prop = sp_ElementLibrary.GetArrayElementAtIndex(index);
             SerializedProperty sp_name = prop.FindPropertyRelative("Name");

@@ -136,7 +136,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             BaseScript = (XHud_Module_Slider)target;
 
-            HudManager = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.GetManager();
 
             // 获取序列化属性
             GetSerializeFields();

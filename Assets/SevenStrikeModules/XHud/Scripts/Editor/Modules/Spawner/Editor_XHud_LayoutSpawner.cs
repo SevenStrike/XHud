@@ -25,6 +25,7 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XTween;
     using SevenStrikeModules.XTween.Editor;
+    using System;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditorInternal;
@@ -61,9 +62,69 @@ namespace SevenStrikeModules.XHud.Editor
         /// 原始脚本参数显示开关
         /// </summary>
         private bool OriginalDisplay;
+        public bool IsPreviewing;
 
         #region 序列化属性
-        private SerializedProperty LibName, IsLoadedLayout_Screen, IsLoadedLayout_World, SpawnItemList_Screen, SpawnItemList_World, SpawnerIndicator, CreateArgs, RecycleArgs, Key_Create, Key_Recycle, UseManullyKey, create_fold_move, create_fold_rotate, create_fold_alpha, recycle_fold_move, recycle_fold_rotate, recycle_fold_alpha, Crc_Lib_Name, Rec_Lib_Name, SpawnFunctionKey_Primary, SpawnFunctionKey_Secondary, KeyControl_Screen, KeyControl_World, FoldScreen, FoldWorld, spawnerisRunning, CreateArgs_MotionAnimateEndState, RecycleArgs_MotionAnimateEndState, IsPreviewing, UseInstantiateMode, UseDebug;
+        [SerializeField]
+        private SerializedProperty LibName;
+        [SerializeField]
+        private SerializedProperty IsLoadedLayout_Screen;
+        [SerializeField]
+        private SerializedProperty IsLoadedLayout_World;
+        [SerializeField]
+        private SerializedProperty SpawnItemList_Screen;
+        [SerializeField]
+        private SerializedProperty SpawnItemList_World;
+        [SerializeField]
+        private SerializedProperty SpawnerIndicator;
+        [SerializeField]
+        private SerializedProperty CreateArgs;
+        [SerializeField]
+        private SerializedProperty RecycleArgs;
+        [SerializeField]
+        private SerializedProperty Key_Create;
+        [SerializeField]
+        private SerializedProperty Key_Recycle;
+        [SerializeField]
+        private SerializedProperty UseManullyKey;
+        [NonSerialized]
+        private SerializedProperty create_fold_move;
+        [NonSerialized]
+        private SerializedProperty create_fold_rotate;
+        [NonSerialized]
+        private SerializedProperty create_fold_alpha;
+        [NonSerialized]
+        private SerializedProperty recycle_fold_move;
+        [NonSerialized]
+        private SerializedProperty recycle_fold_rotate;
+        [NonSerialized]
+        private SerializedProperty recycle_fold_alpha;
+        [SerializeField]
+        private SerializedProperty Crc_Lib_Name;
+        [SerializeField]
+        private SerializedProperty Rec_Lib_Name;
+        [SerializeField]
+        private SerializedProperty SpawnFunctionKey_Primary;
+        [SerializeField]
+        private SerializedProperty SpawnFunctionKey_Secondary;
+        [SerializeField]
+        private SerializedProperty KeyControl_Screen;
+        [SerializeField]
+        private SerializedProperty KeyControl_World;
+        [NonSerialized]
+        private SerializedProperty FoldScreen;
+        [NonSerialized]
+        private SerializedProperty FoldWorld;
+        [SerializeField]
+        private SerializedProperty spawnerisRunning;
+        [SerializeField]
+        private SerializedProperty CreateArgs_MotionAnimateEndState;
+        [SerializeField]
+        private SerializedProperty RecycleArgs_MotionAnimateEndState;
+        [SerializeField]
+        private SerializedProperty UseInstantiateMode;
+        [SerializeField]
+        private SerializedProperty UseDebug;
         #endregion
 
         #region 选项文字
@@ -161,7 +222,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnEnable()
         {
-            HudManager = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.GetManager();
 
             BaseScript = (XHud_LayoutSpawner)target;
 
@@ -1224,23 +1285,23 @@ namespace SevenStrikeModules.XHud.Editor
                 if (IsLoadedLayout_Screen.boolValue)
                 {
                     #region 预览播放 - 生成
-                    if (!IsPreviewing.boolValue && Editor_XHud_GUI.Gui_Layout_Button(15, "预览当前加载的元素的 - 生成 - 动效", icon_preview_in_r, icon_preview_in_p))
+                    if (!IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "预览当前加载的元素的 - 生成 - 动效", icon_preview_in_r, icon_preview_in_p))
                     {
                         if (HudManager == null)
                             return;
 
-                        IsPreviewing.boolValue = true;
+                        IsPreviewing = true;
                         LayoutsTweenPreview(XHudSpace.屏幕空间, XHudElementCreateState.Created);
                     }
                     #endregion
 
                     #region 预览停止 - 生成
-                    if (IsPreviewing.boolValue && Editor_XHud_GUI.Gui_Layout_Button(15, "停止预览当前播放的元素的 - 生成 - 动效", icon_stoppreview_r, icon_stoppreview_p))
+                    if (IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "停止预览当前播放的元素的 - 生成 - 动效", icon_stoppreview_r, icon_stoppreview_p))
                     {
                         if (HudManager == null)
                             return;
 
-                        IsPreviewing.boolValue = false;
+                        IsPreviewing = false;
                         XTween_Preview_Kill(XHudSpace.屏幕空间);
                     }
                     #endregion
@@ -1248,23 +1309,23 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.Gui_Layout_Space(40);
 
                     #region 预览播放 - 回收
-                    if (!IsPreviewing.boolValue && Editor_XHud_GUI.Gui_Layout_Button(15, "预览当前加载的元素的 - 回收 - 动效", icon_preview_out_r, icon_preview_out_p))
+                    if (!IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "预览当前加载的元素的 - 回收 - 动效", icon_preview_out_r, icon_preview_out_p))
                     {
                         if (HudManager == null)
                             return;
 
-                        IsPreviewing.boolValue = true;
+                        IsPreviewing = true;
                         LayoutsTweenPreview(XHudSpace.屏幕空间, XHudElementCreateState.Recycled);
                     }
                     #endregion
 
                     #region 预览停止 - 回收
-                    if (IsPreviewing.boolValue && Editor_XHud_GUI.Gui_Layout_Button(15, "停止预览当前播放的元素的 - 回收 - 动效", icon_stoppreview_r, icon_stoppreview_p))
+                    if (IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "停止预览当前播放的元素的 - 回收 - 动效", icon_stoppreview_r, icon_stoppreview_p))
                     {
                         if (HudManager == null)
                             return;
 
-                        IsPreviewing.boolValue = false;
+                        IsPreviewing = false;
                         XTween_Preview_Kill(XHudSpace.屏幕空间);
                     }
                     #endregion
@@ -1536,23 +1597,23 @@ namespace SevenStrikeModules.XHud.Editor
                 if (IsLoadedLayout_World.boolValue)
                 {
                     #region 预览播放 - 生成
-                    if (!IsPreviewing.boolValue && Editor_XHud_GUI.Gui_Layout_Button(15, "预览当前加载的元素的 - 生成 - 动效", icon_preview_in_r, icon_preview_in_p))
+                    if (!IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "预览当前加载的元素的 - 生成 - 动效", icon_preview_in_r, icon_preview_in_p))
                     {
                         if (HudManager == null)
                             return;
 
-                        IsPreviewing.boolValue = true;
+                        IsPreviewing = true;
                         LayoutsTweenPreview(XHudSpace.世界空间, XHudElementCreateState.Created);
                     }
                     #endregion
 
                     #region 预览停止 - 生成
-                    if (IsPreviewing.boolValue && Editor_XHud_GUI.Gui_Layout_Button(15, "停止预览当前播放的元素的 - 生成 - 动效", icon_stoppreview_r, icon_stoppreview_p))
+                    if (IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "停止预览当前播放的元素的 - 生成 - 动效", icon_stoppreview_r, icon_stoppreview_p))
                     {
                         if (HudManager == null)
                             return;
 
-                        IsPreviewing.boolValue = false;
+                        IsPreviewing = false;
                         XTween_Preview_Kill(XHudSpace.世界空间);
                     }
                     #endregion
@@ -1560,23 +1621,23 @@ namespace SevenStrikeModules.XHud.Editor
                     Editor_XHud_GUI.Gui_Layout_Space(40);
 
                     #region 预览播放 - 回收
-                    if (!IsPreviewing.boolValue && Editor_XHud_GUI.Gui_Layout_Button(15, "预览当前加载的元素的 - 回收 - 动效", icon_preview_out_r, icon_preview_out_p))
+                    if (!IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "预览当前加载的元素的 - 回收 - 动效", icon_preview_out_r, icon_preview_out_p))
                     {
                         if (HudManager == null)
                             return;
 
-                        IsPreviewing.boolValue = true;
+                        IsPreviewing = true;
                         LayoutsTweenPreview(XHudSpace.世界空间, XHudElementCreateState.Recycled);
                     }
                     #endregion
 
                     #region 预览停止 - 回收
-                    if (IsPreviewing.boolValue && Editor_XHud_GUI.Gui_Layout_Button(15, "停止预览当前播放的元素的 - 回收 - 动效", icon_stoppreview_r, icon_stoppreview_p))
+                    if (IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "停止预览当前播放的元素的 - 回收 - 动效", icon_stoppreview_r, icon_stoppreview_p))
                     {
                         if (HudManager == null)
                             return;
 
-                        IsPreviewing.boolValue = false;
+                        IsPreviewing = false;
                         XTween_Preview_Kill(XHudSpace.世界空间);
                     }
                     #endregion
@@ -2528,8 +2589,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (ElementList_World != null && ElementList_World.count > 0)
                 XTween_Preview_Kill(XHudSpace.世界空间);
 
-            IsPreviewing.boolValue = false;
-            IsPreviewing.serializedObject.ApplyModifiedProperties();
+            IsPreviewing = false;
         }
 
         #region 辅助
@@ -2692,7 +2752,6 @@ namespace SevenStrikeModules.XHud.Editor
             spawnerisRunning = serializedObject.FindProperty("spawnerisRunning");
             CreateArgs_MotionAnimateEndState = CreateArgs.FindPropertyRelative("MotionAnimateEndState");
             RecycleArgs_MotionAnimateEndState = RecycleArgs.FindPropertyRelative("MotionAnimateEndState");
-            IsPreviewing = serializedObject.FindProperty("IsPreviewing");
             UseInstantiateMode = serializedObject.FindProperty("UseInstantiateMode");
             UseDebug = serializedObject.FindProperty("UseDebug");
         }
@@ -3244,6 +3303,9 @@ namespace SevenStrikeModules.XHud.Editor
                     continue;
                 if (tweener.PrimitiveTweenNodes[i].Timings != tim)
                     continue;
+                if (!tweener.Tween_CreateRuleValidCheck(tweener.PrimitiveTweenNodes[i]))
+                    continue;
+
                 XTween_Interface tween = tweener.Tween_Create(tweener.PrimitiveTweenNodes[i], tweener.GlobalDuration * HudManager.DurationMultiply * dur);
 
                 tween.SetDelay(tween.Delay + delay);
@@ -3320,6 +3382,13 @@ namespace SevenStrikeModules.XHud.Editor
                         {
                             preview_twns.Add(primitive_tweens[s]);
                         }
+
+                        // ── 新增：子图元音效预览 ──
+                        Preview_PrimitiveTween_Sound(
+                            ele.PrimitiveControllerNodes[c].Controller.pt_Tween,
+                            state == XHudElementCreateState.Created ? "元素进入时" : "元素退出时",
+                            ele.PrimitivesTweenGlobalDuration,
+                            ele.PrimitiveControllerNodes[c].DelayTime + delay_spawner);
                     }
                 }
                 #endregion
@@ -3365,7 +3434,7 @@ namespace SevenStrikeModules.XHud.Editor
                state: true,
                x_color: XHud_Dashboard.Theme_Primary,
                x_title: "Seven Strike Media",
-               x_msg: "元素动效预览中...",
+               x_msg: "布局元素动效预览中...",
                x_anchor: XHudSceneActivateMarkAnchor.左下);
         }
         /// <summary>
@@ -3409,6 +3478,8 @@ namespace SevenStrikeModules.XHud.Editor
 
             cur_space = space;
 
+            XGUI.EditorPlayer_Sound.Stop();
+
             Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
         }
         /// <summary>
@@ -3438,6 +3509,9 @@ namespace SevenStrikeModules.XHud.Editor
             // 清空预览动画杀死后的委托事件
             Editor_XTween_Previewer.act_on_editor_autokill -= XTween_OnAutoKillPreview;
 
+            IsPreviewing = false;
+            XGUI.EditorPlayer_Sound.Stop();
+
             Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
         }
         /// <summary>
@@ -3446,6 +3520,72 @@ namespace SevenStrikeModules.XHud.Editor
         private void XTween_Preview_Rewind()
         {
             Editor_XTween_Previewer.Rewind();
+        }
+        #endregion
+
+        #region 音效预览
+        /// <summary>
+        /// 预览子图元动画器上匹配指定时机的音效。
+        /// <para/>
+        /// 【延迟公式】sod.Delay × HudManager.DurationMultiply × globalDuration + nodeDelay
+        /// 与子图元动画的延迟公式保持一致（动画延迟 = tween.Delay + node.DelayTime）。
+        /// </summary>
+        private void Preview_PrimitiveTween_Sound(XHud_Module_Primitive_Tween tweener, string timing, float globalDuration, float nodeDelay)
+        {
+            if (tweener == null) return;
+            if (tweener.MutePlay) return;
+            if (EditorUtility.audioMasterMute) return;
+            if (string.IsNullOrEmpty(timing)) return;
+
+            for (int s = 0; s < tweener.PrimitiveTweenSounds.Count; s++)
+            {
+                TweenSound sod = tweener.PrimitiveTweenSounds[s];
+                if (sod == null) continue;
+                if (sod.Mute) continue;
+                if (sod.Timing != timing) continue;
+
+                AudioClip clip = Resolve_PrimitiveSoundClip(sod);
+                if (clip == null) continue;
+
+                // ── 延迟：与子图元动画对齐 ──
+                float mul = 1f;
+                if (HudManager != null && HudManager.DurationMultiply > 0f)
+                    mul = HudManager.DurationMultiply;
+                mul *= globalDuration;
+
+                float delay = Mathf.Max(0f, sod.Delay * mul + nodeDelay);
+
+                // ── 音量 / 音高 / 静音 ──
+                float masterVol = (HudManager != null) ? HudManager.Volume * 0.01f : 1f;
+                bool masterMute = (HudManager != null) && HudManager.VolumeMute;
+                float volume = masterVol * Mathf.Clamp01(sod.Volume);
+                bool mute = masterMute;
+
+                float pMin = Mathf.Min(sod.MinPitch, sod.MaxPitch);
+                float pMax = Mathf.Max(sod.MinPitch, sod.MaxPitch);
+                bool useRandomPitch = !Mathf.Approximately(pMin, 1f) || !Mathf.Approximately(pMax, 1f);
+
+                XGUI.EditorPlayer_Sound.Enqueue(
+                    clip, delay, volume, mute, useRandomPitch, pMin, pMax);
+            }
+        }
+        /// <summary>
+        /// 从音效库安全取出一条 AudioClip（与图元侧 ResolvePreviewClip 逻辑一致）。
+        /// </summary>
+        private AudioClip Resolve_PrimitiveSoundClip(TweenSound sod)
+        {
+            if (sod == null || sod.Sound == null) return null;
+
+            if (HudManager != null && HudManager.Hud_Sounds != null)
+            {
+                string soundName = sod.Sound.name;
+                if (!string.IsNullOrEmpty(soundName))
+                {
+                    AudioClip clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(soundName);
+                    if (clip != null) return clip;
+                }
+            }
+            return sod.Sound;
         }
         #endregion
     }

@@ -3523,6 +3523,29 @@ namespace SevenStrikeModules.XHud
 
             return arg.Tweener;
         }
+        /// <summary>
+        /// 用于查验动画是否违反基础类型互斥规则
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public bool Tween_CreateRuleValidCheck(TweenNode node)
+        {
+            bool sw = true;
+
+            ModuleType m_type = controller.GetModuleType();
+            if ((m_type == ModuleType.Text || m_type == ModuleType.TmpText) &&
+                node.Type == TweenNodeType.f_图像填充)
+            {
+                sw = false;
+            }
+            if ((m_type != ModuleType.Text && m_type != ModuleType.TmpText) &&
+                node.Type == TweenNodeType.w_打字机)
+            {
+                sw = false;
+            }
+
+            return sw;
+        }
         #endregion
 
         #region 动画播放
@@ -3669,10 +3692,12 @@ namespace SevenStrikeModules.XHud
             if (controller.mod_Rect == null)
                 return;
 
-            ///--播放
             // ========== 遍历所有节点，逐个创建并播放 ==========
             for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
             {
+                if (!Tween_CreateRuleValidCheck(PrimitiveTweenNodes[i]))
+                    continue;
+
                 // 跳过未启用的节点
                 if (PrimitiveTweenNodes[i].Enabled)
                 {
@@ -3739,7 +3764,6 @@ namespace SevenStrikeModules.XHud
         #endregion
 
         #region 动画复位  /  杀死
-
         /// <summary>
         /// 动画重置（所有节点）
         /// 
@@ -3777,7 +3801,6 @@ namespace SevenStrikeModules.XHud
             // Inspector 绑定事件（内部判空）
             eve_on_Tween_RewindAll.Invoke();
         }
-
         /// <summary>
         /// 动画杀死（所有节点）
         /// 
@@ -3825,7 +3848,6 @@ namespace SevenStrikeModules.XHud
             // Inspector 绑定事件（内部判空）
             eve_on_Tween_KillAll.Invoke();
         }
-
         /// <summary>
         /// 动画清理（所有节点）
         /// 
@@ -3860,7 +3882,6 @@ namespace SevenStrikeModules.XHud
                 PrimitiveTweenNodes[i].Tweener = null;
             }
         }
-
         /// <summary>
         /// 复位动画（单个节点）
         /// 
@@ -3910,6 +3931,8 @@ namespace SevenStrikeModules.XHud
         /// <param name="complete">是否以"完成"语义杀死（传递给底层 Tweener.Kill / Rewind）</param>
         public void Tween_Rewind(TweenNode arg, bool complete = true)
         {
+            if (!Tween_CreateRuleValidCheck(arg))
+                return;
             /*如果动画方式为：当前 -> 结束则不执行退回动画，因为此方式是指让动画直接到达目标值（没有起始值，如果有也只是他的当前值），所以倒退对其没有意义*/
             if (arg.TweenValueMode == TweenValueMode.当前到结束_C_E)
                 return;
@@ -4087,7 +4110,6 @@ namespace SevenStrikeModules.XHud
                 act_on_Tween_Rewind(arg);
             eve_on_Tween_Rewind.Invoke(arg);
         }
-
         /// <summary>
         /// 杀死动画（单个节点）
         /// 
@@ -4116,6 +4138,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="complete">是否以"完成"语义杀死</param>
         public void Tween_Kill(TweenNode arg, bool complete = true)
         {
+            if (!Tween_CreateRuleValidCheck(arg))
+                return;
+
             #region 杀死动画
             // 空值检查：未创建 Tweener 时跳过
             if (arg.Tweener != null)
@@ -4130,7 +4155,6 @@ namespace SevenStrikeModules.XHud
                 act_on_Tween_Kill(arg);
             eve_on_Tween_Kill.Invoke(arg);
         }
-
         /// <summary>
         /// 检查列表中是否存在与指定节点重复的节点
         /// 
@@ -4177,7 +4201,6 @@ namespace SevenStrikeModules.XHud
 
             return false;
         }
-
         /// <summary>
         /// 查找与指定节点重复的节点（基于 ID + Indicator）
         /// 
@@ -4225,7 +4248,6 @@ namespace SevenStrikeModules.XHud
 
             return null;
         }
-
         #endregion
     }
 }

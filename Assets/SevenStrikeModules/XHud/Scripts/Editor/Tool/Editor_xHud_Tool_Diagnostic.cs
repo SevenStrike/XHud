@@ -246,7 +246,7 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem("Tools/XHud/Diagnostic ^#d")]
         static void Init()
         {
-            if (XHud_Dashboard.HudManagerGet() == null)
+            if (XHud_Dashboard.GetManager() == null)
                 return;
             window = (Editor_XHud_Tool_Diagnostic)EditorWindow.GetWindow(typeof(Editor_XHud_Tool_Diagnostic), false, "XHUD 诊断/概况面板", true);
             XGUI.CenterEditorWindow(new Vector2Int(300, 560), window, false);
@@ -325,7 +325,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnGUI()
         {
-            XHud_Manager mgr = XHud_Dashboard.HudManagerGet();
+            XHud_Manager mgr = XHud_Dashboard.GetManager();
 
             BaseObject.Update();
 

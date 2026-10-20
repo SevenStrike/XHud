@@ -146,7 +146,7 @@ namespace SevenStrikeModules.XHud.Editor
         #region 生命周期
         private void OnEnable()
         {
-            HudManager = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.GetManager();
 
             BaseScript = (XHud_Module_Primitive_Tween)target;
 
@@ -2573,6 +2573,8 @@ namespace SevenStrikeModules.XHud.Editor
                 if (!tweener.PrimitiveTweenNodes[i].Enabled)
                     continue;
                 if (tweener.PrimitiveTweenNodes[i].Timings != tim)
+                    continue;
+                if (!tweener.Tween_CreateRuleValidCheck(tweener.PrimitiveTweenNodes[i]))
                     continue;
                 XTween_Interface tween = tweener.Tween_Create(tweener.PrimitiveTweenNodes[i], tweener.GlobalDuration * HudManager.DurationMultiply);
 

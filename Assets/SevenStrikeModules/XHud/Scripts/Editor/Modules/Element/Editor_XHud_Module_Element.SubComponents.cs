@@ -1161,11 +1161,11 @@ namespace SevenStrikeModules.XHud.Editor
                     #region 音效列表
                     if (HudManager.Hud_Sounds != null)
                     {
-                        if (XGUI.CurrentWindowWidthThreshold(">", 170f))
+                        if (XGUI.CurrentWindowWidthThreshold(">", 150))
                         {
                             string[] collist = HudManager.Hud_Sounds.SoundLibrary_GetSoundNames();
                             sp_SoundName.stringValue = XGUI.gui_string_popup(
-                                rect: new Rect(rect.x + 5, rect.y + (XGUI.CurrentWindowWidthThreshold(">", 190f) ? 128 : 103), XGUI.GetCurrentWindowWidth() - 58, XGUI.GetSingleLineHeight()),
+                                rect: new Rect(rect.x + 5, rect.y + (XGUI.CurrentWindowWidthThreshold(">", 190f) ? 128 : 103), rect.width - 10, XGUI.GetSingleLineHeight()),
                                 title: "音效",
                                 title_color: Color.white,
                                 title_size: XGUIFontSize.M,
@@ -1182,7 +1182,8 @@ namespace SevenStrikeModules.XHud.Editor
                                 opt_bg_fill: XGUIGroup.实体,
                                 opt_bg_color: XGUIColor.亮白,
                                 opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
-                                icon_arrow_color: Color.black);
+                                icon_arrow_color: Color.black,
+                                width_limite: 145f);
 
                             sp_SoundName.serializedObject.ApplyModifiedProperties();
                         }

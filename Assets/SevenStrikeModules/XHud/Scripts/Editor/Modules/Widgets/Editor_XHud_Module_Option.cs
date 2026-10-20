@@ -124,7 +124,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         void OnEnable()
         {
-            HudManager = XHud_Dashboard.HudManagerGet();
+            HudManager = XHud_Dashboard.GetManager();
 
             BaseScript = (XHud_Module_Option)target;
 

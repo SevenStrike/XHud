@@ -41,7 +41,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 126.6, y: -363.7}
-  m_SizeDelta: {x: 738.7, y: 151.1}
+  m_SizeDelta: {x: 738.7, y: 70.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3929604278141804968
 CanvasRenderer:
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.3417201, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 0
@@ -72,7 +72,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 12e55bc559028404e842d85bca13f045, type: 3}
+    m_Font: {fileID: 12800000, guid: aca8c7dd72f74624d95ec59655a7afa5, type: 3}
     m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
@@ -81,34 +81,29 @@ MonoBehaviour:
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u4EFB\u52A1\u76EE\u6807\uFF1A \u4E0E\u7B2C29\u6B65\u5175\u5E08\u4F1A\u5408"
+  m_Text: 
   Indicator: Text
-  StyleName: "\u6587\u5B57\u6837\u5F0F\u540D\u79F0asd"
+  StyleName: NewTextStyle_HudText_G
   StyleLibSynching: 0
   PreviousText: 333
   TextIsChanged: 1
   SyncGlobalFontSize: 1
-  mgr: {fileID: 0}
   TextColorOwner: 2
-  fold_param: 0
-  fold_option: 0
-  fold_based: 0
-  fold_sync: 0
   TextStyleInfo:
-    Name: "\u6587\u5B57\u6837\u5F0F\u540D\u79F0asd"
-    Description: "\u6587\u5B57\u6837\u5F0F\u53C2\u6570\u8BF4\u660E\u5185\u5BB9"
+    Name: NewTextStyle_HudText_G
+    Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
     Type: 0
     Style: 0
     ContentAnchor: 2
-    Font: {fileID: 12800000, guid: 12e55bc559028404e842d85bca13f045, type: 3}
+    Font: {fileID: 12800000, guid: aca8c7dd72f74624d95ec59655a7afa5, type: 3}
     Font_AssetPath: 
     Size: 50
     LineHeight: 1
-    Overflow_Horizon: 0
-    Overflow_Vertical: 0
+    Overflow_Horizon: 1
+    Overflow_Vertical: 1
     RichText: 1
     GeometreAlign: 0
     BestFit: 0
@@ -117,7 +112,7 @@ MonoBehaviour:
     Fit_Max: 50
     Fit_Max_GlobalScaled: 50
     Size_GlobalScaled: 50
-    FontColor: {r: 1, g: 1, b: 1, a: 1}
+    FontColor: {r: 0, g: 1, b: 0.3417201, a: 1}
     tmp_rich: 0
     tmp_contentwrap: 0
     tmp_overflow: 0
@@ -245,6 +240,10 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
+  fold_param: 0
+  fold_option: 1
+  fold_based: 1
+  fold_sync: 1
 --- !u!114 &3902099935940337274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,10 +312,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 3902099935940337274}
-  OriginalColor: {r: 1, g: 1, b: 1, a: 1}
-  ColoriseName: "\u4EAE\u94B4\u84DD"
+  OriginalColor: {r: 0.13948512, g: 1, b: 0, a: 1}
+  ColoriseName: "\u94BB\u77F3\u84DD(Diamond Blue)"
   Debug: 0
-  SyncLibraryColor: 0
+  SyncLibraryColor: 1
   SyncImageColor: 1
   fold_param: 0
   fold_option: 0
@@ -339,8 +338,8 @@ MonoBehaviour:
     Euler: {x: -0, y: 0, z: 0}
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Size: {x: 738.7, y: 151.1}
+    Color: {r: 0, g: 1, b: 0.3417201, a: 1}
+    Size: {x: 738.7, y: 70.2}
     Fill: 0
   FirstSaveFeatures: 1
   Debug: 0
@@ -505,7 +504,7 @@ MonoBehaviour:
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
     Delay: 3.338
-    Progress: 0
+    Progress: 0.25286144
     TextCursorBlinkSpeed: 0.1
     TextCursor: _
     TextExtended: 0
@@ -769,7 +768,7 @@ MonoBehaviour:
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
     Delay: 3.338
-    Progress: 0
+    Progress: 0.2528651
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
     TextExtended: 0
@@ -901,7 +900,7 @@ MonoBehaviour:
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
     Delay: 7.063
-    Progress: 0
+    Progress: 0.99179375
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
     TextExtended: 0
@@ -1607,7 +1606,6 @@ GameObject:
   - component: {fileID: 8857759656416062061}
   - component: {fileID: 5955396475993730850}
   - component: {fileID: 3093053317171108072}
-  - component: {fileID: 3605889005545297785}
   m_Layer: 8
   m_Name: Cat
   m_TagString: Untagged
@@ -1635,7 +1633,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 485.6, y: 536.9}
+  m_SizeDelta: {x: 480, y: 520}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &4016231534562583080
 CanvasGroup:
@@ -1713,12 +1711,12 @@ MonoBehaviour:
   ElementSpaceType: 0
   CreatedSourceType: 0
   Tween_Preview_IsPlaying: 0
-  fold_param: 0
+  fold_param: 1
   fold_preview: 1
   fold_state: 1
   fold_option: 1
   fold_rms: 1
-  fold_list: 0
+  fold_list: 1
   fold_statistic: 1
   fold_based: 1
   fold_component: 1
@@ -1730,7 +1728,7 @@ MonoBehaviour:
   ClearPreviewTweensWithKill: 1
   Crc_Preview_Position: {x: 0, y: 0, z: 0}
   Rec_Preview_Position: {x: 0, y: 0, z: 0}
-  PreviewIncludePrimitivesTween: 0
+  PreviewIncludePrimitivesTween: 1
   Crc_Preview_SetPosition: 0
   Rec_Preview_SetPosition: 0
   Crc_Lib_Name: 
@@ -1968,7 +1966,7 @@ MonoBehaviour:
   - Controller: {fileID: 830724219823893641}
     TotalTime: 0
     DelayTime: 0
-  PrimitivesIsFold: 0
+  PrimitivesIsFold: 1
   PrimitivesTweenMaxDuration: 4.8378
   PrimitivesTweenGlobalDuration: 1
   AutoPlayPrimitivesTween: 1
@@ -2018,236 +2016,6 @@ MonoBehaviour:
   fold_option: 0
   fold_state: 1
   fold_based: 1
---- !u!114 &3605889005545297785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5755098906041804970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e623c31c6fe2624eb7a4ebeb2a07f7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HudElement: {fileID: 5955396475993730850}
-  IsEnable: 1
-  DebugState: 0
-  key_Element_In: 99
-  key_Element_Out: 118
-  CreateArgs:
-    anchor: 0
-    MotionAnimateEndState: 0
-    Alpha:
-      Duration: 1
-      Delay: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      CurveName: 
-      Ease: 10
-    Movement:
-      Movement: 0
-      Distance: 100
-      Duration: 1
-      Delay: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      CurveName: 
-      Ease: 10
-    Rotation:
-      Rotation: 0
-      Degree: 0
-      Duration: 1
-      Delay: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      CurveName: 
-      Ease: 10
-  RecycleArgs:
-    MotionAnimateEndState: 0
-    Alpha:
-      Duration: 1
-      Delay: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      CurveName: 
-      Ease: 10
-    Movement:
-      Movement: 0
-      Distance: 100
-      Duration: 1
-      Delay: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      CurveName: 
-      Ease: 10
-    Rotation:
-      Rotation: 0
-      Degree: 0
-      Duration: 1
-      Delay: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      CurveName: 
-      Ease: 10
-  HideWithStart: 1
-  Preset_Position: {x: 0, y: 0, z: 0}
-  Preset_Euler: {x: 0, y: 0, z: 0}
-  DurationScaler: 1
-  previewIsRunning: 0
-  Crc_Lib_Name: 
-  Rec_Lib_Name: 
-  DelayWithIn: 0
-  DelayWithOut: 0
-  create_fold_move: 0
-  create_fold_rotate: 0
-  create_fold_alpha: 0
-  recycle_fold_move: 0
-  recycle_fold_rotate: 0
-  recycle_fold_alpha: 0
-  RMS_Enabled: 0
-  RMS_Name: 
-  ElementIsIn: 1
-  fold_options: 0
-  fold_param: 0
-  fold_key: 0
-  fold_state: 0
-  fold_motion: 0
-  fold_preset_trans: 0
-  fold_rms: 1
-  fold_based: 1
 --- !u!1 &7198499336320210616
 GameObject:
   m_ObjectHideFlags: 0
@@ -2288,8 +2056,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 110, y: 290}
-  m_SizeDelta: {x: 120, y: 30}
+  m_AnchoredPosition: {x: 0.7, y: 335}
+  m_SizeDelta: {x: 518.1, y: 94.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9001394214252907755
 CanvasRenderer:
@@ -2319,7 +2087,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SASSD
+  m_text: ASDFER
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 06a874562f73bbe43984745e24b818c0, type: 2}
   m_sharedMaterial: {fileID: 669065259414783338, guid: 06a874562f73bbe43984745e24b818c0, type: 2}
@@ -2328,15 +2096,15 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278255545
-  m_fontColor: {r: 0.7266756, g: 1, b: 0, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 1
+    rgba: 4292601578
+  m_fontColor: {r: 0.91764706, g: 0.9019608, b: 0.85882354, a: 1}
+  m_enableVertexGradient: 1
+  m_colorMode: 2
   m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 0, b: 0, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 0, b: 0, a: 1}
+    topLeft: {r: 1, g: 0.67677116, b: 0.4764151, a: 1}
+    topRight: {r: 1, g: 0.67677116, b: 0.4764151, a: 1}
+    bottomLeft: {r: 1, g: 0.40481335, b: 0, a: 1}
+    bottomRight: {r: 1, g: 0.40481335, b: 0, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
@@ -2346,8 +2114,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 13
-  m_fontSizeBase: 13
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 5
@@ -2396,12 +2164,7 @@ MonoBehaviour:
   PreviousText: MNBVCXZ-WERTYMMMMMMMMMMM*MMMMMMMMMM
   TextIsChanged: 1
   SyncGlobalFontSize: 1
-  mgr: {fileID: 0}
-  TextColorOwner: 2
-  fold_param: 1
-  fold_option: 0
-  fold_based: 1
-  fold_sync: 0
+  TextColorOwner: 1
   TextStyleInfo:
     Name: NewTextStyle_HudTmpTextGGGGG
     Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudTmpText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
@@ -2430,15 +2193,15 @@ MonoBehaviour:
     tmp_anchor: 14
     tmp_font: {fileID: 11400000, guid: 06a874562f73bbe43984745e24b818c0, type: 2}
     tmp_fontasset_assetpath: 
-    tmp_size: 13
-    tmp_size_globalscaled: 13
+    tmp_size: 50
+    tmp_size_globalscaled: 50
     tmp_space_character: 0
     tmp_space_word: 0
     tmp_space_lineheight: 1
     tmp_space_paragraph: 0
     tmp_WrappingRatios: 0
     tmp_contentmargin: {x: 0, y: 0, z: 0, w: 0}
-    tmp_color: {r: 0.7266756, g: 1, b: 0, a: 1}
+    tmp_color: {r: 0.91764706, g: 0.9019608, b: 0.85882354, a: 1}
     tmp_EnableAutoSizing: 0
     tmp_FontSizeMin: 5
     tmp_FontSizeMin_globalscaled: 5
@@ -2446,14 +2209,14 @@ MonoBehaviour:
     tmp_FontSizeMax_globalscaled: 100
     tmp_CharWidthMaxAdj: 0
     tmp_LineSpacingMax: 0
-    gra_A: {r: 1, g: 1, b: 1, a: 1}
-    gra_B: {r: 1, g: 0, b: 0, a: 1}
-    gra_C: {r: 1, g: 1, b: 1, a: 1}
+    gra_A: {r: 1, g: 0.40481335, b: 0, a: 1}
+    gra_B: {r: 1, g: 0.67677116, b: 0.4764151, a: 1}
+    gra_C: {r: 0, g: 1, b: 0.36952877, a: 1}
     gra_D: {r: 1, g: 1, b: 1, a: 1}
     gra_Invert: 0
-    gra_Used: 0
-    gra_ColorMode: 1
-    gra_ColorModeName: "\u6C34\u5E73\u6E10\u53D8"
+    gra_Used: 1
+    gra_ColorMode: 2
+    gra_ColorModeName: "\u5782\u76F4\u6E10\u53D8"
     LibStyle_Effect_geometre_align: 0
     LibStyle_Effect_align: 0
     LibStyle_Effect_font: 0
@@ -2550,6 +2313,11 @@ MonoBehaviour:
     LibStyle_Effect_maskable: 0
     Raycast: 0
     Maskable: 0
+  fold_param: 1
+  fold_gradient: 0
+  fold_option: 0
+  fold_based: 1
+  fold_sync: 1
 --- !u!114 &830724219823893641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2618,8 +2386,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 830724219823893641}
-  OriginalColor: {r: 0.7254902, g: 0.7254902, b: 0.69411767, a: 1}
-  ColoriseName: "\u77F3\u677F\u7070"
+  OriginalColor: {r: 0.91764706, g: 0.9019608, b: 0.85882354, a: 1}
+  ColoriseName: "\u73CD\u73E0\u7070"
   Debug: 0
   SyncLibraryColor: 1
   SyncImageColor: 1
@@ -2640,12 +2408,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 830724219823893641}
   PrimitiveFeatures:
-    Position: {x: 110, y: 290, z: 0}
+    Position: {x: 0.7, y: 335, z: 0}
     Euler: {x: -0, y: 0, z: 0}
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
-    Color: {r: 0.7266756, g: 1, b: 0, a: 1}
-    Size: {x: 120, y: 30}
+    Color: {r: 0.91764706, g: 0.9019608, b: 0.85882354, a: 1}
+    Size: {x: 518.1, y: 94.2}
     Fill: 0
   FirstSaveFeatures: 1
   Debug: 0
@@ -2868,7 +2636,7 @@ MonoBehaviour:
     RotateMode: 0
     LoopType: 0
     LoopCount: 0
-    IsFold: 0
+    IsFold: 1
   PrimitiveTweenSounds: []
   GlobalDuration: 1
   MinTimer: 1
