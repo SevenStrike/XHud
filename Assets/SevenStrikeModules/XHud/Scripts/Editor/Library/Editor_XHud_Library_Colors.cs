@@ -397,10 +397,10 @@ namespace SevenStrikeModules.XHud.Editor
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
-                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                     title: "参数",
                     title_size: XGUIFontSize.M,
-                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15));
 
@@ -408,7 +408,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "库名称",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
                 prop: sp_LibraryName,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -419,7 +419,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "过滤（包含）",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
                 prop: sp_Highlight,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -435,7 +435,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "查找（精确）",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
                 prop: sp_Find,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -466,10 +466,10 @@ namespace SevenStrikeModules.XHud.Editor
                         type: XGUIContainerType.Horizontal,
                         bg_fill: XGUIGroup.缺口纯色边框,
                         bg_color: XGUIColor.亮白,
-                        bg_color_gui: XHud_Dashboard.Theme_Group,
+                        bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                         title: "快捷功能",
                         title_size: XGUIFontSize.M,
-                        title_text_color: XHud_Dashboard.Theme_Primary,
+                        title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_clipping: TextClipping.Clip,
                         padding: new RectOffset(15, 15, 20, 15));
 
@@ -524,7 +524,7 @@ namespace SevenStrikeModules.XHud.Editor
                             cancel: "暂不",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                         if (res == "暂不")
                             return;
                         sp_ColorLibrary_Original.ClearArray();
@@ -586,7 +586,7 @@ namespace SevenStrikeModules.XHud.Editor
                            other: "通用色",
                            PrimaryIndex: 1,
                            usemodal: true,
-                           themecolor: XHud_Dashboard.Theme_Primary);
+                           themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                         if (res == "暂不")
                             return;
@@ -600,7 +600,7 @@ namespace SevenStrikeModules.XHud.Editor
                             cancel: "替换",
                             PrimaryIndex: 1,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                         switch (res)
                         {
@@ -627,10 +627,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "色卡列表",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15));
 
@@ -780,7 +780,7 @@ namespace SevenStrikeModules.XHud.Editor
                        ok: "明白",
                        PrimaryIndex: 0,
                        usemodal: true,
-                       themecolor: XHud_Dashboard.Theme_Primary);
+                       themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 });
                 menu.AddItem(new GUIContent("E (修改色卡信息)"), false, () =>
                 {
@@ -811,7 +811,7 @@ namespace SevenStrikeModules.XHud.Editor
                         ok: "明白",
                         PrimaryIndex: 0,
                         usemodal: true,
-                        themecolor: XHud_Dashboard.Theme_Primary);
+                        themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 });
                 menu.AddItem(new GUIContent("A (拷贝色卡的 R G B 颜色)"), false, () =>
                 {
@@ -826,7 +826,7 @@ namespace SevenStrikeModules.XHud.Editor
                         cancel: "代码块",
                         PrimaryIndex: 0,
                         usemodal: true,
-                        themecolor: XHud_Dashboard.Theme_Primary);
+                        themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                     if (mode == "代码块")
                     {
@@ -840,7 +840,7 @@ namespace SevenStrikeModules.XHud.Editor
                             ok: "明白",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     else
                     {
@@ -854,7 +854,7 @@ namespace SevenStrikeModules.XHud.Editor
                             ok: "明白",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                 });
                 menu.AddItem(new GUIContent("X (拷贝色卡的 R G B A 颜色)"), false, () =>
@@ -870,7 +870,7 @@ namespace SevenStrikeModules.XHud.Editor
                           cancel: "代码块",
                           PrimaryIndex: 0,
                           usemodal: true,
-                          themecolor: XHud_Dashboard.Theme_Primary);
+                          themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                     if (mode == "代码块")
                     {
@@ -884,7 +884,7 @@ namespace SevenStrikeModules.XHud.Editor
                            ok: "明白",
                            PrimaryIndex: 0,
                            usemodal: true,
-                           themecolor: XHud_Dashboard.Theme_Primary);
+                           themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     else
                     {
@@ -898,7 +898,7 @@ namespace SevenStrikeModules.XHud.Editor
                             ok: "明白",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                 });
                 // 显示右键菜单
@@ -922,7 +922,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.gui_label(
                     rect: drawelement_rect,
                     text: new GUIContent("已定位"),
-                    text_color: XHud_Dashboard.Theme_Primary,
+                    text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     size: XGUIFontSize.S,
                     clipping: TextClipping.Clip,
                     anchor: TextAnchor.MiddleCenter,
@@ -1161,7 +1161,7 @@ namespace SevenStrikeModules.XHud.Editor
                           alt: "暂不",
                           PrimaryIndex: 2,
                           usemodal: true,
-                          themecolor: XHud_Dashboard.Theme_Primary);
+                          themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             if (res == "暂不")
                 return;
 

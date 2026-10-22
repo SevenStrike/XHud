@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditorInternal;
@@ -225,7 +226,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             BaseObject = new SerializedObject(this);
 
-            HudManager = XHud_Dashboard.GetManager();
+            HudManager = XHud_Dashboard.get_manager();
 
             icon_logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_elements_selector/icon");
 
@@ -273,7 +274,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             BaseObject.Update();
 
-            string colorhex_value = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string colorhex_value = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
             string colorhex_title = XGUI_Utilitys.Color_To_HexString(Color.white * 0.65f, true);
 
             TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
@@ -305,7 +306,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_seperator(
                 rect: rect_seperate,
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0));
 
@@ -542,7 +543,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     itemmark_rect = new Rect(item_rect.x + 1, item_rect.y + 11, 5, 5);
                     // 高亮标记表示选中
-                    EditorGUI.DrawRect(itemmark_rect, XHud_Dashboard.Theme_Primary);
+                    EditorGUI.DrawRect(itemmark_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     itemmarkBg_rect = new Rect(item_rect.x, item_rect.y, item_rect.width + 20, item_rect.height);
                     // 高亮背景表示选中
                     EditorGUI.DrawRect(itemmarkBg_rect, new Color(0, 0, 0, 0.2f));
@@ -616,7 +617,7 @@ namespace SevenStrikeModules.XHud.Editor
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 button_text_color: Color.black,
                 press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,

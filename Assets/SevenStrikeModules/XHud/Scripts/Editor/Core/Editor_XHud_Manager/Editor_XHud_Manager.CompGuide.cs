@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEngine;
 
@@ -69,7 +70,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 5, 15));
 
             #region 构图模式       
@@ -97,7 +98,7 @@ namespace SevenStrikeModules.XHud.Editor
                opt_font_style: FontStyle.Normal,
                opt_bg_fill: XGUIGroup.实体,
                opt_bg_color: XGUIColor.亮白,
-               opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+               opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                icon_arrow_color: Color.black,
                margin: new RectOffset(0, 0, 5, 5),
                padding: new RectOffset(5, 5, 0, 0),
@@ -129,7 +130,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 15, 10));
 
             switch (CompGuideMode.stringValue)
@@ -151,7 +152,7 @@ namespace SevenStrikeModules.XHud.Editor
                         opt_font_style: FontStyle.Normal,
                         opt_bg_fill: XGUIGroup.实体,
                         opt_bg_color: XGUIColor.亮白,
-                        opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                        opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         icon_arrow_color: Color.black,
                         margin: new RectOffset(0, 0, 5, 5),
                         padding: new RectOffset(5, 5, 0, 0),
@@ -168,7 +169,7 @@ namespace SevenStrikeModules.XHud.Editor
                             title: "对称偏移校正",
                             title_size: XGUIFontSize.M,
                             //title_color: Color.white,
-                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             title_width: 90,
                             //status_icon: "icon_field_status",
                             prop: GuideParam_Mirror_UD_Offset,
@@ -181,7 +182,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title: "中心点尺寸",
                         title_size: XGUIFontSize.M,
                         //title_color: Color.white,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
                         prop: GuideParam_CenterPointSize,
@@ -237,7 +238,7 @@ namespace SevenStrikeModules.XHud.Editor
                         opt_font_style: FontStyle.Normal,
                         opt_bg_fill: XGUIGroup.实体,
                         opt_bg_color: XGUIColor.亮白,
-                        opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                        opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         icon_arrow_color: Color.black,
                         margin: new RectOffset(0, 0, 5, 5),
                         padding: new RectOffset(5, 5, 0, 0),
@@ -255,7 +256,7 @@ namespace SevenStrikeModules.XHud.Editor
                             title: "对称偏移校正",
                             title_size: XGUIFontSize.M,
                             //title_color: Color.white,
-                            title_hover_color: XHud_Dashboard.Theme_Primary,
+                            title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             title_width: 90,
                             //status_icon: "icon_field_status",
                             prop: GuideParam_Mirror_LR_Offset,
@@ -268,7 +269,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title: "中心点尺寸",
                         title_size: XGUIFontSize.M,
                         //title_color: Color.white,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
                         prop: GuideParam_CenterPointSize,
@@ -324,7 +325,7 @@ namespace SevenStrikeModules.XHud.Editor
                        opt_font_style: FontStyle.Normal,
                        opt_bg_fill: XGUIGroup.实体,
                        opt_bg_color: XGUIColor.亮白,
-                       opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                       opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                        icon_arrow_color: Color.black,
                        margin: new RectOffset(0, 0, 5, 5),
                        padding: new RectOffset(5, 5, 0, 0),
@@ -366,7 +367,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title: "水平偏移",
                         title_size: XGUIFontSize.M,
                         //title_color: Color.white,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
                         prop: GuideParam_CornerLookat_Offset_H,
@@ -378,7 +379,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title: "垂直偏移",
                         title_size: XGUIFontSize.M,
                         //title_color: Color.white,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
                         prop: GuideParam_CornerLookat_Offset_V,
@@ -390,7 +391,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title: "中心点尺寸",
                         title_size: XGUIFontSize.M,
                         //title_color: Color.white,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
                         prop: GuideParam_CenterPointSize,
@@ -434,7 +435,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title: "水平伸缩",
                         title_size: XGUIFontSize.M,
                         //title_color: Color.white,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
                         prop: GuideParam_Three_Offset_H,
@@ -446,7 +447,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title: "垂直伸缩",
                         title_size: XGUIFontSize.M,
                         //title_color: Color.white,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
                         prop: GuideParam_Three_Offset_V,
@@ -458,7 +459,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title: "整体伸缩",
                         title_size: XGUIFontSize.M,
                         //title_color: Color.white,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
                         prop: GuideParam_Three_Offset_Coverage,
@@ -473,7 +474,7 @@ namespace SevenStrikeModules.XHud.Editor
                         bg_fill: XGUIGroup.实体,
                         bg_color: XGUIColor.深空灰,
                         bg_color_gui: Color.white,
-                        button_text_color: XHud_Dashboard.Theme_Primary,
+                        button_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         press_fill: XGUIGroup.实体,
                         press_color: XGUIColor.深空灰,
                         press_text_color: Color.white,
@@ -537,7 +538,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "基准水平位移",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_GuideLine_BaseOffset,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -547,7 +548,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "基准水平高度",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_GuideLine_BaseHeight,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -557,7 +558,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "近景高度",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_GuideLine_Offset_NearHeight,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -567,7 +568,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "近景伸缩",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_GuideLine_Offset_Near,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -577,7 +578,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "远景伸缩",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_GuideLine_Offset_Far,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -587,7 +588,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "中心点尺寸",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_CenterPointSize,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -638,7 +639,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "基准顶部位移",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_Triangle_TopOffset,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -648,7 +649,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "基准顶部高度",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_Triangle_BaseHeight,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -658,7 +659,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "基准底部高度",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_Triangle_BottomHeight,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -668,7 +669,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "左角点偏移",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_Triangle_Offset_Left,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -678,7 +679,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "右角点偏移",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_Triangle_Offset_Right,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -688,7 +689,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "中心点尺寸",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_CenterPointSize,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -739,7 +740,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "工字顶部高度",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_IShape_TopHeight,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -749,7 +750,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "工字底部高度",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_IShape_BottomHeight,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -759,7 +760,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "工字左偏移",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_IShape_Offset_Left,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -769,7 +770,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "工字右偏移",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: GuideParam_IShape_Offset_Right,
                         prop_margin: new RectOffset(0, 0, 5, 0));

@@ -159,7 +159,7 @@ namespace SevenStrikeModules.XHud
         #endregion
 
         public Color GuideColor = new Color(0.5f, 0.5f, 0.5f, 0.2f);
-        public Color GuidePointColor = XHud_Dashboard.Theme_Primary;
+        public Color GuidePointColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
 
         /// <summary>
         /// 绘制屏幕构图参考线

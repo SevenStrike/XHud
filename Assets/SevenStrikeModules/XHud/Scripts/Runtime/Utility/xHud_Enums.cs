@@ -1355,4 +1355,22 @@ namespace SevenStrikeModules.XHud.Enums
         /// </summary>
         InSceneNotPrefab = 3
     }
+    /// <summary>
+    /// 主题色类型
+    /// </summary>
+    public enum ThemeColorType
+    {
+        /// <summary>
+        /// 主色
+        /// </summary>
+        primary = 0,
+        /// <summary>
+        /// 编组
+        /// </summary>
+        group = 1,
+        /// <summary>
+        /// 分割线
+        /// </summary>
+        sepline = 2,
+    }
 }

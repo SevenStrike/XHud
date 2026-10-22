@@ -163,11 +163,15 @@ namespace SevenStrikeModules.XHud.Editor
             RMS_Enabled = xHud_GetSerializedProperty("RMS_Enabled");
             RMS_Nodes = xHud_GetSerializedProperty("RMS_Nodes");
             RMS_CurrentSolution = xHud_GetSerializedProperty("RMS_CurrentSolution");
-            theme_color = xHud_GetSerializedProperty("theme_color");
-            theme_color_gp = xHud_GetSerializedProperty("theme_color_gp");
-            theme_color_sep = xHud_GetSerializedProperty("theme_color_sep");
-            ThemeSolution = xHud_GetSerializedProperty("ThemeSolution");
-            ThemeEdgeSolution = xHud_GetSerializedProperty("ThemeEdgeSolution");
+
+            theme_color_primary = xHud_GetSerializedProperty("theme_color_primary");
+            theme_color_group = xHud_GetSerializedProperty("theme_color_group");
+            theme_color_sepline = xHud_GetSerializedProperty("theme_color_sepline");
+
+            theme_solution_primary = xHud_GetSerializedProperty("theme_solution_primary");
+            theme_solution_group = xHud_GetSerializedProperty("theme_solution_group");
+            theme_solution_sepline = xHud_GetSerializedProperty("theme_solution_sepline");
+
             Hud_EventSystem = xHud_GetSerializedProperty("Hud_EventSystem");
             Hud_InputSystemUIInputModule = xHud_GetSerializedProperty("Hud_InputSystemUIInputModule");
             CreateArgs_MotionAnimateEndState = CreateArgs_Default.FindPropertyRelative("MotionAnimateEndState");

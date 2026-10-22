@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEngine;
 
@@ -128,7 +129,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_seperator(
                 rect: rect_seperate,
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0));
 
@@ -157,7 +158,7 @@ namespace SevenStrikeModules.XHud.Editor
                 bg_color: XGUIColor.无,
                 size: XGUIFontSize.M,
                 anchor: TextAnchor.MiddleCenter,
-                text_color: XHud_Dashboard.Theme_Primary,
+                text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 padding: new RectOffset(10, 10, 0, 0),
                 margin: new RectOffset(0, 0, 95, 0),
                 clipping: TextClipping.Clip,
@@ -172,10 +173,10 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "预加载数量",
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 //status_icon: "icon_field_status",
-                //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.Theme_Primary : Color.red,
+                //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop_padding: new RectOffset(20, 20, 0, 0),
                 prop: sp_InitializeCounts);
             #endregion
@@ -251,7 +252,7 @@ namespace SevenStrikeModules.XHud.Editor
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 button_text_color: Color.black,
                 press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,

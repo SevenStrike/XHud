@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -41,7 +42,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void Draw_RMS()
         {
-            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             #region RMS说明
             if (RMS_Nodes.arraySize <= 0)
@@ -103,7 +104,7 @@ namespace SevenStrikeModules.XHud.Editor
                     cancel: "暂不",
                     PrimaryIndex: 0,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary,
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     on_selected: (d) =>
                     {
                         if (d == "清空")
@@ -180,7 +181,7 @@ namespace SevenStrikeModules.XHud.Editor
                     rect: new Rect(rect.x + 30, rect.y + 3, (XGUI.GetCurrentWindowWidth() > 180 ? (rect.width / 2) : rect.width) - 40, 20),
                     title: null,
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 80,
                     prop: sp_node_indicator);
                 }
@@ -191,7 +192,7 @@ namespace SevenStrikeModules.XHud.Editor
                     rect: new Rect(rect.x + (rect.width - (rect.width / 2)), rect.y + 3, (rect.width / 2) - 5, 20),
                     title: null,
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 80,
                     prop: sp_node_res);
                 }
@@ -199,7 +200,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.gui_icon(
                     rect: new Rect(rect.x + 5, rect.y + 3, 14, 14),
                     icon: rmsicon,
-                    color: ScreenRes.vector2Value != sp_node_res.vector2Value ? Color.gray : XHud_Dashboard.Theme_Primary);
+                    color: ScreenRes.vector2Value != sp_node_res.vector2Value ? Color.gray : XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             }
         }
         /// <summary>

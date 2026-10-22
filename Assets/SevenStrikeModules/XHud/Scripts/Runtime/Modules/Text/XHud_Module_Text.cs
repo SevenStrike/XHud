@@ -198,7 +198,7 @@ namespace SevenStrikeModules.XHud
             #region 如果同步库样式
             if (StyleLibSynching)
             {
-                XHud_Manager mgr = XHud_Dashboard.GetManager();
+                XHud_Manager mgr = XHud_Dashboard.get_manager();
 
                 #region 样式集合为空判断
                 if (mgr == null)
@@ -400,7 +400,7 @@ namespace SevenStrikeModules.XHud
                 {
                     if (!Application.isPlaying)
                     {
-                        TextStyleInfo.Size_GlobalScaled = XHud_Dashboard.GetManager().FontSizeMultiply * TextStyleInfo.Size;
+                        TextStyleInfo.Size_GlobalScaled = XHud_Dashboard.get_manager().FontSizeMultiply * TextStyleInfo.Size;
                     }
                     else
                     {
@@ -427,7 +427,7 @@ namespace SevenStrikeModules.XHud
                 {
                     if (!Application.isPlaying)
                     {
-                        TextStyleInfo.Fit_Min_GlobalScaled = XHud_Dashboard.GetManager().FontSizeMultiply * TextStyleInfo.Fit_Min;
+                        TextStyleInfo.Fit_Min_GlobalScaled = XHud_Dashboard.get_manager().FontSizeMultiply * TextStyleInfo.Fit_Min;
                     }
                     else
                     {
@@ -452,7 +452,7 @@ namespace SevenStrikeModules.XHud
                 {
                     if (!Application.isPlaying)
                     {
-                        TextStyleInfo.Fit_Max_GlobalScaled = XHud_Dashboard.GetManager().FontSizeMultiply * TextStyleInfo.Fit_Max;
+                        TextStyleInfo.Fit_Max_GlobalScaled = XHud_Dashboard.get_manager().FontSizeMultiply * TextStyleInfo.Fit_Max;
                     }
                     else
                     {

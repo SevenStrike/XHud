@@ -247,7 +247,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_seperator(
                 rect: rect_seperate,
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0));
 
@@ -298,7 +298,7 @@ namespace SevenStrikeModules.XHud.Editor
                     tooltip: "以位移结束为准",
                     tex_release: icon_libsetter_motion_movement_r,
                     tex_press: icon_libsetter_motion_movement_p,
-                    tex_gui_color: (Type == HudElementMotionType.Creator ? (maes_crc == MotionAnimateEndState.以_移动为准 ? XHud_Dashboard.Theme_Primary : Color.gray) : (maes_rec == MotionAnimateEndState.以_移动为准 ? XHud_Dashboard.Theme_Primary : Color.gray)),
+                    tex_gui_color: (Type == HudElementMotionType.Creator ? (maes_crc == MotionAnimateEndState.以_移动为准 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray) : (maes_rec == MotionAnimateEndState.以_移动为准 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray)),
                     border: new RectOffset(0, 0, 0, 0),
                     width: IconSize,
                     height: IconSize))
@@ -324,7 +324,7 @@ namespace SevenStrikeModules.XHud.Editor
                      tooltip: "以旋转结束为准",
                      tex_release: icon_libsetter_motion_rotator_r,
                      tex_press: icon_libsetter_motion_rotator_p,
-                     tex_gui_color: (Type == HudElementMotionType.Creator ? (maes_crc == MotionAnimateEndState.以_旋转为准 ? XHud_Dashboard.Theme_Primary : Color.gray) : (maes_rec == MotionAnimateEndState.以_旋转为准 ? XHud_Dashboard.Theme_Primary : Color.gray)),
+                     tex_gui_color: (Type == HudElementMotionType.Creator ? (maes_crc == MotionAnimateEndState.以_旋转为准 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray) : (maes_rec == MotionAnimateEndState.以_旋转为准 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray)),
                      border: new RectOffset(0, 0, 0, 0),
                      width: IconSize,
                      height: IconSize))
@@ -350,7 +350,7 @@ namespace SevenStrikeModules.XHud.Editor
                     tooltip: "以透明度结束为准",
                     tex_release: icon_libsetter_motion_alpha_r,
                     tex_press: icon_libsetter_motion_alpha_p,
-                    tex_gui_color: (Type == HudElementMotionType.Creator ? (maes_crc == MotionAnimateEndState.以_透明度为准 ? XHud_Dashboard.Theme_Primary : Color.gray) : (maes_rec == MotionAnimateEndState.以_透明度为准 ? XHud_Dashboard.Theme_Primary : Color.gray)),
+                    tex_gui_color: (Type == HudElementMotionType.Creator ? (maes_crc == MotionAnimateEndState.以_透明度为准 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray) : (maes_rec == MotionAnimateEndState.以_透明度为准 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray)),
                     border: new RectOffset(0, 0, 0, 0),
                     width: IconSize,
                     height: IconSize))
@@ -385,10 +385,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "模版信息",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 margin: new RectOffset(10, 10, 0, 0),
                 padding: new RectOffset(10, 10, 15, 15));
@@ -448,10 +448,10 @@ namespace SevenStrikeModules.XHud.Editor
            type: XGUIContainerType.Vertical,
            bg_fill: XGUIGroup.缺口纯色边框,
            bg_color: XGUIColor.亮白,
-           bg_color_gui: XHud_Dashboard.Theme_Group,
+           bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
            title: "动效类型",
            title_size: XGUIFontSize.M,
-           title_text_color: XHud_Dashboard.Theme_Primary,
+           title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
            title_clipping: TextClipping.Clip,
            margin: new RectOffset(10, 10, 0, 0),
            padding: new RectOffset(10, 10, 15, 15));
@@ -478,10 +478,10 @@ namespace SevenStrikeModules.XHud.Editor
                type: XGUIContainerType.Vertical,
                bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
-               bg_color_gui: XHud_Dashboard.Theme_Group,
+               bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                title: "生成锚点",
                title_size: XGUIFontSize.M,
-               title_text_color: XHud_Dashboard.Theme_Primary,
+               title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                title_clipping: TextClipping.Clip,
                margin: new RectOffset(10, 10, 0, 0),
                padding: new RectOffset(10, 10, 15, 15));
@@ -506,10 +506,10 @@ namespace SevenStrikeModules.XHud.Editor
                type: XGUIContainerType.Vertical,
                bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
-               bg_color_gui: XHud_Dashboard.Theme_Group,
+               bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                title: "位移参数",
                title_size: XGUIFontSize.M,
-               title_text_color: XHud_Dashboard.Theme_Primary,
+               title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                title_clipping: TextClipping.Clip,
                margin: new RectOffset(10, 10, 0, 0),
                padding: new RectOffset(10, 10, 15, 15));
@@ -522,7 +522,7 @@ namespace SevenStrikeModules.XHud.Editor
                 bg_color: XGUIColor.亮白,
                 bg_gui_color: Color.black * 0.5f,
                 text_color_normal: Color.white,
-                text_color_selected: XHud_Dashboard.Theme_Primary,
+                text_color_selected: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 bar_height: 25,
                 text_anchor: TextAnchor.MiddleCenter,
                 text_padding: new RectOffset(10, 10, 0, 0),
@@ -731,10 +731,10 @@ namespace SevenStrikeModules.XHud.Editor
             type: XGUIContainerType.Vertical,
             bg_fill: XGUIGroup.缺口纯色边框,
             bg_color: XGUIColor.亮白,
-            bg_color_gui: XHud_Dashboard.Theme_Group,
+            bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
             title: "回收 & 生成动作",
             title_size: XGUIFontSize.M,
-            title_text_color: XHud_Dashboard.Theme_Primary,
+            title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_clipping: TextClipping.Clip,
             margin: new RectOffset(10, 10, 0, 0),
             padding: new RectOffset(10, 10, 15, 15));
@@ -796,7 +796,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void SendToLibrary()
         {
-            XHud_Manager mgr = XHud_Dashboard.GetManager();
+            XHud_Manager mgr = XHud_Dashboard.get_manager();
 
             if (sp_LibName.stringValue == "动效名称")
             {
@@ -808,11 +808,11 @@ namespace SevenStrikeModules.XHud.Editor
                    ok: "明白",
                    PrimaryIndex: 0,
                    usemodal: true,
-                   themecolor: XHud_Dashboard.Theme_Primary);
+                   themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 return;
             }
 
-            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             bool exist = Target_Hud_MotionLibrary.ElementMotion_IsExist(sp_LibName.stringValue, Type);
 
@@ -826,7 +826,7 @@ namespace SevenStrikeModules.XHud.Editor
                     ok: "重命名",
                     PrimaryIndex: 0,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                 if (res == "重命名")
                 {
@@ -853,7 +853,7 @@ namespace SevenStrikeModules.XHud.Editor
                         ok: "明白",
                         PrimaryIndex: 0,
                         usemodal: true,
-                        themecolor: XHud_Dashboard.Theme_Primary);
+                        themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 };
                 Close();
             }
@@ -865,7 +865,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void UpdateToLibrary()
         {
-            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             XHud_LibraryArg_Motion motion = new XHud_LibraryArg_Motion(sp_LibName.stringValue, (int)Type, sp_Description.stringValue, CreateArgs.Clone(), RecycleArgs.Clone());
             Target_Hud_MotionLibrary.ElementMotion_ReplaceMotion(ModifiedIndex, motion);
@@ -1012,7 +1012,7 @@ namespace SevenStrikeModules.XHud.Editor
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 button_text_color: Color.black,
                 press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,

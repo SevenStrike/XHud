@@ -137,7 +137,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnEnable()
         {
-            HudManager = XHud_Dashboard.GetManager();
+            HudManager = XHud_Dashboard.get_manager();
 
             BaseScript = (XHud_Spawner)target;
 
@@ -205,7 +205,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 生成器选项
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "生成器选项", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "生成器选项", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 指定库名和元素名
@@ -253,13 +253,13 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.themes_get_color(ThemeColorType.sepline));
 
             #region 生成状态     
-            Editor_XHud_GUI.StatuDisplayer_text(null, 12, new Vector2(0, 7), "生成状态", 12, SpawnerRunning.boolValue ? "生成中" : "待命中", SpawnerRunning.boolValue ? XHud_Dashboard.Theme_Primary : Color.gray, 11, false);
+            Editor_XHud_GUI.StatuDisplayer_text(null, 12, new Vector2(0, 7), "生成状态", 12, SpawnerRunning.boolValue ? "生成中" : "待命中", SpawnerRunning.boolValue ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray, 11, false);
             #endregion
 
-            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+            Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.themes_get_color(ThemeColorType.sepline));
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 根据脚本可见性自动创建与回收
@@ -306,7 +306,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 生成器参数
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "生成器参数", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "生成器参数", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 生成器标识
@@ -316,7 +316,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (sp_ManullyCreate.boolValue)
             {
                 Editor_XHud_GUI.Gui_Layout_Space(5);
-                Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+                Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.themes_get_color(ThemeColorType.sepline));
                 Editor_XHud_GUI.Gui_Layout_Space(10);
 
                 Editor_XHud_GUI.Gui_Layout_Property_Field("主要辅助按键", SpawnFunctionKey_Primary, 90);
@@ -334,7 +334,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 生成偏移
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "生成偏移", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "生成偏移", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             EditorGUILayout.HelpBox("如果不希望指定生成的元素尺寸，请保持尺寸值为0", MessageType.Info);
@@ -385,7 +385,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 生成坐标
             if (sp_WorldCreate.boolValue)
             {
-                Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "生成坐标", XHud_Dashboard.Theme_Primary);
+                Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "生成坐标", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 Editor_XHud_GUI.Gui_Layout_Space(10);
 
                 Editor_XHud_GUI.Gui_Layout_Property_Field("位置", WorldPosition);
@@ -407,7 +407,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (sp_WorldCreate.intValue == 1)
             {
 
-                Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "参考坐标物体", XHud_Dashboard.Theme_Primary);
+                Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "参考坐标物体", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 Editor_XHud_GUI.Gui_Layout_Space(5);
                 if (ReferObject.objectReferenceValue == null)
                     EditorGUILayout.HelpBox("如果不指定参考坐标物体，则默认使用生成坐标作为元素生成条件", MessageType.Warning);
@@ -422,10 +422,10 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 动效参数
-            bool sw_motion = xHud_FunctionGroup("动效参数", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Motion, null);
+            bool sw_motion = xHud_FunctionGroup("动效参数", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.themes_get_color(ThemeColorType.primary), XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Motion, null);
             if (sw_motion)
             {
-                string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
                 #region 模版库                             
                 //确保动效库存在
@@ -755,7 +755,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
 
                 Editor_XHud_GUI.Gui_Layout_Space(5);
-                Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+                Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.themes_get_color(ThemeColorType.sepline));
                 Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 #region 模版库                             
@@ -1665,7 +1665,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
 
             #region 源脚本
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 原始变量

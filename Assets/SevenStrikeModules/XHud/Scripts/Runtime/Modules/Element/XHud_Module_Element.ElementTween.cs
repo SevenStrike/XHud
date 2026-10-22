@@ -320,8 +320,8 @@ namespace SevenStrikeModules.XHud
             }
             else
             {
-                if (XHud_Dashboard.GetManager().UseAutoPerfectPixel)
-                    XHud_Dashboard.GetManager().hm_UsePixelPerfect(false);
+                if (XHud_Dashboard.get_manager().UseAutoPerfectPixel)
+                    XHud_Dashboard.get_manager().hm_UsePixelPerfect(false);
             }
             if (AutoPlayPrimitivesTween)
                 PrimitiveTweens_Play("元素进入时");
@@ -345,8 +345,8 @@ namespace SevenStrikeModules.XHud
             }
             else
             {
-                if (XHud_Dashboard.GetManager().UseAutoPerfectPixel)
-                    XHud_Dashboard.GetManager().hm_UsePixelPerfect(true);
+                if (XHud_Dashboard.get_manager().UseAutoPerfectPixel)
+                    XHud_Dashboard.get_manager().hm_UsePixelPerfect(true);
             }
             if (AutoPlayPrimitivesTween)
                 PrimitiveTweens_Play("元素进入后");
@@ -396,8 +396,8 @@ namespace SevenStrikeModules.XHud
             }
             else
             {
-                if (XHud_Dashboard.GetManager().UseAutoPerfectPixel)
-                    XHud_Dashboard.GetManager().hm_UsePixelPerfect(false);
+                if (XHud_Dashboard.get_manager().UseAutoPerfectPixel)
+                    XHud_Dashboard.get_manager().hm_UsePixelPerfect(false);
             }
             Animating = true;
             if (AutoPlayPrimitivesTween)
@@ -422,8 +422,8 @@ namespace SevenStrikeModules.XHud
             }
             else
             {
-                if (XHud_Dashboard.GetManager().UseAutoPerfectPixel)
-                    XHud_Dashboard.GetManager().hm_UsePixelPerfect(true);
+                if (XHud_Dashboard.get_manager().UseAutoPerfectPixel)
+                    XHud_Dashboard.get_manager().hm_UsePixelPerfect(true);
             }
             Animating = false;
             element_ObjectTracker_Remove();
@@ -483,7 +483,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="pos">预览预设位置</param>
         public void ElementTweens_Creator(Motion_Creator args, UnityAction act_InComplete, bool isPreview = false, bool PosSet = false, Vector3 pos = default)
         {
-            float duration = isPreview ? XHud_Dashboard.GetManager().DurationMultiply * PrimitivesTweenGlobalDuration : XHud_Manager.Instance.DurationMultiply * PrimitivesTweenGlobalDuration;
+            float duration = isPreview ? XHud_Dashboard.get_manager().DurationMultiply * PrimitivesTweenGlobalDuration : XHud_Manager.Instance.DurationMultiply * PrimitivesTweenGlobalDuration;
             Vector3 ori_pos = Vector3.zero;
             if (isPreview)
             {
@@ -813,7 +813,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="pos">预览预设位置</param>
         public void ElementTweens_Recycler(Motion_Recycler args, UnityAction act_OutComplete, bool isPreview = false, bool PosSet = false, Vector3 pos = default)
         {
-            float duration = isPreview ? XHud_Dashboard.GetManager().DurationMultiply : XHud_Manager.Instance.DurationMultiply * PrimitivesTweenGlobalDuration;
+            float duration = isPreview ? XHud_Dashboard.get_manager().DurationMultiply : XHud_Manager.Instance.DurationMultiply * PrimitivesTweenGlobalDuration;
             Vector3 ori_pos = Vector3.zero;
             if (isPreview)
             {

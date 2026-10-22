@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEngine;
 
@@ -47,7 +48,7 @@ namespace SevenStrikeModules.XHud.Editor
                   icon: MaskRaycastEnabled.boolValue ? icon_ray_masked : icon_ray_normal,
                   icon_size: new Vector2(12, 12),
                   icon_offset: new Vector2(0, 0),
-                  icon_color: MaskRaycastEnabled.boolValue ? Color.red : XHud_Dashboard.Theme_Primary,
+                  icon_color: MaskRaycastEnabled.boolValue ? Color.red : XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   padding: new RectOffset(0, 0, 0, 0),
                   margin: new RectOffset(5, 5, 0, 5));
 
@@ -55,7 +56,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
              title: "透明度",
              title_size: XGUIFontSize.M,
-             title_hover_color: XHud_Dashboard.Theme_Primary,
+             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_width: 90,
              prop: MaskAlpha,
              prop_margin: new RectOffset(0, 0, 5, 0));
@@ -65,7 +66,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
             title: "遮挡阈值",
             title_size: XGUIFontSize.M,
-            title_hover_color: XHud_Dashboard.Theme_Primary,
+            title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
             prop: MaskRaycastAlphaThreshold,
             prop_margin: new RectOffset(0, 0, 5, 0));
@@ -85,7 +86,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
             title: "图形",
             title_size: XGUIFontSize.M,
-            title_hover_color: XHud_Dashboard.Theme_Primary,
+            title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
             prop: MaskTexture,
             prop_margin: new RectOffset(0, 0, 5, 0));
@@ -93,14 +94,14 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                thickness: 1,
-               color: XHud_Dashboard.Theme_SeperateLine,
+               color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                margin: new RectOffset(15, 15, 15, 15));
 
             #region 透明度 - 屏幕
             XGUI.layout_property_field(
             title: "透明度-屏幕",
             title_size: XGUIFontSize.M,
-            title_hover_color: XHud_Dashboard.Theme_Primary,
+            title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
             prop: ContentOpacity_Screen,
             prop_margin: new RectOffset(0, 0, 5, 0));
@@ -110,7 +111,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
             title: "透明度-世界",
             title_size: XGUIFontSize.M,
-            title_hover_color: XHud_Dashboard.Theme_Primary,
+            title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
             prop: ContentOpacity_World,
             prop_margin: new RectOffset(0, 0, 5, 0));

@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using System;
     using UnityEditor;
     using UnityEditor.EventSystems;
@@ -103,7 +104,7 @@ namespace SevenStrikeModules.XHud.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 #if UNITY_6000_0_OR_NEWER
             TextClipping clipping = TextClipping.Ellipsis;
 #else
@@ -115,7 +116,7 @@ namespace SevenStrikeModules.XHud.Editor
              bg_color: XGUIColor.深空灰,
              bg_height: 30,
              icon: icon_main,
-             icon_color: XHud_Dashboard.Theme_Primary,
+             icon_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_text: "XHud  -  元素动作触发器",
              title_anchor: TextAnchor.MiddleLeft,
              title_style: FontStyle.Normal,
@@ -130,17 +131,17 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "选项",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_option);
             if (!BaseScript.fold_option)
             {
-                DrawToggle("是否启用触发器", Enabled, 140, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
-                DrawToggle("回收时清空事件和委托", AutoClearActionsAndEvents, 140, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                DrawToggle("是否启用触发器", Enabled, 140, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                DrawToggle("回收时清空事件和委托", AutoClearActionsAndEvents, 140, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
@@ -166,10 +167,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "参数",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_param);
@@ -184,10 +185,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "源脚本",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_based);
@@ -282,7 +283,7 @@ namespace SevenStrikeModules.XHud.Editor
                 tog_bg_on_color: color_bg_on,
                 tog_handler_off_color: color_off,
                 tog_handler_on_color: color_on,
-                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                tog_mixed_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 act_on_changed: act_on_changed);
         }
         #endregion

@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XTween;
     using UnityEngine;
     using UnityEngine.UI;
@@ -35,7 +36,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public XTween_Interface element_Highlight()
         {
-            Color cc = XHud_Dashboard.Theme_Primary;
+            Color cc = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             cc.a = 0;
             Highlighter.color = cc;
             return Highlighter.xt_Alpha_To(1, 0.16f, true, true, false).SetEase(EaseMode.InOutCubic).SetLoop(1, XTween_LoopType.Yoyo);

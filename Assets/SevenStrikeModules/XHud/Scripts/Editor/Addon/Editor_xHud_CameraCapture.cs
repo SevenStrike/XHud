@@ -179,7 +179,7 @@ namespace SevenStrikeModules.XHud.Editor
               bg_color: XGUIColor.深空灰,
               bg_height: 30,
               icon: icon_main,
-              icon_color: XHud_Dashboard.Theme_Primary,
+              icon_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
               title_text: "XHud  -  相机截图器",
               title_anchor: TextAnchor.MiddleLeft,
               title_style: FontStyle.Normal,
@@ -194,10 +194,10 @@ namespace SevenStrikeModules.XHud.Editor
                  type: XGUIContainerType.Vertical,
                  bg_fill: XGUIGroup.缺口纯色边框,
                  bg_color: XGUIColor.亮白,
-                 bg_color_gui: XHud_Dashboard.Theme_Group,
+                 bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                  title: "相机",
                  title_size: XGUIFontSize.M,
-                 title_text_color: XHud_Dashboard.Theme_Primary,
+                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                  title_clipping: TextClipping.Clip,
                  padding: new RectOffset(10, 10, 15, 15),
                  foldout: BaseScript.fold_camera);
@@ -207,10 +207,10 @@ namespace SevenStrikeModules.XHud.Editor
                     title: "截图相机",
                     title_size: XGUIFontSize.M,
                     //title_color: Color.white,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 100,
                     //status_icon: "icon_field_status",
-                    //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.Theme_Primary : Color.red,
+                    //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                     prop: TargetCamera,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 XGUI.layout_space(10);
@@ -231,10 +231,10 @@ namespace SevenStrikeModules.XHud.Editor
              type: XGUIContainerType.Vertical,
              bg_fill: XGUIGroup.缺口纯色边框,
              bg_color: XGUIColor.亮白,
-             bg_color_gui: XHud_Dashboard.Theme_Group,
+             bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
              title: "选项",
              title_size: XGUIFontSize.M,
-             title_text_color: XHud_Dashboard.Theme_Primary,
+             title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_clipping: TextClipping.Clip,
              padding: new RectOffset(10, 10, 15, 15),
              foldout: BaseScript.fold_options);
@@ -254,7 +254,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_font_style: FontStyle.Normal,
                     opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
-                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     icon_arrow_color: Color.black,
                     margin: new RectOffset(0, 0, 5, 5),
                     padding: new RectOffset(5, 5, 0, 0),
@@ -278,7 +278,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_font_style: FontStyle.Normal,
                     opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
-                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     icon_arrow_color: Color.black,
                     margin: new RectOffset(0, 0, 5, 5),
                     padding: new RectOffset(5, 5, 0, 0),
@@ -302,7 +302,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_font_style: FontStyle.Normal,
                     opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
-                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     icon_arrow_color: Color.black,
                     margin: new RectOffset(0, 0, 5, 5),
                     padding: new RectOffset(5, 5, 0, 0),
@@ -326,7 +326,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_font_style: FontStyle.Normal,
                     opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
-                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     icon_arrow_color: Color.black,
                     margin: new RectOffset(0, 0, 5, 5),
                     padding: new RectOffset(5, 5, 0, 0),
@@ -344,10 +344,10 @@ namespace SevenStrikeModules.XHud.Editor
              type: XGUIContainerType.Vertical,
              bg_fill: XGUIGroup.缺口纯色边框,
              bg_color: XGUIColor.亮白,
-             bg_color_gui: XHud_Dashboard.Theme_Group,
+             bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
              title: "参数",
              title_size: XGUIFontSize.M,
-             title_text_color: XHud_Dashboard.Theme_Primary,
+             title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_clipping: TextClipping.Clip,
              padding: new RectOffset(10, 10, 15, 15),
              foldout: BaseScript.fold_param);
@@ -370,7 +370,7 @@ namespace SevenStrikeModules.XHud.Editor
                         bg_color: XGUIColor.亮白,
                         bg_gui_color: Color.black * 0.5f,
                         text_color_normal: Color.white,
-                        text_color_selected: XHud_Dashboard.Theme_Primary,
+                        text_color_selected: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         bar_height: 25,
                         bar_offset: new Vector2(0, 15),
                         text_anchor: TextAnchor.MiddleCenter,
@@ -411,10 +411,10 @@ namespace SevenStrikeModules.XHud.Editor
                         title: "固定尺寸",
                         title_size: XGUIFontSize.M,
                         //title_color: Color.white,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 100,
                         //status_icon: "icon_field_status",
-                        //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.Theme_Primary : Color.red,
+                        //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                         prop: Pixels,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                 }
@@ -424,10 +424,10 @@ namespace SevenStrikeModules.XHud.Editor
                      title: "截图背景色",
                      title_size: XGUIFontSize.M,
                      //title_color: Color.white,
-                     title_hover_color: XHud_Dashboard.Theme_Primary,
+                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                      title_width: 100,
                      //status_icon: "icon_field_status",
-                     //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.Theme_Primary : Color.red,
+                     //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                      prop: x_UICamera_bgcolor,
                      prop_margin: new RectOffset(0, 0, 5, 10));
                 #endregion
@@ -448,7 +448,7 @@ namespace SevenStrikeModules.XHud.Editor
                     field_text_anchor: TextAnchor.MiddleLeft,
                     filter: null,
                     filter_title: "选择文件夹",
-                    btn_color: XHud_Dashboard.Theme_Primary,
+                    btn_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     btn_fontsize: XGUIFontSize.M,
                     default_name: "default",
                     status_icon: "icon_field_status",
@@ -463,10 +463,10 @@ namespace SevenStrikeModules.XHud.Editor
                      title: "文件名",
                      title_size: XGUIFontSize.M,
                      //title_color: Color.white,
-                     title_hover_color: XHud_Dashboard.Theme_Primary,
+                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                      title_width: 100,
                      //status_icon: "icon_field_status",
-                     //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.Theme_Primary : Color.red,
+                     //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                      prop: x_name,
                      prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
@@ -499,7 +499,7 @@ namespace SevenStrikeModules.XHud.Editor
                             ok: "明白",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                         return;
                     }
                     bool validstate = true;
@@ -517,7 +517,7 @@ namespace SevenStrikeModules.XHud.Editor
                             cancel: "暂不",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary,
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             on_selected: (d) =>
                             {
                                 if (d == "快速修正")
@@ -543,7 +543,7 @@ namespace SevenStrikeModules.XHud.Editor
                            cancel: "暂不",
                            PrimaryIndex: 0,
                            usemodal: true,
-                           themecolor: XHud_Dashboard.Theme_Primary,
+                           themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                            on_selected: (d) =>
                            {
                                if (d == "快速修正")
@@ -568,7 +568,7 @@ namespace SevenStrikeModules.XHud.Editor
                             ok: "明白",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                 }
                 #endregion
@@ -580,10 +580,10 @@ namespace SevenStrikeModules.XHud.Editor
                    type: XGUIContainerType.Vertical,
                    bg_fill: XGUIGroup.缺口纯色边框,
                    bg_color: XGUIColor.亮白,
-                   bg_color_gui: XHud_Dashboard.Theme_Group,
+                   bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                    title: "源脚本",
                    title_size: XGUIFontSize.M,
-                   title_text_color: XHud_Dashboard.Theme_Primary,
+                   title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                    title_clipping: TextClipping.Clip,
                    padding: new RectOffset(10, 10, 15, 15),
                    foldout: BaseScript.fold_based);

@@ -22,7 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
-    using SevenStrikeModules.XTween;
+    using SevenStrikeModules.XHud.Enums;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditorInternal;
@@ -228,7 +228,7 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem("Assets/XHud/SendToElementLibrary (将元素预制体添加到元素库)", priority = 3000)]
         private static void OpenElementLibrarySetter()
         {
-            XHud_Manager mgr = XHud_Dashboard.GetManager();
+            XHud_Manager mgr = XHud_Dashboard.get_manager();
 
             if (mgr == null)
             {
@@ -239,7 +239,7 @@ namespace SevenStrikeModules.XHud.Editor
                     msg: "场景中未找到XHudManager管理器！",
                     ok: "明白",
                     PrimaryIndex: 0,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 return;
             }
             Transform[] sel_ele_objs = Selection.GetTransforms(SelectionMode.Unfiltered);
@@ -259,7 +259,7 @@ namespace SevenStrikeModules.XHud.Editor
                         msg: "您未在HudManager中配置元素库！请先至少指定一个元素库后再执行此操作！ ",
                         ok: "明白",
                         PrimaryIndex: 0,
-                        themecolor: XHud_Dashboard.Theme_Primary);
+                        themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     return;
                 }
 
@@ -304,7 +304,7 @@ namespace SevenStrikeModules.XHud.Editor
             sp_library_name = BaseObject.FindProperty("library_name");
             sp_element_list = BaseObject.FindProperty("element_list");
 
-            HudManager = XHud_Dashboard.GetManager();
+            HudManager = XHud_Dashboard.get_manager();
 
             icon_libsetter_element = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_element_setter/icon");
 
@@ -365,7 +365,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_seperator(
                 rect: rect_seperate,
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0));
 
@@ -383,7 +383,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             LibSelector_rect = rect;
 
-            string colorhex_value = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string colorhex_value = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
             string colorhex_title = XGUI_Utilitys.Color_To_HexString(Color.white * 0.65f, true);
 
             #region 统计数量
@@ -416,7 +416,7 @@ namespace SevenStrikeModules.XHud.Editor
                   opt_font_style: FontStyle.Normal,
                   opt_bg_fill: XGUIGroup.实体,
                   opt_bg_color: XGUIColor.亮白,
-                  opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                  opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   icon_arrow_color: Color.black,
                   usearrow: true,
                   width_limite: 100);
@@ -428,7 +428,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_seperator(
                 rect: rect_seperate,
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0));
 
@@ -648,7 +648,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     itemmark_rect = new Rect(item_rect.x + 1, item_rect.y + 11, 5, 5);
                     // 高亮标记表示选中
-                    EditorGUI.DrawRect(itemmark_rect, XHud_Dashboard.Theme_Primary);
+                    EditorGUI.DrawRect(itemmark_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     itemmarkBg_rect = new Rect(item_rect.x, item_rect.y, item_rect.width + 20, item_rect.height);
                     // 高亮背景表示选中
                     EditorGUI.DrawRect(itemmarkBg_rect, new Color(0, 0, 0, 0.2f));
@@ -710,7 +710,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             XHud_Library_Element target_library = HudManager.hm_ElementLibrary_GetTargetLibrary(sp_library_name.stringValue);
 
-            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
             List<XGUIDialogListDatas> valids = new List<XGUIDialogListDatas>();
 
             for (int s = 0; s < element_list.Count; s++)
@@ -728,7 +728,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 ok: "更新替换",
                                 cancel: "跳过",
                                 PrimaryIndex: 1,
-                                themecolor: XHud_Dashboard.Theme_Primary);
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                     if (res == "更新替换")
                     {
@@ -763,7 +763,7 @@ namespace SevenStrikeModules.XHud.Editor
                     ok: "明白",
                     PrimaryIndex: 0,
                     usemodal: false,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             }
         }
         #endregion
@@ -843,7 +843,7 @@ namespace SevenStrikeModules.XHud.Editor
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 button_text_color: Color.black,
                 press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,

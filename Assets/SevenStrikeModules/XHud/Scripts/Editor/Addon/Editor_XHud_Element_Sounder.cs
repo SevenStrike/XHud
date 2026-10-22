@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -203,7 +204,7 @@ namespace SevenStrikeModules.XHud.Editor
         #region 生命周期
         private void OnEnable()
         {
-            HudManager = XHud_Dashboard.GetManager();
+            HudManager = XHud_Dashboard.get_manager();
             BaseScript = (XHud_Element_Sounder)target;
             UseRandomPitch = serializedObject.FindProperty("UseRandomPitch");
             Pitch_Min = serializedObject.FindProperty("Pitch_Min");
@@ -303,7 +304,7 @@ namespace SevenStrikeModules.XHud.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 #if UNITY_6000_0_OR_NEWER
             TextClipping clipping = TextClipping.Ellipsis;
 #else
@@ -315,7 +316,7 @@ namespace SevenStrikeModules.XHud.Editor
              bg_color: XGUIColor.深空灰,
              bg_height: 30,
              icon: icon_main,
-             icon_color: XHud_Dashboard.Theme_Primary,
+             icon_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_text: "XHud  -  音效器",
              title_anchor: TextAnchor.MiddleLeft,
              title_style: FontStyle.Normal,
@@ -330,10 +331,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Horizontal,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "快捷功能",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(15, 15, 20, 15));
             #region 预览当前声音
@@ -403,18 +404,18 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "选项",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_option);
             if (!BaseScript.fold_option)
             {
-                DrawToggle("状态调试", DebugState, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { }, stroptions_debug);
-                DrawToggle("随机音高", UseRandomPitch, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { }, stroptions_random);
-                DrawToggle("循环播放", IsLoop, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { }, stroptions_cycle);
+                DrawToggle("状态调试", DebugState, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { }, stroptions_debug);
+                DrawToggle("随机音高", UseRandomPitch, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { }, stroptions_random);
+                DrawToggle("循环播放", IsLoop, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { }, stroptions_cycle);
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
@@ -423,10 +424,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "统计",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_state);
@@ -471,7 +472,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     title_size: XGUIFontSize.M,
                                     subtitle: soundInfo.Name,
                                     subtitle_size: XGUIFontSize.M,
-                                    subtitle_color: XHud_Dashboard.Theme_Primary,
+                                    subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                     margin: new RectOffset(5, 5, 0, 5));
                                 #endregion
                                 #region 声道
@@ -480,7 +481,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     title_size: XGUIFontSize.M,
                                     subtitle: soundInfo.Channel == 1 ? "单声道" : "立体声",
                                     subtitle_size: XGUIFontSize.M,
-                                    subtitle_color: XHud_Dashboard.Theme_Primary,
+                                    subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                     margin: new RectOffset(5, 5, 0, 5));
                                 #endregion
                                 #region 频率
@@ -489,7 +490,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     title_size: XGUIFontSize.M,
                                     subtitle: soundInfo.Frequency.ToString() + "hz",
                                     subtitle_size: XGUIFontSize.M,
-                                    subtitle_color: XHud_Dashboard.Theme_Primary,
+                                    subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                     margin: new RectOffset(5, 5, 0, 5));
                                 #endregion
                                 #region 时长
@@ -498,7 +499,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     title_size: XGUIFontSize.M,
                                     subtitle: soundInfo.Length.ToString("F2") + " 秒",
                                     subtitle_size: XGUIFontSize.M,
-                                    subtitle_color: XHud_Dashboard.Theme_Primary,
+                                    subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                     margin: new RectOffset(5, 5, 0, 5));
                                 #endregion
                             }
@@ -518,11 +519,11 @@ namespace SevenStrikeModules.XHud.Editor
                                 tooltip: "",
                                 bg_fill: XGUIGroup.透明,
                                 bg_color: XGUIColor.亮白,
-                                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                 button_text_color: Color.white,
                                 press_fill: XGUIGroup.透明,
                                 press_color: XGUIColor.深空灰,
-                                press_text_color: XHud_Dashboard.Theme_Primary,
+                                press_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                 font_size: XGUIFontSize.B,
                                 anchor: TextAnchor.MiddleLeft,
                                 margin: new RectOffset(0, 0, 0, 0),
@@ -580,7 +581,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 title_size: XGUIFontSize.M,
                                 subtitle: soundInfo.Name,
                                 subtitle_size: XGUIFontSize.M,
-                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                 margin: new RectOffset(5, 5, 0, 5));
                             #endregion
                             #region 声道
@@ -589,7 +590,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 title_size: XGUIFontSize.M,
                                 subtitle: soundInfo.Channel == 1 ? "单声道" : "立体声",
                                 subtitle_size: XGUIFontSize.M,
-                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                 margin: new RectOffset(5, 5, 0, 5));
                             #endregion
                             #region 频率
@@ -598,7 +599,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 title_size: XGUIFontSize.M,
                                 subtitle: soundInfo.Frequency.ToString() + "hz",
                                 subtitle_size: XGUIFontSize.M,
-                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                 margin: new RectOffset(5, 5, 0, 5));
                             #endregion
                             #region 时长
@@ -607,7 +608,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 title_size: XGUIFontSize.M,
                                 subtitle: soundInfo.Length.ToString("F2") + " 秒",
                                 subtitle_size: XGUIFontSize.M,
-                                subtitle_color: XHud_Dashboard.Theme_Primary,
+                                subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                 margin: new RectOffset(5, 5, 0, 5));
                             #endregion
                         }
@@ -621,10 +622,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "参数",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_param);
@@ -682,7 +683,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_font_style: FontStyle.Normal,
                     opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
-                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     icon_arrow_color: Color.black,
                     margin: new RectOffset(0, 0, 5, 5),
                     padding: new RectOffset(5, 5, 0, 0),
@@ -711,7 +712,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_font_style: FontStyle.Normal,
                     opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
-                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     icon_arrow_color: Color.black,
                     margin: new RectOffset(0, 0, 5, 5),
                     padding: new RectOffset(5, 5, 0, 0),
@@ -725,13 +726,13 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
                 XGUI.layout_seperator(
                     thickness: 1,
-                    color: XHud_Dashboard.Theme_SeperateLine,
+                    color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                     margin: new RectOffset(15, 15, 15, 15));
                 #region 音效标识
                 XGUI.layout_property_field(
                     title: "音效标识",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: Indicator,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -740,7 +741,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "音效音量",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: Volume,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -751,7 +752,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                     title: "最小音高",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: Pitch_Min,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -760,7 +761,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "最大音高",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: Pitch_Max,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -786,7 +787,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "延迟时间",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: DelayTime,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -795,7 +796,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "开始预览",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: PreviewKey,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -804,7 +805,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "停止预览",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: UnPreviewKey,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -844,10 +845,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "源脚本",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_based);
@@ -915,7 +916,7 @@ namespace SevenStrikeModules.XHud.Editor
                         cancel: "明白",
                         PrimaryIndex: 0,
                         usemodal: true,
-                        themecolor: XHud_Dashboard.Theme_Primary,
+                        themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         on_selected: (d) =>
                         {
                             if (d == "前往")
@@ -1065,7 +1066,7 @@ namespace SevenStrikeModules.XHud.Editor
                 tog_bg_on_color: color_bg_on,
                 tog_handler_off_color: color_off,
                 tog_handler_on_color: color_on,
-                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                tog_mixed_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 act_on_changed: act_on_changed);
         }
         #endregion

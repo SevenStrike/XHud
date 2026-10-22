@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEngine;
 
@@ -43,7 +44,7 @@ namespace SevenStrikeModules.XHud.Editor
                         ok: "明白",
                         cancel: "前往",
                         PrimaryIndex: 1,
-                        themecolor: XHud_Dashboard.Theme_Primary);
+                        themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;
@@ -70,7 +71,7 @@ namespace SevenStrikeModules.XHud.Editor
                       ok: "明白",
                       cancel: "前往",
                       PrimaryIndex: 1,
-                      themecolor: XHud_Dashboard.Theme_Primary);
+                      themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;
@@ -97,7 +98,7 @@ namespace SevenStrikeModules.XHud.Editor
                         ok: "明白",
                         cancel: "前往",
                         PrimaryIndex: 1,
-                        themecolor: XHud_Dashboard.Theme_Primary);
+                        themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;
@@ -111,7 +112,7 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem(("Tools/XHud/Library/CurrentLibrary-Element #F4"))]
         public static void open_elements()
         {
-            XHud_Manager mgr = XHud_Dashboard.GetManager();
+            XHud_Manager mgr = XHud_Dashboard.get_manager();
 
             if (mgr.Hud_ElementLibrarys.Count <= 0)
             {
@@ -125,7 +126,7 @@ namespace SevenStrikeModules.XHud.Editor
                         ok: "明白",
                         cancel: "前往",
                         PrimaryIndex: 1,
-                        themecolor: XHud_Dashboard.Theme_Primary);
+                        themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;
@@ -155,7 +156,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             XHud_Library_Element ele_lib = null;
 
-            XHud_Manager man = XHud_Dashboard.GetManager();
+            XHud_Manager man = XHud_Dashboard.get_manager();
             for (int i = 0; i < man.Hud_ElementLibrarys.Count; i++)
             {
                 XHud_Library_Element lib = man.Hud_ElementLibrarys[i];
@@ -184,7 +185,7 @@ namespace SevenStrikeModules.XHud.Editor
                         ok: "明白",
                         cancel: "前往",
                         PrimaryIndex: 1,
-                        themecolor: XHud_Dashboard.Theme_Primary);
+                        themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;
@@ -211,7 +212,7 @@ namespace SevenStrikeModules.XHud.Editor
                        ok: "明白",
                        cancel: "前往",
                        PrimaryIndex: 1,
-                       themecolor: XHud_Dashboard.Theme_Primary);
+                       themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;
@@ -238,7 +239,7 @@ namespace SevenStrikeModules.XHud.Editor
                        ok: "明白",
                        cancel: "前往",
                        PrimaryIndex: 1,
-                       themecolor: XHud_Dashboard.Theme_Primary);
+                       themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;
@@ -265,7 +266,7 @@ namespace SevenStrikeModules.XHud.Editor
                       ok: "明白",
                       cancel: "前往",
                       PrimaryIndex: 1,
-                      themecolor: XHud_Dashboard.Theme_Primary);
+                      themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     if (res == "前往")
                     {
                         Transform man = FindFirstObjectByType<XHud_Manager>().transform;

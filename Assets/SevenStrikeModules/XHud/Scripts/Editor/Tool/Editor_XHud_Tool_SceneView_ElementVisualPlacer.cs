@@ -26,6 +26,7 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XHud.Enums;
     using System.Collections.Generic;
     using UnityEditor;
+    using UnityEditor.Callbacks;
     using UnityEngine;
 
     /// <summary>
@@ -38,7 +39,7 @@ namespace SevenStrikeModules.XHud.Editor
     /// </list>
     /// </summary>
     [InitializeOnLoad]
-    public class Editor_XHud_Tool_ElementVisualPlacer
+    public class Editor_XHud_Tool_SceneView_ElementVisualPlacer
     {
         #region 字段 - 状态
         /// <summary>
@@ -127,7 +128,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>使用主色调并降低亮度，以达到半透明高亮效果。</description></item>
         /// </list>
         /// </summary>
-        private static Color Color_Grid_Highlight = XHud_Dashboard.Theme_Primary * 0.5f;
+        private static Color Color_Grid_Highlight = XHud_Dashboard.themes_get_color(ThemeColorType.primary) * 0.5f;
         /// <summary>
         /// 拖拽过程中，悬停格子的边框高亮颜色。
         /// <para/>
@@ -163,7 +164,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>订阅 <c>SceneView.duringSceneGui</c>。</description></item>
         /// </list>
         /// </summary>
-        static Editor_XHud_Tool_ElementVisualPlacer()
+        static Editor_XHud_Tool_SceneView_ElementVisualPlacer()
         {
             SceneView.duringSceneGui += OnSceneGUI;
         }
@@ -183,7 +184,7 @@ namespace SevenStrikeModules.XHud.Editor
         private static void OnSceneGUI(SceneView sceneView)
         {
             if (mgr == null)
-                mgr = XHud_Dashboard.GetManager();
+                mgr = XHud_Dashboard.get_manager();
 
             // 如果功能被禁用，不处理任何事件
             if (!isEnabled) return;
@@ -331,7 +332,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.gui_label(
                     rect: label_rect,
                     text: new GUIContent(GetGridLabel(i)),
-                    text_color: XHud_Dashboard.Theme_Primary,
+                    text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     offset: new Vector2(0, -1),
                     size: XGUIFontSize.BX,
                     anchor: TextAnchor.MiddleCenter,
@@ -704,5 +705,11 @@ namespace SevenStrikeModules.XHud.Editor
             SetEnabled(!isEnabled);
         }
         #endregion
+
+        [DidReloadScripts]
+        public static void reload()
+        {
+            isEnabled = XHud_Dashboard.utilitys_get_util_screeen_element_visual_placer();
+        }
     }
 }

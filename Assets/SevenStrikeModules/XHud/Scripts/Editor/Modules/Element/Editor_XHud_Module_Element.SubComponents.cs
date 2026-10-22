@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditorInternal;
@@ -153,7 +154,7 @@ namespace SevenStrikeModules.XHud.Editor
                         XGUI.gui_icon(
                             rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
                             icon: icon_anim,
-                            color: XHud_Dashboard.Theme_Primary);
+                            color: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     #endregion
 
@@ -171,7 +172,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         subtitle: new GUIContent(!string.IsNullOrEmpty(sp_con.ID) ? sp_con.ID : "未分配ID"),
                         subtitle_size: XGUIFontSize.S,
-                        subtitle_color: !string.IsNullOrEmpty(sp_con.ID) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        subtitle_color: !string.IsNullOrEmpty(sp_con.ID) ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.white * 0.65f,
                         margin: new RectOffset(5, 5, 0, 5));
                     #endregion
 
@@ -332,7 +333,7 @@ namespace SevenStrikeModules.XHud.Editor
                         XGUI.gui_icon(
                             rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
                             icon: icon_text,
-                            color: XHud_Dashboard.Theme_Primary);
+                            color: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     #endregion
 
@@ -350,7 +351,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
                         subtitle_size: XGUIFontSize.S,
-                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.white * 0.65f,
                         margin: new RectOffset(5, 5, 0, 5));
                     #endregion
                 }
@@ -435,7 +436,7 @@ namespace SevenStrikeModules.XHud.Editor
                         XGUI.gui_icon(
                             rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
                             icon: icon_tmptext,
-                            color: XHud_Dashboard.Theme_Primary);
+                            color: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     #endregion
 
@@ -453,7 +454,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
                         subtitle_size: XGUIFontSize.S,
-                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.white * 0.65f,
                         margin: new RectOffset(5, 5, 0, 5));
                     #endregion
                 }
@@ -538,7 +539,7 @@ namespace SevenStrikeModules.XHud.Editor
                         XGUI.gui_icon(
                             rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
                             icon: icon_button,
-                            color: XHud_Dashboard.Theme_Primary);
+                            color: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     #endregion
 
@@ -556,7 +557,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
                         subtitle_size: XGUIFontSize.S,
-                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.white * 0.65f,
                         margin: new RectOffset(5, 5, 0, 5));
                     #endregion
                 }
@@ -642,7 +643,7 @@ namespace SevenStrikeModules.XHud.Editor
                         XGUI.gui_icon(
                             rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
                             icon: icon_option,
-                            color: XHud_Dashboard.Theme_Primary);
+                            color: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     #endregion
 
@@ -660,7 +661,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
                         subtitle_size: XGUIFontSize.S,
-                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.white * 0.65f,
                         margin: new RectOffset(5, 5, 0, 5));
                     #endregion
                 }
@@ -745,7 +746,7 @@ namespace SevenStrikeModules.XHud.Editor
                         XGUI.gui_icon(
                             rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
                             icon: icon_slider,
-                            color: XHud_Dashboard.Theme_Primary);
+                            color: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     #endregion
 
@@ -763,7 +764,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
                         subtitle_size: XGUIFontSize.S,
-                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.white * 0.65f,
                         margin: new RectOffset(5, 5, 0, 5));
                     #endregion
                 }
@@ -848,7 +849,7 @@ namespace SevenStrikeModules.XHud.Editor
                         XGUI.gui_icon(
                             rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
                             icon: icon_progress,
-                            color: XHud_Dashboard.Theme_Primary);
+                            color: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     #endregion
 
@@ -866,7 +867,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
                         subtitle_size: XGUIFontSize.S,
-                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.white * 0.65f,
                         margin: new RectOffset(5, 5, 0, 5));
                     #endregion
                 }
@@ -951,7 +952,7 @@ namespace SevenStrikeModules.XHud.Editor
                         XGUI.gui_icon(
                             rect: new Rect(rect.x + 5, rect.y + 7, 10, 10),
                             icon: icon_toggle,
-                            color: XHud_Dashboard.Theme_Primary);
+                            color: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     #endregion
 
@@ -969,7 +970,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         subtitle: new GUIContent(!string.IsNullOrEmpty(indicator) ? indicator : "未分配标识"),
                         subtitle_size: XGUIFontSize.S,
-                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.Theme_Primary : Color.white * 0.65f,
+                        subtitle_color: !string.IsNullOrEmpty(indicator) ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.white * 0.65f,
                         margin: new RectOffset(5, 5, 0, 5));
                     #endregion
                 }
@@ -1065,7 +1066,7 @@ namespace SevenStrikeModules.XHud.Editor
                         XGUI.gui_icon(
                             rect: new Rect(rect.x + 5, rect.y + 6, 10, 10),
                             icon: icon_sound,
-                            color: XHud_Dashboard.Theme_Primary);
+                            color: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     #endregion
 
@@ -1181,7 +1182,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 opt_font_style: FontStyle.Normal,
                                 opt_bg_fill: XGUIGroup.实体,
                                 opt_bg_color: XGUIColor.亮白,
-                                opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                                opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                 icon_arrow_color: Color.black,
                                 width_limite: 145f);
 

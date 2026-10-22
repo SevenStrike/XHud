@@ -90,7 +90,7 @@ namespace SevenStrikeModules.XHud.Editor
                             cancel: "暂不",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary,
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             on_selected: (d) =>
                             {
                                 if (d == "选中")
@@ -174,7 +174,7 @@ namespace SevenStrikeModules.XHud.Editor
                     rect_header_bg.localScale = Vector3.one;
                     img_header_bg.sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_Path_XHUD_SPRITES_Path()}Others/BtnRect_Pure.png");
                     img_header_bg.raycastTarget = false;
-                    img_header_bg.color = XHud_Dashboard.Theme_Primary;
+                    img_header_bg.color = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                     img_header_bg.type = Image.Type.Sliced;
                     #endregion
 
@@ -433,7 +433,7 @@ namespace SevenStrikeModules.XHud.Editor
                             cancel: "暂不",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary,
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             on_selected: (d) =>
                             {
                                 if (d == "选中")
@@ -471,7 +471,7 @@ namespace SevenStrikeModules.XHud.Editor
                     ok: "明白",
                     PrimaryIndex: 0,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 return;
             }
 
@@ -498,7 +498,7 @@ namespace SevenStrikeModules.XHud.Editor
                     ok: "明白",
                     PrimaryIndex: 0,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             }
 
             EditorApplication.delayCall += () =>
@@ -514,7 +514,7 @@ namespace SevenStrikeModules.XHud.Editor
                        cancel: "暂不",
                        PrimaryIndex: 0,
                        usemodal: true,
-                       themecolor: XHud_Dashboard.Theme_Primary,
+                       themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                        on_selected: (d) =>
                        {
                        });
@@ -534,7 +534,7 @@ namespace SevenStrikeModules.XHud.Editor
                     cancel: "暂不",
                     PrimaryIndex: 0,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary,
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     on_selected: (d) =>
                     {
                         if (d == "初始化")

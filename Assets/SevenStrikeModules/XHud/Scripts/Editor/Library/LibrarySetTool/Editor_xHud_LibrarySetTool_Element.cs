@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -210,7 +211,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_seperator(
                 rect: rect_seperate,
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0));
 
@@ -255,7 +256,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 参数
 
-            string colorhex_value = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string colorhex_value = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
             string colorhex_title = XGUI_Utilitys.Color_To_HexString(Color.white * 0.65f, true);
 
             Rect rect_xs = rect;
@@ -279,7 +280,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_seperator(
                 rect: rect_xs,
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0));
             #endregion
@@ -298,7 +299,7 @@ namespace SevenStrikeModules.XHud.Editor
                 rect: rect_xs,
                 title: new GUIContent("元素源"),
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 80,
                 prop: sp_Target);
             if (XGUI.ChangedCheck_End())
@@ -323,7 +324,7 @@ namespace SevenStrikeModules.XHud.Editor
                 rect: rect_xs,
                 title: new GUIContent("根节点"),
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 80,
                 prop: sp_Root);
             #endregion
@@ -339,7 +340,7 @@ namespace SevenStrikeModules.XHud.Editor
                 rect: rect_xs,
                 title: new GUIContent("预加载数量"),
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 80,
                 prop: sp_InitializeCount);
             #endregion
@@ -351,7 +352,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_seperator(
                 rect: rect_xs,
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0));
             #endregion
@@ -498,7 +499,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     itemmark_rect = new Rect(item_rect.x + 1, item_rect.y + 11, 5, 5);
                     // 高亮标记表示选中
-                    EditorGUI.DrawRect(itemmark_rect, XHud_Dashboard.Theme_Primary);
+                    EditorGUI.DrawRect(itemmark_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     itemmarkBg_rect = new Rect(item_rect.x, item_rect.y, item_rect.width + 20, item_rect.height);
                     // 高亮背景表示选中
                     EditorGUI.DrawRect(itemmarkBg_rect, new Color(0, 0, 0, 0.2f));
@@ -575,7 +576,7 @@ namespace SevenStrikeModules.XHud.Editor
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 button_text_color: Color.black,
                 press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,

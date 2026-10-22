@@ -222,7 +222,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnEnable()
         {
-            HudManager = XHud_Dashboard.GetManager();
+            HudManager = XHud_Dashboard.get_manager();
 
             BaseScript = (XHud_LayoutSpawner)target;
 
@@ -293,7 +293,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         // 高亮标记表示选中
                         item_rect_screen.Set(rect.x - 1, rect.y + 4, 3, 36);
-                        EditorGUI.DrawRect(item_rect_screen, XHud_Dashboard.Theme_Primary);
+                        EditorGUI.DrawRect(item_rect_screen, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                 },
                 drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
@@ -336,7 +336,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     #region 徽标 （已生成）
                     if (sp_Spawned.boolValue)
-                        GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                        GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                     else
                         GUI.backgroundColor = Color.gray;
 
@@ -348,7 +348,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     #region 徽标（运动中）
                     if (sp_InMotion.boolValue)
-                        GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                        GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                     else
                         GUI.backgroundColor = Color.gray;
 
@@ -373,7 +373,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     #region 名称类
                     drawelement_screen_rect.Set(rect.x + 90, rect.y, rect.width - 10 - 150, 20);
-                    Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, sp_SpawnName.stringValue, HudFilled.无, HudColor.深空灰, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 12, true, TextClipping.Ellipsis, true, Font_Bold);
+                    Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, sp_SpawnName.stringValue, HudFilled.无, HudColor.深空灰, XHud_Dashboard.themes_get_color(ThemeColorType.primary), TextAnchor.MiddleLeft, Vector2.zero, 12, true, TextClipping.Ellipsis, true, Font_Bold);
 
                     drawelement_screen_rect.Set(rect.x + 30, rect.y + 30, rect.width - 130 - 15, 20);
                     Editor_XHud_GUI.Gui_Labelfield(drawelement_screen_rect, sp_Indicator.stringValue, HudFilled.无, HudColor.深空灰, Color.white * 0.85f, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
@@ -388,7 +388,7 @@ namespace SevenStrikeModules.XHud.Editor
                         EditorGUIUtility.systemCopyBuffer = sp_ID.stringValue;
                         EditorApplication.delayCall += () =>
                         {
-                            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                             string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素生成器消息", "拷贝元素项ID", $"已将元素项的ID： <color={hexcol}><b>   {sp_ID.stringValue}   </b></color>拷贝至系统剪贴板中！", "明白", 0);
                         };
                         e.Use();
@@ -440,7 +440,7 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 使用生成器的通用动效
-                    GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                    GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                     drawelement_screen_rect.Set(rect.width - 95, rect.y + 35, 88, 12);
                     if (EditorGUIUtility.currentViewWidth >= 210)
                         Editor_XHud_GUI.Gui_PopupWithString(drawelement_screen_rect, ref sp_UseSpawnerMotion, new string[3] { "元素自身动效", "列表项动效", "生成器动效" }, HudFilled.无, HudColor.亮白, Color.white * 0.85f);
@@ -458,7 +458,7 @@ namespace SevenStrikeModules.XHud.Editor
                         GUI.backgroundColor = Color.white;
                         Repaint();
                         drawelement_screen_rect.Set(rect.x, baseheight, rect.width * sp_MotionPercentage.floatValue, 1);
-                        Editor_XHud_GUI.Gui_Box(drawelement_screen_rect, XHud_Dashboard.Theme_Primary);
+                        Editor_XHud_GUI.Gui_Box(drawelement_screen_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     #endregion
 
@@ -586,7 +586,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         // 高亮标记表示选中
                         item_rect_world.Set(rect.x - 1, rect.y + 4, 3, 36);
-                        EditorGUI.DrawRect(item_rect_world, XHud_Dashboard.Theme_Primary);
+                        EditorGUI.DrawRect(item_rect_world, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                 },
                 drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
@@ -629,7 +629,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     #region 徽标 （已生成）
                     if (sp_Spawned.boolValue)
-                        GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                        GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                     else
                         GUI.backgroundColor = Color.gray;
 
@@ -641,7 +641,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     #region 徽标（运动中）
                     if (sp_InMotion.boolValue)
-                        GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                        GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                     else
                         GUI.backgroundColor = Color.gray;
 
@@ -666,7 +666,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     #region 名称类
                     drawelement_world_rect.Set(rect.x + 90, rect.y, rect.width - 10 - 150, 20);
-                    Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, sp_SpawnName.stringValue, HudFilled.无, HudColor.深空灰, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 12, true, TextClipping.Ellipsis, true, Font_Bold);
+                    Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, sp_SpawnName.stringValue, HudFilled.无, HudColor.深空灰, XHud_Dashboard.themes_get_color(ThemeColorType.primary), TextAnchor.MiddleLeft, Vector2.zero, 12, true, TextClipping.Ellipsis, true, Font_Bold);
 
                     drawelement_world_rect.Set(rect.x + 30, rect.y + 30, rect.width - 130 - 15, 20);
                     Editor_XHud_GUI.Gui_Labelfield(drawelement_world_rect, sp_Indicator.stringValue, HudFilled.无, HudColor.深空灰, Color.white * 0.85f, TextAnchor.MiddleLeft, Vector2.zero, 11, true, TextClipping.Ellipsis, true, Font_Light);
@@ -681,7 +681,7 @@ namespace SevenStrikeModules.XHud.Editor
                         EditorGUIUtility.systemCopyBuffer = sp_ID.stringValue;
                         EditorApplication.delayCall += () =>
                         {
-                            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                             string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素生成器消息", "拷贝元素项ID", $"已将元素项的ID： <color={hexcol}><b>   {sp_ID.stringValue}   </b></color>拷贝至系统剪贴板中！", "明白", 0);
                         };
                         e.Use();
@@ -725,7 +725,7 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region AutoIn
-                    GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                    GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                     drawelement_world_rect.Set(rect.width - 15, rect.y + 35, 55, 12);
                     if (EditorGUIUtility.currentViewWidth >= 137)
                         Editor_XHud_GUI.Gui_PopupWithString(drawelement_world_rect, ref sp_AutoIn, new string[2] { "自动 In", "手动 In" }, HudFilled.无, HudColor.亮白, Color.white * 0.85f);
@@ -733,7 +733,7 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 使用生成器的通用动效
-                    GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                    GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                     drawelement_world_rect.Set(rect.width - 95, rect.y + 35, 88, 12);
                     if (EditorGUIUtility.currentViewWidth >= 210)
                         Editor_XHud_GUI.Gui_PopupWithString(drawelement_world_rect, ref sp_UseSpawnerMotion, new string[2] { "自身动效", "生成器动效" }, HudFilled.无, HudColor.亮白, Color.white * 0.85f);
@@ -751,7 +751,7 @@ namespace SevenStrikeModules.XHud.Editor
                         GUI.backgroundColor = Color.white;
                         Repaint();
                         drawelement_world_rect.Set(rect.x, baseheight, rect.width * sp_MotionPercentage.floatValue, 1);
-                        Editor_XHud_GUI.Gui_Box(drawelement_world_rect, XHud_Dashboard.Theme_Primary);
+                        Editor_XHud_GUI.Gui_Box(drawelement_world_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     #endregion
 
@@ -902,17 +902,17 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 状态
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "状态", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "状态", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
-            Editor_XHud_GUI.StatuDisplayer_text(null, 12, new Vector2(0, 7), "生成器状态", 12, spawnerisRunning.boolValue ? "运行中" : "待命中", XHud_Dashboard.Theme_Primary, 11, false);
+            Editor_XHud_GUI.StatuDisplayer_text(null, 12, new Vector2(0, 7), "生成器状态", 12, spawnerisRunning.boolValue ? "运行中" : "待命中", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11, false);
 
             Editor_XHud_GUI.Gui_Layout_Space(5);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
             #region 选项
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "选项", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "选项", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_LayoutSpawner>("调试信息", stroptions_enabled, ref UseDebug, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
@@ -953,7 +953,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 参数
-            bool sw_option = xHud_FunctionGroup("参数", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Prams, null);
+            bool sw_option = xHud_FunctionGroup("参数", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.themes_get_color(ThemeColorType.primary), XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Prams, null);
             if (sw_option)
             {
                 Editor_XHud_GUI.Gui_Layout_Property_Field("生成器标识", SpawnerIndicator);
@@ -961,7 +961,7 @@ namespace SevenStrikeModules.XHud.Editor
                 if (UseManullyKey.boolValue)
                 {
                     Editor_XHud_GUI.Gui_Layout_Space(5);
-                    Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+                    Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.themes_get_color(ThemeColorType.sepline));
                     Editor_XHud_GUI.Gui_Layout_Space(10);
 
                     Editor_XHud_GUI.Gui_Layout_Property_Field("主要辅助按键", SpawnFunctionKey_Primary, 170);
@@ -974,7 +974,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
 
                 Editor_XHud_GUI.Gui_Layout_Space(5);
-                Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+                Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.themes_get_color(ThemeColorType.sepline));
                 Editor_XHud_GUI.Gui_Layout_Space(10);
 
                 SerializedProperty sp_anchor_type = CreateArgs.FindPropertyRelative("anchor");
@@ -986,10 +986,10 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 元素项
 
-            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             #region 屏幕空间
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "元素项 - 屏幕空间", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "元素项 - 屏幕空间", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(15);
 
             Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
@@ -1351,7 +1351,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 世界空间
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "元素项 - 世界空间", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "元素项 - 世界空间", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
@@ -1374,7 +1374,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     if (!HudManager.SupportWorldUI)
                     {
-                        string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                        string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                         Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素生成器消息", "收集世界元素布局", $"暂未支持世界元素！请检查XHud 管理器中是否开启了<b><color={hex_col}> 支持世界元素 </color></b>选项？", "明白", 0);
                         return;
                     }
@@ -1665,7 +1665,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 动效参数
-            bool sw_motion = xHud_FunctionGroup("动效参数", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.Theme_Primary, XHud_Dashboard.Theme_Primary, Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Motion, null);
+            bool sw_motion = xHud_FunctionGroup("动效参数", 5, HudFilled.纯色边框, HudColor.亮白, XHud_Dashboard.themes_get_color(ThemeColorType.primary), XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.gray, new RectOffset(0, 0, 0, 0), new Vector2(20, 0), PrefsKeyFold_Motion, null);
             if (sw_motion)
             {
                 #region 模版库                             
@@ -1996,7 +1996,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
 
                 Editor_XHud_GUI.Gui_Layout_Space(5);
-                Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+                Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.themes_get_color(ThemeColorType.sepline));
                 Editor_XHud_GUI.Gui_Layout_Space(5);
 
                 #region 模版库                             
@@ -2558,7 +2558,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
 
             #region 源脚本
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 原始变量
@@ -2827,7 +2827,7 @@ namespace SevenStrikeModules.XHud.Editor
             window.SetLibrarySetterMode(LibrarySetterMode.修改生成器项参数);
             window.SetButtonText("完成");
 
-            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
             window.SetTitle($"<color={hexcol}>{motionName} </color>");
 
             //window.ShowModal();
@@ -3001,7 +3001,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="item"></param>
         private void LoadSpawnItem_Screen(XHud_LayoutSpawner_Item item)
         {
-            string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
             for (int i = 0; i < HudManager.Hud_ElementLibrarys.Count; i++)
             {
                 if (HudManager.Hud_ElementLibrarys[i].LibraryName != LibName.stringValue)
@@ -3222,7 +3222,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="item"></param>
         private void LoadSpawnItem_World(XHud_LayoutSpawner_Item item)
         {
-            string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             for (int i = 0; i < HudManager.Hud_ElementLibrarys.Count; i++)
             {
@@ -3432,7 +3432,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(
                state: true,
-               x_color: XHud_Dashboard.Theme_Primary,
+               x_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                x_title: "Seven Strike Media",
                x_msg: "布局元素动效预览中...",
                x_anchor: XHudSceneActivateMarkAnchor.左下);

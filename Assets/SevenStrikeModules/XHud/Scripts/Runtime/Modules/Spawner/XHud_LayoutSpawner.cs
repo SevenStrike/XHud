@@ -582,7 +582,7 @@ namespace SevenStrikeModules.XHud
             {
                 if (UseDebug)
                 {
-                    string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                    string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
                     XGUI_Utilitys.Console("XHud - 布局元素生成器通知", $"未在元素库： <b><color={hex_col}>{LibName} </color></b>中找到：<b><color={hex_col}> {item.SpawnName} </color></b>元素！请检查目标元素库中是否存在该元素！", XGUIMsgState.通知);
                 }
@@ -889,7 +889,7 @@ namespace SevenStrikeModules.XHud
 
             if (UseDebug)
             {
-                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                 string msg = $"coroutines_Spawn 列表统计：{SpawnerIndicator}  目前存在   <b><color={hex_col}>{SpawnCoroutines.Count}</color></b>   个";
                 XGUI_Utilitys.Console("XHud - 布局元素生成器通知", msg, XGUIMsgState.警告);
             }
@@ -965,7 +965,7 @@ namespace SevenStrikeModules.XHud
                 return;
 
             // 匹配元素库
-            XHud_Library_Element ele_lib = Application.isPlaying ? XHud_Manager.Instance.hm_ElementLibrary_GetTargetLibrary(LibName) : XHud_Dashboard.GetManager().hm_ElementLibrary_GetTargetLibrary(LibName);
+            XHud_Library_Element ele_lib = Application.isPlaying ? XHud_Manager.Instance.hm_ElementLibrary_GetTargetLibrary(LibName) : XHud_Dashboard.get_manager().hm_ElementLibrary_GetTargetLibrary(LibName);
 
             if (ele_lib == null)
                 return;
@@ -1138,7 +1138,7 @@ namespace SevenStrikeModules.XHud
 
             if (UseDebug)
             {
-                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                 XGUI_Utilitys.Console("XHud - 布局元素生成器通知", $"未找到匹配ID的元素项！请确认生成器的<b><color={hex_col}>  {space.ToString()}  </b></color>列表中存在ID为：<b><color={hex_col}>  {id} </b></color>的元素项！", XGUIMsgState.通知);
             }
             return null;
@@ -1185,7 +1185,7 @@ namespace SevenStrikeModules.XHud
 
             if (UseDebug)
             {
-                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                 XGUI_Utilitys.Console("XHud - 布局元素生成器通知", $"未找到匹配ID的元素项！请确认生成器的<b><color={hex_col}>  屏幕空间或是世界空间  </b></color>列表中存在ID为：<b><color={hex_col}>  {name} </b></color>的元素项！", XGUIMsgState.通知);
             }
             return null;
@@ -1212,7 +1212,7 @@ namespace SevenStrikeModules.XHud
 
             if (UseDebug)
             {
-                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                 XGUI_Utilitys.Console("XHud - 布局元素生成器通知", $"未找到匹配ID的元素项！请确认生成器的<b><color={hex_col}>  {space.ToString()}  </b></color>列表中存在名称为：<b><color={hex_col}>  {name} </b></color>的元素项！", XGUIMsgState.通知);
             }
             return null;
@@ -1258,7 +1258,7 @@ namespace SevenStrikeModules.XHud
 
             if (UseDebug)
             {
-                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                 XGUI_Utilitys.Console("XHud - 布局元素生成器通知", $"未找到匹配 SpawnName 的元素项！请确认生成器的<b><color={hex_col}>  屏幕空间或是世界空间  </b></color>列表中存在SpawnName为：<b><color={hex_col}>  {name} </b></color>的元素项！", XGUIMsgState.通知);
             }
             return null;

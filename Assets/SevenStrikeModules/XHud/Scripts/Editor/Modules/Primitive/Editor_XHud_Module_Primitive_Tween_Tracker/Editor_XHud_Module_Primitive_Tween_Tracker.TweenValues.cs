@@ -55,7 +55,7 @@ namespace SevenStrikeModules.XHud.Editor
                 tooltip: "点击交换数值",
                 tex_release: icon_track_param_connector_status_r,
                 tex_press: icon_track_param_connector_status_p,
-                tex_gui_color: XHud_Dashboard.Theme_Primary,
+                tex_gui_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 margin: new RectOffset(0, 10, 10, 0),
                 border: new RectOffset(0, 0, 3, 8),
                 width: icon_track_param_connector_status_r.width,
@@ -143,7 +143,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 XGUI.layout_seperator(
                     thickness: 1,
-                    color: XHud_Dashboard.Theme_SeperateLine,
+                    color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                     margin: new RectOffset(15, 15, 8, 12));
 
                 // 控件绘制 - 目标值
@@ -172,9 +172,9 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                        title: title,
                        title_size: XGUIFontSize.M,
-                       title_hover_color: XHud_Dashboard.Theme_Primary,
+                       title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                        title_width: 50,
-                       title_color: XHud_Dashboard.Theme_Primary,
+                       title_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                        title_offset: new Vector2(0, 0),
                        title_font_style: FontStyle.Normal,
                        prop: prop,

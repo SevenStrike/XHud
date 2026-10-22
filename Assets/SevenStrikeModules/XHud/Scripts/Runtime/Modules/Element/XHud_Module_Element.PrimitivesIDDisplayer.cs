@@ -33,7 +33,7 @@ namespace SevenStrikeModules.XHud
         {
             #region 用于在场景中显示元素下的所有图元ID标签，便于绑定数据
 #if UNITY_EDITOR
-            if (!XHud_Dashboard.DisplayPrimitiveControllerIDConfig.XHudPrimitiveController_ID_Displayer)
+            if (!XHud_Dashboard.primitive_get_controller_displayid())
                 return;
 
             if (PrimitiveControllerNodes == null || PrimitiveControllerNodes.Count == 0)
@@ -41,9 +41,9 @@ namespace SevenStrikeModules.XHud
 
             GUIStyle style = new GUIStyle();
             style.alignment = TextAnchor.MiddleCenter;
-            style.normal.textColor = XHud_Dashboard.GetManager().PrimtiveID_LabelFont_Color;
+            style.normal.textColor = XHud_Dashboard.get_manager().PrimtiveID_LabelFont_Color;
             style.fontStyle = FontStyle.Bold;
-            style.fontSize = XHud_Dashboard.GetManager().PrimtiveID_LabelFont_Size;
+            style.fontSize = XHud_Dashboard.get_manager().PrimtiveID_LabelFont_Size;
 
 
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
@@ -55,7 +55,7 @@ namespace SevenStrikeModules.XHud
 
                 if (con.mod_Rect != null)
                 {
-                    Vector3 target = con.mod_Rect.position + (new Vector3(0, XHud_Dashboard.GetManager().PrimtiveID_LabelLine_Height, 0) * 0.3f);
+                    Vector3 target = con.mod_Rect.position + (new Vector3(0, XHud_Dashboard.get_manager().PrimtiveID_LabelLine_Height, 0) * 0.3f);
 
                     // 获取实际宽度（世界空间）
                     float actualWidth = GetActualWidth(con.mod_Rect);
@@ -108,7 +108,7 @@ namespace SevenStrikeModules.XHud
                     Vector3 offsetTarget = target + new Vector3(offset, 0, 0);
                     Vector3 offsetssddTarget = con.mod_Rect.position + new Vector3(offset, 0, 0);
 
-                    Handles.color = XHud_Dashboard.GetManager().PrimtiveID_LabelLine_Color;
+                    Handles.color = XHud_Dashboard.get_manager().PrimtiveID_LabelLine_Color;
 
                     Handles.DrawLine(offsetssddTarget, offsetTarget);  // 这里改成 offsetTarget
 

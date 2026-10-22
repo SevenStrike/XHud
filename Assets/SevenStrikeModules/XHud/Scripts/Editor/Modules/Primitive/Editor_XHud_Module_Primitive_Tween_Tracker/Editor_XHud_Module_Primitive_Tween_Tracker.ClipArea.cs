@@ -364,7 +364,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (!node.Enabled)
                 clipColor = ColorClipFG_Disabled;
             if (isSelected)
-                clipColor = !node.Enabled ? ColorClipFG_Selected * 0.6f : XHud_Dashboard.Theme_Primary;
+                clipColor = !node.Enabled ? ColorClipFG_Selected * 0.6f : XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             XGUI.gui_box(clipRect, clipColor);
             #endregion
 

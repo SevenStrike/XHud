@@ -84,7 +84,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: "\u5965\u9A6C\u54C8\u6D77\u6EE9"
   Indicator: Text
   StyleName: NewTextStyle_HudText_G
   StyleLibSynching: 0
@@ -504,7 +504,7 @@ MonoBehaviour:
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
     Delay: 3.338
-    Progress: 0.25286144
+    Progress: 0
     TextCursorBlinkSpeed: 0.1
     TextCursor: _
     TextExtended: 0
@@ -768,7 +768,7 @@ MonoBehaviour:
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
     Delay: 3.338
-    Progress: 0.2528651
+    Progress: 0
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
     TextExtended: 0
@@ -900,7 +900,7 @@ MonoBehaviour:
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
     Delay: 7.063
-    Progress: 0.99179375
+    Progress: 0
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
     TextExtended: 0
@@ -1304,7 +1304,7 @@ MonoBehaviour:
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1
     Delay: 1
-    Progress: 0
+    Progress: 0.1079252
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
     TextExtended: 0
@@ -1714,7 +1714,7 @@ MonoBehaviour:
   fold_param: 1
   fold_preview: 1
   fold_state: 1
-  fold_option: 1
+  fold_option: 0
   fold_rms: 1
   fold_list: 1
   fold_statistic: 1
@@ -1970,7 +1970,7 @@ MonoBehaviour:
   PrimitivesTweenMaxDuration: 4.8378
   PrimitivesTweenGlobalDuration: 1
   AutoPlayPrimitivesTween: 1
-  RMS_Enabled: 1
+  RMS_Enabled: 0
   RMS_LayoutDatas:
   - LayoutName: Dell
     Anchor: 5
@@ -2096,8 +2096,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4292601578
-  m_fontColor: {r: 0.91764706, g: 0.9019608, b: 0.85882354, a: 1}
+    rgba: 4278242303
+  m_fontColor: {r: 1, g: 0.7942022, b: 0, a: 1}
   m_enableVertexGradient: 1
   m_colorMode: 2
   m_fontColorGradient:
@@ -2164,7 +2164,7 @@ MonoBehaviour:
   PreviousText: MNBVCXZ-WERTYMMMMMMMMMMM*MMMMMMMMMM
   TextIsChanged: 1
   SyncGlobalFontSize: 1
-  TextColorOwner: 1
+  TextColorOwner: 2
   TextStyleInfo:
     Name: NewTextStyle_HudTmpTextGGGGG
     Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudTmpText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
@@ -2201,7 +2201,7 @@ MonoBehaviour:
     tmp_space_paragraph: 0
     tmp_WrappingRatios: 0
     tmp_contentmargin: {x: 0, y: 0, z: 0, w: 0}
-    tmp_color: {r: 0.91764706, g: 0.9019608, b: 0.85882354, a: 1}
+    tmp_color: {r: 1, g: 0.7942022, b: 0, a: 1}
     tmp_EnableAutoSizing: 0
     tmp_FontSizeMin: 5
     tmp_FontSizeMin_globalscaled: 5
@@ -2386,8 +2386,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 830724219823893641}
-  OriginalColor: {r: 0.91764706, g: 0.9019608, b: 0.85882354, a: 1}
-  ColoriseName: "\u73CD\u73E0\u7070"
+  OriginalColor: {r: 1, g: 0.7942022, b: 0, a: 1}
+  ColoriseName: "\u73CD\u73E0\u7070(Pearl Grey)"
   Debug: 0
   SyncLibraryColor: 1
   SyncImageColor: 1
@@ -2412,7 +2412,7 @@ MonoBehaviour:
     Euler: {x: -0, y: 0, z: 0}
     Scale: {x: 1, y: 1, z: 1}
     Alpha: 1
-    Color: {r: 0.91764706, g: 0.9019608, b: 0.85882354, a: 1}
+    Color: {r: 1, g: 0.7942022, b: 0, a: 1}
     Size: {x: 518.1, y: 94.2}
     Fill: 0
   FirstSaveFeatures: 1
@@ -2512,7 +2512,7 @@ MonoBehaviour:
     Timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     Duration: 1.366
     Delay: 1.079
-    Progress: 0
+    Progress: 0.021180017
     TextCursorBlinkSpeed: 0.5
     TextCursor: '|'
     TextExtended: 0

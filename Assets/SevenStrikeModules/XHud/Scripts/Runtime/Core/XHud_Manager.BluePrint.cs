@@ -122,7 +122,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 蓝图视觉小标题颜色
         /// </summary>
-        public Color BluePrint_marksubtitle_color = XHud_Dashboard.Theme_Primary;
+        public Color BluePrint_marksubtitle_color = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
         [Tooltip("蓝图视觉标题尺寸")]
         /// <summary>
         /// 蓝图视觉标题尺寸

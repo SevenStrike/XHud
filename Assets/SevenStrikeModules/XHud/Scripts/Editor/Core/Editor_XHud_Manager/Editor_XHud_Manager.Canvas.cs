@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.UI;
@@ -40,7 +41,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void Draw_Canvas()
         {
-            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             #region 画布尺寸    
             XGUI.ChangedCheck_Start();
@@ -48,10 +49,10 @@ namespace SevenStrikeModules.XHud.Editor
              title: "画布尺寸",
              title_size: XGUIFontSize.M,
              //title_color: Color.white,
-             title_hover_color: XHud_Dashboard.Theme_Primary,
+             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_width: 100,
              status_icon: "icon_field_status",
-             status_icon_color: CanvasScalerScreenSize.vector2Value != Vector2.zero ? XHud_Dashboard.Theme_Primary : Color.red,
+             status_icon_color: CanvasScalerScreenSize.vector2Value != Vector2.zero ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
              prop: CanvasScalerScreenSize,
              prop_margin: new RectOffset(0, 0, 10, 10));
             if (XGUI.ChangedCheck_End())
@@ -68,10 +69,10 @@ namespace SevenStrikeModules.XHud.Editor
              title: "高度优先",
              title_size: XGUIFontSize.M,
              //title_color: Color.white,
-             title_hover_color: XHud_Dashboard.Theme_Primary,
+             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_width: 100,
              //status_icon: "icon_field_status",
-             //status_icon_color: CanvasMatchDir.floatValue != 0 ? XHud_Dashboard.Theme_Primary : Color.red,
+             //status_icon_color: CanvasMatchDir.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
              prop: CanvasMatchDir,
              prop_margin: new RectOffset(0, 0, 10, 10));
             if (XGUI.ChangedCheck_End())
@@ -90,7 +91,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title: "画布距离",
                     title_size: XGUIFontSize.M,
                     //title_color: Color.white,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 100,
                     prop: CanvasDistance,
                     prop_margin: new RectOffset(0, 0, 10, 10));
@@ -103,8 +104,8 @@ namespace SevenStrikeModules.XHud.Editor
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Primary,
-                button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
+                button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.themes_get_color(ThemeColorType.primary)) ? Color.black : Color.white,
                 press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
                 press_text_color: Color.white,

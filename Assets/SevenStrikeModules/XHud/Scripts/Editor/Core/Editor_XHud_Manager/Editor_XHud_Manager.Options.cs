@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using TMPro;
     using UnityEditor;
     using UnityEngine;
@@ -43,26 +44,26 @@ namespace SevenStrikeModules.XHud.Editor
         private void Draw_Options()
         {
             #region 单例模式
-            DrawToggle("单例模式", UseInstanceMode, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("单例模式", UseInstanceMode, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             #region 状态调试
-            DrawToggle("状态调试", UseDebug, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("状态调试", UseDebug, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             #region 辅助结构
-            DrawToggle("辅助结构", SafeFrameStructureDisplayer, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("辅助结构", SafeFrameStructureDisplayer, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 15, 15));
 
             #region 辅助视觉
             if (SceneCamera.objectReferenceValue != null)
             {
-                DrawToggle("辅助视觉", UseSafeFrame, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+                DrawToggle("辅助视觉", UseSafeFrame, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
                 {
                     UseSafeFrame.boolValue = b;
                     UseSafeFrame.serializedObject.ApplyModifiedProperties();
@@ -84,7 +85,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 构图参考视觉
-            DrawToggle("构图参考视觉", UseCompGuide, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+            DrawToggle("构图参考视觉", UseCompGuide, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
             {
                 if (UseCompGuide.boolValue)
                 {
@@ -106,7 +107,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 蓝图视觉
-            DrawToggle("蓝图视觉", BluePrintMode, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+            DrawToggle("蓝图视觉", BluePrintMode, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
             {
                 BluePrintMode.boolValue = b;
                 BluePrintMode.serializedObject.ApplyModifiedProperties();
@@ -124,7 +125,7 @@ namespace SevenStrikeModules.XHud.Editor
                             cancel: "暂不",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary,
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             on_selected: (d) =>
                             {
                                 if (d == "退出")
@@ -158,30 +159,30 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 关闭时折叠所有
-            DrawToggle("关闭时折叠所有", FoldAllPanelWithDisabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("关闭时折叠所有", FoldAllPanelWithDisabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             #region 元素放置器
-            ElementVisualPlacer.boolValue = Editor_XHud_Tool_ElementVisualPlacer.GetEnabled();
+            ElementVisualPlacer.boolValue = Editor_XHud_Tool_SceneView_ElementVisualPlacer.GetEnabled();
             ElementVisualPlacer.serializedObject.ApplyModifiedProperties();
 
-            DrawToggle("元素放置器", ElementVisualPlacer, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+            DrawToggle("元素放置器", ElementVisualPlacer, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
             {
                 ElementVisualPlacer.boolValue = b;
                 ElementVisualPlacer.serializedObject.ApplyModifiedProperties();
 
-                Editor_XHud_Tool_ElementVisualPlacer.SetEnabled(ElementVisualPlacer.boolValue);
+                Editor_XHud_Tool_SceneView_ElementVisualPlacer.SetEnabled(ElementVisualPlacer.boolValue);
                 XGUI.x_Editor_Data_Set_With_Bool(MENU_KEY_VISUAL_PLACER, ElementVisualPlacer.boolValue);
             });
             #endregion
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 15, 15));
 
             #region 像素对齐
-            DrawToggle("像素对齐", UsePerfectPixelUpdate, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+            DrawToggle("像素对齐", UsePerfectPixelUpdate, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
             {
                 UsePerfectPixelUpdate.boolValue = b;
                 UsePerfectPixelUpdate.serializedObject.ApplyModifiedProperties();
@@ -192,16 +193,16 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 自动像素对齐
-            DrawToggle("自动像素对齐", UseAutoPerfectPixel, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("自动像素对齐", UseAutoPerfectPixel, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 15, 15));
 
             #region 相机投影
-            DrawToggle("相机投影方式", CameraOthograpicMode, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+            DrawToggle("相机投影方式", CameraOthograpicMode, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
             {
                 CameraOthograpicMode.boolValue = b;
                 CameraOthograpicMode.serializedObject.ApplyModifiedProperties();
@@ -212,11 +213,11 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 音效静音
-            DrawToggle("音效静音", VolumeMute, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("音效静音", VolumeMute, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             #region 个性光标
-            DrawToggle("个性光标", CustomCursor, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+            DrawToggle("个性光标", CustomCursor, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
             {
                 CustomCursor.boolValue = b;
                 CustomCursor.serializedObject.ApplyModifiedProperties();
@@ -238,7 +239,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 cancel: "暂不",
                                 PrimaryIndex: 0,
                                 usemodal: true,
-                                themecolor: XHud_Dashboard.Theme_Primary,
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                 on_selected: (d) =>
                                 {
                                     if (d == "是的")
@@ -280,7 +281,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 转场特效
-            DrawToggle("转场特效", CustomTransition, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+            DrawToggle("转场特效", CustomTransition, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
             {
                 CustomTransition.boolValue = b;
                 CustomTransition.serializedObject.ApplyModifiedProperties();
@@ -302,7 +303,7 @@ namespace SevenStrikeModules.XHud.Editor
                                    cancel: "暂不",
                                    PrimaryIndex: 0,
                                    usemodal: true,
-                                   themecolor: XHud_Dashboard.Theme_Primary,
+                                   themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                    on_selected: (d) =>
                                    {
                                        if (d == "禁用")
@@ -363,11 +364,11 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                thickness: 1,
-               color: XHud_Dashboard.Theme_SeperateLine,
+               color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                margin: new RectOffset(15, 15, 15, 15));
 
             #region 支持世界元素
-            DrawToggle("支持世界元素", SupportWorldUI, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+            DrawToggle("支持世界元素", SupportWorldUI, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
             {
                 SupportWorldUI.boolValue = b;
                 SupportWorldUI.serializedObject.ApplyModifiedProperties();
@@ -388,7 +389,7 @@ namespace SevenStrikeModules.XHud.Editor
                                cancel: "暂不",
                                PrimaryIndex: 0,
                                usemodal: true,
-                               themecolor: XHud_Dashboard.Theme_Primary,
+                               themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                                on_selected: (d) =>
                                {
                                    if (d == "继续")
@@ -463,12 +464,12 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region R M S 模块
-            DrawToggle("R M S 模块", RMS_Enabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("R M S 模块", RMS_Enabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             XGUI.layout_seperator(
                thickness: 1,
-               color: XHud_Dashboard.Theme_SeperateLine,
+               color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                margin: new RectOffset(15, 15, 15, 15));
 
             #region 画布尺寸           
@@ -486,7 +487,7 @@ namespace SevenStrikeModules.XHud.Editor
                opt_font_style: FontStyle.Normal,
                opt_bg_fill: XGUIGroup.实体,
                opt_bg_color: XGUIColor.亮白,
-               opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+               opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                icon_arrow_color: Color.black,
                margin: new RectOffset(0, 0, 5, 5),
                padding: new RectOffset(5, 5, 0, 0),
@@ -533,7 +534,7 @@ namespace SevenStrikeModules.XHud.Editor
                opt_font_style: FontStyle.Normal,
                opt_bg_fill: XGUIGroup.实体,
                opt_bg_color: XGUIColor.亮白,
-               opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+               opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                icon_arrow_color: Color.black,
                margin: new RectOffset(0, 0, 5, 5),
                padding: new RectOffset(5, 5, 0, 0),

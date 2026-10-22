@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using System;
     using UnityEditor;
     using UnityEngine;
@@ -172,7 +173,7 @@ namespace SevenStrikeModules.XHud.Editor
             Flip_Hor = serializedObject.FindProperty("Flip_Hor");
             Flip_Ver = serializedObject.FindProperty("Flip_Ver");
             UseKeyControl = serializedObject.FindProperty("UseKeyControl");
-            HudManager = XHud_Dashboard.GetManager();
+            HudManager = XHud_Dashboard.get_manager();
             #endregion
             #region 获取图标
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_transition_controller/icon_main");
@@ -232,7 +233,7 @@ namespace SevenStrikeModules.XHud.Editor
              bg_color: XGUIColor.深空灰,
              bg_height: 30,
              icon: icon_main,
-             icon_color: XHud_Dashboard.Theme_Primary,
+             icon_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_text: "XHud  -  转场控制器",
              title_anchor: TextAnchor.MiddleLeft,
              title_style: FontStyle.Normal,
@@ -247,10 +248,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Horizontal,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "快捷功能",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(15, 15, 20, 15));
             #region 查看当前转场库
@@ -312,17 +313,17 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "选项",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_options);
             if (!BaseScript.fold_options)
             {
-                DrawToggle("按键控制", UseKeyControl, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
-                DrawToggle("转场模式 (入场 & 出场)", ModeSwitch, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+                DrawToggle("按键控制", UseKeyControl, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                DrawToggle("转场模式 (入场 & 出场)", ModeSwitch, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
                 {
                     if (ModeSwitch.boolValue)
                         Mode.enumValueIndex = (int)TransitionMode.出场;
@@ -332,19 +333,19 @@ namespace SevenStrikeModules.XHud.Editor
                     TransitionProgress.floatValue = 0;
                     TransitionProgress.serializedObject.ApplyModifiedProperties();
                 });
-                DrawToggle("水平翻转", Flip_Hor, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+                DrawToggle("水平翻转", Flip_Hor, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
                 {
                     Material mat = (Material)TransitionMat.objectReferenceValue;
                     mat.SetInt("_Flip_Hor", Flip_Hor.boolValue ? 1 : 0);
                     TransitionMat.serializedObject.ApplyModifiedProperties();
                 });
-                DrawToggle("垂直翻转", Flip_Ver, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+                DrawToggle("垂直翻转", Flip_Ver, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
                 {
                     Material mat = (Material)TransitionMat.objectReferenceValue;
                     mat.SetInt("_Flip_Ver", Flip_Ver.boolValue ? 1 : 0);
                     TransitionMat.serializedObject.ApplyModifiedProperties();
                 });
-                DrawToggle("状态调试", DebugState, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                DrawToggle("状态调试", DebugState, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
                 XGUI.layout_group_start(
                     type: XGUIContainerType.Horizontal,
                     absolute_margin: true,
@@ -366,7 +367,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_font_style: FontStyle.Normal,
                     opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
-                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     margin: new RectOffset(0, 0, 5, 5),
                     padding: new RectOffset(5, 5, 0, 0),
                     title_margin: new RectOffset(0, 0, 0, 0),
@@ -432,10 +433,10 @@ namespace SevenStrikeModules.XHud.Editor
               type: XGUIContainerType.Vertical,
               bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
-              bg_color_gui: XHud_Dashboard.Theme_Group,
+              bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
               title: "状态",
               title_size: XGUIFontSize.M,
-              title_text_color: XHud_Dashboard.Theme_Primary,
+              title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
               title_clipping: TextClipping.Clip,
               padding: new RectOffset(10, 10, 15, 15),
               foldout: BaseScript.fold_state);
@@ -447,7 +448,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     subtitle: IsTransiting.boolValue ? "正在转场中" : "等待转场",
                     subtitle_size: XGUIFontSize.M,
-                    subtitle_color: IsTransiting.boolValue ? XHud_Dashboard.Theme_Primary : Color.gray,
+                    subtitle_color: IsTransiting.boolValue ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray,
                     margin: new RectOffset(5, 5, 0, 5));
                 #endregion
                 #region 接近首帧状态
@@ -458,7 +459,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     subtitle: IsTransiting_WithStart.boolValue ? $"接近首帧状态 ({frameLimite_start})" : $"等待转场 ({frameLimite_start})",
                     subtitle_size: XGUIFontSize.M,
-                    subtitle_color: IsTransiting_WithStart.boolValue ? XHud_Dashboard.Theme_Primary : Color.gray,
+                    subtitle_color: IsTransiting_WithStart.boolValue ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray,
                     margin: new RectOffset(5, 5, 0, 5));
                 #endregion
                 #region 接近尾帧状态
@@ -468,7 +469,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     subtitle: IsTransiting_WithEnd.boolValue ? $"接近尾帧状态 ({frameLimite_end})" : $"等待转场 ({frameLimite_end})",
                     subtitle_size: XGUIFontSize.M,
-                    subtitle_color: IsTransiting_WithEnd.boolValue ? XHud_Dashboard.Theme_Primary : Color.gray,
+                    subtitle_color: IsTransiting_WithEnd.boolValue ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray,
                     margin: new RectOffset(5, 5, 0, 5));
                 #endregion
             }
@@ -479,10 +480,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "参数",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(5, 10, 15, 15),
                 foldout: BaseScript.fold_params);
@@ -492,7 +493,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "转场组件",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: TransitionImage,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -502,7 +503,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                   title: "转场材质",
                   title_size: XGUIFontSize.M,
-                  title_hover_color: XHud_Dashboard.Theme_Primary,
+                  title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   title_width: 90,
                   prop: TransitionMat,
                   prop_margin: new RectOffset(0, 0, 5, 0));
@@ -518,7 +519,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                   title: "转场叠加颜色",
                   title_size: XGUIFontSize.M,
-                  title_hover_color: XHud_Dashboard.Theme_Primary,
+                  title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   title_width: 90,
                   prop: TransitionOverlayColor,
                   prop_margin: new RectOffset(0, 0, 5, 0));
@@ -535,7 +536,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "转场参数",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: CurrentTransitionNode,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -549,7 +550,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "转场进度",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: TransitionProgress,
                         prop_margin: new RectOffset(0, 0, 5, 0));
@@ -590,7 +591,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "当前帧",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: CurrentFrame,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -599,7 +600,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "帧间隔速率",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: TransitionTime,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -632,10 +633,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "控制按键",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(5, 10, 15, 15),
                 foldout: BaseScript.fold_key);
@@ -645,7 +646,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "转场模式",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: TransitionMod_Key,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -654,7 +655,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "按键转场",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: TransitionPlayKey,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -663,7 +664,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "水平翻转",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: TransitionFlip_H_Key,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -672,7 +673,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "垂直翻转",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: TransitionFlip_V_Key,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -685,10 +686,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "源脚本",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_based);
@@ -815,7 +816,7 @@ namespace SevenStrikeModules.XHud.Editor
                 tog_bg_on_color: color_bg_on,
                 tog_handler_off_color: color_off,
                 tog_handler_on_color: color_on,
-                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                tog_mixed_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 act_on_changed: act_on_changed);
         }
         #endregion

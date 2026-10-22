@@ -43,7 +43,7 @@ namespace SevenStrikeModules.XHud.Editor
         private void Draw_RatioReference()
         {
             #region 使用图例比例参考
-            DrawToggle("使用图例比例参考", UseRatioReference, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+            DrawToggle("使用图例比例参考", UseRatioReference, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
             {
                 UseRatioReference.boolValue = b;
                 UseRatioReference.serializedObject.ApplyModifiedProperties();
@@ -75,7 +75,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 使用局部比例
-            DrawToggle("使用局部模式", RatioReferenceIsPart, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) =>
+            DrawToggle("使用局部模式", RatioReferenceIsPart, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
             {
                 xHud_RatioReference_Switch();
                 xHud_RatioReference_Update();
@@ -87,10 +87,10 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "物理屏幕可视尺寸",
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 200,
                 //status_icon: "icon_field_status",
-                //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.Theme_Primary : Color.red,
+                //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: sp_PhysicsScreenSize,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
@@ -114,7 +114,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 5, 15));
 
             #region 参考物尺寸 - 整体
@@ -122,10 +122,10 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "参考物尺寸 - 整体",
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 140,
                 //status_icon: "icon_field_status",
-                //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.Theme_Primary : Color.red,
+                //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: sp_Res_Full.FindPropertyRelative("size"),
                 prop_margin: new RectOffset(0, 0, 5, 0));
 
@@ -135,17 +135,17 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "参考物图例 - 整体",
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 140,
                 //status_icon: "icon_field_status",
-                //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.Theme_Primary : Color.red,
+                //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: sp_Res_Full.FindPropertyRelative("sprite"),
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 15, 10));
 
             #region 参考物尺寸 - 局部
@@ -153,10 +153,10 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "参考物尺寸 - 局部",
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 140,
                 //status_icon: "icon_field_status",
-                //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.Theme_Primary : Color.red,
+                //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: sp_Res_Part.FindPropertyRelative("size"),
                 prop_margin: new RectOffset(0, 0, 5, 0));
 
@@ -166,10 +166,10 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "参考物图例 - 局部",
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 140,
                 //status_icon: "icon_field_status",
-                //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.Theme_Primary : Color.red,
+                //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: sp_Res_Part.FindPropertyRelative("sprite"),
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
@@ -182,7 +182,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 15, 10));
 
             #region 比例参考图形
@@ -190,7 +190,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "比例参考图形 - 尺寸",
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 140,
                 prop: sp_ReferShape_RatioSize,
                 prop_margin: new RectOffset(0, 0, 10, 10));
@@ -199,7 +199,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "比例参考图形 - 公差",
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 140,
                 prop: sp_ReferShape_RatioTolerance,
                 prop_margin: new RectOffset(0, 0, 10, 10));
@@ -210,8 +210,8 @@ namespace SevenStrikeModules.XHud.Editor
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Primary,
-                button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
+                button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.themes_get_color(ThemeColorType.primary)) ? Color.black : Color.white,
                 press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
                 press_text_color: Color.white,

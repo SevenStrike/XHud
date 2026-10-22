@@ -464,7 +464,7 @@ namespace SevenStrikeModules.XHud.Editor
         }
         public override void OnPreviewGUI(Rect r, GUIStyle background)
         {
-            string h_color = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary);
+            string h_color = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
             XGUI.gui_icon(
                 rect: new Rect(r.x + (r.width / 2) - 30, r.y + (r.height / 2) - 40, 60, 60),
@@ -498,7 +498,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             base.OnEnable();
 
-            HudManager = XHud_Dashboard.GetManager();
+            HudManager = XHud_Dashboard.get_manager();
 
             BaseScript = (XHud_Module_TmpText)target;
 
@@ -620,7 +620,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         public override void OnInspectorGUI()
         {
-            string h_color = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary);
+            string h_color = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
             serializedObject.Update();
 
@@ -630,7 +630,7 @@ namespace SevenStrikeModules.XHud.Editor
                 bg_color: XGUIColor.深空灰,
                 bg_height: 30,
                 icon: icon_main,
-                icon_color: XHud_Dashboard.Theme_Primary,
+                icon_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_text: "XHud  -  文字",
                 title_anchor: TextAnchor.MiddleLeft,
                 title_style: FontStyle.Normal,
@@ -645,10 +645,10 @@ namespace SevenStrikeModules.XHud.Editor
               type: XGUIContainerType.Vertical,
               bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
-              bg_color_gui: XHud_Dashboard.Theme_Group,
+              bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
               title: "快捷功能",
               title_size: XGUIFontSize.M,
-              title_text_color: XHud_Dashboard.Theme_Primary,
+              title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
               title_clipping: TextClipping.Clip,
               padding: new RectOffset(15, 15, 20, 15));
 
@@ -786,10 +786,10 @@ namespace SevenStrikeModules.XHud.Editor
                  type: XGUIContainerType.Vertical,
                  bg_fill: XGUIGroup.缺口纯色边框,
                  bg_color: XGUIColor.亮白,
-                 bg_color_gui: XHud_Dashboard.Theme_Group,
+                 bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                  title: "颜色接管者",
                  title_size: XGUIFontSize.M,
-                 title_text_color: XHud_Dashboard.Theme_Primary,
+                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                  title_clipping: TextClipping.Clip,
                  padding: new RectOffset(10, 10, 15, 15),
                  foldout: BaseScript.fold_option);
@@ -809,7 +809,7 @@ namespace SevenStrikeModules.XHud.Editor
                 index: sp_TextColorOwner.enumValueIndex,
                 icon_btns: clickselector_args,
                 btn_color_normal: Color.white,
-                btn_color_selected: XHud_Dashboard.Theme_Primary,
+                btn_color_selected: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 btn_height: 60,
                 padding: new RectOffset(0, 0, 0, 0),
                 margin: new RectOffset(0, 0, 0, 0)
@@ -825,10 +825,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "选项",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_option);
@@ -837,30 +837,30 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 #region 射线检测
                 XGUI.SetEnabled(!sp_LibStyle_Effect_raycast.boolValue || !sp_StyleLibSynching.boolValue);
-                DrawLabeledToggle("射线检测", "", sp_Raycast, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                DrawLabeledToggle("射线检测", "", sp_Raycast, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
                 #region 遮罩
                 XGUI.SetEnabled(!sp_LibStyle_Effect_maskable.boolValue || !sp_StyleLibSynching.boolValue);
-                DrawLabeledToggle("遮罩", "", sp_Maskable, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                DrawLabeledToggle("遮罩", "", sp_Maskable, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
                 #region 富文本
                 XGUI.SetEnabled(!sp_LibStyle_Effect_rich.boolValue || !sp_StyleLibSynching.boolValue);
-                DrawLabeledToggle("富文本", "", sp_tmp_rich, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                DrawLabeledToggle("富文本", "", sp_tmp_rich, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
                 #region 自适应尺寸
                 XGUI.SetEnabled(!sp_LibStyle_Effect_autosizing.boolValue || !sp_StyleLibSynching.boolValue);
-                DrawLabeledToggle("自适应尺寸", "", sp_tmp_EnableAutoSizing, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                DrawLabeledToggle("自适应尺寸", "", sp_tmp_EnableAutoSizing, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
                 #region 尺寸全局联动
-                DrawLabeledToggle("尺寸全局联动", "", sp_SyncGlobalFontSize, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncsize, (b) => { });
+                DrawLabeledToggle("尺寸全局联动", "", sp_SyncGlobalFontSize, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncsize, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
@@ -869,7 +869,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     if (!HudManager.Hud_TextStyleLibrary.TextStyle_Library_IsEmpty())
                     {
-                        DrawLabeledToggle("实时匹配库", "", sp_StyleLibSynching, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) =>
+                        DrawLabeledToggle("实时匹配库", "", sp_StyleLibSynching, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) =>
                         {
                             sp_StyleLibSynching.boolValue = b;
                             sp_StyleLibSynching.serializedObject.ApplyModifiedProperties();
@@ -912,13 +912,13 @@ namespace SevenStrikeModules.XHud.Editor
 
                 #region 使用渐变色
                 XGUI.SetEnabled(!sp_LibStyle_Effect_gradientcolor.boolValue || !sp_StyleLibSynching.boolValue);
-                DrawLabeledToggle("使用渐变色", "", sp_gra_Used, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                DrawLabeledToggle("使用渐变色", "", sp_gra_Used, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
                 #region 翻转渐变色
                 XGUI.SetEnabled((!sp_LibStyle_Effect_gradientcolor.boolValue || !sp_StyleLibSynching.boolValue) && sp_gra_Used.boolValue);
-                DrawLabeledToggle("翻转渐变色", "", sp_gra_Invert, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_flip, (b) => { });
+                DrawLabeledToggle("翻转渐变色", "", sp_gra_Invert, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_flip, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
@@ -938,7 +938,7 @@ namespace SevenStrikeModules.XHud.Editor
                     opt_font_style: FontStyle.Normal,
                     opt_bg_fill: XGUIGroup.实体,
                     opt_bg_color: XGUIColor.亮白,
-                    opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     margin: new RectOffset(0, 0, 5, 5),
                     padding: new RectOffset(5, 5, 0, 0),
                     title_margin: new RectOffset(0, 0, 0, 0),
@@ -1000,10 +1000,10 @@ namespace SevenStrikeModules.XHud.Editor
                  type: XGUIContainerType.Vertical,
                  bg_fill: XGUIGroup.缺口纯色边框,
                  bg_color: XGUIColor.亮白,
-                 bg_color_gui: XHud_Dashboard.Theme_Group,
+                 bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                  title: "文字样式库",
                  title_size: XGUIFontSize.M,
-                 title_text_color: XHud_Dashboard.Theme_Primary,
+                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                  title_clipping: TextClipping.Clip,
                  padding: new RectOffset(10, 10, 15, 15),
                  foldout: BaseScript.fold_option);
@@ -1017,7 +1017,7 @@ namespace SevenStrikeModules.XHud.Editor
                         type: XGUIContainerType.Horizontal,
                         bg_fill: XGUIGroup.透明,
                         bg_color: XGUIColor.亮白,
-                        bg_color_gui: XHud_Dashboard.Theme_Group,
+                        bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                         absolute_margin: true,
                         absolute_padding: true,
                         padding: new RectOffset(5, 5, 5, 15));
@@ -1038,7 +1038,7 @@ namespace SevenStrikeModules.XHud.Editor
                         opt_font_style: FontStyle.Normal,
                         opt_bg_fill: XGUIGroup.实体,
                         opt_bg_color: XGUIColor.亮白,
-                        opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                        opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         margin: new RectOffset(0, 0, 5, 5),
                         padding: new RectOffset(0, 0, 0, 0),
                         title_margin: new RectOffset(0, 0, 0, 0),
@@ -1145,10 +1145,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "库同步项",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_sync);
@@ -1156,19 +1156,19 @@ namespace SevenStrikeModules.XHud.Editor
                 if (!BaseScript.fold_sync)
                 {
                     #region 射线检测
-                    DrawLabeledToggle("射线检测", "", sp_LibStyle_Effect_raycast, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("射线检测", "", sp_LibStyle_Effect_raycast, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 遮罩
-                    DrawLabeledToggle("遮罩", "", sp_LibStyle_Effect_maskable, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("遮罩", "", sp_LibStyle_Effect_maskable, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 富文本
-                    DrawLabeledToggle("富文本", "", sp_LibStyle_Effect_rich, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("富文本", "", sp_LibStyle_Effect_rich, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 尺寸
-                    DrawLabeledToggle("尺寸", "", sp_LibStyle_Effect_size, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("尺寸", "", sp_LibStyle_Effect_size, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     if (sp_LibStyle_Effect_size.boolValue)
                     {
                         sp_LibStyle_Effect_autosizing.boolValue = false;
@@ -1179,7 +1179,7 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 自适应尺寸
-                    DrawLabeledToggle("自适应尺寸", "", sp_LibStyle_Effect_autosizing, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("自适应尺寸", "", sp_LibStyle_Effect_autosizing, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     if (sp_LibStyle_Effect_autosizing.boolValue)
                     {
                         sp_LibStyle_Effect_size.boolValue = false;
@@ -1190,43 +1190,43 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 渐变色
-                    DrawLabeledToggle("渐变色", "", sp_LibStyle_Effect_gradientcolor, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("渐变色", "", sp_LibStyle_Effect_gradientcolor, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 对齐
-                    DrawLabeledToggle("对齐", "", sp_LibStyle_Effect_align, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("对齐", "", sp_LibStyle_Effect_align, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 字体
-                    DrawLabeledToggle("字体", "", sp_LibStyle_Effect_font, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("字体", "", sp_LibStyle_Effect_font, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 样式
-                    DrawLabeledToggle("样式", "", sp_LibStyle_Effect_style, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("样式", "", sp_LibStyle_Effect_style, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 颜色
-                    DrawLabeledToggle("颜色", "", sp_LibStyle_Effect_color, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("颜色", "", sp_LibStyle_Effect_color, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 文本包裹
-                    DrawLabeledToggle("包裹", "", sp_LibStyle_Effect_wrap, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("包裹", "", sp_LibStyle_Effect_wrap, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 溢出
-                    DrawLabeledToggle("溢出", "", sp_LibStyle_Effect_overflow, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("溢出", "", sp_LibStyle_Effect_overflow, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 包裹比例
-                    DrawLabeledToggle("包裹比例", "", sp_LibStyle_Effect_wrapratio, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("包裹比例", "", sp_LibStyle_Effect_wrapratio, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 边距
-                    DrawLabeledToggle("边距", "", sp_LibStyle_Effect_margin, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("边距", "", sp_LibStyle_Effect_margin, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 间距
-                    DrawLabeledToggle("间距", "", sp_LibStyle_Effect_space, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("间距", "", sp_LibStyle_Effect_space, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
                 }
                 XGUI.layout_group_end(type: XGUIContainerType.Vertical);
@@ -1238,10 +1238,10 @@ namespace SevenStrikeModules.XHud.Editor
             type: XGUIContainerType.Vertical,
             bg_fill: XGUIGroup.缺口纯色边框,
             bg_color: XGUIColor.亮白,
-            bg_color_gui: XHud_Dashboard.Theme_Group,
+            bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
             title: "文字内容",
             title_size: XGUIFontSize.M,
-            title_text_color: XHud_Dashboard.Theme_Primary,
+            title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_clipping: TextClipping.Clip,
             padding: new RectOffset(10, 10, 10, 10));
 
@@ -1283,10 +1283,10 @@ namespace SevenStrikeModules.XHud.Editor
             type: XGUIContainerType.Vertical,
             bg_fill: XGUIGroup.缺口纯色边框,
             bg_color: XGUIColor.亮白,
-            bg_color_gui: XHud_Dashboard.Theme_Group,
+            bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
             title: "参数",
             title_size: XGUIFontSize.M,
-            title_text_color: XHud_Dashboard.Theme_Primary,
+            title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_clipping: TextClipping.Clip,
             padding: new RectOffset(10, 10, 15, 15),
             foldout: BaseScript.fold_param);
@@ -1299,7 +1299,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "标识",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_Indicator,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1310,7 +1310,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "字体",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_font,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1321,7 +1321,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "锚点",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_anchor,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1334,7 +1334,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_property_field(
                         title: "均分",
                         title_size: XGUIFontSize.M,
-                        title_hover_color: XHud_Dashboard.Theme_Primary,
+                        title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         prop: sp_tmp_WrappingRatios,
                         prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1346,7 +1346,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "尺寸",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_size,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1359,7 +1359,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "最小尺寸",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_FontSizeMin,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1369,7 +1369,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "最大尺寸",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_FontSizeMax,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1379,7 +1379,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "字符宽度",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_CharWidthMaxAdj,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1389,7 +1389,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "最大行高",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_LineSpacingMax,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1403,7 +1403,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "包裹",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_contentwrap,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1414,7 +1414,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "包裹比例",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_WrappingRatios,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1425,7 +1425,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "溢出",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_overflow,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1436,7 +1436,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "样式",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_style,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1447,7 +1447,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "字符间距",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_space_character,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1458,7 +1458,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "单词间距",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_space_word,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1469,7 +1469,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "行高间距",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_space_lineheight,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1480,7 +1480,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "段落间距",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_space_paragraph,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1491,7 +1491,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "边距",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_contentmargin,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1502,7 +1502,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "颜色",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_tmp_color,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1513,7 +1513,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "颜色接管者",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_TextColorOwner,
                     prop_margin: new RectOffset(5, 5, 0, 5));
@@ -1550,10 +1550,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "渐变色",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_gradient);
@@ -1705,7 +1705,7 @@ namespace SevenStrikeModules.XHud.Editor
                         ok: "明白",
                         PrimaryIndex: 0,
                         usemodal: true,
-                        themecolor: XHud_Dashboard.Theme_Primary);
+                        themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 });
                 menu.AddItem(new GUIContent("V (粘贴样式)"), false, () =>
                 {
@@ -1728,7 +1728,7 @@ namespace SevenStrikeModules.XHud.Editor
                            ok: "明白",
                            PrimaryIndex: 0,
                            usemodal: true,
-                           themecolor: XHud_Dashboard.Theme_Primary);
+                           themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     else
                     {
@@ -1744,7 +1744,7 @@ namespace SevenStrikeModules.XHud.Editor
                             ok: "明白",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                 });
                 menu.AddSeparator("");
@@ -1771,7 +1771,7 @@ namespace SevenStrikeModules.XHud.Editor
                                    ok: "明白",
                                    PrimaryIndex: 0,
                                    usemodal: true,
-                                   themecolor: XHud_Dashboard.Theme_Primary);
+                                   themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                                 data.Title = info.Name;
                                 data.SubTitle = "文字样式类型未能匹配到";
@@ -1803,7 +1803,7 @@ namespace SevenStrikeModules.XHud.Editor
                             ok: "明白",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                     else
                     {
@@ -1817,7 +1817,7 @@ namespace SevenStrikeModules.XHud.Editor
                             ok: "明白",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                             return;
                         }
 
@@ -1834,7 +1834,7 @@ namespace SevenStrikeModules.XHud.Editor
                             ok: "明白",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                 });
                 menu.AddSeparator("");
@@ -1948,10 +1948,10 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "源脚本",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
                 foldout: BaseScript.fold_based);
@@ -2105,7 +2105,7 @@ namespace SevenStrikeModules.XHud.Editor
                              cancel: "选择",
                              PrimaryIndex: 0,
                              usemodal: true,
-                             themecolor: XHud_Dashboard.Theme_Primary);
+                             themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                         if (res == "选择")
                         {
@@ -2140,7 +2140,7 @@ namespace SevenStrikeModules.XHud.Editor
                       cancel: "选择",
                       PrimaryIndex: 0,
                       usemodal: true,
-                      themecolor: XHud_Dashboard.Theme_Primary);
+                      themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                     if (res == "选择")
                     {
@@ -2355,7 +2355,7 @@ namespace SevenStrikeModules.XHud.Editor
                 tog_bg_on_color: color_bg_on,
                 tog_handler_off_color: color_off,
                 tog_handler_on_color: color_on,
-                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                tog_mixed_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 act_on_changed: act_on_changed);
         }
         #endregion

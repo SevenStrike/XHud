@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEngine;
 
@@ -43,7 +44,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
             title: "音效音量",
             title_size: XGUIFontSize.M,
-            title_hover_color: XHud_Dashboard.Theme_Primary,
+            title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
             prop: Volume,
             prop_margin: new RectOffset(0, 0, 5, 0));
@@ -53,7 +54,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
             title: "动画速率",
             title_size: XGUIFontSize.M,
-            title_hover_color: XHud_Dashboard.Theme_Primary,
+            title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
             prop: DurationMultiply,
             prop_margin: new RectOffset(0, 0, 5, 0));
@@ -64,7 +65,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
             title: "字体尺寸",
             title_size: XGUIFontSize.M,
-            title_hover_color: XHud_Dashboard.Theme_Primary,
+            title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
             prop: FontSizeMultiply,
             prop_margin: new RectOffset(0, 0, 5, 0));
@@ -78,11 +79,11 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
             title: "光标指针",
             title_size: XGUIFontSize.M,
-            title_hover_color: XHud_Dashboard.Theme_Primary,
+            title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
             prop: Hud_MouseCursor,
             status_icon: "icon_field_status",
-            status_icon_color: Hud_MouseCursor.objectReferenceValue != null ? XHud_Dashboard.Theme_Primary : Color.black,
+            status_icon_color: Hud_MouseCursor.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
             prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -90,11 +91,11 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
             title: "转场控制器",
             title_size: XGUIFontSize.M,
-            title_hover_color: XHud_Dashboard.Theme_Primary,
+            title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
             prop: Hud_TransitionController,
             status_icon: "icon_field_status",
-            status_icon_color: Hud_TransitionController.objectReferenceValue != null ? XHud_Dashboard.Theme_Primary : Color.black,
+            status_icon_color: Hud_TransitionController.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
             prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
         }

@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace SevenStrikeModules.XHud.Editor
         private static void util_GetChildCount()
         {
             GameObject seleobject = Selection.activeGameObject;
-            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
 
             XGUI.dialog(
@@ -42,7 +43,7 @@ namespace SevenStrikeModules.XHud.Editor
                 ok: "明白",
                 PrimaryIndex: 0,
                 usemodal: true,
-                themecolor: XHud_Dashboard.Theme_Primary);
+                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
         }
         [MenuItem("GameObject/XHud/Utilitys (实用工具)/SelectedAllChild (选中所有子物体)", priority = -10)]
         private static void util_SelectedAllChild()

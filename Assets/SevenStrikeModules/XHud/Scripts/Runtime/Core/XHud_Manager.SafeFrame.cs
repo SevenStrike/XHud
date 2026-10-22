@@ -164,7 +164,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 锚点颜色 - 中心点
         /// </summary>
-        public Color Color_CenterMark = XHud_Dashboard.Theme_Primary;
+        public Color Color_CenterMark = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
         [Tooltip("安全框颜色")]
         /// <summary>
         /// 安全框颜色
@@ -174,7 +174,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 锚点颜色 - 主要方向
         /// </summary>
-        public Color Color_SeperaterLine = XHud_Dashboard.Theme_Primary;
+        public Color Color_SeperaterLine = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
         [Tooltip("安全框粗细")]
         /// <summary>
         /// 安全框粗细

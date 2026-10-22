@@ -47,7 +47,7 @@ namespace SevenStrikeModules.XHud.Editor
                       ok: "明白",
                       PrimaryIndex: 0,
                       usemodal: true,
-                      themecolor: XHud_Dashboard.Theme_Primary);
+                      themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 return;
             }
 
@@ -177,7 +177,7 @@ namespace SevenStrikeModules.XHud.Editor
                      ok: "明白",
                      PrimaryIndex: 0,
                      usemodal: true,
-                     themecolor: XHud_Dashboard.Theme_Primary);
+                     themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 return;
             }
 
@@ -219,7 +219,7 @@ namespace SevenStrikeModules.XHud.Editor
                      ok: "明白",
                      PrimaryIndex: 0,
                      usemodal: true,
-                     themecolor: XHud_Dashboard.Theme_Primary);
+                     themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 return;
             }
 
@@ -343,7 +343,7 @@ namespace SevenStrikeModules.XHud.Editor
                      ok: "明白",
                      PrimaryIndex: 0,
                      usemodal: true,
-                     themecolor: XHud_Dashboard.Theme_Primary);
+                     themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 return;
             }
 
@@ -410,7 +410,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(
               state: true,
-              x_color: XHud_Dashboard.Theme_Primary,
+              x_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
               x_title: "Seven Strike Media",
               x_msg: "元素动效预览中...",
               x_anchor: XHudSceneActivateMarkAnchor.左下);
@@ -649,18 +649,16 @@ namespace SevenStrikeModules.XHud.Editor
         private void Preview_Config_Load()
         {
             #region 动画预览器参数状态获取
-            XHud_Dashboard.LoadXHudElementPreviewConfig();
-
             // 自动杀死预览动画
-            AutoKillPreviewTweens.boolValue = XHud_Dashboard.Get_PreviewOption_AutoKillPreviewTweens();
+            AutoKillPreviewTweens.boolValue = XHud_Dashboard.element_get_preview_autokill();
             AutoKillPreviewTweens.serializedObject.ApplyModifiedProperties();
 
             // 预览杀死前重置动画
-            RewindPreviewTweensWithKill.boolValue = XHud_Dashboard.Get_PreviewOption_RewindPreviewTweensWithKill();
+            RewindPreviewTweensWithKill.boolValue = XHud_Dashboard.element_get_preview_rewind_before_kill();
             RewindPreviewTweensWithKill.serializedObject.ApplyModifiedProperties();
 
             // 预览杀死后清空预览列表
-            ClearPreviewTweensWithKill.boolValue = XHud_Dashboard.Get_PreviewOption_ClearPreviewTweensWithKill();
+            ClearPreviewTweensWithKill.boolValue = XHud_Dashboard.element_get_preview_clear_after_kill();
             ClearPreviewTweensWithKill.serializedObject.ApplyModifiedProperties();
             #endregion
         }

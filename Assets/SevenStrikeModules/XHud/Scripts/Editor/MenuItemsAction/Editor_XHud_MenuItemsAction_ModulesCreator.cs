@@ -163,7 +163,7 @@ namespace SevenStrikeModules.XHud.Editor
                     special: "TmpText",
                     PrimaryIndex: 2,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                 if (res == "暂不")
                     return;
@@ -240,7 +240,7 @@ namespace SevenStrikeModules.XHud.Editor
                    cancel: "添加",
                    PrimaryIndex: 1,
                    usemodal: true,
-                   themecolor: XHud_Dashboard.Theme_Primary);
+                   themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 if (res == "添加")
                 {
                     // 初始化图元控制器
@@ -294,7 +294,7 @@ namespace SevenStrikeModules.XHud.Editor
                     cancel: "添加",
                     PrimaryIndex: 1,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 if (res == "添加")
                 {
                     // 初始化图元控制器
@@ -341,7 +341,7 @@ namespace SevenStrikeModules.XHud.Editor
                     alt: "图标 & 文字",
                     PrimaryIndex: 1,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Button)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -362,7 +362,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 创建Button
             XHud_Module_Button btn = Mc_AddHudButton(btn_root, "Button", "XHud-Button");
             ColorBlock colors = btn.colors;
-            colors.pressedColor = XHud_Dashboard.Theme_Primary;
+            colors.pressedColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             btn.colors = colors;
             #endregion
 
@@ -389,7 +389,7 @@ namespace SevenStrikeModules.XHud.Editor
                    cancel: "无背景",
                    PrimaryIndex: 1,
                    usemodal: true,
-                   themecolor: XHud_Dashboard.Theme_Primary);
+                   themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                 if (res_bg == "有背景")
                 {
@@ -413,7 +413,7 @@ namespace SevenStrikeModules.XHud.Editor
                     cancel: "TmpText",
                     PrimaryIndex: 1,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                 if (res == "文字")
                 {
@@ -493,7 +493,7 @@ namespace SevenStrikeModules.XHud.Editor
                     cancel: "TmpText",
                     PrimaryIndex: 1,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Progress)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -517,7 +517,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XHud_Module_Text value = Mc_AddText(pro_root_rect, "Percentage", new Vector3(-35, 28, 0), Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(70, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.右, TextAnchor.MiddleRight, $"{pro.ProgressValue.ToString("F1")} %", 12, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 //创建Progress - 标题
-                XHud_Module_Text title = Mc_AddText(pro_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold.otf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, pro.con_title, 18, XHud_Dashboard.Theme_Primary, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text title = Mc_AddText(pro_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold.otf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, pro.con_title, 18, XHud_Dashboard.themes_get_color(ThemeColorType.primary), FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 //创建Progress - 副标题
                 XHud_Module_Text subtitle = Mc_AddText(pro_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, pro.con_subtitle, 12, Color.white * 0.65f, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
@@ -532,7 +532,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XHud_Module_TmpText value = Mc_AddTmpText(pro_root_rect, "Percentage", new Vector3(-35, 28, 0), Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(70, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{pro.ProgressValue.ToString("F1")} %", 12, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 //创建Progress - 标题
-                XHud_Module_TmpText title = Mc_AddTmpText(pro_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{pro.con_title}", 18, XHud_Dashboard.Theme_Primary, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText title = Mc_AddTmpText(pro_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{pro.con_title}", 18, XHud_Dashboard.themes_get_color(ThemeColorType.primary), FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 //创建Progress - 副标题
                 XHud_Module_TmpText subtitle = Mc_AddTmpText(pro_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{pro.con_subtitle}", 12, Color.white * 0.65f, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
@@ -565,7 +565,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 创建Progress - 轨道区域 - 前景
             GameObject pro_structure_fg = Mc_CreateObject("Fg", "XHud", Vector3.zero, Vector3.zero, Vector3.one, pro_structure_rect);
-            Image pro_img_fg = Mc_AddImage(pro_structure_fg, XHud_Dashboard.Theme_Primary, new Vector2(0, 1), new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), false);
+            Image pro_img_fg = Mc_AddImage(pro_structure_fg, XHud_Dashboard.themes_get_color(ThemeColorType.primary), new Vector2(0, 1), new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f), false);
             #endregion
 
             #region 创建Progress - 进度Mark
@@ -616,7 +616,7 @@ namespace SevenStrikeModules.XHud.Editor
                    cancel: "TmpText",
                    PrimaryIndex: 1,
                    usemodal: true,
-                   themecolor: XHud_Dashboard.Theme_Primary);
+                   themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Slider)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -641,7 +641,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XHud_Module_Text value = Mc_AddText(sli_root_rect, "Percentage", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(50, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0.5f), new Vector2(0, 2), ContentAnchor.右, TextAnchor.MiddleRight, $"{sli.value.ToString("F1")} %", 12, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 //创建Slider - 标题
-                XHud_Module_Text title = Mc_AddText(sli_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold.otf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, sli.con_title, 18, XHud_Dashboard.Theme_Primary, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
+                XHud_Module_Text title = Mc_AddText(sli_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold.otf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, sli.con_title, 18, XHud_Dashboard.themes_get_color(ThemeColorType.primary), FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
 
                 //创建Slider - 副标题
                 XHud_Module_Text subtitle = Mc_AddText(sli_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.左, TextAnchor.MiddleLeft, sli.con_subtitle, 12, Color.white * 0.65f, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
@@ -656,7 +656,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XHud_Module_TmpText value = Mc_AddTmpText(sli_root_rect, "Percentage", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(50, 25), new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0.5f), new Vector2(0, 2), TmpContentAnchor.右, TextAlignmentOptions.Right, $"{sli.value.ToString("F1")} %", 12, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 //创建Slider - 标题
-                XHud_Module_TmpText title = Mc_AddTmpText(sli_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{sli.con_title}", 18, XHud_Dashboard.Theme_Primary, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
+                XHud_Module_TmpText title = Mc_AddTmpText(sli_root_rect, "Title", new Vector3(115, -12.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_bold SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{sli.con_title}", 18, XHud_Dashboard.themes_get_color(ThemeColorType.primary), FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
 
                 //创建Slider - 副标题
                 XHud_Module_TmpText subtitle = Mc_AddTmpText(sli_root_rect, "Subtitle", new Vector3(115, -38.5f, 0), Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(130, 25), new Vector2(0, 1), new Vector2(0, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.左, TextAlignmentOptions.Left, $"{sli.con_subtitle}", 12, Color.white * 0.65f, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
@@ -689,7 +689,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 创建Slider - 滑动区域 - 前景
             GameObject sli_structure_fg = Mc_CreateObject("Fg", "XHud", Vector3.zero, Vector3.zero, Vector3.one, sli_structure_rect);
-            Image sli_img_fg = Mc_AddImage(sli_structure_fg, XHud_Dashboard.Theme_Primary, new Vector2(0, 0), new Vector2(1, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), new Vector2(0, 0), true);
+            Image sli_img_fg = Mc_AddImage(sli_structure_fg, XHud_Dashboard.themes_get_color(ThemeColorType.primary), new Vector2(0, 0), new Vector2(1, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), new Vector2(0, 0), true);
             #endregion
 
             #region 创建Slider - 控制柄限制器
@@ -755,7 +755,7 @@ namespace SevenStrikeModules.XHud.Editor
                   other: "纯净",
                   PrimaryIndex: 2,
                   usemodal: true,
-                  themecolor: XHud_Dashboard.Theme_Primary);
+                  themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Toggle)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -778,14 +778,14 @@ namespace SevenStrikeModules.XHud.Editor
             #region 创建Toggle
             XHud_Module_Toggle tog = Mc_AddHudToggle(tog_root, "Toggle", "XHud-Toggle");
             ColorBlock colors = tog.colors;
-            colors.pressedColor = XHud_Dashboard.Theme_Primary;
+            colors.pressedColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             tog.colors = colors;
             tog.BgCanToggle = true;
             #endregion
 
             #region 设置Toggle 颜色
             tog.Tog_Color_Bg_Unchecked = new Color(0.282353f, 0.282353f, 0.282353f, 1);
-            tog.Tog_Color_Bg_Checked = XHud_Dashboard.Theme_Primary;
+            tog.Tog_Color_Bg_Checked = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             tog.Tog_Color_Handle_Unchecked = new Color(0.8392157f, 0.8392157f, 0.8392157f, 1);
             tog.Tog_Color_Handle_Checked = new Color(0.2156863f, 0.2156863f, 0.2156863f, 1);
             #endregion
@@ -812,7 +812,7 @@ namespace SevenStrikeModules.XHud.Editor
                     cancel: "TmpText",
                     PrimaryIndex: 1,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                 if (res == "文字")
                 {
@@ -908,7 +908,7 @@ namespace SevenStrikeModules.XHud.Editor
                   alt: "图标 & 文字",
                   PrimaryIndex: 0,
                   usemodal: true,
-                  themecolor: XHud_Dashboard.Theme_Primary);
+                  themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Option)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
@@ -945,7 +945,7 @@ namespace SevenStrikeModules.XHud.Editor
                 cancel: "TmpText",
                 PrimaryIndex: 1,
                 usemodal: true,
-                themecolor: XHud_Dashboard.Theme_Primary);
+                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
             if (res == "Text")
             {
@@ -962,7 +962,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 创建 Selector 光标
             GameObject opt_selector = Mc_CreateObject("Selector", "XHud", new Vector3(-85, -22.5f), Vector3.zero, Vector3.one, opt_root_rect);
             Sprite opt_selector_sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_Path_XHUD_ROOT()}Sprites/Others/Opt_Selector2.png");
-            Image opt_img_selector = Mc_AddImage(opt_selector, XHud_Dashboard.Theme_Primary, new Vector2(31, 31), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), false);
+            Image opt_img_selector = Mc_AddImage(opt_selector, XHud_Dashboard.themes_get_color(ThemeColorType.primary), new Vector2(31, 31), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), false);
             opt_img_selector.sprite = opt_selector_sprite;
             option.SelectorMark = opt_img_selector.rectTransform;
             #endregion
@@ -986,7 +986,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 创建Button
                 XHud_Module_Button btn = Mc_AddHudButton(btn_root, ButtonText[i], "Item");
                 ColorBlock colors = btn.colors;
-                colors.pressedColor = XHud_Dashboard.Theme_Primary;
+                colors.pressedColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                 btn.colors = colors;
                 btn.BgColorSyncFade = true;
                 btn.IsOptionButton = true;

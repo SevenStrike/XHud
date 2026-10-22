@@ -28,26 +28,31 @@ namespace SevenStrikeModules.XHud
         /// 主题 Editor GUI 主色调
         /// </summary>
         [SerializeField]
-        public Vector3 theme_color;
+        public Vector3 theme_color_primary;
         /// <summary>
         /// 主题 Editor GUI 组背景色
         /// </summary>
         [SerializeField]
-        public Vector3 theme_color_gp;
+        public Vector3 theme_color_group;
         /// <summary>
         /// 主题 Editor GUI 分割线颜色
         /// </summary>
         [SerializeField]
-        public Vector3 theme_color_sep;
+        public Vector3 theme_color_sepline;
         /// <summary>
         /// 当前使用的主题方案名称
         /// </summary>
         [SerializeField]
-        public string ThemeSolution = "默认";
+        public string theme_solution_primary = "默认";
         /// <summary>
         /// 当前使用的主题边缘处理方案
         /// </summary>
         [SerializeField]
-        public string ThemeEdgeSolution = "默认";
+        public string theme_solution_group = "默认";
+        /// <summary>
+        /// 当前使用的主题边缘处理方案
+        /// </summary>
+        [SerializeField]
+        public string theme_solution_sepline = "默认";
     }
 }

@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using TMPro;
     using UnityEditor;
     using UnityEngine;
@@ -29,7 +30,7 @@ namespace SevenStrikeModules.XHud.Editor
     public class Editor_XHud_MenuItemsAction_ProjectUtility : EditorWindow
     {
         [MenuItem("Assets/XHud/ClearTmpFontAssetData (清理TMP字体资源图集缓存内容)", priority = 2000, validate = true)]
-        private static bool ValidateClearTmpFontAssetContent()
+        private static bool clear_tmp_font_asset_content_validate()
         {
             // 获取当前选中的对象
             Object selectedObject = Selection.activeObject;
@@ -38,7 +39,7 @@ namespace SevenStrikeModules.XHud.Editor
             return selectedObject is TMP_FontAsset;
         }
         [MenuItem("Assets/XHud/ClearTmpFontAssetData (清理TMP字体资源图集缓存内容)", priority = 2000)]
-        private static void ClearTmpFontAssetContent()
+        private static void clear_tmp_font_asset_content()
         {
             Object FontAsset = Selection.activeObject;
 
@@ -51,7 +52,7 @@ namespace SevenStrikeModules.XHud.Editor
                 cancel: "暂不",
                 PrimaryIndex: 1,
                 usemodal: true,
-                themecolor: XHud_Dashboard.Theme_Primary);
+                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             if (res == "暂不")
             {
                 return;
@@ -74,12 +75,13 @@ namespace SevenStrikeModules.XHud.Editor
                         ok: "明白",
                         PrimaryIndex: 0,
                         usemodal: true,
-                        themecolor: XHud_Dashboard.Theme_Primary);
+                        themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 }
             }
         }
+
         [MenuItem("Assets/XHud/AssignLibrary (设置为当前使用的资源库)", priority = 1000, validate = true)]
-        private static bool ValidateSetAssetLibrary()
+        private static bool set_asset_library_validate()
         {
             // 获取当前选中的对象
             Object selectedObject = Selection.activeObject;
@@ -105,7 +107,7 @@ namespace SevenStrikeModules.XHud.Editor
             return valid;
         }
         [MenuItem("Assets/XHud/AssignLibrary (设置为当前使用的资源库)", priority = 1000)]
-        private static void SetAssetLibrary()
+        private static void set_asset_library()
         {
             XHud_Manager manager = FindFirstObjectByType<XHud_Manager>();
 
@@ -175,6 +177,18 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI_Utilitys.Console("XHud - 库通知", "已将名称为： " + manager.Hud_Colors.LibraryName + " 的颜色库设为当前使用！", XGUIMsgState.通知);
                 }
             }
+        }
+
+        [MenuItem("Assets/XHud/CreateConfigs (创建XHud配置文件)", priority = 0, validate = true)]
+        private static bool create_configs_validate()
+        {
+            return Selection.objects.Length != 0;
+        }
+        [MenuItem("Assets/XHud/CreateConfigs (创建XHud配置文件)", priority = 0)]
+        private static void create_configs()
+        {
+            XHud_Dashboard.config_create();
+            XHud_Dashboard.config_save();
         }
     }
 }

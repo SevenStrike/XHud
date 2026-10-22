@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -344,10 +345,10 @@ namespace SevenStrikeModules.XHud.Editor
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
-                    bg_color_gui: XHud_Dashboard.Theme_Group,
+                    bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                     title: "参数",
                     title_size: XGUIFontSize.M,
-                    title_text_color: XHud_Dashboard.Theme_Primary,
+                    title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15));
 
@@ -355,7 +356,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "库名称",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
                 prop: sp_LibraryName,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -366,7 +367,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "过滤（包含）",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
                 prop: sp_Highlight,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -382,7 +383,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "查找（精确）",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
                 prop: sp_Find,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -403,11 +404,11 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 20, 15));
 
             #region 随机音高
-            DrawToggle("随机音高", sp_UseRandomPitch, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("随机音高", sp_UseRandomPitch, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             if (sp_UseRandomPitch.boolValue)
@@ -416,7 +417,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "最小音高",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_Pitch_Min,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -426,7 +427,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "最大音高",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_Pitch_Max,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -445,10 +446,10 @@ namespace SevenStrikeModules.XHud.Editor
                         type: XGUIContainerType.Horizontal,
                         bg_fill: XGUIGroup.缺口纯色边框,
                         bg_color: XGUIColor.亮白,
-                        bg_color_gui: XHud_Dashboard.Theme_Group,
+                        bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                         title: "快捷功能",
                         title_size: XGUIFontSize.M,
-                        title_text_color: XHud_Dashboard.Theme_Primary,
+                        title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_clipping: TextClipping.Clip,
                         padding: new RectOffset(15, 15, 20, 15));
 
@@ -538,7 +539,7 @@ namespace SevenStrikeModules.XHud.Editor
                             cancel: "暂不",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                         if (res == "暂不")
                             return;
 
@@ -589,10 +590,10 @@ namespace SevenStrikeModules.XHud.Editor
                type: XGUIContainerType.Vertical,
                bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
-               bg_color_gui: XHud_Dashboard.Theme_Group,
+               bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                title: "音效列表",
                title_size: XGUIFontSize.M,
-               title_text_color: XHud_Dashboard.Theme_Primary,
+               title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                title_clipping: TextClipping.Clip,
                padding: new RectOffset(10, 10, 15, 15));
 
@@ -680,7 +681,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     ok: "明白",
                                     PrimaryIndex: 0,
                                     usemodal: true,
-                                    themecolor: XHud_Dashboard.Theme_Primary);
+                                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                                 continue;
                             }
                             else
@@ -723,7 +724,7 @@ namespace SevenStrikeModules.XHud.Editor
                           ok: "明白",
                           PrimaryIndex: 0,
                           usemodal: true,
-                          themecolor: XHud_Dashboard.Theme_Primary);
+                          themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
                 }
             }
@@ -873,7 +874,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.gui_label(
                     rect: drawelement_rect,
                     text: new GUIContent("已定位"),
-                    text_color: XHud_Dashboard.Theme_Primary,
+                    text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     size: XGUIFontSize.S,
                     clipping: TextClipping.Clip,
                     anchor: TextAnchor.MiddleRight,
@@ -913,7 +914,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         item_rect.Set(1, i * sp_itemHeight.floatValue + 13, 5, 5);
                         // 高亮标记表示选中
-                        EditorGUI.DrawRect(item_rect, XHud_Dashboard.Theme_Primary);
+                        EditorGUI.DrawRect(item_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                         item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
                         // 高亮背景表示选中
                         EditorGUI.DrawRect(item_rect, SelectedBg);
@@ -1097,7 +1098,7 @@ namespace SevenStrikeModules.XHud.Editor
                 tog_bg_on_color: color_bg_on,
                 tog_handler_off_color: color_off,
                 tog_handler_on_color: color_on,
-                tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                tog_mixed_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 act_on_changed: act_on_changed);
         }
         #endregion

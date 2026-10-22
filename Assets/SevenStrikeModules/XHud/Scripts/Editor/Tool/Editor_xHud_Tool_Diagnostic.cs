@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using System.Collections.Generic;
     using System.IO;
     using UnityEditor;
@@ -246,7 +247,7 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem("Tools/XHud/Diagnostic ^#d")]
         static void Init()
         {
-            if (XHud_Dashboard.GetManager() == null)
+            if (XHud_Dashboard.get_manager() == null)
                 return;
             window = (Editor_XHud_Tool_Diagnostic)EditorWindow.GetWindow(typeof(Editor_XHud_Tool_Diagnostic), false, "XHUD 诊断/概况面板", true);
             XGUI.CenterEditorWindow(new Vector2Int(300, 560), window, false);
@@ -287,7 +288,7 @@ namespace SevenStrikeModules.XHud.Editor
             orthorgrphic = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_diagnostic/orthorgrphic");
             status_dot = XGUI.GetBasedIcon("icon_field_status");
 
-            HexPrimaryColor = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, false);
+            HexPrimaryColor = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), false);
         }
         /// <summary>
         /// 窗口禁用时清理。
@@ -325,7 +326,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnGUI()
         {
-            XHud_Manager mgr = XHud_Dashboard.GetManager();
+            XHud_Manager mgr = XHud_Dashboard.get_manager();
 
             BaseObject.Update();
 
@@ -362,7 +363,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_seperator(
                 rect: rect_seperate,
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0));
 
@@ -389,7 +390,7 @@ namespace SevenStrikeModules.XHud.Editor
                bg_color: XGUIColor.亮白,
                bg_gui_color: Color.black * 0.5f,
                text_color_normal: Color.white,
-               text_color_selected: XHud_Dashboard.Theme_Primary,
+               text_color_selected: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                bar_height: 25,
                text_anchor: TextAnchor.MiddleCenter,
                text_padding: new RectOffset(10, 10, 0, 4),
@@ -408,7 +409,7 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.无,
                 bg_color: XGUIColor.无,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "",
                 title_size: XGUIFontSize.M,
                 title_text_color: Color.white,
@@ -418,32 +419,32 @@ namespace SevenStrikeModules.XHud.Editor
             switch (diagnostic_panel_index)
             {
                 case 0:
-                    state_displayer("管理器已创建", status_dot, mgr == null ? Color.black : XHud_Dashboard.Theme_Primary);
-                    state_displayer("单例模式", status_dot, mgr.UseInstanceMode ? XHud_Dashboard.Theme_Primary : Color.black);
-                    state_displayer("画布尺寸指定", status_dot, mgr.ScreenRes == Vector2.zero ? Color.black : XHud_Dashboard.Theme_Primary);
-                    state_displayer("场景相机指定", status_dot, mgr.SceneCamera == null ? Color.black : XHud_Dashboard.Theme_Primary);
-                    state_displayer("世界坐标支持", status_dot, mgr.SupportWorldUI ? XHud_Dashboard.Theme_Primary : Color.black);
+                    state_displayer("管理器已创建", status_dot, mgr == null ? Color.black : XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer("单例模式", status_dot, mgr.UseInstanceMode ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer("画布尺寸指定", status_dot, mgr.ScreenRes == Vector2.zero ? Color.black : XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer("场景相机指定", status_dot, mgr.SceneCamera == null ? Color.black : XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer("世界坐标支持", status_dot, mgr.SupportWorldUI ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
 
                     XGUI.layout_seperator(thickness: 1,
                         color: Color.white * 0.5f,
                         margin: new RectOffset(15, 15, 10, 10));
 
-                    state_displayer($"{(mod_isexist_blurmask ? "已" : "未")}装配：模糊遮罩", status_dot, mod_isexist_blurmask ? XHud_Dashboard.Theme_Primary : Color.black);
-                    state_displayer($"{(mod_isexist_softmask ? "已" : "未")}装配：图元遮罩", status_dot, mod_isexist_softmask ? XHud_Dashboard.Theme_Primary : Color.black);
-                    state_displayer($"{(mod_isexist_psd ? "已" : "未")}装配：PSD 重建器", status_dot, mod_isexist_psd ? XHud_Dashboard.Theme_Primary : Color.black);
-                    state_displayer($"{(mod_isexist_color_capture ? "已" : "未")}装配：色调提取器", status_dot, mod_isexist_color_capture ? XHud_Dashboard.Theme_Primary : Color.black);
-                    state_displayer($"{(mod_isexist_gradient ? "已" : "未")}装配：渐变色卡", status_dot, mod_isexist_gradient ? XHud_Dashboard.Theme_Primary : Color.black);
-                    state_displayer($"{(mod_isexist_rotate_correct ? "已" : "未")}装配：旋转轴心矫正器", status_dot, mod_isexist_rotate_correct ? XHud_Dashboard.Theme_Primary : Color.black);
-                    state_displayer($"{(mod_isexist_mod_create ? "已" : "未")}装配：白模生成器", status_dot, mod_isexist_mod_create ? XHud_Dashboard.Theme_Primary : Color.black);
-                    state_displayer($"{(mod_isexist_mat_clean ? "已" : "未")}装配：材质清理器", status_dot, mod_isexist_mat_clean ? XHud_Dashboard.Theme_Primary : Color.black);
+                    state_displayer($"{(mod_isexist_blurmask ? "已" : "未")}装配：模糊遮罩", status_dot, mod_isexist_blurmask ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mod_isexist_softmask ? "已" : "未")}装配：图元遮罩", status_dot, mod_isexist_softmask ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mod_isexist_psd ? "已" : "未")}装配：PSD 重建器", status_dot, mod_isexist_psd ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mod_isexist_color_capture ? "已" : "未")}装配：色调提取器", status_dot, mod_isexist_color_capture ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mod_isexist_gradient ? "已" : "未")}装配：渐变色卡", status_dot, mod_isexist_gradient ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mod_isexist_rotate_correct ? "已" : "未")}装配：旋转轴心矫正器", status_dot, mod_isexist_rotate_correct ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mod_isexist_mod_create ? "已" : "未")}装配：白模生成器", status_dot, mod_isexist_mod_create ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mod_isexist_mat_clean ? "已" : "未")}装配：材质清理器", status_dot, mod_isexist_mat_clean ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
                     break;
                 case 1:
-                    state_displayer($"{(mgr.Hud_Colors != null ? "已" : "未")}装配：色卡库", status_dot, mgr.Hud_Colors != null ? XHud_Dashboard.Theme_Primary : Color.black);
-                    state_displayer($"{(mgr.Hud_Curves != null ? "已" : "未")}装配：曲线库", status_dot, mgr.Hud_Curves != null ? XHud_Dashboard.Theme_Primary : Color.black);
-                    state_displayer($"{(mgr.Hud_Sounds != null ? "已" : "未")}装配：音效库", status_dot, mgr.Hud_Sounds != null ? XHud_Dashboard.Theme_Primary : Color.black);
-                    state_displayer($"{(mgr.Hud_TextStyleLibrary != null ? "已" : "未")}装配：字体库", status_dot, mgr.Hud_TextStyleLibrary != null ? XHud_Dashboard.Theme_Primary : Color.black);
-                    state_displayer($"{(mgr.Hud_Motions != null ? "已" : "未")}装配：动效库", status_dot, mgr.Hud_Motions != null ? XHud_Dashboard.Theme_Primary : Color.black);
-                    state_displayer($"{(mgr.Hud_TransitionLib != null ? "已" : "未")}装配：转场库", status_dot, mgr.Hud_TransitionLib != null ? XHud_Dashboard.Theme_Primary : Color.black);
+                    state_displayer($"{(mgr.Hud_Colors != null ? "已" : "未")}装配：色卡库", status_dot, mgr.Hud_Colors != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mgr.Hud_Curves != null ? "已" : "未")}装配：曲线库", status_dot, mgr.Hud_Curves != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mgr.Hud_Sounds != null ? "已" : "未")}装配：音效库", status_dot, mgr.Hud_Sounds != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mgr.Hud_TextStyleLibrary != null ? "已" : "未")}装配：字体库", status_dot, mgr.Hud_TextStyleLibrary != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mgr.Hud_Motions != null ? "已" : "未")}装配：动效库", status_dot, mgr.Hud_Motions != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mgr.Hud_TransitionLib != null ? "已" : "未")}装配：转场库", status_dot, mgr.Hud_TransitionLib != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
 
                     XGUI.layout_seperator(thickness: 1,
                    color: Color.white * 0.5f,
@@ -568,7 +569,7 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     #endregion
 
-                    string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                    string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
                     #region 屏幕分辨率信息可视化
                     XGUI.layout_space(25);
@@ -601,7 +602,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.gui_label(
                       rect: new Rect(res.x + res.width / 2 - 50, res.y + res.height / 2 - 10, 100, XGUI.GetSingleLineHeight()),
                       text: new GUIContent($"宽高比：{(mgr.ScreenRes.x / mgr.ScreenRes.y).ToString("F2")}"),
-                      text_color: XHud_Dashboard.Theme_Primary,
+                      text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                       size: XGUIFontSize.M,
                       clipping: TextClipping.Overflow,
                       anchor: TextAnchor.MiddleCenter,
@@ -692,16 +693,16 @@ namespace SevenStrikeModules.XHud.Editor
                 case 3:
                     XHudElementsStatistic statistics = mgr.hm_Element_GetStatistic();
 
-                    state_displayer(icon_element, "元素", statistics.count_elements.ToString(), XHud_Dashboard.Theme_Primary);
-                    state_displayer(icon_primitive, "图元", statistics.count_primitives.ToString(), XHud_Dashboard.Theme_Primary);
-                    state_displayer(icon_sounder, "音效", statistics.count_sounders.ToString(), XHud_Dashboard.Theme_Primary);
-                    state_displayer(icon_option, "选项", statistics.count_options.ToString(), XHud_Dashboard.Theme_Primary);
-                    state_displayer(icon_button, "按钮", statistics.count_buttons.ToString(), XHud_Dashboard.Theme_Primary);
-                    state_displayer(icon_toggle, "开关", statistics.count_toggles.ToString(), XHud_Dashboard.Theme_Primary);
-                    state_displayer(icon_progress, "进度条", statistics.count_progresses.ToString(), XHud_Dashboard.Theme_Primary);
-                    state_displayer(icon_slider, "滑动条", statistics.count_sliders.ToString(), XHud_Dashboard.Theme_Primary);
-                    state_displayer(icon_text, "文字", statistics.count_texts.ToString(), XHud_Dashboard.Theme_Primary);
-                    state_displayer(icon_tmptext, "TMP 文字", statistics.count_tmptexts.ToString(), XHud_Dashboard.Theme_Primary);
+                    state_displayer(icon_element, "元素", statistics.count_elements.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer(icon_primitive, "图元", statistics.count_primitives.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer(icon_sounder, "音效", statistics.count_sounders.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer(icon_option, "选项", statistics.count_options.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer(icon_button, "按钮", statistics.count_buttons.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer(icon_toggle, "开关", statistics.count_toggles.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer(icon_progress, "进度条", statistics.count_progresses.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer(icon_slider, "滑动条", statistics.count_sliders.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer(icon_text, "文字", statistics.count_texts.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer(icon_tmptext, "TMP 文字", statistics.count_tmptexts.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     break;
             }
 
@@ -758,7 +759,7 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Horizontal,
                 bg_fill: XGUIGroup.无,
                 bg_color: XGUIColor.无,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 title: "",
                 title_size: XGUIFontSize.M,
                 title_text_color: Color.white,

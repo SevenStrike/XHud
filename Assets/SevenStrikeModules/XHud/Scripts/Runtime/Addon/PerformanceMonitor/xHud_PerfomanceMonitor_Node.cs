@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEngine;
 
@@ -128,9 +129,9 @@ namespace SevenStrikeModules.XHud
         [SerializeField] public XHud_Module_TmpText _tmp_value;
 
         [SerializeField] public Color _col_title = Color.white;
-        [SerializeField] public Color _col_value = XHud_Dashboard.Theme_Primary;
+        [SerializeField] public Color _col_value = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
 
-        [SerializeField] public Color _col_value_normal = XHud_Dashboard.Theme_Primary;
+        [SerializeField] public Color _col_value_normal = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
         [SerializeField] public Color _col_value_limited = new Color(1f, 0.3820755f, 0.3865624f, 1);
         /// <summary>
         /// Fps指标阈值

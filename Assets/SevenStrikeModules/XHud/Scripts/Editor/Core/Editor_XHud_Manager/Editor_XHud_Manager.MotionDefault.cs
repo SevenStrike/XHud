@@ -42,7 +42,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void Draw_MotionDefault()
         {
-            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             #region 生成
             #region 模版库 - 生成
@@ -67,7 +67,7 @@ namespace SevenStrikeModules.XHud.Editor
                         opt_font_style: FontStyle.Normal,
                         opt_bg_fill: XGUIGroup.实体,
                         opt_bg_color: XGUIColor.亮白,
-                        opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                        opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         icon_arrow_color: Color.black,
                         margin: new RectOffset(0, 0, 5, 5),
                         padding: new RectOffset(5, 5, 0, 0),
@@ -165,7 +165,7 @@ namespace SevenStrikeModules.XHud.Editor
                             cancel: "暂不",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary,
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             on_selected: (d) =>
                             {
                                 if (d == "重置")
@@ -204,7 +204,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                thickness: 1,
-               color: XHud_Dashboard.Theme_SeperateLine,
+               color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                margin: new RectOffset(15, 15, 18, 15));
 
             #region 参数 - 生成
@@ -214,7 +214,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
             title: "锚点",
             title_size: XGUIFontSize.M,
-            title_hover_color: XHud_Dashboard.Theme_Primary,
+            title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
             prop: sp_def_create_anchor,
             prop_margin: new RectOffset(0, 0, 5, 0));
@@ -236,7 +236,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "方式",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_create_move_type,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -247,7 +247,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "距离",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_create_move_dis,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -258,7 +258,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "耗时",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_create_move_dur,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -269,7 +269,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "延迟",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_create_move_delay,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -280,7 +280,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "曲线",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_create_move_curve,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -291,7 +291,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "缓动",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_create_move_ease,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -310,7 +310,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                   title: "方式",
                   title_size: XGUIFontSize.M,
-                  title_hover_color: XHud_Dashboard.Theme_Primary,
+                  title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   title_width: 90,
                   prop: sp_def_create_rot_type,
                   prop_margin: new RectOffset(0, 0, 5, 0));
@@ -321,7 +321,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                   title: "角度",
                   title_size: XGUIFontSize.M,
-                  title_hover_color: XHud_Dashboard.Theme_Primary,
+                  title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   title_width: 90,
                   prop: sp_def_create_rot_deg,
                   prop_margin: new RectOffset(0, 0, 5, 0));
@@ -332,7 +332,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                   title: "耗时",
                   title_size: XGUIFontSize.M,
-                  title_hover_color: XHud_Dashboard.Theme_Primary,
+                  title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   title_width: 90,
                   prop: sp_def_create_rot_dur,
                   prop_margin: new RectOffset(0, 0, 5, 0));
@@ -343,7 +343,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                   title: "延迟",
                   title_size: XGUIFontSize.M,
-                  title_hover_color: XHud_Dashboard.Theme_Primary,
+                  title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   title_width: 90,
                   prop: sp_def_create_rot_delay,
                   prop_margin: new RectOffset(0, 0, 5, 0));
@@ -354,7 +354,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                   title: "曲线",
                   title_size: XGUIFontSize.M,
-                  title_hover_color: XHud_Dashboard.Theme_Primary,
+                  title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   title_width: 90,
                   prop: sp_def_create_rot_curve,
                   prop_margin: new RectOffset(0, 0, 5, 0));
@@ -365,7 +365,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                   title: "缓动",
                   title_size: XGUIFontSize.M,
-                  title_hover_color: XHud_Dashboard.Theme_Primary,
+                  title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   title_width: 90,
                   prop: sp_def_create_rot_ease,
                   prop_margin: new RectOffset(0, 0, 5, 0));
@@ -383,7 +383,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "耗时",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_create_alpha_type,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -394,7 +394,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "延迟",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_create_alpha_delay,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -405,7 +405,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "曲线",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_create_alpha_curve,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -416,7 +416,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "缓动",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_create_alpha_ease,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -430,7 +430,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                    title: "动效结束时机",
                    title_size: XGUIFontSize.M,
-                   title_hover_color: XHud_Dashboard.Theme_Primary,
+                   title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                    title_width: 90,
                    prop: CreateArgs_MotionAnimateEndState,
                    prop_margin: new RectOffset(0, 0, 15, 0));
@@ -451,7 +451,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 ok: "明白",
                                 PrimaryIndex: 0,
                                 usemodal: true,
-                                themecolor: XHud_Dashboard.Theme_Primary);
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                             CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                         }
@@ -468,7 +468,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 ok: "明白",
                                 PrimaryIndex: 0,
                                 usemodal: true,
-                                themecolor: XHud_Dashboard.Theme_Primary);
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                             CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                         }
@@ -481,7 +481,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                 thickness: 3,
-                color: XHud_Dashboard.Theme_SeperateLine * 1.5f,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline) * 1.5f,
                 margin: new RectOffset(15, 15, 18, 15));
 
             #region 回收
@@ -507,7 +507,7 @@ namespace SevenStrikeModules.XHud.Editor
                         opt_font_style: FontStyle.Normal,
                         opt_bg_fill: XGUIGroup.实体,
                         opt_bg_color: XGUIColor.亮白,
-                        opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                        opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         icon_arrow_color: Color.black,
                         margin: new RectOffset(0, 0, 5, 5),
                         padding: new RectOffset(5, 5, 0, 0),
@@ -604,7 +604,7 @@ namespace SevenStrikeModules.XHud.Editor
                             cancel: "暂不",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary,
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             on_selected: (d) =>
                             {
                                 if (d == "重置")
@@ -641,7 +641,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 18, 15));
 
             #region 参数 - 回收
@@ -661,7 +661,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "方式",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_move_type,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -672,7 +672,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "距离",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_move_dis,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -683,7 +683,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "耗时",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_move_dur,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -694,7 +694,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "延迟",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_move_delay,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -705,7 +705,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "曲线",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_move_curve,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -716,7 +716,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "缓动",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_move_ease,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -734,7 +734,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "方式",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_rot_type,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -745,7 +745,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "角度",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_rot_deg,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -756,7 +756,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "耗时",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_rot_dur,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -767,7 +767,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "延迟",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_rot_delay,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -778,7 +778,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "曲线",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_rot_curve,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -789,7 +789,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "缓动",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_rot_ease,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -807,7 +807,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "耗时",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_alpha_type,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -818,7 +818,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "延迟",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_alpha_delay,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -829,7 +829,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "曲线",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_alpha_curve,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -840,7 +840,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "缓动",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
                     prop: sp_def_recycle_alpha_ease,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -854,7 +854,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "动效结束时机",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
                 prop: RecycleArgs_MotionAnimateEndState,
                 prop_margin: new RectOffset(0, 0, 15, 0));
@@ -875,7 +875,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 ok: "明白",
                                 PrimaryIndex: 0,
                                 usemodal: true,
-                                themecolor: XHud_Dashboard.Theme_Primary);
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                             RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                         }
@@ -892,7 +892,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 ok: "明白",
                                 PrimaryIndex: 0,
                                 usemodal: true,
-                                themecolor: XHud_Dashboard.Theme_Primary);
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                             RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
                         }

@@ -20,16 +20,15 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
-    using SevenStrikeModules.XGUI.Editor;
-    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
+    using UnityEditor.Callbacks;
     using UnityEngine;
 
     [InitializeOnLoad]
     public static class Editor_XHud_Tool_SceneView_Activate_Aimer
     {
-        #region 字段 - 标识内容
+        #region 字段 - 标识与尺寸
         /// <summary>
         /// 边框颜色。
         /// <para/>
@@ -37,7 +36,16 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>由 <c>SetEnabled</c> 重载设置。</description></item>
         /// </list>
         /// </summary>
-        public static Color color;
+        public static Color themecolor;
+        /// <summary>
+        /// 准星整体缩放系数。
+        /// <para/>
+        /// <list type="bullet">
+        /// <item><description>1 为默认大小，大于 1 放大，小于 1 缩小。</description></item>
+        /// <item><description>仅缩放斜线位置与长度，线条粗细、圆点尺寸、两组斜线间距不缩放。</description></item>
+        /// </list>
+        /// </summary>
+        private const float AIMER_SIZE = 2f;
         #endregion
 
         #region 字段 - 状态
@@ -65,15 +73,6 @@ namespace SevenStrikeModules.XHud.Editor
             SceneView.duringSceneGui += OnSceneGUI;
         }
         #endregion
-        /// <summary>
-        /// 准星整体缩放系数。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>1 为默认大小，大于 1 放大，小于 1 缩小。</description></item>
-        /// <item><description>仅缩放斜线位置与长度，线条粗细、圆点尺寸、两组斜线间距不缩放。</description></item>
-        /// </list>
-        /// </summary>
-        private const float AIMER_SIZE = 2f;
 
         #region 绘制 - 边框与标识
         /// <summary>
@@ -142,7 +141,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             Handles.BeginGUI();
 
-            Color lineColor = color == Color.clear ? Color.white : color;
+            Color lineColor = themecolor == Color.clear ? Color.white : themecolor;
 
             // 绘制内组四段斜线
             Handles.color = lineColor;
@@ -185,7 +184,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (!isEnabled)
             {
-                color = Color.clear;
+                themecolor = Color.clear;
             }
         }
         /// <summary>
@@ -200,7 +199,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// 设置启用状态及标识外观参数。
         /// <para/>
         /// <list type="bullet">
-        /// <item><description>颜色为透明时使用主题主色 <c>XHud_Dashboard.Theme_Primary</c>。</description></item>
+        /// <item><description>颜色为透明时使用主题主色 <c>XHud_Dashboard.themes_get_color(ThemeColorType.primary)</c>。</description></item>
         /// <item><description>调用 <c>SetEnabled</c> 重载应用状态。</description></item>
         /// </list>
         /// </summary>
@@ -214,12 +213,19 @@ namespace SevenStrikeModules.XHud.Editor
         public static void SetEnabled(bool state, Color x_color = default, string x_title = "", string x_msg = "", Texture2D x_logo = null, Vector2 x_size = default, XHudSceneActivateMarkAnchor x_anchor = XHudSceneActivateMarkAnchor.左下)
         {
             if (x_color == Color.clear)
-                color = XHud_Dashboard.Theme_Primary;
+                themecolor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             else
-                color = x_color;
+                themecolor = x_color;
 
             SetEnabled(state);
         }
         #endregion
+
+        [DidReloadScripts]
+        public static void reload()
+        {
+            themecolor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
+            isEnabled = XHud_Dashboard.utilitys_get_util_screeen_aimer();
+        }
     }
 }

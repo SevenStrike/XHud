@@ -124,7 +124,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         void OnEnable()
         {
-            HudManager = XHud_Dashboard.GetManager();
+            HudManager = XHud_Dashboard.get_manager();
 
             BaseScript = (XHud_Module_Option)target;
 
@@ -197,7 +197,7 @@ namespace SevenStrikeModules.XHud.Editor
                         #endregion
 
                         #region 类型图标         
-                        GUI.color = XHud_Dashboard.Theme_Primary;
+                        GUI.color = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                         Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight + 1, 10, 10), icon_anim);
                         GUI.color = Color.white;
                         #endregion
@@ -215,7 +215,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                         Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 50, rect.y + 4, 30, 19), "G", sp_glodur, 10, 40, LineHeight, 15);
 
-                        Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect.width - 80, rect.y + 4, 30, 19), $"{sp_maxdur.floatValue.ToString()} s", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, Vector2.zero, 11);
+                        Editor_XHud_GUI.Gui_Labelfield_Thin(new Rect(rect.width - 80, rect.y + 4, 30, 19), $"{sp_maxdur.floatValue.ToString()} s", HudFilled.无, HudColor.无, XHud_Dashboard.themes_get_color(ThemeColorType.primary), TextAnchor.MiddleCenter, Vector2.zero, 11);
                         #endregion
 
                         sp_node_con.serializedObject.ApplyModifiedProperties();
@@ -280,7 +280,7 @@ namespace SevenStrikeModules.XHud.Editor
                             title += btn.gameObject.name;
                         Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.width - (rect.width - 90), titleheight - 2, (rect.width * 0.45f) - 20, LineHeight), title, HudFilled.无, HudColor.亮白, Color.white, TextAnchor.MiddleLeft, Vector2.zero, 11, TextClipping.Clip);
 
-                        GUI.color = XHud_Dashboard.Theme_Primary;
+                        GUI.color = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                         Editor_XHud_GUI.Gui_Icon(new Rect(rect.width - (rect.width - 60), titleheight, 10, 10), icon_button);
 
                         #region 类型图标
@@ -288,7 +288,7 @@ namespace SevenStrikeModules.XHud.Editor
                         {
                             if (OptionIndex.intValue == index)
                             {
-                                GUI.color = XHud_Dashboard.Theme_Primary;
+                                GUI.color = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                             }
                             else
                             {
@@ -381,7 +381,7 @@ namespace SevenStrikeModules.XHud.Editor
                 Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 选项器 -> ( " + BaseScript.Indicator + " )", Color.white);
 
             #region 快捷功能
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "快捷功能", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "快捷功能", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
@@ -446,7 +446,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 选项
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Option>("状态调试", stroptions_debug, ref DebugState, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
@@ -465,7 +465,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 参数
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "参数", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "参数", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 选项按钮说明
@@ -548,34 +548,34 @@ namespace SevenStrikeModules.XHud.Editor
             string statu_title = "状态";
             if (Targets_Selected())
                 statu_title = "状态 - ( 批量模式 )";
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_title, XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_title, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             if (!Targets_Selected())
             {
                 #region 选项状态
-                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选项状态", 12, CurrentOptionName.stringValue, XHud_Dashboard.Theme_Primary, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选项状态", 12, CurrentOptionName.stringValue, XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                 #endregion
 
                 #region 动画相关
                 if (PrimitiveControllerNodes != null && PrimitiveControllerNodes.arraySize > 0)
                 {
                     #region 动画状态     
-                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, (XHudElementAnimateState)AnimateState.enumValueIndex == XHudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, (XHudElementAnimateState)AnimateState.enumValueIndex == XHudElementAnimateState.Animating ? "动画中" : "静止状态", AnimateState.enumValueIndex == 1 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray, 11);
                     #endregion
 
                     #region 最大耗时     
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, PrimitivesTweenMaxDuration.floatValue.ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, PrimitivesTweenMaxDuration.floatValue.ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     #endregion
 
                     #region 最大耗时        
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.DurationMultiply * PrimitivesTweenMaxDuration.floatValue).ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.DurationMultiply * PrimitivesTweenMaxDuration.floatValue).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     #endregion
                 }
                 #endregion
 
                 Editor_XHud_GUI.Gui_Layout_Space(5);
-                Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.Theme_SeperateLine);
+                Editor_XHud_GUI.Gui_Layout_Seperator(1, XHud_Dashboard.themes_get_color(ThemeColorType.sepline));
                 Editor_XHud_GUI.Gui_Layout_Space(10);
 
                 #region 当前选择的选项
@@ -641,24 +641,24 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 按钮状态
-                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选项状态", 12, SelectedObjects[OptionStatu_Index].CurrentOptionName, XHud_Dashboard.Theme_Primary, 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选项状态", 12, SelectedObjects[OptionStatu_Index].CurrentOptionName, XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                 #endregion
 
                 #region 动画相关
                 if (SelectedObjects[OptionStatu_Index].PrimitiveControllerNodes != null && SelectedObjects[OptionStatu_Index].PrimitiveControllerNodes.Count > 0)
                 {
                     #region 动画状态     
-                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[OptionStatu_Index].AnimateState == XHudElementAnimateState.Animating ? "动画中" : "静止状态", SelectedObjects[OptionStatu_Index].AnimateState == XHudElementAnimateState.Animating ? XHud_Dashboard.Theme_Primary : Color.gray, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[OptionStatu_Index].AnimateState == XHudElementAnimateState.Animating ? "动画中" : "静止状态", SelectedObjects[OptionStatu_Index].AnimateState == XHudElementAnimateState.Animating ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray, 11);
                     #endregion
 
                     SelectedObjects[OptionStatu_Index].PrimitivesTweenMaxDuration = PrimitiveTweens_MaxDuration_Get(SelectedObjects[OptionStatu_Index].PrimitiveControllerNodes, SelectedObjects[OptionStatu_Index].PrimitivesTweenGlobalDuration);
 
                     #region 最大耗时     
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, SelectedObjects[OptionStatu_Index].PrimitivesTweenMaxDuration.ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, SelectedObjects[OptionStatu_Index].PrimitivesTweenMaxDuration.ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     #endregion
 
                     #region 最大耗时        
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.DurationMultiply * SelectedObjects[OptionStatu_Index].PrimitivesTweenMaxDuration).ToString() + "秒", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.DurationMultiply * SelectedObjects[OptionStatu_Index].PrimitivesTweenMaxDuration).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     #endregion
                 }
                 #endregion               
@@ -672,7 +672,7 @@ namespace SevenStrikeModules.XHud.Editor
             string statu_statistic = "统计";
             if (Targets_Selected())
                 statu_statistic = "统计 - ( 批量模式 )";
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_statistic, XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, statu_statistic, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             if (!Targets_Selected())
@@ -686,14 +686,14 @@ namespace SevenStrikeModules.XHud.Editor
                     #region 组件数量 - 图元动画器
                     if (PrimitiveControllerNodes.arraySize > 0)
                     {
-                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, PrimitiveControllerNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, PrimitiveControllerNodes.arraySize.ToString() + " 个", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     }
                     #endregion
 
                     #region 组件数量 - 选项按钮
                     if (OptionButtonNodes.arraySize > 0)
                     {
-                        Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选项按钮", 12, OptionButtonNodes.arraySize.ToString() + " 个", XHud_Dashboard.Theme_Primary, 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选项按钮", 12, OptionButtonNodes.arraySize.ToString() + " 个", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     }
                     #endregion
                 }
@@ -740,14 +740,14 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 组件数量 - 图元动画器
                 if (SelectedObjects[OptionStatistic_Index].PrimitiveControllerNodes.Count > 0)
                 {
-                    Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, SelectedObjects[OptionStatistic_Index].PrimitiveControllerNodes.Count + " 个", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, SelectedObjects[OptionStatistic_Index].PrimitiveControllerNodes.Count + " 个", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                 }
                 #endregion
 
                 #region 组件数量 - 选项按钮
                 if (SelectedObjects[OptionStatistic_Index].OptionButtonNodes.Count > 0)
                 {
-                    Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选项按钮", 12, SelectedObjects[OptionStatistic_Index].OptionButtonNodes.Count + " 个", XHud_Dashboard.Theme_Primary, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选项按钮", 12, SelectedObjects[OptionStatistic_Index].OptionButtonNodes.Count + " 个", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                 }
                 #endregion
             }
@@ -764,7 +764,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 事件/列表
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "事件/列表", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "事件/列表", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 图元动画器列表
@@ -1061,7 +1061,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
 
             #region 源脚本
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             #region 原始变量

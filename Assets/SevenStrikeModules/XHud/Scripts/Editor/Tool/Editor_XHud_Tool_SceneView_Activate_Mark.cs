@@ -235,7 +235,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.gui_icon(
                     rect: rect_logo,
                     icon: logo,
-                    color: XHud_Dashboard.Theme_Primary);
+                    color: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             }
             #endregion
 
@@ -327,7 +327,7 @@ namespace SevenStrikeModules.XHud.Editor
         public static void SetEnabled(bool state, Color x_color = default, string x_title = "", string x_msg = "", Texture2D x_logo = null, Vector2 x_size = default, XHudSceneActivateMarkAnchor x_anchor = XHudSceneActivateMarkAnchor.左下)
         {
             if (x_color == Color.clear)
-                color = XHud_Dashboard.Theme_Primary;
+                color = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             else
                 color = x_color;
 

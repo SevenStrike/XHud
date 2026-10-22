@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using TMPro;
     using UnityEditor;
     using UnityEngine;
@@ -48,7 +49,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 subtitle: BluePrint_Displayed.boolValue ? "激活" : "未激活",
                 subtitle_size: XGUIFontSize.M,
-                subtitle_color: XHud_Dashboard.Theme_Primary,
+                subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 padding: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -86,7 +87,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "背景动画缓动 - 入场",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_Bg_AnimationEase_In,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -96,7 +97,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "背景动画缓动 - 出场",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_Bg_AnimationEase_Out,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -106,7 +107,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "背景淡化退场延迟",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_Bg_FadeAnimationDelay,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -127,14 +128,14 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                thickness: 1,
-               color: XHud_Dashboard.Theme_SeperateLine,
+               color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                margin: new RectOffset(15, 15, 5, 15));
 
             #region 叠加图像透明度
             XGUI.layout_property_field(
                 title: "叠加图像透明度",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_bg_mapOpacity,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -168,7 +169,7 @@ namespace SevenStrikeModules.XHud.Editor
                 opt_font_style: FontStyle.Normal,
                 opt_bg_fill: XGUIGroup.实体,
                 opt_bg_color: XGUIColor.亮白,
-                opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 icon_arrow_color: Color.black,
                 margin: new RectOffset(0, 0, 5, 5),
                 padding: new RectOffset(5, 5, 0, 0),
@@ -203,7 +204,7 @@ namespace SevenStrikeModules.XHud.Editor
                 opt_font_style: FontStyle.Normal,
                 opt_bg_fill: XGUIGroup.实体,
                 opt_bg_color: XGUIColor.亮白,
-                opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 icon_arrow_color: Color.black,
                 margin: new RectOffset(0, 0, 5, 5),
                 padding: new RectOffset(5, 5, 0, 0),
@@ -226,7 +227,7 @@ namespace SevenStrikeModules.XHud.Editor
                 opt_font_style: FontStyle.Normal,
                 opt_bg_fill: XGUIGroup.实体,
                 opt_bg_color: XGUIColor.亮白,
-                opt_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                opt_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 icon_arrow_color: Color.black,
                 margin: new RectOffset(0, 0, 5, 5),
                 padding: new RectOffset(5, 5, 0, 0),
@@ -241,7 +242,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_property_field(
                     title: "叠加图像平铺",
                     title_size: XGUIFontSize.M,
-                    title_hover_color: XHud_Dashboard.Theme_Primary,
+                    title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 120,
                     prop: BluePrint_bg_tilling,
                     prop_margin: new RectOffset(0, 0, 5, 0));
@@ -250,7 +251,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
               thickness: 1,
-              color: XHud_Dashboard.Theme_SeperateLine,
+              color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
               margin: new RectOffset(15, 15, 15, 15));
 
             #region 网格色
@@ -270,7 +271,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "网格透明度",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_grid_Opacity,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -281,7 +282,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "网格尺寸",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_grid_size,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -303,7 +304,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "网格线宽度",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_linewidth,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -313,7 +314,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "网格线百分比",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_Grid_LengthPercentage,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -323,7 +324,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "网格分级高差",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_Grid_LevelHeight,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -333,7 +334,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "网格动画结束",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_GridEnd,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -343,7 +344,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "网格动画速率",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_Grid_AnimationDuration,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -351,7 +352,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 15, 15));
 
             #region 大标题色
@@ -384,7 +385,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "水印大标题",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_title_content,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -394,7 +395,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "水印小标题",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_subtitle_content,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -404,7 +405,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "水印透明度",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_mark_opacity,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -414,7 +415,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "水印尺寸",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_mark_size,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -424,7 +425,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "水印间距",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_mark_space,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -434,7 +435,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "水印锚点",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_MarkAnchors,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -449,7 +450,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "水印 - 上边距",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: sp_mar_x,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -457,7 +458,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "水印 - 下边距",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: sp_mar_y,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -465,7 +466,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "水印 - 左边距",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: sp_mar_z,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -473,7 +474,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "水印 - 右边距",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: sp_mar_w,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -481,14 +482,14 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 15, 15));
 
             #region 总动画速度
             XGUI.layout_property_field(
                 title: "总动画速度",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_AnimationDuration,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -498,7 +499,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "网格动画缓动",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
                 prop: BluePrint_Grid_AnimationEase,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -506,27 +507,27 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 15, 15));
 
             #region 开始时退场状态
-            DrawToggle("开始时退场状态", BluePrint_OnStartHide, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("开始时退场状态", BluePrint_OnStartHide, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             #region 入/退场影响网格
-            DrawToggle("入/退场影响网格", Eft_Grid, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("入/退场影响网格", Eft_Grid, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             #region 入/退场影响网格透明度
-            DrawToggle("入/退场影响网格透明度", Eft_GridFade, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("入/退场影响网格透明度", Eft_GridFade, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             #region 入/退场影响背景
-            DrawToggle("入/退场影响背景", Eft_Bg, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("入/退场影响背景", Eft_Bg, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             #region 入/退场影响水印
-            DrawToggle("入/退场影响水印", Eft_Mark, 120, XGUIToggleStyle.实体, XHud_Dashboard.Theme_Primary, Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("入/退场影响水印", Eft_Mark, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
         }
         #endregion

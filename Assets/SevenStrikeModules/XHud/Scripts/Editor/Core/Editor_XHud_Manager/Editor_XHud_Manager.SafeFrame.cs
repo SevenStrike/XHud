@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.UI;
@@ -46,7 +47,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "角点标记",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: Color_LayoutAnchorMark,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -56,7 +57,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "中心标记",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: Color_CenterMark,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -66,7 +67,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "安全框",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: Color_FrameLine,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -76,7 +77,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "分割标记",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: Color_SeperaterLine,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -84,14 +85,14 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 20, 15));
 
             #region 角点标记尺寸
             XGUI.layout_property_field(
                 title: "角点标记尺寸",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: MarkSize,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -101,7 +102,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "安全框粗细",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: Safe_FrameLine_Width,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -111,7 +112,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "安全中分线长度",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: Safe_Seperater_Length,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -121,7 +122,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "安全框边距",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: Safe_FrameLine_Margins,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -131,7 +132,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "中心标记间距",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: Safe_CenterMarkDistance,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -141,7 +142,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "中心标记宽度",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: Safe_CenterMarkWidth,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -151,7 +152,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "中心标记长度",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
                 prop: Safe_CenterMarkLength,
                 prop_margin: new RectOffset(0, 0, 5, 0));
@@ -177,9 +178,9 @@ namespace SevenStrikeModules.XHud.Editor
                 button_text_font: XGUI.GetFont("xg-medium")))
             {
                 Color_LayoutAnchorMark.colorValue = Color.white;
-                Color_CenterMark.colorValue = XHud_Dashboard.Theme_Primary;
+                Color_CenterMark.colorValue = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                 Color_FrameLine.colorValue = Color.white * 0.7f;
-                Color_SeperaterLine.colorValue = XHud_Dashboard.Theme_Primary;
+                Color_SeperaterLine.colorValue = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                 MarkSize.floatValue = 10;
                 Safe_FrameLine_Width.floatValue = 0.5f;
                 Safe_Seperater_Length.floatValue = 30f;

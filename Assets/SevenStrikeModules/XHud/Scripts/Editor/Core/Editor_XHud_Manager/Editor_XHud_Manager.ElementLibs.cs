@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -105,7 +106,7 @@ namespace SevenStrikeModules.XHud.Editor
                 rect: new Rect(rect.x, rect.y + 3, rect.width - 5, 20),
                 title: null,
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 80,
                 prop: sp_elementlib);
         }

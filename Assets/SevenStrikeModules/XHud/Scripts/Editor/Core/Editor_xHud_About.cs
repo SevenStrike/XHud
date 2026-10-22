@@ -22,67 +22,10 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using System;
     using UnityEditor;
     using UnityEngine;
-
-    /// <summary>
-    /// XHud 开发信息数据类。
-    /// <para/>
-    /// <list type="bullet">
-    /// <item><description>由 <c>XHudDevsInfo.json</c> 反序列化而来。</description></item>
-    /// <item><description>用于在关于窗口中展示版本、简介、官网与文档地址。</description></item>
-    /// </list>
-    /// </summary>
-    [Serializable]
-    public class XHudDevInfos
-    {
-        /// <summary>
-        /// 版本号。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>从 JSON 中读取。</description></item>
-        /// </list>
-        /// </summary>
-        [SerializeField]
-        public string ver;
-        /// <summary>
-        /// 副标题。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>从 JSON 中读取。</description></item>
-        /// </list>
-        /// </summary>
-        [SerializeField]
-        public string sub;
-        /// <summary>
-        /// 插件简介。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>从 JSON 中读取。</description></item>
-        /// </list>
-        /// </summary>
-        [SerializeField]
-        public string intro;
-        /// <summary>
-        /// 官网地址。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>从 JSON 中读取。</description></item>
-        /// </list>
-        /// </summary>
-        [SerializeField]
-        public string website;
-        /// <summary>
-        /// 文档地址。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>从 JSON 中读取。</description></item>
-        /// </list>
-        /// </summary>
-        [SerializeField]
-        public string document;
-    }
 
     /// <summary>
     /// XHud 关于窗口。
@@ -115,7 +58,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>用于在 <c>OnGUI</c> 中展示版本、简介等信息。</description></item>
         /// </list>
         /// </summary>
-        public XHudDevInfos HudDevInfos;
+        public versioninfo infos;
         #endregion
 
         #region 字段 - 图标
@@ -141,15 +84,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         private void OnEnable()
         {
-            #region 读取Json数据
-            string datas = AssetDatabase.LoadAssetAtPath<TextAsset>(XHud_Dashboard.Get_Path_XHUD_CONFIG_Path() + "/XHudDevsInfo.json").text;
-            #endregion
-
-            #region 解析Json类
-            if (HudDevInfos == null)
-                HudDevInfos = new XHudDevInfos();
-            HudDevInfos = JsonUtility.FromJson<XHudDevInfos>(datas);
-            #endregion
+            infos = XHud_Dashboard.get_xhud_info();
 
             #region 获取图标
             icon_logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_about/logo");
@@ -169,7 +104,7 @@ namespace SevenStrikeModules.XHud.Editor
                 icon_padding: new RectOffset(0, 0, 0, 0),
                 icon_alignment: XGUIIconAlignment.中心);
             XGUI.layout_label(
-                text: $"{HudDevInfos.sub}  /  Version : {HudDevInfos.ver}",
+                text: $"{infos.sub}  /  Version : {infos.version}",
                 size: XGUIFontSize.M,
                 text_color: Color.white * 0.65f,
                 margin: new RectOffset(0, 0, 20, 0),
@@ -184,7 +119,7 @@ namespace SevenStrikeModules.XHud.Editor
                 margin: new RectOffset(30, 30, 30, 30),
                 padding: new RectOffset(0, 0, 0, 0));
             XGUI.layout_label(
-                text: $"此插件由 （南京塞维斯传媒）SevenStrikeMedia 独家开发",
+                text: infos.support,
                 size: XGUIFontSize.M,
                 text_color: Color.white * 0.7f,
                 margin: new RectOffset(0, 0, 0, 10),
@@ -194,7 +129,7 @@ namespace SevenStrikeModules.XHud.Editor
                 anchor: TextAnchor.MiddleCenter,
                 font: XGUI.GetFont("xg-medium"));
             XGUI.layout_label(
-                text: HudDevInfos.intro,
+                text: infos.intro,
                 size: XGUIFontSize.M,
                 text_color: Color.white * 0.9f,
                 margin: new RectOffset(20, 20, 0, 0),
@@ -226,7 +161,7 @@ namespace SevenStrikeModules.XHud.Editor
                 height: 25,
                 button_text_font: XGUI.GetFont("xg-medium")))
             {
-                XGUI_Utilitys.OpenURL(HudDevInfos.website);
+                XGUI_Utilitys.OpenURL(infos.website);
             }
             XGUI.layout_space(10);
             if (XGUI.layout_button(
@@ -234,11 +169,11 @@ namespace SevenStrikeModules.XHud.Editor
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Primary,
-                button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
+                button_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.themes_get_color(ThemeColorType.primary)) ? Color.black : Color.white,
                 press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
-                press_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.white : Color.black,
+                press_text_color: XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.themes_get_color(ThemeColorType.primary)) ? Color.white : Color.black,
                 font_size: XGUIFontSize.B,
                 anchor: TextAnchor.MiddleCenter,
                 margin: new RectOffset(0, 0, 0, 0),
@@ -246,7 +181,7 @@ namespace SevenStrikeModules.XHud.Editor
                 height: 25,
                 button_text_font: XGUI.GetFont("xg-medium")))
             {
-                XGUI_Utilitys.OpenURL(HudDevInfos.document);
+                XGUI_Utilitys.OpenURL(infos.document);
             }
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
         }

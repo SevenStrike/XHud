@@ -147,7 +147,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                 if (element == null && UseDebug.boolValue)
                 {
-                    string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                    string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                     XGUI_Utilitys.Console("XHud - 布局元素数据绑定器通知", $"未找到匹配ID<color={hex_col}> {valuebinder.ID} </b></color>的元素项！请确认布局元素生成器<b><color={hex_col}>  {space.ToString()}  </b></color>列表中存在ID为：<b><color={hex_col}>  {valuebinder.ID} </b></color>的布局元素数据！", XGUIMsgState.通知);
                 }
 
@@ -178,11 +178,11 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             #region 编辑数据绑定
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "可视化编辑", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "可视化编辑", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             if (Editor_XHud_GUI.Gui_Layout_Button("编辑", "在独立窗口中进行布局元素数据绑定操作", HudFilled
-                .实体, HudColor.深空灰, XHud_Dashboard.Theme_Primary, 30))
+                .实体, HudColor.深空灰, XHud_Dashboard.themes_get_color(ThemeColorType.primary), 30))
             {
                 Editor_XHud_LayoutSpawner_ValueBinder_SetTool window = EditorWindow.GetWindow<Editor_XHud_LayoutSpawner_ValueBinder_SetTool>(false);
 
@@ -195,7 +195,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 选项
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "选项", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "选项", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_LayoutSpawner_ValueBinder>("调试信息", stroptions_enabled, ref UseDebug, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
@@ -205,7 +205,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 元素项拖放区域
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "布局元素数据拖放区域", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "布局元素数据拖放区域", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
             Rect rect_drop = GUILayoutUtility.GetRect(200, 90);
@@ -276,11 +276,11 @@ namespace SevenStrikeModules.XHud.Editor
             if (isDraggingOver)
             {
                 Rect rect_drop_visual_icon = new Rect(rect_drop_visual.x + 5, rect_drop_visual.y + 5, rect_drop_visual.width - 10, rect_drop_visual.height - 10);
-                Editor_XHud_GUI.Gui_Icon(rect_drop_visual_icon, icon_edge, new RectOffset(25, 25, 25, 25), XHud_Dashboard.Theme_Primary);
-                Editor_XHud_GUI.Gui_Box(rect_drop_visual_icon, XHud_Dashboard.Theme_Primary * 0.2f);
+                Editor_XHud_GUI.Gui_Icon(rect_drop_visual_icon, icon_edge, new RectOffset(25, 25, 25, 25), XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                Editor_XHud_GUI.Gui_Box(rect_drop_visual_icon, XHud_Dashboard.themes_get_color(ThemeColorType.primary) * 0.2f);
 
                 Rect rect_drop_visual_text = new Rect(rect_drop_visual.x + 5, rect_drop_visual.y + 5, rect_drop_visual.width - 10, rect_drop_visual.height - 10);
-                Editor_XHud_GUI.Gui_Labelfield(rect_drop_visual_text, "添加到数据绑定列表", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, 12, Font_Bold);
+                Editor_XHud_GUI.Gui_Labelfield(rect_drop_visual_text, "添加到数据绑定列表", HudFilled.无, HudColor.无, XHud_Dashboard.themes_get_color(ThemeColorType.primary), TextAnchor.MiddleCenter, 12, Font_Bold);
             }
             else
             {
@@ -303,7 +303,7 @@ namespace SevenStrikeModules.XHud.Editor
         public void BindValue_Element(XHud_LayoutSpawner_Item item)
         {
             XHud_Module_Element ele = item.SpawnedElementNode.Element;
-            string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             // 用于覆盖原数据
             List<ElementBinder> BindList = new List<ElementBinder>();

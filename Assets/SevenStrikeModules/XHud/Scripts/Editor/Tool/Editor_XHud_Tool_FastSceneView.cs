@@ -23,6 +23,7 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud;
+    using SevenStrikeModules.XHud.Enums;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
@@ -123,16 +124,9 @@ namespace SevenStrikeModules.XHud.Editor
         {
             SceneView.duringSceneGui += OnSceneGUI;
 
-            // 初始化时从 EditorPrefs 读取保存的状态
-            bool savedState = XGUI.x_Editor_Data_Get_With_Bool(MENU_KEY_VISUAL_PLACER);
-            Editor_XHud_Tool_ElementVisualPlacer.SetEnabled(savedState);
+            Editor_XHud_Tool_SceneView_ElementVisualPlacer.SetEnabled(XHud_Dashboard.utilitys_get_util_screeen_element_visual_placer());
 
-            // 初始化时从 EditorPrefs 读取保存的状态
-            bool aimState = XGUI.x_Editor_Data_Get_With_Bool(MENU_KEY_VISUAL_AIMER);
-            Editor_XHud_Tool_SceneView_Activate_Aimer.SetEnabled(aimState);
-
-            bool idDisplay = XGUI.x_Editor_Data_Get_With_Bool(MENU_KEY_PRIMITIVE_CONTROLLER_ID_DISPLAY);
-            XHud_Dashboard.DisplayPrimitiveControllerIDConfig.XHudPrimitiveController_ID_Displayer = idDisplay;
+            Editor_XHud_Tool_SceneView_Activate_Aimer.SetEnabled(XHud_Dashboard.utilitys_get_util_screeen_aimer());
         }
         #endregion
 
@@ -181,7 +175,7 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0)))
             {
                 // 使用新的 API
-                XHud_Manager manager = XHud_Dashboard.GetManager();
+                XHud_Manager manager = XHud_Dashboard.get_manager();
 
                 if (manager != null)
                 {
@@ -196,11 +190,11 @@ namespace SevenStrikeModules.XHud.Editor
                             type: XGUIDialogType.警告,
                             windowtitle: "XHud - 快速视图工具消息",
                             title: "未找到管理器",
-                            msg: $"抱歉未在场景列表中找到 <color=#{XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary)}>XHud Manager</color>！",
+                            msg: $"抱歉未在场景列表中找到 <color=#{XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary))}>XHud Manager</color>！",
                             ok: "明白",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary);
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     };
                 }
             }
@@ -224,12 +218,12 @@ namespace SevenStrikeModules.XHud.Editor
                 GenericMenu menu = new GenericMenu();
 
                 // 获取当前视觉放置器的启用状态
-                bool isPlacerEnabled = Editor_XHud_Tool_ElementVisualPlacer.GetEnabled();
+                bool isPlacerEnabled = Editor_XHud_Tool_SceneView_ElementVisualPlacer.GetEnabled();
                 bool isAimEnabled = Editor_XHud_Tool_SceneView_Activate_Aimer.GetEnabled();
 
-                bool isPrimitiveControllerIDDisplay = XHud_Dashboard.DisplayPrimitiveControllerIDConfig.XHudPrimitiveController_ID_Displayer;
+                bool isPrimitiveControllerIDDisplay = XHud_Dashboard.primitive_get_controller_displayid();
 
-                XHud_Manager mgr = XHud_Dashboard.GetManager();
+                XHud_Manager mgr = XHud_Dashboard.get_manager();
                 if (mgr != null)
                 {
                     for (int i = 0; i < mgr.Anchors_Layout_Screen.Count; i++)
@@ -284,23 +278,21 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddItem(new GUIContent("T 元素视觉放置器"), isPlacerEnabled, () =>
                 {
                     bool newState = !isPlacerEnabled;
-                    Editor_XHud_Tool_ElementVisualPlacer.SetEnabled(newState);
-                    XGUI.x_Editor_Data_Set_With_Bool(MENU_KEY_VISUAL_PLACER, newState);
+                    Editor_XHud_Tool_SceneView_ElementVisualPlacer.SetEnabled(newState);
+                    XHud_Dashboard.utilitys_set_util_screeen_element_visual_placer(newState);
                 });
                 // ========== 可勾选的菜单项：元素视觉放置器 ==========
                 menu.AddItem(new GUIContent("A 视觉瞄具"), isAimEnabled, () =>
                 {
                     bool newState = !isAimEnabled;
                     Editor_XHud_Tool_SceneView_Activate_Aimer.SetEnabled(newState);
-                    XGUI.x_Editor_Data_Set_With_Bool(MENU_KEY_VISUAL_AIMER, newState);
+                    XHud_Dashboard.utilitys_set_util_screeen_aimer(newState);
                 });
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("P 图元ID在场景中显示"), isPrimitiveControllerIDDisplay, () =>
                 {
                     bool newState = !isPrimitiveControllerIDDisplay;
-                    XHud_Dashboard.DisplayPrimitiveControllerIDConfig.XHudPrimitiveController_ID_Displayer = newState;
-                    XHud_Dashboard.DisplayPrimitiveControllerIDConfig_Save();
-                    XGUI.x_Editor_Data_Set_With_Bool(MENU_KEY_PRIMITIVE_CONTROLLER_ID_DISPLAY, newState);
+                    XHud_Dashboard.primitive_set_controller_displayid(newState);
                 });
 
                 menu.AddItem(new GUIContent("R 刷新场景"), false, () =>

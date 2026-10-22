@@ -345,7 +345,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (DataList.Count > 0)
             {
                 TotalCount_rect = new Rect(rect.x + 26, rect.height - 52, 80, 30);
-                Editor_XHud_GUI.Gui_Labelfield(TotalCount_rect, DataList.Count.ToString(), HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 17, Font_Bold);
+                Editor_XHud_GUI.Gui_Labelfield(TotalCount_rect, DataList.Count.ToString(), HudFilled.无, HudColor.无, XHud_Dashboard.themes_get_color(ThemeColorType.primary), TextAnchor.MiddleLeft, Vector2.zero, 17, Font_Bold);
 
                 Editor_XHud_GUI.Gui_Labelfield(new Rect(TotalCount_rect.x + 30, TotalCount_rect.y + 1, 20, TotalCount_rect.height), " 项", HudFilled.无, HudColor.无, Color.gray, TextAnchor.MiddleLeft, Vector2.zero, 14, Font_Bold);
 
@@ -453,8 +453,8 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 标识名称
             Editor_XHud_GUI.Gui_Labelfield(title_rect, sp_title.stringValue, HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.亮白), TextAnchor.MiddleLeft, Vector2.zero, 12, TextClipping.Ellipsis);
-            Editor_XHud_GUI.Gui_Labelfield_Thin(sub_rect, sp_sub.stringValue, HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleLeft, Vector2.zero, 12);
-            Editor_XHud_GUI.Gui_Labelfield_Thin(msg_rect, sp_msg.stringValue, HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleRight, Vector2.zero, 12);
+            Editor_XHud_GUI.Gui_Labelfield_Thin(sub_rect, sp_sub.stringValue, HudFilled.无, HudColor.无, XHud_Dashboard.themes_get_color(ThemeColorType.primary), TextAnchor.MiddleLeft, Vector2.zero, 12);
+            Editor_XHud_GUI.Gui_Labelfield_Thin(msg_rect, sp_msg.stringValue, HudFilled.无, HudColor.无, XHud_Dashboard.themes_get_color(ThemeColorType.primary), TextAnchor.MiddleRight, Vector2.zero, 12);
             #endregion
         }
 
@@ -483,7 +483,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     itemmark_rect = new Rect(item_rect.x + 1, item_rect.y + 11, 5, 5);
                     // 高亮标记表示选中
-                    EditorGUI.DrawRect(itemmark_rect, XHud_Dashboard.Theme_Primary);
+                    EditorGUI.DrawRect(itemmark_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     itemmarkBg_rect = new Rect(item_rect.x, item_rect.y, item_rect.width + 20, item_rect.height);
                     // 高亮背景表示选中
                     EditorGUI.DrawRect(itemmarkBg_rect, new Color(0, 0, 0, 0.2f));
@@ -521,8 +521,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DialogType_BtnMode_1()
         {
-            GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
-            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Ok, "", HudFilled.实体, HudColor.亮白, XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Ok + PrimaryIndex))
+            GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
+            if (Editor_XHud_GUI.Gui_Layout_Button(Text_Ok, "", HudFilled.实体, HudColor.亮白, XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.themes_get_color(ThemeColorType.primary)) ? Color.black : Color.white, 12, ButtonWidth, ButtonHeight, Font_Bold, Text_Ok + PrimaryIndex))
             {
                 Close();
 
@@ -537,11 +537,11 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DialogType_BtnMode_2()
         {
-            Color textcolor = XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
+            Color textcolor = XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.themes_get_color(ThemeColorType.primary)) ? Color.black : Color.white;
 
             if (PrimaryIndex == 1)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {
@@ -557,7 +557,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
             if (PrimaryIndex == 0)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {
@@ -577,11 +577,11 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DialogType_BtnMode_3()
         {
-            Color textcolor = XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
+            Color textcolor = XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.themes_get_color(ThemeColorType.primary)) ? Color.black : Color.white;
 
             if (PrimaryIndex == 2)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {
@@ -598,7 +598,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
             if (PrimaryIndex == 1)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {
@@ -615,7 +615,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
             if (PrimaryIndex == 0)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {
@@ -636,11 +636,11 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DialogType_BtnMode_4()
         {
-            Color textcolor = XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
+            Color textcolor = XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.themes_get_color(ThemeColorType.primary)) ? Color.black : Color.white;
 
             if (PrimaryIndex == 3)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {
@@ -657,7 +657,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
             if (PrimaryIndex == 2)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {
@@ -674,7 +674,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
             if (PrimaryIndex == 1)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {
@@ -691,7 +691,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
             if (PrimaryIndex == 0)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {
@@ -712,11 +712,11 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void DialogType_BtnMode_5()
         {
-            Color textcolor = XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary) ? Color.black : Color.white;
+            Color textcolor = XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.themes_get_color(ThemeColorType.primary)) ? Color.black : Color.white;
 
             if (PrimaryIndex == 4)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {
@@ -733,7 +733,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
             if (PrimaryIndex == 3)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {
@@ -750,7 +750,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
             if (PrimaryIndex == 2)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {
@@ -767,7 +767,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
             if (PrimaryIndex == 1)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {
@@ -784,7 +784,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(ButtonDistance);
             if (PrimaryIndex == 0)
             {
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             }
             else
             {

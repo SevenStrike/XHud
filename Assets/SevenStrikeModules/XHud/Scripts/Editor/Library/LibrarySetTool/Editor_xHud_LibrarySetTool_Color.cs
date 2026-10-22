@@ -309,7 +309,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_seperator(
                 rect: rect_seperate,
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0));
 
@@ -333,7 +333,7 @@ namespace SevenStrikeModules.XHud.Editor
                 rect_group: rect_preview,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 bg_height: 0,
                 true,
                 true,
@@ -487,7 +487,7 @@ namespace SevenStrikeModules.XHud.Editor
               type: XGUIContainerType.Vertical,
               bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
-              bg_color_gui: XHud_Dashboard.Theme_Group,
+              bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
               title: "参数",
               title_size: XGUIFontSize.M,
               title_text_color: Color.white,
@@ -532,12 +532,12 @@ namespace SevenStrikeModules.XHud.Editor
                 state_title: "Hex：",
                 state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_Color.colorValue)}",
                 state_value_color: Color.gray,
-                state_dialog_theme_color: XHud_Dashboard.Theme_Primary);
+                state_dialog_theme_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             #endregion
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 15, 15));
 
             string col_string = XGUI_Utilitys.Color_To_String(sp_Color.colorValue);
@@ -566,7 +566,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.layout_seperator(
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 15, 15));
 
             #region RGBA
@@ -679,11 +679,11 @@ namespace SevenStrikeModules.XHud.Editor
                 ok: "明白",
                 PrimaryIndex: 0,
                 usemodal: true,
-                themecolor: XHud_Dashboard.Theme_Primary);
+                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 return;
             }
 
-            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
             bool exist = Target_Hud_ColorsLibrary.ColorsLibrary_IsExist(sp_ColorName.stringValue);
 
             if (exist)
@@ -698,7 +698,7 @@ namespace SevenStrikeModules.XHud.Editor
                     ok: "重命名",
                     PrimaryIndex: 0,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                     if (res == "重命名")
                     {
@@ -722,7 +722,7 @@ namespace SevenStrikeModules.XHud.Editor
                          ok: "明白",
                          PrimaryIndex: 0,
                          usemodal: true,
-                         themecolor: XHud_Dashboard.Theme_Primary);
+                         themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                 };
 
                 Close();
@@ -738,7 +738,7 @@ namespace SevenStrikeModules.XHud.Editor
                     cancel: "查看色卡库",
                     PrimaryIndex: 0,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                     if (res == "查看色卡库")
                     {
@@ -760,7 +760,7 @@ namespace SevenStrikeModules.XHud.Editor
                     cancel: "暂不",
                     PrimaryIndex: 0,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                 if (res_saved_turnon == "开启")
                 {
@@ -779,7 +779,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void UpdateToLibrary()
         {
-            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
             xHud_LibraryArg_Color info = new xHud_LibraryArg_Color();
             info.Name = sp_ColorName.stringValue;
             info.Color = sp_Color.colorValue;
@@ -988,7 +988,7 @@ namespace SevenStrikeModules.XHud.Editor
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 button_text_color: Color.black,
                 press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,

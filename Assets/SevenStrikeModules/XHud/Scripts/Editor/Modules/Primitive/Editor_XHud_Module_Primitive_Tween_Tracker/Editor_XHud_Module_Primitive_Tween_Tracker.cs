@@ -259,7 +259,7 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 常量：颜色
-        private string Theme_PrimaryColor = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary);
+        private string Theme_PrimaryColor = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary));
         private string DisableTextColor = XGUI_Utilitys.Color_To_HexString(Color.white * 0.85f);
         /// <summary> 
         ///轨道基础底色
@@ -1693,7 +1693,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_label(
                 text: targetName,
                 size: XGUIFontSize.M,
-                text_color: XHud_Dashboard.Theme_Primary,
+                text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 margin: new RectOffset(0, 10, 0, 0),
                 offset: new Vector2(0, 2),
                 clipping: XGUI.TryEllipsisClipping(),
@@ -1905,7 +1905,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: "重置轨道",
                 tooltip: "",
                 button_text_color: Color.white,
-                press_text_color: XHud_Dashboard.Theme_Primary,
+                press_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 font_size: XGUIFontSize.M,
                 anchor: TextAnchor.MiddleCenter,
                 margin: new RectOffset(0, 0, 0, 0),
@@ -1925,7 +1925,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: "合适范围",
                 tooltip: "",
                 button_text_color: Color.white,
-                press_text_color: XHud_Dashboard.Theme_Primary,
+                press_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 font_size: XGUIFontSize.M,
                 anchor: TextAnchor.MiddleCenter,
                 margin: new RectOffset(0, 0, 0, 0),
@@ -2128,7 +2128,7 @@ namespace SevenStrikeModules.XHud.Editor
                    tog_bg_on_color: color_bg_on,
                    tog_handler_off_color: color_off,
                    tog_handler_on_color: color_on,
-                   tog_mixed_bg_color_gui: XHud_Dashboard.Theme_Primary,
+                   tog_mixed_bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                    act_on_changed: act_on_changed);
         }
         #endregion

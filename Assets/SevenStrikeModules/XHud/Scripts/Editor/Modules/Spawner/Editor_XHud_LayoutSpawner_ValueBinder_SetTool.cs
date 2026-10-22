@@ -473,7 +473,7 @@
             #endregion
 
             #region 元素Name
-            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + (rect.width - 190), currentY + 2, 150, 18), binder.Name, HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleRight, 12, Font_Light);
+            Editor_XHud_GUI.Gui_Labelfield(new Rect(rect.x + (rect.width - 190), currentY + 2, 150, 18), binder.Name, HudFilled.无, HudColor.无, XHud_Dashboard.themes_get_color(ThemeColorType.primary), TextAnchor.MiddleRight, 12, Font_Light);
             #endregion
 
             #region 绘制索引标签（右侧）
@@ -500,7 +500,7 @@
             else
             {
                 // 提示没有子项
-                string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                 Editor_XHud_GUI.Gui_Labelfield_WrapText(new Rect(rect.x + 10, currentY + 15, rect.width - 35, 40), "该元素下暂未绑定任何图元控制器", HudFilled.无, HudColor.无, Color.white * 0.85f, TextAnchor.UpperLeft, Vector2.zero, 11, true, true, TextClipping.Ellipsis, true, Font_Light);
 
                 currentY += 48;
@@ -513,7 +513,7 @@
             {
                 AddBinder_Primitive(index);
             }
-            GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+            GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             rect_addPrim.Set(rect_addPrim.x + rect_addPrim.width / 2 - 6, rect_addPrim.y + rect_addPrim.height / 2 - 6, 12, 12);
             Editor_XHud_GUI.Gui_Icon(rect_addPrim, icon_add_r);
             GUI.backgroundColor = Color.white;
@@ -579,7 +579,7 @@
 
             #region 图元类型图标 
             Texture2D icon = GetPrimtiveTypeIcon(binderItem.type);
-            Editor_XHud_GUI.Gui_Icon(new Rect(rect.x + 35, currentY + 3, icon.width, icon.height), icon, XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Icon(new Rect(rect.x + 35, currentY + 3, icon.width, icon.height), icon, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             #endregion
 
             #region 删除按钮（右上角）
@@ -600,7 +600,7 @@
             #endregion
 
             #region 定位图元按钮（右下角）
-            GUI.color = XHud_Dashboard.Theme_Primary;
+            GUI.color = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             if (Editor_XHud_GUI.Gui_Button(new Rect(rect.x + rect.width - 46, rect.y + rect.height - 60, 50, 50), icon_locate_r, icon_locate_p, true, "", "", Color.white))
             {
                 // 开始瞄准
@@ -1015,7 +1015,7 @@
                 Editor_XHud_GUI.Gui_Icon(rect_drop_visual_icon, icon_import);
 
                 Rect rect_drop_visual_text = new Rect(0, rect_drop_visual.y + rect_drop_visual.height / 2 - 30, rect_drop_visual.width, 50);
-                Editor_XHud_GUI.Gui_Labelfield(rect_drop_visual_text, "添加到绑定列表", HudFilled.无, HudColor.无, XHud_Dashboard.Theme_Primary, TextAnchor.MiddleCenter, 16, Font_Bold);
+                Editor_XHud_GUI.Gui_Labelfield(rect_drop_visual_text, "添加到绑定列表", HudFilled.无, HudColor.无, XHud_Dashboard.themes_get_color(ThemeColorType.primary), TextAnchor.MiddleCenter, 16, Font_Bold);
 
                 Rect rect_drop_visual_text_sub = new Rect(0, rect_drop_visual_text.y + rect_drop_visual_text.height / 2 + 10, rect_drop_visual_text.width, 50);
                 Editor_XHud_GUI.Gui_Labelfield(rect_drop_visual_text_sub, "松开鼠标立即添加", HudFilled.无, HudColor.无, Color.white * 0.65f, TextAnchor.MiddleCenter, 12, Font_Light);
@@ -1069,9 +1069,9 @@
         /// </summary>
         private void DrawListArea()
         {
-            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 10, "数据绑定器配置", XHud_Dashboard.Theme_Primary);
+            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 10, "数据绑定器配置", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
             Editor_XHud_GUI.Gui_Layout_Space(10);
 
@@ -1145,7 +1145,7 @@
         /// </summary>
         private void DrawStatusBar()
         {
-            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             GUILayout.FlexibleSpace();
 
@@ -1188,7 +1188,7 @@
         public void BindValue_Element(XHud_LayoutSpawner_Item item)
         {
             XHud_Module_Element ele = item.SpawnedElementNode.Element;
-            string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             // 用于覆盖原数据
             List<ElementBinder> BindList = new List<ElementBinder>();

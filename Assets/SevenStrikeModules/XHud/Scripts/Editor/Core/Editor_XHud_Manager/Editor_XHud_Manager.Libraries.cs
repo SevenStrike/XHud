@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEngine;
 
@@ -41,61 +42,61 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "色卡库",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 prop: Lib_Color,
                 status_icon: "icon_field_status",
-                status_icon_color: Lib_Color.objectReferenceValue != null ? XHud_Dashboard.Theme_Primary : Color.black,
+                status_icon_color: Lib_Color.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
             XGUI.layout_property_field(
                 title: "曲线库",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 prop: Lib_Curve,
                 status_icon: "icon_field_status",
-                status_icon_color: Lib_Curve.objectReferenceValue != null ? XHud_Dashboard.Theme_Primary : Color.black,
+                status_icon_color: Lib_Curve.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
             XGUI.layout_property_field(
                 title: "音效库",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 prop: Lib_Sound,
                 status_icon: "icon_field_status",
-                status_icon_color: Lib_Sound.objectReferenceValue != null ? XHud_Dashboard.Theme_Primary : Color.black,
+                status_icon_color: Lib_Sound.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
             XGUI.layout_property_field(
                 title: "字体库",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 prop: Lib_TextStyleLibrary,
                 status_icon: "icon_field_status",
-                status_icon_color: Lib_TextStyleLibrary.objectReferenceValue != null ? XHud_Dashboard.Theme_Primary : Color.black,
+                status_icon_color: Lib_TextStyleLibrary.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
             XGUI.layout_property_field(
                 title: "动效库",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 prop: Lib_Motions,
                 status_icon: "icon_field_status",
-                status_icon_color: Lib_Motions.objectReferenceValue != null ? XHud_Dashboard.Theme_Primary : Color.black,
+                status_icon_color: Lib_Motions.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
             XGUI.layout_property_field(
                 title: "转场库",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 prop: Lib_Transition,
                 status_icon: "icon_field_status",
-                status_icon_color: Lib_Transition.objectReferenceValue != null ? XHud_Dashboard.Theme_Primary : Color.black,
+                status_icon_color: Lib_Transition.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
             XGUI.layout_space(5);

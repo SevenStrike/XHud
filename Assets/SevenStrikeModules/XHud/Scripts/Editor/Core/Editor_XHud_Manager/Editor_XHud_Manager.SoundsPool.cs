@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
@@ -40,7 +41,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void Draw_SoundsPool()
         {
-            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             string msg = $"音效池支持提供<b><color={hexcol}> 回环队列池化 音效 / 音乐 / 声音播放 </color></b>的能力，如果您的项目<b><color={hexcol}> 不涉及UI音效 </color></b>则可忽略该提示！并保持<b><color={hexcol}> 预加载数量为0 </color></b>";
 
@@ -62,11 +63,11 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
              title: "预加载数量",
              title_size: XGUIFontSize.M,
-             title_hover_color: XHud_Dashboard.Theme_Primary,
+             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_width: 100,
              prop: SounderPoolCount,
              //status_icon: "icon_field_status",
-             //status_icon_color: Lib_TextStyleLibrary.objectReferenceValue != null ? XHud_Dashboard.Theme_Primary : Color.black,
+             //status_icon_color: Lib_TextStyleLibrary.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
              prop_margin: new RectOffset(0, 0, 10, 10));
 
             List_SoundsPool.DoLayoutList();
@@ -129,13 +130,13 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_icon(
                    rect: new Rect(rect.x + 5, rect.y + 6, 14, 14),
                    icon: soundplaying,
-                   color: isplaying.boolValue ? XHud_Dashboard.Theme_Primary : Color.gray);
+                   color: isplaying.boolValue ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray);
 
             XGUI.gui_property_field(
                 rect: new Rect(rect.x + 28, rect.y + 5, rect.width - 25, 20),
                 title: new GUIContent(player.name),
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 80,
                 prop: player);
         }

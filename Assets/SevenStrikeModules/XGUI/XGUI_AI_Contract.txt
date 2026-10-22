@@ -2037,7 +2037,7 @@ public class Editor_MyComponent : Editor
       · 列表管理窗口（如元素库选择器）
       · 预览型窗口（如转场修改器）
   - 生成时按需增删，但抬头 / 按钮 / 事件处理三段必须保留。
-  - 主题色统一用 color_primary（XHud 项目里叫 XHud_Dashboard.Theme_Primary）。
+  - 主题色统一用 color_primary（XHud 项目里叫 XHud_Dashboard.themes_get_color(ThemeColorType.primary)）。
 
 【前置 using】
     using SevenStrikeModules.XGUI.Editor;

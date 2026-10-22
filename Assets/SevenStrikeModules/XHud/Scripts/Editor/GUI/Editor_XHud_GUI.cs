@@ -575,7 +575,7 @@ namespace SevenStrikeModules.XHud.Editor
                 Style.normal.background = null;
 
             Color bgcol = GUI.backgroundColor;
-            GUI.backgroundColor = XHud_Dashboard.Theme_Group;
+            GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.group);
             GUI.BeginGroup(rect_group, Style);
             GUI.EndGroup();
             GUI.backgroundColor = bgcol;
@@ -843,7 +843,7 @@ namespace SevenStrikeModules.XHud.Editor
                 else
                     x = 0;
                 Color bgcol = GUI.backgroundColor;
-                GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+                GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                 x = GUI.Toolbar(rect, x, Options, Style);
                 GUI.backgroundColor = bgcol;
                 if (x == 1)
@@ -876,7 +876,7 @@ namespace SevenStrikeModules.XHud.Editor
             Style.onNormal.textColor = TextColor_Selected;
 
             Color bgcol = GUI.backgroundColor;
-            GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+            GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             Val = GUI.Toolbar(rect, Val, Options, Style);
             GUI.backgroundColor = bgcol;
             return Val;
@@ -1370,7 +1370,7 @@ namespace SevenStrikeModules.XHud.Editor
             guicontent.text = BannerText;
             BannerStyle.normal.textColor = TextColor;
             Color bgcol = GUI.color;
-            GUI.color = XHud_Dashboard.Theme_Primary;
+            GUI.color = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             GUILayout.BeginVertical(guicontent, BannerStyle);
             GUI.color = bgcol;
             GUILayout.EndVertical();
@@ -1409,7 +1409,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             GUILayout.BeginHorizontal(BannerStyle);
             Color bgcol = GUI.color;
-            GUI.color = XHud_Dashboard.Theme_Primary;
+            GUI.color = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             GUILayout.Box(Logo, BannerLogo);
             GUI.color = bgcol;
             GUILayout.Space(10);
@@ -1450,7 +1450,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             GUILayout.BeginHorizontal(BannerStyle);
             Color bgcol = GUI.color;
-            GUI.color = XHud_Dashboard.Theme_Primary;
+            GUI.color = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             GUILayout.Box(Logo, BannerLogo);
             GUI.color = bgcol;
             GUILayout.Space(10);
@@ -1834,7 +1834,7 @@ namespace SevenStrikeModules.XHud.Editor
             Style.normal.background = GetBtnFillTexture(FillStyle, HudColor.亮白);
             Style.onNormal.background = GetBtnFillTexture(FillStyle, HudColor.亮白);
             Style.margin = new RectOffset(0, 0, -1, 0);
-            if (XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary))
+            if (XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.themes_get_color(ThemeColorType.primary)))
             {
                 Style.normal.textColor = Color.black;
                 Style.onNormal.textColor = Color.black;
@@ -1852,7 +1852,7 @@ namespace SevenStrikeModules.XHud.Editor
             GUILayout.FlexibleSpace();
 
             Color bgcol = GUI.backgroundColor;
-            GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+            GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
 
             // 获取嵌套字段的值
             T firstValue = GetNestedFieldValue<T>(objects[0], fieldName);
@@ -2156,7 +2156,7 @@ namespace SevenStrikeModules.XHud.Editor
             Style.onNormal.background = GetBtnFillTexture(FillStyle_Selected, HudColor.亮白);
             Style.margin = new RectOffset(0, 0, -1, 0);
             Style.normal.textColor = TextColor_Normal;
-            if (XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.Theme_Primary))
+            if (XGUI_Utilitys.ColorBrightness_LimiteGet(XHud_Dashboard.themes_get_color(ThemeColorType.primary)))
             {
                 Style.onNormal.textColor = Color.black * 0.9f;
             }
@@ -2172,7 +2172,7 @@ namespace SevenStrikeModules.XHud.Editor
             GUILayout.FlexibleSpace();
 
             Color bgcol = GUI.backgroundColor;
-            GUI.backgroundColor = XHud_Dashboard.Theme_Primary;
+            GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
 
             if (objects.Length > 1)
             {
@@ -2454,7 +2454,7 @@ namespace SevenStrikeModules.XHud.Editor
             else
                 Style.normal.background = null;
             Color bgcol = GUI.backgroundColor;
-            GUI.backgroundColor = XHud_Dashboard.Theme_Group;
+            GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.group);
             GUILayout.BeginVertical(Style);
             GUI.backgroundColor = bgcol;
             Gui_Layout_Space(Margin);
@@ -2475,7 +2475,7 @@ namespace SevenStrikeModules.XHud.Editor
                 Style.normal.background = null;
             GUILayout.Space(5 + Margin);
             Color bgcol = GUI.backgroundColor;
-            GUI.backgroundColor = XHud_Dashboard.Theme_Group;
+            GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.group);
             Gui_Layout_Labelfield(Title, HudFilled.无, HudColor.无, TitleColor, TextAnchor.MiddleLeft, new Vector2(20, 2), 12);
             GUILayout.BeginVertical(Style);
             GUI.backgroundColor = bgcol;
@@ -2497,7 +2497,7 @@ namespace SevenStrikeModules.XHud.Editor
                 Style.normal.background = null;
             GUILayout.Space(5 + Margin);
             Color bgcol = GUI.backgroundColor;
-            GUI.backgroundColor = XHud_Dashboard.Theme_Group;
+            GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.group);
             if (Gui_Layout_Button(Title, "", HudFilled.透明, HudColor.无, TitleColor, 20, Btn_Margin, Btn_Offset, TextAnchor.MiddleLeft, 12, GetFont("sx_regular")))
             {
                 fold = !fold;
@@ -2528,7 +2528,7 @@ namespace SevenStrikeModules.XHud.Editor
                 Style.normal.background = null;
             Style.margin = Margin;
             Color bgcol = GUI.backgroundColor;
-            GUI.backgroundColor = XHud_Dashboard.Theme_Group;
+            GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.group);
             GUILayout.BeginVertical(Style);
             GUI.backgroundColor = bgcol;
             Gui_Layout_Space(Space);

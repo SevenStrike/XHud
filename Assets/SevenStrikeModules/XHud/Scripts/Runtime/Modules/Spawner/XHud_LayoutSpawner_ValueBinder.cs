@@ -106,7 +106,7 @@ namespace SevenStrikeModules.XHud
 
             if (UseDebug)
             {
-                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
                 XGUI_Utilitys.Console("XHud - 布局元素数据绑定器消息", $"已生成元素： \n目标空间：<b><color={hex_col}> {space.ToString()} </color></b>\n名称：<b><color={hex_col}> {elementnode.Element.name} </color></b>\n生成项ID：<b><color={hex_col}> {ID} </color></b>\n", XGUIMsgState.通知);
             }
@@ -116,7 +116,7 @@ namespace SevenStrikeModules.XHud
         {
             if (UseDebug)
             {
-                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+                string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
                 XGUI_Utilitys.Console("XHud - 布局元素数据绑定器消息", $"已回收元素： \n目标空间：<b><color={hex_col}> {space.ToString()} </color></b>\n名称：<b><color={hex_col}> {element.name} </color></b>\n生成项ID：<b><color={hex_col}> {ID} </color></b>\n", XGUIMsgState.通知);
             }

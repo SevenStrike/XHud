@@ -192,7 +192,7 @@ namespace SevenStrikeModules.XHud.Editor
                            ok: "明白",
                            PrimaryIndex: 0,
                            usemodal: true,
-                           themecolor: XHud_Dashboard.Theme_Primary);
+                           themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                 return;
             }
@@ -208,7 +208,7 @@ namespace SevenStrikeModules.XHud.Editor
                     cancel: "暂不",
                     PrimaryIndex: 0,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                 if (res == "去配置")
                 {
@@ -232,7 +232,7 @@ namespace SevenStrikeModules.XHud.Editor
                     ok: "明白",
                     PrimaryIndex: 0,
                     usemodal: true,
-                    themecolor: XHud_Dashboard.Theme_Primary);
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
                 return;
             }
@@ -279,7 +279,7 @@ namespace SevenStrikeModules.XHud.Editor
                 ok: "明白",
                 PrimaryIndex: 0,
                 usemodal: true,
-                themecolor: XHud_Dashboard.Theme_Primary);
+                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
         }
 
         /// <summary>

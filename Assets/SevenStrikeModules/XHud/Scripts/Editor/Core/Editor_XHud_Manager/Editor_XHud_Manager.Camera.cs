@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.Rendering.Universal;
@@ -48,10 +49,10 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "正交尺寸",
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 //status_icon: "icon_field_status",
-                //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.Theme_Primary : Color.red,
+                //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: CameraOrthographicSize,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
@@ -63,10 +64,10 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "近距剪切",
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 //status_icon: "icon_field_status",
-                //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.Theme_Primary : Color.red,
+                //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: CameraCutter_Near,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
@@ -78,10 +79,10 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "远距剪切",
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 //status_icon: "icon_field_status",
-                //status_icon_color: CameraCutter_Far.floatValue != 0 ? XHud_Dashboard.Theme_Primary : Color.red,
+                //status_icon_color: CameraCutter_Far.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: CameraCutter_Far,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
@@ -97,10 +98,10 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "视场角",
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 //status_icon: "icon_field_status",
-                //status_icon_color: CameraFov.floatValue != 0 ? XHud_Dashboard.Theme_Primary : Color.red,
+                //status_icon_color: CameraFov.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: CameraFov,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             }
@@ -118,10 +119,10 @@ namespace SevenStrikeModules.XHud.Editor
                 title: "场景相机",
                 title_size: XGUIFontSize.M,
                 //title_color: Color.white,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 status_icon: "icon_field_status",
-                status_icon_color: SceneCamera.objectReferenceValue != null ? XHud_Dashboard.Theme_Primary : Color.red,
+                status_icon_color: SceneCamera.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop: SceneCamera,
                 prop_margin: new RectOffset(0, 0, 10, 10));
             if (XGUI.ChangedCheck_End())
@@ -141,7 +142,7 @@ namespace SevenStrikeModules.XHud.Editor
                             cancel: "暂不",
                             PrimaryIndex: 0,
                             usemodal: true,
-                            themecolor: XHud_Dashboard.Theme_Primary,
+                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             on_selected: (d) =>
                             {
                                 if (d == "指定")
@@ -172,7 +173,7 @@ namespace SevenStrikeModules.XHud.Editor
                                             ok: "明白 ",
                                             PrimaryIndex: 0,
                                             usemodal: true,
-                                            themecolor: XHud_Dashboard.Theme_Primary);
+                                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                                     };
                                 }
                                 else

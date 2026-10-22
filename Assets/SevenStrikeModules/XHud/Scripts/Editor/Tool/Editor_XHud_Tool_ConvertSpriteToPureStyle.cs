@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using System.IO;
     using UnityEditor;
     using UnityEngine;
@@ -65,7 +66,7 @@ namespace SevenStrikeModules.XHud.Editor
                 ok: "创建",
                 cancel: "暂不",
                 PrimaryIndex: 1,
-                themecolor: XHud_Dashboard.Theme_Primary);
+                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
             // 如果用户选择"暂不"，则退出
             if (res == "暂不")

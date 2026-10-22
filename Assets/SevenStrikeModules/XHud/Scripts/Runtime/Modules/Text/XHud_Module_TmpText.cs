@@ -252,7 +252,7 @@ namespace SevenStrikeModules.XHud
             #region 如果同步库样式
             if (StyleLibSynching)
             {
-                XHud_Manager mgr = XHud_Dashboard.GetManager();
+                XHud_Manager mgr = XHud_Dashboard.get_manager();
 
                 #region 样式集合为空判断
                 if (mgr == null)
@@ -526,7 +526,7 @@ namespace SevenStrikeModules.XHud
                 {
                     if (!Application.isPlaying)
                     {
-                        TextStyleInfo.tmp_FontSizeMin_globalscaled = XHud_Dashboard.GetManager().FontSizeMultiply * TextStyleInfo.tmp_FontSizeMin;
+                        TextStyleInfo.tmp_FontSizeMin_globalscaled = XHud_Dashboard.get_manager().FontSizeMultiply * TextStyleInfo.tmp_FontSizeMin;
                     }
                     else
                     {
@@ -551,7 +551,7 @@ namespace SevenStrikeModules.XHud
                 {
                     if (!Application.isPlaying)
                     {
-                        TextStyleInfo.tmp_FontSizeMax_globalscaled = XHud_Dashboard.GetManager().FontSizeMultiply * TextStyleInfo.tmp_FontSizeMax;
+                        TextStyleInfo.tmp_FontSizeMax_globalscaled = XHud_Dashboard.get_manager().FontSizeMultiply * TextStyleInfo.tmp_FontSizeMax;
                     }
                     else
                     {
@@ -590,7 +590,7 @@ namespace SevenStrikeModules.XHud
                 {
                     if (!Application.isPlaying)
                     {
-                        TextStyleInfo.tmp_size_globalscaled = XHud_Dashboard.GetManager().FontSizeMultiply * TextStyleInfo.tmp_size;
+                        TextStyleInfo.tmp_size_globalscaled = XHud_Dashboard.get_manager().FontSizeMultiply * TextStyleInfo.tmp_size;
                     }
                     else
                     {

@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud.Editor
 {
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEditor;
@@ -424,7 +425,7 @@ namespace SevenStrikeModules.XHud.Editor
             TextClipping clipping = TextClipping.Clip;
 #endif
 
-            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             #region 抬头
             Rect rect = new Rect(0, 0, position.width, position.height);
@@ -453,7 +454,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_seperator(
                 rect: rect_seperate,
                 thickness: 1,
-                color: XHud_Dashboard.Theme_SeperateLine,
+                color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0));
 
@@ -492,7 +493,7 @@ namespace SevenStrikeModules.XHud.Editor
                rect_group: rect_transitionlist_group,
                bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
-               bg_color_gui: XHud_Dashboard.Theme_Group,
+               bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                bg_height: 0,
                false,
                false,
@@ -504,7 +505,7 @@ namespace SevenStrikeModules.XHud.Editor
                //title_bg_color_gui: Color.white,
                title_size: XGUIFontSize.M,
                title_anchor: TextAnchor.MiddleLeft,
-               title_text_color: XHud_Dashboard.Theme_Primary,
+               title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                title_offset: new Vector2(0, 0),
                title_padding: new RectOffset(5, 2, 2, 2),
                title_font: null,
@@ -526,12 +527,12 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 absolute_margin: true,
                 absolute_padding: true,
                 title: "控制区",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 title_manual_offset: true,
                 title_manual_offset_space: 5,
@@ -543,12 +544,12 @@ namespace SevenStrikeModules.XHud.Editor
                type: XGUIContainerType.Horizontal,
                //bg_fill: XGUIFilled.缺口纯色边框,
                //bg_color: XGUIColor.亮白,
-               //bg_color_gui: XHud_Dashboard.Theme_Group,
+               //bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                absolute_margin: true,
                absolute_padding: true,
                //title: "SSS",
                //title_size: XGUIFontSize.M,
-               //title_text_color: XHud_Dashboard.Theme_Primary,
+               //title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                //title_clipping: TextClipping.Clip,
                //title_manual_offset: true,
                //title_manual_offset_space: 5,
@@ -559,7 +560,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
               title: "参考图",
               title_size: XGUIFontSize.M,
-              title_hover_color: XHud_Dashboard.Theme_Primary,
+              title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
               title_width: 50,
               field_width: 130,
               prop: sp_Preview_Texture_Bg,
@@ -570,7 +571,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "跳帧",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 30,
                 field_width: 35,
                 prop: sp_SkipFrame,
@@ -581,7 +582,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_property_field(
                 title: "平铺",
                 title_size: XGUIFontSize.M,
-                title_hover_color: XHud_Dashboard.Theme_Primary,
+                title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 30,
                 field_width: 35,
                 prop: sp_BgGrid_Tilling_multiply,
@@ -622,12 +623,12 @@ namespace SevenStrikeModules.XHud.Editor
                type: XGUIContainerType.Horizontal,
                //bg_fill: XGUIFilled.缺口纯色边框,
                //bg_color: XGUIColor.亮白,
-               //bg_color_gui: XHud_Dashboard.Theme_Group,
+               //bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                absolute_margin: true,
                absolute_padding: true,
                //title: "SSS",
                //title_size: XGUIFontSize.M,
-               //title_text_color: XHud_Dashboard.Theme_Primary,
+               //title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                //title_clipping: TextClipping.Clip,
                //title_manual_offset: true,
                //title_manual_offset_space: 5,
@@ -711,7 +712,7 @@ namespace SevenStrikeModules.XHud.Editor
                button_text_color: Color.white,
                press_fill: XGUIGroup.透明,
                press_color: XGUIColor.无,
-               press_text_color: XHud_Dashboard.Theme_Primary,
+               press_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                font_size: XGUIFontSize.B,
                anchor: TextAnchor.MiddleCenter,
                margin: new RectOffset(0, 0, 0, 0),
@@ -746,7 +747,7 @@ namespace SevenStrikeModules.XHud.Editor
                button_text_color: Color.white,
                press_fill: XGUIGroup.透明,
                press_color: XGUIColor.无,
-               press_text_color: XHud_Dashboard.Theme_Primary,
+               press_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                font_size: XGUIFontSize.B,
                anchor: TextAnchor.MiddleCenter,
                margin: new RectOffset(0, 0, 0, 0),
@@ -773,12 +774,12 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Group,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
                 absolute_margin: true,
                 absolute_padding: true,
                 title: "转场序列帧信息",
                 title_size: XGUIFontSize.M,
-                title_text_color: XHud_Dashboard.Theme_Primary,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 title_manual_offset: true,
                 title_manual_offset_space: 5,
@@ -948,7 +949,7 @@ namespace SevenStrikeModules.XHud.Editor
                     rect: draw_rect,
                     bg_fill: XGUIGroup.实体,
                     bg_color: XGUIColor.亮白,
-                    bg_color_gui: XHud_Dashboard.Theme_Primary,
+                    bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     text: new GUIContent($"{PreviewData_Index} / {sp_TotalFramesCount.intValue - 1}"),
                     text_color: Color.black,
                     size: XGUIFontSize.M,
@@ -1177,7 +1178,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_label(
              rect: drawelement_rect,
              text: new GUIContent(tex.name),
-             text_color: XHud_Dashboard.Theme_Primary,
+             text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              size: XGUIFontSize.M,
              clipping: clipping,
              anchor: TextAnchor.MiddleLeft,
@@ -1222,7 +1223,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     // 高亮标记表示选中
                     item_rect.Set(1, i * sp_itemHeight.floatValue + 10, 5, 5);
-                    EditorGUI.DrawRect(item_rect, XHud_Dashboard.Theme_Primary);
+                    EditorGUI.DrawRect(item_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     // 高亮背景表示选中
                     item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
                     EditorGUI.DrawRect(item_rect, SelectedBg);
@@ -1360,7 +1361,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void UpdateToLibrary()
         {
-            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.Theme_Primary, true);
+            string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             XHud_LibraryArg_Transition info = new XHud_LibraryArg_Transition();
             info.CopyData(TransitionNode);
@@ -1376,7 +1377,7 @@ namespace SevenStrikeModules.XHud.Editor
                 ok: "明白",
                 PrimaryIndex: 0,
                 usemodal: true,
-                themecolor: XHud_Dashboard.Theme_Primary);
+                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
             Close();
         }
@@ -1487,7 +1488,7 @@ namespace SevenStrikeModules.XHud.Editor
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
-                bg_color_gui: XHud_Dashboard.Theme_Primary,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 button_text_color: Color.black,
                 press_fill: XGUIGroup.实体,
                 press_color: XGUIColor.深空灰,
