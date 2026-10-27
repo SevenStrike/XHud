@@ -39,21 +39,26 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>仅用于单选模式下的直接读写操作。</description></item>
         /// </list>
         /// </summary>
-        private XHud_Module_Primitive_Painting_Synchronizer BaseScript;
+        private XHud_Module_Primitive_Painting_Synchronizer base_script;
         #endregion
 
         #region 字段 - 图标
         /// <summary>
-        /// 本编辑器所使用的图标资源集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>icon_main</c>：标题主图标。</description></item>
-        /// <item><description><c>icon_lib</c>：色卡库图标。</description></item>
-        /// <item><description><c>icon_local</c>：本地色图标。</description></item>
-        /// <item><description><c>icon_connect</c>：同步连接图标。</description></item>
-        /// </list>
+        /// 标题主图标
         /// </summary>
-        private Texture2D icon_main, icon_lib, icon_local, icon_connect;
+        private Texture2D icon_main;
+        /// <summary>
+        /// 色卡库图标
+        /// </summary>
+        private Texture2D icon_lib;
+        /// <summary>
+        /// 本地色图标
+        /// </summary>
+        private Texture2D icon_local;
+        /// <summary>
+        /// 同步连接图标
+        /// </summary>
+        private Texture2D icon_connect;
         #endregion
 
         #region 字段 - GUI 参数
@@ -76,7 +81,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>单选时长度为 1，多选时长度等于选中对象数量。</description></item>
         /// </list>
         /// </summary>
-        Editor_XHud_Module_Primitive_Painting_Synchronizer[] SelectedObjects;
+        Editor_XHud_Module_Primitive_Painting_Synchronizer[] selected_objects;
         #endregion
 
         #region 生命周期
@@ -90,7 +95,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseScript = (XHud_Module_Primitive_Painting_Synchronizer)target;
+            base_script = (XHud_Module_Primitive_Painting_Synchronizer)target;
+
             #region 获取图标          
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_painting_synchronizer/icon_main");
             icon_lib = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_painting_synchronizer/icon_lib");
@@ -160,7 +166,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
             #region 源脚本
-            BaseScript.fold_based = XGUI.layout_group_start(
+            base_script.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -170,8 +176,8 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_based);
-            if (!BaseScript.fold_based)
+                foldout: base_script.fold_based);
+            if (!base_script.fold_based)
             {
                 DrawDefaultInspector();
             }
@@ -194,17 +200,17 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new Editor_XHud_Module_Primitive_Painting_Synchronizer[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new Editor_XHud_Module_Primitive_Painting_Synchronizer[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (Editor_XHud_Module_Primitive_Painting_Synchronizer)t;
+                    selected_objects[i] = (Editor_XHud_Module_Primitive_Painting_Synchronizer)t;
                 }
             }
             else
             {
-                SelectedObjects = new Editor_XHud_Module_Primitive_Painting_Synchronizer[targets.Length];
-                SelectedObjects[0] = (Editor_XHud_Module_Primitive_Painting_Synchronizer)target;
+                selected_objects = new Editor_XHud_Module_Primitive_Painting_Synchronizer[targets.Length];
+                selected_objects[0] = (Editor_XHud_Module_Primitive_Painting_Synchronizer)target;
             }
         }
         /// <summary>
@@ -218,9 +224,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>是否为多选状态。</returns>
         private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }

@@ -40,14 +40,14 @@ namespace SevenStrikeModules.XHud.Editor
             if (Application.isPlaying)
                 return;
 
-            if (SceneCamera.objectReferenceValue != null && ScreenRes.vector2Value != Vector2.zero && UseSafeFrame.boolValue)
-                xHud_HiddenStructureDisplayer(SafeFrameStructureDisplayer.boolValue);
+            if (sp_camera_scene.objectReferenceValue != null && sp_cv_screen_res.vector2Value != Vector2.zero && sp_sf_use.boolValue)
+                xHud_HiddenStructureDisplayer(sp_sf_structure_displayer.boolValue);
 
-            BaseScript.hm_Layout_Update();
+            base_script.hm_Layout_Update();
 
-            BaseScript.hm_SafeFrameUpdate();
+            base_script.hm_SafeFrameUpdate();
 
-            BaseScript.hm_TransitionTopView();
+            base_script.hm_TransitionTopView();
         }
         /// <summary>
         /// 刷新画布与相机。
@@ -61,24 +61,24 @@ namespace SevenStrikeModules.XHud.Editor
             if (Application.isPlaying)
                 return;
 
-            Canvas canvas_s = (Canvas)HudCanvas_Screen.objectReferenceValue;
+            Canvas canvas_s = (Canvas)sp_cv_screen.objectReferenceValue;
             if (canvas_s != null)
             {
                 canvas_s.renderMode = RenderMode.ScreenSpaceCamera;
 
-                Camera cam = (Camera)HudCamera.objectReferenceValue;
+                Camera cam = (Camera)sp_camera_ui.objectReferenceValue;
                 if (cam != null)
                 {
                     canvas_s.worldCamera = cam;
                 }
             }
 
-            Canvas canvas_w = (Canvas)HudCanvas_World.objectReferenceValue;
+            Canvas canvas_w = (Canvas)sp_cv_hudcanvas_world.objectReferenceValue;
             if (canvas_w != null)
             {
                 canvas_w.renderMode = RenderMode.WorldSpace;
 
-                Camera cam = (Camera)SceneCamera.objectReferenceValue;
+                Camera cam = (Camera)sp_camera_scene.objectReferenceValue;
                 if (cam != null)
                 {
                     canvas_w.worldCamera = cam;
@@ -94,10 +94,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void xHud_EditorUpdate_CameraArgs()
         {
-            BaseScript.hm_CameraCutterRange(BaseScript.CameraCutter_Near, BaseScript.CameraCutter_Far);
-            BaseScript.hm_CameraOrthographicProjection(CameraOthograpicMode.boolValue);
-            BaseScript.hm_CameraOrthographicSize(BaseScript.CameraOrthographicSize);
-            BaseScript.hm_CameraPerspectiveFov(BaseScript.CameraFov);
+            base_script.hm_CameraCutterRange(base_script.camera_ui_cutter_near, base_script.camera_ui_cutter_far);
+            base_script.hm_CameraOrthographicProjection(sp_camera_othograpic_mode.boolValue);
+            base_script.hm_CameraOrthographicSize(base_script.camera_ui_orthographic_size);
+            base_script.hm_CameraPerspectiveFov(base_script.camera_ui_fov);
         }
         /// <summary>
         /// 刷新掩码。
@@ -108,7 +108,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void xHud_EditorUpdate_Mask()
         {
-            BaseScript.hm_MaskUpdate();
+            base_script.hm_MaskUpdate();
         }
         /// <summary>
         /// 刷新内容透明度。
@@ -119,8 +119,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void xHud_EditorUpdate_ContentOpacity()
         {
-            BaseScript.hm_Screen_ContentOpacity_Update();
-            BaseScript.hm_World_ContentOpacity_Update();
+            base_script.hm_Screen_ContentOpacity_Update();
+            base_script.hm_World_ContentOpacity_Update();
         }
         #endregion
 
@@ -135,12 +135,12 @@ namespace SevenStrikeModules.XHud.Editor
         private void EditorApplication_EditorManagerUpdate()
         {
             // 用户操作后保持高频 0.8 秒，然后降回低频
-            if (EditorApplication.timeSinceStartup - _lastUserActionTime > UPDATE_KEEPTIME)
+            if (EditorApplication.timeSinceStartup - _lastUserActionTime > update_keeptime)
             {
-                UPDATE_INTERVAL = UPDATE_INTERVAL_Low;
+                update_interval = update_interval_low;
             }
 
-            if (EditorApplication.timeSinceStartup - _lastHierarchyUpdate < UPDATE_INTERVAL)
+            if (EditorApplication.timeSinceStartup - _lastHierarchyUpdate < update_interval)
                 return;
             _lastHierarchyUpdate = EditorApplication.timeSinceStartup;
 
@@ -161,24 +161,24 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="state">折叠状态。</param>
         private void xHud_GroupFolds(bool state)
         {
-            BaseScript.fold_options = state;
-            BaseScript.fold_canvasset = state;
-            BaseScript.fold_camera = state;
-            BaseScript.fold_ratiorefer = state;
-            BaseScript.fold_compguid = state;
-            BaseScript.fold_reslibs = state;
-            BaseScript.fold_elementlibs = state;
-            BaseScript.fold_soundslib = state;
-            BaseScript.fold_masks = state;
-            BaseScript.fold_global = state;
-            BaseScript.fold_tool = state;
-            BaseScript.fold_RMS = state;
-            BaseScript.fold_layout = state;
-            BaseScript.fold_visualsafe = state;
-            BaseScript.fold_blueprint = state;
-            BaseScript.fold_based = state;
-            BaseScript.fold_motion_default = state;
-            BaseScript.fold_themes = state;
+            base_script.fold_options = state;
+            base_script.fold_canvasset = state;
+            base_script.fold_camera = state;
+            base_script.fold_ratiorefer = state;
+            base_script.fold_compguid = state;
+            base_script.fold_reslibs = state;
+            base_script.fold_elementlibs = state;
+            base_script.fold_soundslib = state;
+            base_script.fold_masks = state;
+            base_script.fold_global = state;
+            base_script.fold_tool = state;
+            base_script.fold_RMS = state;
+            base_script.fold_layout = state;
+            base_script.fold_visualsafe = state;
+            base_script.fold_blueprint = state;
+            base_script.fold_based = state;
+            base_script.fold_motion_default = state;
+            base_script.fold_themes = state;
 
             Repaint();
         }
@@ -194,7 +194,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void SetHighFrequencyMode()
         {
-            UPDATE_INTERVAL = UPDATE_INTERVAL_High;
+            update_interval = update_interval_high;
             _lastUserActionTime = EditorApplication.timeSinceStartup;
         }
         #endregion

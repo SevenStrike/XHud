@@ -135,7 +135,7 @@ namespace SevenStrikeModules.XHud
             if (con == null)
                 return;
             // 如果图元控制器的ID和图元绑定器ID匹配，则根据图元控制器的类型修改内容
-            if (binder.ID == con.ID)
+            if (binder.ID == con.id)
             {
                 ModuleType type = con.GetModuleType();
                 switch (type)
@@ -144,66 +144,66 @@ namespace SevenStrikeModules.XHud
                         break;
                     case ModuleType.Text:
                         if (!string.IsNullOrEmpty(binder.val_string))
-                            con.mod_Text.txt_Set_Content(binder.val_string);
+                            con.mod_text.txt_Set_Content(binder.val_string);
                         // 当图元配色接管 / 当图元配色不同步色卡库 / 当文字颜色被接管
-                        if (con.pt_Painting != null &&
-                            con.pt_Painting.SyncImageColor &&
-                            !con.pt_Painting.SyncLibraryColor &&
-                             con.mod_Text.TextColorOwner == TextColorOwner.Painting)
+                        if (con.pt_painting != null &&
+                            con.pt_painting.sync_image_color &&
+                            !con.pt_painting.sync_library_color &&
+                             con.mod_text.text_color_owner == TextColorOwner.Painting)
                         {
-                            con.pt_Painting.OriginalColor = binder.val_color;
+                            con.pt_painting.original_color = binder.val_color;
                         }
                         else
                         {
-                            if (con.mod_Text.TextColorOwner == TextColorOwner.Manual)
-                                con.mod_Text.TextStyleInfo.FontColor = binder.val_color;
+                            if (con.mod_text.text_color_owner == TextColorOwner.Manual)
+                                con.mod_text.text_style_info.font_color = binder.val_color;
                         }
                         break;
                     case ModuleType.TmpText:
                         if (!string.IsNullOrEmpty(binder.val_string))
-                            con.mod_TmpText.tmp_Set_Content(binder.val_string);
+                            con.mod_tmp_text.tmp_Set_Content(binder.val_string);
                         // 当图元配色接管 / 当图元配色不同步色卡库 / 当文字颜色被接管
-                        if (con.pt_Painting != null &&
-                          con.pt_Painting.SyncImageColor &&
-                          !con.pt_Painting.SyncLibraryColor &&
-                          con.mod_TmpText.TextColorOwner == TextColorOwner.Painting)
+                        if (con.pt_painting != null &&
+                          con.pt_painting.sync_image_color &&
+                          !con.pt_painting.sync_library_color &&
+                          con.mod_tmp_text.text_color_owner == TextColorOwner.Painting)
                         {
-                            con.pt_Painting.OriginalColor = binder.val_color;
+                            con.pt_painting.original_color = binder.val_color;
                         }
                         else
                         {
-                            if (con.mod_TmpText.TextColorOwner == TextColorOwner.Manual)
-                                con.mod_TmpText.TextStyleInfo.tmp_color = binder.val_color;
+                            if (con.mod_tmp_text.text_color_owner == TextColorOwner.Manual)
+                                con.mod_tmp_text.text_style_info.tmp_color = binder.val_color;
                         }
                         break;
                     case ModuleType.Image:
                         if (binder.val_string != null)
-                            con.mod_Image.sprite = binder.val_sprite;
+                            con.mod_image.sprite = binder.val_sprite;
                         // 当图元配色接管 / 当图元配色不同步色卡库
-                        if (con.pt_Painting != null &&
-                          con.pt_Painting.SyncImageColor &&
-                          !con.pt_Painting.SyncLibraryColor)
+                        if (con.pt_painting != null &&
+                          con.pt_painting.sync_image_color &&
+                          !con.pt_painting.sync_library_color)
                         {
-                            con.pt_Painting.OriginalColor = binder.val_color;
+                            con.pt_painting.original_color = binder.val_color;
                         }
                         else
                         {
-                            con.mod_Image.color = binder.val_color;
+                            con.mod_image.color = binder.val_color;
                         }
                         break;
                     case ModuleType.RawImage:
                         if (binder.val_texture != null)
-                            con.mod_RawImage.texture = binder.val_texture;
+                            con.mod_raw_image.texture = binder.val_texture;
                         // 当图元配色接管 / 当图元配色不同步色卡库
-                        if (con.pt_Painting != null &&
-                            con.pt_Painting.SyncImageColor &&
-                            !con.pt_Painting.SyncLibraryColor)
+                        if (con.pt_painting != null &&
+                            con.pt_painting.sync_image_color &&
+                            !con.pt_painting.sync_library_color)
                         {
-                            con.pt_Painting.OriginalColor = binder.val_color;
+                            con.pt_painting.original_color = binder.val_color;
                         }
                         else
                         {
-                            con.mod_RawImage.color = binder.val_color;
+                            con.mod_raw_image.color = binder.val_color;
                         }
                         break;
                 }

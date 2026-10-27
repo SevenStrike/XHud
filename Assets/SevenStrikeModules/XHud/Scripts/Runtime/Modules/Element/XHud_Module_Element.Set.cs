@@ -33,7 +33,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="state">交互开关状态</param>
         public virtual void element_SetInteractable(bool state)
         {
-            CanvasGroup.interactable = state;
+            canvasgroup.interactable = state;
             element_Button_InteractableSetAll(state);
             element_Option_InteractableSetAll(state);
             element_Slider_InteractableSetAll(state);
@@ -41,12 +41,12 @@ namespace SevenStrikeModules.XHud
             element_Toggle_InteractableSetAll(state);
             if (state)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "将所有下级控件的交互开启！", XGUIMsgState.通知);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "将所有下级控件的交互禁用！", XGUIMsgState.通知);
             }
         }
@@ -56,7 +56,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="state">开关状态</param>
         public virtual void element_SetAutoPlayPrimitiveTween(bool state)
         {
-            AutoPlayPrimitivesTween = state;
+            autoplay_primitives_tween = state;
         }
         /// <summary>
         /// XHud元素 - 重置状态
@@ -69,10 +69,10 @@ namespace SevenStrikeModules.XHud
             ID = 0;
             element_AlphaSet(0);
 
-            CurrentPivot = Vector2.one * 0.5f;
+            current_pivot = Vector2.one * 0.5f;
 
-            if (CanvasGroup != null)
-                CanvasGroup.interactable = true;
+            if (canvasgroup != null)
+                canvasgroup.interactable = true;
 
             if (ClearEvents)
             {
@@ -106,10 +106,10 @@ namespace SevenStrikeModules.XHud
             // 清空所有之前创建的图元动画
             PrimitiveTweens_Clear();
 
-            CreateState = XHudElementCreateState.Recycled;
+            create_state = XHudElementCreateState.Recycled;
             gameObject.SetActive(!Hidden);
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "已重置！", XGUIMsgState.警告);
         }
         /// <summary>
@@ -118,10 +118,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="pivot">锚点</param>
         public virtual void element_PivotSet(Vector2 pivot)
         {
-            CurrentPivot = pivot;
-            RectTransform.pivot = pivot;
+            current_pivot = pivot;
+            rect_transform.pivot = pivot;
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "元素的锚点设置为：" + pivot, XGUIMsgState.通知);
         }
         /// <summary>
@@ -133,42 +133,42 @@ namespace SevenStrikeModules.XHud
             switch (type)
             {
                 case XHudAnchor.上:
-                    CurrentPivot = new Vector2(0.5f, 1f);
+                    current_pivot = new Vector2(0.5f, 1f);
                     break;
                 case XHudAnchor.下:
-                    CurrentPivot = new Vector2(0.5f, 0f);
+                    current_pivot = new Vector2(0.5f, 0f);
                     break;
                 case XHudAnchor.左:
-                    CurrentPivot = new Vector2(0f, 0.5f);
+                    current_pivot = new Vector2(0f, 0.5f);
                     break;
                 case XHudAnchor.右:
-                    CurrentPivot = new Vector2(1f, 0.5f);
+                    current_pivot = new Vector2(1f, 0.5f);
                     break;
                 case XHudAnchor.中心:
-                    CurrentPivot = new Vector2(0.5f, 0.5f);
+                    current_pivot = new Vector2(0.5f, 0.5f);
                     break;
                 case XHudAnchor.左上:
-                    CurrentPivot = new Vector2(0f, 1f);
+                    current_pivot = new Vector2(0f, 1f);
                     break;
                 case XHudAnchor.左下:
-                    CurrentPivot = new Vector2(0f, 0f);
+                    current_pivot = new Vector2(0f, 0f);
                     break;
                 case XHudAnchor.右上:
-                    CurrentPivot = new Vector2(1f, 1f);
+                    current_pivot = new Vector2(1f, 1f);
                     break;
                 case XHudAnchor.右下:
-                    CurrentPivot = new Vector2(1f, 0f);
+                    current_pivot = new Vector2(1f, 0f);
                     break;
                 case XHudAnchor.底层:
-                    CurrentPivot = new Vector2(0.5f, 0.5f);
+                    current_pivot = new Vector2(0.5f, 0.5f);
                     break;
                 case XHudAnchor.顶层:
-                    CurrentPivot = new Vector2(0.5f, 0.5f);
+                    current_pivot = new Vector2(0.5f, 0.5f);
                     break;
             }
-            RectTransform.pivot = CurrentPivot;
+            rect_transform.pivot = current_pivot;
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "元素的锚点设置为：" + type.ToString(), XGUIMsgState.通知);
         }
         /// <summary>
@@ -176,7 +176,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void element_PivotAsync()
         {
-            RectTransform.pivot = CurrentPivot;
+            rect_transform.pivot = current_pivot;
         }
         /// <summary>
         /// XHud元素 - 设置锚点区域范围
@@ -185,17 +185,17 @@ namespace SevenStrikeModules.XHud
         /// <param name="AnchorMax"></param>
         public virtual void element_AnchorRangeSet(Vector2 AnchorMin, Vector2 AnchorMax)
         {
-            RectTransform.anchorMin = AnchorMin;
-            RectTransform.anchorMax = AnchorMax;
+            rect_transform.anchorMin = AnchorMin;
+            rect_transform.anchorMax = AnchorMax;
         }
         /// <summary>
         /// XHud元素 - 位置归零
         /// </summary>
         public virtual void element_PositionResetZero()
         {
-            RectTransform.anchoredPosition3D = Vector3.zero;
+            rect_transform.anchoredPosition3D = Vector3.zero;
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "元素的3D锚点位置归零！", XGUIMsgState.通知);
         }
         /// <summary>
@@ -203,9 +203,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public virtual void element_RotationResetZero()
         {
-            RectTransform.localEulerAngles = Vector3.zero;
+            rect_transform.localEulerAngles = Vector3.zero;
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "元素的旋转归零！", XGUIMsgState.通知);
         }
         /// <summary>
@@ -214,9 +214,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="pos">锚点位置_AnchoredPosition</param>
         public virtual void element_PositionSet(Vector3 pos)
         {
-            RectTransform.anchoredPosition3D = pos;
+            rect_transform.anchoredPosition3D = pos;
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "元素的锚点位置设置为：" + pos, XGUIMsgState.通知);
         }
         /// <summary>
@@ -225,9 +225,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="size">尺寸_Size</param>
         public virtual void element_SizeSet(Vector2 size)
         {
-            RectTransform.sizeDelta = size;
+            rect_transform.sizeDelta = size;
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "元素的尺寸设置为：" + size, XGUIMsgState.通知);
         }
         /// <summary>
@@ -236,9 +236,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="pos">世界位置</param>
         public virtual void element_WorldPositionSet(Vector3 pos)
         {
-            RectTransform.position = pos;
+            rect_transform.position = pos;
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "元素的世界位置设置为：" + pos, XGUIMsgState.通知);
         }
         /// <summary>
@@ -247,7 +247,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="rot">本地旋转角度</param>
         public virtual void element_RotationSet(Vector3 rot)
         {
-            RectTransform.localEulerAngles = rot;
+            rect_transform.localEulerAngles = rot;
         }
         /// <summary>
         /// XHud元素 - 旋转设置 - 世界
@@ -255,8 +255,8 @@ namespace SevenStrikeModules.XHud
         /// <param name="rot">世界旋转角度</param>
         public virtual void element_WorldRotationSet(Quaternion rot)
         {
-            RectTransform.rotation = rot;
-            if (DebugState)
+            rect_transform.rotation = rot;
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "元素的世界旋转设置为：" + rot, XGUIMsgState.通知);
         }
         /// <summary>
@@ -265,9 +265,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="offset">空间偏移</param>
         public virtual void element_PositionOffset(Vector3 offset)
         {
-            RectTransform.anchoredPosition3D += offset;
+            rect_transform.anchoredPosition3D += offset;
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "元素的3D锚点位置偏移设置为：" + offset, XGUIMsgState.通知);
         }
         /// <summary>
@@ -276,8 +276,8 @@ namespace SevenStrikeModules.XHud
         /// <param name="sca">缩放大小</param>
         public virtual void element_ScaleSet(Vector3 sca)
         {
-            RectTransform.localScale = sca;
-            if (DebugState)
+            rect_transform.localScale = sca;
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "元素的缩放设置为：" + sca, XGUIMsgState.通知);
         }
         /// <summary>
@@ -286,8 +286,8 @@ namespace SevenStrikeModules.XHud
         /// <param name="type">生成源类型</param>
         public virtual void element_CreatedSourceTypeSet(XHudElementCreatedSourceType type)
         {
-            CreatedSourceType = type;
-            if (DebugState)
+            created_source_type = type;
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "元素的生成源类型设置为：" + type, XGUIMsgState.通知);
         }
         /// <summary>
@@ -325,7 +325,7 @@ namespace SevenStrikeModules.XHud
                 }
             }
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "生成的随机ID为：" + ran_id, XGUIMsgState.通知);
             return ran_id;
         }

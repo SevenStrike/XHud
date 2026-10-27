@@ -34,26 +34,26 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 原始色
         /// </summary>
-        [SerializeField] public Color OriginalColor = Color.white;
+        [SerializeField] public Color original_color = Color.white;
         /// <summary>
         /// 配色名称（从颜色库中读取）
         /// </summary>
-        [SerializeField] public string ColoriseName;
+        [SerializeField] public string colorise_name;
         #endregion
 
         #region 状态开关
         /// <summary>
         /// 调试开关
         /// </summary>
-        [SerializeField] public bool Debug;
+        [SerializeField] public bool debug;
         /// <summary>
         /// 同步库颜色
         /// </summary>
-        [SerializeField] public bool SyncLibraryColor;
+        [SerializeField] public bool sync_library_color;
         /// <summary>
         /// 同步Image颜色
         /// </summary>
-        [SerializeField] public bool SyncImageColor;
+        [SerializeField] public bool sync_image_color;
         #endregion
 
         #region 折叠
@@ -100,52 +100,52 @@ namespace SevenStrikeModules.XHud
         public void UpdateColor(Color color)
         {
             //如果图元控制器存在于上级按钮物体下
-            if (controller.mod_HudButton != null)
+            if (controller.mod_hud_button != null)
             {
                 //--如果 - 此图元控制器识别类型为TmpText并作为Button下挂的组件且按钮控制  文字变色  则不同步颜色
-                if (controller.mod_HudButton.TextColorSyncFade && controller.mod_HudButton.ButtonTmpText != null && controller.mod_HudButton.ButtonTmpText == controller.mod_TmpText)
+                if (controller.mod_hud_button.TextColorSyncFade && controller.mod_hud_button.ButtonTmpText != null && controller.mod_hud_button.ButtonTmpText == controller.mod_tmp_text)
                     return;
                 //--如果 - 此图元控制器识别类型为Text并作为Button下挂的组件且按钮控制  文字变色  则不同步颜色
-                if (controller.mod_HudButton.TextColorSyncFade && controller.mod_HudButton.ButtonText != null && controller.mod_HudButton.ButtonText == controller.mod_Text)
+                if (controller.mod_hud_button.TextColorSyncFade && controller.mod_hud_button.ButtonText != null && controller.mod_hud_button.ButtonText == controller.mod_text)
                     return;
                 //--如果 - 此图元控制器识别类型为Image并作为Button下挂的组件且按钮控制  图标变色  则不同步颜色
-                if (controller.mod_HudButton.IconColorSyncFade && controller.mod_HudButton.IconImage == controller.mod_Image)
+                if (controller.mod_hud_button.IconColorSyncFade && controller.mod_hud_button.IconImage == controller.mod_image)
                     return;
                 //--如果 - 此图元控制器识别类型为Image并作为Button下挂的组件且按钮控制  背景变色  则不同步颜色
-                if (controller.mod_HudButton.BgColorSyncFade && controller.mod_HudButton.BgImage == controller.mod_Image)
+                if (controller.mod_hud_button.BgColorSyncFade && controller.mod_hud_button.BgImage == controller.mod_image)
                     return;
             }
 
             //--如果 - 图像组件存在则使用color覆盖图像组件的颜色
-            if (controller.mod_Image != null)
+            if (controller.mod_image != null)
             {
-                controller.mod_Image.color = color;
+                controller.mod_image.color = color;
             }
             //--否则 - 如果 - 文字组件存在则使用color覆盖文字组件的颜色
-            else if (controller.mod_Text != null)
+            else if (controller.mod_text != null)
             {
-                if (controller.mod_Text.TextColorOwner != TextColorOwner.Painting)
+                if (controller.mod_text.text_color_owner != TextColorOwner.Painting)
                     return;
-                if (controller.mod_Text.StyleLibSynching && controller.mod_Text.TextStyleInfo.LibStyle_Effect_color)
+                if (controller.mod_text.style_library_synching && controller.mod_text.text_style_info.lib_style_effect_color)
                     return;
-                controller.mod_Text.TextStyleInfo.txt_Set_FontColor(color);
+                controller.mod_text.text_style_info.txt_Set_FontColor(color);
             }
             //--否则 - 如果 - 文字组件存在则使用color覆盖文字组件的颜色
-            else if (controller.mod_TmpText != null)
+            else if (controller.mod_tmp_text != null)
             {
-                if (controller.mod_TmpText.TextColorOwner != TextColorOwner.Painting)
+                if (controller.mod_tmp_text.text_color_owner != TextColorOwner.Painting)
                     return;
-                if (controller.mod_TmpText.StyleLibSynching && controller.mod_TmpText.TextStyleInfo.LibStyle_Effect_color)
+                if (controller.mod_tmp_text.style_library_synching && controller.mod_tmp_text.text_style_info.lib_style_effect_color)
                     return;
-                controller.mod_TmpText.TextStyleInfo.tmp_Set_FontColor(color);
+                controller.mod_tmp_text.text_style_info.tmp_Set_FontColor(color);
             }
             //--否则 - 如果 - 原始图像组件存在则使用color覆盖原始图像组件的颜色
-            else if (controller.mod_RawImage != null)
+            else if (controller.mod_raw_image != null)
             {
-                controller.mod_RawImage.color = color;
+                controller.mod_raw_image.color = color;
             }
 
-            OriginalColor = color;
+            original_color = color;
         }
         /// <summary>
         /// 根据色卡库匹配名同步/直接设置颜色
@@ -153,23 +153,23 @@ namespace SevenStrikeModules.XHud
         public void ColorSync()
         {
             //--如果开启同步颜色库颜色则将组件的颜色值覆盖为库中选中的颜色，否则使用原始色
-            if (SyncLibraryColor)
+            if (sync_library_color)
             {
                 //--如果颜色库存在则设置组件颜色为指定名称的库中的颜色
-                if (XHud_Manager.Instance.Hud_Colors != null)
+                if (XHud_Manager.instance.library_colors != null)
                 {
-                    if (SyncImageColor)
+                    if (sync_image_color)
                     {
-                        Color cc = XHud_Manager.Instance.Hud_Colors.ColorsLibrary_GetColor(ColoriseName);
+                        Color cc = XHud_Manager.instance.library_colors.ColorsLibrary_GetColor(colorise_name);
                         UpdateColor(cc);
                     }
                 }
             }
             else
             {
-                if (SyncImageColor)
+                if (sync_image_color)
                     //--设置组件颜色为原始色
-                    UpdateColor(OriginalColor);
+                    UpdateColor(original_color);
             }
         }
         /// <summary>
@@ -178,7 +178,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="name"></param>
         public void SetColoriseName(string name)
         {
-            ColoriseName = name;
+            colorise_name = name;
         }
         /// <summary>
         /// 设置原始色
@@ -186,7 +186,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="name"></param>
         public void SetOriginalColor(Color color)
         {
-            OriginalColor = color;
+            original_color = color;
         }
         /// <summary>
         /// 设置接管 Image 颜色
@@ -194,7 +194,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="name"></param>
         public void SetSyncImageColor(bool state)
         {
-            SyncImageColor = state;
+            sync_image_color = state;
         }
         #endregion
 
@@ -206,7 +206,7 @@ namespace SevenStrikeModules.XHud
             controller = transform.GetComponent<XHud_Module_Primitive_Controller>();
             if (controller != null)
             {
-                controller.pt_Painting = this;
+                controller.pt_painting = this;
             }
         }
     }

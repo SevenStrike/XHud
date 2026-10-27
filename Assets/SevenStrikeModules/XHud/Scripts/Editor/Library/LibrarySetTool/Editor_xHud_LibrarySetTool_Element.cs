@@ -27,79 +27,108 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditorInternal;
     using UnityEngine;
 
-    #region 编辑器窗口
-    /// <summary>
-    /// XHud 元素库的单项修改工具窗口。
-    /// <para/>
-    /// 提供元素库单项的 Target / 预加载数量 / 预生成队列的查看与修改，
-    /// 以及在播放模式下禁用编辑的功能。
-    /// </summary>
     public class Editor_XHud_LibrarySetTool_Element : EditorWindow
     {
         #region 字段 - 数据
         /// <summary>
         /// 当前正在编辑的元素库项（工作副本）。
         /// </summary>
-        public XHud_LibraryArg_Element_Item Library_Item;
+        public XHud_LibraryArg_Element_Item library_item;
         /// <summary>
         /// 元素库项原始数据（用于回退 / 对比）。
         /// </summary>
-        public XHud_LibraryArg_Element_Item Original_Library_Item;
+        public XHud_LibraryArg_Element_Item original_library_item;
         /// <summary>
         /// 被修改的元素库项索引。
         /// </summary>
-        public int ModifiedIndex;
+        public int modified_index;
         /// <summary>
         /// 目标元素库。
         /// </summary>
-        public XHud_Library_Element TargetLib;
+        public XHud_Library_Element target_lib;
         /// <summary>
         /// 目标元素库名称。
         /// </summary>
         [SerializeField]
-        public string TargetLibName;
+        public string target_lib_name;
         /// <summary>
         /// 日期时间标识。
         /// </summary>
         [SerializeField]
-        public string DateTimes;
+        public string date_times;
         #endregion
 
-        #region 字段 - 序列化对象 / 属性
+        #region 字段 - 序列化对象
         /// <summary>
-        /// 用于序列化当前窗口的自定义字段。
+        /// 用于序列化当前窗口的自定义字段
         /// </summary>
-        private SerializedObject BaseObject;
+        private SerializedObject base_object;
+        #endregion
+
+        #region 字段 - 序列化属性
         /// <summary>
-        /// 本窗口用到的全部序列化属性引用。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里初始化。
-        /// 覆盖：预生成队列 / 目标 / 根节点 / 下一个索引 / 已回收 / 已使用 / 预加载数量 / 名称。
+        /// 预生成队列属性
         /// </summary>
-        private SerializedProperty sp_PreloadElements, sp_Target, sp_Root, sp_NextIndex, sp_RecycledCount, sp_UsedCount, sp_InitializeCount, sp_Name;
+        private SerializedProperty sp_preload_elements;
+        /// <summary>
+        /// 目标属性
+        /// </summary>
+        private SerializedProperty sp_target;
+        /// <summary>
+        /// 根节点属性
+        /// </summary>
+        private SerializedProperty sp_root;
+        /// <summary>
+        /// 下一个索引属性
+        /// </summary>
+        private SerializedProperty sp_next_index;
+        /// <summary>
+        /// 已回收数量属性
+        /// </summary>
+        private SerializedProperty sp_recycled_count;
+        /// <summary>
+        /// 已使用数量属性
+        /// </summary>
+        private SerializedProperty sp_used_count;
+        /// <summary>
+        /// 预加载数量属性
+        /// </summary>
+        private SerializedProperty sp_initialize_count;
+        /// <summary>
+        /// 名称属性
+        /// </summary>
+        private SerializedProperty sp_name;
         #endregion
 
         #region 字段 - 列表
         /// <summary>
         /// 预生成元素队列列表（只读可重排列表）。
         /// </summary>
-        public ReorderableList List_PreloadElements;
+        public ReorderableList list_preload_elements;
         /// <summary>
         /// 列表项高度。
         /// </summary>
-        public float itemHeight = 25;
+        public float item_height = 25;
         /// <summary>
         /// 可视区域显示的元素数量。
         /// </summary>
-        public int visibleItemCount = 8;
+        public int visible_item_count = 8;
         /// <summary>
         /// 列表滚动位置。
         /// </summary>
-        public Vector2 DataList_Scroller;
+        public Vector2 data_list_scroller;
         /// <summary>
         /// 选中项索引号。
         /// </summary>
-        public int SelectedLibraryIndex = 0;
+        public int selected_library_index = 0;
+        /// <summary>
+        /// 窗口标题文字。
+        /// </summary>
+        public string title_primary = "元素项修改器";
+        /// <summary>
+        /// 窗口副标题。
+        /// </summary>
+        string title_sub = "您可以按照需要查看已生成的预制元素列表，或者修改目标元素的库参数特性！";
         #endregion
 
         #region 字段 - 图标
@@ -130,15 +159,6 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 生命周期
         /// <summary>
-        /// Unity 禁用回调。
-        /// <para/>
-        /// 当前实现为空，保留以支持后续清理逻辑。
-        /// </summary>
-        private void OnDisable()
-        {
-
-        }
-        /// <summary>
         /// Unity 启用回调。
         /// <para/>
         /// 执行流程：
@@ -151,24 +171,37 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseObject = new SerializedObject(this);
+            base_object = new SerializedObject(this);
 
-            SerializedProperty prop = BaseObject.FindProperty("Library_Item");
-            sp_PreloadElements = prop.FindPropertyRelative("PreloadElements");
-            sp_Target = prop.FindPropertyRelative("Target");
-            sp_Root = prop.FindPropertyRelative("Root");
-            sp_NextIndex = prop.FindPropertyRelative("NextIndex");
-            sp_RecycledCount = prop.FindPropertyRelative("RecycledCount");
-            sp_UsedCount = prop.FindPropertyRelative("UsedCount");
-            sp_InitializeCount = prop.FindPropertyRelative("InitializeCount");
-            sp_Name = prop.FindPropertyRelative("Name");
+            #region 获取序列化属性
+            SerializedProperty prop = base_object.FindProperty(nameof(library_item));
+            sp_preload_elements = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.preload_elements));
+            sp_target = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.target));
+            sp_root = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.root));
+            sp_next_index = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.next_index));
+            sp_recycled_count = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.recycled_count));
+            sp_used_count = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.used_count));
+            sp_initialize_count = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.initialize_count));
+            sp_name = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.name));
+            #endregion
 
+            #region 获取图标
             icon_logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_element_setter/icon");
+            #endregion
 
             #region ReorderableList
-            List_PreloadElements = new ReorderableList(BaseObject, sp_PreloadElements, false, false, false, false);
-            List_PreloadElements.drawElementCallback = List_PreloadElementList_DrawElementCallback;
+            list_preload_elements = new ReorderableList(base_object, sp_preload_elements, false, false, false, false);
+            list_preload_elements.drawElementCallback = List_PreloadElementList_DrawElementCallback;
             #endregion
+        }
+        /// <summary>
+        /// Unity 禁用回调。
+        /// <para/>
+        /// 当前实现为空，保留以支持后续清理逻辑。
+        /// </summary>
+        private void OnDisable()
+        {
+
         }
         /// <summary>
         /// 绘制窗口 GUI。
@@ -180,7 +213,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnGUI()
         {
-            BaseObject.Update();
+            base_object.Update();
+
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             #region 抬头
             Rect rect = new Rect(0, 0, position.width, position.height);
@@ -194,13 +229,11 @@ namespace SevenStrikeModules.XHud.Editor
                 border: new RectOffset(0, 0, 0, 0),
                 color: Color.white);
 
-            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
-
             // 大标题
             Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
             XGUI.gui_label(
                 rect: rect_title,
-                text: new GUIContent("元素项修改器"),
+                text: new GUIContent(title_primary),
                 text_color: Color.white,
                 size: XGUIFontSize.L,
                 clipping: clipping_ellipsis,
@@ -219,7 +252,7 @@ namespace SevenStrikeModules.XHud.Editor
             Rect rect_subtitle = new Rect(rect.x + 18, rect.y + 53, rect.width, 30);
             XGUI.gui_label(
                 rect: rect_subtitle,
-                text: new GUIContent("您可以按照需要查看已生成的预制元素列表，或者修改目标元素的库参数特性！"),
+                text: new GUIContent(title_sub),
                 text_color: Color.white * 0.7f,
                 size: XGUIFontSize.M,
                 anchor: TextAnchor.UpperLeft,
@@ -227,7 +260,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 预生成元素列表
-            if (sp_PreloadElements.arraySize > 0)
+            if (sp_preload_elements.arraySize > 0)
             {
                 XGUI.layout_space(100);
                 List_PreloadElementList_Drawer();
@@ -265,7 +298,7 @@ namespace SevenStrikeModules.XHud.Editor
             rect_xs.Set(rect.width - 240, rect.y + 100, 215, 20);
             XGUI.gui_label(
                 rect: rect_xs,
-                text: new GUIContent(sp_Name.stringValue),
+                text: new GUIContent(sp_name.stringValue),
                 text_color: Color.white,
                 size: XGUIFontSize.L,
                 clipping: clipping_ellipsis,
@@ -301,17 +334,17 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 80,
-                prop: sp_Target);
+                prop: sp_target);
             if (XGUI.ChangedCheck_End())
             {
-                if (sp_Target.objectReferenceValue != null)
+                if (sp_target.objectReferenceValue != null)
                 {
-                    XHud_Module_Element element = (XHud_Module_Element)sp_Target.objectReferenceValue as XHud_Module_Element;
-                    sp_Name.stringValue = element.name;
+                    XHud_Module_Element element = (XHud_Module_Element)sp_target.objectReferenceValue as XHud_Module_Element;
+                    sp_name.stringValue = element.name;
                 }
                 else
                 {
-                    sp_Name.stringValue = null;
+                    sp_name.stringValue = null;
                 }
             }
             #endregion
@@ -326,7 +359,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 80,
-                prop: sp_Root);
+                prop: sp_root);
             #endregion
 
             if (Application.isPlaying)
@@ -342,7 +375,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 80,
-                prop: sp_InitializeCount);
+                prop: sp_initialize_count);
             #endregion
 
             XGUI.SetEnabled(true);
@@ -361,7 +394,7 @@ namespace SevenStrikeModules.XHud.Editor
             rect_xs.Set(rect.width - 240, rect.y + 210 + AddedHeight, 215, 20);
             XGUI.gui_label(
                 rect: rect_xs,
-                text: new GUIContent($"<color={colorhex_title}>已被使用  (UsedCount) ： </color> <color={colorhex_value}>{sp_UsedCount.intValue}</color>  个"),
+                text: new GUIContent($"<color={colorhex_title}>已被使用  (UsedCount) ： </color> <color={colorhex_value}>{sp_used_count.intValue}</color>  个"),
                 text_color: Color.white,
                 size: XGUIFontSize.M,
                 clipping: clipping_ellipsis,
@@ -375,7 +408,7 @@ namespace SevenStrikeModules.XHud.Editor
             rect_xs.Set(rect.width - 240, rect.y + 240 + AddedHeight, 215, 20);
             XGUI.gui_label(
                 rect: rect_xs,
-                text: new GUIContent($"<color={colorhex_title}>已被回收  (RecycledCount) ： </color> <color={colorhex_value}>{sp_RecycledCount.intValue}</color>  个"),
+                text: new GUIContent($"<color={colorhex_title}>已被回收  (RecycledCount) ： </color> <color={colorhex_value}>{sp_recycled_count.intValue}</color>  个"),
                 text_color: Color.white,
                 size: XGUIFontSize.M,
                 clipping: clipping_ellipsis,
@@ -389,7 +422,7 @@ namespace SevenStrikeModules.XHud.Editor
             rect_xs.Set(rect.width - 240, rect.y + 270 + AddedHeight, 215, 20);
             XGUI.gui_label(
                 rect: rect_xs,
-                text: new GUIContent($"<color={colorhex_title}>下一个索引  (NextIndex) ： </color> <color={colorhex_value}>{sp_NextIndex.intValue}</color>"),
+                text: new GUIContent($"<color={colorhex_title}>下一个索引  (NextIndex) ： </color> <color={colorhex_value}>{sp_next_index.intValue}</color>"),
                 text_color: Color.white,
                 size: XGUIFontSize.M,
                 clipping: clipping_ellipsis,
@@ -402,8 +435,9 @@ namespace SevenStrikeModules.XHud.Editor
 
             Repaint();
 
-            Buttons();
+            bottom_buttons();
 
+            #region 检测事件
             Event e = Event.current;
             // 检测点击事件
             if (e.type == EventType.MouseDown)
@@ -420,9 +454,10 @@ namespace SevenStrikeModules.XHud.Editor
                 e.Use();
                 Close();
             }
+            #endregion
 
-            if (BaseObject.targetObject != null)
-                BaseObject.ApplyModifiedProperties();
+            if (base_object.targetObject != null)
+                base_object.ApplyModifiedProperties();
         }
         #endregion
 
@@ -438,8 +473,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="isFocused">是否聚焦</param>
         private void List_PreloadElementList_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty prop = sp_PreloadElements.GetArrayElementAtIndex(index);
-            SerializedProperty sp_ele = prop.FindPropertyRelative("HudElement");
+            SerializedProperty prop = sp_preload_elements.GetArrayElementAtIndex(index);
+            SerializedProperty sp_ele = prop.FindPropertyRelative("element");
 
             #region 预生成元素索引号
             XGUI.gui_label(
@@ -477,25 +512,25 @@ namespace SevenStrikeModules.XHud.Editor
         private void List_PreloadElementList_Drawer()
         {
             // 绘制滚动视图
-            scrollview_rect = GUILayoutUtility.GetRect(0, visibleItemCount * itemHeight);
+            scrollview_rect = GUILayoutUtility.GetRect(0, visible_item_count * item_height);
             scrollview_rect.x = 26;
             scrollview_rect.width = 220;
             scrollview_rect.height = 310;
-            DataList_Scroller = GUI.BeginScrollView(scrollview_rect, DataList_Scroller, new Rect(0, 0, scrollview_rect.width - 50, Library_Item.PreloadElements.Count * itemHeight), false, true);
+            data_list_scroller = GUI.BeginScrollView(scrollview_rect, data_list_scroller, new Rect(0, 0, scrollview_rect.width - 50, library_item.preload_elements.Count * item_height), false, true);
 
             // 计算可视区域的起始和结束索引
-            int startIndex = Mathf.FloorToInt(DataList_Scroller.y / itemHeight);
-            int endIndex = Mathf.CeilToInt((DataList_Scroller.y + scrollview_rect.height) / itemHeight);
+            int startIndex = Mathf.FloorToInt(data_list_scroller.y / item_height);
+            int endIndex = Mathf.CeilToInt((data_list_scroller.y + scrollview_rect.height) / item_height);
 
             // 只绘制可视区域内的元素
-            for (int i = startIndex; i < endIndex && i < List_PreloadElements.count; i++)
+            for (int i = startIndex; i < endIndex && i < list_preload_elements.count; i++)
             {
-                SerializedProperty prop = sp_PreloadElements.GetArrayElementAtIndex(i);
+                SerializedProperty prop = sp_preload_elements.GetArrayElementAtIndex(i);
 
-                item_rect = new Rect(0, i * itemHeight, scrollview_rect.width, itemHeight);
+                item_rect = new Rect(0, i * item_height, scrollview_rect.width, item_height);
 
                 // 如果当前元素被选中，绘制选中效果
-                if (SelectedLibraryIndex == i)
+                if (selected_library_index == i)
                 {
                     itemmark_rect = new Rect(item_rect.x + 1, item_rect.y + 11, 5, 5);
                     // 高亮标记表示选中
@@ -505,7 +540,7 @@ namespace SevenStrikeModules.XHud.Editor
                     EditorGUI.DrawRect(itemmarkBg_rect, new Color(0, 0, 0, 0.2f));
                 }
 
-                List_PreloadElements.drawElementCallback.Invoke(item_rect, i, i == List_PreloadElements.index, true);
+                list_preload_elements.drawElementCallback.Invoke(item_rect, i, i == list_preload_elements.index, true);
 
                 // 检测鼠标是否在当前元素区域内
                 if (item_rect.Contains(Event.current.mousePosition))
@@ -513,10 +548,10 @@ namespace SevenStrikeModules.XHud.Editor
                     if (Event.current.type == EventType.MouseDown)
                     {
                         // 更新选中项
-                        SelectedLibraryIndex = i;
+                        selected_library_index = i;
 
-                        XHud_LibraryArg_Element_Info preload = Library_Item.PreloadElements[i];
-                        EditorGUIUtility.PingObject(preload.HudElement);
+                        XHud_LibraryArg_Element_Info preload = library_item.preload_elements[i];
+                        EditorGUIUtility.PingObject(preload.element);
 
                         // 标记界面需要更新
                         GUI.changed = true;
@@ -537,7 +572,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 播放模式下禁用更新按钮，防止运行时修改元素库数据。
         /// </summary>
-        private void Buttons()
+        private void bottom_buttons()
         {
             XGUI.layout_group_start(
             type: XGUIContainerType.Horizontal,
@@ -606,8 +641,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="item">元素库项数据</param>
         public void SetLibraryItem(XHud_LibraryArg_Element_Item item)
         {
-            Library_Item.Copy(item);
-            Original_Library_Item.Copy(item);
+            library_item.Copy(item);
+            original_library_item.Copy(item);
         }
         /// <summary>
         /// 设置目标库名称。
@@ -615,7 +650,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="name">库名称</param>
         internal void SetTargetLibName(string name)
         {
-            TargetLibName = name;
+            target_lib_name = name;
         }
         /// <summary>
         /// 设置目标元素库。
@@ -623,7 +658,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="lib">目标元素库</param>
         internal void SetTargetLib(XHud_Library_Element lib)
         {
-            TargetLib = lib;
+            target_lib = lib;
         }
         #endregion
 
@@ -637,7 +672,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             #region 更新元素库目标元素参数
 
-            TargetLib.ElementsLibrary_ReplaceElement(ModifiedIndex, Library_Item);
+            target_lib.ElementsLibrary_ReplaceElement(modified_index, library_item);
 
             #endregion
 
@@ -646,5 +681,4 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
     }
-    #endregion
 }

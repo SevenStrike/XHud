@@ -32,8 +32,8 @@ namespace SevenStrikeModules.XHud
     /// </summary>
     public class xHud_LibraryArg_Curve
     {
-        public string Name;
-        public AnimationCurve Curve;
+        public string name;
+        public AnimationCurve curve;
 
         public xHud_LibraryArg_Curve()
         {
@@ -47,50 +47,85 @@ namespace SevenStrikeModules.XHud
         /// <param name="curve">新增曲线</param>
         public xHud_LibraryArg_Curve(string name = null, AnimationCurve curve = null)
         {
-            Name = name;
-            Curve = curve;
+            this.name = name;
+            this.curve = curve;
         }
     }
 
     [CreateAssetMenu(fileName = "XHud_Library_Curves", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-Curve (曲线库)", order = 0)]
     public class XHud_Library_Curves : ScriptableObject
     {
-        public string LibraryName = "NewCurveLibrary";
-        public List<xHud_LibraryArg_Curve> CurveLibrary = new List<xHud_LibraryArg_Curve>();
-
-        public UnityAction act_on_CurveChanged;
-        public UnityAction<string, AnimationCurve> act_on_CurveSet;
-        public UnityAction<string, AnimationCurve> act_on_CurveAdded;
-        public UnityAction act_on_CurveRemoved;
-
-        public int LocationSelectedIndex = -1;
-
+        #region 字段 - 库基础信息
         /// <summary>
-        /// 当前选中的索引号
+        /// 库名称
         /// </summary>
-        public int SelectedIndex = 0;
-        public string Highlight;
+        public string library_name = "NewCurveLibrary";
+        /// <summary>
+        /// 曲线库数据列表
+        /// </summary>
+        public List<xHud_LibraryArg_Curve> library_curves = new List<xHud_LibraryArg_Curve>();
+        #endregion
+
+        #region 字段 - 事件回调
+        /// <summary>
+        /// 曲线变化时触发的事件
+        /// </summary>
+        public UnityAction act_on_curve_changed;
+        /// <summary>
+        /// 曲线被设置时触发的事件（名称 + 曲线）
+        /// </summary>
+        public UnityAction<string, AnimationCurve> act_on_curve_set;
+        /// <summary>
+        /// 曲线被添加时触发的事件（名称 + 曲线）
+        /// </summary>
+        public UnityAction<string, AnimationCurve> act_on_curve_added;
+        /// <summary>
+        /// 曲线被移除时触发的事件
+        /// </summary>
+        public UnityAction act_on_curve_removed;
+        #endregion
+
+        #region 字段 - 列表查询与筛选
         /// <summary>
         /// 名称项查找（精确匹配）
         /// </summary>
-        public string Find = "";
+        public string find = "";
         /// <summary>
-        /// Editor列表项高度
+        /// 筛选高亮名称
         /// </summary>
-        public float itemHeight = 30;
+        public string highlight;
+        #endregion
+
+        #region 字段 - 列表布局
+        /// <summary>
+        /// Editor 列表项高度
+        /// </summary>
+        public float item_height = 30;
         /// <summary>
         /// 可视区域显示的元素数量
         /// </summary>
-        public int visibleItemCount = 15;
+        public int visible_item_count = 15;
         /// <summary>
         /// 列表滚动位置
         /// </summary>
-        public Vector2 SoundInfoList_Original_Scroller;
+        public Vector2 sound_infolist_original_scroller;
+        #endregion
+
+        #region 字段 - 选中与定位
+        /// <summary>
+        /// 定位选中项索引号（-1 表示无）
+        /// </summary>
+        public int location_selected_index = -1;
+        /// <summary>
+        /// 当前选中的索引号
+        /// </summary>
+        public int selected_index = 0;
+        #endregion
 
         private void OnEnable()
         {
-            itemHeight = 30;
-            visibleItemCount = 15;
+            item_height = 30;
+            visible_item_count = 15;
         }
 
         // 确保内部名称与文件名一致
@@ -116,10 +151,10 @@ namespace SevenStrikeModules.XHud
         public AnimationCurve CurveLibrary_GetCurve(string name)
         {
             AnimationCurve curve = new AnimationCurve();
-            for (int i = 0; i < CurveLibrary.Count; i++)
+            for (int i = 0; i < library_curves.Count; i++)
             {
-                if (CurveLibrary[i].Name == name)
-                    curve = CurveLibrary[i].Curve;
+                if (library_curves[i].name == name)
+                    curve = library_curves[i].curve;
             }
             return curve;
         }
@@ -132,10 +167,10 @@ namespace SevenStrikeModules.XHud
         public AnimationCurve CurveLibrary_GetCurve(int index)
         {
             AnimationCurve curve = new AnimationCurve();
-            for (int i = 0; i < CurveLibrary.Count; i++)
+            for (int i = 0; i < library_curves.Count; i++)
             {
                 if (i == index)
-                    curve = CurveLibrary[i].Curve;
+                    curve = library_curves[i].curve;
             }
             return curve;
         }
@@ -147,16 +182,16 @@ namespace SevenStrikeModules.XHud
         /// <param name="curve"></param>
         public void CurveLibrary_SetCurve(string name, AnimationCurve curve)
         {
-            for (int i = 0; i < CurveLibrary.Count; i++)
+            for (int i = 0; i < library_curves.Count; i++)
             {
-                if (CurveLibrary[i].Name == name)
+                if (library_curves[i].name == name)
                 {
-                    CurveLibrary[i].Curve = curve;
+                    library_curves[i].curve = curve;
                     break;
                 }
             }
-            if (act_on_CurveSet != null)
-                act_on_CurveSet(name, curve);
+            if (act_on_curve_set != null)
+                act_on_curve_set(name, curve);
         }
 
         /// <summary>
@@ -167,9 +202,9 @@ namespace SevenStrikeModules.XHud
         public void CurveLibrary_AddCurve(string name, AnimationCurve curve)
         {
             xHud_LibraryArg_Curve info = new xHud_LibraryArg_Curve(name, curve);
-            CurveLibrary.Add(info);
-            if (act_on_CurveAdded != null)
-                act_on_CurveAdded(name, curve);
+            library_curves.Add(info);
+            if (act_on_curve_added != null)
+                act_on_curve_added(name, curve);
         }
 
         /// <summary>
@@ -178,13 +213,13 @@ namespace SevenStrikeModules.XHud
         /// <param name="name"></param>
         public void CurveLibrary_RemoveCurve(string name)
         {
-            for (int i = 0; i < CurveLibrary.Count; i++)
+            for (int i = 0; i < library_curves.Count; i++)
             {
-                if (CurveLibrary[i].Name == name)
-                    CurveLibrary.RemoveAt(i);
+                if (library_curves[i].name == name)
+                    library_curves.RemoveAt(i);
             }
-            if (act_on_CurveRemoved != null)
-                act_on_CurveRemoved();
+            if (act_on_curve_removed != null)
+                act_on_curve_removed();
         }
 
         /// <summary>
@@ -193,7 +228,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public int CurveLibrary_GetCurvesCount()
         {
-            int count = CurveLibrary.Count;
+            int count = library_curves.Count;
 
             return count;
         }
@@ -204,10 +239,10 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public string[] CurveLibrary_GetCurveNames()
         {
-            string[] names = new string[CurveLibrary.Count];
+            string[] names = new string[library_curves.Count];
             for (int i = 0; i < names.Length; i++)
             {
-                names[i] = CurveLibrary[i].Name;
+                names[i] = library_curves[i].name;
             }
 
             return names;
@@ -221,9 +256,9 @@ namespace SevenStrikeModules.XHud
         public int CurveLibrary_GetIndexWithName(string name)
         {
             int sw = 0;
-            for (int i = 0; i < CurveLibrary.Count; i++)
+            for (int i = 0; i < library_curves.Count; i++)
             {
-                if (CurveLibrary[i].Name == name)
+                if (library_curves[i].name == name)
                 {
                     sw = i;
                     break;
@@ -238,7 +273,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public xHud_LibraryArg_Curve[] CurveLibrary_GetCurveInfos()
         {
-            return CurveLibrary.ToArray();
+            return library_curves.ToArray();
         }
 
         /// <summary>
@@ -247,7 +282,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public bool CurveLibrary_IsEmpty()
         {
-            if (CurveLibrary.Count > 0)
+            if (library_curves.Count > 0)
                 return false;
             else
                 return true;
@@ -259,7 +294,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public bool CurvesLibrary_IndexIsValid(int Index)
         {
-            if (Index >= 0 && Index < CurveLibrary.Count)
+            if (Index >= 0 && Index < library_curves.Count)
                 return true;
             else
                 return false;
@@ -272,9 +307,9 @@ namespace SevenStrikeModules.XHud
         public bool CurvesLibrary_NameIsValid(string name)
         {
             bool sw = false;
-            for (int i = 0; i < CurveLibrary.Count; i++)
+            for (int i = 0; i < library_curves.Count; i++)
             {
-                if (CurveLibrary[i].Name == name)
+                if (library_curves[i].name == name)
                 {
                     sw = true;
                 }
@@ -290,30 +325,30 @@ namespace SevenStrikeModules.XHud
         public void CurveLibrary_Location(string name)
         {
             int index = CurveLibrary_GetIndexWithName(name);
-            LocationSelectedIndex = index;
-            SelectedIndex = index;
-            Highlight = name;
+            location_selected_index = index;
+            selected_index = index;
+            highlight = name;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < CurveLibrary.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < library_curves.Count; i++)
             {
-                if (CurveLibrary[i].Name == name)
+                if (library_curves[i].name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = SoundInfoList_Original_Scroller;
+            Vector2 newscroll = sound_infolist_original_scroller;
             newscroll.y = scrollval;
-            SoundInfoList_Original_Scroller = newscroll;
+            sound_infolist_original_scroller = newscroll;
         }
 
         /// <summary>
@@ -323,29 +358,29 @@ namespace SevenStrikeModules.XHud
         public void CurveLibrary_Location_Find(string name)
         {
             int index = CurveLibrary_GetIndexWithName(name);
-            LocationSelectedIndex = index;
-            SelectedIndex = index;
+            location_selected_index = index;
+            selected_index = index;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < CurveLibrary.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < library_curves.Count; i++)
             {
-                if (CurveLibrary[i].Name == name)
+                if (library_curves[i].name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = SoundInfoList_Original_Scroller;
+            Vector2 newscroll = sound_infolist_original_scroller;
             newscroll.y = scrollval;
-            SoundInfoList_Original_Scroller = newscroll;
+            sound_infolist_original_scroller = newscroll;
         }
     }
 }

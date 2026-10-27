@@ -12,17 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 261e6fe8ca61c2745b8fa316eda9b51d, type: 3}
   m_Name: Lib_Transition
   m_EditorClassIdentifier: 
-  LibraryName: NewTransitionLibrary
-  PreviewScaleMode: 2
-  PreviewSpeed: 1
-  TransitionLibrary:
-  - Name: InkPaint
-    Description: dddddddd
-    TotalFramesCount: 150
-    LastFrameIndex: 149
-    SkipFrame: 1
-    Res: {x: 480, y: 270}
-    Frames:
+  library_name: NewTransitionLibrary
+  library_transitions:
+  - name: NewTransition
+    description: "\u8F6C\u573A\u8BF4\u660E"
+    total_frames_count: 150
+    last_frame_index: 149
+    skip_frame: 1
+    res: {x: 480, y: 270}
+    frames:
     - {fileID: 2800000, guid: 986a6cd1484a13245921bcf5d3b5826d, type: 3}
     - {fileID: 2800000, guid: 1c7b36c0685884d4da905b06db30abd0, type: 3}
     - {fileID: 2800000, guid: 5e6d71e220dd8074cb1652d679e3789a, type: 3}
@@ -173,10 +171,11 @@ MonoBehaviour:
     - {fileID: 2800000, guid: 3bbf7df4b68745248bd6cf53f6441eca, type: 3}
     - {fileID: 2800000, guid: b1e5188378836be4eaa70b8b21f240e7, type: 3}
     - {fileID: 2800000, guid: 42835a7d697edca4a9a1613992d84c61, type: 3}
-  itemHeight: 75
-  visibleItemCount: 6
-  Find: 
-  Highlight: 
-  SelectedIndex: -1
-  LocationSelectedIndex: -1
-  TransitionInfoList_Original_Scroller: {x: 0, y: 0}
+  preview_scale_mode: 2
+  find: 
+  highlight: 
+  item_height: 75
+  visible_item_count: 6
+  transition_info_list_original_scroller: {x: 0, y: 0}
+  selected_index: -1
+  location_selected_index: -1

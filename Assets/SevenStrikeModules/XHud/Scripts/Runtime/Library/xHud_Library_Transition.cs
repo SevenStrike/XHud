@@ -27,29 +27,29 @@ namespace SevenStrikeModules.XHud
 
     [System.Serializable]
     /// <summary>
-    /// Hud转场信息
+    /// 转场信息
     /// </summary>
     public class XHud_LibraryArg_Transition
     {
-        public string Name = "新转场";
-        public string Description = "描述转场效果的文字";
-        public int TotalFramesCount;
-        public int LastFrameIndex;
-        public int SkipFrame = 1;
-        public Vector2Int Res;
-        public List<Texture2D> Frames = new List<Texture2D>();
+        public string name = "新转场";
+        public string description = "描述转场效果的文字";
+        public int total_frames_count;
+        public int last_frame_index;
+        public int skip_frame = 1;
+        public Vector2Int res;
+        public List<Texture2D> frames = new List<Texture2D>();
 
         public void CopyData(XHud_LibraryArg_Transition node)
         {
-            Name = node.Name;
-            Description = node.Description;
-            TotalFramesCount = node.TotalFramesCount;
-            LastFrameIndex = node.LastFrameIndex;
-            SkipFrame = node.SkipFrame;
-            Res = node.Res;
-            for (int i = 0; i < node.Frames.Count; i++)
+            name = node.name;
+            description = node.description;
+            total_frames_count = node.total_frames_count;
+            last_frame_index = node.last_frame_index;
+            skip_frame = node.skip_frame;
+            res = node.res;
+            for (int i = 0; i < node.frames.Count; i++)
             {
-                Frames.Add(node.Frames[i]);
+                frames.Add(node.frames[i]);
             }
         }
     }
@@ -57,51 +57,65 @@ namespace SevenStrikeModules.XHud
     [CreateAssetMenu(fileName = "XHud_Library_Transition", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-Transition (转场库)", order = 0)]
     public class XHud_Library_Transition : ScriptableObject
     {
-        public string LibraryName = "NewTransitionLibrary";
-        public ScaleMode PreviewScaleMode = ScaleMode.ScaleToFit;
-        public float PreviewSpeed = 1;
-        public List<XHud_LibraryArg_Transition> TransitionLibrary = new List<XHud_LibraryArg_Transition>();
-
-
+        #region 字段 - 库基础信息
         /// <summary>
-        /// Editor列表项高度
+        /// 转场库名称
         /// </summary>
-        public float itemHeight = 75;
-
+        public string library_name = "NewTransitionLibrary";
         /// <summary>
-        /// 可视区域显示的元素数量
+        /// 转场库数据列表
         /// </summary>
-        public int visibleItemCount = 6;
+        public List<XHud_LibraryArg_Transition> library_transitions = new List<XHud_LibraryArg_Transition>();
+        #endregion
 
+        #region 字段 - 预览设置
+        /// <summary>
+        /// 预览缩放模式
+        /// </summary>
+        public ScaleMode preview_scale_mode = ScaleMode.ScaleToFit;
+        #endregion
+
+        #region 字段 - 列表查询与筛选
         /// <summary>
         /// 名称项查找（精确匹配）
         /// </summary>
-        public string Find = "";
-
+        public string find = "";
         /// <summary>
-        /// Editor筛选名称
+        /// Editor 筛选名称
         /// </summary>
-        public string Highlight;
+        public string highlight;
+        #endregion
 
+        #region 字段 - 列表布局
         /// <summary>
-        /// 选中项索引号
+        /// Editor 列表项高度
         /// </summary>
-        public int SelectedIndex;
-
+        public float item_height = 75;
         /// <summary>
-        /// 定位选中项索引号
+        /// 可视区域显示的元素数量
         /// </summary>
-        public int LocationSelectedIndex = -1;
-
+        public int visible_item_count = 6;
         /// <summary>
         /// 列表滚动位置
         /// </summary>
-        public Vector2 TransitionInfoList_Original_Scroller;
+        public Vector2 transition_info_list_original_scroller;
+        #endregion
+
+        #region 字段 - 选中与定位
+        /// <summary>
+        /// 选中项索引号
+        /// </summary>
+        public int selected_index;
+        /// <summary>
+        /// 定位选中项索引号（-1 表示无）
+        /// </summary>
+        public int location_selected_index = -1;
+        #endregion
 
         private void OnEnable()
         {
-            itemHeight = 75;
-            visibleItemCount = 6;
+            item_height = 75;
+            visible_item_count = 6;
         }
 
         // 确保内部名称与文件名一致
@@ -133,10 +147,10 @@ namespace SevenStrikeModules.XHud
             {
                 texlist.Add(texs[i]);
             }
-            node.Frames = texlist;
-            node.Name = name;
-            node.SkipFrame = skipframe;
-            TransitionLibrary.Add(node);
+            node.frames = texlist;
+            node.name = name;
+            node.skip_frame = skipframe;
+            library_transitions.Add(node);
         }
 
         /// <summary>
@@ -144,7 +158,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void TransitionLibrary_Clear()
         {
-            TransitionLibrary.Clear();
+            library_transitions.Clear();
         }
 
         /// <summary>
@@ -153,11 +167,11 @@ namespace SevenStrikeModules.XHud
         /// <param name="name"></param>
         public void TransitionLibrary_Remove(string name)
         {
-            for (int i = 0; i < TransitionLibrary.Count; i++)
+            for (int i = 0; i < library_transitions.Count; i++)
             {
-                if (TransitionLibrary[i].Name == name)
+                if (library_transitions[i].name == name)
                 {
-                    TransitionLibrary.RemoveAt(i);
+                    library_transitions.RemoveAt(i);
                 }
             }
         }
@@ -170,11 +184,11 @@ namespace SevenStrikeModules.XHud
         public XHud_LibraryArg_Transition TransitionLibrary_Get(string name)
         {
             XHud_LibraryArg_Transition node = new XHud_LibraryArg_Transition();
-            for (int i = 0; i < TransitionLibrary.Count; i++)
+            for (int i = 0; i < library_transitions.Count; i++)
             {
-                if (TransitionLibrary[i].Name == name)
+                if (library_transitions[i].name == name)
                 {
-                    node = TransitionLibrary[i];
+                    node = library_transitions[i];
                 }
             }
             return node;
@@ -188,9 +202,9 @@ namespace SevenStrikeModules.XHud
         public int TransitionLibrary_GetIndexWithName(string name)
         {
             int index = 0;
-            for (int i = 0; i < TransitionLibrary.Count; i++)
+            for (int i = 0; i < library_transitions.Count; i++)
             {
-                if (TransitionLibrary[i].Name == name)
+                if (library_transitions[i].name == name)
                 {
                     index = i;
                 }
@@ -204,10 +218,10 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public string[] TransitionLibrary_GetAllNames()
         {
-            string[] names = new string[TransitionLibrary.Count];
-            for (int i = 0; i < TransitionLibrary.Count; i++)
+            string[] names = new string[library_transitions.Count];
+            for (int i = 0; i < library_transitions.Count; i++)
             {
-                names[i] = TransitionLibrary[i].Name;
+                names[i] = library_transitions[i].name;
             }
             return names;
         }
@@ -218,7 +232,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public bool TransitionLibrary_IsEmpty()
         {
-            return TransitionLibrary.Count == 0 ? true : false;
+            return library_transitions.Count == 0 ? true : false;
         }
 
         /// <summary>
@@ -228,30 +242,30 @@ namespace SevenStrikeModules.XHud
         public void TransitionLibrary_Location(string name)
         {
             int index = TransitionLibrary_GetIndexWithName(name);
-            SelectedIndex = index;
-            LocationSelectedIndex = index;
-            Highlight = name;
+            selected_index = index;
+            location_selected_index = index;
+            highlight = name;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < TransitionLibrary.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < library_transitions.Count; i++)
             {
-                if (TransitionLibrary[i].Name == name)
+                if (library_transitions[i].name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = TransitionInfoList_Original_Scroller;
+            Vector2 newscroll = transition_info_list_original_scroller;
             newscroll.y = scrollval;
-            TransitionInfoList_Original_Scroller = newscroll;
+            transition_info_list_original_scroller = newscroll;
         }
 
         /// <summary>
@@ -261,29 +275,29 @@ namespace SevenStrikeModules.XHud
         public void TransitionLibrary_Location_Find(string name)
         {
             int index = TransitionLibrary_GetIndexWithName(name);
-            SelectedIndex = index;
-            LocationSelectedIndex = index;
+            selected_index = index;
+            location_selected_index = index;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < TransitionLibrary.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < library_transitions.Count; i++)
             {
-                if (TransitionLibrary[i].Name == name)
+                if (library_transitions[i].name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = TransitionInfoList_Original_Scroller;
+            Vector2 newscroll = transition_info_list_original_scroller;
             newscroll.y = scrollval;
-            TransitionInfoList_Original_Scroller = newscroll;
+            transition_info_list_original_scroller = newscroll;
         }
 
         /// <summary>
@@ -293,7 +307,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="node">替换转场</param>
         public void TransitionsLibrary_Replace(int index, XHud_LibraryArg_Transition node)
         {
-            TransitionLibrary[index] = node;
+            library_transitions[index] = node;
         }
     }
 }

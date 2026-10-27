@@ -34,20 +34,20 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void xHud_GetElementPoolIndicators()
         {
-            if (BaseScript.Hud_ElementLibrarys != null && BaseScript.Hud_ElementLibrarys.Count > 0)
+            if (base_script.ele_library_elements != null && base_script.ele_library_elements.Count > 0)
             {
-                for (int i = 0; i < BaseScript.Hud_ElementLibrarys.Count; i++)
+                for (int i = 0; i < base_script.ele_library_elements.Count; i++)
                 {
-                    XHud_Library_Element lib = BaseScript.Hud_ElementLibrarys[i];
+                    XHud_Library_Element lib = base_script.ele_library_elements[i];
                     if (lib != null)
                     {
-                        for (int s = 0; s < lib.ElementLibrary.Count; s++)
+                        for (int s = 0; s < lib.library_elements.Count; s++)
                         {
-                            XHud_LibraryArg_Element_Item item = lib.ElementLibrary[s];
-                            if (item.Target != null)
+                            XHud_LibraryArg_Element_Item item = lib.library_elements[s];
+                            if (item.target != null)
                             {
-                                if (item.Name != item.Target.transform.name)
-                                    item.Name = item.Target.transform.name;
+                                if (item.name != item.target.transform.name)
+                                    item.name = item.target.transform.name;
                             }
                         }
                     }

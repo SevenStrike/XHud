@@ -29,7 +29,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 物体跟踪器
         /// </summary>
-        public XHud_ObjectTracker ObjectTracker;
+        public XHud_ObjectTracker object_tracker;
 
         /// <summary>
         /// Hud跟踪器 - 在ScreenCamera模式下设定跟踪目标
@@ -52,9 +52,9 @@ namespace SevenStrikeModules.XHud
             ///---创建跟踪器
             element_ObjectTracker_Create();
 
-            ObjectTracker.Tracker_SetTrackerArgs(info);
+            object_tracker.Tracker_SetTrackerArgs(info);
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "创建场景物体跟踪器！", XGUIMsgState.通知);
         }
         /// <summary>
@@ -66,9 +66,9 @@ namespace SevenStrikeModules.XHud
             ///---创建跟踪器
             element_ObjectTracker_Create();
             ///---设定跟踪器的参数
-            ObjectTracker.Tracker_SetTrackerArgs(info);
+            object_tracker.Tracker_SetTrackerArgs(info);
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "创建场景物体跟踪器！", XGUIMsgState.通知);
         }
         /// <summary>
@@ -77,21 +77,21 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         private XHud_ObjectTracker element_ObjectTracker_Create()
         {
-            ObjectTracker = gameObject.AddComponent<XHud_ObjectTracker>();
-            if (DebugState)
+            object_tracker = gameObject.AddComponent<XHud_ObjectTracker>();
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "创建场景物体跟踪器！", XGUIMsgState.通知);
-            return ObjectTracker;
+            return object_tracker;
         }
         /// <summary>
         /// 移除跟踪器
         /// </summary>
         public void element_ObjectTracker_Remove()
         {
-            if (ObjectTracker != null)
-                DestroyImmediate(ObjectTracker, true);
-            ObjectTracker = null;
+            if (object_tracker != null)
+                DestroyImmediate(object_tracker, true);
+            object_tracker = null;
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "移除场景物体跟踪器！", XGUIMsgState.通知);
         }
     }

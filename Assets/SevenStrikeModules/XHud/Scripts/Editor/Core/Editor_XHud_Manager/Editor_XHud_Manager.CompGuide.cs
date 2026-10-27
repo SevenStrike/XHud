@@ -44,28 +44,28 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 构图辅助颜色 - 线
             XGUI.layout_colorfield(
-                prop: GuideColor,
+                prop: sp_cg_color,
                 title: "辅助颜色 - 线",
                 title_width: 140,
                 //title_color: Color.white,
                 //icon: "icon_field_status",
                 //icon_color: Color.red,
                 state_title: "Hex：",
-                state_value: $"#{XGUI_Utilitys.Color_To_HexString(GuideColor.colorValue)}",
-                state_value_color: GuideColor.colorValue);
+                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_cg_color.colorValue)}",
+                state_value_color: sp_cg_color.colorValue);
             #endregion
 
             #region 构图辅助颜色 - 点
             XGUI.layout_colorfield(
-                prop: GuidePointColor,
+                prop: sp_cg_point_color,
                 title: "辅助颜色 - 点",
                 title_width: 140,
                 //title_color: Color.white,
                 //icon: "icon_field_status",
                 //icon_color: Color.red,
                 state_title: "Hex：",
-                state_value: $"#{XGUI_Utilitys.Color_To_HexString(GuidePointColor.colorValue)}",
-                state_value_color: GuidePointColor.colorValue);
+                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_cg_point_color.colorValue)}",
+                state_value_color: sp_cg_point_color.colorValue);
             #endregion
 
             XGUI.layout_seperator(
@@ -89,7 +89,7 @@ namespace SevenStrikeModules.XHud.Editor
                title_width: 60,
                title_size: XGUIFontSize.M,
                title_anchor: TextAnchor.MiddleLeft,
-               prop: CompGuideMode,
+               prop: sp_cg_mode,
                options: compguid_modes,
                opt_text_size: XGUIFontSize.M,
                opt_text_color: Color.black,
@@ -120,7 +120,7 @@ namespace SevenStrikeModules.XHud.Editor
                     width: 15,
                     height: 15))
                 {
-                    xHud_OpenGuideHelpPanel(CompGuideMode.stringValue);
+                    xHud_OpenGuideHelpPanel(sp_cg_mode.stringValue);
                 }
             }
 
@@ -133,7 +133,7 @@ namespace SevenStrikeModules.XHud.Editor
                 color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 15, 10));
 
-            switch (CompGuideMode.stringValue)
+            switch (sp_cg_mode.stringValue)
             {
                 case "水平对称":
                     XGUI.layout_space(5);
@@ -143,7 +143,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_width: 60,
                         title_size: XGUIFontSize.M,
                         title_anchor: TextAnchor.MiddleLeft,
-                        prop: GuideParam_Mirror_UD_GoldenMode,
+                        prop: sp_cg_mirror_ud_golden_mode,
                         options: dir_lr,
                         opt_text_size: XGUIFontSize.M,
                         opt_text_color: Color.black,
@@ -172,7 +172,7 @@ namespace SevenStrikeModules.XHud.Editor
                             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             title_width: 90,
                             //status_icon: "icon_field_status",
-                            prop: GuideParam_Mirror_UD_Offset,
+                            prop: sp_cg_mirror_ud_offset,
                             prop_margin: new RectOffset(0, 0, 5, 0));
                     }
 
@@ -185,7 +185,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
-                        prop: GuideParam_CenterPointSize,
+                        prop: sp_cg_editor_serializefield_center_point_size,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(15);
@@ -208,14 +208,14 @@ namespace SevenStrikeModules.XHud.Editor
                         height: 25,
                         button_text_font: XGUI.GetFont("xg-medium")))
                     {
-                        GuideParam_Mirror_UD_GoldenMode.stringValue = "自定义对称分割";
-                        GuideParam_Mirror_UD_GoldenMode.serializedObject.ApplyModifiedProperties();
+                        sp_cg_mirror_ud_golden_mode.stringValue = "自定义对称分割";
+                        sp_cg_mirror_ud_golden_mode.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_Mirror_UD_Offset.floatValue = 0;
-                        GuideParam_Mirror_UD_Offset.serializedObject.ApplyModifiedProperties();
+                        sp_cg_mirror_ud_offset.floatValue = 0;
+                        sp_cg_mirror_ud_offset.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_CenterPointSize.floatValue = 1;
-                        GuideParam_CenterPointSize.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_center_point_size.floatValue = 1;
+                        sp_cg_editor_serializefield_center_point_size.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
                     break;
@@ -229,7 +229,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_width: 60,
                         title_size: XGUIFontSize.M,
                         title_anchor: TextAnchor.MiddleLeft,
-                        prop: GuideParam_Mirror_LR_GoldenMode,
+                        prop: sp_cg_mirror_lr_golden_mode,
                         options: dir_ud,
                         opt_text_size: XGUIFontSize.M,
                         opt_text_color: Color.black,
@@ -259,7 +259,7 @@ namespace SevenStrikeModules.XHud.Editor
                             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             title_width: 90,
                             //status_icon: "icon_field_status",
-                            prop: GuideParam_Mirror_LR_Offset,
+                            prop: sp_cg_mirror_lr_offset,
                             prop_margin: new RectOffset(0, 0, 5, 0));
                     }
 
@@ -272,7 +272,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
-                        prop: GuideParam_CenterPointSize,
+                        prop: sp_cg_editor_serializefield_center_point_size,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(15);
@@ -295,14 +295,14 @@ namespace SevenStrikeModules.XHud.Editor
                         height: 25,
                         button_text_font: XGUI.GetFont("xg-medium")))
                     {
-                        GuideParam_Mirror_LR_GoldenMode.stringValue = "自定义对称分割";
-                        GuideParam_Mirror_LR_GoldenMode.serializedObject.ApplyModifiedProperties();
+                        sp_cg_mirror_lr_golden_mode.stringValue = "自定义对称分割";
+                        sp_cg_mirror_lr_golden_mode.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_Mirror_LR_Offset.floatValue = 0;
-                        GuideParam_Mirror_LR_Offset.serializedObject.ApplyModifiedProperties();
+                        sp_cg_mirror_lr_offset.floatValue = 0;
+                        sp_cg_mirror_lr_offset.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_CenterPointSize.floatValue = 1;
-                        GuideParam_CenterPointSize.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_center_point_size.floatValue = 1;
+                        sp_cg_editor_serializefield_center_point_size.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
                     break;
@@ -316,7 +316,7 @@ namespace SevenStrikeModules.XHud.Editor
                        title_width: 60,
                        title_size: XGUIFontSize.M,
                        title_anchor: TextAnchor.MiddleLeft,
-                       prop: GuideParam_Fibonacci_Mode,
+                       prop: sp_cg_fibonacci_mode,
                        options: dir_fb,
                        opt_text_size: XGUIFontSize.M,
                        opt_text_color: Color.black,
@@ -355,8 +355,8 @@ namespace SevenStrikeModules.XHud.Editor
                         height: 25,
                         button_text_font: XGUI.GetFont("xg-medium")))
                     {
-                        GuideParam_Fibonacci_Mode.stringValue = "右上";
-                        GuideParam_Fibonacci_Mode.serializedObject.ApplyModifiedProperties();
+                        sp_cg_fibonacci_mode.stringValue = "右上";
+                        sp_cg_fibonacci_mode.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
                     break;
@@ -370,7 +370,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
-                        prop: GuideParam_CornerLookat_Offset_H,
+                        prop: sp_cg_editor_serializefield_corner_lookat_offset_h,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -382,7 +382,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
-                        prop: GuideParam_CornerLookat_Offset_V,
+                        prop: sp_cg_editor_serializefield_corner_lookat_offset_v,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -394,7 +394,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
-                        prop: GuideParam_CenterPointSize,
+                        prop: sp_cg_editor_serializefield_center_point_size,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(15);
@@ -417,14 +417,14 @@ namespace SevenStrikeModules.XHud.Editor
                         height: 25,
                         button_text_font: XGUI.GetFont("xg-medium")))
                     {
-                        GuideParam_CornerLookat_Offset_H.floatValue = 0;
-                        GuideParam_CornerLookat_Offset_H.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_corner_lookat_offset_h.floatValue = 0;
+                        sp_cg_editor_serializefield_corner_lookat_offset_h.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_CornerLookat_Offset_V.floatValue = 0;
-                        GuideParam_CornerLookat_Offset_V.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_corner_lookat_offset_v.floatValue = 0;
+                        sp_cg_editor_serializefield_corner_lookat_offset_v.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_CenterPointSize.floatValue = 1;
-                        GuideParam_CenterPointSize.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_center_point_size.floatValue = 1;
+                        sp_cg_editor_serializefield_center_point_size.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
                     break;
@@ -438,7 +438,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
-                        prop: GuideParam_Three_Offset_H,
+                        prop: sp_cg_editor_serializefield_three_offset_h,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -450,7 +450,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
-                        prop: GuideParam_Three_Offset_V,
+                        prop: sp_cg_editor_serializefield_three_offset_v,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -462,7 +462,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
                         //status_icon: "icon_field_status",
-                        prop: GuideParam_Three_Offset_Coverage,
+                        prop: sp_cg_editor_serializefield_three_offset_coverage,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -485,16 +485,16 @@ namespace SevenStrikeModules.XHud.Editor
                         height: 25,
                         button_text_font: XGUI.GetFont("xg-medium")))
                     {
-                        GuideParam_Three_Offset_Coverage.floatValue = 1;
-                        GuideParam_Three_Offset_Coverage.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_three_offset_coverage.floatValue = 1;
+                        sp_cg_editor_serializefield_three_offset_coverage.serializedObject.ApplyModifiedProperties();
 
-                        float seg_x = ScreenRes.vector2Value.x / 3;
-                        GuideParam_Three_Offset_H.floatValue = seg_x / ScreenRes.vector2Value.x * 2f;
-                        GuideParam_Three_Offset_H.serializedObject.ApplyModifiedProperties();
+                        float seg_x = sp_cv_screen_res.vector2Value.x / 3;
+                        sp_cg_editor_serializefield_three_offset_h.floatValue = seg_x / sp_cv_screen_res.vector2Value.x * 2f;
+                        sp_cg_editor_serializefield_three_offset_h.serializedObject.ApplyModifiedProperties();
 
-                        float seg_y = ScreenRes.vector2Value.y / 3;
-                        GuideParam_Three_Offset_V.floatValue = seg_y / ScreenRes.vector2Value.y * 2f;
-                        GuideParam_Three_Offset_V.serializedObject.ApplyModifiedProperties();
+                        float seg_y = sp_cv_screen_res.vector2Value.y / 3;
+                        sp_cg_editor_serializefield_three_offset_v.floatValue = seg_y / sp_cv_screen_res.vector2Value.y * 2f;
+                        sp_cg_editor_serializefield_three_offset_v.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
 
@@ -518,17 +518,17 @@ namespace SevenStrikeModules.XHud.Editor
                         height: 25,
                         button_text_font: XGUI.GetFont("xg-medium")))
                     {
-                        GuideParam_Three_Offset_H.floatValue = 1;
-                        GuideParam_Three_Offset_H.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_three_offset_h.floatValue = 1;
+                        sp_cg_editor_serializefield_three_offset_h.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_Three_Offset_V.floatValue = 1;
-                        GuideParam_Three_Offset_V.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_three_offset_v.floatValue = 1;
+                        sp_cg_editor_serializefield_three_offset_v.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_Three_Offset_Coverage.floatValue = 0.5f;
-                        GuideParam_Three_Offset_Coverage.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_three_offset_coverage.floatValue = 0.5f;
+                        sp_cg_editor_serializefield_three_offset_coverage.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_CenterPointSize.floatValue = 1;
-                        GuideParam_CenterPointSize.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_center_point_size.floatValue = 1;
+                        sp_cg_editor_serializefield_center_point_size.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
                     break;
@@ -540,7 +540,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_GuideLine_BaseOffset,
+                        prop: sp_cg_editor_serializefield_guide_line_base_offset,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -550,7 +550,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_GuideLine_BaseHeight,
+                        prop: sp_cg_editor_serializefield_guide_line_base_height,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -560,7 +560,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_GuideLine_Offset_NearHeight,
+                        prop: sp_cg_editor_serializefield_guide_line_offset_near_height,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -570,7 +570,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_GuideLine_Offset_Near,
+                        prop: sp_cg_editor_serializefield_guide_line_offset_near,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -580,7 +580,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_GuideLine_Offset_Far,
+                        prop: sp_cg_editor_serializefield_guide_line_offset_far,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -590,7 +590,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_CenterPointSize,
+                        prop: sp_cg_editor_serializefield_center_point_size,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(15);
@@ -613,23 +613,23 @@ namespace SevenStrikeModules.XHud.Editor
                         height: 25,
                         button_text_font: XGUI.GetFont("xg-medium")))
                     {
-                        GuideParam_GuideLine_BaseOffset.floatValue = 0;
-                        GuideParam_GuideLine_BaseOffset.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_guide_line_base_offset.floatValue = 0;
+                        sp_cg_editor_serializefield_guide_line_base_offset.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_GuideLine_BaseHeight.floatValue = 0.5f;
-                        GuideParam_GuideLine_BaseHeight.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_guide_line_base_height.floatValue = 0.5f;
+                        sp_cg_editor_serializefield_guide_line_base_height.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_GuideLine_Offset_Far.floatValue = 0;
-                        GuideParam_GuideLine_Offset_Far.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_guide_line_offset_far.floatValue = 0;
+                        sp_cg_editor_serializefield_guide_line_offset_far.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_GuideLine_Offset_Near.floatValue = 0;
-                        GuideParam_GuideLine_Offset_Near.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_guide_line_offset_near.floatValue = 0;
+                        sp_cg_editor_serializefield_guide_line_offset_near.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_GuideLine_Offset_NearHeight.floatValue = 0;
-                        GuideParam_GuideLine_Offset_NearHeight.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_guide_line_offset_near_height.floatValue = 0;
+                        sp_cg_editor_serializefield_guide_line_offset_near_height.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_CenterPointSize.floatValue = 1;
-                        GuideParam_CenterPointSize.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_center_point_size.floatValue = 1;
+                        sp_cg_editor_serializefield_center_point_size.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
                     break;
@@ -641,7 +641,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_Triangle_TopOffset,
+                        prop: sp_cg_editor_serializefield_triangle_top_offset,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -651,7 +651,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_Triangle_BaseHeight,
+                        prop: sp_cg_editor_serializefield_triangle_base_height,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -661,7 +661,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_Triangle_BottomHeight,
+                        prop: sp_cg_editor_serializefield_guide_param_triangle_bottom_height,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -671,7 +671,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_Triangle_Offset_Left,
+                        prop: sp_cg_editor_serializefield_triangle_offset_left,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -681,7 +681,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_Triangle_Offset_Right,
+                        prop: sp_cg_editor_serializefield_triangle_offset_right,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -691,7 +691,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_CenterPointSize,
+                        prop: sp_cg_editor_serializefield_center_point_size,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(15);
@@ -714,23 +714,23 @@ namespace SevenStrikeModules.XHud.Editor
                         height: 25,
                         button_text_font: XGUI.GetFont("xg-medium")))
                     {
-                        GuideParam_Triangle_TopOffset.floatValue = 0;
-                        GuideParam_Triangle_TopOffset.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_triangle_top_offset.floatValue = 0;
+                        sp_cg_editor_serializefield_triangle_top_offset.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_Triangle_BaseHeight.floatValue = 0.8f;
-                        GuideParam_Triangle_BaseHeight.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_triangle_base_height.floatValue = 0.8f;
+                        sp_cg_editor_serializefield_triangle_base_height.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_Triangle_BottomHeight.floatValue = 0.2f;
-                        GuideParam_Triangle_BottomHeight.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_guide_param_triangle_bottom_height.floatValue = 0.2f;
+                        sp_cg_editor_serializefield_guide_param_triangle_bottom_height.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_Triangle_Offset_Left.floatValue = 0.5f;
-                        GuideParam_Triangle_Offset_Left.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_triangle_offset_left.floatValue = 0.5f;
+                        sp_cg_editor_serializefield_triangle_offset_left.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_Triangle_Offset_Right.floatValue = 0.5f;
-                        GuideParam_Triangle_Offset_Right.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_triangle_offset_right.floatValue = 0.5f;
+                        sp_cg_editor_serializefield_triangle_offset_right.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_CenterPointSize.floatValue = 1;
-                        GuideParam_CenterPointSize.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_center_point_size.floatValue = 1;
+                        sp_cg_editor_serializefield_center_point_size.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
                     break;
@@ -742,7 +742,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_IShape_TopHeight,
+                        prop: sp_cg_editor_serializefield_ishape_top_height,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -752,7 +752,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_IShape_BottomHeight,
+                        prop: sp_cg_editor_serializefield_ishape_bottom_height,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -762,7 +762,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_IShape_Offset_Left,
+                        prop: sp_cg_editor_serializefield_ishape_offset_left,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(5);
@@ -772,7 +772,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: GuideParam_IShape_Offset_Right,
+                        prop: sp_cg_editor_serializefield_ishape_offset_right,
                         prop_margin: new RectOffset(0, 0, 5, 0));
 
                     XGUI.layout_space(15);
@@ -795,20 +795,20 @@ namespace SevenStrikeModules.XHud.Editor
                         height: 25,
                         button_text_font: XGUI.GetFont("xg-medium")))
                     {
-                        GuideParam_IShape_TopHeight.floatValue = 0.8f;
-                        GuideParam_IShape_TopHeight.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_ishape_top_height.floatValue = 0.8f;
+                        sp_cg_editor_serializefield_ishape_top_height.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_IShape_BottomHeight.floatValue = 0.2f;
-                        GuideParam_IShape_BottomHeight.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_ishape_bottom_height.floatValue = 0.2f;
+                        sp_cg_editor_serializefield_ishape_bottom_height.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_IShape_Offset_Left.floatValue = 0.5f;
-                        GuideParam_IShape_Offset_Left.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_ishape_offset_left.floatValue = 0.5f;
+                        sp_cg_editor_serializefield_ishape_offset_left.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_IShape_Offset_Right.floatValue = 0.5f;
-                        GuideParam_IShape_Offset_Right.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_ishape_offset_right.floatValue = 0.5f;
+                        sp_cg_editor_serializefield_ishape_offset_right.serializedObject.ApplyModifiedProperties();
 
-                        GuideParam_CenterPointSize.floatValue = 1;
-                        GuideParam_CenterPointSize.serializedObject.ApplyModifiedProperties();
+                        sp_cg_editor_serializefield_center_point_size.floatValue = 1;
+                        sp_cg_editor_serializefield_center_point_size.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
                     break;
@@ -832,19 +832,19 @@ namespace SevenStrikeModules.XHud.Editor
             obj_Anchors.layer = LayerMask.NameToLayer("XHud");
             UnityEngine.RectTransform Anchors = obj_Anchors.AddComponent<UnityEngine.RectTransform>();
             CanvasGroup cavgroup = obj_Anchors.AddComponent<CanvasGroup>();
-            HudCanvasGroup_Screen.objectReferenceValue = cavgroup;
-            HudCanvasGroup_Screen.serializedObject.ApplyModifiedProperties();
+            sp_op_hud_canvas_group_screen.objectReferenceValue = cavgroup;
+            sp_op_hud_canvas_group_screen.serializedObject.ApplyModifiedProperties();
             cavgroup.alpha = 1;
             Anchors.name = "CompGuide";
-            Anchors.SetParent(BaseScript.HudCanvas_Screen.transform);
+            Anchors.SetParent(base_script.cv_screen.transform);
             Anchors.localPosition = Vector3.zero;
             Anchors.localScale = Vector3.one;
             Anchors.anchorMin = new Vector2(0, 0);
             Anchors.anchorMax = new Vector2(1, 1);
             Anchors.sizeDelta = new Vector2(0, 0);
 
-            CompGuide_AnchorRoot.objectReferenceValue = Anchors;
-            CompGuide_AnchorRoot.serializedObject.ApplyModifiedProperties();
+            sp_cg_anchor_root.objectReferenceValue = Anchors;
+            sp_cg_anchor_root.serializedObject.ApplyModifiedProperties();
 
             for (int i = 0; i < 9; i++)
             {
@@ -930,48 +930,48 @@ namespace SevenStrikeModules.XHud.Editor
             }
 
             #region 获取所有锚点结构 - 布局
-            if (CompGuide_Anchors != null && CompGuide_AnchorRoot != null)
+            if (sp_cg_anchors != null && sp_cg_anchor_root != null)
             {
-                Transform anchorRoot = CompGuide_AnchorRoot.objectReferenceValue as Transform;
+                Transform anchorRoot = sp_cg_anchor_root.objectReferenceValue as Transform;
                 for (int i = 0; i < anchorRoot.childCount; i++)
                 {
                     UnityEngine.RectTransform obj = anchorRoot.GetChild(i).GetComponent<UnityEngine.RectTransform>();
-                    CompGuide_Anchors.InsertArrayElementAtIndex(CompGuide_Anchors.arraySize);
-                    CompGuide_Anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Anchor").objectReferenceValue = obj;
-                    CompGuide_Anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Name").stringValue = obj.name;
+                    sp_cg_anchors.InsertArrayElementAtIndex(sp_cg_anchors.arraySize);
+                    sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Anchor").objectReferenceValue = obj;
+                    sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Name").stringValue = obj.name;
                     string Type = anchorRoot.GetChild(i).name;
                     switch (Type)
                     {
                         case "Up":
-                            CompGuide_Anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 0;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 0;
                             break;
                         case "Down":
-                            CompGuide_Anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 1;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 1;
                             break;
                         case "Left":
-                            CompGuide_Anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 2;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 2;
                             break;
                         case "Right":
-                            CompGuide_Anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 3;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 3;
                             break;
                         case "Center":
-                            CompGuide_Anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 4;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 4;
                             break;
                         case "Left_Up":
-                            CompGuide_Anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 5;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 5;
                             break;
                         case "Left_Down":
-                            CompGuide_Anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 6;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 6;
                             break;
                         case "Right_Up":
-                            CompGuide_Anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 7;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 7;
                             break;
                         case "Right_Down":
-                            CompGuide_Anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 8;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 8;
                             break;
                     }
 
-                    Anchors_Layout_Screen.serializedObject.ApplyModifiedProperties();
+                    sp_cv_anchors_layout_screen.serializedObject.ApplyModifiedProperties();
                 }
             }
 
@@ -987,13 +987,13 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void xHud_CompGuide_Structure_Destroy()
         {
-            CompGuide_Anchors.ClearArray();
-            CompGuide_Anchors.serializedObject.ApplyModifiedProperties();
+            sp_cg_anchors.ClearArray();
+            sp_cg_anchors.serializedObject.ApplyModifiedProperties();
 
-            UnityEngine.RectTransform obj_auxiliary = CompGuide_AnchorRoot.objectReferenceValue as UnityEngine.RectTransform;
+            UnityEngine.RectTransform obj_auxiliary = sp_cg_anchor_root.objectReferenceValue as UnityEngine.RectTransform;
             DestroyImmediate(obj_auxiliary.gameObject, true);
-            CompGuide_AnchorRoot.objectReferenceValue = null;
-            CompGuide_AnchorRoot.serializedObject.ApplyModifiedProperties();
+            sp_cg_anchor_root.objectReferenceValue = null;
+            sp_cg_anchor_root.serializedObject.ApplyModifiedProperties();
         }
         #endregion
 
@@ -1011,7 +1011,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Editor_XHud_Tool_GuideReference window = (Editor_XHud_Tool_GuideReference)EditorWindow.GetWindow(typeof(Editor_XHud_Tool_GuideReference), false, "XHud 构图参考说明书", true);
             XGUI.CenterEditorWindow(new Vector2Int(370, 670), window, false);
-            window.GuideType = (guidetype);
+            window.guide_type = (guidetype);
             window.SetGuideType(guidetype);
             window.Show();
         }

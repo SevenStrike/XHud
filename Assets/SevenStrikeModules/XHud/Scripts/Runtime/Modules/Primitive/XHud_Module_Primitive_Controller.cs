@@ -33,60 +33,60 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 图元编号
         /// </summary>
-        [SerializeField] public string ID;
+        [SerializeField] public string id;
         /// <summary>
         /// 图元名称
         /// </summary>
-        [SerializeField] public string Indicator;
+        [SerializeField] public string indicator;
         /// <summary>
         /// 初始化状态
         /// </summary>
-        [SerializeField] public bool IsInitial;
+        [SerializeField] public bool is_initial;
         /// <summary>
         /// 图元类型（标识当前操作的组件类型）
         /// </summary>
-        [SerializeField] public ModuleType ModuleType;
+        [SerializeField] public ModuleType module_type;
         #endregion
 
         #region 受控组件   
         /// <summary>
         /// 组件 - CanvasGroup
         /// </summary>
-        [SerializeField] public CanvasGroup mod_CanvasGroup;
+        [SerializeField] public CanvasGroup mod_canvas_group;
         /// <summary>
         /// 组件 - Rect
         /// </summary>
-        [SerializeField] public RectTransform mod_Rect;
+        [SerializeField] public RectTransform mod_rect;
         /// <summary>
         /// 组件 - Tmp文字
         /// </summary>
-        [SerializeField] public XHud_Module_TmpText mod_TmpText;
+        [SerializeField] public XHud_Module_TmpText mod_tmp_text;
         /// <summary>
         /// 组件 - 文字
         /// </summary>
-        [SerializeField] public XHud_Module_Text mod_Text;
+        [SerializeField] public XHud_Module_Text mod_text;
         /// <summary>
         /// 组件 - 图片
         /// </summary>
-        [SerializeField] public Image mod_Image;
+        [SerializeField] public Image mod_image;
         /// <summary>
         /// 组件 - Raw图片
         /// </summary>
-        [SerializeField] public RawImage mod_RawImage;
+        [SerializeField] public RawImage mod_raw_image;
         #endregion
 
         #region 成员 - 特殊组件
         /// <summary>
         /// 组件 - 按钮
         /// </summary>
-        [SerializeField] public XHud_Module_Button mod_HudButton;
+        [SerializeField] public XHud_Module_Button mod_hud_button;
         #endregion
 
         #region 状态开关
         /// <summary>
         /// 调试开关
         /// </summary>
-        [SerializeField] public bool Debug;
+        [SerializeField] public bool debug;
         #endregion
 
         #region 折叠
@@ -114,15 +114,15 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 配色器
         /// </summary>
-        [SerializeField] public XHud_Module_Primitive_Painting pt_Painting;
+        [SerializeField] public XHud_Module_Primitive_Painting pt_painting;
         /// <summary>
         /// 姿态基准
         /// </summary>
-        [SerializeField] public XHud_Module_Primitive_Feature pt_Feature;
+        [SerializeField] public XHud_Module_Primitive_Feature pt_feature;
         /// <summary>
         /// 动画
         /// </summary>
-        [SerializeField] public XHud_Module_Primitive_Tween pt_Tween;
+        [SerializeField] public XHud_Module_Primitive_Tween pt_tween;
         #endregion
 
         void Awake()
@@ -148,20 +148,20 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void GetControlComponent()
         {
-            if (mod_CanvasGroup == null)
-                mod_CanvasGroup = GetComponent<CanvasGroup>();
-            if (mod_Rect == null)
-                mod_Rect = GetComponent<RectTransform>();
-            if (mod_Image == null)
-                mod_Image = GetComponent<Image>();
-            if (mod_RawImage == null)
-                mod_RawImage = GetComponent<RawImage>();
-            if (mod_Text == null)
-                mod_Text = GetComponent<XHud_Module_Text>();
-            if (mod_TmpText == null)
-                mod_TmpText = GetComponent<XHud_Module_TmpText>();
-            if (mod_HudButton == null)
-                mod_HudButton = GetComponentInParent<XHud_Module_Button>();
+            if (mod_canvas_group == null)
+                mod_canvas_group = GetComponent<CanvasGroup>();
+            if (mod_rect == null)
+                mod_rect = GetComponent<RectTransform>();
+            if (mod_image == null)
+                mod_image = GetComponent<Image>();
+            if (mod_raw_image == null)
+                mod_raw_image = GetComponent<RawImage>();
+            if (mod_text == null)
+                mod_text = GetComponent<XHud_Module_Text>();
+            if (mod_tmp_text == null)
+                mod_tmp_text = GetComponent<XHud_Module_TmpText>();
+            if (mod_hud_button == null)
+                mod_hud_button = GetComponentInParent<XHud_Module_Button>();
         }
         /// <summary>
         /// 获取被控组件基类类型
@@ -174,28 +174,28 @@ namespace SevenStrikeModules.XHud
             Graphic gc = null;
 
             ///---------Image组件
-            if (mod_Image != null)
+            if (mod_image != null)
             {
-                gc = mod_Image;
-                ModuleType = ModuleType.Image;
+                gc = mod_image;
+                module_type = ModuleType.Image;
             }
             ///---------RawImage
-            if (mod_RawImage != null)
+            if (mod_raw_image != null)
             {
-                gc = mod_RawImage;
-                ModuleType = ModuleType.RawImage;
+                gc = mod_raw_image;
+                module_type = ModuleType.RawImage;
             }
             ///---------Text
-            if (mod_Text != null)
+            if (mod_text != null)
             {
-                gc = mod_Text;
-                ModuleType = ModuleType.Text;
+                gc = mod_text;
+                module_type = ModuleType.Text;
             }
             ///-}--------TmpText
-            if (mod_TmpText != null)
+            if (mod_tmp_text != null)
             {
-                gc = mod_TmpText;
-                ModuleType = ModuleType.TmpText;
+                gc = mod_tmp_text;
+                module_type = ModuleType.TmpText;
             }
 
             return gc;
@@ -207,7 +207,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public ModuleType GetModuleType()
         {
-            return ModuleType;
+            return module_type;
         }
 
         #region 组件标识
@@ -217,7 +217,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public string GetID()
         {
-            return ID;
+            return id;
         }
         /// <summary>
         /// 设置D
@@ -225,7 +225,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="id"></param>
         public void SetID(string id)
         {
-            ID = id;
+            this.id = id;
         }
         /// <summary>
         /// 获取标识名称
@@ -233,7 +233,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public string GetIndicator()
         {
-            return Indicator;
+            return indicator;
         }
         /// <summary>
         /// 设置标识名称
@@ -241,7 +241,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="indicator"></param>
         public void SetIndicator(string indicator)
         {
-            Indicator = indicator;
+            this.indicator = indicator;
         }
         #endregion
 
@@ -261,7 +261,7 @@ namespace SevenStrikeModules.XHud
             XHud_Module_Primitive_Tween comp_tween = (XHud_Module_Primitive_Tween)Undo.AddComponent(gameObject, typeof(XHud_Module_Primitive_Tween));
             comp_tween.Tween_GetController();
 
-            IsInitial = true;
+            is_initial = true;
 
             GetControlComponent();
 
@@ -274,7 +274,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public void ClearComponents_For_Editor()
         {
-            IsInitial = false;
+            is_initial = false;
             if (gameObject.GetComponent<CanvasGroup>() != null)
                 Undo.DestroyObjectImmediate(gameObject.GetComponent<CanvasGroup>());
             if (gameObject.GetComponent<XHud_Module_Primitive_Painting_Synchronizer>() != null)

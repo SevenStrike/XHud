@@ -27,12 +27,12 @@ namespace SevenStrikeModules.XHud
     {
         [SerializeField]
         [Range(0f, 1f)]
-        public float Alpha = 1;
+        public float alpha = 1;
         [SerializeField]
         /// <summary>
         /// CanvasGroup组件
         /// </summary>
-        public CanvasGroup CanvasGroup;
+        public CanvasGroup canvasgroup;
 
         /// <summary>
         /// XHud元素 - 同步透明度
@@ -41,20 +41,20 @@ namespace SevenStrikeModules.XHud
         {
             // 浮点数边界值钳位与容差处理
             // 防止浮点数精度问题导致的值无法精确到达边界（0 或 1），主动将其钳位到精确的边界值
-            if (CanvasGroup != null)
+            if (canvasgroup != null)
             {
-                if (Alpha >= 0.9999f)
+                if (alpha >= 0.9999f)
                 {
-                    CanvasGroup.alpha = 1;
-                    Alpha = 1;
+                    canvasgroup.alpha = 1;
+                    alpha = 1;
                 }
-                else if (Alpha <= 0.0001f)
+                else if (alpha <= 0.0001f)
                 {
-                    CanvasGroup.alpha = 0;
-                    Alpha = 0;
+                    canvasgroup.alpha = 0;
+                    alpha = 0;
                 }
                 else
-                    CanvasGroup.alpha = Alpha;
+                    canvasgroup.alpha = alpha;
             }
         }
         /// <summary>
@@ -63,10 +63,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="alpha">透明度</param>
         public virtual void element_AlphaSet(float alpha)
         {
-            Alpha = alpha;
+            this.alpha = alpha;
             element_AlphaSyncUpdate();
 
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "透明度设置为：" + alpha, XGUIMsgState.通知);
         }
     }

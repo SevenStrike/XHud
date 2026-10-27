@@ -23,6 +23,85 @@ namespace SevenStrikeModules.XHud
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XTween;
     using UnityEngine;
+    using static UnityEditor.FilePathAttribute;
+
+    [System.Serializable]
+    public class XHud_Arg_MotionGroup
+    {
+        public HudElementMotionType Type;
+        /// <summary>
+        /// 参数模版 - 生成参数
+        /// </summary>
+        public Motion_Creator Creator = new Motion_Creator();
+        /// <summary>
+        /// 参数模版 - 回收参数
+        /// </summary>
+        public Motion_Recycler Recycler = new Motion_Recycler();
+
+        public XHud_Arg_MotionGroup()
+        {
+
+        }
+
+        public XHud_Arg_MotionGroup(HudElementMotionType mode, Motion_Creator creator, Motion_Recycler recycler)
+        {
+            Type = mode;
+            Creator = creator.Clone();
+            Recycler = recycler.Clone();
+        }
+
+        public XHud_Arg_MotionGroup(HudElementMotionType mode, Motion_Creator creator)
+        {
+            Type = mode;
+            Creator = creator.Clone();
+        }
+
+        public XHud_Arg_MotionGroup(HudElementMotionType mode, Motion_Recycler recycler)
+        {
+            Type = mode;
+            Recycler = recycler.Clone();
+        }
+
+        public XHud_Arg_MotionGroup(Motion_Creator creator, bool clone = true)
+        {
+            Type = HudElementMotionType.Creator;
+            Creator = clone ? creator.Clone() : creator;
+        }
+
+        public XHud_Arg_MotionGroup(Motion_Recycler recycler, bool clone = true)
+        {
+            Type = HudElementMotionType.Recycler;
+            Recycler = clone ? recycler.Clone() : recycler;
+        }
+
+        public XHud_Arg_MotionGroup(XHud_Arg_MotionGroup motion)
+        {
+            Type = motion.Type;
+
+            // 实例化 CRC
+            Motion_Creator crc = new Motion_Creator();
+            crc.anchor = motion.Creator.anchor;
+            crc.Movement = new MotionNode_Movement();
+            crc.Movement.CopyData(motion.Creator.Movement);
+            crc.Rotation = new MotionNode_Rotation();
+            crc.Rotation.CopyData(motion.Creator.Rotation);
+            crc.Alpha = new MotionNode_Alpha();
+            crc.Alpha.CopyData(motion.Creator.Alpha);
+            crc.MotionAnimateEndState = motion.Creator.MotionAnimateEndState;
+            Creator = crc;
+
+            // 实例化 REC
+            Motion_Recycler rec = new Motion_Recycler();
+            rec.Movement = new MotionNode_Movement();
+            rec.Movement.CopyData(motion.Recycler.Movement);
+            rec.Rotation = new MotionNode_Rotation();
+            rec.Rotation.CopyData(motion.Recycler.Rotation);
+            rec.Alpha = new MotionNode_Alpha();
+            rec.Alpha.CopyData(motion.Recycler.Alpha);
+            rec.MotionAnimateEndState = motion.Recycler.MotionAnimateEndState;
+            Recycler = rec;
+        }
+    }
 
     /// <summary>
     /// 元素创建参数
@@ -103,6 +182,16 @@ namespace SevenStrikeModules.XHud
             clone.Rotation = this.Rotation?.Clone();
             return clone;
         }
+
+        public void Reset()
+        {
+            anchor = XHudAnchor.中心;
+            MotionAnimateEndState = MotionAnimateEndState.以_透明度为准;
+
+            Alpha.Reset();
+            Movement.Reset(HudMotion_Movement.S_从下至上);
+            Rotation.Reset();
+        }
     }
 
     /// <summary>
@@ -176,6 +265,15 @@ namespace SevenStrikeModules.XHud
             clone.Rotation = this.Rotation?.Clone();
             return clone;
         }
+
+        public void Reset()
+        {
+            MotionAnimateEndState = MotionAnimateEndState.以_透明度为准;
+
+            Alpha.Reset();
+            Movement.Reset(HudMotion_Movement.D_从上至下);
+            Rotation.Reset();
+        }
     }
 
     [System.Serializable]
@@ -237,6 +335,17 @@ namespace SevenStrikeModules.XHud
             clone.CurveName = this.CurveName;
             clone.Ease = this.Ease;
             return clone;
+        }
+
+        public void Reset(HudMotion_Movement movement = HudMotion_Movement.S_从下至上)
+        {
+            Movement = movement;
+            Distance = 100;
+            Duration = 1f;
+            Delay = 0f;
+            Curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+            CurveName = "";
+            Ease = EaseMode.InOutCubic;
         }
     }
 
@@ -300,6 +409,17 @@ namespace SevenStrikeModules.XHud
             clone.Ease = this.Ease;
             return clone;
         }
+
+        public void Reset()
+        {
+            Rotation = HudMotion_Rotation.A_无旋转;
+            Degree = 0;
+            Duration = 1f;
+            Delay = 0f;
+            Curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+            CurveName = "";
+            Ease = EaseMode.InOutCubic;
+        }
     }
 
     [System.Serializable]
@@ -349,6 +469,15 @@ namespace SevenStrikeModules.XHud
             clone.CurveName = this.CurveName;
             clone.Ease = this.Ease;
             return clone;
+        }
+
+        public void Reset()
+        {
+            Duration = 1f;
+            Delay = 0f;
+            Curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+            CurveName = "";
+            Ease = EaseMode.InOutCubic;
         }
     }
 }

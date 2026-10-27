@@ -50,7 +50,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>在 <c>OnEnable</c> 中构造，用于序列化窗口内字段。</description></item>
         /// </list>
         /// </summary>
-        private SerializedObject BaseObject;
+        private SerializedObject base_object;
         /// <summary>
         /// 渐变色卡颜色列表。
         /// <para/>
@@ -59,7 +59,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </list>
         /// </summary>
         [SerializeField]
-        public List<Color> ColorGradient = new List<Color>();
+        public List<Color> color_gradient = new List<Color>();
         #endregion
 
         #region 字段 - 窗口引用
@@ -81,7 +81,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>用于「库配置」页中元素库列表的滚动。</description></item>
         /// </list>
         /// </summary>
-        private Vector2 list_scrollPosition;
+        private Vector2 list_scroll_position;
         /// <summary>
         /// 列表项高度缓存。
         /// <para/>
@@ -89,7 +89,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>由滚动视图内部维护，用于计算总高度。</description></item>
         /// </list>
         /// </summary>
-        private List<float> list_cachedItemHeights;
+        private List<float> list_cached_item_heights;
         /// <summary>
         /// 列表高度脏标记。
         /// <para/>
@@ -97,20 +97,70 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>为 <c>true</c> 时表示需要重算列表项高度。</description></item>
         /// </list>
         /// </summary>
-        private bool list_heightsDirty = true;
+        private bool list_heights_dirty = true;
         #endregion
 
         #region 字段 - 图标
         /// <summary>
-        /// 本窗口所使用的图标资源集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>诊断页图标：<c>logo</c> / <c>sizebg</c> / <c>perspective</c> / <c>orthorgrphic</c> / <c>status_dot</c>。</description></item>
-        /// <item><description>统计页图标：<c>icon_element</c> / <c>icon_primitive</c> / <c>icon_sounder</c> / <c>icon_option</c> / <c>icon_button</c>。</description></item>
-        /// <item><description>统计页图标续：<c>icon_toggle</c> / <c>icon_progress</c> / <c>icon_slider</c> / <c>icon_text</c> / <c>icon_tmptext</c>。</description></item>
-        /// </list>
+        /// 诊断页 - Logo 图标
         /// </summary>
-        private Texture2D logo, icon_element, icon_primitive, icon_sounder, icon_button, icon_toggle, icon_progress, icon_slider, icon_option, icon_text, icon_tmptext, sizebg, perspective, orthorgrphic, status_dot;
+        private Texture2D logo;
+        /// <summary>
+        /// 诊断页 - 尺寸背景图标
+        /// </summary>
+        private Texture2D sizebg;
+        /// <summary>
+        /// 诊断页 - 透视视图图标
+        /// </summary>
+        private Texture2D perspective;
+        /// <summary>
+        /// 诊断页 - 正交视图图标
+        /// </summary>
+        private Texture2D orthorgrphic;
+        /// <summary>
+        /// 诊断页 - 状态点图标
+        /// </summary>
+        private Texture2D status_dot;
+        /// <summary>
+        /// 统计页 - 元素图标
+        /// </summary>
+        private Texture2D icon_element;
+        /// <summary>
+        /// 统计页 - 图元图标
+        /// </summary>
+        private Texture2D icon_primitive;
+        /// <summary>
+        /// 统计页 - 音效图标
+        /// </summary>
+        private Texture2D icon_sounder;
+        /// <summary>
+        /// 统计页 - 选项图标
+        /// </summary>
+        private Texture2D icon_option;
+        /// <summary>
+        /// 统计页 - 按钮图标
+        /// </summary>
+        private Texture2D icon_button;
+        /// <summary>
+        /// 统计页 - 开关图标
+        /// </summary>
+        private Texture2D icon_toggle;
+        /// <summary>
+        /// 统计页 - 进度条图标
+        /// </summary>
+        private Texture2D icon_progress;
+        /// <summary>
+        /// 统计页 - 滑动条图标
+        /// </summary>
+        private Texture2D icon_slider;
+        /// <summary>
+        /// 统计页 - 文本图标
+        /// </summary>
+        private Texture2D icon_text;
+        /// <summary>
+        /// 统计页 - TMP 文本图标
+        /// </summary>
+        private Texture2D icon_tmptext;
         #endregion
 
         #region 字段 - 布局参数
@@ -121,7 +171,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>默认 26。</description></item>
         /// </list>
         /// </summary>
-        public float itemHeight = 26;
+        public float item_height = 26;
         /// <summary>
         /// 可视区域显示的元素数量。
         /// <para/>
@@ -129,7 +179,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>默认 20。</description></item>
         /// </list>
         /// </summary>
-        public int visibleItemCount = 20;
+        public int visible_item_count = 20;
         /// <summary>
         /// 渐变色卡滚动位置。
         /// <para/>
@@ -137,7 +187,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>用于渐变色卡区域的滚动。</description></item>
         /// </list>
         /// </summary>
-        public Vector2 GradientColors_Scroller;
+        public Vector2 gradient_colors_scroller;
         #endregion
 
         #region 字段 - 状态
@@ -148,7 +198,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>默认 0。</description></item>
         /// </list>
         /// </summary>
-        public int SelectedIndex = 0;
+        public int selected_index = 0;
         /// <summary>
         /// 状态面板索引号。
         /// <para/>
@@ -164,7 +214,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>在 <c>OnEnable</c> 中由主题色生成。</description></item>
         /// </list>
         /// </summary>
-        public string HexPrimaryColor;
+        public string hex_primary_color;
         #endregion
 
         #region 字段 - 模组检测开关
@@ -268,10 +318,11 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseObject = new SerializedObject(this);
+            base_object = new SerializedObject(this);
 
             CheckToolsExists();
 
+            #region 获取图标
             logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_diagnostic/logo");
             icon_element = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_diagnostic/icon_element");
             icon_primitive = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_diagnostic/icon_primitive");
@@ -287,8 +338,9 @@ namespace SevenStrikeModules.XHud.Editor
             perspective = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_diagnostic/perspective");
             orthorgrphic = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_diagnostic/orthorgrphic");
             status_dot = XGUI.GetBasedIcon("icon_field_status");
+            #endregion
 
-            HexPrimaryColor = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), false);
+            hex_primary_color = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), false);
         }
         /// <summary>
         /// 窗口禁用时清理。
@@ -328,7 +380,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             XHud_Manager mgr = XHud_Dashboard.get_manager();
 
-            BaseObject.Update();
+            base_object.Update();
 
             #region 抬头
             Rect rect = new Rect(0, 0, position.width, position.height);
@@ -420,10 +472,10 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 case 0:
                     state_displayer("管理器已创建", status_dot, mgr == null ? Color.black : XHud_Dashboard.themes_get_color(ThemeColorType.primary));
-                    state_displayer("单例模式", status_dot, mgr.UseInstanceMode ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
-                    state_displayer("画布尺寸指定", status_dot, mgr.ScreenRes == Vector2.zero ? Color.black : XHud_Dashboard.themes_get_color(ThemeColorType.primary));
-                    state_displayer("场景相机指定", status_dot, mgr.SceneCamera == null ? Color.black : XHud_Dashboard.themes_get_color(ThemeColorType.primary));
-                    state_displayer("世界坐标支持", status_dot, mgr.SupportWorldUI ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer("单例模式", status_dot, mgr.use_instance ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer("画布尺寸指定", status_dot, mgr.cv_screen_res == Vector2.zero ? Color.black : XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer("场景相机指定", status_dot, mgr.camera_scene == null ? Color.black : XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    state_displayer("世界坐标支持", status_dot, mgr.cv_support_world_ui ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
 
                     XGUI.layout_seperator(thickness: 1,
                         color: Color.white * 0.5f,
@@ -439,12 +491,12 @@ namespace SevenStrikeModules.XHud.Editor
                     state_displayer($"{(mod_isexist_mat_clean ? "已" : "未")}装配：材质清理器", status_dot, mod_isexist_mat_clean ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
                     break;
                 case 1:
-                    state_displayer($"{(mgr.Hud_Colors != null ? "已" : "未")}装配：色卡库", status_dot, mgr.Hud_Colors != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
-                    state_displayer($"{(mgr.Hud_Curves != null ? "已" : "未")}装配：曲线库", status_dot, mgr.Hud_Curves != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
-                    state_displayer($"{(mgr.Hud_Sounds != null ? "已" : "未")}装配：音效库", status_dot, mgr.Hud_Sounds != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
-                    state_displayer($"{(mgr.Hud_TextStyleLibrary != null ? "已" : "未")}装配：字体库", status_dot, mgr.Hud_TextStyleLibrary != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
-                    state_displayer($"{(mgr.Hud_Motions != null ? "已" : "未")}装配：动效库", status_dot, mgr.Hud_Motions != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
-                    state_displayer($"{(mgr.Hud_TransitionLib != null ? "已" : "未")}装配：转场库", status_dot, mgr.Hud_TransitionLib != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mgr.library_colors != null ? "已" : "未")}装配：色卡库", status_dot, mgr.library_colors != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mgr.library_curves != null ? "已" : "未")}装配：曲线库", status_dot, mgr.library_curves != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mgr.library_sounds != null ? "已" : "未")}装配：音效库", status_dot, mgr.library_sounds != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mgr.library_textstyles != null ? "已" : "未")}装配：字体库", status_dot, mgr.library_textstyles != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mgr.library_motions != null ? "已" : "未")}装配：动效库", status_dot, mgr.library_motions != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
+                    state_displayer($"{(mgr.library_transitions != null ? "已" : "未")}装配：转场库", status_dot, mgr.library_transitions != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black);
 
                     XGUI.layout_seperator(thickness: 1,
                    color: Color.white * 0.5f,
@@ -456,15 +508,15 @@ namespace SevenStrikeModules.XHud.Editor
 
                     bool listoverflow = true;
 
-                    if (list_root.height > 65 * mgr.Hud_ElementLibrarys.Count)
+                    if (list_root.height > 65 * mgr.ele_library_elements.Count)
                         listoverflow = false;
 
-                    list_scrollPosition = XGUI.gui_scrollview<XHud_Library_Element>(
+                    list_scroll_position = XGUI.gui_scrollview<XHud_Library_Element>(
                         rect: new Rect(list_root.x, list_root.y, list_root.width - 3, list_root.height),
-                        scroll: list_scrollPosition,
-                        list: mgr.Hud_ElementLibrarys,
-                        cachedItemHeights: ref list_cachedItemHeights,
-                        heightsDirty: ref list_heightsDirty,
+                        scroll: list_scroll_position,
+                        list: mgr.ele_library_elements,
+                        cachedItemHeights: ref list_cached_item_heights,
+                        heightsDirty: ref list_heights_dirty,
                         fixheight: 65,
                         onscroller: (rect, type, index) =>
                         {
@@ -495,7 +547,7 @@ namespace SevenStrikeModules.XHud.Editor
                             #region 名称
                             XGUI.gui_label(
                                 rect: new Rect(rect_bg.x + 18, rect_bg.y + 8, rect_bg.width, XGUI.GetSingleLineHeight()),
-                                text: new GUIContent($"{type.LibraryName}"),
+                                text: new GUIContent($"{type.library_name}"),
                                 text_color: Color.white,
                                 size: XGUIFontSize.M,
                                 anchor: TextAnchor.MiddleLeft,
@@ -505,7 +557,7 @@ namespace SevenStrikeModules.XHud.Editor
                             #region 数量
                             XGUI.gui_label(
                                 rect: new Rect(rect_bg.x + 18, rect_bg.y + 32, rect_bg.width, XGUI.GetSingleLineHeight()),
-                                text: new GUIContent($"<color=#808080>元素数量：</color><color=#{HexPrimaryColor}>{type.ElementsLibrary_GetElementsCount()}</color>  个"),
+                                text: new GUIContent($"<color=#808080>元素数量：</color><color=#{hex_primary_color}>{type.ElementsLibrary_GetElementsCount()}</color>  个"),
                                 text_color: Color.white,
                                 size: XGUIFontSize.S,
                                 anchor: TextAnchor.MiddleLeft,
@@ -528,7 +580,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 margin: new RectOffset(0, 0, 0, 0),
                                 padding: new RectOffset(0, 0, 0, 0)))
                             {
-                                Editor_XHud_MenuItemsAction_OpenLibrary.open_target_elements(type.LibraryName);
+                                Editor_XHud_MenuItemsAction_OpenLibrary.open_target_elements(type.library_name);
                             }
 
                             #endregion   
@@ -539,8 +591,8 @@ namespace SevenStrikeModules.XHud.Editor
                     break;
                 case 2:
                     #region 分辨率参数概览
-                    float originalWidth = mgr.ScreenRes.x;
-                    float originalHeight = mgr.ScreenRes.y;
+                    float originalWidth = mgr.cv_screen_res.x;
+                    float originalHeight = mgr.cv_screen_res.y;
 
                     #region 计算等比缩放
                     float targetWidth = position.width - 28;
@@ -578,7 +630,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     XGUI.gui_label(
                         rect: new Rect(res.x + 1, res.y - 25, res.width - 15, XGUI.GetSingleLineHeight()),
-                        text: new GUIContent($"当前分辨率：<color={hexcol}>{mgr.ScreenRes.x} x {mgr.ScreenRes.y}</color>"),
+                        text: new GUIContent($"当前分辨率：<color={hexcol}>{mgr.cv_screen_res.x} x {mgr.cv_screen_res.y}</color>"),
                         text_color: Color.white,
                         size: XGUIFontSize.M,
                         clipping: TextClipping.Overflow,
@@ -601,7 +653,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     XGUI.gui_label(
                       rect: new Rect(res.x + res.width / 2 - 50, res.y + res.height / 2 - 10, 100, XGUI.GetSingleLineHeight()),
-                      text: new GUIContent($"宽高比：{(mgr.ScreenRes.x / mgr.ScreenRes.y).ToString("F2")}"),
+                      text: new GUIContent($"宽高比：{(mgr.cv_screen_res.x / mgr.cv_screen_res.y).ToString("F2")}"),
                       text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                       size: XGUIFontSize.M,
                       clipping: TextClipping.Overflow,
@@ -622,7 +674,7 @@ namespace SevenStrikeModules.XHud.Editor
                       icon: sizebg,
                       color: Color.white * 0.12f);
 
-                    if (mgr.CameraOthograpicMode)
+                    if (mgr.camera_othograpic_mode)
                         XGUI.gui_icon(
                             rect: new Rect(cams.x, cams.y, 300, 180),
                             icon: orthorgrphic,
@@ -633,10 +685,10 @@ namespace SevenStrikeModules.XHud.Editor
                             icon: perspective,
                             color: Color.white * 0.7f);
 
-                    if (!mgr.CameraOthograpicMode)
+                    if (!mgr.camera_othograpic_mode)
                         XGUI.gui_label(
                             rect: new Rect(cams.x + 1, cams.y - 26, 80, XGUI.GetSingleLineHeight()),
-                            text: new GUIContent($"视场角：<color={hexcol}>{mgr.CameraFov}</color> °"),
+                            text: new GUIContent($"视场角：<color={hexcol}>{mgr.camera_ui_fov}</color> °"),
                             text_color: Color.white,
                             size: XGUIFontSize.M,
                             clipping: TextClipping.Overflow,
@@ -647,7 +699,7 @@ namespace SevenStrikeModules.XHud.Editor
                     else
                         XGUI.gui_label(
                             rect: new Rect(cams.x + 1, cams.y - 26, 80, XGUI.GetSingleLineHeight()),
-                            text: new GUIContent($"视场大小：<color={hexcol}>{mgr.CameraOrthographicSize}</color> °"),
+                            text: new GUIContent($"视场大小：<color={hexcol}>{mgr.camera_ui_orthographic_size}</color> °"),
                             text_color: Color.white,
                             size: XGUIFontSize.M,
                             clipping: TextClipping.Overflow,
@@ -658,7 +710,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     XGUI.gui_label(
                         rect: new Rect(cams.x + cams.width - 120, cams.y + cams.height - 25, 100, 18),
-                        text: new GUIContent($"远距：<color={hexcol}>{mgr.CameraCutter_Far}</color>"),
+                        text: new GUIContent($"远距：<color={hexcol}>{mgr.camera_ui_cutter_far}</color>"),
                         text_color: Color.white,
                         size: XGUIFontSize.S,
                         clipping: TextClipping.Overflow,
@@ -669,7 +721,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     XGUI.gui_label(
                         rect: new Rect(cams.x + 25, cams.y + cams.height - 25, 100, 18),
-                        text: new GUIContent($"近距：<color={hexcol}>{mgr.CameraCutter_Near}</color>"),
+                        text: new GUIContent($"近距：<color={hexcol}>{mgr.camera_ui_cutter_near}</color>"),
                         text_color: Color.white,
                         size: XGUIFontSize.S,
                         clipping: TextClipping.Overflow,
@@ -680,7 +732,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     XGUI.gui_label(
                         rect: new Rect(cams.x + 156, cams.y + 60, 100, 18),
-                        text: new GUIContent($"画布距离：<color={hexcol}>{mgr.CanvasDistance}</color>"),
+                        text: new GUIContent($"画布距离：<color={hexcol}>{mgr.cv_distance}</color>"),
                         text_color: Color.white,
                         size: XGUIFontSize.S,
                         clipping: TextClipping.Overflow,

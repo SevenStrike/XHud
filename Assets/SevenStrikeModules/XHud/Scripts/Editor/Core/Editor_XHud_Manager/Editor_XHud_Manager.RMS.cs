@@ -45,7 +45,7 @@ namespace SevenStrikeModules.XHud.Editor
             string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             #region RMS说明
-            if (RMS_Nodes.arraySize <= 0)
+            if (sp_rms_nodes.arraySize <= 0)
             {
                 string msg = $"如果开发的应用布局元素需要<color={hexcol}>同时针对多个分辨率</color>进行匹配和定位，那么请在此添加目标分辨率";
 
@@ -72,7 +72,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.SetEnabled(false);
 
             #region 分辨率列表
-            List_RMS.DoLayoutList();
+            list_rms.DoLayoutList();
             #endregion
 
             XGUI.layout_space(5);
@@ -109,8 +109,8 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         if (d == "清空")
                         {
-                            RMS_Nodes.ClearArray();
-                            RMS_Nodes.serializedObject.ApplyModifiedProperties();
+                            sp_rms_nodes.ClearArray();
+                            sp_rms_nodes.serializedObject.ApplyModifiedProperties();
                         }
                     });
                 return;
@@ -131,7 +131,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void Init_RMSList()
         {
-            List_RMS = new ReorderableList(serializedObject, RMS_Nodes)
+            list_rms = new ReorderableList(serializedObject, sp_rms_nodes)
             {
                 draggable = false,
                 displayAdd = !Application.isPlaying,
@@ -170,7 +170,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="isFocused">是否聚焦。</param>
         private void RMS_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty sp_node = RMS_Nodes.GetArrayElementAtIndex(index);
+            SerializedProperty sp_node = sp_rms_nodes.GetArrayElementAtIndex(index);
             SerializedProperty sp_node_indicator = sp_node.FindPropertyRelative("Indicator");
             SerializedProperty sp_node_res = sp_node.FindPropertyRelative("Res");
             if (sp_node != null)
@@ -200,7 +200,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.gui_icon(
                     rect: new Rect(rect.x + 5, rect.y + 3, 14, 14),
                     icon: rmsicon,
-                    color: ScreenRes.vector2Value != sp_node_res.vector2Value ? Color.gray : XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                    color: sp_cv_screen_res.vector2Value != sp_node_res.vector2Value ? Color.gray : XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             }
         }
         /// <summary>
@@ -214,7 +214,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>元素高度。</returns>
         private float RMS_ElementHeight(int index)
         {
-            return 1.5f * LineHeight;
+            return 1.5f * line_height;
         }
         /// <summary>
         /// RMS 列表 - 添加回调。
@@ -226,7 +226,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="list">列表实例。</param>
         private void RMS_OnAdd(ReorderableList list)
         {
-            RMS_Nodes.InsertArrayElementAtIndex(list.count);
+            sp_rms_nodes.InsertArrayElementAtIndex(list.count);
         }
         /// <summary>
         /// RMS 列表 - 移除回调。
@@ -238,7 +238,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="list">列表实例。</param>
         private void RMS_OnRemove(ReorderableList list)
         {
-            RMS_Nodes.DeleteArrayElementAtIndex(list.index);
+            sp_rms_nodes.DeleteArrayElementAtIndex(list.index);
         }
         /// <summary>
         /// RMS 列表 - 选中回调。
@@ -250,8 +250,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="list">列表实例。</param>
         private void RMS_OnSelect(ReorderableList list)
         {
-            SerializedProperty indicator = RMS_Nodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Indicator");
-            RMS_CurrentSolution.stringValue = indicator.stringValue;
+            SerializedProperty indicator = sp_rms_nodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Indicator");
+            sp_rms_current_solution.stringValue = indicator.stringValue;
             xHud_SwitchResolution(indicator.stringValue);
         }
         #endregion
@@ -266,9 +266,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void RefreshResolution()
         {
-            CanvasScaler scaler = (CanvasScaler)HudCanvasScaler.objectReferenceValue;
-            scaler.referenceResolution = ScreenRes.vector2Value;
-            CanvasScalerScreenSize.vector2Value = ScreenRes.vector2Value;
+            CanvasScaler scaler = (CanvasScaler)sp_cv_scaler.objectReferenceValue;
+            scaler.referenceResolution = sp_cv_screen_res.vector2Value;
+            sp_sf_canvas_scaler_screen_size.vector2Value = sp_cv_screen_res.vector2Value;
         }
         /// <summary>
         /// 切换分辨率。
@@ -281,21 +281,21 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="indicator">分辨率标识。</param>
         public void xHud_SwitchResolution(string indicator)
         {
-            for (int i = 0; i < RMS_Nodes.arraySize; i++)
+            for (int i = 0; i < sp_rms_nodes.arraySize; i++)
             {
-                SerializedProperty resroot = RMS_Nodes.GetArrayElementAtIndex(i);
+                SerializedProperty resroot = sp_rms_nodes.GetArrayElementAtIndex(i);
                 SerializedProperty x_res = resroot.FindPropertyRelative("Res");
                 SerializedProperty x_indicator = resroot.FindPropertyRelative("Indicator");
 
                 if (indicator == x_indicator.stringValue)
                 {
-                    ScreenRes.vector2Value = x_res.vector2Value;
+                    sp_cv_screen_res.vector2Value = x_res.vector2Value;
 
                     RefreshResolution();
                     // 设置编辑器的分辨率
-                    if (SizeExists(GameViewSizeGroupType.Standalone, (int)ScreenRes.vector2Value.x, (int)ScreenRes.vector2Value.y))
+                    if (SizeExists(GameViewSizeGroupType.Standalone, (int)sp_cv_screen_res.vector2Value.x, (int)sp_cv_screen_res.vector2Value.y))
                     {
-                        SetSize(FindSize(GameViewSizeGroupType.Standalone, (int)ScreenRes.vector2Value.x, (int)ScreenRes.vector2Value.y));
+                        SetSize(FindSize(GameViewSizeGroupType.Standalone, (int)sp_cv_screen_res.vector2Value.x, (int)sp_cv_screen_res.vector2Value.y));
                     }
                     else
                     {

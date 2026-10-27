@@ -83,15 +83,15 @@ namespace SevenStrikeModules.XHud.Editor
                 TweenNode node = Nodes[i];
 
                 // ── 未启用节点：不参与驱动，清理其残留 tween 与区间标记 ──
-                if (!node.Enabled)
+                if (!node.enabled)
                 {
                     CleanupPreviewTween(i);
                     playheadPrevInRange.Remove(i);
                     continue;
                 }
 
-                float D = node.Delay;
-                float U = node.Duration;
+                float D = node.delay;
+                float U = node.duration;
                 bool inRange = (t >= D && t <= D + U);
                 bool wasInRange = playheadPrevInRange.Contains(i);
 
@@ -179,7 +179,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (node == null) return null;
             if (target == null || target.controller == null) return null;
 
-            switch (node.Type)
+            switch (node.type)
             {
                 case TweenNodeType.a_位移:
                     return CreatePreviewTween_Position(node);
@@ -207,7 +207,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private XTween_Interface CreatePreviewTween_Position(TweenNode node)
         {
-            RectTransform rt = target.controller.mod_Rect;
+            RectTransform rt = target.controller.mod_rect;
             if (rt == null) return null;
 
             // ── 按模式解析目标值与起点策略 ──
@@ -216,28 +216,28 @@ namespace SevenStrikeModules.XHud.Editor
             bool useStaticFrom = false;
             bool useDynamicFrom = false;
 
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    targetValue = node.Original_Vector3;
-                    fromStatic = node.From_Vector3;
+                    targetValue = node.ori_vector3;
+                    fromStatic = node.from_vector3;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.起始到结束_S_E:
-                    targetValue = node.End_Vector3;
-                    fromStatic = node.From_Vector3;
+                    targetValue = node.end_vector3;
+                    fromStatic = node.from_vector3;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.默认到结束_D_E:
-                    targetValue = node.End_Vector3;
-                    fromStatic = node.Original_Vector3;
+                    targetValue = node.end_vector3;
+                    fromStatic = node.ori_vector3;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.当前到结束_C_E:
-                    targetValue = node.End_Vector3;
+                    targetValue = node.end_vector3;
                     useDynamicFrom = true;
                     break;
 
@@ -252,7 +252,7 @@ namespace SevenStrikeModules.XHud.Editor
             // complete_set_endvalue = false（飞梭驱动不依赖 complete）
             XTween_Interface tw = rt.xt_AnchoredPosition3D_To(
                 targetValue,
-                node.Duration,
+                node.duration,
                 false,
                 false,
                 false,
@@ -277,10 +277,10 @@ namespace SevenStrikeModules.XHud.Editor
             }
 
             // ── 缓动 ──
-            if (node.Ease == EaseMode.None)
-                tw = tw.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                tw = tw.SetEase(node.curve);
             else
-                tw = tw.SetEase(node.Ease);
+                tw = tw.SetEase(node.ease);
 
             return tw;
         }
@@ -299,7 +299,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private XTween_Interface CreatePreviewTween_Rotate(TweenNode node)
         {
-            RectTransform rt = target.controller.mod_Rect;
+            RectTransform rt = target.controller.mod_rect;
             if (rt == null) return null;
 
             Vector3 targetValue;
@@ -307,28 +307,28 @@ namespace SevenStrikeModules.XHud.Editor
             bool useStaticFrom = false;
             bool useDynamicFrom = false;
 
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    targetValue = node.Original_Vector3;
-                    fromStatic = node.From_Vector3;
+                    targetValue = node.ori_vector3;
+                    fromStatic = node.from_vector3;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.起始到结束_S_E:
-                    targetValue = node.End_Vector3;
-                    fromStatic = node.From_Vector3;
+                    targetValue = node.end_vector3;
+                    fromStatic = node.from_vector3;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.默认到结束_D_E:
-                    targetValue = node.End_Vector3;
-                    fromStatic = node.Original_Vector3;
+                    targetValue = node.end_vector3;
+                    fromStatic = node.ori_vector3;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.当前到结束_C_E:
-                    targetValue = node.End_Vector3;
+                    targetValue = node.end_vector3;
                     useDynamicFrom = true;
                     break;
 
@@ -342,11 +342,11 @@ namespace SevenStrikeModules.XHud.Editor
             // 注意：xt_Rotate_To 的这个重载没有 rewind_set_startvalue / complete_set_endvalue 参数
             XTween_Interface tw = rt.xt_Rotate_To(
                 targetValue,
-                node.Duration,
+                node.duration,
                 false,              // isRelative
                 false,              // autokill
                 space,              // 世界坐标
-                node.RotateMode);   // 照用 node.RotateMode
+                node.rotate_mode);   // 照用 node.RotateMode
 
             if (tw == null) return null;
 
@@ -365,10 +365,10 @@ namespace SevenStrikeModules.XHud.Editor
                 });
             }
 
-            if (node.Ease == EaseMode.None)
-                tw = tw.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                tw = tw.SetEase(node.curve);
             else
-                tw = tw.SetEase(node.Ease);
+                tw = tw.SetEase(node.ease);
 
             return tw;
         }
@@ -380,7 +380,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private XTween_Interface CreatePreviewTween_Scale(TweenNode node)
         {
-            RectTransform rt = target.controller.mod_Rect;
+            RectTransform rt = target.controller.mod_rect;
             if (rt == null) return null;
 
             Vector3 targetValue;
@@ -388,28 +388,28 @@ namespace SevenStrikeModules.XHud.Editor
             bool useStaticFrom = false;
             bool useDynamicFrom = false;
 
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    targetValue = node.Original_Vector3;
-                    fromStatic = node.From_Vector3;
+                    targetValue = node.ori_vector3;
+                    fromStatic = node.from_vector3;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.起始到结束_S_E:
-                    targetValue = node.End_Vector3;
-                    fromStatic = node.From_Vector3;
+                    targetValue = node.end_vector3;
+                    fromStatic = node.from_vector3;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.默认到结束_D_E:
-                    targetValue = node.End_Vector3;
-                    fromStatic = node.Original_Vector3;
+                    targetValue = node.end_vector3;
+                    fromStatic = node.ori_vector3;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.当前到结束_C_E:
-                    targetValue = node.End_Vector3;
+                    targetValue = node.end_vector3;
                     useDynamicFrom = true;
                     break;
 
@@ -420,7 +420,7 @@ namespace SevenStrikeModules.XHud.Editor
             // 与位置一致：rewind_set_startvalue = false、complete_set_endvalue = false
             XTween_Interface tw = rt.xt_Scale_To(
                 targetValue,
-                node.Duration,
+                node.duration,
                 false,   // isRelative
                 false,   // autokill
                 false,   // rewind_set_startvalue
@@ -441,10 +441,10 @@ namespace SevenStrikeModules.XHud.Editor
                 });
             }
 
-            if (node.Ease == EaseMode.None)
-                tw = tw.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                tw = tw.SetEase(node.curve);
             else
-                tw = tw.SetEase(node.Ease);
+                tw = tw.SetEase(node.ease);
 
             return tw;
         }
@@ -456,7 +456,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private XTween_Interface CreatePreviewTween_Size(TweenNode node)
         {
-            RectTransform rt = target.controller.mod_Rect;
+            RectTransform rt = target.controller.mod_rect;
             if (rt == null) return null;
 
             Vector2 targetValue;
@@ -464,28 +464,28 @@ namespace SevenStrikeModules.XHud.Editor
             bool useStaticFrom = false;
             bool useDynamicFrom = false;
 
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    targetValue = node.Original_Vector2;
-                    fromStatic = node.From_Vector2;
+                    targetValue = node.ori_vector2;
+                    fromStatic = node.from_vector2;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.起始到结束_S_E:
-                    targetValue = node.End_Vector2;
-                    fromStatic = node.From_Vector2;
+                    targetValue = node.end_vector2;
+                    fromStatic = node.from_vector2;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.默认到结束_D_E:
-                    targetValue = node.End_Vector2;
-                    fromStatic = node.Original_Vector2;
+                    targetValue = node.end_vector2;
+                    fromStatic = node.ori_vector2;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.当前到结束_C_E:
-                    targetValue = node.End_Vector2;
+                    targetValue = node.end_vector2;
                     useDynamicFrom = true;
                     break;
 
@@ -495,7 +495,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XTween_Interface tw = rt.xt_Size_To(
                 targetValue,
-                node.Duration,
+                node.duration,
                 false,   // isRelative
                 false,   // autokill
                 false,   // rewind_set_startvalue
@@ -516,10 +516,10 @@ namespace SevenStrikeModules.XHud.Editor
                 });
             }
 
-            if (node.Ease == EaseMode.None)
-                tw = tw.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                tw = tw.SetEase(node.curve);
             else
-                tw = tw.SetEase(node.Ease);
+                tw = tw.SetEase(node.ease);
 
             return tw;
         }
@@ -542,19 +542,19 @@ namespace SevenStrikeModules.XHud.Editor
 
             // ── 前置校验 1：文字库同步样式 ──
             bool isTextColorMode = false;
-            if ((ctrl.mod_Text && ctrl.mod_Text.StyleLibSynching &&
-                 ctrl.mod_Text.TextStyleInfo.LibStyle_Effect_color) ||
-                (ctrl.mod_TmpText && ctrl.mod_TmpText.StyleLibSynching &&
-                 ctrl.mod_TmpText.TextStyleInfo.LibStyle_Effect_color))
+            if ((ctrl.mod_text && ctrl.mod_text.style_library_synching &&
+                 ctrl.mod_text.text_style_info.lib_style_effect_color) ||
+                (ctrl.mod_tmp_text && ctrl.mod_tmp_text.style_library_synching &&
+                 ctrl.mod_tmp_text.text_style_info.lib_style_effect_color))
             {
                 isTextColorMode = true;
             }
             if (isTextColorMode) return null;
 
             // ── 前置校验 2：配色器接管 ──
-            if (ctrl.GetModuleType() == ModuleType.Image && ctrl.pt_Painting.SyncLibraryColor)
+            if (ctrl.GetModuleType() == ModuleType.Image && ctrl.pt_painting.sync_library_color)
                 return null;
-            if (ctrl.GetModuleType() == ModuleType.RawImage && ctrl.pt_Painting.SyncLibraryColor)
+            if (ctrl.GetModuleType() == ModuleType.RawImage && ctrl.pt_painting.sync_library_color)
                 return null;
 
             Graphic gc = ctrl.RecognizeType();
@@ -565,28 +565,28 @@ namespace SevenStrikeModules.XHud.Editor
             bool useStaticFrom = false;
             bool useDynamicFrom = false;
 
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    targetValue = node.Original_Color;
-                    fromStatic = node.From_Color;
+                    targetValue = node.ori_color;
+                    fromStatic = node.from_color;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.起始到结束_S_E:
-                    targetValue = node.End_Color;
-                    fromStatic = node.From_Color;
+                    targetValue = node.end_color;
+                    fromStatic = node.from_color;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.默认到结束_D_E:
-                    targetValue = node.End_Color;
-                    fromStatic = node.Original_Color;
+                    targetValue = node.end_color;
+                    fromStatic = node.ori_color;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.当前到结束_C_E:
-                    targetValue = node.End_Color;
+                    targetValue = node.end_color;
                     useDynamicFrom = true;
                     break;
 
@@ -597,7 +597,7 @@ namespace SevenStrikeModules.XHud.Editor
             // Graphic 重载：(endValue, duration, autokill, rewind_set_startvalue, complete_set_endvalue)
             XTween_Interface tw = gc.xt_Color_To(
                 targetValue,
-                node.Duration,
+                node.duration,
                 false,   // autokill
                 false,   // rewind_set_startvalue
                 false);  // complete_set_endvalue
@@ -618,10 +618,10 @@ namespace SevenStrikeModules.XHud.Editor
                 });
             }
 
-            if (node.Ease == EaseMode.None)
-                tw = tw.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                tw = tw.SetEase(node.curve);
             else
-                tw = tw.SetEase(node.Ease);
+                tw = tw.SetEase(node.ease);
 
             return tw;
         }
@@ -634,7 +634,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private XTween_Interface CreatePreviewTween_Fader(TweenNode node)
         {
-            CanvasGroup cg = target.controller.mod_CanvasGroup;
+            CanvasGroup cg = target.controller.mod_canvas_group;
             if (cg == null) return null;
 
             float targetValue;
@@ -642,28 +642,28 @@ namespace SevenStrikeModules.XHud.Editor
             bool useStaticFrom = false;
             bool useDynamicFrom = false;
 
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    targetValue = node.Original_Float;
-                    fromStatic = node.From_Float;
+                    targetValue = node.ori_float;
+                    fromStatic = node.from_float;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.起始到结束_S_E:
-                    targetValue = node.End_Float;
-                    fromStatic = node.From_Float;
+                    targetValue = node.end_float;
+                    fromStatic = node.from_float;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.默认到结束_D_E:
-                    targetValue = node.End_Float;
-                    fromStatic = node.Original_Float;
+                    targetValue = node.end_float;
+                    fromStatic = node.ori_float;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.当前到结束_C_E:
-                    targetValue = node.End_Float;
+                    targetValue = node.end_float;
                     useDynamicFrom = true;
                     break;
 
@@ -673,7 +673,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             XTween_Interface tw = cg.xt_Alpha_To(
                 targetValue,
-                node.Duration,
+                node.duration,
                 false,   // autokill
                 false,   // rewind_set_startvalue
                 false);  // complete_set_endvalue
@@ -693,10 +693,10 @@ namespace SevenStrikeModules.XHud.Editor
                 });
             }
 
-            if (node.Ease == EaseMode.None)
-                tw = tw.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                tw = tw.SetEase(node.curve);
             else
-                tw = tw.SetEase(node.Ease);
+                tw = tw.SetEase(node.ease);
 
             return tw;
         }
@@ -709,7 +709,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private XTween_Interface CreatePreviewTween_Fill(TweenNode node)
         {
-            Image img = target.controller.mod_Image;
+            Image img = target.controller.mod_image;
             if (img == null) return null;
 
             float targetValue;
@@ -717,28 +717,28 @@ namespace SevenStrikeModules.XHud.Editor
             bool useStaticFrom = false;
             bool useDynamicFrom = false;
 
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    targetValue = node.Original_Float;
-                    fromStatic = node.From_Float;
+                    targetValue = node.ori_float;
+                    fromStatic = node.from_float;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.起始到结束_S_E:
-                    targetValue = node.End_Float;
-                    fromStatic = node.From_Float;
+                    targetValue = node.end_float;
+                    fromStatic = node.from_float;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.默认到结束_D_E:
-                    targetValue = node.End_Float;
-                    fromStatic = node.Original_Float;
+                    targetValue = node.end_float;
+                    fromStatic = node.ori_float;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.当前到结束_C_E:
-                    targetValue = node.End_Float;
+                    targetValue = node.end_float;
                     useDynamicFrom = true;
                     break;
 
@@ -749,7 +749,7 @@ namespace SevenStrikeModules.XHud.Editor
             // 与运行时一致：目标值 Clamp01
             XTween_Interface tw = img.xt_Fill_To(
                 Mathf.Clamp01(targetValue),
-                node.Duration,
+                node.duration,
                 false,   // autokill
                 false,   // rewind_set_startvalue
                 false);  // complete_set_endvalue
@@ -770,27 +770,27 @@ namespace SevenStrikeModules.XHud.Editor
                 });
             }
 
-            if (node.Ease == EaseMode.None)
-                tw = tw.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                tw = tw.SetEase(node.curve);
             else
-                tw = tw.SetEase(node.Ease);
+                tw = tw.SetEase(node.ease);
 
             return tw;
         }
         /// <summary>
         /// 创建打字机动画的飞梭预览 tween。
         /// <para/>与运行时 <c>Tween_Create_Writer_Text</c> / <c>Tween_Create_Writer_TmpText</c> 一致：
-        /// <see cref="XHud_Module_Primitive_Controller.mod_Text"/> 优先，
-        /// <see cref="XHud_Module_Primitive_Controller.mod_TmpText"/> 兜底（两者互斥）。
+        /// <see cref="XHud_Module_Primitive_Controller.mod_text"/> 优先，
+        /// <see cref="XHud_Module_Primitive_Controller.mod_tmp_text"/> 兜底（两者互斥）。
         /// </summary>
         private XTween_Interface CreatePreviewTween_Writer(TweenNode node)
         {
             XHud_Module_Primitive_Controller ctrl = target.controller;
 
-            if (ctrl.mod_Text != null)
-                return CreatePreviewTween_Writer_Text(node, ctrl.mod_Text);
-            if (ctrl.mod_TmpText != null)
-                return CreatePreviewTween_Writer_TmpText(node, ctrl.mod_TmpText);
+            if (ctrl.mod_text != null)
+                return CreatePreviewTween_Writer_Text(node, ctrl.mod_text);
+            if (ctrl.mod_tmp_text != null)
+                return CreatePreviewTween_Writer_TmpText(node, ctrl.mod_tmp_text);
 
             return null;
         }
@@ -806,28 +806,28 @@ namespace SevenStrikeModules.XHud.Editor
             bool useStaticFrom = false;
             bool useDynamicFrom = false;
 
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    targetValue = node.Original_String;
-                    fromStatic = node.From_String;
+                    targetValue = node.ori_string;
+                    fromStatic = node.from_string;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.起始到结束_S_E:
-                    targetValue = node.End_String;
-                    fromStatic = node.From_String;
+                    targetValue = node.end_string;
+                    fromStatic = node.from_string;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.默认到结束_D_E:
-                    targetValue = node.End_String;
-                    fromStatic = node.Original_String;
+                    targetValue = node.end_string;
+                    fromStatic = node.ori_string;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.当前到结束_C_E:
-                    targetValue = node.End_String;
+                    targetValue = node.end_string;
                     useDynamicFrom = true;
                     break;
 
@@ -838,13 +838,13 @@ namespace SevenStrikeModules.XHud.Editor
             // Text 版：有光标重载，8 参数
             // 参数顺序 (extended, cursor, endValue, duration, autokill, blinkInterval, rewind, complete)
             XTween_Interface tw = text.xt_Text_To(
-                node.TextExtended,                                          // extended
-                node.TextCursor,                                // cursor
+                node.text_extended,                                          // extended
+                node.text_cursor,                                // cursor
                 targetValue,                                    // endValue
-                node.Duration,                                  // duration
+                node.duration,                                  // duration
                 false,                                          // autokill
-                node.TextCursorBlinkSpeed > 0
-                    ? node.TextCursorBlinkSpeed : 0.5f,         // blinkInterval
+                node.text_cursor_blink_speed > 0
+                    ? node.text_cursor_blink_speed : 0.5f,         // blinkInterval
                 false,                                          // rewind_set_startvalue
                 false);                                         // complete_set_endvalue
 
@@ -863,10 +863,10 @@ namespace SevenStrikeModules.XHud.Editor
                 });
             }
 
-            if (node.Ease == EaseMode.None)
-                tw = tw.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                tw = tw.SetEase(node.curve);
             else
-                tw = tw.SetEase(node.Ease);
+                tw = tw.SetEase(node.ease);
 
             return tw;
         }
@@ -882,28 +882,28 @@ namespace SevenStrikeModules.XHud.Editor
             bool useStaticFrom = false;
             bool useDynamicFrom = false;
 
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    targetValue = node.Original_String;
-                    fromStatic = node.From_String;
+                    targetValue = node.ori_string;
+                    fromStatic = node.from_string;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.起始到结束_S_E:
-                    targetValue = node.End_String;
-                    fromStatic = node.From_String;
+                    targetValue = node.end_string;
+                    fromStatic = node.from_string;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.默认到结束_D_E:
-                    targetValue = node.End_String;
-                    fromStatic = node.Original_String;
+                    targetValue = node.end_string;
+                    fromStatic = node.ori_string;
                     useStaticFrom = true;
                     break;
 
                 case TweenValueMode.当前到结束_C_E:
-                    targetValue = node.End_String;
+                    targetValue = node.end_string;
                     useDynamicFrom = true;
                     break;
 
@@ -915,13 +915,13 @@ namespace SevenStrikeModules.XHud.Editor
             // 参数顺序 (extended, cursor, endValue, duration, autokill, blinkInterval, rewind, complete)
             // 与运行时 Tween_Create_Writer_TmpText 一致；autokill 统一传 false
             XTween_Interface tw = tmp.xt_Text_To(
-                node.TextExtended,                                          // extended
-                node.TextCursor,                                // cursor
+                node.text_extended,                                          // extended
+                node.text_cursor,                                // cursor
                 targetValue,                                    // endValue
-                node.Duration,                                  // duration
+                node.duration,                                  // duration
                 false,                                          // autokill
-                node.TextCursorBlinkSpeed > 0
-                    ? node.TextCursorBlinkSpeed : 0.5f,         // blinkInterval
+                node.text_cursor_blink_speed > 0
+                    ? node.text_cursor_blink_speed : 0.5f,         // blinkInterval
                 false,                                          // rewind_set_startvalue
                 false);                                         // complete_set_endvalue
 
@@ -940,10 +940,10 @@ namespace SevenStrikeModules.XHud.Editor
                 });
             }
 
-            if (node.Ease == EaseMode.None)
-                tw = tw.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                tw = tw.SetEase(node.curve);
             else
-                tw = tw.SetEase(node.Ease);
+                tw = tw.SetEase(node.ease);
 
             return tw;
         }
@@ -995,11 +995,11 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (hasModifiedComponent)
             {
-                if (target != null && !target.Equals(null) && target.controller != null && target.controller.pt_Feature != null)
+                if (target != null && !target.Equals(null) && target.controller != null && target.controller.pt_feature != null)
                 {
                     try
                     {
-                        target.controller.pt_Feature.PrimitiveFeature_Load();
+                        target.controller.pt_feature.PrimitiveFeature_Load();
                     }
                     catch { }
                 }

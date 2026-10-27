@@ -39,47 +39,47 @@ namespace SevenStrikeModules.XHud.Editor
         {
             bool hasDiagnostic = false;
 
-            if (ScreenRes.vector2Value == Vector2.zero)
+            if (sp_cv_screen_res.vector2Value == Vector2.zero)
             {
                 hasDiagnostic = true;
             }
 
-            if (SceneCamera.objectReferenceValue == null)
+            if (sp_camera_scene.objectReferenceValue == null)
             {
                 hasDiagnostic = true;
             }
 
-            if (Lib_Color.objectReferenceValue == null)
+            if (sp_library_colors.objectReferenceValue == null)
             {
                 hasDiagnostic = true;
             }
 
-            if (Lib_Curve.objectReferenceValue == null)
+            if (sp_library_curves.objectReferenceValue == null)
             {
                 hasDiagnostic = true;
             }
 
-            if (Lib_Sound.objectReferenceValue == null)
+            if (sp_library_sounds.objectReferenceValue == null)
             {
                 hasDiagnostic = true;
             }
 
-            if (Lib_TextStyleLibrary.objectReferenceValue == null)
+            if (sp_library_textstyles.objectReferenceValue == null)
             {
                 hasDiagnostic = true;
             }
 
-            if (Lib_Motions.objectReferenceValue == null)
+            if (sp_library_motions.objectReferenceValue == null)
             {
                 hasDiagnostic = true;
             }
 
-            if (Lib_Transition.objectReferenceValue == null)
+            if (sp_library_transitions.objectReferenceValue == null)
             {
                 hasDiagnostic = true;
             }
 
-            if (Lib_ElementLibrarys.arraySize <= 0)
+            if (sp_ele_library_elements.arraySize <= 0)
             {
                 hasDiagnostic = true;
             }

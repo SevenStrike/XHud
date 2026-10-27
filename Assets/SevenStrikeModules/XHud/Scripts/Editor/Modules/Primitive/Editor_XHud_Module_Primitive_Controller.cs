@@ -33,16 +33,30 @@ namespace SevenStrikeModules.XHud.Editor
     public class Editor_XHud_Module_Primitive_Controller : Editor
     {
         #region 字段 - 组件
-        private XHud_Module_Primitive_Controller BaseScript;
+        private XHud_Module_Primitive_Controller base_script;
         #endregion
 
         #region 字段 - 序列化属性
-        private SerializedProperty
-            sp_ID,
-            sp_Indicator,
-            sp_ModuleType,
-            sp_Debug,
-            sp_IsInitial;
+        /// <summary>
+        /// ID 属性
+        /// </summary>
+        private SerializedProperty sp_id;
+        /// <summary>
+        /// 标识属性
+        /// </summary>
+        private SerializedProperty sp_indicator;
+        /// <summary>
+        /// 模块类型属性
+        /// </summary>
+        private SerializedProperty sp_module_type;
+        /// <summary>
+        /// 调试开关属性
+        /// </summary>
+        private SerializedProperty sp_debug;
+        /// <summary>
+        /// 是否已初始化属性
+        /// </summary>
+        private SerializedProperty sp_is_initial;
         #endregion
 
         #region 字段 - 选项文字
@@ -52,29 +66,80 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 字段 - 图标
-        private Texture2D icon_type, icon_text, icon_tmptext, icon_image, icon_rawimage, icon_main, icon_initial_r, icon_initial_p, icon_recreate_id_r, icon_recreate_id_p, icon_clear_mods_r, icon_clear_mods_p;
+        /// <summary>
+        /// 类型图标
+        /// </summary>
+        private Texture2D icon_type;
+        /// <summary>
+        /// 文本图标
+        /// </summary>
+        private Texture2D icon_text;
+        /// <summary>
+        /// TMP 文本图标
+        /// </summary>
+        private Texture2D icon_tmptext;
+        /// <summary>
+        /// 图像图标
+        /// </summary>
+        private Texture2D icon_image;
+        /// <summary>
+        /// 原始图像图标
+        /// </summary>
+        private Texture2D icon_rawimage;
+        /// <summary>
+        /// 主图标
+        /// </summary>
+        private Texture2D icon_main;
+        /// <summary>
+        /// 初始化按钮常态图标
+        /// </summary>
+        private Texture2D icon_initial_r;
+        /// <summary>
+        /// 初始化按钮按下图标
+        /// </summary>
+        private Texture2D icon_initial_p;
+        /// <summary>
+        /// 重建 ID 按钮常态图标
+        /// </summary>
+        private Texture2D icon_recreate_id_r;
+        /// <summary>
+        /// 重建 ID 按钮按下图标
+        /// </summary>
+        private Texture2D icon_recreate_id_p;
+        /// <summary>
+        /// 清空模块按钮常态图标
+        /// </summary>
+        private Texture2D icon_clear_mods_r;
+        /// <summary>
+        /// 清空模块按钮按下图标
+        /// </summary>
+        private Texture2D icon_clear_mods_p;
         #endregion
 
         #region 字段 - 批量化操作
         /// <summary>
         /// 批量选择脚本数组
         /// </summary>
-        XHud_Module_Primitive_Controller[] SelectedObjects;
+        XHud_Module_Primitive_Controller[] selected_objects;
         #endregion
 
         #region 生命周期
         private void OnEnable()
         {
-            BaseScript = (XHud_Module_Primitive_Controller)target;
+            base_script = (XHud_Module_Primitive_Controller)target;
 
             Targets_Get();
 
-            GetSerializeFields();
+            sp_id = serializedObject.FindProperty(nameof(XHud_Module_Primitive_Controller.id));
+            sp_indicator = serializedObject.FindProperty(nameof(XHud_Module_Primitive_Controller.indicator));
+            sp_module_type = serializedObject.FindProperty(nameof(XHud_Module_Primitive_Controller.module_type));
+            sp_debug = serializedObject.FindProperty(nameof(XHud_Module_Primitive_Controller.debug));
+            sp_is_initial = serializedObject.FindProperty(nameof(XHud_Module_Primitive_Controller.is_initial));
 
             // 收集被控组件
-            BaseScript.GetControlComponent();
+            base_script.GetControlComponent();
             // 识别类型
-            BaseScript.RecognizeType();
+            base_script.RecognizeType();
 
             #region 获取图标          
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_controller/icon_main");
@@ -96,7 +161,7 @@ namespace SevenStrikeModules.XHud.Editor
             serializedObject.Update();
 
             #region 类型识别
-            ModuleType m_type = (ModuleType)sp_ModuleType.enumValueIndex;
+            ModuleType m_type = (ModuleType)sp_module_type.enumValueIndex;
             switch (m_type)
             {
                 case ModuleType.Text:
@@ -125,7 +190,7 @@ namespace SevenStrikeModules.XHud.Editor
                 bg_height: 30,
                 icon: icon_main,
                 icon_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
-                title_text: string.IsNullOrEmpty(sp_ID.stringValue) ? "XHud  -  图元  >  控制器" : "XHud - 图元  >  控制器  ( " + sp_ID.stringValue + " )",
+                title_text: string.IsNullOrEmpty(sp_id.stringValue) ? "XHud  -  图元  >  控制器" : "XHud - 图元  >  控制器  ( " + sp_id.stringValue + " )",
                 title_anchor: TextAnchor.MiddleLeft,
                 title_style: FontStyle.Normal,
                 title_color: Color.white,
@@ -170,10 +235,10 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     List<XGUIDialogListDatas> datas = new List<XGUIDialogListDatas>();
 
-                    for (int i = 0; i < SelectedObjects.Length; i++)
+                    for (int i = 0; i < selected_objects.Length; i++)
                     {
                         XGUIDialogListDatas data = new XGUIDialogListDatas();
-                        data.Title = string.IsNullOrEmpty(SelectedObjects[i].Indicator) ? SelectedObjects[i].name : SelectedObjects[i].Indicator;
+                        data.Title = string.IsNullOrEmpty(selected_objects[i].indicator) ? selected_objects[i].name : selected_objects[i].indicator;
                         data.SubTitle = "即将初始化图元结构";
                         data.Message = "";
                         datas.Add(data);
@@ -197,15 +262,15 @@ namespace SevenStrikeModules.XHud.Editor
 
                             if (res_x == "建立")
                             {
-                                for (int i = 0; i < SelectedObjects.Length; i++)
+                                for (int i = 0; i < selected_objects.Length; i++)
                                 {
-                                    if (SelectedObjects[i].IsInitial)
+                                    if (selected_objects[i].is_initial)
                                     {
                                         string csd = XGUI.dialog(
                                             type: XGUIDialogType.警告,
                                             windowtitle: "XHud - 图元控制器消息",
                                             title: "重新初始化",
-                                            msg: $"确认为 {SelectedObjects[i].gameObject.name} 图元重新建立控制脚本结构吗？",
+                                            msg: $"确认为 {selected_objects[i].gameObject.name} 图元重新建立控制脚本结构吗？",
                                             ok: "重建",
                                             cancel: "暂不",
                                             PrimaryIndex: 0,
@@ -214,14 +279,14 @@ namespace SevenStrikeModules.XHud.Editor
 
                                         if (csd == "重建")
                                         {
-                                            SelectedObjects[i].ClearComponents_For_Editor();
+                                            selected_objects[i].ClearComponents_For_Editor();
                                         }
                                         else
                                         {
                                             continue;
                                         }
                                     }
-                                    SelectedObjects[i].InitialComponents_For_Editor();
+                                    selected_objects[i].InitialComponents_For_Editor();
                                 }
                             }
                         }
@@ -244,7 +309,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                         if (res == "建立")
                         {
-                            if (sp_IsInitial.boolValue)
+                            if (sp_is_initial.boolValue)
                             {
                                 string csd = XGUI.dialog(
                                     type: XGUIDialogType.警告,
@@ -259,14 +324,14 @@ namespace SevenStrikeModules.XHud.Editor
 
                                 if (csd == "重建")
                                 {
-                                    BaseScript.ClearComponents_For_Editor();
+                                    base_script.ClearComponents_For_Editor();
                                 }
                                 else
                                 {
                                     return;
                                 }
                             }
-                            BaseScript.InitialComponents_For_Editor();
+                            base_script.InitialComponents_For_Editor();
                         }
                     };
                 }
@@ -307,10 +372,10 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
 
-                    for (int i = 0; i < SelectedObjects.Length; i++)
+                    for (int i = 0; i < selected_objects.Length; i++)
                     {
                         XGUIDialogListDatas data = new XGUIDialogListDatas();
-                        data.Title = string.IsNullOrEmpty(SelectedObjects[i].Indicator) ? SelectedObjects[i].name : SelectedObjects[i].Indicator;
+                        data.Title = string.IsNullOrEmpty(selected_objects[i].indicator) ? selected_objects[i].name : selected_objects[i].indicator;
                         data.SubTitle = "即将移除图元控制器建立的扩展结构";
                         data.Message = "";
                         Datas.Add(data);
@@ -332,32 +397,32 @@ namespace SevenStrikeModules.XHud.Editor
 
                         if (res_x == "移除")
                         {
-                            for (int i = 0; i < SelectedObjects.Length; i++)
+                            for (int i = 0; i < selected_objects.Length; i++)
                             {
-                                XHud_Module_Primitive_Controller con = SelectedObjects[i];
+                                XHud_Module_Primitive_Controller con = selected_objects[i];
 
-                                if (con.pt_Feature != null)
-                                    Undo.DestroyObjectImmediate(con.pt_Feature);
+                                if (con.pt_feature != null)
+                                    Undo.DestroyObjectImmediate(con.pt_feature);
 
                                 XHud_Module_Primitive_Painting_Synchronizer Synchronizer = con.GetComponent<XHud_Module_Primitive_Painting_Synchronizer>();
 
                                 if (Synchronizer != null)
                                     Undo.DestroyObjectImmediate(Synchronizer);
 
-                                if (con.pt_Painting != null)
-                                    Undo.DestroyObjectImmediate(con.pt_Painting);
+                                if (con.pt_painting != null)
+                                    Undo.DestroyObjectImmediate(con.pt_painting);
 
-                                if (con.pt_Tween != null)
-                                    Undo.DestroyObjectImmediate(con.pt_Tween);
+                                if (con.pt_tween != null)
+                                    Undo.DestroyObjectImmediate(con.pt_tween);
 
-                                if (con.mod_CanvasGroup != null)
-                                    Undo.DestroyObjectImmediate(con.mod_CanvasGroup);
+                                if (con.mod_canvas_group != null)
+                                    Undo.DestroyObjectImmediate(con.mod_canvas_group);
 
-                                con.IsInitial = false;
-                                con.pt_Feature = null;
-                                con.pt_Painting = null;
-                                con.pt_Tween = null;
-                                con.mod_CanvasGroup = null;
+                                con.is_initial = false;
+                                con.pt_feature = null;
+                                con.pt_painting = null;
+                                con.pt_tween = null;
+                                con.mod_canvas_group = null;
                             }
                         }
                     };
@@ -380,28 +445,28 @@ namespace SevenStrikeModules.XHud.Editor
                         if (res == "暂不")
                             return;
 
-                        if (BaseScript.pt_Feature != null)
-                            Undo.DestroyObjectImmediate(BaseScript.pt_Feature);
+                        if (base_script.pt_feature != null)
+                            Undo.DestroyObjectImmediate(base_script.pt_feature);
 
-                        XHud_Module_Primitive_Painting_Synchronizer Synchronizer = BaseScript.GetComponent<XHud_Module_Primitive_Painting_Synchronizer>();
+                        XHud_Module_Primitive_Painting_Synchronizer Synchronizer = base_script.GetComponent<XHud_Module_Primitive_Painting_Synchronizer>();
 
                         if (Synchronizer != null)
                             Undo.DestroyObjectImmediate(Synchronizer);
 
-                        if (BaseScript.pt_Painting != null)
-                            Undo.DestroyObjectImmediate(BaseScript.pt_Painting);
+                        if (base_script.pt_painting != null)
+                            Undo.DestroyObjectImmediate(base_script.pt_painting);
 
-                        if (BaseScript.pt_Tween != null)
-                            Undo.DestroyObjectImmediate(BaseScript.pt_Tween);
+                        if (base_script.pt_tween != null)
+                            Undo.DestroyObjectImmediate(base_script.pt_tween);
 
-                        if (BaseScript.mod_CanvasGroup != null)
-                            Undo.DestroyObjectImmediate(BaseScript.mod_CanvasGroup);
+                        if (base_script.mod_canvas_group != null)
+                            Undo.DestroyObjectImmediate(base_script.mod_canvas_group);
 
-                        BaseScript.IsInitial = false;
-                        BaseScript.pt_Feature = null;
-                        BaseScript.pt_Painting = null;
-                        BaseScript.pt_Tween = null;
-                        BaseScript.mod_CanvasGroup = null;
+                        base_script.is_initial = false;
+                        base_script.pt_feature = null;
+                        base_script.pt_painting = null;
+                        base_script.pt_tween = null;
+                        base_script.mod_canvas_group = null;
                     };
                 }
                 return;
@@ -412,7 +477,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 参数          
-            BaseScript.fold_param = XGUI.layout_group_start(
+            base_script.fold_param = XGUI.layout_group_start(
                type: XGUIContainerType.Vertical,
                bg_fill: XGUIGroup.缺口纯色边框,
                bg_color: XGUIColor.亮白,
@@ -422,9 +487,9 @@ namespace SevenStrikeModules.XHud.Editor
                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                title_clipping: TextClipping.Clip,
                padding: new RectOffset(10, 10, 15, 15),
-               foldout: BaseScript.fold_param);
+               foldout: base_script.fold_param);
 
-            if (!BaseScript.fold_param)
+            if (!base_script.fold_param)
             {
                 #region ID
                 XGUI.layout_property_field(
@@ -432,7 +497,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_ID,
+                    prop: sp_id,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
@@ -442,7 +507,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_Indicator,
+                    prop: sp_indicator,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
@@ -452,7 +517,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_ModuleType,
+                    prop: sp_module_type,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
@@ -461,7 +526,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 选项
-            BaseScript.fold_option = XGUI.layout_group_start(
+            base_script.fold_option = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -471,18 +536,18 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_option);
+                foldout: base_script.fold_option);
 
-            if (!BaseScript.fold_option)
+            if (!base_script.fold_option)
             {
                 #region 状态调试
-                DrawToggle("状态调试", sp_Debug, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_debug, (b) => { });
+                DrawToggle("状态调试", sp_debug, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_debug, (b) => { });
                 #endregion          
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
-            #region 右键菜单
+            #region 检测事件
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
             {
                 GenericMenu menu = new GenericMenu();
@@ -495,28 +560,28 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     if (Targets_Selected())
                     {
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        for (int i = 0; i < selected_objects.Length; i++)
                         {
-                            SelectedObjects[i].GroupFold(true);
+                            selected_objects[i].GroupFold(true);
                         }
                     }
                     else
                     {
-                        BaseScript.GroupFold(true);
+                        base_script.GroupFold(true);
                     }
                 });
                 menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
                 {
                     if (Targets_Selected())
                     {
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        for (int i = 0; i < selected_objects.Length; i++)
                         {
-                            SelectedObjects[i].GroupFold(false);
+                            selected_objects[i].GroupFold(false);
                         }
                     }
                     else
                     {
-                        BaseScript.GroupFold(false);
+                        base_script.GroupFold(false);
                     }
                 });
                 menu.AddSeparator("");
@@ -525,7 +590,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 源脚本
-            BaseScript.fold_based = XGUI.layout_group_start(
+            base_script.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -535,9 +600,9 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_based);
+                foldout: base_script.fold_based);
 
-            if (!BaseScript.fold_based)
+            if (!base_script.fold_based)
             {
                 DrawDefaultInspector();
             }
@@ -549,20 +614,6 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        #region 工具 - 序列化缓存
-        /// <summary>
-        /// 获取所有序列化字段
-        /// </summary>
-        private void GetSerializeFields()
-        {
-            sp_ID = serializedObject.FindProperty("ID");
-            sp_Indicator = serializedObject.FindProperty("Indicator");
-            sp_ModuleType = serializedObject.FindProperty("ModuleType");
-            sp_Debug = serializedObject.FindProperty("Debug");
-            sp_IsInitial = serializedObject.FindProperty("IsInitial");
-        }
-        #endregion
-
         #region 工具 - ID 刷新
         private void RefreshID()
         {
@@ -570,10 +621,10 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
 
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     XGUIDialogListDatas data = new XGUIDialogListDatas();
-                    data.Title = string.IsNullOrEmpty(SelectedObjects[i].Indicator) ? SelectedObjects[i].name : SelectedObjects[i].Indicator;
+                    data.Title = string.IsNullOrEmpty(selected_objects[i].indicator) ? selected_objects[i].name : selected_objects[i].indicator;
                     data.SubTitle = "即将批量更新图元控制器ID";
                     data.Message = "";
                     Datas.Add(data);
@@ -595,11 +646,11 @@ namespace SevenStrikeModules.XHud.Editor
 
                     if (res_x == "更新")
                     {
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        for (int i = 0; i < selected_objects.Length; i++)
                         {
-                            Undo.RecordObject(SelectedObjects[i], "更新所有图元控制器的ID");
+                            Undo.RecordObject(selected_objects[i], "更新所有图元控制器的ID");
 
-                            XHud_Module_Primitive_Controller con = SelectedObjects[i];
+                            XHud_Module_Primitive_Controller con = selected_objects[i];
 
                             #region 从父物体找元素并获取元素下所有图元控制器的ID
                             XHud_Module_Element parent_ele = con.GetComponentInParent<XHud_Module_Element>();
@@ -607,17 +658,17 @@ namespace SevenStrikeModules.XHud.Editor
                             if (parent_ele == null)
                                 continue;
 
-                            if (parent_ele.PrimitiveControllerNodes == null && parent_ele.PrimitiveControllerNodes.Count <= 0)
+                            if (parent_ele.primitive_controller_nodes == null && parent_ele.primitive_controller_nodes.Count <= 0)
                                 continue;
 
                             List<string> list = new List<string>();
-                            for (int s = 0; s < parent_ele.PrimitiveControllerNodes.Count; s++)
+                            for (int s = 0; s < parent_ele.primitive_controller_nodes.Count; s++)
                             {
-                                list.Add(parent_ele.PrimitiveControllerNodes[s].Controller.ID);
+                                list.Add(parent_ele.primitive_controller_nodes[s].controller.id);
                             }
                             #endregion
 
-                            con.ID = XGUI_Utilitys.GenerateUniqueId(list.ToArray());
+                            con.id = XGUI_Utilitys.GenerateUniqueId(list.ToArray());
                         }
                     }
                 };
@@ -640,25 +691,25 @@ namespace SevenStrikeModules.XHud.Editor
                     if (res == "暂不")
                         return;
 
-                    Undo.RecordObject(BaseScript, "刷新图元控制器ID");
-                    BaseScript.ID = XGUI_Utilitys.GenerateUniqueId(CollectIDs());
+                    Undo.RecordObject(base_script, "刷新图元控制器ID");
+                    base_script.id = XGUI_Utilitys.GenerateUniqueId(CollectIDs());
                 };
             }
         }
         private string[] CollectIDs()
         {
-            XHud_Module_Element parent_ele = BaseScript.GetComponentInParent<XHud_Module_Element>();
+            XHud_Module_Element parent_ele = base_script.GetComponentInParent<XHud_Module_Element>();
 
             if (parent_ele == null)
                 return null;
 
-            if (parent_ele.PrimitiveControllerNodes == null && parent_ele.PrimitiveControllerNodes.Count <= 0)
+            if (parent_ele.primitive_controller_nodes == null && parent_ele.primitive_controller_nodes.Count <= 0)
                 return null;
 
             List<string> list = new List<string>();
-            for (int i = 0; i < parent_ele.PrimitiveControllerNodes.Count; i++)
+            for (int i = 0; i < parent_ele.primitive_controller_nodes.Count; i++)
             {
-                list.Add(parent_ele.PrimitiveControllerNodes[i].Controller.ID);
+                list.Add(parent_ele.primitive_controller_nodes[i].controller.id);
             }
 
             return list.ToArray();
@@ -704,17 +755,17 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new XHud_Module_Primitive_Controller[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new XHud_Module_Primitive_Controller[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (XHud_Module_Primitive_Controller)t;
+                    selected_objects[i] = (XHud_Module_Primitive_Controller)t;
                 }
             }
             else
             {
-                SelectedObjects = new XHud_Module_Primitive_Controller[targets.Length];
-                SelectedObjects[0] = (XHud_Module_Primitive_Controller)target;
+                selected_objects = new XHud_Module_Primitive_Controller[targets.Length];
+                selected_objects[0] = (XHud_Module_Primitive_Controller)target;
             }
         }
         /// <summary>
@@ -723,9 +774,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns></returns>
         private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }

@@ -23,53 +23,74 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using System.Collections;
     using System.Collections.Generic;
     using UnityEditor;
     using UnityEditorInternal;
     using UnityEngine;
     using Object = UnityEngine.Object;
 
-    #region 编辑器窗口
-    /// <summary>
-    /// XHud 转场资源修改器窗口。
-    /// <para/>
-    /// 提供转场序列帧的编辑与预览功能，包括：
-    /// <list type="bullet">
-    /// <item><description>序列帧列表（拖放 / 键盘上下键切换）；</description></item>
-    /// <item><description>转场方向与跳帧、背景平铺、颜色等视觉配置；</description></item>
-    /// <item><description>序列帧预览（自动 / 手动播放、逐帧切换）；</description></item>
-    /// <item><description>转场名称 / 说明编辑与库更新。</description></item>
-    /// </list>
-    /// </summary>
     public class Editor_XHud_LibrarySetTool_Transition : EditorWindow
     {
         #region 字段 - 序列化对象 / 属性
         /// <summary>
         /// 用于序列化当前窗口的自定义字段。
         /// </summary>
-        private SerializedObject BaseObject;
+        private SerializedObject base_object;
+        #endregion
+
+        #region 字段 - 序列化属性
         /// <summary>
-        /// 本窗口用到的全部序列化属性引用。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里初始化。
-        /// 覆盖：转场节点 / 名称 / 说明 / 预览背景 / 预览颜色 /
-        /// 网格平铺与颜色 / 列表项高与可见数量 / 选中索引 / 滚动位置 / 预览数据索引。
+        /// 转场节点属性
         /// </summary>
-        private SerializedProperty
-            sp_TransitionNode,
-            sp_TransitionName,
-            sp_TransitionDescription,
-            sp_Preview_Texture_Bg,
-            sp_Preview_Color,
-            sp_BgGrid_Tilling_multiply,
-            sp_BgGrid_Color_A,
-            sp_BgGrid_Color_B,
-            sp_itemHeight,
-            sp_visibleItemCount,
-            sp_SelectedIndex,
-            sp_TransitionInfoList_Scroller,
-            sp_PreviewData_Index;
+        private SerializedProperty sp_transition_node;
+        /// <summary>
+        /// 转场名称属性
+        /// </summary>
+        private SerializedProperty sp_transition_name;
+        /// <summary>
+        /// 转场说明属性
+        /// </summary>
+        private SerializedProperty sp_transition_description;
+        /// <summary>
+        /// 预览背景贴图属性
+        /// </summary>
+        private SerializedProperty sp_preview_texture_bg;
+        /// <summary>
+        /// 预览颜色属性
+        /// </summary>
+        private SerializedProperty sp_preview_color;
+        /// <summary>
+        /// 背景网格平铺倍数属性
+        /// </summary>
+        private SerializedProperty sp_bg_grid_tilling_multiply;
+        /// <summary>
+        /// 背景网格颜色 A 属性
+        /// </summary>
+        private SerializedProperty sp_bg_grid_color_a;
+        /// <summary>
+        /// 背景网格颜色 B 属性
+        /// </summary>
+        private SerializedProperty sp_bg_grid_color_b;
+        /// <summary>
+        /// 列表项高度属性
+        /// </summary>
+        private SerializedProperty sp_item_height;
+        /// <summary>
+        /// 可视区域显示元素数量属性
+        /// </summary>
+        private SerializedProperty sp_visible_item_count;
+        /// <summary>
+        /// 选中项索引属性
+        /// </summary>
+        private SerializedProperty sp_selected_index;
+        /// <summary>
+        /// 转场信息列表滚动位置属性
+        /// </summary>
+        private SerializedProperty sp_transition_info_list_scroller;
+        /// <summary>
+        /// 预览数据索引属性
+        /// </summary>
+        private SerializedProperty sp_preview_data_index;
         #endregion
 
         #region 字段 - 列表
@@ -84,7 +105,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// 当前编辑的转场数据（工作副本）。
         /// </summary>
         [SerializeField]
-        private XHud_LibraryArg_Transition TransitionNode;
+        private XHud_LibraryArg_Transition transition_node;
         /// <summary>
         /// 转场的原始数据（用于对比）。
         /// </summary>
@@ -102,7 +123,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// 转场名称。
         /// </summary>
         [SerializeField]
-        public string TransitionName;
+        public string transition_name;
         /// <summary>
         /// 日期时间标识。
         /// </summary>
@@ -112,7 +133,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// 转场说明。
         /// </summary>
         [SerializeField]
-        public string TransitionDescription;
+        public string transition_description;
         #endregion
 
         #region 字段 - 图标
@@ -163,7 +184,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// 当前预览索引。
         /// </summary>
         [SerializeField]
-        private int PreviewData_Index;
+        private int preview_data_index;
         /// <summary>
         /// 是否正在播放预览动画。
         /// </summary>
@@ -188,18 +209,18 @@ namespace SevenStrikeModules.XHud.Editor
         /// 预览背景纹理。
         /// </summary>
         [SerializeField]
-        private Texture2D Preview_Texture_Bg;
+        private Texture2D preview_texture_bg;
         /// <summary>
         /// 预览颜色。
         /// </summary>
         [SerializeField]
-        private Color Preview_Color = Color.white;
+        private Color preview_color = Color.white;
         /// <summary>
         /// 网格平铺倍数（缓存字段，兼容序列化）。
         /// </summary>
         [SerializeField]
 #pragma warning disable CS0414
-        private float BgGrid_Tilling_multiply = 14;
+        private float bg_grid_tilling_multiply = 14;
 #pragma warning restore CS0414
         /// <summary>
         /// 网格平铺倍数 - 水平。
@@ -215,12 +236,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// 网格主色。
         /// </summary>
         [SerializeField]
-        private Color BgGrid_Color_A = Color.white * 0.509f;
+        private Color bg_grid_color_a = Color.white * 0.509f;
         /// <summary>
         /// 网格副色。
         /// </summary>
         [SerializeField]
-        private Color BgGrid_Color_B = Color.white * 0.376f;
+        private Color bg_grid_color_b = Color.white * 0.376f;
         #endregion
 
         #region 字段 - 列表参数
@@ -228,22 +249,22 @@ namespace SevenStrikeModules.XHud.Editor
         /// 列表项高度。
         /// </summary>
         [SerializeField]
-        public float itemHeight = 25;
+        public float item_height = 25;
         /// <summary>
         /// 可视区域显示的元素数量。
         /// </summary>
         [SerializeField]
-        public int visibleItemCount = 19;
+        public int visible_item_count = 19;
         /// <summary>
         /// 选中项索引号。
         /// </summary>
         [SerializeField]
-        public int SelectedIndex;
+        public int selected_index;
         /// <summary>
         /// 列表滚动位置。
         /// </summary>
         [SerializeField]
-        public Vector2 TransitionInfoList_Scroller;
+        public Vector2 transition_info_list_scroller;
         #endregion
 
         #region 字段 - 布局
@@ -300,20 +321,6 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 生命周期
         /// <summary>
-        /// Unity 禁用回调。
-        /// <para/>
-        /// 将背景网格颜色 / 平铺 / 背景图路径保存到 xData 中，供下次打开恢复。
-        /// </summary>
-        private void OnDisable()
-        {
-            StopPreview();
-
-            XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_ColorA", XGUI_Utilitys.Color_To_String(sp_BgGrid_Color_A.colorValue));
-            XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_ColorB", XGUI_Utilitys.Color_To_String(sp_BgGrid_Color_B.colorValue));
-            XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_Tilling", sp_BgGrid_Tilling_multiply.floatValue.ToString("F2"));
-            XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Path", AssetDatabase.GetAssetPath(sp_Preview_Texture_Bg.objectReferenceValue));
-        }
-        /// <summary>
         /// Unity 启用回调。
         /// <para/>
         /// 执行流程：
@@ -328,74 +335,87 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseObject = new SerializedObject(this);
+            base_object = new SerializedObject(this);
 
-            sp_TransitionNode = BaseObject.FindProperty("TransitionNode");
-            sp_TransitionName = BaseObject.FindProperty("TransitionName");
-            sp_TransitionDescription = BaseObject.FindProperty("TransitionDescription");
+            #region 获取序列化属性
+            sp_transition_node = base_object.FindProperty(nameof(transition_node));
+            sp_transition_name = base_object.FindProperty(nameof(transition_name));
+            sp_transition_description = base_object.FindProperty(nameof(transition_description));
+            sp_preview_texture_bg = base_object.FindProperty(nameof(preview_texture_bg));
+            sp_bg_grid_tilling_multiply = base_object.FindProperty(nameof(bg_grid_tilling_multiply));
+            sp_bg_grid_color_a = base_object.FindProperty(nameof(bg_grid_color_a));
+            sp_bg_grid_color_b = base_object.FindProperty(nameof(bg_grid_color_b));
+            sp_preview_color = base_object.FindProperty(nameof(preview_color));
+            sp_item_height = base_object.FindProperty(nameof(item_height));
+            sp_visible_item_count = base_object.FindProperty(nameof(visible_item_count));
+            sp_selected_index = base_object.FindProperty(nameof(selected_index));
+            sp_transition_info_list_scroller = base_object.FindProperty(nameof(transition_info_list_scroller));
+            sp_preview_data_index = base_object.FindProperty(nameof(preview_data_index));
+            #endregion
 
-            sp_Preview_Texture_Bg = BaseObject.FindProperty("Preview_Texture_Bg");
-            sp_BgGrid_Tilling_multiply = BaseObject.FindProperty("BgGrid_Tilling_multiply");
-            sp_BgGrid_Color_A = BaseObject.FindProperty("BgGrid_Color_A");
-            sp_BgGrid_Color_B = BaseObject.FindProperty("BgGrid_Color_B");
-            sp_Preview_Color = BaseObject.FindProperty("Preview_Color");
-
-            sp_itemHeight = BaseObject.FindProperty("itemHeight");
-            sp_visibleItemCount = BaseObject.FindProperty("visibleItemCount");
-            sp_SelectedIndex = BaseObject.FindProperty("SelectedIndex");
-            sp_TransitionInfoList_Scroller = BaseObject.FindProperty("TransitionInfoList_Scroller");
-            sp_PreviewData_Index = BaseObject.FindProperty("PreviewData_Index");
+            #region 获取图标
+            icon = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/logo");
+            leftarr_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/left_arrow_p");
+            leftarr_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/left_arrow_r");
+            rightarr_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/right_arrow_p");
+            rightarr_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/right_arrow_r");
+            stop_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/prw_stop_r");
+            stop_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/prw_stop_p");
+            play_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/prw_play_r");
+            play_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/prw_play_p");
+            seq_list_logo = XGUI.GetBasedIcon("d_RawImage Icon");
+            #endregion
 
             InitializePreviewMaterial();
 
             LoadPreviewTexture();
 
             if (XGUI.x_Editor_Data_Has_String("xData_Transition_Bg_Grid_ColorA"))
-                sp_BgGrid_Color_A.colorValue = XGUI_Utilitys.String_To_Color(XGUI.x_Editor_Data_Get_With_String("xData_Transition_Bg_Grid_ColorA"), false);
+                sp_bg_grid_color_a.colorValue = XGUI_Utilitys.String_To_Color(XGUI.x_Editor_Data_Get_With_String("xData_Transition_Bg_Grid_ColorA"), false);
             else
-                sp_BgGrid_Color_A.colorValue = Color.white * 0.509f;
+                sp_bg_grid_color_a.colorValue = Color.white * 0.509f;
 
             if (XGUI.x_Editor_Data_Has_String("xData_Transition_Bg_Grid_ColorB"))
-                sp_BgGrid_Color_B.colorValue = XGUI_Utilitys.String_To_Color(XGUI.x_Editor_Data_Get_With_String("xData_Transition_Bg_Grid_ColorB"), false);
+                sp_bg_grid_color_b.colorValue = XGUI_Utilitys.String_To_Color(XGUI.x_Editor_Data_Get_With_String("xData_Transition_Bg_Grid_ColorB"), false);
             else
-                sp_BgGrid_Color_B.colorValue = Color.white * 0.376f;
+                sp_bg_grid_color_b.colorValue = Color.white * 0.376f;
 
             if (XGUI.x_Editor_Data_Has_String("xData_Transition_Bg_Grid_Tilling"))
-                sp_BgGrid_Tilling_multiply.floatValue = float.Parse(XGUI.x_Editor_Data_Get_With_String("xData_Transition_Bg_Grid_Tilling"));
+                sp_bg_grid_tilling_multiply.floatValue = float.Parse(XGUI.x_Editor_Data_Get_With_String("xData_Transition_Bg_Grid_Tilling"));
             else
-                sp_BgGrid_Tilling_multiply.floatValue = 5;
+                sp_bg_grid_tilling_multiply.floatValue = 5;
 
-            sp_BgGrid_Color_A.serializedObject.ApplyModifiedProperties();
-            sp_BgGrid_Color_B.serializedObject.ApplyModifiedProperties();
-            sp_BgGrid_Tilling_multiply.serializedObject.ApplyModifiedProperties();
+            sp_bg_grid_color_a.serializedObject.ApplyModifiedProperties();
+            sp_bg_grid_color_b.serializedObject.ApplyModifiedProperties();
+            sp_bg_grid_tilling_multiply.serializedObject.ApplyModifiedProperties();
 
-            icon = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/logo");
+            transition_description = "转场说明内容";
+            transition_name = "转场名称";
 
-            leftarr_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/left_arrow_p");
-            leftarr_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/left_arrow_r");
-            rightarr_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/right_arrow_p");
-            rightarr_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/right_arrow_r");
+            sp_item_height.floatValue = 25;
+            sp_item_height.serializedObject.ApplyModifiedProperties();
 
-            stop_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/prw_stop_r");
-            stop_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/prw_stop_p");
-            play_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/prw_play_r");
-            play_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/prw_play_p");
-
-            seq_list_logo = XGUI.GetBasedIcon("d_RawImage Icon");
-
-            TransitionDescription = "转场说明内容";
-            TransitionName = "转场名称";
-
-            sp_itemHeight.floatValue = 25;
-            sp_itemHeight.serializedObject.ApplyModifiedProperties();
-
-            sp_visibleItemCount.intValue = 15;
-            sp_visibleItemCount.serializedObject.ApplyModifiedProperties();
+            sp_visible_item_count.intValue = 15;
+            sp_visible_item_count.serializedObject.ApplyModifiedProperties();
 
             #region ReorderableList - TransitionLibrary
-            TrasitionInfoList = new ReorderableList(BaseObject, sp_TransitionNode.FindPropertyRelative("Frames"), true, true, true, true);
+            TrasitionInfoList = new ReorderableList(base_object, sp_transition_node.FindPropertyRelative("frames"), true, true, true, true);
             TrasitionInfoList.drawElementCallback = TransitionInfoList_Original_DrawElementCallback;
             #endregion
+        }
+        /// <summary>
+        /// Unity 禁用回调。
+        /// <para/>
+        /// 将背景网格颜色 / 平铺 / 背景图路径保存到 xData 中，供下次打开恢复。
+        /// </summary>
+        private void OnDisable()
+        {
+            StopPreview();
+
+            XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_ColorA", XGUI_Utilitys.Color_To_String(sp_bg_grid_color_a.colorValue));
+            XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_ColorB", XGUI_Utilitys.Color_To_String(sp_bg_grid_color_b.colorValue));
+            XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Grid_Tilling", sp_bg_grid_tilling_multiply.floatValue.ToString("F2"));
+            XGUI.x_Editor_Data_Set_With_String("xData_Transition_Bg_Path", AssetDatabase.GetAssetPath(sp_preview_texture_bg.objectReferenceValue));
         }
         /// <summary>
         /// Unity 销毁回调。
@@ -417,7 +437,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnGUI()
         {
-            BaseObject.Update();
+            base_object.Update();
 
 #if UNITY_6000_0_OR_NEWERdddd
             TextClipping clipping = TextClipping.Ellipsis;
@@ -469,18 +489,18 @@ namespace SevenStrikeModules.XHud.Editor
                 clipping: clipping);
             #endregion
 
-            SerializedProperty sp_name = sp_TransitionNode.FindPropertyRelative("Name");
-            SerializedProperty sp_des = sp_TransitionNode.FindPropertyRelative("Description");
-            SerializedProperty sp_TotalFramesCount = sp_TransitionNode.FindPropertyRelative("TotalFramesCount");
-            SerializedProperty sp_LastFrameIndex = sp_TransitionNode.FindPropertyRelative("LastFrameIndex");
-            SerializedProperty sp_SkipFrame = sp_TransitionNode.FindPropertyRelative("SkipFrame");
-            SerializedProperty sp_Res = sp_TransitionNode.FindPropertyRelative("Res");
-            SerializedProperty sp_Frames = sp_TransitionNode.FindPropertyRelative("Frames");
+            SerializedProperty sp_name = sp_transition_node.FindPropertyRelative("name");
+            SerializedProperty sp_des = sp_transition_node.FindPropertyRelative("description");
+            SerializedProperty sp_TotalFramesCount = sp_transition_node.FindPropertyRelative("total_frames_count");
+            SerializedProperty sp_LastFrameIndex = sp_transition_node.FindPropertyRelative("last_frame_index");
+            SerializedProperty sp_SkipFrame = sp_transition_node.FindPropertyRelative("skip_frame");
+            SerializedProperty sp_Res = sp_transition_node.FindPropertyRelative("res");
+            SerializedProperty sp_Frames = sp_transition_node.FindPropertyRelative("frames");
 
             #region 数值关联
             if (sp_Frames.arraySize > 0)
             {
-                sp_Res.vector2IntValue = new Vector2Int(TransitionNode.Frames[0].width, TransitionNode.Frames[0].height);
+                sp_Res.vector2IntValue = new Vector2Int(transition_node.frames[0].width, transition_node.frames[0].height);
                 sp_TotalFramesCount.intValue = sp_Frames.arraySize;
                 sp_LastFrameIndex.intValue = sp_Frames.arraySize - 1;
             }
@@ -563,7 +583,7 @@ namespace SevenStrikeModules.XHud.Editor
               title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
               title_width: 50,
               field_width: 130,
-              prop: sp_Preview_Texture_Bg,
+              prop: sp_preview_texture_bg,
               prop_margin: new RectOffset(0, 0, 5, 10));
             #endregion
 
@@ -585,32 +605,32 @@ namespace SevenStrikeModules.XHud.Editor
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 30,
                 field_width: 35,
-                prop: sp_BgGrid_Tilling_multiply,
+                prop: sp_bg_grid_tilling_multiply,
                 prop_margin: new RectOffset(0, 0, 5, 10));
             #endregion
 
             #region 颜色 - 背景
-            sp_Preview_Color.colorValue = XGUI.layout_colorfield(
-                prop: sp_Preview_Color.colorValue,
+            sp_preview_color.colorValue = XGUI.layout_colorfield(
+                prop: sp_preview_color.colorValue,
                 state_title: null,
                 field_width: 50);
-            sp_Preview_Color.serializedObject.ApplyModifiedProperties();
+            sp_preview_color.serializedObject.ApplyModifiedProperties();
             #endregion
 
             #region 颜色 - 格子 - 前景
-            sp_BgGrid_Color_A.colorValue = XGUI.layout_colorfield(
-                prop: sp_BgGrid_Color_A.colorValue,
+            sp_bg_grid_color_a.colorValue = XGUI.layout_colorfield(
+                prop: sp_bg_grid_color_a.colorValue,
                 state_title: null,
                 field_width: 50);
-            sp_BgGrid_Color_A.serializedObject.ApplyModifiedProperties();
+            sp_bg_grid_color_a.serializedObject.ApplyModifiedProperties();
             #endregion
 
             #region 颜色 - 格子 - 背景
-            sp_BgGrid_Color_B.colorValue = XGUI.layout_colorfield(
-                prop: sp_BgGrid_Color_B.colorValue,
+            sp_bg_grid_color_b.colorValue = XGUI.layout_colorfield(
+                prop: sp_bg_grid_color_b.colorValue,
                 state_title: null,
                 field_width: 50);
-            sp_BgGrid_Color_B.serializedObject.ApplyModifiedProperties();
+            sp_bg_grid_color_b.serializedObject.ApplyModifiedProperties();
             #endregion
 
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
@@ -636,11 +656,11 @@ namespace SevenStrikeModules.XHud.Editor
                padding: new RectOffset(0, 0, 0, 0));
 
             XGUI.ChangedCheck_Start();
-            sp_PreviewData_Index.intValue = XGUI.layout_slider_int(
+            sp_preview_data_index.intValue = XGUI.layout_slider_int(
                 title: "序列进度",
-                prop: sp_PreviewData_Index,
+                prop: sp_preview_data_index,
                 left: 0,
-                right: TransitionNode.Frames.Count - 1,
+                right: transition_node.frames.Count - 1,
                 title_width: 80,
                 title_size: XGUIFontSize.M,
                 title_anchor: TextAnchor.MiddleLeft,
@@ -649,11 +669,11 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 StopPreview();
 
-                sp_SelectedIndex.intValue = sp_PreviewData_Index.intValue;
+                sp_selected_index.intValue = sp_preview_data_index.intValue;
 
                 CalculateListScroller();
             }
-            sp_PreviewData_Index.serializedObject.ApplyModifiedProperties();
+            sp_preview_data_index.serializedObject.ApplyModifiedProperties();
 
             XGUI.layout_space(20);
 
@@ -669,7 +689,7 @@ namespace SevenStrikeModules.XHud.Editor
                 height: 14))
             {
                 StartPreview();
-                BaseObject.ApplyModifiedProperties();
+                base_object.ApplyModifiedProperties();
                 return;
             }
             if (IsPreviewing && XGUI.layout_button(
@@ -683,10 +703,10 @@ namespace SevenStrikeModules.XHud.Editor
                height: 14))
             {
                 StopPreview();
-                PreviewData_Index = 0;
-                sp_SelectedIndex.intValue = 0;
-                sp_PreviewData_Index.intValue = 0;
-                BaseObject.ApplyModifiedProperties();
+                preview_data_index = 0;
+                sp_selected_index.intValue = 0;
+                sp_preview_data_index.intValue = 0;
+                base_object.ApplyModifiedProperties();
                 return;
             }
             #endregion
@@ -759,7 +779,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 InvertChannel = !InvertChannel;
                 StopPreview();
-                PreviewData_Index = 0;
+                preview_data_index = 0;
             }
             #endregion
 
@@ -794,14 +814,14 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0));
 
             #region 转场名称
-            if (string.IsNullOrEmpty(sp_TransitionName.stringValue))
+            if (string.IsNullOrEmpty(sp_transition_name.stringValue))
             {
-                sp_TransitionName.stringValue = "转场名称";
+                sp_transition_name.stringValue = "转场名称";
             }
 
-            sp_TransitionName.stringValue = XGUI.layout_inputfield(
+            sp_transition_name.stringValue = XGUI.layout_inputfield(
                 title: "名称",
-                prop: sp_TransitionName.stringValue,
+                prop: sp_transition_name.stringValue,
                 text_wrap: false,
                 field_fontsize: XGUIFontSize.M,
                 field_text_offset: Vector2.zero,
@@ -814,19 +834,19 @@ namespace SevenStrikeModules.XHud.Editor
                 field_text_font: XGUI.GetFont("xg-medium"),
                 field_text_style: FontStyle.Normal,
                 field_text_anchor: TextAnchor.MiddleLeft);
-            sp_TransitionName.serializedObject.ApplyModifiedProperties();
+            sp_transition_name.serializedObject.ApplyModifiedProperties();
             #endregion
 
             XGUI.layout_space(15);
 
             #region 转场说明
-            if (string.IsNullOrEmpty(sp_TransitionDescription.stringValue))
+            if (string.IsNullOrEmpty(sp_transition_description.stringValue))
             {
-                sp_TransitionDescription.stringValue = "转场说明";
+                sp_transition_description.stringValue = "转场说明";
             }
-            sp_TransitionDescription.stringValue = XGUI.layout_inputfield(
+            sp_transition_description.stringValue = XGUI.layout_inputfield(
               title: "说明",
-              prop: sp_TransitionDescription.stringValue,
+              prop: sp_transition_description.stringValue,
               text_wrap: false,
               field_fontsize: XGUIFontSize.M,
               field_text_offset: Vector2.zero,
@@ -839,14 +859,14 @@ namespace SevenStrikeModules.XHud.Editor
               field_text_font: XGUI.GetFont("xg-medium"),
               field_text_style: FontStyle.Normal,
               field_text_anchor: TextAnchor.MiddleLeft);
-            sp_TransitionDescription.serializedObject.ApplyModifiedProperties();
+            sp_transition_description.serializedObject.ApplyModifiedProperties();
             #endregion
 
             XGUI.layout_space(15);
 
             #region 转场帧信息
             XGUI.layout_label(
-                text: $"<color={colorhex}>{PreviewData_Index.ToString()}</color> / 帧",
+                text: $"<color={colorhex}>{preview_data_index.ToString()}</color> / 帧",
                 bg_fill: XGUIGroup.无,
                 bg_color: XGUIColor.无,
                 size: XGUIFontSize.L,
@@ -869,10 +889,10 @@ namespace SevenStrikeModules.XHud.Editor
 
             Rect rect_preview_group = new Rect(rect.width - 530, rect.y + 140, 510, 380);
 
-            if (TransitionNode.Frames != null && TransitionNode.Frames.Count > 0)
+            if (transition_node.frames != null && transition_node.frames.Count > 0)
             {
-                float w = TransitionNode.Frames[0].width;
-                float h = TransitionNode.Frames[0].height;
+                float w = transition_node.frames[0].width;
+                float h = transition_node.frames[0].height;
 
                 Rect rect_preview = new Rect(rect.width - 530, rect.y + 140, 510, 298.75f);
                 float margin = 10;
@@ -908,18 +928,18 @@ namespace SevenStrikeModules.XHud.Editor
 
                 XGUI.gui_box(draw_rect, Color.black * 0.1f);
 
-                Preview_Material.SetColor("_Color", sp_Preview_Color.colorValue);
-                Preview_Material.SetFloat("_Alpha", sp_Preview_Color.colorValue.a);
+                Preview_Material.SetColor("_Color", sp_preview_color.colorValue);
+                Preview_Material.SetFloat("_Alpha", sp_preview_color.colorValue.a);
 
-                BgGrid_Tilling_x = sp_BgGrid_Tilling_multiply.floatValue;
-                BgGrid_Tilling_y = sp_BgGrid_Tilling_multiply.floatValue;
+                BgGrid_Tilling_x = sp_bg_grid_tilling_multiply.floatValue;
+                BgGrid_Tilling_y = sp_bg_grid_tilling_multiply.floatValue;
 
                 Preview_Material.SetFloat("_Grid_Tilling_x", BgGrid_Tilling_x * textureWidth);
                 Preview_Material.SetFloat("_Grid_Tilling_y", BgGrid_Tilling_y * textureHeight);
-                Preview_Material.SetColor("_Grid_Color_A", sp_BgGrid_Color_A.colorValue);
-                Preview_Material.SetColor("_Grid_Color_B", sp_BgGrid_Color_B.colorValue);
-                Preview_Material.SetTexture("_Texture", Preview_Texture_Bg);
-                Preview_Material.SetTexture("_Mask", TransitionNode.Frames[PreviewData_Index]);
+                Preview_Material.SetColor("_Grid_Color_A", sp_bg_grid_color_a.colorValue);
+                Preview_Material.SetColor("_Grid_Color_B", sp_bg_grid_color_b.colorValue);
+                Preview_Material.SetTexture("_Texture", preview_texture_bg);
+                Preview_Material.SetTexture("_Mask", transition_node.frames[preview_data_index]);
                 Preview_Material.SetInt("_Invert", InvertChannel ? 1 : 0);
 
                 #region 绘制预览图片
@@ -950,7 +970,7 @@ namespace SevenStrikeModules.XHud.Editor
                     bg_fill: XGUIGroup.实体,
                     bg_color: XGUIColor.亮白,
                     bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
-                    text: new GUIContent($"{PreviewData_Index} / {sp_TotalFramesCount.intValue - 1}"),
+                    text: new GUIContent($"{preview_data_index} / {sp_TotalFramesCount.intValue - 1}"),
                     text_color: Color.black,
                     size: XGUIFontSize.M,
                     offset: new Vector2(0, -2),
@@ -1019,7 +1039,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     DragAndDrop.AcceptDrag();
                     Object[] dropobjs = DragAndDrop.objectReferences;
-                    TransitionNode.Frames.Clear();
+                    transition_node.frames.Clear();
                     foreach (var item in dropobjs)
                     {
                         if (item is Texture2D == false)
@@ -1027,15 +1047,15 @@ namespace SevenStrikeModules.XHud.Editor
 
                         Texture2D tex = (Texture2D)item;
 
-                        if (TransitionNode.Frames == null)
-                            TransitionNode.Frames = new List<Texture2D>();
+                        if (transition_node.frames == null)
+                            transition_node.frames = new List<Texture2D>();
 
-                        TransitionNode.Frames.Add(tex);
+                        transition_node.frames.Add(tex);
                     }
 
                     e.Use();
-                    PreviewData_Index = 0;
-                    SelectedIndex = 0;
+                    preview_data_index = 0;
+                    selected_index = 0;
                 }
             }
             #endregion
@@ -1076,22 +1096,22 @@ namespace SevenStrikeModules.XHud.Editor
                     if (e.keyCode == KeyCode.UpArrow)
                     {
                         StopPreview();
-                        if (sp_SelectedIndex.intValue <= 0)
-                            sp_SelectedIndex.intValue = 0;
+                        if (sp_selected_index.intValue <= 0)
+                            sp_selected_index.intValue = 0;
                         else
-                            sp_SelectedIndex.intValue--;
-                        PreviewData_Index = sp_SelectedIndex.intValue;
+                            sp_selected_index.intValue--;
+                        preview_data_index = sp_selected_index.intValue;
                         CalculateListScroller();
                         handled = true;
                     }
                     else if (e.keyCode == KeyCode.DownArrow)
                     {
                         StopPreview();
-                        if (sp_SelectedIndex.intValue >= TransitionNode.Frames.Count - 1)
-                            sp_SelectedIndex.intValue = TransitionNode.Frames.Count - 1;
+                        if (sp_selected_index.intValue >= transition_node.frames.Count - 1)
+                            sp_selected_index.intValue = transition_node.frames.Count - 1;
                         else
-                            sp_SelectedIndex.intValue++;
-                        PreviewData_Index = sp_SelectedIndex.intValue;
+                            sp_selected_index.intValue++;
+                        preview_data_index = sp_selected_index.intValue;
                         CalculateListScroller();
                         handled = true;
                     }
@@ -1126,8 +1146,8 @@ namespace SevenStrikeModules.XHud.Editor
 
             Repaint();
 
-            if (BaseObject.targetObject != null)
-                BaseObject.ApplyModifiedProperties();
+            if (base_object.targetObject != null)
+                base_object.ApplyModifiedProperties();
         }
         #endregion
 
@@ -1148,8 +1168,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="isFocused">是否聚焦</param>
         private void TransitionInfoList_Original_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty prop = sp_TransitionNode;
-            SerializedProperty sp_texlist = prop.FindPropertyRelative("Frames");
+            SerializedProperty prop = sp_transition_node;
+            SerializedProperty sp_texlist = prop.FindPropertyRelative("frames");
             SerializedProperty sp_tex = sp_texlist.GetArrayElementAtIndex(index);
 
             Texture2D tex = sp_tex.objectReferenceValue as Texture2D;
@@ -1204,32 +1224,32 @@ namespace SevenStrikeModules.XHud.Editor
         private void DrawTransitionInfoList_Original(Rect rect)
         {
             // 绘制滚动视图
-            scrollview_rect.Set(rect.x + 10, rect.y + 18, rect.width - 20, sp_visibleItemCount.intValue * sp_itemHeight.floatValue);
-            sp_TransitionInfoList_Scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_TransitionInfoList_Scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, TrasitionInfoList.count * sp_itemHeight.floatValue), false, true);
+            scrollview_rect.Set(rect.x + 10, rect.y + 18, rect.width - 20, sp_visible_item_count.intValue * sp_item_height.floatValue);
+            sp_transition_info_list_scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_transition_info_list_scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, TrasitionInfoList.count * sp_item_height.floatValue), false, true);
 
             // 计算可视区域的起始和结束索引
-            int startIndex = Mathf.FloorToInt(sp_TransitionInfoList_Scroller.vector2Value.y / sp_itemHeight.floatValue);
-            int endIndex = Mathf.CeilToInt((sp_TransitionInfoList_Scroller.vector2Value.y + scrollview_rect.height) / sp_itemHeight.floatValue);
+            int startIndex = Mathf.FloorToInt(sp_transition_info_list_scroller.vector2Value.y / sp_item_height.floatValue);
+            int endIndex = Mathf.CeilToInt((sp_transition_info_list_scroller.vector2Value.y + scrollview_rect.height) / sp_item_height.floatValue);
 
             // 只绘制可视区域内的元素
             for (int i = startIndex; i < endIndex && i < TrasitionInfoList.count; i++)
             {
-                SerializedProperty sp_texlist = sp_TransitionNode.FindPropertyRelative("Frames");
+                SerializedProperty sp_texlist = sp_transition_node.FindPropertyRelative("frames");
                 SerializedProperty sp_tex = sp_texlist.GetArrayElementAtIndex(i);
 
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
-                if (sp_SelectedIndex.intValue == i)
+                if (sp_selected_index.intValue == i)
                 {
                     // 高亮标记表示选中
-                    item_rect.Set(1, i * sp_itemHeight.floatValue + 10, 5, 5);
+                    item_rect.Set(1, i * sp_item_height.floatValue + 10, 5, 5);
                     EditorGUI.DrawRect(item_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     // 高亮背景表示选中
-                    item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                    item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
                     EditorGUI.DrawRect(item_rect, SelectedBg);
                 }
 
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
                 TrasitionInfoList.drawElementCallback.Invoke(item_rect, i, i == TrasitionInfoList.index, true);
 
@@ -1245,32 +1265,32 @@ namespace SevenStrikeModules.XHud.Editor
                             StopPreview();
                             IsPreviewing = false;
 
-                            if (sp_SelectedIndex.intValue <= 0)
+                            if (sp_selected_index.intValue <= 0)
                             {
-                                sp_SelectedIndex.intValue = 0;
+                                sp_selected_index.intValue = 0;
                             }
                             else
 
                             {
-                                sp_SelectedIndex.intValue--;
+                                sp_selected_index.intValue--;
                             }
-                            PreviewData_Index = sp_SelectedIndex.intValue;
+                            preview_data_index = sp_selected_index.intValue;
                             CalculateListScroller();
                         }
                         if (e.keyCode == KeyCode.DownArrow)
                         {
                             StopPreview();
                             IsPreviewing = false;
-                            if (sp_SelectedIndex.intValue >= TransitionNode.Frames.Count - 1)
+                            if (sp_selected_index.intValue >= transition_node.frames.Count - 1)
                             {
-                                sp_SelectedIndex.intValue = TransitionNode.Frames.Count - 1;
+                                sp_selected_index.intValue = transition_node.frames.Count - 1;
                             }
                             else
 
                             {
-                                sp_SelectedIndex.intValue++;
+                                sp_selected_index.intValue++;
                             }
-                            PreviewData_Index = sp_SelectedIndex.intValue;
+                            preview_data_index = sp_selected_index.intValue;
                             CalculateListScroller();
                         }
                         e.Use();
@@ -1281,9 +1301,9 @@ namespace SevenStrikeModules.XHud.Editor
                     if (e.type == EventType.MouseDown)
                     {
                         // 更新选中项
-                        sp_SelectedIndex.intValue = i;
+                        sp_selected_index.intValue = i;
 
-                        PreviewData_Index = sp_SelectedIndex.intValue;
+                        preview_data_index = sp_selected_index.intValue;
 
                         // 标记界面需要更新
                         GUI.changed = true;
@@ -1305,22 +1325,22 @@ namespace SevenStrikeModules.XHud.Editor
         {
             StopPreview();
 
-            if (TransitionNode.Frames == null || TransitionNode.Frames.Count == 0)
+            if (transition_node.frames == null || transition_node.frames.Count == 0)
                 return;
 
-            int lastIndex = TransitionNode.Frames.Count - 1;
-            int skip = Mathf.Max(1, TransitionNode.SkipFrame);
+            int lastIndex = transition_node.frames.Count - 1;
+            int skip = Mathf.Max(1, transition_node.skip_frame);
 
             // 前进 skip 帧
-            int newIndex = sp_PreviewData_Index.intValue + skip;
+            int newIndex = sp_preview_data_index.intValue + skip;
 
             // 到末尾就跳回 0
             if (newIndex > lastIndex)
                 newIndex = 0;
 
-            sp_PreviewData_Index.intValue = newIndex;
-            sp_SelectedIndex.intValue = newIndex;
-            PreviewData_Index = newIndex;
+            sp_preview_data_index.intValue = newIndex;
+            sp_selected_index.intValue = newIndex;
+            preview_data_index = newIndex;
 
             CalculateListScroller();
             Repaint();
@@ -1330,22 +1350,22 @@ namespace SevenStrikeModules.XHud.Editor
         {
             StopPreview();
 
-            if (TransitionNode.Frames == null || TransitionNode.Frames.Count == 0)
+            if (transition_node.frames == null || transition_node.frames.Count == 0)
                 return;
 
-            int lastIndex = TransitionNode.Frames.Count - 1;
-            int skip = Mathf.Max(1, TransitionNode.SkipFrame);
+            int lastIndex = transition_node.frames.Count - 1;
+            int skip = Mathf.Max(1, transition_node.skip_frame);
 
             // 后退 skip 帧
-            int newIndex = sp_PreviewData_Index.intValue - skip;
+            int newIndex = sp_preview_data_index.intValue - skip;
 
             // 到 0 以下就跳到末尾
             if (newIndex < 0)
                 newIndex = lastIndex;
 
-            sp_PreviewData_Index.intValue = newIndex;
-            sp_SelectedIndex.intValue = newIndex;
-            PreviewData_Index = newIndex;
+            sp_preview_data_index.intValue = newIndex;
+            sp_selected_index.intValue = newIndex;
+            preview_data_index = newIndex;
 
             CalculateListScroller();
             Repaint();
@@ -1364,9 +1384,9 @@ namespace SevenStrikeModules.XHud.Editor
             string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             XHud_LibraryArg_Transition info = new XHud_LibraryArg_Transition();
-            info.CopyData(TransitionNode);
-            info.Name = sp_TransitionName.stringValue;
-            info.Description = sp_TransitionDescription.stringValue;
+            info.CopyData(transition_node);
+            info.name = sp_transition_name.stringValue;
+            info.description = sp_transition_description.stringValue;
             Target_Hud_TransitionLibrary.TransitionsLibrary_Replace(ModifiedIndex, info);
 
             XGUI.dialog(
@@ -1401,13 +1421,13 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="decription">转场说明</param>
         public void SetInfo(string name, string decription)
         {
-            sp_TransitionName.stringValue = name;
-            sp_TransitionDescription.stringValue = decription;
+            sp_transition_name.stringValue = name;
+            sp_transition_description.stringValue = decription;
 
-            sp_TransitionName.serializedObject.ApplyModifiedProperties();
-            sp_TransitionDescription.serializedObject.ApplyModifiedProperties();
+            sp_transition_name.serializedObject.ApplyModifiedProperties();
+            sp_transition_description.serializedObject.ApplyModifiedProperties();
 
-            PreviewData_Index = 0;
+            preview_data_index = 0;
         }
         /// <summary>
         /// 设置标题。
@@ -1423,7 +1443,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="node">转场数据</param>
         public void Set_TransitionNode(XHud_LibraryArg_Transition node)
         {
-            TransitionNode.CopyData(node);
+            transition_node.CopyData(node);
         }
         /// <summary>
         /// 设置目标转场库。
@@ -1516,14 +1536,14 @@ namespace SevenStrikeModules.XHud.Editor
         #region 工具 - 预览动画
         private void StartPreview()
         {
-            if (TransitionNode.Frames == null || TransitionNode.Frames.Count == 0)
+            if (transition_node.frames == null || transition_node.frames.Count == 0)
                 return;
 
-            int skip = Mathf.Max(1, TransitionNode.SkipFrame);
-            int lastIndex = TransitionNode.Frames.Count - 1;
+            int skip = Mathf.Max(1, transition_node.skip_frame);
+            int lastIndex = transition_node.frames.Count - 1;
 
             // 从当前帧开始
-            int startIndex = Mathf.Clamp(PreviewData_Index, 0, lastIndex);
+            int startIndex = Mathf.Clamp(preview_data_index, 0, lastIndex);
 
             // 剩余帧数（按 skip 步进）
             int remainingSteps = 0;
@@ -1544,8 +1564,8 @@ namespace SevenStrikeModules.XHud.Editor
                 onFrame: () =>
                 {
                     int step = XGUI.EditorPlayer_Sequence.CurrentIndex;
-                    PreviewData_Index = Mathf.Min(startIndex + step * skip, lastIndex);
-                    sp_SelectedIndex.intValue = PreviewData_Index;
+                    preview_data_index = Mathf.Min(startIndex + step * skip, lastIndex);
+                    sp_selected_index.intValue = preview_data_index;
 
                     if (StoppedResetMode && step >= remainingSteps - 1)
                         IsPreviewing = false;
@@ -1580,9 +1600,9 @@ namespace SevenStrikeModules.XHud.Editor
             string path = XGUI.x_Editor_Data_Get_With_String("xData_Transition_Bg_Path");
             Texture2D tex = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
             if (tex == null)
-                sp_Preview_Texture_Bg.objectReferenceValue = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/defaultbg");
+                sp_preview_texture_bg.objectReferenceValue = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_transition_setter/defaultbg");
             else
-                sp_Preview_Texture_Bg.objectReferenceValue = tex;
+                sp_preview_texture_bg.objectReferenceValue = tex;
         }
         #endregion
 
@@ -1594,14 +1614,13 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void CalculateListScroller()
         {
-            if (SelectedIndex >= visibleItemCount)
+            if (selected_index >= visible_item_count)
             {
-                sp_TransitionInfoList_Scroller.vector2Value = new Vector2(sp_TransitionInfoList_Scroller.vector2Value.x, (SelectedIndex) * itemHeight);
+                sp_transition_info_list_scroller.vector2Value = new Vector2(sp_transition_info_list_scroller.vector2Value.x, (selected_index) * item_height);
             }
             else
-                sp_TransitionInfoList_Scroller.vector2Value = Vector2.zero;
+                sp_transition_info_list_scroller.vector2Value = Vector2.zero;
         }
         #endregion
     }
-    #endregion
 }

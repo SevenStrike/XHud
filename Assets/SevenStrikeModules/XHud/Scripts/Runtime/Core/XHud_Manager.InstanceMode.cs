@@ -29,7 +29,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 单例模式开关
         /// </summary>
-        public bool UseInstanceMode = true;
+        public bool use_instance = true;
 
         /// <summary>
         /// XHudManager 构造
@@ -42,7 +42,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// XHudManager 构造单例实例（公开）
         /// </summary>
-        public static XHud_Manager Instance
+        public static XHud_Manager instance
         {
             get
             {
@@ -61,7 +61,7 @@ namespace SevenStrikeModules.XHud
         {
             // 检查是否启用了单例模式
             // 如果 UseInstanceMode 为 false，表示不需要使用单例模式，直接返回，不执行后续代码
-            if (!UseInstanceMode)
+            if (!use_instance)
                 return;
 
             // 检查私有静态字段 _instance 是否已经被赋值（即是否已经存在实例）

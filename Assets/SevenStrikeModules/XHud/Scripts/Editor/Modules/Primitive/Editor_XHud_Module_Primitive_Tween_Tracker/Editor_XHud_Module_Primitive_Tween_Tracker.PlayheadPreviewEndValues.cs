@@ -33,7 +33,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 规则：
         /// <list type="bullet">
-        /// <item><description>按 <see cref="TweenNode.Type"/> 分组；</description></item>
+        /// <item><description>按 <see cref="TweenNode.type"/> 分组；</description></item>
         /// <item><description>每组内取 <c>Delay</c> 最大的那个节点（并列时取列表中索引更大的，即后出现的覆盖先出现的）；</description></item>
         /// <item><description>把选中节点的"结束值"应用到目标组件；</description></item>
         /// <item><description>跳过 <c>!Enabled</c> 的节点；</description></item>
@@ -67,10 +67,10 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 TweenNode node = Nodes[i];
                 if (node == null) continue;
-                if (!node.Enabled) continue;
-                if (node.Duration <= 0f) continue;
+                if (!node.enabled) continue;
+                if (node.duration <= 0f) continue;
 
-                TweenNodeType type = node.Type;
+                TweenNodeType type = node.type;
 
                 if (!latestByType.TryGetValue(type, out TweenNode current))
                 {
@@ -79,7 +79,7 @@ namespace SevenStrikeModules.XHud.Editor
                 else
                 {
                     // 并列时后出现的覆盖：用 >=
-                    if (node.Delay >= current.Delay)
+                    if (node.delay >= current.delay)
                         latestByType[type] = node;
                 }
             }
@@ -106,29 +106,29 @@ namespace SevenStrikeModules.XHud.Editor
             if (target == null || target.controller == null) return;
 
             // S-D 模式的终点是 Original，其余模式的终点是 End
-            bool useOriginalAsEnd = (node.TweenValueMode == TweenValueMode.起始到默认_S_D);
+            bool useOriginalAsEnd = (node.tween_value_mode == TweenValueMode.起始到默认_S_D);
 
-            switch (node.Type)
+            switch (node.type)
             {
                 // ── 位移：RectTransform.anchoredPosition3D ──
                 case TweenNodeType.a_位移:
-                    if (target.controller.mod_Rect != null)
-                        target.controller.mod_Rect.anchoredPosition3D =
-                            useOriginalAsEnd ? node.Original_Vector3 : node.End_Vector3;
+                    if (target.controller.mod_rect != null)
+                        target.controller.mod_rect.anchoredPosition3D =
+                            useOriginalAsEnd ? node.ori_vector3 : node.end_vector3;
                     break;
 
                 // ── 旋转：RectTransform.localEulerAngles ──
                 case TweenNodeType.r_旋转:
-                    if (target.controller.mod_Rect != null)
-                        target.controller.mod_Rect.localEulerAngles =
-                            useOriginalAsEnd ? node.Original_Vector3 : node.End_Vector3;
+                    if (target.controller.mod_rect != null)
+                        target.controller.mod_rect.localEulerAngles =
+                            useOriginalAsEnd ? node.ori_vector3 : node.end_vector3;
                     break;
 
                 // ── 缩放：RectTransform.localScale ──
                 case TweenNodeType.s_缩放:
-                    if (target.controller.mod_Rect != null)
-                        target.controller.mod_Rect.localScale =
-                            useOriginalAsEnd ? node.Original_Vector3 : node.End_Vector3;
+                    if (target.controller.mod_rect != null)
+                        target.controller.mod_rect.localScale =
+                            useOriginalAsEnd ? node.ori_vector3 : node.end_vector3;
                     break;
 
                 // ── 颜色：Graphic.color ──
@@ -136,44 +136,44 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         var gc = target.controller.RecognizeType();
                         if (gc != null)
-                            gc.color = useOriginalAsEnd ? node.Original_Color : node.End_Color;
+                            gc.color = useOriginalAsEnd ? node.ori_color : node.end_color;
                     }
                     break;
 
                 // ── 淡化：CanvasGroup.alpha ──
                 case TweenNodeType.g_淡化:
-                    if (target.controller.mod_CanvasGroup != null)
-                        target.controller.mod_CanvasGroup.alpha =
-                            useOriginalAsEnd ? node.Original_Float : node.End_Float;
+                    if (target.controller.mod_canvas_group != null)
+                        target.controller.mod_canvas_group.alpha =
+                            useOriginalAsEnd ? node.ori_float : node.end_float;
                     break;
 
                 // ── 打字机：Text / TmpText 内容 ──
                 case TweenNodeType.w_打字机:
                     {
-                        string content = useOriginalAsEnd ? node.Original_String : node.End_String;
-                        if (target.controller.mod_Text != null)
+                        string content = useOriginalAsEnd ? node.ori_string : node.end_string;
+                        if (target.controller.mod_text != null)
                         {
-                            target.controller.mod_Text.txt_Set_Content(content);
+                            target.controller.mod_text.txt_Set_Content(content);
                         }
-                        else if (target.controller.mod_TmpText != null)
+                        else if (target.controller.mod_tmp_text != null)
                         {
-                            target.controller.mod_TmpText.tmp_Set_Content(content);
+                            target.controller.mod_tmp_text.tmp_Set_Content(content);
                         }
                     }
                     break;
 
                 // ── 图像填充：Image.fillAmount ──
                 case TweenNodeType.f_图像填充:
-                    if (target.controller.mod_Image != null)
-                        target.controller.mod_Image.fillAmount =
-                            Mathf.Clamp01(useOriginalAsEnd ? node.Original_Float : node.End_Float);
+                    if (target.controller.mod_image != null)
+                        target.controller.mod_image.fillAmount =
+                            Mathf.Clamp01(useOriginalAsEnd ? node.ori_float : node.end_float);
                     break;
 
                 // ── 尺寸：RectTransform.sizeDelta ──
                 case TweenNodeType.z_尺寸:
-                    if (target.controller.mod_Rect != null)
-                        target.controller.mod_Rect.sizeDelta =
-                            useOriginalAsEnd ? node.Original_Vector2 : node.End_Vector2;
+                    if (target.controller.mod_rect != null)
+                        target.controller.mod_rect.sizeDelta =
+                            useOriginalAsEnd ? node.ori_vector2 : node.end_vector2;
                     break;
             }
         }

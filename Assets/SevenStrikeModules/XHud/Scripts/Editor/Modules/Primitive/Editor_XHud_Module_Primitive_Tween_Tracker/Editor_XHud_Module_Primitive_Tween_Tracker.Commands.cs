@@ -63,45 +63,45 @@ namespace SevenStrikeModules.XHud.Editor
             TweenNode newNode = new TweenNode();
 
             // ID：由目标统一分配，保证全局唯一
-            newNode.ID = target.TweenNode_GenerateId();
+            newNode.id = target.TweenNode_GenerateId();
 
             // 显示名：默认 "NewTween"，用户可在参数面板中修改
-            newNode.Indicator = "NewTween";
+            newNode.indicator = "NewTween";
 
             // 启用状态：默认启用，插入后即可在预览中看到效果
-            newNode.Enabled = true;
+            newNode.enabled = true;
 
             // 触发时机：默认「无」，需用户手动选择
-            newNode.Timings = "元素进入时";
+            newNode.timings = "元素进入时";
 
             // 时长 / 延迟：默认 1 秒、无延迟，是一个「开箱即用」的起始值
-            newNode.Duration = 1f;
-            newNode.Delay = 0f;
+            newNode.duration = 1f;
+            newNode.delay = 0f;
 
             // 循环：默认 Restart 模式、循环 0 次（即不循环）
-            newNode.LoopType = XTween_LoopType.Restart;
-            newNode.LoopCount = 0;
+            newNode.loop_type = XTween_LoopType.Restart;
+            newNode.loop_count = 0;
 
             // 运行时进度：默认 0，由 XTween 运行时驱动
-            newNode.Progress = 0f;
+            newNode.progress = 0f;
 
             // 参数面板折叠状态：默认展开
-            newNode.IsFold = false;
+            newNode.is_fold = false;
 
             // 重置 / 完成时是否写回起始 / 结束值：默认都开启
-            newNode.Rewind_Set_Startvalue = true;
-            newNode.Complete_Set_Endvalue = true;
+            newNode.rewind_set_startvalue = true;
+            newNode.complete_set_endvalue = true;
 
             // 颜色三值：默认白色（对颜色动画是安全起始值，对其他类型无影响）
-            newNode.Original_Color = Color.white;
-            newNode.From_Color = Color.white;
-            newNode.End_Color = Color.white;
+            newNode.ori_color = Color.white;
+            newNode.from_color = Color.white;
+            newNode.end_color = Color.white;
 
-            newNode.ValueModeIndex = 0;
-            newNode.TweenValueMode = TweenValueMode.起始到默认_S_D;
+            newNode.value_mode_index = 0;
+            newNode.tween_value_mode = TweenValueMode.起始到默认_S_D;
 
             // 缓动曲线：默认 EaseInOut(0,0,1,1)，即标准缓入缓出
-            newNode.Curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+            newNode.curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
             // ── 钳制插入索引后插入集合 ──
             // Clamp 到 [0, Nodes.Count]，防止调用方传入越界索引
@@ -185,10 +185,10 @@ namespace SevenStrikeModules.XHud.Editor
 
             // ── 运行时清理：先 Kill 掉仍在运行的 Tweener ──
             TweenNode node = Nodes[index];
-            if (node.Tweener != null)
+            if (node.tweener != null)
             {
-                node.Tweener.Kill();
-                node.Tweener = null;
+                node.tweener.Kill();
+                node.tweener = null;
             }
 
             // 从集合移除
@@ -287,10 +287,10 @@ namespace SevenStrikeModules.XHud.Editor
                 // 与 DeleteTweenNodeAt 一致：先 Kill 运行时 Tweener，
                 // 否则节点虽删但动画仍在跑。
                 TweenNode node = Nodes[i];
-                if (node.Tweener != null)
+                if (node.tweener != null)
                 {
-                    node.Tweener.Kill();
-                    node.Tweener = null;
+                    node.tweener.Kill();
+                    node.tweener = null;
                 }
 
                 Nodes.RemoveAt(i);
@@ -332,13 +332,13 @@ namespace SevenStrikeModules.XHud.Editor
                 Undo.RegisterCompleteObjectUndo(target, "Insert Tween Sound");
 
             TweenSound s = new TweenSound();
-            s.ID = target.TweenSound_GenerateId();
-            s.Sound = null;
-            s.Path = "";
-            s.Delay = 0f;
-            s.Volume = 1f;
-            s.MinPitch = 1f;
-            s.MaxPitch = 1f;
+            s.id = target.TweenSound_GenerateId();
+            s.sound = null;
+            s.path = "";
+            s.delay = 0f;
+            s.volume = 1f;
+            s.min_pitch = 1f;
+            s.max_pitch = 1f;
 
             insertAt = Mathf.Clamp(insertAt, 0, Sounds.Count);
             Sounds.Insert(insertAt, s);
@@ -501,12 +501,12 @@ namespace SevenStrikeModules.XHud.Editor
                     TweenNode copy = src.Clone();
 
                     // 重新分配 ID，避免与原节点冲突
-                    copy.ID = target.TweenNode_GenerateId();
+                    copy.id = target.TweenNode_GenerateId();
 
                     // 运行时字段重置
-                    copy.Tweener = null;
-                    copy.Progress = 0f;
-                    copy.IsFold = false;
+                    copy.tweener = null;
+                    copy.progress = 0f;
+                    copy.is_fold = false;
 
                     // 副本插到原节点**下方**（即原索引 +1 处）
                     int insertAt = i + 1;
@@ -530,7 +530,7 @@ namespace SevenStrikeModules.XHud.Editor
                     // 调用 TweenSound.Clone()
                     TweenSound copy = src.Clone();
 
-                    copy.ID = target.TweenSound_GenerateId();
+                    copy.id = target.TweenSound_GenerateId();
 
                     int insertAt = i + 1;
                     Sounds.Insert(insertAt, copy);
@@ -622,12 +622,12 @@ namespace SevenStrikeModules.XHud.Editor
             foreach (int i in selectedNodeIndices)
             {
                 if (i < 0 || i >= Nodes.Count) continue;
-                if (Nodes[i].Delay < minDelay) minDelay = Nodes[i].Delay;
+                if (Nodes[i].delay < minDelay) minDelay = Nodes[i].delay;
             }
             foreach (int i in selectedSoundIndices)
             {
                 if (i < 0 || i >= Sounds.Count) continue;
-                if (Sounds[i].Delay < minDelay) minDelay = Sounds[i].Delay;
+                if (Sounds[i].delay < minDelay) minDelay = Sounds[i].delay;
             }
             if (minDelay == float.MaxValue) return;
 
@@ -639,12 +639,12 @@ namespace SevenStrikeModules.XHud.Editor
             foreach (int i in selectedNodeIndices)
             {
                 if (i < 0 || i >= Nodes.Count) continue;
-                Nodes[i].Delay = QuantizeTime(Mathf.Max(0f, Nodes[i].Delay + delta));
+                Nodes[i].delay = QuantizeTime(Mathf.Max(0f, Nodes[i].delay + delta));
             }
             foreach (int i in selectedSoundIndices)
             {
                 if (i < 0 || i >= Sounds.Count) continue;
-                Sounds[i].Delay = QuantizeTime(Mathf.Max(0f, Sounds[i].Delay + delta));
+                Sounds[i].delay = QuantizeTime(Mathf.Max(0f, Sounds[i].delay + delta));
             }
 
             EditorUtility.SetDirty(target);

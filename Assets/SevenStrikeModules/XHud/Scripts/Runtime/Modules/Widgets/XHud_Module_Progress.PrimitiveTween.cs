@@ -60,9 +60,9 @@ namespace SevenStrikeModules.XHud
             XHud_Module_Primitive_Controller am = null;
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
-                if (PrimitiveControllerNodes[i].Controller.GetIndicator() == indicator)
+                if (PrimitiveControllerNodes[i].controller.GetIndicator() == indicator)
                 {
-                    am = PrimitiveControllerNodes[i].Controller;
+                    am = PrimitiveControllerNodes[i].controller;
                 }
             }
             if (am == null)
@@ -87,9 +87,9 @@ namespace SevenStrikeModules.XHud
             XHud_Module_Primitive_Controller am = null;
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
-                if (PrimitiveControllerNodes[i].Controller.gameObject.name == name)
+                if (PrimitiveControllerNodes[i].controller.gameObject.name == name)
                 {
-                    am = PrimitiveControllerNodes[i].Controller;
+                    am = PrimitiveControllerNodes[i].controller;
                 }
             }
             if (am == null)
@@ -114,9 +114,9 @@ namespace SevenStrikeModules.XHud
             XHud_Module_Primitive_Controller am = null;
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
-                if (PrimitiveControllerNodes[i].Controller.GetID() == id)
+                if (PrimitiveControllerNodes[i].controller.GetID() == id)
                 {
-                    am = PrimitiveControllerNodes[i].Controller;
+                    am = PrimitiveControllerNodes[i].controller;
                 }
             }
             if (am == null)
@@ -140,7 +140,7 @@ namespace SevenStrikeModules.XHud
         public TweenNode GetPrimitiveTweenNode_WithIndicator(string primitive_indicator, int tween_id)
         {
             XHud_Module_Primitive_Controller anim = GetPrimitiveController_WithIndicator(primitive_indicator);
-            TweenNode node = anim.pt_Tween.TweenNode_GetByID(tween_id);
+            TweenNode node = anim.pt_tween.TweenNode_GetByID(tween_id);
 
             if (anim == null)
             {
@@ -172,7 +172,7 @@ namespace SevenStrikeModules.XHud
         public TweenNode GetPrimitiveTweenNode_WithID(string primitive_id, int tween_id)
         {
             XHud_Module_Primitive_Controller anim = GetPrimitiveController_WithID(primitive_id);
-            TweenNode node = anim.pt_Tween.TweenNode_GetByID(tween_id);
+            TweenNode node = anim.pt_tween.TweenNode_GetByID(tween_id);
 
             if (anim == null)
             {
@@ -204,7 +204,7 @@ namespace SevenStrikeModules.XHud
         public TweenNode GetPrimitiveTweenNode(string primitive_indicator, string tween_indicator)
         {
             XHud_Module_Primitive_Controller anim = GetPrimitiveController_WithIndicator(primitive_indicator);
-            TweenNode node = anim.pt_Tween.TweenNode_GetByIndicator(tween_indicator);
+            TweenNode node = anim.pt_tween.TweenNode_GetByIndicator(tween_indicator);
 
             if (anim == null)
             {
@@ -239,7 +239,7 @@ namespace SevenStrikeModules.XHud
             bool isExist = false;
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
-                if (PrimitiveControllerNodes[i].Controller.GetID() == ID)
+                if (PrimitiveControllerNodes[i].controller.GetID() == ID)
                 {
                     isExist = true;
                 }
@@ -255,7 +255,7 @@ namespace SevenStrikeModules.XHud
             bool isExist = false;
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
-                if (PrimitiveControllerNodes[i].Controller.GetIndicator() == Indicator)
+                if (PrimitiveControllerNodes[i].controller.GetIndicator() == Indicator)
                 {
                     isExist = true;
                 }
@@ -271,8 +271,8 @@ namespace SevenStrikeModules.XHud
                 return;
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
-                XHud_Module_Primitive_Controller anim = PrimitiveControllerNodes[i].Controller;
-                anim.pt_Tween.Tweens_Play_With_Delay(PrimitiveControllerNodes[i].DelayTime, PrimitivesTweenGlobalDuration, true, tim);
+                XHud_Module_Primitive_Controller anim = PrimitiveControllerNodes[i].controller;
+                anim.pt_tween.Tweens_Play_With_Delay(PrimitiveControllerNodes[i].delay_time, PrimitivesTweenGlobalDuration, true, tim);
             }
             if (DebugState)
                 XGUI_Utilitys.Console("XHud - 进度条控件通知", "播放图元控制器列表中的所有动画！播放时机为：" + tim.ToString(), XGUIMsgState.通知);
@@ -292,10 +292,10 @@ namespace SevenStrikeModules.XHud
 
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
-                if (PrimitiveControllerNodes[i].Controller.GetID() != id)
+                if (PrimitiveControllerNodes[i].controller.GetID() != id)
                     continue;
-                XHud_Module_Primitive_Controller anim = PrimitiveControllerNodes[i].Controller;
-                anim.pt_Tween.Tweens_Play_With_Delay(PrimitiveControllerNodes[i].DelayTime, PrimitivesTweenGlobalDuration, true, tim);
+                XHud_Module_Primitive_Controller anim = PrimitiveControllerNodes[i].controller;
+                anim.pt_tween.Tweens_Play_With_Delay(PrimitiveControllerNodes[i].delay_time, PrimitivesTweenGlobalDuration, true, tim);
             }
 
             if (DebugState)
@@ -308,8 +308,8 @@ namespace SevenStrikeModules.XHud
         {
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
-                XHud_Module_Primitive_Controller anim = PrimitiveControllerNodes[i].Controller;
-                anim.pt_Tween.Tween_RewindAll();
+                XHud_Module_Primitive_Controller anim = PrimitiveControllerNodes[i].controller;
+                anim.pt_tween.Tween_RewindAll();
             }
 
             if (DebugState)

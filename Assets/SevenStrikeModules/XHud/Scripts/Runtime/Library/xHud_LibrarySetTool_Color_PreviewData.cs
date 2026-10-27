@@ -29,7 +29,7 @@ namespace SevenStrikeModules.XHud
     public class XHud_LibrarySetTool_Color_PreviewData : ScriptableObject
     {
         [SerializeField]
-        public List<Texture2D> Textures = new List<Texture2D>();
+        public List<Texture2D> textures = new List<Texture2D>();
 
         // 确保内部名称与文件名一致
         private void OnValidate()

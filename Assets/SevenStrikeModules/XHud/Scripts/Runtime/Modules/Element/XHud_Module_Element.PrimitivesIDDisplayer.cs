@@ -36,35 +36,35 @@ namespace SevenStrikeModules.XHud
             if (!XHud_Dashboard.primitive_get_controller_displayid())
                 return;
 
-            if (PrimitiveControllerNodes == null || PrimitiveControllerNodes.Count == 0)
+            if (primitive_controller_nodes == null || primitive_controller_nodes.Count == 0)
                 return;
 
             GUIStyle style = new GUIStyle();
             style.alignment = TextAnchor.MiddleCenter;
-            style.normal.textColor = XHud_Dashboard.get_manager().PrimtiveID_LabelFont_Color;
+            style.normal.textColor = XHud_Dashboard.get_manager().primitive_id_label_font_color;
             style.fontStyle = FontStyle.Bold;
-            style.fontSize = XHud_Dashboard.get_manager().PrimtiveID_LabelFont_Size;
+            style.fontSize = XHud_Dashboard.get_manager().primitive_id_label_font_size;
 
 
-            for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
+            for (int i = 0; i < primitive_controller_nodes.Count; i++)
             {
-                XHud_Module_Primitive_Controller con = PrimitiveControllerNodes[i].Controller;
+                XHud_Module_Primitive_Controller con = primitive_controller_nodes[i].controller;
 
                 if (con == null)
                     continue;
 
-                if (con.mod_Rect != null)
+                if (con.mod_rect != null)
                 {
-                    Vector3 target = con.mod_Rect.position + (new Vector3(0, XHud_Dashboard.get_manager().PrimtiveID_LabelLine_Height, 0) * 0.3f);
+                    Vector3 target = con.mod_rect.position + (new Vector3(0, XHud_Dashboard.get_manager().primitive_id_label_line_height, 0) * 0.3f);
 
                     // 获取实际宽度（世界空间）
-                    float actualWidth = GetActualWidth(con.mod_Rect);
+                    float actualWidth = GetActualWidth(con.mod_rect);
 
                     float offset = 0;
 
-                    if (con.mod_Text != null)
+                    if (con.mod_text != null)
                     {
-                        TextAnchor anchor = con.mod_Text.alignment;
+                        TextAnchor anchor = con.mod_text.alignment;
 
                         if (anchor == TextAnchor.UpperLeft || anchor == TextAnchor.LowerLeft || anchor == TextAnchor.MiddleLeft)
                         {
@@ -79,9 +79,9 @@ namespace SevenStrikeModules.XHud
                         }
                     }
 
-                    if (con.mod_TmpText != null)
+                    if (con.mod_tmp_text != null)
                     {
-                        TmpContentAnchor anchor = con.mod_TmpText.TextStyleInfo.tmp_anchor;
+                        TmpContentAnchor anchor = con.mod_tmp_text.text_style_info.tmp_anchor;
 
                         if (anchor == TmpContentAnchor.中线靠左 ||
                             anchor == TmpContentAnchor.基线靠左 ||
@@ -106,16 +106,16 @@ namespace SevenStrikeModules.XHud
 
                     // 应用偏移后的目标位置
                     Vector3 offsetTarget = target + new Vector3(offset, 0, 0);
-                    Vector3 offsetssddTarget = con.mod_Rect.position + new Vector3(offset, 0, 0);
+                    Vector3 offsetssddTarget = con.mod_rect.position + new Vector3(offset, 0, 0);
 
-                    Handles.color = XHud_Dashboard.get_manager().PrimtiveID_LabelLine_Color;
+                    Handles.color = XHud_Dashboard.get_manager().primitive_id_label_line_color;
 
                     Handles.DrawLine(offsetssddTarget, offsetTarget);  // 这里改成 offsetTarget
 
                     Handles.color = Color.white;
 
                     // 显示文本标签
-                    Handles.Label(offsetTarget + Vector3.up * 0.05f, con.ID, style);
+                    Handles.Label(offsetTarget + Vector3.up * 0.05f, con.id, style);
                 }
             }
 #endif

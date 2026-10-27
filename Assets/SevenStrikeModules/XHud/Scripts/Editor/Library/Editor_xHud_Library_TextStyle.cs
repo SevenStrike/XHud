@@ -41,17 +41,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 文字样式库列表。
         /// </summary>
-        public List<XHud_LibraryArg_TextStyle> TextStyleLibrary = new List<XHud_LibraryArg_TextStyle>();
+        public List<XHud_LibraryArg_TextStyle> text_style_library = new List<XHud_LibraryArg_TextStyle>();
     }
     #endregion
 
-    #region 编辑器主体
-    /// <summary>
-    /// XHud 文字样式库的自定义编辑器。
-    /// <para/>
-    /// 提供样式列表的可视化编辑、右键菜单（修改 / 获取 / 粘贴 / 克隆）、导入导出（含字体资源拷贝）、
-    /// 预览、增删清空等功能。
-    /// </summary>
     [CustomEditor(typeof(XHud_Library_TextStyle))]
     public class Editor_XHud_Library_TextStyle : Editor
     {
@@ -61,55 +54,127 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 在 <see cref="OnEnable"/> 中缓存。
         /// </summary>
-        private XHud_Library_TextStyle BaseScript;
+        private XHud_Library_TextStyle base_script;
         /// <summary>
         /// 文字样式库列表（可重排列表）。
         /// <para/>
         /// 用于驱动 ReorderableList 的绘制与交互。
         /// </summary>
-        private ReorderableList sp_TextStyleLibraryList;
+        private ReorderableList text_style_list;
         #endregion
 
         #region 字段 - 序列化属性
         /// <summary>
-        /// 本 Inspector 用到的全部序列化属性引用。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里初始化。
-        /// <para/>
-        /// 覆盖：
-        /// <list type="bullet">
-        /// <item><description>文字样式库列表；</description></item>
-        /// <item><description>预览字体 / 颜色 / 样式 / 内容；</description></item>
-        /// <item><description>选中 / 定位索引；</description></item>
-        /// <item><description>过滤 / 查找字符串；</description></item>
-        /// <item><description>列表滚动位置与项高；</description></item>
-        /// <item><description>库名称。</description></item>
-        /// </list>
+        /// 文字样式库属性
         /// </summary>
-        private SerializedProperty
-            sp_TextStyleLibrary,
-            sp_PreviewFontColor,
-            sp_Preview_Font,
-            sp_PreviewTypeText,
-            sp_LibraryName,
-            sp_itemHeight,
-            sp_visibleItemCount,
-            sp_ColorInfoList_Original_Scroller,
-            sp_LocationSelectedIndex,
-            sp_SelectedIndex,
-            sp_Find,
-            sp_Highlight,
-            sp_PreviewFontStyle,
-            sp_PreviewContent;
+        private SerializedProperty sp_library_text_styles;
+        /// <summary>
+        /// 预览字体颜色属性
+        /// </summary>
+        private SerializedProperty sp_preview_font_color;
+        /// <summary>
+        /// 预览字体属性
+        /// </summary>
+        private SerializedProperty sp_preview_font;
+        /// <summary>
+        /// 预览文字内容属性
+        /// </summary>
+        private SerializedProperty sp_preview_type_text;
+        /// <summary>
+        /// 库名称属性
+        /// </summary>
+        private SerializedProperty sp_library_name;
+        /// <summary>
+        /// 列表项高度属性
+        /// </summary>
+        private SerializedProperty sp_item_height;
+        /// <summary>
+        /// 可视区域显示元素数量属性
+        /// </summary>
+        private SerializedProperty sp_visible_item_count;
+        /// <summary>
+        /// 颜色信息列表滚动位置属性
+        /// </summary>
+        private SerializedProperty sp_color_info_list_original_scroller;
+        /// <summary>
+        /// 定位选中项索引属性
+        /// </summary>
+        private SerializedProperty sp_location_selected_index;
+        /// <summary>
+        /// 选中项索引属性
+        /// </summary>
+        private SerializedProperty sp_selected_index;
+        /// <summary>
+        /// 查找字符串属性
+        /// </summary>
+        private SerializedProperty sp_find;
+        /// <summary>
+        /// 筛选高亮字符串属性
+        /// </summary>
+        private SerializedProperty sp_highlight;
+        /// <summary>
+        /// 预览字体样式属性
+        /// </summary>
+        private SerializedProperty sp_preview_style;
+        /// <summary>
+        /// 预览内容属性
+        /// </summary>
+        private SerializedProperty sp_preview_content;
         #endregion
 
         #region 字段 - 图标
         /// <summary>
-        /// 标题 / 按钮 / 图标资源缓存。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里加载。
+        /// 警告图标
         /// </summary>
-        private Texture2D warnIcon, btn_icon_details_released, btn_icon_details_press, import_p, import_r, export_p, export_r, clear_p, clear_r, create_p, create_r, delete_p, delete_r;
+        private Texture2D warnIcon;
+        /// <summary>
+        /// 详情按钮常态图标
+        /// </summary>
+        private Texture2D btn_icon_details_released;
+        /// <summary>
+        /// 详情按钮按下图标
+        /// </summary>
+        private Texture2D btn_icon_details_press;
+        /// <summary>
+        /// 导入按钮按下图标
+        /// </summary>
+        private Texture2D import_p;
+        /// <summary>
+        /// 导入按钮常态图标
+        /// </summary>
+        private Texture2D import_r;
+        /// <summary>
+        /// 导出按钮按下图标
+        /// </summary>
+        private Texture2D export_p;
+        /// <summary>
+        /// 导出按钮常态图标
+        /// </summary>
+        private Texture2D export_r;
+        /// <summary>
+        /// 清空按钮按下图标
+        /// </summary>
+        private Texture2D clear_p;
+        /// <summary>
+        /// 清空按钮常态图标
+        /// </summary>
+        private Texture2D clear_r;
+        /// <summary>
+        /// 创建按钮按下图标
+        /// </summary>
+        private Texture2D create_p;
+        /// <summary>
+        /// 创建按钮常态图标
+        /// </summary>
+        private Texture2D create_r;
+        /// <summary>
+        /// 删除按钮按下图标
+        /// </summary>
+        private Texture2D delete_p;
+        /// <summary>
+        /// 删除按钮常态图标
+        /// </summary>
+        private Texture2D delete_r;
         #endregion
 
         #region 字段 - 参数
@@ -134,7 +199,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 有列表项被选中时置为 true。
         /// </summary>
-        bool sws;
+        bool has_preview;
         #endregion
 
         #region 字段 - 绘制缓存
@@ -153,7 +218,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 选中背景色。
         /// </summary>
-        private Color SelectedBg = new Color(0, 0, 0, 0.2f);
+        private Color selected_bg = new Color(0, 0, 0, 0.2f);
         #endregion
 
         #region 生命周期
@@ -173,23 +238,23 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseScript = (XHud_Library_TextStyle)target;
+            base_script = (XHud_Library_TextStyle)target;
 
             #region 获取序列化属性
-            sp_TextStyleLibrary = serializedObject.FindProperty("TextStyleLibrary");
-            sp_LibraryName = serializedObject.FindProperty("LibraryName");
-            sp_PreviewContent = serializedObject.FindProperty("PreviewContent");
-            sp_PreviewFontColor = serializedObject.FindProperty("PreviewFontColor");
-            sp_itemHeight = serializedObject.FindProperty("itemHeight");
-            sp_visibleItemCount = serializedObject.FindProperty("visibleItemCount");
-            sp_ColorInfoList_Original_Scroller = serializedObject.FindProperty("ColorInfoList_Original_Scroller");
-            sp_LocationSelectedIndex = serializedObject.FindProperty("LocationSelectedIndex");
-            sp_SelectedIndex = serializedObject.FindProperty("SelectedIndex");
-            sp_Find = serializedObject.FindProperty("Find");
-            sp_Highlight = serializedObject.FindProperty("Highlight");
-            sp_Preview_Font = serializedObject.FindProperty("Preview_Font");
-            sp_PreviewTypeText = serializedObject.FindProperty("PreviewTypeText");
-            sp_PreviewFontStyle = serializedObject.FindProperty("PreviewStyle");
+            sp_library_text_styles = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.library_text_styles));
+            sp_library_name = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.library_name));
+            sp_preview_content = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.preview_content));
+            sp_preview_font_color = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.preview_font_color));
+            sp_item_height = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.item_height));
+            sp_visible_item_count = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.visible_item_count));
+            sp_color_info_list_original_scroller = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.color_info_list_original_scroller));
+            sp_location_selected_index = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.location_selected_index));
+            sp_selected_index = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.selected_index));
+            sp_find = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.find));
+            sp_highlight = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.highlight));
+            sp_preview_font = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.preview_font));
+            sp_preview_type_text = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.preview_type_text));
+            sp_preview_style = serializedObject.FindProperty(nameof(XHud_Library_TextStyle.preview_style));
             #endregion
 
             blocked_col = new Color(0, 0, 0, blocked_alp);
@@ -210,21 +275,21 @@ namespace SevenStrikeModules.XHud.Editor
             warnIcon = XGUI.GetBuiltInIcon("console.warnicon");
             #endregion
 
-            sp_PreviewTypeText.stringValue = "-";
-            sp_PreviewTypeText.serializedObject.ApplyModifiedProperties();
+            sp_preview_type_text.stringValue = "-";
+            sp_preview_type_text.serializedObject.ApplyModifiedProperties();
 
             //设定列表项高度值
-            sp_itemHeight.floatValue = 61;
-            sp_itemHeight.serializedObject.ApplyModifiedProperties();
+            sp_item_height.floatValue = 61;
+            sp_item_height.serializedObject.ApplyModifiedProperties();
 
-            sp_visibleItemCount.intValue = 7;
-            sp_visibleItemCount.serializedObject.ApplyModifiedProperties();
+            sp_visible_item_count.intValue = 7;
+            sp_visible_item_count.serializedObject.ApplyModifiedProperties();
 
-            #region ReorderableList - TextStyleInfoList
-            sp_TextStyleLibraryList = new ReorderableList(serializedObject, sp_TextStyleLibrary, true, true, true, true);
-            sp_TextStyleLibraryList.drawElementCallback = TextStyleInfoList_Original_DrawElementCallback;
-            sp_TextStyleLibraryList.onAddCallback = TextStyleInfoList_Original_AddCallback;
-            sp_TextStyleLibraryList.onRemoveCallback = TextStyleInfoList_Original_RemoveCallback;
+            #region ReorderableList
+            text_style_list = new ReorderableList(serializedObject, sp_library_text_styles, true, true, true, true);
+            text_style_list.drawElementCallback = TextStyleInfoList_Original_DrawElementCallback;
+            text_style_list.onAddCallback = TextStyleInfoList_Original_AddCallback;
+            text_style_list.onRemoveCallback = TextStyleInfoList_Original_RemoveCallback;
             #endregion
         }
         /// <summary>
@@ -240,30 +305,31 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnDisable()
         {
-            sp_ColorInfoList_Original_Scroller.vector2Value = Vector2.zero;
-            sp_ColorInfoList_Original_Scroller.serializedObject.ApplyModifiedProperties();
+            sp_color_info_list_original_scroller.vector2Value = Vector2.zero;
+            sp_color_info_list_original_scroller.serializedObject.ApplyModifiedProperties();
 
-            sp_SelectedIndex.intValue = -1;
-            sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+            sp_selected_index.intValue = -1;
+            sp_selected_index.serializedObject.ApplyModifiedProperties();
 
-            sp_LocationSelectedIndex.intValue = -1;
-            sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+            sp_location_selected_index.intValue = -1;
+            sp_location_selected_index.serializedObject.ApplyModifiedProperties();
 
-            sp_Find.stringValue = string.Empty;
-            sp_Find.serializedObject.ApplyModifiedProperties();
+            sp_find.stringValue = string.Empty;
+            sp_find.serializedObject.ApplyModifiedProperties();
 
-            sp_Highlight.stringValue = string.Empty;
-            sp_Highlight.serializedObject.ApplyModifiedProperties();
+            sp_highlight.stringValue = string.Empty;
+            sp_highlight.serializedObject.ApplyModifiedProperties();
 
-            sp_PreviewTypeText.stringValue = string.Empty;
-            sp_PreviewTypeText.serializedObject.ApplyModifiedProperties();
+            sp_preview_type_text.stringValue = string.Empty;
+            sp_preview_type_text.serializedObject.ApplyModifiedProperties();
 
-            sp_PreviewFontColor.colorValue = Color.white;
-            sp_PreviewFontColor.serializedObject.ApplyModifiedProperties();
+            sp_preview_font_color.colorValue = Color.white;
+            sp_preview_font_color.serializedObject.ApplyModifiedProperties();
 
-            sp_PreviewFontStyle.enumValueIndex = (int)FontStyle.Normal;
-            sp_PreviewFontStyle.serializedObject.ApplyModifiedProperties();
+            sp_preview_style.enumValueIndex = (int)FontStyle.Normal;
+            sp_preview_style.serializedObject.ApplyModifiedProperties();
         }
+
         /// <summary>
         /// 绘制 Inspector 主入口。
         /// <para/>
@@ -311,7 +377,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_LibraryName,
+                prop: sp_library_name,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -322,12 +388,12 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_Highlight,
+                prop: sp_highlight,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
-                sp_LocationSelectedIndex.intValue = -1;
-                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                sp_location_selected_index.intValue = -1;
+                sp_location_selected_index.serializedObject.ApplyModifiedProperties();
             }
             #endregion
 
@@ -338,19 +404,19 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_Find,
+                prop: sp_find,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
-                if (!string.IsNullOrEmpty(sp_Find.stringValue))
-                    BaseScript.TextStyleLibrary_Location_Find(sp_Find.stringValue);
+                if (!string.IsNullOrEmpty(sp_find.stringValue))
+                    base_script.TextStyleLibrary_Location_Find(sp_find.stringValue);
                 else
                 {
-                    sp_SelectedIndex.intValue = -1;
-                    sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+                    sp_selected_index.intValue = -1;
+                    sp_selected_index.serializedObject.ApplyModifiedProperties();
 
-                    sp_LocationSelectedIndex.intValue = -1;
-                    sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                    sp_location_selected_index.intValue = -1;
+                    sp_location_selected_index.serializedObject.ApplyModifiedProperties();
                 }
             }
             #endregion
@@ -361,7 +427,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_PreviewContent,
+                prop: sp_preview_content,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -369,7 +435,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 快捷功能
-            if (string.IsNullOrEmpty(sp_Highlight.stringValue))
+            if (string.IsNullOrEmpty(sp_highlight.stringValue))
             {
                 if (!Application.isPlaying)
                 {
@@ -440,8 +506,8 @@ namespace SevenStrikeModules.XHud.Editor
                         if (res == "暂不")
                             return;
 
-                        sp_TextStyleLibrary.ClearArray();
-                        sp_TextStyleLibrary.serializedObject.ApplyModifiedProperties();
+                        sp_library_text_styles.ClearArray();
+                        sp_library_text_styles.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
 
@@ -457,7 +523,7 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 14,
                         height: 14))
                     {
-                        TextStyleInfoList_Original_Add(sp_TextStyleLibraryList);
+                        TextStyleInfoList_Original_Add(text_style_list);
                     }
                     #endregion
 
@@ -473,7 +539,7 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 14,
                         height: 14))
                     {
-                        TextStyleInfoList_Original_Remove(sp_TextStyleLibraryList);
+                        TextStyleInfoList_Original_Remove(text_style_list);
                     }
                     #endregion
 
@@ -507,12 +573,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 根据高亮过滤条件屏蔽或启用 GUI。
         /// <para/>
-        /// 若名称不包含 <see cref="sp_Highlight"/> 的当前值，则禁用 GUI。
+        /// 若名称不包含 <see cref="sp_highlight"/> 的当前值，则禁用 GUI。
         /// </summary>
         /// <param name="name">待检查的名称</param>
         private void BlockGUI(string name)
         {
-            if (!name.Contains(sp_Highlight.stringValue))
+            if (!name.Contains(sp_highlight.stringValue))
             {
                 GUI.enabled = false;
             }
@@ -529,8 +595,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="list">可重排列表</param>
         private void TextStyleInfoList_Original_AddCallback(ReorderableList list)
         {
-            if (BaseScript.act_on_TextStyleChanged != null)
-                BaseScript.act_on_TextStyleChanged();
+            if (base_script.act_on_text_style_changed != null)
+                base_script.act_on_text_style_changed();
         }
         /// <summary>
         /// 列表移除回调。
@@ -540,8 +606,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="list">可重排列表</param>
         private void TextStyleInfoList_Original_RemoveCallback(ReorderableList list)
         {
-            if (BaseScript.act_on_TextStyleChanged != null)
-                BaseScript.act_on_TextStyleChanged();
+            if (base_script.act_on_text_style_changed != null)
+                base_script.act_on_text_style_changed();
         }
         /// <summary>
         /// 绘制元素回调。
@@ -564,21 +630,21 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="isFocused">是否聚焦</param>
         private void TextStyleInfoList_Original_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty prop = sp_TextStyleLibrary.GetArrayElementAtIndex(index);
+            SerializedProperty prop = sp_library_text_styles.GetArrayElementAtIndex(index);
 
-            SerializedProperty sp_name = prop.FindPropertyRelative("Name");
-            SerializedProperty sp_type = prop.FindPropertyRelative("Type");
-            SerializedProperty sp_tmpfont = prop.FindPropertyRelative("tmp_font");
-            SerializedProperty sp_tmpgra = prop.FindPropertyRelative("gra_Used");
-            SerializedProperty sp_tmp_gramode = prop.FindPropertyRelative("gra_ColorMode");
-            SerializedProperty sp_tmp_gra_col_a = prop.FindPropertyRelative("gra_A");
-            SerializedProperty sp_tmp_gra_col_b = prop.FindPropertyRelative("gra_B");
-            SerializedProperty sp_tmp_gra_col_c = prop.FindPropertyRelative("gra_C");
-            SerializedProperty sp_tmp_gra_col_d = prop.FindPropertyRelative("gra_D");
-            SerializedProperty sp_font = prop.FindPropertyRelative("Font");
-            SerializedProperty sp_descrpt = prop.FindPropertyRelative("Description");
-            SerializedProperty sp_fontcolor = prop.FindPropertyRelative("FontColor");
-            SerializedProperty sp_tmpfontcolor = prop.FindPropertyRelative("tmp_color");
+            SerializedProperty sp_name = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.name));
+            SerializedProperty sp_type = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.type));
+            SerializedProperty sp_tmpfont = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_font));
+            SerializedProperty sp_tmpgra = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_used));
+            SerializedProperty sp_tmp_gramode = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_color_mode));
+            SerializedProperty sp_tmp_gra_col_a = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_a));
+            SerializedProperty sp_tmp_gra_col_b = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_b));
+            SerializedProperty sp_tmp_gra_col_c = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_c));
+            SerializedProperty sp_tmp_gra_col_d = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_d));
+            SerializedProperty sp_font = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.font));
+            SerializedProperty sp_descrpt = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.description));
+            SerializedProperty sp_fontcolor = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.font_color));
+            SerializedProperty sp_tmpfontcolor = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_color));
 
             xHud_TextType ttype = (xHud_TextType)sp_type.enumValueIndex;
 
@@ -606,7 +672,7 @@ namespace SevenStrikeModules.XHud.Editor
             string m_color = XGUI_Utilitys.Color_To_HexString(XGUI.GetXGUIColor(XGUIColor.工业蓝), true);
 
             #region 样式名称
-            drawelement_rect.Set(rect.x + 35, rect.y + 8, rect.width - (string.IsNullOrEmpty(sp_Find.stringValue) ? 95 : 155), 20);
+            drawelement_rect.Set(rect.x + 35, rect.y + 8, rect.width - (string.IsNullOrEmpty(sp_find.stringValue) ? 95 : 155), 20);
             XGUI.gui_label(
                 rect: drawelement_rect,
                 text: new GUIContent($"<b><color={(ttype == xHud_TextType.Text ? t_color : m_color)}>{(ttype == xHud_TextType.Text ? "T " : "M")}</color></b>    <color=#ffffff>|</color>    <color={h_color}>{sp_name.stringValue}</color>"),
@@ -619,7 +685,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 样式解释
-            drawelement_rect.Set(rect.x + 36, rect.y + 33, rect.width - (string.IsNullOrEmpty(sp_Find.stringValue) ? 130 : 160), 22);
+            drawelement_rect.Set(rect.x + 36, rect.y + 33, rect.width - (string.IsNullOrEmpty(sp_find.stringValue) ? 130 : 160), 22);
             XGUI.gui_label(
                 rect: drawelement_rect,
                 text: new GUIContent(sp_descrpt.stringValue),
@@ -709,7 +775,7 @@ namespace SevenStrikeModules.XHud.Editor
                 focus_name: "fav_btn"))
             {
                 XHud_LibraryArg_TextStyle info = new XHud_LibraryArg_TextStyle();
-                info.CopyData(BaseScript.TextStyleLibrary[index]);
+                info.CopyData(base_script.library_text_styles[index]);
                 Open_Hud_Library_TextStyle_Setter(info, index);
                 return;
             }
@@ -729,13 +795,13 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddItem(new GUIContent("E (修改样式)"), false, () =>
                 {
                     XHud_LibraryArg_TextStyle info = new XHud_LibraryArg_TextStyle();
-                    info.CopyData(BaseScript.TextStyleLibrary[index]);
+                    info.CopyData(base_script.library_text_styles[index]);
                     Open_Hud_Library_TextStyle_Setter(info, index);
                     return;
                 });
                 menu.AddItem(new GUIContent("C (获取样式)"), false, () =>
                 {
-                    string json = JsonUtility.ToJson(BaseScript.TextStyleLibrary[index]);
+                    string json = JsonUtility.ToJson(base_script.library_text_styles[index]);
                     XGUI.x_Editor_Data_Set_With_String("xData_XHud_TextStyle", json);
 
                     XGUI.dialog(
@@ -753,9 +819,9 @@ namespace SevenStrikeModules.XHud.Editor
                     XHud_LibraryArg_TextStyle info = JsonUtility.FromJson<XHud_LibraryArg_TextStyle>(XGUI.x_Editor_Data_Get_With_String("xData_XHud_TextStyle"));
 
                     // 使用 Undo.RecordObject 来记录对目标对象的修改
-                    Undo.RecordObject(BaseScript, "Paste Style");
+                    Undo.RecordObject(base_script, "Paste Style");
 
-                    BaseScript.TextStyleLibrary[index].CopyData_Ignored_LibraryToggle(info);
+                    base_script.library_text_styles[index].CopyData_Ignored_LibraryToggle(info);
 
                     XGUI.dialog(
                         type: XGUIDialogType.确认,
@@ -773,10 +839,10 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddItem(new GUIContent("S (克隆样式)"), false, () =>
                 {
                     // 使用 Undo.RecordObject 来记录对目标对象的修改
-                    Undo.RecordObject(sp_TextStyleLibrary.serializedObject.targetObject, "Clone Style");
+                    Undo.RecordObject(sp_library_text_styles.serializedObject.targetObject, "Clone Style");
 
-                    sp_TextStyleLibrary.InsertArrayElementAtIndex(index);
-                    sp_TextStyleLibrary.serializedObject.ApplyModifiedProperties();
+                    sp_library_text_styles.InsertArrayElementAtIndex(index);
+                    sp_library_text_styles.serializedObject.ApplyModifiedProperties();
                     Repaint();
                 });
                 // 显示右键菜单
@@ -787,13 +853,13 @@ namespace SevenStrikeModules.XHud.Editor
 
             GUI.enabled = true;
 
-            if (!sp_name.stringValue.Contains(sp_Highlight.stringValue))
+            if (!sp_name.stringValue.Contains(sp_highlight.stringValue))
             {
                 drawelement_rect.Set(rect.x - 20, rect.y, rect.width + 20, rect.height);
                 XGUI.gui_box(drawelement_rect, blocked_col);
             }
 
-            if (index == sp_LocationSelectedIndex.intValue)
+            if (index == sp_location_selected_index.intValue)
             {
                 drawelement_rect.Set(rect.width - 105, rect.y + 8, 50, 20);
                 XGUI.gui_label(
@@ -816,73 +882,73 @@ namespace SevenStrikeModules.XHud.Editor
         private void DrawTextStyleInfoList_Original()
         {
             // 绘制滚动视图
-            scrollview_rect = GUILayoutUtility.GetRect(0, sp_visibleItemCount.intValue * sp_itemHeight.floatValue);
-            sp_ColorInfoList_Original_Scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_ColorInfoList_Original_Scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, sp_TextStyleLibraryList.count * sp_itemHeight.floatValue), false, true);
+            scrollview_rect = GUILayoutUtility.GetRect(0, sp_visible_item_count.intValue * sp_item_height.floatValue);
+            sp_color_info_list_original_scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_color_info_list_original_scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, text_style_list.count * sp_item_height.floatValue), false, true);
 
             // 计算可视区域的起始和结束索引
-            int startIndex = Mathf.FloorToInt(sp_ColorInfoList_Original_Scroller.vector2Value.y / sp_itemHeight.floatValue);
-            int endIndex = Mathf.CeilToInt((sp_ColorInfoList_Original_Scroller.vector2Value.y + scrollview_rect.height) / sp_itemHeight.floatValue);
+            int startIndex = Mathf.FloorToInt(sp_color_info_list_original_scroller.vector2Value.y / sp_item_height.floatValue);
+            int endIndex = Mathf.CeilToInt((sp_color_info_list_original_scroller.vector2Value.y + scrollview_rect.height) / sp_item_height.floatValue);
 
             // 只绘制可视区域内的元素
-            for (int i = startIndex; i < endIndex && i < sp_TextStyleLibraryList.count; i++)
+            for (int i = startIndex; i < endIndex && i < text_style_list.count; i++)
             {
-                SerializedProperty prop = sp_TextStyleLibrary.GetArrayElementAtIndex(i);
-                SerializedProperty sp_name = prop.FindPropertyRelative("Name");
-                SerializedProperty sp_type = prop.FindPropertyRelative("Type");
-                SerializedProperty sp_fontcolor = prop.FindPropertyRelative("FontColor");
-                SerializedProperty sp_tmpfontcolor = prop.FindPropertyRelative("tmp_color");
-                SerializedProperty sp_size = prop.FindPropertyRelative("Size");
-                SerializedProperty sp_tmp_size = prop.FindPropertyRelative("tmp_size");
-                SerializedProperty sp_font = prop.FindPropertyRelative("Font");
-                SerializedProperty sp_Style = prop.FindPropertyRelative("Style");
+                SerializedProperty prop = sp_library_text_styles.GetArrayElementAtIndex(i);
+                SerializedProperty sp_name = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.name));
+                SerializedProperty sp_type = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.type));
+                SerializedProperty sp_fontcolor = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.font_color));
+                SerializedProperty sp_tmpfontcolor = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_color));
+                SerializedProperty sp_size = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.size));
+                SerializedProperty sp_tmp_size = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_size));
+                SerializedProperty sp_font = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.font));
+                SerializedProperty sp_Style = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.style));
 
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
                 // 如果当前元素被选中，绘制选中效果
-                if (sp_name.stringValue.Contains(sp_Highlight.stringValue))
+                if (sp_name.stringValue.Contains(sp_highlight.stringValue))
                 {
-                    if (sp_SelectedIndex.intValue == i)
+                    if (sp_selected_index.intValue == i)
                     {
                         // 高亮标记表示选中
-                        item_rect.Set(1, i * sp_itemHeight.floatValue + 15, 5, 5);
+                        item_rect.Set(1, i * sp_item_height.floatValue + 15, 5, 5);
                         //itemmark_rect = new Rect(item_rect.x + 1, item_rect.y + 15, 5, 5);
                         EditorGUI.DrawRect(item_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                         // 高亮背景表示选中
-                        item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width + 20, sp_itemHeight.floatValue);
+                        item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width + 20, sp_item_height.floatValue);
                         //itemmarkBg_rect = new Rect(item_rect.x, item_rect.y, item_rect.width + 20, item_rect.height);
-                        EditorGUI.DrawRect(item_rect, SelectedBg);
-                        sws = true;
+                        EditorGUI.DrawRect(item_rect, selected_bg);
+                        has_preview = true;
                     }
                 }
 
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
-                sp_TextStyleLibraryList.drawElementCallback.Invoke(item_rect, i, i == sp_TextStyleLibraryList.index, true);
+                text_style_list.drawElementCallback.Invoke(item_rect, i, i == text_style_list.index, true);
 
                 // 检测鼠标是否在当前元素区域内
                 if (item_rect.Contains(Event.current.mousePosition))
                 {
                     if (Event.current.type == EventType.MouseDown)
                     {
-                        if (sp_name.stringValue.Contains(sp_Highlight.stringValue))
+                        if (sp_name.stringValue.Contains(sp_highlight.stringValue))
                         {
                             // 更新选中项
-                            sp_SelectedIndex.intValue = i;
+                            sp_selected_index.intValue = i;
 
                             if ((xHud_TextType)sp_type.enumValueIndex == xHud_TextType.Text)
                             {
-                                sp_PreviewFontColor.colorValue = sp_fontcolor.colorValue;
-                                sp_PreviewTypeText.stringValue = "Hud Text";
-                                sp_PreviewFontStyle.enumValueIndex = sp_Style.enumValueIndex;
+                                sp_preview_font_color.colorValue = sp_fontcolor.colorValue;
+                                sp_preview_type_text.stringValue = "Hud Text";
+                                sp_preview_style.enumValueIndex = sp_Style.enumValueIndex;
                             }
                             else if ((xHud_TextType)sp_type.enumValueIndex == xHud_TextType.TmpText)
                             {
-                                sp_PreviewFontColor.colorValue = sp_tmpfontcolor.colorValue;
-                                sp_PreviewTypeText.stringValue = "Hud TmpText";
-                                sp_PreviewFontStyle.enumValueIndex = (int)FontStyle.Normal;
+                                sp_preview_font_color.colorValue = sp_tmpfontcolor.colorValue;
+                                sp_preview_type_text.stringValue = "Hud TmpText";
+                                sp_preview_style.enumValueIndex = (int)FontStyle.Normal;
                             }
-                            sp_Preview_Font.objectReferenceValue = sp_font.objectReferenceValue;
-                            sp_Preview_Font.serializedObject.ApplyModifiedProperties();
+                            sp_preview_font.objectReferenceValue = sp_font.objectReferenceValue;
+                            sp_preview_font.serializedObject.ApplyModifiedProperties();
 
                             // 标记界面需要更新
                             GUI.changed = true;
@@ -905,8 +971,8 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (list.count <= 0)
                 return;
-            sp_TextStyleLibrary.DeleteArrayElementAtIndex(list.index);
-            sp_TextStyleLibrary.serializedObject.ApplyModifiedProperties();
+            sp_library_text_styles.DeleteArrayElementAtIndex(list.index);
+            sp_library_text_styles.serializedObject.ApplyModifiedProperties();
         }
         /// <summary>
         /// 列表增加项。
@@ -930,20 +996,20 @@ namespace SevenStrikeModules.XHud.Editor
             SerializedProperty prop = null;
             if (list.count <= 0)
             {
-                sp_TextStyleLibrary.InsertArrayElementAtIndex(0);
-                prop = sp_TextStyleLibrary.GetArrayElementAtIndex(0);
+                sp_library_text_styles.InsertArrayElementAtIndex(0);
+                prop = sp_library_text_styles.GetArrayElementAtIndex(0);
             }
             else
             {
-                sp_TextStyleLibrary.InsertArrayElementAtIndex(list.count);
-                prop = sp_TextStyleLibrary.GetArrayElementAtIndex(list.count - 1);
+                sp_library_text_styles.InsertArrayElementAtIndex(list.count);
+                prop = sp_library_text_styles.GetArrayElementAtIndex(list.count - 1);
             }
 
-            SerializedProperty sp_Name = prop.FindPropertyRelative("Name");
-            SerializedProperty sp_Des = prop.FindPropertyRelative("Description");
-            SerializedProperty sp_Type = prop.FindPropertyRelative("Type");
+            SerializedProperty sp_Name = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.name));
+            SerializedProperty sp_Des = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.description));
+            SerializedProperty sp_Type = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.type));
 
-            string path = AssetDatabase.GetAssetPath(BaseScript);
+            string path = AssetDatabase.GetAssetPath(base_script);
             string font_Path = path.Substring(0, path.IndexOf("XHud") + 4);
 
 
@@ -960,19 +1026,19 @@ namespace SevenStrikeModules.XHud.Editor
             if (type == xHud_TextType.Text)
             {
                 ///---------------Text
-                SerializedProperty sp_Font = prop.FindPropertyRelative("Font");
-                SerializedProperty sp_Font_AssetPath = prop.FindPropertyRelative("Font_AssetPath");
-                SerializedProperty sp_FontSize = prop.FindPropertyRelative("Size");
-                SerializedProperty sp_FontStyle = prop.FindPropertyRelative("Style");
-                SerializedProperty sp_ContentAnchor = prop.FindPropertyRelative("ContentAnchor");
-                SerializedProperty sp_LineHeight = prop.FindPropertyRelative("LineHeight");
-                SerializedProperty sp_Overflow_Horizon = prop.FindPropertyRelative("Overflow_Horizon");
-                SerializedProperty sp_Overflow_Vertical = prop.FindPropertyRelative("Overflow_Vertical");
-                SerializedProperty sp_RichText = prop.FindPropertyRelative("RichText");
-                SerializedProperty sp_BestFit = prop.FindPropertyRelative("BestFit");
-                SerializedProperty sp_Fit_Min = prop.FindPropertyRelative("Fit_Min");
-                SerializedProperty sp_Fit_Max = prop.FindPropertyRelative("Fit_Max");
-                SerializedProperty sp_Color = prop.FindPropertyRelative("FontColor");
+                SerializedProperty sp_Font = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.font));
+                SerializedProperty sp_Font_AssetPath = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.font_asset_path));
+                SerializedProperty sp_FontSize = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.size));
+                SerializedProperty sp_FontStyle = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.style));
+                SerializedProperty sp_ContentAnchor = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.content_anchor));
+                SerializedProperty sp_LineHeight = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.line_height));
+                SerializedProperty sp_Overflow_Horizon = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.overflow_horizon));
+                SerializedProperty sp_Overflow_Vertical = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.overflow_vertical));
+                SerializedProperty sp_RichText = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.rich_text));
+                SerializedProperty sp_BestFit = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.best_fit));
+                SerializedProperty sp_Fit_Min = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.fit_min));
+                SerializedProperty sp_Fit_Max = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.fit_max));
+                SerializedProperty sp_Color = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.font_color));
 
                 sp_Font.objectReferenceValue = AssetDatabase.LoadAssetAtPath<Font>(Path.Combine(font_Path, "Fonts/Text/sx_light.otf"));
                 sp_FontSize.floatValue = 50;
@@ -990,21 +1056,21 @@ namespace SevenStrikeModules.XHud.Editor
             else
             {
                 ///---------------TmpText
-                SerializedProperty sp_tmp_rich = prop.FindPropertyRelative("tmp_rich");
-                SerializedProperty sp_tmp_contentwrap = prop.FindPropertyRelative("tmp_contentwrap");
-                SerializedProperty sp_tmp_overflow = prop.FindPropertyRelative("tmp_overflow");
-                SerializedProperty sp_tmp_style = prop.FindPropertyRelative("tmp_style");
-                SerializedProperty sp_tmp_anchor = prop.FindPropertyRelative("tmp_anchor");
-                SerializedProperty sp_tmp_font = prop.FindPropertyRelative("tmp_font");
-                SerializedProperty sp_tmp_fontasset_assetpath = prop.FindPropertyRelative("tmp_fontasset_assetpath");
-                SerializedProperty sp_tmp_size = prop.FindPropertyRelative("tmp_size");
-                SerializedProperty sp_tmp_space_character = prop.FindPropertyRelative("tmp_space_character");
-                SerializedProperty sp_tmp_space_word = prop.FindPropertyRelative("tmp_space_word");
-                SerializedProperty sp_tmp_space_lineheight = prop.FindPropertyRelative("tmp_space_lineheight");
-                SerializedProperty sp_tmp_space_paragraph = prop.FindPropertyRelative("tmp_space_paragraph");
-                SerializedProperty sp_tmp_WrappingRatios = prop.FindPropertyRelative("tmp_WrappingRatios");
-                SerializedProperty sp_tmp_contentmargin = prop.FindPropertyRelative("tmp_contentmargin");
-                SerializedProperty sp_tmp_color = prop.FindPropertyRelative("tmp_color");
+                SerializedProperty sp_tmp_rich = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_rich));
+                SerializedProperty sp_tmp_contentwrap = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_contentwrap));
+                SerializedProperty sp_tmp_overflow = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_overflow));
+                SerializedProperty sp_tmp_style = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_style));
+                SerializedProperty sp_tmp_anchor = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_anchor));
+                SerializedProperty sp_tmp_font = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_font));
+                SerializedProperty sp_tmp_fontasset_assetpath = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_fontasset_assetpath));
+                SerializedProperty sp_tmp_size = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_size));
+                SerializedProperty sp_tmp_space_character = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_space_character));
+                SerializedProperty sp_tmp_space_word = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_space_word));
+                SerializedProperty sp_tmp_space_lineheight = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_space_lineheight));
+                SerializedProperty sp_tmp_space_paragraph = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_space_paragraph));
+                SerializedProperty sp_tmp_WrappingRatios = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_wrapping_ratios));
+                SerializedProperty sp_tmp_contentmargin = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_content_margin));
+                SerializedProperty sp_tmp_color = prop.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_color));
 
                 sp_tmp_rich.boolValue = true;
                 sp_tmp_contentwrap.enumValueIndex = (int)TextWrappingModes.Normal;
@@ -1051,31 +1117,31 @@ namespace SevenStrikeModules.XHud.Editor
             string save_path = Path.Combine(folder_path, filename);
 
             ExportTextStyles styles = new ExportTextStyles();
-            styles.TextStyleLibrary = BaseScript.TextStyleLibrary;
+            styles.text_style_library = base_script.library_text_styles;
 
-            for (int i = 0; i < styles.TextStyleLibrary.Count; i++)
+            for (int i = 0; i < styles.text_style_library.Count; i++)
             {
-                if (styles.TextStyleLibrary[i].Type == xHud_TextType.Text)
+                if (styles.text_style_library[i].type == xHud_TextType.Text)
                 {
-                    if (styles.TextStyleLibrary[i].Font != null)
+                    if (styles.text_style_library[i].font != null)
                     {
-                        string asset_path = AssetDatabase.GetAssetPath(styles.TextStyleLibrary[i].Font);
+                        string asset_path = AssetDatabase.GetAssetPath(styles.text_style_library[i].font);
                         string ab_name = Path.GetFileName(asset_path);
                         string font_path = Path.Combine(dynamic_folder_path, ab_name);
                         string font_source_path = Application.dataPath + asset_path.Replace("Assets", "");
-                        styles.TextStyleLibrary[i].Font_AssetPath = font_path;
+                        styles.text_style_library[i].font_asset_path = font_path;
                         File.Copy(font_source_path, font_path, true);
                     }
                 }
                 else
                 {
-                    if (styles.TextStyleLibrary[i].tmp_font != null)
+                    if (styles.text_style_library[i].tmp_font != null)
                     {
-                        string asset_path = AssetDatabase.GetAssetPath(styles.TextStyleLibrary[i].tmp_font);
+                        string asset_path = AssetDatabase.GetAssetPath(styles.text_style_library[i].tmp_font);
                         string ab_name = Path.GetFileName(asset_path);
                         string font_path = Path.Combine(tmpasset_folder_path, ab_name);
                         string font_source_path = Application.dataPath + asset_path.Replace("Assets", "");
-                        styles.TextStyleLibrary[i].tmp_fontasset_assetpath = font_path;
+                        styles.text_style_library[i].tmp_fontasset_assetpath = font_path;
                         File.Copy(font_source_path, font_path, true);
                     }
                 }
@@ -1136,9 +1202,9 @@ namespace SevenStrikeModules.XHud.Editor
                         string json = File.ReadAllText(path);
                         styles = JsonUtility.FromJson<ExportTextStyles>(json);
 
-                        for (int i = 0; i < styles.TextStyleLibrary.Count; i++)
+                        for (int i = 0; i < styles.text_style_library.Count; i++)
                         {
-                            BaseScript.TextStyleLibrary.Add(styles.TextStyleLibrary[i]);
+                            base_script.library_text_styles.Add(styles.text_style_library[i]);
                         }
                     }
                     break;
@@ -1147,7 +1213,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         string json = File.ReadAllText(path);
                         styles = JsonUtility.FromJson<ExportTextStyles>(json);
-                        BaseScript.TextStyleLibrary = styles.TextStyleLibrary;
+                        base_script.library_text_styles = styles.text_style_library;
                     }
                     break;
             }
@@ -1178,20 +1244,20 @@ namespace SevenStrikeModules.XHud.Editor
 
             string importfont_save_folder = importfont_save_path.Substring(importfont_save_path.IndexOf("Assets"));
 
-            for (int i = 0; i < styles.TextStyleLibrary.Count; i++)
+            for (int i = 0; i < styles.text_style_library.Count; i++)
             {
-                if (styles.TextStyleLibrary[i].Type == xHud_TextType.Text)
+                if (styles.text_style_library[i].type == xHud_TextType.Text)
                 {
-                    string font_absolute_path = styles.TextStyleLibrary[i].Font_AssetPath;
-                    string font_absolute_filename = Path.GetFileName(styles.TextStyleLibrary[i].Font_AssetPath);
+                    string font_absolute_path = styles.text_style_library[i].font_asset_path;
+                    string font_absolute_filename = Path.GetFileName(styles.text_style_library[i].font_asset_path);
                     string imp_font_filepath = Application.dataPath.Replace("Assets", "") + importfont_save_folder + "/" + font_absolute_filename;
                     if (File.Exists(font_absolute_path))
                         File.Copy(font_absolute_path, imp_font_filepath, true);
                 }
                 else
                 {
-                    string fontasset_absolute_path = styles.TextStyleLibrary[i].tmp_fontasset_assetpath;
-                    string fontasset_absolute_filename = Path.GetFileName(styles.TextStyleLibrary[i].tmp_fontasset_assetpath);
+                    string fontasset_absolute_path = styles.text_style_library[i].tmp_fontasset_assetpath;
+                    string fontasset_absolute_filename = Path.GetFileName(styles.text_style_library[i].tmp_fontasset_assetpath);
                     string imp_fontasset_filepath = Application.dataPath.Replace("Assets", "") + importfont_save_folder + "/" + fontasset_absolute_filename;
                     if (File.Exists(fontasset_absolute_path))
                         File.Copy(fontasset_absolute_path, imp_fontasset_filepath, true);
@@ -1217,17 +1283,17 @@ namespace SevenStrikeModules.XHud.Editor
 
             window.titleContent = new GUIContent("XHud - 文字样式修改器");
 
-            XGUI.CenterEditorWindow(new Vector2Int(348, info.Type == xHud_TextType.Text ? 820 : 800), window);
+            XGUI.CenterEditorWindow(new Vector2Int(348, info.type == xHud_TextType.Text ? 820 : 800), window);
 
             window.SetStyle(info);
-            window.ModifiedIndex = index;
+            window.modified_index = index;
             window.SetOriginStyle(info);
-            window.OriginLibName = info.Name;
-            window.SetInfo(info.Name, info.Description);
+            window.origin_lib_name = info.name;
+            window.SetInfo(info.name, info.description);
             window.SetLibrarySetterMode(LibrarySetterMode.修改库源参数);
             window.SetButtonText("更新", "取消");
             window.SetTitle("文字样式修改器");
-            window.Set_Target_Hud_TextStyleLibrary(BaseScript);
+            window.Set_Target_Hud_TextStyleLibrary(base_script);
             //window.ShowModal();
             window.Show();
         }
@@ -1242,7 +1308,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>true 表示可以显示预览</returns>
         public override bool HasPreviewGUI()
         {
-            return sws;
+            return has_preview;
         }
         /// <summary>
         /// 获取预览面板标题。
@@ -1288,21 +1354,21 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.gui_label(
                 rect: new Rect(r.x, r.y - 15, r.width, r.height),
-                text: new GUIContent(sp_PreviewContent.stringValue),
-                text_color: sp_PreviewFontColor.colorValue,
+                text: new GUIContent(sp_preview_content.stringValue),
+                text_color: sp_preview_font_color.colorValue,
                 size: XGUIFontSize.XL,
                 clipping: clipping,
                 anchor: TextAnchor.MiddleCenter,
                 offset: new Vector2(0, 0),
                 font_style: FontStyle.Normal,
-                font: (Font)sp_Preview_Font.objectReferenceValue);
+                font: (Font)sp_preview_font.objectReferenceValue);
 
             XGUI.gui_label(
                 rect: new Rect((r.width / 2) - 50, r.height - 15, 100, 20),
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.深空灰,
                 bg_color_gui: Color.white,
-                text: new GUIContent(sp_PreviewTypeText.stringValue),
+                text: new GUIContent(sp_preview_type_text.stringValue),
                 text_color: Color.white * 0.75f,
                 size: XGUIFontSize.S,
                 clipping: clipping,
@@ -1312,5 +1378,4 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
     }
-    #endregion
 }

@@ -75,42 +75,42 @@ namespace SevenStrikeModules.XHud
         /// 标识名称。
         /// </summary>
         [SerializeField]
-        public string Indicator;
+        public string indicator;
         /// <summary>
         /// 文字字体样式索引名称。
         /// </summary>
         [SerializeField]
-        public string StyleName;
+        public string style_name;
         /// <summary>
         /// 是否使用实时同步字体样式库。
         /// </summary>
         [SerializeField]
-        public bool StyleLibSynching;
+        public bool style_library_synching;
         /// <summary>
         /// 判断内容是否改变。
         /// </summary>
         [SerializeField]
-        private string PreviousText;
+        private string previous_text;
         /// <summary>
         /// 内容已改变。
         /// </summary>
         [SerializeField]
-        private bool TextIsChanged;
+        private bool text_is_changed;
         /// <summary>
         /// 事件内容改变。
         /// </summary>
         [SerializeField]
-        public UnityAction<string> Act_OnTextChanged;
+        public UnityAction<string> act_on_text_changed;
         /// <summary>
         /// 同步全局字体尺寸。
         /// </summary>
         [SerializeField]
-        public bool SyncGlobalFontSize = true;
+        public bool sync_global_font_size = true;
         /// <summary>
         /// 指定文字颜色接管的拥有者。
         /// </summary>
         [SerializeField]
-        public TextColorOwner TextColorOwner;
+        public TextColorOwner text_color_owner;
         #endregion
 
         #region 字段 - 样式
@@ -118,12 +118,12 @@ namespace SevenStrikeModules.XHud
         /// 字体样式 - 本地。
         /// </summary>
         [SerializeField]
-        public XHud_LibraryArg_TextStyle TextStyleInfo = new XHud_LibraryArg_TextStyle();
+        public XHud_LibraryArg_TextStyle text_style_info = new XHud_LibraryArg_TextStyle();
         /// <summary>
         /// 字体样式 - 库。
         /// </summary>
         [SerializeField]
-        public XHud_LibraryArg_TextStyle TextStyleInfo_Library = new XHud_LibraryArg_TextStyle();
+        public XHud_LibraryArg_TextStyle text_style_info_library = new XHud_LibraryArg_TextStyle();
         #endregion
 
         #region 字段 - 折叠状态
@@ -185,7 +185,7 @@ namespace SevenStrikeModules.XHud
             base.Start();
             if (Application.isPlaying)
             {
-                PreviousText = text;
+                previous_text = text;
             }
         }
         /// <summary>
@@ -200,7 +200,7 @@ namespace SevenStrikeModules.XHud
             //-------------------运行时样式刷新
             tmp_Update_Style_Runtime();
             //--------------------同步全局字体尺寸
-            tmp_Set_SyncGlobalFontSize(SyncGlobalFontSize);
+            tmp_Set_SyncGlobalFontSize(sync_global_font_size);
             //--------------------更新渐变色
             tmp_Update_GradientColor();
         }
@@ -219,30 +219,30 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 内容改变检测。
         /// <para/>
-        /// 对比 <see cref="PreviousText"/> 与当前 <c>text</c>，
-        /// 若发生变化则触发 <see cref="Act_OnTextChanged"/>。
+        /// 对比 <see cref="previous_text"/> 与当前 <c>text</c>，
+        /// 若发生变化则触发 <see cref="act_on_text_changed"/>。
         /// </summary>
         private void tmp_Detect_Content()
         {
-            if (PreviousText != text)
+            if (previous_text != text)
             {
-                if (!TextIsChanged)
+                if (!text_is_changed)
                 {
-                    TextIsChanged = true;
-                    PreviousText = text;
-                    if (Act_OnTextChanged != null)
-                        Act_OnTextChanged(text);
+                    text_is_changed = true;
+                    previous_text = text;
+                    if (act_on_text_changed != null)
+                        act_on_text_changed(text);
                 }
             }
             else
             {
-                TextIsChanged = false;
+                text_is_changed = false;
             }
         }
         /// <summary>
         /// 从字体样式库中切换样式并刷新文字效果。
         /// <para/>
-        /// 若 <see cref="StyleLibSynching"/> 开启，则从样式库读取对应样式，
+        /// 若 <see cref="style_library_synching"/> 开启，则从样式库读取对应样式，
         /// 按各 <c>LibStyle_Effect_*</c> 开关决定哪些属性同步到本地样式；
         /// 最后调用 <see cref="tmp_Syncing_Style"/> 将本地样式写入 TmpText 组件。
         /// </summary>
@@ -250,132 +250,132 @@ namespace SevenStrikeModules.XHud
         public void tmp_Update_Style_Runtime()
         {
             #region 如果同步库样式
-            if (StyleLibSynching)
+            if (style_library_synching)
             {
                 XHud_Manager mgr = XHud_Dashboard.get_manager();
 
                 #region 样式集合为空判断
                 if (mgr == null)
                     return;
-                if (mgr.Hud_TextStyleLibrary == null)
+                if (mgr.library_textstyles == null)
                     return;
-                if (mgr.Hud_TextStyleLibrary.TextStyle_Library_IsEmpty())
+                if (mgr.library_textstyles.TextStyle_Library_IsEmpty())
                     return;
                 #endregion
 
                 #region 从库中获取字体样式资源到 TextStyleInfo
                 if (Application.isPlaying)
                 {
-                    TextStyleInfo_Library = XHud_Manager.Instance.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(StyleName);
+                    text_style_info_library = XHud_Manager.instance.library_textstyles.TextStyle_Library_GetTextStyleInfo(style_name);
                 }
                 else
                 {
-                    if (mgr != null && mgr.Hud_TextStyleLibrary != null)
-                        TextStyleInfo_Library = mgr.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(StyleName);
+                    if (mgr != null && mgr.library_textstyles != null)
+                        text_style_info_library = mgr.library_textstyles.TextStyle_Library_GetTextStyleInfo(style_name);
                 }
                 #endregion
 
                 #region 将TextStyleInfo同步到文字效果上
                 //-----如果开启库同步 - RichText
-                if (TextStyleInfo.LibStyle_Effect_rich)
+                if (text_style_info.lib_style_effect_rich)
                 {
-                    TextStyleInfo.tmp_rich = TextStyleInfo_Library.tmp_rich;
+                    text_style_info.tmp_rich = text_style_info_library.tmp_rich;
                 }
 
                 //-----如果开启库同步 - 包裹文字
-                if (TextStyleInfo.LibStyle_Effect_wrap)
+                if (text_style_info.lib_style_effect_wrap)
                 {
-                    TextStyleInfo.tmp_contentwrap = TextStyleInfo_Library.tmp_contentwrap;
+                    text_style_info.tmp_contentwrap = text_style_info_library.tmp_contentwrap;
                 }
 
                 //-----如果开启库同步 - 溢出文字
-                if (TextStyleInfo.LibStyle_Effect_overflow)
+                if (text_style_info.lib_style_effect_overflow)
                 {
-                    TextStyleInfo.tmp_overflow = TextStyleInfo_Library.tmp_overflow;
+                    text_style_info.tmp_overflow = text_style_info_library.tmp_overflow;
                 }
 
                 //-----如果开启库同步 - 字体样式
-                if (TextStyleInfo.LibStyle_Effect_style)
+                if (text_style_info.lib_style_effect_style)
                 {
-                    TextStyleInfo.tmp_style = TextStyleInfo_Library.tmp_style;
+                    text_style_info.tmp_style = text_style_info_library.tmp_style;
                 }
 
                 //-----如果开启库同步 - 对齐锚点
-                if (TextStyleInfo.LibStyle_Effect_align)
+                if (text_style_info.lib_style_effect_align)
                 {
-                    TextStyleInfo.tmp_anchor = TextStyleInfo_Library.tmp_anchor;
+                    text_style_info.tmp_anchor = text_style_info_library.tmp_anchor;
                 }
 
                 //-----如果开启库同步 - 字体
-                if (TextStyleInfo.LibStyle_Effect_font)
+                if (text_style_info.lib_style_effect_font)
                 {
-                    TextStyleInfo.tmp_font = TextStyleInfo_Library.tmp_font;
+                    text_style_info.tmp_font = text_style_info_library.tmp_font;
                 }
 
                 //-----如果开启库同步 - 尺寸_Size
-                if (TextStyleInfo.LibStyle_Effect_size)
+                if (text_style_info.lib_style_effect_size)
                 {
-                    TextStyleInfo.tmp_size = TextStyleInfo_Library.tmp_size;
+                    text_style_info.tmp_size = text_style_info_library.tmp_size;
                 }
 
                 //-----如果开启库同步 - 自动尺寸
-                if (TextStyleInfo.LibStyle_Effect_autosizing)
+                if (text_style_info.lib_style_effect_autosizing)
                 {
-                    TextStyleInfo.tmp_EnableAutoSizing = TextStyleInfo_Library.tmp_EnableAutoSizing;
-                    TextStyleInfo.tmp_FontSizeMin = TextStyleInfo_Library.tmp_FontSizeMin;
-                    TextStyleInfo.tmp_FontSizeMax = TextStyleInfo_Library.tmp_FontSizeMax;
+                    text_style_info.tmp_enable_auto_sizing = text_style_info_library.tmp_enable_auto_sizing;
+                    text_style_info.tmp_font_size_min = text_style_info_library.tmp_font_size_min;
+                    text_style_info.tmp_font_size_max = text_style_info_library.tmp_font_size_max;
                 }
 
                 //-----如果开启库同步 - 间距
-                if (TextStyleInfo.LibStyle_Effect_space)
+                if (text_style_info.lib_style_effect_space)
                 {
-                    TextStyleInfo.tmp_space_character = TextStyleInfo_Library.tmp_space_character;
-                    TextStyleInfo.tmp_space_word = TextStyleInfo_Library.tmp_space_word;
-                    TextStyleInfo.tmp_space_lineheight = TextStyleInfo_Library.tmp_space_lineheight;
-                    TextStyleInfo.tmp_space_paragraph = TextStyleInfo_Library.tmp_space_paragraph;
+                    text_style_info.tmp_space_character = text_style_info_library.tmp_space_character;
+                    text_style_info.tmp_space_word = text_style_info_library.tmp_space_word;
+                    text_style_info.tmp_space_lineheight = text_style_info_library.tmp_space_lineheight;
+                    text_style_info.tmp_space_paragraph = text_style_info_library.tmp_space_paragraph;
                 }
 
                 //-----如果开启库同步 - 包裹对齐
-                if (TextStyleInfo.LibStyle_Effect_wrapratio)
+                if (text_style_info.lib_style_effect_wrapratio)
                 {
-                    TextStyleInfo.tmp_WrappingRatios = TextStyleInfo_Library.tmp_WrappingRatios;
+                    text_style_info.tmp_wrapping_ratios = text_style_info_library.tmp_wrapping_ratios;
                 }
 
                 //-----如果开启库同步 - 边距
-                if (TextStyleInfo.LibStyle_Effect_margin)
+                if (text_style_info.lib_style_effect_margin)
                 {
-                    TextStyleInfo.tmp_contentmargin = TextStyleInfo_Library.tmp_contentmargin;
+                    text_style_info.tmp_content_margin = text_style_info_library.tmp_content_margin;
                 }
 
                 //-----如果开启库同步 - 颜色_Color
-                if (TextStyleInfo.LibStyle_Effect_color)
+                if (text_style_info.lib_style_effect_color)
                 {
-                    TextStyleInfo.tmp_color = TextStyleInfo_Library.tmp_color;
+                    text_style_info.tmp_color = text_style_info_library.tmp_color;
                 }
 
                 //-----如果开启库同步 - 渐变色
-                if (TextStyleInfo.LibStyle_Effect_gradientcolor)
+                if (text_style_info.lib_style_effect_gradientcolor)
                 {
-                    TextStyleInfo.gra_A = TextStyleInfo_Library.gra_A;
-                    TextStyleInfo.gra_B = TextStyleInfo_Library.gra_B;
-                    TextStyleInfo.gra_C = TextStyleInfo_Library.gra_C;
-                    TextStyleInfo.gra_D = TextStyleInfo_Library.gra_D;
-                    TextStyleInfo.gra_ColorMode = TextStyleInfo_Library.gra_ColorMode;
-                    TextStyleInfo.gra_ColorModeName = TextStyleInfo_Library.gra_ColorModeName;
-                    TextStyleInfo.gra_Invert = TextStyleInfo_Library.gra_Invert;
-                    TextStyleInfo.gra_Used = TextStyleInfo_Library.gra_Used;
+                    text_style_info.gra_a = text_style_info_library.gra_a;
+                    text_style_info.gra_b = text_style_info_library.gra_b;
+                    text_style_info.gra_c = text_style_info_library.gra_c;
+                    text_style_info.gra_d = text_style_info_library.gra_d;
+                    text_style_info.gra_color_mode = text_style_info_library.gra_color_mode;
+                    text_style_info.gra_color_mode_name = text_style_info_library.gra_color_mode_name;
+                    text_style_info.gra_invert = text_style_info_library.gra_invert;
+                    text_style_info.gra_used = text_style_info_library.gra_used;
                 }
 
                 //-----如果开启库同步 - 射线检测
-                if (TextStyleInfo.LibStyle_Effect_raycast)
+                if (text_style_info.lib_style_effect_raycast)
                 {
-                    TextStyleInfo.Raycast = TextStyleInfo_Library.Raycast;
+                    text_style_info.raycast = text_style_info_library.raycast;
                 }
 
                 //-----如果开启库同步 - 遮罩                
-                if (TextStyleInfo.LibStyle_Effect_maskable)
+                if (text_style_info.lib_style_effect_maskable)
                 {
-                    TextStyleInfo.Maskable = TextStyleInfo_Library.Maskable;
+                    text_style_info.maskable = text_style_info_library.maskable;
                 }
                 #endregion
             }
@@ -386,42 +386,42 @@ namespace SevenStrikeModules.XHud
             #endregion
         }
         /// <summary>
-        /// 将 <see cref="TextStyleInfo"/> 的值同步给 TmpText 组件。
+        /// 将 <see cref="text_style_info"/> 的值同步给 TmpText 组件。
         /// <para/>
         /// 涵盖：富文本 / 包裹 / 溢出 / 字体样式 / 对齐 / 字体 /
         /// 自适应尺寸 / 全局尺寸倍率 / 间距 / 包裹对齐 / 边距 / 颜色 /
         /// 渐变色 / 射线检测 / 遮罩。
         /// </para>
-        /// 颜色仅在 <see cref="TextColorOwner"/> 不为 Tween 时同步。
+        /// 颜色仅在 <see cref="text_color_owner"/> 不为 Tween 时同步。
         /// </summary>
         public void tmp_Syncing_Style()
         {
             //--同步 - RichText
-            if (richText != TextStyleInfo.tmp_rich)
+            if (richText != text_style_info.tmp_rich)
             {
-                richText = TextStyleInfo.tmp_rich;
+                richText = text_style_info.tmp_rich;
             }
 
             //--同步 - 包裹文字
-            if (textWrappingMode != TextStyleInfo.tmp_contentwrap)
+            if (textWrappingMode != text_style_info.tmp_contentwrap)
             {
-                textWrappingMode = TextStyleInfo.tmp_contentwrap;
+                textWrappingMode = text_style_info.tmp_contentwrap;
             }
 
             //--同步 - 溢出文字
-            if (overflowMode != TextStyleInfo.tmp_overflow)
+            if (overflowMode != text_style_info.tmp_overflow)
             {
-                overflowMode = TextStyleInfo.tmp_overflow;
+                overflowMode = text_style_info.tmp_overflow;
             }
 
             //--同步 - 字体样式
-            if (fontStyle != TextStyleInfo.tmp_style)
+            if (fontStyle != text_style_info.tmp_style)
             {
-                fontStyle = TextStyleInfo.tmp_style;
+                fontStyle = text_style_info.tmp_style;
             }
 
             //--同步 - 对齐锚点
-            switch (TextStyleInfo.tmp_anchor)
+            switch (text_style_info.tmp_anchor)
             {
                 case TmpContentAnchor.顶部:
                     alignment = TextAlignmentOptions.Top;
@@ -507,193 +507,193 @@ namespace SevenStrikeModules.XHud
             }
 
             //--同步 - 字体
-            if (TextStyleInfo.tmp_font != null && TextStyleInfo.tmp_font != font)
+            if (text_style_info.tmp_font != null && text_style_info.tmp_font != font)
             {
-                font = TextStyleInfo.tmp_font;
+                font = text_style_info.tmp_font;
             }
 
             //--同步 - 自动尺寸 - 开关
-            if (enableAutoSizing != TextStyleInfo.tmp_EnableAutoSizing)
+            if (enableAutoSizing != text_style_info.tmp_enable_auto_sizing)
             {
-                enableAutoSizing = TextStyleInfo.tmp_EnableAutoSizing;
+                enableAutoSizing = text_style_info.tmp_enable_auto_sizing;
             }
 
             //--同步 - 自动尺寸 - 逻辑赋值
             if (enableAutoSizing)
             {
                 //--最小尺寸
-                if (SyncGlobalFontSize)
+                if (sync_global_font_size)
                 {
                     if (!Application.isPlaying)
                     {
-                        TextStyleInfo.tmp_FontSizeMin_globalscaled = XHud_Dashboard.get_manager().FontSizeMultiply * TextStyleInfo.tmp_FontSizeMin;
+                        text_style_info.tmp_FontSizeMin_globalscaled = XHud_Dashboard.get_manager().ft_font_size_multiply * text_style_info.tmp_font_size_min;
                     }
                     else
                     {
-                        TextStyleInfo.tmp_FontSizeMin_globalscaled = XHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.tmp_FontSizeMin;
+                        text_style_info.tmp_FontSizeMin_globalscaled = XHud_Manager.instance.ft_font_size_multiply * text_style_info.tmp_font_size_min;
                     }
 
-                    if (TextStyleInfo.tmp_FontSizeMin_globalscaled != fontSizeMin)
+                    if (text_style_info.tmp_FontSizeMin_globalscaled != fontSizeMin)
                     {
-                        fontSizeMin = TextStyleInfo.tmp_FontSizeMin_globalscaled;
+                        fontSizeMin = text_style_info.tmp_FontSizeMin_globalscaled;
                     }
                 }
                 else
                 {
-                    if (fontSizeMin != TextStyleInfo.tmp_FontSizeMin)
+                    if (fontSizeMin != text_style_info.tmp_font_size_min)
                     {
-                        fontSizeMin = TextStyleInfo.tmp_FontSizeMin;
+                        fontSizeMin = text_style_info.tmp_font_size_min;
                     }
                 }
 
                 //--最大尺寸
-                if (SyncGlobalFontSize)
+                if (sync_global_font_size)
                 {
                     if (!Application.isPlaying)
                     {
-                        TextStyleInfo.tmp_FontSizeMax_globalscaled = XHud_Dashboard.get_manager().FontSizeMultiply * TextStyleInfo.tmp_FontSizeMax;
+                        text_style_info.tmp_FontSizeMax_globalscaled = XHud_Dashboard.get_manager().ft_font_size_multiply * text_style_info.tmp_font_size_max;
                     }
                     else
                     {
-                        TextStyleInfo.tmp_FontSizeMax_globalscaled = XHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.tmp_FontSizeMax;
+                        text_style_info.tmp_FontSizeMax_globalscaled = XHud_Manager.instance.ft_font_size_multiply * text_style_info.tmp_font_size_max;
                     }
 
-                    if (TextStyleInfo.tmp_FontSizeMax_globalscaled != fontSizeMax)
+                    if (text_style_info.tmp_FontSizeMax_globalscaled != fontSizeMax)
                     {
-                        fontSizeMax = TextStyleInfo.tmp_FontSizeMax_globalscaled;
+                        fontSizeMax = text_style_info.tmp_FontSizeMax_globalscaled;
                     }
                 }
                 else
                 {
-                    if (fontSizeMax != TextStyleInfo.tmp_FontSizeMax)
+                    if (fontSizeMax != text_style_info.tmp_font_size_max)
                     {
-                        fontSizeMax = TextStyleInfo.tmp_FontSizeMax;
+                        fontSizeMax = text_style_info.tmp_font_size_max;
                     }
                 }
 
                 //--字符宽度百分比
-                if (characterWidthAdjustment != TextStyleInfo.tmp_CharWidthMaxAdj)
+                if (characterWidthAdjustment != text_style_info.tmp_char_width_max_adj)
                 {
-                    characterWidthAdjustment = TextStyleInfo.tmp_CharWidthMaxAdj;
+                    characterWidthAdjustment = text_style_info.tmp_char_width_max_adj;
                 }
 
                 //--最大行高
-                if (lineSpacingAdjustment != TextStyleInfo.tmp_LineSpacingMax)
+                if (lineSpacingAdjustment != text_style_info.tmp_line_spacing_max)
                 {
-                    lineSpacingAdjustment = TextStyleInfo.tmp_LineSpacingMax;
+                    lineSpacingAdjustment = text_style_info.tmp_line_spacing_max;
                 }
             }
             //--同步 - 原生尺寸 - 逻辑赋值
             else
             {
-                if (SyncGlobalFontSize)
+                if (sync_global_font_size)
                 {
                     if (!Application.isPlaying)
                     {
-                        TextStyleInfo.tmp_size_globalscaled = XHud_Dashboard.get_manager().FontSizeMultiply * TextStyleInfo.tmp_size;
+                        text_style_info.tmp_size_globalscaled = XHud_Dashboard.get_manager().ft_font_size_multiply * text_style_info.tmp_size;
                     }
                     else
                     {
-                        TextStyleInfo.tmp_size_globalscaled = XHud_Manager.Instance.FontSizeMultiply * TextStyleInfo.tmp_size;
+                        text_style_info.tmp_size_globalscaled = XHud_Manager.instance.ft_font_size_multiply * text_style_info.tmp_size;
                     }
 
-                    if (TextStyleInfo.tmp_size_globalscaled != fontSize || m_fontSizeBase != m_fontSize)
+                    if (text_style_info.tmp_size_globalscaled != fontSize || m_fontSizeBase != m_fontSize)
                     {
-                        fontSize = TextStyleInfo.tmp_size_globalscaled;
+                        fontSize = text_style_info.tmp_size_globalscaled;
                     }
                 }
                 else
                 {
-                    if (TextStyleInfo.tmp_size != fontSize || m_fontSizeBase != m_fontSize)
+                    if (text_style_info.tmp_size != fontSize || m_fontSizeBase != m_fontSize)
                     {
-                        fontSize = TextStyleInfo.tmp_size;
+                        fontSize = text_style_info.tmp_size;
                     }
                 }
             }
 
             //--同步 - 间距 - 字符
-            if (characterSpacing != TextStyleInfo.tmp_space_character)
+            if (characterSpacing != text_style_info.tmp_space_character)
             {
-                characterSpacing = TextStyleInfo.tmp_space_character;
+                characterSpacing = text_style_info.tmp_space_character;
             }
 
             //--同步 - 间距 - 单词
-            if (wordSpacing != TextStyleInfo.tmp_space_word)
+            if (wordSpacing != text_style_info.tmp_space_word)
             {
-                wordSpacing = TextStyleInfo.tmp_space_word;
+                wordSpacing = text_style_info.tmp_space_word;
             }
 
             //--同步 - 间距 - 行高
-            if (lineSpacing != TextStyleInfo.tmp_space_lineheight)
+            if (lineSpacing != text_style_info.tmp_space_lineheight)
             {
-                lineSpacing = TextStyleInfo.tmp_space_lineheight;
+                lineSpacing = text_style_info.tmp_space_lineheight;
             }
 
             //--同步 - 间距 - 段落
-            if (paragraphSpacing != TextStyleInfo.tmp_space_paragraph)
+            if (paragraphSpacing != text_style_info.tmp_space_paragraph)
             {
-                paragraphSpacing = TextStyleInfo.tmp_space_paragraph;
+                paragraphSpacing = text_style_info.tmp_space_paragraph;
             }
 
             //--同步 - 包裹对齐
-            if (wordWrappingRatios != TextStyleInfo.tmp_WrappingRatios)
+            if (wordWrappingRatios != text_style_info.tmp_wrapping_ratios)
             {
-                wordWrappingRatios = TextStyleInfo.tmp_WrappingRatios;
+                wordWrappingRatios = text_style_info.tmp_wrapping_ratios;
             }
 
             //--同步 - 边距
-            if (margin != TextStyleInfo.tmp_contentmargin)
+            if (margin != text_style_info.tmp_content_margin)
             {
-                margin = TextStyleInfo.tmp_contentmargin;
+                margin = text_style_info.tmp_content_margin;
             }
 
             //--同步 - 颜色_Color
-            if (TextColorOwner != TextColorOwner.Tween)
+            if (text_color_owner != TextColorOwner.Tween)
             {
-                if (color != TextStyleInfo.tmp_color)
+                if (color != text_style_info.tmp_color)
                 {
-                    color = TextStyleInfo.tmp_color;
+                    color = text_style_info.tmp_color;
                 }
             }
 
             //--同步 - 渐变色开关
-            if (enableVertexGradient != TextStyleInfo.gra_Used)
+            if (enableVertexGradient != text_style_info.gra_used)
             {
-                enableVertexGradient = TextStyleInfo.gra_Used;
+                enableVertexGradient = text_style_info.gra_used;
             }
 
             //--同步 - 渐变色模式
-            if (m_colorMode != TextStyleInfo.gra_ColorMode)
+            if (m_colorMode != text_style_info.gra_color_mode)
             {
-                m_colorMode = TextStyleInfo.gra_ColorMode;
+                m_colorMode = text_style_info.gra_color_mode;
 
-                switch (TextStyleInfo.gra_ColorMode)
+                switch (text_style_info.gra_color_mode)
                 {
                     case ColorMode.Single:
-                        TextStyleInfo.gra_ColorModeName = "单色";
+                        text_style_info.gra_color_mode_name = "单色";
                         break;
                     case ColorMode.HorizontalGradient:
-                        TextStyleInfo.gra_ColorModeName = "水平渐变";
+                        text_style_info.gra_color_mode_name = "水平渐变";
                         break;
                     case ColorMode.VerticalGradient:
-                        TextStyleInfo.gra_ColorModeName = "垂直渐变";
+                        text_style_info.gra_color_mode_name = "垂直渐变";
                         break;
                     case ColorMode.FourCornersGradient:
-                        TextStyleInfo.gra_ColorModeName = "四角渐变";
+                        text_style_info.gra_color_mode_name = "四角渐变";
                         break;
                 }
             }
 
             //--同步 - 射线检测
-            if (raycastTarget != TextStyleInfo.Raycast)
+            if (raycastTarget != text_style_info.raycast)
             {
-                raycastTarget = TextStyleInfo.Raycast;
+                raycastTarget = text_style_info.raycast;
             }
 
             //--同步 - 遮罩
-            if (maskable != TextStyleInfo.Maskable)
+            if (maskable != text_style_info.maskable)
             {
-                maskable = TextStyleInfo.Maskable;
+                maskable = text_style_info.maskable;
             }
         }
         /// <summary>
@@ -702,71 +702,71 @@ namespace SevenStrikeModules.XHud
         /// <param name="styleinfo">样式数据</param>
         public void tmp_Update_Style_LibrarySetter(XHud_LibraryArg_TextStyle styleinfo)
         {
-            TextStyleInfo = styleinfo;
+            text_style_info = styleinfo;
         }
         /// <summary>
         /// 更新渐变色。
         /// <para/>
-        /// 根据 <see cref="TextStyleInfo"/> 中的渐变色模式与翻转设置，
+        /// 根据 <see cref="text_style_info"/> 中的渐变色模式与翻转设置，
         /// 将四个角的颜色写入 <see cref="TMP_Text.colorGradient"/>。
         /// </summary>
         private void tmp_Update_GradientColor()
         {
             VertexGradient cg = colorGradient;
-            switch (TextStyleInfo.gra_ColorMode)
+            switch (text_style_info.gra_color_mode)
             {
                 case ColorMode.Single:
-                    cg.topLeft = TextStyleInfo.gra_A;
-                    cg.topRight = TextStyleInfo.gra_A;
-                    cg.bottomLeft = TextStyleInfo.gra_A;
-                    cg.bottomRight = TextStyleInfo.gra_A;
+                    cg.topLeft = text_style_info.gra_a;
+                    cg.topRight = text_style_info.gra_a;
+                    cg.bottomLeft = text_style_info.gra_a;
+                    cg.bottomRight = text_style_info.gra_a;
                     break;
                 case ColorMode.HorizontalGradient:
-                    if (TextStyleInfo.gra_Invert)
+                    if (text_style_info.gra_invert)
                     {
-                        cg.topLeft = TextStyleInfo.gra_B;
-                        cg.topRight = TextStyleInfo.gra_A;
-                        cg.bottomLeft = TextStyleInfo.gra_B;
-                        cg.bottomRight = TextStyleInfo.gra_A;
+                        cg.topLeft = text_style_info.gra_b;
+                        cg.topRight = text_style_info.gra_a;
+                        cg.bottomLeft = text_style_info.gra_b;
+                        cg.bottomRight = text_style_info.gra_a;
                     }
                     else
                     {
-                        cg.topLeft = TextStyleInfo.gra_A;
-                        cg.topRight = TextStyleInfo.gra_B;
-                        cg.bottomLeft = TextStyleInfo.gra_A;
-                        cg.bottomRight = TextStyleInfo.gra_B;
+                        cg.topLeft = text_style_info.gra_a;
+                        cg.topRight = text_style_info.gra_b;
+                        cg.bottomLeft = text_style_info.gra_a;
+                        cg.bottomRight = text_style_info.gra_b;
                     }
                     break;
                 case ColorMode.VerticalGradient:
-                    if (TextStyleInfo.gra_Invert)
+                    if (text_style_info.gra_invert)
                     {
-                        cg.topLeft = TextStyleInfo.gra_A;
-                        cg.topRight = TextStyleInfo.gra_A;
-                        cg.bottomLeft = TextStyleInfo.gra_B;
-                        cg.bottomRight = TextStyleInfo.gra_B;
+                        cg.topLeft = text_style_info.gra_a;
+                        cg.topRight = text_style_info.gra_a;
+                        cg.bottomLeft = text_style_info.gra_b;
+                        cg.bottomRight = text_style_info.gra_b;
                     }
                     else
                     {
-                        cg.topLeft = TextStyleInfo.gra_B;
-                        cg.topRight = TextStyleInfo.gra_B;
-                        cg.bottomLeft = TextStyleInfo.gra_A;
-                        cg.bottomRight = TextStyleInfo.gra_A;
+                        cg.topLeft = text_style_info.gra_b;
+                        cg.topRight = text_style_info.gra_b;
+                        cg.bottomLeft = text_style_info.gra_a;
+                        cg.bottomRight = text_style_info.gra_a;
                     }
                     break;
                 case ColorMode.FourCornersGradient:
-                    if (TextStyleInfo.gra_Invert)
+                    if (text_style_info.gra_invert)
                     {
-                        cg.topLeft = TextStyleInfo.gra_B;
-                        cg.topRight = TextStyleInfo.gra_A;
-                        cg.bottomLeft = TextStyleInfo.gra_D;
-                        cg.bottomRight = TextStyleInfo.gra_C;
+                        cg.topLeft = text_style_info.gra_b;
+                        cg.topRight = text_style_info.gra_a;
+                        cg.bottomLeft = text_style_info.gra_d;
+                        cg.bottomRight = text_style_info.gra_c;
                     }
                     else
                     {
-                        cg.topLeft = TextStyleInfo.gra_A;
-                        cg.topRight = TextStyleInfo.gra_B;
-                        cg.bottomLeft = TextStyleInfo.gra_C;
-                        cg.bottomRight = TextStyleInfo.gra_D;
+                        cg.topLeft = text_style_info.gra_a;
+                        cg.topRight = text_style_info.gra_b;
+                        cg.bottomLeft = text_style_info.gra_c;
+                        cg.bottomRight = text_style_info.gra_d;
                     }
                     break;
             }
@@ -781,9 +781,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="state">true = 启用全局尺寸倍增</param>
         public void tmp_Set_SyncGlobalFontSize(bool state)
         {
-            if (SyncGlobalFontSize == state)
+            if (sync_global_font_size == state)
                 return;
-            SyncGlobalFontSize = state;
+            sync_global_font_size = state;
         }
         /// <summary>
         /// 设置字体模板样式名称。
@@ -791,7 +791,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="name">样式名称</param>
         public void tmp_Set_StyleName(string name)
         {
-            StyleName = name;
+            style_name = name;
         }
         /// <summary>
         /// 改变文字内容。
@@ -811,7 +811,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="styleinfo">样式数据</param>
         public void tmp_Set_Style_ForSetter(XHud_LibraryArg_TextStyle styleinfo)
         {
-            TextStyleInfo = styleinfo;
+            text_style_info = styleinfo;
             //Text_Set_Alignment(styleinfo.ContentAnchor);
             //Text_Set_Font(styleinfo.Font);
             //Text_Set_FontStyle(styleinfo.Style);

@@ -375,7 +375,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns></returns>
         private ElementBinder BindValue_Primitives(ElementBinder ele_binder, XHud_Module_Element ele)
         {
-            if (ele.PrimitiveControllerNodes.Count <= 0)
+            if (ele.primitive_controller_nodes.Count <= 0)
                 return ele_binder;
 
             #region 如果图元绑定器不为空，先储存现有的图元绑定器
@@ -390,9 +390,9 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             // 遍历元素下的所有图元控制器，如果在现有的绑定其中找不到则添加
-            for (int i = 0; i < ele.PrimitiveControllerNodes.Count; i++)
+            for (int i = 0; i < ele.primitive_controller_nodes.Count; i++)
             {
-                XHud_Module_Primitive_Controller con = ele.PrimitiveControllerNodes[i].Controller;
+                XHud_Module_Primitive_Controller con = ele.primitive_controller_nodes[i].controller;
 
                 if (con == null)
                     continue;
@@ -401,7 +401,7 @@ namespace SevenStrikeModules.XHud.Editor
                 bool exist = false;
                 for (int a = 0; a < prim_binders.Count; a++)
                 {
-                    if (prim_binders[a].ID == con.ID)
+                    if (prim_binders[a].ID == con.id)
                     {
                         PrimitiveBinder binder = prim_binders[a];
 
@@ -415,53 +415,53 @@ namespace SevenStrikeModules.XHud.Editor
 
                         if (binder.type == ModuleType.Image)
                         {
-                            if (con.pt_Painting != null &&
-                                con.pt_Painting.SyncImageColor &&
-                                !con.pt_Painting.SyncLibraryColor)
+                            if (con.pt_painting != null &&
+                                con.pt_painting.sync_image_color &&
+                                !con.pt_painting.sync_library_color)
                             {
-                                binder.val_color = con.pt_Painting.OriginalColor;
+                                binder.val_color = con.pt_painting.original_color;
                             }
                             else
                             {
-                                binder.val_color = con.mod_Image.color;
+                                binder.val_color = con.mod_image.color;
                             }
                         }
                         if (binder.type == ModuleType.RawImage)
                         {
-                            if (con.pt_Painting != null &&
-                                con.pt_Painting.SyncImageColor &&
-                                !con.pt_Painting.SyncLibraryColor)
+                            if (con.pt_painting != null &&
+                                con.pt_painting.sync_image_color &&
+                                !con.pt_painting.sync_library_color)
                             {
-                                binder.val_color = con.pt_Painting.OriginalColor;
+                                binder.val_color = con.pt_painting.original_color;
                             }
                             else
                             {
-                                binder.val_color = con.mod_RawImage.color;
+                                binder.val_color = con.mod_raw_image.color;
                             }
                         }
                         if (binder.type == ModuleType.Text)
                         {
-                            if (con.pt_Painting != null &&
-                                con.pt_Painting.SyncImageColor &&
-                                !con.pt_Painting.SyncLibraryColor)
+                            if (con.pt_painting != null &&
+                                con.pt_painting.sync_image_color &&
+                                !con.pt_painting.sync_library_color)
                             {
-                                if (con.mod_Text.TextColorOwner == TextColorOwner.Painting)
-                                    binder.val_color = con.pt_Painting.OriginalColor;
+                                if (con.mod_text.text_color_owner == TextColorOwner.Painting)
+                                    binder.val_color = con.pt_painting.original_color;
                             }
                             else
-                                binder.val_color = con.mod_Text.TextStyleInfo.FontColor;
+                                binder.val_color = con.mod_text.text_style_info.font_color;
                         }
                         if (binder.type == ModuleType.TmpText)
                         {
-                            if (con.pt_Painting != null &&
-                                con.pt_Painting.SyncImageColor &&
-                                !con.pt_Painting.SyncLibraryColor)
+                            if (con.pt_painting != null &&
+                                con.pt_painting.sync_image_color &&
+                                !con.pt_painting.sync_library_color)
                             {
-                                if (con.mod_TmpText.TextColorOwner == TextColorOwner.Painting)
-                                    binder.val_color = con.pt_Painting.OriginalColor;
+                                if (con.mod_tmp_text.text_color_owner == TextColorOwner.Painting)
+                                    binder.val_color = con.pt_painting.original_color;
                             }
                             else
-                                binder.val_color = con.mod_TmpText.TextStyleInfo.tmp_color;
+                                binder.val_color = con.mod_tmp_text.text_style_info.tmp_color;
                         }
 
                         prim_binders[a] = binder;
@@ -476,42 +476,42 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     PrimitiveBinder p_binder = new PrimitiveBinder();
                     p_binder.Name = con.transform.name;
-                    p_binder.ID = con.ID;
+                    p_binder.ID = con.id;
                     p_binder.type = con.GetModuleType();
 
                     if (p_binder.type == ModuleType.Image)
                     {
-                        if (con.pt_Painting != null && con.pt_Painting.SyncImageColor && !con.pt_Painting.SyncLibraryColor)
-                            p_binder.val_color = con.pt_Painting.OriginalColor;
+                        if (con.pt_painting != null && con.pt_painting.sync_image_color && !con.pt_painting.sync_library_color)
+                            p_binder.val_color = con.pt_painting.original_color;
                         else
-                            p_binder.val_color = con.mod_Image.color;
+                            p_binder.val_color = con.mod_image.color;
                     }
                     if (p_binder.type == ModuleType.RawImage)
                     {
-                        if (con.pt_Painting != null && con.pt_Painting.SyncImageColor && !con.pt_Painting.SyncLibraryColor)
-                            p_binder.val_color = con.pt_Painting.OriginalColor;
+                        if (con.pt_painting != null && con.pt_painting.sync_image_color && !con.pt_painting.sync_library_color)
+                            p_binder.val_color = con.pt_painting.original_color;
                         else
-                            p_binder.val_color = con.mod_RawImage.color;
+                            p_binder.val_color = con.mod_raw_image.color;
                     }
                     if (p_binder.type == ModuleType.Text)
                     {
-                        if (con.pt_Painting != null && con.pt_Painting.SyncImageColor && !con.pt_Painting.SyncLibraryColor)
+                        if (con.pt_painting != null && con.pt_painting.sync_image_color && !con.pt_painting.sync_library_color)
                         {
-                            if (con.mod_Text.TextColorOwner == TextColorOwner.Painting)
-                                p_binder.val_color = con.pt_Painting.OriginalColor;
+                            if (con.mod_text.text_color_owner == TextColorOwner.Painting)
+                                p_binder.val_color = con.pt_painting.original_color;
                         }
                         else
-                            p_binder.val_color = con.mod_Text.TextStyleInfo.FontColor;
+                            p_binder.val_color = con.mod_text.text_style_info.font_color;
                     }
                     if (p_binder.type == ModuleType.TmpText)
                     {
-                        if (con.pt_Painting != null && con.pt_Painting.SyncImageColor && !con.pt_Painting.SyncLibraryColor)
+                        if (con.pt_painting != null && con.pt_painting.sync_image_color && !con.pt_painting.sync_library_color)
                         {
-                            if (con.mod_TmpText.TextColorOwner == TextColorOwner.Painting)
-                                p_binder.val_color = con.pt_Painting.OriginalColor;
+                            if (con.mod_tmp_text.text_color_owner == TextColorOwner.Painting)
+                                p_binder.val_color = con.pt_painting.original_color;
                         }
                         else
-                            p_binder.val_color = con.mod_TmpText.TextStyleInfo.tmp_color;
+                            p_binder.val_color = con.mod_tmp_text.text_style_info.tmp_color;
                     }
                     prim_binders.Add(p_binder);
                 }

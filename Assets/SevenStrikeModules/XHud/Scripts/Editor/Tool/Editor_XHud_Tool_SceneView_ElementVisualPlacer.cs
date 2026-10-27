@@ -50,7 +50,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>可由 <c>SetEnabled</c> 动态切换。</description></item>
         /// </list>
         /// </summary>
-        private static bool isEnabled = true;
+        private static bool is_enabled = true;
         /// <summary>
         /// 标识是否正在拖拽一个有效的目标预制体。
         /// <para/>
@@ -58,7 +58,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>在拖拽过程中为 <c>true</c>。</description></item>
         /// </list>
         /// </summary>
-        private static bool isDraggingTarget = false;
+        private static bool is_dragging_target = false;
         /// <summary>
         /// 当前拖拽的、包含目标组件的预制体数组。
         /// <para/>
@@ -66,7 +66,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>拖拽结束后清空。</description></item>
         /// </list>
         /// </summary>
-        private static GameObject[] draggedPrefabs = null;
+        private static GameObject[] dragged_prefabs = null;
         /// <summary>
         /// 当前鼠标悬停的格子索引。
         /// <para/>
@@ -74,7 +74,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>取值范围 0-8，<c>-1</c> 表示未悬停在任何格子上。</description></item>
         /// </list>
         /// </summary>
-        private static int hoverGridIndex = -1;
+        private static int hover_grid_index = -1;
         #endregion
 
         #region 字段 - 映射
@@ -86,7 +86,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>由 <c>UpdateGridRects</c> 根据 SceneView 视口大小重建。</description></item>
         /// </list>
         /// </summary>
-        private static List<Rect> gridRects = new List<Rect>();
+        private static List<Rect> grid_rects = new List<Rect>();
         /// <summary>
         /// 目标组件名称，用于过滤拖拽对象。
         /// <para/>
@@ -94,7 +94,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>只有包含该组件的预制体才被视为有效的放置目标。</description></item>
         /// </list>
         /// </summary>
-        private static string targetComponentName = "XHud_Module_Element";
+        private static string target_component_name = "XHud_Module_Element";
         /// <summary>
         /// XHud 系统的主管理器引用。
         /// <para/>
@@ -115,7 +115,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>每个格子初始为半透明黑色。</description></item>
         /// </list>
         /// </summary>
-        private static Color[] Colors_Grid_UnHighlight = new Color[9]
+        private static Color[] colors_grid_un_highlight = new Color[9]
         {
             Color.black * 0.4f, Color.black * 0.4f, Color.black * 0.4f,
             Color.black * 0.4f, Color.black * 0.4f, Color.black * 0.4f,
@@ -128,7 +128,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>使用主色调并降低亮度，以达到半透明高亮效果。</description></item>
         /// </list>
         /// </summary>
-        private static Color Color_Grid_Highlight = XHud_Dashboard.themes_get_color(ThemeColorType.primary) * 0.5f;
+        private static Color color_grid_highlight = XHud_Dashboard.themes_get_color(ThemeColorType.primary) * 0.5f;
         /// <summary>
         /// 拖拽过程中，悬停格子的边框高亮颜色。
         /// <para/>
@@ -136,7 +136,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>默认为半透明白色。</description></item>
         /// </list>
         /// </summary>
-        private static Color Color_Edge_Highlight = Color.white * 0.6f;
+        private static Color color_edge_highlight = Color.white * 0.6f;
         /// <summary>
         /// 非悬停状态下的格子边框颜色。
         /// <para/>
@@ -144,7 +144,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>默认为纯黑。</description></item>
         /// </list>
         /// </summary>
-        private static Color Color_Edge_UnHighlight = Color.black;
+        private static Color color_edge_un_highlight = Color.black;
         /// <summary>
         /// 悬停状态下，格子标签文字的颜色。
         /// <para/>
@@ -152,7 +152,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>默认为纯白。</description></item>
         /// </list>
         /// </summary>
-        private static Color Color_Label_Highlight = Color.white;
+        private static Color color_label_highlight = Color.white;
         #endregion
 
         #region 生命周期
@@ -187,24 +187,24 @@ namespace SevenStrikeModules.XHud.Editor
                 mgr = XHud_Dashboard.get_manager();
 
             // 如果功能被禁用，不处理任何事件
-            if (!isEnabled) return;
+            if (!is_enabled) return;
 
             Event e = Event.current;
             UpdateGridRects(sceneView);
 
             // 更新悬停格子索引（仅在拖拽目标时）
-            if (isDraggingTarget)
+            if (is_dragging_target)
             {
                 int newHoverIndex = GetGridIndex(e.mousePosition);
-                if (newHoverIndex != hoverGridIndex)
+                if (newHoverIndex != hover_grid_index)
                 {
-                    hoverGridIndex = newHoverIndex;
+                    hover_grid_index = newHoverIndex;
                     sceneView.Repaint();
                 }
             }
             else
             {
-                hoverGridIndex = -1;
+                hover_grid_index = -1;
             }
 
             // 1. 拖拽进入/更新
@@ -212,7 +212,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 CheckAndSetDragTarget();
 
-                if (isDraggingTarget)
+                if (is_dragging_target)
                 {
                     DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
                     e.Use();
@@ -223,19 +223,19 @@ namespace SevenStrikeModules.XHud.Editor
             // 2. 拖拽释放
             if (e.type == EventType.DragPerform)
             {
-                if (isDraggingTarget)
+                if (is_dragging_target)
                 {
                     Vector2 mousePos = e.mousePosition;
                     int gridIndex = GetGridIndex(mousePos);
 
                     if (gridIndex >= 0)
                     {
-                        ProcessDropedElements(gridIndex, draggedPrefabs);
+                        ProcessDropedElements(gridIndex, dragged_prefabs);
                     }
 
-                    isDraggingTarget = false;
-                    draggedPrefabs = null;
-                    hoverGridIndex = -1;
+                    is_dragging_target = false;
+                    dragged_prefabs = null;
+                    hover_grid_index = -1;
                     e.Use();
                     sceneView.Repaint();
                 }
@@ -244,17 +244,17 @@ namespace SevenStrikeModules.XHud.Editor
             // 3. 拖拽取消
             if (e.type == EventType.DragExited)
             {
-                if (isDraggingTarget)
+                if (is_dragging_target)
                 {
-                    isDraggingTarget = false;
-                    draggedPrefabs = null;
-                    hoverGridIndex = -1;
+                    is_dragging_target = false;
+                    dragged_prefabs = null;
+                    hover_grid_index = -1;
                     sceneView.Repaint();
                 }
             }
 
             // 4. 绘制九宫格
-            if (isDraggingTarget)
+            if (is_dragging_target)
             {
                 DrawGrid();
                 sceneView.Repaint();
@@ -271,7 +271,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="sceneView">当前的 SceneView 窗口，用于获取视口位置和尺寸。</param>
         private static void UpdateGridRects(SceneView sceneView)
         {
-            gridRects.Clear();
+            grid_rects.Clear();
             Rect viewRect = sceneView.position;
             float w = viewRect.width / 3;
             float h = viewRect.height / 3;
@@ -280,7 +280,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 for (int col = 0; col < 3; col++)
                 {
-                    gridRects.Add(new Rect(col * w, row * h, w, h));
+                    grid_rects.Add(new Rect(col * w, row * h, w, h));
                 }
             }
         }
@@ -296,15 +296,15 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Handles.BeginGUI();
 
-            for (int i = 0; i < gridRects.Count; i++)
+            for (int i = 0; i < grid_rects.Count; i++)
             {
-                Rect rect = gridRects[i];
+                Rect rect = grid_rects[i];
 
                 // 获取原始颜色
-                Color originalColor = (i < Colors_Grid_UnHighlight.Length) ? Colors_Grid_UnHighlight[i] : new Color(0, 0.5f, 1, 0.3f);
+                Color originalColor = (i < colors_grid_un_highlight.Length) ? colors_grid_un_highlight[i] : new Color(0, 0.5f, 1, 0.3f);
 
                 // 如果是当前悬停的格子，使用白色高亮（带一定透明度）
-                Color drawColor = (i == hoverGridIndex) ? Color_Grid_Highlight : originalColor;
+                Color drawColor = (i == hover_grid_index) ? color_grid_highlight : originalColor;
 
                 EditorGUI.DrawRect(rect, drawColor);
 
@@ -315,7 +315,7 @@ namespace SevenStrikeModules.XHud.Editor
                 Vector3 bottomRight = new Vector3(rect.x + rect.width, rect.y + rect.height, 0);
 
                 // 悬停时边框使用亮白色，否则使用半透明白色
-                Handles.color = (i == hoverGridIndex) ? Color_Edge_Highlight : Color_Edge_UnHighlight;
+                Handles.color = (i == hover_grid_index) ? color_edge_highlight : color_edge_un_highlight;
                 Handles.DrawLine(topLeft, topRight);     // 上边
                 Handles.DrawLine(bottomLeft, bottomRight); // 下边
                 Handles.DrawLine(topLeft, bottomLeft);   // 左边
@@ -325,7 +325,7 @@ namespace SevenStrikeModules.XHud.Editor
                 GUIStyle style = new GUIStyle(GUI.skin.label);
                 style.alignment = TextAnchor.MiddleCenter;
                 // 悬停时标签文字使用亮色，否则使用对比色
-                style.normal.textColor = (i == hoverGridIndex) ? Color_Label_Highlight : GetContrastColor(originalColor);
+                style.normal.textColor = (i == hover_grid_index) ? color_label_highlight : GetContrastColor(originalColor);
                 style.fontStyle = FontStyle.Bold;
 
                 Rect label_rect = new Rect(rect.x + rect.width / 2 - 60, rect.y + rect.height / 2 - 45, 120, 25);
@@ -442,7 +442,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private static void CheckAndSetDragTarget()
         {
-            if (isDraggingTarget) return;
+            if (is_dragging_target) return;
             if (DragAndDrop.objectReferences.Length == 0) return;
 
             List<GameObject> validPrefabs = new List<GameObject>();
@@ -455,7 +455,7 @@ namespace SevenStrikeModules.XHud.Editor
                 GameObject prefab = obj as GameObject;
                 if (prefab == null) continue;
 
-                if (prefab.GetComponent(targetComponentName) != null)
+                if (prefab.GetComponent(target_component_name) != null)
                 {
                     validPrefabs.Add(prefab);
                 }
@@ -463,8 +463,8 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (validPrefabs.Count > 0)
             {
-                isDraggingTarget = true;
-                draggedPrefabs = validPrefabs.ToArray();
+                is_dragging_target = true;
+                dragged_prefabs = validPrefabs.ToArray();
 
                 XGUI_Utilitys.Console("XHud - 元素视觉放置器", $"检测到目标预制体 {validPrefabs.Count} 个！", XGUIMsgState.设置);
             }
@@ -483,9 +483,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>格子索引 0-8；不在任何格子内时返回 -1。</returns>
         private static int GetGridIndex(Vector2 mousePos)
         {
-            for (int i = 0; i < gridRects.Count; i++)
+            for (int i = 0; i < grid_rects.Count; i++)
             {
-                if (gridRects[i].Contains(mousePos))
+                if (grid_rects[i].Contains(mousePos))
                     return i;
             }
             return -1;
@@ -616,14 +616,14 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="color">目标颜色。</param>
         public static void SetGridColor(int gridIndex, Color color)
         {
-            if (gridIndex >= 0 && gridIndex < Colors_Grid_UnHighlight.Length)
+            if (gridIndex >= 0 && gridIndex < colors_grid_un_highlight.Length)
             {
-                Colors_Grid_UnHighlight[gridIndex] = color;
+                colors_grid_un_highlight[gridIndex] = color;
                 SceneView.RepaintAll();
             }
             else
             {
-                XGUI_Utilitys.Console("XHud - 元素视觉放置器", $"锚点区域索引 {gridIndex} 超出范围 (0-{Colors_Grid_UnHighlight.Length - 1})！", XGUIMsgState.警告);
+                XGUI_Utilitys.Console("XHud - 元素视觉放置器", $"锚点区域索引 {gridIndex} 超出范围 (0-{colors_grid_un_highlight.Length - 1})！", XGUIMsgState.警告);
             }
         }
         /// <summary>
@@ -637,9 +637,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="color">目标颜色。</param>
         public static void SetAllGridColors(Color color)
         {
-            for (int i = 0; i < Colors_Grid_UnHighlight.Length; i++)
+            for (int i = 0; i < colors_grid_un_highlight.Length; i++)
             {
-                Colors_Grid_UnHighlight[i] = color;
+                colors_grid_un_highlight[i] = color;
             }
             SceneView.RepaintAll();
         }
@@ -653,7 +653,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>颜色数组副本。</returns>
         public static Color[] GetGridColors()
         {
-            return (Color[])Colors_Grid_UnHighlight.Clone();
+            return (Color[])colors_grid_un_highlight.Clone();
         }
         #endregion
 
@@ -668,14 +668,14 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="enabled">true=启用, false=禁用。</param>
         public static void SetEnabled(bool enabled)
         {
-            isEnabled = enabled;
+            is_enabled = enabled;
 
             // 如果禁用功能，重置拖拽状态
-            if (!isEnabled)
+            if (!is_enabled)
             {
-                isDraggingTarget = false;
-                draggedPrefabs = null;
-                hoverGridIndex = -1;
+                is_dragging_target = false;
+                dragged_prefabs = null;
+                hover_grid_index = -1;
                 SceneView.RepaintAll();
             }
 
@@ -691,7 +691,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>true=启用, false=禁用。</returns>
         public static bool GetEnabled()
         {
-            return isEnabled;
+            return is_enabled;
         }
         /// <summary>
         /// 切换启用状态。
@@ -702,14 +702,14 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         public static void ToggleEnabled()
         {
-            SetEnabled(!isEnabled);
+            SetEnabled(!is_enabled);
         }
         #endregion
 
         [DidReloadScripts]
         public static void reload()
         {
-            isEnabled = XHud_Dashboard.utilitys_get_util_screeen_element_visual_placer();
+            is_enabled = XHud_Dashboard.utilitys_get_util_screeen_element_visual_placer();
         }
     }
 }

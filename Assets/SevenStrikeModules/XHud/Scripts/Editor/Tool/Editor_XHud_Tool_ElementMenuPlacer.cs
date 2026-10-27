@@ -59,11 +59,11 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 获取目标锚点
             Anchor_Layout targetAnchor = null;
-            for (int i = 0; i < manager.Anchors_Layout_Screen.Count; i++)
+            for (int i = 0; i < manager.cv_anchors_layout_screen.Count; i++)
             {
-                if (manager.Anchors_Layout_Screen[i].Type == anchor)
+                if (manager.cv_anchors_layout_screen[i].Type == anchor)
                 {
-                    targetAnchor = manager.Anchors_Layout_Screen[i];
+                    targetAnchor = manager.cv_anchors_layout_screen[i];
                     break;
                 }
             }
@@ -224,7 +224,7 @@ namespace SevenStrikeModules.XHud.Editor
                 if (prefab == null) continue;
                 if (prefab.GetComponent<XHud_Module_Element>() == null) continue;
 
-                GameObject objins = PrefabUtility.InstantiatePrefab(prefab, manager.HudCanvas_WorldAnchor) as GameObject;
+                GameObject objins = PrefabUtility.InstantiatePrefab(prefab, manager.cv_hudcanvas_world_anchor) as GameObject;
                 if (objins == null) continue;
 
                 Undo.RegisterCreatedObjectUndo(objins, "Place XHud Element");
@@ -297,13 +297,13 @@ namespace SevenStrikeModules.XHud.Editor
                 Undo.RegisterCreatedObjectUndo(obj_ele, "CreateObjects");
                 XHud_Module_Element ele = obj_ele.GetComponent<XHud_Module_Element>();
                 Element_RMS_LayoutData rms = ele.elelemt_RMS_Get(manager.hm_RMS_GetCurrentSolution());
-                ele.RectTransform.SetParent(manager.hm_ScreenElement_GetAnchored_RectTransform(rms.Anchor));
-                ele.RectTransform.pivot = rms.Pivot;
-                ele.RectTransform.anchorMin = rms.AnchorMin;
-                ele.RectTransform.anchorMax = rms.AnchorMax;
-                ele.RectTransform.anchoredPosition3D = rms.Position;
-                ele.RectTransform.localEulerAngles = rms.Euler;
-                ele.RectTransform.localScale = rms.Scale;
+                ele.rect_transform.SetParent(manager.hm_ScreenElement_GetAnchored_RectTransform(rms.anchor));
+                ele.rect_transform.pivot = rms.pivot;
+                ele.rect_transform.anchorMin = rms.anchor_min;
+                ele.rect_transform.anchorMax = rms.anchor_max;
+                ele.rect_transform.anchoredPosition3D = rms.position;
+                ele.rect_transform.localEulerAngles = rms.euler;
+                ele.rect_transform.localScale = rms.scale;
 
                 CreatedObjs.Add(obj_ele);
             }

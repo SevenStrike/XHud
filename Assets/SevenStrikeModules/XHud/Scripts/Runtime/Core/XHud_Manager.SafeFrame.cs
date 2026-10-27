@@ -145,91 +145,91 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 锚点可视化尺寸
         /// </summary>
-        public float MarkSize = 10f;
+        public float sf_mark_size = 10f;
         /// <summary>
         /// 是否在hierarchy中显示安全框结构
         /// </summary>
-        public bool SafeFrameStructureDisplayer;
+        public bool sf_structure_displayer;
         [Tooltip("安全框锚点物体")]
         /// <summary>
         /// 安全框锚点物体
         /// </summary>
-        public Transform Safe_Frame;
+        public Transform sf_safeframe;
         [Tooltip("锚点颜色 - 角点")]
         /// <summary>
         /// 锚点颜色 - 角点
         /// </summary>
-        public Color Color_LayoutAnchorMark = Color.white;
+        public Color sf_color_layout_anchor_mark = Color.white;
         [Tooltip(" 锚点颜色 - 中心点")]
         /// <summary>
         /// 锚点颜色 - 中心点
         /// </summary>
-        public Color Color_CenterMark = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
+        public Color sf_color_center_mark = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
         [Tooltip("安全框颜色")]
         /// <summary>
         /// 安全框颜色
         /// </summary>
-        public Color Color_FrameLine = Color.white * 0.7f;
+        public Color sf_color_frame_line = Color.white * 0.7f;
         [Tooltip("锚点颜色 - 主要方向")]
         /// <summary>
         /// 锚点颜色 - 主要方向
         /// </summary>
-        public Color Color_SeperaterLine = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
+        public Color sf_color_seperater_line = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
         [Tooltip("安全框粗细")]
         /// <summary>
         /// 安全框粗细
         /// </summary>
-        public float Safe_FrameLine_Width = 0.5f;
+        public float sf_safe_frame_line_width = 0.5f;
         [Tooltip("安全框元素组")]
         /// <summary>
         /// 安全框元素组
         /// </summary>
-        public Safe_FrameLine[] Safe_FrameLine;
+        public Safe_FrameLine[] sf_framelines;
         [Tooltip("安全框边距")]
         /// <summary>
         /// 安全框边距
         /// </summary>
-        public Vector2 Safe_FrameLine_Margins = Vector2.one * 50f;
+        public Vector2 sf_line_margins = Vector2.one * 50f;
         [Tooltip("安全框中心线组")]
         /// <summary>
         /// 安全框中心线组
         /// </summary>
-        public Safe_Seperater[] Safe_Seperater;
+        public Safe_Seperater[] sf_seperaters;
         [Tooltip("安全框中心线长度")]
         /// <summary>
         /// 安全框中心线长度
         /// </summary>
-        public float Safe_Seperater_Length = 30f;
+        public float sf_seperater_length = 30f;
         [Tooltip("X：水平边距 | Y：垂直边距")]
         /// <summary>
         /// 中心标记物
         /// </summary>
-        public Safe_CenterMark Safe_CenterMarks;
+        public Safe_CenterMark sf_center_marks;
         [Tooltip("安全框中心标记 - 间距")]
         /// <summary>
         /// 安全框中心标记 - 间距
         /// </summary>
-        public float Safe_CenterMarkDistance = 40f;
+        public float sf_center_mark_distance = 40f;
         [Tooltip("安全框中心标记 - 宽度")]
         /// <summary>
         /// 安全框中心标记 - 宽度
         /// </summary>
-        public float Safe_CenterMarkWidth = 1f;
+        public float sf_center_mark_width = 1f;
         [Tooltip("安全框中心标记 - 长度")]
         /// <summary>
         /// 安全框中心标记 - 长度
         /// </summary>
-        public float Safe_CenterMarkLength = 12f;
+        public float sf_center_mark_length = 12f;
         [Tooltip("画布尺寸")]
         /// <summary>
         /// 画布尺寸
         /// </summary>
-        public Vector2 CanvasScalerScreenSize;
+        public Vector2 sf_canvas_scaler_screen_size;
         [Tooltip("是否使用了布局可视化")]
         /// <summary>
         /// 是否使用了布局可视化
         /// </summary>
-        public bool UseSafeFrame;
+        public bool sf_use;
 
         /// <summary>
         /// 安全框更新
@@ -269,7 +269,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_SafeFrameUpdate()
         {
-            if (!UseSafeFrame)
+            if (!sf_use)
                 return;
 
             hm_Safe_ClampValue();
@@ -282,7 +282,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_Safe_Seperater_Update()
         {
-            if (Safe_Seperater != null)
+            if (sf_seperaters != null)
             {
                 Vector2 pivot = Vector2.zero;
                 Vector2 anchorMin = Vector2.zero;
@@ -290,55 +290,55 @@ namespace SevenStrikeModules.XHud
                 Vector2 sizeDelta = Vector2.zero;
                 Vector2 anchoredPosition3D = Vector2.zero;
 
-                for (int i = 0; i < Safe_Seperater.Length; i++)
+                for (int i = 0; i < sf_seperaters.Length; i++)
                 {
-                    if (Safe_Seperater[i] == null)
+                    if (sf_seperaters[i] == null)
                         continue;
-                    if (Safe_Seperater[i].Line == null)
+                    if (sf_seperaters[i].Line == null)
                         continue;
-                    if (Safe_Seperater[i].Line.rectTransform == null)
+                    if (sf_seperaters[i].Line.rectTransform == null)
                         continue;
 
-                    Safe_Seperater[i].Line.color = Color_SeperaterLine;
+                    sf_seperaters[i].Line.color = sf_color_seperater_line;
 
-                    if (Safe_Seperater[i].Type == XHudAnchor.上)
+                    if (sf_seperaters[i].Type == XHudAnchor.上)
                     {
                         pivot = new Vector2(0.5f, 0.5f);
                         anchorMin = new Vector2(0.5f, 1f);
                         anchorMax = new Vector2(0.5f, 1f);
-                        sizeDelta = new Vector2(Safe_FrameLine_Width, Safe_Seperater_Length);
-                        anchoredPosition3D = new Vector3(0, -Safe_FrameLine_Margins.y, 0);
+                        sizeDelta = new Vector2(sf_safe_frame_line_width, sf_seperater_length);
+                        anchoredPosition3D = new Vector3(0, -sf_line_margins.y, 0);
                     }
-                    if (Safe_Seperater[i].Type == XHudAnchor.下)
+                    if (sf_seperaters[i].Type == XHudAnchor.下)
                     {
                         pivot = new Vector2(0.5f, 0.5f);
                         anchorMin = new Vector2(0.5f, 0f);
                         anchorMax = new Vector2(0.5f, 0f);
-                        sizeDelta = new Vector2(Safe_FrameLine_Width, Safe_Seperater_Length);
-                        anchoredPosition3D = new Vector3(0, Safe_FrameLine_Margins.y, 0);
+                        sizeDelta = new Vector2(sf_safe_frame_line_width, sf_seperater_length);
+                        anchoredPosition3D = new Vector3(0, sf_line_margins.y, 0);
                     }
-                    if (Safe_Seperater[i].Type == XHudAnchor.左)
+                    if (sf_seperaters[i].Type == XHudAnchor.左)
                     {
                         pivot = new Vector2(0.5f, 0.5f);
                         anchorMin = new Vector2(0f, 0.5f);
                         anchorMax = new Vector2(0f, 0.5f);
-                        sizeDelta = new Vector2(Safe_Seperater_Length, Safe_FrameLine_Width);
-                        anchoredPosition3D = new Vector3(Safe_FrameLine_Margins.x, 0, 0);
+                        sizeDelta = new Vector2(sf_seperater_length, sf_safe_frame_line_width);
+                        anchoredPosition3D = new Vector3(sf_line_margins.x, 0, 0);
                     }
-                    if (Safe_Seperater[i].Type == XHudAnchor.右)
+                    if (sf_seperaters[i].Type == XHudAnchor.右)
                     {
                         pivot = new Vector2(0.5f, 0.5f);
                         anchorMin = new Vector2(1f, 0.5f);
                         anchorMax = new Vector2(1f, 0.5f);
-                        sizeDelta = new Vector2(Safe_Seperater_Length, Safe_FrameLine_Width);
-                        anchoredPosition3D = new Vector3(-Safe_FrameLine_Margins.x, 0, 0);
+                        sizeDelta = new Vector2(sf_seperater_length, sf_safe_frame_line_width);
+                        anchoredPosition3D = new Vector3(-sf_line_margins.x, 0, 0);
                     }
 
-                    Safe_Seperater[i].Line.rectTransform.pivot = pivot;
-                    Safe_Seperater[i].Line.rectTransform.anchorMin = anchorMin;
-                    Safe_Seperater[i].Line.rectTransform.anchorMax = anchorMax;
-                    Safe_Seperater[i].Line.rectTransform.sizeDelta = sizeDelta;
-                    Safe_Seperater[i].Line.rectTransform.anchoredPosition3D = anchoredPosition3D;
+                    sf_seperaters[i].Line.rectTransform.pivot = pivot;
+                    sf_seperaters[i].Line.rectTransform.anchorMin = anchorMin;
+                    sf_seperaters[i].Line.rectTransform.anchorMax = anchorMax;
+                    sf_seperaters[i].Line.rectTransform.sizeDelta = sizeDelta;
+                    sf_seperaters[i].Line.rectTransform.anchoredPosition3D = anchoredPosition3D;
                 }
             }
         }
@@ -347,7 +347,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_Safe_FrameLine_Update()
         {
-            if (Safe_FrameLine != null)
+            if (sf_framelines != null)
             {
                 Vector2 pivot = Vector2.zero;
                 Vector2 anchorMin = Vector2.zero;
@@ -355,99 +355,99 @@ namespace SevenStrikeModules.XHud
                 Vector2 sizeDelta = Vector2.zero;
                 Vector2 anchoredPosition3D = Vector2.zero;
 
-                for (int i = 0; i < Safe_FrameLine.Length; i++)
+                for (int i = 0; i < sf_framelines.Length; i++)
                 {
-                    if (Safe_FrameLine[i] == null)
+                    if (sf_framelines[i] == null)
                         continue;
-                    if (Safe_FrameLine[i].Frame == null)
+                    if (sf_framelines[i].Frame == null)
                         continue;
-                    if (Safe_FrameLine[i].Frame.rectTransform == null)
+                    if (sf_framelines[i].Frame.rectTransform == null)
                         continue;
 
-                    Safe_FrameLine[i].Frame.color = Color_FrameLine;
+                    sf_framelines[i].Frame.color = sf_color_frame_line;
 
-                    if (Safe_FrameLine[i].Type == XHudAnchor.上)
+                    if (sf_framelines[i].Type == XHudAnchor.上)
                     {
-                        if (CanvasScalerModeIndex == 0)
+                        if (cv_scaler_mode_index == 0)
                         {
                             pivot = new Vector2(0.5f, 1f);
                             anchorMin = new Vector2(0.5f, 1f);
                             anchorMax = new Vector2(0.5f, 1f);
-                            sizeDelta = new Vector2(ScreenRes.x - (Safe_FrameLine_Margins.x * 2), Safe_FrameLine_Width);
-                            anchoredPosition3D = new Vector3(0, -Safe_FrameLine_Margins.y, 0);
+                            sizeDelta = new Vector2(cv_screen_res.x - (sf_line_margins.x * 2), sf_safe_frame_line_width);
+                            anchoredPosition3D = new Vector3(0, -sf_line_margins.y, 0);
                         }
-                        if (CanvasScalerModeIndex == 1)
+                        if (cv_scaler_mode_index == 1)
                         {
                             pivot = new Vector2(0.5f, 1f);
                             anchorMin = new Vector2(0.5f, 1f);
                             anchorMax = new Vector2(0.5f, 1f);
-                            sizeDelta = new Vector2(CanvasScalerScreenSize.x - (Safe_FrameLine_Margins.x * 2), Safe_FrameLine_Width);
-                            anchoredPosition3D = new Vector3(0, -Safe_FrameLine_Margins.y, 0);
+                            sizeDelta = new Vector2(sf_canvas_scaler_screen_size.x - (sf_line_margins.x * 2), sf_safe_frame_line_width);
+                            anchoredPosition3D = new Vector3(0, -sf_line_margins.y, 0);
                         }
                     }
-                    if (Safe_FrameLine[i].Type == XHudAnchor.下)
+                    if (sf_framelines[i].Type == XHudAnchor.下)
                     {
-                        if (CanvasScalerModeIndex == 0)
+                        if (cv_scaler_mode_index == 0)
                         {
                             pivot = new Vector2(0.5f, 0f);
                             anchorMin = new Vector2(0.5f, 0f);
                             anchorMax = new Vector2(0.5f, 0f);
-                            sizeDelta = new Vector2(ScreenRes.x - (Safe_FrameLine_Margins.x * 2), Safe_FrameLine_Width);
-                            anchoredPosition3D = new Vector3(0, Safe_FrameLine_Margins.y, 0);
+                            sizeDelta = new Vector2(cv_screen_res.x - (sf_line_margins.x * 2), sf_safe_frame_line_width);
+                            anchoredPosition3D = new Vector3(0, sf_line_margins.y, 0);
                         }
-                        if (CanvasScalerModeIndex == 1)
+                        if (cv_scaler_mode_index == 1)
                         {
                             pivot = new Vector2(0.5f, 0f);
                             anchorMin = new Vector2(0.5f, 0f);
                             anchorMax = new Vector2(0.5f, 0f);
-                            sizeDelta = new Vector2(CanvasScalerScreenSize.x - (Safe_FrameLine_Margins.x * 2), Safe_FrameLine_Width);
-                            anchoredPosition3D = new Vector3(0, Safe_FrameLine_Margins.y, 0);
+                            sizeDelta = new Vector2(sf_canvas_scaler_screen_size.x - (sf_line_margins.x * 2), sf_safe_frame_line_width);
+                            anchoredPosition3D = new Vector3(0, sf_line_margins.y, 0);
                         }
                     }
-                    if (Safe_FrameLine[i].Type == XHudAnchor.左)
+                    if (sf_framelines[i].Type == XHudAnchor.左)
                     {
-                        if (CanvasScalerModeIndex == 0)
+                        if (cv_scaler_mode_index == 0)
                         {
                             pivot = new Vector2(0f, 0.5f);
                             anchorMin = new Vector2(0f, 0.5f);
                             anchorMax = new Vector2(0f, 0.5f);
-                            sizeDelta = new Vector2(Safe_FrameLine_Width, ScreenRes.y - (Safe_FrameLine_Margins.y * 2));
-                            anchoredPosition3D = new Vector3(Safe_FrameLine_Margins.x, 0, 0);
+                            sizeDelta = new Vector2(sf_safe_frame_line_width, cv_screen_res.y - (sf_line_margins.y * 2));
+                            anchoredPosition3D = new Vector3(sf_line_margins.x, 0, 0);
                         }
-                        if (CanvasScalerModeIndex == 1)
+                        if (cv_scaler_mode_index == 1)
                         {
                             pivot = new Vector2(0f, 0.5f);
                             anchorMin = new Vector2(0f, 0.5f);
                             anchorMax = new Vector2(0f, 0.5f);
-                            sizeDelta = new Vector2(Safe_FrameLine_Width, CanvasScalerScreenSize.y - (Safe_FrameLine_Margins.y * 2));
-                            anchoredPosition3D = new Vector3(Safe_FrameLine_Margins.x, 0, 0);
+                            sizeDelta = new Vector2(sf_safe_frame_line_width, sf_canvas_scaler_screen_size.y - (sf_line_margins.y * 2));
+                            anchoredPosition3D = new Vector3(sf_line_margins.x, 0, 0);
                         }
                     }
-                    if (Safe_FrameLine[i].Type == XHudAnchor.右)
+                    if (sf_framelines[i].Type == XHudAnchor.右)
                     {
-                        if (CanvasScalerModeIndex == 0)
+                        if (cv_scaler_mode_index == 0)
                         {
                             pivot = new Vector2(1f, 0.5f);
                             anchorMin = new Vector2(1f, 0.5f);
                             anchorMax = new Vector2(1f, 0.5f);
-                            sizeDelta = new Vector2(Safe_FrameLine_Width, ScreenRes.y - (Safe_FrameLine_Margins.y * 2));
-                            anchoredPosition3D = new Vector3(-Safe_FrameLine_Margins.x, 0, 0);
+                            sizeDelta = new Vector2(sf_safe_frame_line_width, cv_screen_res.y - (sf_line_margins.y * 2));
+                            anchoredPosition3D = new Vector3(-sf_line_margins.x, 0, 0);
                         }
-                        if (CanvasScalerModeIndex == 1)
+                        if (cv_scaler_mode_index == 1)
                         {
                             pivot = new Vector2(1f, 0.5f);
                             anchorMin = new Vector2(1f, 0.5f);
                             anchorMax = new Vector2(1f, 0.5f);
-                            sizeDelta = new Vector2(Safe_FrameLine_Width, CanvasScalerScreenSize.y - (Safe_FrameLine_Margins.y * 2));
-                            anchoredPosition3D = new Vector3(-Safe_FrameLine_Margins.x, 0, 0);
+                            sizeDelta = new Vector2(sf_safe_frame_line_width, sf_canvas_scaler_screen_size.y - (sf_line_margins.y * 2));
+                            anchoredPosition3D = new Vector3(-sf_line_margins.x, 0, 0);
                         }
                     }
 
-                    Safe_FrameLine[i].Frame.rectTransform.pivot = pivot;
-                    Safe_FrameLine[i].Frame.rectTransform.anchorMin = anchorMin;
-                    Safe_FrameLine[i].Frame.rectTransform.anchorMax = anchorMax;
-                    Safe_FrameLine[i].Frame.rectTransform.sizeDelta = sizeDelta;
-                    Safe_FrameLine[i].Frame.rectTransform.anchoredPosition3D = anchoredPosition3D;
+                    sf_framelines[i].Frame.rectTransform.pivot = pivot;
+                    sf_framelines[i].Frame.rectTransform.anchorMin = anchorMin;
+                    sf_framelines[i].Frame.rectTransform.anchorMax = anchorMax;
+                    sf_framelines[i].Frame.rectTransform.sizeDelta = sizeDelta;
+                    sf_framelines[i].Frame.rectTransform.anchoredPosition3D = anchoredPosition3D;
                 }
             }
         }
@@ -456,50 +456,50 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void hm_Safe_ClampValue()
         {
-            Safe_FrameLine_Width = Mathf.Clamp(Safe_FrameLine_Width, 0, float.MaxValue);
-            Safe_Seperater_Length = Mathf.Clamp(Safe_Seperater_Length, 0, float.MaxValue);
+            sf_safe_frame_line_width = Mathf.Clamp(sf_safe_frame_line_width, 0, float.MaxValue);
+            sf_seperater_length = Mathf.Clamp(sf_seperater_length, 0, float.MaxValue);
 
-            Safe_FrameLine_Margins.x = Mathf.Clamp(Safe_FrameLine_Margins.x, 0, float.MaxValue);
-            Safe_FrameLine_Margins.y = Mathf.Clamp(Safe_FrameLine_Margins.y, 0, float.MaxValue);
+            sf_line_margins.x = Mathf.Clamp(sf_line_margins.x, 0, float.MaxValue);
+            sf_line_margins.y = Mathf.Clamp(sf_line_margins.y, 0, float.MaxValue);
         }
         /// <summary>
         /// 中心标记物布局
         /// </summary>
         public void hm_Safe_CenterMark_Update()
         {
-            if (Safe_CenterMarks != null)
+            if (sf_center_marks != null)
             {
-                if (Safe_CenterMarks.Edge != null)
+                if (sf_center_marks.Edge != null)
                 {
-                    for (int i = 0; i < Safe_CenterMarks.Edge.Count; i++)
+                    for (int i = 0; i < sf_center_marks.Edge.Count; i++)
                     {
-                        if (Safe_CenterMarks.Edge[i] != null)
+                        if (sf_center_marks.Edge[i] != null)
                         {
-                            Safe_CenterMarks.Edge[i].rectTransform.sizeDelta = new Vector2(Safe_CenterMarkLength, Safe_CenterMarkWidth);
+                            sf_center_marks.Edge[i].rectTransform.sizeDelta = new Vector2(sf_center_mark_length, sf_center_mark_width);
                             Vector3 pos = Vector3.zero;
 
                             if (i == 0)
                             {
-                                pos.x = Safe_CenterMarkDistance;
-                                pos.y = Safe_CenterMarkDistance;
+                                pos.x = sf_center_mark_distance;
+                                pos.y = sf_center_mark_distance;
                             }
                             if (i == 1)
                             {
-                                pos.x = -Safe_CenterMarkDistance;
-                                pos.y = Safe_CenterMarkDistance;
+                                pos.x = -sf_center_mark_distance;
+                                pos.y = sf_center_mark_distance;
                             }
                             if (i == 2)
                             {
-                                pos.x = Safe_CenterMarkDistance;
-                                pos.y = -Safe_CenterMarkDistance;
+                                pos.x = sf_center_mark_distance;
+                                pos.y = -sf_center_mark_distance;
                             }
                             if (i == 3)
                             {
-                                pos.x = -Safe_CenterMarkDistance;
-                                pos.y = -Safe_CenterMarkDistance;
+                                pos.x = -sf_center_mark_distance;
+                                pos.y = -sf_center_mark_distance;
                             }
-                            Safe_CenterMarks.Edge[i].rectTransform.localPosition = pos;
-                            Safe_CenterMarks.Edge[i].color = Color_CenterMark;
+                            sf_center_marks.Edge[i].rectTransform.localPosition = pos;
+                            sf_center_marks.Edge[i].color = sf_color_center_mark;
                         }
                     }
                 }
@@ -512,9 +512,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_AnchorMarks_Create()
         {
-            if (Safe_Frame != null)
+            if (sf_safeframe != null)
                 return;
-            if (Anchors_Layout_Screen == null || Anchors_Layout_Screen.Count <= 0)
+            if (cv_anchors_layout_screen == null || cv_anchors_layout_screen.Count <= 0)
                 return;
 
             hm_CreateSafeElements();
@@ -547,15 +547,15 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void hm_CreateCornerMark()
         {
-            for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
             {
-                if (Anchors_Layout_Screen[i].Mark != null)
+                if (cv_anchors_layout_screen[i].Mark != null)
                     continue;
                 else
                 {
-                    Image img = hm_CreateAnchorMark(Anchors_Layout_Screen[i].Anchor, "Mark");
+                    Image img = hm_CreateAnchorMark(cv_anchors_layout_screen[i].Anchor, "Mark");
 
-                    switch (Anchors_Layout_Screen[i].Type)
+                    switch (cv_anchors_layout_screen[i].Type)
                     {
                         case XHudAnchor.上:
                             img.rectTransform.pivot = new Vector2(0.5f, 1f);
@@ -588,7 +588,7 @@ namespace SevenStrikeModules.XHud
                             img.rectTransform.anchoredPosition3D = Vector3.zero;
 
                             #region 中标标记
-                            Safe_CenterMarks.Center = img;
+                            sf_center_marks.Center = img;
 
                             ///----创建中心标记
                             for (int s = 0; s < 4; s++)
@@ -620,7 +620,7 @@ namespace SevenStrikeModules.XHud
                                     img_mark.rectTransform.localRotation = Quaternion.Euler(0, 0, -135);
                                 }
 
-                                Safe_CenterMarks.Edge.Add(img_mark);
+                                sf_center_marks.Edge.Add(img_mark);
                             }
                             #endregion
                             break;
@@ -661,7 +661,7 @@ namespace SevenStrikeModules.XHud
                             img.rectTransform.anchoredPosition3D = Vector3.zero;
                             break;
                     }
-                    Anchors_Layout_Screen[i].Mark = img;
+                    cv_anchors_layout_screen[i].Mark = img;
                 }
             }
         }
@@ -674,7 +674,7 @@ namespace SevenStrikeModules.XHud
             obj_SafeFrame_Seperaters.name = "SafeFrames";
             obj_SafeFrame_Seperaters.layer = LayerMask.NameToLayer("XHud");
             RectTransform SafeFrame_Seperaters = obj_SafeFrame_Seperaters.AddComponent<RectTransform>();
-            Canvas canvas = (Canvas)HudCanvas_Screen;
+            Canvas canvas = (Canvas)cv_screen;
             SafeFrame_Seperaters.SetParent(canvas.transform);
             SafeFrame_Seperaters.localPosition = Vector3.zero;
             SafeFrame_Seperaters.localScale = Vector3.one;
@@ -704,12 +704,12 @@ namespace SevenStrikeModules.XHud
             imgs.Add(img_frameline_left);
             imgs.Add(img_frameline_right);
 
-            Safe_FrameLine = new Safe_FrameLine[imgs.Count];
+            sf_framelines = new Safe_FrameLine[imgs.Count];
             for (int i = 0; i < imgs.Count; i++)
             {
-                Safe_FrameLine[i] = new Safe_FrameLine();
-                Safe_FrameLine[i].Frame = imgs[i].Frame;
-                Safe_FrameLine[i].Type = imgs[i].Type;
+                sf_framelines[i] = new Safe_FrameLine();
+                sf_framelines[i].Frame = imgs[i].Frame;
+                sf_framelines[i].Type = imgs[i].Type;
             }
 
             Safe_Seperater img_seperater_up = new Safe_Seperater();
@@ -734,15 +734,15 @@ namespace SevenStrikeModules.XHud
             seperaters.Add(img_seperater_left);
             seperaters.Add(img_seperater_right);
 
-            Safe_Seperater = new Safe_Seperater[seperaters.Count];
+            sf_seperaters = new Safe_Seperater[seperaters.Count];
             for (int i = 0; i < seperaters.Count; i++)
             {
-                Safe_Seperater[i] = new Safe_Seperater();
-                Safe_Seperater[i].Line = seperaters[i].Line;
-                Safe_Seperater[i].Type = seperaters[i].Type;
+                sf_seperaters[i] = new Safe_Seperater();
+                sf_seperaters[i].Line = seperaters[i].Line;
+                sf_seperaters[i].Type = seperaters[i].Type;
             }
 
-            Safe_Frame = obj_SafeFrame_Seperaters.transform;
+            sf_safeframe = obj_SafeFrame_Seperaters.transform;
         }
         #endregion
 
@@ -752,49 +752,49 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_AnchorMarks_Destroy()
         {
-            if (Safe_Frame == null)
+            if (sf_safeframe == null)
                 return;
-            if (Anchors_Layout_Screen == null || Anchors_Layout_Screen.Count <= 0)
+            if (cv_anchors_layout_screen == null || cv_anchors_layout_screen.Count <= 0)
                 return;
 
-            for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
             {
-                if (Anchors_Layout_Screen[i].Mark != null)
+                if (cv_anchors_layout_screen[i].Mark != null)
                 {
-                    DestroyImmediate(Anchors_Layout_Screen[i].Mark.gameObject);
-                    Anchors_Layout_Screen[i].Mark = null;
+                    DestroyImmediate(cv_anchors_layout_screen[i].Mark.gameObject);
+                    cv_anchors_layout_screen[i].Mark = null;
                 }
             }
 
-            Safe_CenterMarks.Edge.Clear();
-            Safe_CenterMarks.Center = null;
+            sf_center_marks.Edge.Clear();
+            sf_center_marks.Center = null;
 
-            if (Safe_FrameLine.Length <= 0)
+            if (sf_framelines.Length <= 0)
                 return;
-            for (int i = 0; i < Safe_FrameLine.Length; i++)
+            for (int i = 0; i < sf_framelines.Length; i++)
             {
-                if (Safe_FrameLine[i].Frame != null)
+                if (sf_framelines[i].Frame != null)
                 {
-                    DestroyImmediate(Safe_FrameLine[i].Frame.gameObject, true);
+                    DestroyImmediate(sf_framelines[i].Frame.gameObject, true);
                 }
             }
-            Safe_FrameLine = null;
+            sf_framelines = null;
 
-            if (Safe_Seperater.Length <= 0)
+            if (sf_seperaters.Length <= 0)
                 return;
-            for (int i = 0; i < Safe_Seperater.Length; i++)
+            for (int i = 0; i < sf_seperaters.Length; i++)
             {
-                if (Safe_Seperater[i].Line != null)
+                if (sf_seperaters[i].Line != null)
                 {
-                    DestroyImmediate(Safe_Seperater[i].Line.gameObject, true);
+                    DestroyImmediate(sf_seperaters[i].Line.gameObject, true);
                 }
             }
-            Safe_Seperater = null;
+            sf_seperaters = null;
 
-            if (Safe_Frame != null)
+            if (sf_safeframe != null)
             {
-                DestroyImmediate(Safe_Frame.gameObject, true);
-                Safe_Frame = null;
+                DestroyImmediate(sf_safeframe.gameObject, true);
+                sf_safeframe = null;
             }
 
         }

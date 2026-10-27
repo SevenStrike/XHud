@@ -98,25 +98,25 @@ namespace SevenStrikeModules.XHud.Editor
             foreach (int i in selectedNodeIndices)
             {
                 if (i < 0 || i >= Nodes.Count) continue;
-                dragStartNodeDelays[i] = QuantizeTime(Nodes[i].Delay);
-                dragStartNodeDurations[i] = QuantizeTime(Nodes[i].Duration);
+                dragStartNodeDelays[i] = QuantizeTime(Nodes[i].delay);
+                dragStartNodeDurations[i] = QuantizeTime(Nodes[i].duration);
             }
             foreach (int i in selectedSoundIndices)
             {
                 if (i < 0 || i >= Sounds.Count) continue;
-                dragStartSoundDelays[i] = QuantizeTime(Sounds[i].Delay);
+                dragStartSoundDelays[i] = QuantizeTime(Sounds[i].delay);
             }
 
             // 保证当前拖拽项在字典里
             if (!dragStartNodeDelays.ContainsKey(index))
             {
-                dragStartNodeDelays[index] = QuantizeTime(Nodes[index].Delay);
-                dragStartNodeDurations[index] = QuantizeTime(Nodes[index].Duration);
+                dragStartNodeDelays[index] = QuantizeTime(Nodes[index].delay);
+                dragStartNodeDurations[index] = QuantizeTime(Nodes[index].duration);
                 primaryDragIndex = index;
             }
 
-            dragStartDelay = QuantizeTime(Nodes[primaryDragIndex].Delay);
-            dragStartDuration = QuantizeTime(Nodes[primaryDragIndex].Duration);
+            dragStartDelay = QuantizeTime(Nodes[primaryDragIndex].delay);
+            dragStartDuration = QuantizeTime(Nodes[primaryDragIndex].duration);
 
             draggingIndex = index;
             draggingKind = TrackKind.Node;
@@ -200,19 +200,19 @@ namespace SevenStrikeModules.XHud.Editor
             foreach (int i in selectedNodeIndices)
             {
                 if (i < 0 || i >= Nodes.Count) continue;
-                dragStartNodeDelays[i] = QuantizeTime(Nodes[i].Delay);
-                dragStartNodeDurations[i] = QuantizeTime(Nodes[i].Duration);
+                dragStartNodeDelays[i] = QuantizeTime(Nodes[i].delay);
+                dragStartNodeDurations[i] = QuantizeTime(Nodes[i].duration);
             }
             foreach (int i in selectedSoundIndices)
             {
                 if (i < 0 || i >= Sounds.Count) continue;
-                dragStartSoundDelays[i] = QuantizeTime(Sounds[i].Delay);
+                dragStartSoundDelays[i] = QuantizeTime(Sounds[i].delay);
             }
 
             if (!dragStartSoundDelays.ContainsKey(soundIndex))
-                dragStartSoundDelays[soundIndex] = QuantizeTime(Sounds[soundIndex].Delay);
+                dragStartSoundDelays[soundIndex] = QuantizeTime(Sounds[soundIndex].delay);
 
-            dragStartDelay = QuantizeTime(Sounds[soundIndex].Delay);
+            dragStartDelay = QuantizeTime(Sounds[soundIndex].delay);
             dragStartDuration = 0f;
 
             dragControlID = GUIUtility.GetControlID(FocusType.Passive);
@@ -371,14 +371,14 @@ namespace SevenStrikeModules.XHud.Editor
                         {
                             int idx = kv.Key;
                             if (idx < 0 || idx >= Nodes.Count) continue;
-                            Nodes[idx].Delay = QuantizeTime(kv.Value + finalDelta);
+                            Nodes[idx].delay = QuantizeTime(kv.Value + finalDelta);
                         }
                         // 写回音效
                         foreach (var kv in dragStartSoundDelays)
                         {
                             int idx = kv.Key;
                             if (idx < 0 || idx >= Sounds.Count) continue;
-                            Sounds[idx].Delay = QuantizeTime(kv.Value + finalDelta);
+                            Sounds[idx].delay = QuantizeTime(kv.Value + finalDelta);
                         }
                         break;
                     }
@@ -388,7 +388,7 @@ namespace SevenStrikeModules.XHud.Editor
                         TweenNode primary = Nodes[primaryDragIndex];
                         float primaryStartDelay = dragStartNodeDelays.ContainsKey(primaryDragIndex)
                             ? dragStartNodeDelays[primaryDragIndex]
-                            : QuantizeTime(primary.Delay);
+                            : QuantizeTime(primary.delay);
 
                         float rawDelay = Mathf.Max(0f, primaryStartDelay + totalDelta);
                         float snapped;
@@ -439,15 +439,15 @@ namespace SevenStrikeModules.XHud.Editor
                             float startDur = dragStartNodeDurations[idx];
                             float endFixed = QuantizeTime(startD + startDur);
                             float newDelay = QuantizeTime(startD + delta);
-                            Nodes[idx].Delay = newDelay;
-                            Nodes[idx].Duration = QuantizeTime(Mathf.Max(0.01f, endFixed - newDelay));
+                            Nodes[idx].delay = newDelay;
+                            Nodes[idx].duration = QuantizeTime(Mathf.Max(0.01f, endFixed - newDelay));
                         }
                         // 写回音效：只跟随整体位移（Delay 改，长度不变）
                         foreach (var kv in dragStartSoundDelays)
                         {
                             int idx = kv.Key;
                             if (idx < 0 || idx >= Sounds.Count) continue;
-                            Sounds[idx].Delay = QuantizeTime(kv.Value + delta);
+                            Sounds[idx].delay = QuantizeTime(kv.Value + delta);
                         }
                         break;
                     }
@@ -497,8 +497,8 @@ namespace SevenStrikeModules.XHud.Editor
                             if (idx < 0 || idx >= Nodes.Count) continue;
                             float startD = kv.Value;
                             float startDur = dragStartNodeDurations[idx];
-                            Nodes[idx].Delay = QuantizeTime(startD);
-                            Nodes[idx].Duration = QuantizeTime(Mathf.Max(0.01f, startDur + delta));
+                            Nodes[idx].delay = QuantizeTime(startD);
+                            Nodes[idx].duration = QuantizeTime(Mathf.Max(0.01f, startDur + delta));
                         }
                         // 右边缘拉伸：音效**不动**（决策 2.a）
                         break;
@@ -511,7 +511,7 @@ namespace SevenStrikeModules.XHud.Editor
             e.Use();
         }
         /// <summary> 
-        /// 处理音效 Clip 拖拽：只修改 <see cref="TweenSound.Delay"/>。
+        /// 处理音效 Clip 拖拽：只修改 <see cref="TweenSound.delay"/>。
         /// <para/>
         /// 吸附锚定规则（与动画 Clip 一致）：
         /// <list type="bullet">
@@ -535,10 +535,10 @@ namespace SevenStrikeModules.XHud.Editor
             TweenSound primary = Sounds[draggingIndex];
             float primaryStart = dragStartSoundDelays.ContainsKey(draggingIndex)
                 ? dragStartSoundDelays[draggingIndex]
-                : QuantizeTime(primary.Delay);
+                : QuantizeTime(primary.delay);
 
             // 音效长度（Sound 为空时用默认占位长度，与 CalculateSoundClipRect 保持一致）
-            float primaryLen = primary.Sound != null ? primary.Sound.length : DefaultSoundClipSeconds;
+            float primaryLen = primary.sound != null ? primary.sound.length : DefaultSoundClipSeconds;
 
             // 拖拽起点时间：左边缘锚定 vs 右边缘锚定
             float rawDelay;
@@ -599,14 +599,14 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 int idx = kv.Key;
                 if (idx < 0 || idx >= Sounds.Count) continue;
-                Sounds[idx].Delay = QuantizeTime(kv.Value + finalDelta);
+                Sounds[idx].delay = QuantizeTime(kv.Value + finalDelta);
             }
             // 写回动画（跟随平移）
             foreach (var kv in dragStartNodeDelays)
             {
                 int idx = kv.Key;
                 if (idx < 0 || idx >= Nodes.Count) continue;
-                Nodes[idx].Delay = QuantizeTime(kv.Value + finalDelta);
+                Nodes[idx].delay = QuantizeTime(kv.Value + finalDelta);
             }
 
             AutoScrollViewOnDragEdge(e.mousePosition.x - scrollPos.x,

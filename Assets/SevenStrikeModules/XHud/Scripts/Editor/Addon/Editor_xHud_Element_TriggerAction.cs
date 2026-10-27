@@ -42,19 +42,18 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>仅用于单选模式下的直接读写操作。</description></item>
         /// </list>
         /// </summary>
-        private XHud_Element_TriggerAction BaseScript;
+        private XHud_Element_TriggerAction base_script;
         #endregion
 
         #region 字段 - 序列化属性
         /// <summary>
-        /// 序列化属性集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>AutoClearActionsAndEvents</c>：回收时清空事件和委托开关属性。</description></item>
-        /// <item><description><c>Enabled</c>：触发器启用开关属性。</description></item>
-        /// </list>
+        /// 回收时清空事件和委托的开关属性
         /// </summary>
-        private SerializedProperty AutoClearActionsAndEvents, Enabled;
+        private SerializedProperty sp_auto_clear_actions_and_events;
+        /// <summary>
+        /// 触发器启用开关属性
+        /// </summary>
+        private SerializedProperty sp_is_enabled;
         #endregion
 
         #region 字段 - 图标
@@ -73,26 +72,33 @@ namespace SevenStrikeModules.XHud.Editor
         /// 批量选择脚本数组。
         /// <para/>
         /// <list type="bullet">
-        /// <item><description>在 <c>GetAllTargets</c> 中根据 <c>targets</c> 填充。</description></item>
+        /// <item><description>在 <c>Targets_Get</c> 中根据 <c>targets</c> 填充。</description></item>
         /// <item><description>单选时长度为 1，多选时长度等于选中对象数量。</description></item>
         /// </list>
         /// </summary>
-        private XHud_Element_TriggerAction[] SelectedObjects;
+        private XHud_Element_TriggerAction[] selected_objects;
         #endregion
 
         #region 生命周期     
         protected override void OnEnable()
         {
             base.OnEnable();
-            BaseScript = (XHud_Element_TriggerAction)target;
-            AutoClearActionsAndEvents = serializedObject.FindProperty("AutoClearActionsAndEvents");
-            Enabled = serializedObject.FindProperty("Enabled");
-            if (BaseScript.TriggerImage == null)
-                BaseScript.TriggerImage = BaseScript.GetComponent<Image>();
-            if (BaseScript.HudElement == null)
-                BaseScript.HudElement = BaseScript.GetComponent<XHud_Module_Element>();
+            base_script = (XHud_Element_TriggerAction)target;
+
+            #region 获取序列化属性
+            sp_auto_clear_actions_and_events = serializedObject.FindProperty(nameof(XHud_Element_TriggerAction.auto_clear_actions_and_events));
+            sp_is_enabled = serializedObject.FindProperty(nameof(XHud_Element_TriggerAction.is_enabled));
+            #endregion
+
+            if (base_script.trigger_image == null)
+                base_script.trigger_image = base_script.GetComponent<Image>();
+            if (base_script.hud_manager == null)
+                base_script.hud_manager = base_script.GetComponent<XHud_Module_Element>();
+
+            #region 获取图标
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_element_trigger_action/icon_main");
-            Vector2 ButtonSize = new Vector2(18, 18);
+            #endregion
+
             Targets_Get();
         }
 
@@ -104,12 +110,11 @@ namespace SevenStrikeModules.XHud.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
+
             string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-            TextClipping clipping = TextClipping.Clip;
-#endif
+
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
+
             #region 标题
             XGUI.layout_banner(
              bg_fill: XGUIGroup.实体,
@@ -122,12 +127,14 @@ namespace SevenStrikeModules.XHud.Editor
              title_style: FontStyle.Normal,
              title_color: Color.white,
              title_size: XGUIFontSize.B,
-             title_clipping: clipping,
+             title_clipping: clipping_ellipsis,
              bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
+
             XGUI.layout_space(5);
+
             #region 选项
-            BaseScript.fold_option = XGUI.layout_group_start(
+            base_script.fold_option = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -137,14 +144,15 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_option);
-            if (!BaseScript.fold_option)
+                foldout: base_script.fold_option);
+            if (!base_script.fold_option)
             {
-                DrawToggle("是否启用触发器", Enabled, 140, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
-                DrawToggle("回收时清空事件和委托", AutoClearActionsAndEvents, 140, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                DrawToggle("是否启用触发器", sp_is_enabled, 140, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                DrawToggle("回收时清空事件和委托", sp_auto_clear_actions_and_events, 140, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             if (Application.isPlaying)
             {
                 XGUI.layout_label(
@@ -159,11 +167,12 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                if (BaseScript.TriggerImage != null)
-                    BaseScript.TriggerImage.color = Color.clear;
+                if (base_script.trigger_image != null)
+                    base_script.trigger_image.color = Color.clear;
             }
+
             #region 参数
-            BaseScript.fold_param = XGUI.layout_group_start(
+            base_script.fold_param = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -173,15 +182,35 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_param);
-            if (!BaseScript.fold_param)
+                foldout: base_script.fold_param);
+            if (!base_script.fold_param)
             {
 
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
+            #region 弹出菜单
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
+            {
+                // 创建右键菜单
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("Q (折叠编组)"), false, () =>
+                {
+                    base_script.GroupFold(true);
+                });
+                menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
+                {
+                    base_script.GroupFold(false);
+                });
+                menu.ShowAsContext();
+
+                Event.current.Use();
+            }
+            #endregion
+
             #region 源脚本
-            BaseScript.fold_based = XGUI.layout_group_start(
+            base_script.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -191,13 +220,14 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_based);
-            if (!BaseScript.fold_based)
+                foldout: base_script.fold_based);
+            if (!base_script.fold_based)
             {
                 DrawDefaultInspector();
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             serializedObject.ApplyModifiedProperties();
         }
         #endregion
@@ -215,17 +245,17 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new XHud_Element_TriggerAction[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new XHud_Element_TriggerAction[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (XHud_Element_TriggerAction)t;
+                    selected_objects[i] = (XHud_Element_TriggerAction)t;
                 }
             }
             else
             {
-                SelectedObjects = new XHud_Element_TriggerAction[targets.Length];
-                SelectedObjects[0] = (XHud_Element_TriggerAction)target;
+                selected_objects = new XHud_Element_TriggerAction[targets.Length];
+                selected_objects[0] = (XHud_Element_TriggerAction)target;
             }
         }
         /// <summary>
@@ -239,9 +269,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>是否为多选状态。</returns>
         private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }

@@ -34,7 +34,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 进度条组件
         /// </summary>
-        public XHud_Module_Progress Progress;
+        public XHud_Module_Progress progress;
     }
 
     public partial class XHud_Module_Element : MonoBehaviour
@@ -43,14 +43,14 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 进度条容器
         /// </summary>
-        public List<ElementNode_Progress> ProgressNodes;
+        public List<ElementNode_Progress> progress_nodes;
         [SerializeField]
         /// <summary>
         /// 进度条列表折叠状态
         /// true表示折叠，false表示展开
         /// 用于控制Inspector中进度条列表的显示/隐藏
         /// </summary>
-        public bool ProgressIsFold;
+        public bool progress_is_fold;
 
         /// <summary>
         /// 启用或禁用所有进度条
@@ -58,20 +58,20 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState">状态</param>
         public void element_Progress_EnableSetAll(bool state)
         {
-            if (ProgressNodes.Count <= 0)
+            if (progress_nodes.Count <= 0)
                 return;
-            for (int i = 0; i < ProgressNodes.Count; i++)
+            for (int i = 0; i < progress_nodes.Count; i++)
             {
-                ProgressNodes[i].Progress.enabled = state;
+                progress_nodes[i].progress.enabled = state;
             }
             if (state)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有进度条脚本！", XGUIMsgState.通知);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有进度条脚本！", XGUIMsgState.通知);
             }
         }
@@ -82,21 +82,21 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Progress element_Progress_Get(string indicator)
         {
             XHud_Module_Progress progress = null;
-            for (int i = 0; i < ProgressNodes.Count; i++)
+            for (int i = 0; i < progress_nodes.Count; i++)
             {
-                if (ProgressNodes[i].Progress.Indicator == indicator)
+                if (progress_nodes[i].progress.Indicator == indicator)
                 {
-                    progress = ProgressNodes[i].Progress;
+                    progress = progress_nodes[i].progress;
                 }
             }
             if (progress == null)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "未找到对应标识的进度条！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的进度条！", XGUIMsgState.通知);
             }
             return progress;
@@ -107,19 +107,19 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Progress[] element_Progress_GetAll()
         {
             List<XHud_Module_Progress> progresslist = new List<XHud_Module_Progress>();
-            for (int i = 0; i < ProgressNodes.Count; i++)
+            for (int i = 0; i < progress_nodes.Count; i++)
             {
-                progresslist.Add(ProgressNodes[i].Progress);
+                progresslist.Add(progress_nodes[i].progress);
             }
             if (progresslist.Count <= 0)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "获取的进度条列表为空！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
-                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + ProgressNodes.Count + " 个进度条！", XGUIMsgState.通知);
+                if (debug_state)
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + progress_nodes.Count + " 个进度条！", XGUIMsgState.通知);
             }
             return progresslist.ToArray();
         }

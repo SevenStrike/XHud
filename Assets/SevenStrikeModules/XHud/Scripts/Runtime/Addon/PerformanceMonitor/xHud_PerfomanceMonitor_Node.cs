@@ -136,11 +136,11 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// Fps指标阈值
         /// </summary>
-        [SerializeField] public int Threshold_FPS = 100;
+        [SerializeField] public int threshold_fps = 100;
         /// <summary>
         /// Cpu指标阈值
         /// </summary>
-        [SerializeField] public float Threshold_CPU = 10f;
+        [SerializeField] public float threshold_cpu = 10f;
 
         private int fixedval_int
         {
@@ -185,7 +185,7 @@ namespace SevenStrikeModules.XHud
             {
                 case "FPS":
                     fixedval_int = Get_FPS();
-                    if (fixedval_int < Threshold_FPS)
+                    if (fixedval_int < threshold_fps)
                         col_value = _col_value_limited;
                     else
                         col_value = _col_value_normal;
@@ -194,7 +194,7 @@ namespace SevenStrikeModules.XHud
                     break;
                 case "CpuTime":
                     fixedval_float = Get_CpuTime();
-                    if (fixedval_float > Threshold_CPU)
+                    if (fixedval_float > threshold_cpu)
                         col_value = _col_value_limited;
                     else
                         col_value = _col_value_normal;
@@ -236,8 +236,8 @@ namespace SevenStrikeModules.XHud
             }
 
             tmp_value.tmp_Set_Content(value);
-            tmp_title.TextStyleInfo.tmp_Set_FontColor(col_title);
-            tmp_value.TextStyleInfo.tmp_Set_FontColor(col_value);
+            tmp_title.text_style_info.tmp_Set_FontColor(col_title);
+            tmp_value.text_style_info.tmp_Set_FontColor(col_value);
         }
         #endregion
 

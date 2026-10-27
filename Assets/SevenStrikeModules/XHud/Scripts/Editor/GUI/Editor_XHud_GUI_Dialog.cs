@@ -281,7 +281,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             BaseObject = new SerializedObject(this);
 
-            sp_DataList = BaseObject.FindProperty("DataList");
+            sp_DataList = BaseObject.FindProperty(nameof(DataList));
 
             icon_Help = Editor_XHud_GUI.GetIcon("Dialogs/icon_help");
             icon_Warning = Editor_XHud_GUI.GetIcon("Dialogs/icon_warning");

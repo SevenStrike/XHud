@@ -91,7 +91,7 @@ namespace SevenStrikeModules.XGUI.Editor.Tests
         // ============================================================
         //  生命周期
         // ============================================================
-        [MenuItem("Tools/XGUI/Sample/EditorPlayer 完整测试窗口")]
+        [MenuItem("Tools/XGUI/EditorPlayer 完整测试窗口")]
         private static void Open()
         {
             var win = GetWindow<Editor_XGUI_Samples_EditorPlayer>();

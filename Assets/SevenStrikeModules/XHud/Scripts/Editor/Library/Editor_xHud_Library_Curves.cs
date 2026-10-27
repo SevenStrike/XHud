@@ -49,23 +49,23 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 入切线。
         /// </summary>
-        public float inTangent;
+        public float in_tangent;
         /// <summary>
         /// 入权重。
         /// </summary>
-        public float inWeight;
+        public float in_weight;
         /// <summary>
         /// 出切线。
         /// </summary>
-        public float outTangent;
+        public float out_tangent;
         /// <summary>
         /// 出权重。
         /// </summary>
-        public float outWeight;
+        public float out_weight;
         /// <summary>
         /// 权重模式。
         /// </summary>
-        public WeightedMode weightedMode;
+        public WeightedMode weighted_mode;
     }
     /// <summary>
     /// 曲线节点的序列化数据。
@@ -78,11 +78,11 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 曲线名称。
         /// </summary>
-        public string Name;
+        public string name;
         /// <summary>
         /// 曲线关键帧数组。
         /// </summary>
-        public CurveFrame[] Frames;
+        public CurveFrame[] frames;
     }
     /// <summary>
     /// 曲线库的完整序列化数据结构。
@@ -95,16 +95,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 曲线节点列表。
         /// </summary>
-        public List<CurveNode> Nodes;
+        public List<CurveNode> nodes;
     }
     #endregion
 
-    #region 编辑器主体
-    /// <summary>
-    /// XHud 曲线库的自定义编辑器。
-    /// <para/>
-    /// 提供曲线列表的可视化编辑、导入 / 导出、增删清空等功能。
-    /// </summary>
     [CustomEditor(typeof(XHud_Library_Curves))]
     public class Editor_XHud_Library_Curves : Editor
     {
@@ -114,50 +108,131 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 在 <see cref="OnEnable"/> 中缓存。
         /// </summary>
-        private XHud_Library_Curves BaseScript;
+        private XHud_Library_Curves base_script;
         /// <summary>
         /// 曲线列表（可重排列表）。
         /// <para/>
         /// 用于驱动 ReorderableList 的绘制与交互。
         /// </summary>
-        private ReorderableList CurveInfoList;
+        private ReorderableList curve_info_list;
         #endregion
 
         #region 字段 - 序列化属性
         /// <summary>
-        /// 本 Inspector 用到的全部序列化属性引用。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里初始化。
-        /// <para/>
-        /// 覆盖：
-        /// <list type="bullet">
-        /// <item><description>曲线库列表；</description></item>
-        /// <item><description>选中 / 定位索引；</description></item>
-        /// <item><description>过滤 / 查找字符串；</description></item>
-        /// <item><description>列表滚动位置与项高；</description></item>
-        /// <item><description>预览自动停止开关。</description></item>
-        /// </list>
+        /// 选中项索引属性
         /// </summary>
-        private SerializedProperty
-            sp_SelectedIndex,
-            sp_CurveLibrary,
-            sp_LibraryName,
-            sp_LocationSelectedIndex,
-            sp_Highlight,
-            sp_SoundInfoList_Original_Scroller,
-            sp_itemHeight,
-            sp_visibleItemCount,
-            sp_Find,
-            sp_UsePreviewAutoStop;
+        private SerializedProperty sp_selected_index;
+        /// <summary>
+        /// 曲线库列表属性
+        /// </summary>
+        private SerializedProperty sp_library_curves;
+        /// <summary>
+        /// 库名称属性
+        /// </summary>
+        private SerializedProperty sp_library_name;
+        /// <summary>
+        /// 定位选中项索引属性
+        /// </summary>
+        private SerializedProperty sp_location_selected_index;
+        /// <summary>
+        /// 筛选高亮字符串属性
+        /// </summary>
+        private SerializedProperty sp_highlight;
+        /// <summary>
+        /// 列表滚动位置属性
+        /// </summary>
+        private SerializedProperty sp_sound_infolist_original_scroller;
+        /// <summary>
+        /// 列表项高度属性
+        /// </summary>
+        private SerializedProperty sp_item_height;
+        /// <summary>
+        /// 可视区域显示元素数量属性
+        /// </summary>
+        private SerializedProperty sp_visible_item_count;
+        /// <summary>
+        /// 查找字符串属性
+        /// </summary>
+        private SerializedProperty sp_find;
+        /// <summary>
+        /// 预览自动停止开关属性
+        /// </summary>
+        private SerializedProperty sp_UsePreviewAutoStop;
         #endregion
 
         #region 字段 - 图标
         /// <summary>
-        /// 标题 / 按钮 / 图标资源缓存。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里加载。
+        /// 导入按钮按下图标
         /// </summary>
-        private Texture2D import_p, import_r, export_p, export_r, clear_p, clear_r, create_p, create_r, delete_p, delete_r, play_p, play_r, leftarr_p, leftarr_r, rightarr_p, rightarr_r, stop_p, stop_r;
+        private Texture2D import_p;
+        /// <summary>
+        /// 导入按钮常态图标
+        /// </summary>
+        private Texture2D import_r;
+        /// <summary>
+        /// 导出按钮按下图标
+        /// </summary>
+        private Texture2D export_p;
+        /// <summary>
+        /// 导出按钮常态图标
+        /// </summary>
+        private Texture2D export_r;
+        /// <summary>
+        /// 清空按钮按下图标
+        /// </summary>
+        private Texture2D clear_p;
+        /// <summary>
+        /// 清空按钮常态图标
+        /// </summary>
+        private Texture2D clear_r;
+        /// <summary>
+        /// 创建按钮按下图标
+        /// </summary>
+        private Texture2D create_p;
+        /// <summary>
+        /// 创建按钮常态图标
+        /// </summary>
+        private Texture2D create_r;
+        /// <summary>
+        /// 删除按钮按下图标
+        /// </summary>
+        private Texture2D delete_p;
+        /// <summary>
+        /// 删除按钮常态图标
+        /// </summary>
+        private Texture2D delete_r;
+        /// <summary>
+        /// 播放按钮按下图标
+        /// </summary>
+        private Texture2D play_p;
+        /// <summary>
+        /// 播放按钮常态图标
+        /// </summary>
+        private Texture2D play_r;
+        /// <summary>
+        /// 左箭头按下图标
+        /// </summary>
+        private Texture2D leftarr_p;
+        /// <summary>
+        /// 左箭头常态图标
+        /// </summary>
+        private Texture2D leftarr_r;
+        /// <summary>
+        /// 右箭头按下图标
+        /// </summary>
+        private Texture2D rightarr_p;
+        /// <summary>
+        /// 右箭头常态图标
+        /// </summary>
+        private Texture2D rightarr_r;
+        /// <summary>
+        /// 停止按钮按下图标
+        /// </summary>
+        private Texture2D stop_p;
+        /// <summary>
+        /// 停止按钮常态图标
+        /// </summary>
+        private Texture2D stop_r;
         #endregion
 
         #region 字段 - 参数
@@ -211,19 +286,18 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseScript = (XHud_Library_Curves)target;
+            base_script = (XHud_Library_Curves)target;
 
             #region 获取序列化属性
-            sp_CurveLibrary = serializedObject.FindProperty("CurveLibrary");
-            sp_LocationSelectedIndex = serializedObject.FindProperty("LocationSelectedIndex");
-            sp_UsePreviewAutoStop = serializedObject.FindProperty("UsePreviewAutoStop");
-            sp_LibraryName = serializedObject.FindProperty("LibraryName");
-            sp_Highlight = serializedObject.FindProperty("Highlight");
-            sp_SelectedIndex = serializedObject.FindProperty("SelectedIndex");
-            sp_SoundInfoList_Original_Scroller = serializedObject.FindProperty("SoundInfoList_Original_Scroller");
-            sp_itemHeight = serializedObject.FindProperty("itemHeight");
-            sp_visibleItemCount = serializedObject.FindProperty("visibleItemCount");
-            sp_Find = serializedObject.FindProperty("Find");
+            sp_library_curves = serializedObject.FindProperty(nameof(XHud_Library_Curves.library_curves));
+            sp_location_selected_index = serializedObject.FindProperty(nameof(XHud_Library_Curves.location_selected_index));
+            sp_library_name = serializedObject.FindProperty(nameof(XHud_Library_Curves.library_name));
+            sp_highlight = serializedObject.FindProperty(nameof(XHud_Library_Curves.highlight));
+            sp_selected_index = serializedObject.FindProperty(nameof(XHud_Library_Curves.selected_index));
+            sp_sound_infolist_original_scroller = serializedObject.FindProperty(nameof(XHud_Library_Curves.sound_infolist_original_scroller));
+            sp_item_height = serializedObject.FindProperty(nameof(XHud_Library_Curves.item_height));
+            sp_visible_item_count = serializedObject.FindProperty(nameof(XHud_Library_Curves.visible_item_count));
+            sp_find = serializedObject.FindProperty(nameof(XHud_Library_Curves.find));
             #endregion
 
             #region 获取图标
@@ -248,17 +322,17 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             //设定列表项高度值
-            sp_itemHeight.floatValue = 30;
-            sp_itemHeight.serializedObject.ApplyModifiedProperties();
+            sp_item_height.floatValue = 30;
+            sp_item_height.serializedObject.ApplyModifiedProperties();
 
-            sp_visibleItemCount.intValue = 15;
-            sp_visibleItemCount.serializedObject.ApplyModifiedProperties();
+            sp_visible_item_count.intValue = 15;
+            sp_visible_item_count.serializedObject.ApplyModifiedProperties();
 
             blocked_col = new Color(0, 0, 0, blocked_alp);
 
-            #region ReorderableList - CurveInfoList
-            CurveInfoList = new ReorderableList(serializedObject, sp_CurveLibrary, true, true, true, true);
-            CurveInfoList.drawElementCallback = CurveInfoList_Original_DrawElementCallback;
+            #region ReorderableList
+            curve_info_list = new ReorderableList(serializedObject, sp_library_curves, true, true, true, true);
+            curve_info_list.drawElementCallback = CurveInfoList_Original_DrawElementCallback;
             #endregion
         }
         /// <summary>
@@ -273,20 +347,20 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnDisable()
         {
-            sp_SoundInfoList_Original_Scroller.vector2Value = Vector2.zero;
-            sp_SoundInfoList_Original_Scroller.serializedObject.ApplyModifiedProperties();
+            sp_sound_infolist_original_scroller.vector2Value = Vector2.zero;
+            sp_sound_infolist_original_scroller.serializedObject.ApplyModifiedProperties();
 
-            sp_SelectedIndex.intValue = -1;
-            sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+            sp_selected_index.intValue = -1;
+            sp_selected_index.serializedObject.ApplyModifiedProperties();
 
-            sp_LocationSelectedIndex.intValue = -1;
-            sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+            sp_location_selected_index.intValue = -1;
+            sp_location_selected_index.serializedObject.ApplyModifiedProperties();
 
-            sp_Find.stringValue = string.Empty;
-            sp_Find.serializedObject.ApplyModifiedProperties();
+            sp_find.stringValue = string.Empty;
+            sp_find.serializedObject.ApplyModifiedProperties();
 
-            sp_Highlight.stringValue = string.Empty;
-            sp_Highlight.serializedObject.ApplyModifiedProperties();
+            sp_highlight.stringValue = string.Empty;
+            sp_highlight.serializedObject.ApplyModifiedProperties();
         }
         /// <summary>
         /// 绘制 Inspector 主入口。
@@ -335,7 +409,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_LibraryName,
+                prop: sp_library_name,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -346,12 +420,12 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_Highlight,
+                prop: sp_highlight,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
-                sp_LocationSelectedIndex.intValue = -1;
-                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                sp_location_selected_index.intValue = -1;
+                sp_location_selected_index.serializedObject.ApplyModifiedProperties();
             }
             #endregion
 
@@ -362,19 +436,19 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_Find,
+                prop: sp_find,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
-                if (!string.IsNullOrEmpty(sp_Find.stringValue))
-                    BaseScript.CurveLibrary_Location_Find(sp_Find.stringValue);
+                if (!string.IsNullOrEmpty(sp_find.stringValue))
+                    base_script.CurveLibrary_Location_Find(sp_find.stringValue);
                 else
                 {
-                    sp_SelectedIndex.intValue = -1;
-                    sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+                    sp_selected_index.intValue = -1;
+                    sp_selected_index.serializedObject.ApplyModifiedProperties();
 
-                    sp_LocationSelectedIndex.intValue = -1;
-                    sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                    sp_location_selected_index.intValue = -1;
+                    sp_location_selected_index.serializedObject.ApplyModifiedProperties();
                 }
             }
             #endregion
@@ -383,7 +457,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 快捷功能
-            if (string.IsNullOrEmpty(sp_Highlight.stringValue))
+            if (string.IsNullOrEmpty(sp_highlight.stringValue))
             {
                 if (!Application.isPlaying)
                 {
@@ -453,8 +527,8 @@ namespace SevenStrikeModules.XHud.Editor
                         if (res == "暂不")
                             return;
 
-                        sp_CurveLibrary.ClearArray();
-                        sp_CurveLibrary.serializedObject.ApplyModifiedProperties();
+                        sp_library_curves.ClearArray();
+                        sp_library_curves.serializedObject.ApplyModifiedProperties();
                         return;
                     }
                     #endregion
@@ -471,7 +545,7 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 14,
                         height: 14))
                     {
-                        CurveInfoList_Original_Add(CurveInfoList);
+                        CurveInfoList_Original_Add(curve_info_list);
                     }
                     #endregion
 
@@ -487,7 +561,7 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 14,
                         height: 14))
                     {
-                        CurveInfoList_Original_Remove(CurveInfoList);
+                        CurveInfoList_Original_Remove(curve_info_list);
                     }
                     #endregion
 
@@ -521,12 +595,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 根据高亮过滤条件屏蔽或启用 GUI。
         /// <para/>
-        /// 若名称不包含 <see cref="sp_Highlight"/> 的当前值，则禁用 GUI。
+        /// 若名称不包含 <see cref="sp_highlight"/> 的当前值，则禁用 GUI。
         /// </summary>
         /// <param name="name">待检查的名称</param>
         private void BlockGUI(string name)
         {
-            if (!name.Contains(sp_Highlight.stringValue))
+            if (!name.Contains(sp_highlight.stringValue))
             {
                 GUI.enabled = false;
             }
@@ -552,10 +626,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="isFocused">是否聚焦</param>
         private void CurveInfoList_Original_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty prop = sp_CurveLibrary.GetArrayElementAtIndex(index);
+            SerializedProperty prop = sp_library_curves.GetArrayElementAtIndex(index);
 
-            SerializedProperty sp_name = prop.FindPropertyRelative("Name");
-            SerializedProperty sp_curve = prop.FindPropertyRelative("Curve");
+            SerializedProperty sp_name = prop.FindPropertyRelative("name");
+            SerializedProperty sp_curve = prop.FindPropertyRelative("curve");
 
             #region 序号
             drawelement_rect.Set(rect.x + 16, rect.y + 4, 30, 20);
@@ -573,7 +647,7 @@ namespace SevenStrikeModules.XHud.Editor
             BlockGUI(sp_name.stringValue);
 
             #region 曲线名
-            drawelement_rect.Set(rect.x + 42, rect.y + 6, rect.width - (sp_LocationSelectedIndex.intValue == -1 ? 200 : 235), 20);
+            drawelement_rect.Set(rect.x + 42, rect.y + 6, rect.width - (sp_location_selected_index.intValue == -1 ? 200 : 235), 20);
             sp_name.stringValue = XGUI.gui_inputfield(
                      rect: drawelement_rect,
                      //title: "Bk",
@@ -618,20 +692,20 @@ namespace SevenStrikeModules.XHud.Editor
             sp_curve.serializedObject.ApplyModifiedProperties();
             if (XGUI.ChangedCheck_End())
             {
-                if (BaseScript.act_on_CurveChanged != null)
-                    BaseScript.act_on_CurveChanged();
+                if (base_script.act_on_curve_changed != null)
+                    base_script.act_on_curve_changed();
             }
             #endregion
 
             GUI.enabled = true;
 
-            if (!sp_name.stringValue.Contains(sp_Highlight.stringValue))
+            if (!sp_name.stringValue.Contains(sp_highlight.stringValue))
             {
                 drawelement_rect.Set(rect.x - 20, rect.y, rect.width + 20, rect.height);
                 EditorGUI.DrawRect(drawelement_rect, blocked_col);
             }
 
-            if (index == sp_LocationSelectedIndex.intValue)
+            if (index == sp_location_selected_index.intValue)
             {
                 drawelement_rect.Set(rect.width - 180, rect.y + 3, 50, 20);
                 XGUI.gui_label(
@@ -653,49 +727,49 @@ namespace SevenStrikeModules.XHud.Editor
         private void DrawCurveInfoList_Original()
         {
             // 绘制滚动视图
-            scrollview_rect = GUILayoutUtility.GetRect(0, sp_visibleItemCount.intValue * sp_itemHeight.floatValue);
-            sp_SoundInfoList_Original_Scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_SoundInfoList_Original_Scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, CurveInfoList.count * sp_itemHeight.floatValue), false, true);
+            scrollview_rect = GUILayoutUtility.GetRect(0, sp_visible_item_count.intValue * sp_item_height.floatValue);
+            sp_sound_infolist_original_scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_sound_infolist_original_scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, curve_info_list.count * sp_item_height.floatValue), false, true);
 
             // 计算可视区域的起始和结束索引
-            int startIndex = Mathf.FloorToInt(sp_SoundInfoList_Original_Scroller.vector2Value.y / sp_itemHeight.floatValue);
-            int endIndex = Mathf.CeilToInt((sp_SoundInfoList_Original_Scroller.vector2Value.y + scrollview_rect.height) / sp_itemHeight.floatValue);
+            int startIndex = Mathf.FloorToInt(sp_sound_infolist_original_scroller.vector2Value.y / sp_item_height.floatValue);
+            int endIndex = Mathf.CeilToInt((sp_sound_infolist_original_scroller.vector2Value.y + scrollview_rect.height) / sp_item_height.floatValue);
 
             // 只绘制可视区域内的元素
-            for (int i = startIndex; i < endIndex && i < CurveInfoList.count; i++)
+            for (int i = startIndex; i < endIndex && i < curve_info_list.count; i++)
             {
-                SerializedProperty prop = sp_CurveLibrary.GetArrayElementAtIndex(i);
-                SerializedProperty sp_name = prop.FindPropertyRelative("Name");
+                SerializedProperty prop = sp_library_curves.GetArrayElementAtIndex(i);
+                SerializedProperty sp_name = prop.FindPropertyRelative("name");
 
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
                 // 如果当前元素被选中，绘制选中效果
-                if (sp_name.stringValue.Contains(sp_Highlight.stringValue))
+                if (sp_name.stringValue.Contains(sp_highlight.stringValue))
                 {
-                    if (sp_SelectedIndex.intValue == i)
+                    if (sp_selected_index.intValue == i)
                     {
                         // 高亮标记表示选中
-                        item_rect.Set(1, i * sp_itemHeight.floatValue + 12, 5, 5);
+                        item_rect.Set(1, i * sp_item_height.floatValue + 12, 5, 5);
                         EditorGUI.DrawRect(item_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                         // 高亮背景表示选中
-                        item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width + 20, sp_itemHeight.floatValue);
+                        item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width + 20, sp_item_height.floatValue);
                         EditorGUI.DrawRect(item_rect, SelectedBg);
                     }
                 }
 
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
-                CurveInfoList.drawElementCallback.Invoke(item_rect, i, i == CurveInfoList.index, true);
+                curve_info_list.drawElementCallback.Invoke(item_rect, i, i == curve_info_list.index, true);
 
                 // 检测鼠标是否在当前元素区域内
                 if (item_rect.Contains(Event.current.mousePosition))
                 {
                     if (Event.current.type == EventType.MouseDown)
                     {
-                        if (sp_name.stringValue.Contains(sp_Highlight.stringValue))
+                        if (sp_name.stringValue.Contains(sp_highlight.stringValue))
                         {
                             // 更新选中项
-                            sp_SelectedIndex.intValue = i;
-                            sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+                            sp_selected_index.intValue = i;
+                            sp_selected_index.serializedObject.ApplyModifiedProperties();
 
                             // 标记界面需要更新
                             GUI.changed = true;
@@ -719,9 +793,9 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (list.count <= 0)
                 return;
-            sp_CurveLibrary.DeleteArrayElementAtIndex(list.index);
-            if (BaseScript.act_on_CurveRemoved != null)
-                BaseScript.act_on_CurveRemoved();
+            sp_library_curves.DeleteArrayElementAtIndex(list.index);
+            if (base_script.act_on_curve_removed != null)
+                base_script.act_on_curve_removed();
         }
         /// <summary>
         /// 列表增加项。
@@ -734,23 +808,23 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (list.count <= 0)
             {
-                if (BaseScript.CurveLibrary == null)
-                    BaseScript.CurveLibrary = new List<xHud_LibraryArg_Curve>();
-                BaseScript.CurveLibrary.Add(new XHud.xHud_LibraryArg_Curve("曲线" + BaseScript.CurveLibrary.Count, AnimationCurve.EaseInOut(0, 0, 1, 1)));
+                if (base_script.library_curves == null)
+                    base_script.library_curves = new List<xHud_LibraryArg_Curve>();
+                base_script.library_curves.Add(new XHud.xHud_LibraryArg_Curve("曲线" + base_script.library_curves.Count, AnimationCurve.EaseInOut(0, 0, 1, 1)));
             }
             else
             {
-                sp_CurveLibrary.InsertArrayElementAtIndex(list.index);
-                SerializedProperty prop = sp_CurveLibrary.GetArrayElementAtIndex(list.index);
-                SerializedProperty sp_name = prop.FindPropertyRelative("Name");
+                sp_library_curves.InsertArrayElementAtIndex(list.index);
+                SerializedProperty prop = sp_library_curves.GetArrayElementAtIndex(list.index);
+                SerializedProperty sp_name = prop.FindPropertyRelative("name");
                 sp_name.stringValue = $"新曲线_{list.index}";
 
 
-                sp_CurveLibrary.serializedObject.ApplyModifiedProperties();
+                sp_library_curves.serializedObject.ApplyModifiedProperties();
             }
 
-            if (BaseScript.act_on_CurveAdded != null)
-                BaseScript.act_on_CurveAdded(BaseScript.CurveLibrary[BaseScript.CurveLibrary.Count - 1].Name, BaseScript.CurveLibrary[BaseScript.CurveLibrary.Count - 1].Curve);
+            if (base_script.act_on_curve_added != null)
+                base_script.act_on_curve_added(base_script.library_curves[base_script.library_curves.Count - 1].name, base_script.library_curves[base_script.library_curves.Count - 1].curve);
         }
         #endregion
 
@@ -763,30 +837,30 @@ namespace SevenStrikeModules.XHud.Editor
         private void Curves_Export()
         {
             CurveLib lib = new CurveLib();
-            lib.Nodes = new List<CurveNode>();
+            lib.nodes = new List<CurveNode>();
 
-            for (int i = 0; i < BaseScript.CurveLibrary.Count; i++)
+            for (int i = 0; i < base_script.library_curves.Count; i++)
             {
-                xHud_LibraryArg_Curve info = BaseScript.CurveLibrary[i];
+                xHud_LibraryArg_Curve info = base_script.library_curves[i];
 
-                Keyframe[] frames = info.Curve.keys;
+                Keyframe[] frames = info.curve.keys;
 
                 CurveNode Node = new CurveNode();
-                Node.Name = info.Name;
-                Node.Frames = new CurveFrame[frames.Length];
+                Node.name = info.name;
+                Node.frames = new CurveFrame[frames.Length];
                 for (int s = 0; s < frames.Length; s++)
                 {
                     CurveFrame cs = new CurveFrame();
                     cs.time = frames[s].time;
                     cs.value = frames[s].value;
-                    cs.inTangent = frames[s].inTangent;
-                    cs.inWeight = frames[s].inWeight;
-                    cs.outTangent = frames[s].outTangent;
-                    cs.outWeight = frames[s].outWeight;
-                    cs.weightedMode = frames[s].weightedMode;
-                    Node.Frames[s] = cs;
+                    cs.in_tangent = frames[s].inTangent;
+                    cs.in_weight = frames[s].inWeight;
+                    cs.out_tangent = frames[s].outTangent;
+                    cs.out_weight = frames[s].outWeight;
+                    cs.weighted_mode = frames[s].weightedMode;
+                    Node.frames[s] = cs;
                 }
-                lib.Nodes.Add(Node);
+                lib.nodes.Add(Node);
             }
 
             string path = EditorUtility.SaveFilePanel("", Application.dataPath, "HudCurves", "json");
@@ -846,45 +920,45 @@ namespace SevenStrikeModules.XHud.Editor
 
                         CurveLib lib = JsonUtility.FromJson<CurveLib>(content);
 
-                        int size = sp_CurveLibrary.arraySize;
+                        int size = sp_library_curves.arraySize;
 
-                        for (int i = 0; i < lib.Nodes.Count; i++)
+                        for (int i = 0; i < lib.nodes.Count; i++)
                         {
-                            string name = lib.Nodes[i].Name;
+                            string name = lib.nodes[i].name;
 
-                            Keyframe[] frames = new Keyframe[lib.Nodes[i].Frames.Length];
+                            Keyframe[] frames = new Keyframe[lib.nodes[i].frames.Length];
 
                             for (int s = 0; s < frames.Length; s++)
                             {
                                 frames[s] = new Keyframe(
-                                    lib.Nodes[i].Frames[s].time,
-                                    lib.Nodes[i].Frames[s].value,
-                                    lib.Nodes[i].Frames[s].inTangent,
-                                    lib.Nodes[i].Frames[s].outTangent,
-                                    lib.Nodes[i].Frames[s].inWeight,
-                                    lib.Nodes[i].Frames[s].outWeight);
+                                    lib.nodes[i].frames[s].time,
+                                    lib.nodes[i].frames[s].value,
+                                    lib.nodes[i].frames[s].in_tangent,
+                                    lib.nodes[i].frames[s].out_tangent,
+                                    lib.nodes[i].frames[s].in_weight,
+                                    lib.nodes[i].frames[s].out_weight);
                             }
 
                             AnimationCurve curve = new AnimationCurve(frames);
 
                             xHud_LibraryArg_Curve info = new xHud_LibraryArg_Curve(name, curve);
 
-                            sp_CurveLibrary.InsertArrayElementAtIndex(i + size);
-                            SerializedProperty sp_cur = sp_CurveLibrary.GetArrayElementAtIndex(i + size);
-                            SerializedProperty sp_name = sp_cur.FindPropertyRelative("Name");
-                            SerializedProperty sp_curve = sp_cur.FindPropertyRelative("Curve");
+                            sp_library_curves.InsertArrayElementAtIndex(i + size);
+                            SerializedProperty sp_cur = sp_library_curves.GetArrayElementAtIndex(i + size);
+                            SerializedProperty sp_name = sp_cur.FindPropertyRelative("name");
+                            SerializedProperty sp_curve = sp_cur.FindPropertyRelative("curve");
 
-                            sp_name.stringValue = info.Name;
-                            sp_curve.animationCurveValue = info.Curve;
+                            sp_name.stringValue = info.name;
+                            sp_curve.animationCurveValue = info.curve;
 
                             sp_name.serializedObject.ApplyModifiedProperties();
                             sp_curve.serializedObject.ApplyModifiedProperties();
                             sp_cur.serializedObject.ApplyModifiedProperties();
                         }
-                        sp_CurveLibrary.serializedObject.ApplyModifiedProperties();
+                        sp_library_curves.serializedObject.ApplyModifiedProperties();
 
-                        if (BaseScript.act_on_CurveChanged != null)
-                            BaseScript.act_on_CurveChanged();
+                        if (base_script.act_on_curve_changed != null)
+                            base_script.act_on_curve_changed();
                     }
                     break;
                 case "替换":
@@ -894,50 +968,49 @@ namespace SevenStrikeModules.XHud.Editor
                         string content = File.ReadAllText(path);
                         CurveLib lib = JsonUtility.FromJson<CurveLib>(content);
 
-                        sp_CurveLibrary.ClearArray();
+                        sp_library_curves.ClearArray();
 
-                        for (int i = 0; i < lib.Nodes.Count; i++)
+                        for (int i = 0; i < lib.nodes.Count; i++)
                         {
-                            string name = lib.Nodes[i].Name;
+                            string name = lib.nodes[i].name;
 
-                            Keyframe[] frames = new Keyframe[lib.Nodes[i].Frames.Length];
+                            Keyframe[] frames = new Keyframe[lib.nodes[i].frames.Length];
 
                             for (int s = 0; s < frames.Length; s++)
                             {
                                 frames[s] = new Keyframe(
-                                    lib.Nodes[i].Frames[s].time,
-                                    lib.Nodes[i].Frames[s].value,
-                                    lib.Nodes[i].Frames[s].inTangent,
-                                    lib.Nodes[i].Frames[s].outTangent,
-                                    lib.Nodes[i].Frames[s].inWeight,
-                                    lib.Nodes[i].Frames[s].outWeight);
+                                    lib.nodes[i].frames[s].time,
+                                    lib.nodes[i].frames[s].value,
+                                    lib.nodes[i].frames[s].in_tangent,
+                                    lib.nodes[i].frames[s].out_tangent,
+                                    lib.nodes[i].frames[s].in_weight,
+                                    lib.nodes[i].frames[s].out_weight);
                             }
 
                             AnimationCurve curve = new AnimationCurve(frames);
 
                             xHud_LibraryArg_Curve info = new xHud_LibraryArg_Curve(name, curve);
 
-                            sp_CurveLibrary.InsertArrayElementAtIndex(i);
-                            SerializedProperty sp_cur = sp_CurveLibrary.GetArrayElementAtIndex(i);
-                            SerializedProperty sp_name = sp_cur.FindPropertyRelative("Name");
-                            SerializedProperty sp_curve = sp_cur.FindPropertyRelative("Curve");
+                            sp_library_curves.InsertArrayElementAtIndex(i);
+                            SerializedProperty sp_cur = sp_library_curves.GetArrayElementAtIndex(i);
+                            SerializedProperty sp_name = sp_cur.FindPropertyRelative("name");
+                            SerializedProperty sp_curve = sp_cur.FindPropertyRelative("curve");
 
-                            sp_name.stringValue = info.Name;
-                            sp_curve.animationCurveValue = info.Curve;
+                            sp_name.stringValue = info.name;
+                            sp_curve.animationCurveValue = info.curve;
 
                             sp_name.serializedObject.ApplyModifiedProperties();
                             sp_curve.serializedObject.ApplyModifiedProperties();
                             sp_cur.serializedObject.ApplyModifiedProperties();
                         }
-                        sp_CurveLibrary.serializedObject.ApplyModifiedProperties();
+                        sp_library_curves.serializedObject.ApplyModifiedProperties();
 
-                        if (BaseScript.act_on_CurveChanged != null)
-                            BaseScript.act_on_CurveChanged();
+                        if (base_script.act_on_curve_changed != null)
+                            base_script.act_on_curve_changed();
                     }
                     break;
             }
         }
         #endregion
     }
-    #endregion
 }

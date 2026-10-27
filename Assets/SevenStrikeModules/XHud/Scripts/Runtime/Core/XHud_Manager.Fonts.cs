@@ -29,7 +29,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 影响所有UI的字体尺寸
         /// </summary>
-        public float FontSizeMultiply = 1;
+        public float ft_font_size_multiply = 1;
 
         /// <summary>
         /// 修改全局字体尺寸
@@ -37,9 +37,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="size"></param>
         public void hm_ChangeFontGlobalSize(float size)
         {
-            FontSizeMultiply = size;
-            if (Act_FontSize_Changed != null)
-                Act_FontSize_Changed();
+            ft_font_size_multiply = size;
+            if (act_fontsize_changed != null)
+                act_fontsize_changed();
         }
     }
 }

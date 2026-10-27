@@ -33,9 +33,9 @@ namespace SevenStrikeModules.XHud
     /// </summary>
     public class xHud_LibraryArg_Color
     {
-        public XHud_Module_Primitive_Painting Painting;
-        public string Name;
-        public Color Color;
+        public XHud_Module_Primitive_Painting painting;
+        public string name;
+        public Color color;
 
         public xHud_LibraryArg_Color()
         {
@@ -48,60 +48,77 @@ namespace SevenStrikeModules.XHud
         /// <param name="color">新增配色</param>
         public xHud_LibraryArg_Color(string name, Color color)
         {
-            Name = name;
-            Color = color;
+            this.name = name;
+            this.color = color;
         }
     }
 
     public class TemplateColors
     {
-        public string Name;
-        public Color Color;
-        public string Description;
+        public string name;
+        public Color color;
+        public string description;
     }
 
     [CreateAssetMenu(fileName = "XHud_Library_Colors", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-Color (色卡库)", order = 0)]
     public class XHud_Library_Colors : ScriptableObject
     {
-        public string LibraryName = "NewColorsLibrary";
+        #region 字段 - 库基础信息
+        /// <summary>
+        /// 库名称
+        /// </summary>
+        public string library_name = "NewColorsLibrary";
+        /// <summary>
+        /// 颜色库数据列表
+        /// </summary>
+        public List<xHud_LibraryArg_Color> library_colors = new List<xHud_LibraryArg_Color>();
+        /// <summary>
+        /// 颜色变化时触发的事件
+        /// </summary>
+        public UnityAction act_on_color_changed;
+        #endregion
 
-        public List<xHud_LibraryArg_Color> ColorLibrary = new List<xHud_LibraryArg_Color>();
-
-        public UnityAction act_on_ColorChanged;
-
+        #region 字段 - 列表查询与筛选
         /// <summary>
         /// 名称项查找（精确匹配）
         /// </summary>
-        public string Find = "";
+        public string find = "";
         /// <summary>
-        /// Editor列表项高度
+        /// 筛选高亮名称
         /// </summary>
-        public float itemHeight = 30;
+        public string highlight;
+        #endregion
+
+        #region 字段 - 列表布局
+        /// <summary>
+        /// Editor 列表项高度
+        /// </summary>
+        public float item_height = 30;
         /// <summary>
         /// 可视区域显示的元素数量
         /// </summary>
-        public int visibleItemCount = 15;
+        public int visible_item_count = 15;
         /// <summary>
         /// 列表滚动位置
         /// </summary>
-        public Vector2 ColorInfoList_Original_Scroller;
+        public Vector2 color_info_list_original_scroller;
+        #endregion
+
+        #region 字段 - 选中与定位
         /// <summary>
-        /// Editor筛选名称
+        /// 定位选中项索引号（-1 表示无）
         /// </summary>
-        public string Highlight;
-        /// <summary>
-        /// 定位选中项索引号
-        /// </summary>
-        public int LocationSelectedIndex = -1;
+        public int location_selected_index = -1;
         /// <summary>
         /// 选中项索引号
         /// </summary>
-        public int SelectedIndex;
+        public int selected_index;
+        #endregion
 
         private void OnEnable()
         {
-            itemHeight = 30;
-            visibleItemCount = 15;
+            item_height = 30;
+            visible_item_count = 15;
         }
 
         // 确保内部名称与文件名一致
@@ -128,11 +145,11 @@ namespace SevenStrikeModules.XHud
         public Color ColorsLibrary_GetColor(string name)
         {
             Color color = new Color();
-            for (int x = 0; x < ColorLibrary.Count; x++)
+            for (int x = 0; x < library_colors.Count; x++)
             {
-                if (ColorLibrary[x].Name == name)
+                if (library_colors[x].name == name)
                 {
-                    color = ColorLibrary[x].Color;
+                    color = library_colors[x].color;
                 }
             }
             return color;
@@ -145,9 +162,9 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public string ColorsLibrary_GetColorName(int index)
         {
-            if (ColorLibrary.Count <= 0)
+            if (library_colors.Count <= 0)
                 return null;
-            return ColorLibrary[index].Name;
+            return library_colors[index].name;
         }
 
         /// <summary>
@@ -158,9 +175,9 @@ namespace SevenStrikeModules.XHud
         public int ColorsLibrary_GetColorIndex(string name)
         {
             int index = 0;
-            for (int i = 0; i < ColorLibrary.Count; i++)
+            for (int i = 0; i < library_colors.Count; i++)
             {
-                if (ColorLibrary[i].Name == name)
+                if (library_colors[i].name == name)
                     index = i;
             }
             return index;
@@ -174,11 +191,11 @@ namespace SevenStrikeModules.XHud
         public Color ColorsLibrary_GetColor(int id)
         {
             Color color = new Color();
-            for (int x = 0; x < ColorLibrary.Count; x++)
+            for (int x = 0; x < library_colors.Count; x++)
             {
                 if (x == id)
                 {
-                    color = ColorLibrary[x].Color;
+                    color = library_colors[x].color;
                     break;
                 }
             }
@@ -192,13 +209,13 @@ namespace SevenStrikeModules.XHud
         /// <param name="color"></param>
         public void ColorsLibrary_SetColor(string name, Color color)
         {
-            for (int x = 0; x < ColorLibrary.Count; x++)
+            for (int x = 0; x < library_colors.Count; x++)
             {
-                if (ColorLibrary[x].Name == name)
+                if (library_colors[x].name == name)
                 {
-                    ColorLibrary[x].Color = color;
-                    if (act_on_ColorChanged != null)
-                        act_on_ColorChanged();
+                    library_colors[x].color = color;
+                    if (act_on_color_changed != null)
+                        act_on_color_changed();
                 }
             }
         }
@@ -210,9 +227,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="color"></param>
         public void ColorsLibrary_SetColor(int id, Color color)
         {
-            ColorLibrary[id].Color = color;
-            if (act_on_ColorChanged != null)
-                act_on_ColorChanged();
+            library_colors[id].color = color;
+            if (act_on_color_changed != null)
+                act_on_color_changed();
         }
 
         /// <summary>
@@ -223,16 +240,16 @@ namespace SevenStrikeModules.XHud
         public void ColorsLibrary_AddColor(string name, Color color)
         {
             bool sw = false;
-            for (int i = 0; i < ColorLibrary.Count; i++)
+            for (int i = 0; i < library_colors.Count; i++)
             {
-                if (ColorLibrary[i].Name == name)
+                if (library_colors[i].name == name)
                 {
                     sw = true;
                     break;
                 }
             }
             if (!sw)
-                ColorLibrary.Add(new xHud_LibraryArg_Color(name, color));
+                library_colors.Add(new xHud_LibraryArg_Color(name, color));
         }
 
         /// <summary>
@@ -242,16 +259,16 @@ namespace SevenStrikeModules.XHud
         public void ColorsLibrary_AddColor(xHud_LibraryArg_Color info)
         {
             bool sw = false;
-            for (int i = 0; i < ColorLibrary.Count; i++)
+            for (int i = 0; i < library_colors.Count; i++)
             {
-                if (ColorLibrary[i].Name == name)
+                if (library_colors[i].name == name)
                 {
                     sw = true;
                     break;
                 }
             }
             if (!sw)
-                ColorLibrary.Add(new xHud_LibraryArg_Color(info.Name, info.Color));
+                library_colors.Add(new xHud_LibraryArg_Color(info.name, info.color));
         }
 
         /// <summary>
@@ -261,12 +278,12 @@ namespace SevenStrikeModules.XHud
         /// <param name="color">替换配色</param>
         public void ColorsLibrary_ReplaceColor(string name, Color color)
         {
-            for (int i = 0; i < ColorLibrary.Count; i++)
+            for (int i = 0; i < library_colors.Count; i++)
             {
-                if (ColorLibrary[i].Name == name)
+                if (library_colors[i].name == name)
                 {
-                    ColorLibrary[i].Name = name;
-                    ColorLibrary[i].Color = color;
+                    library_colors[i].name = name;
+                    library_colors[i].color = color;
                     break;
                 }
             }
@@ -279,12 +296,12 @@ namespace SevenStrikeModules.XHud
         /// <param name="color">替换配色</param>
         public void ColorsLibrary_ReplaceColorAndName(string originname, string name, Color color)
         {
-            for (int i = 0; i < ColorLibrary.Count; i++)
+            for (int i = 0; i < library_colors.Count; i++)
             {
-                if (ColorLibrary[i].Name == originname)
+                if (library_colors[i].name == originname)
                 {
-                    ColorLibrary[i].Name = name;
-                    ColorLibrary[i].Color = color;
+                    library_colors[i].name = name;
+                    library_colors[i].color = color;
                     break;
                 }
             }
@@ -297,8 +314,8 @@ namespace SevenStrikeModules.XHud
         /// <param name="color">替换配色</param>
         public void ColorsLibrary_ReplaceColorAndName(int index, string originname, string name, Color color)
         {
-            ColorLibrary[index].Name = name;
-            ColorLibrary[index].Color = color;
+            library_colors[index].name = name;
+            library_colors[index].color = color;
         }
 
         /// <summary>
@@ -307,7 +324,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public int ColorsLibrary_GetColorCount()
         {
-            int count = ColorLibrary.Count;
+            int count = library_colors.Count;
 
             return count;
         }
@@ -318,10 +335,10 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public string[] ColorsLibrary_GetColorNames()
         {
-            string[] names = new string[ColorLibrary.Count];
+            string[] names = new string[library_colors.Count];
             for (int i = 0; i < names.Length; i++)
             {
-                names[i] = ColorLibrary[i].Name;
+                names[i] = library_colors[i].name;
             }
 
             return names;
@@ -333,7 +350,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public xHud_LibraryArg_Color[] ColorsLibrary_GetColorLibrary()
         {
-            return ColorLibrary.ToArray();
+            return library_colors.ToArray();
         }
 
         /// <summary>
@@ -342,7 +359,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public bool ColorsLibrary_IsEmpty()
         {
-            if (ColorLibrary.Count > 0)
+            if (library_colors.Count > 0)
                 return false;
             else
                 return true;
@@ -354,7 +371,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public bool ColorsLibrary_IndexIsValid(int Index)
         {
-            if (Index >= 0 && Index < ColorLibrary.Count)
+            if (Index >= 0 && Index < library_colors.Count)
                 return true;
             else
                 return false;
@@ -367,13 +384,13 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public bool ColorsLibrary_IsExist(string name)
         {
-            if (ColorLibrary.Count <= 0)
+            if (library_colors.Count <= 0)
                 return false;
 
             bool sw = false;
-            for (int i = 0; i < ColorLibrary.Count; i++)
+            for (int i = 0; i < library_colors.Count; i++)
             {
-                if (ColorLibrary[i].Name == name)
+                if (library_colors[i].name == name)
                 {
                     sw = true;
                     break;
@@ -390,9 +407,9 @@ namespace SevenStrikeModules.XHud
         public int ColorsLibrary_CheckNameToIndex(string name)
         {
             int sw = 0;
-            for (int i = 0; i < ColorLibrary.Count; i++)
+            for (int i = 0; i < library_colors.Count; i++)
             {
-                if (ColorLibrary[i].Name == name)
+                if (library_colors[i].name == name)
                 {
                     sw = i;
                     break;
@@ -408,30 +425,30 @@ namespace SevenStrikeModules.XHud
         public void ColorsLibrary_Location(string name)
         {
             int index = ColorsLibrary_GetColorIndex(name);
-            SelectedIndex = index;
-            LocationSelectedIndex = index;
-            Highlight = name;
+            selected_index = index;
+            location_selected_index = index;
+            highlight = name;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < ColorLibrary.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < library_colors.Count; i++)
             {
-                if (ColorLibrary[i].Name == name)
+                if (library_colors[i].name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = ColorInfoList_Original_Scroller;
+            Vector2 newscroll = color_info_list_original_scroller;
             newscroll.y = scrollval;
-            ColorInfoList_Original_Scroller = newscroll;
+            color_info_list_original_scroller = newscroll;
         }
 
         /// <summary>
@@ -441,29 +458,29 @@ namespace SevenStrikeModules.XHud
         public void ColorsLibrary_Location_Find(string name)
         {
             int index = ColorsLibrary_GetColorIndex(name);
-            SelectedIndex = index;
-            LocationSelectedIndex = index;
+            selected_index = index;
+            location_selected_index = index;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < ColorLibrary.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < library_colors.Count; i++)
             {
-                if (ColorLibrary[i].Name == name)
+                if (library_colors[i].name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = ColorInfoList_Original_Scroller;
+            Vector2 newscroll = color_info_list_original_scroller;
             newscroll.y = scrollval;
-            ColorInfoList_Original_Scroller = newscroll;
+            color_info_list_original_scroller = newscroll;
         }
         #endregion
 
@@ -474,7 +491,7 @@ namespace SevenStrikeModules.XHud
         public void ColorsLibrary_CreateColors_BaseColor(string res_m)
         {
             if (res_m == "替换")
-                ColorLibrary.Clear();
+                this.library_colors.Clear();
 
             #region 模拟颜色数据
             TemplateColors[] templateColors = new TemplateColors[20];
@@ -489,14 +506,14 @@ namespace SevenStrikeModules.XHud
             for (int i = 0; i < templateColors.Length; i++)
             {
                 templateColors[i] = new TemplateColors();
-                templateColors[i].Name = word_art[i];
-                templateColors[i].Color = colors[i];
-                templateColors[i].Description = text_art[i];
-                ColorLibrary.Add(new XHud.xHud_LibraryArg_Color(templateColors[i].Name, templateColors[i].Color));
+                templateColors[i].name = word_art[i];
+                templateColors[i].color = colors[i];
+                templateColors[i].description = text_art[i];
+                this.library_colors.Add(new XHud.xHud_LibraryArg_Color(templateColors[i].name, templateColors[i].color));
             }
 
-            if (act_on_ColorChanged != null)
-                act_on_ColorChanged();
+            if (act_on_color_changed != null)
+                act_on_color_changed();
         }
 
         /// <summary>
@@ -505,7 +522,7 @@ namespace SevenStrikeModules.XHud
         public void ColorsLibrary_CreateColors_AdvancedGrayColor(string res_m)
         {
             if (res_m == "替换")
-                ColorLibrary.Clear();
+                this.library_colors.Clear();
 
             #region 模拟颜色数据
             TemplateColors[] templateColors = new TemplateColors[76];
@@ -518,14 +535,14 @@ namespace SevenStrikeModules.XHud
             for (int i = 0; i < templateColors.Length; i++)
             {
                 templateColors[i] = new TemplateColors();
-                templateColors[i].Name = word_art[i];
-                templateColors[i].Color = XGUI_Utilitys.HexString_To_Color(colors[i]);
-                templateColors[i].Description = colors[i];
-                ColorLibrary.Add(new XHud.xHud_LibraryArg_Color(templateColors[i].Name, templateColors[i].Color));
+                templateColors[i].name = word_art[i];
+                templateColors[i].color = XGUI_Utilitys.HexString_To_Color(colors[i]);
+                templateColors[i].description = colors[i];
+                this.library_colors.Add(new XHud.xHud_LibraryArg_Color(templateColors[i].name, templateColors[i].color));
             }
 
-            if (act_on_ColorChanged != null)
-                act_on_ColorChanged();
+            if (act_on_color_changed != null)
+                act_on_color_changed();
         }
 
         /// <summary>
@@ -534,7 +551,7 @@ namespace SevenStrikeModules.XHud
         public void ColorsLibrary_CreateColors_General(string res_m)
         {
             if (res_m == "替换")
-                ColorLibrary.Clear();
+                this.library_colors.Clear();
 
             #region 模拟颜色数据
             TemplateColors[] templateColors = new TemplateColors[77];
@@ -547,14 +564,14 @@ namespace SevenStrikeModules.XHud
             for (int i = 0; i < templateColors.Length; i++)
             {
                 templateColors[i] = new TemplateColors();
-                templateColors[i].Name = word_art[i];
-                templateColors[i].Color = XGUI_Utilitys.HexString_To_Color(colors[i]);
-                templateColors[i].Description = colors[i];
-                ColorLibrary.Add(new XHud.xHud_LibraryArg_Color(templateColors[i].Name, templateColors[i].Color));
+                templateColors[i].name = word_art[i];
+                templateColors[i].color = XGUI_Utilitys.HexString_To_Color(colors[i]);
+                templateColors[i].description = colors[i];
+                this.library_colors.Add(new XHud.xHud_LibraryArg_Color(templateColors[i].name, templateColors[i].color));
             }
 
-            if (act_on_ColorChanged != null)
-                act_on_ColorChanged();
+            if (act_on_color_changed != null)
+                act_on_color_changed();
         }
         #endregion
     }

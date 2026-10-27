@@ -34,17 +34,17 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 按钮组件
         /// </summary>
-        public XHud_Module_Button Button;
+        public XHud_Module_Button button;
         [SerializeField]
         /// <summary>
         /// 选项按钮标识
         /// </summary>
-        public string Indicator;
+        public string indicator;
         [SerializeField]
         /// <summary>
         /// 用于选项按钮
         /// </summary>
-        public bool IsOptional;
+        public bool is_optional;
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 按钮组件
         /// </summary>
-        public XHud_Module_Option Option;
+        public XHud_Module_Option option;
     }
 
     public partial class XHud_Module_Element : MonoBehaviour
@@ -66,14 +66,14 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 选项容器
         /// </summary>
-        public List<ElementNode_Option> OptionNodes;
+        public List<ElementNode_Option> option_nodes;
         [SerializeField]
         /// <summary>
         /// 选项列表折叠状态
         /// true表示折叠，false表示展开
         /// 用于控制Inspector中选项列表的显示/隐藏
         /// </summary>
-        public bool OptionIsFold;
+        public bool option_is_fold;
 
         /// <summary>
         /// 启用或禁用所有选项的交互
@@ -81,23 +81,23 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState">状态</param>
         public void element_Option_InteractableSetAll(bool state)
         {
-            if (OptionNodes.Count <= 0)
+            if (option_nodes.Count <= 0)
                 return;
-            for (int i = 0; i < OptionNodes.Count; i++)
+            for (int i = 0; i < option_nodes.Count; i++)
             {
-                for (int s = 0; s < OptionNodes[i].Option.OptionButtonNodes.Count; s++)
+                for (int s = 0; s < option_nodes[i].option.OptionButtonNodes.Count; s++)
                 {
-                    OptionNodes[i].Option.OptionButtonNodes[s].Button.interactable = state;
+                    option_nodes[i].option.OptionButtonNodes[s].button.interactable = state;
                 }
             }
             if (state)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有选项交互！", XGUIMsgState.通知);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有选项交互！", XGUIMsgState.通知);
             }
         }
@@ -107,18 +107,18 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState">状态</param>
         public void element_Option_EnableSetAll(bool state)
         {
-            for (int i = 0; i < OptionNodes.Count; i++)
+            for (int i = 0; i < option_nodes.Count; i++)
             {
-                OptionNodes[i].Option.enabled = state;
+                option_nodes[i].option.enabled = state;
             }
             if (state)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有选项脚本！", XGUIMsgState.通知);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有选项脚本！", XGUIMsgState.通知);
             }
         }
@@ -129,21 +129,21 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Option element_Option_Get(string indicator)
         {
             XHud_Module_Option opt = null;
-            for (int i = 0; i < OptionNodes.Count; i++)
+            for (int i = 0; i < option_nodes.Count; i++)
             {
-                if (OptionNodes[i].Option.Indicator == indicator)
+                if (option_nodes[i].option.Indicator == indicator)
                 {
-                    opt = OptionNodes[i].Option;
+                    opt = option_nodes[i].option;
                 }
             }
             if (opt == null)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "未找到对应标识的选项！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的选项！", XGUIMsgState.通知);
             }
             return opt;
@@ -154,19 +154,19 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Option[] element_Option_GetAll()
         {
             List<XHud_Module_Option> optlist = new List<XHud_Module_Option>();
-            for (int i = 0; i < OptionNodes.Count; i++)
+            for (int i = 0; i < option_nodes.Count; i++)
             {
-                optlist.Add(OptionNodes[i].Option);
+                optlist.Add(option_nodes[i].option);
             }
             if (optlist.Count <= 0)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "获取的选项列表为空！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
-                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + OptionNodes.Count + " 个选项！", XGUIMsgState.通知);
+                if (debug_state)
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + option_nodes.Count + " 个选项！", XGUIMsgState.通知);
             }
             return optlist.ToArray();
         }
@@ -175,9 +175,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void element_Option_EventsClear()
         {
-            for (int i = 0; i < OptionNodes.Count; i++)
+            for (int i = 0; i < option_nodes.Count; i++)
             {
-                OptionNodes[i].Option.opt_ClearEvents();
+                option_nodes[i].option.opt_ClearEvents();
             }
         }
         /// <summary>
@@ -185,9 +185,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void element_Option_ActionsClear()
         {
-            for (int i = 0; i < OptionNodes.Count; i++)
+            for (int i = 0; i < option_nodes.Count; i++)
             {
-                OptionNodes[i].Option.opt_ClearActions();
+                option_nodes[i].option.opt_ClearActions();
             }
         }
         /// <summary>

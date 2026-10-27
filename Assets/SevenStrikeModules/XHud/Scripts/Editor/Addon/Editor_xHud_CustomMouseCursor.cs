@@ -41,7 +41,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>仅用于单选模式下的直接读写操作。</description></item>
         /// </list>
         /// </summary>
-        private XHud_CustomMouseCursor BaseScript;
+        private XHud_CustomMouseCursor base_script;
         /// <summary>
         /// 鼠标样式列表（可重排列表）。
         /// <para/>
@@ -50,29 +50,89 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>所有回调均使用具名方法。</description></item>
         /// </list>
         /// </summary>
-        private ReorderableList StyleList;
+        private ReorderableList stylelist;
         #endregion
 
         #region 字段 - 序列化属性
         /// <summary>
-        /// 序列化属性集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>CursorRect</c>：光标焦点物体属性。</description></item>
-        /// <item><description><c>CursorCanvasGroup</c>：光标透明组件属性。</description></item>
-        /// <item><description><c>CursorImager</c>：光标图像组件属性。</description></item>
-        /// <item><description><c>UseCustomCursor</c>：自定义光标开关属性。</description></item>
-        /// <item><description><c>MouseStyles</c>：鼠标样式列表属性。</description></item>
-        /// <item><description><c>CursorSize_TweenDuration / CursorSize_TweenEase</c>：光标尺寸缓动参数属性。</description></item>
-        /// <item><description><c>CursorImagerSizeSmooth</c>：光标尺寸差值速率属性。</description></item>
-        /// <item><description><c>CursorOpacity_TweenDuration / CursorOpacity_TweenEase</c>：透明度缓动参数属性。</description></item>
-        /// <item><description><c>CursorSize / CursorColor / CursorColorSmooth / CursorOpacity</c>：光标外观属性。</description></item>
-        /// <item><description><c>IndexMouseType</c>：鼠标响应类型属性。</description></item>
-        /// <item><description><c>UseLerpCursorSize</c>：尺寸平滑方式属性。</description></item>
-        /// <item><description><c>CurrentCursorStyle</c>：当前光标样式属性。</description></item>
-        /// </list>
+        /// 光标焦点物体属性
         /// </summary>
-        private SerializedProperty CursorRect, CursorCanvasGroup, CursorImager, UseCustomCursor, MouseStyles, CursorSize_TweenDuration, CursorSize_TweenEase, CursorImagerSizeSmooth, CursorOpacity_TweenDuration, CursorOpacity_TweenEase, CursorSize, CursorColor, CursorColorSmooth, CursorOpacity, IndexMouseType, UseLerpCursorSize, CurrentCursorStyle;
+        private SerializedProperty sp_cursor_rect;
+        /// <summary>
+        /// 光标透明组件属性
+        /// </summary>
+        private SerializedProperty sp_cursor_canvas_group;
+        /// <summary>
+        /// 光标图像组件属性
+        /// </summary>
+        private SerializedProperty sp_cursor_imager;
+        /// <summary>
+        /// 自定义光标开关属性
+        /// </summary>
+        private SerializedProperty sp_use_custom_cursor;
+        /// <summary>
+        /// 鼠标样式列表属性
+        /// </summary>
+        private SerializedProperty sp_mouse_styles;
+        /// <summary>
+        /// 光标尺寸缓动时长属性
+        /// </summary>
+        private SerializedProperty sp_cursor_size_tween_duration;
+        /// <summary>
+        /// 光标尺寸缓动曲线属性
+        /// </summary>
+        private SerializedProperty sp_cursor_size_tween_ease;
+        /// <summary>
+        /// 光标尺寸差值速率属性
+        /// </summary>
+        private SerializedProperty sp_cursor_imager_size_smooth;
+        /// <summary>
+        /// 光标透明度缓动时长属性
+        /// </summary>
+        private SerializedProperty sp_cursor_opacity_tween_duration;
+        /// <summary>
+        /// 光标透明度缓动曲线属性
+        /// </summary>
+        private SerializedProperty sp_cursor_opacity_tween_ease;
+        /// <summary>
+        /// 光标尺寸属性
+        /// </summary>
+        private SerializedProperty sp_cursor_size;
+        /// <summary>
+        /// 光标颜色属性
+        /// </summary>
+        private SerializedProperty sp_cursor_color;
+        /// <summary>
+        /// 光标颜色平滑值属性
+        /// </summary>
+        private SerializedProperty sp_cursor_color_smooth;
+        /// <summary>
+        /// 光标透明度属性
+        /// </summary>
+        private SerializedProperty sp_cursor_opacity;
+        /// <summary>
+        /// 鼠标响应类型属性
+        /// </summary>
+        private SerializedProperty sp_index_mouse_type;
+        /// <summary>
+        /// 尺寸平滑方式属性
+        /// </summary>
+        private SerializedProperty sp_use_lerp_cursor_size;
+        /// <summary>
+        /// 当前光标样式属性
+        /// </summary>
+        private SerializedProperty sp_current_cursor_style;
+        #endregion
+
+        #region 字段 - 图标
+        /// <summary>
+        /// 标题主图标
+        /// </summary>
+        private Texture2D icon_main;
+        /// <summary>
+        /// 无效光标占位图标
+        /// </summary>
+        private Texture2D icon_invalid_tex;
         #endregion
 
         #region 字段 - GUI 参数
@@ -84,20 +144,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>用于计算列表元素内控件布局。</description></item>
         /// </list>
         /// </summary>
-        private float LineHeight;
-        #endregion
-
-        #region 字段 - 图标
-        /// <summary>
-        /// 本编辑器所使用的图标资源集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>icon_main</c>：标题主图标。</description></item>
-        /// <item><description><c>icon_invalid_tex</c>：无效光标占位图标。</description></item>
-        /// </list>
-        /// </summary>
-        private Texture2D icon_main;
-        private Texture2D icon_invalid_tex;
+        private float lineheight;
         #endregion
 
         #region 字段 - 批量化操作
@@ -105,46 +152,50 @@ namespace SevenStrikeModules.XHud.Editor
         /// 批量选择脚本数组。
         /// <para/>
         /// <list type="bullet">
-        /// <item><description>在 <c>GetAllTargets</c> 中根据 <c>targets</c> 填充。</description></item>
+        /// <item><description>在 <c>Targets_Get</c> 中根据 <c>targets</c> 填充。</description></item>
         /// <item><description>单选时长度为 1，多选时长度等于选中对象数量。</description></item>
         /// </list>
         /// </summary>
-        private XHud_CustomMouseCursor[] SelectedObjects;
+        private XHud_CustomMouseCursor[] selected_objects;
         #endregion
 
         #region 生命周期
         void OnEnable()
         {
-            BaseScript = (XHud_CustomMouseCursor)target;
+            base_script = (XHud_CustomMouseCursor)target;
+
             #region 获取序列化属性
-            CursorRect = serializedObject.FindProperty("CursorRect");
-            CursorCanvasGroup = serializedObject.FindProperty("CursorCanvasGroup");
-            UseCustomCursor = serializedObject.FindProperty("UseCustomCursor");
-            CursorOpacity = serializedObject.FindProperty("CursorOpacity");
-            CursorImager = serializedObject.FindProperty("CursorImager");
-            MouseStyles = serializedObject.FindProperty("MouseStyles");
-            CursorSize_TweenDuration = serializedObject.FindProperty("CursorSize_TweenDuration");
-            CursorSize_TweenEase = serializedObject.FindProperty("CursorSize_TweenEase");
-            CursorImagerSizeSmooth = serializedObject.FindProperty("CursorImagerSizeSmooth");
-            CursorOpacity_TweenDuration = serializedObject.FindProperty("CursorOpacity_TweenDuration");
-            CursorOpacity_TweenEase = serializedObject.FindProperty("CursorOpacity_TweenEase");
-            CursorSize = serializedObject.FindProperty("CursorSize");
-            CursorColor = serializedObject.FindProperty("CursorColor");
-            CursorColorSmooth = serializedObject.FindProperty("CursorColorSmooth");
-            CurrentCursorStyle = serializedObject.FindProperty("CurrentCursorStyle");
-            IndexMouseType = serializedObject.FindProperty("IndexMouseType");
-            UseLerpCursorSize = serializedObject.FindProperty("UseLerpCursorSize");
+            sp_cursor_rect = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.cursor_rect));
+            sp_cursor_canvas_group = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.cursor_canvas_group));
+            sp_use_custom_cursor = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.use_custom_cursor));
+            sp_cursor_opacity = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.cursor_opacity));
+            sp_cursor_imager = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.cursor_imager));
+            sp_mouse_styles = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.mouse_styles));
+            sp_cursor_size_tween_duration = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.cursor_size_tween_duration));
+            sp_cursor_size_tween_ease = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.cursor_size_tween_ease));
+            sp_cursor_imager_size_smooth = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.cursor_imager_size_smooth));
+            sp_cursor_opacity_tween_duration = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.cursor_opacity_tween_duration));
+            sp_cursor_opacity_tween_ease = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.cursor_opacity_tween_ease));
+            sp_cursor_size = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.cursor_size));
+            sp_cursor_color = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.cursor_color));
+            sp_cursor_color_smooth = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.cursor_color_smooth));
+            sp_current_cursor_style = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.current_cursor_style));
+            sp_index_mouse_type = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.index_mouse_type));
+            sp_use_lerp_cursor_size = serializedObject.FindProperty(nameof(XHud_CustomMouseCursor.use_lerp_cursor_size));
             #endregion
+
             #region 获取图标
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_mouse_cursor/icon_main");
             icon_invalid_tex = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_mouse_cursor/icon_invalid");
             #endregion
-            BaseScript.CursorRect = BaseScript.GetComponent<RectTransform>();
-            BaseScript.CursorCanvasGroup = BaseScript.GetComponent<CanvasGroup>();
-            if (BaseScript.transform.childCount <= 0)
+
+            base_script.cursor_rect = base_script.GetComponent<RectTransform>();
+            base_script.cursor_canvas_group = base_script.GetComponent<CanvasGroup>();
+
+            if (base_script.transform.childCount <= 0)
             {
                 GameObject imager = new GameObject();
-                imager.transform.SetParent(BaseScript.transform);
+                imager.transform.SetParent(base_script.transform);
                 imager.transform.localPosition = Vector3.zero;
                 imager.transform.localEulerAngles = Vector3.zero;
                 imager.transform.localScale = Vector3.one;
@@ -156,16 +207,19 @@ namespace SevenStrikeModules.XHud.Editor
                 rect.anchorMax = new Vector2(0.5f, 0.5f);
                 Image img = imager.AddComponent<Image>();
                 img.raycastTarget = false;
-                BaseScript.CursorImager = img;
+                base_script.cursor_imager = img;
             }
             else
             {
-                BaseScript.CursorImager = BaseScript.transform.GetChild(0).GetComponent<Image>();
+                base_script.cursor_imager = base_script.transform.GetChild(0).GetComponent<Image>();
             }
-            LineHeight = XGUI.GetSingleLineHeight();
+
+            lineheight = XGUI.GetSingleLineHeight();
+
             Targets_Get();
+
             #region 列表 - 鼠标样式表
-            StyleList = new ReorderableList(serializedObject, MouseStyles)
+            stylelist = new ReorderableList(serializedObject, sp_mouse_styles)
             {
                 displayAdd = true,
                 displayRemove = true,
@@ -184,11 +238,9 @@ namespace SevenStrikeModules.XHud.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-            TextClipping clipping = TextClipping.Clip;
-#endif
+
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
+
             #region 标题
             XGUI.layout_banner(
              bg_fill: XGUIGroup.实体,
@@ -201,10 +253,12 @@ namespace SevenStrikeModules.XHud.Editor
              title_style: FontStyle.Normal,
              title_color: Color.white,
              title_size: XGUIFontSize.B,
-             title_clipping: clipping,
+             title_clipping: clipping_ellipsis,
              bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
+
             XGUI.layout_space(5);
+
             #region 当前光标预览
             XGUI.layout_group_start(
                type: XGUIContainerType.Vertical,
@@ -218,25 +272,25 @@ namespace SevenStrikeModules.XHud.Editor
                padding: new RectOffset(10, 10, 15, 15));
             if (!Application.isPlaying)
             {
-                CanvasGroup cg = (CanvasGroup)CursorCanvasGroup.objectReferenceValue;
-                Image imgsursor = (Image)CursorImager.objectReferenceValue;
+                CanvasGroup cg = (CanvasGroup)sp_cursor_canvas_group.objectReferenceValue;
+                Image imgsursor = (Image)sp_cursor_imager.objectReferenceValue;
                 if (cg != null)
-                    cg.alpha = CursorOpacity.floatValue;
-                CursorCanvasGroup.serializedObject.ApplyModifiedProperties();
+                    cg.alpha = sp_cursor_opacity.floatValue;
+                sp_cursor_canvas_group.serializedObject.ApplyModifiedProperties();
                 if (imgsursor != null)
                 {
-                    imgsursor.rectTransform.sizeDelta = Vector2.one * CursorSize.floatValue;
+                    imgsursor.rectTransform.sizeDelta = Vector2.one * sp_cursor_size.floatValue;
                 }
-                CursorImager.serializedObject.ApplyModifiedProperties();
+                sp_cursor_imager.serializedObject.ApplyModifiedProperties();
             }
-            if (UseCustomCursor.boolValue)
+            if (sp_use_custom_cursor.boolValue)
             {
-                SerializedProperty index_sprite = CurrentCursorStyle.FindPropertyRelative("Sprite");
+                SerializedProperty index_sprite = sp_current_cursor_style.FindPropertyRelative("Sprite");
                 Sprite spr = (Sprite)index_sprite.objectReferenceValue;
                 #region 当前选择的光标图标
                 XGUI.layout_icon(
                     icon: spr != null && spr.texture != null ? spr.texture : icon_invalid_tex,
-                    icon_color: CursorColor.colorValue,
+                    icon_color: sp_cursor_color.colorValue,
                     width: 15,
                     height: 15,
                     icon_alignment: XGUIIconAlignment.中心,
@@ -281,8 +335,9 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             #region 选项         
-            BaseScript.fold_options = XGUI.layout_group_start(
+            base_script.fold_options = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -292,17 +347,17 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_options);
-            if (!BaseScript.fold_options)
+                foldout: base_script.fold_options);
+            if (!base_script.fold_options)
             {
-                DrawToggle("自定义光标", UseCustomCursor, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                DrawToggle("自定义光标", sp_use_custom_cursor, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
                 string[] actionlist = System.Enum.GetNames(typeof(MouseType));
                 XGUI.layout_string_popup(
                     title: "鼠标响应",
                     title_width: 100,
                     title_size: XGUIFontSize.M,
                     title_anchor: TextAnchor.MiddleLeft,
-                    prop: IndexMouseType,
+                    prop: sp_index_mouse_type,
                     options: actionlist,
                     opt_text_size: XGUIFontSize.M,
                     opt_text_color: Color.black,
@@ -318,7 +373,7 @@ namespace SevenStrikeModules.XHud.Editor
                     icon_arrow_color: Color.black,
                     act_on_changed: (d) =>
                     {
-                        BaseScript.MouseClickType = (MouseType)System.Enum.Parse(typeof(MouseType), d);
+                        base_script.mouse_click_type = (MouseType)System.Enum.Parse(typeof(MouseType), d);
                     });
                 string[] smoothsizelist = new string[2] { "缓动模式", "差值模式" };
                 XGUI.layout_string_popup(
@@ -326,7 +381,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_width: 100,
                     title_size: XGUIFontSize.M,
                     title_anchor: TextAnchor.MiddleLeft,
-                    prop: UseLerpCursorSize,
+                    prop: sp_use_lerp_cursor_size,
                     options: smoothsizelist,
                     opt_text_size: XGUIFontSize.M,
                     opt_text_color: Color.black,
@@ -343,8 +398,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             #region 参数
-            BaseScript.fold_params = XGUI.layout_group_start(
+            base_script.fold_params = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -354,11 +410,11 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(5, 10, 15, 15),
-                foldout: BaseScript.fold_params);
-            Image img_cursor = (Image)CursorImager.objectReferenceValue;
-            if (UseCustomCursor.boolValue)
+                foldout: base_script.fold_params);
+            Image img_cursor = (Image)sp_cursor_imager.objectReferenceValue;
+            if (sp_use_custom_cursor.boolValue)
             {
-                if (!BaseScript.fold_params)
+                if (!base_script.fold_params)
                 {
                     #region 焦点物体
                     XGUI.layout_property_field(
@@ -366,7 +422,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: CursorRect,
+                        prop: sp_cursor_rect,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                     #endregion
                     #region 透明组件
@@ -375,7 +431,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: CursorCanvasGroup,
+                        prop: sp_cursor_canvas_group,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                     #endregion
                     #region 光标组件
@@ -384,7 +440,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: CursorImager,
+                        prop: sp_cursor_imager,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                     #endregion
                     #region 尺寸
@@ -393,7 +449,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: CursorSize,
+                        prop: sp_cursor_size,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                     #endregion
                     #region 颜色
@@ -403,11 +459,11 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: CursorColor,
+                        prop: sp_cursor_color,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                     if (EditorGUI.EndChangeCheck())
                     {
-                        BaseScript.CursorImager.color = CursorColor.colorValue;
+                        base_script.cursor_imager.color = sp_cursor_color.colorValue;
                     }
                     #endregion
                     #region 颜色平滑系数
@@ -416,7 +472,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: CursorColorSmooth,
+                        prop: sp_cursor_color_smooth,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                     #endregion
                     #region 透明度
@@ -425,7 +481,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: CursorOpacity,
+                        prop: sp_cursor_opacity,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                     #endregion
                     #region 透明度缓动方式
@@ -434,7 +490,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: CursorOpacity_TweenEase,
+                        prop: sp_cursor_opacity_tween_ease,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                     #endregion
                     #region 透明度变化耗时
@@ -443,10 +499,10 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: CursorOpacity_TweenDuration,
+                        prop: sp_cursor_opacity_tween_duration,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                     #endregion
-                    if (UseLerpCursorSize.stringValue == "缓动模式")
+                    if (sp_use_lerp_cursor_size.stringValue == "缓动模式")
                     {
                         #region 光标尺寸缓动耗时
                         XGUI.layout_property_field(
@@ -454,7 +510,7 @@ namespace SevenStrikeModules.XHud.Editor
                             title_size: XGUIFontSize.M,
                             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             title_width: 90,
-                            prop: CursorSize_TweenDuration,
+                            prop: sp_cursor_size_tween_duration,
                             prop_margin: new RectOffset(0, 0, 5, 0));
                         #endregion
                         #region 光标尺寸缓动方式
@@ -463,7 +519,7 @@ namespace SevenStrikeModules.XHud.Editor
                             title_size: XGUIFontSize.M,
                             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             title_width: 90,
-                            prop: CursorSize_TweenEase,
+                            prop: sp_cursor_size_tween_ease,
                             prop_margin: new RectOffset(0, 0, 5, 0));
                         #endregion
                     }
@@ -475,7 +531,7 @@ namespace SevenStrikeModules.XHud.Editor
                             title_size: XGUIFontSize.M,
                             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                             title_width: 90,
-                            prop: CursorImagerSizeSmooth,
+                            prop: sp_cursor_imager_size_smooth,
                             prop_margin: new RectOffset(0, 0, 5, 0));
                         #endregion
                     }
@@ -488,8 +544,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             #region 光标样式表
-            BaseScript.fold_styles = XGUI.layout_group_start(
+            base_script.fold_styles = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
               bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
@@ -499,15 +556,35 @@ namespace SevenStrikeModules.XHud.Editor
               title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
               title_clipping: TextClipping.Clip,
               padding: new RectOffset(10, 10, 15, 15),
-              foldout: BaseScript.fold_styles);
-            if (!BaseScript.fold_styles)
+              foldout: base_script.fold_styles);
+            if (!base_script.fold_styles)
             {
-                StyleList.DoLayoutList();
+                stylelist.DoLayoutList();
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
+            #region 弹出菜单
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
+            {
+                // 创建右键菜单
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("Q (折叠编组)"), false, () =>
+                {
+                    base_script.GroupFold(true);
+                });
+                menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
+                {
+                    base_script.GroupFold(false);
+                });
+                menu.ShowAsContext();
+
+                Event.current.Use();
+            }
+            #endregion
+
             #region 源脚本
-            BaseScript.fold_based = XGUI.layout_group_start(
+            base_script.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -517,13 +594,14 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_based);
-            if (!BaseScript.fold_based)
+                foldout: base_script.fold_based);
+            if (!base_script.fold_based)
             {
                 DrawDefaultInspector();
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             serializedObject.ApplyModifiedProperties();
         }
         #endregion
@@ -541,17 +619,17 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new XHud_CustomMouseCursor[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new XHud_CustomMouseCursor[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (XHud_CustomMouseCursor)t;
+                    selected_objects[i] = (XHud_CustomMouseCursor)t;
                 }
             }
             else
             {
-                SelectedObjects = new XHud_CustomMouseCursor[targets.Length];
-                SelectedObjects[0] = (XHud_CustomMouseCursor)target;
+                selected_objects = new XHud_CustomMouseCursor[targets.Length];
+                selected_objects[0] = (XHud_CustomMouseCursor)target;
             }
         }
         /// <summary>
@@ -565,9 +643,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>是否为多选状态。</returns>
         private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }
@@ -617,14 +695,16 @@ namespace SevenStrikeModules.XHud.Editor
             float titleheight = rect.y + 2;
             float baseheight = rect.y + (rect.height - 25);
             float current_width = XGUI.GetCurrentWindowWidth();
-            SerializedProperty sp_name = MouseStyles.GetArrayElementAtIndex(index).FindPropertyRelative("Name");
-            SerializedProperty index_sprite = MouseStyles.GetArrayElementAtIndex(index).FindPropertyRelative("Sprite");
+
+            SerializedProperty sp_name = sp_mouse_styles.GetArrayElementAtIndex(index).FindPropertyRelative("Name");
+            SerializedProperty index_sprite = sp_mouse_styles.GetArrayElementAtIndex(index).FindPropertyRelative("Sprite");
             Sprite spr = (Sprite)index_sprite.objectReferenceValue;
-            SerializedProperty pivot = MouseStyles.GetArrayElementAtIndex(index).FindPropertyRelative("Pivot");
+            SerializedProperty pivot = sp_mouse_styles.GetArrayElementAtIndex(index).FindPropertyRelative("Pivot");
+
             #region 光标名称
             if (current_width > 130)
             {
-                Rect rect_name = new Rect(rect.x + 12, titleheight, rect.width - 16, LineHeight);
+                Rect rect_name = new Rect(rect.x + 12, titleheight, rect.width - 16, lineheight);
                 sp_name.stringValue = XGUI.gui_inputfield(
                     rect: rect_name,
                     title: "标识",
@@ -645,10 +725,11 @@ namespace SevenStrikeModules.XHud.Editor
                 sp_name.serializedObject.ApplyModifiedProperties();
             }
             #endregion
+
             #region 光标贴图
             if (current_width > 130)
             {
-                Rect rect_sprite = new Rect(rect.x + 47, titleheight + 30, rect.width - 50, LineHeight);
+                Rect rect_sprite = new Rect(rect.x + 47, titleheight + 30, rect.width - 50, lineheight);
                 XGUI.gui_property_field(
                     rect: rect_sprite,
                     title: null,
@@ -659,10 +740,11 @@ namespace SevenStrikeModules.XHud.Editor
                 index_sprite.serializedObject.ApplyModifiedProperties();
             }
             #endregion
+
             #region 位置相对偏移
             if (current_width > 130)
             {
-                Rect rect_offset = new Rect(rect.x + 47, titleheight + 55, rect.width - 50, LineHeight);
+                Rect rect_offset = new Rect(rect.x + 47, titleheight + 55, rect.width - 50, lineheight);
                 pivot.vector2Value = XGUI.gui_inputfield(
                     rect: rect_offset,
                     title: null,
@@ -673,15 +755,16 @@ namespace SevenStrikeModules.XHud.Editor
                     title_width: 60);
             }
             pivot.serializedObject.ApplyModifiedProperties();
-            SerializedProperty cur_sprite = CurrentCursorStyle.FindPropertyRelative("Sprite");
+            SerializedProperty cur_sprite = sp_current_cursor_style.FindPropertyRelative("Sprite");
             Sprite cur_spr = (Sprite)cur_sprite.objectReferenceValue;
             if (cur_spr == spr)
             {
-                Image img_cursor = (Image)CursorImager.objectReferenceValue;
+                Image img_cursor = (Image)sp_cursor_imager.objectReferenceValue;
                 img_cursor.rectTransform.pivot = pivot.vector2Value;
-                CursorImager.serializedObject.ApplyModifiedProperties();
+                sp_cursor_imager.serializedObject.ApplyModifiedProperties();
             }
             #endregion
+
             #region 预览光标
             titleheight += 30;
             Sprite icon_spr = (Sprite)index_sprite.objectReferenceValue;
@@ -703,9 +786,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void MouseStyles_OnAdd(ReorderableList list)
         {
-            MouseStyles.InsertArrayElementAtIndex(list.count);
-            MouseStyles.GetArrayElementAtIndex(list.count - 1).FindPropertyRelative("Name").stringValue = "NewCursor";
-            MouseStyles.GetArrayElementAtIndex(list.count - 1).FindPropertyRelative("Pivot").vector2Value = new Vector2(0, 1);
+            sp_mouse_styles.InsertArrayElementAtIndex(list.count);
+            sp_mouse_styles.GetArrayElementAtIndex(list.count - 1).FindPropertyRelative("Name").stringValue = "NewCursor";
+            sp_mouse_styles.GetArrayElementAtIndex(list.count - 1).FindPropertyRelative("Pivot").vector2Value = new Vector2(0, 1);
         }
         /// <summary>
         /// 鼠标样式列表移除回调。
@@ -716,7 +799,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void MouseStyles_OnRemove(ReorderableList list)
         {
-            MouseStyles.DeleteArrayElementAtIndex(list.index);
+            sp_mouse_styles.DeleteArrayElementAtIndex(list.index);
         }
         /// <summary>
         /// 鼠标样式列表选中回调。
@@ -728,17 +811,17 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void MouseStyles_OnSelect(ReorderableList list)
         {
-            SerializedProperty sp_style = MouseStyles.GetArrayElementAtIndex(list.index);
+            SerializedProperty sp_style = sp_mouse_styles.GetArrayElementAtIndex(list.index);
             MouseStyles style = new MouseStyles();
             style.Name = sp_style.FindPropertyRelative("Name").stringValue;
             style.Pivot = sp_style.FindPropertyRelative("Pivot").vector2Value;
             style.Sprite = (Sprite)sp_style.FindPropertyRelative("Sprite").objectReferenceValue;
-            CurrentCursorStyle.FindPropertyRelative("Name").stringValue = style.Name;
-            CurrentCursorStyle.FindPropertyRelative("Pivot").vector2Value = style.Pivot;
-            CurrentCursorStyle.FindPropertyRelative("Sprite").objectReferenceValue = style.Sprite;
-            Image img = (Image)CursorImager.objectReferenceValue;
+            sp_current_cursor_style.FindPropertyRelative("Name").stringValue = style.Name;
+            sp_current_cursor_style.FindPropertyRelative("Pivot").vector2Value = style.Pivot;
+            sp_current_cursor_style.FindPropertyRelative("Sprite").objectReferenceValue = style.Sprite;
+            Image img = (Image)sp_cursor_imager.objectReferenceValue;
             img.sprite = style.Sprite;
-            img.rectTransform.pivot = CurrentCursorStyle.FindPropertyRelative("Pivot").vector2Value;
+            img.rectTransform.pivot = sp_current_cursor_style.FindPropertyRelative("Pivot").vector2Value;
         }
         /// <summary>
         /// 鼠标样式列表元素高度回调。
@@ -749,7 +832,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private float MouseStyles_ElementHeight(int index)
         {
-            return 4.8f * LineHeight;
+            return 4.8f * lineheight;
         }
         #endregion
 

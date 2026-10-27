@@ -26,19 +26,6 @@ namespace SevenStrikeModules.XHud.Editor
     {
         #region 序列化属性 / 字段
         /// <summary>
-        /// 获取序列化变量。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>通过 <c>serializedObject.FindProperty</c> 按名称查找。</description></item>
-        /// </list>
-        /// </summary>
-        /// <param name="name">属性名。</param>
-        /// <returns>对应的序列化属性。</returns>
-        private SerializedProperty xHud_GetSerializedProperty(string name)
-        {
-            return serializedObject.FindProperty(name);
-        }
-        /// <summary>
         /// 序列化变量。
         /// <para/>
         /// <list type="bullet">
@@ -48,191 +35,226 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void xHud_SerializedAllVariables()
         {
-            IsInitialized = xHud_GetSerializedProperty("IsInitialized");
-            HudCamera = xHud_GetSerializedProperty("HudCamera");
-            HudCanvas_Screen = xHud_GetSerializedProperty("HudCanvas_Screen");
-            HudCanvasScaler = xHud_GetSerializedProperty("HudCanvasScaler");
-            Mask = xHud_GetSerializedProperty("Mask");
-            HudCanvasGroup_Screen = xHud_GetSerializedProperty("HudCanvasGroup_Screen");
-            HudCanvas_ScreenAnchor = xHud_GetSerializedProperty("HudCanvas_ScreenAnchor");
-            Anchors_Layout_Screen = xHud_GetSerializedProperty("Anchors_Layout_Screen");
-            Lib_ElementLibrarys = xHud_GetSerializedProperty("Hud_ElementLibrarys");
-            Lib_Color = xHud_GetSerializedProperty("Hud_Colors");
-            Lib_Curve = xHud_GetSerializedProperty("Hud_Curves");
-            Lib_Sound = xHud_GetSerializedProperty("Hud_Sounds");
-            Lib_TextStyleLibrary = xHud_GetSerializedProperty("Hud_TextStyleLibrary");
-            Lib_Motions = xHud_GetSerializedProperty("Hud_Motions");
-            Lib_Transition = xHud_GetSerializedProperty("Hud_TransitionLib");
-            SoundLibrary = xHud_GetSerializedProperty("Pool_Sounder");
-            SounderPoolCount = xHud_GetSerializedProperty("SounderPoolCount");
-            UseInstanceMode = xHud_GetSerializedProperty("UseInstanceMode");
-            UseDebug = xHud_GetSerializedProperty("UseDebug");
-            UseSafeFrame = xHud_GetSerializedProperty("UseSafeFrame");
-            UsePerfectPixelUpdate = xHud_GetSerializedProperty("UsePerfectPixelUpdate");
-            UseAutoPerfectPixel = xHud_GetSerializedProperty("UseAutoPerfectPixel");
-            SafeFrameStructureDisplayer = xHud_GetSerializedProperty("SafeFrameStructureDisplayer");
-            CameraOthograpicMode = xHud_GetSerializedProperty("CameraOthograpicMode");
-            CanvasScalerModeIndex = xHud_GetSerializedProperty("CanvasScalerModeIndex");
-            CanvasScalerScreenSize = xHud_GetSerializedProperty("CanvasScalerScreenSize");
-            CanvasMatchDir = xHud_GetSerializedProperty("CanvasMatchDir");
-            SupportWorldUI = xHud_GetSerializedProperty("SupportWorldUI");
-            BluePrintMode = xHud_GetSerializedProperty("BluePrintMode");
-            Safe_Frame = xHud_GetSerializedProperty("Safe_Frame");
-            Margins = xHud_GetSerializedProperty("Margins");
-            MarginHorizontal = xHud_GetSerializedProperty("MarginHorizontal");
-            MarginMultiply = xHud_GetSerializedProperty("MarginMultiply");
-            MarginVertical = xHud_GetSerializedProperty("MarginVertical");
-            MarkSize = xHud_GetSerializedProperty("MarkSize");
-            Color_LayoutAnchorMark = xHud_GetSerializedProperty("Color_LayoutAnchorMark");
-            Color_FrameLine = xHud_GetSerializedProperty("Color_FrameLine");
-            ScreenRes = xHud_GetSerializedProperty("ScreenRes");
-            Safe_FrameLine_Width = xHud_GetSerializedProperty("Safe_FrameLine_Width");
-            Safe_FrameLine_Margins = xHud_GetSerializedProperty("Safe_FrameLine_Margins");
-            Color_SeperaterLine = xHud_GetSerializedProperty("Color_SeperaterLine");
-            Safe_Seperater_Length = xHud_GetSerializedProperty("Safe_Seperater_Length");
-            Safe_CenterMarkLength = xHud_GetSerializedProperty("Safe_CenterMarkLength");
-            Safe_CenterMarkWidth = xHud_GetSerializedProperty("Safe_CenterMarkWidth");
-            Color_CenterMark = xHud_GetSerializedProperty("Color_CenterMark");
-            Safe_CenterMarkDistance = xHud_GetSerializedProperty("Safe_CenterMarkDistance");
-            CameraOrthographicSize = xHud_GetSerializedProperty("CameraOrthographicSize");
-            CameraFov = xHud_GetSerializedProperty("CameraFov");
-            CameraCutter_Near = xHud_GetSerializedProperty("CameraCutter_Near");
-            CameraCutter_Far = xHud_GetSerializedProperty("CameraCutter_Far");
-            HudCanvasAnchor = xHud_GetSerializedProperty("HudCanvasAnchor");
-            CanvasDistance = xHud_GetSerializedProperty("CanvasDistance");
-            HudCanvasAnchorIndex = xHud_GetSerializedProperty("HudCanvasAnchorIndex");
-            MaskAlpha = xHud_GetSerializedProperty("MaskAlpha");
-            MaskTexture = xHud_GetSerializedProperty("MaskTexture");
-            MaskRaycastAlphaThreshold = xHud_GetSerializedProperty("MaskRaycastAlphaThreshold");
-            MaskColor = xHud_GetSerializedProperty("MaskColor");
-            ContentOpacity_Screen = xHud_GetSerializedProperty("ContentOpacity_Screen");
-            ContentOpacity_World = xHud_GetSerializedProperty("ContentOpacity_World");
-            DurationMultiply = xHud_GetSerializedProperty("DurationMultiply");
-            CustomCursor = xHud_GetSerializedProperty("CustomCursor");
-            CustomTransition = xHud_GetSerializedProperty("CustomTransition");
-            Hud_MouseCursor = xHud_GetSerializedProperty("Hud_MouseCursor");
-            Hud_TransitionController = xHud_GetSerializedProperty("Hud_TransitionController");
-            SceneCamera = xHud_GetSerializedProperty("SceneCamera");
-            MaskRaycastEnabled = xHud_GetSerializedProperty("MaskRaycastEnabled");
-            Volume = xHud_GetSerializedProperty("Volume");
-            VolumeMute = xHud_GetSerializedProperty("VolumeMute");
-            HudCanvas_World = xHud_GetSerializedProperty("HudCanvas_World");
-            HudCanvas_WorldAnchor = xHud_GetSerializedProperty("HudCanvas_WorldAnchor");
-            HudCanvasGroup_World = xHud_GetSerializedProperty("HudCanvasGroup_World");
-            RecycleArgs_Default = xHud_GetSerializedProperty("RecycleArgs_Default");
-            CreateArgs_Default = xHud_GetSerializedProperty("CreateArgs_Default");
-            FontSizeMultiply = xHud_GetSerializedProperty("FontSizeMultiply");
-            BluePrint_root = xHud_GetSerializedProperty("BluePrint_root");
-            BluePrint_grid_size = xHud_GetSerializedProperty("BluePrint_grid_size");
-            BluePrint_linewidth = xHud_GetSerializedProperty("BluePrint_linewidth");
-            BluePrint_grid_color = xHud_GetSerializedProperty("BluePrint_grid_color");
-            BluePrint_bg_color = xHud_GetSerializedProperty("BluePrint_bg_color");
-            BluePrint_bg_decal_color = xHud_GetSerializedProperty("BluePrint_bg_decal_color");
-            BluePrint_marktitle_color = xHud_GetSerializedProperty("BluePrint_marktitle_color");
-            BluePrint_marksubtitle_color = xHud_GetSerializedProperty("BluePrint_marksubtitle_color");
-            BluePrint_mark_size = xHud_GetSerializedProperty("BluePrint_mark_size");
-            BluePrint_mark_opacity = xHud_GetSerializedProperty("BluePrint_mark_opacity");
-            BluePrint_mark_margin = xHud_GetSerializedProperty("BluePrint_mark_margin");
-            BluePrint_mark_space = xHud_GetSerializedProperty("BluePrint_mark_space");
-            BluePrint_title_content = xHud_GetSerializedProperty("BluePrint_title_content");
-            BluePrint_subtitle_content = xHud_GetSerializedProperty("BluePrint_subtitle_content");
-            BluePrint_MarkAnchors = xHud_GetSerializedProperty("BluePrint_MarkAnchors");
-            BluePrint_opacity = xHud_GetSerializedProperty("BluePrint_opacity");
-            BluePrint_Grid_AnimationEase = xHud_GetSerializedProperty("BluePrint_Grid_AnimationEase");
-            BluePrint_Bg_AnimationEase_In = xHud_GetSerializedProperty("BluePrint_Bg_AnimationEase_In");
-            BluePrint_Bg_AnimationEase_Out = xHud_GetSerializedProperty("BluePrint_Bg_AnimationEase_Out");
-            BluePrint_Grid_LengthPercentage = xHud_GetSerializedProperty("BluePrint_Grid_LengthPercentage");
-            BluePrint_Grid_LevelHeight = xHud_GetSerializedProperty("BluePrint_Grid_LevelHeight");
-            BluePrint_AnimationDuration = xHud_GetSerializedProperty("BluePrint_AnimationDuration");
-            BluePrint_Displayed = xHud_GetSerializedProperty("BluePrint_Displayed");
-            BluePrint_OnStartHide = xHud_GetSerializedProperty("BluePrint_OnStartHide");
-            BluePrint_bg_opacity = xHud_GetSerializedProperty("BluePrint_bg_opacity");
-            BluePrint_bg_mapOpacity = xHud_GetSerializedProperty("BluePrint_bg_mapOpacity");
-            BluePrint_Bg_FadeAnimationDelay = xHud_GetSerializedProperty("BluePrint_Bg_FadeAnimationDelay");
-            BluePrint_GridEnd = xHud_GetSerializedProperty("BluePrint_GridEnd");
-            BluePrint_bg_tilling = xHud_GetSerializedProperty("BluePrint_bg_tilling");
-            BluePrint_bg_name = xHud_GetSerializedProperty("BluePrint_bg_name");
-            BluePrint_bg_usetilling_index = xHud_GetSerializedProperty("BluePrint_bg_usetilling_index");
-            BluePrint_bg_usesquareratio_index = xHud_GetSerializedProperty("BluePrint_bg_usesquareratio_index");
-            BluePrint_grid_Opacity = xHud_GetSerializedProperty("BluePrint_grid_Opacity");
-            BluePrint_Grid_AnimationDuration = xHud_GetSerializedProperty("BluePrint_Grid_AnimationDuration");
-            Eft_Grid = xHud_GetSerializedProperty("Eft_Grid");
-            Eft_GridFade = xHud_GetSerializedProperty("Eft_GridFade");
-            Eft_Bg = xHud_GetSerializedProperty("Eft_Bg");
-            Eft_Mark = xHud_GetSerializedProperty("Eft_Mark");
-            RMS_Enabled = xHud_GetSerializedProperty("RMS_Enabled");
-            RMS_Nodes = xHud_GetSerializedProperty("RMS_Nodes");
-            RMS_CurrentSolution = xHud_GetSerializedProperty("RMS_CurrentSolution");
+            initialized = serializedObject.FindProperty(nameof(XHud_Manager.initialized));
 
-            theme_color_primary = xHud_GetSerializedProperty("theme_color_primary");
-            theme_color_group = xHud_GetSerializedProperty("theme_color_group");
-            theme_color_sepline = xHud_GetSerializedProperty("theme_color_sepline");
+            #region Camera
+            sp_camera_scene = serializedObject.FindProperty(nameof(XHud_Manager.camera_scene));
+            sp_camera_ui = serializedObject.FindProperty(nameof(XHud_Manager.camera_ui));
+            sp_camera_ui_cutter_near = serializedObject.FindProperty(nameof(XHud_Manager.camera_ui_cutter_near));
+            sp_camera_ui_cutter_far = serializedObject.FindProperty(nameof(XHud_Manager.camera_ui_cutter_far));
+            sp_camera_othograpic_mode = serializedObject.FindProperty(nameof(XHud_Manager.camera_othograpic_mode));
+            sp_camera_ui_orthographic_size = serializedObject.FindProperty(nameof(XHud_Manager.camera_ui_orthographic_size));
+            sp_camera_ui_fov = serializedObject.FindProperty(nameof(XHud_Manager.camera_ui_fov));
+            #endregion
 
-            theme_solution_primary = xHud_GetSerializedProperty("theme_solution_primary");
-            theme_solution_group = xHud_GetSerializedProperty("theme_solution_group");
-            theme_solution_sepline = xHud_GetSerializedProperty("theme_solution_sepline");
+            #region BluePrint
+            sp_bp_mode = serializedObject.FindProperty(nameof(XHud_Manager.bp_mode));
+            sp_bp_opacity = serializedObject.FindProperty(nameof(XHud_Manager.bp_opacity));
+            sp_bp_grid_size = serializedObject.FindProperty(nameof(XHud_Manager.bp_grid_size));
+            sp_bp_linewidth = serializedObject.FindProperty(nameof(XHud_Manager.bp_linewidth));
+            sp_bp_grid_color = serializedObject.FindProperty(nameof(XHud_Manager.bp_grid_color));
+            sp_bp_bg_color = serializedObject.FindProperty(nameof(XHud_Manager.bp_bg_color));
+            sp_bp_bg_decal_color = serializedObject.FindProperty(nameof(XHud_Manager.bp_bg_decal_color));
+            sp_bp_bg_name = serializedObject.FindProperty(nameof(XHud_Manager.bp_bg_name));
+            sp_bp_grid_opacity = serializedObject.FindProperty(nameof(XHud_Manager.bp_grid_opacity));
+            sp_bp_bg_map_opacity = serializedObject.FindProperty(nameof(XHud_Manager.bp_bg_map_opacity));
+            sp_bp_bg_usetilling_index = serializedObject.FindProperty(nameof(XHud_Manager.bp_bg_usetilling_index));
+            sp_bp_bg_usesquareratio_index = serializedObject.FindProperty(nameof(XHud_Manager.bp_bg_usesquareratio_index));
+            sp_bp_bg_opacity = serializedObject.FindProperty(nameof(XHud_Manager.bp_bg_opacity));
+            sp_bp_bg_tilling = serializedObject.FindProperty(nameof(XHud_Manager.bp_bg_tilling));
+            sp_bp_marktitle_color = serializedObject.FindProperty(nameof(XHud_Manager.bp_marktitle_color));
+            sp_bp_marksubtitle_color = serializedObject.FindProperty(nameof(XHud_Manager.bp_marksubtitle_color));
+            sp_bp_mark_size = serializedObject.FindProperty(nameof(XHud_Manager.bp_mark_size));
+            sp_bp_mark_opacity = serializedObject.FindProperty(nameof(XHud_Manager.bp_mark_opacity));
+            sp_bp_mark_margin = serializedObject.FindProperty(nameof(XHud_Manager.bp_mark_margin));
+            sp_bp_mark_space = serializedObject.FindProperty(nameof(XHud_Manager.bp_mark_space));
+            sp_bp_root = serializedObject.FindProperty(nameof(XHud_Manager.bp_root));
+            sp_bp_title_content = serializedObject.FindProperty(nameof(XHud_Manager.bp_title_content));
+            sp_bp_subtitle_content = serializedObject.FindProperty(nameof(XHud_Manager.bp_subtitle_content));
+            sp_bp_mark_anchors = serializedObject.FindProperty(nameof(XHud_Manager.bp_mark_anchors));
+            sp_bp_grid_animation_ease = serializedObject.FindProperty(nameof(XHud_Manager.bp_grid_animation_ease));
+            sp_bp_bg_animation_ease_in = serializedObject.FindProperty(nameof(XHud_Manager.bp_bg_animation_ease_in));
+            sp_bp_bg_animation_ease_out = serializedObject.FindProperty(nameof(XHud_Manager.bp_bg_animation_ease_out));
+            sp_bp_grid_length_percentage = serializedObject.FindProperty(nameof(XHud_Manager.bp_grid_length_percentage));
+            sp_bp_grid_level_height = serializedObject.FindProperty(nameof(XHud_Manager.bp_grid_level_height));
+            sp_bp_animation_duration = serializedObject.FindProperty(nameof(XHud_Manager.bp_animation_duration));
+            sp_bp_displayed = serializedObject.FindProperty(nameof(XHud_Manager.bp_displayed));
+            sp_bp_on_start_hide = serializedObject.FindProperty(nameof(XHud_Manager.bp_on_start_hide));
+            sp_bp_bg_fade_animation_delay = serializedObject.FindProperty(nameof(XHud_Manager.bp_bg_fade_animation_delay));
+            sp_bp_grid_end = serializedObject.FindProperty(nameof(XHud_Manager.bp_grid_end));
+            sp_bp_grid_animation_duration = serializedObject.FindProperty(nameof(XHud_Manager.bp_grid_animation_duration));
+            sp_bp_eft_grid = serializedObject.FindProperty(nameof(XHud_Manager.bp_eft_grid));
+            sp_bp_eft_grid_fade = serializedObject.FindProperty(nameof(XHud_Manager.bp_eft_grid_fade));
+            sp_bp_eft_bg = serializedObject.FindProperty(nameof(XHud_Manager.bp_eft_bg));
+            sp_bp_eft_mark = serializedObject.FindProperty(nameof(XHud_Manager.bp_eft_mark));
+            #endregion
 
-            Hud_EventSystem = xHud_GetSerializedProperty("Hud_EventSystem");
-            Hud_InputSystemUIInputModule = xHud_GetSerializedProperty("Hud_InputSystemUIInputModule");
-            CreateArgs_MotionAnimateEndState = CreateArgs_Default.FindPropertyRelative("MotionAnimateEndState");
-            RecycleArgs_MotionAnimateEndState = RecycleArgs_Default.FindPropertyRelative("MotionAnimateEndState");
-            sp_PhysicsScreenSize = xHud_GetSerializedProperty("PhysicsScreenSize");
-            sp_Reference_Image = xHud_GetSerializedProperty("Reference_Image");
-            UseRatioReference = xHud_GetSerializedProperty("UseRatioReference");
-            RatioReferenceIsPart = xHud_GetSerializedProperty("RatioReferenceIsPart");
-            sp_Reference_Image_Color = xHud_GetSerializedProperty("Reference_Image_Color");
-            sp_Res_Full = xHud_GetSerializedProperty("Res_Full");
-            sp_Res_Part = xHud_GetSerializedProperty("Res_Part");
-            sp_ReferShape_RatioSize = xHud_GetSerializedProperty("ReferShape_RatioSize");
-            sp_ReferShape_RatioTolerance = xHud_GetSerializedProperty("ReferShape_RatioTolerance");
-            FoldAllPanelWithDisabled = xHud_GetSerializedProperty("FoldAllPanelWithDisabled");
-            CompGuide_Anchors = xHud_GetSerializedProperty("CompGuide_Anchors");
-            CompGuide_AnchorRoot = xHud_GetSerializedProperty("CompGuide_AnchorRoot");
+            #region CompGuide
+            sp_cg_anchor_root = serializedObject.FindProperty(nameof(XHud_Manager.cg_anchor_root));
+            sp_cg_anchors = serializedObject.FindProperty(nameof(XHud_Manager.cg_anchors));
+            sp_cg_mode = serializedObject.FindProperty(nameof(XHud_Manager.cg_mode));
+            sp_cg_use = serializedObject.FindProperty(nameof(XHud_Manager.cg_use));
+            sp_cg_color = serializedObject.FindProperty(nameof(XHud_Manager.cg_color));
+            sp_cg_point_color = serializedObject.FindProperty(nameof(XHud_Manager.cg_point_color));
+            sp_cg_mirror_lr_offset = serializedObject.FindProperty(nameof(XHud_Manager.cg_mirror_lr_offset));
+            sp_cg_mirror_lr_golden_mode = serializedObject.FindProperty(nameof(XHud_Manager.cg_mirror_lr_golden_mode));
+            sp_cg_mirror_ud_offset = serializedObject.FindProperty(nameof(XHud_Manager.cg_mirror_ud_offset));
+            sp_cg_mirror_ud_golden_mode = serializedObject.FindProperty(nameof(XHud_Manager.cg_mirror_ud_golden_mode));
+            sp_cg_fibonacci_mode = serializedObject.FindProperty(nameof(XHud_Manager.cg_fibonacci_mode));
+            sp_cg_editor_serializefield_corner_lookat_offset_h = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_corner_lookat_offset_h);
+            sp_cg_editor_serializefield_corner_lookat_offset_v = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_corner_lookat_offset_v);
+            sp_cg_editor_serializefield_three_offset_h = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_three_offset_h);
+            sp_cg_editor_serializefield_three_offset_v = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_three_offset_v);
+            sp_cg_editor_serializefield_three_offset_coverage = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_three_offset_coverage);
+            sp_cg_editor_serializefield_guide_line_base_offset = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_guide_line_base_offset);
+            sp_cg_editor_serializefield_guide_line_base_height = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_guide_line_base_height);
+            sp_cg_editor_serializefield_guide_line_offset_near = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_guide_line_offset_near);
+            sp_cg_editor_serializefield_guide_line_offset_far = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_guide_line_offset_far);
+            sp_cg_editor_serializefield_guide_line_offset_near_height = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_guide_line_offset_near_height);
+            sp_cg_editor_serializefield_triangle_top_offset = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_triangle_top_offset);
+            sp_cg_editor_serializefield_triangle_base_height = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_triangle_base_height);
+            sp_cg_editor_serializefield_guide_param_triangle_bottom_height = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_guide_param_triangle_bottom_height);
+            sp_cg_editor_serializefield_triangle_offset_left = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_triangle_offset_left);
+            sp_cg_editor_serializefield_triangle_offset_right = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_triangle_offset_right);
+            sp_cg_editor_serializefield_center_point_size = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_center_point_size);
+            sp_cg_editor_serializefield_ishape_top_height = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_ishape_top_height);
+            sp_cg_editor_serializefield_ishape_bottom_height = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_ishape_bottom_height);
+            sp_cg_editor_serializefield_ishape_offset_left = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_ishape_offset_left);
+            sp_cg_editor_serializefield_ishape_offset_right = serializedObject.FindProperty(XHud_Manager.cg_editor_serializefield_ishape_offset_right);
+            #endregion
 
-            UseCompGuide = xHud_GetSerializedProperty("UseCompGuide");
-            CompGuideMode = xHud_GetSerializedProperty("CompGuideMode");
-            GuideColor = xHud_GetSerializedProperty("GuideColor");
-            GuidePointColor = xHud_GetSerializedProperty("GuidePointColor");
+            #region Canvas
+            sp_cv_scaler = serializedObject.FindProperty(nameof(XHud_Manager.cv_scaler));
+            sp_cv_scaler_mode_index = serializedObject.FindProperty(nameof(XHud_Manager.cv_scaler_mode_index));
+            sp_cv_match_dir = serializedObject.FindProperty(nameof(XHud_Manager.cv_match_dir));
+            sp_cv_screen_res = serializedObject.FindProperty(nameof(XHud_Manager.cv_screen_res));
+            sp_cv_use_perfect_pixel_update = serializedObject.FindProperty(nameof(XHud_Manager.cv_use_perfect_pixel_update));
+            sp_cv_use_auto_perfect_pixel = serializedObject.FindProperty(nameof(XHud_Manager.cv_use_auto_perfect_pixel));
+            sp_cv_hudcanvas_screen_anchor = serializedObject.FindProperty(nameof(XHud_Manager.cv_hudcanvas_screen_anchor));
+            sp_cv_hudcanvas_world_anchor = serializedObject.FindProperty(nameof(XHud_Manager.cv_hudcanvas_world_anchor));
+            sp_cv_support_world_ui = serializedObject.FindProperty(nameof(XHud_Manager.cv_support_world_ui));
+            sp_cv_anchors_layout_screen = serializedObject.FindProperty(nameof(XHud_Manager.cv_anchors_layout_screen));
+            sp_cv_margins = serializedObject.FindProperty(nameof(XHud_Manager.cv_margins));
+            sp_cv_margin_horizontal = serializedObject.FindProperty(nameof(XHud_Manager.cv_margin_horizontal));
+            sp_cv_margin_multiply = serializedObject.FindProperty(nameof(XHud_Manager.cv_margin_multiply));
+            sp_cv_margin_vertical = serializedObject.FindProperty(nameof(XHud_Manager.cv_margin_vertical));
+            sp_cv_distance = serializedObject.FindProperty(nameof(XHud_Manager.cv_distance));
+            sp_cv_screen = serializedObject.FindProperty(nameof(XHud_Manager.cv_screen));
+            sp_cv_hudcanvas_world = serializedObject.FindProperty(nameof(XHud_Manager.cv_hudcanvas_world));
+            sp_cv_hudcanvas_anchor = serializedObject.FindProperty(nameof(XHud_Manager.cv_hudcanvas_anchor));
+            sp_cv_hudcanvas_anchor_index = serializedObject.FindProperty(nameof(XHud_Manager.cv_hudcanvas_anchor_index));
+            #endregion
 
-            GuideParam_Mirror_LR_Offset = xHud_GetSerializedProperty("GuideParam_Mirror_LR_Offset");
-            GuideParam_Mirror_LR_GoldenMode = xHud_GetSerializedProperty("GuideParam_Mirror_LR_GoldenMode");
+            #region Mask
+            sp_mk_mask = serializedObject.FindProperty(nameof(XHud_Manager.mk_mask));
+            sp_mk_alpha = serializedObject.FindProperty(nameof(XHud_Manager.mk_alpha));
+            sp_mk_texture = serializedObject.FindProperty(nameof(XHud_Manager.mk_texture));
+            sp_mk_raycast_alpha_threshold = serializedObject.FindProperty(nameof(XHud_Manager.mk_raycast_alpha_threshold));
+            sp_mk_color = serializedObject.FindProperty(nameof(XHud_Manager.mk_color));
+            sp_mk_raycast_enabled = serializedObject.FindProperty(nameof(XHud_Manager.mk_raycast_enabled));
+            #endregion
 
-            GuideParam_Mirror_UD_Offset = xHud_GetSerializedProperty("GuideParam_Mirror_UD_Offset");
-            GuideParam_Mirror_UD_GoldenMode = xHud_GetSerializedProperty("GuideParam_Mirror_UD_GoldenMode");
-            GuideParam_Fibonacci_Mode = xHud_GetSerializedProperty("GuideParam_Fibonacci_Mode");
-            GuideParam_CornerLookat_Offset_H = xHud_GetSerializedProperty("GuideParam_CornerLookat_Offset_H");
-            GuideParam_CornerLookat_Offset_V = xHud_GetSerializedProperty("GuideParam_CornerLookat_Offset_V");
+            #region Opacity
+            sp_op_hud_canvas_group_screen = serializedObject.FindProperty(nameof(XHud_Manager.op_hud_canvas_group_screen));
+            sp_op_hud_canvas_group_world = serializedObject.FindProperty(nameof(XHud_Manager.op_hud_canvas_group_world));
+            sp_op_content_opacity_screen = serializedObject.FindProperty(nameof(XHud_Manager.op_content_opacity_screen));
+            sp_op_content_opacity_world = serializedObject.FindProperty(nameof(XHud_Manager.op_content_opacity_world));
+            #endregion
 
-            GuideParam_Three_Offset_H = xHud_GetSerializedProperty("GuideParam_Three_Offset_H");
-            GuideParam_Three_Offset_V = xHud_GetSerializedProperty("GuideParam_Three_Offset_V");
-            GuideParam_Three_Offset_Coverage = xHud_GetSerializedProperty("GuideParam_Three_Offset_Coverage");
+            #region Elements
+            sp_ele_library_elements = serializedObject.FindProperty(nameof(XHud_Manager.ele_library_elements));
+            sp_ele_global_motion_create_library_index_name = serializedObject.FindProperty(nameof(XHud_Manager.ele_global_motion_create_library_index_name));
+            sp_ele_global_motion_recycle_library_index_name = serializedObject.FindProperty(nameof(XHud_Manager.ele_global_motion_recycle_library_index_name));
+            sp_ele_visual_placer = serializedObject.FindProperty(nameof(XHud_Manager.ele_visual_placer));
+            #endregion
 
-            GuideParam_GuideLine_BaseOffset = xHud_GetSerializedProperty("GuideParam_GuideLine_BaseOffset");
-            GuideParam_GuideLine_BaseHeight = xHud_GetSerializedProperty("GuideParam_GuideLine_BaseHeight");
-            GuideParam_GuideLine_Offset_Near = xHud_GetSerializedProperty("GuideParam_GuideLine_Offset_Near");
-            GuideParam_GuideLine_Offset_Far = xHud_GetSerializedProperty("GuideParam_GuideLine_Offset_Far");
-            GuideParam_GuideLine_Offset_NearHeight = xHud_GetSerializedProperty("GuideParam_GuideLine_Offset_NearHeight");
+            #region Based
+            sp_library_colors = serializedObject.FindProperty(nameof(XHud_Manager.library_colors));
+            sp_library_curves = serializedObject.FindProperty(nameof(XHud_Manager.library_curves));
+            sp_library_sounds = serializedObject.FindProperty(nameof(XHud_Manager.library_sounds));
+            sp_library_textstyles = serializedObject.FindProperty(nameof(XHud_Manager.library_textstyles));
+            sp_library_motions = serializedObject.FindProperty(nameof(XHud_Manager.library_motions));
+            sp_library_transitions = serializedObject.FindProperty(nameof(XHud_Manager.library_transitions));
+            sp_tween_global_duration = serializedObject.FindProperty(nameof(XHud_Manager.tween_global_duration));
+            sp_hud_event_system = serializedObject.FindProperty(nameof(XHud_Manager.hud_event_system));
+            sp_hud_input_system_ui_input_module = serializedObject.FindProperty(nameof(XHud_Manager.hud_input_system_ui_input_module));
+            sp_primitive_id_label_line_height = serializedObject.FindProperty(nameof(XHud_Manager.primitive_id_label_line_height));
+            sp_primitive_id_label_line_color = serializedObject.FindProperty(nameof(XHud_Manager.primitive_id_label_line_color));
+            sp_primitive_id_label_font_size = serializedObject.FindProperty(nameof(XHud_Manager.primitive_id_label_font_size));
+            sp_primitive_id_label_font_color = serializedObject.FindProperty(nameof(XHud_Manager.primitive_id_label_font_color));
+            sp_use_debug = serializedObject.FindProperty(nameof(XHud_Manager.use_debug));
+            sp_fold_all_panel_with_disabled = serializedObject.FindProperty(nameof(XHud_Manager.fold_all_panel_with_disabled));
+            #endregion
 
-            GuideParam_Triangle_TopOffset = xHud_GetSerializedProperty("GuideParam_Triangle_TopOffset");
-            GuideParam_Triangle_BaseHeight = xHud_GetSerializedProperty("GuideParam_Triangle_BaseHeight");
-            GuideParam_Triangle_BottomHeight = xHud_GetSerializedProperty("GuideParam_Triangle_BottomHeight");
-            GuideParam_Triangle_Offset_Left = xHud_GetSerializedProperty("GuideParam_Triangle_Offset_Left");
-            GuideParam_Triangle_Offset_Right = xHud_GetSerializedProperty("GuideParam_Triangle_Offset_Right");
-            GuideParam_CenterPointSize = xHud_GetSerializedProperty("GuideParam_CenterPointSize");
+            #region Pool - Sound
+            sp_pool_sounder = serializedObject.FindProperty(nameof(XHud_Manager.pool_sounder));
+            sp_pool_sounder_count = serializedObject.FindProperty(nameof(XHud_Manager.pool_sounder_count));
+            sp_global_volume = serializedObject.FindProperty(nameof(XHud_Manager.global_volume));
+            sp_global_volume_mute = serializedObject.FindProperty(nameof(XHud_Manager.global_volume_mute));
+            #endregion
 
-            GuideParam_IShape_TopHeight = xHud_GetSerializedProperty("GuideParam_IShape_TopHeight");
-            GuideParam_IShape_BottomHeight = xHud_GetSerializedProperty("GuideParam_IShape_BottomHeight");
-            GuideParam_IShape_Offset_Left = xHud_GetSerializedProperty("GuideParam_IShape_Offset_Left");
-            GuideParam_IShape_Offset_Right = xHud_GetSerializedProperty("GuideParam_IShape_Offset_Right");
+            #region InstanceMode
+            sp_use_instance = serializedObject.FindProperty(nameof(XHud_Manager.use_instance));
+            #endregion
 
-            Crc_Lib_Name = xHud_GetSerializedProperty("Crc_Lib_Name");
-            Rec_Lib_Name = xHud_GetSerializedProperty("Rec_Lib_Name");
+            #region SafeFrame
+            sp_sf_structure_displayer = serializedObject.FindProperty(nameof(XHud_Manager.sf_structure_displayer));
+            sp_sf_canvas_scaler_screen_size = serializedObject.FindProperty(nameof(XHud_Manager.sf_canvas_scaler_screen_size));
+            sp_sf_safeframe = serializedObject.FindProperty(nameof(XHud_Manager.sf_safeframe));
+            sp_sf_mark_size = serializedObject.FindProperty(nameof(XHud_Manager.sf_mark_size));
+            sp_sf_color_layout_anchor_mark = serializedObject.FindProperty(nameof(XHud_Manager.sf_color_layout_anchor_mark));
+            sp_sf_color_center_mark = serializedObject.FindProperty(nameof(XHud_Manager.sf_color_center_mark));
+            sp_sf_color_frame_line = serializedObject.FindProperty(nameof(XHud_Manager.sf_color_frame_line));
+            sp_sf_color_seperater_line = serializedObject.FindProperty(nameof(XHud_Manager.sf_color_seperater_line));
+            sp_sf_safe_frame_line_width = serializedObject.FindProperty(nameof(XHud_Manager.sf_safe_frame_line_width));
+            sp_sf_line_margins = serializedObject.FindProperty(nameof(XHud_Manager.sf_line_margins));
+            sp_sf_seperater_length = serializedObject.FindProperty(nameof(XHud_Manager.sf_seperater_length));
+            sp_sf_center_mark_length = serializedObject.FindProperty(nameof(XHud_Manager.sf_center_mark_length));
+            sp_sf_center_mark_width = serializedObject.FindProperty(nameof(XHud_Manager.sf_center_mark_width));
+            sp_sf_center_mark_distance = serializedObject.FindProperty(nameof(XHud_Manager.sf_center_mark_distance));
+            sp_sf_use = serializedObject.FindProperty(nameof(XHud_Manager.sf_use));
+            #endregion
 
-            ElementVisualPlacer = xHud_GetSerializedProperty("ElementVisualPlacer");
-            PrimtiveID_LabelLine_Height = xHud_GetSerializedProperty("PrimtiveID_LabelLine_Height");
-            PrimtiveID_LabelLine_Color = xHud_GetSerializedProperty("PrimtiveID_LabelLine_Color");
-            PrimtiveID_LabelFont_Size = xHud_GetSerializedProperty("PrimtiveID_LabelFont_Size");
-            PrimtiveID_LabelFont_Color = xHud_GetSerializedProperty("PrimtiveID_LabelFont_Color");
+            #region Mouse
+            sp_mos_custom_cursor = serializedObject.FindProperty(nameof(XHud_Manager.mos_custom_cursor));
+            sp_mos_mouse_cursor = serializedObject.FindProperty(nameof(XHud_Manager.mos_mouse_cursor));
+            #endregion
+
+            #region Transition
+            sp_trans_custom_transition = serializedObject.FindProperty(nameof(XHud_Manager.trans_custom_transition));
+            sp_trans_transition_controller = serializedObject.FindProperty(nameof(XHud_Manager.trans_transition_controller));
+            #endregion
+
+            #region Font
+            sp_ft_font_size_multiply = serializedObject.FindProperty(nameof(XHud_Manager.ft_font_size_multiply));
+            #endregion
+
+            #region RMS 
+            sp_rms_enabled = serializedObject.FindProperty(nameof(XHud_Manager.rms_enabled));
+            sp_rms_nodes = serializedObject.FindProperty(nameof(XHud_Manager.rms_nodes));
+            sp_rms_current_solution = serializedObject.FindProperty(nameof(XHud_Manager.rms_current_solution));
+            #endregion
+
+            #region Theme
+            sp_theme_color_primary = serializedObject.FindProperty(nameof(XHud_Manager.theme_color_primary));
+            sp_theme_color_group = serializedObject.FindProperty(nameof(XHud_Manager.theme_color_group));
+            sp_theme_color_sepline = serializedObject.FindProperty(nameof(XHud_Manager.theme_color_sepline));
+            sp_theme_solution_primary = serializedObject.FindProperty(nameof(XHud_Manager.theme_solution_primary));
+            sp_theme_solution_group = serializedObject.FindProperty(nameof(XHud_Manager.theme_solution_group));
+            sp_theme_solution_sepline = serializedObject.FindProperty(nameof(XHud_Manager.theme_solution_sepline));
+            #endregion
+
+            #region HumanRatioRefer
+            sp_hmr_physics_screen_size = serializedObject.FindProperty(nameof(XHud_Manager.hmr_physics_screen_size));
+            sp_hmr_reference_image = serializedObject.FindProperty(nameof(XHud_Manager.hmr_reference_image));
+            sp_hmr_use_ratio_reference = serializedObject.FindProperty(nameof(XHud_Manager.hmr_use_ratio_reference));
+            sp_hmr_ratio_reference_is_part = serializedObject.FindProperty(nameof(XHud_Manager.hmr_ratio_reference_is_part));
+            sp_hmr_reference_image_color = serializedObject.FindProperty(nameof(XHud_Manager.hmr_reference_image_color));
+            sp_hmr_res_full = serializedObject.FindProperty(nameof(XHud_Manager.hmr_res_full));
+            sp_hmr_res_part = serializedObject.FindProperty(nameof(XHud_Manager.hmr_res_part));
+            sp_hmr_refer_shape_ratio_size = serializedObject.FindProperty(nameof(XHud_Manager.hmr_refer_shape_ratio_size));
+            sp_hmr_refer_shape_ratio_tolerance = serializedObject.FindProperty(nameof(XHud_Manager.hmr_refer_shape_ratio_tolerance));
+            #endregion
         }
         #endregion
     }

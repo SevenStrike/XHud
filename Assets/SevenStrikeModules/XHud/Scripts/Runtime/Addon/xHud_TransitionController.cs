@@ -22,6 +22,7 @@ namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XGUI.Runtime;
     using System;
+    using System.Buffers.Text;
     using System.Collections;
     using UnityEngine;
     using UnityEngine.Events;
@@ -35,124 +36,176 @@ namespace SevenStrikeModules.XHud
 
     public class XHud_TransitionController : MonoBehaviour
     {
+        #region 字段 - 转场组件
         /// <summary>
         /// 转场图形组件
         /// </summary>
-        public Image TransitionImage;
+        public Image transition_image;
         /// <summary>
-        /// 转场-材质
+        /// 转场材质
         /// </summary>
-        public Material TransitionMat;
+        public Material transition_mat;
+        #endregion
+
+        #region 字段 - 转场模式与状态
         /// <summary>
         /// 转场模式
         /// </summary>
-        public TransitionMode Mode;
+        public TransitionMode mode;
         /// <summary>
         /// 转场模式开关
         /// </summary>
-        public bool ModeSwitch;
+        public bool mode_switch;
         /// <summary>
         /// 转场耗时
         /// </summary>
-        public float TransitionTime = 0.035f;
+        public float transition_time = 0.035f;
         /// <summary>
         /// 转场状态开关
         /// </summary>
-        public bool IsTransiting;
-        /// <summary>
-        /// 范围量程
-        /// </summary>
-        [Range(0, 1)]
-        public float TransitionProgress;
-        /// <summary>
-        /// 转场效果名称
-        /// </summary>
-        public string TransitionName;
-        /// <summary>
-        /// 当前帧
-        /// </summary>
-        public int CurrentFrame;
-        [SerializeField]
-        /// <summary>
-        /// 按键可用
-        /// </summary>
-        public bool UseKeyControl;
-        [SerializeField]
-        /// <summary>
-        /// 水平翻转
-        /// </summary>
-        public bool Flip_Hor;
-        [SerializeField]
-        /// <summary>
-        /// 垂直翻转
-        /// </summary>
-        public bool Flip_Ver;
-
-        [SerializeField]
-        public bool DebugState;
-        public float TransitionAlpha = 1;
-        public Color TransitionOverlayColor;
-
-        [Range(0, 1)]
-        /// <summary>
-        /// 接近转场开始后的帧百分比
-        /// </summary>
-        public float LimiteFramePer_Start;
-        [Range(0, 1)]
-        /// <summary>
-        /// 接近转场结束时的帧百分比
-        /// </summary>
-        public float LimiteFramePer_End;
-
+        public bool is_transiting;
         /// <summary>
         /// 转场状态接近结束开关
         /// </summary>
-        public bool IsTransiting_WithEnd;
+        public bool is_transiting_with_end;
         /// <summary>
         /// 转场状态接近开始开关
         /// </summary>
-        public bool IsTransiting_WithStart;
+        public bool is_transiting_with_start;
+        #endregion
 
+        #region 字段 - 转场进度
+        /// <summary>
+        /// 范围量程（0 到 1）
+        /// </summary>
+        [Range(0, 1)]
+        public float transition_progress;
+        /// <summary>
+        /// 当前帧
+        /// </summary>
+        public int current_frame;
+        /// <summary>
+        /// 接近转场开始后的帧百分比
+        /// </summary>
+        [Range(0, 1)]
+        public float limite_frame_per_start;
+        /// <summary>
+        /// 接近转场结束时的帧百分比
+        /// </summary>
+        [Range(0, 1)]
+        public float limite_frame_per_end;
+        #endregion
+
+        #region 字段 - 转场外观
+        /// <summary>
+        /// 转场效果名称
+        /// </summary>
+        public string transition_name;
+        /// <summary>
+        /// 转场透明度
+        /// </summary>
+        public float transition_alpha = 1;
+        /// <summary>
+        /// 转场叠加颜色
+        /// </summary>
+        public Color transition_overlay_color;
+        #endregion
+
+        #region 字段 - 翻转与按键控制
+        /// <summary>
+        /// 按键可用
+        /// </summary>
+        [SerializeField]
+        public bool use_key_control;
+        /// <summary>
+        /// 水平翻转
+        /// </summary>
+        [SerializeField]
+        public bool flip_hor;
+        /// <summary>
+        /// 垂直翻转
+        /// </summary>
+        [SerializeField]
+        public bool flip_ver;
+        #endregion
+
+        #region 字段 - 调试
+        /// <summary>
+        /// 调试开关
+        /// </summary>
+        [SerializeField]
+        public bool debug_state;
+        #endregion
+
+        #region 字段 - 预览与按键
         /// <summary>
         /// 用于预览的转场节点
         /// </summary>
-        public XHud_LibraryArg_Transition CurrentTransitionNode = new XHud_LibraryArg_Transition();
-
-        public KeyCode TransitionPlayKey = KeyCode.T;
-        public KeyCode TransitionFlip_H_Key = KeyCode.H;
-        public KeyCode TransitionFlip_V_Key = KeyCode.V;
-        public KeyCode TransitionMod_Key = KeyCode.M;
+        public XHud_LibraryArg_Transition current_transition_node = new XHud_LibraryArg_Transition();
+        /// <summary>
+        /// 转场播放按键
+        /// </summary>
+        public KeyCode transition_play_key = KeyCode.T;
+        /// <summary>
+        /// 水平翻转按键
+        /// </summary>
+        public KeyCode transition_flip_h_key = KeyCode.H;
+        /// <summary>
+        /// 垂直翻转按键
+        /// </summary>
+        public KeyCode transition_flip_v_key = KeyCode.V;
+        /// <summary>
+        /// 转场模式切换按键
+        /// </summary>
+        public KeyCode transition_mode_key = KeyCode.M;
+        #endregion
 
         /// <summary>
         /// 转场中
         /// </summary>
-        public UnityAction<float, Texture2D> On_InTransition;
-
+        public UnityAction<float, Texture2D> on_InTransition;
         /// <summary>
         /// 转场开始
         /// </summary>
-        public UnityAction On_TansitingStart;
-
+        public UnityAction on_TansitingStart;
         /// <summary>
         /// 转场完成
         /// </summary>
-        public UnityAction On_TansitingComplete;
-
+        public UnityAction on_TansitingComplete;
         /// <summary>
         /// 接近首帧极限时
         /// </summary>
-        public UnityAction On_LimiteStartFrame;
-
+        public UnityAction on_LimiteStartFrame;
         /// <summary>
         /// 接近尾帧极限时
         /// </summary>
-        public UnityAction On_LimiteEndFrame;
+        public UnityAction on_LimiteEndFrame;
 
+        #region 折叠
         public bool fold_options = true;
         public bool fold_state = true;
         public bool fold_params = true;
         public bool fold_key = true;
         public bool fold_based = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_options = state;
+            fold_state = state;
+            fold_params = state;
+            fold_key = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool options = true, bool state = true, bool param = true, bool key = true, bool based = true)
+        {
+            fold_options = options;
+            fold_state = state;
+            fold_params = param;
+            fold_key = key;
+            fold_based = based;
+        }
+        #endregion
 
         void Start()
         {
@@ -161,32 +214,32 @@ namespace SevenStrikeModules.XHud
 
         private void InitialMaterial()
         {
-            TransitionMat = new Material(TransitionMat);
-            TransitionMat.name = "RuntimeTransitionMat";
-            TransitionImage.material = TransitionMat;
+            transition_mat = new Material(transition_mat);
+            transition_mat.name = "RuntimeTransitionMat";
+            transition_image.material = transition_mat;
         }
 
         void Update()
         {
             TransitionUpdate();
 
-            if (UseKeyControl)
+            if (use_key_control)
             {
-                if (Input.GetKeyDown(TransitionPlayKey))
+                if (Input.GetKeyDown(transition_play_key))
                 {
                     TransitionPlay();
                 }
-                if (Input.GetKeyDown(TransitionFlip_H_Key))
+                if (Input.GetKeyDown(transition_flip_h_key))
                 {
-                    Transition_Set_Flip_H(!Flip_Hor);
+                    Transition_Set_Flip_H(!flip_hor);
                 }
-                if (Input.GetKeyDown(TransitionFlip_V_Key))
+                if (Input.GetKeyDown(transition_flip_v_key))
                 {
-                    Transition_Set_Flip_V(!Flip_Ver);
+                    Transition_Set_Flip_V(!flip_ver);
                 }
-                if (Input.GetKeyDown(TransitionMod_Key))
+                if (Input.GetKeyDown(transition_mode_key))
                 {
-                    Transition_Set_Mode(!ModeSwitch);
+                    Transition_Set_Mode(!mode_switch);
                 }
             }
         }
@@ -208,14 +261,14 @@ namespace SevenStrikeModules.XHud
         /// <param name="time"></param>
         public void TransitionPlay_Custom(TransitionMode mode, string name, float time)
         {
-            if (IsTransiting)
+            if (is_transiting)
             {
                 Debug.Log("正在转场中...请等待当前转场动作结束！");
                 return;
             }
 
-            XHud_LibraryArg_Transition node = XHud_Manager.Instance.Hud_TransitionLib.TransitionLibrary_Get(name);
-            CurrentTransitionNode = node;
+            XHud_LibraryArg_Transition node = XHud_Manager.instance.library_transitions.TransitionLibrary_Get(name);
+            current_transition_node = node;
             if (mode == TransitionMode.入场)
             {
                 Transition_Set_ChannelInvert(false);
@@ -232,16 +285,16 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void TransitionPlay()
         {
-            if (IsTransiting)
+            if (is_transiting)
             {
                 Debug.Log("正在转场中...请等待当前转场动作结束！");
                 return;
             }
 
-            if (Mode == TransitionMode.入场)
+            if (mode == TransitionMode.入场)
             {
                 Transition_Set_ChannelInvert(false);
-                if (DebugState)
+                if (debug_state)
                 {
                     XGUI_Utilitys.Console("XHud - 转场器通知", "开始转场 -> 入场！", XGUIMsgState.通知);
                 }
@@ -249,13 +302,13 @@ namespace SevenStrikeModules.XHud
             else
             {
                 Transition_Set_ChannelInvert(true);
-                if (DebugState)
+                if (debug_state)
                 {
                     XGUI_Utilitys.Console("XHud - 转场器通知", "开始转场 -> 出场！", XGUIMsgState.通知);
                 }
             }
 
-            StartCoroutine(TransitionPlayer(CurrentTransitionNode, TransitionTime));
+            StartCoroutine(TransitionPlayer(current_transition_node, transition_time));
         }
 
         /// <summary>
@@ -264,7 +317,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="mode"></param>
         public void TransitionPlay(TransitionMode mode)
         {
-            if (IsTransiting)
+            if (is_transiting)
             {
                 Debug.Log("正在转场中...请等待当前转场动作结束！");
                 return;
@@ -281,7 +334,7 @@ namespace SevenStrikeModules.XHud
                 Debug.Log("开始转场 -> 出场");
             }
 
-            StartCoroutine(TransitionPlayer(CurrentTransitionNode, TransitionTime));
+            StartCoroutine(TransitionPlayer(current_transition_node, transition_time));
         }
 
         /// <summary>
@@ -292,36 +345,36 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         IEnumerator TransitionPlayer(XHud_LibraryArg_Transition node, float time)
         {
-            int frameLimite_start = (int)Mathf.Floor(CurrentTransitionNode.Frames.Count * LimiteFramePer_Start);
-            int frameLimite_end = (int)Mathf.Floor(CurrentTransitionNode.Frames.Count * LimiteFramePer_End);
+            int frameLimite_start = (int)Mathf.Floor(current_transition_node.frames.Count * limite_frame_per_start);
+            int frameLimite_end = (int)Mathf.Floor(current_transition_node.frames.Count * limite_frame_per_end);
 
-            IsTransiting = true;
-            if (On_TansitingStart != null)
-                On_TansitingStart();
-            for (int i = 0; i < node.Frames.Count; i += CurrentTransitionNode.SkipFrame)
+            is_transiting = true;
+            if (on_TansitingStart != null)
+                on_TansitingStart();
+            for (int i = 0; i < node.frames.Count; i += current_transition_node.skip_frame)
             {
                 if (i > frameLimite_start && i < frameLimite_end)
                 {
-                    IsTransiting_WithStart = true;
-                    if (On_LimiteStartFrame != null)
-                        On_LimiteStartFrame();
+                    is_transiting_with_start = true;
+                    if (on_LimiteStartFrame != null)
+                        on_LimiteStartFrame();
                 }
                 if (i > frameLimite_end)
                 {
-                    IsTransiting_WithEnd = true;
-                    if (On_LimiteEndFrame != null)
-                        On_LimiteEndFrame();
+                    is_transiting_with_end = true;
+                    if (on_LimiteEndFrame != null)
+                        on_LimiteEndFrame();
                 }
-                if (On_InTransition != null)
-                    On_InTransition(i, node.Frames[i]);
-                Transition_Set_MaskTexture(node.Frames[i]);
+                if (on_InTransition != null)
+                    on_InTransition(i, node.frames[i]);
+                Transition_Set_MaskTexture(node.frames[i]);
                 yield return new WaitForSecondsRealtime(time);
             }
-            IsTransiting = false;
-            IsTransiting_WithStart = false;
-            IsTransiting_WithEnd = false;
-            if (On_TansitingComplete != null)
-                On_TansitingComplete();
+            is_transiting = false;
+            is_transiting_with_start = false;
+            is_transiting_with_end = false;
+            if (on_TansitingComplete != null)
+                on_TansitingComplete();
 
         }
 
@@ -331,7 +384,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="tex"></param>
         public void Transition_Set_MaskTexture(Texture2D tex)
         {
-            TransitionMat.SetTexture("_Mask", tex);
+            transition_mat.SetTexture("_Mask", tex);
         }
 
         /// <summary>
@@ -340,7 +393,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="tex"></param>
         public void Transition_Set_BaseTexture(Texture2D tex)
         {
-            TransitionMat.SetTexture("_Texture", tex);
+            transition_mat.SetTexture("_Texture", tex);
         }
 
         /// <summary>
@@ -349,7 +402,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="col"></param>
         public void Transition_Set_OverlayColor(Color col)
         {
-            TransitionOverlayColor = col;
+            transition_overlay_color = col;
         }
 
         /// <summary>
@@ -357,7 +410,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void Transition_Update_OverlayColor()
         {
-            TransitionMat.SetColor("_Color", TransitionOverlayColor);
+            transition_mat.SetColor("_Color", transition_overlay_color);
         }
 
         /// <summary>
@@ -366,7 +419,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="val"></param>
         public void Transition_Set_Alpha(float val)
         {
-            TransitionAlpha = val;
+            transition_alpha = val;
         }
 
         /// <summary>
@@ -375,7 +428,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="val"></param>
         public void Transition_Update_Alpha()
         {
-            TransitionMat.SetFloat("_Alpha", TransitionAlpha);
+            transition_mat.SetFloat("_Alpha", transition_alpha);
         }
 
         /// <summary>
@@ -385,9 +438,9 @@ namespace SevenStrikeModules.XHud
         public void Transition_Set_ChannelInvert(bool state)
         {
             if (state)
-                TransitionMat.SetFloat("_Invert", 1);
+                transition_mat.SetFloat("_Invert", 1);
             else
-                TransitionMat.SetFloat("_Invert", 0);
+                transition_mat.SetFloat("_Invert", 0);
 
         }
 
@@ -398,11 +451,11 @@ namespace SevenStrikeModules.XHud
         /// <param name="flip_v">垂直</param>
         public void Transition_Set_Flip(bool flip_h, bool flip_v)
         {
-            Flip_Hor = flip_h;
-            Flip_Ver = flip_v;
+            flip_hor = flip_h;
+            flip_ver = flip_v;
 
-            TransitionMat.SetInt("_Flip_Hor", Flip_Hor ? 1 : 0);
-            TransitionMat.SetInt("_Flip_Ver", Flip_Ver ? 1 : 0);
+            transition_mat.SetInt("_Flip_Hor", flip_hor ? 1 : 0);
+            transition_mat.SetInt("_Flip_Ver", flip_ver ? 1 : 0);
         }
 
         /// <summary>
@@ -411,8 +464,8 @@ namespace SevenStrikeModules.XHud
         /// <param name="flip_toggle">垂直</param>
         public void Transition_Set_Flip_V(bool flip)
         {
-            Flip_Ver = flip;
-            TransitionMat.SetInt("_Flip_Ver", Flip_Ver ? 1 : 0);
+            flip_ver = flip;
+            transition_mat.SetInt("_Flip_Ver", flip_ver ? 1 : 0);
         }
 
         /// <summary>
@@ -421,8 +474,8 @@ namespace SevenStrikeModules.XHud
         /// <param name="flip_toggle">水平</param>
         public void Transition_Set_Flip_H(bool flip)
         {
-            Flip_Hor = flip;
-            TransitionMat.SetInt("_Flip_Hor", Flip_Hor ? 1 : 0);
+            flip_hor = flip;
+            transition_mat.SetInt("_Flip_Hor", flip_hor ? 1 : 0);
         }
 
         /// <summary>
@@ -431,14 +484,14 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState">如果为True就是出场，否则就是入场</param>
         public void Transition_Set_Mode(bool state)
         {
-            ModeSwitch = state;
-            if (ModeSwitch)
+            mode_switch = state;
+            if (mode_switch)
             {
-                Mode = TransitionMode.出场;
+                mode = TransitionMode.出场;
             }
             else
             {
-                Mode = TransitionMode.入场;
+                mode = TransitionMode.入场;
             }
         }
     }

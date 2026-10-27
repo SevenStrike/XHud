@@ -45,7 +45,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>仅缩放斜线位置与长度，线条粗细、圆点尺寸、两组斜线间距不缩放。</description></item>
         /// </list>
         /// </summary>
-        private const float AIMER_SIZE = 2f;
+        private const float aimer_size = 2f;
         #endregion
 
         #region 字段 - 状态
@@ -56,7 +56,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>默认禁用。</description></item>
         /// </list>
         /// </summary>
-        private static bool isEnabled = false;
+        private static bool is_enabled = false;
         #endregion
 
         #region 生命周期
@@ -87,7 +87,7 @@ namespace SevenStrikeModules.XHud.Editor
         private static void OnSceneGUI(SceneView sceneView)
         {
             // 如果功能被禁用，不处理任何事件
-            if (!isEnabled) return;
+            if (!is_enabled) return;
 
             DrawRect(sceneView);
             sceneView.Repaint();
@@ -121,7 +121,7 @@ namespace SevenStrikeModules.XHud.Editor
             const float dotRadius = 2.5f;         // 中心圆点半径
 
             // 按整体缩放系数换算斜线位置与长度
-            float s = AIMER_SIZE;
+            float s = aimer_size;
             float innerEnd = baseInnerEnd * s;
             float outerEnd = baseOuterEnd * s;
 
@@ -180,9 +180,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="enabled">是否启用标识显示。</param>
         private static void SetEnabled(bool enabled)
         {
-            isEnabled = enabled;
+            is_enabled = enabled;
 
-            if (!isEnabled)
+            if (!is_enabled)
             {
                 themecolor = Color.clear;
             }
@@ -193,7 +193,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>当前是否启用标识显示。</returns>
         public static bool GetEnabled()
         {
-            return isEnabled;
+            return is_enabled;
         }
         /// <summary>
         /// 设置启用状态及标识外观参数。
@@ -225,7 +225,7 @@ namespace SevenStrikeModules.XHud.Editor
         public static void reload()
         {
             themecolor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
-            isEnabled = XHud_Dashboard.utilitys_get_util_screeen_aimer();
+            is_enabled = XHud_Dashboard.utilitys_get_util_screeen_aimer();
         }
     }
 }

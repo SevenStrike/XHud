@@ -42,13 +42,13 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 在 <see cref="OnEnable"/> 中缓存。
         /// </summary>
-        private XHud_Module_TmpText BaseScript;
+        private XHud_Module_TmpText base_script;
         /// <summary>
         /// XHud 管理器实例。
         /// <para/>
         /// 用于访问文字样式库。
         /// </summary>
-        private XHud_Manager HudManager;
+        private XHud_Manager hud_manager;
         #endregion
 
         #region 字段 - 折叠状态
@@ -63,167 +63,167 @@ namespace SevenStrikeModules.XHud.Editor
         /// 标识名称。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_Indicator;
+        private SerializedProperty sp_indicator;
         /// <summary>
         /// 样式名称。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_StyleName;
+        private SerializedProperty sp_style_name;
         /// <summary>
         /// 尺寸全局联动开关。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_SyncGlobalFontSize;
+        private SerializedProperty sp_sync_global_font_size;
         /// <summary>
         /// 实时匹配库开关。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_StyleLibSynching;
+        private SerializedProperty sp_style_library_synching;
         /// <summary>
         /// 文字样式信息数据。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_TextStyleInfo;
+        private SerializedProperty sp_text_style_info;
         /// <summary>
         /// 文字内容。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_Text, sp_TextColorOwner;
+        private SerializedProperty sp_Text, sp_text_color_owner;
         /// <summary>
         /// 富文本支持。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_rich;
+        private SerializedProperty sp_tmptext_tmp_rich;
         /// <summary>
         /// 包裹模式。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_contentwrap;
+        private SerializedProperty sp_tmptext_tmp_contentwrap;
         /// <summary>
         /// 溢出模式。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_overflow;
+        private SerializedProperty sp_tmptext_tmp_overflow;
         /// <summary>
         /// 样式。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_style;
+        private SerializedProperty sp_tmptext_tmp_style;
         /// <summary>
         /// 内容锚点。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_anchor;
+        private SerializedProperty sp_tmptext_tmp_anchor;
         /// <summary>
         /// 字体资源。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_font;
+        private SerializedProperty sp_tmptext_tmp_font;
         /// <summary>
         /// 尺寸。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_size;
+        private SerializedProperty sp_tmptext_tmp_size;
         /// <summary>
         /// 字符间距。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_space_character;
+        private SerializedProperty sp_tmptext_tmp_space_character;
         /// <summary>
         /// 单词间距。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_space_word;
+        private SerializedProperty sp_tmptext_tmp_space_word;
         /// <summary>
         /// 行高间距。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_space_lineheight;
+        private SerializedProperty sp_tmptext_space_lineheight;
         /// <summary>
         /// 段落间距。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_space_paragraph;
+        private SerializedProperty sp_tmptext_space_paragraph;
         /// <summary>
         /// 包裹比例。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_WrappingRatios;
+        private SerializedProperty sp_tmptext_tmp_wrapping_ratios;
         /// <summary>
         /// 内容边距。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_contentmargin;
+        private SerializedProperty sp_tmptext_tmp_content_margin;
         /// <summary>
         /// 字体颜色。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_color;
+        private SerializedProperty sp_tmptext_tmp_color;
         /// <summary>
         /// 自适应尺寸。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_EnableAutoSizing;
+        private SerializedProperty sp_tmptext_tmp_enable_auto_sizing;
         /// <summary>
         /// 自适应最小尺寸。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_FontSizeMin;
+        private SerializedProperty sp_tmptext_tmp_font_size_min;
         /// <summary>
         /// 自适应最大尺寸。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_FontSizeMax;
+        private SerializedProperty sp_tmptext_tmp_font_size_max;
         /// <summary>
         /// 最大字符宽度。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_CharWidthMaxAdj;
+        private SerializedProperty sp_tmptext_tmp_char_width_max_adj;
         /// <summary>
         /// 最大行高。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_tmp_LineSpacingMax;
+        private SerializedProperty sp_tmptext_tmp_line_spacing_max;
         /// <summary>
         /// 渐变色 - 主色。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_gra_A;
+        private SerializedProperty sp_tmptext_gra_a;
         /// <summary>
         /// 渐变色 - 副色。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_gra_B;
+        private SerializedProperty sp_tmptext_gra_b;
         /// <summary>
         /// 渐变色 - 次色。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_gra_C;
+        private SerializedProperty sp_tmptext_gra_c;
         /// <summary>
         /// 渐变色 - 尾色。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_gra_D;
+        private SerializedProperty sp_tmptext_gra_d;
         /// <summary>
         /// 渐变色 - 翻转。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_gra_Invert;
+        private SerializedProperty sp_tmptext_gra_invert;
         /// <summary>
         /// 渐变色 - 是否启用。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_gra_Used;
+        private SerializedProperty sp_tmptext_gra_used;
         /// <summary>
         /// 渐变色 - 模式。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_gra_ColorMode;
+        private SerializedProperty sp_tmptext_gra_color_mode;
         /// <summary>
         /// 渐变色 - 模式名称。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_gra_ColorModeName;
+        private SerializedProperty sp_tmptext_gra_color_mode_name;
         /// <summary>
         /// 渐变色 - 模式名称索引。
         /// </summary>
@@ -233,87 +233,87 @@ namespace SevenStrikeModules.XHud.Editor
         /// 库同步 - 对齐。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_align;
+        private SerializedProperty sp_lib_style_effect_align;
         /// <summary>
         /// 库同步 - 字体。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_font;
+        private SerializedProperty sp_lib_style_effect_font;
         /// <summary>
         /// 库同步 - 样式。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_style;
+        private SerializedProperty sp_lib_style_effect_style;
         /// <summary>
         /// 库同步 - 尺寸。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_size;
+        private SerializedProperty sp_lib_style_effect_size;
         /// <summary>
         /// 库同步 - 颜色。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_color;
+        private SerializedProperty sp_lib_style_effect_color;
         /// <summary>
         /// 库同步 - 富文本。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_rich;
+        private SerializedProperty sp_lib_style_effect_rich;
         /// <summary>
         /// 库同步 - 包裹。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_wrap;
+        private SerializedProperty sp_lib_style_effect_wrap;
         /// <summary>
         /// 库同步 - 包裹比例。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_wrapratio;
+        private SerializedProperty sp_lib_style_effect_wrapratio;
         /// <summary>
         /// 库同步 - 溢出。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_overflow;
+        private SerializedProperty sp_lib_style_effect_overflow;
         /// <summary>
         /// 库同步 - 边距。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_margin;
+        private SerializedProperty sp_lib_style_effect_margin;
         /// <summary>
         /// 库同步 - 间距。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_space;
+        private SerializedProperty sp_lib_style_effect_space;
         /// <summary>
         /// 库同步 - 渐变色。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_gradientcolor;
+        private SerializedProperty sp_lib_style_effect_gradientcolor;
         /// <summary>
         /// 库同步 - 自适应尺寸。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_autosizing;
+        private SerializedProperty sp_lib_style_effect_autosizing;
         /// <summary>
         /// 库同步 - 射线检测。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_raycast;
+        private SerializedProperty sp_lib_style_effect_raycast;
         /// <summary>
         /// 库同步 - 遮罩。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_LibStyle_Effect_maskable;
+        private SerializedProperty sp_lib_style_effect_maskable;
         /// <summary>
         /// 射线检测。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_Raycast;
+        private SerializedProperty sp_raycast;
         /// <summary>
         /// 遮罩。
         /// </summary>
         [SerializeField]
-        private SerializedProperty sp_Maskable;
+        private SerializedProperty sp_maskable;
         #endregion
 
         #region 字段 - 图标
@@ -410,9 +410,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 当前 Inspector 选中的所有目标组件缓存。
         /// </summary>
-        private XHud_Module_TmpText[] SelectedObjects;
+        private XHud_Module_TmpText[] selected_objects;
         /// <summary>
-        /// 缓存当前 Inspector 选中的所有目标组件到 <see cref="SelectedObjects"/>。
+        /// 缓存当前 Inspector 选中的所有目标组件到 <see cref="selected_objects"/>。
         /// <para/>
         /// 多选时逐个转换，单选时只填充一个元素。
         /// </summary>
@@ -420,17 +420,17 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new XHud_Module_TmpText[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new XHud_Module_TmpText[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (XHud_Module_TmpText)t;
+                    selected_objects[i] = (XHud_Module_TmpText)t;
                 }
             }
             else
             {
-                SelectedObjects = new XHud_Module_TmpText[targets.Length];
-                SelectedObjects[0] = (XHud_Module_TmpText)target;
+                selected_objects = new XHud_Module_TmpText[targets.Length];
+                selected_objects[0] = (XHud_Module_TmpText)target;
             }
         }
         /// <summary>
@@ -439,9 +439,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>true 表示选中了多个组件</returns>
         private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }
@@ -468,11 +468,11 @@ namespace SevenStrikeModules.XHud.Editor
 
             XGUI.gui_icon(
                 rect: new Rect(r.x + (r.width / 2) - 30, r.y + (r.height / 2) - 40, 60, 60),
-                icon: clickselector_args[sp_TextColorOwner.enumValueIndex].btn_icon_r);
+                icon: clickselector_args[sp_text_color_owner.enumValueIndex].btn_icon_r);
 
             XGUI.gui_label(
                 rect: new Rect(r.x + (r.width / 2) - (r.width / 2), r.y + (r.height / 2) + 15, r.width, XGUI.GetSingleLineHeight()),
-                text: new GUIContent($"文字颜色接管者为：<color=#{h_color}> {tooltip_owner_names[sp_TextColorOwner.enumValueIndex]}</color>"),
+                text: new GUIContent($"文字颜色接管者为：<color=#{h_color}> {tooltip_owner_names[sp_text_color_owner.enumValueIndex]}</color>"),
                 text_color: Color.white,
                 size: XGUIFontSize.M,
                 clipping: TextClipping.Clip,
@@ -498,71 +498,72 @@ namespace SevenStrikeModules.XHud.Editor
         {
             base.OnEnable();
 
-            HudManager = XHud_Dashboard.get_manager();
+            hud_manager = XHud_Dashboard.get_manager();
 
-            BaseScript = (XHud_Module_TmpText)target;
+            base_script = (XHud_Module_TmpText)target;
 
             #region 获取序列化变量
             sp_RaycastTargetProp = serializedObject.FindProperty("m_RaycastTarget");
             sp_MaskableProp = serializedObject.FindProperty("m_Maskable");
 
-            sp_Indicator = serializedObject.FindProperty("Indicator");
-            sp_StyleName = serializedObject.FindProperty("StyleName");
-            sp_StyleLibSynching = serializedObject.FindProperty("StyleLibSynching");
-            sp_SyncGlobalFontSize = serializedObject.FindProperty("SyncGlobalFontSize");
-            sp_TextStyleInfo = serializedObject.FindProperty("TextStyleInfo");
+            sp_indicator = serializedObject.FindProperty(nameof(XHud_Module_TmpText.indicator));
+            sp_style_name = serializedObject.FindProperty(nameof(XHud_Module_TmpText.style_name));
+            sp_style_library_synching = serializedObject.FindProperty(nameof(XHud_Module_TmpText.style_library_synching));
+            sp_sync_global_font_size = serializedObject.FindProperty(nameof(XHud_Module_TmpText.sync_global_font_size));
+            sp_text_style_info = serializedObject.FindProperty(nameof(XHud_Module_TmpText.text_style_info));
             sp_Text = serializedObject.FindProperty("m_text");
-            sp_TextColorOwner = serializedObject.FindProperty("TextColorOwner");
+            sp_text_color_owner = serializedObject.FindProperty(nameof(XHud_Module_TmpText.text_color_owner));
 
-            sp_tmp_rich = sp_TextStyleInfo.FindPropertyRelative("tmp_rich");
-            sp_tmp_contentwrap = sp_TextStyleInfo.FindPropertyRelative("tmp_contentwrap");
-            sp_tmp_overflow = sp_TextStyleInfo.FindPropertyRelative("tmp_overflow");
-            sp_tmp_style = sp_TextStyleInfo.FindPropertyRelative("tmp_style");
-            sp_tmp_anchor = sp_TextStyleInfo.FindPropertyRelative("tmp_anchor");
-            sp_tmp_font = sp_TextStyleInfo.FindPropertyRelative("tmp_font");
-            sp_tmp_size = sp_TextStyleInfo.FindPropertyRelative("tmp_size");
-            sp_tmp_space_character = sp_TextStyleInfo.FindPropertyRelative("tmp_space_character");
-            sp_tmp_space_word = sp_TextStyleInfo.FindPropertyRelative("tmp_space_word");
-            sp_tmp_space_lineheight = sp_TextStyleInfo.FindPropertyRelative("tmp_space_lineheight");
-            sp_tmp_space_paragraph = sp_TextStyleInfo.FindPropertyRelative("tmp_space_paragraph");
-            sp_tmp_WrappingRatios = sp_TextStyleInfo.FindPropertyRelative("tmp_WrappingRatios");
-            sp_tmp_contentmargin = sp_TextStyleInfo.FindPropertyRelative("tmp_contentmargin");
-            sp_tmp_color = sp_TextStyleInfo.FindPropertyRelative("tmp_color");
-            sp_tmp_EnableAutoSizing = sp_TextStyleInfo.FindPropertyRelative("tmp_EnableAutoSizing");
-            sp_tmp_FontSizeMin = sp_TextStyleInfo.FindPropertyRelative("tmp_FontSizeMin");
-            sp_tmp_FontSizeMax = sp_TextStyleInfo.FindPropertyRelative("tmp_FontSizeMax");
-            sp_tmp_CharWidthMaxAdj = sp_TextStyleInfo.FindPropertyRelative("tmp_CharWidthMaxAdj");
-            sp_tmp_LineSpacingMax = sp_TextStyleInfo.FindPropertyRelative("tmp_LineSpacingMax");
+            sp_tmptext_tmp_rich = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_rich));
+            sp_tmptext_tmp_contentwrap = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_contentwrap));
+            sp_tmptext_tmp_overflow = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_overflow));
+            sp_tmptext_tmp_style = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_style));
+            sp_tmptext_tmp_anchor = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_anchor));
+            sp_tmptext_tmp_font = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_font));
+            sp_tmptext_tmp_size = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_size));
+            sp_tmptext_tmp_space_character = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_space_character));
+            sp_tmptext_tmp_space_word = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_space_word));
+            sp_tmptext_space_lineheight = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_space_lineheight));
+            sp_tmptext_space_paragraph = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_space_paragraph));
+            sp_tmptext_tmp_wrapping_ratios = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_wrapping_ratios));
+            sp_tmptext_tmp_content_margin = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_content_margin));
+            sp_tmptext_tmp_color = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_color));
+            sp_tmptext_tmp_enable_auto_sizing = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_enable_auto_sizing));
+            sp_tmptext_tmp_font_size_min = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_font_size_min));
+            sp_tmptext_tmp_font_size_max = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_font_size_max));
+            sp_tmptext_tmp_char_width_max_adj = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_char_width_max_adj));
+            sp_tmptext_tmp_line_spacing_max = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_line_spacing_max));
+
             //---------------------------------Tmp Text Gradient ---------------------------------//
-            sp_gra_A = sp_TextStyleInfo.FindPropertyRelative("gra_A");
-            sp_gra_B = sp_TextStyleInfo.FindPropertyRelative("gra_B");
-            sp_gra_C = sp_TextStyleInfo.FindPropertyRelative("gra_C");
-            sp_gra_D = sp_TextStyleInfo.FindPropertyRelative("gra_D");
-            sp_gra_Invert = sp_TextStyleInfo.FindPropertyRelative("gra_Invert");
-            sp_gra_Used = sp_TextStyleInfo.FindPropertyRelative("gra_Used");
-            sp_gra_ColorMode = sp_TextStyleInfo.FindPropertyRelative("gra_ColorMode");
-            sp_gra_ColorModeName = sp_TextStyleInfo.FindPropertyRelative("gra_ColorModeName");
-            sp_gra_ColorModeNameIndex = sp_TextStyleInfo.FindPropertyRelative("gra_ColorModeNameIndex");
+            sp_tmptext_gra_a = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_a));
+            sp_tmptext_gra_b = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_b));
+            sp_tmptext_gra_c = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_c));
+            sp_tmptext_gra_d = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_d));
+            sp_tmptext_gra_invert = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_invert));
+            sp_tmptext_gra_used = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_used));
+            sp_tmptext_gra_color_mode = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_color_mode));
+            sp_tmptext_gra_color_mode_name = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_color_mode_name));
 
             //---------------------------------LibraryToggle---------------------------------//
-            sp_LibStyle_Effect_align = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_align");
-            sp_LibStyle_Effect_font = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_font");
-            sp_LibStyle_Effect_style = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_style");
-            sp_LibStyle_Effect_size = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_size");
-            sp_LibStyle_Effect_color = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_color");
-            sp_LibStyle_Effect_rich = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_rich");
-            sp_LibStyle_Effect_wrap = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_wrap");
-            sp_LibStyle_Effect_wrapratio = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_wrapratio");
-            sp_LibStyle_Effect_overflow = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_overflow");
-            sp_LibStyle_Effect_margin = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_margin");
-            sp_LibStyle_Effect_space = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_space");
-            sp_LibStyle_Effect_gradientcolor = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_gradientcolor");
-            sp_LibStyle_Effect_autosizing = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_autosizing");
-            sp_LibStyle_Effect_raycast = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_raycast");
-            sp_LibStyle_Effect_maskable = sp_TextStyleInfo.FindPropertyRelative("LibStyle_Effect_maskable");
+            sp_lib_style_effect_align = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_align));
+            sp_lib_style_effect_font = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_font));
+            sp_lib_style_effect_style = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_style));
+            sp_lib_style_effect_size = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_size));
+            sp_lib_style_effect_color = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_color));
+            sp_lib_style_effect_rich = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_rich));
+            sp_lib_style_effect_wrap = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_wrap));
+            sp_lib_style_effect_wrapratio = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_wrapratio));
+            sp_lib_style_effect_overflow = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_overflow));
+            sp_lib_style_effect_margin = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_margin));
+            sp_lib_style_effect_space = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_space));
+            sp_lib_style_effect_gradientcolor = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_gradientcolor));
+            sp_lib_style_effect_autosizing = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_autosizing));
+            sp_lib_style_effect_raycast = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_raycast));
+            sp_lib_style_effect_maskable = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.lib_style_effect_maskable));
+
             //--------------------------------- Features ---------------------------------//
-            sp_Raycast = sp_TextStyleInfo.FindPropertyRelative("Raycast");
-            sp_Maskable = sp_TextStyleInfo.FindPropertyRelative("Maskable");
+            sp_raycast = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.raycast));
+            sp_maskable = sp_text_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.maskable));
             #endregion
 
             #region 获取图标
@@ -587,16 +588,16 @@ namespace SevenStrikeModules.XHud.Editor
 
             Targets_Get();
 
-            if (HudManager != null)
+            if (hud_manager != null)
             {
-                if (HudManager.Hud_TextStyleLibrary != null)
+                if (hud_manager.library_textstyles != null)
                 {
-                    if (string.IsNullOrEmpty(sp_StyleName.stringValue))
+                    if (string.IsNullOrEmpty(sp_style_name.stringValue))
                     {
-                        if (!HudManager.Hud_TextStyleLibrary.TextStyle_Library_IsEmpty())
+                        if (!hud_manager.library_textstyles.TextStyle_Library_IsEmpty())
                         {
-                            sp_StyleName.stringValue = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType.TmpText).Name;
-                            sp_StyleName.serializedObject.ApplyModifiedProperties();
+                            sp_style_name.stringValue = hud_manager.library_textstyles.TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType.TmpText).name;
+                            sp_style_name.serializedObject.ApplyModifiedProperties();
                         }
                     }
                 }
@@ -662,7 +663,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (!Targets_Selected())
             {
-                if (HudManager.Hud_TextStyleLibrary)
+                if (hud_manager.library_textstyles)
                 {
                     #region 将当前样式保存到字体库
                     if (XGUI.layout_button(
@@ -679,36 +680,36 @@ namespace SevenStrikeModules.XHud.Editor
 
                         ///---新建文字模版信息类
                         XHud_LibraryArg_TextStyle info = new XHud_LibraryArg_TextStyle();
-                        info.Type = xHud_TextType.TmpText;
-                        info.tmp_rich = sp_tmp_rich.boolValue;
-                        info.tmp_contentwrap = (TextWrappingModes)sp_tmp_contentwrap.enumValueIndex;
-                        info.tmp_overflow = (TextOverflowModes)sp_tmp_overflow.enumValueIndex;
-                        info.tmp_style = (FontStyles)sp_tmp_style.enumValueIndex;
-                        info.tmp_anchor = (TmpContentAnchor)sp_tmp_anchor.enumValueIndex;
-                        info.tmp_font = sp_tmp_font.objectReferenceValue as TMP_FontAsset;
-                        info.tmp_size = sp_tmp_size.floatValue;
-                        info.tmp_space_character = sp_tmp_space_character.floatValue;
-                        info.tmp_space_word = sp_tmp_space_word.floatValue;
-                        info.tmp_space_lineheight = sp_tmp_space_lineheight.floatValue;
-                        info.tmp_space_paragraph = sp_tmp_space_paragraph.floatValue;
-                        info.tmp_WrappingRatios = sp_tmp_WrappingRatios.floatValue;
-                        info.tmp_contentmargin = sp_tmp_contentmargin.vector4Value;
-                        info.tmp_color = sp_tmp_color.colorValue;
-                        info.tmp_EnableAutoSizing = sp_tmp_EnableAutoSizing.boolValue;
-                        info.tmp_FontSizeMin = sp_tmp_FontSizeMin.floatValue;
-                        info.tmp_FontSizeMax = sp_tmp_FontSizeMax.floatValue;
-                        info.tmp_CharWidthMaxAdj = sp_tmp_CharWidthMaxAdj.floatValue;
-                        info.tmp_LineSpacingMax = sp_tmp_LineSpacingMax.floatValue;
-                        info.gra_A = sp_gra_A.colorValue;
-                        info.gra_B = sp_gra_B.colorValue;
-                        info.gra_C = sp_gra_C.colorValue;
-                        info.gra_D = sp_gra_D.colorValue;
-                        info.gra_Invert = sp_gra_Invert.boolValue;
-                        info.gra_Used = sp_gra_Used.boolValue;
-                        info.gra_ColorMode = (ColorMode)sp_gra_ColorMode.enumValueIndex;
-                        info.gra_ColorModeName = sp_gra_ColorModeName.stringValue;
-                        info.Raycast = sp_Raycast.boolValue;
-                        info.Maskable = sp_Maskable.boolValue;
+                        info.type = xHud_TextType.TmpText;
+                        info.tmp_rich = sp_tmptext_tmp_rich.boolValue;
+                        info.tmp_contentwrap = (TextWrappingModes)sp_tmptext_tmp_contentwrap.enumValueIndex;
+                        info.tmp_overflow = (TextOverflowModes)sp_tmptext_tmp_overflow.enumValueIndex;
+                        info.tmp_style = (FontStyles)sp_tmptext_tmp_style.enumValueIndex;
+                        info.tmp_anchor = (TmpContentAnchor)sp_tmptext_tmp_anchor.enumValueIndex;
+                        info.tmp_font = sp_tmptext_tmp_font.objectReferenceValue as TMP_FontAsset;
+                        info.tmp_size = sp_tmptext_tmp_size.floatValue;
+                        info.tmp_space_character = sp_tmptext_tmp_space_character.floatValue;
+                        info.tmp_space_word = sp_tmptext_tmp_space_word.floatValue;
+                        info.tmp_space_lineheight = sp_tmptext_space_lineheight.floatValue;
+                        info.tmp_space_paragraph = sp_tmptext_space_paragraph.floatValue;
+                        info.tmp_wrapping_ratios = sp_tmptext_tmp_wrapping_ratios.floatValue;
+                        info.tmp_content_margin = sp_tmptext_tmp_content_margin.vector4Value;
+                        info.tmp_color = sp_tmptext_tmp_color.colorValue;
+                        info.tmp_enable_auto_sizing = sp_tmptext_tmp_enable_auto_sizing.boolValue;
+                        info.tmp_font_size_min = sp_tmptext_tmp_font_size_min.floatValue;
+                        info.tmp_font_size_max = sp_tmptext_tmp_font_size_max.floatValue;
+                        info.tmp_char_width_max_adj = sp_tmptext_tmp_char_width_max_adj.floatValue;
+                        info.tmp_line_spacing_max = sp_tmptext_tmp_line_spacing_max.floatValue;
+                        info.gra_a = sp_tmptext_gra_a.colorValue;
+                        info.gra_b = sp_tmptext_gra_b.colorValue;
+                        info.gra_c = sp_tmptext_gra_c.colorValue;
+                        info.gra_d = sp_tmptext_gra_d.colorValue;
+                        info.gra_invert = sp_tmptext_gra_invert.boolValue;
+                        info.gra_used = sp_tmptext_gra_used.boolValue;
+                        info.gra_color_mode = (ColorMode)sp_tmptext_gra_color_mode.enumValueIndex;
+                        info.gra_color_mode_name = sp_tmptext_gra_color_mode_name.stringValue;
+                        info.raycast = sp_raycast.boolValue;
+                        info.maskable = sp_maskable.boolValue;
 
                         Open_Hud_Library_TextStyle_Setter(info);
                     }
@@ -726,12 +727,12 @@ namespace SevenStrikeModules.XHud.Editor
                     width: 14,
                     height: 14))
                     {
-                        if (HudManager.Hud_TextStyleLibrary != null)
-                            EditorUtility.OpenPropertyEditor(HudManager.Hud_TextStyleLibrary);
+                        if (hud_manager.library_textstyles != null)
+                            EditorUtility.OpenPropertyEditor(hud_manager.library_textstyles);
                     }
                     #endregion
                 }
-                if (HudManager.Hud_TextStyleLibrary != null && !HudManager.Hud_TextStyleLibrary.TextStyle_Library_IsEmpty())
+                if (hud_manager.library_textstyles != null && !hud_manager.library_textstyles.TextStyle_Library_IsEmpty())
                 {
                     XGUI.layout_flexspace();
 
@@ -754,9 +755,9 @@ namespace SevenStrikeModules.XHud.Editor
             else
             {
                 #region 批量刷新样式
-                if (!HudManager.Hud_TextStyleLibrary)
+                if (!hud_manager.library_textstyles)
                 {
-                    if (!HudManager.Hud_TextStyleLibrary.TextStyle_Library_IsEmpty())
+                    if (!hud_manager.library_textstyles.TextStyle_Library_IsEmpty())
                     {
                         if (XGUI.layout_button(
                             tooltip: "根据选择的快速样式刷新文字样式",
@@ -792,10 +793,10 @@ namespace SevenStrikeModules.XHud.Editor
                  title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                  title_clipping: TextClipping.Clip,
                  padding: new RectOffset(10, 10, 15, 15),
-                 foldout: BaseScript.fold_option);
+                 foldout: base_script.fold_option);
 
             XGUI.layout_label(
-                           text: $"文字颜色由  <color=#{h_color}>{tooltip_owner_names[sp_TextColorOwner.enumValueIndex]}</color>  接管",
+                           text: $"文字颜色由  <color=#{h_color}>{tooltip_owner_names[sp_text_color_owner.enumValueIndex]}</color>  接管",
                            size: XGUIFontSize.S,
                            anchor: TextAnchor.MiddleCenter,
                            text_color: Color.white,
@@ -805,8 +806,8 @@ namespace SevenStrikeModules.XHud.Editor
                            font_style: FontStyle.Normal,
                            clipping: TextClipping.Clip);
 
-            sp_TextColorOwner.enumValueIndex = XGUI.layout_clickselector(
-                index: sp_TextColorOwner.enumValueIndex,
+            sp_text_color_owner.enumValueIndex = XGUI.layout_clickselector(
+                index: sp_text_color_owner.enumValueIndex,
                 icon_btns: clickselector_args,
                 btn_color_normal: Color.white,
                 btn_color_selected: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
@@ -815,13 +816,13 @@ namespace SevenStrikeModules.XHud.Editor
                 margin: new RectOffset(0, 0, 0, 0)
                 );
 
-            sp_TextColorOwner.serializedObject.ApplyModifiedProperties();
+            sp_text_color_owner.serializedObject.ApplyModifiedProperties();
 
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 选项
-            BaseScript.fold_option = XGUI.layout_group_start(
+            base_script.fold_option = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -831,52 +832,52 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_option);
+                foldout: base_script.fold_option);
 
-            if (!BaseScript.fold_option)
+            if (!base_script.fold_option)
             {
                 #region 射线检测
-                XGUI.SetEnabled(!sp_LibStyle_Effect_raycast.boolValue || !sp_StyleLibSynching.boolValue);
-                DrawLabeledToggle("射线检测", "", sp_Raycast, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                XGUI.SetEnabled(!sp_lib_style_effect_raycast.boolValue || !sp_style_library_synching.boolValue);
+                DrawLabeledToggle("射线检测", "", sp_raycast, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
                 #region 遮罩
-                XGUI.SetEnabled(!sp_LibStyle_Effect_maskable.boolValue || !sp_StyleLibSynching.boolValue);
-                DrawLabeledToggle("遮罩", "", sp_Maskable, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                XGUI.SetEnabled(!sp_lib_style_effect_maskable.boolValue || !sp_style_library_synching.boolValue);
+                DrawLabeledToggle("遮罩", "", sp_maskable, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
                 #region 富文本
-                XGUI.SetEnabled(!sp_LibStyle_Effect_rich.boolValue || !sp_StyleLibSynching.boolValue);
-                DrawLabeledToggle("富文本", "", sp_tmp_rich, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                XGUI.SetEnabled(!sp_lib_style_effect_rich.boolValue || !sp_style_library_synching.boolValue);
+                DrawLabeledToggle("富文本", "", sp_tmptext_tmp_rich, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
                 #region 自适应尺寸
-                XGUI.SetEnabled(!sp_LibStyle_Effect_autosizing.boolValue || !sp_StyleLibSynching.boolValue);
-                DrawLabeledToggle("自适应尺寸", "", sp_tmp_EnableAutoSizing, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                XGUI.SetEnabled(!sp_lib_style_effect_autosizing.boolValue || !sp_style_library_synching.boolValue);
+                DrawLabeledToggle("自适应尺寸", "", sp_tmptext_tmp_enable_auto_sizing, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
                 #region 尺寸全局联动
-                DrawLabeledToggle("尺寸全局联动", "", sp_SyncGlobalFontSize, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncsize, (b) => { });
+                DrawLabeledToggle("尺寸全局联动", "", sp_sync_global_font_size, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncsize, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
                 #region 实时匹配库
-                if (HudManager != null && HudManager.Hud_TextStyleLibrary != null)
+                if (hud_manager != null && hud_manager.library_textstyles != null)
                 {
-                    if (!HudManager.Hud_TextStyleLibrary.TextStyle_Library_IsEmpty())
+                    if (!hud_manager.library_textstyles.TextStyle_Library_IsEmpty())
                     {
-                        DrawLabeledToggle("实时匹配库", "", sp_StyleLibSynching, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) =>
+                        DrawLabeledToggle("实时匹配库", "", sp_style_library_synching, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) =>
                         {
-                            sp_StyleLibSynching.boolValue = b;
-                            sp_StyleLibSynching.serializedObject.ApplyModifiedProperties();
+                            sp_style_library_synching.boolValue = b;
+                            sp_style_library_synching.serializedObject.ApplyModifiedProperties();
 
-                            if (sp_StyleLibSynching.boolValue)
+                            if (sp_style_library_synching.boolValue)
                             {
-                                sp_TextColorOwner.enumValueIndex = (int)TextColorOwner.StyleLibrary;
+                                sp_text_color_owner.enumValueIndex = (int)TextColorOwner.StyleLibrary;
                             }
                         });
                     }
@@ -895,8 +896,8 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 else
                 {
-                    sp_StyleLibSynching.boolValue = false;
-                    sp_StyleLibSynching.serializedObject.ApplyModifiedProperties();
+                    sp_style_library_synching.boolValue = false;
+                    sp_style_library_synching.serializedObject.ApplyModifiedProperties();
 
                     XGUI.layout_label(
                           text: "您未在Hud管理器中配置或指定字体样式库",
@@ -911,25 +912,25 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 使用渐变色
-                XGUI.SetEnabled(!sp_LibStyle_Effect_gradientcolor.boolValue || !sp_StyleLibSynching.boolValue);
-                DrawLabeledToggle("使用渐变色", "", sp_gra_Used, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
+                XGUI.SetEnabled(!sp_lib_style_effect_gradientcolor.boolValue || !sp_style_library_synching.boolValue);
+                DrawLabeledToggle("使用渐变色", "", sp_tmptext_gra_used, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_enabled, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
                 #region 翻转渐变色
-                XGUI.SetEnabled((!sp_LibStyle_Effect_gradientcolor.boolValue || !sp_StyleLibSynching.boolValue) && sp_gra_Used.boolValue);
-                DrawLabeledToggle("翻转渐变色", "", sp_gra_Invert, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_flip, (b) => { });
+                XGUI.SetEnabled((!sp_lib_style_effect_gradientcolor.boolValue || !sp_style_library_synching.boolValue) && sp_tmptext_gra_used.boolValue);
+                DrawLabeledToggle("翻转渐变色", "", sp_tmptext_gra_invert, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_flip, (b) => { });
                 XGUI.SetEnabled(true);
                 #endregion
 
                 #region 渐变色模式
-                XGUI.SetEnabled((!sp_LibStyle_Effect_gradientcolor.boolValue || !sp_StyleLibSynching.boolValue) && sp_gra_Used.boolValue);
-                sp_gra_ColorModeName.stringValue = XGUI.layout_string_popup(
+                XGUI.SetEnabled((!sp_lib_style_effect_gradientcolor.boolValue || !sp_style_library_synching.boolValue) && sp_tmptext_gra_used.boolValue);
+                sp_tmptext_gra_color_mode_name.stringValue = XGUI.layout_string_popup(
                     title: "渐变色模式",
                     title_width: 120,
                     title_size: XGUIFontSize.M,
                     title_anchor: TextAnchor.MiddleLeft,
-                    prop: sp_gra_ColorModeName,
+                    prop: sp_tmptext_gra_color_mode_name,
                     options: stroptions_gramode,
                     opt_text_size: XGUIFontSize.M,
                     opt_text_color: Color.black,
@@ -945,45 +946,45 @@ namespace SevenStrikeModules.XHud.Editor
                     icon_arrow_color: Color.black,
                     act_on_changed: (s) =>
                     {
-                        sp_gra_ColorModeName.stringValue = s;
-                        sp_gra_ColorModeName.serializedObject.ApplyModifiedProperties();
+                        sp_tmptext_gra_color_mode_name.stringValue = s;
+                        sp_tmptext_gra_color_mode_name.serializedObject.ApplyModifiedProperties();
 
                         if (Targets_Selected())
                         {
-                            for (int i = 0; i < SelectedObjects.Length; i++)
+                            for (int i = 0; i < selected_objects.Length; i++)
                             {
-                                switch (SelectedObjects[i].TextStyleInfo.gra_ColorModeName)
+                                switch (selected_objects[i].text_style_info.gra_color_mode_name)
                                 {
                                     case "单色":
-                                        SelectedObjects[i].TextStyleInfo.gra_ColorMode = ColorMode.Single;
+                                        selected_objects[i].text_style_info.gra_color_mode = ColorMode.Single;
                                         break;
                                     case "水平渐变":
-                                        SelectedObjects[i].TextStyleInfo.gra_ColorMode = ColorMode.HorizontalGradient;
+                                        selected_objects[i].text_style_info.gra_color_mode = ColorMode.HorizontalGradient;
                                         break;
                                     case "垂直渐变":
-                                        SelectedObjects[i].TextStyleInfo.gra_ColorMode = ColorMode.VerticalGradient;
+                                        selected_objects[i].text_style_info.gra_color_mode = ColorMode.VerticalGradient;
                                         break;
                                     case "四角渐变":
-                                        SelectedObjects[i].TextStyleInfo.gra_ColorMode = ColorMode.FourCornersGradient;
+                                        selected_objects[i].text_style_info.gra_color_mode = ColorMode.FourCornersGradient;
                                         break;
                                 }
                             }
                         }
                         else
                         {
-                            switch (sp_gra_ColorModeName.stringValue)
+                            switch (sp_tmptext_gra_color_mode_name.stringValue)
                             {
                                 case "单色":
-                                    sp_gra_ColorMode.enumValueIndex = (int)ColorMode.Single;
+                                    sp_tmptext_gra_color_mode.enumValueIndex = (int)ColorMode.Single;
                                     break;
                                 case "水平渐变":
-                                    sp_gra_ColorMode.enumValueIndex = (int)ColorMode.HorizontalGradient;
+                                    sp_tmptext_gra_color_mode.enumValueIndex = (int)ColorMode.HorizontalGradient;
                                     break;
                                 case "垂直渐变":
-                                    sp_gra_ColorMode.enumValueIndex = (int)ColorMode.VerticalGradient;
+                                    sp_tmptext_gra_color_mode.enumValueIndex = (int)ColorMode.VerticalGradient;
                                     break;
                                 case "四角渐变":
-                                    sp_gra_ColorMode.enumValueIndex = (int)ColorMode.FourCornersGradient;
+                                    sp_tmptext_gra_color_mode.enumValueIndex = (int)ColorMode.FourCornersGradient;
                                     break;
                             }
                         }
@@ -1006,12 +1007,12 @@ namespace SevenStrikeModules.XHud.Editor
                  title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                  title_clipping: TextClipping.Clip,
                  padding: new RectOffset(10, 10, 15, 15),
-                 foldout: BaseScript.fold_option);
+                 foldout: base_script.fold_option);
 
             #region 文字样式库
-            if (HudManager != null && HudManager.Hud_TextStyleLibrary != null)
+            if (hud_manager != null && hud_manager.library_textstyles != null)
             {
-                if (HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetCount(xHud_TextType.Text) > 0)
+                if (hud_manager.library_textstyles.TextStyle_Library_GetCount(xHud_TextType.Text) > 0)
                 {
                     XGUI.layout_group_start(
                         type: XGUIContainerType.Horizontal,
@@ -1022,14 +1023,14 @@ namespace SevenStrikeModules.XHud.Editor
                         absolute_padding: true,
                         padding: new RectOffset(5, 5, 5, 15));
 
-                    string[] str_fotlib_ItemsName = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetAllNames_With_TmpText();
+                    string[] str_fotlib_ItemsName = hud_manager.library_textstyles.TextStyle_Library_GetAllNames_With_TmpText();
 
-                    sp_StyleName.stringValue = XGUI.layout_string_popup(
+                    sp_style_name.stringValue = XGUI.layout_string_popup(
                         //title: "文字样式库",
                         //title_width: 0,
                         //title_size: XGUIFontSize.M,
                         //title_anchor: TextAnchor.MiddleLeft,
-                        prop: sp_StyleName,
+                        prop: sp_style_name,
                         options: str_fotlib_ItemsName,
                         opt_text_size: XGUIFontSize.M,
                         opt_text_color: Color.black,
@@ -1045,20 +1046,20 @@ namespace SevenStrikeModules.XHud.Editor
                         icon_arrow_color: Color.black,
                         act_on_changed: (s) =>
                         {
-                            sp_StyleName.stringValue = s;
-                            sp_StyleName.serializedObject.ApplyModifiedProperties();
+                            sp_style_name.stringValue = s;
+                            sp_style_name.serializedObject.ApplyModifiedProperties();
 
                             if (Targets_Selected())
                             {
-                                for (int i = 0; i < SelectedObjects.Length; i++)
+                                for (int i = 0; i < selected_objects.Length; i++)
                                 {
                                     if (Application.isPlaying)
                                     {
-                                        SelectedObjects[i].TextStyleInfo.CopyData_Ignored_LibraryToggle(HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(sp_StyleName.stringValue, xHud_TextType.TmpText));
+                                        selected_objects[i].text_style_info.CopyData_Ignored_LibraryToggle(hud_manager.library_textstyles.TextStyle_Library_GetTextStyleInfo(sp_style_name.stringValue, xHud_TextType.TmpText));
                                     }
                                     else
                                     {
-                                        SelectedObjects[i].TextStyleInfo.CopyData_Ignored_LibraryToggle(HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(sp_StyleName.stringValue, xHud_TextType.TmpText));
+                                        selected_objects[i].text_style_info.CopyData_Ignored_LibraryToggle(hud_manager.library_textstyles.TextStyle_Library_GetTextStyleInfo(sp_style_name.stringValue, xHud_TextType.TmpText));
                                     }
                                 }
                             }
@@ -1066,11 +1067,11 @@ namespace SevenStrikeModules.XHud.Editor
                             {
                                 if (Application.isPlaying)
                                 {
-                                    BaseScript.TextStyleInfo.CopyData_Ignored_LibraryToggle(HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(s, xHud_TextType.TmpText));
+                                    base_script.text_style_info.CopyData_Ignored_LibraryToggle(hud_manager.library_textstyles.TextStyle_Library_GetTextStyleInfo(s, xHud_TextType.TmpText));
                                 }
                                 else
                                 {
-                                    BaseScript.TextStyleInfo.CopyData_Ignored_LibraryToggle(HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(s, xHud_TextType.TmpText));
+                                    base_script.text_style_info.CopyData_Ignored_LibraryToggle(hud_manager.library_textstyles.TextStyle_Library_GetTextStyleInfo(s, xHud_TextType.TmpText));
                                 }
                             }
                         });
@@ -1092,7 +1093,7 @@ namespace SevenStrikeModules.XHud.Editor
                             int index = 0;
                             for (int k = 0; k < str_fotlib_ItemsName.Length; k++)
                             {
-                                if (str_fotlib_ItemsName[k] == sp_StyleName.stringValue)
+                                if (str_fotlib_ItemsName[k] == sp_style_name.stringValue)
                                 {
                                     index = k;
                                     break;
@@ -1101,7 +1102,7 @@ namespace SevenStrikeModules.XHud.Editor
                             //定位到元素库中的对应当前元素
                             //打开目标元素库
                             Editor_XHud_MenuItemsAction_OpenLibrary.open_textstyle();
-                            HudManager.Hud_TextStyleLibrary.TextStyleLibrary_Location(str_fotlib_ItemsName[index]);
+                            hud_manager.library_textstyles.TextStyleLibrary_Location(str_fotlib_ItemsName[index]);
                         }
                     }
                     XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
@@ -1139,9 +1140,9 @@ namespace SevenStrikeModules.XHud.Editor
             Rect rect_gra_color = XGUI.GetLastRect();
 
             #region 库同步项
-            if (sp_StyleLibSynching.boolValue)
+            if (sp_style_library_synching.boolValue)
             {
-                BaseScript.fold_sync = XGUI.layout_group_start(
+                base_script.fold_sync = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -1151,82 +1152,82 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_sync);
+                foldout: base_script.fold_sync);
 
-                if (!BaseScript.fold_sync)
+                if (!base_script.fold_sync)
                 {
                     #region 射线检测
-                    DrawLabeledToggle("射线检测", "", sp_LibStyle_Effect_raycast, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("射线检测", "", sp_lib_style_effect_raycast, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 遮罩
-                    DrawLabeledToggle("遮罩", "", sp_LibStyle_Effect_maskable, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("遮罩", "", sp_lib_style_effect_maskable, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 富文本
-                    DrawLabeledToggle("富文本", "", sp_LibStyle_Effect_rich, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("富文本", "", sp_lib_style_effect_rich, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 尺寸
-                    DrawLabeledToggle("尺寸", "", sp_LibStyle_Effect_size, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
-                    if (sp_LibStyle_Effect_size.boolValue)
+                    DrawLabeledToggle("尺寸", "", sp_lib_style_effect_size, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    if (sp_lib_style_effect_size.boolValue)
                     {
-                        sp_LibStyle_Effect_autosizing.boolValue = false;
-                        sp_LibStyle_Effect_autosizing.serializedObject.ApplyModifiedProperties();
-                        sp_tmp_EnableAutoSizing.boolValue = false;
-                        sp_tmp_EnableAutoSizing.serializedObject.ApplyModifiedProperties();
+                        sp_lib_style_effect_autosizing.boolValue = false;
+                        sp_lib_style_effect_autosizing.serializedObject.ApplyModifiedProperties();
+                        sp_tmptext_tmp_enable_auto_sizing.boolValue = false;
+                        sp_tmptext_tmp_enable_auto_sizing.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
 
                     #region 自适应尺寸
-                    DrawLabeledToggle("自适应尺寸", "", sp_LibStyle_Effect_autosizing, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
-                    if (sp_LibStyle_Effect_autosizing.boolValue)
+                    DrawLabeledToggle("自适应尺寸", "", sp_lib_style_effect_autosizing, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    if (sp_lib_style_effect_autosizing.boolValue)
                     {
-                        sp_LibStyle_Effect_size.boolValue = false;
-                        sp_LibStyle_Effect_size.serializedObject.ApplyModifiedProperties();
-                        sp_tmp_EnableAutoSizing.boolValue = true;
-                        sp_tmp_EnableAutoSizing.serializedObject.ApplyModifiedProperties();
+                        sp_lib_style_effect_size.boolValue = false;
+                        sp_lib_style_effect_size.serializedObject.ApplyModifiedProperties();
+                        sp_tmptext_tmp_enable_auto_sizing.boolValue = true;
+                        sp_tmptext_tmp_enable_auto_sizing.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
 
                     #region 渐变色
-                    DrawLabeledToggle("渐变色", "", sp_LibStyle_Effect_gradientcolor, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("渐变色", "", sp_lib_style_effect_gradientcolor, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 对齐
-                    DrawLabeledToggle("对齐", "", sp_LibStyle_Effect_align, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("对齐", "", sp_lib_style_effect_align, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 字体
-                    DrawLabeledToggle("字体", "", sp_LibStyle_Effect_font, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("字体", "", sp_lib_style_effect_font, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 样式
-                    DrawLabeledToggle("样式", "", sp_LibStyle_Effect_style, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("样式", "", sp_lib_style_effect_style, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 颜色
-                    DrawLabeledToggle("颜色", "", sp_LibStyle_Effect_color, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("颜色", "", sp_lib_style_effect_color, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 文本包裹
-                    DrawLabeledToggle("包裹", "", sp_LibStyle_Effect_wrap, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("包裹", "", sp_lib_style_effect_wrap, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 溢出
-                    DrawLabeledToggle("溢出", "", sp_LibStyle_Effect_overflow, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("溢出", "", sp_lib_style_effect_overflow, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 包裹比例
-                    DrawLabeledToggle("包裹比例", "", sp_LibStyle_Effect_wrapratio, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("包裹比例", "", sp_lib_style_effect_wrapratio, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 边距
-                    DrawLabeledToggle("边距", "", sp_LibStyle_Effect_margin, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("边距", "", sp_lib_style_effect_margin, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
 
                     #region 间距
-                    DrawLabeledToggle("间距", "", sp_LibStyle_Effect_space, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
+                    DrawLabeledToggle("间距", "", sp_lib_style_effect_space, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_syncstyle, (b) => { });
                     #endregion
                 }
                 XGUI.layout_group_end(type: XGUIContainerType.Vertical);
@@ -1268,9 +1269,9 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 if (Targets_Selected())
                 {
-                    for (int i = 0; i < SelectedObjects.Length; i++)
+                    for (int i = 0; i < selected_objects.Length; i++)
                     {
-                        SelectedObjects[i].text = sp_Text.stringValue;
+                        selected_objects[i].text = sp_Text.stringValue;
                     }
                 }
             }
@@ -1279,7 +1280,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 参数
-            BaseScript.fold_param = XGUI.layout_group_start(
+            base_script.fold_param = XGUI.layout_group_start(
             type: XGUIContainerType.Vertical,
             bg_fill: XGUIGroup.缺口纯色边框,
             bg_color: XGUIColor.亮白,
@@ -1289,9 +1290,9 @@ namespace SevenStrikeModules.XHud.Editor
             title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_clipping: TextClipping.Clip,
             padding: new RectOffset(10, 10, 15, 15),
-            foldout: BaseScript.fold_param);
+            foldout: base_script.fold_param);
 
-            if (!BaseScript.fold_param)
+            if (!base_script.fold_param)
             {
                 XGUI.ChangedCheck_Start();
 
@@ -1301,18 +1302,18 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_Indicator,
+                    prop: sp_indicator,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 字体
-                XGUI.SetEnabled(!sp_LibStyle_Effect_font.boolValue || !sp_StyleLibSynching.boolValue);
+                XGUI.SetEnabled(!sp_lib_style_effect_font.boolValue || !sp_style_library_synching.boolValue);
                 XGUI.layout_property_field(
                     title: "字体",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_font,
+                    prop: sp_tmptext_tmp_font,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 XGUI.SetEnabled(true);
                 #endregion
@@ -1323,12 +1324,12 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_anchor,
+                    prop: sp_tmptext_tmp_anchor,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 均分
-                TmpContentAnchor anchors = (TmpContentAnchor)sp_tmp_anchor.enumValueIndex;
+                TmpContentAnchor anchors = (TmpContentAnchor)sp_tmptext_tmp_anchor.enumValueIndex;
                 if (anchors == TmpContentAnchor.中心左右均分 || anchors == TmpContentAnchor.中线左右均分 || anchors == TmpContentAnchor.基线左右均分 || anchors == TmpContentAnchor.底部左右均分 || anchors == TmpContentAnchor.顶部均分 || anchors == TmpContentAnchor.中心填充 || anchors == TmpContentAnchor.中线左右填充 || anchors == TmpContentAnchor.基线左右填充 || anchors == TmpContentAnchor.底部左右填充 || anchors == TmpContentAnchor.顶部填充)
                 {
                     XGUI.layout_property_field(
@@ -1336,24 +1337,24 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: sp_tmp_WrappingRatios,
+                        prop: sp_tmptext_tmp_wrapping_ratios,
                         prop_margin: new RectOffset(5, 5, 0, 5));
                 }
                 #endregion
 
                 #region 尺寸
-                XGUI.SetEnabled((!sp_LibStyle_Effect_size.boolValue || !sp_LibStyle_Effect_autosizing.boolValue || !sp_StyleLibSynching.boolValue) && !sp_tmp_EnableAutoSizing.boolValue);
+                XGUI.SetEnabled((!sp_lib_style_effect_size.boolValue || !sp_lib_style_effect_autosizing.boolValue || !sp_style_library_synching.boolValue) && !sp_tmptext_tmp_enable_auto_sizing.boolValue);
                 XGUI.layout_property_field(
                     title: "尺寸",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_size,
+                    prop: sp_tmptext_tmp_size,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 自适应尺寸
-                XGUI.SetEnabled((!sp_LibStyle_Effect_autosizing.boolValue || !sp_StyleLibSynching.boolValue) && sp_tmp_EnableAutoSizing.boolValue);
+                XGUI.SetEnabled((!sp_lib_style_effect_autosizing.boolValue || !sp_style_library_synching.boolValue) && sp_tmptext_tmp_enable_auto_sizing.boolValue);
 
                 #region 最小尺寸
                 XGUI.layout_property_field(
@@ -1361,7 +1362,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_FontSizeMin,
+                    prop: sp_tmptext_tmp_font_size_min,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
@@ -1371,7 +1372,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_FontSizeMax,
+                    prop: sp_tmptext_tmp_font_size_max,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
@@ -1381,7 +1382,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_CharWidthMaxAdj,
+                    prop: sp_tmptext_tmp_char_width_max_adj,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
@@ -1391,7 +1392,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_LineSpacingMax,
+                    prop: sp_tmptext_tmp_line_spacing_max,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
@@ -1399,123 +1400,123 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 包裹
-                XGUI.SetEnabled((!sp_LibStyle_Effect_wrap.boolValue || !sp_StyleLibSynching.boolValue));
+                XGUI.SetEnabled((!sp_lib_style_effect_wrap.boolValue || !sp_style_library_synching.boolValue));
                 XGUI.layout_property_field(
                     title: "包裹",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_contentwrap,
+                    prop: sp_tmptext_tmp_contentwrap,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 包裹比例
-                XGUI.SetEnabled((!sp_LibStyle_Effect_wrapratio.boolValue || !sp_StyleLibSynching.boolValue));
+                XGUI.SetEnabled((!sp_lib_style_effect_wrapratio.boolValue || !sp_style_library_synching.boolValue));
                 XGUI.layout_property_field(
                     title: "包裹比例",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_WrappingRatios,
+                    prop: sp_tmptext_tmp_wrapping_ratios,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 溢出
-                XGUI.SetEnabled((!sp_LibStyle_Effect_overflow.boolValue || !sp_StyleLibSynching.boolValue));
+                XGUI.SetEnabled((!sp_lib_style_effect_overflow.boolValue || !sp_style_library_synching.boolValue));
                 XGUI.layout_property_field(
                     title: "溢出",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_overflow,
+                    prop: sp_tmptext_tmp_overflow,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 样式
-                XGUI.SetEnabled((!sp_LibStyle_Effect_style.boolValue || !sp_StyleLibSynching.boolValue));
+                XGUI.SetEnabled((!sp_lib_style_effect_style.boolValue || !sp_style_library_synching.boolValue));
                 XGUI.layout_property_field(
                     title: "样式",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_style,
+                    prop: sp_tmptext_tmp_style,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 字符间距
-                XGUI.SetEnabled((!sp_LibStyle_Effect_space.boolValue || !sp_StyleLibSynching.boolValue));
+                XGUI.SetEnabled((!sp_lib_style_effect_space.boolValue || !sp_style_library_synching.boolValue));
                 XGUI.layout_property_field(
                     title: "字符间距",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_space_character,
+                    prop: sp_tmptext_tmp_space_character,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 单词间距
-                XGUI.SetEnabled((!sp_LibStyle_Effect_space.boolValue || !sp_StyleLibSynching.boolValue));
+                XGUI.SetEnabled((!sp_lib_style_effect_space.boolValue || !sp_style_library_synching.boolValue));
                 XGUI.layout_property_field(
                     title: "单词间距",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_space_word,
+                    prop: sp_tmptext_tmp_space_word,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 行高间距
-                XGUI.SetEnabled((!sp_LibStyle_Effect_space.boolValue || !sp_StyleLibSynching.boolValue));
+                XGUI.SetEnabled((!sp_lib_style_effect_space.boolValue || !sp_style_library_synching.boolValue));
                 XGUI.layout_property_field(
                     title: "行高间距",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_space_lineheight,
+                    prop: sp_tmptext_space_lineheight,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 段落间距
-                XGUI.SetEnabled((!sp_LibStyle_Effect_space.boolValue || !sp_StyleLibSynching.boolValue));
+                XGUI.SetEnabled((!sp_lib_style_effect_space.boolValue || !sp_style_library_synching.boolValue));
                 XGUI.layout_property_field(
                     title: "段落间距",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_space_paragraph,
+                    prop: sp_tmptext_space_paragraph,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 边距
-                XGUI.SetEnabled((!sp_LibStyle_Effect_margin.boolValue || !sp_StyleLibSynching.boolValue));
+                XGUI.SetEnabled((!sp_lib_style_effect_margin.boolValue || !sp_style_library_synching.boolValue));
                 XGUI.layout_property_field(
                     title: "边距",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_contentmargin,
+                    prop: sp_tmptext_tmp_content_margin,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 颜色
-                XGUI.SetEnabled((!sp_LibStyle_Effect_color.boolValue || !sp_StyleLibSynching.boolValue));
+                XGUI.SetEnabled((!sp_lib_style_effect_color.boolValue || !sp_style_library_synching.boolValue));
                 XGUI.layout_property_field(
                     title: "颜色",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_tmp_color,
+                    prop: sp_tmptext_tmp_color,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 #endregion
 
                 #region 颜色接管者
-                XGUI.SetEnabled((!sp_LibStyle_Effect_color.boolValue || !sp_StyleLibSynching.boolValue));
+                XGUI.SetEnabled((!sp_lib_style_effect_color.boolValue || !sp_style_library_synching.boolValue));
                 XGUI.layout_property_field(
                     title: "颜色接管者",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_TextColorOwner,
+                    prop: sp_text_color_owner,
                     prop_margin: new RectOffset(5, 5, 0, 5));
                 XGUI.SetEnabled(true);
                 #endregion
@@ -1526,16 +1527,16 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     if (Targets_Selected())
                     {
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        for (int i = 0; i < selected_objects.Length; i++)
                         {
-                            TmpContentAnchor anchor = (TmpContentAnchor)sp_tmp_anchor.enumValueIndex;
-                            SelectedObjects[i].TextStyleInfo.tmp_Set_Alignment(anchor);
+                            TmpContentAnchor anchor = (TmpContentAnchor)sp_tmptext_tmp_anchor.enumValueIndex;
+                            selected_objects[i].text_style_info.tmp_Set_Alignment(anchor);
                         }
                     }
                     else
                     {
-                        TmpContentAnchor anchor = (TmpContentAnchor)sp_tmp_anchor.enumValueIndex;
-                        BaseScript.TextStyleInfo.tmp_Set_Alignment(anchor);
+                        TmpContentAnchor anchor = (TmpContentAnchor)sp_tmptext_tmp_anchor.enumValueIndex;
+                        base_script.text_style_info.tmp_Set_Alignment(anchor);
                     }
                 }
             }
@@ -1544,9 +1545,9 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 渐变色
-            if (sp_gra_Used.boolValue)
+            if (sp_tmptext_gra_used.boolValue)
             {
-                BaseScript.fold_gradient = XGUI.layout_group_start(
+                base_script.fold_gradient = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -1556,17 +1557,17 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_gradient);
+                foldout: base_script.fold_gradient);
 
-                if (!BaseScript.fold_gradient)
+                if (!base_script.fold_gradient)
                 {
-                    CreateGradientTexture((ColorMode)sp_gra_ColorMode.enumValueIndex, sp_gra_Invert.boolValue, sp_gra_A.colorValue, sp_gra_B.colorValue, sp_gra_C.colorValue, sp_gra_D.colorValue);
+                    CreateGradientTexture((ColorMode)sp_tmptext_gra_color_mode.enumValueIndex, sp_tmptext_gra_invert.boolValue, sp_tmptext_gra_a.colorValue, sp_tmptext_gra_b.colorValue, sp_tmptext_gra_c.colorValue, sp_tmptext_gra_d.colorValue);
 
                     Rect rect_gra_root = XGUI.GetControlRect(false, 130);
 
                     Rect rect_GradientIcon;
 
-                    if (sp_gra_ColorModeName.stringValue == "单色")
+                    if (sp_tmptext_gra_color_mode_name.stringValue == "单色")
                     {
                         rect_GradientIcon = new Rect((rect_gra_color.width / 2) - 12, rect_gra_root.y + 15, 60, 60);
                     }
@@ -1578,102 +1579,102 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.gui_icon(rect_GradientIcon, GradientTexture);
 
                     XGUI.ChangedCheck_Start();
-                    switch (sp_gra_ColorModeName.stringValue)
+                    switch (sp_tmptext_gra_color_mode_name.stringValue)
                     {
                         case "单色":
-                            sp_gra_A.colorValue = XGUI.gui_colorfield(
+                            sp_tmptext_gra_a.colorValue = XGUI.gui_colorfield(
                                 rect: new Rect(rect_GradientIcon.x, rect_GradientIcon.y + 80, 61, 20),
-                                prop: sp_gra_A.colorValue);
+                                prop: sp_tmptext_gra_a.colorValue);
                             break;
                         case "水平渐变":
-                            if (sp_gra_Invert.boolValue)
+                            if (sp_tmptext_gra_invert.boolValue)
                             {
-                                sp_gra_B.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_b.colorValue = XGUI.gui_colorfield(
                                     rect: new Rect(rect_gra_color.x + 25, rect_GradientIcon.y + 20, 61, 20),
-                                    prop: sp_gra_B.colorValue);
+                                    prop: sp_tmptext_gra_b.colorValue);
 
-                                sp_gra_A.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_a.colorValue = XGUI.gui_colorfield(
                                     rect: new Rect(rect_gra_color.width - 68, rect_GradientIcon.y + 20, 61, 20),
-                                    prop: sp_gra_A.colorValue);
+                                    prop: sp_tmptext_gra_a.colorValue);
                             }
                             else
                             {
-                                sp_gra_A.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_a.colorValue = XGUI.gui_colorfield(
                                     rect: new Rect(rect_gra_color.x + 25, rect_GradientIcon.y + 20, 61, 20),
-                                    prop: sp_gra_A.colorValue);
+                                    prop: sp_tmptext_gra_a.colorValue);
 
-                                sp_gra_B.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_b.colorValue = XGUI.gui_colorfield(
                                     rect: new Rect(rect_gra_color.width - 68, rect_GradientIcon.y + 20, 61, 20),
-                                    prop: sp_gra_B.colorValue);
+                                    prop: sp_tmptext_gra_b.colorValue);
                             }
                             break;
                         case "垂直渐变":
-                            if (sp_gra_Invert.boolValue)
+                            if (sp_tmptext_gra_invert.boolValue)
                             {
-                                sp_gra_B.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_b.colorValue = XGUI.gui_colorfield(
                                     rect: new Rect(rect_GradientIcon.x, rect_GradientIcon.y + 72, 61, 20),
-                                    prop: sp_gra_B.colorValue);
+                                    prop: sp_tmptext_gra_b.colorValue);
 
-                                sp_gra_A.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_a.colorValue = XGUI.gui_colorfield(
                                     rect: new Rect(rect_GradientIcon.x, rect_GradientIcon.y - 32, 61, 20),
-                                    prop: sp_gra_A.colorValue);
+                                    prop: sp_tmptext_gra_a.colorValue);
                             }
                             else
                             {
-                                sp_gra_A.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_a.colorValue = XGUI.gui_colorfield(
                                     rect: new Rect(rect_GradientIcon.x, rect_GradientIcon.y + 72, 61, 20),
-                                    prop: sp_gra_A.colorValue);
+                                    prop: sp_tmptext_gra_a.colorValue);
 
-                                sp_gra_B.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_b.colorValue = XGUI.gui_colorfield(
                                     rect: new Rect(rect_GradientIcon.x, rect_GradientIcon.y - 32, 61, 20),
-                                    prop: sp_gra_B.colorValue);
+                                    prop: sp_tmptext_gra_b.colorValue);
                             }
                             break;
                         case "四角渐变":
-                            if (sp_gra_Invert.boolValue)
+                            if (sp_tmptext_gra_invert.boolValue)
                             {
-                                sp_gra_B.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_b.colorValue = XGUI.gui_colorfield(
                                    rect: new Rect(rect_gra_color.x + 25, rect_GradientIcon.y - 20, 61, 20),
-                                   prop: sp_gra_B.colorValue);
+                                   prop: sp_tmptext_gra_b.colorValue);
 
-                                sp_gra_A.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_a.colorValue = XGUI.gui_colorfield(
                                     rect: new Rect(rect_gra_color.width - 68, rect_GradientIcon.y - 20, 61, 20),
-                                    prop: sp_gra_A.colorValue);
+                                    prop: sp_tmptext_gra_a.colorValue);
 
-                                sp_gra_D.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_d.colorValue = XGUI.gui_colorfield(
                                    rect: new Rect(rect_gra_color.x + 25, rect_GradientIcon.y + 60, 61, 20),
-                                   prop: sp_gra_D.colorValue);
+                                   prop: sp_tmptext_gra_d.colorValue);
 
-                                sp_gra_C.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_c.colorValue = XGUI.gui_colorfield(
                                     rect: new Rect(rect_gra_color.width - 68, rect_GradientIcon.y + 60, 61, 20),
-                                    prop: sp_gra_C.colorValue);
+                                    prop: sp_tmptext_gra_c.colorValue);
                             }
                             else
                             {
-                                sp_gra_A.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_a.colorValue = XGUI.gui_colorfield(
                                     rect: new Rect(rect_gra_color.x + 25, rect_GradientIcon.y - 20, 61, 20),
-                                    prop: sp_gra_A.colorValue);
+                                    prop: sp_tmptext_gra_a.colorValue);
 
-                                sp_gra_B.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_b.colorValue = XGUI.gui_colorfield(
                                     rect: new Rect(rect_gra_color.width - 68, rect_GradientIcon.y - 20, 61, 20),
-                                    prop: sp_gra_B.colorValue);
+                                    prop: sp_tmptext_gra_b.colorValue);
 
-                                sp_gra_C.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_c.colorValue = XGUI.gui_colorfield(
                                    rect: new Rect(rect_gra_color.x + 25, rect_GradientIcon.y + 60, 61, 20),
-                                   prop: sp_gra_C.colorValue);
+                                   prop: sp_tmptext_gra_c.colorValue);
 
-                                sp_gra_D.colorValue = XGUI.gui_colorfield(
+                                sp_tmptext_gra_d.colorValue = XGUI.gui_colorfield(
                                     rect: new Rect(rect_gra_color.width - 68, rect_GradientIcon.y + 60, 61, 20),
-                                    prop: sp_gra_D.colorValue);
+                                    prop: sp_tmptext_gra_d.colorValue);
                             }
                             break;
                     }
                     if (XGUI.ChangedCheck_End())
                     {
-                        sp_gra_A.serializedObject.ApplyModifiedProperties();
-                        sp_gra_B.serializedObject.ApplyModifiedProperties();
-                        sp_gra_C.serializedObject.ApplyModifiedProperties();
-                        sp_gra_D.serializedObject.ApplyModifiedProperties();
+                        sp_tmptext_gra_a.serializedObject.ApplyModifiedProperties();
+                        sp_tmptext_gra_b.serializedObject.ApplyModifiedProperties();
+                        sp_tmptext_gra_c.serializedObject.ApplyModifiedProperties();
+                        sp_tmptext_gra_d.serializedObject.ApplyModifiedProperties();
                     }
                 }
 
@@ -1691,7 +1692,7 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddItem(new GUIContent("C (复制样式)"), false, () =>
                 {
                     XHud_LibraryArg_TextStyle info = new XHud_LibraryArg_TextStyle();
-                    info.CopyData_Ignored_LibraryToggle(BaseScript.TextStyleInfo);
+                    info.CopyData_Ignored_LibraryToggle(base_script.text_style_info);
 
                     string json = JsonUtility.ToJson(info);
 
@@ -1713,11 +1714,11 @@ namespace SevenStrikeModules.XHud.Editor
 
                     if (Targets_Selected())
                     {
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        for (int i = 0; i < selected_objects.Length; i++)
                         {
                             // 使用 Undo.RecordObject 来记录对目标对象的修改
-                            Undo.RecordObject(SelectedObjects[i], "Paste Style Name");
-                            SelectedObjects[i].TextStyleInfo.CopyData(info);
+                            Undo.RecordObject(selected_objects[i], "Paste Style Name");
+                            selected_objects[i].text_style_info.CopyData(info);
                         }
 
                         XGUI.dialog(
@@ -1733,8 +1734,8 @@ namespace SevenStrikeModules.XHud.Editor
                     else
                     {
                         // 使用 Undo.RecordObject 来记录对目标对象的修改
-                        Undo.RecordObject(BaseScript, "Paste Style Name");
-                        BaseScript.TextStyleInfo.CopyData(info);
+                        Undo.RecordObject(base_script, "Paste Style Name");
+                        base_script.text_style_info.CopyData(info);
 
                         XGUI.dialog(
                             type: XGUIDialogType.确认,
@@ -1757,25 +1758,25 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         List<XGUIDialogListDatas> datas = new List<XGUIDialogListDatas>();
 
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        for (int i = 0; i < selected_objects.Length; i++)
                         {
                             XGUIDialogListDatas data = new XGUIDialogListDatas();
 
-                            if (info.Type != xHud_TextType.TmpText)
+                            if (info.type != xHud_TextType.TmpText)
                             {
                                 XGUI.dialog(
                                    type: XGUIDialogType.帮助,
                                    windowtitle: "XHud - Tmp文字组件消息",
                                    title: "文字样式识别",
-                                   msg: $"从 XData 中识别的文字样式似乎并不是用于 {SelectedObjects[i].name} ( {SelectedObjects[i].Indicator} ) 的文字组件的规范样式！请检查您复制的样式类型是否和当前组件一致？",
+                                   msg: $"从 XData 中识别的文字样式似乎并不是用于 {selected_objects[i].name} ( {selected_objects[i].indicator} ) 的文字组件的规范样式！请检查您复制的样式类型是否和当前组件一致？",
                                    ok: "明白",
                                    PrimaryIndex: 0,
                                    usemodal: true,
                                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
 
-                                data.Title = info.Name;
+                                data.Title = info.name;
                                 data.SubTitle = "文字样式类型未能匹配到";
-                                data.Message = $"{SelectedObjects[i].name} ( {SelectedObjects[i].Indicator} )";
+                                data.Message = $"{selected_objects[i].name} ( {selected_objects[i].indicator} )";
 
                                 datas.Add(data);
                                 continue;
@@ -1783,13 +1784,13 @@ namespace SevenStrikeModules.XHud.Editor
                             else
                             {
                                 // 使用 Undo.RecordObject 来记录对目标对象的修改
-                                Undo.RecordObject(SelectedObjects[i], "Paste Style Name");
+                                Undo.RecordObject(selected_objects[i], "Paste Style Name");
 
-                                SelectedObjects[i].TextStyleInfo.CopyData_Ignored_LibraryToggle(info);
+                                selected_objects[i].text_style_info.CopyData_Ignored_LibraryToggle(info);
 
-                                data.Title = info.Name;
+                                data.Title = info.name;
                                 data.SubTitle = "文字样式已应用到";
-                                data.Message = $"{SelectedObjects[i].name} ( {SelectedObjects[i].Indicator} )";
+                                data.Message = $"{selected_objects[i].name} ( {selected_objects[i].indicator} )";
                                 datas.Add(data);
                             }
                         }
@@ -1807,7 +1808,7 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     else
                     {
-                        if (info.Type != xHud_TextType.TmpText)
+                        if (info.type != xHud_TextType.TmpText)
                         {
                             XGUI.dialog(
                             type: XGUIDialogType.帮助,
@@ -1822,9 +1823,9 @@ namespace SevenStrikeModules.XHud.Editor
                         }
 
                         // 使用 Undo.RecordObject 来记录对目标对象的修改
-                        Undo.RecordObject(BaseScript, "Paste Style Name");
+                        Undo.RecordObject(base_script, "Paste Style Name");
 
-                        BaseScript.TextStyleInfo.CopyData_Ignored_LibraryToggle(info);
+                        base_script.text_style_info.CopyData_Ignored_LibraryToggle(info);
 
                         XGUI.dialog(
                             type: XGUIDialogType.确认,
@@ -1842,99 +1843,99 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     if (Targets_Selected())
                     {
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        for (int i = 0; i < selected_objects.Length; i++)
                         {
-                            SelectedObjects[i].GroupFold(true);
+                            selected_objects[i].GroupFold(true);
                         }
                     }
                     else
                     {
-                        BaseScript.GroupFold(true);
+                        base_script.GroupFold(true);
                     }
                 });
                 menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
                 {
                     if (Targets_Selected())
                     {
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        for (int i = 0; i < selected_objects.Length; i++)
                         {
-                            SelectedObjects[i].GroupFold(false);
+                            selected_objects[i].GroupFold(false);
                         }
                     }
                     else
                     {
-                        BaseScript.GroupFold(false);
+                        base_script.GroupFold(false);
                     }
                 });
                 menu.AddSeparator("");
                 menu.AddDisabledItem(new GUIContent("同步开关"));
                 menu.AddItem(new GUIContent("S (全部同步)"), false, () =>
                 {
-                    sp_LibStyle_Effect_align.boolValue = true;
-                    sp_LibStyle_Effect_font.boolValue = true;
-                    sp_LibStyle_Effect_style.boolValue = true;
-                    sp_LibStyle_Effect_size.boolValue = true;
-                    sp_LibStyle_Effect_color.boolValue = true;
-                    sp_LibStyle_Effect_rich.boolValue = true;
-                    sp_LibStyle_Effect_wrap.boolValue = true;
-                    sp_LibStyle_Effect_wrapratio.boolValue = true;
-                    sp_LibStyle_Effect_overflow.boolValue = true;
-                    sp_LibStyle_Effect_margin.boolValue = true;
-                    sp_LibStyle_Effect_space.boolValue = true;
-                    sp_LibStyle_Effect_gradientcolor.boolValue = true;
-                    sp_LibStyle_Effect_autosizing.boolValue = true;
-                    sp_LibStyle_Effect_raycast.boolValue = true;
-                    sp_LibStyle_Effect_maskable.boolValue = true;
+                    sp_lib_style_effect_align.boolValue = true;
+                    sp_lib_style_effect_font.boolValue = true;
+                    sp_lib_style_effect_style.boolValue = true;
+                    sp_lib_style_effect_size.boolValue = true;
+                    sp_lib_style_effect_color.boolValue = true;
+                    sp_lib_style_effect_rich.boolValue = true;
+                    sp_lib_style_effect_wrap.boolValue = true;
+                    sp_lib_style_effect_wrapratio.boolValue = true;
+                    sp_lib_style_effect_overflow.boolValue = true;
+                    sp_lib_style_effect_margin.boolValue = true;
+                    sp_lib_style_effect_space.boolValue = true;
+                    sp_lib_style_effect_gradientcolor.boolValue = true;
+                    sp_lib_style_effect_autosizing.boolValue = true;
+                    sp_lib_style_effect_raycast.boolValue = true;
+                    sp_lib_style_effect_maskable.boolValue = true;
 
-                    sp_LibStyle_Effect_align.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_font.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_style.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_size.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_color.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_rich.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_wrap.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_wrapratio.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_overflow.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_margin.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_space.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_gradientcolor.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_autosizing.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_raycast.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_maskable.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_align.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_font.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_style.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_size.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_color.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_rich.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_wrap.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_wrapratio.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_overflow.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_margin.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_space.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_gradientcolor.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_autosizing.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_raycast.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_maskable.serializedObject.ApplyModifiedProperties();
                 });
                 menu.AddItem(new GUIContent("D (全部关闭)"), false, () =>
                 {
-                    sp_LibStyle_Effect_align.boolValue = false;
-                    sp_LibStyle_Effect_font.boolValue = false;
-                    sp_LibStyle_Effect_style.boolValue = false;
-                    sp_LibStyle_Effect_size.boolValue = false;
-                    sp_LibStyle_Effect_color.boolValue = false;
-                    sp_LibStyle_Effect_rich.boolValue = false;
-                    sp_LibStyle_Effect_wrap.boolValue = false;
-                    sp_LibStyle_Effect_wrapratio.boolValue = false;
-                    sp_LibStyle_Effect_overflow.boolValue = false;
-                    sp_LibStyle_Effect_margin.boolValue = false;
-                    sp_LibStyle_Effect_space.boolValue = false;
-                    sp_LibStyle_Effect_gradientcolor.boolValue = false;
-                    sp_LibStyle_Effect_autosizing.boolValue = false;
-                    sp_LibStyle_Effect_raycast.boolValue = false;
-                    sp_LibStyle_Effect_maskable.boolValue = false;
+                    sp_lib_style_effect_align.boolValue = false;
+                    sp_lib_style_effect_font.boolValue = false;
+                    sp_lib_style_effect_style.boolValue = false;
+                    sp_lib_style_effect_size.boolValue = false;
+                    sp_lib_style_effect_color.boolValue = false;
+                    sp_lib_style_effect_rich.boolValue = false;
+                    sp_lib_style_effect_wrap.boolValue = false;
+                    sp_lib_style_effect_wrapratio.boolValue = false;
+                    sp_lib_style_effect_overflow.boolValue = false;
+                    sp_lib_style_effect_margin.boolValue = false;
+                    sp_lib_style_effect_space.boolValue = false;
+                    sp_lib_style_effect_gradientcolor.boolValue = false;
+                    sp_lib_style_effect_autosizing.boolValue = false;
+                    sp_lib_style_effect_raycast.boolValue = false;
+                    sp_lib_style_effect_maskable.boolValue = false;
 
-                    sp_LibStyle_Effect_align.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_font.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_style.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_size.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_color.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_rich.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_wrap.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_wrapratio.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_overflow.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_margin.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_space.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_gradientcolor.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_autosizing.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_raycast.serializedObject.ApplyModifiedProperties();
-                    sp_LibStyle_Effect_maskable.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_align.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_font.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_style.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_size.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_color.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_rich.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_wrap.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_wrapratio.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_overflow.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_margin.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_space.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_gradientcolor.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_autosizing.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_raycast.serializedObject.ApplyModifiedProperties();
+                    sp_lib_style_effect_maskable.serializedObject.ApplyModifiedProperties();
                 });
                 // 显示右键菜单
                 menu.ShowAsContext();
@@ -1944,7 +1945,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 源脚本
-            BaseScript.fold_based = XGUI.layout_group_start(
+            base_script.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -1954,9 +1955,9 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_based);
+                foldout: base_script.fold_based);
 
-            if (!BaseScript.fold_based)
+            if (!base_script.fold_based)
             {
                 DrawDefaultInspector();
             }
@@ -2090,9 +2091,9 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     XHud_Module_TmpText tt = (XHud_Module_TmpText)t;
 
-                    if (HudManager.Hud_TextStyleLibrary.TextStyle_Library_NameIsValid(tt.StyleName))
+                    if (hud_manager.library_textstyles.TextStyle_Library_NameIsValid(tt.style_name))
                     {
-                        s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(tt.StyleName, xHud_TextType.TmpText);
+                        s_info = hud_manager.library_textstyles.TextStyle_Library_GetTextStyleInfo(tt.style_name, xHud_TextType.TmpText);
                     }
                     else
                     {
@@ -2100,7 +2101,7 @@ namespace SevenStrikeModules.XHud.Editor
                              type: XGUIDialogType.警告,
                              windowtitle: "XHud - Tmp文字组件消息",
                              title: "刷新文字库样式",
-                             msg: $"似乎 {tt.name} ( {tt.Indicator} ) 文字组件的样式库名称并不在文字样式库中存在，请检查文字样式库名称是否合法，或者可以快速选择文字样式库默认首个样式。是否要选择首个样式？",
+                             msg: $"似乎 {tt.name} ( {tt.indicator} ) 文字组件的样式库名称并不在文字样式库中存在，请检查文字样式库名称是否合法，或者可以快速选择文字样式库默认首个样式。是否要选择首个样式？",
                              ok: "暂不",
                              cancel: "选择",
                              PrimaryIndex: 0,
@@ -2109,12 +2110,12 @@ namespace SevenStrikeModules.XHud.Editor
 
                         if (res == "选择")
                         {
-                            s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType.TmpText);
+                            s_info = hud_manager.library_textstyles.TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType.TmpText);
 
                             // 使用 Undo.RecordObject 来记录对目标对象的修改
                             Undo.RecordObject(tt, "Change TextStyle Name");
 
-                            tt.StyleName = s_info.Name;
+                            tt.style_name = s_info.name;
                         }
                         else
                         {
@@ -2122,13 +2123,13 @@ namespace SevenStrikeModules.XHud.Editor
                         }
                     }
 
-                    tt.TextStyleInfo.CopyData_Ignored_LibraryToggle(s_info);
+                    tt.text_style_info.CopyData_Ignored_LibraryToggle(s_info);
                 }
             }
             else
             {
-                if (HudManager.Hud_TextStyleLibrary.TextStyle_Library_NameIsValid(sp_StyleName.stringValue))
-                    s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetTextStyleInfo(sp_StyleName.stringValue, xHud_TextType.TmpText);
+                if (hud_manager.library_textstyles.TextStyle_Library_NameIsValid(sp_style_name.stringValue))
+                    s_info = hud_manager.library_textstyles.TextStyle_Library_GetTextStyleInfo(sp_style_name.stringValue, xHud_TextType.TmpText);
                 else
                 {
                     string res = XGUI.dialog(
@@ -2144,13 +2145,13 @@ namespace SevenStrikeModules.XHud.Editor
 
                     if (res == "选择")
                     {
-                        s_info = HudManager.Hud_TextStyleLibrary.TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType.TmpText);
+                        s_info = hud_manager.library_textstyles.TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType.TmpText);
 
                         // 使用 Undo.RecordObject 来记录对目标对象的修改
-                        Undo.RecordObject(sp_StyleName.serializedObject.targetObject, "Change TextStyle Name");
+                        Undo.RecordObject(sp_style_name.serializedObject.targetObject, "Change TextStyle Name");
 
-                        sp_StyleName.stringValue = s_info.Name;
-                        sp_StyleName.serializedObject.ApplyModifiedPropertiesWithoutUndo();
+                        sp_style_name.stringValue = s_info.name;
+                        sp_style_name.serializedObject.ApplyModifiedPropertiesWithoutUndo();
                     }
                     else
                     {
@@ -2158,7 +2159,7 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                 }
 
-                BaseScript.TextStyleInfo.CopyData_Ignored_LibraryToggle(s_info);
+                base_script.text_style_info.CopyData_Ignored_LibraryToggle(s_info);
                 return;
             }
         }
@@ -2176,9 +2177,9 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_LibrarySetTool_TextStyle window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_TextStyle>(true);
 
             window.titleContent = new GUIContent("XHud - 文字样式采集器");
-            XGUI.CenterEditorWindow(new Vector2Int(348, info.Type == xHud_TextType.Text ? 820 : 800), window);
+            XGUI.CenterEditorWindow(new Vector2Int(348, info.type == xHud_TextType.Text ? 820 : 800), window);
 
-            window.SetComponent(BaseScript);
+            window.SetComponent(base_script);
             window.SetStyle(info);
             window.SetOriginStyle(info);
             window.SetLibrarySetterMode(LibrarySetterMode.添加到库);

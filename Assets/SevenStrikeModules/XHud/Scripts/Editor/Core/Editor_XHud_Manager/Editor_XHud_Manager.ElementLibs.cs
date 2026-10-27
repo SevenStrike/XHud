@@ -40,7 +40,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void Draw_ElementLibs()
         {
-            if (Lib_ElementLibrarys.arraySize <= 0)
+            if (sp_ele_library_elements.arraySize <= 0)
                 XGUI.layout_helpbox(
                     state: XGUIHelboxState.错误,
                     title_text: "请至少指定一个元素库资源！",
@@ -48,7 +48,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_style: FontStyle.Normal,
                     title_color: Color.white * 0.75f);
 
-            List_ElementLib.DoLayoutList();
+            list_element_librarys.DoLayoutList();
         }
         #endregion
 
@@ -62,7 +62,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void Init_ElementLibList()
         {
-            List_ElementLib = new ReorderableList(serializedObject, Lib_ElementLibrarys)
+            list_element_librarys = new ReorderableList(serializedObject, sp_ele_library_elements)
             {
                 draggable = !Application.isPlaying,
                 displayAdd = !Application.isPlaying,
@@ -100,7 +100,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="isFocused">是否聚焦。</param>
         private void ElementLib_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty sp_elementlib = Lib_ElementLibrarys.GetArrayElementAtIndex(index);
+            SerializedProperty sp_elementlib = sp_ele_library_elements.GetArrayElementAtIndex(index);
 
             XGUI.gui_property_field(
                 rect: new Rect(rect.x, rect.y + 3, rect.width - 5, 20),
@@ -121,7 +121,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>元素高度。</returns>
         private float ElementLib_ElementHeight(int index)
         {
-            return 1.5f * LineHeight;
+            return 1.5f * line_height;
         }
         /// <summary>
         /// 元素库列表 - 添加回调。
@@ -133,7 +133,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="list">列表实例。</param>
         private void ElementLib_OnAdd(ReorderableList list)
         {
-            Lib_ElementLibrarys.InsertArrayElementAtIndex(list.count);
+            sp_ele_library_elements.InsertArrayElementAtIndex(list.count);
         }
         /// <summary>
         /// 元素库列表 - 移除回调。
@@ -145,7 +145,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="list">列表实例。</param>
         private void ElementLib_OnRemove(ReorderableList list)
         {
-            Lib_ElementLibrarys.DeleteArrayElementAtIndex(list.index);
+            sp_ele_library_elements.DeleteArrayElementAtIndex(list.index);
         }
         /// <summary>
         /// 元素库列表 - 选中回调。

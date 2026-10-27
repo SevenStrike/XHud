@@ -28,12 +28,6 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEngine;
 
-    #region 编辑器主体
-    /// <summary>
-    /// 色卡编辑器预览视觉包资源的自定义编辑器。
-    /// <para/>
-    /// 提供序列帧的收集与清空功能，并可在折叠面板中查看源脚本的默认 Inspector。
-    /// </summary>
     [CustomEditor(typeof(XHud_LibrarySetTool_Color_PreviewData))]
     public class Editor_XHud_LibrarySetTool_Color_PreviewData : Editor
     {
@@ -43,7 +37,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 在 <see cref="OnEnable"/> 中缓存。
         /// </summary>
-        private XHud.XHud_LibrarySetTool_Color_PreviewData BaseScript;
+        private XHud_LibrarySetTool_Color_PreviewData base_script;
         #endregion
 
         #region 字段 - 图标
@@ -76,6 +70,11 @@ namespace SevenStrikeModules.XHud.Editor
         /// 源脚本面板的折叠状态。
         /// </summary>
         private bool fold_based;
+
+        public void GroupFold(bool state)
+        {
+            fold_based = state;
+        }
         #endregion
 
         #region 生命周期
@@ -86,14 +85,17 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseScript = (XHud_LibrarySetTool_Color_PreviewData)target;
+            base_script = (XHud_LibrarySetTool_Color_PreviewData)target;
 
+            #region 获取图标
             collect_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/collect_r");
             collect_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/collect_p");
             clear_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/clear_r");
             clear_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/clear_p");
             logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/preview_data");
+            #endregion
         }
+
         /// <summary>
         /// 绘制 Inspector 主入口。
         /// <para/>
@@ -142,22 +144,22 @@ namespace SevenStrikeModules.XHud.Editor
                 width: 14,
                 height: 14))
             {
-                if (BaseScript.Textures != null)
-                    BaseScript.Textures.Clear();
+                if (base_script.textures != null)
+                    base_script.textures.Clear();
 
-                if (BaseScript.Textures == null)
-                    BaseScript.Textures = new List<Texture2D>();
+                if (base_script.textures == null)
+                    base_script.textures = new List<Texture2D>();
 
-                string path = AssetDatabase.GetAssetPath(BaseScript);
+                string path = AssetDatabase.GetAssetPath(base_script);
                 path = Path.GetDirectoryName(path);
 
-                string[] v = Directory.GetFiles($"{path}/{BaseScript.name}", "*.png");
+                string[] v = Directory.GetFiles($"{path}/{base_script.name}", "*.png");
                 for (int i = 0; i < v.Length; i++)
                 {
-                    BaseScript.Textures.Add(AssetDatabase.LoadAssetAtPath<Texture2D>($"{path}/{BaseScript.name}/{i}.png"));
+                    base_script.textures.Add(AssetDatabase.LoadAssetAtPath<Texture2D>($"{path}/{base_script.name}/{i}.png"));
                 }
 
-                EditorUtility.SetDirty(BaseScript);
+                EditorUtility.SetDirty(base_script);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
             }
@@ -175,8 +177,8 @@ namespace SevenStrikeModules.XHud.Editor
                 width: 14,
                 height: 14))
             {
-                if (BaseScript.Textures != null)
-                    BaseScript.Textures.Clear();
+                if (base_script.textures != null)
+                    base_script.textures.Clear();
             }
             #endregion
 
@@ -208,5 +210,4 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
     }
-    #endregion
 }

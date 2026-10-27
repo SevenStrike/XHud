@@ -37,7 +37,7 @@ namespace SevenStrikeModules.XHud
         /// <item><description>默认启用。</description></item>
         /// </list>
         /// </summary>
-        private static bool _isDisplayEnabled = true;
+        private static bool _is_display_enabled = true;
         /// <summary>
         /// 十字线及中心点的颜色。
         /// <para/>
@@ -45,7 +45,7 @@ namespace SevenStrikeModules.XHud
         /// <item><description>默认绿色。</description></item>
         /// </list>
         /// </summary>
-        private static Color _aimColor = Color.green;
+        private static Color _aim_color = Color.green;
         /// <summary>
         /// 十字线线条粗细（像素）。
         /// <para/>
@@ -53,7 +53,7 @@ namespace SevenStrikeModules.XHud
         /// <item><description>默认 1 像素。</description></item>
         /// </list>
         /// </summary>
-        private static float _lineThickness = 1f;
+        private static float _line_thickness = 1f;
         /// <summary>
         /// 中心点尺寸（像素）。
         /// <para/>
@@ -61,7 +61,7 @@ namespace SevenStrikeModules.XHud
         /// <item><description>默认 20 像素。</description></item>
         /// </list>
         /// </summary>
-        private static float _dotSize = 20f;
+        private static float _dot_size = 20f;
         #endregion
 
         #region 字段 - 瞄准状态
@@ -72,7 +72,7 @@ namespace SevenStrikeModules.XHud
         /// <item><description>取值范围 0-1，原点在左下角。</description></item>
         /// </list>
         /// </summary>
-        private static Vector2 _currentNormalizedPosition = new Vector2(0.5f, 0.5f);
+        private static Vector2 _current_normalized_position = new Vector2(0.5f, 0.5f);
         /// <summary>
         /// 目标十字线的归一化位置。
         /// <para/>
@@ -80,7 +80,7 @@ namespace SevenStrikeModules.XHud
         /// <item><description>取值范围 0-1，原点在左下角。</description></item>
         /// </list>
         /// </summary>
-        private static Vector2 _targetNormalizedPosition = new Vector2(0.5f, 0.5f);
+        private static Vector2 _target_normalized_position = new Vector2(0.5f, 0.5f);
         /// <summary>
         /// 当前瞄准的 UI 目标。
         /// <para/>
@@ -88,7 +88,7 @@ namespace SevenStrikeModules.XHud
         /// <item><description>为 <c>null</c> 时表示使用归一化位置瞄准。</description></item>
         /// </list>
         /// </summary>
-        private static RectTransform _targetRectTransform;
+        private static RectTransform _target_rect_transform;
         #endregion
 
         #region 字段 - 缓存
@@ -99,7 +99,7 @@ namespace SevenStrikeModules.XHud
         /// <item><description>在 <c>OnSceneGUI</c> 中自动更新。</description></item>
         /// </list>
         /// </summary>
-        private static Camera _sceneViewCamera;
+        private static Camera _scene_view_camera;
         /// <summary>
         /// 上一次的 SceneView 区域。
         /// <para/>
@@ -107,7 +107,7 @@ namespace SevenStrikeModules.XHud
         /// <item><description>用于计算归一化位置。</description></item>
         /// </list>
         /// </summary>
-        private static Rect _lastSceneViewRect;
+        private static Rect _last_scene_view_rect;
         #endregion
 
         #region 生命周期
@@ -136,7 +136,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="color">目标颜色。</param>
         public static void AimColor(Color color)
         {
-            _aimColor = color;
+            _aim_color = color;
             RepaintSceneView();
         }
         /// <summary>
@@ -149,7 +149,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="state">为 <c>true</c> 时显示，为 <c>false</c> 时隐藏。</param>
         public static void AimDisplay(bool state)
         {
-            _isDisplayEnabled = state;
+            _is_display_enabled = state;
             RepaintSceneView();
         }
         #endregion
@@ -175,7 +175,7 @@ namespace SevenStrikeModules.XHud
                 return;
             }
 
-            _targetRectTransform = target;
+            _target_rect_transform = target;
 
             UpdateTargetPositionAndAnimate();
 
@@ -192,8 +192,8 @@ namespace SevenStrikeModules.XHud
         /// <param name="normalizedPosition">归一化坐标。</param>
         public static void AimToScreenPosition(Vector2 normalizedPosition)
         {
-            _targetRectTransform = null;
-            _targetNormalizedPosition = new Vector2(
+            _target_rect_transform = null;
+            _target_normalized_position = new Vector2(
                 Mathf.Clamp01(normalizedPosition.x),
                 Mathf.Clamp01(normalizedPosition.y)
             );
@@ -209,7 +209,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public static void ClearTarget()
         {
-            _targetRectTransform = null;
+            _target_rect_transform = null;
 
             // 带动画回到屏幕中心
             AimToScreenPosition(new Vector2(0, 0));
@@ -223,7 +223,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public static void JumpToTarget()
         {
-            _currentNormalizedPosition = _targetNormalizedPosition;
+            _current_normalized_position = _target_normalized_position;
             RepaintSceneView();
         }
         #endregion
@@ -242,9 +242,9 @@ namespace SevenStrikeModules.XHud
             if (!TryGetTargetNormalizedPosition(out Vector2 targetPos))
                 return;
 
-            _targetNormalizedPosition = targetPos;
+            _target_normalized_position = targetPos;
 
-            if (Vector2.Distance(_currentNormalizedPosition, _targetNormalizedPosition) < 0.001f)
+            if (Vector2.Distance(_current_normalized_position, _target_normalized_position) < 0.001f)
                 return;
 
             JumpToTarget();
@@ -263,18 +263,18 @@ namespace SevenStrikeModules.XHud
         {
             position = Vector2.zero;
 
-            if (_sceneViewCamera == null)
+            if (_scene_view_camera == null)
             {
                 if (SceneView.lastActiveSceneView?.camera != null)
-                    _sceneViewCamera = SceneView.lastActiveSceneView.camera;
+                    _scene_view_camera = SceneView.lastActiveSceneView.camera;
                 else
                     return false;
             }
 
-            if (_targetRectTransform == null)
+            if (_target_rect_transform == null)
                 return false;
 
-            position = RectTransformToNormalizedPosition(_targetRectTransform);
+            position = RectTransformToNormalizedPosition(_target_rect_transform);
             return true;
         }
         /// <summary>
@@ -289,16 +289,16 @@ namespace SevenStrikeModules.XHud
         /// <returns>归一化位置。</returns>
         private static Vector2 WorldToNormalizedPosition(Vector3 worldPosition)
         {
-            if (_sceneViewCamera == null)
+            if (_scene_view_camera == null)
                 return new Vector2(0.5f, 0.5f);
 
-            Vector3 screenPoint = _sceneViewCamera.WorldToScreenPoint(worldPosition);
+            Vector3 screenPoint = _scene_view_camera.WorldToScreenPoint(worldPosition);
 
             if (screenPoint.z <= 0)
                 return new Vector2(0.5f, 0.5f);
 
-            float width = _lastSceneViewRect.width > 0 ? _lastSceneViewRect.width : Screen.width;
-            float height = _lastSceneViewRect.height > 0 ? _lastSceneViewRect.height : Screen.height;
+            float width = _last_scene_view_rect.width > 0 ? _last_scene_view_rect.width : Screen.width;
+            float height = _last_scene_view_rect.height > 0 ? _last_scene_view_rect.height : Screen.height;
 
             float normalizedX = Mathf.Clamp01(screenPoint.x / width);
             float normalizedY = Mathf.Clamp01(1f - (screenPoint.y / height));
@@ -316,7 +316,7 @@ namespace SevenStrikeModules.XHud
         /// <returns>归一化位置。</returns>
         private static Vector2 RectTransformToNormalizedPosition(RectTransform rectTransform)
         {
-            if (_sceneViewCamera == null)
+            if (_scene_view_camera == null)
                 return new Vector2(0.5f, 0.5f);
 
             Vector3[] worldCorners = new Vector3[4];
@@ -402,16 +402,16 @@ namespace SevenStrikeModules.XHud
         /// <param name="sceneView">当前 SceneView。</param>
         private static void OnSceneGUI(SceneView sceneView)
         {
-            if (!_isDisplayEnabled) return;
+            if (!_is_display_enabled) return;
 
             // 更新相机引用
-            _sceneViewCamera = sceneView.camera;
-            _lastSceneViewRect = sceneView.position;
+            _scene_view_camera = sceneView.camera;
+            _last_scene_view_rect = sceneView.position;
 
             if (TryGetTargetNormalizedPosition(out Vector2 targetPos))
             {
-                _targetNormalizedPosition = targetPos;
-                _currentNormalizedPosition = targetPos;
+                _target_normalized_position = targetPos;
+                _current_normalized_position = targetPos;
             }
 
             DrawCrosshair(sceneView);
@@ -431,8 +431,8 @@ namespace SevenStrikeModules.XHud
             float height = sceneView.position.height;
 
             // 计算当前实际屏幕坐标
-            float crossX = _currentNormalizedPosition.x * width;
-            float crossY = _currentNormalizedPosition.y * height;
+            float crossX = _current_normalized_position.x * width;
+            float crossY = _current_normalized_position.y * height;
 
             // 边界检查
             if (crossX < 0 || crossX > width || crossY < 0 || crossY > height)
@@ -441,19 +441,19 @@ namespace SevenStrikeModules.XHud
             Handles.BeginGUI();
 
             Color oldColor = GUI.color;
-            GUI.color = _aimColor;
+            GUI.color = _aim_color;
 
             // 绘制水平线
-            GUI.DrawTexture(new Rect(0, crossY - _lineThickness / 2, width, _lineThickness),
+            GUI.DrawTexture(new Rect(0, crossY - _line_thickness / 2, width, _line_thickness),
                 EditorGUIUtility.whiteTexture);
 
             // 绘制垂直线
-            GUI.DrawTexture(new Rect(crossX - _lineThickness / 2, 0, _lineThickness, height),
+            GUI.DrawTexture(new Rect(crossX - _line_thickness / 2, 0, _line_thickness, height),
                 EditorGUIUtility.whiteTexture);
 
             // 绘制中心点
-            GUI.color = new Color(_aimColor.r, _aimColor.g, _aimColor.b, 0.8f);
-            GUI.DrawTexture(new Rect(crossX - _dotSize / 2, crossY - _dotSize / 2, _dotSize, _dotSize),
+            GUI.color = new Color(_aim_color.r, _aim_color.g, _aim_color.b, 0.8f);
+            GUI.DrawTexture(new Rect(crossX - _dot_size / 2, crossY - _dot_size / 2, _dot_size, _dot_size),
                 EditorGUIUtility.whiteTexture);
 
             GUI.color = oldColor;
@@ -486,7 +486,7 @@ namespace SevenStrikeModules.XHud
         /// <returns>归一化位置。</returns>
         public static Vector2 GetCurrentPosition()
         {
-            return _currentNormalizedPosition;
+            return _current_normalized_position;
         }
         /// <summary>
         /// 聚焦到 UI 物体。

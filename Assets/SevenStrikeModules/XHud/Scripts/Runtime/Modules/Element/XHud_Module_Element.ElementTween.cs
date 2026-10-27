@@ -34,17 +34,17 @@ namespace SevenStrikeModules.XHud
         /// 动画状态
         /// 标识当前元素是否正在播放动画
         /// </summary>
-        public bool Animating;
+        public bool tweening;
         [SerializeField]
         /// <summary>
         /// 元素动画预览状态 - In
         /// </summary>
-        public bool TweensPreivew_In_State;
+        public bool tweens_preivew_in_state;
         [SerializeField]
         /// <summary>
         /// 元素动画预览状态 - Out
         /// </summary>
-        public bool TweensPreivew_Out_State;
+        public bool tweens_preivew_out_state;
         [SerializeField]
         /// <summary>
         /// 自动停止预览开关
@@ -53,17 +53,17 @@ namespace SevenStrikeModules.XHud
         /// 仅用于编辑器预览模式，不影响运行时行为
         /// 默认值为true
         /// </summary>
-        public bool AutoKillPreviewTweens = true;
+        public bool autokill_preview_tweens = true;
         [SerializeField]
         /// <summary>
         /// 预览杀死前先重置
         /// </summary>
-        public bool RewindPreviewTweensWithKill;
+        public bool rewind_preview_tweens_with_kill;
         [SerializeField]
         /// <summary>
         /// 杀死后清空预览器列表
         /// </summary>
-        public bool ClearPreviewTweensWithKill;
+        public bool clear_preview_tweens_with_kill;
         #endregion
 
         #region 元素自身基础动画节点
@@ -71,17 +71,17 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 动画模组 - 透明度_Alpha
         /// </summary>
-        public XTween_Interface Tween_Alpha;
+        public XTween_Interface tween_alpha;
         [SerializeField]
         /// <summary>
         /// 动画模组 - 位移
         /// </summary>
-        public XTween_Interface Tween_Move;
+        public XTween_Interface tween_move;
         [SerializeField]
         /// <summary>
         /// 动画模组 - 旋转_Rotation
         /// </summary>
-        public XTween_Interface Tween_Rotation;
+        public XTween_Interface tween_rotation;
         #endregion
 
         #region 元素预览位置参数
@@ -89,27 +89,27 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素预览生成时设定的位置
         /// </summary>
-        public Vector3 Crc_Preview_Position;
+        public Vector3 create_preview_position;
         [SerializeField]
         /// <summary>
         /// 元素预览回收时设定的位置
         /// </summary>
-        public Vector3 Rec_Preview_Position;
+        public Vector3 recycle_preview_position;
         [SerializeField]
         /// <summary>
         /// 预览时是否包含子级所有图元动画？
         /// </summary>
-        public bool PreviewIncludePrimitivesTween;
+        public bool preview_include_primitives_tween;
         [SerializeField]
         /// <summary>
         /// 预览生成时是否指定位置？
         /// </summary>
-        public bool Crc_Preview_SetPosition;
+        public bool create_preview_set_position;
         [SerializeField]
         /// <summary>
         /// 预览回收时是否指定位置
         /// </summary>
-        public bool Rec_Preview_SetPosition;
+        public bool recycle_preview_set_position;
         #endregion
 
         #region 元素动效库与动效参数
@@ -119,21 +119,21 @@ namespace SevenStrikeModules.XHud
         /// 用于从动效库中加载预设的生成动效参数
         /// 对应 Motion_Creator 类型的动效模板
         /// </summary>
-        public string Crc_Lib_Name;
+        public string motion_create_library_index_name;
         [SerializeField]
         /// <summary>
         /// 元素回收动效库名称
         /// 用于从动效库中加载预设的回收动效参数
         /// 对应 Motion_Recycler 类型的动效模板
         /// </summary>
-        public string Rec_Lib_Name;
+        public string motion_recycle_library_index_name;
         [SerializeField]
         /// <summary>
         /// 元素生成动效参数
         /// 定义元素进入/显示时的动画效果，包括位移、旋转、透明度等
         /// 支持缓动曲线、持续时间、延迟等参数配置
         /// </summary>
-        public Motion_Creator CreateArgs = new Motion_Creator
+        public Motion_Creator motion_create_args = new Motion_Creator
         {
             Alpha = new MotionNode_Alpha
             {
@@ -170,7 +170,7 @@ namespace SevenStrikeModules.XHud
         /// 定义元素退出/隐藏时的动画效果，包括位移、旋转、透明度等
         /// 支持缓动曲线、持续时间、延迟等参数配置
         /// </summary>
-        public Motion_Recycler RecycleArgs = new Motion_Recycler
+        public Motion_Recycler motion_recycle_args = new Motion_Recycler
         {
             Alpha = new MotionNode_Alpha
             {
@@ -215,12 +215,12 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void ElementTweensPlay()
         {
-            if (Tween_Alpha != null)
-                Tween_Alpha.Play();
-            if (Tween_Move != null)
-                Tween_Move.Play();
-            if (Tween_Rotation != null)
-                Tween_Rotation.Play();
+            if (tween_alpha != null)
+                tween_alpha.Play();
+            if (tween_move != null)
+                tween_move.Play();
+            if (tween_rotation != null)
+                tween_rotation.Play();
         }
         /// <summary>
         /// 杀死已创建的元素三项基础动画（透明度、位移、旋转）
@@ -228,24 +228,24 @@ namespace SevenStrikeModules.XHud
         /// <param name="complete">是否以"完成"语义杀死（传递给底层 XTween 的 Kill）</param>
         public void ElementTweens_Kill(bool complete = true)
         {
-            if (Tween_Alpha != null)
-                Tween_Alpha.Kill(complete);
-            if (Tween_Move != null)
-                Tween_Move.Kill(complete);
-            if (Tween_Rotation != null)
-                Tween_Rotation.Kill(complete);
+            if (tween_alpha != null)
+                tween_alpha.Kill(complete);
+            if (tween_move != null)
+                tween_move.Kill(complete);
+            if (tween_rotation != null)
+                tween_rotation.Kill(complete);
         }
         /// <summary>
         /// 清空已创建的元素三项基础动画（透明度、位移、旋转）的引用
         /// </summary>
         public void ElementTweens_Clear()
         {
-            if (Tween_Alpha != null)
-                Tween_Alpha = null;
-            if (Tween_Move != null)
-                Tween_Move = null;
-            if (Tween_Rotation != null)
-                Tween_Rotation = null;
+            if (tween_alpha != null)
+                tween_alpha = null;
+            if (tween_move != null)
+                tween_move = null;
+            if (tween_rotation != null)
+                tween_rotation = null;
         }
         /// <summary>
         /// 杀死已创建的元素子级下的所有图元动画
@@ -253,12 +253,12 @@ namespace SevenStrikeModules.XHud
         /// <param name="complete">是否以"完成"语义杀死</param>
         public void PrimitiveTweens_Kill(bool complete = true)
         {
-            for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
+            for (int i = 0; i < primitive_controller_nodes.Count; i++)
             {
-                PrimitiveControllerNode node = PrimitiveControllerNodes[i];
-                if (node.Controller.pt_Tween == null)
+                PrimitiveControllerNode node = primitive_controller_nodes[i];
+                if (node.controller.pt_tween == null)
                     continue;
-                node.Controller.pt_Tween.Tween_KillAll(complete);
+                node.controller.pt_tween.Tween_KillAll(complete);
             }
         }
         /// <summary>
@@ -266,12 +266,12 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void PrimitiveTweens_Clear()
         {
-            for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
+            for (int i = 0; i < primitive_controller_nodes.Count; i++)
             {
-                PrimitiveControllerNode node = PrimitiveControllerNodes[i];
-                if (node.Controller.pt_Tween == null)
+                PrimitiveControllerNode node = primitive_controller_nodes[i];
+                if (node.controller.pt_tween == null)
                     continue;
-                node.Controller.pt_Tween.Tween_CleanAll();
+                node.controller.pt_tween.Tween_CleanAll();
             }
         }
         #endregion
@@ -285,11 +285,11 @@ namespace SevenStrikeModules.XHud
         /// <param name="act_InComplete">进入完成时的额外回调</param>
         public virtual void Element_In(Motion_Creator args = null, UnityAction act_InComplete = null)
         {
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "杀死元素自身（透明度、位移、旋转）动画！", XGUIMsgState.警告);
             ElementTweens_Kill(true);
             ElementTweens_Clear();
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "进入动画开始！", XGUIMsgState.通知);
             ElementTweens_Creator(args, act_InComplete);
             ElementTweensPlay();
@@ -307,23 +307,23 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public virtual void Element_In_Start()
         {
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "元素进入前逻辑调用", XGUIMsgState.通知);
-            AnimateState = XHudElementAnimateState.Animating;
-            Animating = true;
-            if (DebugState)
+            animate_state = XHudElementAnimateState.Animating;
+            tweening = true;
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用Canvas像素对齐！", XGUIMsgState.警告);
             if (Application.isPlaying)
             {
-                if (XHud_Manager.Instance.UseAutoPerfectPixel)
-                    XHud_Manager.Instance.hm_UsePixelPerfect(false);
+                if (XHud_Manager.instance.cv_use_auto_perfect_pixel)
+                    XHud_Manager.instance.hm_UsePixelPerfect(false);
             }
             else
             {
-                if (XHud_Dashboard.get_manager().UseAutoPerfectPixel)
+                if (XHud_Dashboard.get_manager().cv_use_auto_perfect_pixel)
                     XHud_Dashboard.get_manager().hm_UsePixelPerfect(false);
             }
-            if (AutoPlayPrimitivesTween)
+            if (autoplay_primitives_tween)
                 PrimitiveTweens_Play("元素进入时");
         }
         /// <summary>
@@ -332,23 +332,23 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public virtual void Element_In_End()
         {
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "元素进入后逻辑调用", XGUIMsgState.通知);
-            AnimateState = XHudElementAnimateState.Static;
-            Animating = false;
-            if (DebugState)
+            animate_state = XHudElementAnimateState.Static;
+            tweening = false;
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "恢复Canvas像素对齐！", XGUIMsgState.警告);
             if (Application.isPlaying)
             {
-                if (XHud_Manager.Instance.UseAutoPerfectPixel)
-                    XHud_Manager.Instance.hm_UsePixelPerfect(true);
+                if (XHud_Manager.instance.cv_use_auto_perfect_pixel)
+                    XHud_Manager.instance.hm_UsePixelPerfect(true);
             }
             else
             {
-                if (XHud_Dashboard.get_manager().UseAutoPerfectPixel)
+                if (XHud_Dashboard.get_manager().cv_use_auto_perfect_pixel)
                     XHud_Dashboard.get_manager().hm_UsePixelPerfect(true);
             }
-            if (AutoPlayPrimitivesTween)
+            if (autoplay_primitives_tween)
                 PrimitiveTweens_Play("元素进入后");
         }
         #endregion
@@ -362,11 +362,11 @@ namespace SevenStrikeModules.XHud
         /// <param name="act_OutComplete">退出完成时的额外回调</param>
         public virtual void Element_Out(Motion_Recycler args = null, UnityAction act_OutComplete = null)
         {
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "杀死元素自身（透明度、位移、旋转）动画！", XGUIMsgState.警告);
             ElementTweens_Kill(true);
             ElementTweens_Clear();
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "退出动画开始！", XGUIMsgState.通知);
             ElementTweens_Recycler(args, act_OutComplete);
             ElementTweensPlay();
@@ -384,23 +384,23 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public virtual void Element_Out_Start()
         {
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "退出前逻辑调用", XGUIMsgState.通知);
-            AnimateState = XHudElementAnimateState.Animating;
-            if (DebugState)
+            animate_state = XHudElementAnimateState.Animating;
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用Canvas像素对齐！", XGUIMsgState.警告);
             if (Application.isPlaying)
             {
-                if (XHud_Manager.Instance.UseAutoPerfectPixel)
-                    XHud_Manager.Instance.hm_UsePixelPerfect(false);
+                if (XHud_Manager.instance.cv_use_auto_perfect_pixel)
+                    XHud_Manager.instance.hm_UsePixelPerfect(false);
             }
             else
             {
-                if (XHud_Dashboard.get_manager().UseAutoPerfectPixel)
+                if (XHud_Dashboard.get_manager().cv_use_auto_perfect_pixel)
                     XHud_Dashboard.get_manager().hm_UsePixelPerfect(false);
             }
-            Animating = true;
-            if (AutoPlayPrimitivesTween)
+            tweening = true;
+            if (autoplay_primitives_tween)
                 PrimitiveTweens_Play("元素退出时");
         }
         /// <summary>
@@ -410,42 +410,42 @@ namespace SevenStrikeModules.XHud
         /// <param name="args">回收动效参数（透传给后续逻辑）</param>
         public virtual void Element_Out_End(Motion_Recycler args = null)
         {
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "退出后逻辑调用", XGUIMsgState.通知);
-            AnimateState = XHudElementAnimateState.Static;
-            if (DebugState)
+            animate_state = XHudElementAnimateState.Static;
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "恢复Canvas像素对齐！", XGUIMsgState.警告);
             if (Application.isPlaying)
             {
-                if (XHud_Manager.Instance.UseAutoPerfectPixel)
-                    XHud_Manager.Instance.hm_UsePixelPerfect(true);
+                if (XHud_Manager.instance.cv_use_auto_perfect_pixel)
+                    XHud_Manager.instance.hm_UsePixelPerfect(true);
             }
             else
             {
-                if (XHud_Dashboard.get_manager().UseAutoPerfectPixel)
+                if (XHud_Dashboard.get_manager().cv_use_auto_perfect_pixel)
                     XHud_Dashboard.get_manager().hm_UsePixelPerfect(true);
             }
-            Animating = false;
+            tweening = false;
             element_ObjectTracker_Remove();
             if (Application.isPlaying)
             {
-                for (int i = 0; i < XHud_Manager.Instance.Anchors_Layout_Screen.Count; i++)
+                for (int i = 0; i < XHud_Manager.instance.cv_anchors_layout_screen.Count; i++)
                 {
-                    for (int s = 0; s < XHud_Manager.Instance.Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
+                    for (int s = 0; s < XHud_Manager.instance.cv_anchors_layout_screen[i].HudElementInfos.Count; s++)
                     {
-                        if (this.ID == XHud_Manager.Instance.Anchors_Layout_Screen[i].HudElementInfos[s].ID)
-                            XHud_Manager.Instance.Anchors_Layout_Screen[i].HudElementInfos.RemoveAt(s);
+                        if (this.ID == XHud_Manager.instance.cv_anchors_layout_screen[i].HudElementInfos[s].ID)
+                            XHud_Manager.instance.cv_anchors_layout_screen[i].HudElementInfos.RemoveAt(s);
                     }
                 }
             }
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", "回收到元素池！", XGUIMsgState.通知);
-            if (CreateState == XHudElementCreateState.Created)
+            if (create_state == XHudElementCreateState.Created)
             {
-                if (this.CreatedSourceType == XHudElementCreatedSourceType.Library)
+                if (this.created_source_type == XHudElementCreatedSourceType.Library)
                 {
                     element_Reset(true);
-                    XHud_Manager.Instance.hm_ElementLibrary_Despawn(this);
+                    XHud_Manager.instance.hm_ElementLibrary_Despawn(this);
                 }
                 else
                 {
@@ -483,13 +483,13 @@ namespace SevenStrikeModules.XHud
         /// <param name="pos">预览预设位置</param>
         public void ElementTweens_Creator(Motion_Creator args, UnityAction act_InComplete, bool isPreview = false, bool PosSet = false, Vector3 pos = default)
         {
-            float duration = isPreview ? XHud_Dashboard.get_manager().DurationMultiply * PrimitivesTweenGlobalDuration : XHud_Manager.Instance.DurationMultiply * PrimitivesTweenGlobalDuration;
+            float duration = isPreview ? XHud_Dashboard.get_manager().tween_global_duration * primitives_tween_global_duration : XHud_Manager.instance.tween_global_duration * primitives_tween_global_duration;
             Vector3 ori_pos = Vector3.zero;
             if (isPreview)
             {
                 if (PosSet)
                 {
-                    ori_pos = RectTransform.anchoredPosition3D;
+                    ori_pos = rect_transform.anchoredPosition3D;
                     element_PositionSet(pos);
                 }
                 element_AlphaSet(0);
@@ -497,9 +497,9 @@ namespace SevenStrikeModules.XHud
             }
 
             #region 动作 - 透明度动画
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", args.Alpha.Ease != EaseMode.None ? "播放透明度动画 - 根据缓动参数" : "播放透明度动画 - 根据曲线参数", XGUIMsgState.通知);
-            Tween_Alpha = ApplyEase(XTween.To(() => Alpha, x => Alpha = x, 1, args.Alpha.Duration * duration, isPreview ? false : true), args.Alpha.Ease, args.Alpha.Curve).SetDelay(args.Alpha.Delay)
+            tween_alpha = ApplyEase(XTween.To(() => alpha, x => alpha = x, 1, args.Alpha.Duration * duration, isPreview ? false : true), args.Alpha.Ease, args.Alpha.Curve).SetDelay(args.Alpha.Delay)
                 .OnUpdate<float>((v, d, t) =>
                 {
                     if (isPreview)
@@ -509,7 +509,7 @@ namespace SevenStrikeModules.XHud
                         if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                         {
                             if (act_on_element_in_progress != null)
-                                act_on_element_in_progress(Tween_Alpha.CurrentEasedProgress);
+                                act_on_element_in_progress(tween_alpha.CurrentEasedProgress);
                         }
                     }
                 })
@@ -545,8 +545,8 @@ namespace SevenStrikeModules.XHud
                 #region 位置计算
                 Vector3 endvalue = Vector3.zero;
                 Vector3 fromvalue = Vector3.zero;
-                Vector3 current = RectTransform.anchoredPosition3D;
-                Vector3 scale = RectTransform.localScale;
+                Vector3 current = rect_transform.anchoredPosition3D;
+                Vector3 scale = rect_transform.localScale;
                 switch (args.Movement.Movement)
                 {
                     case HudMotion_Movement.A_无运动:
@@ -643,11 +643,11 @@ namespace SevenStrikeModules.XHud
                 }
                 #endregion
 
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", args.Movement.Ease != EaseMode.None ? "播放运动动画 - 根据缓动参数" : "播放运动动画 - 根据曲线参数", XGUIMsgState.通知);
                 if (args.Movement.Movement == HudMotion_Movement.W_中心缩放)
                 {
-                    Tween_Move = ApplyEase(RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * duration).SetAutoKill(isPreview ? false : true).SetFrom(fromvalue).SetDelay(args.Movement.Delay), args.Movement.Ease, args.Movement.Curve)
+                    tween_move = ApplyEase(rect_transform.xt_Scale_To(endvalue, args.Movement.Duration * duration).SetAutoKill(isPreview ? false : true).SetFrom(fromvalue).SetDelay(args.Movement.Delay), args.Movement.Ease, args.Movement.Curve)
                         .OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (!isPreview)
@@ -655,14 +655,14 @@ namespace SevenStrikeModules.XHud
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_in_progress != null)
-                                        act_on_element_in_progress(Tween_Move.CurrentEasedProgress);
+                                        act_on_element_in_progress(tween_move.CurrentEasedProgress);
                                 }
                             }
                         })
                         .OnComplete((d) =>
                         {
                             if (isPreview)
-                                RectTransform.localScale = scale;
+                                rect_transform.localScale = scale;
                             if (!isPreview)
                             {
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
@@ -685,7 +685,7 @@ namespace SevenStrikeModules.XHud
                 }
                 else
                 {
-                    Tween_Move = ApplyEase(RectTransform.xt_AnchoredPosition3D_To(endvalue, args.Movement.Duration * duration).SetAutoKill(isPreview ? false : true).SetFrom(fromvalue).SetRelative(true).SetDelay(args.Movement.Delay), args.Movement.Ease, args.Movement.Curve)
+                    tween_move = ApplyEase(rect_transform.xt_AnchoredPosition3D_To(endvalue, args.Movement.Duration * duration).SetAutoKill(isPreview ? false : true).SetFrom(fromvalue).SetRelative(true).SetDelay(args.Movement.Delay), args.Movement.Ease, args.Movement.Curve)
                         .OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (!isPreview)
@@ -693,7 +693,7 @@ namespace SevenStrikeModules.XHud
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_in_progress != null)
-                                        act_on_element_in_progress(Tween_Move.CurrentEasedProgress);
+                                        act_on_element_in_progress(tween_move.CurrentEasedProgress);
                                 }
                             }
                         })
@@ -732,7 +732,7 @@ namespace SevenStrikeModules.XHud
             {
                 #region 角度计算
                 Vector3 endvalue = Vector3.zero;
-                Vector3 current = RectTransform.localEulerAngles;
+                Vector3 current = rect_transform.localEulerAngles;
                 switch (args.Rotation.Rotation)
                 {
                     case HudMotion_Rotation.A_无旋转:
@@ -758,9 +758,9 @@ namespace SevenStrikeModules.XHud
                 }
                 #endregion
 
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", args.Rotation.Ease != EaseMode.None ? "播放旋转动画 - 根据缓动参数" : "播放旋转动画 - 根据曲线参数", XGUIMsgState.通知);
-                Tween_Rotation = ApplyEase(RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * duration, true, false, XTweenRotationSpace.本地坐标, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetAutoKill(isPreview ? false : true), args.Rotation.Ease, args.Rotation.Curve)
+                tween_rotation = ApplyEase(rect_transform.xt_Rotate_To(endvalue, args.Rotation.Duration * duration, true, false, XTweenRotationSpace.本地坐标, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetAutoKill(isPreview ? false : true), args.Rotation.Ease, args.Rotation.Curve)
                     .OnUpdate<Vector3>((v, d, t) =>
                     {
                         if (!isPreview)
@@ -768,7 +768,7 @@ namespace SevenStrikeModules.XHud
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                             {
                                 if (act_on_element_in_progress != null)
-                                    act_on_element_in_progress(Tween_Rotation.CurrentEasedProgress);
+                                    act_on_element_in_progress(tween_rotation.CurrentEasedProgress);
                             }
                         }
                     })
@@ -813,7 +813,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="pos">预览预设位置</param>
         public void ElementTweens_Recycler(Motion_Recycler args, UnityAction act_OutComplete, bool isPreview = false, bool PosSet = false, Vector3 pos = default)
         {
-            float duration = isPreview ? XHud_Dashboard.get_manager().DurationMultiply : XHud_Manager.Instance.DurationMultiply * PrimitivesTweenGlobalDuration;
+            float duration = isPreview ? XHud_Dashboard.get_manager().tween_global_duration : XHud_Manager.instance.tween_global_duration * primitives_tween_global_duration;
             Vector3 ori_pos = Vector3.zero;
             if (isPreview)
             {
@@ -824,9 +824,9 @@ namespace SevenStrikeModules.XHud
             }
 
             #region 动作 - 透明度动画
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素控件通知", args.Alpha.Ease != EaseMode.None ? "播放透明度动画 - 根据缓动参数" : "播放透明度动画 - 根据曲线参数", XGUIMsgState.通知);
-            Tween_Alpha = ApplyEase(XTween.To(() => Alpha, x => Alpha = x, 0, args.Alpha.Duration * duration, isPreview ? false : true), args.Alpha.Ease, args.Alpha.Curve)
+            tween_alpha = ApplyEase(XTween.To(() => alpha, x => alpha = x, 0, args.Alpha.Duration * duration, isPreview ? false : true), args.Alpha.Ease, args.Alpha.Curve)
                 .SetDelay(args.Alpha.Delay)
                 .OnUpdate<float>((v, d, t) =>
                 {
@@ -837,7 +837,7 @@ namespace SevenStrikeModules.XHud
                         if (args.MotionAnimateEndState == MotionAnimateEndState.以_透明度为准)
                         {
                             if (act_on_element_out_progress != null)
-                                act_on_element_out_progress(Tween_Alpha.CurrentEasedProgress);
+                                act_on_element_out_progress(tween_alpha.CurrentEasedProgress);
                         }
                     }
                 })
@@ -872,8 +872,8 @@ namespace SevenStrikeModules.XHud
             {
                 #region 位置计算
                 Vector3 endvalue = Vector3.zero;
-                Vector3 current = RectTransform.anchoredPosition3D;
-                Vector3 scale = RectTransform.localScale;
+                Vector3 current = rect_transform.anchoredPosition3D;
+                Vector3 scale = rect_transform.localScale;
                 switch (args.Movement.Movement)
                 {
                     case HudMotion_Movement.A_无运动:
@@ -934,11 +934,11 @@ namespace SevenStrikeModules.XHud
                     endvalue += current;
                 #endregion
 
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", args.Movement.Ease != EaseMode.None ? "播放运动动画 - 根据缓动参数" : "播放运动动画 - 根据曲线参数", XGUIMsgState.通知);
                 if (args.Movement.Movement == HudMotion_Movement.W_中心缩放)
                 {
-                    Tween_Move = ApplyEase(RectTransform.xt_Scale_To(endvalue, args.Movement.Duration * duration).SetDelay(args.Movement.Delay).SetAutoKill(isPreview ? false : true), args.Movement.Ease, args.Movement.Curve)
+                    tween_move = ApplyEase(rect_transform.xt_Scale_To(endvalue, args.Movement.Duration * duration).SetDelay(args.Movement.Delay).SetAutoKill(isPreview ? false : true), args.Movement.Ease, args.Movement.Curve)
                         .OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (!isPreview)
@@ -946,7 +946,7 @@ namespace SevenStrikeModules.XHud
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_out_progress != null)
-                                        act_on_element_out_progress(Tween_Move.CurrentEasedProgress);
+                                        act_on_element_out_progress(tween_move.CurrentEasedProgress);
                                 }
                             }
                         })
@@ -974,7 +974,7 @@ namespace SevenStrikeModules.XHud
                 }
                 else
                 {
-                    Tween_Move = ApplyEase(RectTransform.xt_AnchoredPosition3D_To(endvalue, args.Movement.Duration * duration).SetRelative(true).SetDelay(args.Movement.Delay).SetAutoKill(isPreview ? false : true), args.Movement.Ease, args.Movement.Curve)
+                    tween_move = ApplyEase(rect_transform.xt_AnchoredPosition3D_To(endvalue, args.Movement.Duration * duration).SetRelative(true).SetDelay(args.Movement.Delay).SetAutoKill(isPreview ? false : true), args.Movement.Ease, args.Movement.Curve)
                         .OnUpdate<Vector3>((v, d, t) =>
                         {
                             if (!isPreview)
@@ -982,7 +982,7 @@ namespace SevenStrikeModules.XHud
                                 if (args.MotionAnimateEndState == MotionAnimateEndState.以_移动为准)
                                 {
                                     if (act_on_element_out_progress != null)
-                                        act_on_element_out_progress(Tween_Move.CurrentEasedProgress);
+                                        act_on_element_out_progress(tween_move.CurrentEasedProgress);
                                 }
                             }
                         })
@@ -1021,7 +1021,7 @@ namespace SevenStrikeModules.XHud
             {
                 #region 角度计算
                 Vector3 endvalue = Vector3.zero;
-                Vector3 euler = RectTransform.localEulerAngles;
+                Vector3 euler = rect_transform.localEulerAngles;
                 switch (args.Rotation.Rotation)
                 {
                     case HudMotion_Rotation.A_无旋转:
@@ -1047,9 +1047,9 @@ namespace SevenStrikeModules.XHud
                 }
                 #endregion
 
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", args.Rotation.Ease != EaseMode.None ? "播放旋转动画 - 根据缓动参数" : "播放旋转动画 - 根据曲线参数", XGUIMsgState.通知);
-                Tween_Rotation = ApplyEase(RectTransform.xt_Rotate_To(endvalue, args.Rotation.Duration * duration, true, isPreview ? false : true, XTweenRotationSpace.本地坐标, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetAutoKill(isPreview ? false : true), args.Rotation.Ease, args.Rotation.Curve)
+                tween_rotation = ApplyEase(rect_transform.xt_Rotate_To(endvalue, args.Rotation.Duration * duration, true, isPreview ? false : true, XTweenRotationSpace.本地坐标, XTweenRotationMode.Normal).SetRelative(true).SetDelay(args.Rotation.Delay).SetAutoKill(isPreview ? false : true), args.Rotation.Ease, args.Rotation.Curve)
                     .OnUpdate<Vector3>((v, d, t) =>
                     {
                         if (!isPreview)
@@ -1057,7 +1057,7 @@ namespace SevenStrikeModules.XHud
                             if (args.MotionAnimateEndState == MotionAnimateEndState.以_旋转为准)
                             {
                                 if (act_on_element_out_progress != null)
-                                    act_on_element_out_progress(Tween_Rotation.CurrentEasedProgress);
+                                    act_on_element_out_progress(tween_rotation.CurrentEasedProgress);
                             }
                         }
                     })

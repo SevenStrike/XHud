@@ -53,7 +53,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 100,
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: CameraOrthographicSize,
+                prop: sp_camera_ui_orthographic_size,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -68,7 +68,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 100,
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: CameraCutter_Near,
+                prop: sp_camera_ui_cutter_near,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -83,14 +83,14 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 100,
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraCutter_Far.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: CameraCutter_Far,
+                prop: sp_camera_ui_cutter_far,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
             XGUI.layout_space(5);
 
             #region 视场角
-            if (!CameraOthograpicMode.boolValue)
+            if (!sp_camera_othograpic_mode.boolValue)
             {
                 XGUI.layout_space(5);
 
@@ -102,7 +102,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 100,
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraFov.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: CameraFov,
+                prop: sp_camera_ui_fov,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             }
             #endregion
@@ -122,14 +122,14 @@ namespace SevenStrikeModules.XHud.Editor
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
                 status_icon: "icon_field_status",
-                status_icon_color: SceneCamera.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: SceneCamera,
+                status_icon_color: sp_camera_scene.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
+                prop: sp_camera_scene,
                 prop_margin: new RectOffset(0, 0, 10, 10));
             if (XGUI.ChangedCheck_End())
             {
                 if (!Application.isPlaying)
                 {
-                    Camera cam = (Camera)SceneCamera.objectReferenceValue;
+                    Camera cam = (Camera)sp_camera_scene.objectReferenceValue;
 
                     EditorApplication.delayCall += () =>
                     {
@@ -149,14 +149,14 @@ namespace SevenStrikeModules.XHud.Editor
                                 {
                                     if (cam != null && cam.GetUniversalAdditionalCameraData().renderType == CameraRenderType.Base)
                                     {
-                                        BaseScript.hm_SceneCam_CheckStack((Camera)SceneCamera.objectReferenceValue);
+                                        base_script.hm_SceneCam_CheckStack((Camera)sp_camera_scene.objectReferenceValue);
                                     }
                                     else
                                     {
-                                        SceneCamera.objectReferenceValue = null;
+                                        sp_camera_scene.objectReferenceValue = null;
                                     }
 
-                                    SceneCamera.serializedObject.ApplyModifiedProperties();
+                                    sp_camera_scene.serializedObject.ApplyModifiedProperties();
 
                                     // 获取 "XHUD" 图层的 LayerMask
                                     int xhudMask = LayerMask.GetMask("XHud");
@@ -178,8 +178,8 @@ namespace SevenStrikeModules.XHud.Editor
                                 }
                                 else
                                 {
-                                    SceneCamera.objectReferenceValue = null;
-                                    SceneCamera.serializedObject.ApplyModifiedProperties();
+                                    sp_camera_scene.objectReferenceValue = null;
+                                    sp_camera_scene.serializedObject.ApplyModifiedProperties();
                                 }
                                 return;
                             });
@@ -187,7 +187,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
 
-            if (SceneCamera.objectReferenceValue == null)
+            if (sp_camera_scene.objectReferenceValue == null)
                 XGUI.layout_helpbox(
                     state: XGUIHelboxState.错误,
                     title_text: "请指定场景主相机！",

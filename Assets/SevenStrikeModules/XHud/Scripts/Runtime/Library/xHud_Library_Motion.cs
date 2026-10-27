@@ -100,52 +100,52 @@ namespace SevenStrikeModules.XHud
     [CreateAssetMenu(fileName = "XHud_Library_ElementMotion", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-ElementMotion (元素动效库)", order = 0)]
     public class XHud_Library_Motion : ScriptableObject
     {
-        public string LibraryName = "NewMotionLibrary";
+        public string library_name = "NewMotionLibrary";
 
         /// <summary>
         /// Editor列表项高度
         /// </summary>
-        public float itemHeight = 80;
+        public float item_height = 80;
 
         /// <summary>
         /// 可视区域显示的元素数量
         /// </summary>
-        public int visibleItemCount = 6;
+        public int visible_item_count = 6;
 
         /// <summary>
         /// 名称项查找（精确匹配）
         /// </summary>
-        public string Find = "";
+        public string find = "";
 
         /// <summary>
         /// Editor筛选名称
         /// </summary>
-        public string Highlight;
+        public string highlight;
 
         /// <summary>
         /// 选中项索引号
         /// </summary>
-        public int SelectedIndex;
+        public int selected_index;
 
         /// <summary>
         /// 定位选中项索引号
         /// </summary>
-        public int LocationSelectedIndex = -1;
+        public int location_selected_index = -1;
 
         /// <summary>
         /// 列表滚动位置
         /// </summary>
-        public Vector2 ElementMotionList_Scroller;
+        public Vector2 motion_list_scroller;
 
         /// <summary>
         /// 元素参数模版列表
         /// </summary>
-        public List<XHud_LibraryArg_Motion> ElementMotionList = new List<XHud_LibraryArg_Motion>();
+        public List<XHud_LibraryArg_Motion> motion_list = new List<XHud_LibraryArg_Motion>();
 
         private void OnEnable()
         {
-            itemHeight = 80;
-            visibleItemCount = 6;
+            item_height = 80;
+            visible_item_count = 6;
         }
 
         // 确保内部名称与文件名一致
@@ -165,7 +165,7 @@ namespace SevenStrikeModules.XHud
 
         public void ElementMotion_ReplaceMotion(int Index, XHud_LibraryArg_Motion motion)
         {
-            ElementMotionList[Index] = motion;
+            motion_list[Index] = motion;
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="motion"></param>
         public void ElementMotion_Add(XHud_LibraryArg_Motion motion)
         {
-            ElementMotionList.Add(motion);
+            motion_list.Add(motion);
         }
 
         /// <summary>
@@ -183,10 +183,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="name"></param>
         public void ElementMotion_Remove(string name)
         {
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Name == name)
-                    ElementMotionList.RemoveAt(i);
+                if (motion_list[i].Name == name)
+                    motion_list.RemoveAt(i);
             }
         }
 
@@ -195,7 +195,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void ElementMotion_RemoveAll()
         {
-            ElementMotionList.Clear();
+            motion_list.Clear();
         }
 
         /// <summary>
@@ -206,9 +206,9 @@ namespace SevenStrikeModules.XHud
         public bool ElementMotion_IsExist(string name)
         {
             bool sw = false;
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Name == name)
+                if (motion_list[i].Name == name)
                 {
                     sw = true;
                     break;
@@ -232,9 +232,9 @@ namespace SevenStrikeModules.XHud
         public bool ElementMotion_IsExist(string name, HudElementMotionType type)
         {
             bool sw = false;
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Name == name && ElementMotionList[i].Mode == (int)type)
+                if (motion_list[i].Name == name && motion_list[i].Mode == (int)type)
                 {
                     sw = true;
                     break;
@@ -258,11 +258,11 @@ namespace SevenStrikeModules.XHud
         public XHud_LibraryArg_Motion ElementMotion_GetMotion(string name, HudElementMotionType type)
         {
             XHud_LibraryArg_Motion pi = null;
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Name == name && ElementMotionList[i].Mode == (int)type)
+                if (motion_list[i].Name == name && motion_list[i].Mode == (int)type)
                 {
-                    pi = ElementMotionList[i];
+                    pi = motion_list[i];
                 }
             }
 
@@ -276,7 +276,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public XHud_LibraryArg_Motion ElementMotion_GetMotion(int index, HudElementMotionType type)
         {
-            return ElementMotionList[index].Mode == (int)type ? ElementMotionList[index] : null;
+            return motion_list[index].Mode == (int)type ? motion_list[index] : null;
         }
 
         /// <summary>
@@ -287,9 +287,9 @@ namespace SevenStrikeModules.XHud
         public int ElementMotion_GetIndexWithName(string name)
         {
             int pi = 0;
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Name == name)
+                if (motion_list[i].Name == name)
                 {
                     pi = i;
                 }
@@ -305,7 +305,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public string ElementMotion_GetNameWithIndex(int index)
         {
-            return ElementMotionList[index].Name;
+            return motion_list[index].Name;
         }
 
         /// <summary>
@@ -315,7 +315,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public XHud_LibraryArg_Motion[] ElementMotion_GetAllMotion()
         {
-            return ElementMotionList.ToArray();
+            return motion_list.ToArray();
         }
 
         /// <summary>
@@ -324,10 +324,10 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public string[] ElementMotion_GetAllMotionName()
         {
-            string[] names = new string[ElementMotionList.Count];
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            string[] names = new string[motion_list.Count];
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                names[i] = ElementMotionList[i].Name;
+                names[i] = motion_list[i].Name;
             }
             return names;
         }
@@ -340,10 +340,10 @@ namespace SevenStrikeModules.XHud
         {
             List<string> names = new List<string>();
             names.Add("None");
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Mode == 0)
-                    names.Add(ElementMotionList[i].Name);
+                if (motion_list[i].Mode == 0)
+                    names.Add(motion_list[i].Name);
             }
             return names.ToArray();
         }
@@ -356,10 +356,10 @@ namespace SevenStrikeModules.XHud
         {
             List<string> names = new List<string>();
             names.Add("None");
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Mode == 1)
-                    names.Add(ElementMotionList[i].Name);
+                if (motion_list[i].Mode == 1)
+                    names.Add(motion_list[i].Name);
             }
             return names.ToArray();
         }
@@ -371,10 +371,10 @@ namespace SevenStrikeModules.XHud
         public XHud_LibraryArg_Motion[] ElementMotion_GetAllMotion_With_Create()
         {
             List<XHud_LibraryArg_Motion> items = new List<XHud_LibraryArg_Motion>();
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Mode == 0)
-                    items.Add(ElementMotionList[i]);
+                if (motion_list[i].Mode == 0)
+                    items.Add(motion_list[i]);
             }
             return items.ToArray();
         }
@@ -386,10 +386,10 @@ namespace SevenStrikeModules.XHud
         public XHud_LibraryArg_Motion[] ElementMotion_GetAllMotion_With_Recycle()
         {
             List<XHud_LibraryArg_Motion> items = new List<XHud_LibraryArg_Motion>();
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Mode == 1)
-                    items.Add(ElementMotionList[i]);
+                if (motion_list[i].Mode == 1)
+                    items.Add(motion_list[i]);
             }
             return items.ToArray();
         }
@@ -401,10 +401,10 @@ namespace SevenStrikeModules.XHud
         public Motion_Creator[] ElementMotion_GetElementCreator_At_Create()
         {
             List<Motion_Creator> items = new List<Motion_Creator>();
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Mode == 0)
-                    items.Add(ElementMotionList[i].Crc);
+                if (motion_list[i].Mode == 0)
+                    items.Add(motion_list[i].Crc);
             }
             return items.ToArray();
         }
@@ -416,13 +416,13 @@ namespace SevenStrikeModules.XHud
         public Motion_Creator ElementMotion_GetElementCreator_At_Create(string name)
         {
             Motion_Creator items = new Motion_Creator();
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Mode == 0)
+                if (motion_list[i].Mode == 0)
                 {
-                    if (ElementMotionList[i].Name == name)
+                    if (motion_list[i].Name == name)
                     {
-                        items = ElementMotionList[i].Crc;
+                        items = motion_list[i].Crc;
                     }
                 }
             }
@@ -436,10 +436,10 @@ namespace SevenStrikeModules.XHud
         public Motion_Recycler[] ElementMotion_GetElementCreator_At_Recycle()
         {
             List<Motion_Recycler> items = new List<Motion_Recycler>();
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Mode == 0)
-                    items.Add(ElementMotionList[i].Rec);
+                if (motion_list[i].Mode == 0)
+                    items.Add(motion_list[i].Rec);
             }
             return items.ToArray();
         }
@@ -451,13 +451,13 @@ namespace SevenStrikeModules.XHud
         public Motion_Recycler ElementMotion_GetElementCreator_At_Recycle(string name)
         {
             Motion_Recycler items = new Motion_Recycler();
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Mode == 1)
+                if (motion_list[i].Mode == 1)
                 {
-                    if (ElementMotionList[i].Name == name)
+                    if (motion_list[i].Name == name)
                     {
-                        items = ElementMotionList[i].Rec;
+                        items = motion_list[i].Rec;
                     }
                 }
             }
@@ -470,7 +470,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public bool ElementMotion_IsEmpty()
         {
-            if (ElementMotionList.Count > 0)
+            if (motion_list.Count > 0)
                 return false;
             else
                 return true;
@@ -483,30 +483,30 @@ namespace SevenStrikeModules.XHud
         public void ElementMotionLibrary_Location(string name)
         {
             int index = ElementMotion_GetIndexWithName(name);
-            SelectedIndex = index;
-            LocationSelectedIndex = index;
-            Highlight = name;
+            selected_index = index;
+            location_selected_index = index;
+            highlight = name;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Name == name)
+                if (motion_list[i].Name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = ElementMotionList_Scroller;
+            Vector2 newscroll = motion_list_scroller;
             newscroll.y = scrollval;
-            ElementMotionList_Scroller = newscroll;
+            motion_list_scroller = newscroll;
         }
 
         /// <summary>
@@ -516,29 +516,29 @@ namespace SevenStrikeModules.XHud
         public void ElementMotionLibrary_Location_Find(string name)
         {
             int index = ElementMotion_GetIndexWithName(name);
-            SelectedIndex = index;
-            LocationSelectedIndex = index;
+            selected_index = index;
+            location_selected_index = index;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < ElementMotionList.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < motion_list.Count; i++)
             {
-                if (ElementMotionList[i].Name == name)
+                if (motion_list[i].Name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = ElementMotionList_Scroller;
+            Vector2 newscroll = motion_list_scroller;
             newscroll.y = scrollval;
-            ElementMotionList_Scroller = newscroll;
+            motion_list_scroller = newscroll;
         }
     }
 }

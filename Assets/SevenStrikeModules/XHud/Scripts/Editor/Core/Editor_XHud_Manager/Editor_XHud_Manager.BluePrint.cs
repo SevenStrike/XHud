@@ -47,7 +47,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_state_displayer_text(
                 title: "蓝图激活状态",
                 title_size: XGUIFontSize.M,
-                subtitle: BluePrint_Displayed.boolValue ? "激活" : "未激活",
+                subtitle: sp_bp_displayed.boolValue ? "激活" : "未激活",
                 subtitle_size: XGUIFontSize.M,
                 subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 padding: new RectOffset(0, 0, 5, 0));
@@ -56,7 +56,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 整体透明度
             XGUI.layout_slider(
                 title: "整体透明度",
-                prop: BluePrint_opacity,
+                prop: sp_bp_opacity,
                 left: 0,
                 right: 1,
                 title_width: 100,
@@ -71,7 +71,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 背景透明度
             XGUI.layout_slider(
               title: "背景透明度",
-              prop: BluePrint_bg_opacity,
+              prop: sp_bp_bg_opacity,
               left: 0,
               right: 1,
               title_width: 100,
@@ -89,7 +89,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_Bg_AnimationEase_In,
+                prop: sp_bp_bg_animation_ease_in,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -99,7 +99,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_Bg_AnimationEase_Out,
+                prop: sp_bp_bg_animation_ease_out,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -109,21 +109,21 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_Bg_FadeAnimationDelay,
+                prop: sp_bp_bg_fade_animation_delay,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
             #region 背景色
             XGUI.layout_colorfield(
-                prop: BluePrint_bg_color,
+                prop: sp_bp_bg_color,
                 title: "背景色",
                 title_width: 140,
                 //title_color: Color.white,
                 //icon: "icon_field_status",
                 //icon_color: Color.red,
                 state_title: "Hex：",
-                state_value: $"#{XGUI_Utilitys.Color_To_HexString(BluePrint_bg_color.colorValue)}",
-                state_value_color: BluePrint_bg_color.colorValue);
+                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_bp_bg_color.colorValue)}",
+                state_value_color: sp_bp_bg_color.colorValue);
             #endregion
 
             XGUI.layout_seperator(
@@ -137,21 +137,21 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_bg_mapOpacity,
+                prop: sp_bp_bg_map_opacity,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
             XGUI.layout_colorfield(
             #region 叠加图像颜色
-                prop: BluePrint_bg_decal_color,
+                prop: sp_bp_bg_decal_color,
                 title: "叠加图像颜色",
                 title_width: 140,
                 //title_color: Color.white,
                 //icon: "icon_field_status",
                 //icon_color: Color.red,
                 state_title: "Hex：",
-                state_value: $"#{XGUI_Utilitys.Color_To_HexString(BluePrint_bg_decal_color.colorValue)}",
-                state_value_color: BluePrint_bg_decal_color.colorValue);
+                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_bp_bg_decal_color.colorValue)}",
+                state_value_color: sp_bp_bg_decal_color.colorValue);
             #endregion
 
             #region 叠加图像
@@ -160,8 +160,8 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 110,
                 title_size: XGUIFontSize.M,
                 title_anchor: TextAnchor.MiddleLeft,
-                prop: BluePrint_bg_name,
-                options: BluePrintBgs_Name,
+                prop: sp_bp_bg_name,
+                options: blue_print_bgs_name,
                 opt_text_size: XGUIFontSize.M,
                 opt_text_color: Color.black,
                 opt_text_padding: new RectOffset(10, 10, 0, 0),
@@ -176,14 +176,14 @@ namespace SevenStrikeModules.XHud.Editor
                 title_margin: new RectOffset(0, 0, 0, 0),
                 act_on_changed: (value) =>
                 {
-                    BluePrint_bg_name.stringValue = value;
-                    BluePrint_bg_name.serializedObject.ApplyModifiedProperties();
+                    sp_bp_bg_name.stringValue = value;
+                    sp_bp_bg_name.serializedObject.ApplyModifiedProperties();
 
                     #region 指定叠加背景                              
                     Texture2D texselected = AssetDatabase.LoadAssetAtPath<Texture2D>($"{XHud_Dashboard.Get_Path_XHUD_TEXTURES_Path()}BluePrints/{value}.png");
                     if (texselected != null)
                     {
-                        BaseScript.hm_BluePrint_SetBgTexture(texselected);
+                        base_script.hm_BluePrint_SetBgTexture(texselected);
                     }
                     #endregion
                 });
@@ -195,7 +195,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 110,
                 title_size: XGUIFontSize.M,
                 title_anchor: TextAnchor.MiddleLeft,
-                prop: BluePrint_bg_usetilling_index,
+                prop: sp_bp_bg_usetilling_index,
                 options: stroptions_enabled,
                 opt_text_size: XGUIFontSize.M,
                 opt_text_color: Color.black,
@@ -218,7 +218,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 110,
                 title_size: XGUIFontSize.M,
                 title_anchor: TextAnchor.MiddleLeft,
-                prop: BluePrint_bg_usesquareratio_index,
+                prop: sp_bp_bg_usesquareratio_index,
                 options: stroptions_enabled,
                 opt_text_size: XGUIFontSize.M,
                 opt_text_color: Color.black,
@@ -237,14 +237,14 @@ namespace SevenStrikeModules.XHud.Editor
 
 
             #region 叠加图像平铺
-            if (BluePrint_bg_usetilling_index.intValue == 1)
+            if (sp_bp_bg_usetilling_index.intValue == 1)
             {
                 XGUI.layout_property_field(
                     title: "叠加图像平铺",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 120,
-                    prop: BluePrint_bg_tilling,
+                    prop: sp_bp_bg_tilling,
                     prop_margin: new RectOffset(0, 0, 5, 0));
             }
             #endregion
@@ -256,15 +256,15 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 网格色
             XGUI.layout_colorfield(
-                prop: BluePrint_grid_color,
+                prop: sp_bp_grid_color,
                 title: "网格色",
                 title_width: 120,
                 //title_color: Color.white,
                 //icon: "icon_field_status",
                 //icon_color: Color.red,
                 state_title: "Hex：",
-                state_value: $"#{XGUI_Utilitys.Color_To_HexString(BluePrint_grid_color.colorValue)}",
-                state_value_color: BluePrint_grid_color.colorValue);
+                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_bp_grid_color.colorValue)}",
+                state_value_color: sp_bp_grid_color.colorValue);
             #endregion
 
             #region 网格透明度
@@ -273,7 +273,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_grid_Opacity,
+                prop: sp_bp_grid_opacity,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -284,18 +284,18 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_grid_size,
+                prop: sp_bp_grid_size,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
                 if (!Application.isPlaying)
                 {
-                    BaseScript.hm_BluePrint_Remove();
+                    base_script.hm_BluePrint_Remove();
 
                     Material mat = AssetDatabase.LoadAssetAtPath<Material>($"{XHud_Dashboard.Get_Path_XHUD_MATERIALS_Path()}BluePrints/Mat/BluePrint.mat");
                     TMP_FontAsset title = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Fonts/Tmp/sx_bold SDF.asset");
                     TMP_FontAsset subtitle = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Fonts/Tmp/sx_light SDF.asset");
-                    BaseScript.hm_BluePrint_Create(true, mat, title, subtitle);
+                    base_script.hm_BluePrint_Create(true, mat, title, subtitle);
                 }
             }
             #endregion
@@ -306,7 +306,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_linewidth,
+                prop: sp_bp_linewidth,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -316,7 +316,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_Grid_LengthPercentage,
+                prop: sp_bp_grid_length_percentage,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -326,7 +326,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_Grid_LevelHeight,
+                prop: sp_bp_grid_level_height,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -336,7 +336,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_GridEnd,
+                prop: sp_bp_grid_end,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -346,7 +346,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_Grid_AnimationDuration,
+                prop: sp_bp_grid_animation_duration,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -357,28 +357,28 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 大标题色
             XGUI.layout_colorfield(
-                prop: BluePrint_marktitle_color,
+                prop: sp_bp_marktitle_color,
                 title: "大标题色",
                 title_width: 140,
                 //title_color: Color.white,
                 //icon: "icon_field_status",
                 //icon_color: Color.red,
                 state_title: "Hex：",
-                state_value: $"#{XGUI_Utilitys.Color_To_HexString(BluePrint_marktitle_color.colorValue)}",
-                state_value_color: BluePrint_marktitle_color.colorValue);
+                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_bp_marktitle_color.colorValue)}",
+                state_value_color: sp_bp_marktitle_color.colorValue);
             #endregion
 
             #region 小标题色
             XGUI.layout_colorfield(
-                prop: BluePrint_marksubtitle_color,
+                prop: sp_bp_marksubtitle_color,
                 title: "小标题色",
                 title_width: 140,
                 //title_color: Color.white,
                 //icon: "icon_field_status",
                 //icon_color: Color.red,
                 state_title: "Hex：",
-                state_value: $"#{XGUI_Utilitys.Color_To_HexString(BluePrint_marksubtitle_color.colorValue)}",
-                state_value_color: BluePrint_marksubtitle_color.colorValue);
+                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_bp_marksubtitle_color.colorValue)}",
+                state_value_color: sp_bp_marksubtitle_color.colorValue);
             #endregion
 
             #region 水印大标题
@@ -387,7 +387,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_title_content,
+                prop: sp_bp_title_content,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -397,7 +397,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_subtitle_content,
+                prop: sp_bp_subtitle_content,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -407,7 +407,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_mark_opacity,
+                prop: sp_bp_mark_opacity,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -417,7 +417,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_mark_size,
+                prop: sp_bp_mark_size,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -427,7 +427,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_mark_space,
+                prop: sp_bp_mark_space,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -437,15 +437,15 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_MarkAnchors,
+                prop: sp_bp_mark_anchors,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
             #region 水印边距
-            SerializedProperty sp_mar_x = BluePrint_mark_margin.FindPropertyRelative("x");
-            SerializedProperty sp_mar_y = BluePrint_mark_margin.FindPropertyRelative("y");
-            SerializedProperty sp_mar_z = BluePrint_mark_margin.FindPropertyRelative("z");
-            SerializedProperty sp_mar_w = BluePrint_mark_margin.FindPropertyRelative("w");
+            SerializedProperty sp_mar_x = sp_bp_mark_margin.FindPropertyRelative("x");
+            SerializedProperty sp_mar_y = sp_bp_mark_margin.FindPropertyRelative("y");
+            SerializedProperty sp_mar_z = sp_bp_mark_margin.FindPropertyRelative("z");
+            SerializedProperty sp_mar_w = sp_bp_mark_margin.FindPropertyRelative("w");
 
             XGUI.layout_property_field(
                 title: "水印 - 上边距",
@@ -491,7 +491,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_AnimationDuration,
+                prop: sp_bp_animation_duration,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -501,7 +501,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 120,
-                prop: BluePrint_Grid_AnimationEase,
+                prop: sp_bp_grid_animation_ease,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -511,23 +511,23 @@ namespace SevenStrikeModules.XHud.Editor
                 margin: new RectOffset(15, 15, 15, 15));
 
             #region 开始时退场状态
-            DrawToggle("开始时退场状态", BluePrint_OnStartHide, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("开始时退场状态", sp_bp_on_start_hide, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             #region 入/退场影响网格
-            DrawToggle("入/退场影响网格", Eft_Grid, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("入/退场影响网格", sp_bp_eft_grid, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             #region 入/退场影响网格透明度
-            DrawToggle("入/退场影响网格透明度", Eft_GridFade, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("入/退场影响网格透明度", sp_bp_eft_grid_fade, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             #region 入/退场影响背景
-            DrawToggle("入/退场影响背景", Eft_Bg, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("入/退场影响背景", sp_bp_eft_bg, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
             #region 入/退场影响水印
-            DrawToggle("入/退场影响水印", Eft_Mark, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("入/退场影响水印", sp_bp_eft_mark, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
         }
         #endregion

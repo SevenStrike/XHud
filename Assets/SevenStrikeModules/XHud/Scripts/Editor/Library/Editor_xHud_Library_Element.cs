@@ -28,12 +28,6 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditorInternal;
     using UnityEngine;
 
-    #region 编辑器主体
-    /// <summary>
-    /// XHud 元素库的自定义编辑器。
-    /// <para/>
-    /// 提供元素列表的可视化编辑、拖放添加、状态标记、批量数量设定、增删清空等功能。
-    /// </summary>
     [CustomEditor(typeof(XHud_Library_Element))]
     public class Editor_XHud_Library_Element : Editor
     {
@@ -43,40 +37,123 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 在 <see cref="OnEnable"/> 中缓存。
         /// </summary>
-        private XHud_Library_Element BaseScript;
+        private XHud_Library_Element base_script;
         /// <summary>
         /// 元素列表（可重排列表）。
         /// <para/>
         /// 用于驱动 ReorderableList 的绘制与交互。
         /// </summary>
-        public ReorderableList ElementInfoList;
+        public ReorderableList element_info_list;
         #endregion
 
         #region 字段 - 序列化属性
         /// <summary>
-        /// 本 Inspector 用到的全部序列化属性引用。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里初始化。
-        /// <para/>
-        /// 覆盖：
-        /// <list type="bullet">
-        /// <item><description>元素库列表；</description></item>
-        /// <item><description>库名称 / 库描述；</description></item>
-        /// <item><description>选中 / 定位索引；</description></item>
-        /// <item><description>过滤 / 查找字符串；</description></item>
-        /// <item><description>列表滚动位置与项高。</description></item>
-        /// </list>
+        /// 元素库列表属性
         /// </summary>
-        private SerializedProperty sp_ElementLibrary, sp_LibraryName, sp_SelectedIndex, sp_LocationSelectedIndex, sp_ElementInfoList_Original_Scroller, sp_itemHeight, sp_visibleItemCount, sp_Find, sp_Highlight, sp_LibraryDescription;
+        private SerializedProperty sp_library_elements;
+        /// <summary>
+        /// 库名称属性
+        /// </summary>
+        private SerializedProperty sp_library_name;
+        /// <summary>
+        /// 选中项索引属性
+        /// </summary>
+        private SerializedProperty sp_selected_index;
+        /// <summary>
+        /// 定位选中项索引属性
+        /// </summary>
+        private SerializedProperty sp_location_selected_index;
+        /// <summary>
+        /// 元素信息列表滚动位置属性
+        /// </summary>
+        private SerializedProperty sp_element_info_list_original_scroller;
+        /// <summary>
+        /// 列表项高度属性
+        /// </summary>
+        private SerializedProperty sp_item_height;
+        /// <summary>
+        /// 可视区域显示元素数量属性
+        /// </summary>
+        private SerializedProperty sp_visible_item_count;
+        /// <summary>
+        /// 查找字符串属性
+        /// </summary>
+        private SerializedProperty sp_find;
+        /// <summary>
+        /// 筛选高亮字符串属性
+        /// </summary>
+        private SerializedProperty sp_highlight;
         #endregion
 
         #region 字段 - 图标
         /// <summary>
-        /// 标题 / 按钮 / 图标资源缓存。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里加载。
+        /// 警告图标
         /// </summary>
-        private Texture2D warnIcon, normalIcon, Icon_Using, btn_icon_edit_released, btn_icon_edit_press, clean_p, clean_r, clear_p, clear_r, create_p, create_r, delete_p, delete_r, tip_r, tip_p, fastcount_r, fastcount_p;
+        private Texture2D warnIcon;
+        /// <summary>
+        /// 正常图标
+        /// </summary>
+        private Texture2D normalIcon;
+        /// <summary>
+        /// 使用中图标
+        /// </summary>
+        private Texture2D Icon_Using;
+        /// <summary>
+        /// 编辑按钮常态图标
+        /// </summary>
+        private Texture2D btn_icon_edit_released;
+        /// <summary>
+        /// 编辑按钮按下图标
+        /// </summary>
+        private Texture2D btn_icon_edit_press;
+        /// <summary>
+        /// 清理按钮按下图标
+        /// </summary>
+        private Texture2D clean_p;
+        /// <summary>
+        /// 清理按钮常态图标
+        /// </summary>
+        private Texture2D clean_r;
+        /// <summary>
+        /// 清空按钮按下图标
+        /// </summary>
+        private Texture2D clear_p;
+        /// <summary>
+        /// 清空按钮常态图标
+        /// </summary>
+        private Texture2D clear_r;
+        /// <summary>
+        /// 创建按钮按下图标
+        /// </summary>
+        private Texture2D create_p;
+        /// <summary>
+        /// 创建按钮常态图标
+        /// </summary>
+        private Texture2D create_r;
+        /// <summary>
+        /// 删除按钮按下图标
+        /// </summary>
+        private Texture2D delete_p;
+        /// <summary>
+        /// 删除按钮常态图标
+        /// </summary>
+        private Texture2D delete_r;
+        /// <summary>
+        /// 提示按钮常态图标
+        /// </summary>
+        private Texture2D tip_r;
+        /// <summary>
+        /// 提示按钮按下图标
+        /// </summary>
+        private Texture2D tip_p;
+        /// <summary>
+        /// 快速计数按钮常态图标
+        /// </summary>
+        private Texture2D fastcount_r;
+        /// <summary>
+        /// 快速计数按钮按下图标
+        /// </summary>
+        private Texture2D fastcount_p;
         #endregion
 
         #region 字段 - 参数
@@ -128,31 +205,30 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseScript = (XHud_Library_Element)target;
+            base_script = (XHud_Library_Element)target;
 
             XHud_Manager mgr = XHud_Dashboard.get_manager();
 
             #region 获取序列化属性
-            sp_ElementLibrary = serializedObject.FindProperty("ElementLibrary");
-            sp_LibraryName = serializedObject.FindProperty("LibraryName");
-            sp_LibraryDescription = serializedObject.FindProperty("LibraryDescription");
-            sp_Highlight = serializedObject.FindProperty("Highlight");
-            sp_SelectedIndex = serializedObject.FindProperty("SelectedIndex");
-            sp_LocationSelectedIndex = serializedObject.FindProperty("LocationSelectedIndex");
-            sp_ElementInfoList_Original_Scroller = serializedObject.FindProperty("ElementInfoList_Original_Scroller");
-            sp_itemHeight = serializedObject.FindProperty("itemHeight");
-            sp_visibleItemCount = serializedObject.FindProperty("visibleItemCount");
-            sp_Find = serializedObject.FindProperty("Find");
+            sp_library_elements = serializedObject.FindProperty(nameof(XHud_Library_Element.library_elements));
+            sp_library_name = serializedObject.FindProperty(nameof(XHud_Library_Element.library_name));
+            sp_highlight = serializedObject.FindProperty(nameof(XHud_Library_Element.highlight));
+            sp_selected_index = serializedObject.FindProperty(nameof(XHud_Library_Element.selected_index));
+            sp_location_selected_index = serializedObject.FindProperty(nameof(XHud_Library_Element.location_selected_index));
+            sp_element_info_list_original_scroller = serializedObject.FindProperty(nameof(XHud_Library_Element.element_info_list_original_scroller));
+            sp_item_height = serializedObject.FindProperty(nameof(XHud_Library_Element.item_height));
+            sp_visible_item_count = serializedObject.FindProperty(nameof(XHud_Library_Element.visible_item_count));
+            sp_find = serializedObject.FindProperty(nameof(XHud_Library_Element.find));
             #endregion
 
             blocked_col = new Color(0, 0, 0, blocked_alp);
 
             //设定列表项高度值
-            sp_itemHeight.floatValue = 50;
-            sp_itemHeight.serializedObject.ApplyModifiedProperties();
+            sp_item_height.floatValue = 50;
+            sp_item_height.serializedObject.ApplyModifiedProperties();
 
-            sp_visibleItemCount.intValue = 9;
-            sp_visibleItemCount.serializedObject.ApplyModifiedProperties();
+            sp_visible_item_count.intValue = 9;
+            sp_visible_item_count.serializedObject.ApplyModifiedProperties();
 
             #region 获取图标
             warnIcon = XGUI.GetBuiltInIcon("console.warnicon");
@@ -179,9 +255,9 @@ namespace SevenStrikeModules.XHud.Editor
                 ClearLibraryPreloads();
             }
 
-            #region ReorderableList - ElementInfoList
-            ElementInfoList = new ReorderableList(serializedObject, sp_ElementLibrary, true, true, true, true);
-            ElementInfoList.drawElementCallback = ElementInfoList_Original_DrawElementCallback;
+            #region ReorderableList
+            element_info_list = new ReorderableList(serializedObject, sp_library_elements, true, true, true, true);
+            element_info_list.drawElementCallback = ElementInfoList_Original_DrawElementCallback;
             #endregion
         }
         /// <summary>
@@ -204,20 +280,20 @@ namespace SevenStrikeModules.XHud.Editor
                     ClearLibraryPreloads();
                 }
 
-                sp_ElementInfoList_Original_Scroller.vector2Value = Vector2.zero;
-                sp_ElementInfoList_Original_Scroller.serializedObject.ApplyModifiedProperties();
+                sp_element_info_list_original_scroller.vector2Value = Vector2.zero;
+                sp_element_info_list_original_scroller.serializedObject.ApplyModifiedProperties();
 
-                sp_LocationSelectedIndex.intValue = -1;
-                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                sp_location_selected_index.intValue = -1;
+                sp_location_selected_index.serializedObject.ApplyModifiedProperties();
 
-                sp_SelectedIndex.intValue = -1;
-                sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+                sp_selected_index.intValue = -1;
+                sp_selected_index.serializedObject.ApplyModifiedProperties();
 
-                sp_Find.stringValue = string.Empty;
-                sp_Find.serializedObject.ApplyModifiedProperties();
+                sp_find.stringValue = string.Empty;
+                sp_find.serializedObject.ApplyModifiedProperties();
 
-                sp_Highlight.stringValue = string.Empty;
-                sp_Highlight.serializedObject.ApplyModifiedProperties();
+                sp_highlight.stringValue = string.Empty;
+                sp_highlight.serializedObject.ApplyModifiedProperties();
             }
         }
         /// <summary>
@@ -267,7 +343,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_LibraryName,
+                prop: sp_library_name,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -278,12 +354,12 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_Highlight,
+                prop: sp_highlight,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
-                sp_LocationSelectedIndex.intValue = -1;
-                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                sp_location_selected_index.intValue = -1;
+                sp_location_selected_index.serializedObject.ApplyModifiedProperties();
             }
             #endregion
 
@@ -294,19 +370,19 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_Find,
+                prop: sp_find,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
-                if (!string.IsNullOrEmpty(sp_Find.stringValue))
-                    BaseScript.ElementLibrary_Location_Find(sp_Find.stringValue);
+                if (!string.IsNullOrEmpty(sp_find.stringValue))
+                    base_script.ElementLibrary_Location_Find(sp_find.stringValue);
                 else
                 {
-                    sp_SelectedIndex.intValue = -1;
-                    sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+                    sp_selected_index.intValue = -1;
+                    sp_selected_index.serializedObject.ApplyModifiedProperties();
 
-                    sp_LocationSelectedIndex.intValue = -1;
-                    sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                    sp_location_selected_index.intValue = -1;
+                    sp_location_selected_index.serializedObject.ApplyModifiedProperties();
                 }
             }
             #endregion
@@ -315,7 +391,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 快捷功能
-            if (string.IsNullOrEmpty(sp_Highlight.stringValue))
+            if (string.IsNullOrEmpty(sp_highlight.stringValue))
             {
                 if (!Application.isPlaying)
                 {
@@ -383,15 +459,15 @@ namespace SevenStrikeModules.XHud.Editor
                         if (res == "暂不")
                             return;
 
-                        for (int i = 0; i < sp_ElementLibrary.arraySize; i++)
+                        for (int i = 0; i < sp_library_elements.arraySize; i++)
                         {
-                            SerializedProperty preloads = sp_ElementLibrary.GetArrayElementAtIndex(i).FindPropertyRelative("PreloadElements");
+                            SerializedProperty preloads = sp_library_elements.GetArrayElementAtIndex(i).FindPropertyRelative("preload_elements");
                             preloads.ClearArray();
                             preloads.serializedObject.ApplyModifiedProperties();
                         }
 
-                        sp_ElementLibrary.ClearArray();
-                        sp_ElementLibrary.serializedObject.ApplyModifiedProperties();
+                        sp_library_elements.ClearArray();
+                        sp_library_elements.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
 
@@ -407,7 +483,7 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 14,
                         height: 14))
                     {
-                        ElementInfoList_Original_Add(ElementInfoList);
+                        ElementInfoList_Original_Add(element_info_list);
                     }
                     #endregion
 
@@ -423,7 +499,7 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 14,
                         height: 14))
                     {
-                        ElementInfoList_Original_Remove(ElementInfoList);
+                        ElementInfoList_Original_Remove(element_info_list);
                     }
                     #endregion
 
@@ -513,14 +589,14 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         GameObject el = (GameObject)item;
                         XHud_LibraryArg_Element_Item it = new XHud_LibraryArg_Element_Item();
-                        it.Target = el.GetComponent<XHud_Module_Element>();
-                        if (it.Target != null)
+                        it.target = el.GetComponent<XHud_Module_Element>();
+                        if (it.target != null)
                         {
                             bool isExist = false;
-                            for (int s = 0; s < sp_ElementLibrary.arraySize; s++)
+                            for (int s = 0; s < sp_library_elements.arraySize; s++)
                             {
-                                SerializedProperty ser = sp_ElementLibrary.GetArrayElementAtIndex(s);
-                                SerializedProperty ser_target = ser.FindPropertyRelative("Target");
+                                SerializedProperty ser = sp_library_elements.GetArrayElementAtIndex(s);
+                                SerializedProperty ser_target = ser.FindPropertyRelative("target");
                                 if (ser_target.objectReferenceValue.name == el.name)
                                 {
                                     isExist = true;
@@ -533,7 +609,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     type: XGUIDialogType.警告,
                                     windowtitle: "XHud - 元素库消息",
                                     title: "清空元素项",
-                                    msg: $"此元素预制体已存在于该库中！请勿重复添加！预制体名称： {el.name}  标识名称： {it.Target.Indicator}",
+                                    msg: $"此元素预制体已存在于该库中！请勿重复添加！预制体名称： {el.name}  标识名称： {it.target.indicator}",
                                     ok: "明白",
                                     PrimaryIndex: 0,
                                     usemodal: true,
@@ -541,17 +617,17 @@ namespace SevenStrikeModules.XHud.Editor
                             }
                             else
                             {
-                                it.InitializeCount = 2;
-                                it.Name = it.Target.name;
+                                it.initialize_count = 2;
+                                it.name = it.target.name;
 
-                                sp_ElementLibrary.InsertArrayElementAtIndex(sp_ElementLibrary.arraySize);
-                                SerializedProperty root = sp_ElementLibrary.GetArrayElementAtIndex(sp_ElementLibrary.arraySize - 1);
-                                SerializedProperty sp_target = root.FindPropertyRelative("Target");
-                                SerializedProperty sp_Initiacount = root.FindPropertyRelative("InitializeCount");
-                                SerializedProperty sp_Name = root.FindPropertyRelative("Name");
-                                sp_target.objectReferenceValue = it.Target;
-                                sp_Initiacount.intValue = it.InitializeCount;
-                                sp_Name.stringValue = it.Name;
+                                sp_library_elements.InsertArrayElementAtIndex(sp_library_elements.arraySize);
+                                SerializedProperty root = sp_library_elements.GetArrayElementAtIndex(sp_library_elements.arraySize - 1);
+                                SerializedProperty sp_target = root.FindPropertyRelative("target");
+                                SerializedProperty sp_Initiacount = root.FindPropertyRelative("initialize_count");
+                                SerializedProperty sp_Name = root.FindPropertyRelative("name");
+                                sp_target.objectReferenceValue = it.target;
+                                sp_Initiacount.intValue = it.initialize_count;
+                                sp_Name.stringValue = it.name;
 
                                 valids.Add(new XGUIDialogListDatas("添加到元素库", sp_Name.stringValue, "成功添加"));
                             }
@@ -591,14 +667,14 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void ClearLibraryPreloads()
         {
-            for (int i = 0; i < sp_ElementLibrary.arraySize; i++)
+            for (int i = 0; i < sp_library_elements.arraySize; i++)
             {
-                SerializedProperty prop = sp_ElementLibrary.GetArrayElementAtIndex(i);
-                SerializedProperty preloads = prop.FindPropertyRelative("PreloadElements");
-                SerializedProperty UsedCount = prop.FindPropertyRelative("UsedCount");
-                SerializedProperty RecycledCount = prop.FindPropertyRelative("RecycledCount");
-                SerializedProperty NextIndex = prop.FindPropertyRelative("NextIndex");
-                SerializedProperty Root = prop.FindPropertyRelative("Root");
+                SerializedProperty prop = sp_library_elements.GetArrayElementAtIndex(i);
+                SerializedProperty preloads = prop.FindPropertyRelative("preload_elements");
+                SerializedProperty UsedCount = prop.FindPropertyRelative("used_count");
+                SerializedProperty RecycledCount = prop.FindPropertyRelative("recycled_count");
+                SerializedProperty NextIndex = prop.FindPropertyRelative("next_index");
+                SerializedProperty Root = prop.FindPropertyRelative("root");
 
                 UsedCount.intValue = 0;
                 RecycledCount.intValue = 0;
@@ -614,12 +690,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 根据高亮过滤条件屏蔽或启用 GUI。
         /// <para/>
-        /// 若名称不包含 <see cref="sp_Highlight"/> 的当前值，则禁用 GUI。
+        /// 若名称不包含 <see cref="sp_highlight"/> 的当前值，则禁用 GUI。
         /// </summary>
         /// <param name="name">待检查的名称</param>
         private void BlockGUI(string name)
         {
-            if (!name.Contains(sp_Highlight.stringValue))
+            if (!name.Contains(sp_highlight.stringValue))
             {
                 GUI.enabled = false;
             }
@@ -651,13 +727,13 @@ namespace SevenStrikeModules.XHud.Editor
         {
             XHud_Manager mgr = XHud_Dashboard.get_manager();
 
-            SerializedProperty prop = sp_ElementLibrary.GetArrayElementAtIndex(index);
-            SerializedProperty sp_name = prop.FindPropertyRelative("Name");
-            SerializedProperty sp_initalcount = prop.FindPropertyRelative("InitializeCount");
-            SerializedProperty sp_usedcount = prop.FindPropertyRelative("UsedCount");
-            SerializedProperty sp_recyclecount = prop.FindPropertyRelative("RecycledCount");
-            SerializedProperty sp_Index = prop.FindPropertyRelative("NextIndex");
-            SerializedProperty sp_target = prop.FindPropertyRelative("Target");
+            SerializedProperty prop = sp_library_elements.GetArrayElementAtIndex(index);
+            SerializedProperty sp_name = prop.FindPropertyRelative("name");
+            SerializedProperty sp_initalcount = prop.FindPropertyRelative("initialize_count");
+            SerializedProperty sp_usedcount = prop.FindPropertyRelative("used_count");
+            SerializedProperty sp_recyclecount = prop.FindPropertyRelative("recycled_count");
+            SerializedProperty sp_Index = prop.FindPropertyRelative("next_index");
+            SerializedProperty sp_target = prop.FindPropertyRelative("target");
 
             if (sp_target.objectReferenceValue != null)
             {
@@ -733,39 +809,39 @@ namespace SevenStrikeModules.XHud.Editor
             // 检测鼠标点击事件
             if (e.type == EventType.MouseDown && e.button == 1 && drawelement_rect.Contains(e.mousePosition))
             {
-                sp_SelectedIndex.intValue = index;
+                sp_selected_index.intValue = index;
 
                 // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
                 menu.AddItem(new GUIContent("D (克隆元素)"), false, () =>
                 {
-                    sp_ElementLibrary.InsertArrayElementAtIndex(index);
-                    sp_ElementLibrary.serializedObject.ApplyModifiedProperties();
+                    sp_library_elements.InsertArrayElementAtIndex(index);
+                    sp_library_elements.serializedObject.ApplyModifiedProperties();
                 });
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("E (修改元素项)"), false, () =>
                 {
-                    XHud_LibraryArg_Element_Item item = BaseScript.ElementLibrary[sp_SelectedIndex.intValue];
+                    XHud_LibraryArg_Element_Item item = base_script.library_elements[sp_selected_index.intValue];
                     Open_Hud_Library_Element_Setter(item, index);
                 });
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("S (根据自身布局参数发送到场景锚点)"), false, () =>
                 {
-                    XHud_Module_Element source_ele = BaseScript.ElementLibrary[index].Target;
-                    if (source_ele.RMS_Enabled)
+                    XHud_Module_Element source_ele = base_script.library_elements[index].target;
+                    if (source_ele.rms_enabled)
                     {
-                        GameObject obj_ele = (GameObject)PrefabUtility.InstantiatePrefab(BaseScript.ElementLibrary[index].Target.gameObject, null);
+                        GameObject obj_ele = (GameObject)PrefabUtility.InstantiatePrefab(base_script.library_elements[index].target.gameObject, null);
                         Undo.RegisterCreatedObjectUndo(obj_ele, "CreateElement");
                         XHud_Module_Element ele = obj_ele.GetComponent<XHud_Module_Element>();
 
                         Element_RMS_LayoutData rms = ele.elelemt_RMS_Get(mgr.hm_RMS_GetCurrentSolution());
-                        ele.RectTransform.SetParent(mgr.hm_ScreenElement_GetAnchored_RectTransform(rms.Anchor));
-                        ele.RectTransform.pivot = rms.Pivot;
-                        ele.RectTransform.anchorMin = rms.AnchorMin;
-                        ele.RectTransform.anchorMax = rms.AnchorMax;
-                        ele.RectTransform.anchoredPosition3D = rms.Position;
-                        ele.RectTransform.localEulerAngles = rms.Euler;
-                        ele.RectTransform.localScale = rms.Scale;
+                        ele.rect_transform.SetParent(mgr.hm_ScreenElement_GetAnchored_RectTransform(rms.anchor));
+                        ele.rect_transform.pivot = rms.pivot;
+                        ele.rect_transform.anchorMin = rms.anchor_min;
+                        ele.rect_transform.anchorMax = rms.anchor_max;
+                        ele.rect_transform.anchoredPosition3D = rms.position;
+                        ele.rect_transform.localEulerAngles = rms.euler;
+                        ele.rect_transform.localScale = rms.scale;
                         Selection.activeGameObject = obj_ele;
                     }
                     else
@@ -789,7 +865,7 @@ namespace SevenStrikeModules.XHud.Editor
                 // 创建右键菜单
                 menu.AddItem(new GUIContent("F (定位元素源)"), false, () =>
                 {
-                    EditorGUIUtility.PingObject(prop.FindPropertyRelative("Target").objectReferenceValue);
+                    EditorGUIUtility.PingObject(prop.FindPropertyRelative("target").objectReferenceValue);
                 });
                 // 显示右键菜单
                 menu.ShowAsContext();
@@ -810,20 +886,20 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0),
                 focus_name: "fav_btn"))
             {
-                XHud_LibraryArg_Element_Item item = BaseScript.ElementLibrary[index];
+                XHud_LibraryArg_Element_Item item = base_script.library_elements[index];
                 Open_Hud_Library_Element_Setter(item, index);
             }
             #endregion
 
             GUI.enabled = true;
 
-            if (!sp_name.stringValue.Contains(sp_Highlight.stringValue))
+            if (!sp_name.stringValue.Contains(sp_highlight.stringValue))
             {
                 drawelement_rect.Set(rect.x - 20, rect.y, rect.width + 20, rect.height);
                 EditorGUI.DrawRect(drawelement_rect, blocked_col);
             }
 
-            if (index == sp_LocationSelectedIndex.intValue)
+            if (index == sp_location_selected_index.intValue)
             {
                 if (XGUI.GetCurrentWindowWidth() >= 400)
                 {
@@ -848,48 +924,48 @@ namespace SevenStrikeModules.XHud.Editor
         private void DrawElementInfoList_Original()
         {
             // 绘制滚动视图
-            scrollview_rect = GUILayoutUtility.GetRect(0, sp_visibleItemCount.intValue * sp_itemHeight.floatValue);
-            sp_ElementInfoList_Original_Scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_ElementInfoList_Original_Scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, ElementInfoList.count * sp_itemHeight.floatValue), false, true);
+            scrollview_rect = GUILayoutUtility.GetRect(0, sp_visible_item_count.intValue * sp_item_height.floatValue);
+            sp_element_info_list_original_scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_element_info_list_original_scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, element_info_list.count * sp_item_height.floatValue), false, true);
 
             // 计算可视区域的起始和结束索引
-            int startIndex = Mathf.FloorToInt(sp_ElementInfoList_Original_Scroller.vector2Value.y / sp_itemHeight.floatValue);
-            int endIndex = Mathf.CeilToInt((sp_ElementInfoList_Original_Scroller.vector2Value.y + scrollview_rect.height) / sp_itemHeight.floatValue);
+            int startIndex = Mathf.FloorToInt(sp_element_info_list_original_scroller.vector2Value.y / sp_item_height.floatValue);
+            int endIndex = Mathf.CeilToInt((sp_element_info_list_original_scroller.vector2Value.y + scrollview_rect.height) / sp_item_height.floatValue);
 
             // 只绘制可视区域内的元素
-            for (int i = startIndex; i < endIndex && i < ElementInfoList.count; i++)
+            for (int i = startIndex; i < endIndex && i < element_info_list.count; i++)
             {
-                SerializedProperty prop = sp_ElementLibrary.GetArrayElementAtIndex(i);
-                SerializedProperty sp_name = prop.FindPropertyRelative("Name");
+                SerializedProperty prop = sp_library_elements.GetArrayElementAtIndex(i);
+                SerializedProperty sp_name = prop.FindPropertyRelative("name");
 
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
                 // 如果当前元素被选中，绘制选中效果
-                if (sp_name.stringValue.Contains(sp_Highlight.stringValue))
+                if (sp_name.stringValue.Contains(sp_highlight.stringValue))
                 {
-                    if (sp_SelectedIndex.intValue == i)
+                    if (sp_selected_index.intValue == i)
                     {
                         // 高亮标记表示选中
-                        item_rect.Set(1, i * sp_itemHeight.floatValue + 12, 5, 5);
+                        item_rect.Set(1, i * sp_item_height.floatValue + 12, 5, 5);
                         EditorGUI.DrawRect(item_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                         // 高亮背景表示选中
-                        item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                        item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
                         EditorGUI.DrawRect(item_rect, SelectedBg);
                     }
                 }
 
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
-                ElementInfoList.drawElementCallback.Invoke(item_rect, i, i == ElementInfoList.index, true);
+                element_info_list.drawElementCallback.Invoke(item_rect, i, i == element_info_list.index, true);
 
                 // 检测鼠标是否在当前元素区域内
                 if (item_rect.Contains(Event.current.mousePosition))
                 {
                     if (Event.current.type == EventType.MouseDown)
                     {
-                        if (sp_name.stringValue.Contains(sp_Highlight.stringValue))
+                        if (sp_name.stringValue.Contains(sp_highlight.stringValue))
                         {
                             // 更新选中项
-                            sp_SelectedIndex.intValue = i;
+                            sp_selected_index.intValue = i;
 
                             // 标记界面需要更新
                             GUI.changed = true;
@@ -913,8 +989,8 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (list.count <= 0)
                 return;
-            sp_ElementLibrary.DeleteArrayElementAtIndex(list.index);
-            sp_ElementLibrary.serializedObject.ApplyModifiedProperties();
+            sp_library_elements.DeleteArrayElementAtIndex(list.index);
+            sp_library_elements.serializedObject.ApplyModifiedProperties();
         }
         /// <summary>
         /// 列表增加项。
@@ -925,22 +1001,22 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="list">可重排列表</param>
         private void ElementInfoList_Original_Add(ReorderableList list)
         {
-            if (sp_ElementLibrary.arraySize <= 0)
+            if (sp_library_elements.arraySize <= 0)
             {
-                sp_ElementLibrary.InsertArrayElementAtIndex(0);
-                sp_ElementLibrary.GetArrayElementAtIndex(0).FindPropertyRelative("Name").stringValue = "NewElement";
-                sp_ElementLibrary.GetArrayElementAtIndex(0).FindPropertyRelative("Target").objectReferenceValue = null;
-                sp_ElementLibrary.GetArrayElementAtIndex(0).FindPropertyRelative("InitializeCount").intValue = 1;
+                sp_library_elements.InsertArrayElementAtIndex(0);
+                sp_library_elements.GetArrayElementAtIndex(0).FindPropertyRelative("name").stringValue = "NewElement";
+                sp_library_elements.GetArrayElementAtIndex(0).FindPropertyRelative("target").objectReferenceValue = null;
+                sp_library_elements.GetArrayElementAtIndex(0).FindPropertyRelative("initialize_count").intValue = 1;
             }
             else
             {
-                sp_ElementLibrary.InsertArrayElementAtIndex(list.index);
+                sp_library_elements.InsertArrayElementAtIndex(list.index);
 
-                sp_ElementLibrary.GetArrayElementAtIndex(list.index).FindPropertyRelative("Name").stringValue = "NewElement";
-                sp_ElementLibrary.GetArrayElementAtIndex(list.index).FindPropertyRelative("Target").objectReferenceValue = null;
-                sp_ElementLibrary.GetArrayElementAtIndex(list.index).FindPropertyRelative("InitializeCount").intValue = 1;
+                sp_library_elements.GetArrayElementAtIndex(list.index).FindPropertyRelative("name").stringValue = "NewElement";
+                sp_library_elements.GetArrayElementAtIndex(list.index).FindPropertyRelative("target").objectReferenceValue = null;
+                sp_library_elements.GetArrayElementAtIndex(list.index).FindPropertyRelative("initialize_count").intValue = 1;
             }
-            sp_ElementLibrary.serializedObject.ApplyModifiedProperties();
+            sp_library_elements.serializedObject.ApplyModifiedProperties();
         }
         #endregion
 
@@ -959,9 +1035,9 @@ namespace SevenStrikeModules.XHud.Editor
             window.titleContent = new GUIContent("XHud 元素项修改器");
             XGUI.CenterEditorWindow(new Vector2Int(500, 440), window);
             window.SetLibraryItem(item);
-            window.SetTargetLibName(sp_LibraryName.stringValue);
-            window.SetTargetLib(BaseScript);
-            window.ModifiedIndex = index;
+            window.SetTargetLibName(sp_library_name.stringValue);
+            window.SetTargetLib(base_script);
+            window.modified_index = index;
             window.Show();
         }
         /// <summary>
@@ -974,10 +1050,9 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_LibrarySetTool_ElementLib_CountsSet window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_ElementLib_CountsSet>(true);
             window.titleContent = new GUIContent("XHud 元素库预加载数量修改器");
             XGUI.CenterEditorWindow(new Vector2Int(300, 260), window);
-            window.SetTargetLib(BaseScript);
+            window.SetTargetLib(base_script);
             window.Show();
         }
         #endregion
     }
-    #endregion
 }

@@ -65,12 +65,12 @@ namespace SevenStrikeModules.XHud.Editor
              title_size: XGUIFontSize.M,
              title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_width: 100,
-             prop: SounderPoolCount,
+             prop: sp_pool_sounder_count,
              //status_icon: "icon_field_status",
              //status_icon_color: Lib_TextStyleLibrary.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
              prop_margin: new RectOffset(0, 0, 10, 10));
 
-            List_SoundsPool.DoLayoutList();
+            list_soundpools.DoLayoutList();
         }
         #endregion
 
@@ -84,7 +84,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void Init_SoundsPoolList()
         {
-            List_SoundsPool = new ReorderableList(serializedObject, SoundLibrary)
+            list_soundpools = new ReorderableList(serializedObject, sp_pool_sounder)
             {
                 draggable = !Application.isPlaying,
                 displayAdd = !Application.isPlaying,
@@ -123,7 +123,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="isFocused">是否聚焦。</param>
         private void SoundsPool_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty sp_Soundlib = SoundLibrary.GetArrayElementAtIndex(index);
+            SerializedProperty sp_Soundlib = sp_pool_sounder.GetArrayElementAtIndex(index);
             SerializedProperty player = sp_Soundlib.FindPropertyRelative("Player");
             SerializedProperty isplaying = sp_Soundlib.FindPropertyRelative("IsPlaying");
 
@@ -151,7 +151,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>元素高度。</returns>
         private float SoundsPool_ElementHeight(int index)
         {
-            return 1.5f * LineHeight;
+            return 1.5f * line_height;
         }
         /// <summary>
         /// 音效池列表 - 添加回调。
@@ -163,7 +163,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="list">列表实例。</param>
         private void SoundsPool_OnAdd(ReorderableList list)
         {
-            SoundLibrary.InsertArrayElementAtIndex(list.count);
+            sp_pool_sounder.InsertArrayElementAtIndex(list.count);
         }
         /// <summary>
         /// 音效池列表 - 移除回调。
@@ -175,7 +175,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="list">列表实例。</param>
         private void SoundsPool_OnRemove(ReorderableList list)
         {
-            SoundLibrary.DeleteArrayElementAtIndex(list.index);
+            sp_pool_sounder.DeleteArrayElementAtIndex(list.index);
         }
         /// <summary>
         /// 音效池列表 - 选中回调。

@@ -34,7 +34,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 文字组件
         /// </summary>
-        public XHud_Module_Text Text;
+        public XHud_Module_Text text;
     }
 
     public partial class XHud_Module_Element : MonoBehaviour
@@ -43,14 +43,14 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 文字容器
         /// </summary>
-        public List<ElementNode_Text> TextNodes;
+        public List<ElementNode_Text> text_nodes;
         [SerializeField]
         /// <summary>
         /// 文字列表折叠状态
         /// true表示折叠，false表示展开
         /// 用于控制Inspector中Text文字列表的显示/隐藏
         /// </summary>
-        public bool TextIsFold;
+        public bool text_is_fold;
 
         /// <summary>
         /// 获取目标文字
@@ -59,21 +59,21 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Text element_Text_Get(string indicator)
         {
             XHud_Module_Text tex = null;
-            for (int i = 0; i < TextNodes.Count; i++)
+            for (int i = 0; i < text_nodes.Count; i++)
             {
-                if (TextNodes[i].Text.Indicator == indicator)
+                if (text_nodes[i].text.indicator == indicator)
                 {
-                    tex = TextNodes[i].Text;
+                    tex = text_nodes[i].text;
                 }
             }
             if (tex == null)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "未找到对应标识的文字！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的文字组件！", XGUIMsgState.通知);
             }
             return tex;
@@ -84,19 +84,19 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Text[] element_Text_GetAll()
         {
             List<XHud_Module_Text> textlist = new List<XHud_Module_Text>();
-            for (int i = 0; i < TextNodes.Count; i++)
+            for (int i = 0; i < text_nodes.Count; i++)
             {
-                textlist.Add(TextNodes[i].Text);
+                textlist.Add(text_nodes[i].text);
             }
             if (textlist.Count <= 0)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "获取的文字列表为空！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
-                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + TextNodes.Count + " 个文字组件！", XGUIMsgState.通知);
+                if (debug_state)
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + text_nodes.Count + " 个文字组件！", XGUIMsgState.通知);
             }
             return textlist.ToArray();
         }

@@ -38,17 +38,17 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="sp_sounds">音效节点列表对象</param>
         private void Preview_ElementSounder_OnSerialize(string Timings, SerializedProperty sp_sounds)
         {
-            if (HudManager == null || HudManager.Hud_Sounds == null) return;
+            if (hud_manager == null || hud_manager.library_sounds == null) return;
 
             for (int i = 0; i < sp_sounds.arraySize; i++)
             {
                 SerializedProperty sp_soundnode = sp_sounds.GetArrayElementAtIndex(i);
-                SerializedProperty sp_sounder = sp_soundnode.FindPropertyRelative("Sounder");
+                SerializedProperty sp_sounder = sp_soundnode.FindPropertyRelative(nameof(ElementNode_Sound.sounder));
                 if (sp_sounder.objectReferenceValue == null) continue;
 
                 XHud_Element_Sounder sounder = sp_sounder.objectReferenceValue as XHud_Element_Sounder;
                 if (sounder == null) continue;
-                if (sounder.Timings != Timings) continue;
+                if (sounder.timings != Timings) continue;
 
                 Preview_ElementSounder_Item(sounder);
             }
@@ -62,15 +62,15 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="soundnodes">音效节点列表对象</param>
         private void Preview_ElementSounder_OnList(string Timings, List<ElementNode_Sound> soundnodes)
         {
-            if (HudManager == null || HudManager.Hud_Sounds == null) return;
+            if (hud_manager == null || hud_manager.library_sounds == null) return;
 
             for (int i = 0; i < soundnodes.Count; i++)
             {
                 ElementNode_Sound node = soundnodes[i];
-                if (node == null || node.Sounder == null) continue;
-                if (node.Sounder.Timings != Timings) continue;
+                if (node == null || node.sounder == null) continue;
+                if (node.sounder.timings != Timings) continue;
 
-                Preview_ElementSounder_Item(node.Sounder);
+                Preview_ElementSounder_Item(node.sounder);
             }
         }
         /// <summary>
@@ -88,22 +88,22 @@ namespace SevenStrikeModules.XHud.Editor
         private void Preview_ElementSounder_Item(XHud_Element_Sounder sounder)
         {
             if (sounder == null) return;
-            if (string.IsNullOrEmpty(sounder.SoundName)) return;
+            if (string.IsNullOrEmpty(sounder.sound_name)) return;
 
-            AudioClip clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(sounder.SoundName);
+            AudioClip clip = hud_manager.library_sounds.SoundLibrary_GetSound(sounder.sound_name);
             if (clip == null) return;
 
             // ── 算好参数 ──
-            float delay = Mathf.Max(0f, sounder.DelayTime);
+            float delay = Mathf.Max(0f, sounder.delay_time);
 
-            float masterVol = (HudManager != null) ? HudManager.Volume * 0.01f : 1f;
-            bool masterMute = (HudManager != null) && HudManager.VolumeMute;
-            float volume = masterVol * Mathf.Clamp01(sounder.Volume);
+            float masterVol = (hud_manager != null) ? hud_manager.global_volume * 0.01f : 1f;
+            bool masterMute = (hud_manager != null) && hud_manager.global_volume_mute;
+            float volume = masterVol * Mathf.Clamp01(sounder.volume);
             bool mute = masterMute;
 
-            bool useRandomPitch = sounder.UseRandomPitch;
-            float pMin = sounder.Pitch_Min;
-            float pMax = sounder.Pitch_Max;
+            bool useRandomPitch = sounder.use_random_pitch;
+            float pMin = sounder.pitch_min;
+            float pMax = sounder.pitch_max;
 
             XGUI.EditorPlayer_Sound.Enqueue(
                 clip, delay, volume, mute, useRandomPitch, pMin, pMax);
@@ -117,36 +117,36 @@ namespace SevenStrikeModules.XHud.Editor
         private void Preview_PrimitiveTween_Sound(XHud_Module_Primitive_Tween tweener, string timing, float globalDuration, float nodeDelay)
         {
             if (tweener == null) return;
-            if (tweener.MutePlay) return;
+            if (tweener.mute_play) return;
             if (EditorUtility.audioMasterMute) return;
             if (string.IsNullOrEmpty(timing)) return;
 
-            for (int s = 0; s < tweener.PrimitiveTweenSounds.Count; s++)
+            for (int s = 0; s < tweener.primitive_tween_sounds.Count; s++)
             {
-                TweenSound sod = tweener.PrimitiveTweenSounds[s];
+                TweenSound sod = tweener.primitive_tween_sounds[s];
                 if (sod == null) continue;
-                if (sod.Mute) continue;
-                if (sod.Timing != timing) continue;
+                if (sod.mute) continue;
+                if (sod.timing != timing) continue;
 
                 AudioClip clip = Resolve_PrimitiveSoundClip(sod);
                 if (clip == null) continue;
 
                 // ── 延迟：与子图元动画对齐 ──
                 float mul = 1f;
-                if (HudManager != null && HudManager.DurationMultiply > 0f)
-                    mul = HudManager.DurationMultiply;
+                if (hud_manager != null && hud_manager.tween_global_duration > 0f)
+                    mul = hud_manager.tween_global_duration;
                 mul *= globalDuration;
 
-                float delay = Mathf.Max(0f, sod.Delay * mul + nodeDelay);
+                float delay = Mathf.Max(0f, sod.delay * mul + nodeDelay);
 
                 // ── 音量 / 音高 / 静音 ──
-                float masterVol = (HudManager != null) ? HudManager.Volume * 0.01f : 1f;
-                bool masterMute = (HudManager != null) && HudManager.VolumeMute;
-                float volume = masterVol * Mathf.Clamp01(sod.Volume);
+                float masterVol = (hud_manager != null) ? hud_manager.global_volume * 0.01f : 1f;
+                bool masterMute = (hud_manager != null) && hud_manager.global_volume_mute;
+                float volume = masterVol * Mathf.Clamp01(sod.volume);
                 bool mute = masterMute;
 
-                float pMin = Mathf.Min(sod.MinPitch, sod.MaxPitch);
-                float pMax = Mathf.Max(sod.MinPitch, sod.MaxPitch);
+                float pMin = Mathf.Min(sod.min_pitch, sod.max_pitch);
+                float pMax = Mathf.Max(sod.min_pitch, sod.max_pitch);
                 bool useRandomPitch = !Mathf.Approximately(pMin, 1f) || !Mathf.Approximately(pMax, 1f);
 
                 XGUI.EditorPlayer_Sound.Enqueue(
@@ -158,18 +158,18 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private AudioClip Resolve_PrimitiveSoundClip(TweenSound sod)
         {
-            if (sod == null || sod.Sound == null) return null;
+            if (sod == null || sod.sound == null) return null;
 
-            if (HudManager != null && HudManager.Hud_Sounds != null)
+            if (hud_manager != null && hud_manager.library_sounds != null)
             {
-                string soundName = sod.Sound.name;
+                string soundName = sod.sound.name;
                 if (!string.IsNullOrEmpty(soundName))
                 {
-                    AudioClip clip = HudManager.Hud_Sounds.SoundLibrary_GetSound(soundName);
+                    AudioClip clip = hud_manager.library_sounds.SoundLibrary_GetSound(soundName);
                     if (clip != null) return clip;
                 }
             }
-            return sod.Sound;
+            return sod.sound;
         }
     }
 }

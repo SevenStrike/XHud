@@ -30,7 +30,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 是否正在与UI交互
         /// </summary>
-        public bool IsInteractionUI;
+        public bool is_interaction_ui;
         [SerializeField]
         /// <summary>
         /// UI 交互有效状态标志位
@@ -45,7 +45,7 @@ namespace SevenStrikeModules.XHud
         /// - 检测用户何时开始与 UI 交互（用于隐藏游戏内 UI、暂停游戏逻辑等）
         /// - 避免在每一帧都触发事件，只在状态变化时触发一次
         /// </summary>
-        private bool Interacte_Valid;
+        private bool interacte_valid;
         [SerializeField]
         /// <summary>
         /// UI 交互无效状态标志位
@@ -60,7 +60,7 @@ namespace SevenStrikeModules.XHud
         /// - 检测用户何时停止与 UI 交互（用于恢复游戏内 UI、恢复游戏逻辑等）
         /// - 确保事件只在状态切换时触发，避免重复调用
         /// </summary>
-        private bool Interacte_Invalid;
+        private bool interacte_invalid;
 
         /// <summary>
         /// /// <summary>
@@ -89,26 +89,26 @@ namespace SevenStrikeModules.XHud
         {
             while (true)
             {
-                IsInteractionUI = EventSystem.current.IsPointerOverGameObject();
+                is_interaction_ui = EventSystem.current.IsPointerOverGameObject();
 
-                if (IsInteractionUI)
+                if (is_interaction_ui)
                 {
-                    Interacte_Invalid = false;
-                    if (!Interacte_Valid)
+                    interacte_invalid = false;
+                    if (!interacte_valid)
                     {
-                        Interacte_Valid = true;
-                        if (Act_IsInteractionUI != null)
-                            Act_IsInteractionUI(IsInteractionUI);
+                        interacte_valid = true;
+                        if (act_is_interaction_ui != null)
+                            act_is_interaction_ui(is_interaction_ui);
                     }
                 }
                 else
                 {
-                    Interacte_Valid = false;
-                    if (!Interacte_Invalid)
+                    interacte_valid = false;
+                    if (!interacte_invalid)
                     {
-                        Interacte_Invalid = true;
-                        if (Act_IsInteractionUI != null)
-                            Act_IsInteractionUI(IsInteractionUI);
+                        interacte_invalid = true;
+                        if (act_is_interaction_ui != null)
+                            act_is_interaction_ui(is_interaction_ui);
                     }
                 }
 

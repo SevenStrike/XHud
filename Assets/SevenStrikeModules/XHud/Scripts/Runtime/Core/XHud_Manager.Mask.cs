@@ -32,54 +32,54 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 屏幕遮罩
         /// </summary>
-        public Image Mask;
+        public Image mk_mask;
         [Range(0, 1)]
         [Tooltip("遮罩透明度")]
         /// <summary>
         /// 遮罩透明度
         /// </summary>
-        public float MaskAlpha;
+        public float mk_alpha;
         [Range(0, 1)]
         [Tooltip("当遮罩透明度大于此值时遮罩的射线点击特性(Raycast)处于启用")]
         /// <summary>
         /// 当遮罩透明度大于此值时遮罩的射线点击特性(Raycast)处于启用
         /// </summary>
-        public float MaskRaycastAlphaThreshold = 1;
+        public float mk_raycast_alpha_threshold = 1;
         [Tooltip("是否开启遮罩射线遮挡")]
         /// <summary>
         /// 是否开启遮罩射线遮挡
         /// </summary>
-        public bool MaskRaycastEnabled;
+        public bool mk_raycast_enabled;
         [Tooltip("遮罩颜色")]
         /// <summary>
         /// 遮罩颜色
         /// </summary>
-        public Color MaskColor = Color.clear;
+        public Color mk_color = Color.clear;
         [Tooltip("遮罩贴图")]
         /// <summary>
         /// 遮罩贴图
         /// </summary>
-        public Texture2D MaskTexture;
+        public Texture2D mk_texture;
         [Tooltip("动画组件 - 遮罩透明度")]
         /// <summary>
         /// 动画组件 - 遮罩透明度
         /// </summary>
-        private XTween_Interface twn_MaskAlpha;
+        private XTween_Interface twn_mask_alpha;
         [Tooltip("动画组件 - 遮罩颜色通道 R")]
         /// <summary>
         /// 动画组件 - 遮罩颜色通道 R
         /// </summary>
-        private XTween_Interface twn_MaskColor_R;
+        private XTween_Interface twn_mask_color_r;
         [Tooltip("动画组件 - 遮罩颜色通道 G")]
         /// <summary>
         /// 动画组件 - 遮罩颜色通道 G
         /// </summary>
-        private XTween_Interface twn_MaskColor_G;
+        private XTween_Interface twn_mask_color_g;
         [Tooltip("动画组件 - 遮罩颜色通道 B")]
         /// <summary>
         /// 动画组件 - 遮罩颜色通道 B
         /// </summary>
-        private XTween_Interface twn_MaskColor_B;
+        private XTween_Interface twn_mask_color_b;
 
         /// <summary>
         /// 屏幕遮罩更新
@@ -125,39 +125,39 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_MaskUpdate()
         {
-            if (Mask == null)
+            if (mk_mask == null)
                 return;
 
-            MaskColor.a = MaskAlpha;
-            if (Mask != null)
-                Mask.color = MaskColor;
-            if (MaskTexture != null)
-                hm_MaskTextureSet(MaskTexture);
+            mk_color.a = mk_alpha;
+            if (mk_mask != null)
+                mk_mask.color = mk_color;
+            if (mk_texture != null)
+                hm_MaskTextureSet(mk_texture);
             else
                 hm_MaskTextureSet(null);
 
-            if (MaskAlpha < MaskRaycastAlphaThreshold)
+            if (mk_alpha < mk_raycast_alpha_threshold)
             {
-                MaskRaycastEnabled = false;
+                mk_raycast_enabled = false;
             }
             else
             {
-                MaskRaycastEnabled = true;
+                mk_raycast_enabled = true;
             }
-            Mask.raycastTarget = MaskRaycastEnabled;
+            mk_mask.raycastTarget = mk_raycast_enabled;
             hm_MaskTopView();
 
-            if (Act_MaskChanged_Value != null)
-                Act_MaskChanged_Value(MaskAlpha);
+            if (act_mask_changed_value != null)
+                act_mask_changed_value(mk_alpha);
         }
         /// <summary>
         /// 将Mask置于最上层
         /// </summary>
         public void hm_MaskTopView()
         {
-            if (Mask == null)
+            if (mk_mask == null)
                 return;
-            Mask.transform.SetAsLastSibling();
+            mk_mask.transform.SetAsLastSibling();
         }
         /// <summary>
         /// 遮罩颜色平滑到
@@ -168,25 +168,25 @@ namespace SevenStrikeModules.XHud
         /// <param name="delay">延迟</param>
         public XTween_Interface[] hm_MaskColor_To(Color col, float dur, EaseMode ease, float delay)
         {
-            if (twn_MaskColor_R != null && twn_MaskColor_R.IsActive)
-                if (twn_MaskColor_R.IsPlaying)
-                    twn_MaskColor_R.Kill();
-            if (twn_MaskColor_G != null && twn_MaskColor_G.IsActive)
-                if (twn_MaskColor_G.IsPlaying)
-                    twn_MaskColor_G.Kill();
-            if (twn_MaskColor_B != null && twn_MaskColor_B.IsActive)
-                if (twn_MaskColor_B.IsPlaying)
-                    twn_MaskColor_B.Kill();
+            if (twn_mask_color_r != null && twn_mask_color_r.IsActive)
+                if (twn_mask_color_r.IsPlaying)
+                    twn_mask_color_r.Kill();
+            if (twn_mask_color_g != null && twn_mask_color_g.IsActive)
+                if (twn_mask_color_g.IsPlaying)
+                    twn_mask_color_g.Kill();
+            if (twn_mask_color_b != null && twn_mask_color_b.IsActive)
+                if (twn_mask_color_b.IsPlaying)
+                    twn_mask_color_b.Kill();
 
             List<XTween_Interface> tweens = new List<XTween_Interface>();
 
-            twn_MaskColor_R = XTween.To(() => MaskColor.r, r => MaskColor.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
-            twn_MaskColor_G = XTween.To(() => MaskColor.g, g => MaskColor.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
-            twn_MaskColor_B = XTween.To(() => MaskColor.b, b => MaskColor.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_mask_color_r = XTween.To(() => mk_color.r, r => mk_color.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_mask_color_g = XTween.To(() => mk_color.g, g => mk_color.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_mask_color_b = XTween.To(() => mk_color.b, b => mk_color.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
 
-            tweens.Add(twn_MaskColor_R);
-            tweens.Add(twn_MaskColor_G);
-            tweens.Add(twn_MaskColor_B);
+            tweens.Add(twn_mask_color_r);
+            tweens.Add(twn_mask_color_g);
+            tweens.Add(twn_mask_color_b);
 
             return tweens.ToArray();
         }
@@ -199,25 +199,25 @@ namespace SevenStrikeModules.XHud
         /// <param name="delay">延迟</param>
         public XTween_Interface[] hm_MaskColor_To(Color col, float dur, AnimationCurve ease, float delay)
         {
-            if (twn_MaskColor_R != null && twn_MaskColor_R.IsActive)
-                if (twn_MaskColor_R.IsPlaying)
-                    twn_MaskColor_R.Kill();
-            if (twn_MaskColor_G != null && twn_MaskColor_G.IsActive)
-                if (twn_MaskColor_G.IsPlaying)
-                    twn_MaskColor_G.Kill();
-            if (twn_MaskColor_B != null && twn_MaskColor_B.IsActive)
-                if (twn_MaskColor_B.IsPlaying)
-                    twn_MaskColor_B.Kill();
+            if (twn_mask_color_r != null && twn_mask_color_r.IsActive)
+                if (twn_mask_color_r.IsPlaying)
+                    twn_mask_color_r.Kill();
+            if (twn_mask_color_g != null && twn_mask_color_g.IsActive)
+                if (twn_mask_color_g.IsPlaying)
+                    twn_mask_color_g.Kill();
+            if (twn_mask_color_b != null && twn_mask_color_b.IsActive)
+                if (twn_mask_color_b.IsPlaying)
+                    twn_mask_color_b.Kill();
 
             List<XTween_Interface> tweens = new List<XTween_Interface>();
 
-            twn_MaskColor_R = XTween.To(() => MaskColor.r, r => MaskColor.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
-            twn_MaskColor_G = XTween.To(() => MaskColor.g, g => MaskColor.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
-            twn_MaskColor_B = XTween.To(() => MaskColor.b, b => MaskColor.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_mask_color_r = XTween.To(() => mk_color.r, r => mk_color.r = r, col.r, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_mask_color_g = XTween.To(() => mk_color.g, g => mk_color.g = g, col.g, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
+            twn_mask_color_b = XTween.To(() => mk_color.b, b => mk_color.b = b, col.b, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay);
 
-            tweens.Add(twn_MaskColor_R);
-            tweens.Add(twn_MaskColor_G);
-            tweens.Add(twn_MaskColor_B);
+            tweens.Add(twn_mask_color_r);
+            tweens.Add(twn_mask_color_g);
+            tweens.Add(twn_mask_color_b);
 
             return tweens.ToArray();
         }
@@ -227,21 +227,21 @@ namespace SevenStrikeModules.XHud
         /// <param name="col">目标颜色</param>
         public void hm_MaskColor_FastTo(Color col)
         {
-            if (twn_MaskColor_R != null && twn_MaskColor_R.IsActive)
-                if (twn_MaskColor_R.IsPlaying)
-                    twn_MaskColor_R.Kill();
+            if (twn_mask_color_r != null && twn_mask_color_r.IsActive)
+                if (twn_mask_color_r.IsPlaying)
+                    twn_mask_color_r.Kill();
 
-            if (twn_MaskColor_G != null && twn_MaskColor_G.IsActive)
-                if (twn_MaskColor_G.IsPlaying)
-                    twn_MaskColor_G.Kill();
+            if (twn_mask_color_g != null && twn_mask_color_g.IsActive)
+                if (twn_mask_color_g.IsPlaying)
+                    twn_mask_color_g.Kill();
 
-            if (twn_MaskColor_B != null && twn_MaskColor_B.IsActive)
-                if (twn_MaskColor_B.IsPlaying)
-                    twn_MaskColor_B.Kill();
+            if (twn_mask_color_b != null && twn_mask_color_b.IsActive)
+                if (twn_mask_color_b.IsPlaying)
+                    twn_mask_color_b.Kill();
 
-            MaskColor.r = col.r;
-            MaskColor.g = col.g;
-            MaskColor.b = col.b;
+            mk_color.r = col.r;
+            mk_color.g = col.g;
+            mk_color.b = col.b;
         }
         /// <summary>
         /// 遮罩透明度平滑到
@@ -254,10 +254,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="action_end">委托 - 结束时</param>
         public XTween_Interface hm_MaskAlpha_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_MaskAlpha != null && twn_MaskAlpha.IsActive)
-                if (twn_MaskAlpha.IsPlaying)
-                    twn_MaskAlpha.Kill();
-            twn_MaskAlpha = XTween.To(() => MaskAlpha, x => MaskAlpha = x, val, dur, true).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            if (twn_mask_alpha != null && twn_mask_alpha.IsActive)
+                if (twn_mask_alpha.IsPlaying)
+                    twn_mask_alpha.Kill();
+            twn_mask_alpha = XTween.To(() => mk_alpha, x => mk_alpha = x, val, dur, true).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
@@ -267,7 +267,7 @@ namespace SevenStrikeModules.XHud
                     action_end();
             });
 
-            return twn_MaskAlpha;
+            return twn_mask_alpha;
         }
         /// <summary>
         /// 遮罩透明度平滑到
@@ -280,10 +280,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="action_end">委托 - 结束时</param>
         public XTween_Interface hm_MaskAlpha_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_MaskAlpha != null && twn_MaskAlpha.IsActive)
-                if (twn_MaskAlpha.IsPlaying)
-                    twn_MaskAlpha.Kill();
-            twn_MaskAlpha = XTween.To(() => MaskAlpha, x => MaskAlpha = x, val, dur, true).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            if (twn_mask_alpha != null && twn_mask_alpha.IsActive)
+                if (twn_mask_alpha.IsPlaying)
+                    twn_mask_alpha.Kill();
+            twn_mask_alpha = XTween.To(() => mk_alpha, x => mk_alpha = x, val, dur, true).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
@@ -293,7 +293,7 @@ namespace SevenStrikeModules.XHud
                     action_end();
             });
 
-            return twn_MaskAlpha;
+            return twn_mask_alpha;
         }
         /// <summary>
         /// 遮罩透明度快速到
@@ -301,10 +301,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="val">目标透明度</param>
         public void hm_MaskAlpha_FastTo(float val)
         {
-            if (twn_MaskAlpha != null && twn_MaskAlpha.IsActive)
-                if (twn_MaskAlpha.IsPlaying)
-                    twn_MaskAlpha.Kill();
-            MaskAlpha = val;
+            if (twn_mask_alpha != null && twn_mask_alpha.IsActive)
+                if (twn_mask_alpha.IsPlaying)
+                    twn_mask_alpha.Kill();
+            mk_alpha = val;
         }
         /// <summary>
         /// 设置遮罩贴图
@@ -314,13 +314,13 @@ namespace SevenStrikeModules.XHud
         {
             if (tex == null)
             {
-                if (Mask != null)
-                    Mask.sprite = null;
+                if (mk_mask != null)
+                    mk_mask.sprite = null;
                 return;
             }
-            Mask.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
-            if (Act_MaskChanged_Texture != null)
-                Act_MaskChanged_Texture(tex);
+            mk_mask.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f);
+            if (act_mask_changed_texture != null)
+                act_mask_changed_texture(tex);
         }
     }
 }

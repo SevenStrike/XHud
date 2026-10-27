@@ -38,22 +38,22 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 物理世界中的显示器的尺寸大小
         /// </summary>
-        public Vector2 PhysicsScreenSize;
+        public Vector2 hmr_physics_screen_size;
         [SerializeField]
         /// <summary>
         /// 参考尺寸
         /// </summary>
-        public Vector2 PhysicsReferenceSize;
+        public Vector2 physics_reference_size;
         [SerializeField]
         /// <summary>
         /// 参考比例标识显示组件
         /// </summary>
-        public Image Reference_Image;
+        public Image hmr_reference_image;
         [SerializeField]
         /// <summary>
         /// 参考比例标识显示颜色
         /// </summary>
-        public Color Reference_Image_Color;
+        public Color hmr_reference_image_color;
         /// <summary>
         /// 全屏参考比例标识资源
         /// 当 RatioReferenceIsPart = false 时使用此资源
@@ -61,7 +61,7 @@ namespace SevenStrikeModules.XHud
         /// 帮助判断 UI 元素与完整物理参考物的比例关系
         /// </summary>
         [SerializeField]
-        public XHUdRatioReferenceRes Res_Full;
+        public XHUdRatioReferenceRes hmr_res_full;
         /// <summary>
         /// 局部参考比例标识资源
         /// 当 RatioReferenceIsPart = true 时使用此资源
@@ -70,7 +70,7 @@ namespace SevenStrikeModules.XHud
         /// 示例：头部参考图用于判断头像框大小是否合理
         /// </summary>
         [SerializeField]
-        public XHUdRatioReferenceRes Res_Part;
+        public XHUdRatioReferenceRes hmr_res_part;
         /// <summary>
         /// 参考形状的比例尺寸
         /// 定义物理参考标识在屏幕上的显示尺寸（相对于屏幕宽高比）
@@ -78,7 +78,7 @@ namespace SevenStrikeModules.XHud
         /// 示例：Vector2(0.5f, 0.5f) 表示参考标识占屏幕宽高的 50%
         /// </summary>
         [SerializeField]
-        public Vector2 ReferShape_RatioSize = new Vector2(5, 5);
+        public Vector2 hmr_refer_shape_ratio_size = new Vector2(5, 5);
         /// <summary>
         /// 参考形状的比例容差
         /// 定义参考标识允许的尺寸偏差范围，用于自动适配不同分辨率
@@ -87,16 +87,16 @@ namespace SevenStrikeModules.XHud
         /// 示例：Vector2(0.05f, 0.05f) 表示允许 5% 的尺寸偏差
         /// </summary>
         [SerializeField]
-        public Vector2 ReferShape_RatioTolerance = new Vector2(1, 1);
+        public Vector2 hmr_refer_shape_ratio_tolerance = new Vector2(1, 1);
         [SerializeField]
         /// <summary>
         /// 使用人形比例参考
         /// </summary>
-        public bool UseRatioReference;
+        public bool hmr_use_ratio_reference;
         [SerializeField]
         /// <summary>
         /// 人形比例参考类型
         /// </summary>
-        public bool RatioReferenceIsPart = true;
+        public bool hmr_ratio_reference_is_part = true;
     }
 }

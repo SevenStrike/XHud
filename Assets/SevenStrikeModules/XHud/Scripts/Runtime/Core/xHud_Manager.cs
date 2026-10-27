@@ -35,37 +35,37 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 曲线库
         /// </summary>
-        public XHud_Library_Curves Hud_Curves;
+        public XHud_Library_Curves library_curves;
         [SerializeField]
         [Tooltip("调色板")]
         /// <summary>
         /// 调色板
         /// </summary>
-        public XHud_Library_Colors Hud_Colors;
+        public XHud_Library_Colors library_colors;
         [SerializeField]
         [Tooltip("音效库")]
         /// <summary>
         /// 音效库
         /// </summary>
-        public XHud_Library_Sounds Hud_Sounds;
+        public XHud_Library_Sounds library_sounds;
         [SerializeField]
         [Tooltip("字体库")]
         /// <summary>
         /// 字体库
         /// </summary>
-        public XHud_Library_TextStyle Hud_TextStyleLibrary;
+        public XHud_Library_TextStyle library_textstyles;
         [SerializeField]
         [Tooltip("转场")]
         /// <summary>
         /// 转场
         /// </summary>
-        public XHud_Library_Transition Hud_TransitionLib;
+        public XHud_Library_Transition library_transitions;
         [SerializeField]
         [Tooltip("元素动效库")]
         /// <summary>
         /// 元素动效库
         /// </summary>
-        public XHud_Library_Motion Hud_Motions;
+        public XHud_Library_Motion library_motions;
         #endregion
 
         #region UI的全局动画速度
@@ -75,7 +75,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 影响所有UI的动画速度
         /// </summary>
-        public float DurationMultiply = 1f;
+        public float tween_global_duration = 1f;
         #endregion
 
         #region 必要组件
@@ -83,17 +83,17 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// EventSystem组件
         /// </summary>
-        public EventSystem Hud_EventSystem;
+        public EventSystem hud_event_system;
         [Tooltip("输入系统")]
         /// <summary>
         /// InputSystemUIInputModule组件
         /// </summary>
-        public InputSystemUIInputModule Hud_InputSystemUIInputModule;
+        public InputSystemUIInputModule hud_input_system_ui_input_module;
         [Tooltip("XTween")]
         /// <summary>
         /// XTween
         /// </summary>
-        public XTween_Manager XTweenManager;
+        public XTween_Manager xtween_manager;
         #endregion      
 
         #region 状态开关
@@ -102,20 +102,21 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 调试模式
         /// </summary>
-        public bool UseDebug;
+        public bool use_debug;
         [SerializeField]
         [Tooltip("管理器初始化状态")]
         /// <summary>
         /// 管理器初始化状态
         /// </summary>
-        public bool IsInitialized;
+        public bool initialized;
         [SerializeField]
         /// <summary>
         /// 关闭面板后是否折叠所有选项卡
         /// </summary>
-        public bool FoldAllPanelWithDisabled;
+        public bool fold_all_panel_with_disabled;
         #endregion
 
+        #region 折叠
         public bool
             fold_options = true,
             fold_canvasset = true,
@@ -136,10 +137,57 @@ namespace SevenStrikeModules.XHud
             fold_themes = true,
             fold_based = true;
 
-        [SerializeField] public float PrimtiveID_LabelLine_Height = 0.5f;
-        [SerializeField] public Color PrimtiveID_LabelLine_Color = Color.white * 0.5f;
-        [SerializeField] public int PrimtiveID_LabelFont_Size = 12;
-        [SerializeField] public Color PrimtiveID_LabelFont_Color = Color.white;
+        public void GroupFold(bool state)
+        {
+            fold_options = state;
+            fold_canvasset = state;
+            fold_camera = state;
+            fold_ratiorefer = state;
+            fold_compguid = state;
+            fold_reslibs = state;
+            fold_elementlibs = state;
+            fold_soundslib = state;
+            fold_masks = state;
+            fold_global = state;
+            fold_tool = state;
+            fold_RMS = state;
+            fold_layout = state;
+            fold_visualsafe = state;
+            fold_blueprint = state;
+            fold_motion_default = state;
+            fold_themes = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool options = true, bool canvasset = true, bool camera = true, bool ratiorefer = true, bool compguid = true, bool reslibs = true, bool elementlibs = true, bool soundslib = true, bool masks = true, bool global = true, bool tool = true, bool RMS = true, bool layout = true, bool visualsafe = true, bool blueprint = true, bool motion_default = true, bool themes = true, bool based = true)
+        {
+            fold_options = options;
+            fold_canvasset = canvasset;
+            fold_camera = camera;
+            fold_ratiorefer = ratiorefer;
+            fold_compguid = compguid;
+            fold_reslibs = reslibs;
+            fold_elementlibs = elementlibs;
+            fold_soundslib = soundslib;
+            fold_masks = masks;
+            fold_global = global;
+            fold_tool = tool;
+            fold_RMS = RMS;
+            fold_layout = layout;
+            fold_visualsafe = visualsafe;
+            fold_blueprint = blueprint;
+            fold_motion_default = motion_default;
+            fold_themes = themes;
+            fold_based = based;
+        }
+        #endregion
+
+        #region 图元ID可视化参数
+        [SerializeField] public float primitive_id_label_line_height = 0.5f;
+        [SerializeField] public Color primitive_id_label_line_color = Color.white * 0.5f;
+        [SerializeField] public int primitive_id_label_font_size = 12;
+        [SerializeField] public Color primitive_id_label_font_color = Color.white;
+        #endregion
 
         void Awake()
         {
@@ -149,16 +197,16 @@ namespace SevenStrikeModules.XHud
             hm_CanvasPixelPerfect_InitializeMode();
 
             // 在子级中获取 CanvasScaler
-            if (HudCanvasScaler == null)
-                HudCanvasScaler = HudCanvas_Screen.GetComponentInChildren<CanvasScaler>();
+            if (cv_scaler == null)
+                cv_scaler = cv_screen.GetComponentInChildren<CanvasScaler>();
 
             // 在子级中获取 CustomMouseCursor
-            if (Hud_MouseCursor == null)
-                Hud_MouseCursor = GetComponentInChildren<XHud_CustomMouseCursor>();
+            if (mos_mouse_cursor == null)
+                mos_mouse_cursor = GetComponentInChildren<XHud_CustomMouseCursor>();
 
             // 在子级中获取 TransitionController
-            if (Hud_TransitionController == null)
-                Hud_TransitionController = GetComponentInChildren<XHud_TransitionController>();
+            if (trans_transition_controller == null)
+                trans_transition_controller = GetComponentInChildren<XHud_TransitionController>();
 
             // 根据 BluePrint_OnStartHide 配置决定蓝图视觉在游戏启动时的显示状态
             hm_BluePrint_InitializeMode();
@@ -167,7 +215,7 @@ namespace SevenStrikeModules.XHud
             // 根据配置的预制体列表，预先生成指定数量的 UI 元素实例，放入对象池待用
             hm_ElementLibrary_Initialize();
             // 预创建指定数量的 AudioSource 组件，用于播放 UI 音效
-            hm_LibrarySounds_Initialize(SounderPoolCount);
+            hm_LibrarySounds_Initialize(pool_sounder_count);
             // 检查 UI 交互状态的协程
             StartCoroutine(CheckUIInteraction());
         }

@@ -28,7 +28,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 动作器
         /// </summary>
-        public XHud_Element_TriggerAction TriggerAction;
+        public XHud_Element_TriggerAction trigger_action;
 
         /// <summary>
         /// 检测是否存在元素动作器
@@ -36,7 +36,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public bool element_TriggerActionIsExist()
         {
-            if (TriggerAction != null)
+            if (trigger_action != null)
                 return true;
             else
                 return false;
@@ -49,7 +49,7 @@ namespace SevenStrikeModules.XHud
         public XHud_Element_TriggerAction element_GetTriggerAction()
         {
             if (element_TriggerActionIsExist())
-                return TriggerAction;
+                return trigger_action;
             else
                 return null;
         }

@@ -35,11 +35,11 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 是否正在使用
         /// </summary>
-        public bool Using;
+        public bool is_using;
         /// <summary>
         /// 预生成的元素
         /// </summary>
-        public XHud_Module_Element HudElement;
+        public XHud_Module_Element element;
 
         public XHud_LibraryArg_Element_Info()
         {
@@ -51,23 +51,23 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void UpdateState()
         {
-            if (HudElement == null)
+            if (element == null)
                 return;
 
-            if (HudElement.CreateState == XHudElementCreateState.Recycled)
+            if (element.create_state == XHudElementCreateState.Recycled)
             {
-                Using = false;
+                is_using = false;
             }
             else
             {
-                Using = true;
+                is_using = true;
             }
         }
 
         public void Copy(XHud_LibraryArg_Element_Info ele)
         {
-            Using = ele.Using;
-            HudElement = ele.HudElement;
+            is_using = ele.is_using;
+            element = ele.element;
         }
     }
 
@@ -80,36 +80,36 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 标识
         /// </summary>
-        public string Name;
+        public string name;
         /// <summary>
         /// 需要预生成的数量
         /// </summary>
-        public int InitializeCount;
+        public int initialize_count;
         /// <summary>
         /// 已使用的数量
         /// </summary>
-        public int UsedCount;
+        public int used_count;
         /// <summary>
         /// 已回收的数量
         /// </summary>
-        public int RecycledCount;
+        public int recycled_count;
         /// <summary>
         /// 序号
         /// </summary>
-        public int NextIndex;
+        public int next_index;
         /// <summary>
         /// 根节点
         /// </summary>
-        public Transform Root;
+        public Transform root;
         /// <summary>
         /// 元素
         /// </summary>
-        public XHud_Module_Element Target;
+        public XHud_Module_Element target;
         [SerializeField]
         /// <summary>
         /// 预生成的元素信息列表
         /// </summary>
-        public List<XHud_LibraryArg_Element_Info> PreloadElements = new List<XHud_LibraryArg_Element_Info>();
+        public List<XHud_LibraryArg_Element_Info> preload_elements = new List<XHud_LibraryArg_Element_Info>();
 
         public XHud_LibraryArg_Element_Item()
         {
@@ -118,14 +118,14 @@ namespace SevenStrikeModules.XHud
 
         public XHud_LibraryArg_Element_Item(int initializeCount, XHud_Module_Element target)
         {
-            Name = target.name;
-            InitializeCount = initializeCount;
-            UsedCount = 0;
-            RecycledCount = 0;
-            NextIndex = 0;
-            Root = null;
-            Target = target;
-            PreloadElements = new List<XHud_LibraryArg_Element_Info>();
+            name = target.name;
+            initialize_count = initializeCount;
+            used_count = 0;
+            recycled_count = 0;
+            next_index = 0;
+            root = null;
+            this.target = target;
+            preload_elements = new List<XHud_LibraryArg_Element_Info>();
         }
 
 
@@ -136,14 +136,14 @@ namespace SevenStrikeModules.XHud
         public void GetUsedCount()
         {
             int count = 0;
-            for (int i = 0; i < PreloadElements.Count; i++)
+            for (int i = 0; i < preload_elements.Count; i++)
             {
-                if (PreloadElements[i].Using)
+                if (preload_elements[i].is_using)
                 {
                     count++;
                 }
             }
-            UsedCount = count;
+            used_count = count;
         }
 
         /// <summary>
@@ -152,71 +152,88 @@ namespace SevenStrikeModules.XHud
         public void GetRecycledCount()
         {
             int count = 0;
-            for (int i = 0; i < PreloadElements.Count; i++)
+            for (int i = 0; i < preload_elements.Count; i++)
             {
-                if (!PreloadElements[i].Using)
+                if (!preload_elements[i].is_using)
                 {
                     count++;
                 }
             }
-            RecycledCount = count;
+            recycled_count = count;
         }
 
         public void Copy(XHud_LibraryArg_Element_Item item)
         {
-            Name = item.Name;
-            InitializeCount = item.InitializeCount;
-            UsedCount = item.UsedCount;
-            RecycledCount = item.RecycledCount;
-            NextIndex = item.NextIndex;
-            Root = item.Root;
-            Target = item.Target;
-            PreloadElements = item.PreloadElements;
+            name = item.name;
+            initialize_count = item.initialize_count;
+            used_count = item.used_count;
+            recycled_count = item.recycled_count;
+            next_index = item.next_index;
+            root = item.root;
+            target = item.target;
+            preload_elements = item.preload_elements;
         }
     }
 
     [CreateAssetMenu(fileName = "XHud_Library_Element", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-Element (元素库)", order = 0)]
     public class XHud_Library_Element : ScriptableObject
     {
-        public string LibraryName = "NewElementsLibrary";
-        public string LibraryDescription = "NewDescription";
+        #region 字段 - 库基础信息
+        /// <summary>
+        /// 库名称
+        /// </summary>
+        public string library_name = "NewElementsLibrary";
+        /// <summary>
+        /// 库根节点
+        /// </summary>
+        public Transform library_root;
+        /// <summary>
+        /// 元素库数据列表
+        /// </summary>
+        public List<XHud_LibraryArg_Element_Item> library_elements = new List<XHud_LibraryArg_Element_Item>();
+        #endregion
 
-        public Transform LibraryRoot;
-        /// <summary>
-        /// Editor列表项高度
-        /// </summary>
-        public float itemHeight = 50;
-        /// <summary>
-        /// 可视区域显示的元素数量
-        /// </summary>
-        public int visibleItemCount = 9;
+        #region 字段 - 列表查询与筛选
         /// <summary>
         /// 名称项查找（精确匹配）
         /// </summary>
-        public string Find = "";
+        public string find = "";
         /// <summary>
-        /// Editor筛选名称
+        /// 筛选高亮名称
         /// </summary>
-        public string Highlight;
+        public string highlight;
+        #endregion
+
+        #region 字段 - 列表布局
         /// <summary>
-        /// 选中项索引号
+        /// Editor 列表项高度
         /// </summary>
-        public int SelectedIndex;
+        public float item_height = 50;
         /// <summary>
-        /// 定位选中项索引号
+        /// 可视区域显示的元素数量
         /// </summary>
-        public int LocationSelectedIndex = -1;
+        public int visible_item_count = 9;
         /// <summary>
         /// 列表滚动位置
         /// </summary>
-        public Vector2 ElementInfoList_Original_Scroller;
+        public Vector2 element_info_list_original_scroller;
+        #endregion
 
-        public List<XHud_LibraryArg_Element_Item> ElementLibrary = new List<XHud_LibraryArg_Element_Item>();
+        #region 字段 - 选中与定位
+        /// <summary>
+        /// 选中项索引号
+        /// </summary>
+        public int selected_index;
+        /// <summary>
+        /// 定位选中项索引号（-1 表示无）
+        /// </summary>
+        public int location_selected_index = -1;
+        #endregion
 
         private void OnEnable()
         {
-            itemHeight = 50;
-            visibleItemCount = 9;
+            item_height = 50;
+            visible_item_count = 9;
         }
 
         // 确保内部名称与文件名一致
@@ -241,12 +258,12 @@ namespace SevenStrikeModules.XHud
         /// <param name="paramObject"></param>
         public void ElementsLibrary_ReplaceElement(XHud_Module_Element paramObject)
         {
-            for (int i = 0; i < ElementLibrary.Count; i++)
+            for (int i = 0; i < library_elements.Count; i++)
             {
-                if (ElementLibrary[i].Name == paramObject.transform.name)
+                if (library_elements[i].name == paramObject.transform.name)
                 {
-                    ElementLibrary[i].Target = paramObject;
-                    ElementLibrary[i].Name = paramObject.transform.name;
+                    library_elements[i].target = paramObject;
+                    library_elements[i].name = paramObject.transform.name;
                 }
             }
         }
@@ -258,7 +275,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="paramObject"></param>
         public void ElementsLibrary_ReplaceElement(int index, XHud_LibraryArg_Element_Item item)
         {
-            ElementLibrary[index] = item;
+            library_elements[index] = item;
         }
 
         /// <summary>
@@ -269,10 +286,10 @@ namespace SevenStrikeModules.XHud
         public void ElementsLibrary_Add(XHud_Module_Element element, int count)
         {
             XHud_LibraryArg_Element_Item item = new XHud_LibraryArg_Element_Item();
-            item.Target = element;
-            item.InitializeCount = count;
-            item.Name = element.transform.name;
-            ElementLibrary.Add(item);
+            item.target = element;
+            item.initialize_count = count;
+            item.name = element.transform.name;
+            library_elements.Add(item);
         }
 
         /// <summary>
@@ -282,7 +299,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="count">数量</param>
         public void ElementsLibrary_Add(XHud_LibraryArg_Element_Item item)
         {
-            ElementLibrary.Add(item);
+            library_elements.Add(item);
         }
 
         /// <summary>
@@ -291,7 +308,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="index">索引</param>
         public void ElementsLibrary_Remove(int index)
         {
-            ElementLibrary.RemoveAt(index);
+            library_elements.RemoveAt(index);
         }
 
         /// <summary>
@@ -300,7 +317,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="name">目标名称</param>
         public void ElementLibrary_ChangeLibraryName(string name)
         {
-            LibraryName = name;
+            library_name = name;
         }
 
         /// <summary>
@@ -309,10 +326,10 @@ namespace SevenStrikeModules.XHud
         /// <returns>元素名称列表</returns>
         public string[] ElementsLibrary_GetAllElementsNames()
         {
-            string[] names = new string[ElementLibrary.Count];
+            string[] names = new string[library_elements.Count];
             for (int i = 0; i < names.Length; i++)
             {
-                names[i] = ElementLibrary[i].Name;
+                names[i] = library_elements[i].name;
             }
 
             return names;
@@ -324,7 +341,7 @@ namespace SevenStrikeModules.XHud
         /// <returns>所有元素数量</returns>
         public int ElementsLibrary_GetElementsCount()
         {
-            return ElementLibrary.Count;
+            return library_elements.Count;
         }
 
         /// <summary>
@@ -335,9 +352,9 @@ namespace SevenStrikeModules.XHud
         {
             int count = 0;
 
-            for (int i = 0; i < ElementLibrary.Count; i++)
+            for (int i = 0; i < library_elements.Count; i++)
             {
-                count += ElementLibrary[i].UsedCount;
+                count += library_elements[i].used_count;
             }
 
             return count;
@@ -351,9 +368,9 @@ namespace SevenStrikeModules.XHud
         {
             int count = 0;
 
-            for (int i = 0; i < ElementLibrary.Count; i++)
+            for (int i = 0; i < library_elements.Count; i++)
             {
-                count += ElementLibrary[i].InitializeCount;
+                count += library_elements[i].initialize_count;
             }
 
             return count;
@@ -367,9 +384,9 @@ namespace SevenStrikeModules.XHud
         {
             int count = 0;
 
-            for (int i = 0; i < ElementLibrary.Count; i++)
+            for (int i = 0; i < library_elements.Count; i++)
             {
-                count += ElementLibrary[i].RecycledCount;
+                count += library_elements[i].recycled_count;
             }
 
             return count;
@@ -383,10 +400,10 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Element ElementsLibrary_GetTargetElement(string name)
         {
             XHud_Module_Element ele = null;
-            for (int i = 0; i < ElementLibrary.Count; i++)
+            for (int i = 0; i < library_elements.Count; i++)
             {
-                if (ElementLibrary[i].Name == name)
-                    ele = ElementLibrary[i].Target;
+                if (library_elements[i].name == name)
+                    ele = library_elements[i].target;
             }
 
             return ele;
@@ -400,10 +417,10 @@ namespace SevenStrikeModules.XHud
         public XHud_LibraryArg_Element_Item ElementsLibrary_GetTargetLibraryItem(string name)
         {
             XHud_LibraryArg_Element_Item item = null;
-            for (int i = 0; i < ElementLibrary.Count; i++)
+            for (int i = 0; i < library_elements.Count; i++)
             {
-                if (ElementLibrary[i].Name == name)
-                    item = ElementLibrary[i];
+                if (library_elements[i].name == name)
+                    item = library_elements[i];
             }
 
             return item;
@@ -416,10 +433,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="Count">初始化数量</param>
         public void ElementsLibrary_ChangeElementInitializeCount(string Indicator, int Count)
         {
-            for (int i = 0; i < ElementLibrary.Count; i++)
+            for (int i = 0; i < library_elements.Count; i++)
             {
-                if (ElementLibrary[i].Name == Indicator)
-                    ElementLibrary[i].InitializeCount = Count;
+                if (library_elements[i].name == Indicator)
+                    library_elements[i].initialize_count = Count;
             }
         }
 
@@ -428,26 +445,26 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void ElementLibrary_RecycleAll()
         {
-            for (int i = 0; i < ElementLibrary.Count; i++)
+            for (int i = 0; i < library_elements.Count; i++)
             {
-                XHud_LibraryArg_Element_Item item = ElementLibrary[i];
+                XHud_LibraryArg_Element_Item item = library_elements[i];
 
-                for (int s = 0; s < item.PreloadElements.Count; s++)
+                for (int s = 0; s < item.preload_elements.Count; s++)
                 {
-                    XHud_Module_Element ele = item.PreloadElements[s].HudElement;
+                    XHud_Module_Element ele = item.preload_elements[s].element;
 
-                    if (ele.CreateState == XHudElementCreateState.Recycled)
+                    if (ele.create_state == XHudElementCreateState.Recycled)
                     {
                         continue;
                     }
                     else
                     {
                         ele.element_Reset();
-                        ele.transform.SetParent(ElementLibrary[i].Root);
+                        ele.transform.SetParent(library_elements[i].root);
                         ele.gameObject.SetActive(false);
                     }
                 }
-                item.NextIndex = 0;
+                item.next_index = 0;
             }
         }
 
@@ -457,7 +474,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public bool ElementLibrary_IsEmpty()
         {
-            if (ElementLibrary.Count > 0)
+            if (library_elements.Count > 0)
                 return false;
             else
                 return true;
@@ -471,9 +488,9 @@ namespace SevenStrikeModules.XHud
         public bool ElementLibrary_IsExist(string name)
         {
             bool isexist = false;
-            for (int i = 0; i < ElementLibrary.Count; i++)
+            for (int i = 0; i < library_elements.Count; i++)
             {
-                if (ElementLibrary[i].Name == name)
+                if (library_elements[i].name == name)
                 {
                     isexist = true;
                     break;
@@ -490,9 +507,9 @@ namespace SevenStrikeModules.XHud
         public int ElementLibrary_GetIndexWithName(string name)
         {
             int isexist = 0;
-            for (int i = 0; i < ElementLibrary.Count; i++)
+            for (int i = 0; i < library_elements.Count; i++)
             {
-                if (ElementLibrary[i].Name == name)
+                if (library_elements[i].name == name)
                 {
                     isexist = i;
                     break;
@@ -507,7 +524,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public bool ElementLibrary_IndexIsValid(int Index)
         {
-            if (Index >= 0 && Index < ElementLibrary.Count)
+            if (Index >= 0 && Index < library_elements.Count)
                 return true;
             else
                 return false;
@@ -520,30 +537,30 @@ namespace SevenStrikeModules.XHud
         public void ElementLibrary_Location(string name)
         {
             int index = ElementLibrary_GetIndexWithName(name);
-            SelectedIndex = index;
-            LocationSelectedIndex = index;
-            Highlight = name;
+            selected_index = index;
+            location_selected_index = index;
+            highlight = name;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < ElementLibrary.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < library_elements.Count; i++)
             {
-                if (ElementLibrary[i].Name == name)
+                if (library_elements[i].name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = ElementInfoList_Original_Scroller;
+            Vector2 newscroll = element_info_list_original_scroller;
             newscroll.y = scrollval;
-            ElementInfoList_Original_Scroller = newscroll;
+            element_info_list_original_scroller = newscroll;
         }
 
         /// <summary>
@@ -553,29 +570,29 @@ namespace SevenStrikeModules.XHud
         public void ElementLibrary_Location_Find(string name)
         {
             int index = ElementLibrary_GetIndexWithName(name);
-            SelectedIndex = index;
-            LocationSelectedIndex = index;
+            selected_index = index;
+            location_selected_index = index;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < ElementLibrary.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < library_elements.Count; i++)
             {
-                if (ElementLibrary[i].Name == name)
+                if (library_elements[i].name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = ElementInfoList_Original_Scroller;
+            Vector2 newscroll = element_info_list_original_scroller;
             newscroll.y = scrollval;
-            ElementInfoList_Original_Scroller = newscroll;
+            element_info_list_original_scroller = newscroll;
         }
     }
 }

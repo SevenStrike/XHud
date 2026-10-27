@@ -28,12 +28,11 @@ namespace SevenStrikeModules.XHud.Editor
 
     public class Editor_XHud_MenuItemsAction_HierarchyUtility : EditorWindow
     {
-        [MenuItem("GameObject/XHud/Utilitys (实用工具)/ChildCountGet (获取子物体数量)", priority = -1)]
-        private static void util_GetChildCount()
+        [MenuItem("GameObject/XHud/Utilitys (实用工具)/ChildCountGet (获取子物体数量)", priority = -20)]
+        private static void util_HierarchyUtility_GetChildCount()
         {
             GameObject seleobject = Selection.activeGameObject;
             string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
-
 
             XGUI.dialog(
                 type: XGUIDialogType.警告,
@@ -46,7 +45,7 @@ namespace SevenStrikeModules.XHud.Editor
                 themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
         }
         [MenuItem("GameObject/XHud/Utilitys (实用工具)/SelectedAllChild (选中所有子物体)", priority = -10)]
-        private static void util_SelectedAllChild()
+        private static void util_HierarchyUtility_SelectedAllChild()
         {
             GameObject seleobject = Selection.activeGameObject;
             GameObject[] arr = new GameObject[seleobject.transform.childCount];
@@ -58,8 +57,8 @@ namespace SevenStrikeModules.XHud.Editor
             }
             Selection.objects = arr;
         }
-        [MenuItem("GameObject/XHud/Utilitys (实用工具)/NameSuffixClean (移除名称后缀)", priority = -10)]
-        private static void util_CleanGameObjectNameSuffix()
+        [MenuItem("GameObject/XHud/Utilitys (实用工具)/NameSuffixClean (移除名称后缀)", priority = 0)]
+        private static void util_HierarchyUtility_CleanGameObjectNameSuffix()
         {
             Object[] seleobject = Selection.objects;
             for (int i = 0; i < seleobject.Length; i++)

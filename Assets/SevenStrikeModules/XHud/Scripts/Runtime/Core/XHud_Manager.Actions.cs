@@ -28,82 +28,82 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 委托事件 - 元素库初始化后
         /// </summary>
-        public UnityAction Act_ElementsLib_Instantiated;
+        public UnityAction act_elements_library_instantiated;
         /// <summary>
         /// 委托事件 - 遮罩透明度变化时
         /// </summary>
-        public UnityAction<float> Act_MaskChanged_Value;
+        public UnityAction<float> act_mask_changed_value;
         /// <summary>
         /// 委托事件 - 屏幕空间的内容的透明度最大时
         /// </summary>
-        public UnityAction<float> Act_ContentOpacity_Screen_IsMax;
+        public UnityAction<float> act_content_opacity_screen_is_max;
         /// <summary>
         /// 委托事件 - 屏幕空间的内容的透明度最小时
         /// </summary>
-        public UnityAction<float> Act_ContentOpacity_Screen_IsMin;
+        public UnityAction<float> act_content_opacity_screen_is_min;
         /// <summary>
         /// 委托事件 - 屏幕空间的内容的透明度变化时
         /// </summary>
-        public UnityAction<float> Act_ContentOpacity_Screen_Changed;
+        public UnityAction<float> act_content_opacity_screen_changed;
         /// <summary>
         /// 委托事件 - 屏幕空间的内容的透明度最大时
         /// </summary>
-        public UnityAction<float> Act_ContentOpacity_World_IsMax;
+        public UnityAction<float> act_content_opacity_world_is_max;
         /// <summary>
         /// 委托事件 - 屏幕空间的内容的透明度最小时
         /// </summary>
-        public UnityAction<float> Act_ContentOpacity_World_IsMin;
+        public UnityAction<float> act_content_opacity_world_is_min;
         /// <summary>
         /// 委托事件 - 屏幕空间的内容的透明度变化时
         /// </summary>
-        public UnityAction<float> Act_ContentOpacity_World_Changed;
+        public UnityAction<float> act_content_opacity_world_is_changed;
         /// <summary>
         /// 委托事件 - 遮罩贴图变化时
         /// </summary>
-        public UnityAction<Texture2D> Act_MaskChanged_Texture;
+        public UnityAction<Texture2D> act_mask_changed_texture;
         /// <summary>
         /// 委托事件 - 蓝图视觉进场
         /// </summary>
-        public UnityAction Act_BluePrint_In;
+        public UnityAction act_blueprint_in;
         /// <summary>
         /// 委托事件 - 蓝图视觉退场
         /// </summary>
-        public UnityAction Act_BluePrint_Out;
+        public UnityAction act_blueprint_out;
         /// <summary>
         /// 委托事件 - 蓝图视觉整体完全透明化
         /// </summary>
-        public UnityAction Act_BluePrint_IsTransparency;
+        public UnityAction act_blueprint_is_transparency;
         /// <summary>
         /// 委托事件 - 蓝图视觉整体完全实心化
         /// </summary>
-        public UnityAction Act_BluePrint_IsSolid;
+        public UnityAction act_blueprint_is_solid;
         /// <summary>
         /// 委托事件 - 字体缩放变化
         /// </summary>
-        public UnityAction Act_FontSize_Changed;
+        public UnityAction act_fontsize_changed;
         /// <summary>
         /// 委托事件 - 分辨率变化
         /// </summary>
-        public UnityAction<string, Vector2> Act_ScreenResolution_Changed;
+        public UnityAction<string, Vector2> act_screen_resolution_changed;
         /// <summary>
         /// 委托事件 - 鼠标是否正在与UI交互
         /// </summary>
-        public UnityAction<bool> Act_IsInteractionUI;
+        public UnityAction<bool> act_is_interaction_ui;
         /// <summary>
         /// 委托事件 - 全局音效音量变化时
         /// </summary>
-        public UnityAction<float> Act_VolumeChanged_Value;
+        public UnityAction<float> act_volume_changed_value;
         /// <summary>
         /// 委托事件 - 全局速率变化时
         /// </summary>
-        public UnityAction<float> Act_DurationChanged_Value;
+        public UnityAction<float> act_duration_changed_value;
         /// <summary>
         /// 委托事件 - 全局字体尺寸变化时
         /// </summary>
-        public UnityAction<float> Act_FontSizeChanged_Value;
+        public UnityAction<float> act_fontsize_changed_value;
         /// <summary>
         /// 委托事件 - 生成元素时
         /// </summary>
-        public UnityAction<XHud_Module_Element> Act_SpawnElement;
+        public UnityAction<XHud_Module_Element> act_spawn_element;
     }
 }

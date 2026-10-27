@@ -41,7 +41,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>仅用于单选模式下的直接读写操作。</description></item>
         /// </list>
         /// </summary>
-        private XHud_Module_Primitive_Painting BaseScript;
+        private XHud_Module_Primitive_Painting base_script;
         /// <summary>
         /// HUD 管理器引用。
         /// <para/>
@@ -50,27 +50,30 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>用于访问色卡库等全局数据。</description></item>
         /// </list>
         /// </summary>
-        private XHud_Manager HudManager;
+        private XHud_Manager hud_manager;
         #endregion
 
         #region 字段 - 序列化属性
         /// <summary>
-        /// 序列化属性集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>sp_OriginalColor</c>：原始颜色属性。</description></item>
-        /// <item><description><c>sp_ColoriseName</c>：色卡名称属性。</description></item>
-        /// <item><description><c>sp_Debug</c>：调试开关属性。</description></item>
-        /// <item><description><c>sp_SyncLibraryColor</c>：同步色卡库开关属性。</description></item>
-        /// <item><description><c>sp_SyncImageColor</c>：接管图像颜色开关属性。</description></item>
-        /// </list>
+        /// 原始颜色属性
         /// </summary>
-        private SerializedProperty
-            sp_OriginalColor,
-            sp_ColoriseName,
-            sp_Debug,
-            sp_SyncLibraryColor,
-            sp_SyncImageColor;
+        private SerializedProperty sp_original_color;
+        /// <summary>
+        /// 色卡名称属性
+        /// </summary>
+        private SerializedProperty sp_colorise_name;
+        /// <summary>
+        /// 调试开关属性
+        /// </summary>
+        private SerializedProperty sp_debug;
+        /// <summary>
+        /// 同步色卡库开关属性
+        /// </summary>
+        private SerializedProperty sp_sync_library_color;
+        /// <summary>
+        /// 接管图像颜色开关属性
+        /// </summary>
+        private SerializedProperty sp_sync_image_color;
         #endregion
 
         #region 字段 - 选项文字
@@ -138,11 +141,19 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            HudManager = XHud_Dashboard.get_manager();
-            BaseScript = (XHud_Module_Primitive_Painting)target;
+            hud_manager = XHud_Dashboard.get_manager();
+            base_script = (XHud_Module_Primitive_Painting)target;
+
             Targets_Get();
-            // 获取所有序列化字段
-            GetSerializeFields();
+
+            #region  获取所有序列化字段
+            sp_original_color = serializedObject.FindProperty(nameof(XHud_Module_Primitive_Painting.original_color));
+            sp_colorise_name = serializedObject.FindProperty(nameof(XHud_Module_Primitive_Painting.colorise_name));
+            sp_debug = serializedObject.FindProperty(nameof(XHud_Module_Primitive_Painting.debug));
+            sp_sync_library_color = serializedObject.FindProperty(nameof(XHud_Module_Primitive_Painting.sync_library_color));
+            sp_sync_image_color = serializedObject.FindProperty(nameof(XHud_Module_Primitive_Painting.sync_image_color));
+            #endregion
+
             #region 获取图标          
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_painting/icon_main");
             colormode_lib_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_painting/col_lib_r");
@@ -161,6 +172,7 @@ namespace SevenStrikeModules.XHud.Editor
             recogcolor_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_painting/recogcolor_p");
             #endregion
         }
+
         /// <summary>
         /// 绘制 Inspector 界面。
         /// <para/>
@@ -178,6 +190,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             serializedObject.Update();
             TextClipping clipping = XGUI.TryEllipsisClipping();
+
             #region 标题
             XGUI.layout_banner(
                 bg_fill: XGUIGroup.实体,
@@ -193,16 +206,18 @@ namespace SevenStrikeModules.XHud.Editor
                 title_clipping: clipping,
                 bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
+
             Rect rect = GUILayoutUtility.GetLastRect();
+
             #region 检测多选模式下的颜色模式是否一致
             // 该字段用于检测多选情况下每个Painting的颜色模式是否是一致的
             bool MultiColorModeSame = true;
-            bool mode = SelectedObjects[0].SyncLibraryColor;
+            bool mode = SelectedObjects[0].sync_library_color;
             if (Targets_Selected())
             {
                 for (int i = 0; i < SelectedObjects.Length; i++)
                 {
-                    if (SelectedObjects[i].SyncLibraryColor != mode)
+                    if (SelectedObjects[i].sync_library_color != mode)
                     {
                         MultiColorModeSame = false;
                         break;
@@ -210,6 +225,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
             #endregion
+
             #region 快捷功能          
             XGUI.layout_group_start(
                type: XGUIContainerType.Horizontal,
@@ -237,9 +253,9 @@ namespace SevenStrikeModules.XHud.Editor
                     for (int i = 0; i < SelectedObjects.Length; i++)
                     {
                         XGUIDialogListDatas data = new XGUIDialogListDatas();
-                        data.Title = string.IsNullOrEmpty(SelectedObjects[i].controller.Indicator) ? SelectedObjects[i].name : SelectedObjects[i].controller.Indicator;
+                        data.Title = string.IsNullOrEmpty(SelectedObjects[i].controller.indicator) ? SelectedObjects[i].name : SelectedObjects[i].controller.indicator;
                         data.SubTitle = "当前颜色模式";
-                        data.Message = SelectedObjects[i].SyncLibraryColor ? "色卡库" : "原始色";
+                        data.Message = SelectedObjects[i].sync_library_color ? "色卡库" : "原始色";
                         datas.Add(data);
                     }
                     if (datas.Count > 0)
@@ -271,28 +287,28 @@ namespace SevenStrikeModules.XHud.Editor
                             {
                                 for (int i = 0; i < SelectedObjects.Length; i++)
                                 {
-                                    SelectedObjects[i].SyncLibraryColor = false;
+                                    SelectedObjects[i].sync_library_color = false;
                                 }
                             }
                             else
                             {
                                 for (int i = 0; i < SelectedObjects.Length; i++)
                                 {
-                                    SelectedObjects[i].SyncLibraryColor = true;
+                                    SelectedObjects[i].sync_library_color = true;
                                     if (!Application.isPlaying)
                                     {
                                         //--检查色卡名称是否失效
-                                        if (!HudManager.Hud_Colors.ColorsLibrary_IsExist(SelectedObjects[i].ColoriseName) || string.IsNullOrEmpty(SelectedObjects[i].ColoriseName))
+                                        if (!hud_manager.library_colors.ColorsLibrary_IsExist(SelectedObjects[i].colorise_name) || string.IsNullOrEmpty(SelectedObjects[i].colorise_name))
                                         {
-                                            SelectedObjects[i].ColoriseName = HudManager.Hud_Colors.ColorsLibrary_GetColorName(0);
+                                            SelectedObjects[i].colorise_name = hud_manager.library_colors.ColorsLibrary_GetColorName(0);
                                         }
                                     }
                                     else
                                     {
                                         //--检查色卡名称是否失效
-                                        if (!HudManager.Hud_Colors.ColorsLibrary_IsExist(SelectedObjects[i].ColoriseName) || string.IsNullOrEmpty(SelectedObjects[i].ColoriseName))
+                                        if (!hud_manager.library_colors.ColorsLibrary_IsExist(SelectedObjects[i].colorise_name) || string.IsNullOrEmpty(SelectedObjects[i].colorise_name))
                                         {
-                                            SelectedObjects[i].ColoriseName = HudManager.Hud_Colors.ColorsLibrary_GetColorName(0);
+                                            SelectedObjects[i].colorise_name = hud_manager.library_colors.ColorsLibrary_GetColorName(0);
                                         }
                                     }
                                 }
@@ -310,7 +326,7 @@ namespace SevenStrikeModules.XHud.Editor
                               type: XGUIDialogType.警告,
                               windowtitle: "XHud - 图元配色器消息",
                               title: "切换颜色模式",
-                              msg: $"需要将 {(string.IsNullOrEmpty(BaseScript.controller.Indicator) ? BaseScript.name : BaseScript.controller.Indicator)} 颜色显示切换为那种模式？",
+                              msg: $"需要将 {(string.IsNullOrEmpty(base_script.controller.indicator) ? base_script.name : base_script.controller.indicator)} 颜色显示切换为那种模式？",
                               ok: "色卡库",
                               cancel: "原始色",
                               PrimaryIndex: 1,
@@ -318,29 +334,29 @@ namespace SevenStrikeModules.XHud.Editor
                               themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     if (res == "原始色")
                     {
-                        sp_SyncLibraryColor.boolValue = false;
-                        sp_SyncLibraryColor.serializedObject.ApplyModifiedProperties();
+                        sp_sync_library_color.boolValue = false;
+                        sp_sync_library_color.serializedObject.ApplyModifiedProperties();
                     }
                     else
                     {
-                        sp_SyncLibraryColor.boolValue = true;
-                        sp_SyncLibraryColor.serializedObject.ApplyModifiedProperties();
+                        sp_sync_library_color.boolValue = true;
+                        sp_sync_library_color.serializedObject.ApplyModifiedProperties();
                         if (!Application.isPlaying)
                         {
                             //--检查色卡名称是否失效
-                            if (!HudManager.Hud_Colors.ColorsLibrary_IsExist(sp_ColoriseName.stringValue) || string.IsNullOrEmpty(sp_ColoriseName.stringValue))
+                            if (!hud_manager.library_colors.ColorsLibrary_IsExist(sp_colorise_name.stringValue) || string.IsNullOrEmpty(sp_colorise_name.stringValue))
                             {
-                                sp_ColoriseName.stringValue = HudManager.Hud_Colors.ColorsLibrary_GetColorName(0);
-                                sp_ColoriseName.serializedObject.ApplyModifiedProperties();
+                                sp_colorise_name.stringValue = hud_manager.library_colors.ColorsLibrary_GetColorName(0);
+                                sp_colorise_name.serializedObject.ApplyModifiedProperties();
                             }
                         }
                         else
                         {
                             //--检查色卡名称是否失效
-                            if (!HudManager.Hud_Colors.ColorsLibrary_IsExist(sp_ColoriseName.stringValue) || string.IsNullOrEmpty(sp_ColoriseName.stringValue))
+                            if (!hud_manager.library_colors.ColorsLibrary_IsExist(sp_colorise_name.stringValue) || string.IsNullOrEmpty(sp_colorise_name.stringValue))
                             {
-                                sp_ColoriseName.stringValue = HudManager.Hud_Colors.ColorsLibrary_GetColorName(0);
-                                sp_ColoriseName.serializedObject.ApplyModifiedProperties();
+                                sp_colorise_name.stringValue = hud_manager.library_colors.ColorsLibrary_GetColorName(0);
+                                sp_colorise_name.serializedObject.ApplyModifiedProperties();
                             }
                         }
                     }
@@ -350,7 +366,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
             XGUI.layout_flexspace();
             #region 拷贝色卡
-            if (sp_SyncLibraryColor.boolValue && !Targets_Selected())
+            if (sp_sync_library_color.boolValue && !Targets_Selected())
             {
                 if (XGUI.layout_button(
                     tooltip: "拷贝色卡",
@@ -361,7 +377,7 @@ namespace SevenStrikeModules.XHud.Editor
                     width: 14,
                     height: 14))
                 {
-                    if (sp_SyncLibraryColor.boolValue)
+                    if (sp_sync_library_color.boolValue)
                     {
                         Copy_Color();
                     }
@@ -386,8 +402,9 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
+
             #region 配色参数          
-            BaseScript.fold_param = XGUI.layout_group_start(
+            base_script.fold_param = XGUI.layout_group_start(
                   type: XGUIContainerType.Horizontal,
                   bg_fill: XGUIGroup.缺口纯色边框,
                   bg_color: XGUIColor.亮白,
@@ -397,17 +414,18 @@ namespace SevenStrikeModules.XHud.Editor
                   title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   title_clipping: TextClipping.Clip,
                   padding: new RectOffset(15, 10, 20, 15),
-                  foldout: BaseScript.fold_param);
+                  foldout: base_script.fold_param);
             bool TextSyncing = false;
-            XHud_Module_Primitive_Controller con = BaseScript.controller;
+            XHud_Module_Primitive_Controller con = base_script.controller;
+
             #region 如果存在文字组件
             // 如果是 XHud_Text 受控组件类型，则获取文字组件的“同步库颜色状态开关”到 TextSyncing 状态开关
             // 表明文字组件的文字颜色是否是使用同步到库状态
-            if (con.ModuleType == ModuleType.Text)
+            if (con.module_type == ModuleType.Text)
             {
-                if (con.mod_Text.StyleLibSynching)
+                if (con.mod_text.style_library_synching)
                 {
-                    if (con.mod_Text.TextStyleInfo.LibStyle_Effect_color)
+                    if (con.mod_text.text_style_info.lib_style_effect_color)
                     {
                         TextSyncing = true;
                     }
@@ -415,22 +433,23 @@ namespace SevenStrikeModules.XHud.Editor
             }
             // 如果是 XHud_TmpText 受控组件类型，则获取文字组件的“同步库颜色状态开关”到 TextSyncing 状态开关
             // 表明文字组件的文字颜色是否是使用同步到库状态
-            if (con.ModuleType == ModuleType.TmpText)
+            if (con.module_type == ModuleType.TmpText)
             {
-                if (con.mod_TmpText.StyleLibSynching)
+                if (con.mod_tmp_text.style_library_synching)
                 {
-                    if (con.mod_TmpText.TextStyleInfo.LibStyle_Effect_color)
+                    if (con.mod_tmp_text.text_style_info.lib_style_effect_color)
                     {
                         TextSyncing = true;
                     }
                 }
             }
             #endregion
-            if (!BaseScript.fold_param)
+
+            if (!base_script.fold_param)
             {
                 if (!TextSyncing)
                 {
-                    if (!sp_SyncLibraryColor.boolValue)
+                    if (!sp_sync_library_color.boolValue)
                     {
                         #region 原始色模式
                         XGUI.layout_group_start(
@@ -442,6 +461,7 @@ namespace SevenStrikeModules.XHud.Editor
                             absolute_margin: true,
                             margin: new RectOffset(0, 0, 0, 0),
                             padding: new RectOffset(0, 0, 5, 5));
+
                         #region 添加到库按钮
                         if (!Targets_Selected())
                         {
@@ -464,14 +484,16 @@ namespace SevenStrikeModules.XHud.Editor
                                 height: Add_p.height))
                             {
                                 xHud_LibraryArg_Color info = new xHud_LibraryArg_Color();
-                                info.Painting = BaseScript;
-                                info.Color = sp_OriginalColor.colorValue;
+                                info.painting = base_script;
+                                info.color = sp_original_color.colorValue;
                                 OpenLibrarySetTool(info);
                             }
                             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
                         }
                         #endregion
+
                         XGUI.layout_space(20);
+
                         #region 颜色
                         XGUI.ChangedCheck_Start();
                         XGUI.layout_property_field(
@@ -479,7 +501,7 @@ namespace SevenStrikeModules.XHud.Editor
                              title_size: XGUIFontSize.M,
                              title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                              title_width: 45,
-                             prop: sp_OriginalColor,
+                             prop: sp_original_color,
                              prop_margin: new RectOffset(0, 0, 0, 0));
                         if (XGUI.ChangedCheck_End())
                         {
@@ -487,20 +509,21 @@ namespace SevenStrikeModules.XHud.Editor
                             {
                                 for (int i = 0; i < SelectedObjects.Length; i++)
                                 {
-                                    SelectedObjects[i].UpdateColor(sp_OriginalColor.colorValue);
+                                    SelectedObjects[i].UpdateColor(sp_original_color.colorValue);
                                 }
                             }
                         }
                         #endregion
+
                         XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
                         #endregion
                     }
                     else
                     {
                         #region 色卡库模式
-                        if (HudManager != null)
+                        if (hud_manager != null)
                         {
-                            if (HudManager.Hud_Colors != null && !HudManager.Hud_Colors.ColorsLibrary_IsEmpty())
+                            if (hud_manager.library_colors != null && !hud_manager.library_colors.ColorsLibrary_IsEmpty())
                             {
                                 XGUI.layout_group_start(
                                     type: XGUIContainerType.Horizontal,
@@ -511,6 +534,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     absolute_margin: true,
                                     margin: new RectOffset(0, 0, 0, 0),
                                     padding: new RectOffset(0, 0, 5, 5));
+
                                 #region 定位到库按钮
                                 if (!Targets_Selected())
                                 {
@@ -534,38 +558,40 @@ namespace SevenStrikeModules.XHud.Editor
                                     {
                                         if (!Application.isPlaying)
                                         {
-                                            if (!HudManager.Hud_Colors.ColorsLibrary_IsExist(sp_ColoriseName.stringValue))
+                                            if (!hud_manager.library_colors.ColorsLibrary_IsExist(sp_colorise_name.stringValue))
                                                 return;
                                             Editor_XHud_MenuItemsAction_OpenLibrary.open_col();
-                                            HudManager.Hud_Colors.ColorsLibrary_Location(sp_ColoriseName.stringValue);
+                                            hud_manager.library_colors.ColorsLibrary_Location(sp_colorise_name.stringValue);
                                         }
                                         else
                                         {
-                                            if (!HudManager.Hud_Colors.ColorsLibrary_IsExist(sp_ColoriseName.stringValue))
+                                            if (!hud_manager.library_colors.ColorsLibrary_IsExist(sp_colorise_name.stringValue))
                                                 return;
                                             Editor_XHud_MenuItemsAction_OpenLibrary.open_col();
-                                            HudManager.Hud_Colors.ColorsLibrary_Location(sp_ColoriseName.stringValue);
+                                            hud_manager.library_colors.ColorsLibrary_Location(sp_colorise_name.stringValue);
                                         }
                                     }
                                     XGUI.layout_group_end(type: XGUIContainerType.Vertical);
                                     XGUI.layout_space(20);
                                 }
                                 #endregion
+
                                 #region 色卡下拉菜单
-                                string[] collist = HudManager.Hud_Colors.ColorsLibrary_GetColorNames();
+                                string[] collist = hud_manager.library_colors.ColorsLibrary_GetColorNames();
+
                                 #region 单/多选控件背景色逻辑
                                 Color cc = Color.white;
                                 bool SameColor = true;
-                                string FirstColoriseName = SelectedObjects[0].ColoriseName;
+                                string FirstColoriseName = SelectedObjects[0].colorise_name;
                                 if (!Targets_Selected())
                                 {
-                                    cc = HudManager.Hud_Colors.ColorsLibrary_GetColor(sp_ColoriseName.stringValue);
+                                    cc = hud_manager.library_colors.ColorsLibrary_GetColor(sp_colorise_name.stringValue);
                                 }
                                 else
                                 {
                                     for (int k = 1; k < SelectedObjects.Length; k++)
                                     {
-                                        if (SelectedObjects[k].ColoriseName != FirstColoriseName)
+                                        if (SelectedObjects[k].colorise_name != FirstColoriseName)
                                         {
                                             SameColor = false;
                                             break;
@@ -574,13 +600,14 @@ namespace SevenStrikeModules.XHud.Editor
                                 }
                                 if (SameColor)
                                 {
-                                    cc = HudManager.Hud_Colors.ColorsLibrary_GetColor(FirstColoriseName);
+                                    cc = hud_manager.library_colors.ColorsLibrary_GetColor(FirstColoriseName);
                                 }
                                 else
                                 {
                                     cc = Color.gray;
                                 }
                                 #endregion
+
                                 #region 记录撤销行为
                                 if (Targets_Selected())
                                 {
@@ -593,17 +620,18 @@ namespace SevenStrikeModules.XHud.Editor
                                 else
                                 {
                                     // 使用 Undo.RecordObject 来记录对目标对象的修改
-                                    Undo.RecordObject(sp_ColoriseName.serializedObject.targetObject, "Selected ColoriseName");
+                                    Undo.RecordObject(sp_colorise_name.serializedObject.targetObject, "Selected ColoriseName");
                                 }
                                 #endregion
+
                                 #region 下拉菜单
-                                sp_ColoriseName.stringValue = XGUI.layout_string_popup(
+                                sp_colorise_name.stringValue = XGUI.layout_string_popup(
                                     title: "色卡",
                                     title_width: 60,
                                     title_color: Color.white,
                                     title_size: XGUIFontSize.M,
                                     title_anchor: TextAnchor.MiddleLeft,
-                                    prop: sp_ColoriseName,
+                                    prop: sp_colorise_name,
                                     options: collist,
                                     opt_text_size: XGUIFontSize.M,
                                     opt_text_color: Color.black,
@@ -617,9 +645,10 @@ namespace SevenStrikeModules.XHud.Editor
                                     padding: new RectOffset(5, 0, 0, 0),
                                     title_margin: new RectOffset(0, 0, 0, 0),
                                     icon_arrow_color: Color.black);
-                                sp_ColoriseName.serializedObject.ApplyModifiedProperties();
+                                sp_colorise_name.serializedObject.ApplyModifiedProperties();
                                 #endregion
                                 #endregion
+
                                 XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
                             }
                             else
@@ -650,8 +679,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
+
             #region 选项
-            BaseScript.fold_option = XGUI.layout_group_start(
+            base_script.fold_option = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -661,18 +691,20 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_option);
-            if (!BaseScript.fold_option)
+                foldout: base_script.fold_option);
+            if (!base_script.fold_option)
             {
                 #region 接管状态
-                DrawToggle("接管状态", sp_SyncImageColor, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_sync, (b) => { });
+                DrawToggle("接管状态", sp_sync_image_color, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_sync, (b) => { });
                 #endregion
+
                 #region 状态调试
-                DrawToggle("状态调试", sp_Debug, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_debug, (b) => { });
+                DrawToggle("状态调试", sp_debug, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_debug, (b) => { });
                 #endregion
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             #region 菜单功能
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
             {
@@ -699,7 +731,7 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     else
                     {
-                        BaseScript.GroupFold(true);
+                        base_script.GroupFold(true);
                     }
                 });
                 menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
@@ -713,14 +745,15 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     else
                     {
-                        BaseScript.GroupFold(false);
+                        base_script.GroupFold(false);
                     }
                 });
                 menu.ShowAsContext();
             }
             #endregion
+
             #region 源脚本
-            BaseScript.fold_based = XGUI.layout_group_start(
+            base_script.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -730,13 +763,14 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_based);
-            if (!BaseScript.fold_based)
+                foldout: base_script.fold_based);
+            if (!base_script.fold_based)
             {
                 DrawDefaultInspector();
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             serializedObject.ApplyModifiedProperties();
         }
         #endregion
@@ -754,18 +788,18 @@ namespace SevenStrikeModules.XHud.Editor
         private void Copy_Color()
         {
             CopyHudColor chc = new CopyHudColor();
-            chc.color = sp_OriginalColor.colorValue.r + "," + sp_OriginalColor.colorValue.g + "," + sp_OriginalColor.colorValue.b + "," + sp_OriginalColor.colorValue.a;
-            chc.index = HudManager.Hud_Colors.ColorsLibrary_GetColorIndex(sp_ColoriseName.stringValue);
-            chc.name = sp_ColoriseName.stringValue;
+            chc.color = sp_original_color.colorValue.r + "," + sp_original_color.colorValue.g + "," + sp_original_color.colorValue.b + "," + sp_original_color.colorValue.a;
+            chc.index = hud_manager.library_colors.ColorsLibrary_GetColorIndex(sp_colorise_name.stringValue);
+            chc.name = sp_colorise_name.stringValue;
             chc.type = "HudCopyColor";
             string json = JsonUtility.ToJson(chc);
             XGUI.x_Editor_Data_Set_With_String("xData_ColorInfo", json);
-            string hexcol = XGUI_Utilitys.Color_To_HexString(sp_OriginalColor.colorValue, true);
+            string hexcol = XGUI_Utilitys.Color_To_HexString(sp_original_color.colorValue, true);
             XGUI.dialog(
                type: XGUIDialogType.确认,
                windowtitle: "XHud - 图元配色器消息",
                title: "获取色卡信息",
-               msg: $"<color={hexcol}>{sp_ColoriseName.stringValue} </color>色卡信息已就绪！请选择需要识别的图元配色器后右键菜单点击识别色卡即可应用该色卡颜色！",
+               msg: $"<color={hexcol}>{sp_colorise_name.stringValue} </color>色卡信息已就绪！请选择需要识别的图元配色器后右键菜单点击识别色卡即可应用该色卡颜色！",
                ok: "明白",
                PrimaryIndex: 0,
                usemodal: true,
@@ -799,13 +833,13 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int i = 0; i < SelectedObjects.Length; i++)
                         {
                             // 如果不是色卡库模式，则询问是否要转换为色卡库模式，否则就是接赋值原始颜色值
-                            if (!SelectedObjects[i].SyncLibraryColor)
+                            if (!SelectedObjects[i].sync_library_color)
                             {
                                 string res = XGUI.dialog(
                                type: XGUIDialogType.警告,
                                windowtitle: "XHud - 图元配色器消息",
                                title: "批量识别色卡信息",
-                               msg: $"侦测到 {SelectedObjects[i].name} ( {SelectedObjects[i].controller.Indicator} ) 处于原始色模式！是否将其转换为色卡模式？",
+                               msg: $"侦测到 {SelectedObjects[i].name} ( {SelectedObjects[i].controller.indicator} ) 处于原始色模式！是否将其转换为色卡模式？",
                                ok: "原始颜色",
                                cancel: "转换",
                                PrimaryIndex: 1,
@@ -813,23 +847,23 @@ namespace SevenStrikeModules.XHud.Editor
                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                                 if (res == "原始颜色")
                                 {
-                                    SelectedObjects[i].OriginalColor = XGUI_Utilitys.String_To_Color(copyHudColor.color, false);
+                                    SelectedObjects[i].original_color = XGUI_Utilitys.String_To_Color(copyHudColor.color, false);
                                 }
                                 else
                                 {
-                                    SelectedObjects[i].SyncLibraryColor = true;
-                                    SelectedObjects[i].ColoriseName = copyHudColor.name;
+                                    SelectedObjects[i].sync_library_color = true;
+                                    SelectedObjects[i].colorise_name = copyHudColor.name;
                                 }
                             }
                             else
                             {
-                                SelectedObjects[i].SyncLibraryColor = true;
-                                SelectedObjects[i].ColoriseName = copyHudColor.name;
+                                SelectedObjects[i].sync_library_color = true;
+                                SelectedObjects[i].colorise_name = copyHudColor.name;
                             }
                             XGUIDialogListDatas dataitem = new XGUIDialogListDatas();
-                            dataitem.Title = $"色卡 <color={hexcol}>{SelectedObjects[i].ColoriseName} </color>";
+                            dataitem.Title = $"色卡 <color={hexcol}>{SelectedObjects[i].colorise_name} </color>";
                             dataitem.SubTitle = "已应用到图元配色器";
-                            dataitem.Message = $"{SelectedObjects[i].name} ( {SelectedObjects[i].controller.Indicator} )";
+                            dataitem.Message = $"{SelectedObjects[i].name} ( {SelectedObjects[i].controller.indicator} )";
                             datas.Add(dataitem);
                         }
                         if (datas.Count > 0)
@@ -848,10 +882,10 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     else
                     {
-                        if (sp_SyncLibraryColor.boolValue)
+                        if (sp_sync_library_color.boolValue)
                         {
-                            sp_ColoriseName.stringValue = copyHudColor.name;
-                            sp_ColoriseName.serializedObject.ApplyModifiedProperties();
+                            sp_colorise_name.stringValue = copyHudColor.name;
+                            sp_colorise_name.serializedObject.ApplyModifiedProperties();
                         }
                         else
                         {
@@ -859,7 +893,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 type: XGUIDialogType.警告,
                                 windowtitle: "XHud - 图元配色器消息",
                                 title: "识别色卡信息",
-                                msg: $"侦测到 {BaseScript.gameObject.name} ( {BaseScript.controller.Indicator} ) 处于原始色模式！是否将其转换为色卡模式？",
+                                msg: $"侦测到 {base_script.gameObject.name} ( {base_script.controller.indicator} ) 处于原始色模式！是否将其转换为色卡模式？",
                                 ok: "直接赋值原始颜色",
                                 cancel: "转换",
                                 PrimaryIndex: 1,
@@ -867,15 +901,15 @@ namespace SevenStrikeModules.XHud.Editor
                                 themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                             if (res == "直接赋值原始颜色")
                             {
-                                sp_OriginalColor.colorValue = XGUI_Utilitys.String_To_Color(copyHudColor.color, false);
-                                sp_OriginalColor.serializedObject.ApplyModifiedProperties();
+                                sp_original_color.colorValue = XGUI_Utilitys.String_To_Color(copyHudColor.color, false);
+                                sp_original_color.serializedObject.ApplyModifiedProperties();
                             }
                             else
                             {
-                                sp_SyncLibraryColor.boolValue = true;
-                                sp_SyncLibraryColor.serializedObject.ApplyModifiedProperties();
-                                sp_ColoriseName.stringValue = copyHudColor.name;
-                                sp_ColoriseName.serializedObject.ApplyModifiedProperties();
+                                sp_sync_library_color.boolValue = true;
+                                sp_sync_library_color.serializedObject.ApplyModifiedProperties();
+                                sp_colorise_name.stringValue = copyHudColor.name;
+                                sp_colorise_name.serializedObject.ApplyModifiedProperties();
                             }
                         }
                         XGUI.dialog(
@@ -906,28 +940,6 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
 
-        #region 工具 - 序列化缓存
-        /// <summary>
-        /// 获取所有序列化字段。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>缓存 <c>OriginalColor</c> 属性。</description></item>
-        /// <item><description>缓存 <c>ColoriseName</c> 属性。</description></item>
-        /// <item><description>缓存 <c>Debug</c> 属性。</description></item>
-        /// <item><description>缓存 <c>SyncLibraryColor</c> 属性。</description></item>
-        /// <item><description>缓存 <c>SyncImageColor</c> 属性。</description></item>
-        /// </list>
-        /// </summary>
-        private void GetSerializeFields()
-        {
-            sp_OriginalColor = serializedObject.FindProperty("OriginalColor");
-            sp_ColoriseName = serializedObject.FindProperty("ColoriseName");
-            sp_Debug = serializedObject.FindProperty("Debug");
-            sp_SyncLibraryColor = serializedObject.FindProperty("SyncLibraryColor");
-            sp_SyncImageColor = serializedObject.FindProperty("SyncImageColor");
-        }
-        #endregion
-
         #region 工具 - 色卡库设置器
         /// <summary>
         /// 色卡库采集设置器。
@@ -944,13 +956,14 @@ namespace SevenStrikeModules.XHud.Editor
             window.titleContent = new GUIContent("色卡库采集器");
             XGUI.CenterEditorWindow(new Vector2Int(348, 730), window);
             window.SetLibrarySetterMode(LibrarySetterMode.添加到库);
-            window.SetInfo(info.Name, info.Color);
-            window.SetPainting(info.Painting);
+            window.SetInfo(info.name, info.color);
+            window.SetPainting(info.painting);
             window.SetButtonText("添加", "取消");
-            window.SetTarget_Hud_ColorsLibrary(HudManager.Hud_Colors);
+            window.SetTarget_Hud_ColorsLibrary(hud_manager.library_colors);
             //window.ShowModal();
-            window.Show();
             window.SetTitle("色卡库采集器");
+            window.SetSubTitle("以下为目标色卡的颜色参数与效果的预览");
+            window.Show();
         }
         #endregion
 

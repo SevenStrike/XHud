@@ -76,11 +76,11 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 TweenSound s = Sounds[i];
                 if (s == null) continue;
-                if (s.Mute) continue;
-                if (s.Sound == null) continue;
-                if (s.Sound.length <= 0f) continue;
+                if (s.mute) continue;
+                if (s.sound == null) continue;
+                if (s.sound.length <= 0f) continue;
 
-                float delay = s.Delay;
+                float delay = s.delay;
 
                 // 跨线判定：prev 与 curr 分别在 delay 两侧（含恰好落线）
                 float dPrev = prev - delay;
@@ -109,7 +109,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (index < 0 || index >= Sounds.Count) return false;
             TweenSound s = Sounds[index];
-            if (s == null || s.Sound == null || s.Mute) return false;
+            if (s == null || s.sound == null || s.mute) return false;
 
             AudioSource src = EnsurePreviewAudioSource();
             if (src == null) return false;
@@ -119,23 +119,23 @@ namespace SevenStrikeModules.XHud.Editor
             // 反向时 curr 可能略小于 delay，钳到 0；
             // 正向时 curr 可能略大于 delay，也近似为 0。
             float offset = Mathf.Clamp(
-                playheadTime - s.Delay,
+                playheadTime - s.delay,
                 0f,
-                Mathf.Max(0f, s.Sound.length - 0.001f));
+                Mathf.Max(0f, s.sound.length - 0.001f));
 
             // ── 音量 / 音高 ──
-            float volume = Mathf.Clamp01(s.Volume);
+            float volume = Mathf.Clamp01(s.volume);
 
             float pitch = 1f;
-            if (s.MinPitch > 0f && s.MaxPitch > 0f)
+            if (s.min_pitch > 0f && s.max_pitch > 0f)
             {
                 pitch = Random.Range(
-                    Mathf.Min(s.MinPitch, s.MaxPitch),
-                    Mathf.Max(s.MinPitch, s.MaxPitch));
+                    Mathf.Min(s.min_pitch, s.max_pitch),
+                    Mathf.Max(s.min_pitch, s.max_pitch));
             }
-            else if (s.MinPitch > 0f)
+            else if (s.min_pitch > 0f)
             {
-                pitch = s.MinPitch;
+                pitch = s.min_pitch;
             }
 
             // ── 播放 ──
@@ -144,12 +144,12 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (offset <= 0.0001f)
             {
-                src.PlayOneShot(s.Sound, volume);
+                src.PlayOneShot(s.sound, volume);
             }
             else
             {
                 // 带偏移播放：临时配置 clip 与 time
-                src.clip = s.Sound;
+                src.clip = s.sound;
                 src.time = offset;
                 src.Play();
             }

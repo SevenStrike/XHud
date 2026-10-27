@@ -97,12 +97,6 @@ namespace SevenStrikeModules.XHud.Editor
     }
     #endregion
 
-    #region 编辑器主体
-    /// <summary>
-    /// XHud 色卡库的自定义编辑器。
-    /// <para/>
-    /// 提供色卡列表的可视化编辑、右键菜单操作、导入 / 导出、批量生成等功能。
-    /// </summary>
     [CustomEditor(typeof(XHud_Library_Colors))]
     public class Editor_XHud_Library_Colors : Editor
     {
@@ -112,78 +106,78 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 在 <see cref="OnEnable"/> 中缓存。
         /// </summary>
-        private XHud_Library_Colors BaseScript;
+        private XHud_Library_Colors base_script;
         /// <summary>
         /// 颜色列表（可重排列表）。
         /// <para/>
         /// 用于驱动 ReorderableList 的绘制与交互。
         /// </summary>
-        public ReorderableList ColorInfoList_Original;
+        public ReorderableList color_info_list;
         #endregion
 
         #region 字段 - 序列化属性
         /// <summary>
         /// 列表项高度。
         /// </summary>
-        private SerializedProperty sp_itemHeight;
+        private SerializedProperty sp_item_height;
         /// <summary>
         /// 可见列表项数量。
         /// </summary>
-        private SerializedProperty sp_visibleItemCount;
+        private SerializedProperty sp_visible_item_count;
         /// <summary>
         /// 色卡列表滚动位置。
         /// </summary>
-        private SerializedProperty sp_ColorInfoList_Original_Scroller;
+        private SerializedProperty sp_color_info_list_original_scroller;
         /// <summary>
         /// 定位选中索引。
         /// </summary>
-        private SerializedProperty sp_LocationSelectedIndex;
+        private SerializedProperty sp_location_selected_index;
         /// <summary>
         /// 当前选中索引。
         /// </summary>
-        private SerializedProperty sp_SelectedIndex;
+        private SerializedProperty sp_selected_index;
         /// <summary>
         /// 原始色卡库列表。
         /// </summary>
-        private SerializedProperty sp_ColorLibrary_Original;
+        private SerializedProperty sp_library_colors;
         /// <summary>
         /// 精确查找字符串。
         /// </summary>
-        private SerializedProperty sp_Find;
+        private SerializedProperty sp_find;
         /// <summary>
         /// 过滤高亮字符串。
         /// </summary>
-        private SerializedProperty sp_Highlight;
+        private SerializedProperty sp_highlight;
         /// <summary>
         /// 库名称。
         /// </summary>
-        private SerializedProperty sp_LibraryName;
+        private SerializedProperty sp_library_name;
         #endregion
 
         #region 字段 - 预览
         /// <summary>
         /// 选中的颜色。
         /// </summary>
-        private Color SelectedColor;
+        private Color selected_color;
         /// <summary>
         /// 颜色信息文本。
         /// </summary>
-        private string ColorInfo;
+        private string color_info;
         /// <summary>
         /// 预览图片数组。
         /// </summary>
-        private Texture2D[] ReferImages;
+        private Texture2D[] refer_images;
         /// <summary>
         /// 预览标题文字。
         /// </summary>
-        public string PreviewHeader = "HudColorPreview";
+        public string preview_header = "HudColorPreview";
         #endregion
 
         #region 字段 - 图标
         /// <summary>
         /// 调色板图标。
         /// </summary>
-        private Texture2D PalletIcon;
+        private Texture2D palletIcon;
         /// <summary>
         /// 导入按钮按下图标。
         /// </summary>
@@ -240,7 +234,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 用于导出色板 PNG 时每个色块的像素宽度。
         /// </summary>
-        private int MultipleSize = 16;
+        private int multiple_size = 16;
         /// <summary>
         /// 屏蔽颜色。
         /// <para/>
@@ -269,7 +263,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 选中背景色。
         /// </summary>
-        private Color SelectedBg = new Color(0, 0, 0, 0.2f);
+        private Color selected_bg = new Color(0, 0, 0, 0.2f);
         #endregion
 
         #region 生命周期
@@ -287,23 +281,19 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseScript = (XHud_Library_Colors)target;
+            base_script = (XHud_Library_Colors)target;
 
             #region 获取序列化属性
-            sp_ColorLibrary_Original = serializedObject.FindProperty("ColorLibrary");
-            sp_LibraryName = serializedObject.FindProperty("LibraryName");
-            sp_Highlight = serializedObject.FindProperty("Highlight");
-            sp_SelectedIndex = serializedObject.FindProperty("SelectedIndex");
-            sp_LocationSelectedIndex = serializedObject.FindProperty("LocationSelectedIndex");
-            sp_itemHeight = serializedObject.FindProperty("itemHeight");
-            sp_visibleItemCount = serializedObject.FindProperty("visibleItemCount");
-            sp_ColorInfoList_Original_Scroller = serializedObject.FindProperty("ColorInfoList_Original_Scroller");
-            sp_Find = serializedObject.FindProperty("Find");
+            sp_library_colors = serializedObject.FindProperty(nameof(XHud_Library_Colors.library_colors));
+            sp_library_name = serializedObject.FindProperty(nameof(XHud_Library_Colors.library_name));
+            sp_highlight = serializedObject.FindProperty(nameof(XHud_Library_Colors.highlight));
+            sp_selected_index = serializedObject.FindProperty(nameof(XHud_Library_Colors.selected_index));
+            sp_location_selected_index = serializedObject.FindProperty(nameof(XHud_Library_Colors.location_selected_index));
+            sp_item_height = serializedObject.FindProperty(nameof(XHud_Library_Colors.item_height));
+            sp_visible_item_count = serializedObject.FindProperty(nameof(XHud_Library_Colors.visible_item_count));
+            sp_color_info_list_original_scroller = serializedObject.FindProperty(nameof(XHud_Library_Colors.color_info_list_original_scroller));
+            sp_find = serializedObject.FindProperty(nameof(XHud_Library_Colors.find));
             #endregion
-
-            SelectedColor = Color.white;
-
-            blocked_col = new Color(0, 0, 0, blocked_alp);
 
             #region 获取图标
             import_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_colors/import_p");
@@ -318,19 +308,23 @@ namespace SevenStrikeModules.XHud.Editor
             delete_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_colors/delete_r");
             random_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_colors/random_p");
             random_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_colors/random_r");
-            PalletIcon = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_colors/palletmark");
+            palletIcon = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_colors/palletmark");
             #endregion
 
+            selected_color = Color.white;
+
+            blocked_col = new Color(0, 0, 0, blocked_alp);
+
             //设定列表项高度值
-            sp_itemHeight.floatValue = 30;
-            sp_itemHeight.serializedObject.ApplyModifiedProperties();
+            sp_item_height.floatValue = 30;
+            sp_item_height.serializedObject.ApplyModifiedProperties();
 
-            sp_visibleItemCount.intValue = 15;
-            sp_visibleItemCount.serializedObject.ApplyModifiedProperties();
+            sp_visible_item_count.intValue = 15;
+            sp_visible_item_count.serializedObject.ApplyModifiedProperties();
 
-            #region ReorderableList - ColorInfoList
-            ColorInfoList_Original = new ReorderableList(serializedObject, sp_ColorLibrary_Original, true, true, true, true);
-            ColorInfoList_Original.drawElementCallback = ColorInfoList_Original_DrawElementCallback;
+            #region ReorderableList
+            color_info_list = new ReorderableList(serializedObject, sp_library_colors, true, true, true, true);
+            color_info_list.drawElementCallback = ColorInfoList_Original_DrawElementCallback;
             #endregion
         }
         /// <summary>
@@ -347,20 +341,20 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (target != null)
             {
-                sp_ColorInfoList_Original_Scroller.vector2Value = Vector2.zero;
-                sp_ColorInfoList_Original_Scroller.serializedObject.ApplyModifiedProperties();
+                sp_color_info_list_original_scroller.vector2Value = Vector2.zero;
+                sp_color_info_list_original_scroller.serializedObject.ApplyModifiedProperties();
 
-                sp_SelectedIndex.intValue = -1;
-                sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+                sp_selected_index.intValue = -1;
+                sp_selected_index.serializedObject.ApplyModifiedProperties();
 
-                sp_LocationSelectedIndex.intValue = -1;
-                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                sp_location_selected_index.intValue = -1;
+                sp_location_selected_index.serializedObject.ApplyModifiedProperties();
 
-                sp_Find.stringValue = string.Empty;
-                sp_Find.serializedObject.ApplyModifiedProperties();
+                sp_find.stringValue = string.Empty;
+                sp_find.serializedObject.ApplyModifiedProperties();
 
-                sp_Highlight.stringValue = string.Empty;
-                sp_Highlight.serializedObject.ApplyModifiedProperties();
+                sp_highlight.stringValue = string.Empty;
+                sp_highlight.serializedObject.ApplyModifiedProperties();
             }
         }
         /// <summary>
@@ -410,7 +404,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_LibraryName,
+                prop: sp_library_name,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -421,12 +415,12 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_Highlight,
+                prop: sp_highlight,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
-                sp_LocationSelectedIndex.intValue = -1;
-                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                sp_location_selected_index.intValue = -1;
+                sp_location_selected_index.serializedObject.ApplyModifiedProperties();
             }
             #endregion
 
@@ -437,19 +431,19 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_Find,
+                prop: sp_find,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
-                if (!string.IsNullOrEmpty(sp_Find.stringValue))
-                    BaseScript.ColorsLibrary_Location_Find(sp_Find.stringValue);
+                if (!string.IsNullOrEmpty(sp_find.stringValue))
+                    base_script.ColorsLibrary_Location_Find(sp_find.stringValue);
                 else
                 {
-                    sp_SelectedIndex.intValue = -1;
-                    sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+                    sp_selected_index.intValue = -1;
+                    sp_selected_index.serializedObject.ApplyModifiedProperties();
 
-                    sp_LocationSelectedIndex.intValue = -1;
-                    sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                    sp_location_selected_index.intValue = -1;
+                    sp_location_selected_index.serializedObject.ApplyModifiedProperties();
                 }
             }
             #endregion
@@ -458,7 +452,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 快捷功能
-            if (string.IsNullOrEmpty(sp_Highlight.stringValue))
+            if (string.IsNullOrEmpty(sp_highlight.stringValue))
             {
                 if (!Application.isPlaying)
                 {
@@ -527,7 +521,7 @@ namespace SevenStrikeModules.XHud.Editor
                             themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                         if (res == "暂不")
                             return;
-                        sp_ColorLibrary_Original.ClearArray();
+                        sp_library_colors.ClearArray();
                     }
                     #endregion
 
@@ -543,7 +537,7 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 14,
                         height: 14))
                     {
-                        ColorInfoList_Original_Add(ColorInfoList_Original);
+                        ColorInfoList_Original_Add(color_info_list);
                     }
                     #endregion
 
@@ -559,7 +553,7 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 14,
                         height: 14))
                     {
-                        ColorInfoList_Original_Remove(ColorInfoList_Original);
+                        ColorInfoList_Original_Remove(color_info_list);
                     }
                     #endregion
 
@@ -605,13 +599,13 @@ namespace SevenStrikeModules.XHud.Editor
                         switch (res)
                         {
                             case "基础色":
-                                BaseScript.ColorsLibrary_CreateColors_BaseColor(res_m);
+                                base_script.ColorsLibrary_CreateColors_BaseColor(res_m);
                                 break;
                             case "高级灰":
-                                BaseScript.ColorsLibrary_CreateColors_AdvancedGrayColor(res_m);
+                                base_script.ColorsLibrary_CreateColors_AdvancedGrayColor(res_m);
                                 break;
                             case "通用色":
-                                BaseScript.ColorsLibrary_CreateColors_General(res_m);
+                                base_script.ColorsLibrary_CreateColors_General(res_m);
                                 break;
                         }
                     }
@@ -647,12 +641,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 根据高亮过滤条件屏蔽或启用 GUI。
         /// <para/>
-        /// 若名称不包含 <see cref="sp_Highlight"/> 的当前值，则禁用 GUI。
+        /// 若名称不包含 <see cref="sp_highlight"/> 的当前值，则禁用 GUI。
         /// </summary>
         /// <param name="name">待检查的名称</param>
         private void BlockGUI(string name)
         {
-            if (!name.Contains(sp_Highlight.stringValue))
+            if (!name.Contains(sp_highlight.stringValue))
             {
                 GUI.enabled = false;
             }
@@ -679,10 +673,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="isFocused">是否聚焦</param>
         private void ColorInfoList_Original_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty prop = sp_ColorLibrary_Original.GetArrayElementAtIndex(index);
+            SerializedProperty prop = sp_library_colors.GetArrayElementAtIndex(index);
 
-            SerializedProperty sp_name = prop.FindPropertyRelative("Name");
-            SerializedProperty sp_color = prop.FindPropertyRelative("Color");
+            SerializedProperty sp_name = prop.FindPropertyRelative("name");
+            SerializedProperty sp_color = prop.FindPropertyRelative("color");
 
             #region 序号
             drawelement_rect.Set(rect.x + 20, rect.y + 4, 30, 20);
@@ -749,13 +743,13 @@ namespace SevenStrikeModules.XHud.Editor
             if (e.type == EventType.MouseDown && e.button == 1 && drawelement_rect.Contains(e.mousePosition))
             {
                 // 更新选中项
-                sp_SelectedIndex.intValue = index;
+                sp_selected_index.intValue = index;
 
-                SelectedColor = sp_color.colorValue;
+                selected_color = sp_color.colorValue;
 
-                ColorInfo = "R: " + SelectedColor.r.ToString("F2") + " | G: " + SelectedColor.g.ToString("F2") + " | B: " + SelectedColor.b.ToString("F2");
+                color_info = "R: " + selected_color.r.ToString("F2") + " | G: " + selected_color.g.ToString("F2") + " | B: " + selected_color.b.ToString("F2");
 
-                PreviewHeader = sp_name.stringValue;
+                preview_header = sp_name.stringValue;
 
                 // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
@@ -785,15 +779,15 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddItem(new GUIContent("E (修改色卡信息)"), false, () =>
                 {
                     xHud_LibraryArg_Color info = new xHud_LibraryArg_Color();
-                    info.Name = sp_name.stringValue;
-                    info.Color = sp_color.colorValue;
+                    info.name = sp_name.stringValue;
+                    info.color = sp_color.colorValue;
                     OpenLibrarySetTool(info, sp_name.stringValue, index);
                 });
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("C (克隆色卡项)"), false, () =>
                 {
-                    sp_ColorLibrary_Original.InsertArrayElementAtIndex(index);
-                    sp_ColorLibrary_Original.serializedObject.ApplyModifiedProperties();
+                    sp_library_colors.InsertArrayElementAtIndex(index);
+                    sp_library_colors.serializedObject.ApplyModifiedProperties();
                     Repaint();
                 });
                 menu.AddSeparator("");
@@ -910,13 +904,13 @@ namespace SevenStrikeModules.XHud.Editor
             GUI.enabled = true;
             #endregion
 
-            if (!sp_name.stringValue.Contains(sp_Highlight.stringValue))
+            if (!sp_name.stringValue.Contains(sp_highlight.stringValue))
             {
                 drawelement_rect.Set(rect.x - 20, rect.y, rect.width + 20, rect.height);
                 XGUI.gui_box(drawelement_rect, blocked_col);
             }
 
-            if (index == sp_LocationSelectedIndex.intValue)
+            if (index == sp_location_selected_index.intValue)
             {
                 drawelement_rect.Set(rect.width - 145, rect.y + 5, 50, 20);
                 XGUI.gui_label(
@@ -938,60 +932,60 @@ namespace SevenStrikeModules.XHud.Editor
         private void DrawColorInfoList_Original()
         {
             // 绘制滚动视图
-            scrollview_rect = GUILayoutUtility.GetRect(0, sp_visibleItemCount.intValue * sp_itemHeight.floatValue);
-            sp_ColorInfoList_Original_Scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_ColorInfoList_Original_Scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, ColorInfoList_Original.count * sp_itemHeight.floatValue), false, true);
+            scrollview_rect = GUILayoutUtility.GetRect(0, sp_visible_item_count.intValue * sp_item_height.floatValue);
+            sp_color_info_list_original_scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_color_info_list_original_scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, color_info_list.count * sp_item_height.floatValue), false, true);
 
             // 计算可视区域的起始和结束索引
-            int startIndex = Mathf.FloorToInt(sp_ColorInfoList_Original_Scroller.vector2Value.y / sp_itemHeight.floatValue);
-            int endIndex = Mathf.CeilToInt((sp_ColorInfoList_Original_Scroller.vector2Value.y + scrollview_rect.height) / sp_itemHeight.floatValue);
+            int startIndex = Mathf.FloorToInt(sp_color_info_list_original_scroller.vector2Value.y / sp_item_height.floatValue);
+            int endIndex = Mathf.CeilToInt((sp_color_info_list_original_scroller.vector2Value.y + scrollview_rect.height) / sp_item_height.floatValue);
 
             // 只绘制可视区域内的元素
-            for (int i = startIndex; i < endIndex && i < ColorInfoList_Original.count; i++)
+            for (int i = startIndex; i < endIndex && i < color_info_list.count; i++)
             {
-                SerializedProperty prop = sp_ColorLibrary_Original.GetArrayElementAtIndex(i);
-                SerializedProperty sp_color = prop.FindPropertyRelative("Color");
-                SerializedProperty sp_name = prop.FindPropertyRelative("Name");
+                SerializedProperty prop = sp_library_colors.GetArrayElementAtIndex(i);
+                SerializedProperty sp_color = prop.FindPropertyRelative("color");
+                SerializedProperty sp_name = prop.FindPropertyRelative("name");
 
                 // 如果当前元素被选中，绘制选中效果
-                if (sp_name.stringValue.Contains(sp_Highlight.stringValue))
+                if (sp_name.stringValue.Contains(sp_highlight.stringValue))
                 {
-                    if (sp_SelectedIndex.intValue == i)
+                    if (sp_selected_index.intValue == i)
                     {
                         // 高亮标记表示选中
-                        item_rect.Set(2, i * sp_itemHeight.floatValue + 9, 12, 12);
+                        item_rect.Set(2, i * sp_item_height.floatValue + 9, 12, 12);
 
                         #region 图标
                         XGUI.gui_icon(
                             rect: item_rect,
-                            icon: PalletIcon,
+                            icon: palletIcon,
                             color: sp_color.colorValue);
                         #endregion
 
                         // 高亮背景表示选中
-                        item_rect.Set(1, i * sp_itemHeight.floatValue, scrollview_rect.width + 20, sp_itemHeight.floatValue);
-                        EditorGUI.DrawRect(item_rect, SelectedBg);
+                        item_rect.Set(1, i * sp_item_height.floatValue, scrollview_rect.width + 20, sp_item_height.floatValue);
+                        EditorGUI.DrawRect(item_rect, selected_bg);
                     }
                 }
 
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
-                ColorInfoList_Original.drawElementCallback.Invoke(item_rect, i, i == ColorInfoList_Original.index, true);
+                color_info_list.drawElementCallback.Invoke(item_rect, i, i == color_info_list.index, true);
 
                 // 检测鼠标是否在当前元素区域内
                 if (item_rect.Contains(Event.current.mousePosition))
                 {
                     if (Event.current.type == EventType.MouseDown)
                     {
-                        if (sp_name.stringValue.Contains(sp_Highlight.stringValue))
+                        if (sp_name.stringValue.Contains(sp_highlight.stringValue))
                         {
                             // 更新选中项
-                            sp_SelectedIndex.intValue = i;
+                            sp_selected_index.intValue = i;
 
-                            SelectedColor = sp_color.colorValue;
+                            selected_color = sp_color.colorValue;
 
-                            ColorInfo = "R: " + SelectedColor.r.ToString("F2") + " | G: " + SelectedColor.g.ToString("F2") + " | B: " + SelectedColor.b.ToString("F2");
+                            color_info = "R: " + selected_color.r.ToString("F2") + " | G: " + selected_color.g.ToString("F2") + " | B: " + selected_color.b.ToString("F2");
 
-                            PreviewHeader = sp_name.stringValue;
+                            preview_header = sp_name.stringValue;
 
                             // 标记界面需要更新
                             GUI.changed = true;
@@ -1015,7 +1009,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (list.count <= 0)
                 return;
-            sp_ColorLibrary_Original.DeleteArrayElementAtIndex(list.index);
+            sp_library_colors.DeleteArrayElementAtIndex(list.index);
         }
         /// <summary>
         /// 列表增加项。
@@ -1027,19 +1021,19 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (list.count <= 0)
             {
-                if (BaseScript.ColorLibrary == null)
-                    BaseScript.ColorLibrary = new List<xHud_LibraryArg_Color>();
-                BaseScript.ColorLibrary.Add(new XHud.xHud_LibraryArg_Color("颜色" + BaseScript.ColorLibrary.Count, Color.white));
+                if (base_script.library_colors == null)
+                    base_script.library_colors = new List<xHud_LibraryArg_Color>();
+                base_script.library_colors.Add(new XHud.xHud_LibraryArg_Color("颜色" + base_script.library_colors.Count, Color.white));
             }
             else
             {
-                sp_ColorLibrary_Original.InsertArrayElementAtIndex(list.index);
-                SerializedProperty prop = sp_ColorLibrary_Original.GetArrayElementAtIndex(list.index);
-                SerializedProperty prop_name = prop.FindPropertyRelative("Name");
-                SerializedProperty prop_color = prop.FindPropertyRelative("Color");
-                SerializedProperty prop_des = prop.FindPropertyRelative("Description");
+                sp_library_colors.InsertArrayElementAtIndex(list.index);
+                SerializedProperty prop = sp_library_colors.GetArrayElementAtIndex(list.index);
+                SerializedProperty prop_name = prop.FindPropertyRelative("name");
+                SerializedProperty prop_color = prop.FindPropertyRelative("color");
+                SerializedProperty prop_des = prop.FindPropertyRelative("description");
 
-                prop_name.stringValue = "颜色" + sp_ColorLibrary_Original.arraySize;
+                prop_name.stringValue = "颜色" + sp_library_colors.arraySize;
                 prop_color.colorValue = Color.white;
                 prop_des.stringValue = "颜色文字说明";
 
@@ -1064,13 +1058,14 @@ namespace SevenStrikeModules.XHud.Editor
             window.titleContent = new GUIContent("XHud - 色卡修改器");
             XGUI.CenterEditorWindow(new Vector2Int(348, 730), window, true);
 
-            window.SetInfo(info.Name, info.Color);
-            window.ModifiedIndex = index;
+            window.SetInfo(info.name, info.color);
+            window.modified_index = index;
             window.SetLibrarySetterMode(LibrarySetterMode.修改库源参数);
             window.Set_OriginColorName(originname);
             window.SetButtonText("更新", "取消");
             window.SetTitle("色卡修改器");
-            window.SetTarget_Hud_ColorsLibrary(BaseScript);
+            window.SetSubTitle("以下为目标色卡的颜色参数与效果的预览");
+            window.SetTarget_Hud_ColorsLibrary(base_script);
             //window.ShowModal();
             window.Show();
         }
@@ -1086,16 +1081,16 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void ExportPallets()
         {
-            if (BaseScript.ColorLibrary != null && BaseScript.ColorLibrary.Count > 0)
+            if (base_script.library_colors != null && base_script.library_colors.Count > 0)
             {
-                Texture2D Pallet = new Texture2D(MultipleSize * BaseScript.ColorLibrary.Count, MultipleSize, TextureFormat.ARGB32, true, true);
-                for (int i = 0; i < BaseScript.ColorLibrary.Count; i++)
+                Texture2D Pallet = new Texture2D(multiple_size * base_script.library_colors.Count, multiple_size, TextureFormat.ARGB32, true, true);
+                for (int i = 0; i < base_script.library_colors.Count; i++)
                 {
-                    for (int x = MultipleSize * i; x < MultipleSize * (i + 1); x++)
+                    for (int x = multiple_size * i; x < multiple_size * (i + 1); x++)
                     {
-                        for (int y = 0; y < MultipleSize; y++)
+                        for (int y = 0; y < multiple_size; y++)
                         {
-                            Pallet.SetPixel(x, y, BaseScript.ColorLibrary[i].Color);
+                            Pallet.SetPixel(x, y, base_script.library_colors[i].color);
                         }
                     }
                 }
@@ -1120,12 +1115,12 @@ namespace SevenStrikeModules.XHud.Editor
                 ExportColorLib lib = new ExportColorLib();
                 lib.ColorsInfo = new List<ExportItem>();
 
-                for (int i = 0; i < BaseScript.ColorLibrary.Count; i++)
+                for (int i = 0; i < base_script.library_colors.Count; i++)
                 {
                     ExportItem item = new ExportItem();
-                    item.color = XGUI_Utilitys.Color_To_String(BaseScript.ColorLibrary[i].Color);
-                    item.hex = XGUI_Utilitys.Color_To_HexString(BaseScript.ColorLibrary[i].Color);
-                    item.name = BaseScript.ColorLibrary[i].Name;
+                    item.color = XGUI_Utilitys.Color_To_String(base_script.library_colors[i].color);
+                    item.hex = XGUI_Utilitys.Color_To_HexString(base_script.library_colors[i].color);
+                    item.name = base_script.library_colors[i].name;
 
                     lib.ColorsInfo.Add(item);
                 }
@@ -1177,15 +1172,15 @@ namespace SevenStrikeModules.XHud.Editor
                         ExportColorLib lib = JsonUtility.FromJson<ExportColorLib>(json);
                         int count = lib.ColorsInfo.Count;
 
-                        int size = sp_ColorLibrary_Original.arraySize;
+                        int size = sp_library_colors.arraySize;
 
                         for (int i = 0; i < count; i++)
                         {
-                            sp_ColorLibrary_Original.InsertArrayElementAtIndex(i + size);
+                            sp_library_colors.InsertArrayElementAtIndex(i + size);
 
-                            SerializedProperty sp_item = sp_ColorLibrary_Original.GetArrayElementAtIndex(i + size);
-                            SerializedProperty sp_name = sp_item.FindPropertyRelative("Name");
-                            SerializedProperty sp_color = sp_item.FindPropertyRelative("Color");
+                            SerializedProperty sp_item = sp_library_colors.GetArrayElementAtIndex(i + size);
+                            SerializedProperty sp_name = sp_item.FindPropertyRelative("name");
+                            SerializedProperty sp_color = sp_item.FindPropertyRelative("color");
 
                             sp_name.stringValue = lib.ColorsInfo[i].name;
                             sp_color.colorValue = XGUI_Utilitys.String_To_Color(lib.ColorsInfo[i].color, false);
@@ -1194,14 +1189,14 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_color.serializedObject.ApplyModifiedProperties();
                             sp_item.serializedObject.ApplyModifiedProperties();
                         }
-                        sp_ColorLibrary_Original.serializedObject.ApplyModifiedProperties();
+                        sp_library_colors.serializedObject.ApplyModifiedProperties();
                     }
                     break;
                 case "替换":
                     path = EditorUtility.OpenFilePanel("读取色板信息文件", Application.dataPath, "json");
                     if (!string.IsNullOrEmpty(path))
                     {
-                        sp_ColorLibrary_Original.ClearArray();
+                        sp_library_colors.ClearArray();
 
                         string json = File.ReadAllText(path);
 
@@ -1210,11 +1205,11 @@ namespace SevenStrikeModules.XHud.Editor
 
                         for (int i = 0; i < count; i++)
                         {
-                            sp_ColorLibrary_Original.InsertArrayElementAtIndex(i);
+                            sp_library_colors.InsertArrayElementAtIndex(i);
 
-                            SerializedProperty sp_item = sp_ColorLibrary_Original.GetArrayElementAtIndex(i);
-                            SerializedProperty sp_name = sp_item.FindPropertyRelative("Name");
-                            SerializedProperty sp_color = sp_item.FindPropertyRelative("Color");
+                            SerializedProperty sp_item = sp_library_colors.GetArrayElementAtIndex(i);
+                            SerializedProperty sp_name = sp_item.FindPropertyRelative("name");
+                            SerializedProperty sp_color = sp_item.FindPropertyRelative("color");
 
                             sp_name.stringValue = lib.ColorsInfo[i].name;
                             sp_color.colorValue = XGUI_Utilitys.String_To_Color(lib.ColorsInfo[i].color, false);
@@ -1222,12 +1217,11 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_color.serializedObject.ApplyModifiedProperties();
                             sp_item.serializedObject.ApplyModifiedProperties();
                         }
-                        sp_ColorLibrary_Original.serializedObject.ApplyModifiedProperties();
+                        sp_library_colors.serializedObject.ApplyModifiedProperties();
                     }
                     break;
             }
         }
         #endregion
     }
-    #endregion
 }

@@ -112,103 +112,103 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// Hud画布 - 屏幕空间缩放器
         /// </summary>
-        public CanvasScaler HudCanvasScaler;
+        public CanvasScaler cv_scaler;
         [Tooltip("XHud画布 - 屏幕空间缩放模式索引")]
         /// <summary>
         /// Hud画布 - 屏幕空间缩放模式索引
         /// </summary>
-        public int CanvasScalerModeIndex;
+        public int cv_scaler_mode_index;
         [Range(0, 1)]
         [Tooltip("高度优先匹配值")]
         /// <summary>
         /// 高度优先匹配值
         /// </summary>
-        public float CanvasMatchDir;
+        public float cv_match_dir;
         [Tooltip("当前屏幕分辨率尺寸")]
         /// <summary>
         /// 屏幕分辨率
         /// </summary>
-        public Vector2 ScreenRes;
+        public Vector2 cv_screen_res;
         [Tooltip("是否使用像素对齐")]
         /// <summary>
         /// 是否使用像素对齐
         /// </summary>
-        public bool UsePerfectPixelUpdate;
+        public bool cv_use_perfect_pixel_update;
         [Tooltip("是否使用运动停止后自动像素对齐")]
         /// <summary>
         /// 是否使用运动停止后自动像素对齐
         /// </summary>
-        public bool UseAutoPerfectPixel;
+        public bool cv_use_auto_perfect_pixel;
         [Tooltip("XHud画布-屏幕锚点")]
         /// <summary>
         /// XHud画布-屏幕锚点
         /// </summary>
-        public RectTransform HudCanvas_ScreenAnchor;
+        public RectTransform cv_hudcanvas_screen_anchor;
         [Tooltip("XHud画布-世界锚点")]
         /// <summary>
         /// XHud画布-世界锚点
         /// </summary>
-        public RectTransform HudCanvas_WorldAnchor;
+        public RectTransform cv_hudcanvas_world_anchor;
         [SerializeField]
         /// <summary>
         /// 支持世界UI
         /// </summary>
-        public bool SupportWorldUI;
+        public bool cv_support_world_ui;
         [Tooltip("世界锚点列表")]
         /// <summary>
         /// 世界锚点列表
         /// </summary>
-        public List<XHudElementNode> Anchors_Layout_World = new List<XHudElementNode>();
+        public List<XHudElementNode> cv_anchors_layout_world = new List<XHudElementNode>();
         [Tooltip("屏幕锚点列表")]
         /// <summary>
         /// 屏幕锚点列表
         /// </summary>
-        public List<Anchor_Layout> Anchors_Layout_Screen = new List<Anchor_Layout>();
+        public List<Anchor_Layout> cv_anchors_layout_screen = new List<Anchor_Layout>();
         [Tooltip("X：上边距 | Y：下边距 | Z：左边距 | W：右边距")]
         /// <summary>
         /// 屏幕边距
         /// </summary>
-        public Vector4 Margins = Vector4.one * 10f;
+        public Vector4 cv_margins = Vector4.one * 10f;
         [Tooltip("水平边距")]
         /// <summary>
         /// 屏幕边距 - 水平
         /// </summary>
-        public float MarginHorizontal = 1f;
+        public float cv_margin_horizontal = 1f;
         [Tooltip("垂直边距")]
         /// <summary>
         /// 屏幕边距 - 垂直
         /// </summary>
-        public float MarginVertical = 1f;
+        public float cv_margin_vertical = 1f;
         [Tooltip("边距倍增")]
         /// <summary>
         /// 主要方向锚点尺寸倍增
         /// </summary>
-        public float MarginMultiply = 1f;
+        public float cv_margin_multiply = 1f;
         [Tooltip("画布和相机的距离")]
         /// <summary>
         /// 画布和相机的距离
         /// </summary>
-        public float CanvasDistance = 0.5f;
+        public float cv_distance = 0.5f;
         [Tooltip("XHud画布 - 屏幕空间")]
         /// <summary>
         /// XHud画布 - 屏幕空间
         /// </summary>
-        public Canvas HudCanvas_Screen;
+        public Canvas cv_screen;
         [Tooltip("XHud画布 - 世界空间")]
         /// <summary>
         /// XHud画布 - 世界空间
         /// </summary>
-        public Canvas HudCanvas_World;
+        public Canvas cv_hudcanvas_world;
         [Tooltip("XHud画布锚点")]
         /// <summary>
         /// XHud画布锚点
         /// </summary>
-        public CanvasCameraAttachment HudCanvasAnchor = CanvasCameraAttachment.CameraFar;
+        public CanvasCameraAttachment cv_hudcanvas_anchor = CanvasCameraAttachment.CameraFar;
         [Tooltip("画布距离模式索引")]
         /// <summary>
         /// 画布距离模式索引
         /// </summary>
-        public int HudCanvasAnchorIndex;
+        public int cv_hudcanvas_anchor_index;
 
         /// <summary>
         /// 布局锚点更新
@@ -250,111 +250,111 @@ namespace SevenStrikeModules.XHud
         {
             hm_Layout_CanvasDistance_Update();
 
-            if (HudCanvas_Screen != null)
+            if (cv_screen != null)
             {
-                HudCanvas_Screen.renderMode = RenderMode.ScreenSpaceCamera;
+                cv_screen.renderMode = RenderMode.ScreenSpaceCamera;
 
-                if (HudCamera != null)
+                if (camera_ui != null)
                 {
-                    HudCanvas_Screen.worldCamera = HudCamera;
+                    cv_screen.worldCamera = camera_ui;
                 }
             }
 
-            if (HudCanvas_World != null)
+            if (cv_hudcanvas_world != null)
             {
-                HudCanvas_World.renderMode = RenderMode.WorldSpace;
-                if (SceneCamera != null)
+                cv_hudcanvas_world.renderMode = RenderMode.WorldSpace;
+                if (camera_scene != null)
                 {
-                    HudCanvas_World.worldCamera = SceneCamera;
+                    cv_hudcanvas_world.worldCamera = camera_scene;
                 }
             }
 
-            if (Anchors_Layout_Screen != null)
+            if (cv_anchors_layout_screen != null)
             {
-                for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+                for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
                 {
-                    string sp_name = Anchors_Layout_Screen[i].Name;
-                    RectTransform rect = Anchors_Layout_Screen[i].Anchor;
+                    string sp_name = cv_anchors_layout_screen[i].Name;
+                    RectTransform rect = cv_anchors_layout_screen[i].Anchor;
 
                     if (sp_name == "Anchor_B")
                     {
-                        Anchors_Layout_Screen[i].Type = XHudAnchor.底层;
+                        cv_anchors_layout_screen[i].Type = XHudAnchor.底层;
                         if (rect != null)
                             rect.anchoredPosition3D = new Vector3(0, 0, 0);
                     }
                     if (sp_name == "Anchor_U")
                     {
-                        Anchors_Layout_Screen[i].Type = XHudAnchor.上;
+                        cv_anchors_layout_screen[i].Type = XHudAnchor.上;
                         if (rect != null)
-                            rect.anchoredPosition3D = new Vector3(0, (-Margins.x - MarginVertical) * MarginMultiply, 0);
+                            rect.anchoredPosition3D = new Vector3(0, (-cv_margins.x - cv_margin_vertical) * cv_margin_multiply, 0);
                     }
                     if (sp_name == "Anchor_D")
                     {
-                        Anchors_Layout_Screen[i].Type = XHudAnchor.下;
+                        cv_anchors_layout_screen[i].Type = XHudAnchor.下;
                         if (rect != null)
-                            rect.anchoredPosition3D = new Vector3(0, (Margins.y + MarginVertical) * MarginMultiply, 0);
+                            rect.anchoredPosition3D = new Vector3(0, (cv_margins.y + cv_margin_vertical) * cv_margin_multiply, 0);
                     }
                     if (sp_name == "Anchor_L")
                     {
-                        Anchors_Layout_Screen[i].Type = XHudAnchor.左;
+                        cv_anchors_layout_screen[i].Type = XHudAnchor.左;
                         if (rect != null)
-                            rect.anchoredPosition3D = new Vector3((Margins.z + MarginHorizontal) * MarginMultiply, 0, 0);
+                            rect.anchoredPosition3D = new Vector3((cv_margins.z + cv_margin_horizontal) * cv_margin_multiply, 0, 0);
                     }
                     if (sp_name == "Anchor_R")
                     {
-                        Anchors_Layout_Screen[i].Type = XHudAnchor.右;
+                        cv_anchors_layout_screen[i].Type = XHudAnchor.右;
                         if (rect != null)
-                            rect.anchoredPosition3D = new Vector3((-Margins.w - MarginHorizontal) * MarginMultiply, 0, 0);
+                            rect.anchoredPosition3D = new Vector3((-cv_margins.w - cv_margin_horizontal) * cv_margin_multiply, 0, 0);
                     }
                     if (sp_name == "Anchor_C")
                     {
-                        Anchors_Layout_Screen[i].Type = XHudAnchor.中心;
+                        cv_anchors_layout_screen[i].Type = XHudAnchor.中心;
                         if (rect != null)
                             rect.anchoredPosition3D = new Vector3(0, 0, 0);
                     }
                     if (sp_name == "Anchor_L_U")
                     {
-                        Anchors_Layout_Screen[i].Type = XHudAnchor.左上;
+                        cv_anchors_layout_screen[i].Type = XHudAnchor.左上;
                         if (rect != null)
-                            rect.anchoredPosition3D = new Vector3((Margins.z + MarginHorizontal) * MarginMultiply, (-Margins.x - MarginVertical) * MarginMultiply, 0);
+                            rect.anchoredPosition3D = new Vector3((cv_margins.z + cv_margin_horizontal) * cv_margin_multiply, (-cv_margins.x - cv_margin_vertical) * cv_margin_multiply, 0);
                     }
                     if (sp_name == "Anchor_L_D")
                     {
-                        Anchors_Layout_Screen[i].Type = XHudAnchor.左下;
+                        cv_anchors_layout_screen[i].Type = XHudAnchor.左下;
                         if (rect != null)
-                            rect.anchoredPosition3D = new Vector3((Margins.z + MarginHorizontal) * MarginMultiply, (Margins.y + MarginVertical) * MarginMultiply, 0);
+                            rect.anchoredPosition3D = new Vector3((cv_margins.z + cv_margin_horizontal) * cv_margin_multiply, (cv_margins.y + cv_margin_vertical) * cv_margin_multiply, 0);
                     }
                     if (sp_name == "Anchor_R_U")
                     {
-                        Anchors_Layout_Screen[i].Type = XHudAnchor.右上;
+                        cv_anchors_layout_screen[i].Type = XHudAnchor.右上;
                         if (rect != null)
-                            rect.anchoredPosition3D = new Vector3((-Margins.w - MarginHorizontal) * MarginMultiply, (-Margins.x - MarginVertical) * MarginMultiply, 0);
+                            rect.anchoredPosition3D = new Vector3((-cv_margins.w - cv_margin_horizontal) * cv_margin_multiply, (-cv_margins.x - cv_margin_vertical) * cv_margin_multiply, 0);
                     }
                     if (sp_name == "Anchor_R_D")
                     {
-                        Anchors_Layout_Screen[i].Type = XHudAnchor.右下;
+                        cv_anchors_layout_screen[i].Type = XHudAnchor.右下;
                         if (rect != null)
-                            rect.anchoredPosition3D = new Vector3((-Margins.w - MarginHorizontal) * MarginMultiply, (Margins.y + MarginVertical) * MarginMultiply, 0);
+                            rect.anchoredPosition3D = new Vector3((-cv_margins.w - cv_margin_horizontal) * cv_margin_multiply, (cv_margins.y + cv_margin_vertical) * cv_margin_multiply, 0);
                     }
                     if (sp_name == "Anchor_T")
                     {
-                        Anchors_Layout_Screen[i].Type = XHudAnchor.顶层;
+                        cv_anchors_layout_screen[i].Type = XHudAnchor.顶层;
                         if (rect != null)
                             rect.anchoredPosition3D = new Vector3(0, 0, 0);
                     }
 
-                    Image rect_mark = Anchors_Layout_Screen[i].Mark;
+                    Image rect_mark = cv_anchors_layout_screen[i].Mark;
 
                     if (rect_mark != null)
                     {
-                        rect_mark.rectTransform.sizeDelta = Vector2.one * MarkSize;
-                        rect_mark.color = Color_LayoutAnchorMark;
+                        rect_mark.rectTransform.sizeDelta = Vector2.one * sf_mark_size;
+                        rect_mark.color = sf_color_layout_anchor_mark;
                         rect_mark.transform.SetAsLastSibling();
                     }
                 }
             }
 
-            hm_Layout_CanvasDistance(HudCanvasAnchor);
+            hm_Layout_CanvasDistance(cv_hudcanvas_anchor);
         }
         /// <summary>
         /// 设置Hud画布的锚点位置
@@ -362,15 +362,15 @@ namespace SevenStrikeModules.XHud
         /// <param name="anchor">画布目标锚点</param>
         public void hm_Layout_CanvasDistance(CanvasCameraAttachment anchor)
         {
-            if (HudCamera == null)
+            if (camera_ui == null)
                 return;
             switch (anchor)
             {
                 case CanvasCameraAttachment.CameraNear:
-                    CanvasDistance = HudCamera.nearClipPlane + 0.001f;
+                    cv_distance = camera_ui.nearClipPlane + 0.001f;
                     break;
                 case CanvasCameraAttachment.CameraFar:
-                    CanvasDistance = HudCamera.farClipPlane - 0.001f;
+                    cv_distance = camera_ui.farClipPlane - 0.001f;
                     break;
                 case CanvasCameraAttachment.Custom:
 
@@ -388,16 +388,16 @@ namespace SevenStrikeModules.XHud
             switch (anchor)
             {
                 case HudAnchorMargin.上:
-                    val = Margins.x;
+                    val = cv_margins.x;
                     break;
                 case HudAnchorMargin.下:
-                    val = Margins.y;
+                    val = cv_margins.y;
                     break;
                 case HudAnchorMargin.左:
-                    val = Margins.z;
+                    val = cv_margins.z;
                     break;
                 case HudAnchorMargin.右:
-                    val = Margins.w;
+                    val = cv_margins.w;
                     break;
             }
             return val;
@@ -407,9 +407,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_Layout_CanvasDistance_Update()
         {
-            if (HudCanvas_Screen == null)
+            if (cv_screen == null)
                 return;
-            HudCanvas_Screen.planeDistance = CanvasDistance;
+            cv_screen.planeDistance = cv_distance;
         }
         /// <summary>
         /// 画布像素对齐开关
@@ -417,32 +417,32 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState">是否开启像素对齐</param>
         public void hm_UsePixelPerfect(bool state)
         {
-            if (!UsePerfectPixelUpdate)
+            if (!cv_use_perfect_pixel_update)
                 return;
-            HudCanvas_Screen.pixelPerfect = state;
+            cv_screen.pixelPerfect = state;
         }
         /// <summary>
         /// 获取屏幕分辨率
         /// </summary>
         public Vector2 hm_GetScreenResolution()
         {
-            return ScreenRes;
+            return cv_screen_res;
         }
         /// <summary>
         /// 获取画布分辨率
         /// </summary>
         public Vector2 hm_GetCanvasScalerScreenSize()
         {
-            return CanvasScalerScreenSize;
+            return sf_canvas_scaler_screen_size;
         }
         /// <summary>
         /// 启动时根据配置开关，设置屏幕画布（Canvas）的像素完美对齐模式，避免模糊。
         /// </summary>
         public void hm_CanvasPixelPerfect_InitializeMode()
         {
-            if (HudCanvas_Screen != null)
+            if (cv_screen != null)
             {
-                HudCanvas_Screen.pixelPerfect = UsePerfectPixelUpdate;
+                cv_screen.pixelPerfect = cv_use_perfect_pixel_update;
             }
         }
     }

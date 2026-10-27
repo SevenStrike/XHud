@@ -34,17 +34,17 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 控制器
         /// </summary>
-        public XHud_Module_Primitive_Controller Controller;
+        public XHud_Module_Primitive_Controller controller;
         [SerializeField]
         /// <summary>
         /// 动画器的动画总计时间
         /// </summary>
-        public float TotalTime;
+        public float total_time;
         [SerializeField]
         /// <summary>
         /// 动画器的动画延迟时间
         /// </summary>
-        public float DelayTime;
+        public float delay_time;
     }
 
     public partial class XHud_Module_Element : MonoBehaviour
@@ -53,14 +53,14 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 图元动画器容器
         /// </summary>
-        public List<PrimitiveControllerNode> PrimitiveControllerNodes = new List<PrimitiveControllerNode>();
+        public List<PrimitiveControllerNode> primitive_controller_nodes = new List<PrimitiveControllerNode>();
         [SerializeField]
         /// <summary>
         /// 图元列表折叠状态
         /// true表示折叠，false表示展开
         /// 用于控制Inspector中图元列表的显示/隐藏
         /// </summary>
-        public bool PrimitivesIsFold;
+        public bool primitives_is_fold;
 
         #region 获取图元控制器
         /// <summary>
@@ -71,21 +71,21 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Primitive_Controller GetPrimitiveController_With_Indicator(string indicator)
         {
             XHud_Module_Primitive_Controller am = null;
-            for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
+            for (int i = 0; i < primitive_controller_nodes.Count; i++)
             {
-                if (PrimitiveControllerNodes[i].Controller.GetIndicator() == indicator)
+                if (primitive_controller_nodes[i].controller.GetIndicator() == indicator)
                 {
-                    am = PrimitiveControllerNodes[i].Controller;
+                    am = primitive_controller_nodes[i].controller;
                 }
             }
             if (am == null)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "未获取到标识名为 " + indicator + " 的子级图元控制器！ ", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取子级图元控制器 " + indicator, XGUIMsgState.通知);
             }
             return am;
@@ -98,21 +98,21 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Primitive_Controller GetPrimitiveController_With_GameObjectName(string name)
         {
             XHud_Module_Primitive_Controller am = null;
-            for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
+            for (int i = 0; i < primitive_controller_nodes.Count; i++)
             {
-                if (PrimitiveControllerNodes[i].Controller.gameObject.name == name)
+                if (primitive_controller_nodes[i].controller.gameObject.name == name)
                 {
-                    am = PrimitiveControllerNodes[i].Controller;
+                    am = primitive_controller_nodes[i].controller;
                 }
             }
             if (am == null)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "未获取到名为 " + name + " 的子级图元控制器！ ", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取子级图元控制器 " + name, XGUIMsgState.通知);
             }
             return am;
@@ -125,21 +125,21 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Primitive_Controller GetPrimitiveController_With_ID(string id)
         {
             XHud_Module_Primitive_Controller am = null;
-            for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
+            for (int i = 0; i < primitive_controller_nodes.Count; i++)
             {
-                if (PrimitiveControllerNodes[i].Controller.GetID() == id)
+                if (primitive_controller_nodes[i].controller.GetID() == id)
                 {
-                    am = PrimitiveControllerNodes[i].Controller;
+                    am = primitive_controller_nodes[i].controller;
                 }
             }
             if (am == null)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "未获取到 ID 号为 " + id + " 的子级图元控制器！ ", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取 ID 号为 " + id + " 子级图元控制器！", XGUIMsgState.通知);
             }
             return am;

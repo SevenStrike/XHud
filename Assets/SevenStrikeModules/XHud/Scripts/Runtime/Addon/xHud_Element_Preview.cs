@@ -17,7 +17,8 @@
  * 4. 完整协议文本可查阅：https://www.gnu.org/licenses/agpl-3.0.html
  * ============================================================================
  * 违反本注释保留要求，将违反 AGPL 3.0 授权协议，需承担相应法律责任
- */namespace SevenStrikeModules.XHud
+ */
+namespace SevenStrikeModules.XHud
 {
     using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
@@ -27,60 +28,127 @@
 
     public class XHud_Element_Preview : MonoBehaviour
     {
+        #region 字段 - 元素数据
+        /// <summary>
+        /// 元素模块组件引用
+        /// </summary>
         [SerializeField]
-        public XHud_Module_Element HudElement;
+        public XHud_Module_Element element;
+        /// <summary>
+        /// 是否启用预览功能
+        /// </summary>
+        public bool is_enabled = true;
+        /// <summary>
+        /// 是否输出调试信息
+        /// </summary>
+        public bool debug_state = false;
+        #endregion
 
-        public bool IsEnable = true;
-        public bool DebugState = false;
+        #region 字段 - 预览按键
+        /// <summary>
+        /// 元素入场预览按键
+        /// </summary>
+        public KeyCode key_element_in = KeyCode.C;
+        /// <summary>
+        /// 元素出场预览按键
+        /// </summary>
+        public KeyCode key_element_out = KeyCode.V;
+        #endregion
 
-        public KeyCode key_Element_In = KeyCode.C;
-        public KeyCode key_Element_Out = KeyCode.V;
+        #region 字段 - 动效参数
+        /// <summary>
+        /// 生成（入场）动效参数
+        /// </summary>
+        public Motion_Creator motion_create_args;
+        /// <summary>
+        /// 回收（出场）动效参数
+        /// </summary>
+        public Motion_Recycler motion_recycle_args;
+        /// <summary>
+        /// 动效库中生成动效的索引名称
+        /// </summary>
+        public string motion_create_library_index_name;
+        /// <summary>
+        /// 动效库中回收动效的索引名称
+        /// </summary>
+        public string motion_recycle_library_index_name;
+        /// <summary>
+        /// 入场延时时间
+        /// </summary>
+        public float delay_with_in;
+        /// <summary>
+        /// 出场延时时间
+        /// </summary>
+        public float delay_with_out;
+        #endregion
 
-        public Motion_Creator CreateArgs;
-        public Motion_Recycler RecycleArgs;
-        public bool HideWithStart = true;
-        public Vector3 Preset_Position;
-        public Vector3 Preset_Euler;
-        public float DurationScaler = 1;
+        #region 字段 - 预设变换
+        /// <summary>
+        /// 预设位置
+        /// </summary>
+        public Vector3 preset_position;
+        /// <summary>
+        /// 预设角度
+        /// </summary>
+        public Vector3 preset_euler;
+        /// <summary>
+        /// 缩放耗时系数
+        /// </summary>
+        public float duration_scaler = 1;
+        #endregion
 
+        #region 字段 - 显示与 RMS
+        /// <summary>
+        /// 开始时是否隐藏
+        /// </summary>
+        public bool hide_with_start = true;
+        /// <summary>
+        /// 是否启用 RMS 布局
+        /// </summary>
+        public bool rms_enabled = false;
+        /// <summary>
+        /// RMS 方案名称
+        /// </summary>
+        public string rms_name;
+        /// <summary>
+        /// 元素当前是否处于入场状态
+        /// </summary>
+        public bool element_is_in = true;
+        #endregion
+
+        #region 字段 - 预览运行状态
+        /// <summary>
+        /// 预览运行状态（序列化私有字段，对外通过 PreviewIsRunning 属性访问）
+        /// </summary>
         [SerializeField]
-        private bool previewIsRunning;
-        public bool PreviewIsRunning
+        private bool m_preview_is_running;
+        /// <summary>
+        /// 预览运行状态字段名常量，供编辑器脚本以 nameof 方式查找序列化属性
+        /// </summary>
+        public const string editor_preview_is_running = nameof(m_preview_is_running);
+        /// <summary>
+        /// 预览运行状态属性：值变化时触发 act_on_element_preview_statechanged 回调
+        /// </summary>
+        public bool preview_is_running
         {
             get
             {
-                return previewIsRunning;
+                return m_preview_is_running;
             }
             set
             {
-                if (value != previewIsRunning)
+                if (value != m_preview_is_running)
                 {
-                    previewIsRunning = value;
+                    m_preview_is_running = value;
 
                     if (act_on_element_preview_statechanged != null)
                         act_on_element_preview_statechanged(value);
                 }
             }
         }
+        #endregion
 
-        public string Crc_Lib_Name;
-        public string Rec_Lib_Name;
-
-        public float DelayWithIn;
-        public float DelayWithOut;
-
-        public bool create_fold_move;
-        public bool create_fold_rotate;
-        public bool create_fold_alpha;
-        public bool recycle_fold_move;
-        public bool recycle_fold_rotate;
-        public bool recycle_fold_alpha;
-
-        public bool RMS_Enabled = false;
-        public string RMS_Name;
-
-        public bool ElementIsIn = true;
-
+        #region 字段 - 事件回调
         /// <summary>
         /// 动作 - 元素 入场 - 开始
         /// </summary>
@@ -101,7 +169,9 @@
         /// 动作 - 元素状态改变
         /// </summary>
         public UnityAction<bool> act_on_element_preview_statechanged;
+        #endregion
 
+        #region 折叠
         public bool
           fold_options = true,
           fold_param = true,
@@ -112,39 +182,53 @@
           fold_rms = true,
           fold_based = true;
 
+        public void GroupFold(bool state)
+        {
+            fold_options = state;
+            fold_param = state;
+            fold_key = state;
+            fold_state = state;
+            fold_motion = state;
+            fold_preset_trans = state;
+            fold_rms = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool options = true, bool param = true, bool key = true, bool state = true, bool motion = true, bool preset_trans = true, bool rms = true, bool based = true)
+        {
+            fold_options = options;
+            fold_param = param;
+            fold_key = key;
+            fold_state = state;
+            fold_motion = motion;
+            fold_preset_trans = preset_trans;
+            fold_rms = rms;
+            fold_based = based;
+        }
+        #endregion
+
         private void Awake()
         {
-            if (HudElement == null)
-                HudElement = GetComponent<XHud_Module_Element>();
+            if (element == null)
+                element = GetComponent<XHud_Module_Element>();
 
             // 原始姿态数据收集
             OriginalDataCollect();
         }
 
-        /// <summary>
-        /// 收集原始姿态数据
-        /// </summary>
-        public void OriginalDataCollect()
-        {
-            // 原始姿态数据收集：获取位置
-            Preset_Position = HudElement.RectTransform.anchoredPosition3D;
-            // 原始姿态数据收集：获取角度
-            Preset_Euler = HudElement.RectTransform.localEulerAngles;
-        }
-
         private void Start()
         {
-            if (HideWithStart)
+            if (hide_with_start)
             {
-                ElementIsIn = false;
-                HudElement.element_AlphaSet(0);
-                HudElement.element_Reset(false, false, false);
-                if (DebugState)
+                element_is_in = false;
+                element.element_AlphaSet(0);
+                element.element_Reset(false, false, false);
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素预览器通知", "预览前初始化元素透明度为0！ ", XGUIMsgState.通知);
             }
             else
             {
-                ElementIsIn = true;
+                element_is_in = true;
             }
         }
 
@@ -163,20 +247,31 @@
 
         }
 
+        /// <summary>
+        /// 收集原始姿态数据
+        /// </summary>
+        public void OriginalDataCollect()
+        {
+            // 原始姿态数据收集：获取位置
+            preset_position = element.rect_transform.anchoredPosition3D;
+            // 原始姿态数据收集：获取角度
+            preset_euler = element.rect_transform.localEulerAngles;
+        }
+
         private void ControlUpdate()
         {
-            if (Input.GetKeyDown(key_Element_In))
+            if (Input.GetKeyDown(key_element_in))
             {
                 Preview_Element_In();
             }
 
-            if (Input.GetKeyDown(key_Element_Out))
+            if (Input.GetKeyDown(key_element_out))
             {
                 Preview_Element_Out();
             }
 
-            if (IsEnable)
-                HudElement.PrimitivesTweenGlobalDuration = DurationScaler;
+            if (is_enabled)
+                element.primitives_tween_global_duration = duration_scaler;
         }
 
         /// <summary>
@@ -184,24 +279,24 @@
         /// </summary>
         public void Preview_Element_In()
         {
-            if (PreviewIsRunning)
+            if (preview_is_running)
                 return;
-            if (ElementIsIn)
+            if (element_is_in)
                 return;
-            PreviewIsRunning = true;
+            preview_is_running = true;
 
-            ElementIsIn = true;
+            element_is_in = true;
 
-            if (!IsEnable)
+            if (!is_enabled)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素预览器通知", "预览开关已关闭！ ", XGUIMsgState.错误);
                 return;
             }
-            if (HudElement.AnimateState == XHudElementAnimateState.Animating)
+            if (element.animate_state == XHudElementAnimateState.Animating)
                 return;
             StartCoroutine(Preview_Delay_In());
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素预览器通知", "预览 - 元素进入！ ", XGUIMsgState.通知);
         }
 
@@ -210,45 +305,45 @@
         /// </summary>
         public void Preview_Element_Out()
         {
-            if (PreviewIsRunning)
+            if (preview_is_running)
                 return;
-            if (!ElementIsIn)
+            if (!element_is_in)
                 return;
-            PreviewIsRunning = true;
+            preview_is_running = true;
 
-            ElementIsIn = false;
+            element_is_in = false;
 
-            if (!IsEnable)
+            if (!is_enabled)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素预览器通知", "预览开关已关闭！ ", XGUIMsgState.错误);
                 return;
             }
-            if (HudElement.AnimateState == XHudElementAnimateState.Animating)
+            if (element.animate_state == XHudElementAnimateState.Animating)
                 return;
             StartCoroutine(Preview_Delay_Out());
-            if (DebugState)
+            if (debug_state)
                 XGUI_Utilitys.Console("XHud - 元素预览器通知", "预览 - 元素退出！ ", XGUIMsgState.通知);
         }
 
         IEnumerator Preview_Delay_In()
         {
-            yield return new WaitForSeconds(DelayWithIn);
+            yield return new WaitForSeconds(delay_with_in);
 
             if (act_on_element_preview_in_start != null)
                 act_on_element_preview_in_start();
 
             // 进入前强制透明度 0
-            HudElement.element_AlphaSet(0);
+            element.element_AlphaSet(0);
 
             // 如果 RMS 开启，进入前先强制设置变换信息：根据 RMS 信息获取
-            if (RMS_Enabled && HudElement.RMS_Enabled)
+            if (rms_enabled && element.rms_enabled)
             {
-                for (int i = 0; i < HudElement.RMS_LayoutDatas.Count; i++)
+                for (int i = 0; i < element.rms_layout_datas.Count; i++)
                 {
-                    if (HudElement.RMS_LayoutDatas[i].LayoutName == RMS_Name)
+                    if (element.rms_layout_datas[i].layout_name == rms_name)
                     {
-                        XHud_Manager.Instance.hm_ScreenElement_Initialize_By_RMS(HudElement, RMS_Name, true);
+                        XHud_Manager.instance.hm_ScreenElement_Initialize_By_RMS(element, rms_name, true);
                         break;
                     }
                 }
@@ -256,17 +351,17 @@
             else
             {
                 // 进入前先强制设置位置：原始位置
-                HudElement.element_PositionSet(Preset_Position);
+                element.element_PositionSet(preset_position);
                 // 进入前强制设置角度：原始角度
-                HudElement.element_RotationSet(Preset_Euler);
+                element.element_RotationSet(preset_euler);
             }
 
             // 保险操作：倒退动画
-            HudElement.PrimitiveTweens_Rewind();
+            element.PrimitiveTweens_Rewind();
             // 开始进入
-            HudElement.Element_In(CreateArgs, () =>
+            element.Element_In(motion_create_args, () =>
             {
-                PreviewIsRunning = false;
+                preview_is_running = false;
 
                 if (act_on_element_preview_in_end != null)
                     act_on_element_preview_in_end();
@@ -275,14 +370,14 @@
 
         IEnumerator Preview_Delay_Out()
         {
-            yield return new WaitForSeconds(DelayWithOut);
+            yield return new WaitForSeconds(delay_with_out);
 
             if (act_on_element_preview_out_start != null)
                 act_on_element_preview_out_start();
 
-            HudElement.Element_Out(RecycleArgs, () =>
+            element.Element_Out(motion_recycle_args, () =>
             {
-                PreviewIsRunning = false;
+                preview_is_running = false;
 
                 if (act_on_element_preview_out_end != null)
                     act_on_element_preview_out_end();

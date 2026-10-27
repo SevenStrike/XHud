@@ -86,7 +86,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </list>
         /// </summary>
         [SerializeField]
-        public List<GuideReferDataItem> GuideReferDatas;
+        public List<GuideReferDataItem> guide_refer_datas;
     }
 
     /// <summary>
@@ -108,7 +108,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>在 <c>OnEnable</c> 中构造。</description></item>
         /// </list>
         /// </summary>
-        private SerializedObject BaseObject;
+        private SerializedObject base_object;
         /// <summary>
         /// 构图参考数据列表。
         /// <para/>
@@ -116,7 +116,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>在 <c>LoadReferDes</c> 中由 JSON 反序列化得到。</description></item>
         /// </list>
         /// </summary>
-        public GuideReferDataList GuideReferDataList;
+        public GuideReferDataList guide_refer_data_list;
         /// <summary>
         /// 当前构图类型的参考图片数组。
         /// <para/>
@@ -125,20 +125,30 @@ namespace SevenStrikeModules.XHud.Editor
         /// </list>
         /// </summary>
         [SerializeField]
-        private Texture2D[] ReferImages;
+        private Texture2D[] refer_images;
         #endregion
 
         #region 字段 - 图标
         /// <summary>
-        /// 本窗口所使用的图标资源集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>logo</c>：窗口标题图标。</description></item>
-        /// <item><description><c>left_arrow_r</c> / <c>left_arrow_p</c>：左翻页按钮常态 / 按下图标。</description></item>
-        /// <item><description><c>right_arrow_r</c> / <c>right_arrow_p</c>：右翻页按钮常态 / 按下图标。</description></item>
-        /// </list>
+        /// 窗口标题图标
         /// </summary>
-        private Texture2D logo, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p;
+        private Texture2D logo;
+        /// <summary>
+        /// 左翻页按钮常态图标
+        /// </summary>
+        private Texture2D left_arrow_r;
+        /// <summary>
+        /// 左翻页按钮按下图标
+        /// </summary>
+        private Texture2D left_arrow_p;
+        /// <summary>
+        /// 右翻页按钮常态图标
+        /// </summary>
+        private Texture2D right_arrow_r;
+        /// <summary>
+        /// 右翻页按钮按下图标
+        /// </summary>
+        private Texture2D right_arrow_p;
         #endregion
 
         #region 字段 - 状态
@@ -150,7 +160,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>由 <c>SetGuideType</c> 设置。</description></item>
         /// </list>
         /// </summary>
-        public string GuideType = "垂直对称";
+        public string guide_type = "垂直对称";
         /// <summary>
         /// 当前参考图片的索引。
         /// <para/>
@@ -158,7 +168,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>由左右翻页按钮调整。</description></item>
         /// </list>
         /// </summary>
-        private int referIndex = 0;
+        private int refer_index = 0;
         /// <summary>
         /// 参考图片的横向溢出边距。
         /// <para/>
@@ -196,13 +206,15 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseObject = new SerializedObject(this);
+            base_object = new SerializedObject(this);
 
+            #region 获取图标
             logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/logo");
             left_arrow_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/left_arrow_r");
             left_arrow_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/left_arrow_p");
             right_arrow_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/right_arrow_r");
             right_arrow_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/right_arrow_p");
+            #endregion
         }
         /// <summary>
         /// 窗口销毁时清理。
@@ -230,15 +242,15 @@ namespace SevenStrikeModules.XHud.Editor
         {
             // 读取配置表
             TextAsset value = (TextAsset)AssetDatabase.LoadAssetAtPath($"{XHud_Dashboard.Get_Path_XHUD_CONFIG_Path()}XHudGuideRefer.json", typeof(TextAsset));
-            GuideReferDataList = JsonUtility.FromJson<GuideReferDataList>(value.text);
+            guide_refer_data_list = JsonUtility.FromJson<GuideReferDataList>(value.text);
 
             // 匹配参考说明内容
-            for (int i = 0; i < GuideReferDataList.GuideReferDatas.Count; i++)
+            for (int i = 0; i < guide_refer_data_list.guide_refer_datas.Count; i++)
             {
-                if (GuideReferDataList.GuideReferDatas[i].name == GuideType)
+                if (guide_refer_data_list.guide_refer_datas[i].name == guide_type)
                 {
-                    abbr = GuideReferDataList.GuideReferDatas[i].abbr;
-                    des = GuideReferDataList.GuideReferDatas[i].des;
+                    abbr = guide_refer_data_list.guide_refer_datas[i].abbr;
+                    des = guide_refer_data_list.guide_refer_datas[i].des;
                     break;
                 }
             }
@@ -254,12 +266,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="type">构图类型名称。</param>
         private void LoadReferImages(string type)
         {
-            if (ReferImages == null)
+            if (refer_images == null)
             {
-                ReferImages = new Texture2D[5];
-                for (int i = 0; i < ReferImages.Length; i++)
+                refer_images = new Texture2D[5];
+                for (int i = 0; i < refer_images.Length; i++)
                 {
-                    ReferImages[i] = AssetDatabase.LoadAssetAtPath<Texture2D>($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/ReferImages/{type}/ReferImg_{i}.png");
+                    refer_images[i] = AssetDatabase.LoadAssetAtPath<Texture2D>($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_guide_description/ReferImages/{type}/ReferImg_{i}.png");
                 }
             }
         }
@@ -274,11 +286,11 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="type">构图类型名称。</param>
         public void SetGuideType(string type)
         {
-            GuideType = type;
-            ReferImages = null;
-            referIndex = 0;
+            guide_type = type;
+            refer_images = null;
+            refer_index = 0;
             LoadReferDes();
-            LoadReferImages(GuideType);
+            LoadReferImages(guide_type);
         }
         #endregion
 
@@ -296,7 +308,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             XHud_Manager mgr = XHud_Dashboard.get_manager();
 
-            BaseObject.Update();
+            base_object.Update();
 
             // 关键文字主题色
             string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
@@ -354,10 +366,10 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_space(105);
 
             #region 参考图片 / 参数
-            if (ReferImages == null)
-                LoadReferImages(GuideType);
+            if (refer_images == null)
+                LoadReferImages(guide_type);
 
-            Texture2D icon = ReferImages[referIndex];
+            Texture2D icon = refer_images[refer_index];
             float ratio = (float)icon.width / icon.height;  // 注意要显式转换为float
 
             // 计算保持宽高比的高度
@@ -385,10 +397,10 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0),
                 focus_name: "prev_btn"))
             {
-                if (referIndex <= 0)
-                    referIndex = ReferImages.Length - 1;
+                if (refer_index <= 0)
+                    refer_index = refer_images.Length - 1;
                 else
-                    referIndex--;
+                    refer_index--;
             }
 
             // 右翻页
@@ -402,17 +414,17 @@ namespace SevenStrikeModules.XHud.Editor
                padding: new RectOffset(0, 0, 0, 0),
                focus_name: "next_btn"))
             {
-                if (referIndex >= ReferImages.Length - 1)
-                    referIndex = 0;
+                if (refer_index >= refer_images.Length - 1)
+                    refer_index = 0;
                 else
-                    referIndex++;
+                    refer_index++;
             }
             #endregion
 
             // 构图参考说明 - 构图类型标题
             XGUI.gui_label(
                 rect: new Rect(rect_refer.x, rect_refer.y + (rect_refer.height + 12), rect_refer.width, XGUI.GetSingleLineHeight()),
-                text: new GUIContent($"{GuideType}    <size=11>( <color={hexcol}>{abbr}</color> )</size>"),
+                text: new GUIContent($"{guide_type}    <size=11>( <color={hexcol}>{abbr}</color> )</size>"),
                 text_color: Color.white,
                 size: XGUIFontSize.M,
                 clipping: clipping,
@@ -447,7 +459,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
-            BaseObject.ApplyModifiedProperties();
+            base_object.ApplyModifiedProperties();
 
             Event e = Event.current;
             if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape)

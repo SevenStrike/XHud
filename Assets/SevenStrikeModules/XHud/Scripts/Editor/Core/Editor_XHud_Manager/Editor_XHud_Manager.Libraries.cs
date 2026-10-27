@@ -44,9 +44,9 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
-                prop: Lib_Color,
+                prop: sp_library_colors,
                 status_icon: "icon_field_status",
-                status_icon_color: Lib_Color.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
+                status_icon_color: sp_library_colors.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
             XGUI.layout_property_field(
@@ -54,9 +54,9 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
-                prop: Lib_Curve,
+                prop: sp_library_curves,
                 status_icon: "icon_field_status",
-                status_icon_color: Lib_Curve.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
+                status_icon_color: sp_library_curves.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
             XGUI.layout_property_field(
@@ -64,9 +64,9 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
-                prop: Lib_Sound,
+                prop: sp_library_sounds,
                 status_icon: "icon_field_status",
-                status_icon_color: Lib_Sound.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
+                status_icon_color: sp_library_sounds.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
             XGUI.layout_property_field(
@@ -74,9 +74,9 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
-                prop: Lib_TextStyleLibrary,
+                prop: sp_library_textstyles,
                 status_icon: "icon_field_status",
-                status_icon_color: Lib_TextStyleLibrary.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
+                status_icon_color: sp_library_textstyles.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
             XGUI.layout_property_field(
@@ -84,9 +84,9 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
-                prop: Lib_Motions,
+                prop: sp_library_motions,
                 status_icon: "icon_field_status",
-                status_icon_color: Lib_Motions.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
+                status_icon_color: sp_library_motions.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
             XGUI.layout_property_field(
@@ -94,9 +94,9 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 100,
-                prop: Lib_Transition,
+                prop: sp_library_transitions,
                 status_icon: "icon_field_status",
-                status_icon_color: Lib_Transition.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
+                status_icon_color: sp_library_transitions.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
             XGUI.layout_space(5);

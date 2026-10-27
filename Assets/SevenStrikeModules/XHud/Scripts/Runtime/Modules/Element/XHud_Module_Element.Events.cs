@@ -31,9 +31,9 @@ namespace SevenStrikeModules.XHud
         /// true表示折叠，false表示展开
         /// 用于控制Inspector中事件列表的显示/隐藏
         /// </summary>
-        public bool EventIsFold;
+        public bool event_is_fold;
 
-        public bool ClearEvents_With_Spawn = true;
+        public bool clear_events_with_spawn = true;
 
         /// <summary>
         /// 动作 - 动画播放 - 入场 - 开始

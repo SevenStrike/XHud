@@ -70,7 +70,7 @@ namespace SevenStrikeModules.XHud.Editor
                title_width: 100,
                title_size: XGUIFontSize.M,
                title_anchor: TextAnchor.MiddleLeft,
-               prop: theme_solution_primary,
+               prop: sp_theme_solution_primary,
                options: theme_primary_presetnames,
                opt_text_size: XGUIFontSize.M,
                opt_text_color: Color.black,
@@ -86,10 +86,10 @@ namespace SevenStrikeModules.XHud.Editor
                title_margin: new RectOffset(0, 0, 0, 0),
                act_on_changed: (value) =>
                {
-                   theme_solution_primary.stringValue = value;
-                   theme_solution_primary.serializedObject.ApplyModifiedProperties();
+                   sp_theme_solution_primary.stringValue = value;
+                   sp_theme_solution_primary.serializedObject.ApplyModifiedProperties();
 
-                   xHud_Themes_SliderValueSet(theme_color_primary, XHud_Dashboard.themes_set_primary_color(value));
+                   xHud_Themes_SliderValueSet(sp_theme_color_primary, XHud_Dashboard.themes_set_primary_color(value));
 
                    Editor_XHud_Tool_SceneView_Activate_Aimer.reload();
                });
@@ -101,7 +101,7 @@ namespace SevenStrikeModules.XHud.Editor
             title_width: 100,
             title_size: XGUIFontSize.M,
             title_anchor: TextAnchor.MiddleLeft,
-            prop: theme_solution_group,
+            prop: sp_theme_solution_group,
             options: theme_group_presetnames,
             opt_text_size: XGUIFontSize.M,
             opt_text_color: Color.black,
@@ -117,10 +117,10 @@ namespace SevenStrikeModules.XHud.Editor
             title_margin: new RectOffset(0, 0, 0, 0),
             act_on_changed: (value) =>
             {
-                theme_solution_group.stringValue = value;
-                theme_solution_group.serializedObject.ApplyModifiedProperties();
+                sp_theme_solution_group.stringValue = value;
+                sp_theme_solution_group.serializedObject.ApplyModifiedProperties();
 
-                xHud_Themes_SliderValueSet(theme_color_group, XHud_Dashboard.themes_set_group_color(value));
+                xHud_Themes_SliderValueSet(sp_theme_color_group, XHud_Dashboard.themes_set_group_color(value));
 
                 Editor_XHud_Tool_SceneView_Activate_Aimer.reload();
             });
@@ -132,7 +132,7 @@ namespace SevenStrikeModules.XHud.Editor
             title_width: 100,
             title_size: XGUIFontSize.M,
             title_anchor: TextAnchor.MiddleLeft,
-            prop: theme_solution_sepline,
+            prop: sp_theme_solution_sepline,
             options: theme_sepline_presetnames,
             opt_text_size: XGUIFontSize.M,
             opt_text_color: Color.black,
@@ -148,10 +148,10 @@ namespace SevenStrikeModules.XHud.Editor
             title_margin: new RectOffset(0, 0, 0, 0),
             act_on_changed: (value) =>
             {
-                theme_solution_sepline.stringValue = value;
-                theme_solution_sepline.serializedObject.ApplyModifiedProperties();
+                sp_theme_solution_sepline.stringValue = value;
+                sp_theme_solution_sepline.serializedObject.ApplyModifiedProperties();
 
-                xHud_Themes_SliderValueSet(theme_color_sepline, XHud_Dashboard.themes_set_sepline_color(value));
+                xHud_Themes_SliderValueSet(sp_theme_color_sepline, XHud_Dashboard.themes_set_sepline_color(value));
 
                 Editor_XHud_Tool_SceneView_Activate_Aimer.reload();
             });
@@ -161,7 +161,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 绘制色带基准坐标
             Rect color_rect_primary = XGUI.GetControlRect(false, 1);
-            xHud_ThemeControl(color_rect_primary, theme_color_primary, ThemeColorType.primary);
+            xHud_ThemeControl(color_rect_primary, sp_theme_color_primary, ThemeColorType.primary);
 
             XGUI.layout_seperator(
                 thickness: 1,
@@ -170,7 +170,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 绘制色带基准坐标
             Rect color_rect_group = XGUI.GetControlRect(false, 1);
-            xHud_ThemeControl(color_rect_group, theme_color_group, ThemeColorType.group);
+            xHud_ThemeControl(color_rect_group, sp_theme_color_group, ThemeColorType.group);
 
             XGUI.layout_seperator(
                 thickness: 1,
@@ -179,7 +179,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 绘制色带基准坐标
             Rect color_rect_sepline = XGUI.GetControlRect(false, 1);
-            xHud_ThemeControl(color_rect_sepline, theme_color_sepline, ThemeColorType.sepline);
+            xHud_ThemeControl(color_rect_sepline, sp_theme_color_sepline, ThemeColorType.sepline);
         }
         #endregion
 
@@ -198,9 +198,9 @@ namespace SevenStrikeModules.XHud.Editor
 
             XHud_Dashboard.themes_reset_color();
 
-            xHud_Themes_SliderValueSet(theme_color_primary, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
-            xHud_Themes_SliderValueSet(theme_color_group, XHud_Dashboard.themes_get_color(ThemeColorType.group));
-            xHud_Themes_SliderValueSet(theme_color_sepline, XHud_Dashboard.themes_get_color(ThemeColorType.sepline));
+            xHud_Themes_SliderValueSet(sp_theme_color_primary, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+            xHud_Themes_SliderValueSet(sp_theme_color_group, XHud_Dashboard.themes_get_color(ThemeColorType.group));
+            xHud_Themes_SliderValueSet(sp_theme_color_sepline, XHud_Dashboard.themes_get_color(ThemeColorType.sepline));
 
             Editor_XHud_Tool_SceneView_Activate_Aimer.reload();
         }
@@ -221,9 +221,9 @@ namespace SevenStrikeModules.XHud.Editor
         }
         private void xHud_Themes_ColorUpdateAll()
         {
-            xHud_Themes_ColorUpdate(ThemeColorType.primary, theme_color_primary.vector3Value);
-            xHud_Themes_ColorUpdate(ThemeColorType.group, theme_color_group.vector3Value);
-            xHud_Themes_ColorUpdate(ThemeColorType.sepline, theme_color_sepline.vector3Value);
+            xHud_Themes_ColorUpdate(ThemeColorType.primary, sp_theme_color_primary.vector3Value);
+            xHud_Themes_ColorUpdate(ThemeColorType.group, sp_theme_color_group.vector3Value);
+            xHud_Themes_ColorUpdate(ThemeColorType.sepline, sp_theme_color_sepline.vector3Value);
 
             Editor_XHud_Tool_SceneView_Activate_Aimer.reload();
         }
@@ -247,13 +247,13 @@ namespace SevenStrikeModules.XHud.Editor
         }
         private void xHud_Themes_SolutionReset()
         {
-            theme_solution_primary.stringValue = "默认";
-            theme_solution_group.stringValue = "默认";
-            theme_solution_sepline.stringValue = "默认";
+            sp_theme_solution_primary.stringValue = "默认";
+            sp_theme_solution_group.stringValue = "默认";
+            sp_theme_solution_sepline.stringValue = "默认";
 
-            theme_solution_primary.serializedObject.ApplyModifiedProperties();
-            theme_solution_group.serializedObject.ApplyModifiedProperties();
-            theme_solution_sepline.serializedObject.ApplyModifiedProperties();
+            sp_theme_solution_primary.serializedObject.ApplyModifiedProperties();
+            sp_theme_solution_group.serializedObject.ApplyModifiedProperties();
+            sp_theme_solution_sepline.serializedObject.ApplyModifiedProperties();
         }
         #endregion
 

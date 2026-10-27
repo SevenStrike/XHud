@@ -29,7 +29,7 @@ namespace SevenStrikeModules.XHud
     {
         [SerializeField]
         [Range(0f, 1f)]
-        public Image Highlighter;
+        public Image highlighter;
 
         /// <summary>
         /// XHud元素 - 同步透明度
@@ -38,8 +38,8 @@ namespace SevenStrikeModules.XHud
         {
             Color cc = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             cc.a = 0;
-            Highlighter.color = cc;
-            return Highlighter.xt_Alpha_To(1, 0.16f, true, true, false).SetEase(EaseMode.InOutCubic).SetLoop(1, XTween_LoopType.Yoyo);
+            highlighter.color = cc;
+            return highlighter.xt_Alpha_To(1, 0.16f, true, true, false).SetEase(EaseMode.InOutCubic).SetLoop(1, XTween_LoopType.Yoyo);
         }
     }
 }

@@ -345,7 +345,7 @@ namespace SevenStrikeModules.XHud
         {
             if (EaseMotion)
             {
-                Tog_HandleTweener = XTween.To(() => HandleProgress, x => HandleProgress = x, value, HandleProgressDuration * XHud_Manager.Instance.DurationMultiply).SetEase(ProgressEase).SetAutoKill(true).OnUpdate<float>((v, d, t) =>
+                Tog_HandleTweener = XTween.To(() => HandleProgress, x => HandleProgress = x, value, HandleProgressDuration * XHud_Manager.instance.tween_global_duration).SetEase(ProgressEase).SetAutoKill(true).OnUpdate<float>((v, d, t) =>
                 {
                     ChangingTimer += Time.deltaTime;
                     if (ChangingTimer >= ChangingInterval)
@@ -476,7 +476,7 @@ namespace SevenStrikeModules.XHud
             else
             {
                 if (EaseMotion)
-                    Tog_HandleColorTweener = Tog_Handle.xt_Color_To(value, ColorDuration * XHud_Manager.Instance.DurationMultiply, true).SetEase(ColorEase).SetAutoKill(true).Play();
+                    Tog_HandleColorTweener = Tog_Handle.xt_Color_To(value, ColorDuration * XHud_Manager.instance.tween_global_duration, true).SetEase(ColorEase).SetAutoKill(true).Play();
                 else
                     Tog_Handle.color = value;
             }
@@ -496,7 +496,7 @@ namespace SevenStrikeModules.XHud
             else
             {
                 if (EaseMotion)
-                    Tog_BgColorTweener = Tog_Bg.xt_Color_To(value, ColorDuration * XHud_Manager.Instance.DurationMultiply, true, true, true).SetEase(ColorEase).Play();
+                    Tog_BgColorTweener = Tog_Bg.xt_Color_To(value, ColorDuration * XHud_Manager.instance.tween_global_duration, true, true, true).SetEase(ColorEase).Play();
                 else
                     Tog_Bg.color = value;
             }

@@ -47,12 +47,6 @@ namespace SevenStrikeModules.XHud.Editor
     }
     #endregion
 
-    #region 编辑器主体
-    /// <summary>
-    /// XHud 元素动效库的自定义编辑器。
-    /// <para/>
-    /// 提供动效列表的可视化编辑、右键菜单（代码块 / 修改 / 复制 / 粘贴 / 导出）、导入导出、增删清空等功能。
-    /// </summary>
     [CustomEditor(typeof(XHud_Library_Motion))]
     public class Editor_XHud_Library_Motion : Editor
     {
@@ -62,31 +56,111 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 在 <see cref="OnEnable"/> 中缓存。
         /// </summary>
-        private XHud_Library_Motion BaseScript;
+        private XHud_Library_Motion base_script;
         /// <summary>
         /// 动效参数列表（可重排列表）。
         /// <para/>
         /// 用于驱动 ReorderableList 的绘制与交互。
         /// </summary>
-        private ReorderableList ElementMotionList;
+        private ReorderableList motion_list;
         #endregion
 
         #region 字段 - 序列化属性
         /// <summary>
-        /// 本 Inspector 用到的全部序列化属性引用。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里初始化。
-        /// <para/>
-        /// 覆盖：
-        /// <list type="bullet">
-        /// <item><description>动效参数列表；</description></item>
-        /// <item><description>选中 / 定位索引；</description></item>
-        /// <item><description>过滤 / 查找字符串；</description></item>
-        /// <item><description>列表滚动位置与项高；</description></item>
-        /// <item><description>库名称。</description></item>
-        /// </list>
+        /// 动效参数列表属性
         /// </summary>
-        private SerializedProperty sp_ElementMotionList, sp_SelectedIndex, sp_LocationSelectedIndex, sp_ElementMotionList_Scroller, sp_LibraryName, sp_itemHeight, sp_visibleItemCount, sp_Find, sp_Highlight;
+        private SerializedProperty sp_motion_list;
+        /// <summary>
+        /// 选中项索引属性
+        /// </summary>
+        private SerializedProperty sp_selected_index;
+        /// <summary>
+        /// 定位选中项索引属性
+        /// </summary>
+        private SerializedProperty sp_location_selected_index;
+        /// <summary>
+        /// 动效参数列表滚动位置属性
+        /// </summary>
+        private SerializedProperty sp_motion_list_scroller;
+        /// <summary>
+        /// 库名称属性
+        /// </summary>
+        private SerializedProperty sp_library_name;
+        /// <summary>
+        /// 列表项高度属性
+        /// </summary>
+        private SerializedProperty sp_item_height;
+        /// <summary>
+        /// 可视区域显示元素数量属性
+        /// </summary>
+        private SerializedProperty sp_visible_item_count;
+        /// <summary>
+        /// 查找字符串属性
+        /// </summary>
+        private SerializedProperty sp_find;
+        /// <summary>
+        /// 筛选高亮字符串属性
+        /// </summary>
+        private SerializedProperty sp_highlight;
+        #endregion
+
+        #region 字段 - 图标
+        /// <summary>
+        /// 详情按钮常态图标
+        /// </summary>
+        private Texture2D btn_icon_details_released;
+        /// <summary>
+        /// 详情按钮按下图标
+        /// </summary>
+        private Texture2D btn_icon_details_press;
+        /// <summary>
+        /// 动效参数类型 - 移动图标
+        /// </summary>
+        private Texture2D Icon_eleparam_type_move;
+        /// <summary>
+        /// 动效参数类型 - 旋转图标
+        /// </summary>
+        private Texture2D Icon_eleparam_type_rot;
+        /// <summary>
+        /// 导入按钮按下图标
+        /// </summary>
+        private Texture2D import_p;
+        /// <summary>
+        /// 导入按钮常态图标
+        /// </summary>
+        private Texture2D import_r;
+        /// <summary>
+        /// 导出按钮按下图标
+        /// </summary>
+        private Texture2D export_p;
+        /// <summary>
+        /// 导出按钮常态图标
+        /// </summary>
+        private Texture2D export_r;
+        /// <summary>
+        /// 清空按钮按下图标
+        /// </summary>
+        private Texture2D clear_p;
+        /// <summary>
+        /// 清空按钮常态图标
+        /// </summary>
+        private Texture2D clear_r;
+        /// <summary>
+        /// 创建按钮按下图标
+        /// </summary>
+        private Texture2D create_p;
+        /// <summary>
+        /// 创建按钮常态图标
+        /// </summary>
+        private Texture2D create_r;
+        /// <summary>
+        /// 删除按钮按下图标
+        /// </summary>
+        private Texture2D delete_p;
+        /// <summary>
+        /// 删除按钮常态图标
+        /// </summary>
+        private Texture2D delete_r;
         #endregion
 
         #region 字段 - 参数
@@ -100,15 +174,6 @@ namespace SevenStrikeModules.XHud.Editor
         /// 屏蔽颜色透明度。
         /// </summary>
         private float blocked_alp = 0.45f;
-        #endregion
-
-        #region 字段 - 图标
-        /// <summary>
-        /// 标题 / 按钮 / 图标资源缓存。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里加载。
-        /// </summary>
-        private Texture2D btn_icon_details_released, btn_icon_details_press, Icon_eleparam_type_move, Icon_eleparam_type_rot, import_p, import_r, export_p, export_r, clear_p, clear_r, create_p, create_r, delete_p, delete_r;
         #endregion
 
         #region 字段 - 绘制缓存
@@ -146,18 +211,18 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseScript = (XHud_Library_Motion)target;
+            base_script = (XHud_Library_Motion)target;
 
             #region 获取序列化属性
-            sp_LibraryName = serializedObject.FindProperty("LibraryName");
-            sp_ElementMotionList = serializedObject.FindProperty("ElementMotionList");
-            sp_SelectedIndex = serializedObject.FindProperty("SelectedIndex");
-            sp_LocationSelectedIndex = serializedObject.FindProperty("LocationSelectedIndex");
-            sp_ElementMotionList_Scroller = serializedObject.FindProperty("ElementMotionList_Scroller");
-            sp_itemHeight = serializedObject.FindProperty("itemHeight");
-            sp_visibleItemCount = serializedObject.FindProperty("visibleItemCount");
-            sp_Find = serializedObject.FindProperty("Find");
-            sp_Highlight = serializedObject.FindProperty("Highlight");
+            sp_library_name = serializedObject.FindProperty(nameof(XHud_Library_Motion.library_name));
+            sp_motion_list = serializedObject.FindProperty(nameof(XHud_Library_Motion.motion_list));
+            sp_selected_index = serializedObject.FindProperty(nameof(XHud_Library_Motion.selected_index));
+            sp_location_selected_index = serializedObject.FindProperty(nameof(XHud_Library_Motion.location_selected_index));
+            sp_motion_list_scroller = serializedObject.FindProperty(nameof(XHud_Library_Motion.motion_list_scroller));
+            sp_item_height = serializedObject.FindProperty(nameof(XHud_Library_Motion.item_height));
+            sp_visible_item_count = serializedObject.FindProperty(nameof(XHud_Library_Motion.visible_item_count));
+            sp_find = serializedObject.FindProperty(nameof(XHud_Library_Motion.find));
+            sp_highlight = serializedObject.FindProperty(nameof(XHud_Library_Motion.highlight));
             #endregion
 
             #region 获取图标
@@ -178,17 +243,17 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             //设定列表项高度值
-            sp_itemHeight.floatValue = 80;
-            sp_itemHeight.serializedObject.ApplyModifiedProperties();
+            sp_item_height.floatValue = 80;
+            sp_item_height.serializedObject.ApplyModifiedProperties();
 
-            sp_visibleItemCount.intValue = 6;
-            sp_visibleItemCount.serializedObject.ApplyModifiedProperties();
+            sp_visible_item_count.intValue = 6;
+            sp_visible_item_count.serializedObject.ApplyModifiedProperties();
 
             blocked_col = new Color(0, 0, 0, blocked_alp);
 
-            #region ReorderableList - ElementMotionList
-            ElementMotionList = new ReorderableList(serializedObject, sp_ElementMotionList, true, true, true, true);
-            ElementMotionList.drawElementCallback = MotionList_DrawElementCallback;
+            #region ReorderableList
+            motion_list = new ReorderableList(serializedObject, sp_motion_list, true, true, true, true);
+            motion_list.drawElementCallback = MotionList_DrawElementCallback;
             #endregion
         }
         /// <summary>
@@ -205,20 +270,20 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (target != null)
             {
-                sp_ElementMotionList_Scroller.vector2Value = Vector2.zero;
-                sp_ElementMotionList_Scroller.serializedObject.ApplyModifiedProperties();
+                sp_motion_list_scroller.vector2Value = Vector2.zero;
+                sp_motion_list_scroller.serializedObject.ApplyModifiedProperties();
 
-                sp_LocationSelectedIndex.intValue = -1;
-                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                sp_location_selected_index.intValue = -1;
+                sp_location_selected_index.serializedObject.ApplyModifiedProperties();
 
-                sp_SelectedIndex.intValue = -1;
-                sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+                sp_selected_index.intValue = -1;
+                sp_selected_index.serializedObject.ApplyModifiedProperties();
 
-                sp_Find.stringValue = string.Empty;
-                sp_Find.serializedObject.ApplyModifiedProperties();
+                sp_find.stringValue = string.Empty;
+                sp_find.serializedObject.ApplyModifiedProperties();
 
-                sp_Highlight.stringValue = string.Empty;
-                sp_Highlight.serializedObject.ApplyModifiedProperties();
+                sp_highlight.stringValue = string.Empty;
+                sp_highlight.serializedObject.ApplyModifiedProperties();
             }
         }
         /// <summary>
@@ -268,7 +333,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_LibraryName,
+                prop: sp_library_name,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -279,12 +344,12 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_Highlight,
+                prop: sp_highlight,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
-                sp_LocationSelectedIndex.intValue = -1;
-                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                sp_location_selected_index.intValue = -1;
+                sp_location_selected_index.serializedObject.ApplyModifiedProperties();
             }
             #endregion
 
@@ -295,19 +360,19 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_Find,
+                prop: sp_find,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
-                if (!string.IsNullOrEmpty(sp_Find.stringValue))
-                    BaseScript.ElementMotionLibrary_Location_Find(sp_Find.stringValue);
+                if (!string.IsNullOrEmpty(sp_find.stringValue))
+                    base_script.ElementMotionLibrary_Location_Find(sp_find.stringValue);
                 else
                 {
-                    sp_SelectedIndex.intValue = -1;
-                    sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+                    sp_selected_index.intValue = -1;
+                    sp_selected_index.serializedObject.ApplyModifiedProperties();
 
-                    sp_LocationSelectedIndex.intValue = -1;
-                    sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                    sp_location_selected_index.intValue = -1;
+                    sp_location_selected_index.serializedObject.ApplyModifiedProperties();
                 }
             }
             #endregion
@@ -316,7 +381,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 快捷功能
-            if (string.IsNullOrEmpty(sp_Highlight.stringValue))
+            if (string.IsNullOrEmpty(sp_highlight.stringValue))
             {
                 if (!Application.isPlaying)
                 {
@@ -390,8 +455,8 @@ namespace SevenStrikeModules.XHud.Editor
                         {
                             return;
                         }
-                        sp_ElementMotionList.ClearArray();
-                        sp_ElementMotionList.serializedObject.ApplyModifiedProperties();
+                        sp_motion_list.ClearArray();
+                        sp_motion_list.serializedObject.ApplyModifiedProperties();
                         return;
                     }
                     #endregion
@@ -408,7 +473,7 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 14,
                         height: 14))
                     {
-                        MotionList_Add(ElementMotionList);
+                        MotionList_Add(motion_list);
                         return;
                     }
                     #endregion
@@ -425,7 +490,7 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 14,
                         height: 14))
                     {
-                        MotionList_Remove(ElementMotionList);
+                        MotionList_Remove(motion_list);
                         return;
                     }
                     #endregion
@@ -460,12 +525,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 根据高亮过滤条件屏蔽或启用 GUI。
         /// <para/>
-        /// 若名称不包含 <see cref="sp_Highlight"/> 的当前值，则禁用 GUI。
+        /// 若名称不包含 <see cref="sp_highlight"/> 的当前值，则禁用 GUI。
         /// </summary>
         /// <param name="name">待检查的名称</param>
         private void BlockGUI(string name)
         {
-            if (!name.Contains(sp_Highlight.stringValue))
+            if (!name.Contains(sp_highlight.stringValue))
             {
                 GUI.enabled = false;
             }
@@ -495,7 +560,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="isFocused">是否聚焦</param>
         private void MotionList_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty prop = sp_ElementMotionList.GetArrayElementAtIndex(index);
+            SerializedProperty prop = sp_motion_list.GetArrayElementAtIndex(index);
             SerializedProperty sp_name = prop.FindPropertyRelative("Name");
             SerializedProperty sp_descript = prop.FindPropertyRelative("Des");
             SerializedProperty sp_mode = prop.FindPropertyRelative("Mode");
@@ -551,7 +616,7 @@ namespace SevenStrikeModules.XHud.Editor
             string m_color = XGUI_Utilitys.Color_To_HexString(XGUI.GetXGUIColor(XGUIColor.工业蓝), true);
 
             #region 样式名称
-            drawelement_rect.Set(rect.x + 40, rect.y + 5, rect.width - (string.IsNullOrEmpty(sp_Find.stringValue) ? 95 : 155), 20);
+            drawelement_rect.Set(rect.x + 40, rect.y + 5, rect.width - (string.IsNullOrEmpty(sp_find.stringValue) ? 95 : 155), 20);
             XGUI.gui_label(
                 rect: drawelement_rect,
                 text: new GUIContent($"<b><color={(sp_mode.intValue == 0 ? t_color : m_color)}>{(sp_mode.intValue == 0 ? "C " : "R")}</color></b>    <color=#ffffff>|</color>    <color={h_color}>{sp_name.stringValue}</color>"),
@@ -723,7 +788,7 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0),
                 focus_name: "fav_btn"))
             {
-                XHud.XHud_LibraryArg_Motion motion = new XHud.XHud_LibraryArg_Motion(BaseScript.ElementMotionList[index]);
+                XHud.XHud_LibraryArg_Motion motion = new XHud.XHud_LibraryArg_Motion(base_script.motion_list[index]);
                 OpenParameterSetter(motion, (HudElementMotionType)motion.Mode, sp_name.stringValue, index);
             }
             #endregion
@@ -753,7 +818,7 @@ namespace SevenStrikeModules.XHud.Editor
                     if (sp_mode.intValue == 0)
                     {
                         Mode = "生成动效参数代码块";
-                        Motion_Creator hc = MotionParam_Convert_Crc(sp_crc);
+                        Motion_Creator hc = MotionParam_Convert_Create(sp_crc);
                         #region 代码块
                         str_codeblock = $"Motion_Creator cre = new Motion_Creator();\ncre.anchor = XHudAnchor. {hc.anchor.ToString()} ;\n cre.Movement = new MotionNode_Movement();\ncre.Movement.Movement = HudMotion_Movement. {hc.Movement.Movement.ToString()} ;\ncre.Movement.Distance = {hc.Movement.Distance}f;\ncre.Movement.Duration = {hc.Movement.Duration}f;\ncre.Movement.Delay = {hc.Movement.Delay}f;\ncre.Movement.CurveName =\"\";\ncre.Movement.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(cre.Movement.CurveName);\ncre.Movement.Ease = EaseMode. {hc.Movement.Ease.ToString()} ;\n cre.Rotation = new MotionNode_Rotation();\ncre.Rotation.Rotation = HudMotion_Rotation. {hc.Rotation.Rotation.ToString()} ;\ncre.Rotation.Degree = {hc.Rotation.Degree}f;\ncre.Rotation.Duration = {hc.Rotation.Duration}f;\ncre.Rotation.Delay = {hc.Rotation.Delay}f;\ncre.Rotation.CurveName = \"\";\ncre.Rotation.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(cre.Rotation.CurveName);\ncre.Rotation.Ease = EaseMode. {hc.Rotation.Ease.ToString()} ;\n cre.Alpha = new MotionNode_Alpha();\ncre.Alpha.Duration = {hc.Alpha.Duration}f;\ncre.Alpha.Delay = {hc.Alpha.Delay}f;\ncre.Alpha.CurveName =\"\";\ncre.Alpha.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(cre.Alpha.CurveName);\ncre.Alpha.Ease = EaseMode. {hc.Alpha.Ease} ;";
                         #endregion
@@ -761,7 +826,7 @@ namespace SevenStrikeModules.XHud.Editor
                     if (sp_mode.intValue == 1)
                     {
                         Mode = "回收动效参数代码块";
-                        Motion_Recycler hr = MotionParam_Convert_Rec(sp_rec);
+                        Motion_Recycler hr = MotionParam_Convert_Recycle(sp_rec);
                         #region 代码块
                         str_codeblock = $"Motion_Recycler rec = new Motion_Recycler();\n rec.Movement = new MotionNode_Movement();\n rec.Movement.Movement = HudMotion_Movement. {hr.Movement.Movement.ToString()} ;\n rec.Movement.Distance = {hr.Movement.Distance}f;\n rec.Movement.Duration = {hr.Movement.Duration}f;\n rec.Movement.Delay = {hr.Movement.Delay}f;\n rec.Movement.CurveName = \"\";\n rec.Movement.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Movement.CurveName);\n rec.Movement.Ease = EaseMode. {hr.Movement.Ease.ToString()} ;\n rec.Rotation = new MotionNode_Rotation();\n rec.Rotation.Rotation = HudMotion_Rotation. {hr.Rotation.Rotation.ToString()} ;\n rec.Rotation.Degree = {hr.Rotation.Degree}f;\n rec.Rotation.Duration = {hr.Rotation.Duration}f;\n rec.Rotation.Delay = {hr.Rotation.Delay}f;\n rec.Rotation.CurveName = \"\";\n rec.Rotation.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Rotation.CurveName);\n rec.Rotation.Ease = EaseMode. {hr.Rotation.Ease.ToString()} ;\n rec.Alpha = new MotionNode_Alpha();\n rec.Alpha.Duration = {hr.Alpha.Duration}f;\n rec.Alpha.Delay = {hr.Alpha.Delay}f;\n rec.Alpha.CurveName = \"\";\n rec.Alpha.Curve = XHud_Dashboard.HudManagerGet().Hud_Curves.CurveLibrary_GetCurve(rec.Alpha.CurveName);\n rec.Alpha.Ease = EaseMode. {hr.Alpha.Ease} ;";
                         #endregion
@@ -780,7 +845,7 @@ namespace SevenStrikeModules.XHud.Editor
                 });
                 menu.AddItem(new GUIContent("E (修改动效)"), false, () =>
                 {
-                    XHud.XHud_LibraryArg_Motion motion = new XHud.XHud_LibraryArg_Motion(BaseScript.ElementMotionList[index]);
+                    XHud.XHud_LibraryArg_Motion motion = new XHud.XHud_LibraryArg_Motion(base_script.motion_list[index]);
                     OpenParameterSetter(motion, (HudElementMotionType)motion.Mode, sp_name.stringValue, index);
                     return;
                 });
@@ -793,12 +858,12 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         Mode = "生成动效";
 
-                        str_jsons = JsonUtility.ToJson(MotionParam_Convert_Crc(sp_crc));
+                        str_jsons = JsonUtility.ToJson(MotionParam_Convert_Create(sp_crc));
                     }
                     if (sp_mode.intValue == 1)
                     {
                         Mode = "回收动效";
-                        str_jsons = JsonUtility.ToJson(MotionParam_Convert_Rec(sp_rec));
+                        str_jsons = JsonUtility.ToJson(MotionParam_Convert_Recycle(sp_rec));
                     }
 
                     XGUI.x_Editor_Data_Set_With_String("xData_MotionArgs", str_jsons);
@@ -953,7 +1018,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         case 0:
                             Mode = "元素生成动效参数";
-                            Motion_Creator hc = MotionParam_Convert_Crc(sp_crc);
+                            Motion_Creator hc = MotionParam_Convert_Create(sp_crc);
                             ExportMotions eem_crc = new ExportMotions();
                             eem_crc.ElementMotionList = new List<XHud.XHud_LibraryArg_Motion>();
                             XHud.XHud_LibraryArg_Motion motion_crc = new XHud.XHud_LibraryArg_Motion();
@@ -964,7 +1029,7 @@ namespace SevenStrikeModules.XHud.Editor
                             eem_crc.ElementMotionList.Add(motion_crc);
 
                             json = JsonUtility.ToJson(eem_crc);
-                            path = EditorUtility.SaveFilePanel("请选择导出动效参数Json文件的路径", Application.dataPath, $"ElementMotion_CRC_{sp_LibraryName.stringValue}_{sp_name.stringValue}", "json");
+                            path = EditorUtility.SaveFilePanel("请选择导出动效参数Json文件的路径", Application.dataPath, $"ElementMotion_CRC_{sp_library_name.stringValue}_{sp_name.stringValue}", "json");
 
                             if (!string.IsNullOrEmpty(path))
                             {
@@ -997,7 +1062,7 @@ namespace SevenStrikeModules.XHud.Editor
                             break;
                         case 1:
                             Mode = "元素回收动效参数";
-                            Motion_Recycler hr = MotionParam_Convert_Rec(sp_rec);
+                            Motion_Recycler hr = MotionParam_Convert_Recycle(sp_rec);
                             ExportMotions eem_rec = new ExportMotions();
                             eem_rec.ElementMotionList = new List<XHud.XHud_LibraryArg_Motion>();
                             XHud.XHud_LibraryArg_Motion motion_rec = new XHud.XHud_LibraryArg_Motion();
@@ -1008,7 +1073,7 @@ namespace SevenStrikeModules.XHud.Editor
                             eem_rec.ElementMotionList.Add(motion_rec);
 
                             json = JsonUtility.ToJson(eem_rec);
-                            path = EditorUtility.SaveFilePanel("请选择导出动效参数Json文件的路径", Application.dataPath, $"ElementMotion_REC_{sp_LibraryName.stringValue}_{sp_name.stringValue}", "json");
+                            path = EditorUtility.SaveFilePanel("请选择导出动效参数Json文件的路径", Application.dataPath, $"ElementMotion_REC_{sp_library_name.stringValue}_{sp_name.stringValue}", "json");
 
                             if (!string.IsNullOrEmpty(path))
                             {
@@ -1050,13 +1115,13 @@ namespace SevenStrikeModules.XHud.Editor
 
             GUI.enabled = true;
 
-            if (!sp_name.stringValue.Contains(sp_Highlight.stringValue))
+            if (!sp_name.stringValue.Contains(sp_highlight.stringValue))
             {
                 drawelement_rect.Set(rect.x - 20, rect.y, rect.width + 20, rect.height);
                 EditorGUI.DrawRect(drawelement_rect, blocked_col);
             }
 
-            if (index == sp_LocationSelectedIndex.intValue)
+            if (index == sp_location_selected_index.intValue)
             {
                 drawelement_rect.Set(rect.width - 120, rect.y + 15, 50, 20);
                 XGUI.gui_label(
@@ -1078,47 +1143,47 @@ namespace SevenStrikeModules.XHud.Editor
         private void DrawMotionList()
         {
             // 绘制滚动视图
-            scrollview_rect = GUILayoutUtility.GetRect(0, sp_visibleItemCount.intValue * sp_itemHeight.floatValue);
-            sp_ElementMotionList_Scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_ElementMotionList_Scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, ElementMotionList.count * sp_itemHeight.floatValue), false, true);
+            scrollview_rect = GUILayoutUtility.GetRect(0, sp_visible_item_count.intValue * sp_item_height.floatValue);
+            sp_motion_list_scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_motion_list_scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, motion_list.count * sp_item_height.floatValue), false, true);
 
             // 计算可视区域的起始和结束索引
-            int startIndex = Mathf.FloorToInt(sp_ElementMotionList_Scroller.vector2Value.y / sp_itemHeight.floatValue);
-            int endIndex = Mathf.CeilToInt((sp_ElementMotionList_Scroller.vector2Value.y + scrollview_rect.height) / sp_itemHeight.floatValue);
+            int startIndex = Mathf.FloorToInt(sp_motion_list_scroller.vector2Value.y / sp_item_height.floatValue);
+            int endIndex = Mathf.CeilToInt((sp_motion_list_scroller.vector2Value.y + scrollview_rect.height) / sp_item_height.floatValue);
 
             // 只绘制可视区域内的元素
-            for (int i = startIndex; i < endIndex && i < ElementMotionList.count; i++)
+            for (int i = startIndex; i < endIndex && i < motion_list.count; i++)
             {
-                SerializedProperty prop = sp_ElementMotionList.GetArrayElementAtIndex(i);
+                SerializedProperty prop = sp_motion_list.GetArrayElementAtIndex(i);
                 SerializedProperty sp_name = prop.FindPropertyRelative("Name");
 
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
                 // 如果当前元素被选中，绘制选中效果
-                if (sp_name.stringValue.Contains(sp_Highlight.stringValue))
+                if (sp_name.stringValue.Contains(sp_highlight.stringValue))
                 {
-                    if (sp_SelectedIndex.intValue == i)
+                    if (sp_selected_index.intValue == i)
                     {
                         // 高亮标记表示选中
-                        item_rect.Set(1, i * sp_itemHeight.floatValue + 12, 5, 5);
+                        item_rect.Set(1, i * sp_item_height.floatValue + 12, 5, 5);
                         EditorGUI.DrawRect(item_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                         // 高亮背景表示选中
-                        item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width + 20, sp_itemHeight.floatValue);
+                        item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width + 20, sp_item_height.floatValue);
                         EditorGUI.DrawRect(item_rect, SelectedBg);
                     }
                 }
 
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
-                ElementMotionList.drawElementCallback.Invoke(item_rect, i, i == ElementMotionList.index, true);
+                item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
+                motion_list.drawElementCallback.Invoke(item_rect, i, i == motion_list.index, true);
 
                 // 检测鼠标是否在当前元素区域内
                 if (item_rect.Contains(Event.current.mousePosition))
                 {
                     if (Event.current.type == EventType.MouseDown)
                     {
-                        if (sp_name.stringValue.Contains(sp_Highlight.stringValue))
+                        if (sp_name.stringValue.Contains(sp_highlight.stringValue))
                         {
                             // 更新选中项
-                            sp_SelectedIndex.intValue = i;
+                            sp_selected_index.intValue = i;
 
                             // 标记界面需要更新
                             GUI.changed = true;
@@ -1143,8 +1208,8 @@ namespace SevenStrikeModules.XHud.Editor
             if (list.count <= 0)
                 return;
 
-            sp_ElementMotionList.DeleteArrayElementAtIndex(list.index);
-            sp_ElementMotionList.serializedObject.ApplyModifiedProperties();
+            sp_motion_list.DeleteArrayElementAtIndex(list.index);
+            sp_motion_list.serializedObject.ApplyModifiedProperties();
         }
         /// <summary>
         /// 列表增加项。
@@ -1157,15 +1222,15 @@ namespace SevenStrikeModules.XHud.Editor
         private void MotionList_Add(ReorderableList list)
         {
             SerializedProperty prop = null;
-            if (sp_ElementMotionList.arraySize <= 0)
+            if (sp_motion_list.arraySize <= 0)
             {
-                sp_ElementMotionList.InsertArrayElementAtIndex(0);
-                prop = sp_ElementMotionList.GetArrayElementAtIndex(0);
+                sp_motion_list.InsertArrayElementAtIndex(0);
+                prop = sp_motion_list.GetArrayElementAtIndex(0);
             }
             else
             {
-                sp_ElementMotionList.InsertArrayElementAtIndex(list.index);
-                prop = sp_ElementMotionList.GetArrayElementAtIndex(list.index);
+                sp_motion_list.InsertArrayElementAtIndex(list.index);
+                prop = sp_motion_list.GetArrayElementAtIndex(list.index);
 
             }
             prop.FindPropertyRelative("Name").stringValue = "NewMotion";
@@ -1226,7 +1291,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         /// <param name="prop">动效生成参数的序列化属性</param>
         /// <returns>转换后的 <see cref="Motion_Creator"/> 实例</returns>
-        private Motion_Creator MotionParam_Convert_Crc(SerializedProperty prop)
+        private Motion_Creator MotionParam_Convert_Create(SerializedProperty prop)
         {
             Motion_Creator hc = new Motion_Creator();
             hc.anchor = (XHudAnchor)prop.FindPropertyRelative("anchor").enumValueIndex;
@@ -1259,7 +1324,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         /// <param name="prop">动效回收参数的序列化属性</param>
         /// <returns>转换后的 <see cref="Motion_Recycler"/> 实例</returns>
-        private Motion_Recycler MotionParam_Convert_Rec(SerializedProperty prop)
+        private Motion_Recycler MotionParam_Convert_Recycle(SerializedProperty prop)
         {
             Motion_Recycler hr = new Motion_Recycler();
             hr.Movement.Movement = (HudMotion_Movement)prop.FindPropertyRelative("Movement.Movement").enumValueIndex;
@@ -1336,7 +1401,7 @@ namespace SevenStrikeModules.XHud.Editor
                         ExportMotions info = JsonUtility.FromJson<ExportMotions>(json);
                         for (int i = 0; i < info.ElementMotionList.Count; i++)
                         {
-                            BaseScript.ElementMotion_Add(info.ElementMotionList[i]);
+                            base_script.ElementMotion_Add(info.ElementMotionList[i]);
                         }
                     }
                     break;
@@ -1344,7 +1409,7 @@ namespace SevenStrikeModules.XHud.Editor
                     if (!string.IsNullOrEmpty(path))
                     {
                         string json = File.ReadAllText(path);
-                        BaseScript.ElementMotionList = JsonUtility.FromJson<ExportMotions>(json).ElementMotionList;
+                        base_script.motion_list = JsonUtility.FromJson<ExportMotions>(json).ElementMotionList;
                     }
                     break;
             }
@@ -1356,7 +1421,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void ExportMotions()
         {
-            string path_rec = EditorUtility.SaveFilePanel("请选择导出动效参数文件的路径", Application.dataPath, "ElementMotions_" + sp_LibraryName.stringValue, "json");
+            string path_rec = EditorUtility.SaveFilePanel("请选择导出动效参数文件的路径", Application.dataPath, "ElementMotions_" + sp_library_name.stringValue, "json");
 
             if (string.IsNullOrEmpty(path_rec))
             {
@@ -1378,7 +1443,7 @@ namespace SevenStrikeModules.XHud.Editor
                 return;
 
             ExportMotions eem = new ExportMotions();
-            eem.ElementMotionList = BaseScript.ElementMotionList;
+            eem.ElementMotionList = base_script.motion_list;
 
             string json = JsonUtility.ToJson(eem);
             File.WriteAllText(path_rec, json);
@@ -1412,19 +1477,18 @@ namespace SevenStrikeModules.XHud.Editor
             window.titleContent = new GUIContent("XHud - 元素动效资源修改器");
             XGUI.CenterEditorWindow(new Vector2Int(348, type == HudElementMotionType.Creator ? 850 : 780), window);
 
-            window.SetElementMotion(motion.Crc);
-            window.SetElementMotion(motion.Rec);
-            window.SetElementMotionType(type);
-            window.SetLibrarySetterMode(LibrarySetterMode.修改库源参数);
-            window.SetButtonText("更新", "取消");
-            window.SetTitle("元素动效资源修改器");
-            window.SetInfo(motion.Name, motion.Des);
-            window.ModifiedIndex = index;
-            window.SetTarget_Hud_MotionLibrary(BaseScript);
+            window.set_motion(motion.Crc);
+            window.set_motion(motion.Rec);
+            window.set_motion_type(type);
+            window.set_library_setter_mode(LibrarySetterMode.修改库源参数);
+            window.set_button_text("更新", "取消");
+            window.set_title("元素动效资源修改器");
+            window.set_info(motion.Name, motion.Des);
+            window.modified_index = index;
+            window.set_target_motion_library(base_script);
             //window.ShowModal();
             window.Show();
         }
         #endregion
     }
-    #endregion
 }

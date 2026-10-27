@@ -23,7 +23,6 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
-    using System;
     using UnityEditor;
     using UnityEngine;
 
@@ -46,7 +45,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>用于设置窗口尺寸与显示。</description></item>
         /// </list>
         /// </summary>
-        static Editor_XHud_About Window;
+        static Editor_XHud_About window;
         #endregion
 
         #region 字段 - 序列化属性
@@ -76,10 +75,10 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem("Tools/XHud/About #a")]
         static void Init()
         {
-            Window = (Editor_XHud_About)EditorWindow.GetWindow(typeof(Editor_XHud_About), true, "关于XHud的信息", true);
-            Window.minSize = new Vector2(350, 430);
-            Window.maxSize = Window.minSize;
-            Window.Show();
+            window = (Editor_XHud_About)EditorWindow.GetWindow(typeof(Editor_XHud_About), true, "关于XHud的信息", true);
+            window.minSize = new Vector2(350, 430);
+            window.maxSize = window.minSize;
+            window.Show();
         }
 
         private void OnEnable()

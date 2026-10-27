@@ -36,24 +36,24 @@ namespace SevenStrikeModules.XHud.Editor
             //--判断当前元素是否在场景中
             if (!IsInPrefabStageMode())
             {
-                if (!string.IsNullOrEmpty(BaseScript.gameObject.scene.name))
+                if (!string.IsNullOrEmpty(base_script.gameObject.scene.name))
                 {
-                    if (RMS_Enabled.boolValue)
+                    if (sp_rms_enabled.boolValue)
                     {
                         #region 以Hud管理器中指定的RMS布局方案来对此元素进行坐标信息复位
 
-                        string solution = HudManager.hm_RMS_GetCurrentSolution();
+                        string solution = hud_manager.hm_RMS_GetCurrentSolution();
 
                         if (Targets_Selected())
                         {
-                            for (int i = 0; i < SelectedObjects.Length; i++)
+                            for (int i = 0; i < selected_objects.Length; i++)
                             {
-                                RMS_Preview(SelectedObjects[i], SelectedObjects[i].Alpha, Vector3.zero, solution, true);
+                                RMS_Preview(selected_objects[i], selected_objects[i].alpha, Vector3.zero, solution, true);
                             }
                         }
                         else
                         {
-                            RMS_Preview(BaseScript, Alpha.floatValue, Vector3.zero, solution, true);
+                            RMS_Preview(base_script, sp_alpha.floatValue, Vector3.zero, solution, true);
                         }
                         #endregion
                     }
@@ -68,11 +68,11 @@ namespace SevenStrikeModules.XHud.Editor
         private bool RMS_IsExist()
         {
             bool isExist = false;
-            for (int i = 0; i < RMS_LayoutDatas.arraySize; i++)
+            for (int i = 0; i < sp_rms_layout_datas.arraySize; i++)
             {
-                SerializedProperty sp_name = RMS_LayoutDatas.GetArrayElementAtIndex(i).FindPropertyRelative("LayoutName");
+                SerializedProperty sp_name = sp_rms_layout_datas.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Element_RMS_LayoutData.layout_name));
 
-                if (sp_name.stringValue == RMS_Name.stringValue)
+                if (sp_name.stringValue == sp_rms_name.stringValue)
                 {
                     isExist = true;
                     break;
@@ -90,7 +90,7 @@ namespace SevenStrikeModules.XHud.Editor
             Element_RMS_LayoutData info = new Element_RMS_LayoutData();
 
             XHudAnchor anchor = XHudAnchor.中心;
-            string ParentName = BaseScript.transform.parent.name;
+            string ParentName = base_script.transform.parent.name;
 
             if (ParentName == "Anchor_B")
             {
@@ -137,13 +137,13 @@ namespace SevenStrikeModules.XHud.Editor
                 anchor = XHudAnchor.顶层;
             }
 
-            info.Anchor = anchor;
-            info.AnchorMin = BaseScript.RectTransform.anchorMin;
-            info.AnchorMax = BaseScript.RectTransform.anchorMax;
-            info.Pivot = BaseScript.RectTransform.pivot;
-            info.Position = BaseScript.RectTransform.anchoredPosition3D;
-            info.Euler = BaseScript.RectTransform.localEulerAngles;
-            info.Scale = BaseScript.RectTransform.localScale;
+            info.anchor = anchor;
+            info.anchor_min = base_script.rect_transform.anchorMin;
+            info.anchor_max = base_script.rect_transform.anchorMax;
+            info.pivot = base_script.rect_transform.pivot;
+            info.position = base_script.rect_transform.anchoredPosition3D;
+            info.euler = base_script.rect_transform.localEulerAngles;
+            info.scale = base_script.rect_transform.localScale;
 
             return info;
         }
@@ -154,25 +154,25 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="property"></param>
         private void RMS_Set(SerializedProperty property)
         {
-            SerializedProperty sp_Anchor = property.FindPropertyRelative("Anchor");
-            SerializedProperty sp_Position = property.FindPropertyRelative("Position");
-            SerializedProperty sp_Euler = property.FindPropertyRelative("Euler");
-            SerializedProperty sp_Scale = property.FindPropertyRelative("Scale");
-            SerializedProperty sp_AnchorMin = property.FindPropertyRelative("AnchorMin");
-            SerializedProperty sp_AnchorMax = property.FindPropertyRelative("AnchorMax");
-            SerializedProperty sp_Pivot = property.FindPropertyRelative("Pivot");
-            SerializedProperty sp_LayoutName = property.FindPropertyRelative("LayoutName");
+            SerializedProperty sp_anchor = property.FindPropertyRelative(nameof(Element_RMS_LayoutData.anchor));
+            SerializedProperty sp_position = property.FindPropertyRelative(nameof(Element_RMS_LayoutData.position));
+            SerializedProperty sp_euler = property.FindPropertyRelative(nameof(Element_RMS_LayoutData.euler));
+            SerializedProperty sp_scale = property.FindPropertyRelative(nameof(Element_RMS_LayoutData.scale));
+            SerializedProperty sp_anchor_min = property.FindPropertyRelative(nameof(Element_RMS_LayoutData.anchor_min));
+            SerializedProperty sp_anchor_max = property.FindPropertyRelative(nameof(Element_RMS_LayoutData.anchor_max));
+            SerializedProperty sp_pivot = property.FindPropertyRelative(nameof(Element_RMS_LayoutData.pivot));
+            SerializedProperty sp_layout_name = property.FindPropertyRelative(nameof(Element_RMS_LayoutData.layout_name));
 
             Element_RMS_LayoutData layout_info = RMS_GetCurrentInfo();
 
-            sp_Anchor.enumValueIndex = (int)layout_info.Anchor;
-            sp_Position.vector3Value = layout_info.Position;
-            sp_Euler.vector3Value = layout_info.Euler;
-            sp_Scale.vector3Value = layout_info.Scale;
-            sp_AnchorMin.vector2Value = layout_info.AnchorMin;
-            sp_AnchorMax.vector2Value = layout_info.AnchorMax;
-            sp_Pivot.vector2Value = layout_info.Pivot;
-            sp_LayoutName.stringValue = RMS_Name.stringValue;
+            sp_anchor.enumValueIndex = (int)layout_info.anchor;
+            sp_position.vector3Value = layout_info.position;
+            sp_euler.vector3Value = layout_info.euler;
+            sp_scale.vector3Value = layout_info.scale;
+            sp_anchor_min.vector2Value = layout_info.anchor_min;
+            sp_anchor_max.vector2Value = layout_info.anchor_max;
+            sp_pivot.vector2Value = layout_info.pivot;
+            sp_layout_name.stringValue = sp_rms_name.stringValue;
 
             property.serializedObject.ApplyModifiedProperties();
         }
@@ -182,7 +182,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void RMS_Record()
         {
-            if (!HudManager.RMS_Enabled)
+            if (!hud_manager.rms_enabled)
             {
                 XGUI.dialog(
                            type: XGUIDialogType.警告,
@@ -197,7 +197,7 @@ namespace SevenStrikeModules.XHud.Editor
                 return;
             }
 
-            if (HudManager.hm_RMS_IsEmpty())
+            if (hud_manager.hm_RMS_IsEmpty())
             {
                 string res = XGUI.dialog(
                     type: XGUIDialogType.警告,
@@ -212,8 +212,8 @@ namespace SevenStrikeModules.XHud.Editor
 
                 if (res == "去配置")
                 {
-                    Selection.activeGameObject = HudManager.gameObject;
-                    EditorGUIUtility.PingObject(HudManager);
+                    Selection.activeGameObject = hud_manager.gameObject;
+                    EditorGUIUtility.PingObject(hud_manager);
                     return;
                 }
                 if (res == "暂不")
@@ -238,24 +238,24 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                if (!HudManager.RMS_Enabled)
+                if (!hud_manager.rms_enabled)
                     return;
 
-                if (RMS_LayoutDatas.arraySize <= 0)
+                if (sp_rms_layout_datas.arraySize <= 0)
                 {
-                    RMS_LayoutDatas.InsertArrayElementAtIndex(RMS_LayoutDatas.arraySize);
-                    SerializedProperty newLayoutInfo = RMS_LayoutDatas.GetArrayElementAtIndex(RMS_LayoutDatas.arraySize - 1);
+                    sp_rms_layout_datas.InsertArrayElementAtIndex(sp_rms_layout_datas.arraySize);
+                    SerializedProperty newLayoutInfo = sp_rms_layout_datas.GetArrayElementAtIndex(sp_rms_layout_datas.arraySize - 1);
                     RMS_Set(newLayoutInfo);
                 }
                 else
                 {
                     bool IsExist = false;
-                    for (int i = 0; i < RMS_LayoutDatas.arraySize; i++)
+                    for (int i = 0; i < sp_rms_layout_datas.arraySize; i++)
                     {
-                        SerializedProperty sp_list_cur_solution = RMS_LayoutDatas.GetArrayElementAtIndex(i);
-                        SerializedProperty sp_list_cur_solution_name = sp_list_cur_solution.FindPropertyRelative("LayoutName");
+                        SerializedProperty sp_list_cur_solution = sp_rms_layout_datas.GetArrayElementAtIndex(i);
+                        SerializedProperty sp_list_cur_solution_name = sp_list_cur_solution.FindPropertyRelative(nameof(Element_RMS_LayoutData.layout_name));
 
-                        if (sp_list_cur_solution_name.stringValue == RMS_Name.stringValue)
+                        if (sp_list_cur_solution_name.stringValue == sp_rms_name.stringValue)
                         {
                             RMS_Set(sp_list_cur_solution);
                             IsExist = true;
@@ -264,8 +264,8 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     if (!IsExist)
                     {
-                        RMS_LayoutDatas.InsertArrayElementAtIndex(RMS_LayoutDatas.arraySize);
-                        SerializedProperty newLayoutInfo = RMS_LayoutDatas.GetArrayElementAtIndex(RMS_LayoutDatas.arraySize - 1);
+                        sp_rms_layout_datas.InsertArrayElementAtIndex(sp_rms_layout_datas.arraySize);
+                        SerializedProperty newLayoutInfo = sp_rms_layout_datas.GetArrayElementAtIndex(sp_rms_layout_datas.arraySize - 1);
                         RMS_Set(newLayoutInfo);
                     }
                 }
@@ -275,7 +275,7 @@ namespace SevenStrikeModules.XHud.Editor
                 type: XGUIDialogType.警告,
                 windowtitle: "XHud - 元素消息",
                 title: "RMS记录布局",
-                msg: $"已记录 {RMS_Name.stringValue} 设计布局信息！",
+                msg: $"已记录 {sp_rms_name.stringValue} 设计布局信息！",
                 ok: "明白",
                 PrimaryIndex: 0,
                 usemodal: true,
@@ -292,7 +292,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="DontCreateID"></param>
         private void RMS_Preview(XHud_Module_Element element, float alpha, Vector3 offset, string solution, bool DontCreateID)
         {
-            HudManager.hm_ScreenElement_Initialize_By_RMS(element, solution, DontCreateID);
+            hud_manager.hm_ScreenElement_Initialize_By_RMS(element, solution, DontCreateID);
         }
     }
 }

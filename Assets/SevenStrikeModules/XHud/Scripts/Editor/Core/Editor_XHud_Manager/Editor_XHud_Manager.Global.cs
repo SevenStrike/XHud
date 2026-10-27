@@ -46,7 +46,7 @@ namespace SevenStrikeModules.XHud.Editor
             title_size: XGUIFontSize.M,
             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
-            prop: Volume,
+            prop: sp_global_volume,
             prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -56,7 +56,7 @@ namespace SevenStrikeModules.XHud.Editor
             title_size: XGUIFontSize.M,
             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
-            prop: DurationMultiply,
+            prop: sp_tween_global_duration,
             prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -67,11 +67,11 @@ namespace SevenStrikeModules.XHud.Editor
             title_size: XGUIFontSize.M,
             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
-            prop: FontSizeMultiply,
+            prop: sp_ft_font_size_multiply,
             prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
-                BaseScript.hm_ChangeFontGlobalSize(FontSizeMultiply.floatValue);
+                base_script.hm_ChangeFontGlobalSize(sp_ft_font_size_multiply.floatValue);
             }
             #endregion
 
@@ -81,9 +81,9 @@ namespace SevenStrikeModules.XHud.Editor
             title_size: XGUIFontSize.M,
             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
-            prop: Hud_MouseCursor,
+            prop: sp_mos_mouse_cursor,
             status_icon: "icon_field_status",
-            status_icon_color: Hud_MouseCursor.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
+            status_icon_color: sp_mos_mouse_cursor.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
             prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -93,9 +93,9 @@ namespace SevenStrikeModules.XHud.Editor
             title_size: XGUIFontSize.M,
             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
-            prop: Hud_TransitionController,
+            prop: sp_trans_transition_controller,
             status_icon: "icon_field_status",
-            status_icon_color: Hud_TransitionController.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
+            status_icon_color: sp_trans_transition_controller.objectReferenceValue != null ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.black,
             prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
         }

@@ -32,12 +32,6 @@ namespace SevenStrikeModules.XHud.Editor
     using Object = UnityEngine.Object;
     using Random = UnityEngine.Random;
 
-    #region 编辑器主体
-    /// <summary>
-    /// XHud 音效库的自定义编辑器。
-    /// <para/>
-    /// 提供音效列表的可视化编辑、拖放添加、对象选择器添加、预览试听、随机音高、扫描参数、增删清空等功能。
-    /// </summary>
     [CustomEditor(typeof(XHud_Library_Sounds))]
     public class Editor_XHud_Library_Sounds : Editor
     {
@@ -47,39 +41,81 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 在 <see cref="OnEnable"/> 中缓存。
         /// </summary>
-        private XHud_Library_Sounds BaseScript;
+        private XHud_Library_Sounds base_script;
         /// <summary>
         /// 音效列表（可重排列表）。
         /// <para/>
         /// 用于驱动 ReorderableList 的绘制与交互。
         /// </summary>
-        public ReorderableList SoundInfoList;
+        public ReorderableList sound_info_list;
         #endregion
 
         #region 字段 - 序列化属性
+
         /// <summary>
-        /// 本 Inspector 用到的全部序列化属性引用。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里初始化。
-        /// <para/>
-        /// 覆盖：
-        /// <list type="bullet">
-        /// <item><description>音效库列表；</description></item>
-        /// <item><description>随机音高开关与音高范围；</description></item>
-        /// <item><description>选中 / 定位索引；</description></item>
-        /// <item><description>过滤 / 查找字符串；</description></item>
-        /// <item><description>列表滚动位置与项高；</description></item>
-        /// <item><description>库名称。</description></item>
-        /// </list>
+        /// 音效信息列表滚动位置属性
         /// </summary>
-        private SerializedProperty sp_SoundInfoList_Original_Scroller, sp_itemHeight, sp_visibleItemCount, sp_SoundList, sp_UseRandomPitch, sp_Pitch_Min, sp_Pitch_Max, sp_SelectedIndex, sp_LocationSelectedIndex, sp_Highlight, sp_Find, sp_LibraryName;
+        private SerializedProperty sp_sound_Info_list_original_scroller;
+        /// <summary>
+        /// 列表项高度属性
+        /// </summary>
+        private SerializedProperty sp_item_height;
+        /// <summary>
+        /// 可视区域显示元素数量属性
+        /// </summary>
+        private SerializedProperty sp_visible_item_count;
+        /// <summary>
+        /// 音效库列表属性
+        /// </summary>
+        private SerializedProperty sp_library_sounds;
+        /// <summary>
+        /// 随机音高开关属性
+        /// </summary>
+        private SerializedProperty sp_use_random_pitch;
+        /// <summary>
+        /// 音高下限属性
+        /// </summary>
+        private SerializedProperty sp_pitch_min;
+        /// <summary>
+        /// 音高上限属性
+        /// </summary>
+        private SerializedProperty sp_pitch_max;
+        /// <summary>
+        /// 选中项索引属性
+        /// </summary>
+        private SerializedProperty sp_selected_index;
+        /// <summary>
+        /// 定位选中项索引属性
+        /// </summary>
+        private SerializedProperty sp_location_selected_index;
+        /// <summary>
+        /// 筛选高亮字符串属性
+        /// </summary>
+        private SerializedProperty sp_highlight;
+        /// <summary>
+        /// 查找字符串属性
+        /// </summary>
+        private SerializedProperty sp_find;
+        /// <summary>
+        /// 库名称属性
+        /// </summary>
+        private SerializedProperty sp_library_name;
+        #endregion
+
+        #region 字段 - 图标
+        /// <summary>
+        /// 标题 / 按钮 / 图标资源缓存。
+        /// <para/>
+        /// 统一在 <see cref="OnEnable"/> 里加载。
+        /// </summary>
+        private Texture2D scan_p, scan_r, stoppreview_p, stoppreview_r, clear_p, clear_r, create_p, create_r, delete_p, delete_r;
         #endregion
 
         #region 字段 - 参数
         /// <summary>
         /// 单行高度缓存。
         /// </summary>
-        private float LineHeight;
+        private float line_height;
         /// <summary>
         /// 当前选中的音频剪辑。
         /// <para/>
@@ -98,40 +134,25 @@ namespace SevenStrikeModules.XHud.Editor
         private float blocked_alp = 0.45f;
         #endregion
 
-        #region 字段 - 图标
-        /// <summary>
-        /// 标题 / 按钮 / 图标资源缓存。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里加载。
-        /// </summary>
-        private Texture2D scan_p, scan_r, stoppreview_p, stoppreview_r, clear_p, clear_r, create_p, create_r, delete_p, delete_r;
-        #endregion
-
         #region 字段 - 预览 / 选择器
         /// <summary>
         /// 当前 Unity 命令名称。
         /// <para/>
         /// 用于检测对象选择器状态变化。
         /// </summary>
-        string commandName;
+        string command_name;
         /// <summary>
         /// 是否已经从对象选择器选中过对象。
         /// </summary>
-        private bool selectobject;
-        /// <summary>
-        /// 预览音效使用的 AudioSource 列表。
-        /// <para/>
-        /// 用于停止预览与播放结束后回收。
-        /// </summary>
-        List<AudioSource> PreviewAudioList;
+        private bool select_object;
         /// <summary>
         /// 是否处于对象选择器打开状态。
         /// </summary>
-        private bool IsObjectSelector;
+        private bool is_object_selector;
         /// <summary>
         /// 对象选择器是否发生更新。
         /// </summary>
-        private bool IsObjectSelectorUpdated;
+        private bool is_object_selector_updated;
         #endregion
 
         #region 字段 - 绘制缓存
@@ -157,12 +178,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 当前 Inspector 选中的所有目标组件缓存。
         /// </summary>
-        XHud_Library_Sounds[] SelectedObjects;
+        XHud_Library_Sounds[] selected_objects;
         #endregion
 
         #region 工具 - 批量化操作
         /// <summary>
-        /// 缓存当前 Inspector 选中的所有目标组件到 <see cref="SelectedObjects"/>。
+        /// 缓存当前 Inspector 选中的所有目标组件到 <see cref="selected_objects"/>。
         /// <para/>
         /// 多选时逐个转换，单选时只填充一个元素。
         /// </summary>
@@ -170,17 +191,17 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new XHud_Library_Sounds[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new XHud_Library_Sounds[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (XHud_Library_Sounds)t;
+                    selected_objects[i] = (XHud_Library_Sounds)t;
                 }
             }
             else
             {
-                SelectedObjects = new XHud_Library_Sounds[targets.Length];
-                SelectedObjects[0] = (XHud_Library_Sounds)target;
+                selected_objects = new XHud_Library_Sounds[targets.Length];
+                selected_objects[0] = (XHud_Library_Sounds)target;
             }
         }
         /// <summary>
@@ -189,9 +210,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>true 表示选中了多个组件</returns>
         private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }
@@ -221,33 +242,33 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseScript = (XHud_Library_Sounds)target;
+            base_script = (XHud_Library_Sounds)target;
 
             #region 获取序列化属性
-            sp_SoundList = serializedObject.FindProperty("SoundLibrary");
-            sp_UseRandomPitch = serializedObject.FindProperty("UseRandomPitch");
-            sp_Pitch_Min = serializedObject.FindProperty("Pitch_Min");
-            sp_Pitch_Max = serializedObject.FindProperty("Pitch_Max");
-            sp_LibraryName = serializedObject.FindProperty("LibraryName");
-            sp_SelectedIndex = serializedObject.FindProperty("SelectedIndex");
-            sp_Highlight = serializedObject.FindProperty("Highlight");
-            sp_LocationSelectedIndex = serializedObject.FindProperty("LocationSelectedIndex");
-            sp_SoundInfoList_Original_Scroller = serializedObject.FindProperty("SoundInfoList_Original_Scroller");
-            sp_itemHeight = serializedObject.FindProperty("itemHeight");
-            sp_visibleItemCount = serializedObject.FindProperty("visibleItemCount");
-            sp_Find = serializedObject.FindProperty("Find");
+            sp_library_sounds = serializedObject.FindProperty(nameof(XHud_Library_Sounds.library_sounds));
+            sp_use_random_pitch = serializedObject.FindProperty(nameof(XHud_Library_Sounds.use_random_pitch));
+            sp_pitch_min = serializedObject.FindProperty(nameof(XHud_Library_Sounds.pitch_min));
+            sp_pitch_max = serializedObject.FindProperty(nameof(XHud_Library_Sounds.pitch_max));
+            sp_library_name = serializedObject.FindProperty(nameof(XHud_Library_Sounds.library_name));
+            sp_selected_index = serializedObject.FindProperty(nameof(XHud_Library_Sounds.selected_index));
+            sp_highlight = serializedObject.FindProperty(nameof(XHud_Library_Sounds.highlight));
+            sp_location_selected_index = serializedObject.FindProperty(nameof(XHud_Library_Sounds.location_selected_index));
+            sp_sound_Info_list_original_scroller = serializedObject.FindProperty(nameof(XHud_Library_Sounds.sound_Info_list_original_scroller));
+            sp_item_height = serializedObject.FindProperty(nameof(XHud_Library_Sounds.item_height));
+            sp_visible_item_count = serializedObject.FindProperty(nameof(XHud_Library_Sounds.visible_item_count));
+            sp_find = serializedObject.FindProperty(nameof(XHud_Library_Sounds.find));
             #endregion
 
-            LineHeight = EditorGUIUtility.singleLineHeight;
+            line_height = EditorGUIUtility.singleLineHeight;
 
             Targets_Get();
 
             //设定列表项高度值
-            sp_itemHeight.floatValue = 50;
-            sp_itemHeight.serializedObject.ApplyModifiedProperties();
+            sp_item_height.floatValue = 50;
+            sp_item_height.serializedObject.ApplyModifiedProperties();
 
-            sp_visibleItemCount.intValue = 8;
-            sp_visibleItemCount.serializedObject.ApplyModifiedProperties();
+            sp_visible_item_count.intValue = 8;
+            sp_visible_item_count.serializedObject.ApplyModifiedProperties();
 
             #region 获取图标
             scan_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_sound/scan_p");
@@ -266,9 +287,9 @@ namespace SevenStrikeModules.XHud.Editor
 
             Vector2 ButtonSize = new Vector2(16, 16);
 
-            #region ReorderableList - SoundInfoList
-            SoundInfoList = new ReorderableList(serializedObject, sp_SoundList, true, true, true, true);
-            SoundInfoList.drawElementCallback = SoundInfoList_Original_DrawElementCallback;
+            #region ReorderableList
+            sound_info_list = new ReorderableList(serializedObject, sp_library_sounds, true, true, true, true);
+            sound_info_list.drawElementCallback = SoundInfoList_Original_DrawElementCallback;
             #endregion
 
             EditorApplication.playModeStateChanged += EditorApplication_playModeStateChanged;
@@ -290,22 +311,22 @@ namespace SevenStrikeModules.XHud.Editor
         {
             EditorApplication.playModeStateChanged -= EditorApplication_playModeStateChanged;
 
-            sp_SoundInfoList_Original_Scroller.vector2Value = Vector2.zero;
-            sp_SoundInfoList_Original_Scroller.serializedObject.ApplyModifiedProperties();
+            sp_sound_Info_list_original_scroller.vector2Value = Vector2.zero;
+            sp_sound_Info_list_original_scroller.serializedObject.ApplyModifiedProperties();
 
-            sp_LocationSelectedIndex.intValue = -1;
-            sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+            sp_location_selected_index.intValue = -1;
+            sp_location_selected_index.serializedObject.ApplyModifiedProperties();
 
-            sp_SelectedIndex.intValue = -1;
-            sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+            sp_selected_index.intValue = -1;
+            sp_selected_index.serializedObject.ApplyModifiedProperties();
 
-            sp_Find.stringValue = string.Empty;
-            sp_Find.serializedObject.ApplyModifiedProperties();
+            sp_find.stringValue = string.Empty;
+            sp_find.serializedObject.ApplyModifiedProperties();
 
-            sp_Highlight.stringValue = string.Empty;
-            sp_Highlight.serializedObject.ApplyModifiedProperties();
+            sp_highlight.stringValue = string.Empty;
+            sp_highlight.serializedObject.ApplyModifiedProperties();
 
-            RecycleAudio();
+            Preview_Sound_Stop();
         }
         /// <summary>
         /// 绘制 Inspector 主入口。
@@ -317,11 +338,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             serializedObject.Update();
 
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             #region 标题
             XGUI.layout_banner(
@@ -333,7 +350,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_style: FontStyle.Normal,
                 title_color: Color.white,
                 title_size: XGUIFontSize.B,
-                title_clipping: clipping,
+                title_clipping: clipping_ellipsis,
                 title_offset: new Vector2(-10, 0),
                 bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
@@ -358,7 +375,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_LibraryName,
+                prop: sp_library_name,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -369,12 +386,12 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_Highlight,
+                prop: sp_highlight,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
-                sp_LocationSelectedIndex.intValue = -1;
-                sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                sp_location_selected_index.intValue = -1;
+                sp_location_selected_index.serializedObject.ApplyModifiedProperties();
             }
             #endregion
 
@@ -385,19 +402,19 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 90,
-                prop: sp_Find,
+                prop: sp_find,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             if (XGUI.ChangedCheck_End())
             {
-                if (!string.IsNullOrEmpty(sp_Find.stringValue))
-                    BaseScript.SoundLibrary_Location_Find(sp_Find.stringValue);
+                if (!string.IsNullOrEmpty(sp_find.stringValue))
+                    base_script.SoundLibrary_Location_Find(sp_find.stringValue);
                 else
                 {
-                    sp_SelectedIndex.intValue = -1;
-                    sp_SelectedIndex.serializedObject.ApplyModifiedProperties();
+                    sp_selected_index.intValue = -1;
+                    sp_selected_index.serializedObject.ApplyModifiedProperties();
 
-                    sp_LocationSelectedIndex.intValue = -1;
-                    sp_LocationSelectedIndex.serializedObject.ApplyModifiedProperties();
+                    sp_location_selected_index.intValue = -1;
+                    sp_location_selected_index.serializedObject.ApplyModifiedProperties();
                 }
             }
             #endregion
@@ -408,10 +425,10 @@ namespace SevenStrikeModules.XHud.Editor
                 margin: new RectOffset(15, 15, 20, 15));
 
             #region 随机音高
-            DrawToggle("随机音高", sp_UseRandomPitch, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+            DrawToggle("随机音高", sp_use_random_pitch, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             #endregion
 
-            if (sp_UseRandomPitch.boolValue)
+            if (sp_use_random_pitch.boolValue)
             {
                 #region 最小音高
                 XGUI.layout_property_field(
@@ -419,7 +436,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_Pitch_Min,
+                    prop: sp_pitch_min,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
 
@@ -429,7 +446,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: sp_Pitch_Max,
+                    prop: sp_pitch_max,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
             }
@@ -438,7 +455,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 快捷功能
-            if (string.IsNullOrEmpty(sp_Highlight.stringValue))
+            if (string.IsNullOrEmpty(sp_highlight.stringValue))
             {
                 if (!Application.isPlaying)
                 {
@@ -463,14 +480,14 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 14,
                         height: 14))
                     {
-                        for (int i = 0; i < sp_SoundList.arraySize; i++)
+                        for (int i = 0; i < sp_library_sounds.arraySize; i++)
                         {
-                            SerializedProperty item = sp_SoundList.GetArrayElementAtIndex(i);
-                            SerializedProperty x_Clip = item.FindPropertyRelative("Clip");
-                            SerializedProperty x_Frequency = item.FindPropertyRelative("Frequency");
-                            SerializedProperty x_Channel = item.FindPropertyRelative("Channel");
-                            SerializedProperty x_Length = item.FindPropertyRelative("Length");
-                            SerializedProperty x_Format = item.FindPropertyRelative("Format");
+                            SerializedProperty item = sp_library_sounds.GetArrayElementAtIndex(i);
+                            SerializedProperty x_Clip = item.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.clip));
+                            SerializedProperty x_Frequency = item.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.frequency));
+                            SerializedProperty x_Channel = item.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.channel));
+                            SerializedProperty x_Length = item.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.length));
+                            SerializedProperty x_Format = item.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.format));
 
                             if (x_Clip.objectReferenceValue != null)
                             {
@@ -493,7 +510,7 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     #endregion
 
-                    if (BaseScript.SoundLibrary != null && BaseScript.SoundLibrary.Count > 0)
+                    if (base_script.library_sounds != null && base_script.library_sounds.Count > 0)
                         GUI.enabled = true;
                     else
                         GUI.enabled = false;
@@ -512,7 +529,7 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         if (Application.isPlaying)
                             return;
-                        RecycleAudio();
+                        Preview_Sound_Stop();
                     }
                     #endregion
 
@@ -543,8 +560,8 @@ namespace SevenStrikeModules.XHud.Editor
                         if (res == "暂不")
                             return;
 
-                        sp_SoundList.ClearArray();
-                        sp_SoundList.serializedObject.ApplyModifiedProperties();
+                        sp_library_sounds.ClearArray();
+                        sp_library_sounds.serializedObject.ApplyModifiedProperties();
                     }
                     #endregion
 
@@ -560,7 +577,7 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 14,
                         height: 14))
                     {
-                        SoundInfoList_Original_Add(SoundInfoList);
+                        SoundInfoList_Original_Add(sound_info_list);
                     }
                     #endregion
 
@@ -576,7 +593,7 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 14,
                         height: 14))
                     {
-                        SoundInfoList_Original_Remove(SoundInfoList);
+                        SoundInfoList_Original_Remove(sound_info_list);
                     }
                     #endregion
 
@@ -600,44 +617,44 @@ namespace SevenStrikeModules.XHud.Editor
             DrawSoundInfoList_Original();
 
             ///------------选择音效
-            commandName = Event.current.commandName;
-            if (commandName == "ObjectSelectorUpdated")
+            command_name = Event.current.commandName;
+            if (command_name == "ObjectSelectorUpdated")
             {
                 UpdateSoundParams();
-                if (IsObjectSelectorUpdated)
+                if (is_object_selector_updated)
                 {
-                    if (BaseScript.act_on_SoundChanged != null)
-                        BaseScript.act_on_SoundChanged();
+                    if (base_script.act_on_sound_changed != null)
+                        base_script.act_on_sound_changed();
                 }
-                IsObjectSelectorUpdated = false;
-                selectobject = false;
+                is_object_selector_updated = false;
+                select_object = false;
             }
-            else if (commandName == "ObjectSelectorClosed")
+            else if (command_name == "ObjectSelectorClosed")
             {
-                if (!IsObjectSelector)
+                if (!is_object_selector)
                     return;
 
                 Object obj = EditorGUIUtility.GetObjectPickerObject();
 
                 if (obj != null)
                 {
-                    if (!selectobject)
+                    if (!select_object)
                     {
-                        IsObjectSelector = false;
-                        selectobject = true;
-                        if (BaseScript.SoundLibrary == null)
-                            BaseScript.SoundLibrary = new List<XHud_LibraryArg_Sound>();
+                        is_object_selector = false;
+                        select_object = true;
+                        if (base_script.library_sounds == null)
+                            base_script.library_sounds = new List<XHud_LibraryArg_Sound>();
                         AudioClip clip = obj as AudioClip;
                         string format = Path.GetExtension(AssetDatabase.GetAssetPath(clip)).ToLower();
-                        BaseScript.SoundLibrary.Add(new XHud_LibraryArg_Sound(clip.name, clip, format));
-                        if (BaseScript.act_on_SoundAdded != null)
-                            BaseScript.act_on_SoundAdded(clip.name, clip);
+                        base_script.library_sounds.Add(new XHud_LibraryArg_Sound(clip.name, clip, format));
+                        if (base_script.act_on_sound_added != null)
+                            base_script.act_on_sound_added(clip.name, clip);
                     }
                 }
             }
             else
             {
-                IsObjectSelectorUpdated = true;
+                is_object_selector_updated = true;
             }
 
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
@@ -657,15 +674,15 @@ namespace SevenStrikeModules.XHud.Editor
                     foreach (var item in dropobjs)
                     {
                         XHud_LibraryArg_Sound it = new XHud_LibraryArg_Sound();
-                        it.Clip = (AudioClip)item;
-                        if (it.Clip != null)
+                        it.clip = (AudioClip)item;
+                        if (it.clip != null)
                         {
                             bool isExist = false;
-                            for (int s = 0; s < sp_SoundList.arraySize; s++)
+                            for (int s = 0; s < sp_library_sounds.arraySize; s++)
                             {
-                                SerializedProperty ser = sp_SoundList.GetArrayElementAtIndex(s);
-                                SerializedProperty ser_target = ser.FindPropertyRelative("Clip");
-                                if (ser_target.objectReferenceValue.name == it.Clip.name)
+                                SerializedProperty ser = sp_library_sounds.GetArrayElementAtIndex(s);
+                                SerializedProperty ser_target = ser.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.clip));
+                                if (ser_target.objectReferenceValue.name == it.clip.name)
                                 {
                                     isExist = true;
                                     break;
@@ -677,7 +694,7 @@ namespace SevenStrikeModules.XHud.Editor
                                     type: XGUIDialogType.警告,
                                     windowtitle: "XHud - 音效库消息",
                                     title: "重复添加音效",
-                                    msg: $"此音效已存在于该库中！请勿重复添加！重复音效名称： {it.Clip.name}",
+                                    msg: $"此音效已存在于该库中！请勿重复添加！重复音效名称： {it.clip.name}",
                                     ok: "明白",
                                     PrimaryIndex: 0,
                                     usemodal: true,
@@ -688,24 +705,24 @@ namespace SevenStrikeModules.XHud.Editor
                             {
                                 string item_format = Path.GetExtension(AssetDatabase.GetAssetPath(item)).ToLower();
 
-                                it.Name = it.Clip.name;
-                                it.Format = item_format;
+                                it.name = it.clip.name;
+                                it.format = item_format;
 
-                                sp_SoundList.InsertArrayElementAtIndex(sp_SoundList.arraySize);
-                                SerializedProperty root = sp_SoundList.GetArrayElementAtIndex(sp_SoundList.arraySize - 1);
-                                SerializedProperty x_Clip = root.FindPropertyRelative("Clip");
-                                SerializedProperty x_Name = root.FindPropertyRelative("Name");
-                                SerializedProperty x_Frequency = root.FindPropertyRelative("Frequency");
-                                SerializedProperty x_Channel = root.FindPropertyRelative("Channel");
-                                SerializedProperty x_Length = root.FindPropertyRelative("Length");
-                                SerializedProperty x_Format = root.FindPropertyRelative("Format");
+                                sp_library_sounds.InsertArrayElementAtIndex(sp_library_sounds.arraySize);
+                                SerializedProperty root = sp_library_sounds.GetArrayElementAtIndex(sp_library_sounds.arraySize - 1);
+                                SerializedProperty x_Clip = root.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.clip));
+                                SerializedProperty x_Name = root.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.name));
+                                SerializedProperty x_Frequency = root.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.frequency));
+                                SerializedProperty x_Channel = root.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.channel));
+                                SerializedProperty x_Length = root.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.length));
+                                SerializedProperty x_Format = root.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.format));
 
-                                x_Clip.objectReferenceValue = it.Clip;
-                                x_Name.stringValue = it.Name;
-                                x_Channel.intValue = it.Clip.channels;
-                                x_Frequency.intValue = it.Clip.frequency;
-                                x_Length.floatValue = it.Clip.length;
-                                x_Format.stringValue = it.Format;
+                                x_Clip.objectReferenceValue = it.clip;
+                                x_Name.stringValue = it.name;
+                                x_Channel.intValue = it.clip.channels;
+                                x_Frequency.intValue = it.clip.frequency;
+                                x_Length.floatValue = it.clip.length;
+                                x_Format.stringValue = it.format;
 
                                 root.serializedObject.ApplyModifiedProperties();
 
@@ -738,12 +755,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 根据高亮过滤条件屏蔽或启用 GUI。
         /// <para/>
-        /// 若名称不包含 <see cref="sp_Highlight"/> 的当前值，则禁用 GUI。
+        /// 若名称不包含 <see cref="sp_highlight"/> 的当前值，则禁用 GUI。
         /// </summary>
         /// <param name="name">待检查的名称</param>
         private void BlockGUI(string name)
         {
-            if (!name.Contains(sp_Highlight.stringValue))
+            if (!name.Contains(sp_highlight.stringValue))
             {
                 GUI.enabled = false;
             }
@@ -772,14 +789,14 @@ namespace SevenStrikeModules.XHud.Editor
         {
             float titleheight = rect.y + 8;
 
-            SerializedProperty prop = sp_SoundList.GetArrayElementAtIndex(index);
+            SerializedProperty prop = sp_library_sounds.GetArrayElementAtIndex(index);
 
-            SerializedProperty sp_name = prop.FindPropertyRelative("Name");
-            SerializedProperty sp_clip = prop.FindPropertyRelative("Clip");
-            SerializedProperty sp_length = prop.FindPropertyRelative("Length");
-            SerializedProperty sp_chan = prop.FindPropertyRelative("Channel");
-            SerializedProperty sp_freq = prop.FindPropertyRelative("Frequency");
-            SerializedProperty sp_format = prop.FindPropertyRelative("Format");
+            SerializedProperty sp_name = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.name));
+            SerializedProperty sp_clip = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.clip));
+            SerializedProperty sp_length = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.length));
+            SerializedProperty sp_chan = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.channel));
+            SerializedProperty sp_freq = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.frequency));
+            SerializedProperty sp_format = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.format));
 
             #region 序号
             drawelement_rect.Set(rect.x + 16, rect.y + 6, 30, 20);
@@ -797,7 +814,7 @@ namespace SevenStrikeModules.XHud.Editor
             BlockGUI(sp_name.stringValue);
 
             #region 音效名称
-            drawelement_rect.Set(rect.x + 35, titleheight, rect.width - 180, LineHeight);
+            drawelement_rect.Set(rect.x + 35, titleheight, rect.width - 180, line_height);
             sp_name.stringValue = XGUI.gui_inputfield(
                      rect: drawelement_rect,
                      //title: "Bk",
@@ -821,7 +838,7 @@ namespace SevenStrikeModules.XHud.Editor
             BlockGUI(sp_name.stringValue);
 
             #region 音效
-            drawelement_rect.Set(rect.width - 120, titleheight, 100, LineHeight);
+            drawelement_rect.Set(rect.width - 120, titleheight, 100, line_height);
             XGUI.gui_property_field(
                            rect: drawelement_rect,
                            //status_icon: "icon_field_status",
@@ -834,7 +851,7 @@ namespace SevenStrikeModules.XHud.Editor
             #region 音效信息
             string cxs = sp_length.floatValue.ToString("F2") + " s";
             string xxc = "";
-            if (BaseScript.SoundLibrary[index].Channel == 2)
+            if (base_script.library_sounds[index].channel == 2)
             {
                 xxc = sp_chan.intValue + " ch (Stereo)";
             }
@@ -846,7 +863,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             string res = cxs + " | " + xxc + " | " + fsr + " | " + sp_format.stringValue;
 
-            drawelement_rect.Set(rect.x + 36, rect.y + 28, rect.width - 10, LineHeight);
+            drawelement_rect.Set(rect.x + 36, rect.y + 28, rect.width - 10, line_height);
             XGUI.gui_label(
                 rect: drawelement_rect,
                 text: new GUIContent(res),
@@ -862,13 +879,13 @@ namespace SevenStrikeModules.XHud.Editor
 
             GUI.enabled = true;
 
-            if (!sp_name.stringValue.Contains(sp_Highlight.stringValue))
+            if (!sp_name.stringValue.Contains(sp_highlight.stringValue))
             {
                 drawelement_rect.Set(rect.x - 20, rect.y, rect.width + 20, rect.height);
                 EditorGUI.DrawRect(drawelement_rect, blocked_col);
             }
 
-            if (index == sp_LocationSelectedIndex.intValue)
+            if (index == sp_location_selected_index.intValue)
             {
                 drawelement_rect.Set(rect.width - 80, rect.y + 25, 58, 20);
                 XGUI.gui_label(
@@ -891,52 +908,51 @@ namespace SevenStrikeModules.XHud.Editor
         private void DrawSoundInfoList_Original()
         {
             // 绘制滚动视图
-            scrollview_rect = GUILayoutUtility.GetRect(0, sp_visibleItemCount.intValue * sp_itemHeight.floatValue);
-            sp_SoundInfoList_Original_Scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_SoundInfoList_Original_Scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, SoundInfoList.count * sp_itemHeight.floatValue), false, true);
+            scrollview_rect = GUILayoutUtility.GetRect(0, sp_visible_item_count.intValue * sp_item_height.floatValue);
+            sp_sound_Info_list_original_scroller.vector2Value = GUI.BeginScrollView(scrollview_rect, sp_sound_Info_list_original_scroller.vector2Value, new Rect(0, 0, scrollview_rect.width - 50, sound_info_list.count * sp_item_height.floatValue), false, true);
 
             // 计算可视区域的起始和结束索引
-            int startIndex = Mathf.FloorToInt(sp_SoundInfoList_Original_Scroller.vector2Value.y / sp_itemHeight.floatValue);
-            int endIndex = Mathf.CeilToInt((sp_SoundInfoList_Original_Scroller.vector2Value.y + scrollview_rect.height) / sp_itemHeight.floatValue);
+            int startIndex = Mathf.FloorToInt(sp_sound_Info_list_original_scroller.vector2Value.y / sp_item_height.floatValue);
+            int endIndex = Mathf.CeilToInt((sp_sound_Info_list_original_scroller.vector2Value.y + scrollview_rect.height) / sp_item_height.floatValue);
 
             // 只绘制可视区域内的元素
-            for (int i = startIndex; i < endIndex && i < SoundInfoList.count; i++)
+            for (int i = startIndex; i < endIndex && i < sound_info_list.count; i++)
             {
-                SerializedProperty prop = sp_SoundList.GetArrayElementAtIndex(i);
-                SerializedProperty sp_color = prop.FindPropertyRelative("Color");
-                SerializedProperty sp_name = prop.FindPropertyRelative("Name");
+                SerializedProperty prop = sp_library_sounds.GetArrayElementAtIndex(i);
+                SerializedProperty sp_name = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Sound.name));
 
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
                 // 如果当前元素被选中，绘制选中效果
-                if (sp_name.stringValue.Contains(sp_Highlight.stringValue))
+                if (sp_name.stringValue.Contains(sp_highlight.stringValue))
                 {
-                    if (sp_SelectedIndex.intValue == i)
+                    if (sp_selected_index.intValue == i)
                     {
-                        item_rect.Set(1, i * sp_itemHeight.floatValue + 13, 5, 5);
+                        item_rect.Set(1, i * sp_item_height.floatValue + 13, 5, 5);
                         // 高亮标记表示选中
                         EditorGUI.DrawRect(item_rect, XHud_Dashboard.themes_get_color(ThemeColorType.primary));
-                        item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
+                        item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
                         // 高亮背景表示选中
                         EditorGUI.DrawRect(item_rect, SelectedBg);
                     }
                 }
 
-                item_rect.Set(0, i * sp_itemHeight.floatValue, scrollview_rect.width, sp_itemHeight.floatValue);
-                SoundInfoList.drawElementCallback.Invoke(item_rect, i, i == SoundInfoList.index, true);
+                item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
+                sound_info_list.drawElementCallback.Invoke(item_rect, i, i == sound_info_list.index, true);
 
                 // 检测鼠标是否在当前元素区域内
                 if (item_rect.Contains(Event.current.mousePosition))
                 {
                     if (Event.current.type == EventType.MouseDown)
                     {
-                        if (sp_name.stringValue.Contains(sp_Highlight.stringValue))
+                        if (sp_name.stringValue.Contains(sp_highlight.stringValue))
                         {
                             // 更新选中项
-                            sp_SelectedIndex.intValue = i;
+                            sp_selected_index.intValue = i;
 
                             if (!Application.isPlaying)
                             {
-                                PreviewSound(BaseScript.SoundLibrary[i].Clip);
+                                Preview_Sound_Play(base_script.library_sounds[i]);
                             }
                             // 标记界面需要更新
                             GUI.changed = true;
@@ -961,10 +977,10 @@ namespace SevenStrikeModules.XHud.Editor
             if (list.count <= 0)
                 return;
 
-            sp_SoundList.DeleteArrayElementAtIndex(list.index);
+            sp_library_sounds.DeleteArrayElementAtIndex(list.index);
 
-            if (BaseScript.act_on_SoundRemoved != null)
-                BaseScript.act_on_SoundRemoved();
+            if (base_script.act_on_sound_removed != null)
+                base_script.act_on_sound_removed();
         }
         /// <summary>
         /// 列表增加项。
@@ -974,12 +990,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="list">可重排列表</param>
         private void SoundInfoList_Original_Add(ReorderableList list)
         {
-            IsObjectSelector = true;
+            is_object_selector = true;
             EditorGUIUtility.ShowObjectPicker<AudioClip>(SelectedClip, false, "", 0);
         }
         #endregion
 
-        #region 工具 - 音效预览
+        #region 工具 - 音效分析
         /// <summary>
         /// 刷新音效参数。
         /// <para/>
@@ -987,15 +1003,15 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void UpdateSoundParams()
         {
-            if (BaseScript.SoundLibrary != null && BaseScript.SoundLibrary.Count > 0)
+            if (base_script.library_sounds != null && base_script.library_sounds.Count > 0)
             {
-                for (int i = 0; i < BaseScript.SoundLibrary.Count; i++)
+                for (int i = 0; i < base_script.library_sounds.Count; i++)
                 {
-                    if (BaseScript.SoundLibrary[i].Clip != null)
+                    if (base_script.library_sounds[i].clip != null)
                     {
-                        BaseScript.SoundLibrary[i].Channel = BaseScript.SoundLibrary[i].Clip.channels;
-                        BaseScript.SoundLibrary[i].Frequency = BaseScript.SoundLibrary[i].Clip.frequency;
-                        BaseScript.SoundLibrary[i].Length = BaseScript.SoundLibrary[i].Clip.length;
+                        base_script.library_sounds[i].channel = base_script.library_sounds[i].clip.channels;
+                        base_script.library_sounds[i].frequency = base_script.library_sounds[i].clip.frequency;
+                        base_script.library_sounds[i].length = base_script.library_sounds[i].clip.length;
                     }
                 }
             }
@@ -1010,63 +1026,94 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (state == PlayModeStateChange.ExitingEditMode)
             {
-                RecycleAudio();
-
-                for (int i = 0; i < PreviewAudioList.Count; i++)
-                {
-                    if (PreviewAudioList[i] != null)
-                    {
-                        DestroyImmediate(PreviewAudioList[i].gameObject, true);
-                        PreviewAudioList[i] = null;
-                        PreviewAudioList.RemoveAt(i);
-                    }
-                }
-                PreviewAudioList.Clear();
+                Preview_Sound_Stop();
             }
         }
+        #endregion
+
+        #region 工具 - 音效预览
         /// <summary>
-        /// 回收预览音效。
+        /// 预览音效（统一入口）。
         /// <para/>
-        /// 停止所有正在播放的预览 AudioSource。
+        /// 本方法只负责"决定要预览哪些 Sounder"，具体参数计算与入队交给 <see cref="EnqueueSound"/>。
+        /// <para/>
+        /// 【多选行为】多选时逐个 Sounder 各自取 SoundName / DelayTime / Volume / Pitch，
+        /// 不再共用当前查看对象的 SerializedProperty 值（修正原实现的隐藏 bug）。
         /// </summary>
-        private void RecycleAudio()
+        private void Preview_Sound_Play(XHud_LibraryArg_Sound sounder)
         {
-            if (PreviewAudioList != null)
+            XHud_Manager mgr = XHud_Dashboard.get_manager();
+            if (mgr.library_sounds == null)
             {
-                for (int i = 0; i < PreviewAudioList.Count; i++)
+                EditorApplication.delayCall += () =>
                 {
-                    if (PreviewAudioList[i] != null)
-                    {
-                        PreviewAudioList[i].Stop();
-                    }
-                }
+                    string res = XGUI.dialog(
+                        type: XGUIDialogType.警告,
+                        windowtitle: "XHud - 音效器消息",
+                        title: "未指定音效库",
+                        msg: "未在 XHudManager 中配置音效库！请先前往 XHud管理器 指定一个音效库！",
+                        ok: "前往",
+                        cancel: "明白",
+                        PrimaryIndex: 0,
+                        usemodal: true,
+                        themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
+                        on_selected: (d) =>
+                        {
+                            if (d == "前往")
+                            {
+                                Transform man = mgr.transform;
+                                EditorGUIUtility.PingObject(man);
+                            }
+                        });
+                };
+            }
+            else
+            {
+                EnqueueSound(sounder);
             }
         }
         /// <summary>
-        /// 预览声音。
+        /// 把单个 Sounder 的预览音效"算好参数"后交给 helper 入队。
         /// <para/>
-        /// 创建一个临时 GameObject 与 AudioSource，根据随机音高设置播放音频剪辑。
-        /// 该临时对象会被记录到 <see cref="PreviewAudioList"/> 中以便后续回收。
+        /// 【参数来源】
+        /// <list type="bullet">
+        /// <item><description>clip：从音效库按 SoundName 取；取不到则跳过。</description></item>
+        /// <item><description>delay：sounder.DelayTime 原值（不乘任何倍增系数）。</description></item>
+        /// <item><description>volume：sounder.Volume × HudManager.Volume（对齐运行时 DelayPlay 算法）。</description></item>
+        /// <item><description>mute：HudManager.VolumeMute（对齐运行时）。</description></item>
+        /// <item><description>pitch：sounder.UseRandomPitch 为 true 时在 [Pitch_Min, Pitch_Max] 随机，否则 1。</description></item>
+        /// </list>
         /// </summary>
-        /// <param name="clip">要预览的音频剪辑</param>
-        private void PreviewSound(AudioClip clip)
+        private void EnqueueSound(XHud_LibraryArg_Sound sounder)
         {
-            GameObject obj = new GameObject();
-            obj.name = "SoundPreviewer-" + "[" + clip.length.ToString("F2") + " s]-" + "[" + clip.channels + " ch]-" + "[" + clip.frequency + " hz]";
-            AudioSource au = obj.AddComponent<AudioSource>();
+            XHud_Manager mgr = XHud_Dashboard.get_manager();
 
-            if (PreviewAudioList == null)
-                PreviewAudioList = new List<AudioSource>();
-            PreviewAudioList.Add(au);
-
-            au.clip = clip;
-            if (sp_UseRandomPitch.boolValue)
-                au.pitch = Random.Range(sp_Pitch_Min.floatValue, sp_Pitch_Max.floatValue);
-            else
-                au.pitch = 1f;
-            au.Play();
-            //XHud_AudioStoper sp = au.gameObject.AddComponent<XHud_AudioStoper>();
-            //sp.AudioSource = au;
+            if (sounder == null) return;
+            if (string.IsNullOrEmpty(sounder.name)) return;
+            if (mgr == null || mgr.library_sounds == null) return;
+            AudioClip clip = mgr.library_sounds.SoundLibrary_GetSound(sounder.name);
+            if (clip == null) return;
+            // ── 算好参数 ──
+            float delay = Mathf.Max(0f, 0);
+            float masterVol = (mgr != null) ? mgr.global_volume * 0.01f : 1f;
+            bool masterMute = (mgr != null) && mgr.global_volume_mute;
+            float volume = masterVol * Mathf.Clamp01(1);
+            bool mute = masterMute;
+            bool useRandomPitch = sp_use_random_pitch.boolValue;
+            float pMin = sp_pitch_min.floatValue;
+            float pMax = sp_pitch_max.floatValue;
+            XGUI.EditorPlayer_Sound.Enqueue(
+                clip, delay, volume, mute, useRandomPitch, pMin, pMax);
+        }
+        /// <summary>
+        /// 停止所有音效预览。
+        /// <para/>
+        /// 委托给 <see cref="XGUI_Player_Sound.Stop()"/>，
+        /// 语义完全一致：待触发全丢 + 正在播立即掐断并销毁。
+        /// </summary>
+        private void Preview_Sound_Stop()
+        {
+            XGUI.EditorPlayer_Sound.Stop();
         }
         #endregion
 
@@ -1103,5 +1150,4 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
     }
-    #endregion
 }

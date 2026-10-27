@@ -25,56 +25,58 @@ namespace SevenStrikeModules.XHud
 
     public class XHud_PerformanceMonitor : MonoBehaviour
     {
-        [SerializeField] public float updateInterval = 0.4f;
-        [SerializeField] private float lastUpdateTime = 0f;
+        [SerializeField] public float update_interval = 0.4f;
+        [SerializeField] private float last_update_time = 0f;
 
         /// <summary>
         /// 节点内容边距
         /// </summary>
-        [SerializeField] public float RectMargin = 20;
+        [SerializeField] public float rect_margin = 20;
         /// <summary>
         /// 节点内容比例
         /// </summary>
-        [SerializeField] public float ScaleRatio = 1;
+        [SerializeField] public float scale_ratio = 1;
         /// <summary>
         /// 标题
         /// </summary>
-        [SerializeField] public XHud_Module_TmpText Title;
+        [SerializeField] public XHud_Module_TmpText title;
         /// <summary>
         /// 滚动条
         /// </summary>
-        [SerializeField] public ScrollRect ScrollRect;
+        [SerializeField] public ScrollRect scroll_rect;
         /// <summary>
         /// 数据节点列表
         /// </summary>
-        public xHud_MonitorData[] MonitorDataNodes;
+        public xHud_MonitorData[] monitor_data_nodes;
 
         private void Start()
         {
             GetAllMonitorDataNodes();
-            lastUpdateTime = Time.time;
+            last_update_time = Time.time;
         }
+
         private void Update()
         {
             // 每隔 updateInterval 秒更新一次数据
-            if (Time.time - lastUpdateTime >= updateInterval)
+            if (Time.time - last_update_time >= update_interval)
             {
-                for (int i = 0; i < MonitorDataNodes.Length; i++)
+                for (int i = 0; i < monitor_data_nodes.Length; i++)
                 {
-                    MonitorDataNodes[i].UpdateData();
+                    monitor_data_nodes[i].UpdateData();
                 }
-                lastUpdateTime = Time.time;
+                last_update_time = Time.time;
             }
         }
+
         /// <summary>
         /// 获取下面所有子物体中的MonitorData节点
         /// </summary>
         private void GetAllMonitorDataNodes()
         {
-            MonitorDataNodes = GetComponentsInChildren<xHud_MonitorData>(true);
-            for (int i = 0; i < MonitorDataNodes.Length; i++)
+            monitor_data_nodes = GetComponentsInChildren<xHud_MonitorData>(true);
+            for (int i = 0; i < monitor_data_nodes.Length; i++)
             {
-                MonitorDataNodes[i].Initialize();
+                monitor_data_nodes[i].Initialize();
             }
         }
 

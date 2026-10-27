@@ -105,7 +105,7 @@ namespace SevenStrikeModules.XHud.Editor
                 obj.name = "NewElement";
                 obj.layer = LayerMask.NameToLayer("XHud");
                 XHud_Module_Element obj_ele = obj.AddComponent<XHud_Module_Element>();
-                obj_ele.Indicator = "NewElement";
+                obj_ele.indicator = "NewElement";
                 RectTransform obj_ele_rect = obj.GetComponent<RectTransform>();
                 obj_ele_rect.transform.SetParent(actobj);
                 obj_ele_rect.anchoredPosition3D = Vector3.zero;
@@ -184,19 +184,19 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     //创建Text
                     XHud_Module_Text value = Mc_AddText(obj, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "XHud Text", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
-                    value.Indicator = "Text";
+                    value.indicator = "Text";
                     obj.name = "PrimitiveController ( Text )";
                 }
                 else if (res == "TmpText")
                 {
                     //创建TmpText
                     XHud_Module_TmpText value = Mc_AddTmpText(obj, "TmpText", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "XHud Text", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
-                    value.Indicator = "TmpText";
+                    value.indicator = "TmpText";
                     obj.name = "PrimitiveController ( TmpText )";
                 }
 
                 XHud_Module_Primitive_Controller obj_con = obj.AddComponent<XHud_Module_Primitive_Controller>();
-                obj_con.Indicator = "NewPrimitiveController";
+                obj_con.indicator = "NewPrimitiveController";
                 Selection.activeTransform = obj.transform;
             }
         }
@@ -229,7 +229,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 //创建Text
                 XHud_Module_Text value = Mc_AddText(actobj, "Text", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light.otf", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), ContentAnchor.中心, TextAnchor.MiddleCenter, "XHud Text", 18, Color.white, FontStyle.Normal, HorizontalWrapMode.Overflow, VerticalWrapMode.Overflow, false);
-                value.Indicator = "Text";
+                value.indicator = "Text";
 
                 string res = XGUI.dialog(
                    type: XGUIDialogType.警告,
@@ -248,7 +248,7 @@ namespace SevenStrikeModules.XHud.Editor
                     // 初始化图元控制器
                     con.InitialComponents_For_Editor();
                     // 初始配色同步
-                    con.pt_Painting.OriginalColor = value.TextStyleInfo.tmp_color;
+                    con.pt_painting.original_color = value.text_style_info.tmp_color;
                 }
 
                 Selection.activeTransform = value.transform;
@@ -283,7 +283,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 //创建TmpText
                 XHud_Module_TmpText value = Mc_AddTmpText(actobj, "TmpText", Vector3.zero, Vector3.zero, Vector3.one, "XHud", "sx_light SDF", new Vector2(120, 30), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), TmpContentAnchor.中心, TextAlignmentOptions.Center, "XHud Text", 18, Color.white, FontStyles.Normal, TextOverflowModes.Overflow, TextWrappingModes.NoWrap, false);
-                value.Indicator = "TmpText";
+                value.indicator = "TmpText";
 
                 string res = XGUI.dialog(
                     type: XGUIDialogType.警告,
@@ -302,7 +302,7 @@ namespace SevenStrikeModules.XHud.Editor
                     // 初始化图元控制器
                     con.InitialComponents_For_Editor();
                     // 初始配色同步
-                    con.pt_Painting.OriginalColor = value.TextStyleInfo.tmp_color;
+                    con.pt_painting.original_color = value.text_style_info.tmp_color;
                 }
 
                 Selection.activeTransform = value.transform;
@@ -347,15 +347,15 @@ namespace SevenStrikeModules.XHud.Editor
             GameObject obj = Mc_CreateObject("Element(Button)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
             XHud_Module_Element btn_ele = Mc_AddHudElement(obj);
             if (res == "图标")
-                btn_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(45, 45));
+                btn_ele.rect_transform = Mc_AddRectTransform(obj, new Vector2(45, 45));
             else if (res == "文字")
-                btn_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(128, 45));
+                btn_ele.rect_transform = Mc_AddRectTransform(obj, new Vector2(128, 45));
             else if (res == "图标 & 文字")
-                btn_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(160, 45));
+                btn_ele.rect_transform = Mc_AddRectTransform(obj, new Vector2(160, 45));
             #endregion
 
             #region 创建Button根物体
-            GameObject btn_root = Mc_CreateObject("Button", "XHud", Vector3.zero, Vector3.zero, Vector3.one, btn_ele.RectTransform);
+            GameObject btn_root = Mc_CreateObject("Button", "XHud", Vector3.zero, Vector3.zero, Vector3.one, btn_ele.rect_transform);
             RectTransform btn_root_rect = Mc_AddRectTransform(btn_root, new Vector2(0, 0), new Vector2(1, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), new Vector2(0, 0));
             #endregion
 
@@ -498,11 +498,11 @@ namespace SevenStrikeModules.XHud.Editor
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Progress)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
             XHud_Module_Element pro_ele = Mc_AddHudElement(obj);
-            pro_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(300, 70));
+            pro_ele.rect_transform = Mc_AddRectTransform(obj, new Vector2(300, 70));
             #endregion
 
             #region 创建Progress根物体
-            GameObject pro_root = Mc_CreateObject("Progress", "XHud", Vector3.zero, Vector3.zero, Vector3.one, pro_ele.RectTransform);
+            GameObject pro_root = Mc_CreateObject("Progress", "XHud", Vector3.zero, Vector3.zero, Vector3.one, pro_ele.rect_transform);
             RectTransform pro_root_rect = Mc_AddRectTransform(pro_root, new Vector2(300, 70));
             #endregion
 
@@ -621,11 +621,11 @@ namespace SevenStrikeModules.XHud.Editor
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Slider)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
             XHud_Module_Element sli_ele = Mc_AddHudElement(obj);
-            sli_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(300, 70));
+            sli_ele.rect_transform = Mc_AddRectTransform(obj, new Vector2(300, 70));
             #endregion
 
             #region 创建Slider根物体
-            GameObject sli_root = Mc_CreateObject("Slider", "XHud", Vector3.zero, Vector3.zero, Vector3.one, sli_ele.RectTransform);
+            GameObject sli_root = Mc_CreateObject("Slider", "XHud", Vector3.zero, Vector3.zero, Vector3.one, sli_ele.rect_transform);
             RectTransform sli_root_rect = Mc_AddRectTransform(sli_root, new Vector2(0, 0), new Vector2(1, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), new Vector2(0, 0));
 
             #endregion
@@ -761,17 +761,17 @@ namespace SevenStrikeModules.XHud.Editor
             GameObject obj = Mc_CreateObject("Element(Toggle)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
             XHud_Module_Element btn_ele = Mc_AddHudElement(obj);
             if (res == "图标")
-                btn_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(80, 35));
+                btn_ele.rect_transform = Mc_AddRectTransform(obj, new Vector2(80, 35));
             else if (res == "文字")
-                btn_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(150, 35));
+                btn_ele.rect_transform = Mc_AddRectTransform(obj, new Vector2(150, 35));
             else if (res == "图标 & 文字")
-                btn_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(185, 35));
+                btn_ele.rect_transform = Mc_AddRectTransform(obj, new Vector2(185, 35));
             else if (res == "纯净")
-                btn_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(65, 35));
+                btn_ele.rect_transform = Mc_AddRectTransform(obj, new Vector2(65, 35));
             #endregion
 
             #region 创建Toggle根物体
-            GameObject tog_root = Mc_CreateObject("Toggle", "XHud", Vector3.zero, Vector3.zero, Vector3.one, btn_ele.RectTransform);
+            GameObject tog_root = Mc_CreateObject("Toggle", "XHud", Vector3.zero, Vector3.zero, Vector3.one, btn_ele.rect_transform);
             RectTransform tog_root_rect = Mc_AddRectTransform(tog_root, new Vector2(0, 0), new Vector2(1, 1), new Vector2(0.5f, 0.5f), new Vector2(0, 0), new Vector2(0, 0));
             #endregion
 
@@ -913,11 +913,11 @@ namespace SevenStrikeModules.XHud.Editor
             #region 创建Hud元素
             GameObject obj = Mc_CreateObject("Element(Option)", "XHud", Vector3.zero, Vector3.zero, Vector3.one, Selection.activeTransform);
             XHud_Module_Element opt_ele = Mc_AddHudElement(obj);
-            opt_ele.RectTransform = Mc_AddRectTransform(obj, new Vector2(420, 75));
+            opt_ele.rect_transform = Mc_AddRectTransform(obj, new Vector2(420, 75));
             #endregion
 
             #region 创建Option根物体
-            GameObject opt_root = Mc_CreateObject("Option", "XHud", Vector3.zero, Vector3.zero, Vector3.one, opt_ele.RectTransform);
+            GameObject opt_root = Mc_CreateObject("Option", "XHud", Vector3.zero, Vector3.zero, Vector3.one, opt_ele.rect_transform);
             RectTransform opt_root_rect = Mc_AddRectTransform(opt_root, new Vector2(420, 75), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 0), new Vector2(0, 0));
             #endregion
 
@@ -1057,9 +1057,9 @@ namespace SevenStrikeModules.XHud.Editor
 
                 #region 添加到选项按钮列表中
                 ElementNode_OptionButton node = new ElementNode_OptionButton();
-                node.Button = btn;
-                node.Indicator = ButtonText[i];
-                node.IsOptional = btn.IsOptionButton;
+                node.button = btn;
+                node.indicator = ButtonText[i];
+                node.is_optional = btn.IsOptionButton;
                 if (option.OptionButtonNodes == null)
                     option.OptionButtonNodes = new List<ElementNode_OptionButton>();
                 option.OptionButtonNodes.Add(node);
@@ -1374,17 +1374,17 @@ namespace SevenStrikeModules.XHud.Editor
             rect.anchoredPosition = new Vector2(rect.anchoredPosition.x + anchor_pos.x, rect.anchoredPosition.y + anchor_pos.y);
 
             XHud_Module_Text hud_text = obj.AddComponent<XHud_Module_Text>();
-            hud_text.TextStyleInfo.txt_Set_Alignment(anchor_content);
+            hud_text.text_style_info.txt_Set_Alignment(anchor_content);
             hud_text.alignment = anchor_text;
             hud_text.text = text;
-            hud_text.TextStyleInfo.txt_Set_FontSize(font_size);
-            hud_text.TextStyleInfo.txt_Set_FontColor(font_color);
-            hud_text.TextStyleInfo.txt_Set_Font(font);
+            hud_text.text_style_info.txt_Set_FontSize(font_size);
+            hud_text.text_style_info.txt_Set_FontColor(font_color);
+            hud_text.text_style_info.txt_Set_Font(font);
             hud_text.font = font;
-            hud_text.TextStyleInfo.txt_Set_FontStyle(style);
-            hud_text.TextStyleInfo.txt_Set_Overflow(h_mode);
-            hud_text.TextStyleInfo.txt_Set_Overflow(v_mode);
-            hud_text.TextStyleInfo.gen_RayCastSet(raycast);
+            hud_text.text_style_info.txt_Set_FontStyle(style);
+            hud_text.text_style_info.txt_Set_Overflow(h_mode);
+            hud_text.text_style_info.txt_Set_Overflow(v_mode);
+            hud_text.text_style_info.gen_RayCastSet(raycast);
 
             return hud_text;
         }
@@ -1428,17 +1428,17 @@ namespace SevenStrikeModules.XHud.Editor
             rect.anchoredPosition = new Vector2(rect.anchoredPosition.x + anchor_pos.x, rect.anchoredPosition.y + anchor_pos.y);
 
             XHud_Module_Text hud_text = parent.AddComponent<XHud_Module_Text>();
-            hud_text.TextStyleInfo.txt_Set_Alignment(anchor_content);
+            hud_text.text_style_info.txt_Set_Alignment(anchor_content);
             hud_text.alignment = anchor_text;
             hud_text.text = text;
-            hud_text.TextStyleInfo.txt_Set_FontSize(font_size);
-            hud_text.TextStyleInfo.txt_Set_FontColor(font_color);
-            hud_text.TextStyleInfo.txt_Set_Font(font);
+            hud_text.text_style_info.txt_Set_FontSize(font_size);
+            hud_text.text_style_info.txt_Set_FontColor(font_color);
+            hud_text.text_style_info.txt_Set_Font(font);
             hud_text.font = font;
-            hud_text.TextStyleInfo.txt_Set_FontStyle(style);
-            hud_text.TextStyleInfo.txt_Set_Overflow(h_mode);
-            hud_text.TextStyleInfo.txt_Set_Overflow(v_mode);
-            hud_text.TextStyleInfo.gen_RayCastSet(raycast);
+            hud_text.text_style_info.txt_Set_FontStyle(style);
+            hud_text.text_style_info.txt_Set_Overflow(h_mode);
+            hud_text.text_style_info.txt_Set_Overflow(v_mode);
+            hud_text.text_style_info.gen_RayCastSet(raycast);
 
             return hud_text;
         }
@@ -1489,19 +1489,19 @@ namespace SevenStrikeModules.XHud.Editor
             rect.anchoredPosition = new Vector2(rect.anchoredPosition.x + anchor_pos.x, rect.anchoredPosition.y + anchor_pos.y);
 
             XHud_Module_TmpText hud_tmptext = obj.AddComponent<XHud_Module_TmpText>();
-            hud_tmptext.TextStyleInfo.tmp_Set_Alignment(anchor_content);
+            hud_tmptext.text_style_info.tmp_Set_Alignment(anchor_content);
             hud_tmptext.alignment = anchor_text;
             hud_tmptext.text = text;
-            hud_tmptext.TextStyleInfo.tmp_Set_FontSize(font_size);
+            hud_tmptext.text_style_info.tmp_Set_FontSize(font_size);
             hud_tmptext.fontSize = font_size;
-            hud_tmptext.TextStyleInfo.tmp_Set_FontColor(font_color);
-            hud_tmptext.TextStyleInfo.tmp_Set_FontAsset(font);
+            hud_tmptext.text_style_info.tmp_Set_FontColor(font_color);
+            hud_tmptext.text_style_info.tmp_Set_FontAsset(font);
             hud_tmptext.font = font;
-            hud_tmptext.TextStyleInfo.tmp_Set_FontStyle(style);
-            hud_tmptext.TextStyleInfo.tmp_Set_Overflow(overflow);
-            hud_tmptext.TextStyleInfo.tmp_Set_WordWrappingMode(wrap);
+            hud_tmptext.text_style_info.tmp_Set_FontStyle(style);
+            hud_tmptext.text_style_info.tmp_Set_Overflow(overflow);
+            hud_tmptext.text_style_info.tmp_Set_WordWrappingMode(wrap);
             hud_tmptext.textWrappingMode = TextWrappingModes.NoWrap;
-            hud_tmptext.TextStyleInfo.gen_RayCastSet(raycast);
+            hud_tmptext.text_style_info.gen_RayCastSet(raycast);
 
             return hud_tmptext;
         }
@@ -1545,19 +1545,19 @@ namespace SevenStrikeModules.XHud.Editor
             rect.anchoredPosition = new Vector2(rect.anchoredPosition.x + anchor_pos.x, rect.anchoredPosition.y + anchor_pos.y);
 
             XHud_Module_TmpText hud_tmptext = parent.AddComponent<XHud_Module_TmpText>();
-            hud_tmptext.TextStyleInfo.tmp_Set_Alignment(anchor_content);
+            hud_tmptext.text_style_info.tmp_Set_Alignment(anchor_content);
             hud_tmptext.alignment = anchor_text;
             hud_tmptext.text = text;
-            hud_tmptext.TextStyleInfo.tmp_Set_FontSize(font_size);
+            hud_tmptext.text_style_info.tmp_Set_FontSize(font_size);
             hud_tmptext.fontSize = font_size;
-            hud_tmptext.TextStyleInfo.tmp_Set_FontColor(font_color);
-            hud_tmptext.TextStyleInfo.tmp_Set_FontAsset(font);
+            hud_tmptext.text_style_info.tmp_Set_FontColor(font_color);
+            hud_tmptext.text_style_info.tmp_Set_FontAsset(font);
             hud_tmptext.font = font;
-            hud_tmptext.TextStyleInfo.tmp_Set_FontStyle(style);
-            hud_tmptext.TextStyleInfo.tmp_Set_Overflow(overflow);
-            hud_tmptext.TextStyleInfo.tmp_Set_WordWrappingMode(wrap);
+            hud_tmptext.text_style_info.tmp_Set_FontStyle(style);
+            hud_tmptext.text_style_info.tmp_Set_Overflow(overflow);
+            hud_tmptext.text_style_info.tmp_Set_WordWrappingMode(wrap);
             hud_tmptext.textWrappingMode = TextWrappingModes.NoWrap;
-            hud_tmptext.TextStyleInfo.gen_RayCastSet(raycast);
+            hud_tmptext.text_style_info.gen_RayCastSet(raycast);
 
             return hud_tmptext;
         }

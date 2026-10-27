@@ -268,11 +268,11 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         ///主功能键（组合键）
         ///</summary>
-        [SerializeField] public SpawnFunctionKey SpawnFunctionKey_Primary = SpawnFunctionKey.Shift;
+        [SerializeField] public SpawnFunctionKey SpawnFunctionKey_Primary = SpawnFunctionKey.shift;
         /// <summary>
         ///辅助功能键（组合键）
         ///</summary>
-        [SerializeField] public SpawnFunctionKey SpawnFunctionKey_Secondary = SpawnFunctionKey.None;
+        [SerializeField] public SpawnFunctionKey SpawnFunctionKey_Secondary = SpawnFunctionKey.none;
         /// <summary>
         ///生成快捷键
         ///</summary>
@@ -547,27 +547,27 @@ namespace SevenStrikeModules.XHud
             // 该方法是直接实例化元素（非从元素库中取元素）
             if (UseInstantiateMode)
             {
-                e = XHud_Manager.Instance.hm_ElementLibrary_GetTargetLibrary(LibName).ElementsLibrary_GetTargetElement(item.SpawnName);
+                e = XHud_Manager.instance.hm_ElementLibrary_GetTargetLibrary(LibName).ElementsLibrary_GetTargetElement(item.SpawnName);
             }
 
             if (space == XHudSpace.屏幕空间)
             {
                 if (UseInstantiateMode) // 该方法是直接实例化元素
                 {
-                    item.SpawnedElementNode = XHud_Manager.Instance.hm_ScreenElement_Create(Instantiate(e));
+                    item.SpawnedElementNode = XHud_Manager.instance.hm_ScreenElement_Create(Instantiate(e));
                 }
                 else // 从库中找到匹配的元素则返回实例
-                    item.SpawnedElementNode = XHud_Manager.Instance.hm_ScreenElement_Create(LibName, item.SpawnName);
+                    item.SpawnedElementNode = XHud_Manager.instance.hm_ScreenElement_Create(LibName, item.SpawnName);
             }
             else
             {
                 if (UseInstantiateMode) // 该方法是直接实例化元素
                 {
-                    item.SpawnedElementNode = XHud_Manager.Instance.hm_WorldElement_Create(Instantiate(e));
+                    item.SpawnedElementNode = XHud_Manager.instance.hm_WorldElement_Create(Instantiate(e));
                 }
                 else // 从库中找到匹配的元素则返回实例
                 {
-                    item.SpawnedElementNode = XHud_Manager.Instance.hm_WorldElement_Create(LibName, item.SpawnName);
+                    item.SpawnedElementNode = XHud_Manager.instance.hm_WorldElement_Create(LibName, item.SpawnName);
                 }
             }
 
@@ -575,7 +575,7 @@ namespace SevenStrikeModules.XHud
             #endregion
 
             // 动效源选择（自身动效 or 全局动效）
-            Motion_Creator arg = item.UseSpawnerMotion == "列表项动效" ? item.CreateArgs : item.UseSpawnerMotion == "元素自身动效" ? node.Element.CreateArgs : CreateArgs;
+            Motion_Creator arg = item.UseSpawnerMotion == "列表项动效" ? item.CreateArgs : item.UseSpawnerMotion == "元素自身动效" ? node.Element.motion_create_args : CreateArgs;
 
             // 如果无法再库中找到匹配的元素则返回一个空的实例
             if (node == null)
@@ -826,7 +826,7 @@ namespace SevenStrikeModules.XHud
                 if (ele != null)
                 {
                     // 有管理器负责的回收逻辑开始执行（根据动效源选择使用自身动效或全局动效）
-                    XHud_Manager.Instance.hm_HudElement_RecycleAt(node.Element, item.UseSpawnerMotion == "列表项动效" ? item.RecycleArgs : item.UseSpawnerMotion == "元素自身动效" ? ele.RecycleArgs : RecycleArgs, action_out_end: (ele) =>
+                    XHud_Manager.instance.hm_HudElement_RecycleAt(node.Element, item.UseSpawnerMotion == "列表项动效" ? item.RecycleArgs : item.UseSpawnerMotion == "元素自身动效" ? ele.motion_recycle_args : RecycleArgs, action_out_end: (ele) =>
                     {
                         // 调用回收委托，并传递回收的元素结构以及回收项的ID号
                         // 便于附加的脚本对匹配的ID的元素结构中的元素中的控件进行数值绑定
@@ -903,18 +903,18 @@ namespace SevenStrikeModules.XHud
             bool ispress = false;
             switch (SpawnFunctionKey_Primary)
             {
-                case SpawnFunctionKey.None:
+                case SpawnFunctionKey.none:
                     ispress = true;
                     break;
-                case SpawnFunctionKey.Ctrl:
+                case SpawnFunctionKey.ctrl:
                     if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                         ispress = true;
                     break;
-                case SpawnFunctionKey.Alt:
+                case SpawnFunctionKey.alt:
                     if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
                         ispress = true;
                     break;
-                case SpawnFunctionKey.Shift:
+                case SpawnFunctionKey.shift:
                     if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                         ispress = true;
                     break;
@@ -930,18 +930,18 @@ namespace SevenStrikeModules.XHud
             bool ispress = false;
             switch (SpawnFunctionKey_Secondary)
             {
-                case SpawnFunctionKey.None:
+                case SpawnFunctionKey.none:
                     ispress = true;
                     break;
-                case SpawnFunctionKey.Ctrl:
+                case SpawnFunctionKey.ctrl:
                     if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                         ispress = true;
                     break;
-                case SpawnFunctionKey.Alt:
+                case SpawnFunctionKey.alt:
                     if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
                         ispress = true;
                     break;
-                case SpawnFunctionKey.Shift:
+                case SpawnFunctionKey.shift:
                     if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                         ispress = true;
                     break;
@@ -965,34 +965,34 @@ namespace SevenStrikeModules.XHud
                 return;
 
             // 匹配元素库
-            XHud_Library_Element ele_lib = Application.isPlaying ? XHud_Manager.Instance.hm_ElementLibrary_GetTargetLibrary(LibName) : XHud_Dashboard.get_manager().hm_ElementLibrary_GetTargetLibrary(LibName);
+            XHud_Library_Element ele_lib = Application.isPlaying ? XHud_Manager.instance.hm_ElementLibrary_GetTargetLibrary(LibName) : XHud_Dashboard.get_manager().hm_ElementLibrary_GetTargetLibrary(LibName);
 
             if (ele_lib == null)
                 return;
 
-            for (int i = 0; i < ele_lib.ElementLibrary.Count; i++)
+            for (int i = 0; i < ele_lib.library_elements.Count; i++)
             {
-                XHud_LibraryArg_Element_Item lib_item = ele_lib.ElementLibrary[i];
+                XHud_LibraryArg_Element_Item lib_item = ele_lib.library_elements[i];
                 if (lib_item == null)
                     continue;
 
-                if (lib_item.Target == null)
+                if (lib_item.target == null)
                     continue;
 
                 // 屏幕空间生成元素校验
                 for (int s = 0; s < SpawnItemList_Screen.Count; s++)
                 {
                     XHud_LayoutSpawner_Item spawn_item = SpawnItemList_Screen[s];
-                    if (spawn_item.SpawnName == lib_item.Name)
+                    if (spawn_item.SpawnName == lib_item.name)
                     {
                         // 这里明确先记录后恢复的原则
                         // 否则会导致布局生成器生成的元素的锚点被元素库的元素自身携带的锚点覆盖
                         // 这样你生成出来的元素是在元素自身携带的生成动效锚点下，而不是布局记录的锚点下
                         XHudAnchor anchor = spawn_item.CreateArgs.anchor;
-                        spawn_item.CreateArgs = lib_item.Target.CreateArgs.Clone();
+                        spawn_item.CreateArgs = lib_item.target.motion_create_args.Clone();
                         spawn_item.CreateArgs.anchor = anchor;
 
-                        spawn_item.RecycleArgs = lib_item.Target.RecycleArgs.Clone();
+                        spawn_item.RecycleArgs = lib_item.target.motion_recycle_args.Clone();
                     }
                 }
 
@@ -1000,10 +1000,10 @@ namespace SevenStrikeModules.XHud
                 for (int s = 0; s < SpawnItemList_World.Count; s++)
                 {
                     XHud_LayoutSpawner_Item spawn_item = SpawnItemList_World[s];
-                    if (spawn_item.SpawnName == lib_item.Name)
+                    if (spawn_item.SpawnName == lib_item.name)
                     {
-                        spawn_item.CreateArgs = lib_item.Target.CreateArgs.Clone();
-                        spawn_item.RecycleArgs = lib_item.Target.RecycleArgs.Clone();
+                        spawn_item.CreateArgs = lib_item.target.motion_create_args.Clone();
+                        spawn_item.RecycleArgs = lib_item.target.motion_recycle_args.Clone();
                     }
                 }
             }
@@ -1016,7 +1016,7 @@ namespace SevenStrikeModules.XHud
         {
             bool isEmpty = false;
 
-            if (XHud_Manager.Instance.Hud_ElementLibrarys == null)
+            if (XHud_Manager.instance.ele_library_elements == null)
                 isEmpty = true;
 
             return isEmpty;

@@ -135,8 +135,8 @@ namespace SevenStrikeModules.XHud.Editor
             if (dragMode == DragMode.移动 && draggingKind == TrackKind.Node && draggingIndex >= 0 && draggingIndex < Nodes.Count)
             {
                 TweenNode draggingNode = Nodes[draggingIndex];
-                float leftX = draggingNode.Delay * pixelsPerSecond - scrollPos.x;
-                float rightX = (draggingNode.Delay + draggingNode.Duration) * pixelsPerSecond - scrollPos.x;
+                float leftX = draggingNode.delay * pixelsPerSecond - scrollPos.x;
+                float rightX = (draggingNode.delay + draggingNode.duration) * pixelsPerSecond - scrollPos.x;
                 if (leftX >= 0f && leftX <= area.width)
                     XGUI.gui_box(new Rect(leftX, 0, 1f, area.height), ColorClipEdgeGuide);
                 if (rightX >= 0f && rightX <= area.width)
@@ -147,9 +147,9 @@ namespace SevenStrikeModules.XHud.Editor
             if (dragMode == DragMode.移动 && draggingKind == TrackKind.Sound && draggingIndex >= 0 && draggingIndex < Sounds.Count)
             {
                 TweenSound draggingSound = Sounds[draggingIndex];
-                float sLen = draggingSound.Sound != null ? draggingSound.Sound.length : DefaultSoundClipSeconds;
-                float sLeftX = draggingSound.Delay * pixelsPerSecond - scrollPos.x;
-                float sRightX = (draggingSound.Delay + sLen) * pixelsPerSecond - scrollPos.x;
+                float sLen = draggingSound.sound != null ? draggingSound.sound.length : DefaultSoundClipSeconds;
+                float sLeftX = draggingSound.delay * pixelsPerSecond - scrollPos.x;
+                float sRightX = (draggingSound.delay + sLen) * pixelsPerSecond - scrollPos.x;
                 if (sLeftX >= 0f && sLeftX <= area.width)
                     XGUI.gui_box(new Rect(sLeftX, 0, 1f, area.height), ColorClipEdgeGuide);
                 if (sRightX >= 0f && sRightX <= area.width)
@@ -361,10 +361,10 @@ namespace SevenStrikeModules.XHud.Editor
         {
             #region 轨道条
             Color clipColor = ColorClipFG_Normal;
-            if (!node.Enabled)
+            if (!node.enabled)
                 clipColor = ColorClipFG_Disabled;
             if (isSelected)
-                clipColor = !node.Enabled ? ColorClipFG_Selected * 0.6f : XHud_Dashboard.themes_get_color(ThemeColorType.primary);
+                clipColor = !node.enabled ? ColorClipFG_Selected * 0.6f : XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             XGUI.gui_box(clipRect, clipColor);
             #endregion
 
@@ -372,9 +372,9 @@ namespace SevenStrikeModules.XHud.Editor
             bool is_very_minmal = clipRect.width <= 90;
 
             ModuleType moduleType = target.controller.GetModuleType();
-            bool type_not_matched = (moduleType == ModuleType.TmpText || moduleType == ModuleType.Text) && node.Type == TweenNodeType.f_图像填充;
+            bool type_not_matched = (moduleType == ModuleType.TmpText || moduleType == ModuleType.Text) && node.type == TweenNodeType.f_图像填充;
 
-            if ((moduleType != ModuleType.TmpText && moduleType != ModuleType.Text) && node.Type == TweenNodeType.w_打字机)
+            if ((moduleType != ModuleType.TmpText && moduleType != ModuleType.Text) && node.type == TweenNodeType.w_打字机)
                 type_not_matched = true;
 
             if (type_not_matched)
@@ -402,7 +402,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.gui_label(
                         rect: new Rect(clipRect.x + (clipRect.width / 2) - ((clipRect.width - 50) / 2), clipRect.y + (clipRect.height / 2) - (clipRect.height / 2), clipRect.width - 50, clipRect.height),
                         text: new GUIContent("动画类型不兼容"),
-                        text_color: isSelected ? (!node.Enabled ? Color.white * 0.7f : Color.black) : Color.white,
+                        text_color: isSelected ? (!node.enabled ? Color.white * 0.7f : Color.black) : Color.white,
                         size: XGUIFontSize.M,
                         clipping: TextClipping.Clip,
                         anchor: TextAnchor.MiddleCenter,
@@ -419,8 +419,8 @@ namespace SevenStrikeModules.XHud.Editor
             else
             {
                 #region 类型指示条
-                Color clip_type_Color = GetTweenTypeColor(node.Type);
-                if (!node.Enabled)
+                Color clip_type_Color = GetTweenTypeColor(node.type);
+                if (!node.enabled)
                     clip_type_Color *= 0.55f;
                 if (isSelected)
                     clip_type_Color = Color.Lerp(clip_type_Color, Color.white, 0.25f);
@@ -431,11 +431,11 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 概述信息
                 if (!is_very_minmal)
                 {
-                    string twn_content = $"{(is_minmal ? "" : "延迟：")}{node.Delay:F3}   /   {(is_minmal ? "" : "耗时：")}{node.Duration:F3}";
+                    string twn_content = $"{(is_minmal ? "" : "延迟：")}{node.delay:F3}   /   {(is_minmal ? "" : "耗时：")}{node.duration:F3}";
                     XGUI.gui_label(
                         rect: new Rect(clipRect.x + 4, clipRect.y, clipRect.width - 8, clipRect.height),
                         text: new GUIContent(twn_content),
-                        text_color: isSelected ? (!node.Enabled ? Color.white * 0.7f : Color.black) : Color.white,
+                        text_color: isSelected ? (!node.enabled ? Color.white * 0.7f : Color.black) : Color.white,
                         size: XGUIFontSize.M,
                         clipping: TextClipping.Clip,
                         anchor: TextAnchor.MiddleCenter,
@@ -448,7 +448,7 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     XGUI.gui_icon(
                           rect: new Rect(clipRect.x + (clipRect.width / 2 - 6), clipRect.y + (trackHeight / 2 - 7), 12, 12),
-                          icon: GetTweenTypeIcon(node.Type, false),
+                          icon: GetTweenTypeIcon(node.type, false),
                           border: new RectOffset(0, 0, 0, 0),
                           color: isSelected ? Color.black : Color.white * 0.9f);
                 }
@@ -458,13 +458,13 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         XGUI.gui_icon(
                             rect: new Rect(clipRect.x + 15, clipRect.y + (trackHeight / 2 - 7), 12, 12),
-                            icon: GetTweenTypeIcon(node.Type, false),
+                            icon: GetTweenTypeIcon(node.type, false),
                             border: new RectOffset(0, 0, 0, 0),
                             color: isSelected ? Color.black : Color.white * 0.9f);
 
                         XGUI.gui_icon(
                             rect: new Rect(clipRect.x + (clipRect.width - 25), clipRect.y + (trackHeight / 2 - 7), 12, 12),
-                            icon: GetTweenTypeIcon(node.Type, false),
+                            icon: GetTweenTypeIcon(node.type, false),
                             border: new RectOffset(0, 0, 0, 0),
                             color: isSelected ? Color.black : Color.white * 0.9f);
                     }
@@ -482,8 +482,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>Clip 矩形（内容坐标）</returns>
         private Rect CalculateClipRect(Rect trackVisualRect, TweenNode node)
         {
-            float clipX = trackVisualRect.x + node.Delay * pixelsPerSecond;
-            float clipW = node.Duration * pixelsPerSecond;
+            float clipX = trackVisualRect.x + node.delay * pixelsPerSecond;
+            float clipW = node.duration * pixelsPerSecond;
             return new Rect(
                 Mathf.Round(clipX),
                 trackVisualRect.y,
@@ -609,8 +609,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private Rect CalculateSoundClipRect(Rect trackVisualRect, TweenSound sound)
         {
-            float clipX = trackVisualRect.x + sound.Delay * pixelsPerSecond;
-            float lengthSec = sound.Sound != null ? sound.Sound.length : DefaultSoundClipSeconds;
+            float clipX = trackVisualRect.x + sound.delay * pixelsPerSecond;
+            float lengthSec = sound.sound != null ? sound.sound.length : DefaultSoundClipSeconds;
             float clipW = lengthSec * pixelsPerSecond;
             return new Rect(
                 Mathf.Round(clipX),
@@ -628,7 +628,7 @@ namespace SevenStrikeModules.XHud.Editor
             bool is_minmal = clipRect.width < 180;
             bool is_very_minmal = clipRect.width <= 90;
 
-            bool sound_null = sound.Sound == null;
+            bool sound_null = sound.sound == null;
 
             XGUI.gui_box(clipRect, Color.gray * 0.75f);
 
@@ -655,7 +655,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.gui_label(
                         rect: new Rect(clipRect.x + (clipRect.width / 2) - ((clipRect.width - 50) / 2), clipRect.y + (clipRect.height / 2) - (clipRect.height / 2), clipRect.width - 50, clipRect.height),
                         text: new GUIContent("音效剪辑未指定"),
-                        text_color: isSelected ? (!sound.Mute ? Color.white * 0.7f : Color.black) : Color.white,
+                        text_color: isSelected ? (!sound.mute ? Color.white * 0.7f : Color.black) : Color.white,
                         size: XGUIFontSize.M,
                         clipping: TextClipping.Clip,
                         anchor: TextAnchor.MiddleCenter,
@@ -672,11 +672,11 @@ namespace SevenStrikeModules.XHud.Editor
             else
             {
                 #region 背景
-                Color bg = sound.Mute ? ColorSoundTrackBG_muted : (sound.Sound != null ? ColorSoundClipBG : ColorSoundClipBG_Empty);
+                Color bg = sound.mute ? ColorSoundTrackBG_muted : (sound.sound != null ? ColorSoundClipBG : ColorSoundClipBG_Empty);
 
                 if (isSelected)
                 {
-                    bg = sound.Mute ? ColorSoundTrackBG_muted_Selected : (sound.Sound != null ? ColorSoundClipBG_Selected : ColorSoundClipBG_Empty_Selected);
+                    bg = sound.mute ? ColorSoundTrackBG_muted_Selected : (sound.sound != null ? ColorSoundClipBG_Selected : ColorSoundClipBG_Empty_Selected);
                 }
 
                 XGUI.gui_box(clipRect, bg);
@@ -685,11 +685,11 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 概述信息
                 if (!is_very_minmal)
                 {
-                    string state = sound.Mute ? "已静音" : sound.Sound != null ? is_minmal ? $"{sound.Sound.length:F2}  s   /   {sound.Delay:F3}  s" : $"延迟：{sound.Delay:F3}  s   /   时长：{sound.Sound.length:F2}  s" : "空音效";
+                    string state = sound.mute ? "已静音" : sound.sound != null ? is_minmal ? $"{sound.sound.length:F2}  s   /   {sound.delay:F3}  s" : $"延迟：{sound.delay:F3}  s   /   时长：{sound.sound.length:F2}  s" : "空音效";
                     XGUI.gui_label(
                         rect: new Rect(clipRect.x + 4, clipRect.y, clipRect.width - 8, clipRect.height),
                         text: new GUIContent(state),
-                        text_color: sound.Mute ? Color.white * 0.7f : Color.white,
+                        text_color: sound.mute ? Color.white * 0.7f : Color.white,
                         size: XGUIFontSize.M,
                         clipping: TextClipping.Clip,
                         anchor: TextAnchor.MiddleCenter,

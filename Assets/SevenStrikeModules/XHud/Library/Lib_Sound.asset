@@ -12,21 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63c7c2391e18c5b4590c40e9724718ad, type: 3}
   m_Name: Lib_Sound
   m_EditorClassIdentifier: 
-  LibraryName: NewSoundLibrary
-  UseRandomPitch: 0
-  Pitch_Min: 0.3
-  Pitch_Max: 1
-  Find: 
-  itemHeight: 50
-  visibleItemCount: 8
-  SoundInfoList_Original_Scroller: {x: 0, y: 0}
-  Highlight: 
-  SelectedIndex: -1
-  LocationSelectedIndex: -1
-  SoundLibrary:
-  - Name: DefaultSound
-    Format: .wav
-    Clip: {fileID: 8300000, guid: e2b63b2bd09f35d468069a437dec056a, type: 3}
-    Frequency: 22050
-    Channel: 1
-    Length: 0.1799093
+  library_name: NewSoundLibrary
+  library_sounds:
+  - name: "\u7535\u5B50\u6FC0\u5149\u58F011"
+    format: .wav
+    clip: {fileID: 8300000, guid: 3b0d6c66aeca5ad48807e549004a9a11, type: 3}
+    frequency: 32000
+    channel: 1
+    length: 0.31340626
+  - name: ddd
+    format: .wav
+    clip: {fileID: 8300000, guid: 3b0d6c66aeca5ad48807e549004a9a11, type: 3}
+    frequency: 32000
+    channel: 1
+    length: 0.31340626
+  use_random_pitch: 0
+  pitch_min: 1
+  pitch_max: 1
+  find: 
+  highlight: 
+  item_height: 50
+  visible_item_count: 8
+  sound_Info_list_original_scroller: {x: 0, y: 0}
+  selected_index: -1
+  location_selected_index: -1

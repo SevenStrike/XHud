@@ -26,22 +26,6 @@ namespace SevenStrikeModules.XHud
     using UnityEngine.Events;
 
     /// <summary>
-    /// 生成器功能键枚举
-    /// 定义用于触发生成/回收操作的修饰键组合
-    /// </summary>
-    public enum SpawnFunctionKey
-    {
-        /// <summary>无修饰键，直接按下触发键即可</summary>
-        None = 0,
-        /// <summary>Ctrl 键组合</summary>
-        Ctrl = 1,
-        /// <summary>Alt 键组合</summary>
-        Alt = 2,
-        /// <summary>Shift 键组合</summary>
-        Shift = 3,
-    }
-
-    /// <summary>
     /// XHud 元素生成器
     /// 用于在编辑器和运行时动态生成和回收 Hud 元素，支持快捷键操作、视觉预览和世界空间/屏幕空间两种模式
     /// </summary>
@@ -53,31 +37,73 @@ namespace SevenStrikeModules.XHud
         /// 元素库名称
         /// 指定从哪个元素库中获取预制体资源
         /// </summary>
-        public string LibName;
+        public string target_library_name;
         [SerializeField]
         /// <summary>
         /// 生成元素名称标识
         /// 用于在元素库中查找对应的预制体名称
         /// </summary>
-        public string SpawnName;
+        public string target_spawn_name;
         [SerializeField]
         /// <summary>
         /// 生成元素标识符
         /// 用于区分同一预制体的不同实例，可自定义标识名称
         /// </summary>
-        public string SpawnIndicator;
+        public string target_spawn_indicator;
         [SerializeField]
         /// <summary>
         /// 生成器自身标识符
         /// 用于标识当前生成器实例，便于管理和调试
         /// </summary>
-        public string SpawnerIndicator;
+        public string spawner_indicator;
         [SerializeField]
         /// <summary>
         /// 当前生成的元素实例
         /// 保存通过此生成器创建的元素对象引用
         /// </summary>
-        public XHud_Module_Element SpawnElement;
+        public XHud_Module_Element spawned_element;
+        #endregion
+
+        #region 折叠
+        public bool
+            fold_param = true,
+            fold_trans = true,
+            fold_trans_world = true,
+            fold_trans_world_refer = true,
+            fold_motion = true,
+            fold_state = true,
+            fold_option = true,
+            fold_target = true,
+            fold_based = true,
+            fold_rms = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_param = state;
+            fold_trans = state;
+            fold_trans_world = state;
+            fold_trans_world_refer = state;
+            fold_motion = state;
+            fold_state = state;
+            fold_option = state;
+            fold_target = state;
+            fold_based = state;
+            fold_rms = state;
+        }
+
+        public void GroupFold(bool param = true, bool trans = true, bool trans_world = true, bool trans_world_refer = true, bool motion = true, bool state = true, bool option = true, bool selector = true, bool based = true, bool rms = true)
+        {
+            fold_param = param;
+            fold_trans = trans;
+            fold_trans_world = trans_world;
+            fold_trans_world_refer = trans_world_refer;
+            fold_motion = motion;
+            fold_state = state;
+            fold_option = option;
+            fold_target = selector;
+            fold_based = based;
+            fold_rms = rms;
+        }
         #endregion
 
         #region 动效参数
@@ -87,7 +113,7 @@ namespace SevenStrikeModules.XHud
         /// 定义元素进入/显示时的动画效果，包括位移、旋转、透明度等
         /// 支持缓动曲线、持续时间、延迟等参数配置
         /// </summary>
-        public Motion_Creator CreateArgs = new Motion_Creator
+        public Motion_Creator motion_create_args = new Motion_Creator
         {
             Alpha = new MotionNode_Alpha
             {
@@ -120,17 +146,11 @@ namespace SevenStrikeModules.XHud
         };
         [SerializeField]
         /// <summary>
-        /// 生成动效参数名称
-        /// 用于从动效库中加载预设的生成动效配置
-        /// </summary>
-        public string CreateParamName;
-        [SerializeField]
-        /// <summary>
         /// 元素回收动效参数
         /// 定义元素退出/隐藏时的动画效果，包括位移、旋转、透明度等
         /// 支持缓动曲线、持续时间、延迟等参数配置
         /// </summary>
-        public Motion_Recycler RecycleArgs = new Motion_Recycler
+        public Motion_Recycler motion_recycle_args = new Motion_Recycler
         {
             Alpha = new MotionNode_Alpha
             {
@@ -161,13 +181,6 @@ namespace SevenStrikeModules.XHud
                 Ease = EaseMode.InOutCubic  // 缓动模式
             }
         };
-
-        /// <summary>
-        /// 回收动效参数名称
-        /// 用于从动效库中加载预设的回收动效配置
-        /// </summary>
-        public string RecycleParamName;
-
         #endregion
 
         #region 位置与变换参数
@@ -175,113 +188,122 @@ namespace SevenStrikeModules.XHud
         /// 元素尺寸
         /// 设置生成元素的宽高尺寸（像素）
         /// </summary>
-        public Vector2 ElementSize;
+        public Vector2 preset_element_size;
         /// <summary>
         /// 元素偏移量
         /// 相对于生成位置的偏移量（本地坐标偏移）
         /// </summary>
-        public Vector3 ElementOffset;
+        public Vector3 preset_element_offset;
         /// <summary>
         /// 元素缩放
         /// 设置生成元素的本地缩放比例
         /// </summary>
-        public Vector3 ElementScale = new Vector3(1, 1, 1);
+        public Vector3 preset_element_scale = new Vector3(1, 1, 1);
         /// <summary>
         /// 世界空间位置
         /// 当 Opt_WorldCreate 为 true 且无参考对象时，使用此世界坐标位置生成元素
         /// </summary>
-        public Vector3 WorldPosition;
+        public Vector3 preset_element_world_position;
         /// <summary>
         /// 世界空间旋转
         /// 当 Opt_WorldCreate 为 true 且无参考对象时，使用此世界旋转角度生成元素
         /// </summary>
-        public Vector3 WorldRotation;
+        public Vector3 preset_element_world_rotation;
         /// <summary>
         /// 世界空间缩放
         /// 当 Opt_WorldCreate 为 true 且无参考对象时，使用此世界缩放比例生成元素
         /// </summary>
-        public Vector3 WorldScale = new Vector3(1, 1, 1);
+        public Vector3 preset_element_world_scale = new Vector3(1, 1, 1);
         /// <summary>
         /// 参考对象
         /// 当 Opt_WorldCreate 为 true 时，元素的位置、旋转、缩放将参考此 Transform
         /// </summary>
-        public Transform ReferObject;
+        public Transform preset_element_referobject;
         #endregion
 
         #region 操作配置
+        [SerializeField]
         /// <summary>
         /// 主功能键
         /// 生成/回收操作的主修饰键，需要同时按下此键和触发键才可执行操作
         /// </summary>
-        public SpawnFunctionKey SpawnFunctionKey_Primary = SpawnFunctionKey.Shift;
+        public SpawnFunctionKey spawn_key_primary = SpawnFunctionKey.shift;
+        [SerializeField]
         /// <summary>
         /// 辅助功能键
         /// 生成/回收操作的辅助修饰键，需要同时按下主键、辅助键和触发键才可执行操作
         /// </summary>
-        public SpawnFunctionKey SpawnFunctionKey_Secondary = SpawnFunctionKey.None;
+        public SpawnFunctionKey spawn_key_secondary = SpawnFunctionKey.none;
+        [SerializeField]
         /// <summary>
         /// 生成触发键
         /// 按下此键（配合功能键）触发元素生成操作
         /// </summary>
-        public KeyCode Key_Create = KeyCode.G;
+        public KeyCode spawn_key_create = KeyCode.G;
+        [SerializeField]
         /// <summary>
         /// 回收触发键
         /// 按下此键（配合功能键）触发元素回收操作
         /// </summary>
-        public KeyCode Key_Recycle = KeyCode.R;
+        public KeyCode spawn_key_recycle = KeyCode.R;
+        [SerializeField]
         /// <summary>
         /// 手动生成开关
         /// 是否允许通过快捷键手动生成和回收元素
         /// </summary>
-        public bool ManullyCreate = true;
+        public bool opt_create_manully = true;
+        [SerializeField]
         /// <summary>
         /// 可视化生成开关
         /// 是否在编辑器模式下自动生成元素进行可视化预览
         /// </summary>
-        public bool VisuallerCreate;
+        public bool opt_create_visual;
+        [SerializeField]
         /// <summary>
         /// 世界空间生成模式
         /// true：在世界空间生成 UI 元素（3D UI）；false：在屏幕空间生成 UI 元素
         /// </summary>
-        public bool WorldCreate;
+        public bool opt_create_world;
+        [SerializeField]
         /// <summary>
         /// RMS 布局适配开关
         /// 是否启用响应式布局系统（Responsive Layout System）
         /// </summary>
-        public bool RMSEnabled;
+        public bool opt_rms_mode;
+        [SerializeField]
         /// <summary>
         /// 自动播放进入动画
         /// 元素生成后是否自动播放进入动画
         /// </summary>
-        public bool AutoIn = true;
+        public bool opt_auto_in = true;
         [SerializeField]
         /// <summary>
         /// 使用元素自身动效
         /// </summary>
-        public bool UseElementSelfMotion = true;
+        public bool opt_use_element_motion = true;
         #endregion
 
         #region 运行时状态
-
         [SerializeField]
-        private bool m_SpawnerRunning;
+        private bool m_opt_is_spawing;
+        public const string editor_serializefield_m_opt_is_spawing = nameof(m_opt_is_spawing);
         [SerializeField]
         /// <summary>
         /// 操作运行状态
         /// 标识当前生成器是否正在执行生成或回收操作（播放动画中）
         /// 当值为 true 时，新的操作将被阻止，防止动画冲突
         /// </summary>
-        public bool IsSpawing
+        public bool opt_is_spawing
         {
             get
             {
-                return m_SpawnerRunning;
+                return m_opt_is_spawing;
             }
             set
             {
-                if (value != m_SpawnerRunning)
+                if (value != m_opt_is_spawing)
                 {
-                    m_SpawnerRunning = value;
+                    m_opt_is_spawing = value;
 
                     if (act_on_element_state_changed != null)
                         act_on_element_state_changed(value);
@@ -301,58 +323,19 @@ namespace SevenStrikeModules.XHud
         /// 生成动效库名称
         /// 用于从动效库中加载预设的生成动效模板
         /// </summary>
-        public string Crc_Lib_Name;
+        public string motion_create_library_index_name;
         [SerializeField]
         /// <summary>
         /// 回收动效库名称
         /// 用于从动效库中加载预设的回收动效模板
         /// </summary>
-        public string Rec_Lib_Name;
+        public string motion_recycle_library_index_name;
         [SerializeField]
         /// <summary>
         /// RMS 布局方案名称
         /// 指定使用的响应式布局方案名称
         /// </summary>
-        public string RMS_SelctedName;
-        #endregion
-
-        #region UI 折叠状态
-        [SerializeField]
-        /// <summary>
-        /// 回收动效 - 位移参数折叠状态（编辑器使用）
-        /// 控制 Inspector 面板中回收动效位移参数区域的展开/折叠状态
-        /// </summary>
-        public bool recycle_fold_move;
-        [SerializeField]
-        /// <summary>
-        /// 回收动效 - 旋转参数折叠状态（编辑器使用）
-        /// 控制 Inspector 面板中回收动效旋转参数区域的展开/折叠状态
-        /// </summary>
-        public bool recycle_fold_rotate;
-        [SerializeField]
-        /// <summary>
-        /// 回收动效 - 透明度参数折叠状态（编辑器使用）
-        /// 控制 Inspector 面板中回收动效透明度参数区域的展开/折叠状态
-        /// </summary>
-        public bool recycle_fold_alpha;
-        [SerializeField]
-        /// <summary>
-        /// 生成动效 - 位移参数折叠状态（编辑器使用）
-        /// 控制 Inspector 面板中生成动效位移参数区域的展开/折叠状态
-        /// </summary>
-        public bool create_fold_move;
-        [SerializeField]
-        /// <summary>
-        /// 生成动效 - 旋转参数折叠状态（编辑器使用）
-        /// 控制 Inspector 面板中生成动效旋转参数区域的展开/折叠状态
-        /// </summary>
-        public bool create_fold_rotate;
-        [SerializeField]
-        /// <summary>
-        /// 生成动效 - 透明度参数折叠状态（编辑器使用）
-        /// 控制 Inspector 面板中生成动效透明度参数区域的展开/折叠状态
-        /// </summary>
-        public bool create_fold_alpha;
+        public string rms_index_name;
         #endregion
 
         #region 操作保护
@@ -361,7 +344,7 @@ namespace SevenStrikeModules.XHud
         /// 操作保护开关
         /// 防止元素动效未结束时再次触发生成或回收操作，避免动画冲突
         /// </summary>
-        public bool ProtectedAction = true;
+        public bool opt_protected_spawn_action = true;
         #endregion
 
         #region Unity 事件回调
@@ -451,14 +434,14 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void OnEnable()
         {
-            if (VisuallerCreate)
+            if (opt_create_visual)
             {
-                if (XHud_Manager.Instance == null)
+                if (XHud_Manager.instance == null)
                     return;
-                if (CheckElementLibraryIsEmpty())
+                if (hsp_check_element_library_is_empty())
                     return;
-                if (SpawnElement == null)
-                    SpawnElement = hsp_Spawn();
+                if (spawned_element == null)
+                    spawned_element = hsp_spawn();
             }
         }
 
@@ -468,12 +451,12 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void OnDisable()
         {
-            if (VisuallerCreate)
+            if (opt_create_visual)
             {
-                if (CheckElementLibraryIsEmpty())
+                if (hsp_check_element_library_is_empty())
                     return;
-                if (SpawnElement != null)
-                    hsp_Despawn(RecycleArgs);
+                if (spawned_element != null)
+                    hsp_despawn(motion_recycle_args);
             }
         }
 
@@ -483,32 +466,32 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void Update()
         {
-            if (FunctionKey_Primary_Detect() && FunctionKey_Secondary_Detect())
+            if (functionkey_primary_detect() && functionkey_secondary_detect())
             {
-                if (Input.GetKeyDown(Key_Create))
+                if (Input.GetKeyDown(spawn_key_create))
                 {
-                    if (CheckElementLibraryIsEmpty())
+                    if (hsp_check_element_library_is_empty())
                         return;
-                    if (!ManullyCreate)
+                    if (!opt_create_manully)
                         return;
-                    if (IsSpawing)
+                    if (opt_is_spawing)
                         return;
-                    if (SpawnElement != null)
+                    if (spawned_element != null)
                         return;
-                    SpawnElement = hsp_Spawn(SpawnIndicator, CreateArgs);
+                    spawned_element = hsp_spawn(target_spawn_indicator, motion_create_args);
                 }
 
-                if (Input.GetKeyDown(Key_Recycle))
+                if (Input.GetKeyDown(spawn_key_recycle))
                 {
-                    if (CheckElementLibraryIsEmpty())
+                    if (hsp_check_element_library_is_empty())
                         return;
-                    if (!ManullyCreate)
+                    if (!opt_create_manully)
                         return;
-                    if (IsSpawing)
+                    if (opt_is_spawing)
                         return;
-                    if (SpawnElement == null)
+                    if (spawned_element == null)
                         return;
-                    hsp_Despawn(RecycleArgs);
+                    hsp_despawn(motion_recycle_args);
                 }
             }
         }
@@ -522,66 +505,66 @@ namespace SevenStrikeModules.XHud
         /// <param name="IndicatorName">元素标识名称，用于区分同一预制体的不同实例，为空时使用脚本自带的 SpawnIndicator</param>
         /// <param name="CreateParam">生成动效参数，为空时使用脚本自带的 CreateArgs</param>
         /// <returns>生成成功的 XHud 元素实例，失败时返回 null</returns>
-        public XHud_Module_Element hsp_Spawn(string IndicatorName = "", Motion_Creator CreateParam = null)
+        public XHud_Module_Element hsp_spawn(string IndicatorName = "", Motion_Creator CreateParam = null)
         {
             XHud_Module_Element element = null;
 
-            Motion_Creator arg = CreateParam == null ? this.CreateArgs : CreateParam;
+            Motion_Creator arg = CreateParam == null ? this.motion_create_args : CreateParam;
 
-            string indicator = string.IsNullOrEmpty(IndicatorName) ? SpawnIndicator : IndicatorName;
+            string indicator = string.IsNullOrEmpty(IndicatorName) ? target_spawn_indicator : IndicatorName;
             // 从元素库中获取目标元素本体
-            XHud_Module_Element target_ele = XHud_Manager.Instance.hm_ElementLibrary_GetTargetLibrary(LibName).ElementsLibrary_GetTargetElement(SpawnName);
+            XHud_Module_Element target_ele = XHud_Manager.instance.hm_ElementLibrary_GetTargetLibrary(target_library_name).ElementsLibrary_GetTargetElement(target_spawn_name);
 
             ///---如果UI渲染模式为世界空间则使用世界空间专用的方法
-            if (WorldCreate)
+            if (opt_create_world)
             {
                 ///---如果参考物体存在则生成的UI的坐标信息则参考这个物体的坐标信息
-                if (ReferObject != null)
+                if (preset_element_referobject != null)
                 {
-                    element = XHud_Manager.Instance.hm_WorldElement_Create(LibName, SpawnName)
+                    element = XHud_Manager.instance.hm_WorldElement_Create(target_library_name, target_spawn_name)
                       .SetAlpha(0)
                       .SetAnchored_World(indicator)
-                      .SetPosition_World(ReferObject.position)
-                      .SetRotation_World(Quaternion.Euler(ReferObject.eulerAngles))
-                      .SetOffset(ElementOffset)
-                      .SetScale(ReferObject.localScale)
-                      .SetSize(ElementSize)
+                      .SetPosition_World(preset_element_referobject.position)
+                      .SetRotation_World(Quaternion.Euler(preset_element_referobject.eulerAngles))
+                      .SetOffset(preset_element_offset)
+                      .SetScale(preset_element_referobject.localScale)
+                      .SetSize(preset_element_size)
                       .On_In_Start((e) =>
                       {
                           ///--------当元素 - 进入 - 开始时
                           if (act_on_element_in_start != null)
                               act_on_element_in_start();
                           eve_on_element_spawn_start.Invoke();
-                          if (ProtectedAction)
-                              IsSpawing = true;
+                          if (opt_protected_spawn_action)
+                              opt_is_spawing = true;
                       }).On_In_End((e) =>
                       {
                           ///--------当元素 - 进入 - 结束时
                           if (act_on_element_in_end != null)
                               act_on_element_in_end();
                           eve_on_element_spawn_end.Invoke();
-                          if (ProtectedAction)
-                              IsSpawing = false;
+                          if (opt_protected_spawn_action)
+                              opt_is_spawing = false;
                       }).Element;
                 }
                 else
                 {
-                    element = XHud_Manager.Instance.hm_WorldElement_Create(LibName, SpawnName)
+                    element = XHud_Manager.instance.hm_WorldElement_Create(target_library_name, target_spawn_name)
                         .SetAlpha(0)
                         .SetAnchored_World(indicator)
-                        .SetPosition_World(WorldPosition)
-                        .SetRotation_World(Quaternion.Euler(WorldRotation))
-                        .SetOffset(ElementOffset)
-                        .SetScale(WorldScale)
-                        .SetSize(ElementSize)
+                        .SetPosition_World(preset_element_world_position)
+                        .SetRotation_World(Quaternion.Euler(preset_element_world_rotation))
+                        .SetOffset(preset_element_offset)
+                        .SetScale(preset_element_world_scale)
+                        .SetSize(preset_element_size)
                         .On_In_Start((e) =>
                         {
                             ///--------当元素 - 进入 - 开始时
                             if (act_on_element_in_start != null)
                                 act_on_element_in_start();
                             eve_on_element_spawn_start.Invoke();
-                            if (ProtectedAction)
-                                IsSpawing = true;
+                            if (opt_protected_spawn_action)
+                                opt_is_spawing = true;
                         }).On_In_End((e) =>
                         {
                             ///--------当元素 - 进入 - 结束时
@@ -589,45 +572,45 @@ namespace SevenStrikeModules.XHud
                                 act_on_element_in_end();
                             eve_on_element_spawn_end.Invoke();
 
-                            if (ProtectedAction)
-                                IsSpawing = false;
+                            if (opt_protected_spawn_action)
+                                opt_is_spawing = false;
                         }).Element;
                 }
             }
             else
             {
-                element = XHud_Manager.Instance.hm_ScreenElement_Create(LibName, SpawnName)
+                element = XHud_Manager.instance.hm_ScreenElement_Create(target_library_name, target_spawn_name)
                     .SetAlpha(0)
-                    .SetAnchored_Screen(UseElementSelfMotion ? target_ele.CreateArgs.anchor : arg.anchor, indicator)
-                    .SetOffset(ElementOffset)
-                    .SetScale(ElementScale)
-                    .SetSize(ElementSize)
-                    .SetRMS(RMSEnabled, RMS_SelctedName)
+                    .SetAnchored_Screen(opt_use_element_motion ? target_ele.motion_create_args.anchor : arg.anchor, indicator)
+                    .SetOffset(preset_element_offset)
+                    .SetScale(preset_element_scale)
+                    .SetSize(preset_element_size)
+                    .SetRMS(opt_rms_mode, rms_index_name)
                     .On_In_Start((e) =>
                     {
                         ///--------当元素 - 进入 - 开始时
                         if (act_on_element_in_start != null)
                             act_on_element_in_start();
                         eve_on_element_spawn_start.Invoke();
-                        if (ProtectedAction)
-                            IsSpawing = true;
+                        if (opt_protected_spawn_action)
+                            opt_is_spawing = true;
                     }).On_In_End((e) =>
                     {
                         ///--------当元素 - 进入 - 结束时
                         if (act_on_element_in_end != null)
                             act_on_element_in_end();
                         eve_on_element_spawn_end.Invoke();
-                        if (ProtectedAction)
-                            IsSpawing = false;
+                        if (opt_protected_spawn_action)
+                            opt_is_spawing = false;
                     }).Element;
             }
 
-            if (AutoIn)
-                element.Element_In(UseElementSelfMotion ? element.CreateArgs : arg);
+            if (opt_auto_in)
+                element.Element_In(opt_use_element_motion ? element.motion_create_args : arg);
 
             if (act_on_element_spawn != null)
                 act_on_element_spawn(element);
-            SpawnElement = element;
+            spawned_element = element;
             return element;
         }
         /// <summary>
@@ -636,17 +619,17 @@ namespace SevenStrikeModules.XHud
         /// <param name="RecycleParam">回收动效参数，为空时使用脚本自带的 RecycleArgs</param>
         /// <param name="actionstart">回收开始时的回调事件，用于覆盖默认的动画开始处理</param>
         /// <param name="actionend">回收结束时的回调事件，用于覆盖默认的动画结束处理</param>
-        public void hsp_Despawn(Motion_Recycler RecycleParam = null, UnityAction<XHud_Module_Element> actionstart = null, UnityAction<XHud_Module_Element> actionend = null)
+        public void hsp_despawn(Motion_Recycler RecycleParam = null, UnityAction<XHud_Module_Element> actionstart = null, UnityAction<XHud_Module_Element> actionend = null)
         {
-            XHud_Manager.Instance.hm_HudElement_RecycleAt(
-                SpawnElement, (UseElementSelfMotion ? SpawnElement.RecycleArgs : (RecycleParam == null ? this.RecycleArgs : RecycleParam)),
+            XHud_Manager.instance.hm_HudElement_RecycleAt(
+                spawned_element, (opt_use_element_motion ? spawned_element.motion_recycle_args : (RecycleParam == null ? this.motion_recycle_args : RecycleParam)),
                 actionstart == null ? (ele) =>
                 {
                     if (act_on_element_out_start != null)
                         act_on_element_out_start();
                     eve_on_element_despawn_start.Invoke();
-                    if (ProtectedAction)
-                        IsSpawing = true;
+                    if (opt_protected_spawn_action)
+                        opt_is_spawing = true;
                 }
             : actionstart,
                 null, actionend == null ? (ele) =>
@@ -654,42 +637,42 @@ namespace SevenStrikeModules.XHud
                     if (act_on_element_out_end != null)
                         act_on_element_out_end();
                     if (act_on_element_despawn != null)
-                        act_on_element_despawn(SpawnElement);
+                        act_on_element_despawn(spawned_element);
                     eve_on_element_despawn_end.Invoke();
-                    if (ProtectedAction)
+                    if (opt_protected_spawn_action)
                     {
-                        SpawnElement = null;
-                        IsSpawing = false;
+                        spawned_element = null;
+                        opt_is_spawing = false;
                     }
                 }
             : actionend);
 
-            if (!ProtectedAction)
+            if (!opt_protected_spawn_action)
             {
-                SpawnElement = null;
+                spawned_element = null;
             }
         }
         /// <summary>
         /// 检查元素库是否为空
         /// </summary>
         /// <returns>true 表示元素库为空或未初始化，false 表示元素库可用</returns>
-        public bool CheckElementLibraryIsEmpty()
+        public bool hsp_check_element_library_is_empty()
         {
             bool sw = false;
             if (!Application.isPlaying)
             {
                 XHud_Manager mgr = FindFirstObjectByType<XHud_Manager>();
 
-                if (mgr.Hud_ElementLibrarys == null)
+                if (mgr.ele_library_elements == null)
                     sw = true;
-                if (mgr.Hud_ElementLibrarys.Count <= 0)
+                if (mgr.ele_library_elements.Count <= 0)
                     sw = true;
             }
             else
             {
-                if (XHud_Manager.Instance.Hud_ElementLibrarys == null)
+                if (XHud_Manager.instance.ele_library_elements == null)
                     sw = true;
-                if (XHud_Manager.Instance.Hud_ElementLibrarys.Count <= 0)
+                if (XHud_Manager.instance.ele_library_elements.Count <= 0)
                     sw = true;
             }
             return sw;
@@ -701,23 +684,23 @@ namespace SevenStrikeModules.XHud
         /// 检测主功能键是否按下
         /// </summary>
         /// <returns>true 表示主功能键条件满足，false 表示不满足</returns>
-        private bool FunctionKey_Primary_Detect()
+        private bool functionkey_primary_detect()
         {
             bool ispress = false;
-            switch (SpawnFunctionKey_Primary)
+            switch (spawn_key_primary)
             {
-                case SpawnFunctionKey.None:
+                case SpawnFunctionKey.none:
                     ispress = true;
                     break;
-                case SpawnFunctionKey.Ctrl:
+                case SpawnFunctionKey.ctrl:
                     if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                         ispress = true;
                     break;
-                case SpawnFunctionKey.Alt:
+                case SpawnFunctionKey.alt:
                     if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
                         ispress = true;
                     break;
-                case SpawnFunctionKey.Shift:
+                case SpawnFunctionKey.shift:
                     if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                         ispress = true;
                     break;
@@ -728,23 +711,23 @@ namespace SevenStrikeModules.XHud
         /// 检测辅助功能键是否按下
         /// </summary>
         /// <returns>true 表示辅助功能键条件满足，false 表示不满足</returns>
-        private bool FunctionKey_Secondary_Detect()
+        private bool functionkey_secondary_detect()
         {
             bool ispress = false;
-            switch (SpawnFunctionKey_Secondary)
+            switch (spawn_key_secondary)
             {
-                case SpawnFunctionKey.None:
+                case SpawnFunctionKey.none:
                     ispress = true;
                     break;
-                case SpawnFunctionKey.Ctrl:
+                case SpawnFunctionKey.ctrl:
                     if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                         ispress = true;
                     break;
-                case SpawnFunctionKey.Alt:
+                case SpawnFunctionKey.alt:
                     if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
                         ispress = true;
                     break;
-                case SpawnFunctionKey.Shift:
+                case SpawnFunctionKey.shift:
                     if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                         ispress = true;
                     break;

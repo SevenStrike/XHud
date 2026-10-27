@@ -42,37 +42,13 @@ namespace SevenStrikeModules.XHud.Editor
     {
         #region 常量 - 按钮布局
         /// <summary>
-        /// 按钮宽度（像素）。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>默认 120。</description></item>
-        /// </list>
-        /// </summary>
-        private const int BUTTON_WIDTH = 120;
-        /// <summary>
-        /// 按钮高度（像素）。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>默认 30。</description></item>
-        /// </list>
-        /// </summary>
-        private const int BUTTON_HEIGHT = 30;
-        /// <summary>
-        /// 按钮之间的间距（像素）。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>默认 5。</description></item>
-        /// </list>
-        /// </summary>
-        private const int BUTTON_SPACING = 5;
-        /// <summary>
         /// 按钮距离 SceneView 右边距（像素）。
         /// <para/>
         /// <list type="bullet">
         /// <item><description>默认 20。</description></item>
         /// </list>
         /// </summary>
-        private const int RIGHT_MARGIN = 20;
+        private const int right_margin = 20;
         /// <summary>
         /// 按钮距离 SceneView 下边距（像素）。
         /// <para/>
@@ -80,34 +56,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>默认 40。</description></item>
         /// </list>
         /// </summary>
-        private const int BOTTOM_MARGIN = 50;
+        private const int bottom_margin = 45;
         #endregion
 
-        #region 常量 - 菜单键
-        /// <summary>
-        /// 元素视觉放置器菜单键。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>用于 EditorPrefs 存储放置器的启用状态。</description></item>
-        /// </list>
-        /// </summary>
-        private const string MENU_KEY_VISUAL_PLACER = "XHud_ElementVisualPlacer_Enabled";
-        /// <summary>
-        /// 元素视觉放置器菜单键。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>用于 EditorPrefs 存储放置器的启用状态。</description></item>
-        /// </list>
-        /// </summary>
-        private const string MENU_KEY_VISUAL_AIMER = "XHud_Aimer_Enabled";
-        /// <summary>
-        /// 图元控制器 ID 显示菜单键。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>用于 EditorPrefs 存储图元 ID 在场景中显示的状态。</description></item>
-        /// </list>
-        /// </summary>
-        private const string MENU_KEY_PRIMITIVE_CONTROLLER_ID_DISPLAY = "XHudPrimitiveController_ID_Displayer";
+        #region 图标
+        private static Texture2D icon_mgr_r;
+        private static Texture2D icon_mgr_p;
         #endregion
 
         #region 生命周期
@@ -122,11 +76,19 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         static Editor_XHud_Tool_FastSceneView()
         {
+            LoadIcon();
+
             SceneView.duringSceneGui += OnSceneGUI;
 
             Editor_XHud_Tool_SceneView_ElementVisualPlacer.SetEnabled(XHud_Dashboard.utilitys_get_util_screeen_element_visual_placer());
 
             Editor_XHud_Tool_SceneView_Activate_Aimer.SetEnabled(XHud_Dashboard.utilitys_get_util_screeen_aimer());
+        }
+
+        private static void LoadIcon()
+        {
+            icon_mgr_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_manager/logo_sceneview_r");
+            icon_mgr_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_manager/logo_sceneview_p");
         }
         #endregion
 
@@ -145,73 +107,23 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Handles.BeginGUI();
 
-            // ========== 计算右下角位置 ==========
             // 获取 SceneView 窗口的宽度和高度
             float viewWidth = sceneView.position.width;
             float viewHeight = sceneView.position.height;
 
             // 两个按钮的 X 坐标相同 = 窗口宽度 - 按钮宽度 - 右边距
-            float btn_x = viewWidth - BUTTON_WIDTH - RIGHT_MARGIN;
+            float btn_x = viewWidth - icon_mgr_r.width - right_margin;
 
             // 下方按钮（XHud 管理器）的 Y 坐标 = 窗口高度 - 按钮高度 - 下边距
-            float btn_mgr_y = viewHeight - BUTTON_HEIGHT - BOTTOM_MARGIN;
-            // 上方按钮（XHud 快速操作）的 Y 坐标 = 下方按钮 Y 坐标 - 按钮高度 - 按钮间距
-            float btn_faster_y = btn_mgr_y - BUTTON_HEIGHT - BUTTON_SPACING;
+            float btn_mgr_y = viewHeight - icon_mgr_r.height - bottom_margin;
 
-            Rect btn_rect_mgr = new Rect(btn_x, btn_mgr_y, BUTTON_WIDTH, BUTTON_HEIGHT);
+            Rect btn_rect_mgr = new Rect(btn_x, btn_mgr_y, icon_mgr_r.width, icon_mgr_r.height);
             if (XGUI.gui_button(
                 rect: btn_rect_mgr,
-                text: "XHud 管理器",
-                tooltip: "",
-                btn_fill: XGUIGroup.实体,
-                btn_color: XGUIColor.亮白,
-                btn_color_gui: Color.white,
-                btn_text_color: Color.black,
-                press_fill: XGUIGroup.实体,
-                press_color: XGUIColor.深空灰,
-                press_text_color: Color.white,
-                font_size: XGUIFontSize.M,
-                margin: new RectOffset(0, 0, 0, 0),
-                padding: new RectOffset(0, 0, 0, 0)))
-            {
-                // 使用新的 API
-                XHud_Manager manager = XHud_Dashboard.get_manager();
-
-                if (manager != null)
-                {
-                    // 选中第一个管理器对应的物体
-                    Selection.activeGameObject = manager.gameObject;
-                }
-                else
-                {
-                    EditorApplication.delayCall += () =>
-                    {
-                        string res = XGUI.dialog(
-                            type: XGUIDialogType.警告,
-                            windowtitle: "XHud - 快速视图工具消息",
-                            title: "未找到管理器",
-                            msg: $"抱歉未在场景列表中找到 <color=#{XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary))}>XHud Manager</color>！",
-                            ok: "明白",
-                            PrimaryIndex: 0,
-                            usemodal: true,
-                            themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
-                    };
-                }
-            }
-
-            Rect btn_rect_faster = new Rect(btn_x, btn_faster_y, BUTTON_WIDTH, BUTTON_HEIGHT);
-            if (XGUI.gui_button(
-                rect: btn_rect_faster,
-                text: "XHud 快速操作",
-                tooltip: "",
-                btn_fill: XGUIGroup.实体,
-                btn_color: XGUIColor.亮白,
-                btn_color_gui: Color.white,
-                btn_text_color: Color.black,
-                press_fill: XGUIGroup.实体,
-                press_color: XGUIColor.深空灰,
-                press_text_color: Color.white,
-                font_size: XGUIFontSize.M,
+                tooltip: $"XHud 快速操作",
+                tex_release: icon_mgr_r,
+                tex_press: icon_mgr_p,
+                tex_gui_color: Color.white,
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0)))
             {
@@ -226,9 +138,9 @@ namespace SevenStrikeModules.XHud.Editor
                 XHud_Manager mgr = XHud_Dashboard.get_manager();
                 if (mgr != null)
                 {
-                    for (int i = 0; i < mgr.Anchors_Layout_Screen.Count; i++)
+                    for (int i = 0; i < mgr.cv_anchors_layout_screen.Count; i++)
                     {
-                        Anchor_Layout anchor = mgr.Anchors_Layout_Screen[i];
+                        Anchor_Layout anchor = mgr.cv_anchors_layout_screen[i];
                         menu.AddItem(new GUIContent($"S 选择锚点/{anchor.Name}（{anchor.Type}）"), false, () =>
                         {
                             Selection.activeGameObject = anchor.Anchor.gameObject;
@@ -238,19 +150,19 @@ namespace SevenStrikeModules.XHud.Editor
 
                 menu.AddSeparator("");
 
-                if (mgr.HudCanvas_Screen != null)
+                if (mgr.cv_screen != null)
                 {
                     menu.AddItem(new GUIContent("F 选中屏幕画布"), false, () =>
                     {
-                        Selection.activeGameObject = mgr.HudCanvas_Screen.gameObject;
+                        Selection.activeGameObject = mgr.cv_screen.gameObject;
                     });
                 }
 
-                if (mgr.HudCanvas_World != null)
+                if (mgr.cv_hudcanvas_world != null)
                 {
                     menu.AddItem(new GUIContent("W 选中世界画布"), false, () =>
                     {
-                        Selection.activeGameObject = mgr.HudCanvas_World.gameObject;
+                        Selection.activeGameObject = mgr.cv_hudcanvas_world.gameObject;
                     });
                 }
 
@@ -308,8 +220,46 @@ namespace SevenStrikeModules.XHud.Editor
                     clearMethod.Invoke(null, null);
                 });
 
+                menu.AddItem(new GUIContent("X 快速选中管理器"), false, () =>
+                {
+                    // 使用新的 API
+                    XHud_Manager manager = XHud_Dashboard.get_manager();
+
+                    if (manager != null)
+                    {
+                        // 选中第一个管理器对应的物体
+                        Selection.activeGameObject = manager.gameObject;
+                    }
+                    else
+                    {
+                        EditorApplication.delayCall += () =>
+                        {
+                            string res = XGUI.dialog(
+                                type: XGUIDialogType.警告,
+                                windowtitle: "XHud - 快速视图工具消息",
+                                title: "未找到管理器",
+                                msg: $"抱歉未在场景列表中找到 <color=#{XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary))}>XHud Manager</color>！",
+                                ok: "明白",
+                                PrimaryIndex: 0,
+                                usemodal: true,
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                        };
+                    }
+                });
+
                 menu.ShowAsContext();
             }
+
+            XGUI.gui_label(
+                rect: new Rect(btn_rect_mgr.x + 12, btn_rect_mgr.y - 5, 20, 20),
+                text: new GUIContent("X"),
+                text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
+                size: XGUIFontSize.XL,
+                clipping: TextClipping.Clip,
+                anchor: TextAnchor.MiddleLeft,
+                offset: new Vector2(0, 0),
+                font_style: FontStyle.Bold,
+                font: XGUI.GetFont("xg-heavy"));
 
             Handles.EndGUI();
         }

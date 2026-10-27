@@ -31,20 +31,20 @@ namespace SevenStrikeModules.XHud.Editor
     public static class Editor_XHud_PrefabCreationMonitor
     {
         // 存储待处理的预制体信息
-        private static readonly Dictionary<string, float> pendingPrefabs = new Dictionary<string, float>();
+        private static readonly Dictionary<string, float> pending_prefabs = new Dictionary<string, float>();
         private static bool isInitialized = false;
 
         /// <summary>
         /// 预制体创建事件，当预制体被创建时触发
         /// 参数：预制体路径
         /// </summary>
-        public static event System.Action<string> OnPrefabCreated;
+        public static event System.Action<string> on_prefab_created;
 
         /// <summary>
         /// 预制体创建完成事件，当预制体完全加载并可用时触发
         /// 参数：预制体游戏对象
         /// </summary>
-        public static event System.Action<GameObject> OnPrefabReady;
+        public static event System.Action<GameObject> on_prefab_ready;
 
         /// <summary>
         /// 初始化监听器，会在编辑器启动时自动调用
@@ -56,7 +56,7 @@ namespace SevenStrikeModules.XHud.Editor
             isInitialized = true;
 
             // 订阅资源创建事件
-            AssetModificationProcessorHook.OnWillCreateAssetHandler += OnWillCreateAsset;
+            AssetModificationProcessorHook.on_will_create_asset_handler += OnWillCreateAsset;
 
             // 订阅编辑器更新事件，用于处理延迟调用
             EditorApplication.update += OnEditorUpdate;
@@ -77,10 +77,10 @@ namespace SevenStrikeModules.XHud.Editor
             Debug.Log($"[XHUD] 检测到预制体创建: {assetPath}");
 
             // 记录待处理的预制体
-            pendingPrefabs[assetPath] = Time.realtimeSinceStartup;
+            pending_prefabs[assetPath] = Time.realtimeSinceStartup;
 
             // 触发创建事件
-            OnPrefabCreated?.Invoke(assetPath);
+            on_prefab_created?.Invoke(assetPath);
         }
 
         /// <summary>
@@ -88,12 +88,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private static void OnEditorUpdate()
         {
-            if (pendingPrefabs.Count == 0) return;
+            if (pending_prefabs.Count == 0) return;
 
             // 需要等待至少一帧，确保资源完全创建
             List<string> readyPaths = new List<string>();
 
-            foreach (var kvp in pendingPrefabs)
+            foreach (var kvp in pending_prefabs)
             {
                 string path = kvp.Key;
                 float createTime = kvp.Value;
@@ -108,7 +108,7 @@ namespace SevenStrikeModules.XHud.Editor
             // 处理就绪的预制体
             foreach (string path in readyPaths)
             {
-                pendingPrefabs.Remove(path);
+                pending_prefabs.Remove(path);
                 ProcessReadyPrefab(path);
             }
         }
@@ -131,7 +131,7 @@ namespace SevenStrikeModules.XHud.Editor
                 Debug.Log($"[XHUD] 预制体已就绪: {assetPath}");
 
                 // 触发就绪事件
-                OnPrefabReady?.Invoke(prefab);
+                on_prefab_ready?.Invoke(prefab);
             }
             catch (System.Exception e)
             {
@@ -147,7 +147,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (state == PlayModeStateChange.ExitingEditMode)
             {
                 // 退出编辑模式时，清理待处理队列
-                pendingPrefabs.Clear();
+                pending_prefabs.Clear();
             }
         }
 
@@ -170,7 +170,7 @@ namespace SevenStrikeModules.XHud.Editor
                 return;
             }
 
-            OnPrefabReady?.Invoke(prefab);
+            on_prefab_ready?.Invoke(prefab);
         }
 
         /// <summary>
@@ -180,11 +180,11 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (!isInitialized) return;
 
-            AssetModificationProcessorHook.OnWillCreateAssetHandler -= OnWillCreateAsset;
+            AssetModificationProcessorHook.on_will_create_asset_handler -= OnWillCreateAsset;
             EditorApplication.update -= OnEditorUpdate;
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
 
-            pendingPrefabs.Clear();
+            pending_prefabs.Clear();
             isInitialized = false;
 
             Debug.Log("[XHUD] 预制体监听器已清理");
@@ -196,11 +196,11 @@ namespace SevenStrikeModules.XHud.Editor
     /// </summary>
     internal class AssetModificationProcessorHook : UnityEditor.AssetModificationProcessor
     {
-        public static event System.Action<string> OnWillCreateAssetHandler;
+        public static event System.Action<string> on_will_create_asset_handler;
 
         public static void OnWillCreateAsset(string assetName)
         {
-            OnWillCreateAssetHandler?.Invoke(assetName);
+            on_will_create_asset_handler?.Invoke(assetName);
         }
     }
 }

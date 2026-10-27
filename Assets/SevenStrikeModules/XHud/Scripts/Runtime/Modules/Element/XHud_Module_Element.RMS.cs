@@ -28,14 +28,14 @@ namespace SevenStrikeModules.XHud
     [System.Serializable]
     public class Element_RMS_LayoutData
     {
-        public string LayoutName;
-        public XHudAnchor Anchor;
-        public Vector3 Position;
-        public Vector3 Euler;
-        public Vector3 Scale;
-        public Vector2 AnchorMin;
-        public Vector2 AnchorMax;
-        public Vector2 Pivot;
+        public string layout_name;
+        public XHudAnchor anchor;
+        public Vector3 position;
+        public Vector3 euler;
+        public Vector3 scale;
+        public Vector2 anchor_min;
+        public Vector2 anchor_max;
+        public Vector2 pivot;
     }
 
     public partial class XHud_Module_Element : MonoBehaviour
@@ -44,17 +44,17 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 布局匹配方案是否开启
         /// </summary>
-        public bool RMS_Enabled;
+        public bool rms_enabled;
         [SerializeField]
         /// <summary>
         ///  布局匹配方案列表
         /// </summary>
-        public List<Element_RMS_LayoutData> RMS_LayoutDatas;
+        public List<Element_RMS_LayoutData> rms_layout_datas;
         [SerializeField]
         /// <summary>
         ///  布局匹配方案当前选择的标识名称
         /// </summary>
-        public string RMS_Name;
+        public string rms_name;
 
         /// <summary>
         /// 根据方案名称获取RMS节点参数
@@ -63,11 +63,11 @@ namespace SevenStrikeModules.XHud
         public Element_RMS_LayoutData elelemt_RMS_Get(string solution)
         {
             Element_RMS_LayoutData info = null;
-            for (int i = 0; i < RMS_LayoutDatas.Count; i++)
+            for (int i = 0; i < rms_layout_datas.Count; i++)
             {
-                if (solution == RMS_LayoutDatas[i].LayoutName)
+                if (solution == rms_layout_datas[i].layout_name)
                 {
-                    info = RMS_LayoutDatas[i];
+                    info = rms_layout_datas[i];
                     break;
                 }
             }
@@ -78,7 +78,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void element_RMS_Mode_Enabled(bool state)
         {
-            RMS_Enabled = state;
+            rms_enabled = state;
         }
         /// <summary>
         /// 用于响应屏幕分辨率变化时根据元素自身记录的 RMS 布局方案（RMS_Name）重新初始化元素的位置、锚点、缩放等
@@ -88,18 +88,18 @@ namespace SevenStrikeModules.XHud
         private void elelemt_RMS_ScreenResolutionChanged(string Indicator, Vector2 Res)
         {
             // 只有开启了 RMS 才处理
-            if (!RMS_Enabled)
+            if (!rms_enabled)
                 return;
 
             // 检查是否有对应的布局方案
-            if (string.IsNullOrEmpty(RMS_Name))
+            if (string.IsNullOrEmpty(rms_name))
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "RMS已开启但未指定布局方案名称", XGUIMsgState.警告);
                 return;
             }
 
-            XHud_Manager.Instance.hm_ScreenElement_Initialize_By_RMS(this, RMS_Name, true);
+            XHud_Manager.instance.hm_ScreenElement_Initialize_By_RMS(this, rms_name, true);
         }
     }
 }

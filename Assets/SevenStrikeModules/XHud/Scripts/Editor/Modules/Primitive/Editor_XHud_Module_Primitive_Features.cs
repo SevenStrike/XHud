@@ -41,23 +41,22 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>仅用于单选模式下的直接读写操作。</description></item>
         /// </list>
         /// </summary>
-        private XHud_Module_Primitive_Feature BaseScript;
+        private XHud_Module_Primitive_Feature base_script;
         #endregion
 
         #region 字段 - 序列化属性
         /// <summary>
-        /// 序列化属性集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>sp_Debug</c>：调试开关属性。</description></item>
-        /// <item><description><c>sp_PrimitiveFeatures</c>：图元特性数据属性。</description></item>
-        /// <item><description><c>FirstSaveFeatures</c>：首次记录标记属性。</description></item>
-        /// </list>
+        /// 调试开关属性
         /// </summary>
-        private SerializedProperty
-            sp_Debug,
-            sp_PrimitiveFeatures,
-            FirstSaveFeatures;
+        private SerializedProperty sp_debug;
+        /// <summary>
+        /// 图元特性数据属性
+        /// </summary>
+        private SerializedProperty sp_primitive_features;
+        /// <summary>
+        /// 首次记录标记属性
+        /// </summary>
+        private SerializedProperty sp_first_save_features;
         #endregion
 
         #region 字段 - GUI 参数
@@ -69,11 +68,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>通过上一个/下一个按钮循环切换。</description></item>
         /// </list>
         /// </summary>
-        private int MultiPrimitiveFeature_Index;
+        private int multi_primitive_feature_index;
         #endregion
 
         #region 字段 - 选项文字
-
         /// <summary>
         /// 调试开关的选项文字。
         /// <para/>
@@ -87,19 +85,73 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 字段 - 图标
         /// <summary>
-        /// 本编辑器所使用的图标资源集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>icon_main</c>：标题主图标。</description></item>
-        /// <item><description><c>f_pos / f_rot / f_sca / f_size / f_alp / f_fill / f_color</c>：各特性字段图标。</description></item>
-        /// <item><description><c>left_arrow_r / left_arrow_p</c>：上一个按钮常态/按下图标。</description></item>
-        /// <item><description><c>right_arrow_r / right_arrow_p</c>：下一个按钮常态/按下图标。</description></item>
-        /// <item><description><c>f_save_r / f_save_p</c>：记录特性按钮常态/按下图标。</description></item>
-        /// <item><description><c>f_load_r / f_load_p</c>：读取特性按钮常态/按下图标。</description></item>
-        /// <item><description><c>icon_col_mark</c>：颜色标记图标。</description></item>
-        /// </list>
+        /// 标题主图标
         /// </summary>
-        private Texture2D icon_main, f_pos, f_rot, f_sca, f_size, f_alp, f_fill, f_color, left_arrow_r, left_arrow_p, right_arrow_r, right_arrow_p, f_save_r, f_save_p, f_load_r, f_load_p, icon_col_mark;
+        private Texture2D icon_main;
+        /// <summary>
+        /// 位置字段图标
+        /// </summary>
+        private Texture2D f_pos;
+        /// <summary>
+        /// 旋转字段图标
+        /// </summary>
+        private Texture2D f_rot;
+        /// <summary>
+        /// 缩放字段图标
+        /// </summary>
+        private Texture2D f_sca;
+        /// <summary>
+        /// 尺寸字段图标
+        /// </summary>
+        private Texture2D f_size;
+        /// <summary>
+        /// 透明度字段图标
+        /// </summary>
+        private Texture2D f_alp;
+        /// <summary>
+        /// 填充字段图标
+        /// </summary>
+        private Texture2D f_fill;
+        /// <summary>
+        /// 颜色字段图标
+        /// </summary>
+        private Texture2D f_color;
+        /// <summary>
+        /// 上一个按钮常态图标
+        /// </summary>
+        private Texture2D left_arrow_r;
+        /// <summary>
+        /// 上一个按钮按下图标
+        /// </summary>
+        private Texture2D left_arrow_p;
+        /// <summary>
+        /// 下一个按钮常态图标
+        /// </summary>
+        private Texture2D right_arrow_r;
+        /// <summary>
+        /// 下一个按钮按下图标
+        /// </summary>
+        private Texture2D right_arrow_p;
+        /// <summary>
+        /// 记录特性按钮常态图标
+        /// </summary>
+        private Texture2D f_save_r;
+        /// <summary>
+        /// 记录特性按钮按下图标
+        /// </summary>
+        private Texture2D f_save_p;
+        /// <summary>
+        /// 读取特性按钮常态图标
+        /// </summary>
+        private Texture2D f_load_r;
+        /// <summary>
+        /// 读取特性按钮按下图标
+        /// </summary>
+        private Texture2D f_load_p;
+        /// <summary>
+        /// 颜色标记图标
+        /// </summary>
+        private Texture2D icon_col_mark;
         #endregion
 
         #region 字段 - 批量化操作
@@ -111,7 +163,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>单选时长度为 1，多选时长度等于选中对象数量。</description></item>
         /// </list>
         /// </summary>
-        XHud_Module_Primitive_Feature[] SelectedObjects;
+        XHud_Module_Primitive_Feature[] selected_objects;
         /// <summary>
         /// 采集的特性数据数组。
         /// <para/>
@@ -120,18 +172,21 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>仅用于缓存当前批量目标的特性快照。</description></item>
         /// </list>
         /// </summary>
-        private PrimitiveFeatures[] PrimitiveFeatures;
+        private PrimitiveFeatures[] primitive_features;
         #endregion
 
         #region 生命周期
         private void OnEnable()
         {
-            BaseScript = (XHud_Module_Primitive_Feature)target;
+            base_script = (XHud_Module_Primitive_Feature)target;
 
             Targets_Get();
 
-            // 获取所有序列化字段
-            GetSerializeFields();
+            #region 获取所有序列化字段
+            sp_primitive_features = serializedObject.FindProperty(nameof(XHud_Module_Primitive_Feature.primitive_features));
+            sp_debug = serializedObject.FindProperty(nameof(XHud_Module_Primitive_Feature.debug));
+            sp_first_save_features = serializedObject.FindProperty(nameof(XHud_Module_Primitive_Feature.first_save_features));
+            #endregion
 
             #region 获取图标          
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_primitive_features/icon_main");
@@ -155,7 +210,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             CheckFirstCreatedFeature();
 
-            PrimitiveFeature_Capture(SelectedObjects);
+            PrimitiveFeature_Capture(selected_objects);
         }
 
         private void OnDisable()
@@ -168,17 +223,17 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 记录特性
                 if (Targets_Selected())
                 {
-                    for (int i = 0; i < SelectedObjects.Length; i++)
+                    for (int i = 0; i < selected_objects.Length; i++)
                     {
-                        if (SelectedObjects[i] != null)
+                        if (selected_objects[i] != null)
                         {
-                            if (!SelectedObjects[i].controller.pt_Tween.TweenIsPreviewing)
+                            if (!selected_objects[i].controller.pt_tween.tween_is_previewing)
                             {
-                                PrimitiveFeature_Save(SelectedObjects[i]);
+                                PrimitiveFeature_Save(selected_objects[i]);
                             }
                             else
                             {
-                                PrimitiveFeature_Load(SelectedObjects[i]);
+                                PrimitiveFeature_Load(selected_objects[i]);
                             }
                         }
                     }
@@ -187,14 +242,14 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     if (target != null)
                     {
-                        if (!BaseScript.controller.pt_Tween.TweenIsPreviewing)
+                        if (!base_script.controller.pt_tween.tween_is_previewing)
                         {
-                            PrimitiveFeature_Save(BaseScript);
+                            PrimitiveFeature_Save(base_script);
                             serializedObject.ApplyModifiedProperties();
                         }
                         else
                         {
-                            PrimitiveFeature_Load(BaseScript);
+                            PrimitiveFeature_Load(base_script);
                         }
                     }
                 }
@@ -276,7 +331,7 @@ namespace SevenStrikeModules.XHud.Editor
             if (Targets_Selected())
                 statu_title = "特性参数 - ( 批量模式 )";
 
-            BaseScript.fold_param = XGUI.layout_group_start(
+            base_script.fold_param = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -286,19 +341,19 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_param);
+                foldout: base_script.fold_param);
 
-            if (!BaseScript.fold_param)
+            if (!base_script.fold_param)
             {
                 if (!Targets_Selected())
                 {
-                    SerializedProperty pos = sp_PrimitiveFeatures.FindPropertyRelative("Position");
-                    SerializedProperty eur = sp_PrimitiveFeatures.FindPropertyRelative("Euler");
-                    SerializedProperty sca = sp_PrimitiveFeatures.FindPropertyRelative("Scale");
-                    SerializedProperty size = sp_PrimitiveFeatures.FindPropertyRelative("Size");
-                    SerializedProperty alp = sp_PrimitiveFeatures.FindPropertyRelative("Alpha");
-                    SerializedProperty col = sp_PrimitiveFeatures.FindPropertyRelative("Color");
-                    SerializedProperty fil = sp_PrimitiveFeatures.FindPropertyRelative("Fill");
+                    SerializedProperty pos = sp_primitive_features.FindPropertyRelative(nameof(PrimitiveFeatures.position));
+                    SerializedProperty eur = sp_primitive_features.FindPropertyRelative(nameof(PrimitiveFeatures.euler));
+                    SerializedProperty sca = sp_primitive_features.FindPropertyRelative(nameof(PrimitiveFeatures.scale));
+                    SerializedProperty size = sp_primitive_features.FindPropertyRelative(nameof(PrimitiveFeatures.size));
+                    SerializedProperty alp = sp_primitive_features.FindPropertyRelative(nameof(PrimitiveFeatures.alpha));
+                    SerializedProperty col = sp_primitive_features.FindPropertyRelative(nameof(PrimitiveFeatures.color));
+                    SerializedProperty fil = sp_primitive_features.FindPropertyRelative(nameof(PrimitiveFeatures.fill));
 
                     #region 位置
                     XGUI.layout_state_displayer_text(
@@ -387,7 +442,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     #region 标题按钮
                     if (XGUI.layout_button(
-                        text: $"{SelectedObjects[MultiPrimitiveFeature_Index].name}",
+                        text: $"{selected_objects[multi_primitive_feature_index].name}",
                         tooltip: "",
                         bg_fill: XGUIGroup.透明,
                         button_text_color: Color.gray,
@@ -400,7 +455,7 @@ namespace SevenStrikeModules.XHud.Editor
                         layout_width: 150,
                         button_text_font: XGUI.GetFont("xg-medium")))
                     {
-                        EditorGUIUtility.PingObject(SelectedObjects[MultiPrimitiveFeature_Index]);
+                        EditorGUIUtility.PingObject(selected_objects[multi_primitive_feature_index]);
                     }
                     #endregion
 
@@ -416,15 +471,15 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 12,
                         height: 12))
                     {
-                        if (MultiPrimitiveFeature_Index <= 0)
+                        if (multi_primitive_feature_index <= 0)
                         {
-                            MultiPrimitiveFeature_Index = SelectedObjects.Length - 1;
+                            multi_primitive_feature_index = selected_objects.Length - 1;
                         }
                         else
                         {
-                            MultiPrimitiveFeature_Index--;
+                            multi_primitive_feature_index--;
                         }
-                        EditorGUIUtility.PingObject(SelectedObjects[MultiPrimitiveFeature_Index]);
+                        EditorGUIUtility.PingObject(selected_objects[multi_primitive_feature_index]);
                     }
                     #endregion
 
@@ -440,15 +495,15 @@ namespace SevenStrikeModules.XHud.Editor
                         width: 12,
                         height: 12))
                     {
-                        if (MultiPrimitiveFeature_Index >= SelectedObjects.Length - 1)
+                        if (multi_primitive_feature_index >= selected_objects.Length - 1)
                         {
-                            MultiPrimitiveFeature_Index = 0;
+                            multi_primitive_feature_index = 0;
                         }
                         else
                         {
-                            MultiPrimitiveFeature_Index++;
+                            multi_primitive_feature_index++;
                         }
-                        EditorGUIUtility.PingObject(SelectedObjects[MultiPrimitiveFeature_Index]);
+                        EditorGUIUtility.PingObject(selected_objects[multi_primitive_feature_index]);
                     }
                     #endregion
 
@@ -464,7 +519,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_state_displayer_text(
                         title: "位置",
                     title_size: XGUIFontSize.M,
-                        subtitle: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Position.ToString(),
+                        subtitle: selected_objects[multi_primitive_feature_index].primitive_features.position.ToString(),
                         subtitle_size: XGUIFontSize.M,
                         subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         margin: new RectOffset(5, 5, 0, 5));
@@ -474,7 +529,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_state_displayer_text(
                        title: "角度",
                        title_size: XGUIFontSize.M,
-                       subtitle: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Euler.ToString(),
+                       subtitle: selected_objects[multi_primitive_feature_index].primitive_features.euler.ToString(),
                        subtitle_size: XGUIFontSize.M,
                        subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                        margin: new RectOffset(5, 5, 0, 5));
@@ -484,7 +539,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_state_displayer_text(
                         title: "缩放",
                         title_size: XGUIFontSize.M,
-                        subtitle: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Scale.ToString(),
+                        subtitle: selected_objects[multi_primitive_feature_index].primitive_features.scale.ToString(),
                         subtitle_size: XGUIFontSize.M,
                         subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         margin: new RectOffset(5, 5, 0, 5));
@@ -494,7 +549,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_state_displayer_text(
                        title: "尺寸",
                        title_size: XGUIFontSize.M,
-                       subtitle: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Size.ToString(),
+                       subtitle: selected_objects[multi_primitive_feature_index].primitive_features.size.ToString(),
                        subtitle_size: XGUIFontSize.M,
                        subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                        margin: new RectOffset(5, 5, 0, 5));
@@ -504,7 +559,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_state_displayer_text(
                        title: "透明度",
                        title_size: XGUIFontSize.M,
-                       subtitle: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Alpha.ToString(),
+                       subtitle: selected_objects[multi_primitive_feature_index].primitive_features.alpha.ToString(),
                        subtitle_size: XGUIFontSize.M,
                        subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                        margin: new RectOffset(5, 5, 0, 5));
@@ -514,7 +569,7 @@ namespace SevenStrikeModules.XHud.Editor
                     XGUI.layout_state_displayer_text(
                        title: "填充",
                        title_size: XGUIFontSize.M,
-                       subtitle: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Fill.ToString(),
+                       subtitle: selected_objects[multi_primitive_feature_index].primitive_features.fill.ToString(),
                        subtitle_size: XGUIFontSize.M,
                        subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                        margin: new RectOffset(5, 5, 0, 5));
@@ -527,7 +582,7 @@ namespace SevenStrikeModules.XHud.Editor
                      icon: icon_col_mark,
                      icon_size: new Vector2(14, 14),
                      icon_offset: new Vector2(0, 0),
-                     icon_color: SelectedObjects[MultiPrimitiveFeature_Index].PrimitiveFeatures.Color,
+                     icon_color: selected_objects[multi_primitive_feature_index].primitive_features.color,
                      padding: new RectOffset(0, 0, 0, 0),
                      margin: new RectOffset(5, 5, 0, 5));
                     #endregion
@@ -537,7 +592,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 选项
-            BaseScript.fold_option = XGUI.layout_group_start(
+            base_script.fold_option = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -547,12 +602,12 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_option);
+                foldout: base_script.fold_option);
 
-            if (!BaseScript.fold_option)
+            if (!base_script.fold_option)
             {
                 #region 状态调试
-                DrawToggle("状态调试", sp_Debug, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_debug, (b) => { });
+                DrawToggle("状态调试", sp_debug, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, stroptions_debug, (b) => { });
                 #endregion
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
@@ -576,28 +631,28 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     if (Targets_Selected())
                     {
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        for (int i = 0; i < selected_objects.Length; i++)
                         {
-                            SelectedObjects[i].GroupFold(true);
+                            selected_objects[i].GroupFold(true);
                         }
                     }
                     else
                     {
-                        BaseScript.GroupFold(true);
+                        base_script.GroupFold(true);
                     }
                 });
                 menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
                 {
                     if (Targets_Selected())
                     {
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        for (int i = 0; i < selected_objects.Length; i++)
                         {
-                            SelectedObjects[i].GroupFold(false);
+                            selected_objects[i].GroupFold(false);
                         }
                     }
                     else
                     {
-                        BaseScript.GroupFold(false);
+                        base_script.GroupFold(false);
                     }
                 });
                 menu.ShowAsContext();
@@ -605,7 +660,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 源脚本
-            BaseScript.fold_based = XGUI.layout_group_start(
+            base_script.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -615,9 +670,9 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_based);
+                foldout: base_script.fold_based);
 
-            if (!BaseScript.fold_based)
+            if (!base_script.fold_based)
             {
                 DrawDefaultInspector();
             }
@@ -626,24 +681,6 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             serializedObject.ApplyModifiedProperties();
-        }
-        #endregion
-
-        #region 工具 - 序列化缓存
-        /// <summary>
-        /// 获取所有序列化字段。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>缓存 <c>PrimitiveFeatures</c> 属性。</description></item>
-        /// <item><description>缓存 <c>Debug</c> 属性。</description></item>
-        /// <item><description>缓存 <c>FirstSaveFeatures</c> 属性。</description></item>
-        /// </list>
-        /// </summary>
-        private void GetSerializeFields()
-        {
-            sp_PrimitiveFeatures = serializedObject.FindProperty("PrimitiveFeatures");
-            sp_Debug = serializedObject.FindProperty("Debug");
-            FirstSaveFeatures = serializedObject.FindProperty("FirstSaveFeatures");
         }
         #endregion
 
@@ -660,12 +697,12 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    XHud_Module_Primitive_Feature feature = SelectedObjects[i];
+                    XHud_Module_Primitive_Feature feature = selected_objects[i];
                     SerializedObject so = new SerializedObject(feature);
                     so.Update();
-                    SerializedProperty prop_FirstSaveFeatures = so.FindProperty("FirstSaveFeatures");
+                    SerializedProperty prop_FirstSaveFeatures = so.FindProperty(nameof(XHud_Module_Primitive_Feature.first_save_features));
                     if (!prop_FirstSaveFeatures.boolValue)
                     {
                         prop_FirstSaveFeatures.boolValue = true;
@@ -677,13 +714,13 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                if (!FirstSaveFeatures.boolValue)
+                if (!sp_first_save_features.boolValue)
                 {
-                    FirstSaveFeatures.boolValue = true;
+                    sp_first_save_features.boolValue = true;
                     serializedObject.ApplyModifiedProperties();
 
                     // 首次记录姿态信息
-                    PrimitiveFeature_Save(BaseScript);
+                    PrimitiveFeature_Save(base_script);
                 }
             }
         }
@@ -710,49 +747,49 @@ namespace SevenStrikeModules.XHud.Editor
                 so.Update();
 
                 // 获取特性类
-                SerializedProperty feature = so.FindProperty("PrimitiveFeatures");
+                SerializedProperty feature = so.FindProperty(nameof(XHud_Module_Primitive_Feature.primitive_features));
                 // 获取特性类的字段
-                SerializedProperty pos = feature.FindPropertyRelative("Position");
-                SerializedProperty eur = feature.FindPropertyRelative("Euler");
-                SerializedProperty sca = feature.FindPropertyRelative("Scale");
-                SerializedProperty size = feature.FindPropertyRelative("Size");
-                SerializedProperty alp = feature.FindPropertyRelative("Alpha");
-                SerializedProperty col = feature.FindPropertyRelative("Color");
-                SerializedProperty fil = feature.FindPropertyRelative("Fill");
+                SerializedProperty pos = feature.FindPropertyRelative(nameof(PrimitiveFeatures.position));
+                SerializedProperty eur = feature.FindPropertyRelative(nameof(PrimitiveFeatures.euler));
+                SerializedProperty sca = feature.FindPropertyRelative(nameof(PrimitiveFeatures.scale));
+                SerializedProperty size = feature.FindPropertyRelative(nameof(PrimitiveFeatures.size));
+                SerializedProperty alp = feature.FindPropertyRelative(nameof(PrimitiveFeatures.alpha));
+                SerializedProperty col = feature.FindPropertyRelative(nameof(PrimitiveFeatures.color));
+                SerializedProperty fil = feature.FindPropertyRelative(nameof(PrimitiveFeatures.fill));
 
                 // 保存特性：Rect
-                if (features.controller.mod_Rect != null)
+                if (features.controller.mod_rect != null)
                 {
-                    pos.vector3Value = features.controller.mod_Rect.anchoredPosition3D;
-                    eur.vector3Value = features.controller.mod_Rect.localEulerAngles;
-                    sca.vector3Value = features.controller.mod_Rect.localScale;
-                    size.vector2Value = features.controller.mod_Rect.sizeDelta;
+                    pos.vector3Value = features.controller.mod_rect.anchoredPosition3D;
+                    eur.vector3Value = features.controller.mod_rect.localEulerAngles;
+                    sca.vector3Value = features.controller.mod_rect.localScale;
+                    size.vector2Value = features.controller.mod_rect.sizeDelta;
                 }
                 // 保存特性：CanvasGroup
-                if (features.controller.mod_CanvasGroup != null)
+                if (features.controller.mod_canvas_group != null)
                 {
-                    alp.floatValue = features.controller.mod_CanvasGroup.alpha;
+                    alp.floatValue = features.controller.mod_canvas_group.alpha;
                 }
                 // 保存特性：Image
-                if (features.controller.mod_Image != null)
+                if (features.controller.mod_image != null)
                 {
-                    col.colorValue = features.controller.mod_Image.color;
-                    fil.floatValue = features.controller.mod_Image.fillAmount;
+                    col.colorValue = features.controller.mod_image.color;
+                    fil.floatValue = features.controller.mod_image.fillAmount;
                 }
                 // 保存特性：Text
-                else if (features.controller.mod_Text != null)
+                else if (features.controller.mod_text != null)
                 {
-                    col.colorValue = features.controller.mod_Text.color;
+                    col.colorValue = features.controller.mod_text.color;
                 }
                 // 保存特性：TmpText
-                else if (features.controller.mod_TmpText != null)
+                else if (features.controller.mod_tmp_text != null)
                 {
-                    col.colorValue = features.controller.mod_TmpText.color;
+                    col.colorValue = features.controller.mod_tmp_text.color;
                 }
                 // 保存特性：_RawImage
-                else if (features.controller.mod_RawImage != null)
+                else if (features.controller.mod_raw_image != null)
                 {
-                    col.colorValue = features.controller.mod_RawImage.color;
+                    col.colorValue = features.controller.mod_raw_image.color;
                 }
 
                 so.ApplyModifiedProperties();
@@ -778,51 +815,51 @@ namespace SevenStrikeModules.XHud.Editor
                 so.Update();
 
                 // 获取特性类
-                SerializedProperty feature = so.FindProperty("PrimitiveFeatures");
+                SerializedProperty feature = so.FindProperty(nameof(XHud_Module_Primitive_Feature.primitive_features));
                 // 获取特性类的字段
-                SerializedProperty pos = feature.FindPropertyRelative("Position");
-                SerializedProperty eur = feature.FindPropertyRelative("Euler");
-                SerializedProperty sca = feature.FindPropertyRelative("Scale");
-                SerializedProperty size = feature.FindPropertyRelative("Size");
-                SerializedProperty alp = feature.FindPropertyRelative("Alpha");
-                SerializedProperty col = feature.FindPropertyRelative("Color");
-                SerializedProperty fil = feature.FindPropertyRelative("Fill");
+                SerializedProperty pos = feature.FindPropertyRelative(nameof(PrimitiveFeatures.position));
+                SerializedProperty eur = feature.FindPropertyRelative(nameof(PrimitiveFeatures.euler));
+                SerializedProperty sca = feature.FindPropertyRelative(nameof(PrimitiveFeatures.scale));
+                SerializedProperty size = feature.FindPropertyRelative(nameof(PrimitiveFeatures.size));
+                SerializedProperty alp = feature.FindPropertyRelative(nameof(PrimitiveFeatures.alpha));
+                SerializedProperty col = feature.FindPropertyRelative(nameof(PrimitiveFeatures.color));
+                SerializedProperty fil = feature.FindPropertyRelative(nameof(PrimitiveFeatures.fill));
 
                 // 读取特性：Rect
-                if (features.controller.mod_Rect != null)
+                if (features.controller.mod_rect != null)
                 {
-                    features.controller.mod_Rect.anchoredPosition3D = pos.vector3Value;
-                    features.controller.mod_Rect.localEulerAngles = eur.vector3Value;
-                    features.controller.mod_Rect.localScale = sca.vector3Value;
-                    features.controller.mod_Rect.sizeDelta = size.vector2Value;
+                    features.controller.mod_rect.anchoredPosition3D = pos.vector3Value;
+                    features.controller.mod_rect.localEulerAngles = eur.vector3Value;
+                    features.controller.mod_rect.localScale = sca.vector3Value;
+                    features.controller.mod_rect.sizeDelta = size.vector2Value;
                 }
                 // 读取特性：CanvasGroup
-                if (features.controller.mod_CanvasGroup != null)
+                if (features.controller.mod_canvas_group != null)
                 {
-                    features.controller.mod_CanvasGroup.alpha = alp.floatValue;
+                    features.controller.mod_canvas_group.alpha = alp.floatValue;
                 }
                 // 读取特性：Image
-                if (features.controller.mod_Image != null)
+                if (features.controller.mod_image != null)
                 {
-                    features.controller.pt_Painting.UpdateColor(col.colorValue);
-                    features.controller.mod_Image.color = col.colorValue;
-                    features.controller.mod_Image.fillAmount = fil.floatValue;
+                    features.controller.pt_painting.UpdateColor(col.colorValue);
+                    features.controller.mod_image.color = col.colorValue;
+                    features.controller.mod_image.fillAmount = fil.floatValue;
                 }
                 // 读取特性：Text
-                else if (features.controller.mod_Text != null)
+                else if (features.controller.mod_text != null)
                 {
-                    features.controller.mod_Text.color = col.colorValue;
+                    features.controller.mod_text.color = col.colorValue;
                 }
                 // 读取特性：TmpText
-                else if (features.controller.mod_TmpText != null)
+                else if (features.controller.mod_tmp_text != null)
                 {
-                    features.controller.mod_TmpText.color = col.colorValue;
+                    features.controller.mod_tmp_text.color = col.colorValue;
                 }
                 // 读取特性：RawImage
-                else if (features.controller.mod_RawImage != null)
+                else if (features.controller.mod_raw_image != null)
                 {
-                    features.controller.pt_Painting.UpdateColor(col.colorValue);
-                    features.controller.mod_RawImage.color = col.colorValue;
+                    features.controller.pt_painting.UpdateColor(col.colorValue);
+                    features.controller.mod_raw_image.color = col.colorValue;
                 }
 
                 so.ApplyModifiedProperties();
@@ -838,10 +875,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void PrimitiveFeature_Capture(XHud_Module_Primitive_Feature[] features)
         {
-            PrimitiveFeatures = new PrimitiveFeatures[features.Length];
+            primitive_features = new PrimitiveFeatures[features.Length];
             for (int i = 0; i < features.Length; i++)
             {
-                PrimitiveFeatures[i] = features[i].PrimitiveFeatures;
+                primitive_features[i] = features[i].primitive_features;
             }
         }
         /// <summary>
@@ -859,12 +896,12 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
 
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    PrimitiveFeature_Save(SelectedObjects[i]);
+                    PrimitiveFeature_Save(selected_objects[i]);
                     XGUIDialogListDatas data = new XGUIDialogListDatas();
 
-                    data.Title = string.IsNullOrEmpty(SelectedObjects[i].controller.Indicator) ? SelectedObjects[i].name : SelectedObjects[i].controller.Indicator;
+                    data.Title = string.IsNullOrEmpty(selected_objects[i].controller.indicator) ? selected_objects[i].name : selected_objects[i].controller.indicator;
                     data.SubTitle = "";
                     data.Message = "已记录特性";
                     Datas.Add(data);
@@ -887,7 +924,7 @@ namespace SevenStrikeModules.XHud.Editor
             // 单选时
             else
             {
-                PrimitiveFeature_Save(BaseScript);
+                PrimitiveFeature_Save(base_script);
                 EditorApplication.delayCall += () =>
                 {
                     XGUI.dialog(
@@ -917,12 +954,12 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 List<XGUIDialogListDatas> Datas = new List<XGUIDialogListDatas>();
 
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    PrimitiveFeature_Load(SelectedObjects[i]);
+                    PrimitiveFeature_Load(selected_objects[i]);
                     XGUIDialogListDatas data = new XGUIDialogListDatas();
 
-                    data.Title = string.IsNullOrEmpty(SelectedObjects[i].controller.Indicator) ? SelectedObjects[i].name : SelectedObjects[i].controller.Indicator;
+                    data.Title = string.IsNullOrEmpty(selected_objects[i].controller.indicator) ? selected_objects[i].name : selected_objects[i].controller.indicator;
                     data.SubTitle = "";
                     data.Message = "已读取特性";
                     Datas.Add(data);
@@ -946,7 +983,7 @@ namespace SevenStrikeModules.XHud.Editor
             // 单选时
             else
             {
-                PrimitiveFeature_Load(BaseScript);
+                PrimitiveFeature_Load(base_script);
                 EditorApplication.delayCall += () =>
                 {
                     XGUI.dialog(
@@ -976,17 +1013,17 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new XHud_Module_Primitive_Feature[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new XHud_Module_Primitive_Feature[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (XHud_Module_Primitive_Feature)t;
+                    selected_objects[i] = (XHud_Module_Primitive_Feature)t;
                 }
             }
             else
             {
-                SelectedObjects = new XHud_Module_Primitive_Feature[targets.Length];
-                SelectedObjects[0] = (XHud_Module_Primitive_Feature)target;
+                selected_objects = new XHud_Module_Primitive_Feature[targets.Length];
+                selected_objects[0] = (XHud_Module_Primitive_Feature)target;
             }
         }
         /// <summary>
@@ -1000,9 +1037,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>是否为多选状态。</returns>
         private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }

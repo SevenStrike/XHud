@@ -30,10 +30,12 @@ namespace SevenStrikeModules.XHud
     public partial class XHud_Module_Element : MonoBehaviour
     {
         #region 参数
+        [SerializeField]
         /// <summary>
         ///  ID编号
         /// </summary>
         private int id;
+        public const string editor_serializefield_id = nameof(id);
         [SerializeField]
         /// <summary>
         /// ID编号
@@ -53,32 +55,32 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素昵称
         /// </summary>
-        public string Indicator;
+        public string indicator;
         [SerializeField]
         /// <summary>
         /// 元素原始名称
         /// </summary>
-        public string OriginalName;
+        public string original_name;
         [SerializeField]
         /// <summary>
         /// 源自元素池的名称
         /// </summary>
-        public string OriginPoolName;
+        public string origin_poolname;
         [SerializeField]
         /// <summary>
         /// 调试开关
         /// </summary>
-        public bool DebugState;
+        public bool debug_state;
         [SerializeField]
         /// <summary>
         /// 变换组件
         /// </summary>
-        public RectTransform RectTransform;
+        public RectTransform rect_transform;
         [SerializeField]
         /// <summary>
         /// 锚点坐标
         /// </summary>
-        public Vector2 CurrentPivot;
+        public Vector2 current_pivot;
         #endregion
 
         #region 状态
@@ -86,22 +88,22 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素的生成状态
         /// </summary>
-        public XHudElementCreateState CreateState = XHudElementCreateState.Recycled;
+        public XHudElementCreateState create_state = XHudElementCreateState.Recycled;
         [SerializeField]
         /// <summary>
         /// 元素的动画状态
         /// </summary>
-        public XHudElementAnimateState AnimateState = XHudElementAnimateState.Static;
+        public XHudElementAnimateState animate_state = XHudElementAnimateState.Static;
         [SerializeField]
         /// <summary>
         /// 判定元素是屏幕类型还是世界空间类型
         /// </summary>
-        public XHudElementSpaceType ElementSpaceType = XHudElementSpaceType.None;
+        public XHudElementSpaceType element_space_type = XHudElementSpaceType.None;
         [SerializeField]
         /// <summary>
         /// 判定元素生成源是从元素库还是自定义实例化
         /// </summary>
-        public XHudElementCreatedSourceType CreatedSourceType = XHudElementCreatedSourceType.Library;
+        public XHudElementCreatedSourceType created_source_type = XHudElementCreatedSourceType.Library;
         [SerializeField]
         /// <summary>
         /// Tween动画预览状态
@@ -109,7 +111,7 @@ namespace SevenStrikeModules.XHud
         /// false表示未在预览状态
         /// 用于编辑器模式下的动画预览控制
         /// </summary>
-        public bool Tween_Preview_IsPlaying = false;
+        public bool tween_preview_is_playing = false;
         #endregion
 
         #region 折叠
@@ -154,12 +156,12 @@ namespace SevenStrikeModules.XHud
         private void Awake()
         {
             // 获取自身的 RectTransform
-            if (RectTransform == null)
-                RectTransform = GetComponent<RectTransform>();
+            if (rect_transform == null)
+                rect_transform = GetComponent<RectTransform>();
 
             // 获取自身的 TriggerAction
-            if (TriggerAction == null)
-                TriggerAction = GetComponent<XHud_Element_TriggerAction>();
+            if (trigger_action == null)
+                trigger_action = GetComponent<XHud_Element_TriggerAction>();
         }
 
         public virtual void OnEnable()
@@ -178,7 +180,7 @@ namespace SevenStrikeModules.XHud
         public virtual void Start()
         {
             // 注册屏幕分辨率变化时的动作
-            XHud_Manager.Instance.Act_ScreenResolution_Changed += elelemt_RMS_ScreenResolutionChanged;
+            XHud_Manager.instance.act_screen_resolution_changed += elelemt_RMS_ScreenResolutionChanged;
         }
 
         public virtual void Update()

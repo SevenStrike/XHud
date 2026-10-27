@@ -32,68 +32,60 @@ namespace SevenStrikeModules.XHud.Editor
     {
         #region 字段 - 列表
         /// <summary>
-        /// 图元控制器列表。
+        /// 图元控制器列表
         /// </summary>
-        private ReorderableList PrimitivesTweenList;
-
+        private ReorderableList primitives_list;
         /// <summary>
-        /// 音效器列表。
+        /// 音效器列表
         /// </summary>
-        private ReorderableList SounderList;
-
+        private ReorderableList sounder_list;
         /// <summary>
-        /// 按钮列表。
+        /// 按钮列表
         /// </summary>
-        private ReorderableList ButtonList;
-
+        private ReorderableList button_list;
         /// <summary>
-        /// 选项列表。
+        /// 选项列表
         /// </summary>
-        private ReorderableList OptionList;
-
+        private ReorderableList option_list;
         /// <summary>
-        /// 滑动条列表。
+        /// 滑动条列表
         /// </summary>
-        private ReorderableList SliderList;
-
+        private ReorderableList slider_list;
         /// <summary>
-        /// 进度条列表。
+        /// 进度条列表
         /// </summary>
-        private ReorderableList ProgressList;
-
+        private ReorderableList progress_list;
         /// <summary>
-        /// 开关列表。
+        /// 开关列表
         /// </summary>
-        private ReorderableList ToggleList;
-
+        private ReorderableList toggle_list;
         /// <summary>
-        /// 文字列表。
+        /// 文字列表
         /// </summary>
-        private ReorderableList TextList;
-
+        private ReorderableList text_list;
         /// <summary>
-        /// Tmp 文字列表。
+        /// Tmp 文字列表
         /// </summary>
-        private ReorderableList TmpTextList;
+        private ReorderableList tmp_text_list;
         #endregion
 
         #region 绘制 - 图元控制器列表
         /// <summary>
-        /// 绘制图元控制器列表。
+        /// 绘制图元控制器列表
         /// <para/>
         /// 每条目显示：
         /// <list type="bullet">
         /// <item><description>控制器标识（Indicator / 物体名）；</description></item>
         /// <item><description>控制器 ID（未分配时显示"未分配ID"）；</description></item>
         /// <item><description>速率滑块（GlobalDuration）；</description></item>
-        /// <item><description>延迟输入框（DelayTime）。</description></item>
+        /// <item><description>延迟输入框（DelayTime）</description></item>
         /// </list>
         /// <para/>
-        /// 点击条目：定位控制器并触发 <c>Preview_PrimitiveTween_OnSelect</c> 预览。
+        /// 点击条目：定位控制器并触发 <c>Preview_PrimitiveTween_OnSelect</c> 预览
         /// </summary>
         public void ReorderableList_Draw_PrimitiveController()
         {
-            PrimitivesTweenList = new ReorderableList(serializedObject, PrimitiveControllerNodes)
+            primitives_list = new ReorderableList(serializedObject, sp_primitive_controller_nodes)
             {
                 displayAdd = false,
                 displayRemove = true,
@@ -105,7 +97,7 @@ namespace SevenStrikeModules.XHud.Editor
             };
         }
         /// <summary>
-        /// 绘制图元控制器列表的表头。
+        /// 绘制图元控制器列表的表头
         /// </summary>
         private void PrimitiveController_DrawHeader(Rect rect)
         {
@@ -120,29 +112,29 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Normal);
         }
         /// <summary>
-        /// 绘制图元控制器列表的单个条目。
+        /// 绘制图元控制器列表的单个条目
         /// <para/>
         /// 每条目显示：
         /// <list type="bullet">
         /// <item><description>图标；</description></item>
         /// <item><description>控制器标识与 ID；</description></item>
         /// <item><description>速率滑块（GlobalDuration）；</description></item>
-        /// <item><description>延迟输入框（DelayTime）。</description></item>
+        /// <item><description>延迟输入框（DelayTime）</description></item>
         /// </list>
         /// <para/>
-        /// 若控制器未挂载图元动画器（<c>pt_Tween == null</c>），显示"未初始化动画模块"提示。
+        /// 若控制器未挂载图元动画器（<c>pt_Tween == null</c>），显示"未初始化动画模块"提示
         /// </summary>
         private void PrimitiveController_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            if (PrimitiveControllerNodes == null)
+            if (sp_primitive_controller_nodes == null)
                 return;
-            if (PrimitiveControllerNodes.arraySize <= 0)
+            if (sp_primitive_controller_nodes.arraySize <= 0)
                 return;
-            SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(index);
+            SerializedProperty sp_node = sp_primitive_controller_nodes.GetArrayElementAtIndex(index);
             if (sp_node != null)
             {
-                SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
-                SerializedProperty sp_delay = sp_node.FindPropertyRelative("DelayTime");
+                SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
+                SerializedProperty sp_delay = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.delay_time));
 
                 XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
 
@@ -170,22 +162,22 @@ namespace SevenStrikeModules.XHud.Editor
                         rect: new Rect(rect.x + 25, rect.y + 2, rect.width - 30, XGUI.GetSingleLineHeight()),
                         title: new GUIContent(title),
                         title_size: XGUIFontSize.M,
-                        subtitle: new GUIContent(!string.IsNullOrEmpty(sp_con.ID) ? sp_con.ID : "未分配ID"),
+                        subtitle: new GUIContent(!string.IsNullOrEmpty(sp_con.id) ? sp_con.id : "未分配ID"),
                         subtitle_size: XGUIFontSize.S,
-                        subtitle_color: !string.IsNullOrEmpty(sp_con.ID) ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.white * 0.65f,
+                        subtitle_color: !string.IsNullOrEmpty(sp_con.id) ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.white * 0.65f,
                         margin: new RectOffset(5, 5, 0, 5));
                     #endregion
 
-                    if (sp_con.pt_Tween != null)
+                    if (sp_con.pt_tween != null)
                     {
                         #region 速率      
                         if (XGUI.CurrentWindowWidthThreshold(">", 150f))
                         {
-                            SerializedObject so_tween = new SerializedObject(sp_con.pt_Tween);
+                            SerializedObject so_tween = new SerializedObject(sp_con.pt_tween);
                             so_tween.Update();
 
-                            SerializedProperty sp_glodur = so_tween.FindProperty("GlobalDuration");
-                            SerializedProperty sp_maxdur = so_tween.FindProperty("MaxTimerWithGlobalDuration");
+                            SerializedProperty sp_glodur = so_tween.FindProperty(nameof(XHud_Module_Primitive_Tween.global_duration));
+                            SerializedProperty sp_maxdur = so_tween.FindProperty(nameof(XHud_Module_Primitive_Tween.max_timer_with_global_duration));
 
                             sp_glodur.floatValue = XGUI.gui_slider(
                                 rect: new Rect(rect.x + 5, rect.y + 28, rect.width - 15, XGUI.GetSingleLineHeight()),
@@ -249,23 +241,23 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 图元控制器列表条目选中回调。
+        /// 图元控制器列表条目选中回调
         /// <para/>
-        /// 点击条目：定位控制器并触发 <c>Preview_PrimitiveTween_OnSelect</c> 预览。
+        /// 点击条目：定位控制器并触发 <c>Preview_PrimitiveTween_OnSelect</c> 预览
         /// </summary>
         private void PrimitiveController_OnSelect(ReorderableList list)
         {
-            SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(list.index);
+            SerializedProperty sp_node = sp_primitive_controller_nodes.GetArrayElementAtIndex(list.index);
             if (sp_node != null)
             {
-                SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                 EditorGUIUtility.PingObject(sp_node_con.objectReferenceValue);
 
-                Preview_PrimitiveTween_OnSelect(BaseScript.PrimitiveControllerNodes[list.index]);
+                Preview_PrimitiveTween_OnSelect(base_script.primitive_controller_nodes[list.index]);
             }
         }
         /// <summary>
-        /// 图元控制器列表条目高度。
+        /// 图元控制器列表条目高度
         /// </summary>
         private float PrimitiveController_ElementHeight(int index)
         {
@@ -275,15 +267,15 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 绘制 - 文字列表
         /// <summary>
-        /// 绘制文字列表。
+        /// 绘制文字列表
         /// <para/>
-        /// 每条目显示文字组件的标识名（Indicator / 物体名）。
+        /// 每条目显示文字组件的标识名（Indicator / 物体名）
         /// <para/>
-        /// 点击条目：定位文字组件。
+        /// 点击条目：定位文字组件
         /// </summary>
         public void ReorderableList_Draw_Text()
         {
-            TextList = new ReorderableList(serializedObject, TextNodes)
+            text_list = new ReorderableList(serializedObject, sp_text_nodes)
             {
                 displayAdd = false,
                 displayRemove = true,
@@ -295,7 +287,7 @@ namespace SevenStrikeModules.XHud.Editor
             };
         }
         /// <summary>
-        /// 绘制文字列表的表头。
+        /// 绘制文字列表的表头
         /// </summary>
         private void Text_DrawHeader(Rect rect)
         {
@@ -310,20 +302,20 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Normal);
         }
         /// <summary>
-        /// 绘制文字列表的单个条目。
+        /// 绘制文字列表的单个条目
         /// <para/>
         /// 每条目显示：
         /// <list type="bullet">
         /// <item><description>图标；</description></item>
-        /// <item><description>文字组件标识名（Indicator / 物体名）。</description></item>
+        /// <item><description>文字组件标识名（Indicator / 物体名）</description></item>
         /// </list>
         /// </summary>
         private void Text_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty sp_root = TextNodes.GetArrayElementAtIndex(index);
+            SerializedProperty sp_root = sp_text_nodes.GetArrayElementAtIndex(index);
             if (sp_root != null)
             {
-                SerializedProperty sp_text = sp_root.FindPropertyRelative("Text");
+                SerializedProperty sp_text = sp_root.FindPropertyRelative(nameof(ElementNode_Text.text));
                 XHud_Module_Text txt = (XHud_Module_Text)sp_text.objectReferenceValue;
                 if (txt != null)
                 {
@@ -339,7 +331,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     #region 名称
                     string title = "";
-                    string indicator = txt.Indicator;
+                    string indicator = txt.indicator;
                     if (!string.IsNullOrEmpty(indicator))
                         title += indicator;
                     else
@@ -358,17 +350,17 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 文字列表条目选中回调。
+        /// 文字列表条目选中回调
         /// <para/>
-        /// 点击条目：定位文字组件。
+        /// 点击条目：定位文字组件
         /// </summary>
         private void Text_OnSelect(ReorderableList list)
         {
-            SerializedProperty sp_text = TextNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Text");
+            SerializedProperty sp_text = sp_text_nodes.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(ElementNode_Text.text));
             EditorGUIUtility.PingObject(sp_text.objectReferenceValue);
         }
         /// <summary>
-        /// 文字列表条目高度。
+        /// 文字列表条目高度
         /// </summary>
         private float Text_ElementHeight(int index)
         {
@@ -378,15 +370,15 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 绘制 - Tmp文字列表
         /// <summary>
-        /// 绘制 Tmp 文字列表。
+        /// 绘制 Tmp 文字列表
         /// <para/>
-        /// 每条目显示 TmpText 组件的标识名（Indicator / 物体名）。
+        /// 每条目显示 TmpText 组件的标识名（Indicator / 物体名）
         /// <para/>
-        /// 点击条目：定位 TmpText 组件。
+        /// 点击条目：定位 TmpText 组件
         /// </summary>
         public void ReorderableList_Draw_TmpText()
         {
-            TmpTextList = new ReorderableList(serializedObject, TmpTextNodes)
+            tmp_text_list = new ReorderableList(serializedObject, sp_tmptext_nodes)
             {
                 displayAdd = false,
                 displayRemove = true,
@@ -398,7 +390,7 @@ namespace SevenStrikeModules.XHud.Editor
             };
         }
         /// <summary>
-        /// 绘制 Tmp 文字列表的表头。
+        /// 绘制 Tmp 文字列表的表头
         /// </summary>
         private void TmpText_DrawHeader(Rect rect)
         {
@@ -413,20 +405,20 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Normal);
         }
         /// <summary>
-        /// 绘制 Tmp 文字列表的单个条目。
+        /// 绘制 Tmp 文字列表的单个条目
         /// <para/>
         /// 每条目显示：
         /// <list type="bullet">
         /// <item><description>图标；</description></item>
-        /// <item><description>TmpText 组件标识名（Indicator / 物体名）。</description></item>
+        /// <item><description>TmpText 组件标识名（Indicator / 物体名）</description></item>
         /// </list>
         /// </summary>
         private void TmpText_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty sp_root = TmpTextNodes.GetArrayElementAtIndex(index);
+            SerializedProperty sp_root = sp_tmptext_nodes.GetArrayElementAtIndex(index);
             if (sp_root != null)
             {
-                SerializedProperty sp_text = sp_root.FindPropertyRelative("TmpText");
+                SerializedProperty sp_text = sp_root.FindPropertyRelative(nameof(ElementNode_TmpText.tmptext));
                 XHud_Module_TmpText tmp_txt = (XHud_Module_TmpText)sp_text.objectReferenceValue;
                 if (tmp_txt != null)
                 {
@@ -442,7 +434,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                     #region 名称
                     string title = "";
-                    string indicator = tmp_txt.Indicator;
+                    string indicator = tmp_txt.indicator;
                     if (!string.IsNullOrEmpty(indicator))
                         title += indicator;
                     else
@@ -461,17 +453,17 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// Tmp 文字列表条目选中回调。
+        /// Tmp 文字列表条目选中回调
         /// <para/>
-        /// 点击条目：定位 TmpText 组件。
+        /// 点击条目：定位 TmpText 组件
         /// </summary>
         private void TmpText_OnSelect(ReorderableList list)
         {
-            SerializedProperty sp_text = TmpTextNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("TmpText");
+            SerializedProperty sp_text = sp_tmptext_nodes.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(ElementNode_TmpText.tmptext));
             EditorGUIUtility.PingObject(sp_text.objectReferenceValue);
         }
         /// <summary>
-        /// Tmp 文字列表条目高度。
+        /// Tmp 文字列表条目高度
         /// </summary>
         private float TmpText_ElementHeight(int index)
         {
@@ -481,15 +473,15 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 绘制 - 按钮列表
         /// <summary>
-        /// 绘制按钮列表。
+        /// 绘制按钮列表
         /// <para/>
-        /// 每条目显示按钮组件的标识名（Indicator / 物体名）。
+        /// 每条目显示按钮组件的标识名（Indicator / 物体名）
         /// <para/>
-        /// 点击条目：定位按钮组件。
+        /// 点击条目：定位按钮组件
         /// </summary>
         public void ReorderableList_Draw_Button()
         {
-            ButtonList = new ReorderableList(serializedObject, ButtonNodes)
+            button_list = new ReorderableList(serializedObject, sp_button_nodes)
             {
                 displayAdd = false,
                 displayRemove = true,
@@ -501,7 +493,7 @@ namespace SevenStrikeModules.XHud.Editor
             };
         }
         /// <summary>
-        /// 绘制按钮列表的表头。
+        /// 绘制按钮列表的表头
         /// </summary>
         private void Button_DrawHeader(Rect rect)
         {
@@ -516,20 +508,20 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Normal);
         }
         /// <summary>
-        /// 绘制按钮列表的单个条目。
+        /// 绘制按钮列表的单个条目
         /// <para/>
         /// 每条目显示：
         /// <list type="bullet">
         /// <item><description>图标；</description></item>
-        /// <item><description>按钮组件标识名（Indicator / 物体名）。</description></item>
+        /// <item><description>按钮组件标识名（Indicator / 物体名）</description></item>
         /// </list>
         /// </summary>
         private void Button_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty sp_root = ButtonNodes.GetArrayElementAtIndex(index);
+            SerializedProperty sp_root = sp_button_nodes.GetArrayElementAtIndex(index);
             if (sp_root != null)
             {
-                SerializedProperty sp_btn = sp_root.FindPropertyRelative("Button");
+                SerializedProperty sp_btn = sp_root.FindPropertyRelative(nameof(ElementNode_Button.button));
                 XHud_Module_Button btn = (XHud_Module_Button)sp_btn.objectReferenceValue;
                 if (btn != null)
                 {
@@ -564,18 +556,18 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 按钮列表条目选中回调。
+        /// 按钮列表条目选中回调
         /// <para/>
-        /// 点击条目：定位按钮组件。
+        /// 点击条目：定位按钮组件
         /// </summary>
         private void Button_OnSelect(ReorderableList list)
         {
-            SerializedProperty sp_btn = ButtonNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Button");
+            SerializedProperty sp_btn = sp_button_nodes.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(ElementNode_Button.button));
             //Hud_Button btn = (Hud_Button)sp_btn.objectReferenceValue;
             EditorGUIUtility.PingObject(sp_btn.objectReferenceValue);
         }
         /// <summary>
-        /// 按钮列表条目高度。
+        /// 按钮列表条目高度
         /// </summary>
         private float Button_ElementHeight(int index)
         {
@@ -585,15 +577,15 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 绘制 - 选项列表
         /// <summary>
-        /// 绘制选项列表。
+        /// 绘制选项列表
         /// <para/>
-        /// 每条目显示选项组件的标识名（Indicator / 物体名）。
+        /// 每条目显示选项组件的标识名（Indicator / 物体名）
         /// <para/>
-        /// 点击条目：定位选项组件。
+        /// 点击条目：定位选项组件
         /// </summary>
         public void ReorderableList_Draw_Option()
         {
-            OptionList = new ReorderableList(serializedObject, OptionNodes)
+            option_list = new ReorderableList(serializedObject, sp_option_nodes)
             {
                 displayAdd = false,
                 displayRemove = true,
@@ -605,7 +597,7 @@ namespace SevenStrikeModules.XHud.Editor
             };
         }
         /// <summary>
-        /// 绘制选项列表的表头。
+        /// 绘制选项列表的表头
         /// </summary>
         private void Option_DrawHeader(Rect rect)
         {
@@ -620,20 +612,20 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Normal);
         }
         /// <summary>
-        /// 绘制选项列表的单个条目。
+        /// 绘制选项列表的单个条目
         /// <para/>
         /// 每条目显示：
         /// <list type="bullet">
         /// <item><description>图标；</description></item>
-        /// <item><description>选项组件标识名（Indicator / 物体名）。</description></item>
+        /// <item><description>选项组件标识名（Indicator / 物体名）</description></item>
         /// </list>
         /// </summary>
         private void Option_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty sp_root = OptionNodes.GetArrayElementAtIndex(index);
+            SerializedProperty sp_root = sp_option_nodes.GetArrayElementAtIndex(index);
             if (sp_root != null)
             {
-                SerializedProperty sp_opt = sp_root.FindPropertyRelative("Option");
+                SerializedProperty sp_opt = sp_root.FindPropertyRelative(nameof(ElementNode_Option.option));
                 XHud_Module_Option opt = (XHud_Module_Option)sp_opt.objectReferenceValue;
                 if (opt != null)
                 {
@@ -668,17 +660,17 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 选项列表条目选中回调。
+        /// 选项列表条目选中回调
         /// <para/>
-        /// 点击条目：定位选项组件。
+        /// 点击条目：定位选项组件
         /// </summary>
         private void Option_OnSelect(ReorderableList list)
         {
-            SerializedProperty sp_opt = OptionNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Option");
+            SerializedProperty sp_opt = sp_option_nodes.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(ElementNode_Option.option));
             EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
         }
         /// <summary>
-        /// 选项列表条目高度。
+        /// 选项列表条目高度
         /// </summary>
         private float Option_ElementHeight(int index)
         {
@@ -688,15 +680,15 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 绘制 - 滑动条列表
         /// <summary>
-        /// 绘制滑动条列表。
+        /// 绘制滑动条列表
         /// <para/>
-        /// 每条目显示滑动条组件的标识名（Indicator / 物体名）。
+        /// 每条目显示滑动条组件的标识名（Indicator / 物体名）
         /// <para/>
-        /// 点击条目：定位滑动条组件。
+        /// 点击条目：定位滑动条组件
         /// </summary>
         public void ReorderableList_Draw_Slider()
         {
-            SliderList = new ReorderableList(serializedObject, SliderNodes)
+            slider_list = new ReorderableList(serializedObject, sp_slider_nodes)
             {
                 displayAdd = false,
                 displayRemove = true,
@@ -708,7 +700,7 @@ namespace SevenStrikeModules.XHud.Editor
             };
         }
         /// <summary>
-        /// 绘制滑动条列表的表头。
+        /// 绘制滑动条列表的表头
         /// </summary>
         private void Slider_DrawHeader(Rect rect)
         {
@@ -723,20 +715,20 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Normal);
         }
         /// <summary>
-        /// 绘制滑动条列表的单个条目。
+        /// 绘制滑动条列表的单个条目
         /// <para/>
         /// 每条目显示：
         /// <list type="bullet">
         /// <item><description>图标；</description></item>
-        /// <item><description>滑动条组件标识名（Indicator / 物体名）。</description></item>
+        /// <item><description>滑动条组件标识名（Indicator / 物体名）</description></item>
         /// </list>
         /// </summary>
         private void Slider_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty sp_root = SliderNodes.GetArrayElementAtIndex(index);
+            SerializedProperty sp_root = sp_slider_nodes.GetArrayElementAtIndex(index);
             if (sp_root != null)
             {
-                SerializedProperty sp_sli = sp_root.FindPropertyRelative("Slider");
+                SerializedProperty sp_sli = sp_root.FindPropertyRelative(nameof(ElementNode_Slider.slider));
                 XHud_Module_Slider sli = (XHud_Module_Slider)sp_sli.objectReferenceValue;
                 if (sli != null)
                 {
@@ -771,17 +763,17 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 滑动条列表条目选中回调。
+        /// 滑动条列表条目选中回调
         /// <para/>
-        /// 点击条目：定位滑动条组件。
+        /// 点击条目：定位滑动条组件
         /// </summary>
         private void Slider_OnSelect(ReorderableList list)
         {
-            SerializedProperty sp_opt = SliderNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Slider");
+            SerializedProperty sp_opt = sp_slider_nodes.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(ElementNode_Slider.slider));
             EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
         }
         /// <summary>
-        /// 滑动条列表条目高度。
+        /// 滑动条列表条目高度
         /// </summary>
         private float Slider_ElementHeight(int index)
         {
@@ -791,15 +783,15 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 绘制 - 进度条列表
         /// <summary>
-        /// 绘制进度条列表。
+        /// 绘制进度条列表
         /// <para/>
-        /// 每条目显示进度条组件的标识名（Indicator / 物体名）。
+        /// 每条目显示进度条组件的标识名（Indicator / 物体名）
         /// <para/>
-        /// 点击条目：定位进度条组件。
+        /// 点击条目：定位进度条组件
         /// </summary>
         public void ReorderableList_Draw_Progress()
         {
-            ProgressList = new ReorderableList(serializedObject, ProgressNodes)
+            progress_list = new ReorderableList(serializedObject, sp_progress_nodes)
             {
                 displayAdd = false,
                 displayRemove = true,
@@ -811,7 +803,7 @@ namespace SevenStrikeModules.XHud.Editor
             };
         }
         /// <summary>
-        /// 绘制进度条列表的表头。
+        /// 绘制进度条列表的表头
         /// </summary>
         private void Progress_DrawHeader(Rect rect)
         {
@@ -826,20 +818,20 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Normal);
         }
         /// <summary>
-        /// 绘制进度条列表的单个条目。
+        /// 绘制进度条列表的单个条目
         /// <para/>
         /// 每条目显示：
         /// <list type="bullet">
         /// <item><description>图标；</description></item>
-        /// <item><description>进度条组件标识名（Indicator / 物体名）。</description></item>
+        /// <item><description>进度条组件标识名（Indicator / 物体名）</description></item>
         /// </list>
         /// </summary>
         private void Progress_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty sp_root = ProgressNodes.GetArrayElementAtIndex(index);
+            SerializedProperty sp_root = sp_progress_nodes.GetArrayElementAtIndex(index);
             if (sp_root != null)
             {
-                SerializedProperty sp_pro = sp_root.FindPropertyRelative("Progress");
+                SerializedProperty sp_pro = sp_root.FindPropertyRelative(nameof(ElementNode_Progress.progress));
                 XHud_Module_Progress pro = (XHud_Module_Progress)sp_pro.objectReferenceValue;
                 if (pro != null)
                 {
@@ -874,17 +866,17 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 进度条列表条目选中回调。
+        /// 进度条列表条目选中回调
         /// <para/>
-        /// 点击条目：定位进度条组件。
+        /// 点击条目：定位进度条组件
         /// </summary>
         private void Progress_OnSelect(ReorderableList list)
         {
-            SerializedProperty sp_opt = ProgressNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Progress");
+            SerializedProperty sp_opt = sp_progress_nodes.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(ElementNode_Progress.progress));
             EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
         }
         /// <summary>
-        /// 进度条列表条目高度。
+        /// 进度条列表条目高度
         /// </summary>
         private float Progress_ElementHeight(int index)
         {
@@ -894,15 +886,15 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 绘制 - 开关列表
         /// <summary>
-        /// 绘制开关列表。
+        /// 绘制开关列表
         /// <para/>
-        /// 每条目显示开关组件的标识名（Indicator / 物体名）。
+        /// 每条目显示开关组件的标识名（Indicator / 物体名）
         /// <para/>
-        /// 点击条目：定位开关组件。
+        /// 点击条目：定位开关组件
         /// </summary>
         public void ReorderableList_Draw_Toggle()
         {
-            ToggleList = new ReorderableList(serializedObject, ToggleNodes)
+            toggle_list = new ReorderableList(serializedObject, sp_toggle_nodes)
             {
                 displayAdd = false,
                 displayRemove = true,
@@ -914,7 +906,7 @@ namespace SevenStrikeModules.XHud.Editor
             };
         }
         /// <summary>
-        /// 绘制开关列表的表头。
+        /// 绘制开关列表的表头
         /// </summary>
         private void Toggle_DrawHeader(Rect rect)
         {
@@ -929,20 +921,20 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Normal);
         }
         /// <summary>
-        /// 绘制开关列表的单个条目。
+        /// 绘制开关列表的单个条目
         /// <para/>
         /// 每条目显示：
         /// <list type="bullet">
         /// <item><description>图标；</description></item>
-        /// <item><description>开关组件标识名（Indicator / 物体名）。</description></item>
+        /// <item><description>开关组件标识名（Indicator / 物体名）</description></item>
         /// </list>
         /// </summary>
         private void Toggle_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty sp_root = ToggleNodes.GetArrayElementAtIndex(index);
+            SerializedProperty sp_root = sp_toggle_nodes.GetArrayElementAtIndex(index);
             if (sp_root != null)
             {
-                SerializedProperty sp_tog = sp_root.FindPropertyRelative("Toggle");
+                SerializedProperty sp_tog = sp_root.FindPropertyRelative(nameof(ElementNode_Toggle.toggle));
                 XHud_Module_Toggle tog = (XHud_Module_Toggle)sp_tog.objectReferenceValue;
                 if (tog != null)
                 {
@@ -977,17 +969,17 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 开关列表条目选中回调。
+        /// 开关列表条目选中回调
         /// <para/>
-        /// 点击条目：定位开关组件。
+        /// 点击条目：定位开关组件
         /// </summary>
         private void Toggle_OnSelect(ReorderableList list)
         {
-            SerializedProperty sp_opt = ToggleNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Toggle");
+            SerializedProperty sp_opt = sp_toggle_nodes.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(ElementNode_Toggle.toggle));
             EditorGUIUtility.PingObject(sp_opt.objectReferenceValue);
         }
         /// <summary>
-        /// 开关列表条目高度。
+        /// 开关列表条目高度
         /// </summary>
         private float Toggle_ElementHeight(int index)
         {
@@ -997,7 +989,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 绘制 - 音效器列表
         /// <summary>
-        /// 绘制音效器列表。
+        /// 绘制音效器列表
         /// <para/>
         /// 每条目显示：
         /// <list type="bullet">
@@ -1005,14 +997,14 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>音量滑块；</description></item>
         /// <item><description>音高范围滑块；</description></item>
         /// <item><description>延迟输入框；</description></item>
-        /// <item><description>音效库选择下拉框。</description></item>
+        /// <item><description>音效库选择下拉框</description></item>
         /// </list>
         /// <para/>
-        /// 点击条目：定位音效器并触发 <c>Preview_ElementSounder_Item</c> 试听。
+        /// 点击条目：定位音效器并触发 <c>Preview_ElementSounder_Item</c> 试听
         /// </summary>
         public void ReorderableList_Draw_Sounder()
         {
-            SounderList = new ReorderableList(serializedObject, SounderNodes)
+            sounder_list = new ReorderableList(serializedObject, sp_sounder_nodes)
             {
                 displayAdd = false,
                 displayRemove = true,
@@ -1024,7 +1016,7 @@ namespace SevenStrikeModules.XHud.Editor
             };
         }
         /// <summary>
-        /// 绘制音效器列表的表头。
+        /// 绘制音效器列表的表头
         /// </summary>
         private void Sounder_DrawHeader(Rect rect)
         {
@@ -1039,7 +1031,7 @@ namespace SevenStrikeModules.XHud.Editor
                 font_style: FontStyle.Normal);
         }
         /// <summary>
-        /// 绘制音效器列表的单个条目。
+        /// 绘制音效器列表的单个条目
         /// <para/>
         /// 每条目显示：
         /// <list type="bullet">
@@ -1048,15 +1040,15 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>音量滑块；</description></item>
         /// <item><description>音高范围滑块；</description></item>
         /// <item><description>延迟输入框；</description></item>
-        /// <item><description>音效库选择下拉框。</description></item>
+        /// <item><description>音效库选择下拉框</description></item>
         /// </list>
         /// </summary>
         private void Sounder_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty sp_root = SounderNodes.GetArrayElementAtIndex(index);
+            SerializedProperty sp_root = sp_sounder_nodes.GetArrayElementAtIndex(index);
             if (sp_root != null)
             {
-                SerializedProperty sp_sounder = sp_root.FindPropertyRelative("Sounder");
+                SerializedProperty sp_sounder = sp_root.FindPropertyRelative(nameof(ElementNode_Sound.sounder));
                 XHud_Element_Sounder sounder = (XHud_Element_Sounder)sp_sounder.objectReferenceValue;
                 if (sounder != null)
                 {
@@ -1072,8 +1064,8 @@ namespace SevenStrikeModules.XHud.Editor
 
                     #region 名称
                     string title = "";
-                    if (!string.IsNullOrEmpty(sounder.Indicator))
-                        title += sounder.Indicator;
+                    if (!string.IsNullOrEmpty(sounder.indicator))
+                        title += sounder.indicator;
                     else
                         title += sounder.gameObject.name;
 
@@ -1090,11 +1082,11 @@ namespace SevenStrikeModules.XHud.Editor
 
                     SerializedObject so_sounder = new SerializedObject(sounder);
 
-                    SerializedProperty sp_PitchMin = so_sounder.FindProperty("Pitch_Min");
-                    SerializedProperty sp_PitchMax = so_sounder.FindProperty("Pitch_Max");
-                    SerializedProperty sp_Delay = so_sounder.FindProperty("DelayTime");
-                    SerializedProperty sp_Vol = so_sounder.FindProperty("Volume");
-                    SerializedProperty sp_SoundName = so_sounder.FindProperty("SoundName");
+                    SerializedProperty sp_PitchMin = so_sounder.FindProperty(nameof(ElementNode_Sound.sounder.pitch_min));
+                    SerializedProperty sp_PitchMax = so_sounder.FindProperty(nameof(ElementNode_Sound.sounder.pitch_max));
+                    SerializedProperty sp_Delay = so_sounder.FindProperty(nameof(ElementNode_Sound.sounder.delay_time));
+                    SerializedProperty sp_Vol = so_sounder.FindProperty(nameof(ElementNode_Sound.sounder.volume));
+                    SerializedProperty sp_SoundName = so_sounder.FindProperty(nameof(ElementNode_Sound.sounder.sound_name));
 
                     so_sounder.Update();
 
@@ -1119,8 +1111,8 @@ namespace SevenStrikeModules.XHud.Editor
 
                         #region 音高
                         xgui_minmax_value mimax = XGUI.gui_slider_min_max(
-                            ref_min: ref BaseScript.SounderNodes[index].Sounder.Pitch_Min,
-                            ref_max: ref BaseScript.SounderNodes[index].Sounder.Pitch_Max,
+                            ref_min: ref base_script.sounder_nodes[index].sounder.pitch_min,
+                            ref_max: ref base_script.sounder_nodes[index].sounder.pitch_max,
                             rect: new Rect(rect.x + 5, rect.y + 50, rect.width - 15, XGUI.GetSingleLineHeight()),
                             title: "音高",
                             title_size: XGUIFontSize.M,
@@ -1160,11 +1152,11 @@ namespace SevenStrikeModules.XHud.Editor
                     }
 
                     #region 音效列表
-                    if (HudManager.Hud_Sounds != null)
+                    if (hud_manager.library_sounds != null)
                     {
                         if (XGUI.CurrentWindowWidthThreshold(">", 150))
                         {
-                            string[] collist = HudManager.Hud_Sounds.SoundLibrary_GetSoundNames();
+                            string[] collist = hud_manager.library_sounds.SoundLibrary_GetSoundNames();
                             sp_SoundName.stringValue = XGUI.gui_string_popup(
                                 rect: new Rect(rect.x + 5, rect.y + (XGUI.CurrentWindowWidthThreshold(">", 190f) ? 128 : 103), rect.width - 10, XGUI.GetSingleLineHeight()),
                                 title: "音效",
@@ -1196,13 +1188,13 @@ namespace SevenStrikeModules.XHud.Editor
             }
         }
         /// <summary>
-        /// 音效器列表条目选中回调。
+        /// 音效器列表条目选中回调
         /// <para/>
-        /// 点击条目：定位音效器并触发 <c>Preview_ElementSounder_Item</c> 试听。
+        /// 点击条目：定位音效器并触发 <c>Preview_ElementSounder_Item</c> 试听
         /// </summary>
         private void Sounder_OnSelect(ReorderableList list)
         {
-            SerializedProperty sp_sounder = SounderNodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Sounder");
+            SerializedProperty sp_sounder = sp_sounder_nodes.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(ElementNode_Sound.sounder));
             EditorGUIUtility.PingObject(sp_sounder.objectReferenceValue);
 
             #region 播放音效
@@ -1214,7 +1206,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
         }
         /// <summary>
-        /// 音效器列表条目高度。
+        /// 音效器列表条目高度
         /// </summary>
         private float Sounder_ElementHeight(int index)
         {
@@ -1224,25 +1216,25 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 工具 - 子组件收集
         /// <summary>
-        /// 收集所有子图元控制器。
+        /// 收集所有子图元控制器
         /// <para/>
-        /// 过滤规则：父级为按钮 / 选项 / 滑动条 / 进度条 / 开关的控制器不收集。
+        /// 过滤规则：父级为按钮 / 选项 / 滑动条 / 进度条 / 开关的控制器不收集
         /// <para/>
-        /// 增量更新：移除已不存在的控制器，添加新增的控制器。
+        /// 增量更新：移除已不存在的控制器，添加新增的控制器
         /// </summary>
         private void GetPrimitivesTween()
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("PrimitiveControllerNodes");
+                    SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                    SerializedProperty sp_nodes = so_ele.FindProperty(nameof(XHud_Module_Element.primitive_controller_nodes));
                     so_ele.Update();
                     sp_nodes.ClearArray();
 
                     #region 获取所有 PrimitiveController
-                    XHud_Module_Primitive_Controller[] cons = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Primitive_Controller>();
+                    XHud_Module_Primitive_Controller[] cons = selected_objects[i].GetComponentsInChildren<XHud_Module_Primitive_Controller>();
 
                     #region 过滤 PrimitiveController
                     // 如果找到的 PrimitiveController 的父级是按钮、选项、滑动条、进度条、开关控件那么则要忽略
@@ -1277,7 +1269,7 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int s = 0; s < sp_nodes.arraySize; s++)
                         {
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                            SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                             XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
                             if (con_confirm[m] == sp_con)
                             {
@@ -1298,7 +1290,7 @@ namespace SevenStrikeModules.XHud.Editor
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
 
                             #region 加入列表 PrimitiveControllerNodes 的 PrimitiveController
-                            SerializedProperty sp_con = sp_node.FindPropertyRelative("Controller");
+                            SerializedProperty sp_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                             sp_con.objectReferenceValue = con_confirm[m];
                             sp_con.serializedObject.ApplyModifiedProperties();
                             #endregion
@@ -1315,10 +1307,10 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("PrimitiveControllerNodes");
+                SerializedProperty sp_nodes = serializedObject.FindProperty(nameof(XHud_Module_Element.primitive_controller_nodes));
 
                 #region 获取所有 PrimitiveController
-                XHud_Module_Primitive_Controller[] cons = BaseScript.GetComponentsInChildren<XHud_Module_Primitive_Controller>();
+                XHud_Module_Primitive_Controller[] cons = base_script.GetComponentsInChildren<XHud_Module_Primitive_Controller>();
                 #endregion
 
                 #region 过滤 PrimitiveController
@@ -1353,7 +1345,7 @@ namespace SevenStrikeModules.XHud.Editor
                 for (int s = 0; s < sp_nodes.arraySize; s++)
                 {
                     SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                    SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                    SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                     XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
                     existingControllers.Add(sp_con);
                 }
@@ -1362,7 +1354,7 @@ namespace SevenStrikeModules.XHud.Editor
                 for (int s = sp_nodes.arraySize - 1; s >= 0; s--)
                 {
                     SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                    SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                    SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                     XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
 
                     bool stillExists = false;
@@ -1390,7 +1382,7 @@ namespace SevenStrikeModules.XHud.Editor
                     for (int s = 0; s < sp_nodes.arraySize; s++)
                     {
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                        SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                        SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                         XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
                         if (cons_confirm[i] == sp_con)
                         {
@@ -1405,7 +1397,7 @@ namespace SevenStrikeModules.XHud.Editor
                         int index = sp_nodes.arraySize;
                         sp_nodes.InsertArrayElementAtIndex(index);
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_con = sp_node.FindPropertyRelative("Controller");
+                        SerializedProperty sp_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                         sp_con.objectReferenceValue = cons_confirm[i];
                     }
                 }
@@ -1425,7 +1417,7 @@ namespace SevenStrikeModules.XHud.Editor
                     for (int i = 0; i < sortedList.Count; i++)
                     {
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(i);
-                        SerializedProperty sp_con = sp_node.FindPropertyRelative("Controller");
+                        SerializedProperty sp_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                         sp_con.objectReferenceValue = sortedList[i];
                     }
                 }
@@ -1437,22 +1429,22 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         /// <summary>
-        /// 收集所有文字组件（XHud_Module_Text）。
+        /// 收集所有文字组件（XHud_Module_Text）
         /// <para/>
-        /// 过滤规则：父级为按钮 / 选项 / 滑动条 / 进度条 / 开关的文字不收集。
+        /// 过滤规则：父级为按钮 / 选项 / 滑动条 / 进度条 / 开关的文字不收集
         /// </summary>
         private void GetAllText()
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("TextNodes");
+                    SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                    SerializedProperty sp_nodes = so_ele.FindProperty(nameof(XHud_Module_Element.text_nodes));
                     so_ele.Update();
 
                     #region 获取所有 Text文字组件 并过滤条件
-                    XHud_Module_Text[] texts = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Text>();
+                    XHud_Module_Text[] texts = selected_objects[i].GetComponentsInChildren<XHud_Module_Text>();
 
                     List<XHud_Module_Text> texts_fillter = new List<XHud_Module_Text>();
                     for (int g = 0; g < texts.Length; g++)
@@ -1486,7 +1478,7 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int s = 0; s < sp_nodes.arraySize; s++)
                         {
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_text = sp_node.FindPropertyRelative("Text");
+                            SerializedProperty sp_node_text = sp_node.FindPropertyRelative(nameof(ElementNode_Text.text));
                             XHud_Module_Text sp_text = (XHud_Module_Text)sp_node_text.objectReferenceValue;
                             if (texts_confirm[m] == sp_text)
                             {
@@ -1507,7 +1499,7 @@ namespace SevenStrikeModules.XHud.Editor
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
 
                             #region 赋值 Text
-                            SerializedProperty sp_Text = sp_node.FindPropertyRelative("Text");
+                            SerializedProperty sp_Text = sp_node.FindPropertyRelative(nameof(ElementNode_Text.text));
                             sp_Text.objectReferenceValue = texts_confirm[m];
                             sp_Text.serializedObject.ApplyModifiedProperties();
                             #endregion
@@ -1523,10 +1515,10 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("TextNodes");
+                SerializedProperty sp_nodes = serializedObject.FindProperty(nameof(XHud_Module_Element.text_nodes));
 
                 #region 获取所有 文字组件 并过滤条件
-                XHud_Module_Text[] texts = BaseScript.GetComponentsInChildren<XHud_Module_Text>();
+                XHud_Module_Text[] texts = base_script.GetComponentsInChildren<XHud_Module_Text>();
 
                 List<XHud_Module_Text> texts_fillter = new List<XHud_Module_Text>();
                 for (int i = 0; i < texts.Length; i++)
@@ -1560,7 +1552,7 @@ namespace SevenStrikeModules.XHud.Editor
                     for (int s = 0; s < sp_nodes.arraySize; s++)
                     {
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                        SerializedProperty sp_node_text = sp_node.FindPropertyRelative("Text");
+                        SerializedProperty sp_node_text = sp_node.FindPropertyRelative(nameof(ElementNode_Text.text));
                         XHud_Module_Text sp_text = (XHud_Module_Text)sp_node_text.objectReferenceValue;
                         if (texts_confirm[i] == sp_text)
                         {
@@ -1581,7 +1573,7 @@ namespace SevenStrikeModules.XHud.Editor
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
 
                         #region 赋值 Text
-                        SerializedProperty sp_text = sp_node.FindPropertyRelative("Text");
+                        SerializedProperty sp_text = sp_node.FindPropertyRelative(nameof(ElementNode_Text.text));
                         sp_text.objectReferenceValue = texts_confirm[i];
                         sp_text.serializedObject.ApplyModifiedProperties();
                         #endregion
@@ -1596,22 +1588,22 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         /// <summary>
-        /// 收集所有 Tmp 文字组件（XHud_Module_TmpText）。
+        /// 收集所有 Tmp 文字组件（XHud_Module_TmpText）
         /// <para/>
-        /// 过滤规则：父级为按钮 / 选项 / 滑动条 / 进度条 / 开关的文字不收集。
+        /// 过滤规则：父级为按钮 / 选项 / 滑动条 / 进度条 / 开关的文字不收集
         /// </summary>
         private void GetAllTmpText()
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("TmpTextNodes");
+                    SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                    SerializedProperty sp_nodes = so_ele.FindProperty(nameof(XHud_Module_Element.tmptext_nodes));
                     so_ele.Update();
 
                     #region 获取所有 TmpText组件 并过滤条件
-                    XHud_Module_TmpText[] texts = SelectedObjects[i].GetComponentsInChildren<XHud_Module_TmpText>();
+                    XHud_Module_TmpText[] texts = selected_objects[i].GetComponentsInChildren<XHud_Module_TmpText>();
 
                     List<XHud_Module_TmpText> texts_fillter = new List<XHud_Module_TmpText>();
                     for (int g = 0; g < texts.Length; g++)
@@ -1645,7 +1637,7 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int s = 0; s < sp_nodes.arraySize; s++)
                         {
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_text = sp_node.FindPropertyRelative("TmpText");
+                            SerializedProperty sp_node_text = sp_node.FindPropertyRelative(nameof(ElementNode_TmpText.tmptext));
                             XHud_Module_TmpText sp_text = (XHud_Module_TmpText)sp_node_text.objectReferenceValue;
                             if (texts_confirm[m] == sp_text)
                             {
@@ -1666,7 +1658,7 @@ namespace SevenStrikeModules.XHud.Editor
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
 
                             #region 赋值 TmpText
-                            SerializedProperty sp_Text = sp_node.FindPropertyRelative("TmpText");
+                            SerializedProperty sp_Text = sp_node.FindPropertyRelative(nameof(ElementNode_TmpText.tmptext));
                             sp_Text.objectReferenceValue = texts_confirm[m];
                             sp_Text.serializedObject.ApplyModifiedProperties();
                             #endregion
@@ -1682,10 +1674,10 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("TmpTextNodes");
+                SerializedProperty sp_nodes = serializedObject.FindProperty(nameof(XHud_Module_Element.tmptext_nodes));
 
                 #region 获取所有 TmpText组件 并过滤条件
-                XHud_Module_TmpText[] texts = BaseScript.GetComponentsInChildren<XHud_Module_TmpText>();
+                XHud_Module_TmpText[] texts = base_script.GetComponentsInChildren<XHud_Module_TmpText>();
 
                 List<XHud_Module_TmpText> texts_fillter = new List<XHud_Module_TmpText>();
                 for (int i = 0; i < texts.Length; i++)
@@ -1719,7 +1711,7 @@ namespace SevenStrikeModules.XHud.Editor
                     for (int s = 0; s < sp_nodes.arraySize; s++)
                     {
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                        SerializedProperty sp_node_text = sp_node.FindPropertyRelative("TmpText");
+                        SerializedProperty sp_node_text = sp_node.FindPropertyRelative(nameof(ElementNode_TmpText.tmptext));
                         XHud_Module_TmpText sp_text = (XHud_Module_TmpText)sp_node_text.objectReferenceValue;
                         if (texts_confirm[i] == sp_text)
                         {
@@ -1740,7 +1732,7 @@ namespace SevenStrikeModules.XHud.Editor
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
 
                         #region 赋值 TmpText
-                        SerializedProperty sp_text = sp_node.FindPropertyRelative("TmpText");
+                        SerializedProperty sp_text = sp_node.FindPropertyRelative(nameof(ElementNode_TmpText.tmptext));
                         sp_text.objectReferenceValue = texts_confirm[i];
                         sp_text.serializedObject.ApplyModifiedProperties();
                         #endregion
@@ -1755,19 +1747,19 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         /// <summary>
-        /// 收集所有选项组件（XHud_Module_Option）。
+        /// 收集所有选项组件（XHud_Module_Option）
         /// </summary>
         private void GetAllOptions()
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("OptionNodes");
+                    SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                    SerializedProperty sp_nodes = so_ele.FindProperty(nameof(XHud_Module_Element.option_nodes));
                     so_ele.Update();
 
-                    XHud_Module_Option[] allopts = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Option>();
+                    XHud_Module_Option[] allopts = selected_objects[i].GetComponentsInChildren<XHud_Module_Option>();
 
                     List<XHud_Module_Option> Filter = new List<XHud_Module_Option>();
                     for (int s = 0; s < allopts.Length; s++)
@@ -1786,7 +1778,7 @@ namespace SevenStrikeModules.XHud.Editor
                             for (int s = 0; s < sp_nodes.arraySize; s++)
                             {
                                 SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_opt = sp_node.FindPropertyRelative("Option");
+                                SerializedProperty sp_node_opt = sp_node.FindPropertyRelative(nameof(ElementNode_Option.option));
                                 XHud_Module_Option sp_opt = (XHud_Module_Option)sp_node_opt.objectReferenceValue;
                                 if (sp_opt == gettedOpts[x])
                                     repeat = true;
@@ -1805,7 +1797,7 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_nodes.InsertArrayElementAtIndex(index);
 
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_opt = sp_node.FindPropertyRelative("Option");
+                            SerializedProperty sp_opt = sp_node.FindPropertyRelative(nameof(ElementNode_Option.option));
                             sp_opt.objectReferenceValue = gettedOpts[x];
 
                             sp_opt.serializedObject.ApplyModifiedProperties();
@@ -1818,9 +1810,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("OptionNodes");
+                SerializedProperty sp_nodes = serializedObject.FindProperty(nameof(XHud_Module_Element.option_nodes));
 
-                XHud_Module_Option[] options = BaseScript.GetComponentsInChildren<XHud_Module_Option>();
+                XHud_Module_Option[] options = base_script.GetComponentsInChildren<XHud_Module_Option>();
 
                 List<XHud_Module_Option> Filter = new List<XHud_Module_Option>();
                 for (int i = 0; i < options.Length; i++)
@@ -1839,7 +1831,7 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int s = 0; s < sp_nodes.arraySize; s++)
                         {
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_opt = sp_node.FindPropertyRelative("Option");
+                            SerializedProperty sp_node_opt = sp_node.FindPropertyRelative(nameof(ElementNode_Option.option));
                             XHud_Module_Option sp_opt = (XHud_Module_Option)sp_node_opt.objectReferenceValue;
                             if (sp_opt == gettedOpts[i])
                                 repeat = true;
@@ -1858,7 +1850,7 @@ namespace SevenStrikeModules.XHud.Editor
                         sp_nodes.InsertArrayElementAtIndex(index);
 
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_Option = sp_node.FindPropertyRelative("Option");
+                        SerializedProperty sp_Option = sp_node.FindPropertyRelative(nameof(ElementNode_Option.option));
                         sp_Option.objectReferenceValue = gettedOpts[i];
 
                         sp_Option.serializedObject.ApplyModifiedProperties();
@@ -1870,19 +1862,19 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         /// <summary>
-        /// 收集所有滑动条组件（XHud_Module_Slider）。
+        /// 收集所有滑动条组件（XHud_Module_Slider）
         /// </summary>
         private void GetAllSliders()
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("SliderNodes");
+                    SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                    SerializedProperty sp_nodes = so_ele.FindProperty(nameof(XHud_Module_Element.slider_nodes));
                     so_ele.Update();
 
-                    XHud_Module_Slider[] allSliders = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Slider>();
+                    XHud_Module_Slider[] allSliders = selected_objects[i].GetComponentsInChildren<XHud_Module_Slider>();
 
                     List<XHud_Module_Slider> Filter = new List<XHud_Module_Slider>();
                     for (int s = 0; s < allSliders.Length; s++)
@@ -1901,7 +1893,7 @@ namespace SevenStrikeModules.XHud.Editor
                             for (int s = 0; s < sp_nodes.arraySize; s++)
                             {
                                 SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_Slider = sp_node.FindPropertyRelative("Slider");
+                                SerializedProperty sp_node_Slider = sp_node.FindPropertyRelative(nameof(ElementNode_Slider.slider));
                                 XHud_Module_Slider sp_opt = (XHud_Module_Slider)sp_node_Slider.objectReferenceValue;
                                 if (sp_opt == gettedSliders[x])
                                     repeat = true;
@@ -1920,7 +1912,7 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_nodes.InsertArrayElementAtIndex(index);
 
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_Slider = sp_node.FindPropertyRelative("Slider");
+                            SerializedProperty sp_Slider = sp_node.FindPropertyRelative(nameof(ElementNode_Slider.slider));
                             sp_Slider.objectReferenceValue = gettedSliders[x];
 
                             sp_Slider.serializedObject.ApplyModifiedProperties();
@@ -1933,9 +1925,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("SliderNodes");
+                SerializedProperty sp_nodes = serializedObject.FindProperty(nameof(XHud_Module_Element.slider_nodes));
 
-                XHud_Module_Slider[] allslider = BaseScript.GetComponentsInChildren<XHud_Module_Slider>();
+                XHud_Module_Slider[] allslider = base_script.GetComponentsInChildren<XHud_Module_Slider>();
 
                 List<XHud_Module_Slider> Filter = new List<XHud_Module_Slider>();
                 for (int i = 0; i < allslider.Length; i++)
@@ -1954,7 +1946,7 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int s = 0; s < sp_nodes.arraySize; s++)
                         {
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_sli = sp_node.FindPropertyRelative("Slider");
+                            SerializedProperty sp_node_sli = sp_node.FindPropertyRelative(nameof(ElementNode_Slider.slider));
                             XHud_Module_Slider sp_opt = (XHud_Module_Slider)sp_node_sli.objectReferenceValue;
                             if (sp_opt == gettedSliders[i])
                                 repeat = true;
@@ -1973,7 +1965,7 @@ namespace SevenStrikeModules.XHud.Editor
                         sp_nodes.InsertArrayElementAtIndex(index);
 
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_Slider = sp_node.FindPropertyRelative("Slider");
+                        SerializedProperty sp_Slider = sp_node.FindPropertyRelative(nameof(ElementNode_Slider.slider));
                         sp_Slider.objectReferenceValue = gettedSliders[i];
 
                         sp_Slider.serializedObject.ApplyModifiedProperties();
@@ -1985,21 +1977,21 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         /// <summary>
-        /// 收集所有按钮组件（XHud_Module_Button）。
+        /// 收集所有按钮组件（XHud_Module_Button）
         /// <para/>
-        /// 过滤规则：父级为选项的按钮不收集。
+        /// 过滤规则：父级为选项的按钮不收集
         /// </summary>
         private void GetAllButtons()
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("ButtonNodes");
+                    SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                    SerializedProperty sp_nodes = so_ele.FindProperty(nameof(XHud_Module_Element.button_nodes));
                     so_ele.Update();
 
-                    XHud_Module_Button[] allbtns = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Button>();
+                    XHud_Module_Button[] allbtns = selected_objects[i].GetComponentsInChildren<XHud_Module_Button>();
 
                     List<XHud_Module_Button> Filter = new List<XHud_Module_Button>();
                     for (int s = 0; s < allbtns.Length; s++)
@@ -2021,7 +2013,7 @@ namespace SevenStrikeModules.XHud.Editor
                             for (int s = 0; s < sp_nodes.arraySize; s++)
                             {
                                 SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_btn = sp_node.FindPropertyRelative("Button");
+                                SerializedProperty sp_node_btn = sp_node.FindPropertyRelative(nameof(ElementNode_Button.button));
                                 XHud_Module_Button sp_btn = (XHud_Module_Button)sp_node_btn.objectReferenceValue;
                                 if (sp_btn == gettedBtns[x])
                                     repeat = true;
@@ -2040,7 +2032,7 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_nodes.InsertArrayElementAtIndex(index);
 
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_btn = sp_node.FindPropertyRelative("Button");
+                            SerializedProperty sp_btn = sp_node.FindPropertyRelative(nameof(ElementNode_Button.button));
                             sp_btn.objectReferenceValue = gettedBtns[x];
 
                             sp_btn.serializedObject.ApplyModifiedProperties();
@@ -2053,9 +2045,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("ButtonNodes");
+                SerializedProperty sp_nodes = serializedObject.FindProperty(nameof(XHud_Module_Element.button_nodes));
 
-                XHud_Module_Button[] buttons = BaseScript.GetComponentsInChildren<XHud_Module_Button>();
+                XHud_Module_Button[] buttons = base_script.GetComponentsInChildren<XHud_Module_Button>();
 
                 List<XHud_Module_Button> Filter = new List<XHud_Module_Button>();
                 for (int i = 0; i < buttons.Length; i++)
@@ -2077,7 +2069,7 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int s = 0; s < sp_nodes.arraySize; s++)
                         {
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_btn = sp_node.FindPropertyRelative("Button");
+                            SerializedProperty sp_node_btn = sp_node.FindPropertyRelative(nameof(ElementNode_Button.button));
                             XHud_Module_Button sp_btn = (XHud_Module_Button)sp_node_btn.objectReferenceValue;
                             if (sp_btn == gettedBtns[i])
                                 repeat = true;
@@ -2096,7 +2088,7 @@ namespace SevenStrikeModules.XHud.Editor
                         sp_nodes.InsertArrayElementAtIndex(index);
 
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_button = sp_node.FindPropertyRelative("Button");
+                        SerializedProperty sp_button = sp_node.FindPropertyRelative(nameof(ElementNode_Button.button));
                         sp_button.objectReferenceValue = gettedBtns[i];
 
                         sp_button.serializedObject.ApplyModifiedProperties();
@@ -2108,19 +2100,19 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         /// <summary>
-        /// 收集所有进度条组件（XHud_Module_Progress）。
+        /// 收集所有进度条组件（XHud_Module_Progress）
         /// </summary>
         private void GetAllProgress()
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("ProgressNodes");
+                    SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                    SerializedProperty sp_nodes = so_ele.FindProperty(nameof(XHud_Module_Element.progress_nodes));
                     so_ele.Update();
 
-                    XHud_Module_Progress[] allpros = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Progress>();
+                    XHud_Module_Progress[] allpros = selected_objects[i].GetComponentsInChildren<XHud_Module_Progress>();
 
                     List<XHud_Module_Progress> Filter = new List<XHud_Module_Progress>();
                     for (int s = 0; s < allpros.Length; s++)
@@ -2139,7 +2131,7 @@ namespace SevenStrikeModules.XHud.Editor
                             for (int s = 0; s < sp_nodes.arraySize; s++)
                             {
                                 SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_pro = sp_node.FindPropertyRelative("Progress");
+                                SerializedProperty sp_node_pro = sp_node.FindPropertyRelative(nameof(ElementNode_Progress.progress));
                                 XHud_Module_Progress sp_pro = (XHud_Module_Progress)sp_node_pro.objectReferenceValue;
                                 if (sp_pro == gettedPros[x])
                                     repeat = true;
@@ -2158,7 +2150,7 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_nodes.InsertArrayElementAtIndex(index);
 
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_pro = sp_node.FindPropertyRelative("Progress");
+                            SerializedProperty sp_pro = sp_node.FindPropertyRelative(nameof(ElementNode_Progress.progress));
                             sp_pro.objectReferenceValue = gettedPros[x];
 
                             sp_pro.serializedObject.ApplyModifiedProperties();
@@ -2171,9 +2163,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("ProgressNodes");
+                SerializedProperty sp_nodes = serializedObject.FindProperty(nameof(XHud_Module_Element.progress_nodes));
 
-                XHud_Module_Progress[] allpros = BaseScript.GetComponentsInChildren<XHud_Module_Progress>();
+                XHud_Module_Progress[] allpros = base_script.GetComponentsInChildren<XHud_Module_Progress>();
 
                 List<XHud_Module_Progress> Filter = new List<XHud_Module_Progress>();
                 for (int i = 0; i < allpros.Length; i++)
@@ -2192,7 +2184,7 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int s = 0; s < sp_nodes.arraySize; s++)
                         {
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_pro = sp_node.FindPropertyRelative("Progress");
+                            SerializedProperty sp_node_pro = sp_node.FindPropertyRelative(nameof(ElementNode_Progress.progress));
                             XHud_Module_Progress sp_pro = (XHud_Module_Progress)sp_node_pro.objectReferenceValue;
                             if (sp_pro == gettedPros[i])
                                 repeat = true;
@@ -2211,7 +2203,7 @@ namespace SevenStrikeModules.XHud.Editor
                         sp_nodes.InsertArrayElementAtIndex(index);
 
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_pro = sp_node.FindPropertyRelative("Progress");
+                        SerializedProperty sp_pro = sp_node.FindPropertyRelative(nameof(ElementNode_Progress.progress));
                         sp_pro.objectReferenceValue = gettedPros[i];
 
                         sp_pro.serializedObject.ApplyModifiedProperties();
@@ -2223,19 +2215,19 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         /// <summary>
-        /// 收集所有开关组件（XHud_Module_Toggle）。
+        /// 收集所有开关组件（XHud_Module_Toggle）
         /// </summary>
         private void GetAllToggle()
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("ToggleNodes");
+                    SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                    SerializedProperty sp_nodes = so_ele.FindProperty(nameof(XHud_Module_Element.toggle_nodes));
                     so_ele.Update();
 
-                    XHud_Module_Toggle[] alltog = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Toggle>();
+                    XHud_Module_Toggle[] alltog = selected_objects[i].GetComponentsInChildren<XHud_Module_Toggle>();
 
                     List<XHud_Module_Toggle> Filter = new List<XHud_Module_Toggle>();
                     for (int s = 0; s < alltog.Length; s++)
@@ -2254,7 +2246,7 @@ namespace SevenStrikeModules.XHud.Editor
                             for (int s = 0; s < sp_nodes.arraySize; s++)
                             {
                                 SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_tog = sp_node.FindPropertyRelative("Toggle");
+                                SerializedProperty sp_node_tog = sp_node.FindPropertyRelative(nameof(ElementNode_Toggle.toggle));
                                 XHud_Module_Toggle sp_tog = (XHud_Module_Toggle)sp_node_tog.objectReferenceValue;
                                 if (sp_tog == gettedtogs[x])
                                     repeat = true;
@@ -2273,7 +2265,7 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_nodes.InsertArrayElementAtIndex(index);
 
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_tog = sp_node.FindPropertyRelative("Toggle");
+                            SerializedProperty sp_tog = sp_node.FindPropertyRelative(nameof(ElementNode_Toggle.toggle));
                             sp_tog.objectReferenceValue = gettedtogs[x];
 
                             sp_tog.serializedObject.ApplyModifiedProperties();
@@ -2286,9 +2278,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("ToggleNodes");
+                SerializedProperty sp_nodes = serializedObject.FindProperty(nameof(XHud_Module_Element.toggle_nodes));
 
-                XHud_Module_Toggle[] alltog = BaseScript.GetComponentsInChildren<XHud_Module_Toggle>();
+                XHud_Module_Toggle[] alltog = base_script.GetComponentsInChildren<XHud_Module_Toggle>();
 
                 List<XHud_Module_Toggle> Filter = new List<XHud_Module_Toggle>();
                 for (int i = 0; i < alltog.Length; i++)
@@ -2307,7 +2299,7 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int s = 0; s < sp_nodes.arraySize; s++)
                         {
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_tog = sp_node.FindPropertyRelative("Toggle");
+                            SerializedProperty sp_node_tog = sp_node.FindPropertyRelative(nameof(ElementNode_Toggle.toggle));
                             XHud_Module_Toggle sp_tog = (XHud_Module_Toggle)sp_node_tog.objectReferenceValue;
                             if (sp_tog == gettedtogs[i])
                                 repeat = true;
@@ -2326,7 +2318,7 @@ namespace SevenStrikeModules.XHud.Editor
                         sp_nodes.InsertArrayElementAtIndex(index);
 
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_tog = sp_node.FindPropertyRelative("Toggle");
+                        SerializedProperty sp_tog = sp_node.FindPropertyRelative(nameof(ElementNode_Toggle.toggle));
                         sp_tog.objectReferenceValue = gettedtogs[i];
 
                         sp_tog.serializedObject.ApplyModifiedProperties();
@@ -2338,21 +2330,21 @@ namespace SevenStrikeModules.XHud.Editor
         }
 
         /// <summary>
-        /// 收集所有音效器组件（XHud_Element_Sounder）。
+        /// 收集所有音效器组件（XHud_Element_Sounder）
         /// <para/>
-        /// 过滤规则：父级为按钮 / 选项 / 滑动条 / 进度条 / 开关的音效器不收集。
+        /// 过滤规则：父级为按钮 / 选项 / 滑动条 / 进度条 / 开关的音效器不收集
         /// </summary>
         private void GetAllSounder()
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("SounderNodes");
+                    SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                    SerializedProperty sp_nodes = so_ele.FindProperty(nameof(XHud_Module_Element.sounder_nodes));
                     so_ele.Update();
 
-                    XHud_Element_Sounder[] allsod = SelectedObjects[i].GetComponentsInChildren<XHud_Element_Sounder>();
+                    XHud_Element_Sounder[] allsod = selected_objects[i].GetComponentsInChildren<XHud_Element_Sounder>();
 
                     List<XHud_Element_Sounder> Filter = new List<XHud_Element_Sounder>();
                     for (int s = 0; s < allsod.Length; s++)
@@ -2371,7 +2363,7 @@ namespace SevenStrikeModules.XHud.Editor
                             for (int s = 0; s < sp_nodes.arraySize; s++)
                             {
                                 SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_sod = sp_node.FindPropertyRelative("Sounder");
+                                SerializedProperty sp_node_sod = sp_node.FindPropertyRelative(nameof(ElementNode_Sound.sounder));
                                 XHud_Element_Sounder sp_sod = (XHud_Element_Sounder)sp_node_sod.objectReferenceValue;
                                 if (sp_sod == gettedsods[x])
                                     repeat = true;
@@ -2390,7 +2382,7 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_nodes.InsertArrayElementAtIndex(index);
 
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_tog = sp_node.FindPropertyRelative("Sounder");
+                            SerializedProperty sp_tog = sp_node.FindPropertyRelative(nameof(ElementNode_Sound.sounder));
                             sp_tog.objectReferenceValue = gettedsods[x];
 
                             sp_tog.serializedObject.ApplyModifiedProperties();
@@ -2403,9 +2395,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("SounderNodes");
+                SerializedProperty sp_nodes = serializedObject.FindProperty(nameof(XHud_Module_Element.sounder_nodes));
 
-                XHud_Element_Sounder[] allsod = BaseScript.GetComponentsInChildren<XHud_Element_Sounder>();
+                XHud_Element_Sounder[] allsod = base_script.GetComponentsInChildren<XHud_Element_Sounder>();
 
                 List<XHud_Element_Sounder> Filter = new List<XHud_Element_Sounder>();
                 for (int i = 0; i < allsod.Length; i++)
@@ -2440,7 +2432,7 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int s = 0; s < sp_nodes.arraySize; s++)
                         {
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_sod = sp_node.FindPropertyRelative("Sounder");
+                            SerializedProperty sp_node_sod = sp_node.FindPropertyRelative(nameof(ElementNode_Sound.sounder));
                             XHud_Element_Sounder sp_tog = (XHud_Element_Sounder)sp_node_sod.objectReferenceValue;
                             if (sp_tog == gettedsods[i])
                                 repeat = true;
@@ -2459,7 +2451,7 @@ namespace SevenStrikeModules.XHud.Editor
                         sp_nodes.InsertArrayElementAtIndex(index);
 
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_sod = sp_node.FindPropertyRelative("Sounder");
+                        SerializedProperty sp_sod = sp_node.FindPropertyRelative(nameof(ElementNode_Sound.sounder));
                         sp_sod.objectReferenceValue = gettedsods[i];
 
                         sp_sod.serializedObject.ApplyModifiedProperties();
@@ -2473,87 +2465,87 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 工具 - 清理
         /// <summary>
-        /// 清理所有无效的子组件节点。
+        /// 清理所有无效的子组件节点
         /// <para/>
-        /// 判定：节点中对应的组件引用为 null。
+        /// 判定：节点中对应的组件引用为 null
         /// <para/>
         /// 覆盖：
         /// <list type="bullet">
         /// <item><description>TmpText / Text；</description></item>
-        /// <item><description>Button / Slider / Option / Progress / Toggle。</description></item>
+        /// <item><description>Button / Slider / Option / Progress / Toggle</description></item>
         /// </list>
         /// </summary>
         private void ClearEmptyNodes()
         {
-            for (int i = 0; i < BaseScript.TmpTextNodes.Count; i++)
+            for (int i = 0; i < base_script.tmptext_nodes.Count; i++)
             {
                 // 检查是否为 null 或类型不匹配
-                if (BaseScript.TmpTextNodes[i].TmpText == null)
+                if (base_script.tmptext_nodes[i].tmptext == null)
                 {
-                    TmpTextNodes.DeleteArrayElementAtIndex(i);
+                    sp_tmptext_nodes.DeleteArrayElementAtIndex(i);
                 }
             }
-            TmpTextNodes.serializedObject.ApplyModifiedProperties();
+            sp_tmptext_nodes.serializedObject.ApplyModifiedProperties();
 
-            for (int i = 0; i < BaseScript.TextNodes.Count; i++)
+            for (int i = 0; i < base_script.text_nodes.Count; i++)
             {
                 // 检查是否为 null 或类型不匹配
-                if (BaseScript.TextNodes[i].Text == null)
+                if (base_script.text_nodes[i].text == null)
                 {
-                    TextNodes.DeleteArrayElementAtIndex(i);
+                    sp_text_nodes.DeleteArrayElementAtIndex(i);
                 }
             }
-            TextNodes.serializedObject.ApplyModifiedProperties();
+            sp_text_nodes.serializedObject.ApplyModifiedProperties();
 
-            for (int i = 0; i < BaseScript.ButtonNodes.Count; i++)
+            for (int i = 0; i < base_script.button_nodes.Count; i++)
             {
                 // 检查是否为 null 或类型不匹配
-                if (BaseScript.ButtonNodes[i].Button == null)
+                if (base_script.button_nodes[i].button == null)
                 {
-                    ButtonNodes.DeleteArrayElementAtIndex(i);
+                    sp_button_nodes.DeleteArrayElementAtIndex(i);
                 }
             }
-            ButtonNodes.serializedObject.ApplyModifiedProperties();
+            sp_button_nodes.serializedObject.ApplyModifiedProperties();
 
-            for (int i = 0; i < BaseScript.SliderNodes.Count; i++)
+            for (int i = 0; i < base_script.slider_nodes.Count; i++)
             {
                 // 检查是否为 null 或类型不匹配
-                if (BaseScript.SliderNodes[i].Slider == null)
+                if (base_script.slider_nodes[i].slider == null)
                 {
-                    SliderNodes.DeleteArrayElementAtIndex(i);
+                    sp_slider_nodes.DeleteArrayElementAtIndex(i);
                 }
             }
-            SliderNodes.serializedObject.ApplyModifiedProperties();
+            sp_slider_nodes.serializedObject.ApplyModifiedProperties();
 
-            for (int i = 0; i < BaseScript.OptionNodes.Count; i++)
+            for (int i = 0; i < base_script.option_nodes.Count; i++)
             {
                 // 检查是否为 null 或类型不匹配
-                if (BaseScript.OptionNodes[i].Option == null)
+                if (base_script.option_nodes[i].option == null)
                 {
-                    OptionNodes.DeleteArrayElementAtIndex(i);
+                    sp_option_nodes.DeleteArrayElementAtIndex(i);
                 }
             }
-            OptionNodes.serializedObject.ApplyModifiedProperties();
+            sp_option_nodes.serializedObject.ApplyModifiedProperties();
 
-            for (int i = 0; i < BaseScript.ProgressNodes.Count; i++)
+            for (int i = 0; i < base_script.progress_nodes.Count; i++)
             {
                 // 检查是否为 null 或类型不匹配
-                if (BaseScript.ProgressNodes[i].Progress == null)
+                if (base_script.progress_nodes[i].progress == null)
                 {
-                    ProgressNodes.DeleteArrayElementAtIndex(i);
+                    sp_progress_nodes.DeleteArrayElementAtIndex(i);
                 }
             }
-            ProgressNodes.serializedObject.ApplyModifiedProperties();
+            sp_progress_nodes.serializedObject.ApplyModifiedProperties();
 
-            for (int i = 0; i < BaseScript.ToggleNodes.Count; i++)
+            for (int i = 0; i < base_script.toggle_nodes.Count; i++)
             {
                 // 检查是否为 null 或类型不匹配
-                if (BaseScript.ToggleNodes[i].Toggle == null)
+                if (base_script.toggle_nodes[i].toggle == null)
                 {
-                    ToggleNodes.DeleteArrayElementAtIndex(i);
+                    sp_toggle_nodes.DeleteArrayElementAtIndex(i);
                 }
             }
-            ToggleNodes.serializedObject.ApplyModifiedProperties();
+            sp_toggle_nodes.serializedObject.ApplyModifiedProperties();
         }
         #endregion
     }

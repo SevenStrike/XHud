@@ -40,8 +40,8 @@ namespace SevenStrikeModules.XHud.Editor
          * ============================================================================
          * Editor_XHud_Manager - Partial 文件组总览
          * ============================================================================
-         * 本编辑器由 22 个 partial 文件共同构成，主文件为「调度中心 + 公共设施」，
-         * 其余文件各自负责一块面板的绘制或一类工具方法。
+         * 本编辑器由 22 个文件共同构成（主文件 + 21 个 partial 文件），主文件为
+         * 「调度中心 + 公共设施」，其余文件各自负责一块面板的绘制或一类工具方法。
          *
          * ----------------------------------------------------------------------------
          * 一、文件职责清单
@@ -49,8 +49,8 @@ namespace SevenStrikeModules.XHud.Editor
          *
          *   Editor_XHud_Manager.cs（主文件）
          *   ├─ 字段区：所有 partial 共享的字段全部集中于此
-         *   ├─ 生命周期：OnEnable / OnDisable / OnDestroy / OnUndoRedoPerformed
-         *   │            / OnInspectorGUI / OnSceneGUI
+         *   ├─ 生命周期：Awake / OnEnable / OnDisable / OnDestroy
+         *   │            / OnUndoRedoPerformed / OnInspectorGUI / OnSceneGUI
          *   ├─ OnInspectorGUI：保留 Logo、基础栏、分辨率信息栏、右键菜单，
          *   │                  其余面板通过 Draw_XXX() 调度
          *   ├─ 工具 - 批量化操作：Targets_Get / Targets_Selected
@@ -76,7 +76,7 @@ namespace SevenStrikeModules.XHud.Editor
          *   │  SafeFrame.cs       → Draw_SafeFrame()        「辅助」面板            │
          *   │  BluePrint.cs       → Draw_BluePrint()        「蓝图」面板            │
          *   │  RMS.cs             → Draw_RMS()              「RMS」面板             │
-         *   │  MotionDefault.cs   → Draw_MotionDefault()    「动效默认参数」面板     │
+         *   │  Motion.cs          → Draw_MotionDefault()    「动效默认参数」面板     │
          *   │  Theme.cs           → Draw_Theme()            「主题色」面板          │
          *   └──────────────────────────────────────────────────────────────────────┘
          *
@@ -96,14 +96,16 @@ namespace SevenStrikeModules.XHud.Editor
          *   │                       + xHud_SortTexturesByNameSuffix                 │
          *   │                       + xHud_ExtractNumberFromName                    │
          *   │  SafeFrame.cs       → xHud_HiddenStructureDisplayer                   │
-         *   │  MotionDefault.cs   → ResetMotionParams + xHud_OpenParameterSetter    │
-         *   │  Theme.cs           → xHud_LoadThemesColor / ResetThemesColor         │
-         *   │                       / UpdateThemeColor(_Gp/_Sep)                    │
+         *   │  Motion.cs          → motion_save / motion_edit                       │
+         *   │  Theme.cs           → xHud_ResetThemesColor / xHud_Themes_ColorUpdate │
+         *   │                       / xHud_Themes_ColorUpdateAll                    │
+         *   │                       / xHud_Themes_SliderValueSet                    │
+         *   │                       / xHud_Themes_SolutionReset                     │
+         *   │                       / xHud_ThemeControl                             │
          *   │  Update.cs          → xHud_EditorUpdate_*                             │
          *   │                       + EditorApplication_EditorManagerUpdate         │
          *   │                       + xHud_GroupFolds + SetHighFrequencyMode        │
          *   │  Serialized.cs      → xHud_SerializedAllVariables                     │
-         *   │                       + xHud_GetSerializedProperty                    │
          *   │  Diagnostic.cs      → xHud_Diagnostic                                 │
          *   │  ElementPool.cs     → xHud_GetElementPoolIndicators                   │
          *   └──────────────────────────────────────────────────────────────────────┘
@@ -119,14 +121,14 @@ namespace SevenStrikeModules.XHud.Editor
          *      ├─ Logo 背景 / 主体（主文件内联）
          *      ├─ 基础栏（主文件内联）
          *      │
-         *      ├─ if (IsInitialized)
+         *      ├─ if (initialized.boolValue)
          *      │     ├─ 分辨率信息（主文件内联）
          *      │     │
          *      │     ├─ Draw_Options()          ← Options.cs
          *      │     ├─ Draw_Canvas()           ← Canvas.cs
          *      │     ├─ Draw_Camera()           ← Camera.cs
          *      │     ├─ Draw_RatioReference()   ← RatioReference.cs
-         *      │     ├─ if (UseCompGuide)
+         *      │     ├─ if (sp_cg_use.boolValue)
          *      │     │     └─ Draw_CompGuide()  ← CompGuide.cs
          *      │     ├─ Draw_Libraries()        ← Libraries.cs
          *      │     ├─ Draw_ElementLibs()      ← ElementLibs.cs
@@ -135,13 +137,13 @@ namespace SevenStrikeModules.XHud.Editor
          *      │     ├─ Draw_Global()           ← Global.cs
          *      │     ├─ Draw_Tool()             ← Tool.cs
          *      │     ├─ Draw_Layout()           ← Layout.cs
-         *      │     ├─ if (UseSafeFrame)
+         *      │     ├─ if (sp_sf_use.boolValue)
          *      │     │     └─ Draw_SafeFrame()  ← SafeFrame.cs
-         *      │     ├─ if (BluePrintMode)
+         *      │     ├─ if (sp_bp_mode.boolValue)
          *      │     │     └─ Draw_BluePrint()  ← BluePrint.cs
-         *      │     ├─ if (RMS_Enabled)
+         *      │     ├─ if (sp_rms_enabled.boolValue)
          *      │     │     └─ Draw_RMS()        ← RMS.cs
-         *      │     ├─ Draw_MotionDefault()    ← MotionDefault.cs
+         *      │     ├─ Draw_MotionDefault()    ← Motion.cs
          *      │     ├─ Draw_Theme()            ← Theme.cs
          *      │     └─ DrawDefaultInspector()  （主文件内联，源脚本）
          *      │
@@ -150,6 +152,10 @@ namespace SevenStrikeModules.XHud.Editor
          * ----------------------------------------------------------------------------
          * 三、OnEnable 调用流向
          * ----------------------------------------------------------------------------
+         *
+         *   Awake（主文件）
+         *      │
+         *      └─ 获取预制主题色名称列表（XHud_Dashboard.themes_get_presetnames_*）
          *
          *   OnEnable（主文件）
          *      │
@@ -164,9 +170,9 @@ namespace SevenStrikeModules.XHud.Editor
          *      ├─ Init_ElementLibList()               ← ElementLibs.cs
          *      ├─ Init_SoundsPoolList()               ← SoundsPool.cs
          *      ├─ 获取所有蓝图背景贴图（主文件内联）
+         *      ├─ base_script.hm_BluePrintRootFirstSibling()
          *      ├─ EditorApplication.hierarchyChanged 订阅（主文件）
          *      ├─ xHud_InitiaGameViewResolutions()    （主文件：GameView 尺寸）
-         *      ├─ xHud_LoadThemesColor()              ← Theme.cs
          *      ├─ xHud_EnsureLayerExists("XHud")      ← Tool.cs
          *      ├─ xHud_EnsureLayerExists("XHud_World")← Tool.cs
          *      └─ xHud_RatioReference_Update()        ← RatioReference.cs
@@ -174,12 +180,13 @@ namespace SevenStrikeModules.XHud.Editor
          * ----------------------------------------------------------------------------
          * 四、关键约定
          * ----------------------------------------------------------------------------
-         *   1. 字段与方法同文件；字段集中定义在主文件，各 partial 直接读写。
+         *   1. 字段集中定义在主文件，各 partial 直接读写；方法按职责归属各自文件。
          *   2. 各 Partial 文件独立 using，只引自身需要的命名空间。
-         *   3. 条件判断保留在主文件 OnInspectorGUI（UseCompGuide / BluePrintMode
-         *      / RMS_Enabled / UseSafeFrame），各 Draw_XXX 只负责画。
+         *   3. 条件判断保留在主文件 OnInspectorGUI（sp_cg_use / sp_bp_mode /
+         *      sp_rms_enabled / sp_sf_use），各 Draw_XXX 只负责画。
          *   4. ReorderableList 回调统一具名化：<对象>_<动作>。
          *   5. 主文件不定义具体面板内容，仅做调度与公共设施。
+         *   6. Motion 面板文件名为 Motion.cs，绘制方法名为 Draw_MotionDefault()。
          * ============================================================================
          */
 
@@ -191,20 +198,20 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>在 <c>OnEnable</c> 中由 <c>target</c> 强制转换获得。</description></item>
         /// </list>
         /// </summary>
-        public XHud_Manager BaseScript;
+        public XHud_Manager base_script;
         /// <summary>
         /// 可重排列表集合。
         /// <para/>
         /// <list type="bullet">
-        /// <item><description><c>List_ElementLib</c>：元素库列表。</description></item>
-        /// <item><description><c>List_RMS</c>：RMS 分辨率节点列表。</description></item>
-        /// <item><description><c>List_SoundsPool</c>：音效池列表。</description></item>
+        /// <item><description><c>list_element_librarys</c>：元素库列表。</description></item>
+        /// <item><description><c>list_rms</c>：RMS 分辨率节点列表。</description></item>
+        /// <item><description><c>list_soundpools</c>：音效池列表。</description></item>
         /// </list>
         /// </summary>
         private ReorderableList
-            List_ElementLib,
-            List_RMS,
-            List_SoundsPool;
+            list_element_librarys,
+            list_rms,
+            list_soundpools;
         #endregion
 
         #region 字段 - GUI 参数
@@ -215,7 +222,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>用于列表元素与控件布局计算。</description></item>
         /// </list>
         /// </summary>
-        private float LineHeight;
+        private float line_height;
         /// <summary>
         /// GameView 分组方法反射引用。
         /// <para/>
@@ -223,7 +230,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>用于获取 GameView 尺寸。</description></item>
         /// </list>
         /// </summary>
-        static MethodInfo getGroup;
+        static MethodInfo get_group;
         /// <summary>
         /// GameView 尺寸实例。
         /// <para/>
@@ -231,7 +238,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>用于获取 GameView 尺寸。</description></item>
         /// </list>
         /// </summary>
-        static object gameViewSizesInstance;
+        static object game_view_sizes_instance;
         #endregion
 
         #region 字段 - 频率更新
@@ -266,7 +273,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>默认 0.6 秒。</description></item>
         /// </list>
         /// </summary>
-        private double UPDATE_KEEPTIME = 0.6f;
+        private double update_keeptime = 0.6f;
         /// <summary>
         /// 每秒最低刷新次数。
         /// <para/>
@@ -274,7 +281,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>默认 1 次/秒。</description></item>
         /// </list>
         /// </summary>
-        private double UPDATE_INTERVAL = 1;
+        private double update_interval = 1;
         /// <summary>
         /// 低频刷新间隔。
         /// <para/>
@@ -282,7 +289,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>默认 0.033 秒。</description></item>
         /// </list>
         /// </summary>
-        private double UPDATE_INTERVAL_Low = 0.033f;
+        private double update_interval_low = 0.033f;
         /// <summary>
         /// 高频刷新间隔。
         /// <para/>
@@ -290,221 +297,912 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>默认 0.005 秒。</description></item>
         /// </list>
         /// </summary>
-        private double UPDATE_INTERVAL_High = 0.005f;
-        #endregion
-
-        #region 字段 - 键
-        /// <summary>
-        /// 元素可视化放置器菜单键。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>用于 EditorPrefs 存储。</description></item>
-        /// </list>
-        /// </summary>
-        private const string MENU_KEY_VISUAL_PLACER = "XHud_ElementVisualPlacer_Enabled";
+        private double update_interval_high = 0.005f;
         #endregion
 
         #region 字段 - 序列化属性
-        SerializedProperty
-            IsInitialized,
-            Lib_ElementLibrarys,
-            SoundLibrary,
-            SounderPoolCount,
-            Anchors_Layout_Screen,
-            HudCanvas_ScreenAnchor,
-            Lib_Color,
-            Lib_Curve,
-            Lib_Sound,
-            Lib_TextStyleLibrary,
-            Lib_Motions,
-            Lib_Transition,
-            HudCamera,
-            FontSizeMultiply,
-            CanvasScalerModeIndex,
-            CanvasScalerScreenSize,
-            CanvasMatchDir,
-            HudCanvas_Screen,
-            HudCanvas_World,
-            HudCanvasScaler,
-            HudCanvas_WorldAnchor,
-            Mask,
-            HudCanvasGroup_Screen,
-            HudCanvasGroup_World,
-            UseInstanceMode,
-            UseDebug,
-            UseSafeFrame,
-            UseAutoPerfectPixel,
-            UsePerfectPixelUpdate,
-            SafeFrameStructureDisplayer,
-            CameraOthograpicMode,
-            CustomCursor,
-            CustomTransition,
-            SupportWorldUI,
-            Safe_Frame,
-            Margins,
-            MarginHorizontal,
-            MarginMultiply,
-            MarginVertical,
-            MarkSize,
-            Color_LayoutAnchorMark,
-            Color_FrameLine,
-            ScreenRes,
-            Safe_FrameLine_Width,
-            Safe_FrameLine_Margins,
-            Color_SeperaterLine,
-            Safe_Seperater_Length,
-            Safe_CenterMarkLength,
-            Safe_CenterMarkWidth,
-            Color_CenterMark,
-            Safe_CenterMarkDistance,
-            CameraOrthographicSize,
-            CameraFov,
-            CameraCutter_Near,
-            CameraCutter_Far,
-            HudCanvasAnchor,
-            CanvasDistance,
-            HudCanvasAnchorIndex,
-            MaskAlpha,
-            MaskTexture,
-            MaskRaycastAlphaThreshold,
-            MaskRaycastEnabled,
-            MaskColor,
-            ContentOpacity_Screen,
-            ContentOpacity_World,
-            DurationMultiply,
-            Hud_MouseCursor,
-            Hud_TransitionController,
-            RecycleArgs_Default,
-            CreateArgs_Default,
-            SceneCamera,
-            Volume,
-            VolumeMute,
-            BluePrint_root,
-            BluePrintMode,
-            BluePrint_grid_size,
-            BluePrint_grid_color,
-            BluePrint_bg_color,
-            BluePrint_bg_decal_color,
-            BluePrint_mark_size,
-            BluePrint_mark_opacity,
-            BluePrint_linewidth,
-            BluePrint_title_content,
-            BluePrint_subtitle_content,
-            BluePrint_marktitle_color,
-            BluePrint_marksubtitle_color,
-            BluePrint_mark_margin,
-            BluePrint_MarkAnchors,
-            BluePrint_mark_space,
-            BluePrint_opacity,
-            BluePrint_AnimationDuration,
-            BluePrint_Displayed,
-            BluePrint_OnStartHide,
-            BluePrint_Grid_AnimationEase,
-            BluePrint_grid_Opacity,
-            BluePrint_Grid_AnimationDuration,
-            BluePrint_Bg_AnimationEase_In,
-            BluePrint_Bg_AnimationEase_Out,
-            BluePrint_bg_opacity,
-            BluePrint_Bg_FadeAnimationDelay,
-            BluePrint_Grid_LengthPercentage,
-            BluePrint_Grid_LevelHeight,
-            BluePrint_GridEnd,
-            BluePrint_bg_tilling,
-            BluePrint_bg_name,
-            BluePrint_bg_usetilling_index,
-            BluePrint_bg_usesquareratio_index,
-            BluePrint_bg_mapOpacity,
-            Eft_Grid,
-            Eft_GridFade,
-            Eft_Bg,
-            Eft_Mark,
-            RMS_Enabled,
-            RMS_CurrentSolution,
-            RMS_Nodes,
-            theme_color_primary,
-            theme_color_group,
-            theme_color_sepline,
-            theme_solution_primary,
-            theme_solution_group,
-            theme_solution_sepline,
-            Hud_EventSystem,
-            Hud_InputSystemUIInputModule,
-            CreateArgs_MotionAnimateEndState,
-            RecycleArgs_MotionAnimateEndState,
-            Crc_Lib_Name,
-            Rec_Lib_Name,
-            sp_PhysicsScreenSize,
-            sp_Reference_Image,
-            UseRatioReference,
-            RatioReferenceIsPart,
-            sp_Reference_Image_Color,
-            sp_Res_Full,
-            sp_Res_Part,
-            sp_ReferShape_RatioSize,
-            sp_ReferShape_RatioTolerance,
-            FoldAllPanelWithDisabled,
-            CompGuide_Anchors,
-            CompGuide_AnchorRoot,
-            UseCompGuide,
-            CompGuideMode,
-            GuideColor,
-            GuidePointColor,
-            GuideParam_Mirror_LR_Offset,
-            GuideParam_Mirror_UD_Offset,
-            GuideParam_Mirror_LR_GoldenMode,
-            GuideParam_Mirror_UD_GoldenMode,
-            GuideParam_Fibonacci_Mode,
-            GuideParam_CornerLookat_Offset_H,
-            GuideParam_CornerLookat_Offset_V,
-            GuideParam_Three_Offset_H,
-            GuideParam_Three_Offset_Coverage,
-            GuideParam_Three_Offset_V,
-            GuideParam_GuideLine_BaseHeight,
-            GuideParam_GuideLine_Offset_Near,
-            GuideParam_GuideLine_Offset_Far,
-            GuideParam_GuideLine_Offset_NearHeight,
-            GuideParam_Triangle_BaseHeight,
-            GuideParam_Triangle_BottomHeight,
-            GuideParam_Triangle_Offset_Left,
-            GuideParam_Triangle_Offset_Right,
-            GuideParam_Triangle_TopOffset,
-            GuideParam_CenterPointSize,
-            GuideParam_IShape_TopHeight,
-            GuideParam_IShape_BottomHeight,
-            GuideParam_IShape_Offset_Left,
-            GuideParam_IShape_Offset_Right,
-            GuideParam_GuideLine_BaseOffset,
-            ElementVisualPlacer,
-            PrimtiveID_LabelLine_Height,
-            PrimtiveID_LabelLine_Color,
-            PrimtiveID_LabelFont_Size,
-            PrimtiveID_LabelFont_Color;
+        #region 初始化与库引用
+        /// <summary>
+        /// 是否已完成初始化
+        /// </summary>
+        SerializedProperty initialized;
+        /// <summary>
+        /// 元素库中的元素列表
+        /// </summary>
+        SerializedProperty sp_ele_library_elements;
+        /// <summary>
+        /// 音效对象池
+        /// </summary>
+        SerializedProperty sp_pool_sounder;
+        /// <summary>
+        /// 音效对象池数量
+        /// </summary>
+        SerializedProperty sp_pool_sounder_count;
+        /// <summary>
+        /// 颜色库
+        /// </summary>
+        SerializedProperty sp_library_colors;
+        /// <summary>
+        /// 曲线库
+        /// </summary>
+        SerializedProperty sp_library_curves;
+        /// <summary>
+        /// 音效库
+        /// </summary>
+        SerializedProperty sp_library_sounds;
+        /// <summary>
+        /// 文本样式库
+        /// </summary>
+        SerializedProperty sp_library_textstyles;
+        /// <summary>
+        /// 动效库
+        /// </summary>
+        SerializedProperty sp_library_motions;
+        /// <summary>
+        /// 转场库
+        /// </summary>
+        SerializedProperty sp_library_transitions;
+        #endregion
+
+        #region 画布与相机
+        /// <summary>
+        /// UI 相机
+        /// </summary>
+        SerializedProperty sp_camera_ui;
+        /// <summary>
+        /// 场景相机
+        /// </summary>
+        SerializedProperty sp_camera_scene;
+        /// <summary>
+        /// 屏幕 HUD 画布
+        /// </summary>
+        SerializedProperty sp_cv_hudcanvas_screen_anchor;
+        /// <summary>
+        /// 世界 HUD 画布
+        /// </summary>
+        SerializedProperty sp_cv_hudcanvas_world;
+        /// <summary>
+        /// 世界 HUD 画布锚点
+        /// </summary>
+        SerializedProperty sp_cv_hudcanvas_world_anchor;
+        /// <summary>
+        /// HUD 画布锚点
+        /// </summary>
+        SerializedProperty sp_cv_hudcanvas_anchor;
+        /// <summary>
+        /// HUD 画布锚点索引
+        /// </summary>
+        SerializedProperty sp_cv_hudcanvas_anchor_index;
+        /// <summary>
+        /// 画布缩放器
+        /// </summary>
+        SerializedProperty sp_cv_scaler;
+        /// <summary>
+        /// 画布缩放模式索引
+        /// </summary>
+        SerializedProperty sp_cv_scaler_mode_index;
+        /// <summary>
+        /// 画布参考分辨率
+        /// </summary>
+        SerializedProperty sp_cv_screen;
+        /// <summary>
+        /// 画布匹配方向
+        /// </summary>
+        SerializedProperty sp_cv_match_dir;
+        /// <summary>
+        /// 画布距离
+        /// </summary>
+        SerializedProperty sp_cv_distance;
+        /// <summary>
+        /// 画布屏幕分辨率
+        /// </summary>
+        SerializedProperty sp_cv_screen_res;
+        /// <summary>
+        /// 画布边距
+        /// </summary>
+        SerializedProperty sp_cv_margins;
+        /// <summary>
+        /// 画布水平边距
+        /// </summary>
+        SerializedProperty sp_cv_margin_horizontal;
+        /// <summary>
+        /// 画布垂直边距
+        /// </summary>
+        SerializedProperty sp_cv_margin_vertical;
+        /// <summary>
+        /// 画布边距倍数
+        /// </summary>
+        SerializedProperty sp_cv_margin_multiply;
+        /// <summary>
+        /// 画布锚点布局屏幕
+        /// </summary>
+        SerializedProperty sp_cv_anchors_layout_screen;
+        /// <summary>
+        /// 是否支持世界 UI
+        /// </summary>
+        SerializedProperty sp_cv_support_world_ui;
+        /// <summary>
+        /// 是否使用自动完美像素
+        /// </summary>
+        SerializedProperty sp_cv_use_auto_perfect_pixel;
+        /// <summary>
+        /// 是否每帧更新完美像素
+        /// </summary>
+        SerializedProperty sp_cv_use_perfect_pixel_update;
+        /// <summary>
+        /// UI 相机正交尺寸
+        /// </summary>
+        SerializedProperty sp_camera_ui_orthographic_size;
+        /// <summary>
+        /// UI 相机视野
+        /// </summary>
+        SerializedProperty sp_camera_ui_fov;
+        /// <summary>
+        /// UI 相机近裁剪面
+        /// </summary>
+        SerializedProperty sp_camera_ui_cutter_near;
+        /// <summary>
+        /// UI 相机远裁剪面
+        /// </summary>
+        SerializedProperty sp_camera_ui_cutter_far;
+        /// <summary>
+        /// 相机正交模式
+        /// </summary>
+        SerializedProperty sp_camera_othograpic_mode;
+        #endregion
+
+        #region 屏幕适配与安全框
+        /// <summary>
+        /// 字体大小倍数
+        /// </summary>
+        SerializedProperty sp_ft_font_size_multiply;
+        /// <summary>
+        /// 画布缩放器屏幕尺寸
+        /// </summary>
+        SerializedProperty sp_sf_canvas_scaler_screen_size;
+        /// <summary>
+        /// 安全框是否启用
+        /// </summary>
+        SerializedProperty sp_sf_use;
+        /// <summary>
+        /// 安全框结构显示器
+        /// </summary>
+        SerializedProperty sp_sf_structure_displayer;
+        /// <summary>
+        /// 安全框
+        /// </summary>
+        SerializedProperty sp_sf_safeframe;
+        /// <summary>
+        /// 安全框标记尺寸
+        /// </summary>
+        SerializedProperty sp_sf_mark_size;
+        /// <summary>
+        /// 安全框布局锚点标记颜色
+        /// </summary>
+        SerializedProperty sp_sf_color_layout_anchor_mark;
+        /// <summary>
+        /// 安全框边框线颜色
+        /// </summary>
+        SerializedProperty sp_sf_color_frame_line;
+        /// <summary>
+        /// 安全框线宽
+        /// </summary>
+        SerializedProperty sp_sf_safe_frame_line_width;
+        /// <summary>
+        /// 安全框线边距
+        /// </summary>
+        SerializedProperty sp_sf_line_margins;
+        /// <summary>
+        /// 分隔线颜色
+        /// </summary>
+        SerializedProperty sp_sf_color_seperater_line;
+        /// <summary>
+        /// 分隔线长度
+        /// </summary>
+        SerializedProperty sp_sf_seperater_length;
+        /// <summary>
+        /// 中心标记长度
+        /// </summary>
+        SerializedProperty sp_sf_center_mark_length;
+        /// <summary>
+        /// 中心标记宽度
+        /// </summary>
+        SerializedProperty sp_sf_center_mark_width;
+        /// <summary>
+        /// 中心标记颜色
+        /// </summary>
+        SerializedProperty sp_sf_color_center_mark;
+        /// <summary>
+        /// 中心标记间距
+        /// </summary>
+        SerializedProperty sp_sf_center_mark_distance;
+        #endregion
+
+        #region 掩码与不透明度
+        /// <summary>
+        /// 掩码
+        /// </summary>
+        SerializedProperty sp_mk_mask;
+        /// <summary>
+        /// 掩码透明度
+        /// </summary>
+        SerializedProperty sp_mk_alpha;
+        /// <summary>
+        /// 掩码贴图
+        /// </summary>
+        SerializedProperty sp_mk_texture;
+        /// <summary>
+        /// 掩码射线检测透明度阈值
+        /// </summary>
+        SerializedProperty sp_mk_raycast_alpha_threshold;
+        /// <summary>
+        /// 掩码射线检测是否启用
+        /// </summary>
+        SerializedProperty sp_mk_raycast_enabled;
+        /// <summary>
+        /// 掩码颜色
+        /// </summary>
+        SerializedProperty sp_mk_color;
+        /// <summary>
+        /// 屏幕 HUD 画布组不透明度
+        /// </summary>
+        SerializedProperty sp_op_hud_canvas_group_screen;
+        /// <summary>
+        /// 世界 HUD 画布组不透明度
+        /// </summary>
+        SerializedProperty sp_op_hud_canvas_group_world;
+        /// <summary>
+        /// 屏幕内容不透明度
+        /// </summary>
+        SerializedProperty sp_op_content_opacity_screen;
+        /// <summary>
+        /// 世界内容不透明度
+        /// </summary>
+        SerializedProperty sp_op_content_opacity_world;
+        #endregion
+
+        #region 全局开关
+        /// <summary>
+        /// 是否使用单例
+        /// </summary>
+        SerializedProperty sp_use_instance;
+        /// <summary>
+        /// 是否使用调试模式
+        /// </summary>
+        SerializedProperty sp_use_debug;
+        /// <summary>
+        /// 全局音量
+        /// </summary>
+        SerializedProperty sp_global_volume;
+        /// <summary>
+        /// 全局音量静音
+        /// </summary>
+        SerializedProperty sp_global_volume_mute;
+        /// <summary>
+        /// 全局缓动时长
+        /// </summary>
+        SerializedProperty sp_tween_global_duration;
+        #endregion
+
+        #region 鼠标与转场控制器
+        /// <summary>
+        /// 自定义光标
+        /// </summary>
+        SerializedProperty sp_mos_custom_cursor;
+        /// <summary>
+        /// 鼠标光标
+        /// </summary>
+        SerializedProperty sp_mos_mouse_cursor;
+        /// <summary>
+        /// 自定义转场
+        /// </summary>
+        SerializedProperty sp_trans_custom_transition;
+        /// <summary>
+        /// 转场控制器
+        /// </summary>
+        SerializedProperty sp_trans_transition_controller;
+        #endregion
+
+        #region 蓝图
+        /// <summary>
+        /// 蓝图根节点
+        /// </summary>
+        SerializedProperty sp_bp_root;
+        /// <summary>
+        /// 蓝图模式
+        /// </summary>
+        SerializedProperty sp_bp_mode;
+        /// <summary>
+        /// 蓝图网格尺寸
+        /// </summary>
+        SerializedProperty sp_bp_grid_size;
+        /// <summary>
+        /// 蓝图网格颜色
+        /// </summary>
+        SerializedProperty sp_bp_grid_color;
+        /// <summary>
+        /// 蓝图背景颜色
+        /// </summary>
+        SerializedProperty sp_bp_bg_color;
+        /// <summary>
+        /// 蓝图背景贴花颜色
+        /// </summary>
+        SerializedProperty sp_bp_bg_decal_color;
+        /// <summary>
+        /// 蓝图标记尺寸
+        /// </summary>
+        SerializedProperty sp_bp_mark_size;
+        /// <summary>
+        /// 蓝图标记不透明度
+        /// </summary>
+        SerializedProperty sp_bp_mark_opacity;
+        /// <summary>
+        /// 蓝图线宽
+        /// </summary>
+        SerializedProperty sp_bp_linewidth;
+        /// <summary>
+        /// 蓝图标题内容
+        /// </summary>
+        SerializedProperty sp_bp_title_content;
+        /// <summary>
+        /// 蓝图副标题内容
+        /// </summary>
+        SerializedProperty sp_bp_subtitle_content;
+        /// <summary>
+        /// 蓝图标记标题颜色
+        /// </summary>
+        SerializedProperty sp_bp_marktitle_color;
+        /// <summary>
+        /// 蓝图标记副标题颜色
+        /// </summary>
+        SerializedProperty sp_bp_marksubtitle_color;
+        /// <summary>
+        /// 蓝图标记边距
+        /// </summary>
+        SerializedProperty sp_bp_mark_margin;
+        /// <summary>
+        /// 蓝图标记锚点
+        /// </summary>
+        SerializedProperty sp_bp_mark_anchors;
+        /// <summary>
+        /// 蓝图标记间距
+        /// </summary>
+        SerializedProperty sp_bp_mark_space;
+        /// <summary>
+        /// 蓝图不透明度
+        /// </summary>
+        SerializedProperty sp_bp_opacity;
+        /// <summary>
+        /// 蓝图动画时长
+        /// </summary>
+        SerializedProperty sp_bp_animation_duration;
+        /// <summary>
+        /// 蓝图是否已显示
+        /// </summary>
+        SerializedProperty sp_bp_displayed;
+        /// <summary>
+        /// 蓝图开始时是否隐藏
+        /// </summary>
+        SerializedProperty sp_bp_on_start_hide;
+        /// <summary>
+        /// 蓝图网格动画缓动
+        /// </summary>
+        SerializedProperty sp_bp_grid_animation_ease;
+        /// <summary>
+        /// 蓝图网格不透明度
+        /// </summary>
+        SerializedProperty sp_bp_grid_opacity;
+        /// <summary>
+        /// 蓝图网格动画时长
+        /// </summary>
+        SerializedProperty sp_bp_grid_animation_duration;
+        /// <summary>
+        /// 蓝图背景淡入缓动
+        /// </summary>
+        SerializedProperty sp_bp_bg_animation_ease_in;
+        /// <summary>
+        /// 蓝图背景淡出缓动
+        /// </summary>
+        SerializedProperty sp_bp_bg_animation_ease_out;
+        /// <summary>
+        /// 蓝图背景不透明度
+        /// </summary>
+        SerializedProperty sp_bp_bg_opacity;
+        /// <summary>
+        /// 蓝图背景淡入动画延迟
+        /// </summary>
+        SerializedProperty sp_bp_bg_fade_animation_delay;
+        /// <summary>
+        /// 蓝图网格长度百分比
+        /// </summary>
+        SerializedProperty sp_bp_grid_length_percentage;
+        /// <summary>
+        /// 蓝图网格层级高度
+        /// </summary>
+        SerializedProperty sp_bp_grid_level_height;
+        /// <summary>
+        /// 蓝图网格结束位置
+        /// </summary>
+        SerializedProperty sp_bp_grid_end;
+        /// <summary>
+        /// 蓝图背景平铺
+        /// </summary>
+        SerializedProperty sp_bp_bg_tilling;
+        /// <summary>
+        /// 蓝图背景名称
+        /// </summary>
+        SerializedProperty sp_bp_bg_name;
+        /// <summary>
+        /// 蓝图背景平铺索引
+        /// </summary>
+        SerializedProperty sp_bp_bg_usetilling_index;
+        /// <summary>
+        /// 蓝图背景方形比例索引
+        /// </summary>
+        SerializedProperty sp_bp_bg_usesquareratio_index;
+        /// <summary>
+        /// 蓝图背景贴图不透明度
+        /// </summary>
+        SerializedProperty sp_bp_bg_map_opacity;
+        /// <summary>
+        /// 蓝图特效网格
+        /// </summary>
+        SerializedProperty sp_bp_eft_grid;
+        /// <summary>
+        /// 蓝图特效网格淡入
+        /// </summary>
+        SerializedProperty sp_bp_eft_grid_fade;
+        /// <summary>
+        /// 蓝图特效背景
+        /// </summary>
+        SerializedProperty sp_bp_eft_bg;
+        /// <summary>
+        /// 蓝图特效标记
+        /// </summary>
+        SerializedProperty sp_bp_eft_mark;
+        #endregion
+
+        #region RMS 与主题
+        /// <summary>
+        /// RMS 是否启用
+        /// </summary>
+        SerializedProperty sp_rms_enabled;
+        /// <summary>
+        /// RMS 当前方案
+        /// </summary>
+        SerializedProperty sp_rms_current_solution;
+        /// <summary>
+        /// RMS 节点列表
+        /// </summary>
+        SerializedProperty sp_rms_nodes;
+        /// <summary>
+        /// 主题主色调
+        /// </summary>
+        SerializedProperty sp_theme_color_primary;
+        /// <summary>
+        /// 主题编组色
+        /// </summary>
+        SerializedProperty sp_theme_color_group;
+        /// <summary>
+        /// 主题分割线色
+        /// </summary>
+        SerializedProperty sp_theme_color_sepline;
+        /// <summary>
+        /// 主题主色调方案
+        /// </summary>
+        SerializedProperty sp_theme_solution_primary;
+        /// <summary>
+        /// 主题编组色方案
+        /// </summary>
+        SerializedProperty sp_theme_solution_group;
+        /// <summary>
+        /// 主题分割线色方案
+        /// </summary>
+        SerializedProperty sp_theme_solution_sepline;
+        #endregion
+
+        #region 事件系统与全局动效
+        /// <summary>
+        /// HUD 事件系统
+        /// </summary>
+        SerializedProperty sp_hud_event_system;
+        /// <summary>
+        /// HUD 输入系统 UI 输入模块
+        /// </summary>
+        SerializedProperty sp_hud_input_system_ui_input_module;
+        /// <summary>
+        /// 元素全局生成动效库索引名称
+        /// </summary>
+        SerializedProperty sp_ele_global_motion_create_library_index_name;
+        /// <summary>
+        /// 元素全局回收动效库索引名称
+        /// </summary>
+        SerializedProperty sp_ele_global_motion_recycle_library_index_name;
+        #endregion
+
+        #region 分辨率匹配
+        /// <summary>
+        /// 物理屏幕尺寸
+        /// </summary>
+        SerializedProperty sp_hmr_physics_screen_size;
+        /// <summary>
+        /// 参考图
+        /// </summary>
+        SerializedProperty sp_hmr_reference_image;
+        /// <summary>
+        /// 是否使用比例参考
+        /// </summary>
+        SerializedProperty sp_hmr_use_ratio_reference;
+        /// <summary>
+        /// 比例参考是否为局部
+        /// </summary>
+        SerializedProperty sp_hmr_ratio_reference_is_part;
+        /// <summary>
+        /// 参考图颜色
+        /// </summary>
+        SerializedProperty sp_hmr_reference_image_color;
+        /// <summary>
+        /// 完整分辨率
+        /// </summary>
+        SerializedProperty sp_hmr_res_full;
+        /// <summary>
+        /// 局部分辨率
+        /// </summary>
+        SerializedProperty sp_hmr_res_part;
+        /// <summary>
+        /// 参考形状比例尺寸
+        /// </summary>
+        SerializedProperty sp_hmr_refer_shape_ratio_size;
+        /// <summary>
+        /// 参考形状比例容差
+        /// </summary>
+        SerializedProperty sp_hmr_refer_shape_ratio_tolerance;
+        #endregion
+
+        #region 折叠与参考线
+        /// <summary>
+        /// 是否折叠所有禁用面板
+        /// </summary>
+        SerializedProperty sp_fold_all_panel_with_disabled;
+        /// <summary>
+        /// 参考线锚点
+        /// </summary>
+        SerializedProperty sp_cg_anchors;
+        /// <summary>
+        /// 参考线锚点根节点
+        /// </summary>
+        SerializedProperty sp_cg_anchor_root;
+        /// <summary>
+        /// 参考线是否启用
+        /// </summary>
+        SerializedProperty sp_cg_use;
+        /// <summary>
+        /// 参考线模式
+        /// </summary>
+        SerializedProperty sp_cg_mode;
+        /// <summary>
+        /// 参考线颜色
+        /// </summary>
+        SerializedProperty sp_cg_color;
+        /// <summary>
+        /// 参考线点颜色
+        /// </summary>
+        SerializedProperty sp_cg_point_color;
+        /// <summary>
+        /// 参考线左右镜像偏移
+        /// </summary>
+        SerializedProperty sp_cg_mirror_lr_offset;
+        /// <summary>
+        /// 参考线上下镜像偏移
+        /// </summary>
+        SerializedProperty sp_cg_mirror_ud_offset;
+        /// <summary>
+        /// 参考线左右镜像黄金模式
+        /// </summary>
+        SerializedProperty sp_cg_mirror_lr_golden_mode;
+        /// <summary>
+        /// 参考线上下镜像黄金模式
+        /// </summary>
+        SerializedProperty sp_cg_mirror_ud_golden_mode;
+        /// <summary>
+        /// 参考线斐波那契模式
+        /// </summary>
+        SerializedProperty sp_cg_fibonacci_mode;
+        /// <summary>
+        /// 角形视点水平偏移
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_corner_lookat_offset_h;
+        /// <summary>
+        /// 角形视点垂直偏移
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_corner_lookat_offset_v;
+        /// <summary>
+        /// 三分法水平偏移
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_three_offset_h;
+        /// <summary>
+        /// 三分法偏移覆盖范围
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_three_offset_coverage;
+        /// <summary>
+        /// 三分法垂直偏移
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_three_offset_v;
+        /// <summary>
+        /// 引导线基准高度
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_guide_line_base_height;
+        /// <summary>
+        /// 引导线近端偏移
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_guide_line_offset_near;
+        /// <summary>
+        /// 引导线远端偏移
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_guide_line_offset_far;
+        /// <summary>
+        /// 引导线近端高度偏移
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_guide_line_offset_near_height;
+        /// <summary>
+        /// 三角形基准高度
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_triangle_base_height;
+        /// <summary>
+        /// 三角形底部高度
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_guide_param_triangle_bottom_height;
+        /// <summary>
+        /// 三角形左侧偏移
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_triangle_offset_left;
+        /// <summary>
+        /// 三角形右侧偏移
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_triangle_offset_right;
+        /// <summary>
+        /// 三角形顶部偏移
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_triangle_top_offset;
+        /// <summary>
+        /// 中心点尺寸
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_center_point_size;
+        /// <summary>
+        /// I 形顶部高度
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_ishape_top_height;
+        /// <summary>
+        /// I 形底部高度
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_ishape_bottom_height;
+        /// <summary>
+        /// I 形左侧偏移
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_ishape_offset_left;
+        /// <summary>
+        /// I 形右侧偏移
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_ishape_offset_right;
+        /// <summary>
+        /// 引导线基准偏移
+        /// </summary>
+        SerializedProperty sp_cg_editor_serializefield_guide_line_base_offset;
+        #endregion
+
+        #region 图元可视化
+        /// <summary>
+        /// 元素可视化放置器
+        /// </summary>
+        SerializedProperty sp_ele_visual_placer;
+        /// <summary>
+        /// 图元 ID 标签行高
+        /// </summary>
+        SerializedProperty sp_primitive_id_label_line_height;
+        /// <summary>
+        /// 图元 ID 标签行颜色
+        /// </summary>
+        SerializedProperty sp_primitive_id_label_line_color;
+        /// <summary>
+        /// 图元 ID 标签字体大小
+        /// </summary>
+        SerializedProperty sp_primitive_id_label_font_size;
+        /// <summary>
+        /// 图元 ID 标签字体颜色
+        /// </summary>
+        SerializedProperty sp_primitive_id_label_font_color;
+        #endregion
         #endregion
 
         #region 字段 - 图标
         /// <summary>
-        /// 本编辑器所使用的图标资源集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description>状态与 RMS 图标。</description></item>
-        /// <item><description>面板分类图标（选项/画布/相机/库/元素库/安全框/辅助/蓝图/匹配分辨率/音频/掩码/全局/工具/主题/本地化/物理比例）。</description></item>
-        /// <item><description>按钮常态/按下图标（保存/定位/重置/初始化/创建库/安全框可视化/状态检查）。</description></item>
-        /// <item><description>射线图标、组件引导图标、Logo 与主题标记。</description></item>
-        /// </list>
+        /// 状态图标
         /// </summary>
-        public Texture2D status, rmsicon, icon_MC_Use, icon_MC_None, soundplaying, panel_option, panel_canvas, panel_camera, panel_libs, panel_elementlibs, panel_frame, panel_assist, panel_bulueprint, panel_matchres, panel_audios, panel_mask, panel_global, panel_tools, panel_eleparamrecycle_auto, panel_eleparammotion_default, panel_theme, panel_localized, panel_physicsratio, save_r, save_p, locate_r, locate_p, reset_r, reset_p, icon_initia_r, icon_initia_p, icon_libs_create_r, icon_libs_create_p, icon_safeframevisual_r, icon_safeframevisual_p, icon_checkstate_r, icon_checkstate_p, icon_ray_normal, icon_ray_masked, panel_comp_guide, GuideHelp_Released, GuideHelp_Press, logo_bg, logo, themes_mark;
-        #endregion
-
-        #region 字段 - 开关
+        public Texture2D status;
         /// <summary>
-        /// 默认动效参数折叠状态。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>def_recycle_fold_move / def_recycle_fold_rotate / def_recycle_fold_alpha</c>：回收参数折叠状态。</description></item>
-        /// <item><description><c>def_create_fold_move / def_create_fold_rotate / def_create_fold_alpha</c>：生成参数折叠状态。</description></item>
-        /// </list>
+        /// RMS 图标
         /// </summary>
-        private bool def_recycle_fold_move, def_recycle_fold_rotate, def_recycle_fold_alpha, def_create_fold_move, def_create_fold_rotate, def_create_fold_alpha;
+        public Texture2D rmsicon;
+        /// <summary>
+        /// 鼠标光标启用图标
+        /// </summary>
+        public Texture2D icon_MC_Use;
+        /// <summary>
+        /// 鼠标光标禁用图标
+        /// </summary>
+        public Texture2D icon_MC_None;
+        /// <summary>
+        /// 音效播放中图标
+        /// </summary>
+        public Texture2D soundplaying;
+        /// <summary>
+        /// 面板图标 - 选项
+        /// </summary>
+        public Texture2D panel_option;
+        /// <summary>
+        /// 面板图标 - 画布
+        /// </summary>
+        public Texture2D panel_canvas;
+        /// <summary>
+        /// 面板图标 - 相机
+        /// </summary>
+        public Texture2D panel_camera;
+        /// <summary>
+        /// 面板图标 - 库
+        /// </summary>
+        public Texture2D panel_libs;
+        /// <summary>
+        /// 面板图标 - 元素库
+        /// </summary>
+        public Texture2D panel_elementlibs;
+        /// <summary>
+        /// 面板图标 - 安全框
+        /// </summary>
+        public Texture2D panel_frame;
+        /// <summary>
+        /// 面板图标 - 辅助
+        /// </summary>
+        public Texture2D panel_assist;
+        /// <summary>
+        /// 面板图标 - 蓝图
+        /// </summary>
+        public Texture2D panel_bulueprint;
+        /// <summary>
+        /// 面板图标 - 分辨率匹配
+        /// </summary>
+        public Texture2D panel_matchres;
+        /// <summary>
+        /// 面板图标 - 音频
+        /// </summary>
+        public Texture2D panel_audios;
+        /// <summary>
+        /// 面板图标 - 掩码
+        /// </summary>
+        public Texture2D panel_mask;
+        /// <summary>
+        /// 面板图标 - 全局
+        /// </summary>
+        public Texture2D panel_global;
+        /// <summary>
+        /// 面板图标 - 工具
+        /// </summary>
+        public Texture2D panel_tools;
+        /// <summary>
+        /// 面板图标 - 元素参数回收自动
+        /// </summary>
+        public Texture2D panel_eleparamrecycle_auto;
+        /// <summary>
+        /// 面板图标 - 元素参数动效默认
+        /// </summary>
+        public Texture2D panel_eleparammotion_default;
+        /// <summary>
+        /// 面板图标 - 主题
+        /// </summary>
+        public Texture2D panel_theme;
+        /// <summary>
+        /// 面板图标 - 本地化
+        /// </summary>
+        public Texture2D panel_localized;
+        /// <summary>
+        /// 面板图标 - 物理比例
+        /// </summary>
+        public Texture2D panel_physicsratio;
+        /// <summary>
+        /// 保存按钮常态图标
+        /// </summary>
+        public Texture2D save_r;
+        /// <summary>
+        /// 保存按钮按下图标
+        /// </summary>
+        public Texture2D save_p;
+        /// <summary>
+        /// 定位按钮常态图标
+        /// </summary>
+        public Texture2D locate_r;
+        /// <summary>
+        /// 定位按钮按下图标
+        /// </summary>
+        public Texture2D locate_p;
+        /// <summary>
+        /// 重置按钮常态图标
+        /// </summary>
+        public Texture2D reset_r;
+        /// <summary>
+        /// 重置按钮按下图标
+        /// </summary>
+        public Texture2D reset_p;
+        /// <summary>
+        /// 编辑按钮常态图标
+        /// </summary>
+        public Texture2D edit_r;
+        /// <summary>
+        /// 编辑按钮按下图标
+        /// </summary>
+        public Texture2D edit_p;
+        /// <summary>
+        /// 初始化按钮常态图标
+        /// </summary>
+        public Texture2D icon_initia_r;
+        /// <summary>
+        /// 初始化按钮按下图标
+        /// </summary>
+        public Texture2D icon_initia_p;
+        /// <summary>
+        /// 创建库按钮常态图标
+        /// </summary>
+        public Texture2D icon_libs_create_r;
+        /// <summary>
+        /// 创建库按钮按下图标
+        /// </summary>
+        public Texture2D icon_libs_create_p;
+        /// <summary>
+        /// 安全框可视化按钮常态图标
+        /// </summary>
+        public Texture2D icon_safeframevisual_r;
+        /// <summary>
+        /// 安全框可视化按钮按下图标
+        /// </summary>
+        public Texture2D icon_safeframevisual_p;
+        /// <summary>
+        /// 状态检查按钮常态图标
+        /// </summary>
+        public Texture2D icon_checkstate_r;
+        /// <summary>
+        /// 状态检查按钮按下图标
+        /// </summary>
+        public Texture2D icon_checkstate_p;
+        /// <summary>
+        /// 射线常态图标
+        /// </summary>
+        public Texture2D icon_ray_normal;
+        /// <summary>
+        /// 射线遮罩图标
+        /// </summary>
+        public Texture2D icon_ray_masked;
+        /// <summary>
+        /// 面板图标 - 组件引导
+        /// </summary>
+        public Texture2D panel_comp_guide;
+        /// <summary>
+        /// 引导帮助常态图标
+        /// </summary>
+        public Texture2D GuideHelp_Released;
+        /// <summary>
+        /// 引导帮助按下图标
+        /// </summary>
+        public Texture2D GuideHelp_Press;
+        /// <summary>
+        /// Logo 背景
+        /// </summary>
+        public Texture2D logo_bg;
+        /// <summary>
+        /// Logo
+        /// </summary>
+        public Texture2D logo;
+        /// <summary>
+        /// 主题标记
+        /// </summary>
+        public Texture2D themes_mark;
         #endregion
 
         #region 字段 - 蓝图
@@ -515,7 +1213,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>在 <c>OnEnable</c> 中扫描蓝图背景目录填充。</description></item>
         /// </list>
         /// </summary>
-        List<Texture2D> BluePrintBgs = new List<Texture2D>();
+        List<Texture2D> blue_print_bgs = new List<Texture2D>();
         /// <summary>
         /// 蓝图背景贴图名称数组。
         /// <para/>
@@ -523,7 +1221,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>与 <c>BluePrintBgs</c> 一一对应。</description></item>
         /// </list>
         /// </summary>
-        string[] BluePrintBgs_Name;
+        string[] blue_print_bgs_name;
         #endregion
 
         #region 字段 - 选项文字
@@ -582,7 +1280,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>由 <c>Targets_Selected</c> 判断是否为多选状态。</description></item>
         /// </list>
         /// </summary>
-        XHud_Manager[] SelectedObjects;
+        XHud_Manager[] selected_objects;
         #endregion
 
         #region 字段 - 颜色
@@ -620,8 +1318,8 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
 
-            BaseScript = (XHud_Manager)target;
-            LineHeight = EditorGUIUtility.singleLineHeight;
+            base_script = (XHud_Manager)target;
+            line_height = EditorGUIUtility.singleLineHeight;
 
             Targets_Get();
 
@@ -637,7 +1335,8 @@ namespace SevenStrikeModules.XHud.Editor
             locate_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_manager/locate_p");
             reset_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_manager/reset_r");
             reset_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_manager/reset_p");
-
+            edit_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_manager/edit_r");
+            edit_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_manager/edit_p");
             #region 标题图标
             panel_option = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_manager/panel_option");
             panel_canvas = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_manager/panel_canvas");
@@ -686,19 +1385,19 @@ namespace SevenStrikeModules.XHud.Editor
             #region 获取Mask遮罩层
             if (!Application.isPlaying)
             {
-                if (HudCanvas_ScreenAnchor.objectReferenceValue != null)
+                if (sp_cv_hudcanvas_screen_anchor.objectReferenceValue != null)
                 {
-                    if (Anchors_Layout_Screen.arraySize <= 0)
+                    if (sp_cv_anchors_layout_screen.arraySize <= 0)
                     {
-                        UnityEngine.RectTransform root = HudCanvas_ScreenAnchor.objectReferenceValue as UnityEngine.RectTransform;
+                        UnityEngine.RectTransform root = sp_cv_hudcanvas_screen_anchor.objectReferenceValue as UnityEngine.RectTransform;
                         for (int i = 0; i < root.childCount; i++)
                         {
                             if (root.GetChild(i).name.Contains("Anchor"))
                             {
                                 UnityEngine.RectTransform obj = root.GetChild(i).GetComponent<UnityEngine.RectTransform>();
-                                Anchors_Layout_Screen.InsertArrayElementAtIndex(Anchors_Layout_Screen.arraySize);
-                                Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Name").stringValue = obj.name;
-                                Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Anchor").objectReferenceValue = obj;
+                                sp_cv_anchors_layout_screen.InsertArrayElementAtIndex(sp_cv_anchors_layout_screen.arraySize);
+                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Name").stringValue = obj.name;
+                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Anchor").objectReferenceValue = obj;
                                 if (obj.childCount > 0)
                                 {
                                     for (int c = 0; c < obj.childCount; c++)
@@ -706,7 +1405,7 @@ namespace SevenStrikeModules.XHud.Editor
                                         if (obj.GetChild(c).name == "Mark")
                                         {
                                             Image mark = obj.GetChild(c).GetComponent<Image>();
-                                            Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Mark").objectReferenceValue = mark;
+                                            sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Mark").objectReferenceValue = mark;
                                         }
                                     }
                                 }
@@ -720,8 +1419,8 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             ///--------寻找布局节点根物体
-            HudCanvas_ScreenAnchor.objectReferenceValue = BaseScript.transform.Find("Screen/Anchors");
-            HudCanvas_ScreenAnchor.serializedObject.ApplyModifiedProperties();
+            sp_cv_hudcanvas_screen_anchor.objectReferenceValue = base_script.transform.Find("Screen/Anchors");
+            sp_cv_hudcanvas_screen_anchor.serializedObject.ApplyModifiedProperties();
 
             xHud_GetElementPoolIndicators();
 
@@ -734,15 +1433,15 @@ namespace SevenStrikeModules.XHud.Editor
             #region 获取所有蓝图背景贴图
             Texture2D[] AllTextures = XGUI.LoadAllAssetsAtPathWithPattern<Texture2D>($"{XHud_Dashboard.Get_Path_XHUD_TEXTURES_Path()}BluePrints/", ".png").ToArray();
 
-            BluePrintBgs_Name = new string[AllTextures.Length];
+            blue_print_bgs_name = new string[AllTextures.Length];
             for (int i = 0; i < AllTextures.Length; i++)
             {
-                BluePrintBgs.Add(AllTextures[i]);
-                BluePrintBgs_Name[i] = AllTextures[i].name;
+                blue_print_bgs.Add(AllTextures[i]);
+                blue_print_bgs_name[i] = AllTextures[i].name;
             }
             #endregion
 
-            BaseScript.hm_BluePrintRootFirstSibling();
+            base_script.hm_BluePrintRootFirstSibling();
 
             EditorApplication.hierarchyChanged -= EditorApplication_EditorManagerUpdate;
             EditorApplication.hierarchyChanged += EditorApplication_EditorManagerUpdate;
@@ -756,7 +1455,7 @@ namespace SevenStrikeModules.XHud.Editor
             xHud_EnsureLayerExists("XHud_World");
 
             //设置XHud管理器图层为XHud
-            BaseScript.gameObject.layer = LayerMask.NameToLayer("XHud");
+            base_script.gameObject.layer = LayerMask.NameToLayer("XHud");
 
             xHud_RatioReference_Update();
         }
@@ -773,9 +1472,9 @@ namespace SevenStrikeModules.XHud.Editor
         {
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
 
-            BaseScript.hm_BluePrintRootFirstSibling();
+            base_script.hm_BluePrintRootFirstSibling();
 
-            if (FoldAllPanelWithDisabled.boolValue)
+            if (sp_fold_all_panel_with_disabled.boolValue)
                 xHud_GroupFolds(false);
         }
         /// <summary>
@@ -897,7 +1596,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             GUILayout.FlexibleSpace();
 
-            if (IsInitialized.boolValue)
+            if (initialized.boolValue)
                 XGUI.SetEnabled(true);
             else
                 XGUI.SetEnabled(false);
@@ -920,70 +1619,70 @@ namespace SevenStrikeModules.XHud.Editor
 
                 //创建色卡库
                 XHud_Library_Colors lib_color = ScriptableObject.CreateInstance<XHud_Library_Colors>();
-                lib_color.LibraryName = $"NewColorsLibrary";
+                lib_color.library_name = $"NewColorsLibrary";
                 lib_color.ColorsLibrary_AddColor("DefaultColor", Color.white);
 
                 //创建曲线库
                 XHud_Library_Curves lib_curve = ScriptableObject.CreateInstance<XHud_Library_Curves>();
-                lib_curve.LibraryName = $"NewCurveLibrary";
+                lib_curve.library_name = $"NewCurveLibrary";
                 lib_curve.CurveLibrary_AddCurve("DefaultCurve", AnimationCurve.EaseInOut(0, 0, 1, 1));
 
                 //创建音效库
                 XHud_Library_Sounds lib_sound = ScriptableObject.CreateInstance<XHud_Library_Sounds>();
-                lib_sound.LibraryName = $"NewSoundLibrary";
+                lib_sound.library_name = $"NewSoundLibrary";
                 lib_sound.SoundLibrary_AddSound("DefaultSound", AssetDatabase.LoadAssetAtPath<AudioClip>($"{XHud_Dashboard.Get_Path_XHUD_SOUND_Path()}DefaultSound.wav"), "wav");
 
                 //创建元素库
                 XHud_Library_Element lib_element = ScriptableObject.CreateInstance<XHud_Library_Element>();
-                lib_element.LibraryName = $"NewElementLibrary";
+                lib_element.library_name = $"NewElementLibrary";
                 Transform obj_XHudSample = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_Path_XHUD_PREFABS_Path()}XHudIcon.prefab");
                 lib_element.ElementsLibrary_Add(new XHud_LibraryArg_Element_Item(1, obj_XHudSample.GetComponent<XHud_Module_Element>()));
 
                 //创建字体库
                 XHud_Library_TextStyle lib_textstyle = ScriptableObject.CreateInstance<XHud_Library_TextStyle>();
-                lib_textstyle.LibraryName = $"NewTextStyleLibrary";
+                lib_textstyle.library_name = $"NewTextStyleLibrary";
 
                 XHud_LibraryArg_TextStyle info_text = new XHud_LibraryArg_TextStyle();
-                info_text.Type = xHud_TextType.Text;
-                info_text.RichText = true;
-                info_text.Maskable = false;
-                info_text.Raycast = false;
-                info_text.BestFit = false;
-                info_text.GeometreAlign = false;
-                info_text.Font = AssetDatabase.LoadAssetAtPath<Font>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Text/sx_light.otf");
-                info_text.FontColor = Color.white;
-                info_text.Size = 50;
-                info_text.LineHeight = 1;
-                info_text.Name = "NewTextStyle_HudText";
-                info_text.Description = "这是一个用于HudText文字组件的默认字体样式";
-                info_text.Style = FontStyle.Normal;
-                info_text.Overflow_Horizon = HorizontalWrapMode.Overflow;
-                info_text.Overflow_Vertical = VerticalWrapMode.Overflow;
-                info_text.ContentAnchor = ContentAnchor.中心;
+                info_text.type = xHud_TextType.Text;
+                info_text.rich_text = true;
+                info_text.maskable = false;
+                info_text.raycast = false;
+                info_text.best_fit = false;
+                info_text.geometre_align = false;
+                info_text.font = AssetDatabase.LoadAssetAtPath<Font>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Text/sx_light.otf");
+                info_text.font_color = Color.white;
+                info_text.size = 50;
+                info_text.line_height = 1;
+                info_text.name = "NewTextStyle_HudText";
+                info_text.description = "这是一个用于HudText文字组件的默认字体样式";
+                info_text.style = FontStyle.Normal;
+                info_text.overflow_horizon = HorizontalWrapMode.Overflow;
+                info_text.overflow_vertical = VerticalWrapMode.Overflow;
+                info_text.content_anchor = ContentAnchor.中心;
 
                 XHud_LibraryArg_TextStyle info_tmptext = new XHud_LibraryArg_TextStyle();
-                info_tmptext.Type = xHud_TextType.TmpText;
+                info_tmptext.type = xHud_TextType.TmpText;
                 info_tmptext.tmp_rich = true;
-                info_tmptext.Maskable = false;
-                info_tmptext.Raycast = false;
-                info_tmptext.tmp_EnableAutoSizing = false;
+                info_tmptext.maskable = false;
+                info_tmptext.raycast = false;
+                info_tmptext.tmp_enable_auto_sizing = false;
                 info_tmptext.tmp_font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Tmp/sx_light SDF.asset");
                 info_tmptext.tmp_color = Color.white;
-                info_tmptext.Size = 50;
+                info_tmptext.size = 50;
                 info_tmptext.tmp_overflow = TextOverflowModes.Overflow;
                 info_tmptext.tmp_contentwrap = TextWrappingModes.NoWrap;
                 info_tmptext.tmp_anchor = TmpContentAnchor.中心;
                 info_tmptext.tmp_space_lineheight = 1;
-                info_tmptext.Name = "NewTextStyle_HudTmpText";
-                info_tmptext.Description = "这是一个用于HudTmpText文字组件的默认字体样式";
-                info_tmptext.ContentAnchor = ContentAnchor.中心;
+                info_tmptext.name = "NewTextStyle_HudTmpText";
+                info_tmptext.description = "这是一个用于HudTmpText文字组件的默认字体样式";
+                info_tmptext.content_anchor = ContentAnchor.中心;
 
                 lib_textstyle.TextStyle_Library_Add(info_text);
                 lib_textstyle.TextStyle_Library_Add(info_tmptext);
 
                 //创建动效库
                 XHud_Library_Motion lib_motion = ScriptableObject.CreateInstance<XHud_Library_Motion>();
-                lib_motion.LibraryName = $"NewMotionLibrary";
+                lib_motion.library_name = $"NewMotionLibrary";
 
                 #region 预制动效
                 Motion_Creator crc = new Motion_Creator();
@@ -994,7 +1693,7 @@ namespace SevenStrikeModules.XHud.Editor
                 crc.Movement.Duration = 1f;
                 crc.Movement.Delay = 0f;
                 crc.Movement.CurveName = "";
-                crc.Movement.Curve = BaseScript.Hud_Curves != null ? BaseScript.Hud_Curves.CurveLibrary_GetCurve(crc.Movement.CurveName) : null;
+                crc.Movement.Curve = base_script.library_curves != null ? base_script.library_curves.CurveLibrary_GetCurve(crc.Movement.CurveName) : null;
                 crc.Movement.Ease = EaseMode.OutQuart;
                 crc.Rotation = new MotionNode_Rotation();
                 crc.Rotation.Rotation = HudMotion_Rotation.A_无旋转;
@@ -1002,13 +1701,13 @@ namespace SevenStrikeModules.XHud.Editor
                 crc.Rotation.Duration = 1f;
                 crc.Rotation.Delay = 0f;
                 crc.Rotation.CurveName = "";
-                crc.Rotation.Curve = BaseScript.Hud_Curves != null ? BaseScript.Hud_Curves.CurveLibrary_GetCurve(crc.Rotation.CurveName) : null;
+                crc.Rotation.Curve = base_script.library_curves != null ? base_script.library_curves.CurveLibrary_GetCurve(crc.Rotation.CurveName) : null;
                 crc.Rotation.Ease = EaseMode.OutQuart;
                 crc.Alpha = new MotionNode_Alpha();
                 crc.Alpha.Duration = 1f;
                 crc.Alpha.Delay = 0f;
                 crc.Alpha.CurveName = "";
-                crc.Alpha.Curve = BaseScript.Hud_Curves != null ? BaseScript.Hud_Curves.CurveLibrary_GetCurve(crc.Alpha.CurveName) : null;
+                crc.Alpha.Curve = base_script.library_curves != null ? base_script.library_curves.CurveLibrary_GetCurve(crc.Alpha.CurveName) : null;
                 crc.Alpha.Ease = EaseMode.OutQuart;
 
                 Motion_Recycler rec = new Motion_Recycler();
@@ -1018,7 +1717,7 @@ namespace SevenStrikeModules.XHud.Editor
                 rec.Movement.Duration = 1f;
                 rec.Movement.Delay = 0f;
                 rec.Movement.CurveName = "";
-                rec.Movement.Curve = BaseScript.Hud_Curves != null ? BaseScript.Hud_Curves.CurveLibrary_GetCurve(rec.Movement.CurveName) : null;
+                rec.Movement.Curve = base_script.library_curves != null ? base_script.library_curves.CurveLibrary_GetCurve(rec.Movement.CurveName) : null;
                 rec.Movement.Ease = EaseMode.OutQuart;
                 rec.Rotation = new MotionNode_Rotation();
                 rec.Rotation.Rotation = HudMotion_Rotation.A_无旋转;
@@ -1026,13 +1725,13 @@ namespace SevenStrikeModules.XHud.Editor
                 rec.Rotation.Duration = 1f;
                 rec.Rotation.Delay = 0f;
                 rec.Rotation.CurveName = "";
-                rec.Rotation.Curve = BaseScript.Hud_Curves != null ? BaseScript.Hud_Curves.CurveLibrary_GetCurve(rec.Rotation.CurveName) : null;
+                rec.Rotation.Curve = base_script.library_curves != null ? base_script.library_curves.CurveLibrary_GetCurve(rec.Rotation.CurveName) : null;
                 rec.Rotation.Ease = EaseMode.OutQuart;
                 rec.Alpha = new MotionNode_Alpha();
                 rec.Alpha.Duration = 1f;
                 rec.Alpha.Delay = 0f;
                 rec.Alpha.CurveName = "";
-                rec.Alpha.Curve = BaseScript.Hud_Curves != null ? BaseScript.Hud_Curves.CurveLibrary_GetCurve(rec.Alpha.CurveName) : null;
+                rec.Alpha.Curve = base_script.library_curves != null ? base_script.library_curves.CurveLibrary_GetCurve(rec.Alpha.CurveName) : null;
                 rec.Alpha.Ease = EaseMode.OutQuart;
                 #endregion
 
@@ -1055,27 +1754,27 @@ namespace SevenStrikeModules.XHud.Editor
 
                 //创建转场库
                 XHud_Library_Transition lib_transition = ScriptableObject.CreateInstance<XHud_Library_Transition>();
-                lib_transition.LibraryName = $"NewTransitionLibrary";
+                lib_transition.library_name = $"NewTransitionLibrary";
                 List<Texture2D> texs_list = XGUI.LoadAllAssetsAtPathWithPattern<Texture2D>($"{XHud_Dashboard.Get_Path_XHUD_TEXTURES_Path()}Transitions/Ink/", ".jpg");
                 // 调用排序方法
                 xHud_SortTexturesByNameSuffix(texs_list);
                 lib_transition.TransitionLibrary_Add("InkPaint", texs_list.ToArray(), 1);
                 XHud_LibraryArg_Transition node = lib_transition.TransitionLibrary_Get("InkPaint");
                 #region 分析转场数据
-                if (node.Frames == null || node.Frames.Count <= 0)
+                if (node.frames == null || node.frames.Count <= 0)
                 {
-                    node.TotalFramesCount = 0;
-                    node.LastFrameIndex = 0;
-                    node.Res = Vector2Int.zero;
+                    node.total_frames_count = 0;
+                    node.last_frame_index = 0;
+                    node.res = Vector2Int.zero;
                 }
                 else
                 {
-                    node.TotalFramesCount = node.Frames.Count;
-                    node.LastFrameIndex = node.Frames.Count - 1;
-                    for (int s = 0; s < node.Frames.Count; s++)
+                    node.total_frames_count = node.frames.Count;
+                    node.last_frame_index = node.frames.Count - 1;
+                    for (int s = 0; s < node.frames.Count; s++)
                     {
                         // 获取纹理的导入设置
-                        TextureImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(node.Frames[s])) as TextureImporter;
+                        TextureImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(node.frames[s])) as TextureImporter;
 
                         if (importer != null)
                         {
@@ -1089,7 +1788,7 @@ namespace SevenStrikeModules.XHud.Editor
                             }
                         }
                     }
-                    node.Res = new Vector2Int(node.Frames[0].width, node.Frames[0].height);
+                    node.res = new Vector2Int(node.frames[0].width, node.frames[0].height);
                 }
                 #endregion
 
@@ -1115,13 +1814,13 @@ namespace SevenStrikeModules.XHud.Editor
 
                 if (res == "指定")
                 {
-                    BaseScript.Hud_Colors = lib_color;
-                    BaseScript.Hud_Curves = lib_curve;
-                    BaseScript.Hud_Sounds = lib_sound;
-                    BaseScript.Hud_TextStyleLibrary = lib_textstyle;
-                    BaseScript.Hud_Motions = lib_motion;
-                    BaseScript.Hud_TransitionLib = lib_transition;
-                    BaseScript.Hud_ElementLibrarys.Add(lib_element);
+                    base_script.library_colors = lib_color;
+                    base_script.library_curves = lib_curve;
+                    base_script.library_sounds = lib_sound;
+                    base_script.library_textstyles = lib_textstyle;
+                    base_script.library_motions = lib_motion;
+                    base_script.library_transitions = lib_transition;
+                    base_script.ele_library_elements.Add(lib_element);
                 }
 
                 return;
@@ -1139,7 +1838,7 @@ namespace SevenStrikeModules.XHud.Editor
             width: 15,
             height: 15))
             {
-                if (SceneCamera.objectReferenceValue == null)
+                if (sp_camera_scene.objectReferenceValue == null)
                 {
                     XGUI.dialog(
                         type: XGUIDialogType.警告,
@@ -1151,16 +1850,16 @@ namespace SevenStrikeModules.XHud.Editor
                     return;
                 }
 
-                UseSafeFrame.boolValue = !UseSafeFrame.boolValue;
-                UseSafeFrame.serializedObject.ApplyModifiedProperties();
+                sp_sf_use.boolValue = !sp_sf_use.boolValue;
+                sp_sf_use.serializedObject.ApplyModifiedProperties();
 
-                if (!UseSafeFrame.boolValue)
+                if (!sp_sf_use.boolValue)
                 {
-                    BaseScript.hm_AnchorMarks_Destroy();
+                    base_script.hm_AnchorMarks_Destroy();
                 }
                 else
                 {
-                    BaseScript.hm_AnchorMarks_Create();
+                    base_script.hm_AnchorMarks_Create();
                 }
 
                 SetHighFrequencyMode();
@@ -1188,7 +1887,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 检查配置是否完善
-            if (IsInitialized.boolValue)
+            if (initialized.boolValue)
             {
                 if (xHud_Diagnostic())
                 {
@@ -1205,7 +1904,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
 
-            if (IsInitialized.boolValue)
+            if (initialized.boolValue)
             {
                 #region 分辨率信息
                 XGUI.layout_group_start(
@@ -1219,7 +1918,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(20, 20, 15, 15));
 
-                string resinfo = string.Format("{0} x {1}", ScreenRes.vector2Value.x, ScreenRes.vector2Value.y);
+                string resinfo = string.Format("{0} x {1}", sp_cv_screen_res.vector2Value.x, sp_cv_screen_res.vector2Value.y);
                 XGUI.layout_label(
                     text: resinfo,
                     size: XGUIFontSize.M,
@@ -1231,10 +1930,10 @@ namespace SevenStrikeModules.XHud.Editor
                     anchor: TextAnchor.MiddleCenter,
                     font: XGUI.GetFont("xg-medium"));
 
-                if (RMS_Nodes.arraySize > 0)
+                if (sp_rms_nodes.arraySize > 0)
                 {
                     XGUI.layout_label(
-                        text: "RMS： " + RMS_CurrentSolution.stringValue,
+                        text: "RMS： " + sp_rms_current_solution.stringValue,
                         size: XGUIFontSize.M,
                         text_color: Color.white * 0.7f,
                         margin: new RectOffset(0, 0, 0, 0),
@@ -1250,7 +1949,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 选项
-                BaseScript.fold_options = XGUI.layout_group_start(
+                base_script.fold_options = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1260,9 +1959,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_options);
+                    foldout: base_script.fold_options);
 
-                if (!BaseScript.fold_options)
+                if (!base_script.fold_options)
                 {
                     Draw_Options();
                 }
@@ -1271,7 +1970,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 画布 
-                BaseScript.fold_canvasset = XGUI.layout_group_start(
+                base_script.fold_canvasset = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1281,9 +1980,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_canvasset);
+                    foldout: base_script.fold_canvasset);
 
-                if (!BaseScript.fold_canvasset)
+                if (!base_script.fold_canvasset)
                 {
                     Draw_Canvas();
                 }
@@ -1292,7 +1991,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 相机 
-                BaseScript.fold_camera = XGUI.layout_group_start(
+                base_script.fold_camera = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1302,9 +2001,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_camera);
+                    foldout: base_script.fold_camera);
 
-                if (!BaseScript.fold_camera)
+                if (!base_script.fold_camera)
                 {
                     Draw_Camera();
                 }
@@ -1313,7 +2012,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 比例图例 
-                BaseScript.fold_ratiorefer = XGUI.layout_group_start(
+                base_script.fold_ratiorefer = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1323,9 +2022,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_ratiorefer);
+                    foldout: base_script.fold_ratiorefer);
 
-                if (!BaseScript.fold_ratiorefer)
+                if (!base_script.fold_ratiorefer)
                 {
                     Draw_RatioReference();
                 }
@@ -1334,9 +2033,9 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 构图参考 
-                if (UseCompGuide.boolValue)
+                if (sp_cg_use.boolValue)
                 {
-                    BaseScript.fold_compguid = XGUI.layout_group_start(
+                    base_script.fold_compguid = XGUI.layout_group_start(
                         type: XGUIContainerType.Vertical,
                         bg_fill: XGUIGroup.缺口纯色边框,
                         bg_color: XGUIColor.亮白,
@@ -1346,9 +2045,9 @@ namespace SevenStrikeModules.XHud.Editor
                         title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_clipping: TextClipping.Clip,
                         padding: new RectOffset(10, 10, 15, 15),
-                        foldout: BaseScript.fold_compguid);
+                        foldout: base_script.fold_compguid);
 
-                    if (!BaseScript.fold_compguid)
+                    if (!base_script.fold_compguid)
                     {
                         Draw_CompGuide();
                     }
@@ -1357,7 +2056,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 资源库 
-                BaseScript.fold_reslibs = XGUI.layout_group_start(
+                base_script.fold_reslibs = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1367,9 +2066,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_reslibs);
+                    foldout: base_script.fold_reslibs);
 
-                if (!BaseScript.fold_reslibs)
+                if (!base_script.fold_reslibs)
                 {
                     Draw_Libraries();
                 }
@@ -1378,7 +2077,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 元素库 
-                BaseScript.fold_elementlibs = XGUI.layout_group_start(
+                base_script.fold_elementlibs = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1388,9 +2087,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_elementlibs);
+                    foldout: base_script.fold_elementlibs);
 
-                if (!BaseScript.fold_elementlibs)
+                if (!base_script.fold_elementlibs)
                 {
                     Draw_ElementLibs();
                 }
@@ -1399,7 +2098,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 音效池 
-                BaseScript.fold_soundslib = XGUI.layout_group_start(
+                base_script.fold_soundslib = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1409,9 +2108,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_soundslib);
+                    foldout: base_script.fold_soundslib);
 
-                if (!BaseScript.fold_soundslib)
+                if (!base_script.fold_soundslib)
                 {
                     Draw_SoundsPool();
                 }
@@ -1420,7 +2119,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 遮罩 / 内容透明度 
-                BaseScript.fold_masks = XGUI.layout_group_start(
+                base_script.fold_masks = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1430,9 +2129,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_masks);
+                    foldout: base_script.fold_masks);
 
-                if (!BaseScript.fold_masks)
+                if (!base_script.fold_masks)
                 {
                     Draw_Mask();
                 }
@@ -1441,7 +2140,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 全局
-                BaseScript.fold_global = XGUI.layout_group_start(
+                base_script.fold_global = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1451,9 +2150,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_global);
+                    foldout: base_script.fold_global);
 
-                if (!BaseScript.fold_global)
+                if (!base_script.fold_global)
                 {
                     Draw_Global();
                 }
@@ -1462,7 +2161,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 工具
-                BaseScript.fold_tool = XGUI.layout_group_start(
+                base_script.fold_tool = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1472,9 +2171,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_tool);
+                    foldout: base_script.fold_tool);
 
-                if (!BaseScript.fold_tool)
+                if (!base_script.fold_tool)
                 {
                     Draw_Tool();
                 }
@@ -1483,7 +2182,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 布局
-                BaseScript.fold_layout = XGUI.layout_group_start(
+                base_script.fold_layout = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1493,9 +2192,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_layout);
+                    foldout: base_script.fold_layout);
 
-                if (!BaseScript.fold_layout)
+                if (!base_script.fold_layout)
                 {
                     Draw_Layout();
                 }
@@ -1504,9 +2203,9 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 辅助
-                if (UseSafeFrame.boolValue)
+                if (sp_sf_use.boolValue)
                 {
-                    BaseScript.fold_visualsafe = XGUI.layout_group_start(
+                    base_script.fold_visualsafe = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1516,9 +2215,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_visualsafe);
+                    foldout: base_script.fold_visualsafe);
 
-                    if (!BaseScript.fold_visualsafe)
+                    if (!base_script.fold_visualsafe)
                     {
                         Draw_SafeFrame();
                     }
@@ -1528,9 +2227,9 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 蓝图
-                if (BluePrintMode.boolValue)
+                if (sp_bp_mode.boolValue)
                 {
-                    BaseScript.fold_blueprint = XGUI.layout_group_start(
+                    base_script.fold_blueprint = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1540,16 +2239,16 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_blueprint);
+                    foldout: base_script.fold_blueprint);
 
-                    if (!BaseScript.fold_blueprint)
+                    if (!base_script.fold_blueprint)
                     {
                         Draw_BluePrint();
                     }
 
                     if (!Application.isPlaying)
                     {
-                        BaseScript.hm_BluePrint_Update();
+                        base_script.hm_BluePrint_Update();
                     }
 
                     XGUI.layout_group_end(type: XGUIContainerType.Vertical);
@@ -1557,9 +2256,9 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region RMS
-                if (RMS_Enabled.boolValue)
+                if (sp_rms_enabled.boolValue)
                 {
-                    BaseScript.fold_RMS = XGUI.layout_group_start(
+                    base_script.fold_RMS = XGUI.layout_group_start(
                         type: XGUIContainerType.Vertical,
                         bg_fill: XGUIGroup.缺口纯色边框,
                         bg_color: XGUIColor.亮白,
@@ -1569,9 +2268,9 @@ namespace SevenStrikeModules.XHud.Editor
                         title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_clipping: TextClipping.Clip,
                         padding: new RectOffset(10, 10, 15, 15),
-                        foldout: BaseScript.fold_RMS);
+                        foldout: base_script.fold_RMS);
 
-                    if (!BaseScript.fold_RMS)
+                    if (!base_script.fold_RMS)
                     {
                         Draw_RMS();
                     }
@@ -1581,7 +2280,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 动效默认参数
-                BaseScript.fold_motion_default = XGUI.layout_group_start(
+                base_script.fold_motion_default = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1591,9 +2290,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_motion_default);
+                    foldout: base_script.fold_motion_default);
 
-                if (!BaseScript.fold_motion_default)
+                if (!base_script.fold_motion_default)
                 {
                     Draw_MotionDefault();
                 }
@@ -1602,7 +2301,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 主题色
-                BaseScript.fold_themes = XGUI.layout_group_start(
+                base_script.fold_themes = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1612,9 +2311,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_themes);
+                    foldout: base_script.fold_themes);
 
-                if (!BaseScript.fold_themes)
+                if (!base_script.fold_themes)
                 {
                     Draw_Theme();
                 }
@@ -1623,7 +2322,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 源脚本
-                BaseScript.fold_based = XGUI.layout_group_start(
+                base_script.fold_based = XGUI.layout_group_start(
                     type: XGUIContainerType.Vertical,
                     bg_fill: XGUIGroup.缺口纯色边框,
                     bg_color: XGUIColor.亮白,
@@ -1633,9 +2332,9 @@ namespace SevenStrikeModules.XHud.Editor
                     title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_clipping: TextClipping.Clip,
                     padding: new RectOffset(10, 10, 15, 15),
-                    foldout: BaseScript.fold_based);
+                    foldout: base_script.fold_based);
 
-                if (!BaseScript.fold_based)
+                if (!base_script.fold_based)
                 {
                     DrawDefaultInspector();
                 }
@@ -1648,11 +2347,11 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
-                menu.AddItem(new GUIContent("F (折叠所有项)"), false, () =>
+                menu.AddItem(new GUIContent("Q (折叠所有项)"), false, () =>
                 {
                     xHud_GroupFolds(true);
                 });
-                menu.AddItem(new GUIContent("D (展开所有项)"), false, () =>
+                menu.AddItem(new GUIContent("W (展开所有项)"), false, () =>
                 {
                     xHud_GroupFolds(false);
                 });
@@ -1672,13 +2371,13 @@ namespace SevenStrikeModules.XHud.Editor
         private void OnSceneGUI()
         {
             // 用户操作后保持高频 0.8 秒，然后降回低频
-            if (EditorApplication.timeSinceStartup - _lastUserActionTime > UPDATE_KEEPTIME)
+            if (EditorApplication.timeSinceStartup - _lastUserActionTime > update_keeptime)
             {
-                UPDATE_INTERVAL = UPDATE_INTERVAL_Low;
+                update_interval = update_interval_low;
             }
 
             // 频率限制
-            if (EditorApplication.timeSinceStartup - _lastSceneUpdate < UPDATE_INTERVAL)
+            if (EditorApplication.timeSinceStartup - _lastSceneUpdate < update_interval)
                 return;
             _lastSceneUpdate = EditorApplication.timeSinceStartup;
 
@@ -1701,17 +2400,17 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new XHud_Manager[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new XHud_Manager[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (XHud_Manager)t;
+                    selected_objects[i] = (XHud_Manager)t;
                 }
             }
             else
             {
-                SelectedObjects = new XHud_Manager[targets.Length];
-                SelectedObjects[0] = (XHud_Manager)target;
+                selected_objects = new XHud_Manager[targets.Length];
+                selected_objects[0] = (XHud_Manager)target;
             }
         }
         /// <summary>
@@ -1724,9 +2423,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>多选返回 <c>true</c>，否则返回 <c>false</c>。</returns>
         private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }
@@ -1810,8 +2509,8 @@ namespace SevenStrikeModules.XHud.Editor
             var sizesType = typeof(Editor).Assembly.GetType("UnityEditor.GameViewSizes");
             var singleType = typeof(ScriptableSingleton<>).MakeGenericType(sizesType);
             var instanceProp = singleType.GetProperty("instance");
-            getGroup = sizesType.GetMethod("GetGroup");
-            gameViewSizesInstance = instanceProp.GetValue(null, null);
+            get_group = sizesType.GetMethod("GetGroup");
+            game_view_sizes_instance = instanceProp.GetValue(null, null);
         }
         /// <summary>
         /// 获取指定分组的 GameView 尺寸对象。
@@ -1824,7 +2523,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>分组对象。</returns>
         static object GetGroup(GameViewSizeGroupType type)
         {
-            return getGroup.Invoke(gameViewSizesInstance, new object[] { (int)type });
+            return get_group.Invoke(game_view_sizes_instance, new object[] { (int)type });
         }
         /// <summary>
         /// 按显示文本查找尺寸索引。
@@ -1931,7 +2630,7 @@ namespace SevenStrikeModules.XHud.Editor
         public static void AddCustomSize(GameViewSizeType viewSizeType, GameViewSizeGroupType sizeGroupType, int width, int height, string text)
         {
             var group = GetGroup(sizeGroupType);
-            var addCustomSize = getGroup.ReturnType.GetMethod("AddCustomSize");
+            var addCustomSize = get_group.ReturnType.GetMethod("AddCustomSize");
             var gvsType = typeof(Editor).Assembly.GetType("UnityEditor.GameViewSize");
             var ctor = gvsType.GetConstructor(new Type[] { typeof(int), typeof(int), typeof(int), typeof(string) });
             var newSize = ctor.Invoke(new object[] { (int)viewSizeType, width, height, text });

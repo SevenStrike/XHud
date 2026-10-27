@@ -63,30 +63,28 @@ namespace SevenStrikeModules.XHud.Editor
     }
     #endregion
 
-    #region 编辑器窗口
-    /// <summary>
-    /// XHud 色卡库的采集 / 修改工具窗口。
-    /// <para/>
-    /// 提供色卡的名称编辑、颜色拾取、RGBA 预览、动画效果预览、
-    /// 添加到库 / 修改库源参数等功能。
-    /// </summary>
     public class Editor_XHud_LibrarySetTool_Color : EditorWindow
     {
-        #region 字段 - 序列化对象 / 属性
+        #region 字段 - 属性
         /// <summary>
         /// 用于序列化当前窗口的自定义字段。
         /// </summary>
-        private SerializedObject BaseObject;
+        private SerializedObject base_object;
+        #endregion
+
+        #region 字段 - 序列化属性
         /// <summary>
-        /// 本窗口用到的全部序列化属性引用。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里初始化。
-        /// 覆盖：色卡名称 / 原始名称 / 颜色值。
+        /// 色卡名称属性
         /// </summary>
-        private SerializedProperty
-            sp_ColorName,
-            sp_OriginColorName,
-            sp_Color;
+        private SerializedProperty sp_color_name;
+        /// <summary>
+        /// 原始色卡名称属性
+        /// </summary>
+        private SerializedProperty sp_origin_color_name;
+        /// <summary>
+        /// 颜色值属性
+        /// </summary>
+        private SerializedProperty sp_color;
         #endregion
 
         #region 字段 - 图标
@@ -116,41 +114,41 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 每帧预览动画的持续时间间隔（秒）。
         /// </summary>
-        private float PreviewInterval = 0.035f;
+        private float preview_interval = 0.035f;
         /// <summary>
         /// 当前预览动画数据的索引。
         /// </summary>
-        private int PreviewData_Index = 0;
+        private int preview_data_index = 0;
         /// <summary>
         /// 当前预览纹理（由 SequencePreviewer 的 Current 同步过来）。
         /// </summary>
-        private Texture2D PreviewTex = null;
+        private Texture2D preview_tex = null;
         [System.NonSerialized]
         /// <summary>
         /// 预览序列帧数据数组。
         /// </summary>
-        public XHud_LibrarySetTool_Color_PreviewData[] PreviewDatas;
+        public XHud_LibrarySetTool_Color_PreviewData[] preview_datas;
         /// <summary>
         /// 预览区背景色。
         /// </summary>
-        Color PreviewBgColor = Color.black;
+        Color preview_bg_color = Color.black;
         #endregion
 
         #region 字段 - 模式与源
         /// <summary>
         /// 库设置模式（添加到库 / 修改库源参数）。
         /// </summary>
-        public LibrarySetterMode LibrarySetterMode;
+        public LibrarySetterMode library_setter_mode;
         /// <summary>
         /// 源图元配色器。
         /// <para/>
         /// 用于从图元配色器中采集颜色或回写色卡信息。
         /// </summary>
-        public XHud_Module_Primitive_Painting SourcePainting;
+        public XHud_Module_Primitive_Painting source_painting;
         /// <summary>
         /// 目标色卡库。
         /// </summary>
-        private XHud_Library_Colors Target_Hud_ColorsLibrary;
+        private XHud_Library_Colors target_hud_colors_library;
         #endregion
 
         #region 字段 - 数据
@@ -158,58 +156,62 @@ namespace SevenStrikeModules.XHud.Editor
         /// 色卡名称。
         /// </summary>
         [SerializeField]
-        public string ColorName;
+        public string color_name;
         /// <summary>
         /// 日期时间标识。
         /// </summary>
         [SerializeField]
-        public string DateTimes;
+        public string date_times;
         /// <summary>
         /// 色卡颜色。
         /// </summary>
         [SerializeField]
-        public Color Color;
+        public Color color;
         /// <summary>
         /// 原始色卡名称。
         /// <para/>
         /// 修改库源参数模式下用于定位原始项。
         /// </summary>
         [SerializeField]
-        public string OriginColorName;
+        public string origin_color_name;
         /// <summary>
         /// 修改的库项索引。
         /// </summary>
-        public int ModifiedIndex;
+        public int modified_index;
         #endregion
 
         #region 字段 - 布局
         /// <summary>
         /// 按钮高度。
         /// </summary>
-        private float ButtonHeight = 25;
+        private float button_height = 25;
         /// <summary>
         /// 按钮间距。
         /// </summary>
-        private float ButtonDistance = 10;
+        private float button_distance = 10;
         /// <summary>
         /// 窗口标题文字。
         /// </summary>
-        public string Title;
+        public string title_primary;
+        /// <summary>
+        /// 窗口副标题。
+        /// </summary>
+        string title_sub;
         /// <summary>
         /// 是否使用预览背景。
         /// </summary>
         [SerializeField]
-        public bool UseBg = true;
+        public bool use_bg = true;
         /// <summary>
         /// 确认按钮文字。
         /// </summary>
         [SerializeField]
-        public string ButtonText_Ok;
+        public string button_text_ok;
         /// <summary>
         /// 取消按钮文字。
         /// </summary>
         [SerializeField]
-        public string ButtonText_Cancel;
+        public string button_text_cancel;
         /// <summary>
         /// 通用绘制矩形缓存。
         /// </summary>
@@ -239,20 +241,25 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseObject = new SerializedObject(this);
-            sp_ColorName = BaseObject.FindProperty("ColorName");
-            sp_Color = BaseObject.FindProperty("Color");
-            sp_OriginColorName = BaseObject.FindProperty("OriginColorName");
+            base_object = new SerializedObject(this);
 
+            #region 获取序列化属性
+            sp_color_name = base_object.FindProperty(nameof(color_name));
+            sp_color = base_object.FindProperty(nameof(color));
+            sp_origin_color_name = base_object.FindProperty(nameof(origin_color_name));
+            #endregion
+
+            #region 获取图片
             icon_libsetter_color = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/logo");
             leftarr_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/leftarr_p");
             leftarr_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/leftarr_r");
             rightarr_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/rightarr_p");
             rightarr_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/rightarr_r");
+            #endregion
 
-            ColorName = "颜色名称";
+            color_name = "颜色名称";
 
-            PreviewData_Index = XGUI.x_Editor_Data_Get_With_Int("xData_library_color_previewdata_index");
+            preview_data_index = XGUI.x_Editor_Data_Get_With_Int("xData_library_color_previewdata_index");
 
             // 新增：加载 + 启动预览
             LoadPreviewDatas();
@@ -277,7 +284,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnGUI()
         {
-            BaseObject.Update();
+            base_object.Update();
 
             Rect rect = new Rect(0, 0, position.width, position.height);
 
@@ -298,7 +305,7 @@ namespace SevenStrikeModules.XHud.Editor
             Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
             XGUI.gui_label(
                 rect: rect_title,
-                text: new GUIContent(Title),
+                text: new GUIContent(title_primary),
                 text_color: Color.white,
                 size: XGUIFontSize.L,
                 clipping: clipping_ellipsis,
@@ -317,7 +324,7 @@ namespace SevenStrikeModules.XHud.Editor
             Rect rect_subtitle = new Rect(rect.x + 18, rect.y + 45, rect.width, 30);
             XGUI.gui_label(
                 rect: rect_subtitle,
-                text: new GUIContent("以下为目标色卡的颜色参数与效果的预览"),
+                text: new GUIContent(title_sub),
                 text_color: Color.white * 0.7f,
                 size: XGUIFontSize.M,
                 clipping: clipping_ellipsis);
@@ -359,25 +366,25 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_group_end();
 
             draw_rect.Set(rect_preview.x + 10, rect_preview.y + 10, rect_preview.width - 20, rect_preview.height - 20);
-            if (UseBg)
+            if (use_bg)
             {
                 #region 预览背景
-                if (XGUI_Utilitys.ColorBrightness_LimiteGet(sp_Color.colorValue, 0.2f))
+                if (XGUI_Utilitys.ColorBrightness_LimiteGet(sp_color.colorValue, 0.2f))
                 {
-                    PreviewBgColor = Color.black;
+                    preview_bg_color = Color.black;
                 }
                 else
                 {
-                    PreviewBgColor = Color.white * 0.88f;
+                    preview_bg_color = Color.white * 0.88f;
                 }
-                XGUI.gui_box(draw_rect, PreviewBgColor);
+                XGUI.gui_box(draw_rect, preview_bg_color);
                 #endregion
             }
 
             #region 预览图片（尺寸300 x 265）
             Texture2D frame = XGUI.EditorPlayer_Sequence.IsPlaying
                 ? XGUI.EditorPlayer_Sequence.Current
-                : PreviewTex;
+                : preview_tex;
 
             draw_rect.Set(rect_preview.x + ((rect_preview.width / 2) - (frame ? frame.width / 2 : 0)), rect_preview.y + 10, 300, 265);
 
@@ -385,13 +392,13 @@ namespace SevenStrikeModules.XHud.Editor
                 rect: draw_rect,
                 icon: frame,
                 border: new RectOffset(0, 0, 0, 0),
-                color: sp_Color.colorValue);
+                color: sp_color.colorValue);
             #endregion
 
             #region 背景切换
             draw_rect.Set(rect_preview.x + ((rect_preview.width / 2) - 32), rect_preview.y + (rect_preview.height - 65), 64, 64);
             string bgstatu = "显示背景";
-            if (UseBg)
+            if (use_bg)
             {
                 bgstatu = "显示背景";
             }
@@ -415,7 +422,7 @@ namespace SevenStrikeModules.XHud.Editor
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0)))
             {
-                UseBg = !UseBg;
+                use_bg = !use_bg;
             }
             #endregion
 
@@ -430,21 +437,21 @@ namespace SevenStrikeModules.XHud.Editor
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0)))
             {
-                if (PreviewDatas == null || PreviewDatas.Length == 0)
+                if (preview_datas == null || preview_datas.Length == 0)
                 {
                     Debug.LogWarning("[ColorPreview] PreviewDatas 为空，无法翻页");
                     return;
                 }
 
-                if (PreviewData_Index <= 0)
+                if (preview_data_index <= 0)
                 {
-                    PreviewData_Index = PreviewDatas.Length - 1;
+                    preview_data_index = preview_datas.Length - 1;
                 }
                 else
                 {
-                    PreviewData_Index--;
+                    preview_data_index--;
                 }
-                XGUI.x_Editor_Data_Set_With_Int("xData_library_color_previewdata_index", PreviewData_Index);
+                XGUI.x_Editor_Data_Set_With_Int("xData_library_color_previewdata_index", preview_data_index);
                 PlayCurrentPreview();
             }
             #endregion
@@ -459,21 +466,21 @@ namespace SevenStrikeModules.XHud.Editor
                margin: new RectOffset(0, 0, 0, 0),
                padding: new RectOffset(0, 0, 0, 0)))
             {
-                if (PreviewDatas == null || PreviewDatas.Length == 0)
+                if (preview_datas == null || preview_datas.Length == 0)
                 {
                     Debug.LogWarning("[ColorPreview] PreviewDatas 为空，无法翻页");
                     return;
                 }
 
-                if (PreviewData_Index >= PreviewDatas.Length - 1)
+                if (preview_data_index >= preview_datas.Length - 1)
                 {
-                    PreviewData_Index = 0;
+                    preview_data_index = 0;
                 }
                 else
                 {
-                    PreviewData_Index++;
+                    preview_data_index++;
                 }
-                XGUI.x_Editor_Data_Set_With_Int("xData_library_color_previewdata_index", PreviewData_Index);
+                XGUI.x_Editor_Data_Set_With_Int("xData_library_color_previewdata_index", preview_data_index);
                 PlayCurrentPreview();
             }
             #endregion
@@ -496,14 +503,14 @@ namespace SevenStrikeModules.XHud.Editor
               padding: new RectOffset(10, 10, 15, 15));
 
             #region 入库名称
-            if (string.IsNullOrEmpty(sp_ColorName.stringValue))
+            if (string.IsNullOrEmpty(sp_color_name.stringValue))
             {
-                sp_ColorName.stringValue = "颜色名称";
+                sp_color_name.stringValue = "颜色名称";
             }
 
-            sp_ColorName.stringValue = XGUI.layout_inputfield(
+            sp_color_name.stringValue = XGUI.layout_inputfield(
                 title: "标识",
-                prop: sp_ColorName.stringValue,
+                prop: sp_color_name.stringValue,
                 text_wrap: false,
                 field_fontsize: XGUIFontSize.M,
                 field_text_offset: Vector2.zero,
@@ -518,19 +525,19 @@ namespace SevenStrikeModules.XHud.Editor
             //status_icon: "icon_field_status",
             //status_icon_color: Color.green);
 
-            sp_ColorName.serializedObject.ApplyModifiedProperties();
+            sp_color_name.serializedObject.ApplyModifiedProperties();
             #endregion
 
             #region 颜色
             XGUI.layout_colorfield(
-                prop: sp_Color,
+                prop: sp_color,
                 title: "颜色",
                 title_width: 80,
                 title_color: Color.white,
                 //icon: "icon_field_status",
                 //icon_color: Color.red,
                 state_title: "Hex：",
-                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_Color.colorValue)}",
+                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_color.colorValue)}",
                 state_value_color: Color.gray,
                 state_dialog_theme_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             #endregion
@@ -540,9 +547,9 @@ namespace SevenStrikeModules.XHud.Editor
                 color: XHud_Dashboard.themes_get_color(ThemeColorType.sepline),
                 margin: new RectOffset(15, 15, 15, 15));
 
-            string col_string = XGUI_Utilitys.Color_To_String(sp_Color.colorValue);
-            string col_hex = XGUI_Utilitys.Color_To_HexString(sp_Color.colorValue, true);
-            float[] col_array = XGUI_Utilitys.Color_To_FloatArray(sp_Color.colorValue);
+            string col_string = XGUI_Utilitys.Color_To_String(sp_color.colorValue);
+            string col_hex = XGUI_Utilitys.Color_To_HexString(sp_color.colorValue, true);
+            float[] col_array = XGUI_Utilitys.Color_To_FloatArray(sp_color.colorValue);
 
             #region 颜色字符串
             XGUI.layout_state_displayer_text(
@@ -620,12 +627,13 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
-            BaseObject.ApplyModifiedProperties();
+            base_object.ApplyModifiedProperties();
 
             XGUI.layout_space(10);
 
-            Buttons();
+            bottom_buttons();
 
+            #region 检测事件
             Event e = Event.current;
             // 检测点击事件
             if (e.type == EventType.MouseDown)
@@ -645,12 +653,12 @@ namespace SevenStrikeModules.XHud.Editor
                     Repaint(); // 重新绘制窗口
                 }
             }
-
             if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape)
             {
                 e.Use();
                 Close();
             }
+            #endregion
         }
         #endregion
 
@@ -669,7 +677,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void SendToLibrary()
         {
-            if (sp_ColorName.stringValue == "颜色名称")
+            if (sp_color_name.stringValue == "颜色名称")
             {
                 string res = XGUI.dialog(
                 type: XGUIDialogType.警告,
@@ -684,7 +692,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
 
             string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
-            bool exist = Target_Hud_ColorsLibrary.ColorsLibrary_IsExist(sp_ColorName.stringValue);
+            bool exist = target_hud_colors_library.ColorsLibrary_IsExist(sp_color_name.stringValue);
 
             if (exist)
             {
@@ -694,7 +702,7 @@ namespace SevenStrikeModules.XHud.Editor
                     type: XGUIDialogType.警告,
                     windowtitle: "XHud - 色卡库采集器消息",
                     title: "存在重复色卡名称",
-                    msg: $"名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡已经存在于色卡库中！",
+                    msg: $"名称为<color={colorhex}> {sp_color_name.stringValue} </color>的色卡已经存在于色卡库中！",
                     ok: "重命名",
                     PrimaryIndex: 0,
                     usemodal: true,
@@ -709,16 +717,16 @@ namespace SevenStrikeModules.XHud.Editor
             else
             {
                 xHud_LibraryArg_Color info = new xHud_LibraryArg_Color();
-                info.Name = sp_ColorName.stringValue;
-                info.Color = sp_Color.colorValue;
-                Target_Hud_ColorsLibrary.ColorsLibrary_AddColor(info);
+                info.name = sp_color_name.stringValue;
+                info.color = sp_color.colorValue;
+                target_hud_colors_library.ColorsLibrary_AddColor(info);
                 EditorApplication.delayCall += () =>
                 {
                     XGUI.dialog(
                          type: XGUIDialogType.确认,
                          windowtitle: "XHud - 色卡库采集器消息",
                          title: "已添加到色卡库",
-                         msg: $"已将名称为<color={colorhex}> {sp_ColorName.stringValue} </color>的色卡添加到色卡库中！",
+                         msg: $"已将名称为<color={colorhex}> {sp_color_name.stringValue} </color>的色卡添加到色卡库中！",
                          ok: "明白",
                          PrimaryIndex: 0,
                          usemodal: true,
@@ -742,20 +750,20 @@ namespace SevenStrikeModules.XHud.Editor
 
                     if (res == "查看色卡库")
                     {
-                        EditorUtility.OpenPropertyEditor(Target_Hud_ColorsLibrary);
+                        EditorUtility.OpenPropertyEditor(target_hud_colors_library);
                     }
                 };
             }
 
             EditorApplication.delayCall += () =>
             {
-                string indicator = SourcePainting.controller.GetIndicator();
+                string indicator = source_painting.controller.GetIndicator();
 
                 string res_saved_turnon = XGUI.dialog(
                     type: XGUIDialogType.帮助,
                     windowtitle: "XHud - 色卡库采集器消息",
                     title: "色卡库模式设定",
-                    msg: $"是否要将 {(string.IsNullOrEmpty(indicator) ? SourcePainting.transform.name : indicator)} 色卡模式开启？",
+                    msg: $"是否要将 {(string.IsNullOrEmpty(indicator) ? source_painting.transform.name : indicator)} 色卡模式开启？",
                     ok: "开启",
                     cancel: "暂不",
                     PrimaryIndex: 0,
@@ -764,9 +772,9 @@ namespace SevenStrikeModules.XHud.Editor
 
                 if (res_saved_turnon == "开启")
                 {
-                    SourcePainting.SyncLibraryColor = true;
-                    int id = Target_Hud_ColorsLibrary.ColorsLibrary_GetColorCount() - 1;
-                    SourcePainting.ColoriseName = Target_Hud_ColorsLibrary.ColorsLibrary_GetColorNames()[id];
+                    source_painting.sync_library_color = true;
+                    int id = target_hud_colors_library.ColorsLibrary_GetColorCount() - 1;
+                    source_painting.colorise_name = target_hud_colors_library.ColorsLibrary_GetColorNames()[id];
                 }
             };
 
@@ -781,9 +789,9 @@ namespace SevenStrikeModules.XHud.Editor
         {
             string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
             xHud_LibraryArg_Color info = new xHud_LibraryArg_Color();
-            info.Name = sp_ColorName.stringValue;
-            info.Color = sp_Color.colorValue;
-            Target_Hud_ColorsLibrary.ColorsLibrary_ReplaceColorAndName(ModifiedIndex, sp_OriginColorName.stringValue, sp_ColorName.stringValue, sp_Color.colorValue);
+            info.name = sp_color_name.stringValue;
+            info.color = sp_color.colorValue;
+            target_hud_colors_library.ColorsLibrary_ReplaceColorAndName(modified_index, sp_origin_color_name.stringValue, sp_color_name.stringValue, sp_color.colorValue);
 
             Close();
         }
@@ -826,10 +834,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void LoadPreviewDatas()
         {
-            if (PreviewDatas != null && PreviewDatas.Length > 0) return;
+            if (preview_datas != null && preview_datas.Length > 0) return;
 
             string path = $"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_color_setter/samples";
-            PreviewDatas = LoadAllAssetsAtPathWithPattern<XHud_LibrarySetTool_Color_PreviewData>(path, ".asset").ToArray();
+            preview_datas = LoadAllAssetsAtPathWithPattern<XHud_LibrarySetTool_Color_PreviewData>(path, ".asset").ToArray();
         }
 
         /// <summary>
@@ -840,39 +848,39 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void PlayCurrentPreview()
         {
-            if (PreviewDatas == null || PreviewDatas.Length == 0)
+            if (preview_datas == null || preview_datas.Length == 0)
             {
                 XGUI.EditorPlayer_Sequence.Stop();
-                PreviewTex = null;
+                preview_tex = null;
                 return;
             }
 
-            if (PreviewData_Index < 0 || PreviewData_Index >= PreviewDatas.Length)
+            if (preview_data_index < 0 || preview_data_index >= preview_datas.Length)
             {
-                PreviewData_Index = 0;
+                preview_data_index = 0;
             }
 
-            XHud_LibrarySetTool_Color_PreviewData data = PreviewDatas[PreviewData_Index];
-            if (data == null || data.Textures == null || data.Textures.Count == 0)
+            XHud_LibrarySetTool_Color_PreviewData data = preview_datas[preview_data_index];
+            if (data == null || data.textures == null || data.textures.Count == 0)
             {
                 XGUI.EditorPlayer_Sequence.Stop();
-                PreviewTex = null;
+                preview_tex = null;
                 return;
             }
 
             XGUI.EditorPlayer_Sequence.Play(
-                frames: data.Textures,
-                interval: PreviewInterval,
+                frames: data.textures,
+                interval: preview_interval,
                 loopCount: -1,
                 onFrame: () =>
                 {
-                    PreviewTex = XGUI.EditorPlayer_Sequence.Current;
+                    preview_tex = XGUI.EditorPlayer_Sequence.Current;
                     Repaint();
                 });
 
 
             // 立即给一次初值，避免下一帧前 PreviewTex 还是旧值
-            PreviewTex = XGUI.EditorPlayer_Sequence.Current;
+            preview_tex = XGUI.EditorPlayer_Sequence.Current;
         }
         #endregion
 
@@ -884,8 +892,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="cancel">取消按钮文字</param>
         public void SetButtonText(string ok, string cancel)
         {
-            ButtonText_Cancel = cancel;
-            ButtonText_Ok = ok;
+            button_text_cancel = cancel;
+            button_text_ok = ok;
         }
         /// <summary>
         /// 设置模版基础信息（针对从库源修改更新使用）。
@@ -894,11 +902,11 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="color">色卡颜色</param>
         public void SetInfo(string name, Color color)
         {
-            sp_ColorName.stringValue = name;
-            sp_Color.colorValue = color;
+            sp_color_name.stringValue = name;
+            sp_color.colorValue = color;
 
-            sp_ColorName.serializedObject.ApplyModifiedProperties();
-            sp_Color.serializedObject.ApplyModifiedProperties();
+            sp_color_name.serializedObject.ApplyModifiedProperties();
+            sp_color.serializedObject.ApplyModifiedProperties();
         }
         /// <summary>
         /// 设置标题。
@@ -906,7 +914,16 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="title">标题文字</param>
         public void SetTitle(string title)
         {
-            Title = title;
+            this.title_primary = title;
+            Repaint();
+        }
+        /// <summary>
+        /// 设置副标题。
+        /// </summary>
+        /// <param name="title">标题文字</param>
+        public void SetSubTitle(string title)
+        {
+            this.title_sub = title;
             Repaint();
         }
         /// <summary>
@@ -915,7 +932,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="name">原始色卡名称</param>
         public void Set_OriginColorName(string name)
         {
-            OriginColorName = name;
+            origin_color_name = name;
         }
         /// <summary>
         /// 设置为添加到库模式还是修改库源参数模式。
@@ -923,7 +940,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="mode">库设置模式</param>
         public void SetLibrarySetterMode(LibrarySetterMode mode)
         {
-            LibrarySetterMode = mode;
+            library_setter_mode = mode;
         }
         /// <summary>
         /// 设置源图元配色器。
@@ -931,7 +948,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="painting">源配色器</param>
         public void SetPainting(XHud_Module_Primitive_Painting painting)
         {
-            SourcePainting = painting;
+            source_painting = painting;
         }
         /// <summary>
         /// 设置目标色卡库。
@@ -939,7 +956,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="lib">目标色卡库</param>
         public void SetTarget_Hud_ColorsLibrary(XHud_Library_Colors lib)
         {
-            Target_Hud_ColorsLibrary = lib;
+            target_hud_colors_library = lib;
         }
         #endregion
 
@@ -947,9 +964,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 绘制底部按钮区（取消 / 确认）。
         /// <para/>
-        /// 确认按钮根据 <see cref="LibrarySetterMode"/> 决定调用 <see cref="SendToLibrary"/> 或 <see cref="UpdateToLibrary"/>。
+        /// 确认按钮根据 <see cref="library_setter_mode"/> 决定调用 <see cref="SendToLibrary"/> 或 <see cref="UpdateToLibrary"/>。
         /// </summary>
-        private void Buttons()
+        private void bottom_buttons()
         {
             #region 按钮
             XGUI.layout_group_start(
@@ -960,7 +977,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_flexspace();
 
             if (XGUI.layout_button(
-                text: ButtonText_Cancel,
+                text: button_text_cancel,
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
@@ -975,16 +992,16 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0),
                 layout_min_width: 0,
                 layout_width: 200,
-                height: ButtonHeight,
+                height: button_height,
                 button_text_font: XGUI.GetFont("xg-medium")))
             {
                 Close();
             }
 
-            XGUI.layout_space(ButtonDistance);
+            XGUI.layout_space(button_distance);
 
             if (XGUI.layout_button(
-                text: ButtonText_Ok,
+                text: button_text_ok,
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
@@ -999,14 +1016,14 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0),
                 layout_min_width: 0,
                 layout_width: 200,
-                height: ButtonHeight,
+                height: button_height,
                 button_text_font: XGUI.GetFont("xg-medium")))
             {
-                if (LibrarySetterMode == LibrarySetterMode.添加到库)
+                if (library_setter_mode == LibrarySetterMode.添加到库)
                 {
                     SendToLibrary();
                 }
-                else if (LibrarySetterMode == LibrarySetterMode.修改库源参数)
+                else if (library_setter_mode == LibrarySetterMode.修改库源参数)
                 {
                     UpdateToLibrary();
                 }
@@ -1123,5 +1140,4 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
     }
-    #endregion
 }

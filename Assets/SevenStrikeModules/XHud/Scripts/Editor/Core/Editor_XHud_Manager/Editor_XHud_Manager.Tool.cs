@@ -132,15 +132,15 @@ namespace SevenStrikeModules.XHud.Editor
                     obj_cc.layer = LayerMask.NameToLayer("XHud");
                     obj_cc.name = "PerformanceMonitor";
                     RectTransform rect = obj_cc.AddComponent<RectTransform>();
-                    rect.SetParent(BaseScript.HudCanvas_Screen.transform);
+                    rect.SetParent(base_script.cv_screen.transform);
                     rect.anchoredPosition3D = Vector3.zero;
                     rect.sizeDelta = new Vector2(240, 500);
                     rect.localEulerAngles = Vector3.zero;
                     rect.localScale = Vector3.one;
                     XHud_PerformanceMonitor monitor = obj_cc.AddComponent<XHud_PerformanceMonitor>();
-                    monitor.updateInterval = 0.2f;
-                    monitor.RectMargin = 20;
-                    monitor.ScaleRatio = 1f;
+                    monitor.update_interval = 0.2f;
+                    monitor.rect_margin = 20;
+                    monitor.scale_ratio = 1f;
                     #endregion
 
                     #region  创建标题
@@ -212,8 +212,8 @@ namespace SevenStrikeModules.XHud.Editor
                     rect_header_title.anchoredPosition3D = Vector3.zero;
                     rect_header_title.localEulerAngles = Vector3.zero;
                     rect_header_title.localScale = Vector3.one;
-                    txt_header_title.TextStyleInfo.tmp_Set_FontAsset(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Tmp/sx_bold SDF.asset"));
-                    txt_header_title.TextStyleInfo.gen_RayCastSet(false);
+                    txt_header_title.text_style_info.tmp_Set_FontAsset(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Tmp/sx_bold SDF.asset"));
+                    txt_header_title.text_style_info.gen_RayCastSet(false);
                     txt_header_title.raycastTarget = false;
                     txt_header_title.color = Color.black;
                     txt_header_title.fontSize = 16;
@@ -222,16 +222,16 @@ namespace SevenStrikeModules.XHud.Editor
                     txt_header_title.overflowMode = TextOverflowModes.Truncate;
                     txt_header_title.fontStyle = FontStyles.Bold;
                     txt_header_title.margin = new Vector4(75, 0, 15, 0);
-                    txt_header_title.TextStyleInfo.tmp_Set_FontColor(Color.black);
-                    txt_header_title.TextStyleInfo.tmp_Set_FontSize(16);
-                    txt_header_title.TextStyleInfo.tmp_Set_Alignment(TmpContentAnchor.左);
-                    txt_header_title.TextStyleInfo.tmp_Set_WordWrappingMode(TextWrappingModes.NoWrap);
-                    txt_header_title.TextStyleInfo.tmp_Set_Overflow(TextOverflowModes.Truncate);
-                    txt_header_title.TextStyleInfo.tmp_Set_FontStyle(FontStyles.Bold);
-                    txt_header_title.TextStyleInfo.tmp_Set_MarginSet(new Vector4(75, 0, 15, 0));
+                    txt_header_title.text_style_info.tmp_Set_FontColor(Color.black);
+                    txt_header_title.text_style_info.tmp_Set_FontSize(16);
+                    txt_header_title.text_style_info.tmp_Set_Alignment(TmpContentAnchor.左);
+                    txt_header_title.text_style_info.tmp_Set_WordWrappingMode(TextWrappingModes.NoWrap);
+                    txt_header_title.text_style_info.tmp_Set_Overflow(TextOverflowModes.Truncate);
+                    txt_header_title.text_style_info.tmp_Set_FontStyle(FontStyles.Bold);
+                    txt_header_title.text_style_info.tmp_Set_MarginSet(new Vector4(75, 0, 15, 0));
                     txt_header_title.tmp_Set_Content("DataMonitor");
                     #endregion
-                    monitor.Title = txt_header_title;
+                    monitor.title = txt_header_title;
                     #region  创建列表
                     GameObject obj_Header_List = new GameObject();
                     obj_Header_List.layer = LayerMask.NameToLayer("XHud");
@@ -251,7 +251,7 @@ namespace SevenStrikeModules.XHud.Editor
                     rect_header_scroll.vertical = true;
                     rect_header_scroll.horizontal = false;
                     #endregion
-                    monitor.ScrollRect = rect_header_scroll;
+                    monitor.scroll_rect = rect_header_scroll;
                     #region  创建列表可视区域
                     GameObject obj_Header_ListViewport = new GameObject();
                     obj_Header_ListViewport.layer = LayerMask.NameToLayer("XHud");
@@ -341,9 +341,9 @@ namespace SevenStrikeModules.XHud.Editor
                         rect_node_title.offsetMax = new Vector2(-25, -10); // Right:50px
                         rect_node_title.localEulerAngles = Vector3.zero;
                         rect_node_title.localScale = Vector3.one;
-                        txt_node_title.TextStyleInfo.tmp_Set_FontAsset(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Tmp/sx_bold SDF.asset"));
-                        txt_node_title.TextStyleInfo.gen_RayCastSet(false);
-                        txt_node_title.TextStyleInfo.gen_Set_MaskableSet(true);
+                        txt_node_title.text_style_info.tmp_Set_FontAsset(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Tmp/sx_bold SDF.asset"));
+                        txt_node_title.text_style_info.gen_RayCastSet(false);
+                        txt_node_title.text_style_info.gen_Set_MaskableSet(true);
                         txt_node_title.maskable = true;
                         txt_node_title.raycastTarget = false;
                         txt_node_title.color = monitornode.col_title;
@@ -353,13 +353,13 @@ namespace SevenStrikeModules.XHud.Editor
                         txt_node_title.overflowMode = TextOverflowModes.Ellipsis;
                         txt_node_title.fontStyle = FontStyles.Normal;
                         txt_node_title.margin = new Vector4(0, 0, 0, 0);
-                        txt_node_title.TextStyleInfo.tmp_Set_FontColor(monitornode.col_title);
-                        txt_node_title.TextStyleInfo.tmp_Set_FontSize(14);
-                        txt_node_title.TextStyleInfo.tmp_Set_Alignment(TmpContentAnchor.左);
-                        txt_node_title.TextStyleInfo.tmp_Set_WordWrappingMode(TextWrappingModes.NoWrap);
-                        txt_node_title.TextStyleInfo.tmp_Set_Overflow(TextOverflowModes.Ellipsis);
-                        txt_node_title.TextStyleInfo.tmp_Set_FontStyle(FontStyles.Normal);
-                        txt_node_title.TextStyleInfo.tmp_Set_MarginSet(Vector4.zero);
+                        txt_node_title.text_style_info.tmp_Set_FontColor(monitornode.col_title);
+                        txt_node_title.text_style_info.tmp_Set_FontSize(14);
+                        txt_node_title.text_style_info.tmp_Set_Alignment(TmpContentAnchor.左);
+                        txt_node_title.text_style_info.tmp_Set_WordWrappingMode(TextWrappingModes.NoWrap);
+                        txt_node_title.text_style_info.tmp_Set_Overflow(TextOverflowModes.Ellipsis);
+                        txt_node_title.text_style_info.tmp_Set_FontStyle(FontStyles.Normal);
+                        txt_node_title.text_style_info.tmp_Set_MarginSet(Vector4.zero);
                         txt_node_title.tmp_Set_Content(node_names[i]);
                         #endregion
 
@@ -378,9 +378,9 @@ namespace SevenStrikeModules.XHud.Editor
                         rect_node_value.offsetMax = new Vector2(-20, -30); // Right:50px
                         rect_node_value.localEulerAngles = Vector3.zero;
                         rect_node_value.localScale = Vector3.one;
-                        txt_node_value.TextStyleInfo.tmp_Set_FontAsset(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Tmp/sx_regular SDF.asset"));
-                        txt_node_value.TextStyleInfo.gen_RayCastSet(false);
-                        txt_node_value.TextStyleInfo.gen_Set_MaskableSet(true);
+                        txt_node_value.text_style_info.tmp_Set_FontAsset(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>($"{XHud_Dashboard.Get_Path_XHUD_FONTS_Path()}Tmp/sx_regular SDF.asset"));
+                        txt_node_value.text_style_info.gen_RayCastSet(false);
+                        txt_node_value.text_style_info.gen_Set_MaskableSet(true);
                         txt_node_value.maskable = true;
                         txt_node_value.raycastTarget = false;
                         txt_node_value.color = monitornode.col_value;
@@ -390,13 +390,13 @@ namespace SevenStrikeModules.XHud.Editor
                         txt_node_value.overflowMode = TextOverflowModes.Ellipsis;
                         txt_node_value.fontStyle = FontStyles.Normal;
                         txt_node_value.margin = new Vector4(0, 0, 0, 0);
-                        txt_node_value.TextStyleInfo.tmp_Set_FontColor(monitornode.col_value);
-                        txt_node_value.TextStyleInfo.tmp_Set_FontSize(13);
-                        txt_node_value.TextStyleInfo.tmp_Set_Alignment(TmpContentAnchor.右);
-                        txt_node_value.TextStyleInfo.tmp_Set_WordWrappingMode(TextWrappingModes.NoWrap);
-                        txt_node_value.TextStyleInfo.tmp_Set_Overflow(TextOverflowModes.Ellipsis);
-                        txt_node_value.TextStyleInfo.tmp_Set_FontStyle(FontStyles.Normal);
-                        txt_node_value.TextStyleInfo.tmp_Set_MarginSet(Vector4.zero);
+                        txt_node_value.text_style_info.tmp_Set_FontColor(monitornode.col_value);
+                        txt_node_value.text_style_info.tmp_Set_FontSize(13);
+                        txt_node_value.text_style_info.tmp_Set_Alignment(TmpContentAnchor.右);
+                        txt_node_value.text_style_info.tmp_Set_WordWrappingMode(TextWrappingModes.NoWrap);
+                        txt_node_value.text_style_info.tmp_Set_Overflow(TextOverflowModes.Ellipsis);
+                        txt_node_value.text_style_info.tmp_Set_FontStyle(FontStyles.Normal);
+                        txt_node_value.text_style_info.tmp_Set_MarginSet(Vector4.zero);
                         txt_node_value.tmp_Set_Content("-");
                         #endregion
 
@@ -503,7 +503,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             EditorApplication.delayCall += () =>
             {
-                if (IsInitialized.boolValue)
+                if (initialized.boolValue)
                 {
                     string repeat = XGUI.dialog(
                        type: XGUIDialogType.警告,
@@ -542,18 +542,18 @@ namespace SevenStrikeModules.XHud.Editor
                             #region 重建Manager的结构
 
                             #region  清空并重置所有组件
-                            Anchors_Layout_Screen.ClearArray();
-                            Anchors_Layout_Screen.serializedObject.ApplyModifiedProperties();
+                            sp_cv_anchors_layout_screen.ClearArray();
+                            sp_cv_anchors_layout_screen.serializedObject.ApplyModifiedProperties();
 
-                            foreach (Transform child in BaseScript.transform)
+                            foreach (Transform child in base_script.transform)
                             {
                                 DestroyImmediate(child.gameObject, true);
                             }
 
-                            GameObject[] objs = new GameObject[BaseScript.transform.childCount];
+                            GameObject[] objs = new GameObject[base_script.transform.childCount];
                             for (int i = 0; i < objs.Length; i++)
                             {
-                                objs[i] = BaseScript.transform.GetChild(i).gameObject;
+                                objs[i] = base_script.transform.GetChild(i).gameObject;
                                 objs[i].layer = LayerMask.NameToLayer("XHud");
                             }
                             for (int i = 0; i < objs.Length; i++)
@@ -561,14 +561,14 @@ namespace SevenStrikeModules.XHud.Editor
                                 DestroyImmediate(objs[i], true);
                             }
 
-                            BaseScript.Anchors_Layout_Screen = null;
-                            BaseScript.Safe_FrameLine = null;
-                            BaseScript.Safe_Seperater = null;
-                            BaseScript.Safe_CenterMarks = null;
+                            base_script.cv_anchors_layout_screen = null;
+                            base_script.sf_framelines = null;
+                            base_script.sf_seperaters = null;
+                            base_script.sf_center_marks = null;
 
-                            BaseScript.gameObject.name = "XHud";
-                            BaseScript.Safe_Frame = null;
-                            BaseScript.XTweenManager = null;
+                            base_script.gameObject.name = "XHud";
+                            base_script.sf_safeframe = null;
+                            base_script.xtween_manager = null;
                             #endregion
 
                             #region Cam
@@ -590,12 +590,12 @@ namespace SevenStrikeModules.XHud.Editor
                                     toOverlayData.SetRenderer(i);
                                 }
                             }
-                            cam.orthographic = CameraOthograpicMode.boolValue;
+                            cam.orthographic = sp_camera_othograpic_mode.boolValue;
                             cam.clearFlags = CameraClearFlags.SolidColor;
-                            cam.transform.SetParent(BaseScript.transform);
+                            cam.transform.SetParent(base_script.transform);
                             cam.transform.localPosition = Vector3.zero;
-                            HudCamera.objectReferenceValue = cam;
-                            HudCamera.serializedObject.ApplyModifiedProperties();
+                            sp_camera_ui.objectReferenceValue = cam;
+                            sp_camera_ui.serializedObject.ApplyModifiedProperties();
                             #endregion
 
                             #region Canvas-Screen
@@ -605,14 +605,14 @@ namespace SevenStrikeModules.XHud.Editor
                             cav.renderMode = RenderMode.ScreenSpaceCamera;
                             cav.worldCamera = cam;
                             obj_cav.name = "Screen";
-                            obj_cav.transform.SetParent(BaseScript.transform);
+                            obj_cav.transform.SetParent(base_script.transform);
                             obj_cav.transform.localPosition = Vector3.zero;
                             CanvasScaler scaler = obj_cav.AddComponent<CanvasScaler>();
                             obj_cav.AddComponent<GraphicRaycaster>();
                             cav.renderMode = RenderMode.ScreenSpaceCamera;
-                            CanvasScalerModeIndex.intValue = 1;
-                            CanvasScalerModeIndex.serializedObject.ApplyModifiedProperties();
-                            switch (CanvasScalerModeIndex.intValue)
+                            sp_cv_scaler_mode_index.intValue = 1;
+                            sp_cv_scaler_mode_index.serializedObject.ApplyModifiedProperties();
+                            switch (sp_cv_scaler_mode_index.intValue)
                             {
                                 case 0:
                                     scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
@@ -624,15 +624,15 @@ namespace SevenStrikeModules.XHud.Editor
                                     scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPhysicalSize;
                                     break;
                             }
-                            HudCanvasScaler.objectReferenceValue = scaler;
-                            cav.pixelPerfect = UsePerfectPixelUpdate.boolValue;
-                            HudCanvas_Screen.objectReferenceValue = cav;
-                            HudCanvas_Screen.serializedObject.ApplyModifiedProperties();
+                            sp_cv_scaler.objectReferenceValue = scaler;
+                            cav.pixelPerfect = sp_cv_use_perfect_pixel_update.boolValue;
+                            sp_cv_screen.objectReferenceValue = cav;
+                            sp_cv_screen.serializedObject.ApplyModifiedProperties();
 
-                            HudCanvasAnchorIndex.intValue = 1;
-                            HudCanvasAnchorIndex.serializedObject.ApplyModifiedProperties();
-                            HudCanvasAnchor.enumValueIndex = (int)CanvasCameraAttachment.CameraFar;
-                            HudCanvasAnchor.serializedObject.ApplyModifiedProperties();
+                            sp_cv_hudcanvas_anchor_index.intValue = 1;
+                            sp_cv_hudcanvas_anchor_index.serializedObject.ApplyModifiedProperties();
+                            sp_cv_hudcanvas_anchor.enumValueIndex = (int)CanvasCameraAttachment.CameraFar;
+                            sp_cv_hudcanvas_anchor.serializedObject.ApplyModifiedProperties();
                             #endregion
 
                             #region Anchors
@@ -640,8 +640,8 @@ namespace SevenStrikeModules.XHud.Editor
                             obj_Anchors.layer = LayerMask.NameToLayer("XHud");
                             UnityEngine.RectTransform Anchors = obj_Anchors.AddComponent<UnityEngine.RectTransform>();
                             CanvasGroup cavgroup = obj_Anchors.AddComponent<CanvasGroup>();
-                            HudCanvasGroup_Screen.objectReferenceValue = cavgroup;
-                            HudCanvasGroup_Screen.serializedObject.ApplyModifiedProperties();
+                            sp_op_hud_canvas_group_screen.objectReferenceValue = cavgroup;
+                            sp_op_hud_canvas_group_screen.serializedObject.ApplyModifiedProperties();
                             cavgroup.alpha = 1;
                             Anchors.name = "Anchors";
                             Anchors.SetParent(cav.transform);
@@ -651,8 +651,8 @@ namespace SevenStrikeModules.XHud.Editor
                             Anchors.anchorMax = new Vector2(1, 1);
                             Anchors.sizeDelta = new Vector2(0, 0);
 
-                            HudCanvas_ScreenAnchor.objectReferenceValue = Anchors;
-                            HudCanvas_ScreenAnchor.serializedObject.ApplyModifiedProperties();
+                            sp_cv_hudcanvas_screen_anchor.objectReferenceValue = Anchors;
+                            sp_cv_hudcanvas_screen_anchor.serializedObject.ApplyModifiedProperties();
 
                             for (int i = 0; i < 11; i++)
                             {
@@ -766,8 +766,8 @@ namespace SevenStrikeModules.XHud.Editor
                             m_Mask.anchorMin = new Vector2(0, 0);
                             m_Mask.anchorMax = new Vector2(1, 1);
                             m_Mask.sizeDelta = new Vector2(0, 0);
-                            Mask.objectReferenceValue = Mask_img;
-                            Mask.serializedObject.ApplyModifiedProperties();
+                            sp_mk_mask.objectReferenceValue = Mask_img;
+                            sp_mk_mask.serializedObject.ApplyModifiedProperties();
                             #endregion
 
                             #region EventSystem
@@ -776,65 +776,65 @@ namespace SevenStrikeModules.XHud.Editor
                             EventSystem esys = obj_esys.AddComponent<EventSystem>();
                             InputSystemUIInputModule slm = obj_esys.AddComponent<InputSystemUIInputModule>();
                             obj_esys.name = "Event";
-                            obj_esys.transform.SetParent(BaseScript.transform);
+                            obj_esys.transform.SetParent(base_script.transform);
                             obj_esys.transform.localPosition = Vector3.zero;
-                            Hud_EventSystem.objectReferenceValue = esys;
-                            Hud_InputSystemUIInputModule.objectReferenceValue = slm;
-                            Hud_EventSystem.serializedObject.ApplyModifiedProperties();
-                            Hud_InputSystemUIInputModule.serializedObject.ApplyModifiedProperties();
+                            sp_hud_event_system.objectReferenceValue = esys;
+                            sp_hud_input_system_ui_input_module.objectReferenceValue = slm;
+                            sp_hud_event_system.serializedObject.ApplyModifiedProperties();
+                            sp_hud_input_system_ui_input_module.serializedObject.ApplyModifiedProperties();
                             #endregion
 
                             #region 获取所有锚点结构 - 布局
-                            if (Anchors_Layout_Screen != null && HudCanvas_ScreenAnchor != null)
+                            if (sp_cv_anchors_layout_screen != null && sp_cv_hudcanvas_screen_anchor != null)
                             {
-                                Transform anchorRoot = HudCanvas_ScreenAnchor.objectReferenceValue as Transform;
+                                Transform anchorRoot = sp_cv_hudcanvas_screen_anchor.objectReferenceValue as Transform;
                                 for (int i = 0; i < anchorRoot.childCount; i++)
                                 {
                                     if (anchorRoot.GetChild(i).name.Contains("Anchor"))
                                     {
                                         UnityEngine.RectTransform obj = anchorRoot.GetChild(i).GetComponent<UnityEngine.RectTransform>();
-                                        Anchors_Layout_Screen.InsertArrayElementAtIndex(Anchors_Layout_Screen.arraySize);
-                                        Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Anchor").objectReferenceValue = obj;
-                                        Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Name").stringValue = obj.name;
+                                        sp_cv_anchors_layout_screen.InsertArrayElementAtIndex(sp_cv_anchors_layout_screen.arraySize);
+                                        sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Anchor").objectReferenceValue = obj;
+                                        sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Name").stringValue = obj.name;
                                         string Type = anchorRoot.GetChild(i).name;
                                         switch (Type)
                                         {
                                             case "B":
-                                                Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 0;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 0;
                                                 break;
                                             case "U":
-                                                Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 1;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 1;
                                                 break;
                                             case "D":
-                                                Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 2;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 2;
                                                 break;
                                             case "L":
-                                                Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 3;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 3;
                                                 break;
                                             case "R":
-                                                Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 4;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 4;
                                                 break;
                                             case "C":
-                                                Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 5;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 5;
                                                 break;
                                             case "L_U":
-                                                Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 6;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 6;
                                                 break;
                                             case "L_D":
-                                                Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 7;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 7;
                                                 break;
                                             case "R_U":
-                                                Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 8;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 8;
                                                 break;
                                             case "R_D":
-                                                Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 9;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 9;
                                                 break;
                                             case "T":
-                                                Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 10;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 10;
                                                 break;
                                         }
 
-                                        Anchors_Layout_Screen.serializedObject.ApplyModifiedProperties();
+                                        sp_cv_anchors_layout_screen.serializedObject.ApplyModifiedProperties();
                                     }
                                     else
                                         continue;
@@ -844,29 +844,29 @@ namespace SevenStrikeModules.XHud.Editor
                             #endregion
 
                             #region 比例参考图形信息初始化
-                            sp_PhysicsScreenSize.vector2Value = new Vector2(59.6f, 33.7f);
-                            sp_PhysicsScreenSize.serializedObject.ApplyModifiedProperties();
+                            sp_hmr_physics_screen_size.vector2Value = new Vector2(59.6f, 33.7f);
+                            sp_hmr_physics_screen_size.serializedObject.ApplyModifiedProperties();
 
-                            SerializedProperty sp_res_full_sprite = sp_Res_Full.FindPropertyRelative("sprite");
-                            SerializedProperty sp_res_full_size = sp_Res_Full.FindPropertyRelative("size");
+                            SerializedProperty sp_res_full_sprite = sp_hmr_res_full.FindPropertyRelative("sprite");
+                            SerializedProperty sp_res_full_size = sp_hmr_res_full.FindPropertyRelative("size");
                             sp_res_full_sprite.objectReferenceValue = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_manager/HumanRefer/Body_Solid.png");
                             sp_res_full_size.vector2Value = new Vector2(47, 172);
-                            sp_Res_Full.serializedObject.ApplyModifiedProperties();
+                            sp_hmr_res_full.serializedObject.ApplyModifiedProperties();
 
-                            SerializedProperty sp_res_part_sprite = sp_Res_Part.FindPropertyRelative("sprite");
-                            SerializedProperty sp_res_part_size = sp_Res_Part.FindPropertyRelative("size");
+                            SerializedProperty sp_res_part_sprite = sp_hmr_res_part.FindPropertyRelative("sprite");
+                            SerializedProperty sp_res_part_size = sp_hmr_res_part.FindPropertyRelative("size");
                             sp_res_part_sprite.objectReferenceValue = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_manager/HumanRefer/Head_Solid.png");
                             sp_res_part_size.vector2Value = new Vector2(19, 30);
-                            sp_Res_Part.serializedObject.ApplyModifiedProperties();
+                            sp_hmr_res_part.serializedObject.ApplyModifiedProperties();
 
-                            sp_Reference_Image_Color.colorValue = new Color(0.6f, 0.6f, 0.6f, 0.05f);
-                            sp_Reference_Image_Color.serializedObject.ApplyModifiedProperties();
+                            sp_hmr_reference_image_color.colorValue = new Color(0.6f, 0.6f, 0.6f, 0.05f);
+                            sp_hmr_reference_image_color.serializedObject.ApplyModifiedProperties();
                             #endregion
 
                             #region 创建XTween动画管理器
                             XTween_Manager xTween_Manager = FindFirstObjectByType<XTween_Manager>();
                             if (xTween_Manager != null)
-                                BaseScript.XTweenManager = xTween_Manager;
+                                base_script.xtween_manager = xTween_Manager;
                             else
                             {
                                 GameObject xtween_obj = new GameObject();
@@ -877,21 +877,21 @@ namespace SevenStrikeModules.XHud.Editor
                                 xtween_obj.transform.localEulerAngles = Vector3.zero;
                                 xtween_obj.transform.localScale = Vector3.one;
                                 xtween_obj.transform.SetAsLastSibling();
-                                BaseScript.XTweenManager = xtween_obj.AddComponent<XTween_Manager>();
+                                base_script.xtween_manager = xtween_obj.AddComponent<XTween_Manager>();
                             }
                             #endregion
 
                             #region 初始化动效
                             // 元素生成动效
-                            ResetMotionParams("c");
+                            base_script.global_motion_create_args.Reset();
                             // 元素回收动效
-                            ResetMotionParams("r");
+                            base_script.global_motion_recycle_args.Reset();
                             #endregion
 
                             #endregion
 
-                            IsInitialized.boolValue = true;
-                            IsInitialized.serializedObject.ApplyModifiedProperties();
+                            initialized.boolValue = true;
+                            initialized.serializedObject.ApplyModifiedProperties();
                             return;
                         }
                     });

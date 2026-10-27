@@ -326,23 +326,23 @@ namespace SevenStrikeModules.XHud
 
             Element.element_RMS_Mode_Enabled(enabled);
             if (!string.IsNullOrEmpty(rmsName))
-                Element.RMS_Name = rmsName;
+                Element.rms_name = rmsName;
 
-            if (enabled && XHud_Manager.Instance.RMS_Enabled)
+            if (enabled && XHud_Manager.instance.rms_enabled)
             {
                 Anchor_Layout anchor_struct = null;
 
                 // 如果RMS名称为空，则使用当前的RMS指定的布局锚点
                 if (string.IsNullOrEmpty(rmsName))
-                    anchor_struct = XHud_Manager.Instance.hm_ScreenElement_Get_RMS_Anchored(Element, XHud_Manager.Instance.RMS_CurrentSolution);
+                    anchor_struct = XHud_Manager.instance.hm_ScreenElement_Get_RMS_Anchored(Element, XHud_Manager.instance.rms_current_solution);
                 else
-                    anchor_struct = XHud_Manager.Instance.hm_ScreenElement_Get_RMS_Anchored(Element, rmsName);
+                    anchor_struct = XHud_Manager.instance.hm_ScreenElement_Get_RMS_Anchored(Element, rmsName);
 
                 // 如果RMS名称为空，那么就参考 XHud 管理器当前选中的方案作为元素的RMS方案
                 if (string.IsNullOrEmpty(rmsName))
-                    XHud_Manager.Instance.hm_ScreenElement_Initialize_By_RMS(Element, XHud_Manager.Instance.RMS_CurrentSolution);
+                    XHud_Manager.instance.hm_ScreenElement_Initialize_By_RMS(Element, XHud_Manager.instance.rms_current_solution);
                 else
-                    XHud_Manager.Instance.hm_ScreenElement_Initialize_By_RMS(Element, rmsName);
+                    XHud_Manager.instance.hm_ScreenElement_Initialize_By_RMS(Element, rmsName);
             }
 
             if (AutoIn)
@@ -358,17 +358,17 @@ namespace SevenStrikeModules.XHud
             Anchor_Layout anchor_struct = null;
 
             // 获取的匹配的锚点结构参数
-            anchor_struct = XHud_Manager.Instance.hm_ScreenElement_Matched_AnchoredType(anchor);
+            anchor_struct = XHud_Manager.instance.hm_ScreenElement_Matched_AnchoredType(anchor);
             // 初始化元素
-            XHud_Manager.Instance.hm_ScreenElement_Initialize_By_MotionArgs(Element, anchor_struct.Type);
+            XHud_Manager.instance.hm_ScreenElement_Initialize_By_MotionArgs(Element, anchor_struct.Type);
             // 标记为已创建
-            Element.CreateState = XHudElementCreateState.Created;
+            Element.create_state = XHudElementCreateState.Created;
             // 设置缩放归一化
             Element.element_ScaleSet(Vector3.one);
             // 尺寸归一化
             Element.element_SizeSet(Vector2.one * 100);
             // 将元素放置到目标屏幕锚点物体下，并设置标识名称和标记名称
-            XHudElementNode node = XHud_Manager.Instance.hm_ScreenElement_Send_To_AnchoredList(anchor_struct, Element, string.IsNullOrEmpty(Element.Indicator) ? Element.gameObject.name : Element.Indicator, anchor_indicator);
+            XHudElementNode node = XHud_Manager.instance.hm_ScreenElement_Send_To_AnchoredList(anchor_struct, Element, string.IsNullOrEmpty(Element.indicator) ? Element.gameObject.name : Element.indicator, anchor_indicator);
 
             // 自动播放入场状态标记
             if (AutoIn)
@@ -383,17 +383,17 @@ namespace SevenStrikeModules.XHud
             Anchor_Layout anchor_struct = null;
 
             // 获取的匹配的锚点结构参数
-            anchor_struct = XHud_Manager.Instance.hm_ScreenElement_Matched_AnchoredType(anchor);
+            anchor_struct = XHud_Manager.instance.hm_ScreenElement_Matched_AnchoredType(anchor);
             // 初始化元素
-            XHud_Manager.Instance.hm_ScreenElement_Initialize_By_MotionArgs(Element, anchor_struct.Type);
+            XHud_Manager.instance.hm_ScreenElement_Initialize_By_MotionArgs(Element, anchor_struct.Type);
             // 标记为已创建
-            Element.CreateState = XHudElementCreateState.Created;
+            Element.create_state = XHudElementCreateState.Created;
             // 设置缩放归一化
             Element.element_ScaleSet(scale);
             // 尺寸归一化
             Element.element_SizeSet(size);
             // 将元素放置到目标屏幕锚点物体下
-            XHudElementNode node = XHud_Manager.Instance.hm_ScreenElement_Send_To_AnchoredList(anchor_struct, Element, string.IsNullOrEmpty(Element.Indicator) ? Element.gameObject.name : Element.Indicator, anchor_indicator);
+            XHudElementNode node = XHud_Manager.instance.hm_ScreenElement_Send_To_AnchoredList(anchor_struct, Element, string.IsNullOrEmpty(Element.indicator) ? Element.gameObject.name : Element.indicator, anchor_indicator);
 
             // 自动播放入场状态标记
             if (AutoIn)
@@ -407,15 +407,15 @@ namespace SevenStrikeModules.XHud
         public XHudElementNode SetAnchored_World(string indicator, bool AutoIn = false, Motion_Creator creator = null)
         {
             // 初始化元素
-            XHud_Manager.Instance.hm_WorldElement_Initialize_For_World(Element);
+            XHud_Manager.instance.hm_WorldElement_Initialize_For_World(Element);
             // 标记为已创建
-            Element.CreateState = XHudElementCreateState.Created;
+            Element.create_state = XHudElementCreateState.Created;
             // 设置缩放归一化
             Element.element_ScaleSet(Vector3.one);
             // 尺寸归一化
             Element.element_SizeSet(Vector2.one * 100);
             // 将元素放置到目标屏幕锚点物体下
-            XHudElementNode node = XHud_Manager.Instance.hm_WorldElement_Send_To_AnchoredList(Element, string.IsNullOrEmpty(Element.Indicator) ? Element.gameObject.name : Element.Indicator, indicator);
+            XHudElementNode node = XHud_Manager.instance.hm_WorldElement_Send_To_AnchoredList(Element, string.IsNullOrEmpty(Element.indicator) ? Element.gameObject.name : Element.indicator, indicator);
 
             // 自动播放入场状态标记
             if (AutoIn)
@@ -429,15 +429,15 @@ namespace SevenStrikeModules.XHud
         public XHudElementNode SetAnchored_World(string indicator, Vector2 size, Vector3 scale, bool AutoIn = false, Motion_Creator creator = null)
         {
             // 初始化元素
-            XHud_Manager.Instance.hm_WorldElement_Initialize_For_World(Element);
+            XHud_Manager.instance.hm_WorldElement_Initialize_For_World(Element);
             // 标记为已创建
-            Element.CreateState = XHudElementCreateState.Created;
+            Element.create_state = XHudElementCreateState.Created;
             // 设置缩放归一化
             Element.element_ScaleSet(scale);
             // 尺寸归一化
             Element.element_SizeSet(size);
             // 将元素放置到目标屏幕锚点物体下
-            XHudElementNode node = XHud_Manager.Instance.hm_WorldElement_Send_To_AnchoredList(Element, string.IsNullOrEmpty(Element.Indicator) ? Element.gameObject.name : Element.Indicator, indicator);
+            XHudElementNode node = XHud_Manager.instance.hm_WorldElement_Send_To_AnchoredList(Element, string.IsNullOrEmpty(Element.indicator) ? Element.gameObject.name : Element.indicator, indicator);
 
             // 自动播放入场状态标记
             if (AutoIn)
@@ -528,7 +528,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public XHudElementNode Element_In(Motion_Creator args = null)
         {
-            Element.Element_In(args ?? XHud_Manager.Instance.CreateArgs_Default);
+            Element.Element_In(args ?? XHud_Manager.instance.global_motion_create_args);
             return this;
         }
         /// <summary>
@@ -536,7 +536,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public XHudElementNode Element_Out(Motion_Recycler args = null)
         {
-            Element.Element_Out(args ?? XHud_Manager.Instance.RecycleArgs_Default);
+            Element.Element_Out(args ?? XHud_Manager.instance.global_motion_recycle_args);
             return this;
         }
 
@@ -561,17 +561,16 @@ namespace SevenStrikeModules.XHud
 
     public partial class XHud_Manager : MonoBehaviour
     {
-        [Tooltip("此元素库用于配置存放场景中需要调用的元素预制体")]
         /// <summary>
         /// 元素库 - 配置化（Editor期间）
         /// </summary>
-        [SerializeField] public List<XHud_Library_Element> Hud_ElementLibrarys = new List<XHud_Library_Element>();
-        [Tooltip("此参数用于元素再生成时的默认动效效果")]
+        [SerializeField]
+        public List<XHud_Library_Element> ele_library_elements = new List<XHud_Library_Element>();
         /// <summary>
         /// 默认参数 - 元素生成
         /// </summary>
         [SerializeField]
-        public Motion_Creator CreateArgs_Default = new Motion_Creator
+        public Motion_Creator global_motion_create_args = new Motion_Creator
         {
             // 创建HudManager 的时候初始化动效参数
             anchor = XHudAnchor.中心,
@@ -604,12 +603,11 @@ namespace SevenStrikeModules.XHud
                 Ease = EaseMode.InOutCubic,
             }
         };
-        [Tooltip("此参数用于元素再回收时的默认动效效果")]
         /// <summary>
         /// 默认参数 - 元素回收
         /// </summary>
         [SerializeField]
-        public Motion_Recycler RecycleArgs_Default = new Motion_Recycler
+        public Motion_Recycler global_motion_recycle_args = new Motion_Recycler
         {
             // 创建HudManager 的时候初始化动效参数
             MotionAnimateEndState = MotionAnimateEndState.以_透明度为准,
@@ -645,13 +643,18 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 用于编辑器内元素生成模板下拉菜单的选择索引名称
         /// </summary>
-        [SerializeField] public string Crc_Lib_Name;
+        [SerializeField]
+        public string ele_global_motion_create_library_index_name;
         /// <summary>
         /// 用于编辑器内元素回收模板下拉菜单的选择索引名称
         /// </summary>
-        [SerializeField] public string Rec_Lib_Name;
-        // 元素防止器的开关标记字段
-        [SerializeField] public bool ElementVisualPlacer = false;
+        [SerializeField]
+        public string ele_global_motion_recycle_library_index_name;
+        /// <summary>
+        /// 元素屏幕拖放放置器的开关标记字段
+        /// </summary>
+        [SerializeField]
+        public bool ele_visual_placer = false;
 
         #region 元素库相关操作
         /// <summary>
@@ -660,7 +663,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public XHud_Library_Element[] hm_ElementLibrary_GetArray()
         {
-            return Hud_ElementLibrarys.ToArray();
+            return ele_library_elements.ToArray();
         }
         /// <summary>
         /// 获取所有元素库
@@ -668,7 +671,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public List<XHud_Library_Element> hm_ElementLibrary_GetList()
         {
-            return Hud_ElementLibrarys;
+            return ele_library_elements;
         }
         /// <summary>
         /// 获取所有元素库
@@ -676,10 +679,10 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public string[] hm_ElementLibrary_GetAllLibraryNames()
         {
-            string[] names = new string[Hud_ElementLibrarys.Count];
+            string[] names = new string[ele_library_elements.Count];
             for (int i = 0; i < names.Length; i++)
             {
-                names[i] = Hud_ElementLibrarys[i].LibraryName;
+                names[i] = ele_library_elements[i].library_name;
             }
             return names;
         }
@@ -696,7 +699,7 @@ namespace SevenStrikeModules.XHud
             {
                 if (name == lib_names[i])
                 {
-                    lib = Hud_ElementLibrarys[i];
+                    lib = ele_library_elements[i];
                 }
             }
             return lib;
@@ -708,8 +711,8 @@ namespace SevenStrikeModules.XHud
         public XHud_Library_Element hm_ElementLibrary_GetFirstLibrary()
         {
             XHud_Library_Element res_lib = null;
-            if (Hud_ElementLibrarys != null && Hud_ElementLibrarys.Count > 0)
-                res_lib = Hud_ElementLibrarys[0];
+            if (ele_library_elements != null && ele_library_elements.Count > 0)
+                res_lib = ele_library_elements[0];
             return res_lib;
         }
         /// <summary>
@@ -750,21 +753,21 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void hm_ElementLibrary_UpdateStates()
         {
-            if (Hud_ElementLibrarys == null || Hud_ElementLibrarys.Count <= 0)
+            if (ele_library_elements == null || ele_library_elements.Count <= 0)
                 return;
 
             #region 更新元素是否正在在被使用的状态
-            for (int i = 0; i < Hud_ElementLibrarys.Count; i++)
+            for (int i = 0; i < ele_library_elements.Count; i++)
             {
-                XHud_Library_Element lib = Hud_ElementLibrarys[i];
-                for (int s = 0; s < lib.ElementLibrary.Count; s++)
+                XHud_Library_Element lib = ele_library_elements[i];
+                for (int s = 0; s < lib.library_elements.Count; s++)
                 {
-                    XHud_LibraryArg_Element_Item item = lib.ElementLibrary[s];
-                    if (item.PreloadElements != null && item.PreloadElements.Count > 0)
+                    XHud_LibraryArg_Element_Item item = lib.library_elements[s];
+                    if (item.preload_elements != null && item.preload_elements.Count > 0)
                     {
-                        for (int v = 0; v < item.PreloadElements.Count; v++)
+                        for (int v = 0; v < item.preload_elements.Count; v++)
                         {
-                            item.PreloadElements[v].UpdateState();
+                            item.preload_elements[v].UpdateState();
                         }
                         item.GetUsedCount();
                         item.GetRecycledCount();
@@ -815,7 +818,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void hm_ElementLibrary_Initialize()
         {
-            if (Hud_ElementLibrarys.Count <= 0)
+            if (ele_library_elements.Count <= 0)
                 return;
             ///---创建元素库根目录
             GameObject PoolRoot = new GameObject();
@@ -828,49 +831,49 @@ namespace SevenStrikeModules.XHud
 
             hm_ElementLibrary_Clean();
 
-            for (int v = 0; v < Hud_ElementLibrarys.Count; v++)
+            for (int v = 0; v < ele_library_elements.Count; v++)
             {
-                XHud_Library_Element Lib = Hud_ElementLibrarys[v];
+                XHud_Library_Element Lib = ele_library_elements[v];
 
                 ///---创建库容器
                 GameObject lib_obj = new GameObject();
-                lib_obj.name = "Library -> ( " + Lib.LibraryName + " )";
+                lib_obj.name = "Library -> ( " + Lib.library_name + " )";
                 lib_obj.layer = LayerMask.NameToLayer("XHud");
                 lib_obj.transform.SetParent(PoolRoot.transform);
                 lib_obj.transform.localPosition = Vector3.zero;
                 lib_obj.transform.localEulerAngles = Vector3.zero;
                 lib_obj.transform.localScale = Vector3.one;
 
-                Lib.LibraryRoot = lib_obj.transform;
+                Lib.library_root = lib_obj.transform;
 
-                for (int i = 0; i < Lib.ElementLibrary.Count; i++)
+                for (int i = 0; i < Lib.library_elements.Count; i++)
                 {
-                    XHud_LibraryArg_Element_Item item = Lib.ElementLibrary[i];
+                    XHud_LibraryArg_Element_Item item = Lib.library_elements[i];
 
-                    if (item.Target == null)
+                    if (item.target == null)
                     {
-                        XGUI_Utilitys.Console("XHud - 管理器通知", $"库元素 \" {item.Name} \" 的目标预制体 \"已丢失\"，预生成元素过程将  \"跳过\"  此元素！", XGUIMsgState.错误);
+                        XGUI_Utilitys.Console("XHud - 管理器通知", $"库元素 \" {item.name} \" 的目标预制体 \"已丢失\"，预生成元素过程将  \"跳过\"  此元素！", XGUIMsgState.错误);
                         continue;
                     }
 
                     GameObject root = new GameObject();
-                    root.name = "Category - " + item.Target.name;
+                    root.name = "Category - " + item.target.name;
                     root.layer = LayerMask.NameToLayer("XHud");
                     root.transform.SetParent(lib_obj.transform);
                     root.transform.localPosition = Vector3.zero;
                     root.transform.localEulerAngles = Vector3.zero;
                     root.transform.localScale = Vector3.one;
-                    item.Root = root.transform;
+                    item.root = root.transform;
 
-                    for (int s = 0; s < item.InitializeCount; s++)
+                    for (int s = 0; s < item.initialize_count; s++)
                     {
-                        XHud_Module_Element element = Instantiate(item.Target, Vector3.zero, Quaternion.identity, item.Root);
+                        XHud_Module_Element element = Instantiate(item.target, Vector3.zero, Quaternion.identity, item.root);
                         ///---保存原始名称
-                        element.OriginalName = element.transform.name.Substring(0, element.transform.name.Length - 7);
+                        element.original_name = element.transform.name.Substring(0, element.transform.name.Length - 7);
                         ///---改名
-                        element.transform.name = element.OriginalName + "_Clone_" + s;
+                        element.transform.name = element.original_name + "_Clone_" + s;
                         ///---赋值源库名
-                        element.OriginPoolName = Lib.LibraryName;
+                        element.origin_poolname = Lib.library_name;
 
                         element.GroupFold(
                             param: true,
@@ -883,36 +886,35 @@ namespace SevenStrikeModules.XHud
                             component: true);
 
                         XHud_LibraryArg_Element_Info pw = new XHud_LibraryArg_Element_Info();
-                        pw.HudElement = element;
-                        pw.HudElement.CreateState = XHudElementCreateState.Recycled;
-                        pw.HudElement.element_Reset();
-                        pw.HudElement.gameObject.SetActive(false);
-                        item.PreloadElements.Add(pw);
+                        pw.element = element;
+                        pw.element.create_state = XHudElementCreateState.Recycled;
+                        pw.element.element_Reset();
+                        pw.element.gameObject.SetActive(false);
+                        item.preload_elements.Add(pw);
 
                     }
                 }
             }
-            if (Act_ElementsLib_Instantiated != null)
-                Act_ElementsLib_Instantiated();
+            if (act_elements_library_instantiated != null)
+                act_elements_library_instantiated();
         }
-
         /// <summary>
         /// 回收一个元素到元素库
         /// </summary>
         /// <param name="Element">目标元素</param>
         public void hm_ElementLibrary_Despawn(XHud_Module_Element Element)
         {
-            for (int i = 0; i < Hud_ElementLibrarys.Count; i++)
+            for (int i = 0; i < ele_library_elements.Count; i++)
             {
-                XHud_Library_Element lib = Hud_ElementLibrarys[i];
+                XHud_Library_Element lib = ele_library_elements[i];
 
-                for (int m = 0; m < lib.ElementLibrary.Count; m++)
+                for (int m = 0; m < lib.library_elements.Count; m++)
                 {
-                    XHud_LibraryArg_Element_Item item = lib.ElementLibrary[m];
+                    XHud_LibraryArg_Element_Item item = lib.library_elements[m];
 
-                    if (Element.OriginalName == item.Name)
+                    if (Element.original_name == item.name)
                     {
-                        Element.transform.SetParent(item.Root);
+                        Element.transform.SetParent(item.root);
                         Element.element_Reset();
                         Element.gameObject.SetActive(false);
                     }
@@ -925,9 +927,9 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public void hm_ElementLibrary_DespawnAll()
         {
-            for (int i = 0; i < Hud_ElementLibrarys.Count; i++)
+            for (int i = 0; i < ele_library_elements.Count; i++)
             {
-                Hud_ElementLibrarys[i].ElementLibrary_RecycleAll();
+                ele_library_elements[i].ElementLibrary_RecycleAll();
             }
         }
         /// <summary>
@@ -936,7 +938,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public int hm_ElementLibrary_GetCount()
         {
-            return Hud_ElementLibrarys.Count;
+            return ele_library_elements.Count;
         }
         /// <summary>
         /// 判断元素库是否存在有效
@@ -963,23 +965,23 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_ElementLibrary_Clean()
         {
-            for (int v = 0; v < Hud_ElementLibrarys.Count; v++)
+            for (int v = 0; v < ele_library_elements.Count; v++)
             {
-                XHud_Library_Element lib = Hud_ElementLibrarys[v];
+                XHud_Library_Element lib = ele_library_elements[v];
                 #region 清理预生成元素及其使用信息痕迹，主要是为了弥补ScriptableObject在运行时也能被赋值
-                lib.LibraryRoot = null;
-                for (int i = 0; i < lib.ElementLibrary.Count; i++)
+                lib.library_root = null;
+                for (int i = 0; i < lib.library_elements.Count; i++)
                 {
-                    lib.ElementLibrary[i].Root = null;
-                    lib.ElementLibrary[i].UsedCount = 0;
-                    lib.ElementLibrary[i].RecycledCount = 0;
-                    lib.ElementLibrary[i].NextIndex = 0;
-                    lib.ElementLibrary[i].Root = null;
+                    lib.library_elements[i].root = null;
+                    lib.library_elements[i].used_count = 0;
+                    lib.library_elements[i].recycled_count = 0;
+                    lib.library_elements[i].next_index = 0;
+                    lib.library_elements[i].root = null;
 
-                    if (lib.ElementLibrary[i].PreloadElements == null)
-                        lib.ElementLibrary[i].PreloadElements = new List<XHud_LibraryArg_Element_Info>();
+                    if (lib.library_elements[i].preload_elements == null)
+                        lib.library_elements[i].preload_elements = new List<XHud_LibraryArg_Element_Info>();
 
-                    lib.ElementLibrary[i].PreloadElements.Clear();
+                    lib.library_elements[i].preload_elements.Clear();
                 }
                 #endregion
             }
@@ -994,37 +996,37 @@ namespace SevenStrikeModules.XHud
         {
             XHud_Module_Element element = null;
 
-            for (int i = 0; i < Hud_ElementLibrarys.Count; i++)
+            for (int i = 0; i < ele_library_elements.Count; i++)
             {
                 // 如果指定了库名且不匹配，跳过
-                if (LibraryName != null && LibraryName != Hud_ElementLibrarys[i].LibraryName)
+                if (LibraryName != null && LibraryName != ele_library_elements[i].library_name)
                     continue;
 
-                XHud_Library_Element lib = Hud_ElementLibrarys[i];
+                XHud_Library_Element lib = ele_library_elements[i];
 
-                for (int k = 0; k < lib.ElementLibrary.Count; k++)
+                for (int k = 0; k < lib.library_elements.Count; k++)
                 {
-                    XHud_LibraryArg_Element_Item item = lib.ElementLibrary[k];
+                    XHud_LibraryArg_Element_Item item = lib.library_elements[k];
 
-                    if (item.Target.name == ElementName)
+                    if (item.target.name == ElementName)
                     {
-                        int index = item.NextIndex;
+                        int index = item.next_index;
 
-                        if (item.PreloadElements != null && item.PreloadElements.Count > 0)
+                        if (item.preload_elements != null && item.preload_elements.Count > 0)
                         {
-                            if (item.PreloadElements[index] != null)
+                            if (item.preload_elements[index] != null)
                             {
-                                element = item.PreloadElements[index].HudElement;
+                                element = item.preload_elements[index].element;
                                 element.gameObject.SetActive(true);
                                 // 更新索引
-                                if (item.NextIndex >= item.InitializeCount - 1)
-                                    item.NextIndex = 0;
+                                if (item.next_index >= item.initialize_count - 1)
+                                    item.next_index = 0;
                                 else
-                                    item.NextIndex++;
+                                    item.next_index++;
                             }
 
-                            if (Act_SpawnElement != null)
-                                Act_SpawnElement(element);
+                            if (act_spawn_element != null)
+                                act_spawn_element(element);
                         }
                         return element; // 找到后直接返回
                     }
@@ -1058,12 +1060,12 @@ namespace SevenStrikeModules.XHud
         public XHud_LibraryArg_Element_Item hm_ElementLibrary_CreateItem(XHud_Module_Element Element, int InitialCount)
         {
             XHud_LibraryArg_Element_Item item = new XHud_LibraryArg_Element_Item();
-            item.Target = Element;
-            item.Name = string.IsNullOrEmpty(Element.transform.name) ? "NewElement" : Element.transform.name;
-            item.InitializeCount = InitialCount;
+            item.target = Element;
+            item.name = string.IsNullOrEmpty(Element.transform.name) ? "NewElement" : Element.transform.name;
+            item.initialize_count = InitialCount;
 
-            if (item.PreloadElements == null)
-                item.PreloadElements = new List<XHud_LibraryArg_Element_Info>();
+            if (item.preload_elements == null)
+                item.preload_elements = new List<XHud_LibraryArg_Element_Info>();
 
             return item;
         }
@@ -1077,13 +1079,13 @@ namespace SevenStrikeModules.XHud
         {
             XHud_Library_Element lib = ScriptableObject.CreateInstance<XHud_Library_Element>();
             lib.name = "RunTimeLib";
-            lib.LibraryName = LibraryName;
+            lib.library_name = LibraryName;
             for (int i = 0; i < Items.Length; i++)
             {
-                if (lib.ElementLibrary == null)
-                    lib.ElementLibrary = new List<XHud_LibraryArg_Element_Item>();
+                if (lib.library_elements == null)
+                    lib.library_elements = new List<XHud_LibraryArg_Element_Item>();
 
-                lib.ElementLibrary.Add(Items[i]);
+                lib.library_elements.Add(Items[i]);
             }
             return lib;
         }
@@ -1110,50 +1112,50 @@ namespace SevenStrikeModules.XHud
 
             ///---创建库容器
             GameObject lib_obj = new GameObject();
-            lib_obj.name = "Category -> ( " + Library.LibraryName + " )";
+            lib_obj.name = "Category -> ( " + Library.library_name + " )";
             lib_obj.transform.SetParent(PoolRoot.transform);
             lib_obj.transform.localPosition = Vector3.zero;
             lib_obj.transform.localEulerAngles = Vector3.zero;
             lib_obj.transform.localScale = Vector3.one;
-            Library.LibraryRoot = lib_obj.transform;
+            Library.library_root = lib_obj.transform;
 
-            List<XHud_LibraryArg_Element_Item> items = Library.ElementLibrary;
+            List<XHud_LibraryArg_Element_Item> items = Library.library_elements;
 
             for (int i = 0; i < items.Count; i++)
             {
                 GameObject root = new GameObject();
-                root.name = "Case - " + items[i].Target.name;
+                root.name = "Case - " + items[i].target.name;
                 root.transform.SetParent(lib_obj.transform);
                 root.transform.localPosition = Vector3.zero;
                 root.transform.localEulerAngles = Vector3.zero;
                 root.transform.localScale = Vector3.one;
-                items[i].Root = root.transform;
+                items[i].root = root.transform;
 
-                for (int s = 0; s < items[i].InitializeCount; s++)
+                for (int s = 0; s < items[i].initialize_count; s++)
                 {
-                    XHud_Module_Element element = Instantiate(items[i].Target, Vector3.zero, Quaternion.identity, items[i].Root);
+                    XHud_Module_Element element = Instantiate(items[i].target, Vector3.zero, Quaternion.identity, items[i].root);
                     ///---保存原始名称
-                    element.OriginalName = element.transform.name.Substring(0, element.transform.name.Length - 7);
+                    element.original_name = element.transform.name.Substring(0, element.transform.name.Length - 7);
                     ///---改名
-                    element.transform.name = element.OriginalName + "_Clone_" + s;
+                    element.transform.name = element.original_name + "_Clone_" + s;
 
                     XHud_LibraryArg_Element_Info pw = new XHud_LibraryArg_Element_Info();
-                    pw.HudElement = element;
-                    pw.HudElement.CreateState = XHudElementCreateState.Recycled;
-                    pw.HudElement.element_Reset();
-                    pw.HudElement.gameObject.SetActive(false);
+                    pw.element = element;
+                    pw.element.create_state = XHudElementCreateState.Recycled;
+                    pw.element.element_Reset();
+                    pw.element.gameObject.SetActive(false);
 
-                    if (items[i].PreloadElements == null)
-                        items[i].PreloadElements = new List<XHud_LibraryArg_Element_Info>();
+                    if (items[i].preload_elements == null)
+                        items[i].preload_elements = new List<XHud_LibraryArg_Element_Info>();
 
-                    items[i].PreloadElements.Add(pw);
+                    items[i].preload_elements.Add(pw);
                 }
             }
 
-            Hud_ElementLibrarys.Add(Library);
+            ele_library_elements.Add(Library);
 
-            if (Act_ElementsLib_Instantiated != null)
-                Act_ElementsLib_Instantiated();
+            if (act_elements_library_instantiated != null)
+                act_elements_library_instantiated();
         }
         /// <summary>
         /// 删除已经初始化的元素库
@@ -1161,14 +1163,14 @@ namespace SevenStrikeModules.XHud
         /// <param name="LibName">目标元素库</param>
         public void hm_ElementLibrary_Destroyed(string LibName)
         {
-            for (int i = 0; i < Hud_ElementLibrarys.Count; i++)
+            for (int i = 0; i < ele_library_elements.Count; i++)
             {
-                XHud_Library_Element lib = Hud_ElementLibrarys[i];
-                if (lib.LibraryName == LibName)
+                XHud_Library_Element lib = ele_library_elements[i];
+                if (lib.library_name == LibName)
                 {
                     lib.ElementLibrary_RecycleAll();
-                    DestroyImmediate(lib.LibraryRoot.gameObject, true);
-                    Hud_ElementLibrarys.RemoveAt(i);
+                    DestroyImmediate(lib.library_root.gameObject, true);
+                    ele_library_elements.RemoveAt(i);
                 }
             }
         }
@@ -1183,7 +1185,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="anchor">锚点父物体</param>
         public void hm_Element_SetParentAnchored(XHud_Module_Element element, RectTransform anchor)
         {
-            element.RectTransform.SetParent(anchor);
+            element.rect_transform.SetParent(anchor);
         }
         /// <summary>
         /// 检测是否存在已生成的Hud元素
@@ -1192,9 +1194,9 @@ namespace SevenStrikeModules.XHud
         public bool hm_HasElements()
         {
             bool state = false;
-            for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
             {
-                if (Anchors_Layout_Screen[i].HudElementInfos != null && Anchors_Layout_Screen[i].HudElementInfos.Count > 0)
+                if (cv_anchors_layout_screen[i].HudElementInfos != null && cv_anchors_layout_screen[i].HudElementInfos.Count > 0)
                 {
                     state = true;
                 }
@@ -1240,15 +1242,15 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_Element_UpdateAnimating()
         {
-            for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
             {
-                if (Anchors_Layout_Screen[i].HudElementInfos != null)
+                if (cv_anchors_layout_screen[i].HudElementInfos != null)
                 {
-                    for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
+                    for (int s = 0; s < cv_anchors_layout_screen[i].HudElementInfos.Count; s++)
                     {
-                        if (Anchors_Layout_Screen[i].HudElementInfos[s] != null)
+                        if (cv_anchors_layout_screen[i].HudElementInfos[s] != null)
                         {
-                            Anchors_Layout_Screen[i].HudElementInfos[s].IsAnimating = Anchors_Layout_Screen[i].HudElementInfos[s].Element.Animating;
+                            cv_anchors_layout_screen[i].HudElementInfos[s].IsAnimating = cv_anchors_layout_screen[i].HudElementInfos[s].Element.tweening;
                         }
                     }
                 }
@@ -1263,41 +1265,41 @@ namespace SevenStrikeModules.XHud
             XHudElementsStatistic statistic = new XHudElementsStatistic();
 
             //统计屏幕UI组件数
-            for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
             {
-                Anchor_Layout lay = Anchors_Layout_Screen[i];
+                Anchor_Layout lay = cv_anchors_layout_screen[i];
                 for (int s = 0; s < lay.HudElementInfos.Count; s++)
                 {
                     statistic.count_elements++;
 
                     XHudElementNode node = lay.HudElementInfos[s];
-                    statistic.count_primitives += node.Element.PrimitiveControllerNodes.Count;
-                    statistic.count_sounders += node.Element.SounderNodes.Count;
-                    statistic.count_buttons += node.Element.ButtonNodes.Count;
-                    statistic.count_options += node.Element.OptionNodes.Count;
-                    statistic.count_texts += node.Element.TextNodes.Count;
-                    statistic.count_tmptexts += node.Element.TmpTextNodes.Count;
-                    statistic.count_sliders += node.Element.SliderNodes.Count;
-                    statistic.count_progresses += node.Element.ProgressNodes.Count;
-                    statistic.count_toggles += node.Element.ToggleNodes.Count;
+                    statistic.count_primitives += node.Element.primitive_controller_nodes.Count;
+                    statistic.count_sounders += node.Element.sounder_nodes.Count;
+                    statistic.count_buttons += node.Element.button_nodes.Count;
+                    statistic.count_options += node.Element.option_nodes.Count;
+                    statistic.count_texts += node.Element.text_nodes.Count;
+                    statistic.count_tmptexts += node.Element.tmptext_nodes.Count;
+                    statistic.count_sliders += node.Element.slider_nodes.Count;
+                    statistic.count_progresses += node.Element.progress_nodes.Count;
+                    statistic.count_toggles += node.Element.toggle_nodes.Count;
                 }
             }
 
             //统计世界UI组件数
-            for (int i = 0; i < Anchors_Layout_World.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_world.Count; i++)
             {
                 statistic.count_elements++;
 
-                XHudElementNode node = Anchors_Layout_World[i];
-                statistic.count_primitives += node.Element.PrimitiveControllerNodes.Count;
-                statistic.count_sounders += node.Element.SounderNodes.Count;
-                statistic.count_buttons += node.Element.ButtonNodes.Count;
-                statistic.count_options += node.Element.OptionNodes.Count;
-                statistic.count_texts += node.Element.TextNodes.Count;
-                statistic.count_tmptexts += node.Element.TmpTextNodes.Count;
-                statistic.count_sliders += node.Element.SliderNodes.Count;
-                statistic.count_progresses += node.Element.ProgressNodes.Count;
-                statistic.count_toggles += node.Element.ToggleNodes.Count;
+                XHudElementNode node = cv_anchors_layout_world[i];
+                statistic.count_primitives += node.Element.primitive_controller_nodes.Count;
+                statistic.count_sounders += node.Element.sounder_nodes.Count;
+                statistic.count_buttons += node.Element.button_nodes.Count;
+                statistic.count_options += node.Element.option_nodes.Count;
+                statistic.count_texts += node.Element.text_nodes.Count;
+                statistic.count_tmptexts += node.Element.tmptext_nodes.Count;
+                statistic.count_sliders += node.Element.slider_nodes.Count;
+                statistic.count_progresses += node.Element.progress_nodes.Count;
+                statistic.count_toggles += node.Element.toggle_nodes.Count;
             }
 
             return statistic;
@@ -1313,43 +1315,43 @@ namespace SevenStrikeModules.XHud
             if (space == XHudSpace.屏幕空间)
             {
                 //统计屏幕UI组件数
-                for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+                for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
                 {
-                    Anchor_Layout lay = Anchors_Layout_Screen[i];
+                    Anchor_Layout lay = cv_anchors_layout_screen[i];
                     for (int s = 0; s < lay.HudElementInfos.Count; s++)
                     {
                         statistic.count_elements++;
 
                         XHudElementNode node = lay.HudElementInfos[s];
-                        statistic.count_primitives += node.Element.PrimitiveControllerNodes.Count;
-                        statistic.count_sounders += node.Element.SounderNodes.Count;
-                        statistic.count_buttons += node.Element.ButtonNodes.Count;
-                        statistic.count_options += node.Element.OptionNodes.Count;
-                        statistic.count_texts += node.Element.TextNodes.Count;
-                        statistic.count_tmptexts += node.Element.TmpTextNodes.Count;
-                        statistic.count_sliders += node.Element.SliderNodes.Count;
-                        statistic.count_progresses += node.Element.ProgressNodes.Count;
-                        statistic.count_toggles += node.Element.ToggleNodes.Count;
+                        statistic.count_primitives += node.Element.primitive_controller_nodes.Count;
+                        statistic.count_sounders += node.Element.sounder_nodes.Count;
+                        statistic.count_buttons += node.Element.button_nodes.Count;
+                        statistic.count_options += node.Element.option_nodes.Count;
+                        statistic.count_texts += node.Element.text_nodes.Count;
+                        statistic.count_tmptexts += node.Element.tmptext_nodes.Count;
+                        statistic.count_sliders += node.Element.slider_nodes.Count;
+                        statistic.count_progresses += node.Element.progress_nodes.Count;
+                        statistic.count_toggles += node.Element.toggle_nodes.Count;
                     }
                 }
             }
             else
             {
                 //统计世界UI组件数
-                for (int i = 0; i < Anchors_Layout_World.Count; i++)
+                for (int i = 0; i < cv_anchors_layout_world.Count; i++)
                 {
                     statistic.count_elements++;
 
-                    XHudElementNode node = Anchors_Layout_World[i];
-                    statistic.count_primitives += node.Element.PrimitiveControllerNodes.Count;
-                    statistic.count_sounders += node.Element.SounderNodes.Count;
-                    statistic.count_buttons += node.Element.ButtonNodes.Count;
-                    statistic.count_options += node.Element.OptionNodes.Count;
-                    statistic.count_texts += node.Element.TextNodes.Count;
-                    statistic.count_tmptexts += node.Element.TmpTextNodes.Count;
-                    statistic.count_sliders += node.Element.SliderNodes.Count;
-                    statistic.count_progresses += node.Element.ProgressNodes.Count;
-                    statistic.count_toggles += node.Element.ToggleNodes.Count;
+                    XHudElementNode node = cv_anchors_layout_world[i];
+                    statistic.count_primitives += node.Element.primitive_controller_nodes.Count;
+                    statistic.count_sounders += node.Element.sounder_nodes.Count;
+                    statistic.count_buttons += node.Element.button_nodes.Count;
+                    statistic.count_options += node.Element.option_nodes.Count;
+                    statistic.count_texts += node.Element.text_nodes.Count;
+                    statistic.count_tmptexts += node.Element.tmptext_nodes.Count;
+                    statistic.count_sliders += node.Element.slider_nodes.Count;
+                    statistic.count_progresses += node.Element.progress_nodes.Count;
+                    statistic.count_toggles += node.Element.toggle_nodes.Count;
                 }
             }
             return statistic;
@@ -1367,11 +1369,11 @@ namespace SevenStrikeModules.XHud
         public RectTransform hm_ScreenElement_GetAnchored_RectTransform(XHudAnchor anchor)
         {
             RectTransform rect = null;
-            for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
             {
-                if (Anchors_Layout_Screen[i].Type == anchor)
+                if (cv_anchors_layout_screen[i].Type == anchor)
                 {
-                    rect = Anchors_Layout_Screen[i].Anchor;
+                    rect = cv_anchors_layout_screen[i].Anchor;
                     break;
                 }
             }
@@ -1386,11 +1388,11 @@ namespace SevenStrikeModules.XHud
         public Anchor_Layout hm_ScreenElement_Get_RMS_Anchored(XHud_Module_Element element, string solutionName)
         {
             Anchor_Layout layout = null;
-            for (int i = 0; i < element.RMS_LayoutDatas.Count; i++)
+            for (int i = 0; i < element.rms_layout_datas.Count; i++)
             {
-                if (element.RMS_LayoutDatas[i].LayoutName == solutionName)
+                if (element.rms_layout_datas[i].layout_name == solutionName)
                 {
-                    layout = hm_ScreenElement_Matched_AnchoredType(element.RMS_LayoutDatas[i].Anchor);
+                    layout = hm_ScreenElement_Matched_AnchoredType(element.rms_layout_datas[i].anchor);
                 }
             }
             return layout;
@@ -1402,11 +1404,11 @@ namespace SevenStrikeModules.XHud
         /// <returns>返回一个锚点布局</returns>
         public Anchor_Layout hm_ScreenElement_Matched_AnchoredType(XHudAnchor type)
         {
-            for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
             {
-                if (Anchors_Layout_Screen[i].Type == type)
+                if (cv_anchors_layout_screen[i].Type == type)
                 {
-                    return Anchors_Layout_Screen[i];
+                    return cv_anchors_layout_screen[i];
                 }
             }
             return null;
@@ -1422,21 +1424,21 @@ namespace SevenStrikeModules.XHud
         public void hm_ScreenElement_Initialize_By_RMS(XHud_Module_Element element, string rms_name, bool DontCreateID = false)
         {
             bool IsExist = false;
-            for (int i = 0; i < element.RMS_LayoutDatas.Count; i++)
+            for (int i = 0; i < element.rms_layout_datas.Count; i++)
             {
-                if (element.RMS_LayoutDatas[i].LayoutName == rms_name)
+                if (element.rms_layout_datas[i].layout_name == rms_name)
                 {
-                    Element_RMS_LayoutData info = element.RMS_LayoutDatas[i];
-                    element.RectTransform.SetParent(hm_ScreenElement_GetAnchored_RectTransform(info.Anchor));
-                    element.element_AnchorRangeSet(info.AnchorMin, info.AnchorMax);
-                    element.element_PivotSet(info.Pivot);
-                    element.element_PositionSet(info.Position);
-                    element.element_RotationSet(info.Euler);
-                    element.element_ScaleSet(info.Scale);
+                    Element_RMS_LayoutData info = element.rms_layout_datas[i];
+                    element.rect_transform.SetParent(hm_ScreenElement_GetAnchored_RectTransform(info.anchor));
+                    element.element_AnchorRangeSet(info.anchor_min, info.anchor_max);
+                    element.element_PivotSet(info.pivot);
+                    element.element_PositionSet(info.position);
+                    element.element_RotationSet(info.euler);
+                    element.element_ScaleSet(info.scale);
 
                     if (!DontCreateID)
                         element.ID = element.element_CreateID(hm_ScreenElement_CollectAllElements());
-                    if (UseDebug)
+                    if (use_debug)
                         XGUI_Utilitys.Console("XHud - 管理器通知", "已将元素生成到指定设计布局！", XGUIMsgState.通知);
                     IsExist = true;
                     break;
@@ -1448,7 +1450,7 @@ namespace SevenStrikeModules.XHud
             }
             if (!IsExist)
             {
-                if (UseDebug)
+                if (use_debug)
                     XGUI_Utilitys.Console("XHud - 管理器通知", "未找到指定标识名称的设计布局，请检查该元素是否有记录设计布局信息！", XGUIMsgState.错误);
             }
         }
@@ -1460,7 +1462,7 @@ namespace SevenStrikeModules.XHud
         public void hm_ScreenElement_Initialize_By_MotionArgs(XHud_Module_Element element, XHudAnchor anchor)
         {
             // 放置到目标锚点下
-            element.RectTransform.SetParent(hm_ScreenElement_GetAnchored_RectTransform(anchor));
+            element.rect_transform.SetParent(hm_ScreenElement_GetAnchored_RectTransform(anchor));
             // 位置归零
             element.element_PositionResetZero();
             // 旋转归零
@@ -1502,11 +1504,11 @@ namespace SevenStrikeModules.XHud
         {
             List<XHudElementNode> items = new List<XHudElementNode>();
 
-            for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
             {
-                for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
+                for (int s = 0; s < cv_anchors_layout_screen[i].HudElementInfos.Count; s++)
                 {
-                    items.Add(Anchors_Layout_Screen[i].HudElementInfos[s]);
+                    items.Add(cv_anchors_layout_screen[i].HudElementInfos[s]);
                 }
             }
             return items.ToArray();
@@ -1517,13 +1519,13 @@ namespace SevenStrikeModules.XHud
         /// <param name="element">目标元素</param>
         public void hm_ScreenElement_Remove_From_ScreenAnchored(XHud_Module_Element element)
         {
-            for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
             {
-                for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
+                for (int s = 0; s < cv_anchors_layout_screen[i].HudElementInfos.Count; s++)
                 {
-                    if (element.ID == Anchors_Layout_Screen[i].HudElementInfos[s].ID && element.Indicator == Anchors_Layout_Screen[i].HudElementInfos[s].Indicator)
+                    if (element.ID == cv_anchors_layout_screen[i].HudElementInfos[s].ID && element.indicator == cv_anchors_layout_screen[i].HudElementInfos[s].Indicator)
                     {
-                        Anchors_Layout_Screen[i].HudElementInfos.RemoveAt(s);
+                        cv_anchors_layout_screen[i].HudElementInfos.RemoveAt(s);
                     }
                 }
             }
@@ -1583,7 +1585,7 @@ namespace SevenStrikeModules.XHud
             hm_ScreenElement_Remove_From_ScreenAnchored(element);
 
             // 重要操作：清理元素！清理元素！清理元素！
-            element.element_Reset(false, element.ClearEvents_With_Spawn, element.ClearActions_With_Spawn);
+            element.element_Reset(false, element.clear_events_with_spawn, element.clear_actions_with_spawn);
 
             // 将生成的元素存入节点，便于后续链式调用
             XHudElementNode node = new XHudElementNode();
@@ -1608,7 +1610,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="rotation">旋转_Rotation</param>
         public void hm_WorldElement_Initialize_For_World(XHud_Module_Element element)
         {
-            element.RectTransform.SetParent(HudCanvas_WorldAnchor);
+            element.rect_transform.SetParent(cv_hudcanvas_world_anchor);
             element.element_PositionResetZero();
             element.element_RotationResetZero();
             element.ID = element.element_CreateID(hm_WorldElement_CollectAllElements());
@@ -1629,7 +1631,7 @@ namespace SevenStrikeModules.XHud
             item.ID = element.ID;
             item.Element = element;
 
-            Anchors_Layout_World.Add(item);
+            cv_anchors_layout_world.Add(item);
 
             return item;
         }
@@ -1642,9 +1644,9 @@ namespace SevenStrikeModules.XHud
         {
             List<XHudElementNode> items = new List<XHudElementNode>();
 
-            for (int i = 0; i < Anchors_Layout_World.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_world.Count; i++)
             {
-                items.Add(Anchors_Layout_World[i]);
+                items.Add(cv_anchors_layout_world[i]);
             }
             return items.ToArray();
         }
@@ -1654,11 +1656,11 @@ namespace SevenStrikeModules.XHud
         /// <param name="element">目标元素</param>
         public void hm_WorldElement_Remove_From_WorldAnchored(XHud_Module_Element element)
         {
-            for (int i = 0; i < Anchors_Layout_World.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_world.Count; i++)
             {
-                if (element.ID == Anchors_Layout_World[i].ID && element.Indicator == Anchors_Layout_World[i].Indicator)
+                if (element.ID == cv_anchors_layout_world[i].ID && element.indicator == cv_anchors_layout_world[i].Indicator)
                 {
-                    Anchors_Layout_World.RemoveAt(i);
+                    cv_anchors_layout_world.RemoveAt(i);
                 }
             }
         }
@@ -1672,7 +1674,7 @@ namespace SevenStrikeModules.XHud
         /// <returns>返回一个XHudElement节点元素体</returns>
         public XHudElementNode hm_WorldElement_Create(XHud_Module_Element element)
         {
-            if (!SupportWorldUI)
+            if (!cv_support_world_ui)
             {
                 XGUI_Utilitys.Console("XHud - 元素生成通知", "你想要生成世界UI，但是XHud管理器并未开启世界模式支持！请检查该开关是否为开启状态！", XGUIMsgState.警告);
                 return null;
@@ -1706,7 +1708,7 @@ namespace SevenStrikeModules.XHud
         /// <returns>返回一个XHudElement节点元素体</returns>
         public XHudElementNode hm_WorldElement_Create(string libname, string modulename)
         {
-            if (!SupportWorldUI)
+            if (!cv_support_world_ui)
             {
                 XGUI_Utilitys.Console("XHud - 元素生成通知", "你想要生成世界UI，但是XHud管理器并未开启世界模式支持！请检查该开关是否为开启状态！", XGUIMsgState.警告);
                 return null;
@@ -1728,7 +1730,7 @@ namespace SevenStrikeModules.XHud
             hm_WorldElement_Remove_From_WorldAnchored(element);
 
             // 重要操作：清理元素！清理元素！清理元素！
-            element.element_Reset(false, element.ClearEvents_With_Spawn, element.ClearActions_With_Spawn);
+            element.element_Reset(false, element.clear_events_with_spawn, element.clear_actions_with_spawn);
 
             // 将生成的元素存入节点，便于后续链式调用
             XHudElementNode node = new XHudElementNode();
@@ -1753,17 +1755,17 @@ namespace SevenStrikeModules.XHud
         {
             // 设置默认回收参数
             if (args == null)
-                args = RecycleArgs_Default;
+                args = global_motion_recycle_args;
 
             string x_indicator = "";
             int x_id = 0;
 
             // 回收所有屏幕元素
-            for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
             {
-                for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
+                for (int s = 0; s < cv_anchors_layout_screen[i].HudElementInfos.Count; s++)
                 {
-                    XHudElementNode node = Anchors_Layout_Screen[i].HudElementInfos[s];
+                    XHudElementNode node = cv_anchors_layout_screen[i].HudElementInfos[s];
                     x_indicator = node.Indicator;
                     x_id = node.ID;
 
@@ -1798,19 +1800,19 @@ namespace SevenStrikeModules.XHud
 
                     // 执行回收
                     if (args == null)
-                        args = RecycleArgs_Default;
+                        args = global_motion_recycle_args;
                     node.Element.Element_Out(args);
 
                     // 调试信息 - 成功
-                    if (UseDebug)
-                        XGUI_Utilitys.Console("XHud - 管理器通知", $"已{(node.Element.CreatedSourceType == XHudElementCreatedSourceType.Library ? "回收" : "销毁")}元素：" + x_indicator + " / " + x_id, XGUIMsgState.通知);
+                    if (use_debug)
+                        XGUI_Utilitys.Console("XHud - 管理器通知", $"已{(node.Element.created_source_type == XHudElementCreatedSourceType.Library ? "回收" : "销毁")}元素：" + x_indicator + " / " + x_id, XGUIMsgState.通知);
                 }
             }
 
             // 回收所有世界元素
-            for (int i = 0; i < Anchors_Layout_World.Count; i++)
+            for (int i = 0; i < cv_anchors_layout_world.Count; i++)
             {
-                XHudElementNode node = Anchors_Layout_World[i];
+                XHudElementNode node = cv_anchors_layout_world[i];
                 x_indicator = node.Indicator;
                 x_id = node.ID;
 
@@ -1845,12 +1847,12 @@ namespace SevenStrikeModules.XHud
 
                 // 执行回收
                 if (args == null)
-                    args = RecycleArgs_Default;
+                    args = global_motion_recycle_args;
                 node.Element.Element_Out(args);
 
                 // 调试信息 - 成功
-                if (UseDebug)
-                    XGUI_Utilitys.Console("XHud - 管理器通知", $"已{(node.Element.CreatedSourceType == XHudElementCreatedSourceType.Library ? "回收" : "销毁")}元素：" + x_indicator + " / " + x_id, XGUIMsgState.通知);
+                if (use_debug)
+                    XGUI_Utilitys.Console("XHud - 管理器通知", $"已{(node.Element.created_source_type == XHudElementCreatedSourceType.Library ? "回收" : "销毁")}元素：" + x_indicator + " / " + x_id, XGUIMsgState.通知);
             }
         }
 
@@ -1870,15 +1872,15 @@ namespace SevenStrikeModules.XHud
             XHudElementNode targetNode = null;
 
             // 在屏幕元素中查找
-            for (int i = 0; i < Anchors_Layout_Screen.Count && !finded; i++)
+            for (int i = 0; i < cv_anchors_layout_screen.Count && !finded; i++)
             {
-                for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count && !finded; s++)
+                for (int s = 0; s < cv_anchors_layout_screen[i].HudElementInfos.Count && !finded; s++)
                 {
-                    if (element.ID == Anchors_Layout_Screen[i].HudElementInfos[s].ID)
+                    if (element.ID == cv_anchors_layout_screen[i].HudElementInfos[s].ID)
                     {
-                        x_id = Anchors_Layout_Screen[i].HudElementInfos[s].ID;
-                        x_indicator = Anchors_Layout_Screen[i].HudElementInfos[s].Indicator;
-                        targetNode = Anchors_Layout_Screen[i].HudElementInfos[s];
+                        x_id = cv_anchors_layout_screen[i].HudElementInfos[s].ID;
+                        x_indicator = cv_anchors_layout_screen[i].HudElementInfos[s].Indicator;
+                        targetNode = cv_anchors_layout_screen[i].HudElementInfos[s];
                         finded = true;
                     }
                 }
@@ -1887,13 +1889,13 @@ namespace SevenStrikeModules.XHud
             // 在世界元素中查找（仅在屏幕元素中未找到时）
             if (!finded)
             {
-                for (int i = 0; i < Anchors_Layout_World.Count && !finded; i++)
+                for (int i = 0; i < cv_anchors_layout_world.Count && !finded; i++)
                 {
-                    if (element.ID == Anchors_Layout_World[i].ID)
+                    if (element.ID == cv_anchors_layout_world[i].ID)
                     {
-                        x_id = Anchors_Layout_World[i].ID;
-                        x_indicator = Anchors_Layout_World[i].Indicator;
-                        targetNode = Anchors_Layout_World[i];
+                        x_id = cv_anchors_layout_world[i].ID;
+                        x_indicator = cv_anchors_layout_world[i].Indicator;
+                        targetNode = cv_anchors_layout_world[i];
                         finded = true;
                     }
                 }
@@ -1933,18 +1935,18 @@ namespace SevenStrikeModules.XHud
 
                 // 执行回收
                 if (args == null)
-                    args = RecycleArgs_Default;
+                    args = global_motion_recycle_args;
                 targetNode.Element.Element_Out(args);
 
                 // 调试信息 - 成功
-                if (UseDebug)
-                    XGUI_Utilitys.Console("XHud - 管理器通知", $"已{(element.CreatedSourceType == XHudElementCreatedSourceType.Library ? "回收" : "销毁")}元素：" + x_indicator + " / " + x_id, XGUIMsgState.通知);
+                if (use_debug)
+                    XGUI_Utilitys.Console("XHud - 管理器通知", $"已{(element.created_source_type == XHudElementCreatedSourceType.Library ? "回收" : "销毁")}元素：" + x_indicator + " / " + x_id, XGUIMsgState.通知);
             }
             else
             {
                 // 调试信息 - 未找到
-                if (UseDebug)
-                    XGUI_Utilitys.Console("XHud - 管理器通知", "XHud元素：" + $"{(string.IsNullOrEmpty(element.Indicator) ? element.gameObject.name : element.Indicator)}" + $" 不存在！未找到要{(element.CreatedSourceType == XHudElementCreatedSourceType.Library ? "回收" : "销毁")}的目标元素！", XGUIMsgState.通知);
+                if (use_debug)
+                    XGUI_Utilitys.Console("XHud - 管理器通知", "XHud元素：" + $"{(string.IsNullOrEmpty(element.indicator) ? element.gameObject.name : element.indicator)}" + $" 不存在！未找到要{(element.created_source_type == XHudElementCreatedSourceType.Library ? "回收" : "销毁")}的目标元素！", XGUIMsgState.通知);
             }
         }
 
@@ -1961,23 +1963,23 @@ namespace SevenStrikeModules.XHud
             XHud_Module_Element element = null;
 
             // 在屏幕元素中查找
-            for (int i = 0; i < Anchors_Layout_Screen.Count && element == null; i++)
+            for (int i = 0; i < cv_anchors_layout_screen.Count && element == null; i++)
             {
-                for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count && element == null; s++)
+                for (int s = 0; s < cv_anchors_layout_screen[i].HudElementInfos.Count && element == null; s++)
                 {
-                    if (id == Anchors_Layout_Screen[i].HudElementInfos[s].ID)
+                    if (id == cv_anchors_layout_screen[i].HudElementInfos[s].ID)
                     {
-                        element = Anchors_Layout_Screen[i].HudElementInfos[s].Element;
+                        element = cv_anchors_layout_screen[i].HudElementInfos[s].Element;
                     }
                 }
             }
 
             // 在世界元素中查找
-            for (int i = 0; i < Anchors_Layout_World.Count && element == null; i++)
+            for (int i = 0; i < cv_anchors_layout_world.Count && element == null; i++)
             {
-                if (id == Anchors_Layout_World[i].ID)
+                if (id == cv_anchors_layout_world[i].ID)
                 {
-                    element = Anchors_Layout_World[i].Element;
+                    element = cv_anchors_layout_world[i].Element;
                 }
             }
 
@@ -1986,7 +1988,7 @@ namespace SevenStrikeModules.XHud
             {
                 hm_HudElement_RecycleAt(element, args, action_out_start, action_out_progress, action_out_end);
             }
-            else if (UseDebug)
+            else if (use_debug)
             {
                 XGUI_Utilitys.Console("XHud - 管理器通知", $"XHud元素ID：{id} 不存在！", XGUIMsgState.通知);
             }
@@ -2004,24 +2006,24 @@ namespace SevenStrikeModules.XHud
             XHud_Module_Element element = null;
             if (space == XHudSpace.屏幕空间)
             {
-                for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+                for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
                 {
-                    for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
+                    for (int s = 0; s < cv_anchors_layout_screen[i].HudElementInfos.Count; s++)
                     {
-                        if (id == Anchors_Layout_Screen[i].HudElementInfos[s].ID)
+                        if (id == cv_anchors_layout_screen[i].HudElementInfos[s].ID)
                         {
-                            element = Anchors_Layout_Screen[i].HudElementInfos[s].Element;
+                            element = cv_anchors_layout_screen[i].HudElementInfos[s].Element;
                         }
                     }
                 }
             }
             else
             {
-                for (int i = 0; i < Anchors_Layout_World.Count; i++)
+                for (int i = 0; i < cv_anchors_layout_world.Count; i++)
                 {
-                    if (id == Anchors_Layout_World[i].Element.ID)
+                    if (id == cv_anchors_layout_world[i].Element.ID)
                     {
-                        element = Anchors_Layout_World[i].Element;
+                        element = cv_anchors_layout_world[i].Element;
                     }
                 }
             }
@@ -2037,24 +2039,24 @@ namespace SevenStrikeModules.XHud
             XHud_Module_Element element = null;
             if (space == XHudSpace.屏幕空间)
             {
-                for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+                for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
                 {
-                    for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
+                    for (int s = 0; s < cv_anchors_layout_screen[i].HudElementInfos.Count; s++)
                     {
-                        if (name == Anchors_Layout_Screen[i].HudElementInfos[s].Indicator)
+                        if (name == cv_anchors_layout_screen[i].HudElementInfos[s].Indicator)
                         {
-                            element = Anchors_Layout_Screen[i].HudElementInfos[s].Element;
+                            element = cv_anchors_layout_screen[i].HudElementInfos[s].Element;
                         }
                     }
                 }
             }
             else
             {
-                for (int i = 0; i < Anchors_Layout_World.Count; i++)
+                for (int i = 0; i < cv_anchors_layout_world.Count; i++)
                 {
-                    if (name == Anchors_Layout_World[i].Element.Indicator)
+                    if (name == cv_anchors_layout_world[i].Element.indicator)
                     {
-                        element = Anchors_Layout_World[i].Element;
+                        element = cv_anchors_layout_world[i].Element;
                     }
                 }
             }
@@ -2069,19 +2071,19 @@ namespace SevenStrikeModules.XHud
             List<XHud_Module_Element> list = new List<XHud_Module_Element>();
             if (space == XHudSpace.屏幕空间)
             {
-                for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+                for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
                 {
-                    for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
+                    for (int s = 0; s < cv_anchors_layout_screen[i].HudElementInfos.Count; s++)
                     {
-                        list.Add(Anchors_Layout_Screen[i].HudElementInfos[s].Element);
+                        list.Add(cv_anchors_layout_screen[i].HudElementInfos[s].Element);
                     }
                 }
             }
             else
             {
-                for (int i = 0; i < Anchors_Layout_World.Count; i++)
+                for (int i = 0; i < cv_anchors_layout_world.Count; i++)
                 {
-                    list.Add(Anchors_Layout_World[i].Element);
+                    list.Add(cv_anchors_layout_world[i].Element);
                 }
             }
             return list.ToArray();
@@ -2095,20 +2097,20 @@ namespace SevenStrikeModules.XHud
             int x = 0;
             if (space == XHudSpace.屏幕空间)
             {
-                for (int i = 0; i < Anchors_Layout_Screen.Count; i++)
+                for (int i = 0; i < cv_anchors_layout_screen.Count; i++)
                 {
-                    for (int s = 0; s < Anchors_Layout_Screen[i].HudElementInfos.Count; s++)
+                    for (int s = 0; s < cv_anchors_layout_screen[i].HudElementInfos.Count; s++)
                     {
-                        if (Anchors_Layout_Screen[i].HudElementInfos[s].Element != null)
+                        if (cv_anchors_layout_screen[i].HudElementInfos[s].Element != null)
                             x++;
                     }
                 }
             }
             else
             {
-                for (int i = 0; i < Anchors_Layout_World.Count; i++)
+                for (int i = 0; i < cv_anchors_layout_world.Count; i++)
                 {
-                    if (Anchors_Layout_World[i].Element != null)
+                    if (cv_anchors_layout_world[i].Element != null)
                         x++;
                 }
             }
@@ -2126,9 +2128,9 @@ namespace SevenStrikeModules.XHud
 
             if (space == XHudSpace.屏幕空间)
             {
-                for (int i = 0; i < mgr.HudCanvas_ScreenAnchor.childCount; i++)
+                for (int i = 0; i < mgr.cv_hudcanvas_screen_anchor.childCount; i++)
                 {
-                    Transform trans = mgr.HudCanvas_ScreenAnchor.GetChild(i);
+                    Transform trans = mgr.cv_hudcanvas_screen_anchor.GetChild(i);
                     if (trans.childCount > 0)
                     {
                         for (int s = 0; s < trans.childCount; s++)
@@ -2142,9 +2144,9 @@ namespace SevenStrikeModules.XHud
             }
             else
             {
-                for (int i = 0; i < mgr.HudCanvas_WorldAnchor.childCount; i++)
+                for (int i = 0; i < mgr.cv_hudcanvas_world_anchor.childCount; i++)
                 {
-                    Transform trans = mgr.HudCanvas_WorldAnchor.GetChild(i);
+                    Transform trans = mgr.cv_hudcanvas_world_anchor.GetChild(i);
                     if (trans.childCount > 0)
                     {
                         for (int s = 0; s < trans.childCount; s++)
@@ -2165,15 +2167,15 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Element[] hm_AnchorElementsGet()
         {
             XHud_Manager mgr = FindFirstObjectByType<XHud_Manager>();
-            XHud_Module_Element[] trans = mgr.HudCanvas_ScreenAnchor.GetComponentsInChildren<XHud_Module_Element>();
+            XHud_Module_Element[] trans = mgr.cv_hudcanvas_screen_anchor.GetComponentsInChildren<XHud_Module_Element>();
             return trans;
         }
         public RectTransform hm_GetAnchorRoot(XHudSpace Space)
         {
             if (Space == XHudSpace.屏幕空间)
-                return HudCanvas_ScreenAnchor;
+                return cv_hudcanvas_screen_anchor;
             else
-                return HudCanvas_WorldAnchor;
+                return cv_hudcanvas_world_anchor;
         }
         #endregion
     }

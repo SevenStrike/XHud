@@ -32,13 +32,14 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 图元配色器
         /// </summary>
-        private XHud_Module_Primitive_Painting Painting;
+        private XHud_Module_Primitive_Painting painting;
         /// <summary>
         /// XHud 管理器
         /// </summary>
-        private XHud_Manager mgr;
+        private XHud_Manager hud_manager;
 
-        private Vector3 ActivateScale;
+        private Vector3 activate_scale;
+
         public bool fold_based = true;
 
         private void OnEnable()
@@ -46,17 +47,17 @@ namespace SevenStrikeModules.XHud
             if (Application.isPlaying)
                 return;
 
-            if (Painting == null)
-                Painting = GetComponent<XHud_Module_Primitive_Painting>();
+            if (painting == null)
+                painting = GetComponent<XHud_Module_Primitive_Painting>();
 
-            if (mgr == null)
+            if (hud_manager == null)
             {
-                mgr = FindFirstObjectByType<XHud_Manager>();
+                hud_manager = FindFirstObjectByType<XHud_Manager>();
             }
 
-            if (mgr.Hud_Colors != null)
+            if (hud_manager.library_colors != null)
             {
-                mgr.Hud_Colors.act_on_ColorChanged += act_on_ColorChanged;
+                hud_manager.library_colors.act_on_color_changed += act_on_ColorChanged;
             }
         }
 
@@ -70,8 +71,8 @@ namespace SevenStrikeModules.XHud
             if (Application.isPlaying)
                 return;
 
-            if (mgr.Hud_Colors != null)
-                mgr.Hud_Colors.act_on_ColorChanged -= act_on_ColorChanged;
+            if (hud_manager.library_colors != null)
+                hud_manager.library_colors.act_on_color_changed -= act_on_ColorChanged;
         }
 
         void Update()
@@ -86,36 +87,36 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void UpdateLibraryColor()
         {
-            if (Painting != null)
+            if (painting != null)
             {
                 //--如果使用颜色库颜色则将组件的颜色值覆盖为库中选中的颜色，否则使用原始色
-                if (Painting.SyncLibraryColor && Painting.SyncImageColor)
+                if (painting.sync_library_color && painting.sync_image_color)
                 {
-                    if (mgr == null)
+                    if (hud_manager == null)
                     {
                         //--在场景中找到Hud管理器                
-                        mgr = FindFirstObjectByType<XHud_Manager>();
+                        hud_manager = FindFirstObjectByType<XHud_Manager>();
                     }
 
                     //--检查色卡名称是否失效
-                    if (!mgr.Hud_Colors.ColorsLibrary_IsExist(Painting.ColoriseName) || string.IsNullOrEmpty(Painting.ColoriseName))
+                    if (!hud_manager.library_colors.ColorsLibrary_IsExist(painting.colorise_name) || string.IsNullOrEmpty(painting.colorise_name))
                     {
-                        Painting.ColoriseName = mgr.Hud_Colors.ColorsLibrary_GetColorName(0);
+                        painting.colorise_name = hud_manager.library_colors.ColorsLibrary_GetColorName(0);
                     }
 
                     //--判断颜色库是否正确配置
-                    if (mgr != null && mgr.Hud_Colors != null)
+                    if (hud_manager != null && hud_manager.library_colors != null)
                     {
-                        if (mgr.Hud_Colors.ColorLibrary.Count > 0)
+                        if (hud_manager.library_colors.library_colors.Count > 0)
                         {
-                            Painting.UpdateColor(mgr.Hud_Colors.ColorsLibrary_GetColor(Painting.ColoriseName));
+                            painting.UpdateColor(hud_manager.library_colors.ColorsLibrary_GetColor(painting.colorise_name));
                         }
                     }
                 }
                 else
                 {
-                    if (Painting.SyncImageColor)
-                        Painting.UpdateColor(Painting.OriginalColor);
+                    if (painting.sync_image_color)
+                        painting.UpdateColor(painting.original_color);
                 }
 
                 ////做缩放并还原动作来激活颜色变化
@@ -125,7 +126,7 @@ namespace SevenStrikeModules.XHud
             }
             else
             {
-                Painting = GetComponent<XHud_Module_Primitive_Painting>();
+                painting = GetComponent<XHud_Module_Primitive_Painting>();
             }
         }
     }

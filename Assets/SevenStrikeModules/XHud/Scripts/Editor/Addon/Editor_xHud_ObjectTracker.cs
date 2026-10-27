@@ -40,29 +40,34 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>仅用于单选模式下的直接读写操作。</description></item>
         /// </list>
         /// </summary>
-        private XHud_ObjectTracker BaseScript;
+        private XHud_ObjectTracker base_script;
         #endregion
 
         #region 字段 - 序列化属性
         /// <summary>
-        /// 序列化属性集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>SelfObject</c>：自身物体属性。</description></item>
-        /// <item><description><c>RelativeObject</c>：相对物体属性。</description></item>
-        /// <item><description><c>TargetObject</c>：目标物体属性。</description></item>
-        /// <item><description><c>UseSmoothTracker</c>：平滑追踪开关属性。</description></item>
-        /// <item><description><c>TrackerOffset</c>：追踪位置偏移属性。</description></item>
-        /// <item><description><c>SmoothTime</c>：平滑速率属性。</description></item>
-        /// </list>
+        /// 自身物体属性
         /// </summary>
-        private SerializedProperty
-            SelfObject,
-            RelativeObject,
-            TargetObject,
-            UseSmoothTracker,
-            TrackerOffset,
-            SmoothTime;
+        private SerializedProperty sp_self_object;
+        /// <summary>
+        /// 相对物体属性
+        /// </summary>
+        private SerializedProperty sp_relative_object;
+        /// <summary>
+        /// 目标物体属性
+        /// </summary>
+        private SerializedProperty sp_target_object;
+        /// <summary>
+        /// 平滑追踪开关属性
+        /// </summary>
+        private SerializedProperty sp_use_smooth_tracker;
+        /// <summary>
+        /// 追踪位置偏移属性
+        /// </summary>
+        private SerializedProperty sp_tracker_offset;
+        /// <summary>
+        /// 平滑速率属性
+        /// </summary>
+        private SerializedProperty sp_smooth_time;
         #endregion
 
         #region 字段 - 图标
@@ -81,36 +86,42 @@ namespace SevenStrikeModules.XHud.Editor
         /// 批量选择脚本数组。
         /// <para/>
         /// <list type="bullet">
-        /// <item><description>在 <c>GetAllTargets</c> 中根据 <c>targets</c> 填充。</description></item>
+        /// <item><description>在 <c>Targets_Get</c> 中根据 <c>targets</c> 填充。</description></item>
         /// <item><description>单选时长度为 1，多选时长度等于选中对象数量。</description></item>
         /// </list>
         /// </summary>
-        private XHud_ObjectTracker[] SelectedObjects;
+        private XHud_ObjectTracker[] selected_objects;
         #endregion
 
         #region 生命周期    
         void OnEnable()
         {
-            BaseScript = (XHud_ObjectTracker)target;
-            SelfObject = serializedObject.FindProperty("SelfObject");
-            RelativeObject = serializedObject.FindProperty("RelativeObject");
-            TargetObject = serializedObject.FindProperty("TargetObject");
-            UseSmoothTracker = serializedObject.FindProperty("UseSmoothTracker");
-            SmoothTime = serializedObject.FindProperty("SmoothTime");
-            TrackerOffset = serializedObject.FindProperty("TrackerOffset");
+            base_script = (XHud_ObjectTracker)target;
+
+            #region 获取序列化属性
+            sp_self_object = serializedObject.FindProperty(nameof(XHud_ObjectTracker.self_object));
+            sp_relative_object = serializedObject.FindProperty(nameof(XHud_ObjectTracker.relative_object));
+            sp_target_object = serializedObject.FindProperty(nameof(XHud_ObjectTracker.target_object));
+            sp_use_smooth_tracker = serializedObject.FindProperty(nameof(XHud_ObjectTracker.use_smooth_tracker));
+            sp_smooth_time = serializedObject.FindProperty(nameof(XHud_ObjectTracker.smooth_time));
+            sp_tracker_offset = serializedObject.FindProperty(nameof(XHud_ObjectTracker.tracker_offset));
+            #endregion
+
+            #region 获取图标
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_object_tracker/icon_main");
+            #endregion
+
             Targets_Get();
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
+
             string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-            TextClipping clipping = TextClipping.Clip;
-#endif
+
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
+
             #region 标题
             XGUI.layout_banner(
              bg_fill: XGUIGroup.实体,
@@ -123,12 +134,14 @@ namespace SevenStrikeModules.XHud.Editor
              title_style: FontStyle.Normal,
              title_color: Color.white,
              title_size: XGUIFontSize.B,
-             title_clipping: clipping,
+             title_clipping: clipping_ellipsis,
              bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
+
             XGUI.layout_space(5);
+
             #region 选项
-            BaseScript.fold_option = XGUI.layout_group_start(
+            base_script.fold_option = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -138,15 +151,16 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_option);
-            if (!BaseScript.fold_option)
+                foldout: base_script.fold_option);
+            if (!base_script.fold_option)
             {
-                DrawToggle("使用平滑追踪", UseSmoothTracker, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                DrawToggle("使用平滑追踪", sp_use_smooth_tracker, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             #region 参数
-            BaseScript.fold_param = XGUI.layout_group_start(
+            base_script.fold_param = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -156,8 +170,8 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_param);
-            if (!BaseScript.fold_param)
+                foldout: base_script.fold_param);
+            if (!base_script.fold_param)
             {
                 #region XHud元素
                 XGUI.layout_property_field(
@@ -165,28 +179,31 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: SelfObject,
+                    prop: sp_self_object,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
+
                 #region XHud元素父物体
                 XGUI.layout_property_field(
                     title: "XHud元素父物体",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: RelativeObject,
+                    prop: sp_relative_object,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
+
                 #region 场景目标物体
                 XGUI.layout_property_field(
                     title: "场景目标物体",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: TargetObject,
+                    prop: sp_target_object,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
-                if (UseSmoothTracker.boolValue)
+
+                if (sp_use_smooth_tracker.boolValue)
                 {
                     #region 平滑速率
                     XGUI.layout_property_field(
@@ -194,24 +211,45 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: SmoothTime,
+                        prop: sp_smooth_time,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                     #endregion
                 }
+
                 #region 位置偏移
                 XGUI.layout_property_field(
                     title: "位置偏移",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: TrackerOffset,
+                    prop: sp_tracker_offset,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
+            #region 弹出菜单
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
+            {
+                // 创建右键菜单
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("Q (折叠编组)"), false, () =>
+                {
+                    base_script.GroupFold(true);
+                });
+                menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
+                {
+                    base_script.GroupFold(false);
+                });
+                menu.ShowAsContext();
+
+                Event.current.Use();
+            }
+            #endregion
+
             #region 源脚本
-            BaseScript.fold_based = XGUI.layout_group_start(
+            base_script.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -221,13 +259,14 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_based);
-            if (!BaseScript.fold_based)
+                foldout: base_script.fold_based);
+            if (!base_script.fold_based)
             {
                 DrawDefaultInspector();
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             serializedObject.ApplyModifiedProperties();
         }
         #endregion
@@ -245,17 +284,17 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new XHud_ObjectTracker[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new XHud_ObjectTracker[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (XHud_ObjectTracker)t;
+                    selected_objects[i] = (XHud_ObjectTracker)t;
                 }
             }
             else
             {
-                SelectedObjects = new XHud_ObjectTracker[targets.Length];
-                SelectedObjects[0] = (XHud_ObjectTracker)target;
+                selected_objects = new XHud_ObjectTracker[targets.Length];
+                selected_objects[0] = (XHud_ObjectTracker)target;
             }
         }
         /// <summary>
@@ -269,9 +308,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>是否为多选状态。</returns>
         private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }

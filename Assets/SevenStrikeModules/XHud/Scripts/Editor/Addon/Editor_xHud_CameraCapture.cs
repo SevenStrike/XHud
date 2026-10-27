@@ -40,55 +40,69 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>仅用于单选模式下的直接读写操作。</description></item>
         /// </list>
         /// </summary>
-        private XHud_CameraCapture BaseScript;
+        private XHud_CameraCapture base_script;
         #endregion
 
         #region 字段 - 序列化属性
         /// <summary>
-        /// 序列化属性集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>TargetCamera</c>：目标相机属性。</description></item>
-        /// <item><description><c>x_sizemode</c>：截图尺寸模式属性。</description></item>
-        /// <item><description><c>x_mode</c>：相机类型属性。</description></item>
-        /// <item><description><c>x_type</c>：截图格式属性。</description></item>
-        /// <item><description><c>x_bgtype</c>：截图背景类型属性。</description></item>
-        /// <item><description><c>Pixels</c>：固定尺寸属性。</description></item>
-        /// <item><description><c>x_path</c>：截图路径属性。</description></item>
-        /// <item><description><c>x_name</c>：文件名属性。</description></item>
-        /// <item><description><c>x_UICamera_bgcolor</c>：UI 相机背景色属性。</description></item>
-        /// <item><description><c>x_bg_alpha</c>：背景透明度索引属性。</description></item>
-        /// </list>
+        /// 目标相机属性
         /// </summary>
-        private SerializedProperty
-            TargetCamera,
-            x_sizemode,
-            x_mode,
-            x_type,
-            x_bgtype,
-            Pixels,
-            x_path,
-            x_name,
-            x_UICamera_bgcolor,
-            x_bg_alpha;
+        private SerializedProperty sp_target_camera;
+        /// <summary>
+        /// 截图尺寸模式属性
+        /// </summary>
+        private SerializedProperty sp_size_mode;
+        /// <summary>
+        /// 相机类型属性
+        /// </summary>
+        private SerializedProperty sp_mode;
+        /// <summary>
+        /// 截图格式属性
+        /// </summary>
+        private SerializedProperty sp_type;
+        /// <summary>
+        /// 截图背景类型属性
+        /// </summary>
+        private SerializedProperty sp_bg_type;
+        /// <summary>
+        /// 固定尺寸属性
+        /// </summary>
+        private SerializedProperty sp_pixels;
+        /// <summary>
+        /// 截图路径属性
+        /// </summary>
+        private SerializedProperty sp_cap_path;
+        /// <summary>
+        /// 文件名属性
+        /// </summary>
+        private SerializedProperty sp_cap_name;
+        /// <summary>
+        /// UI 相机背景色属性
+        /// </summary>
+        private SerializedProperty sp_ui_camera_bg_color;
+        /// <summary>
+        /// 背景透明度索引属性
+        /// </summary>
+        private SerializedProperty sp_bg_alpha;
         #endregion
 
         #region 字段 - 图标
         /// <summary>
-        /// 本编辑器所使用的图标资源集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>icon_main</c>：标题主图标。</description></item>
-        /// <item><description><c>icon_bg_alpha_full</c>：不透明背景图标。</description></item>
-        /// <item><description><c>icon_bg_alpha_half</c>：半透明背景图标。</description></item>
-        /// <item><description><c>icon_bg_alpha_zero</c>：全透明背景图标。</description></item>
-        /// </list>
+        /// 标题主图标
         /// </summary>
-        private Texture2D
-            icon_main,
-            icon_bg_alpha_full,
-            icon_bg_alpha_half,
-            icon_bg_alpha_zero;
+        private Texture2D icon_main;
+        /// <summary>
+        /// 不透明背景图标
+        /// </summary>
+        private Texture2D icon_bg_alpha_full;
+        /// <summary>
+        /// 半透明背景图标
+        /// </summary>
+        private Texture2D icon_bg_alpha_half;
+        /// <summary>
+        /// 全透明背景图标
+        /// </summary>
+        private Texture2D icon_bg_alpha_zero;
         #endregion
 
         #region 字段 - 选项文字
@@ -138,30 +152,33 @@ namespace SevenStrikeModules.XHud.Editor
         /// 批量选择脚本数组。
         /// <para/>
         /// <list type="bullet">
-        /// <item><description>在 <c>GetAllTargets</c> 中根据 <c>targets</c> 填充。</description></item>
+        /// <item><description>在 <c>Targets_Get</c> 中根据 <c>targets</c> 填充。</description></item>
         /// <item><description>单选时长度为 1，多选时长度等于选中对象数量。</description></item>
         /// </list>
         /// </summary>
-        private XHud_CameraCapture[] SelectedObjects;
+        private XHud_CameraCapture[] selected_objects;
         #endregion
 
         #region 生命周期
         private void OnEnable()
         {
-            BaseScript = (XHud_CameraCapture)target;
+            base_script = (XHud_CameraCapture)target;
+
             Targets_Get();
-            #region 获取变量
-            TargetCamera = serializedObject.FindProperty("TargetCamera");
-            x_sizemode = serializedObject.FindProperty("x_sizemode");
-            x_mode = serializedObject.FindProperty("x_mode");
-            x_type = serializedObject.FindProperty("x_type");
-            Pixels = serializedObject.FindProperty("Pixels");
-            x_path = serializedObject.FindProperty("x_path");
-            x_bgtype = serializedObject.FindProperty("x_bgtype");
-            x_name = serializedObject.FindProperty("x_name");
-            x_UICamera_bgcolor = serializedObject.FindProperty("x_UICamera_bgcolor");
-            x_bg_alpha = serializedObject.FindProperty("x_bg_alpha");
+
+            #region 获取序列化属性
+            sp_target_camera = serializedObject.FindProperty(nameof(XHud_CameraCapture.target_camera));
+            sp_size_mode = serializedObject.FindProperty(nameof(XHud_CameraCapture.size_mode));
+            sp_mode = serializedObject.FindProperty(nameof(XHud_CameraCapture.mode));
+            sp_type = serializedObject.FindProperty(nameof(XHud_CameraCapture.type));
+            sp_pixels = serializedObject.FindProperty(nameof(XHud_CameraCapture.pixels));
+            sp_bg_type = serializedObject.FindProperty(nameof(XHud_CameraCapture.bg_type));
+            sp_cap_path = serializedObject.FindProperty(nameof(XHud_CameraCapture.cap_path));
+            sp_cap_name = serializedObject.FindProperty(nameof(XHud_CameraCapture.cap_name));
+            sp_ui_camera_bg_color = serializedObject.FindProperty(nameof(XHud_CameraCapture.ui_camera_bg_color));
+            sp_bg_alpha = serializedObject.FindProperty(nameof(XHud_CameraCapture.bg_alpha));
             #endregion
+
             #region 获取图标
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_camera_capture/icon_main");
             icon_bg_alpha_full = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_camera_capture/icon_bg_alpha_full");
@@ -173,6 +190,7 @@ namespace SevenStrikeModules.XHud.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
+
             #region 标题
             XGUI.layout_banner(
               bg_fill: XGUIGroup.实体,
@@ -188,9 +206,11 @@ namespace SevenStrikeModules.XHud.Editor
               title_clipping: TextClipping.Ellipsis,
               bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
+
             XGUI.layout_space(5);
+
             #region 相机指定
-            BaseScript.fold_camera = XGUI.layout_group_start(
+            base_script.fold_camera = XGUI.layout_group_start(
                  type: XGUIContainerType.Vertical,
                  bg_fill: XGUIGroup.缺口纯色边框,
                  bg_color: XGUIColor.亮白,
@@ -200,8 +220,8 @@ namespace SevenStrikeModules.XHud.Editor
                  title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                  title_clipping: TextClipping.Clip,
                  padding: new RectOffset(10, 10, 15, 15),
-                 foldout: BaseScript.fold_camera);
-            if (!BaseScript.fold_camera)
+                 foldout: base_script.fold_camera);
+            if (!base_script.fold_camera)
             {
                 XGUI.layout_property_field(
                     title: "截图相机",
@@ -211,10 +231,10 @@ namespace SevenStrikeModules.XHud.Editor
                     title_width: 100,
                     //status_icon: "icon_field_status",
                     //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                    prop: TargetCamera,
+                    prop: sp_target_camera,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 XGUI.layout_space(10);
-                if (x_mode.enumValueIndex == (int)CaptureCameraType.场景相机)
+                if (sp_mode.enumValueIndex == (int)CaptureCameraType.场景相机)
                     XGUI.layout_helpbox(
                         state: XGUIHelboxState.通知,
                         title_text: "注意！如果您开启了PostProcessing模式则场景背景则会丢失透明通道！",
@@ -226,8 +246,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             #region 选项
-            BaseScript.fold_options = XGUI.layout_group_start(
+            base_script.fold_options = XGUI.layout_group_start(
              type: XGUIContainerType.Vertical,
              bg_fill: XGUIGroup.缺口纯色边框,
              bg_color: XGUIColor.亮白,
@@ -237,15 +258,15 @@ namespace SevenStrikeModules.XHud.Editor
              title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_clipping: TextClipping.Clip,
              padding: new RectOffset(10, 10, 15, 15),
-             foldout: BaseScript.fold_options);
-            if (!BaseScript.fold_options)
+             foldout: base_script.fold_options);
+            if (!base_script.fold_options)
             {
                 XGUI.layout_int_popup(
                     title: "相机类型",
                     title_width: 60,
                     title_size: XGUIFontSize.M,
                     title_anchor: TextAnchor.MiddleLeft,
-                    prop: x_mode,
+                    prop: sp_mode,
                     options: str_x_mode,
                     opt_text_size: XGUIFontSize.M,
                     opt_text_color: Color.black,
@@ -261,15 +282,15 @@ namespace SevenStrikeModules.XHud.Editor
                     title_margin: new RectOffset(0, 0, 0, 0),
                     act_on_changed: (value) =>
                     {
-                        x_mode.enumValueIndex = value;
-                        x_mode.serializedObject.ApplyModifiedProperties();
+                        sp_mode.enumValueIndex = value;
+                        sp_mode.serializedObject.ApplyModifiedProperties();
                     });
                 XGUI.layout_int_popup(
                     title: "截图格式",
                     title_width: 60,
                     title_size: XGUIFontSize.M,
                     title_anchor: TextAnchor.MiddleLeft,
-                    prop: x_type,
+                    prop: sp_type,
                     options: str_x_type,
                     opt_text_size: XGUIFontSize.M,
                     opt_text_color: Color.black,
@@ -285,15 +306,15 @@ namespace SevenStrikeModules.XHud.Editor
                     title_margin: new RectOffset(0, 0, 0, 0),
                     act_on_changed: (value) =>
                     {
-                        x_type.enumValueIndex = value;
-                        x_type.serializedObject.ApplyModifiedProperties();
+                        sp_type.enumValueIndex = value;
+                        sp_type.serializedObject.ApplyModifiedProperties();
                     });
                 XGUI.layout_int_popup(
                     title: "截图背景",
                     title_width: 60,
                     title_size: XGUIFontSize.M,
                     title_anchor: TextAnchor.MiddleLeft,
-                    prop: x_bgtype,
+                    prop: sp_bg_type,
                     options: str_x_bgtype,
                     opt_text_size: XGUIFontSize.M,
                     opt_text_color: Color.black,
@@ -309,15 +330,15 @@ namespace SevenStrikeModules.XHud.Editor
                     title_margin: new RectOffset(0, 0, 0, 0),
                     act_on_changed: (value) =>
                     {
-                        x_bgtype.enumValueIndex = value;
-                        x_bgtype.serializedObject.ApplyModifiedProperties();
+                        sp_bg_type.enumValueIndex = value;
+                        sp_bg_type.serializedObject.ApplyModifiedProperties();
                     });
                 XGUI.layout_int_popup(
                     title: "截图尺寸",
                     title_width: 60,
                     title_size: XGUIFontSize.M,
                     title_anchor: TextAnchor.MiddleLeft,
-                    prop: x_sizemode,
+                    prop: sp_size_mode,
                     options: str_x_size,
                     opt_text_size: XGUIFontSize.M,
                     opt_text_color: Color.black,
@@ -333,14 +354,15 @@ namespace SevenStrikeModules.XHud.Editor
                     title_margin: new RectOffset(0, 0, 0, 0),
                     act_on_changed: (value) =>
                     {
-                        x_sizemode.enumValueIndex = value;
-                        x_sizemode.serializedObject.ApplyModifiedProperties();
+                        sp_size_mode.enumValueIndex = value;
+                        sp_size_mode.serializedObject.ApplyModifiedProperties();
                     });
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             #region 参数
-            BaseScript.fold_param = XGUI.layout_group_start(
+            base_script.fold_param = XGUI.layout_group_start(
              type: XGUIContainerType.Vertical,
              bg_fill: XGUIGroup.缺口纯色边框,
              bg_color: XGUIColor.亮白,
@@ -350,20 +372,20 @@ namespace SevenStrikeModules.XHud.Editor
              title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_clipping: TextClipping.Clip,
              padding: new RectOffset(10, 10, 15, 15),
-             foldout: BaseScript.fold_param);
-            if (!BaseScript.fold_param)
+             foldout: base_script.fold_param);
+            if (!base_script.fold_param)
             {
                 #region UI截图背景颜色
                 float scale = 0.5f;
                 XGUI.layout_icon(
-                    icon: x_bg_alpha.intValue == 2 ? icon_bg_alpha_full : (x_bg_alpha.intValue == 1 ? icon_bg_alpha_half : icon_bg_alpha_zero),
+                    icon: sp_bg_alpha.intValue == 2 ? icon_bg_alpha_full : (sp_bg_alpha.intValue == 1 ? icon_bg_alpha_half : icon_bg_alpha_zero),
                     width: icon_bg_alpha_full.width * scale,
                     height: icon_bg_alpha_full.height * scale,
                     icon_alignment: XGUIIconAlignment.中心,
                     layout_margin: new RectOffset(0, 0, 20, 15));
                 XGUI.layout_space(10);
-                x_bg_alpha.intValue = XGUI.layout_toolbar(
-                        index: x_bg_alpha.intValue,
+                sp_bg_alpha.intValue = XGUI.layout_toolbar(
+                        index: sp_bg_alpha.intValue,
                         names: new string[] { "全透明", "半透明", "不透明" },
                         bg_normal: XGUIGroup.无,
                         bg_selected: XGUIGroup.实体,
@@ -385,26 +407,27 @@ namespace SevenStrikeModules.XHud.Editor
                         navigate_style: true,
                         navigate_style_bg: XGUIGroup.纯色边框,
                         navigate_style_bg_color: Color.black * 0.5f);
-                x_bg_alpha.serializedObject.ApplyModifiedProperties();
-                Color colorValue = x_UICamera_bgcolor.colorValue;
-                switch (BaseScript.x_bg_alpha)
+                sp_bg_alpha.serializedObject.ApplyModifiedProperties();
+                Color colorValue = sp_ui_camera_bg_color.colorValue;
+                switch (base_script.bg_alpha)
                 {
                     case 0:
                         colorValue.a = 0;
-                        x_UICamera_bgcolor.colorValue = colorValue;
+                        sp_ui_camera_bg_color.colorValue = colorValue;
                         break;
                     case 1:
                         colorValue.a = 0.5f;
-                        x_UICamera_bgcolor.colorValue = colorValue;
+                        sp_ui_camera_bg_color.colorValue = colorValue;
                         break;
                     case 2:
                         colorValue.a = 1;
-                        x_UICamera_bgcolor.colorValue = colorValue;
+                        sp_ui_camera_bg_color.colorValue = colorValue;
                         break;
                 }
                 #endregion
+
                 #region 固定尺寸
-                if (x_sizemode.intValue == 2)
+                if (sp_size_mode.intValue == 2)
                 {
                     XGUI.layout_space(5);
                     XGUI.layout_property_field(
@@ -415,10 +438,11 @@ namespace SevenStrikeModules.XHud.Editor
                         title_width: 100,
                         //status_icon: "icon_field_status",
                         //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                        prop: Pixels,
+                        prop: sp_pixels,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                 }
                 #endregion
+
                 #region 截图背景色
                 XGUI.layout_property_field(
                      title: "截图背景色",
@@ -428,13 +452,14 @@ namespace SevenStrikeModules.XHud.Editor
                      title_width: 100,
                      //status_icon: "icon_field_status",
                      //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                     prop: x_UICamera_bgcolor,
+                     prop: sp_ui_camera_bg_color,
                      prop_margin: new RectOffset(0, 0, 5, 10));
                 #endregion
+
                 #region 截图路径
                 XGUI.layout_path_selector(
                     path_type: XGUIPathType.文件夹,
-                    prop: ref BaseScript.x_path,
+                    prop: ref base_script.cap_path,
                     title: "截图路径",
                     //title_color: Color.white,
                     title_width: 162,
@@ -452,12 +477,13 @@ namespace SevenStrikeModules.XHud.Editor
                     btn_fontsize: XGUIFontSize.M,
                     default_name: "default",
                     status_icon: "icon_field_status",
-                    status_icon_color: XGUI_Utilitys.PathExists(BaseScript.x_path) ? Color.green : Color.red,
+                    status_icon_color: XGUI_Utilitys.PathExists(base_script.cap_path) ? Color.green : Color.red,
                     on_path_changed: (val) =>
                     {
-                        BaseScript.x_path = val;
+                        base_script.cap_path = val;
                     });
                 #endregion
+
                 #region 文件名
                 XGUI.layout_property_field(
                      title: "文件名",
@@ -467,9 +493,10 @@ namespace SevenStrikeModules.XHud.Editor
                      title_width: 100,
                      //status_icon: "icon_field_status",
                      //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                     prop: x_name,
+                     prop: sp_cap_name,
                      prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
+
                 #region 立即截图
                 XGUI.layout_space(10);
                 if (XGUI.layout_button(
@@ -489,7 +516,7 @@ namespace SevenStrikeModules.XHud.Editor
                     height: 30,
                     button_text_font: XGUI.GetFont("xg-medium")))
                 {
-                    if (TargetCamera.objectReferenceValue == null)
+                    if (sp_target_camera.objectReferenceValue == null)
                     {
                         XGUI.dialog(
                             type: XGUIDialogType.警告,
@@ -503,9 +530,9 @@ namespace SevenStrikeModules.XHud.Editor
                         return;
                     }
                     bool validstate = true;
-                    Camera cam = (Camera)TargetCamera.objectReferenceValue;
+                    Camera cam = (Camera)sp_target_camera.objectReferenceValue;
                     UniversalAdditionalCameraData universal = cam.GetComponent<UniversalAdditionalCameraData>();
-                    if (universal.renderType == CameraRenderType.Base && x_mode.enumValueIndex == (int)CaptureCameraType.UI相机)
+                    if (universal.renderType == CameraRenderType.Base && sp_mode.enumValueIndex == (int)CaptureCameraType.UI相机)
                     {
                         validstate = false;
                         string res = XGUI.dialog(
@@ -522,8 +549,8 @@ namespace SevenStrikeModules.XHud.Editor
                             {
                                 if (d == "快速修正")
                                 {
-                                    x_mode.enumValueIndex = (int)CaptureCameraType.场景相机;
-                                    x_mode.serializedObject.ApplyModifiedProperties();
+                                    sp_mode.enumValueIndex = (int)CaptureCameraType.场景相机;
+                                    sp_mode.serializedObject.ApplyModifiedProperties();
                                 }
                                 else
                                 {
@@ -531,7 +558,7 @@ namespace SevenStrikeModules.XHud.Editor
                                 }
                             });
                     }
-                    if (universal.renderType == CameraRenderType.Overlay && x_mode.enumValueIndex == (int)CaptureCameraType.场景相机)
+                    if (universal.renderType == CameraRenderType.Overlay && sp_mode.enumValueIndex == (int)CaptureCameraType.场景相机)
                     {
                         validstate = false;
                         string res = XGUI.dialog(
@@ -548,8 +575,8 @@ namespace SevenStrikeModules.XHud.Editor
                            {
                                if (d == "快速修正")
                                {
-                                   x_mode.enumValueIndex = (int)CaptureCameraType.UI相机;
-                                   x_mode.serializedObject.ApplyModifiedProperties();
+                                   sp_mode.enumValueIndex = (int)CaptureCameraType.UI相机;
+                                   sp_mode.serializedObject.ApplyModifiedProperties();
                                }
                                else
                                {
@@ -559,12 +586,12 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     if (validstate)
                     {
-                        BaseScript.CaptureNow();
+                        base_script.CaptureNow();
                         XGUI.dialog(
                             type: XGUIDialogType.警告,
                             windowtitle: "XHud - 相机截图器消息",
                             title: "截图捕捉完成",
-                            msg: $"已将 {str_x_mode[x_mode.intValue]} 的画面数据按照 {str_x_size[x_sizemode.intValue]} 模式保存格式为 {str_x_type[x_type.intValue]} 图片到路径： {x_path.stringValue}",
+                            msg: $"已将 {str_x_mode[sp_mode.intValue]} 的画面数据按照 {str_x_size[sp_size_mode.intValue]} 模式保存格式为 {str_x_type[sp_type.intValue]} 图片到路径： {sp_cap_path.stringValue}",
                             ok: "明白",
                             PrimaryIndex: 0,
                             usemodal: true,
@@ -575,8 +602,28 @@ namespace SevenStrikeModules.XHud.Editor
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
+            #region 弹出菜单
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
+            {
+                // 创建右键菜单
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("Q (折叠编组)"), false, () =>
+                {
+                    base_script.GroupFold(true);
+                });
+                menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
+                {
+                    base_script.GroupFold(false);
+                });
+                menu.ShowAsContext();
+
+                Event.current.Use();
+            }
+            #endregion
+
             #region 源脚本
-            BaseScript.fold_based = XGUI.layout_group_start(
+            base_script.fold_based = XGUI.layout_group_start(
                    type: XGUIContainerType.Vertical,
                    bg_fill: XGUIGroup.缺口纯色边框,
                    bg_color: XGUIColor.亮白,
@@ -586,11 +633,12 @@ namespace SevenStrikeModules.XHud.Editor
                    title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                    title_clipping: TextClipping.Clip,
                    padding: new RectOffset(10, 10, 15, 15),
-                   foldout: BaseScript.fold_based);
-            if (!BaseScript.fold_based)
+                   foldout: base_script.fold_based);
+            if (!base_script.fold_based)
                 DrawDefaultInspector();
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             serializedObject.ApplyModifiedProperties();
         }
         #endregion
@@ -608,17 +656,17 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new XHud_CameraCapture[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new XHud_CameraCapture[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (XHud_CameraCapture)t;
+                    selected_objects[i] = (XHud_CameraCapture)t;
                 }
             }
             else
             {
-                SelectedObjects = new XHud_CameraCapture[targets.Length];
-                SelectedObjects[0] = (XHud_CameraCapture)target;
+                selected_objects = new XHud_CameraCapture[targets.Length];
+                selected_objects[0] = (XHud_CameraCapture)target;
             }
         }
         /// <summary>
@@ -632,9 +680,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>是否为多选状态。</returns>
         private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }

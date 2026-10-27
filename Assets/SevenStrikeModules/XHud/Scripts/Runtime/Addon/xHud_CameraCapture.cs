@@ -30,44 +30,95 @@ namespace SevenStrikeModules.XHud
 
     public class XHud_CameraCapture : MonoBehaviour
     {
-        // 目标摄像机
-        public Camera TargetCamera;
-        // 截图尺寸
-        public CaptureSize x_sizemode = CaptureSize.相机尺寸;
-        // 相机类型
-        public CaptureCameraType x_mode = CaptureCameraType.场景相机;
-        // 相机类型
-        public CaptureType x_type = CaptureType.PNG;
-        // 相机类型
-        public CaptureBgType x_bgtype = CaptureBgType.天空盒;
+        #region 字段 - 目标摄像机
+        /// <summary>
+        /// 目标摄像机
+        /// </summary>
+        public Camera target_camera;
+        /// <summary>
+        /// 截图尺寸模式
+        /// </summary>
+        public CaptureSize size_mode = CaptureSize.相机尺寸;
+        /// <summary>
+        /// 相机类型（场景相机 / UI 相机等）
+        /// </summary>
+        public CaptureCameraType mode = CaptureCameraType.场景相机;
+        /// <summary>
+        /// 截图文件格式
+        /// </summary>
+        public CaptureType type = CaptureType.PNG;
+        /// <summary>
+        /// 截图背景类型
+        /// </summary>
+        public CaptureBgType bg_type = CaptureBgType.天空盒;
+        /// <summary>
+        /// 背景透明度
+        /// </summary>
+        public int bg_alpha;
+        #endregion
 
-        public int x_bg_alpha;
+        #region 字段 - 截图尺寸
+        /// <summary>
+        /// 像素尺寸
+        /// </summary>
+        public Vector2 pixels = new Vector2(1024, 768);
+        #endregion
 
-        // 像素尺寸
-        public Vector2 Pixels = new Vector2(1024, 768);
+        #region 字段 - 保存路径
+        /// <summary>
+        /// 保存路径
+        /// </summary>
+        public string cap_path = "StreamingAssets/";
+        /// <summary>
+        /// 文件名称
+        /// </summary>
+        public string cap_name = "Capture";
+        #endregion
 
-        // 保存路径
-        public string x_path = "StreamingAssets/";
-        // 文件名称
-        public string x_name = "Capture";
+        #region 字段 - UI 相机背景
+        /// <summary>
+        /// UI 相机背景颜色
+        /// </summary>
+        public Color ui_camera_bg_color = Color.black;
+        /// <summary>
+        /// UI 相机背景颜色原始数据（用于截图后还原）
+        /// </summary>
+        public Color ui_camera_bg_color_original = Color.black;
+        /// <summary>
+        /// UI 相机清除标志原始数据（用于截图后还原）
+        /// </summary>
+        public CameraClearFlags ui_camera_clear_flags_original = CameraClearFlags.Skybox;
+        #endregion
 
-        // UI相机背景颜色
-        public Color x_UICamera_bgcolor = Color.black;
-        // UI相机原始数据
-        public Color x_UICamera_Bgcolor_Original = Color.black;
-        public CameraClearFlags x_UICamera_ClearFlags_Original = CameraClearFlags.Skybox;
-
+        #region 折叠
         public bool
           fold_options = true,
           fold_param = true,
           fold_camera = true,
           fold_based = true;
 
+        public void GroupFold(bool state)
+        {
+            fold_options = state;
+            fold_param = state;
+            fold_camera = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool options = true, bool param = true, bool camera = true, bool based = true)
+        {
+            fold_options = options;
+            fold_param = param;
+            fold_camera = camera;
+            fold_based = based;
+        }
+        #endregion
+
 #if UNITY_EDITOR
         private void Reset()
         {
-            TargetCamera = GetComponent<Camera>();
-            Pixels = new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
+            target_camera = GetComponent<Camera>();
+            pixels = new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
         }
 #endif
 
@@ -76,62 +127,62 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void CaptureNow()
         {
-            Vector2 size = Pixels;
-            if (x_sizemode == CaptureSize.相机尺寸)
+            Vector2 size = pixels;
+            if (size_mode == CaptureSize.相机尺寸)
             {
-                size = new Vector2(TargetCamera.pixelWidth, TargetCamera.pixelHeight);
+                size = new Vector2(target_camera.pixelWidth, target_camera.pixelHeight);
             }
-            else if (x_sizemode == CaptureSize.屏幕分辨率)
+            else if (size_mode == CaptureSize.屏幕分辨率)
             {
                 size = new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
             }
-            string path = x_path + @"\" + x_name + "_" + x_mode.ToString() + "_" + RandomCode(4).ToUpper() + "." + x_type.ToString().ToLower();
+            string path = this.cap_path + @"\" + cap_name + "_" + mode.ToString() + "_" + RandomCode(4).ToUpper() + "." + type.ToString().ToLower();
 
             #region 截图前准备操作
-            if (x_mode == CaptureCameraType.UI相机)
+            if (mode == CaptureCameraType.UI相机)
             {
-                UniversalAdditionalCameraData universal = TargetCamera.GetComponent<UniversalAdditionalCameraData>();
+                UniversalAdditionalCameraData universal = target_camera.GetComponent<UniversalAdditionalCameraData>();
                 universal.renderType = CameraRenderType.Base;
-                TargetCamera.clearFlags = CameraClearFlags.SolidColor;
-                x_UICamera_Bgcolor_Original = TargetCamera.backgroundColor;
-                TargetCamera.backgroundColor = x_UICamera_bgcolor;
+                target_camera.clearFlags = CameraClearFlags.SolidColor;
+                ui_camera_bg_color_original = target_camera.backgroundColor;
+                target_camera.backgroundColor = ui_camera_bg_color;
             }
 
-            if (x_mode == CaptureCameraType.场景相机)
+            if (mode == CaptureCameraType.场景相机)
             {
-                x_UICamera_ClearFlags_Original = TargetCamera.clearFlags;
-                x_UICamera_Bgcolor_Original = TargetCamera.backgroundColor;
-                switch (x_bgtype)
+                ui_camera_clear_flags_original = target_camera.clearFlags;
+                ui_camera_bg_color_original = target_camera.backgroundColor;
+                switch (bg_type)
                 {
                     case CaptureBgType.天空盒:
-                        TargetCamera.clearFlags = CameraClearFlags.Skybox;
+                        target_camera.clearFlags = CameraClearFlags.Skybox;
                         break;
                     case CaptureBgType.颜色:
-                        TargetCamera.clearFlags = CameraClearFlags.SolidColor;
-                        TargetCamera.backgroundColor = x_UICamera_bgcolor;
+                        target_camera.clearFlags = CameraClearFlags.SolidColor;
+                        target_camera.backgroundColor = ui_camera_bg_color;
                         break;
                     case CaptureBgType.透明:
-                        TargetCamera.clearFlags = CameraClearFlags.Depth;
-                        TargetCamera.backgroundColor = new Color(0, 0, 0, 0);
+                        target_camera.clearFlags = CameraClearFlags.Depth;
+                        target_camera.backgroundColor = new Color(0, 0, 0, 0);
                         break;
                 }
             }
             #endregion
 
-            ExportTexture(path, CameraCaptureTool(TargetCamera, (int)size.x, (int)size.y), x_type, () =>
+            ExportTexture(path, CameraCaptureTool(target_camera, (int)size.x, (int)size.y), type, () =>
             {
                 // 截图完成后的操作
-                if (x_mode == CaptureCameraType.UI相机)
+                if (mode == CaptureCameraType.UI相机)
                 {
-                    UniversalAdditionalCameraData universal = TargetCamera.GetComponent<UniversalAdditionalCameraData>();
+                    UniversalAdditionalCameraData universal = target_camera.GetComponent<UniversalAdditionalCameraData>();
                     universal.renderType = CameraRenderType.Overlay;
-                    TargetCamera.backgroundColor = x_UICamera_Bgcolor_Original;
-                    TargetCamera.clearFlags = CameraClearFlags.Depth;
+                    target_camera.backgroundColor = ui_camera_bg_color_original;
+                    target_camera.clearFlags = CameraClearFlags.Depth;
                 }
-                if (x_mode == CaptureCameraType.场景相机)
+                if (mode == CaptureCameraType.场景相机)
                 {
-                    TargetCamera.backgroundColor = x_UICamera_Bgcolor_Original;
-                    TargetCamera.clearFlags = x_UICamera_ClearFlags_Original;
+                    target_camera.backgroundColor = ui_camera_bg_color_original;
+                    target_camera.clearFlags = ui_camera_clear_flags_original;
                 }
             });
         }

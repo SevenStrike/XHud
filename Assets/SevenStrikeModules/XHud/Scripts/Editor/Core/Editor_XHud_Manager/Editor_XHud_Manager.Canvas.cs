@@ -52,14 +52,14 @@ namespace SevenStrikeModules.XHud.Editor
              title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_width: 100,
              status_icon: "icon_field_status",
-             status_icon_color: CanvasScalerScreenSize.vector2Value != Vector2.zero ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-             prop: CanvasScalerScreenSize,
+             status_icon_color: sp_sf_canvas_scaler_screen_size.vector2Value != Vector2.zero ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
+             prop: sp_sf_canvas_scaler_screen_size,
              prop_margin: new RectOffset(0, 0, 10, 10));
             if (XGUI.ChangedCheck_End())
             {
-                CanvasScaler scaler = (CanvasScaler)HudCanvasScaler.objectReferenceValue;
-                scaler.referenceResolution = CanvasScalerScreenSize.vector2Value;
-                ScreenRes.vector2Value = CanvasScalerScreenSize.vector2Value;
+                CanvasScaler scaler = (CanvasScaler)sp_cv_scaler.objectReferenceValue;
+                scaler.referenceResolution = sp_sf_canvas_scaler_screen_size.vector2Value;
+                sp_cv_screen_res.vector2Value = sp_sf_canvas_scaler_screen_size.vector2Value;
             }
             #endregion
 
@@ -73,17 +73,17 @@ namespace SevenStrikeModules.XHud.Editor
              title_width: 100,
              //status_icon: "icon_field_status",
              //status_icon_color: CanvasMatchDir.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-             prop: CanvasMatchDir,
+             prop: sp_cv_match_dir,
              prop_margin: new RectOffset(0, 0, 10, 10));
             if (XGUI.ChangedCheck_End())
             {
-                CanvasScaler scaler = (CanvasScaler)HudCanvasScaler.objectReferenceValue;
-                scaler.matchWidthOrHeight = CanvasMatchDir.floatValue;
+                CanvasScaler scaler = (CanvasScaler)sp_cv_scaler.objectReferenceValue;
+                scaler.matchWidthOrHeight = sp_cv_match_dir.floatValue;
             }
             #endregion
 
             #region 画布距离     
-            if (HudCanvasAnchorIndex.intValue == 2)
+            if (sp_cv_hudcanvas_anchor_index.intValue == 2)
             {
                 XGUI.layout_space(5);
 
@@ -93,7 +93,7 @@ namespace SevenStrikeModules.XHud.Editor
                     //title_color: Color.white,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 100,
-                    prop: CanvasDistance,
+                    prop: sp_cv_distance,
                     prop_margin: new RectOffset(0, 0, 10, 10));
             }
             #endregion
@@ -115,13 +115,13 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0),
                 button_text_font: XGUI.GetFont("xg-medium")))
             {
-                CanvasScalerScreenSize.vector2Value = xHud_GetMainGameViewSize();
-                CanvasScalerScreenSize.serializedObject.ApplyModifiedProperties();
+                sp_sf_canvas_scaler_screen_size.vector2Value = xHud_GetMainGameViewSize();
+                sp_sf_canvas_scaler_screen_size.serializedObject.ApplyModifiedProperties();
 
-                CanvasScaler scaler = (CanvasScaler)HudCanvasScaler.objectReferenceValue;
-                scaler.referenceResolution = CanvasScalerScreenSize.vector2Value;
+                CanvasScaler scaler = (CanvasScaler)sp_cv_scaler.objectReferenceValue;
+                scaler.referenceResolution = sp_sf_canvas_scaler_screen_size.vector2Value;
 
-                ScreenRes.vector2Value = CanvasScalerScreenSize.vector2Value;
+                sp_cv_screen_res.vector2Value = sp_sf_canvas_scaler_screen_size.vector2Value;
 
                 xHud_RatioReference_Update();
             }

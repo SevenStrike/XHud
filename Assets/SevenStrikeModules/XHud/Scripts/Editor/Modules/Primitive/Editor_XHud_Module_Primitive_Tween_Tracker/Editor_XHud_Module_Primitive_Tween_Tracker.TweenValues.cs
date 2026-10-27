@@ -253,45 +253,45 @@ namespace SevenStrikeModules.XHud.Editor
         private TweenValueProperties ResolveTweenValueProperties(TweenNodeType type, SerializedProperty prop)
         {
             #region 数值类型序列化获取- Vector4
-            SerializedProperty ori_v4 = prop.FindPropertyRelative("Original_Vector4");
-            SerializedProperty from_v4 = prop.FindPropertyRelative("From_Vector4");
-            SerializedProperty end_v4 = prop.FindPropertyRelative("End_Vector4");
+            SerializedProperty ori_v4 = prop.FindPropertyRelative(nameof(TweenNode.ori_vector4));
+            SerializedProperty from_v4 = prop.FindPropertyRelative(nameof(TweenNode.from_vector4));
+            SerializedProperty end_v4 = prop.FindPropertyRelative(nameof(TweenNode.end_vector4));
             #endregion
 
             #region 数值类型序列化获取- Vector3
-            SerializedProperty ori_v3 = prop.FindPropertyRelative("Original_Vector3");
-            SerializedProperty from_v3 = prop.FindPropertyRelative("From_Vector3");
-            SerializedProperty end_v3 = prop.FindPropertyRelative("End_Vector3");
+            SerializedProperty ori_v3 = prop.FindPropertyRelative(nameof(TweenNode.ori_vector3));
+            SerializedProperty from_v3 = prop.FindPropertyRelative(nameof(TweenNode.from_vector3));
+            SerializedProperty end_v3 = prop.FindPropertyRelative(nameof(TweenNode.end_vector3));
             #endregion
 
             #region 数值类型序列化获取- Vector2
-            SerializedProperty ori_v2 = prop.FindPropertyRelative("Original_Vector2");
-            SerializedProperty from_v2 = prop.FindPropertyRelative("From_Vector2");
-            SerializedProperty end_v2 = prop.FindPropertyRelative("End_Vector2");
+            SerializedProperty ori_v2 = prop.FindPropertyRelative(nameof(TweenNode.ori_vector2));
+            SerializedProperty from_v2 = prop.FindPropertyRelative(nameof(TweenNode.from_vector2));
+            SerializedProperty end_v2 = prop.FindPropertyRelative(nameof(TweenNode.end_vector2));
             #endregion
 
             #region 数值类型序列化获取- Color
-            SerializedProperty ori_color = prop.FindPropertyRelative("Original_Color");
-            SerializedProperty from_color = prop.FindPropertyRelative("From_Color");
-            SerializedProperty end_color = prop.FindPropertyRelative("End_Color");
+            SerializedProperty ori_color = prop.FindPropertyRelative(nameof(TweenNode.ori_color));
+            SerializedProperty from_color = prop.FindPropertyRelative(nameof(TweenNode.from_color));
+            SerializedProperty end_color = prop.FindPropertyRelative(nameof(TweenNode.end_color));
             #endregion
 
             #region 数值类型序列化获取- String
-            SerializedProperty ori_string = prop.FindPropertyRelative("Original_String");
-            SerializedProperty from_string = prop.FindPropertyRelative("From_String");
-            SerializedProperty end_string = prop.FindPropertyRelative("End_String");
+            SerializedProperty ori_string = prop.FindPropertyRelative(nameof(TweenNode.ori_string));
+            SerializedProperty from_string = prop.FindPropertyRelative(nameof(TweenNode.from_string));
+            SerializedProperty end_string = prop.FindPropertyRelative(nameof(TweenNode.end_string));
             #endregion
 
             #region 数值类型序列化获取- Float
-            SerializedProperty ori_float = prop.FindPropertyRelative("Original_Float");
-            SerializedProperty from_float = prop.FindPropertyRelative("From_Float");
-            SerializedProperty end_float = prop.FindPropertyRelative("End_Float");
+            SerializedProperty ori_float = prop.FindPropertyRelative(nameof(TweenNode.ori_float));
+            SerializedProperty from_float = prop.FindPropertyRelative(nameof(TweenNode.from_float));
+            SerializedProperty end_float = prop.FindPropertyRelative(nameof(TweenNode.end_float));
             #endregion
 
             #region 数值类型序列化获取- Int
-            SerializedProperty ori_int = prop.FindPropertyRelative("Original_Int");
-            SerializedProperty from_int = prop.FindPropertyRelative("From_Int");
-            SerializedProperty end_int = prop.FindPropertyRelative("End_Int");
+            SerializedProperty ori_int = prop.FindPropertyRelative(nameof(TweenNode.ori_int));
+            SerializedProperty from_int = prop.FindPropertyRelative(nameof(TweenNode.from_int));
+            SerializedProperty end_int = prop.FindPropertyRelative(nameof(TweenNode.end_int));
             #endregion
 
             TweenValueProperties value_propertys = new TweenValueProperties();
@@ -356,17 +356,17 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 // ── 位移：读取 RectTransform.anchoredPosition3D ──
                 case TweenNodeType.a_位移:
-                    p.vector3Value = target.controller.mod_Rect.anchoredPosition3D;
+                    p.vector3Value = target.controller.mod_rect.anchoredPosition3D;
                     break;
 
                 // ── 旋转：读取 RectTransform.localEulerAngles（欧拉角）──
                 case TweenNodeType.r_旋转:
-                    p.vector3Value = target.controller.mod_Rect.localEulerAngles;
+                    p.vector3Value = target.controller.mod_rect.localEulerAngles;
                     break;
 
                 // ── 缩放：读取 RectTransform.localScale ──
                 case TweenNodeType.s_缩放:
-                    p.vector3Value = target.controller.mod_Rect.localScale;
+                    p.vector3Value = target.controller.mod_rect.localScale;
                     break;
 
                 // ── 颜色：读取 Graphic.color ──
@@ -380,31 +380,31 @@ namespace SevenStrikeModules.XHud.Editor
 
                 // ── 淡化：读取 CanvasGroup.alpha ──
                 case TweenNodeType.g_淡化:
-                    p.floatValue = target.controller.mod_CanvasGroup.alpha;
+                    p.floatValue = target.controller.mod_canvas_group.alpha;
                     break;
 
                 // ── 打字机：读取 Text / TmpText 的内容 ──
                 // 注意：Text 与 TmpText 互斥，优先 Text，回退 TmpText；
                 // 两者都为 null 时保持属性原值不变。
                 case TweenNodeType.w_打字机:
-                    if (target.controller.mod_Text != null)
+                    if (target.controller.mod_text != null)
                     {
-                        p.stringValue = target.controller.mod_Text.text;
+                        p.stringValue = target.controller.mod_text.text;
                     }
-                    else if (target.controller.mod_TmpText != null)
+                    else if (target.controller.mod_tmp_text != null)
                     {
-                        p.stringValue = target.controller.mod_TmpText.text;
+                        p.stringValue = target.controller.mod_tmp_text.text;
                     }
                     break;
 
                 // ── 图像填充：读取 Image.fillAmount ──
                 case TweenNodeType.f_图像填充:
-                    p.floatValue = target.controller.mod_Image.fillAmount;
+                    p.floatValue = target.controller.mod_image.fillAmount;
                     break;
 
                 // ── 尺寸：读取 RectTransform.sizeDelta ──
                 case TweenNodeType.z_尺寸:
-                    p.vector2Value = target.controller.mod_Rect.sizeDelta;
+                    p.vector2Value = target.controller.mod_rect.sizeDelta;
                     break;
             }
 
@@ -428,22 +428,22 @@ namespace SevenStrikeModules.XHud.Editor
                 // ── 位移：写入 RectTransform.anchoredPosition3D ──
                 case TweenNodeType.a_位移:
                     if (!IsPreviewing)
-                        Undo.RecordObject(target.controller.mod_Rect, "undotransform-position");
-                    target.controller.mod_Rect.anchoredPosition3D = p.vector3Value;
+                        Undo.RecordObject(target.controller.mod_rect, "undotransform-position");
+                    target.controller.mod_rect.anchoredPosition3D = p.vector3Value;
                     break;
 
                 // ── 旋转：写入 RectTransform.localEulerAngles（欧拉角）──
                 case TweenNodeType.r_旋转:
                     if (!IsPreviewing)
-                        Undo.RecordObject(target.controller.mod_Rect, "undotransform-eulerangle");
-                    target.controller.mod_Rect.localEulerAngles = p.vector3Value;
+                        Undo.RecordObject(target.controller.mod_rect, "undotransform-eulerangle");
+                    target.controller.mod_rect.localEulerAngles = p.vector3Value;
                     break;
 
                 // ── 缩放：写入 RectTransform.localScale ──
                 case TweenNodeType.s_缩放:
                     if (!IsPreviewing)
-                        Undo.RecordObject(target.controller.mod_Rect, "undotransform-localscale");
-                    target.controller.mod_Rect.localScale = p.vector3Value;
+                        Undo.RecordObject(target.controller.mod_rect, "undotransform-localscale");
+                    target.controller.mod_rect.localScale = p.vector3Value;
                     break;
 
                 // ── 颜色：写入 Graphic.color，并同步刷新 Control 上缓存的 OriginalColor ──
@@ -455,13 +455,13 @@ namespace SevenStrikeModules.XHud.Editor
                     // 同步记录 Control 内部的 OriginalColor 缓存，避免下次动画运行时
                     // 用旧的 OriginalColor 覆盖用户刚刚写入的颜色。
                     if (!IsPreviewing)
-                        Undo.RecordObject(target.controller.pt_Painting, "undocolor-origin");
+                        Undo.RecordObject(target.controller.pt_painting, "undocolor-origin");
 
                     ModuleType x_Type = target.controller.GetModuleType();
                     if (x_Type == ModuleType.Image)
-                        target.controller.pt_Painting.OriginalColor = p.colorValue;
+                        target.controller.pt_painting.original_color = p.colorValue;
                     else if (x_Type == ModuleType.RawImage)
-                        target.controller.pt_Painting.OriginalColor = p.colorValue;
+                        target.controller.pt_painting.original_color = p.colorValue;
 
                     gc.color = p.colorValue;
                     break;
@@ -469,24 +469,24 @@ namespace SevenStrikeModules.XHud.Editor
                 // ── 淡化：写入 CanvasGroup.alpha ──
                 case TweenNodeType.g_淡化:
                     if (!IsPreviewing)
-                        Undo.RecordObject(target.controller.mod_CanvasGroup, "undoAlpha");
-                    target.controller.mod_CanvasGroup.alpha = p.floatValue;
+                        Undo.RecordObject(target.controller.mod_canvas_group, "undoAlpha");
+                    target.controller.mod_canvas_group.alpha = p.floatValue;
                     break;
 
                 // ── 打字机：写入 Text / TmpText 的内容 ──
                 // 注意：Text 与 TmpText 互斥，优先 Text，回退 TmpText。
                 case TweenNodeType.w_打字机:
-                    if (target.controller.mod_Text != null)
+                    if (target.controller.mod_text != null)
                     {
                         if (!IsPreviewing)
-                            Undo.RecordObject(target.controller.mod_Text, "undoText");
-                        target.controller.mod_Text.txt_Set_Content(p.stringValue);
+                            Undo.RecordObject(target.controller.mod_text, "undoText");
+                        target.controller.mod_text.txt_Set_Content(p.stringValue);
                     }
-                    else if (target.controller.mod_TmpText != null)
+                    else if (target.controller.mod_tmp_text != null)
                     {
                         if (!IsPreviewing)
-                            Undo.RecordObject(target.controller.mod_TmpText, "undoTmpText");
-                        target.controller.mod_TmpText.tmp_Set_Content(p.stringValue);
+                            Undo.RecordObject(target.controller.mod_tmp_text, "undoTmpText");
+                        target.controller.mod_tmp_text.tmp_Set_Content(p.stringValue);
                     }
                     // 文本变更需要刷新编辑器窗口与场景视图，否则预览不会立即更新。
                     Repaint();
@@ -496,15 +496,15 @@ namespace SevenStrikeModules.XHud.Editor
                 // ── 图像填充：写入 Image.fillAmount ──
                 case TweenNodeType.f_图像填充:
                     if (!IsPreviewing)
-                        Undo.RecordObject(target.controller.mod_Image, "undofill");
-                    target.controller.mod_Image.fillAmount = p.floatValue;
+                        Undo.RecordObject(target.controller.mod_image, "undofill");
+                    target.controller.mod_image.fillAmount = p.floatValue;
                     break;
 
                 // ── 尺寸：写入 RectTransform.sizeDelta ──
                 case TweenNodeType.z_尺寸:
                     if (!IsPreviewing)
-                        Undo.RecordObject(target.controller.mod_Rect, "undotransform-size");
-                    target.controller.mod_Rect.sizeDelta = p.vector2Value;
+                        Undo.RecordObject(target.controller.mod_rect, "undotransform-size");
+                    target.controller.mod_rect.sizeDelta = p.vector2Value;
                     break;
             }
         }

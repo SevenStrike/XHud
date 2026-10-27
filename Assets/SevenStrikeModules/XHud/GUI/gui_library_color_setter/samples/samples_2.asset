@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0202fa7a2e8e2ef47bebf0ed030f8bb0, type: 3}
   m_Name: samples_2
   m_EditorClassIdentifier: 
-  Textures:
+  textures:
   - {fileID: 2800000, guid: 7e923616b9def2d459fac0b60f0ca0e6, type: 3}
   - {fileID: 2800000, guid: a006bb6a967bb1e4eba052e04733f257, type: 3}
   - {fileID: 2800000, guid: aeb74525f6f5bb149945578eb19502de, type: 3}

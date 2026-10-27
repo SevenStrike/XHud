@@ -207,7 +207,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                         #region 速率   
                         #region 速率   
-                        SerializedObject so_anim = new SerializedObject(sp_con.pt_Tween);
+                        SerializedObject so_anim = new SerializedObject(sp_con.pt_tween);
                         so_anim.Update();
 
                         SerializedProperty sp_glodur = so_anim.FindProperty("GlobalDuration");
@@ -506,7 +506,7 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 最大耗时        
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.DurationMultiply * PrimitivesTweenMaxDuration.floatValue).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.tween_global_duration * PrimitivesTweenMaxDuration.floatValue).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     #endregion
                 }
                 #endregion
@@ -570,7 +570,7 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 最大耗时        
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.DurationMultiply * SelectedObjects[ProgressStatu_Index].PrimitivesTweenMaxDuration).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.tween_global_duration * SelectedObjects[ProgressStatu_Index].PrimitivesTweenMaxDuration).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     #endregion
                 }
                 #endregion
@@ -975,13 +975,13 @@ namespace SevenStrikeModules.XHud.Editor
             float[] x_list = new float[list.Count];
             for (int i = 0; i < list.Count; i++)
             {
-                if (list[i].Controller == null)
+                if (list[i].controller == null)
                 {
                     x_list[i] = 0;
                     continue;
                 }
-                list[i].Controller.pt_Tween.TweenNode_GetTimers();
-                x_list[i] = list[i].Controller.pt_Tween.MaxTimerWithGlobalDuration + list[i].DelayTime;
+                list[i].controller.pt_tween.TweenNode_GetTimers();
+                x_list[i] = list[i].controller.pt_tween.max_timer_with_global_duration + list[i].delay_time;
             }
             float v = XGUI_Utilitys.MaxValue(x_list);
             return v * globaldur;
@@ -1003,15 +1003,15 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     continue;
                 }
-                if (sp_con == null && sp_con.pt_Tween.PrimitiveTweenNodes == null || sp_con.pt_Tween.PrimitiveTweenNodes.Count <= 0)
+                if (sp_con == null && sp_con.pt_tween.primitive_tween_nodes == null || sp_con.pt_tween.primitive_tween_nodes.Count <= 0)
                 {
                     continue;
                 }
                 else
                 {
-                    for (int s = 0; s < sp_con.pt_Tween.PrimitiveTweenNodes.Count; s++)
+                    for (int s = 0; s < sp_con.pt_tween.primitive_tween_nodes.Count; s++)
                     {
-                        loops.Add(sp_con.pt_Tween.PrimitiveTweenNodes[s].LoopCount);
+                        loops.Add(sp_con.pt_tween.primitive_tween_nodes[s].loop_count);
                     }
                 }
             }
@@ -1036,7 +1036,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             for (int s = 0; s < tweenlist.Count; s++)
             {
-                if (tweenlist[s].LoopCount == -1)
+                if (tweenlist[s].loop_count == -1)
                 {
                     hasLoop = true;
                     break;
@@ -1058,7 +1058,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
             {
-                list.Add(BaseScript.PrimitiveControllerNodes[i].Controller.ID);
+                list.Add(BaseScript.PrimitiveControllerNodes[i].controller.id);
             }
 
             return list.ToArray();
@@ -1224,7 +1224,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                             dataitem.Title = $"{progress.name} ( {progress.Indicator} )";
                             dataitem.SubTitle = $"扫描到图元动画器";
-                            dataitem.Message = $"{progress.PrimitiveControllerNodes[c].Controller.name} ( {progress.PrimitiveControllerNodes[c].Controller.Indicator} )";
+                            dataitem.Message = $"{progress.PrimitiveControllerNodes[c].controller.name} ( {progress.PrimitiveControllerNodes[c].controller.indicator} )";
 
                             Datas.Add(dataitem);
                         }
@@ -1242,7 +1242,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                         dataitem.Title = $"{BaseScript.name} ( {BaseScript.Indicator} )";
                         dataitem.SubTitle = $"扫描到动画器";
-                        dataitem.Message = $"{BaseScript.PrimitiveControllerNodes[i].Controller.name} ( {BaseScript.PrimitiveControllerNodes[i].Controller.Indicator} )";
+                        dataitem.Message = $"{BaseScript.PrimitiveControllerNodes[i].controller.name} ( {BaseScript.PrimitiveControllerNodes[i].controller.indicator} )";
                         Datas.Add(dataitem);
                     }
                     Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 进度条消息", "扫描图元动画器组件", "以下是扫描到的所有图元动画器组件列表，请您检查核对：", "明白");

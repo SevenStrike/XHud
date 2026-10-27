@@ -245,13 +245,13 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 TweenNode node = Nodes[i];
                 if (node == null) continue;
-                if (!node.Enabled) continue;
-                if (node.TweenValueMode != TweenValueMode.当前到结束_C_E) continue;
+                if (!node.enabled) continue;
+                if (node.tween_value_mode != TweenValueMode.当前到结束_C_E) continue;
 
                 // 零时长节点无区间，跳过（与 DrivePlayheadPreview 的守卫一致）
-                if (node.Duration <= 0f) continue;
+                if (node.duration <= 0f) continue;
 
-                if (t >= node.Delay && t <= node.Delay + node.Duration)
+                if (t >= node.delay && t <= node.delay + node.duration)
                     return true;
             }
 

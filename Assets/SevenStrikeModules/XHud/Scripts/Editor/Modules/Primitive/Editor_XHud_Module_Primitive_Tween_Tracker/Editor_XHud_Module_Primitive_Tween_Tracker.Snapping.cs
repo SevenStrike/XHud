@@ -81,8 +81,8 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 if (exclude != null && exclude.Contains(i)) continue;
                 TweenNode other = Nodes[i];
-                float otherStart = other.Delay;
-                float otherEnd = other.Delay + other.Duration;
+                float otherStart = other.delay;
+                float otherEnd = other.delay + other.duration;
 
                 float dStart = Mathf.Abs(time - otherStart);
                 if (dStart < bestDist) { bestDist = dStart; bestTime = otherStart; snapped = true; }
@@ -124,8 +124,8 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = 0; i < Nodes.Count; i++)
             {
                 TweenNode other = Nodes[i];
-                float s = other.Delay;
-                float e = other.Delay + other.Duration;
+                float s = other.delay;
+                float e = other.delay + other.duration;
                 float ds = Mathf.Abs(time - s);
                 if (ds < bestDist) { bestDist = ds; bestTime = s; snapped = true; }
                 float de = Mathf.Abs(time - e);
@@ -137,9 +137,9 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 if (excludeSoundIndices != null && excludeSoundIndices.Contains(i)) continue;
                 TweenSound other = Sounds[i];
-                float s = other.Delay;
-                float len = other.Sound != null ? other.Sound.length : DefaultSoundClipSeconds;
-                float e = other.Delay + len;
+                float s = other.delay;
+                float len = other.sound != null ? other.sound.length : DefaultSoundClipSeconds;
+                float e = other.delay + len;
                 float ds = Mathf.Abs(time - s);
                 if (ds < bestDist) { bestDist = ds; bestTime = s; snapped = true; }
                 float de = Mathf.Abs(time - e);
@@ -176,8 +176,8 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = 0; i < Nodes.Count; i++)
             {
                 TweenNode other = Nodes[i];
-                float s = other.Delay;
-                float e = other.Delay + other.Duration;
+                float s = other.delay;
+                float e = other.delay + other.duration;
 
                 float ds = Mathf.Abs(time - s);
                 if (ds < bestDist) { bestDist = ds; bestTime = s; snapped = true; }
@@ -190,9 +190,9 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = 0; i < Sounds.Count; i++)
             {
                 TweenSound other = Sounds[i];
-                float s = other.Delay;
-                float len = other.Sound != null ? other.Sound.length : DefaultSoundClipSeconds;
-                float e = other.Delay + len;
+                float s = other.delay;
+                float len = other.sound != null ? other.sound.length : DefaultSoundClipSeconds;
+                float e = other.delay + len;
 
                 float ds = Mathf.Abs(time - s);
                 if (ds < bestDist) { bestDist = ds; bestTime = s; snapped = true; }

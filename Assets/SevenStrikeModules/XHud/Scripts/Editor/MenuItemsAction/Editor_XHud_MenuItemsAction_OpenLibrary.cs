@@ -31,7 +31,7 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem(("Tools/XHud/Library/CurrentLibrary-Color #F1"))]
         public static void open_col()
         {
-            XHud_Library_Colors lib = (XHud_Library_Colors)FindFirstObjectByType<XHud_Manager>().Hud_Colors;
+            XHud_Library_Colors lib = (XHud_Library_Colors)FindFirstObjectByType<XHud_Manager>().library_colors;
             if (lib == null)
             {
                 EditorApplication.delayCall += () =>
@@ -58,34 +58,34 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem(("Tools/XHud/Library/CurrentLibrary-PrimitiveTween #F2"))]
         public static void open_primitive_tween()
         {
-            XHud_Library_Curves lib = (XHud_Library_Curves)FindFirstObjectByType<XHud_Manager>().Hud_Curves;
-            if (lib == null)
+            //XHud_Library_Curves lib = (XHud_Library_Curves)FindFirstObjectByType<XHud_Manager>().library_curves;
+            //if (lib == null)
+            //{
+            EditorApplication.delayCall += () =>
             {
-                EditorApplication.delayCall += () =>
+                string res = XGUI.dialog(
+                  type: XGUIDialogType.警告,
+                  windowtitle: "XHud - 图元动画库消息",
+                  title: "未指定图元动画库",
+                  msg: "未在XHudManager中配置图元动画库！请先前往XHud管理器指定一个图元动画库！",
+                  ok: "明白",
+                  cancel: "前往",
+                  PrimaryIndex: 1,
+                  themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                if (res == "前往")
                 {
-                    string res = XGUI.dialog(
-                      type: XGUIDialogType.警告,
-                      windowtitle: "XHud - 曲线库消息",
-                      title: "未指定曲线库",
-                      msg: "未在XHudManager中配置曲线库！请先前往XHud管理器指定一个曲线库！",
-                      ok: "明白",
-                      cancel: "前往",
-                      PrimaryIndex: 1,
-                      themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
-                    if (res == "前往")
-                    {
-                        Transform man = FindFirstObjectByType<XHud_Manager>().transform;
-                        EditorGUIUtility.PingObject(man);
-                    }
-                    return;
-                };
-            }
-            EditorUtility.OpenPropertyEditor(lib);
+                    Transform man = FindFirstObjectByType<XHud_Manager>().transform;
+                    EditorGUIUtility.PingObject(man);
+                }
+                return;
+            };
+            //}
+            //EditorUtility.OpenPropertyEditor(lib);
         }
         [MenuItem(("Tools/XHud/Library/CurrentLibrary-Sound #F3"))]
         public static void open_sound()
         {
-            XHud_Library_Sounds lib = (XHud_Library_Sounds)FindFirstObjectByType<XHud_Manager>().Hud_Sounds;
+            XHud_Library_Sounds lib = (XHud_Library_Sounds)FindFirstObjectByType<XHud_Manager>().library_sounds;
             if (lib == null)
             {
                 EditorApplication.delayCall += () =>
@@ -114,7 +114,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             XHud_Manager mgr = XHud_Dashboard.get_manager();
 
-            if (mgr.Hud_ElementLibrarys.Count <= 0)
+            if (mgr.ele_library_elements.Count <= 0)
             {
                 EditorApplication.delayCall += () =>
                 {
@@ -137,9 +137,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                if (mgr.Hud_ElementLibrarys.Count == 1)
+                if (mgr.ele_library_elements.Count == 1)
                 {
-                    XHud_Library_Element lib = mgr.Hud_ElementLibrarys[0];
+                    XHud_Library_Element lib = mgr.ele_library_elements[0];
                     EditorUtility.OpenPropertyEditor(lib);
                 }
                 else
@@ -157,10 +157,10 @@ namespace SevenStrikeModules.XHud.Editor
             XHud_Library_Element ele_lib = null;
 
             XHud_Manager man = XHud_Dashboard.get_manager();
-            for (int i = 0; i < man.Hud_ElementLibrarys.Count; i++)
+            for (int i = 0; i < man.ele_library_elements.Count; i++)
             {
-                XHud_Library_Element lib = man.Hud_ElementLibrarys[i];
-                if (lib.LibraryName == libname)
+                XHud_Library_Element lib = man.ele_library_elements[i];
+                if (lib.library_name == libname)
                 {
                     ele_lib = lib;
                     EditorUtility.OpenPropertyEditor(lib);
@@ -172,7 +172,7 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem(("Tools/XHud/Library/CurrentLibrary-TextStyleLibrary #F5"))]
         public static void open_textstyle()
         {
-            XHud_Library_TextStyle lib = (XHud_Library_TextStyle)FindFirstObjectByType<XHud_Manager>().Hud_TextStyleLibrary;
+            XHud_Library_TextStyle lib = (XHud_Library_TextStyle)FindFirstObjectByType<XHud_Manager>().library_textstyles;
             if (lib == null)
             {
                 EditorApplication.delayCall += () =>
@@ -199,7 +199,7 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem(("Tools/XHud/Library/CurrentLibrary-ElementMotionLibrary #F6"))]
         public static void open_elementmotion()
         {
-            XHud_Library_Motion lib = (XHud_Library_Motion)FindFirstObjectByType<XHud_Manager>().Hud_Motions;
+            XHud_Library_Motion lib = (XHud_Library_Motion)FindFirstObjectByType<XHud_Manager>().library_motions;
             if (lib == null)
             {
                 EditorApplication.delayCall += () =>
@@ -226,7 +226,7 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem(("Tools/XHud/Library/CurrentLibrary-TransitionLibrary #F7"))]
         public static void open_transition()
         {
-            XHud_Library_Transition lib = (XHud_Library_Transition)FindFirstObjectByType<XHud_Manager>().Hud_TransitionLib;
+            XHud_Library_Transition lib = (XHud_Library_Transition)FindFirstObjectByType<XHud_Manager>().library_transitions;
             if (lib == null)
             {
                 EditorApplication.delayCall += () =>
@@ -253,7 +253,7 @@ namespace SevenStrikeModules.XHud.Editor
         [MenuItem(("Tools/XHud/Library/CurrentLibrary-Curve #F8"))]
         public static void open_curve()
         {
-            XHud_Library_Curves lib = (XHud_Library_Curves)FindFirstObjectByType<XHud_Manager>().Hud_Curves;
+            XHud_Library_Curves lib = (XHud_Library_Curves)FindFirstObjectByType<XHud_Manager>().library_curves;
             if (lib == null)
             {
                 EditorApplication.delayCall += () =>

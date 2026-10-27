@@ -50,14 +50,14 @@ namespace SevenStrikeModules.XHud.Editor
                 return;
 
             SerializedProperty prop_sound = prop_sounds.GetArrayElementAtIndex(selectedIndex);
-            SerializedProperty ser_id = prop_sound.FindPropertyRelative("ID");
-            SerializedProperty ser_sound = prop_sound.FindPropertyRelative("Sound");
-            SerializedProperty ser_path = prop_sound.FindPropertyRelative("Path");
-            SerializedProperty ser_timing = prop_sound.FindPropertyRelative("Timing");
-            SerializedProperty ser_delay = prop_sound.FindPropertyRelative("Delay");
-            SerializedProperty ser_volume = prop_sound.FindPropertyRelative("Volume");
-            SerializedProperty ser_minPitch = prop_sound.FindPropertyRelative("MinPitch");
-            SerializedProperty ser_maxPitch = prop_sound.FindPropertyRelative("MaxPitch");
+            SerializedProperty ser_id = prop_sound.FindPropertyRelative(nameof(TweenSound.id));
+            SerializedProperty ser_sound = prop_sound.FindPropertyRelative(nameof(TweenSound.sound));
+            SerializedProperty ser_path = prop_sound.FindPropertyRelative(nameof(TweenSound.path));
+            SerializedProperty ser_timing = prop_sound.FindPropertyRelative(nameof(TweenSound.timing));
+            SerializedProperty ser_delay = prop_sound.FindPropertyRelative(nameof(TweenSound.delay));
+            SerializedProperty ser_volume = prop_sound.FindPropertyRelative(nameof(TweenSound.volume));
+            SerializedProperty ser_minPitch = prop_sound.FindPropertyRelative(nameof(TweenSound.min_pitch));
+            SerializedProperty ser_maxPitch = prop_sound.FindPropertyRelative(nameof(TweenSound.max_pitch));
 
             XGUI.ChangedCheck_Start();
 
@@ -103,7 +103,7 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0),
                 focus_name: "fav_btn"))
             {
-                sound.ID = target.TweenSound_GenerateId();
+                sound.id = target.TweenSound_GenerateId();
             }
 
             #region 音效资源
@@ -235,7 +235,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_space(5);
 
             #region 静音
-            sound.Mute = DrawLabeledToggle("静音", sound.Mute, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+            sound.mute = DrawLabeledToggle("静音", sound.mute, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
             #endregion
 
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
@@ -257,7 +257,7 @@ namespace SevenStrikeModules.XHud.Editor
                 margin: new RectOffset(10, 10, 20, 0),
                 padding: new RectOffset(10, 10, 15, 15));
 
-            string lenText = sound.Sound != null ? $"{sound.Sound.length:F3} 秒" : "—";
+            string lenText = sound.sound != null ? $"{sound.sound.length:F3} 秒" : "—";
             XGUI.layout_state_displayer_text(
                 title: "音频时长",
                 title_size: XGUIFontSize.M,
@@ -284,7 +284,7 @@ namespace SevenStrikeModules.XHud.Editor
         }
         /// <summary> 
         ///绘制选中节点的参数字段
-        ///<para/>使用 EditorGUILayout 自动布局；按 <see cref="TweenNode.Type"/> 动态显示起始值 / 结束值
+        ///<para/>使用 EditorGUILayout 自动布局；按 <see cref="TweenNode.type"/> 动态显示起始值 / 结束值
         /// </summary>
         private void DrawNodeParameterFields(Rect area, Texture2D type_icon, TweenNode node)
         {
@@ -300,20 +300,20 @@ namespace SevenStrikeModules.XHud.Editor
                 return;
 
             SerializedProperty prop_node = prop_nodes.GetArrayElementAtIndex(selectedIndex);
-            SerializedProperty ser_id = prop_node.FindPropertyRelative("ID");
-            SerializedProperty ser_indicator = prop_node.FindPropertyRelative("Indicator");
-            SerializedProperty ser_type = prop_node.FindPropertyRelative("Type");
-            SerializedProperty ser_duration = prop_node.FindPropertyRelative("Duration");
-            SerializedProperty ser_delay = prop_node.FindPropertyRelative("Delay");
-            SerializedProperty ser_timing = prop_node.FindPropertyRelative("Timings");
-            SerializedProperty ser_loop_type = prop_node.FindPropertyRelative("LoopType");
-            SerializedProperty ser_loop_count = prop_node.FindPropertyRelative("LoopCount");
-            SerializedProperty ser_ease = prop_node.FindPropertyRelative("Ease");
-            SerializedProperty ser_curve = prop_node.FindPropertyRelative("Curve");
-            SerializedProperty ser_rotate_mode = prop_node.FindPropertyRelative("RotateMode");
-            SerializedProperty ser_written_extended = prop_node.FindPropertyRelative("TextExtended");
-            SerializedProperty ser_written_text_cursor = prop_node.FindPropertyRelative("TextCursor");
-            SerializedProperty ser_written_text_cursorblinkspeed = prop_node.FindPropertyRelative("TextCursorBlinkSpeed");
+            SerializedProperty ser_id = prop_node.FindPropertyRelative(nameof(TweenNode.id));
+            SerializedProperty ser_indicator = prop_node.FindPropertyRelative(nameof(TweenNode.indicator));
+            SerializedProperty ser_type = prop_node.FindPropertyRelative(nameof(TweenNode.type));
+            SerializedProperty ser_duration = prop_node.FindPropertyRelative(nameof(TweenNode.duration));
+            SerializedProperty ser_delay = prop_node.FindPropertyRelative(nameof(TweenNode.delay));
+            SerializedProperty ser_timing = prop_node.FindPropertyRelative(nameof(TweenNode.timings));
+            SerializedProperty ser_loop_type = prop_node.FindPropertyRelative(nameof(TweenNode.loop_type));
+            SerializedProperty ser_loop_count = prop_node.FindPropertyRelative(nameof(TweenNode.loop_count));
+            SerializedProperty ser_ease = prop_node.FindPropertyRelative(nameof(TweenNode.ease));
+            SerializedProperty ser_curve = prop_node.FindPropertyRelative(nameof(TweenNode.curve));
+            SerializedProperty ser_rotate_mode = prop_node.FindPropertyRelative(nameof(TweenNode.rotate_mode));
+            SerializedProperty ser_written_extended = prop_node.FindPropertyRelative(nameof(TweenNode.text_extended));
+            SerializedProperty ser_written_text_cursor = prop_node.FindPropertyRelative(nameof(TweenNode.text_cursor));
+            SerializedProperty ser_written_text_cursorblinkspeed = prop_node.FindPropertyRelative(nameof(TweenNode.text_cursor_blink_speed));
 
 
             #region 类型图标
@@ -398,7 +398,7 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0),
                 focus_name: "fav_btn"))
             {
-                node.ID = target.TweenNode_GenerateId();
+                node.id = target.TweenNode_GenerateId();
             }
 
             #region ID
@@ -462,7 +462,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 旋转模式
-            if (node.Type == TweenNodeType.r_旋转)
+            if (node.type == TweenNodeType.r_旋转)
             {
                 XGUI.layout_property_field(
                     title: "旋转模式",
@@ -501,7 +501,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 曲线
-            if (node.Ease == EaseMode.None)
+            if (node.ease == EaseMode.None)
             {
                 XGUI.layout_property_field(
                     title: "曲线",
@@ -516,7 +516,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 光标字符
-            if (node.Type == TweenNodeType.w_打字机)
+            if (node.type == TweenNodeType.w_打字机)
                 XGUI.layout_property_field(
                 title: "光标字符",
                 title_size: XGUIFontSize.M,
@@ -529,7 +529,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 光标字符闪烁频率
-            if (node.Type == TweenNodeType.w_打字机)
+            if (node.type == TweenNodeType.w_打字机)
                 XGUI.layout_property_field(
                     title: "光标字符闪烁频率",
                     title_size: XGUIFontSize.M,
@@ -665,8 +665,8 @@ namespace SevenStrikeModules.XHud.Editor
                     can_foldout: false);
 
                 #region 动画数值过渡模式选项卡
-                int value_mode_index = node.ValueModeIndex = XGUI.layout_toolbar(
-                          index: node.ValueModeIndex,
+                int value_mode_index = node.value_mode_index = XGUI.layout_toolbar(
+                          index: node.value_mode_index,
                           names: new string[] { "S - D", "D - E", "S - E", "C - E" },
                           bg_normal: XGUIGroup.纯色边框,
                           bg_selected: XGUIGroup.实体,
@@ -689,7 +689,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 // 数值模式枚举值同步
-                node.TweenValueMode = (TweenValueMode)value_mode_index;
+                node.tween_value_mode = (TweenValueMode)value_mode_index;
 
                 #region 模式说明按钮（弹出说明弹窗）
                 Rect rect_toolbar = XGUI.GetLastRect();
@@ -752,20 +752,20 @@ namespace SevenStrikeModules.XHud.Editor
                     padding: new RectOffset(10, 10, 15, 15));
 
                 #region 动画开关
-                node.Enabled = DrawLabeledToggle("动画开关", node.Enabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+                node.enabled = DrawLabeledToggle("动画开关", node.enabled, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
                 #endregion
 
                 #region 延伸内容
-                if (node.Type == TweenNodeType.w_打字机 && node.TweenValueMode == TweenValueMode.当前到结束_C_E)
-                    node.TextExtended = DrawLabeledToggle("延伸内容", node.TextExtended, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+                if (node.type == TweenNodeType.w_打字机 && node.tween_value_mode == TweenValueMode.当前到结束_C_E)
+                    node.text_extended = DrawLabeledToggle("延伸内容", node.text_extended, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
                 #endregion
 
                 #region 重置设为起始值
-                node.Rewind_Set_Startvalue = DrawLabeledToggle("重置设为起始值", node.Rewind_Set_Startvalue, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+                node.rewind_set_startvalue = DrawLabeledToggle("重置设为起始值", node.rewind_set_startvalue, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
                 #endregion
 
                 #region 完成设为结束值
-                node.Complete_Set_Endvalue = DrawLabeledToggle("完成设为结束值", node.Complete_Set_Endvalue, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
+                node.complete_set_endvalue = DrawLabeledToggle("完成设为结束值", node.complete_set_endvalue, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, new string[] { "禁用", "启用" }, (b) => { });
                 #endregion
 
                 XGUI.layout_group_end(type: XGUIContainerType.Vertical);
@@ -821,9 +821,9 @@ namespace SevenStrikeModules.XHud.Editor
             if (needRebuildSubProps)
             {
                 if (selectedKind == TrackKind.Node)
-                    cachedNodesProp = cachedSO.FindProperty("PrimitiveTweenNodes");
+                    cachedNodesProp = cachedSO.FindProperty(nameof(XHud_Module_Primitive_Tween.primitive_tween_nodes));
                 else if (selectedKind == TrackKind.Sound)
-                    cachedSoundsProp = cachedSO.FindProperty("PrimitiveTweenSounds");
+                    cachedSoundsProp = cachedSO.FindProperty(nameof(XHud_Module_Primitive_Tween.primitive_tween_sounds));
 
                 cachedSOKind = selectedKind;
                 cachedSOIndex = selectedIndex;

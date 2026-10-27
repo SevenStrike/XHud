@@ -43,12 +43,12 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.ChangedCheck_Start();
 
             XGUI.layout_state_displayer_icon(
-                  title: MaskRaycastEnabled.boolValue ? "射线阻挡" : "射线穿透",
+                  title: sp_mk_raycast_enabled.boolValue ? "射线阻挡" : "射线穿透",
                   title_size: XGUIFontSize.M,
-                  icon: MaskRaycastEnabled.boolValue ? icon_ray_masked : icon_ray_normal,
+                  icon: sp_mk_raycast_enabled.boolValue ? icon_ray_masked : icon_ray_normal,
                   icon_size: new Vector2(12, 12),
                   icon_offset: new Vector2(0, 0),
-                  icon_color: MaskRaycastEnabled.boolValue ? Color.red : XHud_Dashboard.themes_get_color(ThemeColorType.primary),
+                  icon_color: sp_mk_raycast_enabled.boolValue ? Color.red : XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   padding: new RectOffset(0, 0, 0, 0),
                   margin: new RectOffset(5, 5, 0, 5));
 
@@ -58,7 +58,7 @@ namespace SevenStrikeModules.XHud.Editor
              title_size: XGUIFontSize.M,
              title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              title_width: 90,
-             prop: MaskAlpha,
+             prop: sp_mk_alpha,
              prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -68,18 +68,18 @@ namespace SevenStrikeModules.XHud.Editor
             title_size: XGUIFontSize.M,
             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
-            prop: MaskRaycastAlphaThreshold,
+            prop: sp_mk_raycast_alpha_threshold,
             prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
             #region 颜色
             XGUI.layout_colorfield(
-                prop: MaskColor,
+                prop: sp_mk_color,
                 title: "颜色",
                 title_width: 90,
                 state_title: "Hex：",
-                state_value: $"#{XGUI_Utilitys.Color_To_HexString(MaskColor.colorValue)}",
-                state_value_color: MaskColor.colorValue);
+                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_mk_color.colorValue)}",
+                state_value_color: sp_mk_color.colorValue);
             #endregion
 
             #region 图形
@@ -88,7 +88,7 @@ namespace SevenStrikeModules.XHud.Editor
             title_size: XGUIFontSize.M,
             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
-            prop: MaskTexture,
+            prop: sp_mk_texture,
             prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -103,7 +103,7 @@ namespace SevenStrikeModules.XHud.Editor
             title_size: XGUIFontSize.M,
             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
-            prop: ContentOpacity_Screen,
+            prop: sp_op_content_opacity_screen,
             prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -113,7 +113,7 @@ namespace SevenStrikeModules.XHud.Editor
             title_size: XGUIFontSize.M,
             title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
             title_width: 90,
-            prop: ContentOpacity_World,
+            prop: sp_op_content_opacity_world,
             prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 

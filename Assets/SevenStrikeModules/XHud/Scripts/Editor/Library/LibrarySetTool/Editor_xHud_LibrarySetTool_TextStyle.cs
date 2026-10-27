@@ -27,28 +27,28 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEngine;
 
-    #region 编辑器窗口
-    /// <summary>
-    /// XHud 文字样式库采集 / 修改工具窗口。
-    /// <para/>
-    /// 支持 Text 与 TmpText 两种样式类型，分别暴露各自的完整参数面板；
-    /// 提供实时预览（对源组件反向写入）、名称 / 说明编辑、
-    /// 添加到库 / 修改库源参数两种模式。
-    /// </summary>
     public class Editor_XHud_LibrarySetTool_TextStyle : EditorWindow
     {
         #region 字段 - 序列化对象 / 属性
         /// <summary>
         /// 用于序列化当前窗口的自定义字段。
         /// </summary>
-        private SerializedObject BaseObject;
+        private SerializedObject base_object;
+        #endregion
+
+        #region 字段 - 序列化属性
         /// <summary>
-        /// 本窗口用到的全部序列化属性引用。
-        /// <para/>
-        /// 统一在 <see cref="OnEnable"/> 里初始化。
-        /// 覆盖：样式名称 / 说明 / 样式数据。
+        /// 样式名称属性
         /// </summary>
-        private SerializedProperty sp_LibName, sp_Description, sp_StyleInfo;
+        private SerializedProperty sp_lib_name;
+        /// <summary>
+        /// 样式说明属性
+        /// </summary>
+        private SerializedProperty sp_description;
+        /// <summary>
+        /// 样式数据属性
+        /// </summary>
+        private SerializedProperty sp_style_info;
         #endregion
 
         #region 字段 - 数据
@@ -56,39 +56,39 @@ namespace SevenStrikeModules.XHud.Editor
         /// 当前编辑的文字样式数据（工作副本）。
         /// </summary>
         [SerializeField]
-        private XHud_LibraryArg_TextStyle StyleInfo;
+        private XHud_LibraryArg_TextStyle style_info;
         /// <summary>
         /// 文字样式的原始数据（用于恢复）。
         /// </summary>
         [SerializeField]
-        private XHud_LibraryArg_TextStyle OriginStyleInfo;
+        private XHud_LibraryArg_TextStyle origin_style_info;
         /// <summary>
         /// 样式名称。
         /// </summary>
         [SerializeField]
-        public string LibName;
+        public string lib_name;
         /// <summary>
         /// 样式说明。
         /// </summary>
         [SerializeField]
-        public string Description;
+        public string description;
         /// <summary>
         /// 原始样式名称。
         /// </summary>
         [SerializeField]
-        public string OriginLibName;
+        public string origin_lib_name;
         /// <summary>
         /// 修改的库项索引。
         /// </summary>
-        public int ModifiedIndex;
+        public int modified_index;
         /// <summary>
         /// 目标文字样式库。
         /// </summary>
-        private XHud_Library_TextStyle Target_Hud_TextStyleLibrary;
+        private XHud_Library_TextStyle target_hud_text_style_library;
         /// <summary>
         /// 库设置模式（添加到库 / 修改库源参数）。
         /// </summary>
-        public LibrarySetterMode LibrarySetterMode;
+        public LibrarySetterMode library_setter_mode;
         #endregion
 
         #region 字段 - 组件
@@ -97,13 +97,13 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 用于实时预览并反向写入样式修改。
         /// </summary>
-        public XHud_Module_Text Component_Text;
+        public XHud_Module_Text component_text;
         /// <summary>
         /// 源 TmpText 组件。
         /// <para/>
         /// 用于实时预览并反向写入样式修改。
         /// </summary>
-        public XHud_Module_TmpText Component_TmpText;
+        public XHud_Module_TmpText component_tmptext;
         #endregion
 
         #region 字段 - 图标
@@ -117,33 +117,37 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 按钮高度。
         /// </summary>
-        private float ButtonHeight = 25;
+        private float button_height = 25;
         /// <summary>
         /// 按钮间距。
         /// </summary>
-        private float ButtonDistance = 15;
+        private float button_distance = 15;
         /// <summary>
         /// 确认按钮文字。
         /// </summary>
-        public string ButtonText_Ok;
+        public string button_text_ok;
         /// <summary>
         /// 取消按钮文字。
         /// </summary>
-        public string ButtonText_Cancel;
+        public string button_text_cancel;
         /// <summary>
         /// 窗口标题。
         /// </summary>
-        string Title;
+        string title_primary;
+        /// <summary>
+        /// 窗口副标题。
+        /// </summary>
+        string title_sub = "以下为目标文字样式的参数，可根据需要进行调整";
         /// <summary>
         /// 参数面板工具栏当前索引。
         /// </summary>
-        private int ToolbarIndex;
+        private int toolbar_index;
         /// <summary>
         /// 窗口是否正在关闭。
         /// <para/>
         /// 用于跳过关闭阶段的实时预览反向写入。
         /// </summary>
-        private bool isClosing;
+        private bool is_closing;
         #endregion
 
         #region 字段 - 选项文字
@@ -169,17 +173,6 @@ namespace SevenStrikeModules.XHud.Editor
         string[] optnames_g = new string[] { "单色", "水平", "垂直", "四角" };
         #endregion
 
-        #region 字段 - 动效参数
-        /// <summary>
-        /// 生成动效参数。
-        /// </summary>
-        public Motion_Creator CreateArgs;
-        /// <summary>
-        /// 回收动效参数。
-        /// </summary>
-        public Motion_Recycler RecycleArgs;
-        #endregion
-
         #region 生命周期
         /// <summary>
         /// Unity 禁用回调。
@@ -188,7 +181,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnDisable()
         {
-            isClosing = true;
+            is_closing = true;
         }
         /// <summary>
         /// Unity 启用回调。
@@ -202,15 +195,20 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseObject = new SerializedObject(this);
-            sp_LibName = BaseObject.FindProperty("LibName");
-            sp_StyleInfo = BaseObject.FindProperty("StyleInfo");
-            sp_Description = BaseObject.FindProperty("Description");
+            base_object = new SerializedObject(this);
 
+            #region 获取序列化属性
+            sp_lib_name = base_object.FindProperty(nameof(lib_name));
+            sp_style_info = base_object.FindProperty(nameof(style_info));
+            sp_description = base_object.FindProperty(nameof(description));
+            #endregion
+
+            #region 获取图标
             icon_logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_text_style_setter/icon_logo");
+            #endregion
 
-            Description = "文字样式参数说明内容";
-            LibName = "文字样式名称";
+            description = "文字样式参数说明内容";
+            lib_name = "文字样式名称";
         }
         /// <summary>
         /// Unity 销毁回调。
@@ -223,9 +221,9 @@ namespace SevenStrikeModules.XHud.Editor
         private void OnDestroy()
         {
             #region 是否恢复到未改动的原有参数，还是保持调整后的状态
-            if (LibrarySetterMode == LibrarySetterMode.添加到库)
+            if (library_setter_mode == LibrarySetterMode.添加到库)
             {
-                bool EqualsData = OriginStyleInfo.EqualsData(StyleInfo);
+                bool EqualsData = origin_style_info.EqualsData(style_info);
 
                 if (!EqualsData)
                 {
@@ -243,13 +241,13 @@ namespace SevenStrikeModules.XHud.Editor
                             themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                         if (res == "恢复")
                         {
-                            if (Component_Text != null)
+                            if (component_text != null)
                             {
-                                Component_Text.txt_Set_Style_ForSetter(OriginStyleInfo);
+                                component_text.txt_Set_Style_ForSetter(origin_style_info);
                             }
-                            else if (Component_TmpText != null)
+                            else if (component_tmptext != null)
                             {
-                                Component_TmpText.tmp_Update_Style_LibrarySetter(OriginStyleInfo);
+                                component_tmptext.tmp_Update_Style_LibrarySetter(origin_style_info);
                             }
                         }
                     };
@@ -270,13 +268,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnGUI()
         {
-            BaseObject.Update();
+            base_object.Update();
 
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = TextClipping.Ellipsis;
 
             #region 抬头
             Rect rect = new Rect(0, 0, position.width, position.height);
@@ -294,10 +288,10 @@ namespace SevenStrikeModules.XHud.Editor
             Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
             XGUI.gui_label(
                 rect: rect_title,
-                text: new GUIContent(Title),
+                text: new GUIContent(title_primary),
                 text_color: Color.white,
                 size: XGUIFontSize.L,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 font: XGUI.GetFont("xg-heavy"));
 
             // 分割线
@@ -313,62 +307,62 @@ namespace SevenStrikeModules.XHud.Editor
             Rect rect_subtitle = new Rect(rect.x + 18, rect.y + 53, rect.width, 30);
             XGUI.gui_label(
                 rect: rect_subtitle,
-                text: new GUIContent("以下为目标文字样式的参数，可根据需要进行调整"),
+                text: new GUIContent(title_sub),
                 text_color: Color.white * 0.7f,
                 size: XGUIFontSize.M,
                 anchor: TextAnchor.UpperLeft,
-                clipping: clipping);
+                clipping: clipping_ellipsis);
             #endregion
 
             #region 参数
-            SerializedProperty prop_Type = sp_StyleInfo.FindPropertyRelative("Type");
-            SerializedProperty prop_Raycast = sp_StyleInfo.FindPropertyRelative("Raycast");
-            SerializedProperty prop_Maskable = sp_StyleInfo.FindPropertyRelative("Maskable");
+            SerializedProperty prop_Type = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.type));
+            SerializedProperty prop_Raycast = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.raycast));
+            SerializedProperty prop_Maskable = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.maskable));
 
             #region Text属性
-            SerializedProperty prop_overflow_h = sp_StyleInfo.FindPropertyRelative("Overflow_Horizon");
-            SerializedProperty prop_overflow_v = sp_StyleInfo.FindPropertyRelative("Overflow_Vertical");
-            SerializedProperty prop_autosize = sp_StyleInfo.FindPropertyRelative("BestFit");
-            SerializedProperty prop_rich = sp_StyleInfo.FindPropertyRelative("RichText");
-            SerializedProperty prop_alignGEO = sp_StyleInfo.FindPropertyRelative("GeometreAlign");
-            SerializedProperty prop_style = sp_StyleInfo.FindPropertyRelative("Style");
-            SerializedProperty prop_Font = sp_StyleInfo.FindPropertyRelative("Font");
-            SerializedProperty prop_ContentAnchor = sp_StyleInfo.FindPropertyRelative("ContentAnchor");
-            SerializedProperty prop_Size = sp_StyleInfo.FindPropertyRelative("Size");
-            SerializedProperty prop_Fit_Min = sp_StyleInfo.FindPropertyRelative("Fit_Min");
-            SerializedProperty prop_Fit_Max = sp_StyleInfo.FindPropertyRelative("Fit_Max");
-            SerializedProperty prop_LineHeight = sp_StyleInfo.FindPropertyRelative("LineHeight");
-            SerializedProperty prop_FontColor = sp_StyleInfo.FindPropertyRelative("FontColor");
+            SerializedProperty prop_overflow_h = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.overflow_horizon));
+            SerializedProperty prop_overflow_v = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.overflow_vertical));
+            SerializedProperty prop_autosize = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.best_fit));
+            SerializedProperty prop_rich = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.rich_text));
+            SerializedProperty prop_alignGEO = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.geometre_align));
+            SerializedProperty prop_style = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.style));
+            SerializedProperty prop_Font = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.font));
+            SerializedProperty prop_ContentAnchor = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.content_anchor));
+            SerializedProperty prop_Size = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.size));
+            SerializedProperty prop_Fit_Min = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.fit_min));
+            SerializedProperty prop_Fit_Max = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.fit_max));
+            SerializedProperty prop_LineHeight = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.line_height));
+            SerializedProperty prop_FontColor = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.font_color));
             #endregion
 
             #region TmpText属性
-            SerializedProperty prop_tmp_rich = sp_StyleInfo.FindPropertyRelative("tmp_rich");
-            SerializedProperty prop_tmp_contentwrap = sp_StyleInfo.FindPropertyRelative("tmp_contentwrap");
-            SerializedProperty prop_tmp_overflow = sp_StyleInfo.FindPropertyRelative("tmp_overflow");
-            SerializedProperty prop_tmp_style = sp_StyleInfo.FindPropertyRelative("tmp_style");
-            SerializedProperty prop_tmp_anchor = sp_StyleInfo.FindPropertyRelative("tmp_anchor");
-            SerializedProperty prop_tmp_font = sp_StyleInfo.FindPropertyRelative("tmp_font");
-            SerializedProperty prop_tmp_size = sp_StyleInfo.FindPropertyRelative("tmp_size");
-            SerializedProperty prop_tmp_space_character = sp_StyleInfo.FindPropertyRelative("tmp_space_character");
-            SerializedProperty prop_tmp_space_word = sp_StyleInfo.FindPropertyRelative("tmp_space_word");
-            SerializedProperty prop_tmp_space_lineheight = sp_StyleInfo.FindPropertyRelative("tmp_space_lineheight");
-            SerializedProperty prop_tmp_space_paragraph = sp_StyleInfo.FindPropertyRelative("tmp_space_paragraph");
-            SerializedProperty prop_tmp_WrappingRatios = sp_StyleInfo.FindPropertyRelative("tmp_WrappingRatios");
-            SerializedProperty prop_tmp_contentmargin = sp_StyleInfo.FindPropertyRelative("tmp_contentmargin");
-            SerializedProperty prop_tmp_color = sp_StyleInfo.FindPropertyRelative("tmp_color");
-            SerializedProperty prop_tmp_EnableAutoSizing = sp_StyleInfo.FindPropertyRelative("tmp_EnableAutoSizing");
-            SerializedProperty prop_tmp_FontSizeMin = sp_StyleInfo.FindPropertyRelative("tmp_FontSizeMin");
-            SerializedProperty prop_tmp_FontSizeMax = sp_StyleInfo.FindPropertyRelative("tmp_FontSizeMax");
-            SerializedProperty prop_tmp_CharWidthMaxAdj = sp_StyleInfo.FindPropertyRelative("tmp_CharWidthMaxAdj");
-            SerializedProperty prop_tmp_LineSpacingMax = sp_StyleInfo.FindPropertyRelative("tmp_LineSpacingMax");
-            SerializedProperty prop_gra_A = sp_StyleInfo.FindPropertyRelative("gra_A");
-            SerializedProperty prop_gra_B = sp_StyleInfo.FindPropertyRelative("gra_B");
-            SerializedProperty prop_gra_C = sp_StyleInfo.FindPropertyRelative("gra_C");
-            SerializedProperty prop_gra_D = sp_StyleInfo.FindPropertyRelative("gra_D");
-            SerializedProperty prop_gra_Invert = sp_StyleInfo.FindPropertyRelative("gra_Invert");
-            SerializedProperty prop_gra_Used = sp_StyleInfo.FindPropertyRelative("gra_Used");
-            SerializedProperty prop_gra_ColorMode = sp_StyleInfo.FindPropertyRelative("gra_ColorMode");
-            SerializedProperty prop_gra_ColorModeName = sp_StyleInfo.FindPropertyRelative("gra_ColorModeName");
+            SerializedProperty prop_tmp_rich = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_rich));
+            SerializedProperty prop_tmp_contentwrap = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_contentwrap));
+            SerializedProperty prop_tmp_overflow = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_overflow));
+            SerializedProperty prop_tmp_style = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_style));
+            SerializedProperty prop_tmp_anchor = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_anchor));
+            SerializedProperty prop_tmp_font = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_font));
+            SerializedProperty prop_tmp_size = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_size));
+            SerializedProperty prop_tmp_space_character = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_space_character));
+            SerializedProperty prop_tmp_space_word = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_space_word));
+            SerializedProperty prop_tmp_space_lineheight = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_space_lineheight));
+            SerializedProperty prop_tmp_space_paragraph = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_space_paragraph));
+            SerializedProperty prop_tmp_WrappingRatios = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_wrapping_ratios));
+            SerializedProperty prop_tmp_contentmargin = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_content_margin));
+            SerializedProperty prop_tmp_color = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_color));
+            SerializedProperty prop_tmp_EnableAutoSizing = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_enable_auto_sizing));
+            SerializedProperty prop_tmp_FontSizeMin = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_font_size_min));
+            SerializedProperty prop_tmp_FontSizeMax = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_font_size_max));
+            SerializedProperty prop_tmp_CharWidthMaxAdj = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_char_width_max_adj));
+            SerializedProperty prop_tmp_LineSpacingMax = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.tmp_line_spacing_max));
+            SerializedProperty prop_gra_A = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_a));
+            SerializedProperty prop_gra_B = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_b));
+            SerializedProperty prop_gra_C = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_c));
+            SerializedProperty prop_gra_D = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_d));
+            SerializedProperty prop_gra_Invert = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_invert));
+            SerializedProperty prop_gra_Used = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_used));
+            SerializedProperty prop_gra_ColorMode = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_color_mode));
+            SerializedProperty prop_gra_ColorModeName = sp_style_info.FindPropertyRelative(nameof(XHud_LibraryArg_TextStyle.gra_color_mode_name));
             #endregion
 
             xHud_TextType textType = (xHud_TextType)prop_Type.enumValueIndex;
@@ -385,7 +379,7 @@ namespace SevenStrikeModules.XHud.Editor
                 size: XGUIFontSize.S,
                 anchor: TextAnchor.MiddleCenter,
                 offset: new Vector2(0, -2),
-                clipping: clipping);
+                clipping: clipping_ellipsis);
 
             XGUI.layout_space(100);
 
@@ -404,14 +398,14 @@ namespace SevenStrikeModules.XHud.Editor
 
             Rect Description_Rect = XGUI.GetLastRect();
 
-            if (string.IsNullOrEmpty(sp_LibName.stringValue))
+            if (string.IsNullOrEmpty(sp_lib_name.stringValue))
             {
-                sp_LibName.stringValue = "文字样式名称";
+                sp_lib_name.stringValue = "文字样式名称";
             }
 
-            sp_LibName.stringValue = XGUI.layout_inputfield(
+            sp_lib_name.stringValue = XGUI.layout_inputfield(
                    title: "名称",
-                   prop: sp_LibName.stringValue,
+                   prop: sp_lib_name.stringValue,
                    text_wrap: false,
                    field_fontsize: XGUIFontSize.M,
                    field_text_offset: Vector2.zero,
@@ -424,16 +418,16 @@ namespace SevenStrikeModules.XHud.Editor
                    field_text_style: FontStyle.Normal,
                    field_text_anchor: TextAnchor.MiddleLeft);
 
-            sp_LibName.serializedObject.ApplyModifiedProperties();
+            sp_lib_name.serializedObject.ApplyModifiedProperties();
 
-            if (string.IsNullOrEmpty(sp_Description.stringValue))
+            if (string.IsNullOrEmpty(sp_description.stringValue))
             {
-                sp_Description.stringValue = "文字样式参数说明内容";
+                sp_description.stringValue = "文字样式参数说明内容";
             }
 
-            sp_Description.stringValue = XGUI.layout_inputfield(
+            sp_description.stringValue = XGUI.layout_inputfield(
                 title: "说明",
-                prop: sp_Description.stringValue,
+                prop: sp_description.stringValue,
                 text_wrap: true,
                 field_fontsize: XGUIFontSize.M,
                 field_text_offset: Vector2.zero,
@@ -446,7 +440,7 @@ namespace SevenStrikeModules.XHud.Editor
                 field_text_style: FontStyle.Normal,
                 field_text_anchor: TextAnchor.UpperLeft);
 
-            sp_Description.serializedObject.ApplyModifiedProperties();
+            sp_description.serializedObject.ApplyModifiedProperties();
 
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
@@ -821,8 +815,8 @@ namespace SevenStrikeModules.XHud.Editor
                   margin: new RectOffset(10, 10, 0, 0),
                   padding: new RectOffset(10, 10, 15, 15));
 
-                ToolbarIndex = XGUI.layout_toolbar(
-                    index: ref ToolbarIndex,
+                toolbar_index = XGUI.layout_toolbar(
+                    index: ref toolbar_index,
                     names: new string[] { "特征", "间距", "渐变色" },
                     bg_normal: XGUIGroup.无,
                     bg_selected: XGUIGroup.实体,
@@ -844,7 +838,7 @@ namespace SevenStrikeModules.XHud.Editor
                     navigate_style_bg: XGUIGroup.纯色边框,
                     navigate_style_bg_color: Color.black * 0.5f);
 
-                switch (ToolbarIndex)
+                switch (toolbar_index)
                 {
                     case 0:
                         #region 类型
@@ -1476,14 +1470,15 @@ namespace SevenStrikeModules.XHud.Editor
             }
             #endregion
 
-            BaseObject.ApplyModifiedProperties();
+            base_object.ApplyModifiedProperties();
 
             Repaint();
 
             XGUI.layout_space(10);
 
-            Buttons();
+            bottom_buttons();
 
+            #region 检测事件
             Event e = Event.current;
             // 检测点击事件
             if (e.type == EventType.MouseDown)
@@ -1501,16 +1496,17 @@ namespace SevenStrikeModules.XHud.Editor
                 e.Use();
                 Close();
             }
+            #endregion
 
-            if (isClosing)
+            if (is_closing)
                 return;
             if (GUI.changed)
             {
                 //反向更新源文字效果
-                if (Component_Text != null)
-                    Component_Text.txt_Set_Style_ForSetter(StyleInfo);
-                if (Component_TmpText != null)
-                    Component_TmpText.tmp_Update_Style_LibrarySetter(StyleInfo);
+                if (component_text != null)
+                    component_text.txt_Set_Style_ForSetter(style_info);
+                if (component_tmptext != null)
+                    component_tmptext.tmp_Update_Style_LibrarySetter(style_info);
             }
         }
         #endregion
@@ -1532,11 +1528,11 @@ namespace SevenStrikeModules.XHud.Editor
             XHud_Manager mgr = XHud_Dashboard.get_manager();
 
             XHud_LibraryArg_TextStyle info = new XHud_LibraryArg_TextStyle();
-            info.CopyData(StyleInfo);
-            info.Name = sp_LibName.stringValue;
-            info.Description = sp_Description.stringValue;
+            info.CopyData(style_info);
+            info.name = sp_lib_name.stringValue;
+            info.description = sp_description.stringValue;
 
-            if (sp_LibName.stringValue == "文字样式名称")
+            if (sp_lib_name.stringValue == "文字样式名称")
             {
                 XGUI.dialog(
                     type: XGUIDialogType.警告,
@@ -1552,7 +1548,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
-            bool exist = Target_Hud_TextStyleLibrary.TextStyle_Library_NameIsValid(sp_LibName.stringValue, info.Type);
+            bool exist = target_hud_text_style_library.TextStyle_Library_NameIsValid(sp_lib_name.stringValue, info.type);
 
             if (exist)
             {
@@ -1560,7 +1556,7 @@ namespace SevenStrikeModules.XHud.Editor
                     type: XGUIDialogType.警告,
                     windowtitle: "XHud - 文字样式库采集器消息",
                     title: "存在重复文字样式名称",
-                    msg: $"名称为<color={colorhex}> {sp_LibName.stringValue} </color>的已经存在于文字样式库中！",
+                    msg: $"名称为<color={colorhex}> {sp_lib_name.stringValue} </color>的已经存在于文字样式库中！",
                     ok: "重命名",
                     PrimaryIndex: 0,
                     usemodal: true,
@@ -1569,13 +1565,13 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                Target_Hud_TextStyleLibrary.TextStyle_Library_Add(info);
+                target_hud_text_style_library.TextStyle_Library_Add(info);
 
                 XGUI.dialog(
                     type: XGUIDialogType.确认,
                     windowtitle: "XHud - 文字样式库采集器消息",
                     title: "已添加到文字样式库",
-                    msg: $"已将名称为<color={colorhex}> {sp_LibName.stringValue} </color>的文字样式参数添加到文字样式库中！",
+                    msg: $"已将名称为<color={colorhex}> {sp_lib_name.stringValue} </color>的文字样式参数添加到文字样式库中！",
                     ok: "明白",
                     PrimaryIndex: 0,
                     usemodal: true,
@@ -1598,7 +1594,7 @@ namespace SevenStrikeModules.XHud.Editor
                         type: XGUIDialogType.警告,
                         windowtitle: "XHud - 文字样式库采集器消息",
                         title: "更新文字样式模版",
-                        msg: $"即将更新文字样式库中名称为： <color={colorhex}> {OriginStyleInfo.Name} </color> 且类型为： {OriginStyleInfo.Type} 的文字样式模版参数，确认更新参数吗？",
+                        msg: $"即将更新文字样式库中名称为： <color={colorhex}> {origin_style_info.name} </color> 且类型为： {origin_style_info.type} 的文字样式模版参数，确认更新参数吗？",
                         ok: "更新",
                         cancel: "暂不",
                         PrimaryIndex: 0,
@@ -1608,11 +1604,11 @@ namespace SevenStrikeModules.XHud.Editor
                 if (res == "更新")
                 {
                     XHud_LibraryArg_TextStyle info = new XHud_LibraryArg_TextStyle();
-                    info.CopyData_Ignored_LibraryToggle(StyleInfo);
-                    info.Name = sp_LibName.stringValue;
-                    info.Type = StyleInfo.Type;
-                    info.Description = sp_Description.stringValue;
-                    Target_Hud_TextStyleLibrary.TextStyle_Library_Replace(ModifiedIndex, info);
+                    info.CopyData_Ignored_LibraryToggle(style_info);
+                    info.name = sp_lib_name.stringValue;
+                    info.type = style_info.type;
+                    info.description = sp_description.stringValue;
+                    target_hud_text_style_library.TextStyle_Library_Replace(modified_index, info);
 
                     Close();
                 }
@@ -1628,8 +1624,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="cancel">取消按钮文字</param>
         public void SetButtonText(string ok, string cancel)
         {
-            ButtonText_Cancel = cancel;
-            ButtonText_Ok = ok;
+            button_text_cancel = cancel;
+            button_text_ok = ok;
         }
         /// <summary>
         /// 设置模版基础信息（针对从库源修改更新使用）。
@@ -1638,8 +1634,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="description">样式说明</param>
         public void SetInfo(string name, string description)
         {
-            LibName = name;
-            Description = description;
+            lib_name = name;
+            this.description = description;
         }
         /// <summary>
         /// 设置模版样式信息（工作副本）。
@@ -1647,7 +1643,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="info">样式数据</param>
         public void SetStyle(XHud_LibraryArg_TextStyle info)
         {
-            StyleInfo.CopyData(info);
+            style_info.CopyData(info);
         }
         /// <summary>
         /// 设置模版样式信息（原始副本）。
@@ -1655,7 +1651,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="info">样式数据</param>
         public void SetOriginStyle(XHud_LibraryArg_TextStyle info)
         {
-            OriginStyleInfo.CopyData(info);
+            origin_style_info.CopyData(info);
         }
         /// <summary>
         /// 设置源 Text 组件。
@@ -1663,7 +1659,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="com">Text 组件</param>
         public void SetComponent(XHud_Module_Text com)
         {
-            Component_Text = com;
+            component_text = com;
         }
         /// <summary>
         /// 设置源 TmpText 组件。
@@ -1671,7 +1667,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="com">TmpText 组件</param>
         public void SetComponent(XHud_Module_TmpText com)
         {
-            Component_TmpText = com;
+            component_tmptext = com;
         }
         /// <summary>
         /// 设置标题。
@@ -1679,7 +1675,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="title">标题文字</param>
         public void SetTitle(string title)
         {
-            Title = title;
+            title_primary = title;
         }
         /// <summary>
         /// 设置库设置模式（添加到库 / 修改库源参数）。
@@ -1687,7 +1683,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="mode">库设置模式</param>
         public void SetLibrarySetterMode(LibrarySetterMode mode)
         {
-            LibrarySetterMode = mode;
+            library_setter_mode = mode;
         }
         /// <summary>
         /// 设置目标文字样式库。
@@ -1695,7 +1691,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="lib">目标文字样式库</param>
         public void Set_Target_Hud_TextStyleLibrary(XHud_Library_TextStyle lib)
         {
-            Target_Hud_TextStyleLibrary = lib;
+            target_hud_text_style_library = lib;
         }
         #endregion
 
@@ -1703,10 +1699,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 绘制底部按钮区（取消 / 确认）。
         /// <para/>
-        /// 确认按钮根据 <see cref="LibrarySetterMode"/> 决定调用
+        /// 确认按钮根据 <see cref="library_setter_mode"/> 决定调用
         /// <see cref="SendToLibrary"/> 或 <see cref="UpdateToLibrary"/>。
         /// </summary>
-        private void Buttons()
+        private void bottom_buttons()
         {
             #region 按钮
             XGUI.layout_group_start(
@@ -1717,7 +1713,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_flexspace();
 
             if (XGUI.layout_button(
-                text: ButtonText_Cancel,
+                text: button_text_cancel,
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
@@ -1732,16 +1728,16 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0),
                 layout_min_width: 0,
                 layout_width: 200,
-                height: ButtonHeight,
+                height: button_height,
                 button_text_font: XGUI.GetFont("xg-medium")))
             {
                 Close();
             }
 
-            XGUI.layout_space(ButtonDistance);
+            XGUI.layout_space(button_distance);
 
             if (XGUI.layout_button(
-                text: ButtonText_Ok,
+                text: button_text_ok,
                 tooltip: "",
                 bg_fill: XGUIGroup.实体,
                 bg_color: XGUIColor.亮白,
@@ -1756,16 +1752,17 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0),
                 layout_min_width: 0,
                 layout_width: 200,
-                height: ButtonHeight,
+                height: button_height,
                 button_text_font: XGUI.GetFont("xg-medium")))
             {
-                if (LibrarySetterMode == LibrarySetterMode.添加到库)
+                if (library_setter_mode == LibrarySetterMode.添加到库)
                 {
                     SendToLibrary();
                 }
-                else if (LibrarySetterMode == LibrarySetterMode.修改库源参数)
+                else if (library_setter_mode == LibrarySetterMode.修改库源参数)
                 {
                     UpdateToLibrary();
+                    XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
                 }
                 return;
             }
@@ -1777,5 +1774,4 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
     }
-    #endregion
 }

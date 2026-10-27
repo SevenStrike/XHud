@@ -34,12 +34,12 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 按钮组件
         /// </summary>
-        public XHud_Module_Button Button;
+        public XHud_Module_Button button;
         [SerializeField]
         /// <summary>
         /// 用于选项按钮
         /// </summary>
-        public bool IsOptional;
+        public bool is_optional;
     }
 
     public partial class XHud_Module_Element : MonoBehaviour
@@ -48,14 +48,14 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 按钮容器
         /// </summary>
-        public List<ElementNode_Button> ButtonNodes;
+        public List<ElementNode_Button> button_nodes;
         [SerializeField]
         /// <summary>
         /// 按钮列表折叠状态
         /// true表示折叠，false表示展开
         /// 用于控制Inspector中按钮列表的显示/隐藏
         /// </summary>
-        public bool ButtonIsFold;
+        public bool button_is_fold;
 
         /// <summary>
         /// 启用或禁用所有按钮的交互
@@ -63,20 +63,20 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState">状态</param>
         public void element_Button_InteractableSetAll(bool state)
         {
-            if (ButtonNodes.Count <= 0)
+            if (button_nodes.Count <= 0)
                 return;
-            for (int i = 0; i < ButtonNodes.Count; i++)
+            for (int i = 0; i < button_nodes.Count; i++)
             {
-                ButtonNodes[i].Button.interactable = state;
+                button_nodes[i].button.interactable = state;
             }
             if (state)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有按钮交互！", XGUIMsgState.通知);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有按钮交互！", XGUIMsgState.通知);
             }
         }
@@ -86,18 +86,18 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState">状态</param>
         public void element_Button_EnableSetAll(bool state)
         {
-            for (int i = 0; i < ButtonNodes.Count; i++)
+            for (int i = 0; i < button_nodes.Count; i++)
             {
-                ButtonNodes[i].Button.enabled = state;
+                button_nodes[i].button.enabled = state;
             }
             if (state)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有按钮脚本！", XGUIMsgState.通知);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有按钮脚本！", XGUIMsgState.通知);
             }
         }
@@ -108,21 +108,21 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Button element_Button_Get(string indicator)
         {
             XHud_Module_Button btn = null;
-            for (int i = 0; i < ButtonNodes.Count; i++)
+            for (int i = 0; i < button_nodes.Count; i++)
             {
-                if (ButtonNodes[i].Button.Indicator == indicator)
+                if (button_nodes[i].button.Indicator == indicator)
                 {
-                    btn = ButtonNodes[i].Button;
+                    btn = button_nodes[i].button;
                 }
             }
             if (btn == null)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "未找到对应标识的按钮！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的按钮！", XGUIMsgState.通知);
             }
             return btn;
@@ -133,22 +133,22 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Button[] element_Button_GetAll(bool IgnoreOptionBtn = true)
         {
             List<XHud_Module_Button> btnlist = new List<XHud_Module_Button>();
-            for (int i = 0; i < ButtonNodes.Count; i++)
+            for (int i = 0; i < button_nodes.Count; i++)
             {
                 if (IgnoreOptionBtn)
-                    if (ButtonNodes[i].Button.IsOptionButton)
+                    if (button_nodes[i].button.IsOptionButton)
                         continue;
-                btnlist.Add(ButtonNodes[i].Button);
+                btnlist.Add(button_nodes[i].button);
             }
             if (btnlist.Count <= 0)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "获取的按钮列表为空！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
-                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + ButtonNodes.Count + " 个按钮！", XGUIMsgState.通知);
+                if (debug_state)
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + button_nodes.Count + " 个按钮！", XGUIMsgState.通知);
             }
             return btnlist.ToArray();
         }
@@ -157,12 +157,12 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void element_Button_EventsClear(bool IgnoreOptionBtn = true)
         {
-            for (int i = 0; i < ButtonNodes.Count; i++)
+            for (int i = 0; i < button_nodes.Count; i++)
             {
                 if (IgnoreOptionBtn)
-                    if (ButtonNodes[i].Button.IsOptionButton)
+                    if (button_nodes[i].button.IsOptionButton)
                         continue;
-                ButtonNodes[i].Button.btn_EventsClear();
+                button_nodes[i].button.btn_EventsClear();
             }
         }
         /// <summary>
@@ -170,12 +170,12 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void element_Button_ActionsClear(bool IgnoreOptionBtn = true)
         {
-            for (int i = 0; i < ButtonNodes.Count; i++)
+            for (int i = 0; i < button_nodes.Count; i++)
             {
                 if (IgnoreOptionBtn)
-                    if (ButtonNodes[i].Button.IsOptionButton)
+                    if (button_nodes[i].button.IsOptionButton)
                         continue;
-                ButtonNodes[i].Button.btn_ActionsClear();
+                button_nodes[i].button.btn_ActionsClear();
             }
         }
         /// <summary>

@@ -26,23 +26,17 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditor;
     using UnityEngine;
 
-    #region 编辑器窗口
-    /// <summary>
-    /// XHud 元素库统一预加载数量修改器窗口。
-    /// <para/>
-    /// 提供将目标元素库下所有元素项的初始化数量统一设置为指定值的功能。
-    /// </summary>
     public class Editor_XHud_LibrarySetTool_ElementLib_CountsSet : EditorWindow
     {
         #region 字段 - 序列化对象 / 属性
         /// <summary>
         /// 用于序列化当前窗口的自定义字段。
         /// </summary>
-        private SerializedObject BaseObject;
+        private SerializedObject base_object;
         /// <summary>
         /// 预加载数量的序列化属性。
         /// </summary>
-        private SerializedProperty sp_InitializeCounts;
+        private SerializedProperty sp_initialize_counts;
         #endregion
 
         #region 字段 - 数据
@@ -50,12 +44,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// 预加载数量（运行时）。
         /// </summary>
         [SerializeField]
-        private int InitializeCounts;
+        private int initialize_counts;
         /// <summary>
         /// 目标元素库。
         /// </summary>
         [SerializeField]
-        private XHud_Library_Element TargetElementLibrary;
+        private XHud_Library_Element target_element_library;
         #endregion
 
         #region 字段 - 图标
@@ -67,6 +61,19 @@ namespace SevenStrikeModules.XHud.Editor
 
         #region 生命周期
         /// <summary>
+        /// Unity 启用回调。
+        /// <para/>
+        /// 构建序列化对象、绑定预加载数量属性并加载窗口 Logo 图标。
+        /// </summary>
+        private void OnEnable()
+        {
+            base_object = new SerializedObject(this);
+
+            sp_initialize_counts = base_object.FindProperty(nameof(initialize_counts));
+
+            icon_logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_element_setter/icon");
+        }
+        /// <summary>
         /// Unity 禁用回调。
         /// <para/>
         /// 当前实现为空，保留以支持后续清理逻辑。
@@ -74,19 +81,6 @@ namespace SevenStrikeModules.XHud.Editor
         private void OnDisable()
         {
 
-        }
-        /// <summary>
-        /// Unity 启用回调。
-        /// <para/>
-        /// 构建序列化对象、绑定预加载数量属性并加载窗口 Logo 图标。
-        /// </summary>
-        private void OnEnable()
-        {
-            BaseObject = new SerializedObject(this);
-
-            sp_InitializeCounts = BaseObject.FindProperty("InitializeCounts");
-
-            icon_logo = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_library_element_setter/icon");
         }
         /// <summary>
         /// 绘制窗口 GUI。
@@ -98,7 +92,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void OnGUI()
         {
-            BaseObject.Update();
+            base_object.Update();
+
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             #region 抬头
             Rect rect = new Rect(0, 0, position.width, position.height);
@@ -111,8 +107,6 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0),
                 border: new RectOffset(0, 0, 0, 0),
                 color: Color.white);
-
-            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             // 大标题
             Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
@@ -153,7 +147,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 目标元素库名称
             XGUI.layout_label(
-                text: TargetElementLibrary.LibraryName,
+                text: target_element_library.library_name,
                 bg_fill: XGUIGroup.无,
                 bg_color: XGUIColor.无,
                 size: XGUIFontSize.M,
@@ -178,13 +172,14 @@ namespace SevenStrikeModules.XHud.Editor
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraCutter_Near.floatValue != 0, XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
                 prop_padding: new RectOffset(20, 20, 0, 0),
-                prop: sp_InitializeCounts);
+                prop: sp_initialize_counts);
             #endregion
 
             XGUI.layout_space(10);
 
-            Buttons();
+            bottom_buttons();
 
+            #region 检测事件
             Event e = Event.current;
             // 检测点击事件
             if (e.type == EventType.MouseDown)
@@ -201,9 +196,10 @@ namespace SevenStrikeModules.XHud.Editor
                 e.Use();
                 Close();
             }
+            #endregion
 
-            if (BaseObject.targetObject != null)
-                BaseObject.ApplyModifiedProperties();
+            if (base_object.targetObject != null)
+                base_object.ApplyModifiedProperties();
         }
         #endregion
 
@@ -213,7 +209,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 播放模式下禁用更新按钮，防止运行时修改元素库数据。
         /// </summary>
-        private void Buttons()
+        private void bottom_buttons()
         {
             XGUI.layout_group_start(
               type: XGUIContainerType.Horizontal,
@@ -264,7 +260,7 @@ namespace SevenStrikeModules.XHud.Editor
                 height: XGUI.GetSingleLineHeight() + 10,
                 button_text_font: XGUI.GetFont("xg-medium")))
             {
-                ModifyTargetLibPreloadCounts(TargetElementLibrary);
+                ModifyTargetLibPreloadCounts(target_element_library);
             }
             GUI.backgroundColor = Color.white;
             XGUI.SetEnabled(true);
@@ -280,7 +276,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="lib">目标元素库</param>
         public void SetTargetLib(XHud_Library_Element lib)
         {
-            TargetElementLibrary = lib;
+            target_element_library = lib;
         }
         #endregion
 
@@ -288,7 +284,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 修改目标元素库所有元素项的预加载数量。
         /// <para/>
-        /// 将 <see cref="sp_InitializeCounts"/> 的值统一写入目标元素库中所有元素项的
+        /// 将 <see cref="sp_initialize_counts"/> 的值统一写入目标元素库中所有元素项的
         /// <c>InitializeCount</c> 字段，并记录 Undo 与标记资产为脏。
         /// </summary>
         /// <param name="lib">目标元素库</param>
@@ -300,9 +296,9 @@ namespace SevenStrikeModules.XHud.Editor
             Undo.RecordObject(targetLibrary, "Modify Preload Counts");
 
             // 修改预加载数量
-            for (int s = 0; s < targetLibrary.ElementLibrary.Count; s++)
+            for (int s = 0; s < targetLibrary.library_elements.Count; s++)
             {
-                targetLibrary.ElementLibrary[s].InitializeCount = sp_InitializeCounts.intValue;
+                targetLibrary.library_elements[s].initialize_count = sp_initialize_counts.intValue;
             }
 
             // 标记为已修改
@@ -314,5 +310,4 @@ namespace SevenStrikeModules.XHud.Editor
         }
         #endregion
     }
-    #endregion
 }

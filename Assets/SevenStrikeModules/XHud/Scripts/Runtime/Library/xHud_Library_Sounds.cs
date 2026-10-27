@@ -32,12 +32,12 @@ namespace SevenStrikeModules.XHud
     /// </summary>
     public class XHud_LibraryArg_Sound
     {
-        public string Name;
-        public string Format;
-        public AudioClip Clip;
-        public int Frequency;
-        public int Channel;
-        public float Length;
+        public string name;
+        public string format;
+        public AudioClip clip;
+        public int frequency;
+        public int channel;
+        public float length;
 
         public XHud_LibraryArg_Sound()
         {
@@ -50,83 +50,96 @@ namespace SevenStrikeModules.XHud
         /// <param name="clip">新增配色</param>
         public XHud_LibraryArg_Sound(string name, AudioClip clip, string format)
         {
-            Name = name;
-            Clip = clip;
-            Frequency = clip.frequency;
-            Channel = clip.channels;
-            Length = clip.length;
-            Format = format;
+            this.name = name;
+            this.clip = clip;
+            frequency = clip.frequency;
+            channel = clip.channels;
+            length = clip.length;
+            this.format = format;
         }
     }
 
     [CreateAssetMenu(fileName = "XHud_Library_Sounds", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-Sound (音效库)", order = 0)]
     public class XHud_Library_Sounds : ScriptableObject
     {
+        #region 字段 - 库基础信息
+
         /// <summary>
         /// 音效库名称
         /// </summary>
-        public string LibraryName = "NewSoundLibrary";
+        public string library_name = "NewSoundLibrary";
+
+        /// <summary>
+        /// 音效库数据列表
+        /// </summary>
+        public List<XHud_LibraryArg_Sound> library_sounds = new List<XHud_LibraryArg_Sound>();
+
+        #endregion
+
+        #region 字段 - 音高设置
+
         /// <summary>
         /// 随机音高开关
         /// </summary>
-        public bool UseRandomPitch = false;
+        public bool use_random_pitch = false;
         /// <summary>
-        ///  最小音高
+        /// 最小音高
         /// </summary>
-        public float Pitch_Min = 1;
+        public float pitch_min = 1;
         /// <summary>
-        ///  最大音高
+        /// 最大音高
         /// </summary>
-        public float Pitch_Max = 1;
+        public float pitch_max = 1;
+        #endregion
 
-
+        #region 字段 - 列表查询与筛选
         /// <summary>
         /// 名称项查找（精确匹配）
         /// </summary>
-        public string Find = "";
-
+        public string find = "";
         /// <summary>
-        /// Editor列表项高度
+        /// Editor 筛选名称
         /// </summary>
-        public float itemHeight = 50;
+        public string highlight;
+        #endregion
 
+        #region 字段 - 列表布局
+        /// <summary>
+        /// Editor 列表项高度
+        /// </summary>
+        public float item_height = 50;
         /// <summary>
         /// 可视区域显示的元素数量
         /// </summary>
-        public int visibleItemCount = 8;
-
+        public int visible_item_count = 8;
         /// <summary>
         /// 列表滚动位置
         /// </summary>
-        public Vector2 SoundInfoList_Original_Scroller;
+        public Vector2 sound_Info_list_original_scroller;
+        #endregion
 
-
-        /// <summary>
-        /// Editor筛选名称
-        /// </summary>
-        public string Highlight;
-
+        #region 字段 - 选中与定位
 
         /// <summary>
         /// 选中项索引号
         /// </summary>
-        public int SelectedIndex;
-
+        public int selected_index;
 
         /// <summary>
-        /// 定位选中项索引号
+        /// 定位选中项索引号（-1 表示无）
         /// </summary>
-        public int LocationSelectedIndex = -1;
+        public int location_selected_index = -1;
 
-        public List<XHud_LibraryArg_Sound> SoundLibrary = new List<XHud_LibraryArg_Sound>();
-        public UnityAction act_on_SoundChanged;
-        public UnityAction<string, AudioClip> act_on_SoundAdded;
-        public UnityAction act_on_SoundRemoved;
+        #endregion
+
+        public UnityAction act_on_sound_changed;
+        public UnityAction<string, AudioClip> act_on_sound_added;
+        public UnityAction act_on_sound_removed;
 
         private void OnEnable()
         {
-            itemHeight = 50;
-            visibleItemCount = 8;
+            item_height = 50;
+            visible_item_count = 8;
         }
 
         // 确保内部名称与文件名一致
@@ -152,11 +165,11 @@ namespace SevenStrikeModules.XHud
         public XHud_LibraryArg_Sound SoundLibrary_GetSoundInfo(string name)
         {
             XHud_LibraryArg_Sound info = null;
-            for (int x = 0; x < SoundLibrary.Count; x++)
+            for (int x = 0; x < library_sounds.Count; x++)
             {
-                if (SoundLibrary[x].Name == name)
+                if (library_sounds[x].name == name)
                 {
-                    info = SoundLibrary[x];
+                    info = library_sounds[x];
                 }
             }
             return info;
@@ -170,11 +183,11 @@ namespace SevenStrikeModules.XHud
         public AudioClip SoundLibrary_GetSound(string name)
         {
             AudioClip color = null;
-            for (int x = 0; x < SoundLibrary.Count; x++)
+            for (int x = 0; x < library_sounds.Count; x++)
             {
-                if (SoundLibrary[x].Name == name)
+                if (library_sounds[x].name == name)
                 {
-                    color = SoundLibrary[x].Clip;
+                    color = library_sounds[x].clip;
                 }
             }
             return color;
@@ -187,7 +200,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public AudioClip SoundLibrary_GetSound(int index)
         {
-            return SoundLibrary[index].Clip;
+            return library_sounds[index].clip;
         }
 
         /// <summary>
@@ -197,7 +210,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public XHud_LibraryArg_Sound SoundLibrary_GetSoundArg(int index)
         {
-            return SoundLibrary[index];
+            return library_sounds[index];
         }
 
         /// <summary>
@@ -208,9 +221,9 @@ namespace SevenStrikeModules.XHud
         public void SoundLibrary_AddSound(string name, AudioClip sound, string format)
         {
             bool sw = false;
-            for (int i = 0; i < SoundLibrary.Count; i++)
+            for (int i = 0; i < library_sounds.Count; i++)
             {
-                if (SoundLibrary[i].Name == name)
+                if (library_sounds[i].name == name)
                 {
                     sw = true;
                     break;
@@ -218,10 +231,10 @@ namespace SevenStrikeModules.XHud
             }
             if (!sw)
             {
-                SoundLibrary.Add(new XHud_LibraryArg_Sound(name, sound, format));
+                library_sounds.Add(new XHud_LibraryArg_Sound(name, sound, format));
             }
-            if (act_on_SoundAdded != null)
-                act_on_SoundAdded(name, sound);
+            if (act_on_sound_added != null)
+                act_on_sound_added(name, sound);
         }
 
         /// <summary>
@@ -230,17 +243,17 @@ namespace SevenStrikeModules.XHud
         /// <param name="name">移除的音效名称</param>
         public void SoundLibrary_RemoveSound(string name)
         {
-            for (int i = 0; i < SoundLibrary.Count; i++)
+            for (int i = 0; i < library_sounds.Count; i++)
             {
-                if (SoundLibrary[i].Name == name)
+                if (library_sounds[i].name == name)
                 {
-                    SoundLibrary.RemoveAt(i);
+                    library_sounds.RemoveAt(i);
 
                     break;
                 }
             }
-            if (act_on_SoundRemoved != null)
-                act_on_SoundRemoved();
+            if (act_on_sound_removed != null)
+                act_on_sound_removed();
         }
 
         /// <summary>
@@ -249,7 +262,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public int SoundLibrary_GetSoundCount()
         {
-            int count = SoundLibrary.Count;
+            int count = library_sounds.Count;
 
             return count;
         }
@@ -261,9 +274,9 @@ namespace SevenStrikeModules.XHud
         public int SoundLibrary_GetSoundCount_WithFrequency(int Frequency)
         {
             int count = 0;
-            for (int i = 0; i < SoundLibrary.Count; i++)
+            for (int i = 0; i < library_sounds.Count; i++)
             {
-                if (SoundLibrary[i].Clip.frequency == Frequency)
+                if (library_sounds[i].clip.frequency == Frequency)
                 {
                     count++;
                 }
@@ -278,9 +291,9 @@ namespace SevenStrikeModules.XHud
         public int SoundLibrary_GetSoundCount_WithLength(int Length)
         {
             int count = 0;
-            for (int i = 0; i < SoundLibrary.Count; i++)
+            for (int i = 0; i < library_sounds.Count; i++)
             {
-                if (SoundLibrary[i].Clip.length == Length)
+                if (library_sounds[i].clip.length == Length)
                 {
                     count++;
                 }
@@ -295,9 +308,9 @@ namespace SevenStrikeModules.XHud
         public int SoundLibrary_GetSoundCount_WithSample(int Sample)
         {
             int count = 0;
-            for (int i = 0; i < SoundLibrary.Count; i++)
+            for (int i = 0; i < library_sounds.Count; i++)
             {
-                if (SoundLibrary[i].Clip.samples == Sample)
+                if (library_sounds[i].clip.samples == Sample)
                 {
                     count++;
                 }
@@ -312,9 +325,9 @@ namespace SevenStrikeModules.XHud
         public int SoundLibrary_GetSoundCount_WithChannels(int Channels)
         {
             int count = 0;
-            for (int i = 0; i < SoundLibrary.Count; i++)
+            for (int i = 0; i < library_sounds.Count; i++)
             {
-                if (SoundLibrary[i].Clip.channels == Channels)
+                if (library_sounds[i].clip.channels == Channels)
                 {
                     count++;
                 }
@@ -328,10 +341,10 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public string[] SoundLibrary_GetSoundNames()
         {
-            string[] names = new string[SoundLibrary.Count];
+            string[] names = new string[library_sounds.Count];
             for (int i = 0; i < names.Length; i++)
             {
-                names[i] = SoundLibrary[i].Name;
+                names[i] = library_sounds[i].name;
             }
 
             return names;
@@ -343,7 +356,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public XHud_LibraryArg_Sound[] SoundLibrary_GetSoundLibrary()
         {
-            return SoundLibrary.ToArray();
+            return library_sounds.ToArray();
         }
 
         /// <summary>
@@ -352,7 +365,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public bool SoundLibrary_IsEmpty()
         {
-            if (SoundLibrary.Count > 0)
+            if (library_sounds.Count > 0)
                 return false;
             else
                 return true;
@@ -364,7 +377,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public bool SoundLibrary_IndexIsValid(int Index)
         {
-            if (Index >= 0 && Index < SoundLibrary.Count)
+            if (Index >= 0 && Index < library_sounds.Count)
                 return true;
             else
                 return false;
@@ -378,9 +391,9 @@ namespace SevenStrikeModules.XHud
         public int SoundLibrary_GetIndexWithName(string name)
         {
             int sw = 0;
-            for (int i = 0; i < SoundLibrary.Count; i++)
+            for (int i = 0; i < library_sounds.Count; i++)
             {
-                if (SoundLibrary[i].Name == name)
+                if (library_sounds[i].name == name)
                 {
                     sw = i;
                     break;
@@ -397,9 +410,9 @@ namespace SevenStrikeModules.XHud
         public bool SoundLibrary_NameIsValid(string name)
         {
             bool sw = false;
-            for (int i = 0; i < SoundLibrary.Count; i++)
+            for (int i = 0; i < library_sounds.Count; i++)
             {
-                if (SoundLibrary[i].Name == name)
+                if (library_sounds[i].name == name)
                 {
                     sw = true;
                     break;
@@ -415,30 +428,30 @@ namespace SevenStrikeModules.XHud
         public void SoundLibrary_Location(string name)
         {
             int index = SoundLibrary_GetIndexWithName(name);
-            SelectedIndex = index;
-            LocationSelectedIndex = index;
-            Highlight = name;
+            selected_index = index;
+            location_selected_index = index;
+            highlight = name;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < SoundLibrary.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < library_sounds.Count; i++)
             {
-                if (SoundLibrary[i].Name == name)
+                if (library_sounds[i].name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = SoundInfoList_Original_Scroller;
+            Vector2 newscroll = sound_Info_list_original_scroller;
             newscroll.y = scrollval;
-            SoundInfoList_Original_Scroller = newscroll;
+            sound_Info_list_original_scroller = newscroll;
         }
 
         /// <summary>
@@ -448,29 +461,29 @@ namespace SevenStrikeModules.XHud
         public void SoundLibrary_Location_Find(string name)
         {
             int index = SoundLibrary_GetIndexWithName(name);
-            SelectedIndex = index;
-            LocationSelectedIndex = index;
+            selected_index = index;
+            location_selected_index = index;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < SoundLibrary.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < library_sounds.Count; i++)
             {
-                if (SoundLibrary[i].Name == name)
+                if (library_sounds[i].name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = SoundInfoList_Original_Scroller;
+            Vector2 newscroll = sound_Info_list_original_scroller;
             newscroll.y = scrollval;
-            SoundInfoList_Original_Scroller = newscroll;
+            sound_Info_list_original_scroller = newscroll;
         }
     }
 }

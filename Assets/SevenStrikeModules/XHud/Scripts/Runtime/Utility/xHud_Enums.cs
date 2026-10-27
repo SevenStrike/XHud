@@ -467,7 +467,7 @@ namespace SevenStrikeModules.XHud.Enums
     {
         添加到库,
         修改库源参数,
-        修改生成器项参数,
+        修改动效参数,
     }
     /// <summary>
     /// 内容锚点
@@ -1081,6 +1081,15 @@ namespace SevenStrikeModules.XHud.Enums
         Recycler = 1
     }
     /// <summary>
+    /// 元素的动效方式分类   
+    /// </summary>
+    public enum HudElementMotionMode
+    {
+        Movement = 0,
+        Rotation = 1,
+        Alpha = 2
+    }
+    /// <summary>
     /// 元素的动画状态
     /// 定义UI元素当前的动画播放状态
     /// 用于状态机管理，控制UI元素在动画播放期间的行为表现
@@ -1372,5 +1381,28 @@ namespace SevenStrikeModules.XHud.Enums
         /// 分割线
         /// </summary>
         sepline = 2,
+    }
+    /// <summary>
+    /// 生成器功能键枚举
+    /// 定义用于触发生成/回收操作的修饰键组合
+    /// </summary>
+    public enum SpawnFunctionKey
+    {
+        /// <summary>
+        /// 无修饰键，直接按下触发键即可
+        /// </summary>
+        none = 0,
+        /// <summary>
+        /// ctrl 键组合
+        /// </summary>
+        ctrl = 1,
+        /// <summary>
+        /// alt 键组合
+        /// </summary>
+        alt = 2,
+        /// <summary>
+        /// shift 键组合
+        /// </summary>
+        shift = 3,
     }
 }

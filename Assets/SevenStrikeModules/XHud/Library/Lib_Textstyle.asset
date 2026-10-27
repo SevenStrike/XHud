@@ -12,382 +12,163 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3e10dd539fe36a4a91801a508dd4e8f, type: 3}
   m_Name: Lib_Textstyle
   m_EditorClassIdentifier: 
-  LibraryName: NewTextStyleLibrary
-  TextStyleLibrary:
-  - Name: NewTextStyle_HudText_R
-    Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
-    Type: 0
-    Style: 0
-    ContentAnchor: 4
-    Font: {fileID: 12800000, guid: 12e55bc559028404e842d85bca13f045, type: 3}
-    Font_AssetPath: 
-    Size: 50
-    LineHeight: 1
-    Overflow_Horizon: 1
-    Overflow_Vertical: 1
-    RichText: 1
-    GeometreAlign: 0
-    BestFit: 0
-    Fit_Min: 1
-    Fit_Min_GlobalScaled: 0
-    Fit_Max: 50
-    Fit_Max_GlobalScaled: 0
-    Size_GlobalScaled: 0
-    FontColor: {r: 1, g: 0, b: 0.06987047, a: 1}
+  library_name: NewTextStyleLibrary
+  library_text_styles:
+  - name: NewTextStyle_0_Text
+    description: "\u8FD9\u91CC\u662F\u6837\u5F0F\u8BF4\u660E\u6587\u5B57\u5185\u5BB9..."
+    type: 0
+    style: 0
+    content_anchor: 4
+    font: {fileID: 12800000, guid: dc6c33facc175e745ae390557bad77ad, type: 3}
+    font_asset_path: 
+    size: 50
+    line_height: 1
+    overflow_horizon: 1
+    overflow_vertical: 1
+    rich_text: 1
+    geometre_align: 0
+    best_fit: 0
+    fit_min: 0
+    fit_min_global_scaled: 0
+    fit_max: 100
+    fit_max_global_scaled: 0
+    size_global_scaled: 0
+    font_color: {r: 1, g: 0.3254717, b: 0.3254717, a: 1}
     tmp_rich: 0
     tmp_contentwrap: 0
     tmp_overflow: 0
     tmp_style: 0
-    tmp_anchor: 14
+    tmp_anchor: 0
     tmp_font: {fileID: 0}
     tmp_fontasset_assetpath: 
-    tmp_size: 13
+    tmp_size: 0
     tmp_size_globalscaled: 0
     tmp_space_character: 0
     tmp_space_word: 0
     tmp_space_lineheight: 0
     tmp_space_paragraph: 0
-    tmp_WrappingRatios: 0
-    tmp_contentmargin: {x: 0, y: 0, z: 0, w: 0}
-    tmp_color: {r: 1, g: 1, b: 1, a: 1}
-    tmp_EnableAutoSizing: 0
-    tmp_FontSizeMin: 5
-    tmp_FontSizeMin_globalscaled: 5
-    tmp_FontSizeMax: 100
-    tmp_FontSizeMax_globalscaled: 100
-    tmp_CharWidthMaxAdj: 0
-    tmp_LineSpacingMax: 0
-    gra_A: {r: 1, g: 1, b: 1, a: 1}
-    gra_B: {r: 1, g: 1, b: 1, a: 1}
-    gra_C: {r: 1, g: 1, b: 1, a: 1}
-    gra_D: {r: 1, g: 1, b: 1, a: 1}
-    gra_Invert: 0
-    gra_Used: 0
-    gra_ColorMode: 0
-    gra_ColorModeName: 
-    LibStyle_Effect_geometre_align: 0
-    LibStyle_Effect_align: 0
-    LibStyle_Effect_font: 0
-    LibStyle_Effect_style: 0
-    LibStyle_Effect_size: 0
-    LibStyle_Effect_color: 0
-    LibStyle_Effect_rich: 0
-    LibStyle_Effect_line: 0
-    LibStyle_Effect_overflow_h: 0
-    LibStyle_Effect_overflow_v: 0
-    LibStyle_Effect_wrap: 0
-    LibStyle_Effect_wrapratio: 0
-    LibStyle_Effect_overflow: 0
-    LibStyle_Effect_margin: 0
-    LibStyle_Effect_space: 0
-    LibStyle_Effect_bestfit: 0
-    LibStyle_Effect_gradientcolor: 0
-    LibStyle_Effect_autosizing: 0
-    LibStyle_Effect_raycast: 0
-    LibStyle_Effect_maskable: 0
-    Raycast: 0
-    Maskable: 0
-  - Name: NewTextStyle_HudText_G
-    Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
-    Type: 0
-    Style: 0
-    ContentAnchor: 4
-    Font: {fileID: 12800000, guid: aca8c7dd72f74624d95ec59655a7afa5, type: 3}
-    Font_AssetPath: 
-    Size: 50
-    LineHeight: 1
-    Overflow_Horizon: 1
-    Overflow_Vertical: 1
-    RichText: 1
-    GeometreAlign: 0
-    BestFit: 0
-    Fit_Min: 1
-    Fit_Min_GlobalScaled: 0
-    Fit_Max: 50
-    Fit_Max_GlobalScaled: 0
-    Size_GlobalScaled: 0
-    FontColor: {r: 0, g: 1, b: 0.3417201, a: 1}
-    tmp_rich: 0
-    tmp_contentwrap: 0
-    tmp_overflow: 0
-    tmp_style: 0
-    tmp_anchor: 14
-    tmp_font: {fileID: 0}
-    tmp_fontasset_assetpath: 
-    tmp_size: 13
-    tmp_size_globalscaled: 0
-    tmp_space_character: 0
-    tmp_space_word: 0
-    tmp_space_lineheight: 0
-    tmp_space_paragraph: 0
-    tmp_WrappingRatios: 0
-    tmp_contentmargin: {x: 0, y: 0, z: 0, w: 0}
-    tmp_color: {r: 1, g: 1, b: 1, a: 1}
-    tmp_EnableAutoSizing: 0
-    tmp_FontSizeMin: 5
-    tmp_FontSizeMin_globalscaled: 5
-    tmp_FontSizeMax: 100
-    tmp_FontSizeMax_globalscaled: 100
-    tmp_CharWidthMaxAdj: 0
-    tmp_LineSpacingMax: 0
-    gra_A: {r: 1, g: 1, b: 1, a: 1}
-    gra_B: {r: 1, g: 1, b: 1, a: 1}
-    gra_C: {r: 1, g: 1, b: 1, a: 1}
-    gra_D: {r: 1, g: 1, b: 1, a: 1}
-    gra_Invert: 0
-    gra_Used: 0
-    gra_ColorMode: 0
-    gra_ColorModeName: 
-    LibStyle_Effect_geometre_align: 0
-    LibStyle_Effect_align: 0
-    LibStyle_Effect_font: 0
-    LibStyle_Effect_style: 0
-    LibStyle_Effect_size: 0
-    LibStyle_Effect_color: 0
-    LibStyle_Effect_rich: 0
-    LibStyle_Effect_line: 0
-    LibStyle_Effect_overflow_h: 0
-    LibStyle_Effect_overflow_v: 0
-    LibStyle_Effect_wrap: 0
-    LibStyle_Effect_wrapratio: 0
-    LibStyle_Effect_overflow: 0
-    LibStyle_Effect_margin: 0
-    LibStyle_Effect_space: 0
-    LibStyle_Effect_bestfit: 0
-    LibStyle_Effect_gradientcolor: 0
-    LibStyle_Effect_autosizing: 0
-    LibStyle_Effect_raycast: 0
-    LibStyle_Effect_maskable: 0
-    Raycast: 0
-    Maskable: 0
-  - Name: NewTextStyle_HudTmpText
-    Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudTmpText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
-    Type: 1
-    Style: 0
-    ContentAnchor: 4
-    Font: {fileID: 0}
-    Font_AssetPath: 
-    Size: 50
-    LineHeight: 1
-    Overflow_Horizon: 0
-    Overflow_Vertical: 0
-    RichText: 0
-    GeometreAlign: 0
-    BestFit: 0
-    Fit_Min: 1
-    Fit_Min_GlobalScaled: 0
-    Fit_Max: 50
-    Fit_Max_GlobalScaled: 0
-    Size_GlobalScaled: 0
-    FontColor: {r: 1, g: 1, b: 1, a: 1}
+    tmp_wrapping_ratios: 0
+    tmp_content_margin: {x: 0, y: 0, z: 0, w: 0}
+    tmp_color: {r: 0, g: 0, b: 0, a: 0}
+    tmp_enable_auto_sizing: 0
+    tmp_font_size_min: 0
+    tmp_FontSizeMin_globalscaled: 0
+    tmp_font_size_max: 0
+    tmp_FontSizeMax_globalscaled: 0
+    tmp_char_width_max_adj: 0
+    tmp_line_spacing_max: 0
+    gra_a: {r: 0, g: 0, b: 0, a: 0}
+    gra_b: {r: 0, g: 0, b: 0, a: 0}
+    gra_c: {r: 0, g: 0, b: 0, a: 0}
+    gra_d: {r: 0, g: 0, b: 0, a: 0}
+    gra_invert: 0
+    gra_used: 0
+    gra_color_mode: 0
+    gra_color_mode_name: 
+    lib_style_effect_geometre_align: 0
+    lib_style_effect_align: 0
+    lib_style_effect_font: 0
+    lib_style_effect_style: 0
+    lib_style_effect_size: 0
+    lib_style_effect_color: 0
+    lib_style_effect_rich: 0
+    lib_style_effect_line: 0
+    lib_style_effect_overflow_h: 0
+    lib_style_effect_overflow_v: 0
+    lib_style_effect_wrap: 0
+    lib_style_effect_wrapratio: 0
+    lib_style_effect_overflow: 0
+    lib_style_effect_margin: 0
+    lib_style_effect_space: 0
+    lib_style_effect_bestfit: 0
+    lib_style_effect_gradientcolor: 0
+    lib_style_effect_autosizing: 0
+    lib_style_effect_raycast: 0
+    lib_style_effect_maskable: 0
+    raycast: 0
+    maskable: 0
+  - name: NewTextStyle_1_TmpText
+    description: "\u8FD9\u91CC\u662F\u6837\u5F0F\u8BF4\u660E\u6587\u5B57\u5185\u5BB9..."
+    type: 1
+    style: 0
+    content_anchor: 4
+    font: {fileID: 12800000, guid: dc6c33facc175e745ae390557bad77ad, type: 3}
+    font_asset_path: 
+    size: 50
+    line_height: 1
+    overflow_horizon: 1
+    overflow_vertical: 1
+    rich_text: 1
+    geometre_align: 0
+    best_fit: 0
+    fit_min: 0
+    fit_min_global_scaled: 0
+    fit_max: 100
+    fit_max_global_scaled: 0
+    size_global_scaled: 0
+    font_color: {r: 1, g: 0.3254717, b: 0.3254717, a: 1}
     tmp_rich: 1
-    tmp_contentwrap: 0
+    tmp_contentwrap: 1
     tmp_overflow: 0
     tmp_style: 0
     tmp_anchor: 14
     tmp_font: {fileID: 11400000, guid: 3d6405d940e228d4b85a181d7ed3204f, type: 2}
     tmp_fontasset_assetpath: 
-    tmp_size: 13
-    tmp_size_globalscaled: 0
-    tmp_space_character: 0
-    tmp_space_word: 0
-    tmp_space_lineheight: 1
-    tmp_space_paragraph: 0
-    tmp_WrappingRatios: 0
-    tmp_contentmargin: {x: 0, y: 0, z: 0, w: 0}
-    tmp_color: {r: 1, g: 1, b: 1, a: 1}
-    tmp_EnableAutoSizing: 0
-    tmp_FontSizeMin: 5
-    tmp_FontSizeMin_globalscaled: 5
-    tmp_FontSizeMax: 100
-    tmp_FontSizeMax_globalscaled: 100
-    tmp_CharWidthMaxAdj: 0
-    tmp_LineSpacingMax: 0
-    gra_A: {r: 1, g: 1, b: 1, a: 1}
-    gra_B: {r: 1, g: 0, b: 0, a: 1}
-    gra_C: {r: 1, g: 1, b: 1, a: 1}
-    gra_D: {r: 1, g: 1, b: 1, a: 1}
-    gra_Invert: 0
-    gra_Used: 1
-    gra_ColorMode: 1
-    gra_ColorModeName: "\u6C34\u5E73\u6E10\u53D8"
-    LibStyle_Effect_geometre_align: 0
-    LibStyle_Effect_align: 0
-    LibStyle_Effect_font: 0
-    LibStyle_Effect_style: 0
-    LibStyle_Effect_size: 0
-    LibStyle_Effect_color: 0
-    LibStyle_Effect_rich: 0
-    LibStyle_Effect_line: 0
-    LibStyle_Effect_overflow_h: 0
-    LibStyle_Effect_overflow_v: 0
-    LibStyle_Effect_wrap: 0
-    LibStyle_Effect_wrapratio: 0
-    LibStyle_Effect_overflow: 0
-    LibStyle_Effect_margin: 0
-    LibStyle_Effect_space: 0
-    LibStyle_Effect_bestfit: 0
-    LibStyle_Effect_gradientcolor: 0
-    LibStyle_Effect_autosizing: 0
-    LibStyle_Effect_raycast: 0
-    LibStyle_Effect_maskable: 0
-    Raycast: 0
-    Maskable: 0
-  - Name: NewTextStyle_HudTmpTextGGGGG
-    Description: "\u8FD9\u662F\u4E00\u4E2A\u7528\u4E8EHudTmpText\u6587\u5B57\u7EC4\u4EF6\u7684\u9ED8\u8BA4\u5B57\u4F53\u6837\u5F0F"
-    Type: 1
-    Style: 0
-    ContentAnchor: 4
-    Font: {fileID: 0}
-    Font_AssetPath: 
-    Size: 50
-    LineHeight: 1
-    Overflow_Horizon: 0
-    Overflow_Vertical: 0
-    RichText: 0
-    GeometreAlign: 0
-    BestFit: 0
-    Fit_Min: 1
-    Fit_Min_GlobalScaled: 0
-    Fit_Max: 50
-    Fit_Max_GlobalScaled: 0
-    Size_GlobalScaled: 0
-    FontColor: {r: 1, g: 1, b: 1, a: 1}
-    tmp_rich: 1
-    tmp_contentwrap: 0
-    tmp_overflow: 0
-    tmp_style: 0
-    tmp_anchor: 14
-    tmp_font: {fileID: 11400000, guid: 3d6405d940e228d4b85a181d7ed3204f, type: 2}
-    tmp_fontasset_assetpath: 
-    tmp_size: 13
-    tmp_size_globalscaled: 0
-    tmp_space_character: 0
-    tmp_space_word: 0
-    tmp_space_lineheight: 1
-    tmp_space_paragraph: 0
-    tmp_WrappingRatios: 0
-    tmp_contentmargin: {x: 0, y: 0, z: 0, w: 0}
-    tmp_color: {r: 0.7266756, g: 1, b: 0, a: 1}
-    tmp_EnableAutoSizing: 1
-    tmp_FontSizeMin: 5
-    tmp_FontSizeMin_globalscaled: 5
-    tmp_FontSizeMax: 100
-    tmp_FontSizeMax_globalscaled: 100
-    tmp_CharWidthMaxAdj: 0
-    tmp_LineSpacingMax: 0
-    gra_A: {r: 1, g: 1, b: 1, a: 1}
-    gra_B: {r: 1, g: 0, b: 0, a: 1}
-    gra_C: {r: 1, g: 1, b: 1, a: 1}
-    gra_D: {r: 1, g: 1, b: 1, a: 1}
-    gra_Invert: 0
-    gra_Used: 1
-    gra_ColorMode: 1
-    gra_ColorModeName: "\u6C34\u5E73\u6E10\u53D8"
-    LibStyle_Effect_geometre_align: 0
-    LibStyle_Effect_align: 0
-    LibStyle_Effect_font: 0
-    LibStyle_Effect_style: 0
-    LibStyle_Effect_size: 0
-    LibStyle_Effect_color: 0
-    LibStyle_Effect_rich: 0
-    LibStyle_Effect_line: 0
-    LibStyle_Effect_overflow_h: 0
-    LibStyle_Effect_overflow_v: 0
-    LibStyle_Effect_wrap: 0
-    LibStyle_Effect_wrapratio: 0
-    LibStyle_Effect_overflow: 0
-    LibStyle_Effect_margin: 0
-    LibStyle_Effect_space: 0
-    LibStyle_Effect_bestfit: 0
-    LibStyle_Effect_gradientcolor: 0
-    LibStyle_Effect_autosizing: 0
-    LibStyle_Effect_raycast: 0
-    LibStyle_Effect_maskable: 0
-    Raycast: 0
-    Maskable: 0
-  - Name: "\u6587\u5B57\u6837\u5F0F\u540D\u79F0asd"
-    Description: "\u6587\u5B57\u6837\u5F0F\u53C2\u6570\u8BF4\u660E\u5185\u5BB9"
-    Type: 0
-    Style: 0
-    ContentAnchor: 2
-    Font: {fileID: 12800000, guid: 12e55bc559028404e842d85bca13f045, type: 3}
-    Font_AssetPath: 
-    Size: 50
-    LineHeight: 1
-    Overflow_Horizon: 1
-    Overflow_Vertical: 1
-    RichText: 1
-    GeometreAlign: 0
-    BestFit: 1
-    Fit_Min: 1
-    Fit_Min_GlobalScaled: 0
-    Fit_Max: 50
-    Fit_Max_GlobalScaled: 0
-    Size_GlobalScaled: 0
-    FontColor: {r: 1, g: 0, b: 0.06987047, a: 1}
-    tmp_rich: 0
-    tmp_contentwrap: 0
-    tmp_overflow: 0
-    tmp_style: 0
-    tmp_anchor: 14
-    tmp_font: {fileID: 0}
-    tmp_fontasset_assetpath: 
-    tmp_size: 13
+    tmp_size: 50
     tmp_size_globalscaled: 0
     tmp_space_character: 0
     tmp_space_word: 0
     tmp_space_lineheight: 0
     tmp_space_paragraph: 0
-    tmp_WrappingRatios: 0
-    tmp_contentmargin: {x: 0, y: 0, z: 0, w: 0}
-    tmp_color: {r: 1, g: 1, b: 1, a: 1}
-    tmp_EnableAutoSizing: 0
-    tmp_FontSizeMin: 5
-    tmp_FontSizeMin_globalscaled: 5
-    tmp_FontSizeMax: 100
-    tmp_FontSizeMax_globalscaled: 100
-    tmp_CharWidthMaxAdj: 0
-    tmp_LineSpacingMax: 0
-    gra_A: {r: 1, g: 1, b: 1, a: 1}
-    gra_B: {r: 1, g: 1, b: 1, a: 1}
-    gra_C: {r: 1, g: 1, b: 1, a: 1}
-    gra_D: {r: 1, g: 1, b: 1, a: 1}
-    gra_Invert: 0
-    gra_Used: 0
-    gra_ColorMode: 0
-    gra_ColorModeName: 
-    LibStyle_Effect_geometre_align: 0
-    LibStyle_Effect_align: 0
-    LibStyle_Effect_font: 0
-    LibStyle_Effect_style: 0
-    LibStyle_Effect_size: 0
-    LibStyle_Effect_color: 0
-    LibStyle_Effect_rich: 0
-    LibStyle_Effect_line: 0
-    LibStyle_Effect_overflow_h: 0
-    LibStyle_Effect_overflow_v: 0
-    LibStyle_Effect_wrap: 0
-    LibStyle_Effect_wrapratio: 0
-    LibStyle_Effect_overflow: 0
-    LibStyle_Effect_margin: 0
-    LibStyle_Effect_space: 0
-    LibStyle_Effect_bestfit: 0
-    LibStyle_Effect_gradientcolor: 0
-    LibStyle_Effect_autosizing: 0
-    LibStyle_Effect_raycast: 0
-    LibStyle_Effect_maskable: 0
-    Raycast: 0
-    Maskable: 0
-  Preview_Font: {fileID: 12800000, guid: 12e55bc559028404e842d85bca13f045, type: 3}
-  PreviewFontColor: {r: 1, g: 1, b: 1, a: 1}
-  PreviewContent: TextStyle
-  PreviewTypeText: 
-  PreviewStyle: 0
-  Find: 
-  itemHeight: 61
-  visibleItemCount: 7
-  ColorInfoList_Original_Scroller: {x: 0, y: 0}
-  Highlight: 
-  LocationSelectedIndex: -1
-  SelectedIndex: -1
+    tmp_wrapping_ratios: 0
+    tmp_content_margin: {x: 0, y: 0, z: 0, w: 0}
+    tmp_color: {r: 0.23113209, g: 0.6937495, b: 1, a: 1}
+    tmp_enable_auto_sizing: 0
+    tmp_font_size_min: 0
+    tmp_FontSizeMin_globalscaled: 0
+    tmp_font_size_max: 0
+    tmp_FontSizeMax_globalscaled: 0
+    tmp_char_width_max_adj: 0
+    tmp_line_spacing_max: 0
+    gra_a: {r: 0, g: 0, b: 0, a: 0}
+    gra_b: {r: 0, g: 0, b: 0, a: 0}
+    gra_c: {r: 0, g: 0, b: 0, a: 0}
+    gra_d: {r: 0, g: 0, b: 0, a: 0}
+    gra_invert: 0
+    gra_used: 0
+    gra_color_mode: 0
+    gra_color_mode_name: 
+    lib_style_effect_geometre_align: 0
+    lib_style_effect_align: 0
+    lib_style_effect_font: 0
+    lib_style_effect_style: 0
+    lib_style_effect_size: 0
+    lib_style_effect_color: 0
+    lib_style_effect_rich: 0
+    lib_style_effect_line: 0
+    lib_style_effect_overflow_h: 0
+    lib_style_effect_overflow_v: 0
+    lib_style_effect_wrap: 0
+    lib_style_effect_wrapratio: 0
+    lib_style_effect_overflow: 0
+    lib_style_effect_margin: 0
+    lib_style_effect_space: 0
+    lib_style_effect_bestfit: 0
+    lib_style_effect_gradientcolor: 0
+    lib_style_effect_autosizing: 0
+    lib_style_effect_raycast: 0
+    lib_style_effect_maskable: 0
+    raycast: 0
+    maskable: 0
+  preview_font: {fileID: 12800000, guid: dc6c33facc175e745ae390557bad77ad, type: 3}
+  preview_font_color: {r: 1, g: 1, b: 1, a: 1}
+  preview_content: XHud Sample Fonts
+  preview_type_text: 
+  preview_style: 0
+  find: 
+  highlight: 
+  item_height: 61
+  visible_item_count: 7
+  color_info_list_original_scroller: {x: 0, y: 0}
+  location_selected_index: -1
+  selected_index: -1

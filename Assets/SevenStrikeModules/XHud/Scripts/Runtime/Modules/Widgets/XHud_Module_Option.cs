@@ -253,9 +253,9 @@ namespace SevenStrikeModules.XHud
             Selector_Tween_Rewind();
 
             OptionIndex = index;
-            CurrentOptionName = OptionButtonNodes[index].Button.Indicator;
+            CurrentOptionName = OptionButtonNodes[index].button.Indicator;
 
-            Vector3 pos = OptionRoot.parent.InverseTransformPoint(OptionButtonNodes[index].Button.RectTransform.position);
+            Vector3 pos = OptionRoot.parent.InverseTransformPoint(OptionButtonNodes[index].button.RectTransform.position);
 
             Selector_Tween_Play("点击选项");
             PrimitiveTween_Play("点击选项");
@@ -499,7 +499,7 @@ namespace SevenStrikeModules.XHud
 
             for (int i = 0; i < OptionButtonNodes.Count; i++)
             {
-                OptionalButtons.Add(OptionButtonNodes[i].Button);
+                OptionalButtons.Add(OptionButtonNodes[i].button);
             }
 
             if (OptionButtonNodes.Count <= 0)
@@ -526,8 +526,8 @@ namespace SevenStrikeModules.XHud
 
             for (int i = 0; i < OptionButtonNodes.Count; i++)
             {
-                if (OptionButtonNodes[i].IsOptional)
-                    Names.Add(OptionButtonNodes[i].Button.Indicator);
+                if (OptionButtonNodes[i].is_optional)
+                    Names.Add(OptionButtonNodes[i].button.Indicator);
             }
 
             if (OptionButtonNodes.Count <= 0)
@@ -562,7 +562,7 @@ namespace SevenStrikeModules.XHud
             int x = 0;
             for (int i = 0; i < OptionButtonNodes.Count; i++)
             {
-                if (OptionButtonNodes[i].Indicator == indicator)
+                if (OptionButtonNodes[i].indicator == indicator)
                 {
                     x = i;
                     break;
@@ -584,9 +584,9 @@ namespace SevenStrikeModules.XHud
             RectTransform x = null;
             for (int i = 0; i < OptionButtonNodes.Count; i++)
             {
-                if (OptionButtonNodes[i].Indicator == indicator)
+                if (OptionButtonNodes[i].indicator == indicator)
                 {
-                    x = OptionButtonNodes[i].Button.RectTransform;
+                    x = OptionButtonNodes[i].button.RectTransform;
                     break;
                 }
             }
@@ -604,11 +604,11 @@ namespace SevenStrikeModules.XHud
         {
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
-                int v = PrimitiveControllerNodes[i].Controller.mod_Rect.GetInstanceID();
+                int v = PrimitiveControllerNodes[i].controller.mod_rect.GetInstanceID();
                 int x = SelectorMark.GetInstanceID();
                 if (v == x)
                 {
-                    PrimitiveControllerNodes[i].Controller.pt_Tween.Tweens_Play_With_Delay(PrimitiveControllerNodes[i].DelayTime, PrimitivesTweenGlobalDuration, true, tim);
+                    PrimitiveControllerNodes[i].controller.pt_tween.Tweens_Play_With_Delay(PrimitiveControllerNodes[i].delay_time, PrimitivesTweenGlobalDuration, true, tim);
                     break;
                 }
             }
@@ -624,11 +624,11 @@ namespace SevenStrikeModules.XHud
         {
             for (int i = 0; i < PrimitiveControllerNodes.Count; i++)
             {
-                int v = PrimitiveControllerNodes[i].Controller.mod_Rect.GetInstanceID();
+                int v = PrimitiveControllerNodes[i].controller.mod_rect.GetInstanceID();
                 int x = SelectorMark.GetInstanceID();
                 if (v == x)
                 {
-                    PrimitiveControllerNodes[i].Controller.pt_Tween.Tween_RewindAll();
+                    PrimitiveControllerNodes[i].controller.pt_tween.Tween_RewindAll();
                     break;
                 }
             }

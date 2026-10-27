@@ -41,10 +41,10 @@ namespace SevenStrikeModules.XHud.Editor
         private void Draw_Layout()
         {
             #region 边距
-            SerializedProperty sp_mar_x = Margins.FindPropertyRelative("x");
-            SerializedProperty sp_mar_y = Margins.FindPropertyRelative("y");
-            SerializedProperty sp_mar_z = Margins.FindPropertyRelative("z");
-            SerializedProperty sp_mar_w = Margins.FindPropertyRelative("w");
+            SerializedProperty sp_mar_x = sp_cv_margins.FindPropertyRelative("x");
+            SerializedProperty sp_mar_y = sp_cv_margins.FindPropertyRelative("y");
+            SerializedProperty sp_mar_z = sp_cv_margins.FindPropertyRelative("z");
+            SerializedProperty sp_mar_w = sp_cv_margins.FindPropertyRelative("w");
 
             XGUI.layout_property_field(
                 title: "上边距",
@@ -85,7 +85,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: MarginHorizontal,
+                prop: sp_cv_margin_horizontal,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -95,7 +95,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: MarginVertical,
+                prop: sp_cv_margin_vertical,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -105,7 +105,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: MarginMultiply,
+                prop: sp_cv_margin_multiply,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -115,7 +115,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: PrimtiveID_LabelLine_Height,
+                prop: sp_primitive_id_label_line_height,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -125,7 +125,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: PrimtiveID_LabelFont_Size,
+                prop: sp_primitive_id_label_font_size,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion                  
 
@@ -133,28 +133,28 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 图元ID标识颜色 - 线
             XGUI.layout_colorfield(
-                prop: PrimtiveID_LabelLine_Color,
+                prop: sp_primitive_id_label_line_color,
                 title: "图元ID标识颜色 - 线",
                 title_width: 140,
                 //title_color: Color.white,
                 //icon: "icon_field_status",
                 //icon_color: Color.red,
                 state_title: "Hex：",
-                state_value: $"#{XGUI_Utilitys.Color_To_HexString(PrimtiveID_LabelLine_Color.colorValue)}",
-                state_value_color: PrimtiveID_LabelLine_Color.colorValue);
+                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_primitive_id_label_line_color.colorValue)}",
+                state_value_color: sp_primitive_id_label_line_color.colorValue);
             #endregion
 
             #region 图元ID标识颜色 - 文字
             XGUI.layout_colorfield(
-                prop: PrimtiveID_LabelFont_Color,
+                prop: sp_primitive_id_label_font_color,
                 title: "图元ID标识颜色 - 文字",
                 title_width: 140,
                 //title_color: Color.white,
                 //icon: "icon_field_status",
                 //icon_color: Color.red,
                 state_title: "Hex：",
-                state_value: $"#{XGUI_Utilitys.Color_To_HexString(PrimtiveID_LabelFont_Color.colorValue)}",
-                state_value_color: PrimtiveID_LabelFont_Color.colorValue);
+                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_primitive_id_label_font_color.colorValue)}",
+                state_value_color: sp_primitive_id_label_font_color.colorValue);
             #endregion
         }
         #endregion

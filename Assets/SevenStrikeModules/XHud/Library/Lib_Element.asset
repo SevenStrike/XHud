@@ -12,30 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f37a79528fd6b243945098c5e1d4982, type: 3}
   m_Name: Lib_Element
   m_EditorClassIdentifier: 
-  LibraryName: NewElementLibrary
-  LibraryDescription: NewDescription
-  LibraryRoot: {fileID: 0}
-  itemHeight: 50
-  visibleItemCount: 9
-  Find: 
-  Highlight: 
-  SelectedIndex: -1
-  LocationSelectedIndex: -1
-  ElementInfoList_Original_Scroller: {x: 0, y: 0}
-  ElementLibrary:
-  - Name: XHudIcon
-    InitializeCount: 3
-    UsedCount: 0
-    RecycledCount: 0
-    NextIndex: 0
-    Root: {fileID: 0}
-    Target: {fileID: 2484565434626366029, guid: 54cb949a8cef5ca44a27602c14cb9919, type: 3}
-    PreloadElements: []
-  - Name: Cat
-    InitializeCount: 3
-    UsedCount: 0
-    RecycledCount: 0
-    NextIndex: 0
-    Root: {fileID: 0}
-    Target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
-    PreloadElements: []
+  library_name: NewElementsLibrary
+  library_root: {fileID: 0}
+  library_elements:
+  - name: XHudIcon
+    initialize_count: 1
+    used_count: 0
+    recycled_count: 0
+    next_index: 0
+    root: {fileID: 0}
+    target: {fileID: 2484565434626366029, guid: 54cb949a8cef5ca44a27602c14cb9919, type: 3}
+    preload_elements: []
+  - name: Cat
+    initialize_count: 1
+    used_count: 0
+    recycled_count: 0
+    next_index: 0
+    root: {fileID: 0}
+    target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
+    preload_elements: []
+  find: 
+  highlight: 
+  item_height: 50
+  visible_item_count: 9
+  element_info_list_original_scroller: {x: 0, y: 0}
+  selected_index: -1
+  location_selected_index: -1

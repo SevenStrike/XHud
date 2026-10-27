@@ -26,9 +26,9 @@ namespace SevenStrikeModules.XHud
 
     public class XHud_Element_TriggerAction : EventTrigger
     {
-        public Image TriggerImage;
-        public XHud_Module_Element HudElement;
-        public bool AutoClearActionsAndEvents;
+        public Image trigger_image;
+        public XHud_Module_Element hud_manager;
+        public bool auto_clear_actions_and_events;
 
         /// <summary>
         /// 动作 - 当 - 鼠标点击时
@@ -104,19 +104,35 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public UnityEvent eve_on_pointer_Drop;
 
-        public bool Enabled = true;
+        public bool is_enabled = true;
 
+        #region 折叠
         public bool
             fold_param = true,
             fold_option = true,
             fold_based = true;
 
+        public void GroupFold(bool state)
+        {
+            fold_param = state;
+            fold_option = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool param = true, bool option = true, bool based = true)
+        {
+            fold_param = param;
+            fold_option = option;
+            fold_based = based;
+        }
+        #endregion
+
         void Start()
         {
-            if (HudElement == null)
-                HudElement = GetComponent<XHud_Module_Element>();
-            if (TriggerImage == null)
-                TriggerImage = GetComponent<Image>();
+            if (hud_manager == null)
+                hud_manager = GetComponent<XHud_Module_Element>();
+            if (trigger_image == null)
+                trigger_image = GetComponent<Image>();
         }
 
         void Update()
@@ -126,7 +142,7 @@ namespace SevenStrikeModules.XHud
 
         private void OnDisable()
         {
-            if (!AutoClearActionsAndEvents)
+            if (!auto_clear_actions_and_events)
                 return;
             ClearAllEvents();
             ClearAllActions();
@@ -166,91 +182,91 @@ namespace SevenStrikeModules.XHud
 
         public override void OnPointerEnter(PointerEventData eventData)
         {
-            if (!Enabled) return;
+            if (!is_enabled) return;
 
             base.OnPointerEnter(eventData);
             if (act_on_Enter != null)
-                act_on_Enter(HudElement, eventData);
+                act_on_Enter(hud_manager, eventData);
             eve_on_pointer_Enter.Invoke();
         }
 
         public override void OnPointerExit(PointerEventData eventData)
         {
-            if (!Enabled) return;
+            if (!is_enabled) return;
 
             base.OnPointerExit(eventData);
-            if (act_on_Enter != null)
-                act_on_Enter(HudElement, eventData);
-            eve_on_pointer_Enter.Invoke();
+            if (act_on_Exit != null)
+                act_on_Exit(hud_manager, eventData);
+            eve_on_pointer_Exit.Invoke();
         }
 
         public override void OnSelect(BaseEventData eventData)
         {
-            if (!Enabled) return;
+            if (!is_enabled) return;
 
             base.OnSelect(eventData);
             if (act_on_Select != null)
-                act_on_Select(HudElement, eventData);
+                act_on_Select(hud_manager, eventData);
             eve_on_pointer_Select.Invoke();
         }
 
         public override void OnDeselect(BaseEventData eventData)
         {
-            if (!Enabled) return;
+            if (!is_enabled) return;
 
             base.OnDeselect(eventData);
             if (act_on_Unselect != null)
-                act_on_Unselect(HudElement, eventData);
+                act_on_Unselect(hud_manager, eventData);
             eve_on_pointer_Unselect.Invoke();
         }
 
         public override void OnPointerClick(PointerEventData eventData)
         {
-            if (!Enabled) return;
+            if (!is_enabled) return;
 
             base.OnPointerClick(eventData);
             if (act_on_Clicked != null)
-                act_on_Clicked(HudElement, eventData);
+                act_on_Clicked(hud_manager, eventData);
             eve_on_pointer_Clicked.Invoke();
         }
 
         public override void OnPointerDown(PointerEventData eventData)
         {
-            if (!Enabled) return;
+            if (!is_enabled) return;
 
             base.OnPointerDown(eventData);
             if (act_on_Press != null)
-                act_on_Press(HudElement, eventData);
+                act_on_Press(hud_manager, eventData);
             eve_on_pointer_Press.Invoke();
         }
 
         public override void OnPointerUp(PointerEventData eventData)
         {
-            if (!Enabled) return;
+            if (!is_enabled) return;
 
             base.OnPointerUp(eventData);
             if (act_on_Release != null)
-                act_on_Release(HudElement, eventData);
+                act_on_Release(hud_manager, eventData);
             eve_on_pointer_Release.Invoke();
         }
 
         public override void OnDrag(PointerEventData eventData)
         {
-            if (!Enabled) return;
+            if (!is_enabled) return;
 
             base.OnDrag(eventData);
             if (act_on_Drag != null)
-                act_on_Drag(HudElement, eventData);
+                act_on_Drag(hud_manager, eventData);
             eve_on_pointer_Drag.Invoke();
         }
 
         public override void OnDrop(PointerEventData eventData)
         {
-            if (!Enabled) return;
+            if (!is_enabled) return;
 
             base.OnDrop(eventData);
             if (act_on_Drop != null)
-                act_on_Drop(HudElement, eventData);
+                act_on_Drop(hud_manager, eventData);
             eve_on_pointer_Drop.Invoke();
         }
     }

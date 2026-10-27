@@ -156,7 +156,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 for (int i = 0; i < Nodes.Count; i++)
                 {
-                    float end = Nodes[i].Delay + Nodes[i].Duration;
+                    float end = Nodes[i].delay + Nodes[i].duration;
                     if (end > maxEnd) maxEnd = end;
                 }
             }
@@ -166,8 +166,8 @@ namespace SevenStrikeModules.XHud.Editor
                 for (int i = 0; i < Sounds.Count; i++)
                 {
                     TweenSound s = Sounds[i];
-                    float len = s.Sound != null ? s.Sound.length : DefaultSoundClipSeconds;
-                    float end = s.Delay + len;
+                    float len = s.sound != null ? s.sound.length : DefaultSoundClipSeconds;
+                    float end = s.delay + len;
                     if (end > maxEnd) maxEnd = end;
                 }
             }

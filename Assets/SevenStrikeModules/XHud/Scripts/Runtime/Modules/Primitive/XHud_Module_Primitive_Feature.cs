@@ -32,31 +32,31 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 位置
         /// </summary>
-        public Vector3 Position;
+        public Vector3 position;
         /// <summary>
         /// 角度
         /// </summary>
-        public Vector3 Euler;
+        public Vector3 euler;
         /// <summary>
         /// 缩放
         /// </summary>
-        public Vector3 Scale;
+        public Vector3 scale;
         /// <summary>
         /// 透明度
         /// </summary>
-        public float Alpha;
+        public float alpha;
         /// <summary>
         /// 颜色
         /// </summary>
-        public Color Color;
+        public Color color;
         /// <summary>
         /// 尺寸
         /// </summary>
-        public Vector2 Size;
+        public Vector2 size;
         /// <summary>
         /// 填充
         /// </summary>
-        public float Fill;
+        public float fill;
     }
 
     public class XHud_Module_Primitive_Feature : MonoBehaviour
@@ -70,18 +70,18 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 图元特性参数
         /// </summary>
-        [SerializeField] public PrimitiveFeatures PrimitiveFeatures;
+        [SerializeField] public PrimitiveFeatures primitive_features;
         /// <summary>
         /// 第一次点击的时候记录为首次使用控制器特性，并且会把所有涉及的特性参数都收集，只有第一次使用才会起效
         /// </summary>
-        [SerializeField] public bool FirstSaveFeatures;
+        [SerializeField] public bool first_save_features;
         #endregion
 
         #region 状态开关
         /// <summary>
         /// 调试开关
         /// </summary>
-        [SerializeField] public bool Debug;
+        [SerializeField] public bool debug;
         #endregion
 
         #region 折叠
@@ -126,38 +126,38 @@ namespace SevenStrikeModules.XHud
         public void PrimitiveFeature_Save()
         {
             // 保存特性：Rect
-            if (controller.mod_Rect != null)
+            if (controller.mod_rect != null)
             {
-                PrimitiveFeatures.Position = controller.mod_Rect.anchoredPosition3D;
-                PrimitiveFeatures.Euler = controller.mod_Rect.localEulerAngles;
-                PrimitiveFeatures.Scale = controller.mod_Rect.localScale;
-                PrimitiveFeatures.Size = controller.mod_Rect.sizeDelta;
+                primitive_features.position = controller.mod_rect.anchoredPosition3D;
+                primitive_features.euler = controller.mod_rect.localEulerAngles;
+                primitive_features.scale = controller.mod_rect.localScale;
+                primitive_features.size = controller.mod_rect.sizeDelta;
             }
             // 保存特性：CanvasGroup
-            if (controller.mod_CanvasGroup != null)
+            if (controller.mod_canvas_group != null)
             {
-                PrimitiveFeatures.Alpha = controller.mod_CanvasGroup.alpha;
+                primitive_features.alpha = controller.mod_canvas_group.alpha;
             }
             // 保存特性：Image
-            if (controller.mod_Image != null)
+            if (controller.mod_image != null)
             {
-                PrimitiveFeatures.Color = controller.mod_Image.color;
-                PrimitiveFeatures.Fill = controller.mod_Image.fillAmount;
+                primitive_features.color = controller.mod_image.color;
+                primitive_features.fill = controller.mod_image.fillAmount;
             }
             // 保存特性：Text
-            else if (controller.mod_Text != null)
+            else if (controller.mod_text != null)
             {
-                PrimitiveFeatures.Color = controller.mod_Text.color;
+                primitive_features.color = controller.mod_text.color;
             }
             // 保存特性：TmpText
-            else if (controller.mod_TmpText != null)
+            else if (controller.mod_tmp_text != null)
             {
-                PrimitiveFeatures.Color = controller.mod_TmpText.color;
+                primitive_features.color = controller.mod_tmp_text.color;
             }
             // 保存特性：_RawImage
-            else if (controller.mod_RawImage != null)
+            else if (controller.mod_raw_image != null)
             {
-                PrimitiveFeatures.Color = controller.mod_RawImage.color;
+                primitive_features.color = controller.mod_raw_image.color;
             }
         }
         /// <summary>
@@ -166,38 +166,38 @@ namespace SevenStrikeModules.XHud
         public void PrimitiveFeature_Load()
         {
             // 读取特性：Rect
-            if (controller.mod_Rect != null)
+            if (controller.mod_rect != null)
             {
-                controller.mod_Rect.anchoredPosition3D = PrimitiveFeatures.Position;
-                controller.mod_Rect.localEulerAngles = PrimitiveFeatures.Euler;
-                controller.mod_Rect.localScale = PrimitiveFeatures.Scale;
-                controller.mod_Rect.sizeDelta = PrimitiveFeatures.Size;
+                controller.mod_rect.anchoredPosition3D = primitive_features.position;
+                controller.mod_rect.localEulerAngles = primitive_features.euler;
+                controller.mod_rect.localScale = primitive_features.scale;
+                controller.mod_rect.sizeDelta = primitive_features.size;
             }
             // 读取特性：CanvasGroup
-            if (controller.mod_CanvasGroup != null)
+            if (controller.mod_canvas_group != null)
             {
-                controller.mod_CanvasGroup.alpha = PrimitiveFeatures.Alpha;
+                controller.mod_canvas_group.alpha = primitive_features.alpha;
             }
             // 读取特性：Image
-            if (controller.mod_Image != null)
+            if (controller.mod_image != null)
             {
-                controller.mod_Image.color = PrimitiveFeatures.Color;
-                controller.mod_Image.fillAmount = PrimitiveFeatures.Fill;
+                controller.mod_image.color = primitive_features.color;
+                controller.mod_image.fillAmount = primitive_features.fill;
             }
             // 读取特性：Text
-            else if (controller.mod_Text != null)
+            else if (controller.mod_text != null)
             {
-                controller.mod_Text.color = PrimitiveFeatures.Color;
+                controller.mod_text.color = primitive_features.color;
             }
             // 读取特性：TmpText
-            else if (controller.mod_TmpText != null)
+            else if (controller.mod_tmp_text != null)
             {
-                controller.mod_TmpText.color = PrimitiveFeatures.Color;
+                controller.mod_tmp_text.color = primitive_features.color;
             }
             // 读取特性：RawImage
-            else if (controller.mod_RawImage != null)
+            else if (controller.mod_raw_image != null)
             {
-                controller.mod_RawImage.color = PrimitiveFeatures.Color;
+                controller.mod_raw_image.color = primitive_features.color;
             }
         }
 
@@ -209,7 +209,7 @@ namespace SevenStrikeModules.XHud
             controller = transform.GetComponent<XHud_Module_Primitive_Controller>();
             if (controller != null)
             {
-                controller.pt_Feature = this;
+                controller.pt_feature = this;
             }
         }
     }

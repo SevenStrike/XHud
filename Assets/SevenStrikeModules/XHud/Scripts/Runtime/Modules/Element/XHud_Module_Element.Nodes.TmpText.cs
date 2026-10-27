@@ -34,7 +34,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 文字组件
         /// </summary>
-        public XHud_Module_TmpText TmpText;
+        public XHud_Module_TmpText tmptext;
     }
 
     public partial class XHud_Module_Element : MonoBehaviour
@@ -43,14 +43,14 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// Tmp文字容器
         /// </summary>
-        public List<ElementNode_TmpText> TmpTextNodes;
+        public List<ElementNode_TmpText> tmptext_nodes;
         [SerializeField]
         /// <summary>
         /// TMP文字列表折叠状态
         /// true表示折叠，false表示展开
         /// 用于控制Inspector中TMP文字列表的显示/隐藏
         /// </summary>
-        public bool TmpTextIsFold;
+        public bool tmptext_is_fold;
 
         /// <summary>
         /// 获取目标Tmp文字
@@ -59,21 +59,21 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_TmpText element_TmpText_Get(string indicator)
         {
             XHud_Module_TmpText tex = null;
-            for (int i = 0; i < TmpTextNodes.Count; i++)
+            for (int i = 0; i < tmptext_nodes.Count; i++)
             {
-                if (TmpTextNodes[i].TmpText.Indicator == indicator)
+                if (tmptext_nodes[i].tmptext.indicator == indicator)
                 {
-                    tex = TmpTextNodes[i].TmpText;
+                    tex = tmptext_nodes[i].tmptext;
                 }
             }
             if (tex == null)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "未找到对应标识的文字！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的Tmp文字！", XGUIMsgState.通知);
             }
             return tex;
@@ -84,19 +84,19 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_TmpText[] element_TmpText_GetAll()
         {
             List<XHud_Module_TmpText> textlist = new List<XHud_Module_TmpText>();
-            for (int i = 0; i < TmpTextNodes.Count; i++)
+            for (int i = 0; i < tmptext_nodes.Count; i++)
             {
-                textlist.Add(TmpTextNodes[i].TmpText);
+                textlist.Add(tmptext_nodes[i].tmptext);
             }
             if (textlist.Count <= 0)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "获取的文字列表为空！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
-                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + TmpTextNodes.Count + " 个文字组件！", XGUIMsgState.通知);
+                if (debug_state)
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + tmptext_nodes.Count + " 个文字组件！", XGUIMsgState.通知);
             }
             return textlist.ToArray();
         }

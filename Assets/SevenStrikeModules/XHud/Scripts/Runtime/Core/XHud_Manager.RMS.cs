@@ -29,8 +29,8 @@ namespace SevenStrikeModules.XHud
     [System.Serializable]
     public class ScreenResolutionNode
     {
-        public string Indicator;
-        public Vector2 Res;
+        public string indicator;
+        public Vector2 res;
     }
 
     public partial class XHud_Manager : MonoBehaviour
@@ -38,32 +38,32 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         ///布局匹配方案模式
         /// </summary>
-        public bool RMS_Enabled;
+        public bool rms_enabled;
         /// <summary>
         /// 布局匹配方案列表
         /// </summary>
-        public List<ScreenResolutionNode> RMS_Nodes = new List<ScreenResolutionNode>();
+        public List<ScreenResolutionNode> rms_nodes = new List<ScreenResolutionNode>();
         /// <summary>
         /// RMS当前选中的方案
         /// </summary>
-        public string RMS_CurrentSolution;
+        public string rms_current_solution;
 
         /// <summary>
         /// 获取RMS的节点列表
         /// </summary>
         public ScreenResolutionNode[] hm_RMS_GetResolutionNodes()
         {
-            return RMS_Nodes.ToArray();
+            return rms_nodes.ToArray();
         }
         /// <summary>
         /// 获取RMS的节点所有名称
         /// </summary>
         public string[] hm_RMS_GetResolutionNodeNames()
         {
-            string[] names = new string[RMS_Nodes.Count];
-            for (int i = 0; i < RMS_Nodes.Count; i++)
+            string[] names = new string[rms_nodes.Count];
+            for (int i = 0; i < rms_nodes.Count; i++)
             {
-                names[i] = RMS_Nodes[i].Indicator;
+                names[i] = rms_nodes[i].indicator;
             }
             return names;
         }
@@ -73,10 +73,10 @@ namespace SevenStrikeModules.XHud
         public ScreenResolutionNode hm_RMS_GetResolutionNode(string name)
         {
             ScreenResolutionNode node = new ScreenResolutionNode();
-            for (int i = 0; i < RMS_Nodes.Count; i++)
+            for (int i = 0; i < rms_nodes.Count; i++)
             {
-                if (RMS_Nodes[i].Indicator == name)
-                    node = RMS_Nodes[i];
+                if (rms_nodes[i].indicator == name)
+                    node = rms_nodes[i];
             }
             return node;
         }
@@ -86,7 +86,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public string hm_RMS_GetCurrentSolution()
         {
-            return RMS_CurrentSolution;
+            return rms_current_solution;
         }
         /// <summary>
         /// 根据方案名称获取RMS的索引号
@@ -96,9 +96,9 @@ namespace SevenStrikeModules.XHud
         public int hm_RMS_GetSolutionIndex(string solution)
         {
             int index = 0;
-            for (int i = 0; i < RMS_Nodes.Count; i++)
+            for (int i = 0; i < rms_nodes.Count; i++)
             {
-                if (solution == RMS_Nodes[i].Indicator)
+                if (solution == rms_nodes[i].indicator)
                 {
                     index = i;
                     break;
@@ -111,14 +111,14 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public int hm_RMS_GetResolutionNodesLength()
         {
-            return RMS_Nodes.Count;
+            return rms_nodes.Count;
         }
         /// <summary>
         /// 获取匹配屏幕分辨率节点列表是否为空
         /// </summary>
         public bool hm_RMS_IsEmpty()
         {
-            return RMS_Nodes.Count > 0 ? false : true;
+            return rms_nodes.Count > 0 ? false : true;
         }
         /// <summary>
         /// 根据分辨率标识符设置屏幕分辨率
@@ -128,21 +128,21 @@ namespace SevenStrikeModules.XHud
         public void hm_RMS_SetResolution(string indicator, FullScreenMode mode)
         {
             // 遍历所有已配置的分辨率节点
-            for (int i = 0; i < RMS_Nodes.Count; i++)
+            for (int i = 0; i < rms_nodes.Count; i++)
             {
                 // 查找与传入标识符匹配的分辨率配置
-                if (indicator == RMS_Nodes[i].Indicator)
+                if (indicator == rms_nodes[i].indicator)
                 {
                     // 调用重载方法，根据匹配到的分辨率宽高设置屏幕分辨率
-                    hm_RMS_SetResolution((int)RMS_Nodes[i].Res.x, (int)RMS_Nodes[i].Res.y, mode);
+                    hm_RMS_SetResolution((int)rms_nodes[i].res.x, (int)rms_nodes[i].res.y, mode);
 
                     // 更新当前使用的分辨率标识符，用于记录当前分辨率状态
-                    RMS_CurrentSolution = indicator;
+                    rms_current_solution = indicator;
 
                     // 如果屏幕分辨率改变事件有订阅者，则触发事件
                     // 事件参数：分辨率标识符 和 对应的分辨率向量
-                    if (Act_ScreenResolution_Changed != null)
-                        Act_ScreenResolution_Changed(indicator, RMS_Nodes[i].Res);
+                    if (act_screen_resolution_changed != null)
+                        act_screen_resolution_changed(indicator, rms_nodes[i].res);
                 }
             }
         }

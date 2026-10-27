@@ -56,35 +56,35 @@ namespace SevenStrikeModules.XHud.Editor
                 // 预览列表
                 List<XTween_Interface> preview_twns = new List<XTween_Interface>();
 
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    XHud_Module_Element ele = SelectedObjects[i];
+                    XHud_Module_Element ele = selected_objects[i];
 
-                    ele.TweensPreivew_In_State = true;
-                    ele.TweensPreivew_Out_State = false;
+                    ele.tweens_preivew_in_state = true;
+                    ele.tweens_preivew_out_state = false;
                     //Debug.Log($"TweensPreivew_In：{SelectedObjects[i].TweensPreivew_In_State}");
 
                     // 创建元素自身基础三项动画
-                    ele.ElementTweens_Creator(ele.CreateArgs, null, true, ele.Crc_Preview_SetPosition, ele.Crc_Preview_Position);
+                    ele.ElementTweens_Creator(ele.motion_create_args, null, true, ele.create_preview_set_position, ele.create_preview_position);
 
                     #region 元素基础三项动画 - 加入预览列表
-                    if (ele.Tween_Alpha != null)
-                        preview_twns.Add(ele.Tween_Alpha);
-                    if (ele.Tween_Move != null)
-                        preview_twns.Add(ele.Tween_Move);
-                    if (ele.Tween_Rotation != null)
-                        preview_twns.Add(ele.Tween_Rotation);
+                    if (ele.tween_alpha != null)
+                        preview_twns.Add(ele.tween_alpha);
+                    if (ele.tween_move != null)
+                        preview_twns.Add(ele.tween_move);
+                    if (ele.tween_rotation != null)
+                        preview_twns.Add(ele.tween_rotation);
                     #endregion
 
                     #region 元素子级中的图元动画 - 加入预览列表
-                    if (ele.PreviewIncludePrimitivesTween)
+                    if (ele.preview_include_primitives_tween)
                     {
-                        for (int v = 0; v < ele.PrimitiveControllerNodes.Count; v++)
+                        for (int v = 0; v < ele.primitive_controller_nodes.Count; v++)
                         {
-                            if (ele.PrimitiveControllerNodes[v].Controller.pt_Tween == null)
+                            if (ele.primitive_controller_nodes[v].controller.pt_tween == null)
                                 continue;
 
-                            XTween_Interface[] primitive_tweens = Preview_PrimitiveTween_Collect(ele.PrimitiveControllerNodes[v].Controller.pt_Tween, "元素进入时", ele.PrimitivesTweenGlobalDuration, SelectedObjects[i].PrimitiveControllerNodes[v].DelayTime);
+                            XTween_Interface[] primitive_tweens = Preview_PrimitiveTween_Collect(ele.primitive_controller_nodes[v].controller.pt_tween, "元素进入时", ele.primitives_tween_global_duration, selected_objects[i].primitive_controller_nodes[v].delay_time);
 
                             for (int g = 0; g < primitive_tweens.Length; g++)
                             {
@@ -93,53 +93,53 @@ namespace SevenStrikeModules.XHud.Editor
 
                             // ── 新增：子图元音效预览 ──
                             Preview_PrimitiveTween_Sound(
-                                ele.PrimitiveControllerNodes[v].Controller.pt_Tween,
+                                ele.primitive_controller_nodes[v].controller.pt_tween,
                                 "元素进入时",
-                                ele.PrimitivesTweenGlobalDuration,
-                                ele.PrimitiveControllerNodes[v].DelayTime);
+                                ele.primitives_tween_global_duration,
+                                ele.primitive_controller_nodes[v].delay_time);
                         }
                     }
                     #endregion
 
                     // 元素音效器预览
-                    Preview_ElementSounder_OnList("元素进入时", ele.SounderNodes);
+                    Preview_ElementSounder_OnList("元素进入时", ele.sounder_nodes);
                 }
 
                 Preview_Start(preview_twns.ToArray());
             }
             else
             {
-                TweensPreivew_In_State.boolValue = true;
-                TweensPreivew_Out_State.boolValue = false;
+                sp_tweens_preivew_in_state.boolValue = true;
+                sp_tweens_preivew_out_state.boolValue = false;
                 //Debug.Log($"TweensPreivew_In：{TweensPreivew_In_State.boolValue}");
 
-                TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
-                TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
+                sp_tweens_preivew_in_state.serializedObject.ApplyModifiedProperties();
+                sp_tweens_preivew_out_state.serializedObject.ApplyModifiedProperties();
 
                 // 创建元素自身基础三项动画
-                BaseScript.ElementTweens_Creator(BaseScript.CreateArgs, null, true, Crc_Preview_SetPosition.boolValue, Crc_Preview_Position.vector3Value);
+                base_script.ElementTweens_Creator(base_script.motion_create_args, null, true, sp_create_preview_set_position.boolValue, sp_create_preview_position.vector3Value);
 
                 // 预览列表
                 List<XTween_Interface> preview_twns = new List<XTween_Interface>();
 
                 #region 元素基础三项动画 - 加入预览列表
-                if (BaseScript.Tween_Alpha != null)
-                    preview_twns.Add(BaseScript.Tween_Alpha);
-                if (BaseScript.Tween_Move != null)
-                    preview_twns.Add(BaseScript.Tween_Move);
-                if (BaseScript.Tween_Rotation != null)
-                    preview_twns.Add(BaseScript.Tween_Rotation);
+                if (base_script.tween_alpha != null)
+                    preview_twns.Add(base_script.tween_alpha);
+                if (base_script.tween_move != null)
+                    preview_twns.Add(base_script.tween_move);
+                if (base_script.tween_rotation != null)
+                    preview_twns.Add(base_script.tween_rotation);
                 #endregion
 
                 #region 元素子级中的图元动画 - 加入预览列表
-                if (PreviewIncludePrimitivesTween.boolValue)
+                if (sp_preview_include_primitives_tween.boolValue)
                 {
-                    for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+                    for (int i = 0; i < base_script.primitive_controller_nodes.Count; i++)
                     {
-                        if (BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween == null)
+                        if (base_script.primitive_controller_nodes[i].controller.pt_tween == null)
                             continue;
 
-                        XTween_Interface[] primitive_tweens = Preview_PrimitiveTween_Collect(BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween, "元素进入时", BaseScript.PrimitivesTweenGlobalDuration, BaseScript.PrimitiveControllerNodes[i].DelayTime);
+                        XTween_Interface[] primitive_tweens = Preview_PrimitiveTween_Collect(base_script.primitive_controller_nodes[i].controller.pt_tween, "元素进入时", base_script.primitives_tween_global_duration, base_script.primitive_controller_nodes[i].delay_time);
 
                         for (int s = 0; s < primitive_tweens.Length; s++)
                         {
@@ -148,10 +148,10 @@ namespace SevenStrikeModules.XHud.Editor
 
                         // ── 新增：子图元音效预览 ──
                         Preview_PrimitiveTween_Sound(
-                            BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween,
+                            base_script.primitive_controller_nodes[i].controller.pt_tween,
                             "元素进入时",
-                            BaseScript.PrimitivesTweenGlobalDuration,
-                            BaseScript.PrimitiveControllerNodes[i].DelayTime);
+                            base_script.primitives_tween_global_duration,
+                            base_script.primitive_controller_nodes[i].delay_time);
                     }
                 }
                 #endregion
@@ -159,7 +159,7 @@ namespace SevenStrikeModules.XHud.Editor
                 Preview_Start(preview_twns.ToArray());
 
                 // 元素音效器预览
-                Preview_ElementSounder_OnSerialize("元素进入时", SounderNodes);
+                Preview_ElementSounder_OnSerialize("元素进入时", sp_sounder_nodes);
             }
         }
         /// <summary>
@@ -183,20 +183,20 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SelectedObjects[i].TweensPreivew_In_State = false;
+                    selected_objects[i].tweens_preivew_in_state = false;
                     //Debug.Log($"TweensPreivew_In：{SelectedObjects[i].TweensPreivew_In_State}");
-                    SelectedObjects[i].ElementTweens_Kill();
+                    selected_objects[i].ElementTweens_Kill();
                 }
             }
             else
             {
-                TweensPreivew_In_State.boolValue = false;
+                sp_tweens_preivew_in_state.boolValue = false;
                 //Debug.Log($"TweensPreivew_In：{TweensPreivew_In_State.boolValue}");
-                TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
+                sp_tweens_preivew_in_state.serializedObject.ApplyModifiedProperties();
 
-                BaseScript.ElementTweens_Kill();
+                base_script.ElementTweens_Kill();
             }
 
             Preview_Kill();
@@ -228,33 +228,33 @@ namespace SevenStrikeModules.XHud.Editor
                 // 预览列表
                 List<XTween_Interface> preview_twns = new List<XTween_Interface>();
 
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    XHud_Module_Element ele = SelectedObjects[i];
+                    XHud_Module_Element ele = selected_objects[i];
 
-                    ele.TweensPreivew_In_State = false;
-                    ele.TweensPreivew_Out_State = true;
+                    ele.tweens_preivew_in_state = false;
+                    ele.tweens_preivew_out_state = true;
                     //Debug.Log($"TweensPreivew_Out：{SelectedObjects[i].TweensPreivew_Out_State}");
-                    ele.ElementTweens_Recycler(ele.RecycleArgs, null, true, ele.Rec_Preview_SetPosition, ele.Rec_Preview_Position);
+                    ele.ElementTweens_Recycler(ele.motion_recycle_args, null, true, ele.recycle_preview_set_position, ele.recycle_preview_position);
 
                     #region 元素基础三项动画 - 加入预览列表
-                    if (ele.Tween_Alpha != null)
-                        preview_twns.Add(ele.Tween_Alpha);
-                    if (ele.Tween_Move != null)
-                        preview_twns.Add(ele.Tween_Move);
-                    if (ele.Tween_Rotation != null)
-                        preview_twns.Add(ele.Tween_Rotation);
+                    if (ele.tween_alpha != null)
+                        preview_twns.Add(ele.tween_alpha);
+                    if (ele.tween_move != null)
+                        preview_twns.Add(ele.tween_move);
+                    if (ele.tween_rotation != null)
+                        preview_twns.Add(ele.tween_rotation);
                     #endregion
 
                     #region 元素子级中的图元动画 - 加入预览列表
-                    if (ele.PreviewIncludePrimitivesTween)
+                    if (ele.preview_include_primitives_tween)
                     {
-                        for (int v = 0; v < ele.PrimitiveControllerNodes.Count; v++)
+                        for (int v = 0; v < ele.primitive_controller_nodes.Count; v++)
                         {
-                            if (ele.PrimitiveControllerNodes[v].Controller.pt_Tween == null)
+                            if (ele.primitive_controller_nodes[v].controller.pt_tween == null)
                                 continue;
 
-                            XTween_Interface[] primitive_tweens = Preview_PrimitiveTween_Collect(ele.PrimitiveControllerNodes[v].Controller.pt_Tween, "元素退出时", ele.PrimitivesTweenGlobalDuration, ele.PrimitiveControllerNodes[v].DelayTime);
+                            XTween_Interface[] primitive_tweens = Preview_PrimitiveTween_Collect(ele.primitive_controller_nodes[v].controller.pt_tween, "元素退出时", ele.primitives_tween_global_duration, ele.primitive_controller_nodes[v].delay_time);
 
                             for (int g = 0; g < primitive_tweens.Length; g++)
                             {
@@ -263,51 +263,51 @@ namespace SevenStrikeModules.XHud.Editor
 
                             // ── 新增：子图元音效预览 ──
                             Preview_PrimitiveTween_Sound(
-                                ele.PrimitiveControllerNodes[v].Controller.pt_Tween,
+                                ele.primitive_controller_nodes[v].controller.pt_tween,
                                 "元素退出时",
-                                ele.PrimitivesTweenGlobalDuration,
-                                ele.PrimitiveControllerNodes[v].DelayTime);
+                                ele.primitives_tween_global_duration,
+                                ele.primitive_controller_nodes[v].delay_time);
                         }
                     }
                     #endregion
 
-                    Preview_ElementSounder_OnList("元素退出时", ele.SounderNodes);
+                    Preview_ElementSounder_OnList("元素退出时", ele.sounder_nodes);
                 }
 
                 Preview_Start(preview_twns.ToArray());
             }
             else
             {
-                TweensPreivew_In_State.boolValue = false;
-                TweensPreivew_Out_State.boolValue = true;
+                sp_tweens_preivew_in_state.boolValue = false;
+                sp_tweens_preivew_out_state.boolValue = true;
                 //Debug.Log($"TweensPreivew_Out：{TweensPreivew_Out_State.boolValue}");
 
-                TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
-                TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
+                sp_tweens_preivew_in_state.serializedObject.ApplyModifiedProperties();
+                sp_tweens_preivew_out_state.serializedObject.ApplyModifiedProperties();
 
-                BaseScript.ElementTweens_Recycler(BaseScript.RecycleArgs, null, true, Rec_Preview_SetPosition.boolValue, Rec_Preview_Position.vector3Value);
+                base_script.ElementTweens_Recycler(base_script.motion_recycle_args, null, true, sp_recycle_preview_set_position.boolValue, sp_recycle_preview_position.vector3Value);
 
                 // 预览列表
                 List<XTween_Interface> preview_twns = new List<XTween_Interface>();
 
                 #region 元素基础三项动画 - 加入预览列表
-                if (BaseScript.Tween_Alpha != null)
-                    preview_twns.Add(BaseScript.Tween_Alpha);
-                if (BaseScript.Tween_Move != null)
-                    preview_twns.Add(BaseScript.Tween_Move);
-                if (BaseScript.Tween_Rotation != null)
-                    preview_twns.Add(BaseScript.Tween_Rotation);
+                if (base_script.tween_alpha != null)
+                    preview_twns.Add(base_script.tween_alpha);
+                if (base_script.tween_move != null)
+                    preview_twns.Add(base_script.tween_move);
+                if (base_script.tween_rotation != null)
+                    preview_twns.Add(base_script.tween_rotation);
                 #endregion
 
                 #region 元素子级中的图元动画 - 加入预览列表
-                if (PreviewIncludePrimitivesTween.boolValue)
+                if (sp_preview_include_primitives_tween.boolValue)
                 {
-                    for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+                    for (int i = 0; i < base_script.primitive_controller_nodes.Count; i++)
                     {
-                        if (BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween == null)
+                        if (base_script.primitive_controller_nodes[i].controller.pt_tween == null)
                             continue;
 
-                        XTween_Interface[] primitive_tweens = Preview_PrimitiveTween_Collect(BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween, "元素退出时", BaseScript.PrimitivesTweenGlobalDuration, BaseScript.PrimitiveControllerNodes[i].DelayTime);
+                        XTween_Interface[] primitive_tweens = Preview_PrimitiveTween_Collect(base_script.primitive_controller_nodes[i].controller.pt_tween, "元素退出时", base_script.primitives_tween_global_duration, base_script.primitive_controller_nodes[i].delay_time);
 
                         for (int s = 0; s < primitive_tweens.Length; s++)
                         {
@@ -316,16 +316,16 @@ namespace SevenStrikeModules.XHud.Editor
 
                         // ── 新增：子图元音效预览 ──
                         Preview_PrimitiveTween_Sound(
-                            BaseScript.PrimitiveControllerNodes[i].Controller.pt_Tween,
+                            base_script.primitive_controller_nodes[i].controller.pt_tween,
                             "元素退出时",
-                            BaseScript.PrimitivesTweenGlobalDuration,
-                            BaseScript.PrimitiveControllerNodes[i].DelayTime);
+                            base_script.primitives_tween_global_duration,
+                            base_script.primitive_controller_nodes[i].delay_time);
                     }
                 }
                 #endregion
 
                 Preview_Start(preview_twns.ToArray());
-                Preview_ElementSounder_OnSerialize("元素退出时", SounderNodes);
+                Preview_ElementSounder_OnSerialize("元素退出时", sp_sounder_nodes);
             }
         }
         /// <summary>
@@ -349,17 +349,17 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SelectedObjects[i].TweensPreivew_Out_State = false;
+                    selected_objects[i].tweens_preivew_out_state = false;
                     //Debug.Log($"TweensPreivew_Out：{SelectedObjects[i].TweensPreivew_Out_State}");
                 }
             }
             else
             {
-                TweensPreivew_Out_State.boolValue = false;
+                sp_tweens_preivew_out_state.boolValue = false;
                 //Debug.Log($"TweensPreivew_Out：{TweensPreivew_Out_State.boolValue}");
-                TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
+                sp_tweens_preivew_out_state.serializedObject.ApplyModifiedProperties();
             }
 
             Preview_Kill();
@@ -380,7 +380,7 @@ namespace SevenStrikeModules.XHud.Editor
                 return;
 
             // 如果预览动画播完后自动杀死
-            if (AutoKillPreviewTweens.boolValue)
+            if (sp_autokill_preview_tweens.boolValue)
             {
                 // 预览动画杀死后自动清空预览器的列表
                 Editor_XTween_Previewer.AfterKillClear = true;
@@ -396,9 +396,9 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 Editor_XTween_Previewer.AutoKillWithDuration = false;
                 // 预览动画杀死后自动清空预览器的列表 - 状态根据元素脚本的开关
-                Editor_XTween_Previewer.AfterKillClear = ClearPreviewTweensWithKill.boolValue;
+                Editor_XTween_Previewer.AfterKillClear = sp_clear_preview_tweens_with_kill.boolValue;
                 // 预览动画杀死前将动画目标的属性倒退 - 状态根据元素脚本的开关
-                Editor_XTween_Previewer.BeforeKillRewind = RewindPreviewTweensWithKill.boolValue;
+                Editor_XTween_Previewer.BeforeKillRewind = sp_rewind_preview_tweens_with_kill.boolValue;
             }
 
             for (int i = 0; i < tweens.Length; i++)
@@ -427,30 +427,30 @@ namespace SevenStrikeModules.XHud.Editor
             Preview_State_ResetAll();
 
             // 预览器执行动作：杀死动画
-            Editor_XTween_Previewer.Kill(ClearPreviewTweensWithKill.boolValue, RewindPreviewTweensWithKill.boolValue, () =>
+            Editor_XTween_Previewer.Kill(sp_clear_preview_tweens_with_kill.boolValue, sp_rewind_preview_tweens_with_kill.boolValue, () =>
             {
                 //BaseScript.CurrentTweener = null;
             });
 
             // 当动画预览器为根据动画耗时自动杀死的情况下
-            if (AutoKillPreviewTweens.boolValue)
+            if (sp_autokill_preview_tweens.boolValue)
                 Editor_XTween_Previewer.act_on_editor_autokill -= Preview_OnAutoKill;
 
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    XHud_Module_Element ele = SelectedObjects[i];
+                    XHud_Module_Element ele = selected_objects[i];
 
                     // 根据是否包含图元动画预览类型对图元动画进行特性复位
-                    if (PreviewIncludePrimitivesTween.boolValue)
+                    if (sp_preview_include_primitives_tween.boolValue)
                     {
-                        for (int d = 0; d < SelectedObjects[i].PrimitiveControllerNodes.Count; d++)
+                        for (int d = 0; d < selected_objects[i].primitive_controller_nodes.Count; d++)
                         {
-                            PrimitiveControllerNode con = SelectedObjects[i].PrimitiveControllerNodes[d];
-                            if (con.Controller.pt_Feature == null)
+                            PrimitiveControllerNode con = selected_objects[i].primitive_controller_nodes[d];
+                            if (con.controller.pt_feature == null)
                                 continue;
-                            con.Controller.pt_Feature.PrimitiveFeature_Load();
+                            con.controller.pt_feature.PrimitiveFeature_Load();
                         }
                     }
                     // 杀死元素三项自身动画
@@ -462,19 +462,19 @@ namespace SevenStrikeModules.XHud.Editor
             else
             {
                 // 根据是否包含图元动画预览类型对图元动画进行特性复位
-                if (PreviewIncludePrimitivesTween.boolValue)
+                if (sp_preview_include_primitives_tween.boolValue)
                 {
-                    for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+                    for (int i = 0; i < base_script.primitive_controller_nodes.Count; i++)
                     {
-                        PrimitiveControllerNode con = BaseScript.PrimitiveControllerNodes[i];
-                        if (con.Controller.pt_Feature != null)
-                            con.Controller.pt_Feature.PrimitiveFeature_Load();
+                        PrimitiveControllerNode con = base_script.primitive_controller_nodes[i];
+                        if (con.controller.pt_feature != null)
+                            con.controller.pt_feature.PrimitiveFeature_Load();
                     }
                 }
                 // 杀死元素三项自身动画
-                BaseScript.ElementTweens_Kill();
+                base_script.ElementTweens_Kill();
                 // 清空元素三项自身动画
-                BaseScript.ElementTweens_Clear();
+                base_script.ElementTweens_Clear();
             }
 
             Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
@@ -489,19 +489,19 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    XHud_Module_Element ele = SelectedObjects[i];
+                    XHud_Module_Element ele = selected_objects[i];
 
                     // 根据是否包含图元动画预览类型对图元动画进行特性复位
-                    if (ele.PreviewIncludePrimitivesTween)
+                    if (ele.preview_include_primitives_tween)
                     {
-                        for (int d = 0; d < ele.PrimitiveControllerNodes.Count; d++)
+                        for (int d = 0; d < ele.primitive_controller_nodes.Count; d++)
                         {
-                            PrimitiveControllerNode con = ele.PrimitiveControllerNodes[d];
-                            if (con.Controller.pt_Feature == null)
+                            PrimitiveControllerNode con = ele.primitive_controller_nodes[d];
+                            if (con.controller.pt_feature == null)
                                 continue;
-                            con.Controller.pt_Feature.PrimitiveFeature_Load();
+                            con.controller.pt_feature.PrimitiveFeature_Load();
                         }
                     }
 
@@ -510,27 +510,27 @@ namespace SevenStrikeModules.XHud.Editor
                     // 清空元素三项自身动画
                     ele.ElementTweens_Clear();
 
-                    ele.Alpha = 1;
+                    ele.alpha = 1;
                 }
             }
             else
             {
                 // 根据是否包含图元动画预览类型对图元动画进行特性复位
-                if (PreviewIncludePrimitivesTween.boolValue)
+                if (sp_preview_include_primitives_tween.boolValue)
                 {
-                    for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+                    for (int i = 0; i < base_script.primitive_controller_nodes.Count; i++)
                     {
-                        PrimitiveControllerNode con = BaseScript.PrimitiveControllerNodes[i];
-                        if (con.Controller.pt_Feature == null)
+                        PrimitiveControllerNode con = base_script.primitive_controller_nodes[i];
+                        if (con.controller.pt_feature == null)
                             continue;
-                        con.Controller.pt_Feature.PrimitiveFeature_Load();
+                        con.controller.pt_feature.PrimitiveFeature_Load();
                     }
                 }
                 // 杀死元素三项自身动画
-                BaseScript.ElementTweens_Kill();
+                base_script.ElementTweens_Kill();
                 // 清空元素三项自身动画
-                BaseScript.ElementTweens_Clear();
-                BaseScript.Alpha = 1;
+                base_script.ElementTweens_Clear();
+                base_script.alpha = 1;
             }
 
             Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
@@ -552,19 +552,19 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SelectedObjects[i].TweensPreivew_In_State = false;
-                    SelectedObjects[i].TweensPreivew_Out_State = false;
+                    selected_objects[i].tweens_preivew_in_state = false;
+                    selected_objects[i].tweens_preivew_out_state = false;
                 }
             }
             else
             {
-                TweensPreivew_In_State.boolValue = false;
-                TweensPreivew_Out_State.boolValue = false;
+                sp_tweens_preivew_in_state.boolValue = false;
+                sp_tweens_preivew_out_state.boolValue = false;
 
-                TweensPreivew_In_State.serializedObject.ApplyModifiedProperties();
-                TweensPreivew_Out_State.serializedObject.ApplyModifiedProperties();
+                sp_tweens_preivew_in_state.serializedObject.ApplyModifiedProperties();
+                sp_tweens_preivew_out_state.serializedObject.ApplyModifiedProperties();
             }
         }
         #endregion
@@ -581,16 +581,16 @@ namespace SevenStrikeModules.XHud.Editor
         private XTween_Interface[] Preview_PrimitiveTween_Collect(XHud_Module_Primitive_Tween tweener, string tim, float dur, float delay)
         {
             List<XTween_Interface> tweens = new List<XTween_Interface>();
-            for (int i = 0; i < tweener.PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < tweener.primitive_tween_nodes.Count; i++)
             {
-                if (!tweener.PrimitiveTweenNodes[i].Enabled)
+                if (!tweener.primitive_tween_nodes[i].enabled)
                     continue;
-                if (tweener.PrimitiveTweenNodes[i].Timings != tim)
+                if (tweener.primitive_tween_nodes[i].timings != tim)
                     continue;
-                if (!tweener.Tween_CreateRuleValidCheck(tweener.PrimitiveTweenNodes[i]))
+                if (!tweener.Tween_CreateRuleValidCheck(tweener.primitive_tween_nodes[i]))
                     continue;
 
-                XTween_Interface tween = tweener.Tween_Create(tweener.PrimitiveTweenNodes[i], tweener.GlobalDuration * HudManager.DurationMultiply * dur);
+                XTween_Interface tween = tweener.Tween_Create(tweener.primitive_tween_nodes[i], tweener.global_duration * hud_manager.tween_global_duration * dur);
 
                 if (tween != null)
                     tween.SetDelay(tween.Delay + delay);
@@ -621,10 +621,10 @@ namespace SevenStrikeModules.XHud.Editor
             // 预览列表
             List<XTween_Interface> preview_twns = new List<XTween_Interface>();
 
-            if (node.Controller.pt_Tween == null)
+            if (node.controller.pt_tween == null)
                 return;
 
-            XTween_Interface[] primitive_tweens = Preview_PrimitiveTween_Collect(node.Controller.pt_Tween, "元素进入时", BaseScript.PrimitivesTweenGlobalDuration, node.DelayTime);
+            XTween_Interface[] primitive_tweens = Preview_PrimitiveTween_Collect(node.controller.pt_tween, "元素进入时", base_script.primitives_tween_global_duration, node.delay_time);
 
             for (int s = 0; s < primitive_tweens.Length; s++)
             {
@@ -633,10 +633,10 @@ namespace SevenStrikeModules.XHud.Editor
 
             // ── 子图元音效预览（时机与上方动画收集一致，延迟与子图元动画对齐） ──
             Preview_PrimitiveTween_Sound(
-                node.Controller.pt_Tween,
+                node.controller.pt_tween,
                 "元素进入时",
-                BaseScript.PrimitivesTweenGlobalDuration,
-                node.DelayTime);
+                base_script.primitives_tween_global_duration,
+                node.delay_time);
 
             Preview_Start(preview_twns.ToArray());
         }
@@ -650,78 +650,17 @@ namespace SevenStrikeModules.XHud.Editor
         {
             #region 动画预览器参数状态获取
             // 自动杀死预览动画
-            AutoKillPreviewTweens.boolValue = XHud_Dashboard.element_get_preview_autokill();
-            AutoKillPreviewTweens.serializedObject.ApplyModifiedProperties();
+            sp_autokill_preview_tweens.boolValue = XHud_Dashboard.element_get_preview_autokill();
+            sp_autokill_preview_tweens.serializedObject.ApplyModifiedProperties();
 
             // 预览杀死前重置动画
-            RewindPreviewTweensWithKill.boolValue = XHud_Dashboard.element_get_preview_rewind_before_kill();
-            RewindPreviewTweensWithKill.serializedObject.ApplyModifiedProperties();
+            sp_rewind_preview_tweens_with_kill.boolValue = XHud_Dashboard.element_get_preview_rewind_before_kill();
+            sp_rewind_preview_tweens_with_kill.serializedObject.ApplyModifiedProperties();
 
             // 预览杀死后清空预览列表
-            ClearPreviewTweensWithKill.boolValue = XHud_Dashboard.element_get_preview_clear_after_kill();
-            ClearPreviewTweensWithKill.serializedObject.ApplyModifiedProperties();
+            sp_clear_preview_tweens_with_kill.boolValue = XHud_Dashboard.element_get_preview_clear_after_kill();
+            sp_clear_preview_tweens_with_kill.serializedObject.ApplyModifiedProperties();
             #endregion
-        }
-        /// <summary>
-        /// 重置生成与回收的参数到默认
-        /// </summary>
-        private void MotionParams_Reset(string state)
-        {
-            if (state == "c")
-            {
-                CreateArgs.FindPropertyRelative("anchor").enumValueIndex = (int)XHudAnchor.中心;
-                CreateArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)HudMotion_Movement.S_从下至上;
-                CreateArgs.FindPropertyRelative("Movement.Distance").floatValue = 100;
-                CreateArgs.FindPropertyRelative("Movement.Duration").floatValue = 1;
-                CreateArgs.FindPropertyRelative("Movement.Delay").floatValue = 0;
-                CreateArgs.FindPropertyRelative("Movement.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
-                CreateArgs.FindPropertyRelative("Movement.CurveName").stringValue = "";
-                CreateArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
-                CreateArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)HudMotion_Rotation.A_无旋转;
-                CreateArgs.FindPropertyRelative("Rotation.Degree").floatValue = 0;
-                CreateArgs.FindPropertyRelative("Rotation.Duration").floatValue = 1;
-                CreateArgs.FindPropertyRelative("Rotation.Delay").floatValue = 0;
-                CreateArgs.FindPropertyRelative("Rotation.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
-                CreateArgs.FindPropertyRelative("Rotation.CurveName").stringValue = "";
-                CreateArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
-                CreateArgs.FindPropertyRelative("Alpha.Duration").floatValue = 1;
-                CreateArgs.FindPropertyRelative("Alpha.Delay").floatValue = 0;
-                CreateArgs.FindPropertyRelative("Alpha.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
-                CreateArgs.FindPropertyRelative("Alpha.CurveName").stringValue = "";
-                CreateArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
-                CreateArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
-                CreateArgs.serializedObject.ApplyModifiedProperties();
-
-                Crc_Lib_Name.stringValue = null;
-                Crc_Lib_Name.serializedObject.ApplyModifiedProperties();
-            }
-            else if (state == "r")
-            {
-                RecycleArgs.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)HudMotion_Movement.D_从上至下;
-                RecycleArgs.FindPropertyRelative("Movement.Distance").floatValue = 100;
-                RecycleArgs.FindPropertyRelative("Movement.Duration").floatValue = 1;
-                RecycleArgs.FindPropertyRelative("Movement.Delay").floatValue = 0;
-                RecycleArgs.FindPropertyRelative("Movement.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
-                RecycleArgs.FindPropertyRelative("Movement.CurveName").stringValue = "";
-                RecycleArgs.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
-                RecycleArgs.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)HudMotion_Rotation.A_无旋转;
-                RecycleArgs.FindPropertyRelative("Rotation.Degree").floatValue = 0;
-                RecycleArgs.FindPropertyRelative("Rotation.Duration").floatValue = 1;
-                RecycleArgs.FindPropertyRelative("Rotation.Delay").floatValue = 0;
-                RecycleArgs.FindPropertyRelative("Rotation.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
-                RecycleArgs.FindPropertyRelative("Rotation.CurveName").stringValue = "";
-                RecycleArgs.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
-                RecycleArgs.FindPropertyRelative("Alpha.Duration").floatValue = 1;
-                RecycleArgs.FindPropertyRelative("Alpha.Delay").floatValue = 0;
-                RecycleArgs.FindPropertyRelative("Alpha.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
-                RecycleArgs.FindPropertyRelative("Alpha.CurveName").stringValue = "";
-                RecycleArgs.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
-                RecycleArgs_MotionAnimateEndState.enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
-                RecycleArgs.serializedObject.ApplyModifiedProperties();
-
-                Rec_Lib_Name.stringValue = null;
-                Rec_Lib_Name.serializedObject.ApplyModifiedProperties();
-            }
         }
         #endregion
 
@@ -741,42 +680,42 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 case HudElementMotionType.Recycler:
                     Motion_Recycler rec = new Motion_Recycler();
-                    rec.Alpha = BaseScript.RecycleArgs.Alpha;
+                    rec.Alpha = base_script.motion_recycle_args.Alpha;
 
                     rec.Movement = new MotionNode_Movement();
-                    rec.Movement.CopyData(BaseScript.RecycleArgs.Movement);
+                    rec.Movement.CopyData(base_script.motion_recycle_args.Movement);
 
                     rec.Rotation = new MotionNode_Rotation();
-                    rec.Rotation.CopyData(BaseScript.RecycleArgs.Rotation);
+                    rec.Rotation.CopyData(base_script.motion_recycle_args.Rotation);
 
                     rec.Alpha = new MotionNode_Alpha();
-                    rec.Alpha.CopyData(BaseScript.RecycleArgs.Alpha);
+                    rec.Alpha.CopyData(base_script.motion_recycle_args.Alpha);
 
-                    window.SetElementMotion(rec);
+                    window.set_motion(rec);
                     break;
                 case HudElementMotionType.Creator:
                     Motion_Creator crc = new Motion_Creator();
-                    crc.anchor = BaseScript.CreateArgs.anchor;
+                    crc.anchor = base_script.motion_create_args.anchor;
 
-                    crc.Alpha = BaseScript.CreateArgs.Alpha;
+                    crc.Alpha = base_script.motion_create_args.Alpha;
 
                     crc.Movement = new MotionNode_Movement();
-                    crc.Movement.CopyData(BaseScript.CreateArgs.Movement);
+                    crc.Movement.CopyData(base_script.motion_create_args.Movement);
 
                     crc.Rotation = new MotionNode_Rotation();
-                    crc.Rotation.CopyData(BaseScript.CreateArgs.Rotation);
+                    crc.Rotation.CopyData(base_script.motion_create_args.Rotation);
 
                     crc.Alpha = new MotionNode_Alpha();
-                    crc.Alpha.CopyData(BaseScript.CreateArgs.Alpha);
+                    crc.Alpha.CopyData(base_script.motion_create_args.Alpha);
 
-                    window.SetElementMotion(crc);
+                    window.set_motion(crc);
                     break;
             }
-            window.SetElementMotionType(Type);
-            window.SetLibrarySetterMode(LibrarySetterMode.添加到库);
-            window.SetButtonText("添加", "取消");
-            window.SetTitle("元素动效资源采集器");
-            window.SetTarget_Hud_MotionLibrary(HudManager.Hud_Motions);
+            window.set_motion_type(Type);
+            window.set_library_setter_mode(LibrarySetterMode.添加到库);
+            window.set_button_text("添加", "取消");
+            window.set_title("元素动效资源采集器");
+            window.set_target_motion_library(hud_manager.library_motions);
             //window.ShowModal();
             window.Show();
         }

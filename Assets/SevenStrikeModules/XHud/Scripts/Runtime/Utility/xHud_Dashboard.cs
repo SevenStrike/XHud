@@ -712,13 +712,13 @@ namespace SevenStrikeModules.XHud
         /// 获取当前场景中的 <see cref="XHud_Manager"/> 实例
         /// </summary>
         /// <returns>
-        /// 播放模式下返回 <see cref="XHud_Manager.Instance"/>；
+        /// 播放模式下返回 <see cref="XHud_Manager.instance"/>；
         /// 编辑模式下返回场景中首个激活的 <see cref="XHud_Manager"/>（并缓存到 <see cref="manager"/>）
         /// </returns>
         public static XHud_Manager get_manager()
         {
             if (Application.isPlaying)
-                return XHud_Manager.Instance;
+                return XHud_Manager.instance;
             else
             {
                 if (manager == null)

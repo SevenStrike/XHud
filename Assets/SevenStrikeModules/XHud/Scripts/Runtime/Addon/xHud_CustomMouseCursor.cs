@@ -47,34 +47,34 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 自定义鼠标样式
         /// </summary>
-        public bool UseCustomCursor;
+        public bool use_custom_cursor;
         /// <summary>
         /// 鼠标锚点
         /// </summary>
-        public RectTransform CursorRect;
+        public RectTransform cursor_rect;
         /// <summary>
         /// 鼠标透明度组件
         /// </summary>
-        public CanvasGroup CursorCanvasGroup;
+        public CanvasGroup cursor_canvas_group;
         /// <summary>
         /// 鼠标图像组件
         /// </summary>
-        public Image CursorImager;
+        public Image cursor_imager;
 
         [Range(0, 1)]
         /// <summary>
         /// 鼠标透明度
         /// </summary>
-        public float CursorOpacity = 1;
+        public float cursor_opacity = 1;
 
-        Vector2 CalaculatePos;
+        Vector2 calaculate_pos;
 
-        public MouseType MouseClickType = MouseType.左键;
+        public MouseType mouse_click_type = MouseType.左键;
 
         /// <summary>
         /// 当前正在使用的样式
         /// </summary>
-        public MouseStyles CurrentCursorStyle;
+        public MouseStyles current_cursor_style;
         /// <summary>
         /// 用于重置的样式
         /// </summary>
@@ -83,18 +83,18 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 光标尺寸
         /// </summary>
-        public float CursorSize = 20;
+        public float cursor_size = 20;
 
         /// <summary>
         /// 光标颜色
         /// </summary>
-        public Color CursorColor = Color.white;
-        public float CursorColorSmooth = 1;
+        public Color cursor_color = Color.white;
+        public float cursor_color_smooth = 1;
 
         /// <summary>
         /// 鼠标样式列表
         /// </summary>
-        public List<MouseStyles> MouseStyles;
+        public List<MouseStyles> mouse_styles;
 
         /// <summary>
         /// 鼠标按下时
@@ -109,26 +109,43 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public UnityAction<Vector3, string, MouseStyles> act_on_changed;
 
-        public string IndexMouseType = "左键";
+        public string index_mouse_type = "左键";
 
-        public float CursorImagerSizeSmooth = 1;
+        public float cursor_imager_size_smooth = 1;
 
-        public string UseLerpCursorSize = "差值模式";
+        public string use_lerp_cursor_size = "差值模式";
 
-        private XTween_Interface Tween_CursorSize;
-        public float CursorSize_TweenDuration = 1;
-        public EaseMode CursorSize_TweenEase;
+        private XTween_Interface tween_cursor_size;
+        public float cursor_size_tween_duration = 1;
+        public EaseMode cursor_size_tween_ease;
 
-        private XTween_Interface Tween_CursorOpacity;
-        public float CursorOpacity_TweenDuration = 1;
-        public EaseMode CursorOpacity_TweenEase;
+        private XTween_Interface tween_cursor_opacity;
+        public float cursor_opacity_tween_duration = 1;
+        public EaseMode cursor_opacity_tween_ease;
 
+        #region 折叠
         public bool
             fold_based = true,
             fold_options = true,
             fold_styles = true,
             fold_params = true;
 
+        public void GroupFold(bool state)
+        {
+            fold_based = state;
+            fold_options = state;
+            fold_styles = state;
+            fold_params = state;
+        }
+
+        public void GroupFold(bool based = true, bool options = true, bool styles = true, bool param = true)
+        {
+            fold_based = based;
+            fold_options = options;
+            fold_styles = styles;
+            fold_params = param;
+        }
+        #endregion
 
         void Start()
         {
@@ -155,29 +172,29 @@ namespace SevenStrikeModules.XHud
                 rect.anchorMax = new Vector2(0.5f, 0.5f);
                 Image img = imager.AddComponent<Image>();
                 img.raycastTarget = false;
-                CursorImager = img;
-                CursorRect = rect;
+                cursor_imager = img;
+                cursor_rect = rect;
             }
             else
             {
-                CursorImager = transform.GetChild(0).GetComponent<Image>();
+                cursor_imager = transform.GetChild(0).GetComponent<Image>();
             }
 
-            CursorRect = GetComponent<RectTransform>();
+            cursor_rect = GetComponent<RectTransform>();
 
-            CursorCanvasGroup = GetComponent<CanvasGroup>();
-            if (CursorCanvasGroup == null)
+            cursor_canvas_group = GetComponent<CanvasGroup>();
+            if (cursor_canvas_group == null)
             {
-                CursorCanvasGroup = gameObject.AddComponent<CanvasGroup>();
+                cursor_canvas_group = gameObject.AddComponent<CanvasGroup>();
             }
 
-            if (CurrentCursorStyle != null)
+            if (current_cursor_style != null)
             {
-                OriginalMouseStyle = CurrentCursorStyle;
+                OriginalMouseStyle = current_cursor_style;
             }
 
-            CursorImager.rectTransform.sizeDelta = Vector2.one * CursorSize;
-            CursorImager.color = CursorColor;
+            cursor_imager.rectTransform.sizeDelta = Vector2.one * cursor_size;
+            cursor_imager.color = cursor_color;
         }
 
         void Update()
@@ -191,7 +208,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState">开启状态</param>
         public void mc_SetCustomCursorEnabled(bool state)
         {
-            UseCustomCursor = state;
+            use_custom_cursor = state;
             if (!state)
                 Cursor.visible = true;
         }
@@ -203,7 +220,7 @@ namespace SevenStrikeModules.XHud
         private int mc_GetMouseType()
         {
             int index = 0;
-            switch (MouseClickType)
+            switch (mouse_click_type)
             {
                 case MouseType.左键:
                     index = 0;
@@ -223,25 +240,25 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void mc_CustomCursorUpdate()
         {
-            if (!UseCustomCursor)
+            if (!use_custom_cursor)
             {
                 Cursor.visible = true;
-                if (CursorImager != null)
-                    CursorImager.enabled = false;
+                if (cursor_imager != null)
+                    cursor_imager.enabled = false;
                 return;
             }
             else
             {
                 Cursor.visible = false;
-                if (CursorImager != null)
-                    CursorImager.enabled = true;
+                if (cursor_imager != null)
+                    cursor_imager.enabled = true;
             }
 
             ///---同步样式到鼠标位置
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(XHud_Manager.Instance.HudCanvas_Screen.transform as RectTransform, Input.mousePosition, XHud_Manager.Instance.HudCamera, out CalaculatePos))
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(XHud_Manager.instance.cv_screen.transform as RectTransform, Input.mousePosition, XHud_Manager.instance.camera_ui, out calaculate_pos))
             {
 
-                CursorRect.anchoredPosition = CalaculatePos;
+                cursor_rect.anchoredPosition = calaculate_pos;
             }
 
             ///---点击事件
@@ -256,20 +273,20 @@ namespace SevenStrikeModules.XHud
                     act_on_release(Input.mousePosition);
             }
 
-            if (CursorCanvasGroup != null)
+            if (cursor_canvas_group != null)
             {
                 ///---鼠标样式透明度
-                CursorCanvasGroup.alpha = CursorOpacity;
+                cursor_canvas_group.alpha = cursor_opacity;
             }
 
-            if (UseLerpCursorSize == "差值模式")
-                CursorImager.rectTransform.sizeDelta = Vector2.Lerp(CursorImager.rectTransform.sizeDelta, Vector2.one * CursorSize, Time.deltaTime * CursorImagerSizeSmooth);
+            if (use_lerp_cursor_size == "差值模式")
+                cursor_imager.rectTransform.sizeDelta = Vector2.Lerp(cursor_imager.rectTransform.sizeDelta, Vector2.one * cursor_size, Time.deltaTime * cursor_imager_size_smooth);
             else
-                CursorImager.rectTransform.sizeDelta = Vector2.one * CursorSize;
+                cursor_imager.rectTransform.sizeDelta = Vector2.one * cursor_size;
 
-            mc_SetCursorImager(CurrentCursorStyle);
+            mc_SetCursorImager(current_cursor_style);
 
-            CursorImager.color = Color.Lerp(CursorImager.color, CursorColor, Time.deltaTime * CursorColorSmooth);
+            cursor_imager.color = Color.Lerp(cursor_imager.color, cursor_color, Time.deltaTime * cursor_color_smooth);
         }
 
         /// <summary>
@@ -278,12 +295,12 @@ namespace SevenStrikeModules.XHud
         /// <param name="cursor"></param>
         public void mc_SetCursorImager(MouseStyles style)
         {
-            if (CursorImager == null)
+            if (cursor_imager == null)
                 return;
             if (style == null)
                 return;
-            CursorImager.sprite = style.Sprite;
-            CursorImager.rectTransform.pivot = style.Pivot;
+            cursor_imager.sprite = style.Sprite;
+            cursor_imager.rectTransform.pivot = style.Pivot;
         }
 
         /// <summary>
@@ -292,9 +309,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="color"></param>
         public void mc_SetCursorColor(Color color)
         {
-            if (CursorImager == null)
+            if (cursor_imager == null)
                 return;
-            CursorColor = color;
+            cursor_color = color;
         }
 
         /// <summary>
@@ -303,24 +320,24 @@ namespace SevenStrikeModules.XHud
         /// <param name="cursor"></param>
         public XTween_Interface mc_SetCursorSize(float size)
         {
-            if (UseLerpCursorSize == "差值模式")
+            if (use_lerp_cursor_size == "差值模式")
             {
-                CursorSize = size;
+                cursor_size = size;
             }
             else
             {
-                if (Tween_CursorSize != null && Tween_CursorSize.IsActive)
+                if (tween_cursor_size != null && tween_cursor_size.IsActive)
                 {
-                    if (Tween_CursorSize.IsPlaying)
+                    if (tween_cursor_size.IsPlaying)
                     {
-                        Tween_CursorSize.Rewind();
+                        tween_cursor_size.Rewind();
                     }
                 }
 
-                Tween_CursorSize = XTween.To(() => CursorSize, x => CursorSize = x, size, CursorSize_TweenDuration * XHud_Manager.Instance.DurationMultiply).SetEase(CursorSize_TweenEase).SetAutoKill(true);
+                tween_cursor_size = XTween.To(() => cursor_size, x => cursor_size = x, size, cursor_size_tween_duration * XHud_Manager.instance.tween_global_duration).SetEase(cursor_size_tween_ease).SetAutoKill(true);
             }
 
-            return Tween_CursorSize;
+            return tween_cursor_size;
         }
 
         /// <summary>
@@ -336,15 +353,15 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void mc_ChangeStyle(string stylename)
         {
-            if (MouseStyles != null && MouseStyles.Count <= 0)
+            if (mouse_styles != null && mouse_styles.Count <= 0)
                 return;
-            for (int i = 0; i < MouseStyles.Count; i++)
+            for (int i = 0; i < mouse_styles.Count; i++)
             {
-                if (MouseStyles[i].Name == stylename)
+                if (mouse_styles[i].Name == stylename)
                 {
-                    CurrentCursorStyle = MouseStyles[i];
+                    current_cursor_style = mouse_styles[i];
                     if (act_on_changed != null)
-                        act_on_changed(Input.mousePosition, stylename, MouseStyles[i]);
+                        act_on_changed(Input.mousePosition, stylename, mouse_styles[i]);
                     break;
                 }
             }
@@ -356,17 +373,17 @@ namespace SevenStrikeModules.XHud
         /// <param name="opacity"></param>
         public XTween_Interface mc_CursorOpacitySet(float opacity)
         {
-            if (Tween_CursorOpacity != null && Tween_CursorOpacity.IsActive)
+            if (tween_cursor_opacity != null && tween_cursor_opacity.IsActive)
             {
-                if (Tween_CursorOpacity.IsPlaying)
+                if (tween_cursor_opacity.IsPlaying)
                 {
-                    Tween_CursorOpacity.Rewind();
+                    tween_cursor_opacity.Rewind();
                 }
             }
 
-            Tween_CursorOpacity = XTween.To(() => CursorOpacity, x => CursorOpacity = x, opacity, CursorOpacity_TweenDuration).SetEase(CursorOpacity_TweenEase).SetAutoKill(true);
+            tween_cursor_opacity = XTween.To(() => cursor_opacity, x => cursor_opacity = x, opacity, cursor_opacity_tween_duration).SetEase(cursor_opacity_tween_ease).SetAutoKill(true);
 
-            return Tween_CursorOpacity;
+            return tween_cursor_opacity;
         }
 
         /// <summary>
@@ -375,7 +392,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="opacity"></param>
         public void mc_CursorOpacityFastSet(float opacity)
         {
-            CursorOpacity = opacity;
+            cursor_opacity = opacity;
         }
 
         /// <summary>

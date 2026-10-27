@@ -28,11 +28,11 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 转场器组件
         /// </summary>
-        public XHud_TransitionController Hud_TransitionController;
+        public XHud_TransitionController trans_transition_controller;
         /// <summary>
         /// 使用转场库
         /// </summary>
-        public bool CustomTransition;
+        public bool trans_custom_transition;
 
         /// <summary>
         /// 转场控制器更新
@@ -62,7 +62,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_TransitionUpdate()
         {
-            if (Hud_TransitionController == null)
+            if (trans_transition_controller == null)
                 return;
             hm_TransitionTopView();
         }
@@ -71,9 +71,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_TransitionTopView()
         {
-            if (Hud_TransitionController == null)
+            if (trans_transition_controller == null)
                 return;
-            Hud_TransitionController.transform.SetAsLastSibling();
+            trans_transition_controller.transform.SetAsLastSibling();
         }
     }
 }

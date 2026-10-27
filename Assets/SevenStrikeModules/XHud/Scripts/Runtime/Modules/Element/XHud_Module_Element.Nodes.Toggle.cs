@@ -34,7 +34,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 开关组件
         /// </summary>
-        public XHud_Module_Toggle Toggle;
+        public XHud_Module_Toggle toggle;
     }
 
     public partial class XHud_Module_Element : MonoBehaviour
@@ -43,14 +43,14 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 开关容器
         /// </summary>
-        public List<ElementNode_Toggle> ToggleNodes;
+        public List<ElementNode_Toggle> toggle_nodes;
         [SerializeField]
         /// <summary>
         /// 开关列表折叠状态
         /// true表示折叠，false表示展开
         /// 用于控制Inspector中开关列表的显示/隐藏
         /// </summary>
-        public bool ToggleIsFold;
+        public bool toggle_is_fold;
 
         /// <summary>
         /// 启用或禁用所有开关的交互
@@ -58,20 +58,20 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState">状态</param>
         public void element_Toggle_InteractableSetAll(bool state)
         {
-            if (ToggleNodes.Count <= 0)
+            if (toggle_nodes.Count <= 0)
                 return;
-            for (int i = 0; i < ToggleNodes.Count; i++)
+            for (int i = 0; i < toggle_nodes.Count; i++)
             {
-                ToggleNodes[i].Toggle.interactable = state;
+                toggle_nodes[i].toggle.interactable = state;
             }
             if (state)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有开关交互！", XGUIMsgState.通知);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有开关交互！", XGUIMsgState.通知);
             }
         }
@@ -81,18 +81,18 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState">状态</param>
         public void element_Toggle_EnableSet(bool state)
         {
-            for (int i = 0; i < ToggleNodes.Count; i++)
+            for (int i = 0; i < toggle_nodes.Count; i++)
             {
-                ToggleNodes[i].Toggle.enabled = state;
+                toggle_nodes[i].toggle.enabled = state;
             }
             if (state)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有开关脚本！", XGUIMsgState.通知);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有开关脚本！", XGUIMsgState.通知);
             }
         }
@@ -103,21 +103,21 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Toggle element_Toggle_Get(string indicator)
         {
             XHud_Module_Toggle toggle = null;
-            for (int i = 0; i < ToggleNodes.Count; i++)
+            for (int i = 0; i < toggle_nodes.Count; i++)
             {
-                if (ToggleNodes[i].Toggle.Indicator == indicator)
+                if (toggle_nodes[i].toggle.Indicator == indicator)
                 {
-                    toggle = ToggleNodes[i].Toggle;
+                    toggle = toggle_nodes[i].toggle;
                 }
             }
             if (toggle == null)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "未找到对应标识的开关！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的开关！", XGUIMsgState.通知);
             }
             return toggle;
@@ -128,19 +128,19 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Toggle[] element_Toggle_GetAll()
         {
             List<XHud_Module_Toggle> togglelist = new List<XHud_Module_Toggle>();
-            for (int i = 0; i < ToggleNodes.Count; i++)
+            for (int i = 0; i < toggle_nodes.Count; i++)
             {
-                togglelist.Add(ToggleNodes[i].Toggle);
+                togglelist.Add(toggle_nodes[i].toggle);
             }
             if (togglelist.Count <= 0)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "获取的开关列表为空！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
-                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + ToggleNodes.Count + " 个开关！", XGUIMsgState.通知);
+                if (debug_state)
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + toggle_nodes.Count + " 个开关！", XGUIMsgState.通知);
             }
             return togglelist.ToArray();
         }
@@ -149,9 +149,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void element_Toggle_EventsClear()
         {
-            for (int i = 0; i < ToggleNodes.Count; i++)
+            for (int i = 0; i < toggle_nodes.Count; i++)
             {
-                ToggleNodes[i].Toggle.EventsClear();
+                toggle_nodes[i].toggle.EventsClear();
             }
         }
         /// <summary>
@@ -159,9 +159,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void element_Toggle_ActionsClear()
         {
-            for (int i = 0; i < ToggleNodes.Count; i++)
+            for (int i = 0; i < toggle_nodes.Count; i++)
             {
-                ToggleNodes[i].Toggle.ActionsClear();
+                toggle_nodes[i].toggle.ActionsClear();
             }
         }
         /// <summary>

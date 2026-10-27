@@ -211,7 +211,7 @@ namespace SevenStrikeModules.XHud.Editor
             float buttonZoneLeft = insertRect.x - 35;
             XGUI.gui_label(
                 rect: new Rect(nameRect.x + 25, nameRect.y, buttonZoneLeft - nameRect.x, nameRect.height),
-                text: new GUIContent(node.Indicator),
+                text: new GUIContent(node.indicator),
                 text_color: Color.white * 0.9f,
                 size: XGUIFontSize.B,
                 clipping: XGUI.TryEllipsisClipping(),
@@ -251,15 +251,15 @@ namespace SevenStrikeModules.XHud.Editor
             // ── 按钮：显隐 ──
             if (XGUI.gui_button(
                 rect: eyeRect, tooltip: "",
-                tex_release: node.Enabled ? icon_enabled_r : icon_disabled_r,
-                tex_press: node.Enabled ? icon_enabled_p : icon_disabled_p,
-                tex_gui_color: node.Enabled ? Color.white : Color.gray * 0.85f,
+                tex_release: node.enabled ? icon_enabled_r : icon_disabled_r,
+                tex_press: node.enabled ? icon_enabled_p : icon_disabled_p,
+                tex_gui_color: node.enabled ? Color.white : Color.gray * 0.85f,
                 width: NameRowButtonSize, height: NameRowButtonSize,
                 border: new RectOffset(0, 0, 0, 0),
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0)))
             {
-                node.Enabled = !node.Enabled;
+                node.enabled = !node.enabled;
                 nameHitThisFrame = true;
             }
 
@@ -285,7 +285,7 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.gui_icon(
                 rect: new Rect(nameRect.x + 10, nameRect.y + ((nameRect.height / 2) - TweenTypeDotSize / 2), TweenTypeDotSize, TweenTypeDotSize),
                 icon: icon_led,
-                color: GetTweenTypeColor(node.Type));
+                color: GetTweenTypeColor(node.type));
 
             // ── 行本体点击 ──
             if (Event.current.type == EventType.MouseDown
@@ -330,7 +330,7 @@ namespace SevenStrikeModules.XHud.Editor
             Rect sepRect = new Rect(insertRect.x - dis - 2, nameRect.y, 1, nameRect.height);
 
             float buttonZoneLeft = insertRect.x - 35;
-            string label = sound.Sound != null ? sound.Sound.name : "(空音效)";
+            string label = sound.sound != null ? sound.sound.name : "(空音效)";
             XGUI.gui_label(
                 rect: new Rect(nameRect.x + 25, nameRect.y, buttonZoneLeft - nameRect.x, nameRect.height),
                 text: new GUIContent(label),
@@ -373,15 +373,15 @@ namespace SevenStrikeModules.XHud.Editor
             // ── 按钮：静音 ──
             if (XGUI.gui_button(
                 rect: muteRect, tooltip: "",
-                tex_release: sound.Mute ? icon_mute_r : icon_unmute_r,
-                tex_press: sound.Mute ? icon_mute_p : icon_unmute_p,
-                tex_gui_color: sound.Mute ? Color.gray * 0.85f : Color.white,
+                tex_release: sound.mute ? icon_mute_r : icon_unmute_r,
+                tex_press: sound.mute ? icon_mute_p : icon_unmute_p,
+                tex_gui_color: sound.mute ? Color.gray * 0.85f : Color.white,
                 width: NameRowButtonSize, height: NameRowButtonSize,
                 border: new RectOffset(0, 0, 0, 0),
                 margin: new RectOffset(0, 0, 0, 0),
                 padding: new RectOffset(0, 0, 0, 0)))
             {
-                sound.Mute = !sound.Mute;
+                sound.mute = !sound.mute;
                 nameHitThisFrame = true;
             }
 

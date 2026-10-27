@@ -226,7 +226,7 @@ namespace SevenStrikeModules.XHud
                 XHud_Module_Primitive_Controller con = ButtonTmpText.GetComponent<XHud_Module_Primitive_Controller>();
                 if (con != null)
                 {
-                    con.mod_HudButton = this;
+                    con.mod_hud_button = this;
                 }
             }
         }
@@ -444,7 +444,7 @@ namespace SevenStrikeModules.XHud
                             tweener_TextColor.Kill();
                         }
                     }
-                    tweener_TextColor = XTween.To(() => ButtonText.TextStyleInfo.FontColor, x => ButtonText.TextStyleInfo.FontColor = x, colors.pressedColor, colors.fadeDuration).SetAutoKill(true).Play();
+                    tweener_TextColor = XTween.To(() => ButtonText.text_style_info.font_color, x => ButtonText.text_style_info.font_color = x, colors.pressedColor, colors.fadeDuration).SetAutoKill(true).Play();
                 }
                 if (ButtonTmpText != null)
                 {
@@ -455,7 +455,7 @@ namespace SevenStrikeModules.XHud
                             tweener_TextColor.Kill();
                         }
                     }
-                    tweener_TextColor = XTween.To(() => ButtonTmpText.TextStyleInfo.tmp_color, x => ButtonTmpText.TextStyleInfo.tmp_color = x, colors.pressedColor, colors.fadeDuration).SetAutoKill(true).Play();
+                    tweener_TextColor = XTween.To(() => ButtonTmpText.text_style_info.tmp_color, x => ButtonTmpText.text_style_info.tmp_color = x, colors.pressedColor, colors.fadeDuration).SetAutoKill(true).Play();
                 }
             }
             if (IconColorSyncFade)
@@ -504,7 +504,7 @@ namespace SevenStrikeModules.XHud
                             tweener_TextColor.Kill();
                         }
                     }
-                    tweener_TextColor = XTween.To(() => ButtonText.TextStyleInfo.FontColor, x => ButtonText.TextStyleInfo.FontColor = x, colors.normalColor, colors.fadeDuration).SetAutoKill(true).Play();
+                    tweener_TextColor = XTween.To(() => ButtonText.text_style_info.font_color, x => ButtonText.text_style_info.font_color = x, colors.normalColor, colors.fadeDuration).SetAutoKill(true).Play();
                 }
                 if (ButtonTmpText != null)
                 {
@@ -515,7 +515,7 @@ namespace SevenStrikeModules.XHud
                             tweener_TextColor.Kill();
                         }
                     }
-                    tweener_TextColor = XTween.To(() => ButtonTmpText.TextStyleInfo.tmp_color, x => ButtonTmpText.TextStyleInfo.tmp_color = x, colors.normalColor, colors.fadeDuration).SetAutoKill(true).Play();
+                    tweener_TextColor = XTween.To(() => ButtonTmpText.text_style_info.tmp_color, x => ButtonTmpText.text_style_info.tmp_color = x, colors.normalColor, colors.fadeDuration).SetAutoKill(true).Play();
                 }
             }
             if (IconColorSyncFade)
@@ -777,8 +777,8 @@ namespace SevenStrikeModules.XHud
                 }
                 for (int i = 0; i < HudOption.OptionButtonNodes.Count; i++)
                 {
-                    if (HudOption.OptionButtonNodes[i].Button.IsOptionButton &&
-                        HudOption.OptionButtonNodes[i].Indicator == Indicator)
+                    if (HudOption.OptionButtonNodes[i].button.IsOptionButton &&
+                        HudOption.OptionButtonNodes[i].indicator == Indicator)
                     {
                         //HudOption.opt_Clicked(i);
                         HudOption.opt_Select(Indicator);

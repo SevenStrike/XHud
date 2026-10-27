@@ -124,7 +124,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>默认禁用。</description></item>
         /// </list>
         /// </summary>
-        private static bool isEnabled = false;
+        private static bool is_enabled = false;
         #endregion
 
         #region 生命周期
@@ -155,7 +155,7 @@ namespace SevenStrikeModules.XHud.Editor
         private static void OnSceneGUI(SceneView sceneView)
         {
             // 如果功能被禁用，不处理任何事件
-            if (!isEnabled) return;
+            if (!is_enabled) return;
 
             DrawRect(sceneView);
             sceneView.Repaint();
@@ -286,9 +286,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="enabled">true=启用, false=禁用。</param>
         private static void SetEnabled(bool enabled)
         {
-            isEnabled = enabled;
+            is_enabled = enabled;
 
-            if (!isEnabled)
+            if (!is_enabled)
             {
                 color = Color.clear;
                 title = "";
@@ -307,7 +307,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>true=启用, false=禁用。</returns>
         public static bool GetEnabled()
         {
-            return isEnabled;
+            return is_enabled;
         }
         /// <summary>
         /// 设置功能的启用状态并更新标识内容。

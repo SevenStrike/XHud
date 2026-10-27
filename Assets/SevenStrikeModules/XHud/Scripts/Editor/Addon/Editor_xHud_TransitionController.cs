@@ -40,7 +40,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>仅用于单选模式下的直接读写操作。</description></item>
         /// </list>
         /// </summary>
-        private XHud_TransitionController BaseScript;
+        private XHud_TransitionController base_script;
         /// <summary>
         /// HUD 管理器引用。
         /// <para/>
@@ -49,47 +49,149 @@ namespace SevenStrikeModules.XHud.Editor
         /// <item><description>用于访问转场库等全局数据。</description></item>
         /// </list>
         /// </summary>
-        private XHud_Manager HudManager;
+        private XHud_Manager hud_manager;
         #endregion
 
         #region 字段 - 序列化属性
         /// <summary>
-        /// 序列化属性集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>TransitionImage</c>：转场组件属性。</description></item>
-        /// <item><description><c>TransitionMat</c>：转场材质属性。</description></item>
-        /// <item><description><c>Mode / ModeSwitch</c>：转场模式与开关属性。</description></item>
-        /// <item><description><c>DebugState</c>：调试开关属性。</description></item>
-        /// <item><description><c>TransitionTime</c>：帧间隔速率属性。</description></item>
-        /// <item><description><c>TransitionName</c>：转场名称属性。</description></item>
-        /// <item><description><c>IsTransiting / IsTransiting_WithStart / IsTransiting_WithEnd</c>：转场状态属性。</description></item>
-        /// <item><description><c>TransitionProgress / CurrentFrame</c>：转场进度与当前帧属性。</description></item>
-        /// <item><description><c>CurrentTransitionNode</c>：当前转场节点属性。</description></item>
-        /// <item><description><c>TransitionPlayKey / TransitionFlip_H_Key / TransitionFlip_V_Key / TransitionMod_Key</c>：控制按键属性。</description></item>
-        /// <item><description><c>TransitionOverlayColor / TransitionAlpha</c>：叠加颜色与透明度属性。</description></item>
-        /// <item><description><c>LimiteFramePer_Start / LimiteFramePer_End</c>：接近转场帧比例属性。</description></item>
-        /// <item><description><c>Flip_Hor / Flip_Ver</c>：翻转开关属性。</description></item>
-        /// <item><description><c>UseKeyControl</c>：按键控制开关属性。</description></item>
-        /// </list>
+        /// 转场组件属性
         /// </summary>
-        private SerializedProperty TransitionImage, TransitionMat, Mode, ModeSwitch, DebugState, TransitionTime, TransitionName, IsTransiting, TransitionProgress, CurrentTransitionNode, TransitionPlayKey, TransitionFlip_H_Key, TransitionFlip_V_Key, TransitionMod_Key, TransitionOverlayColor, LimiteFramePer_Start, LimiteFramePer_End, IsTransiting_WithEnd, IsTransiting_WithStart, TransitionAlpha, CurrentFrame, Flip_Hor, Flip_Ver, UseKeyControl;
+        private SerializedProperty sp_transition_image;
+        /// <summary>
+        /// 转场材质属性
+        /// </summary>
+        private SerializedProperty sp_transition_mat;
+        /// <summary>
+        /// 转场模式属性
+        /// </summary>
+        private SerializedProperty sp_mode;
+        /// <summary>
+        /// 转场模式开关属性
+        /// </summary>
+        private SerializedProperty sp_mode_switch;
+        /// <summary>
+        /// 调试开关属性
+        /// </summary>
+        private SerializedProperty sp_debug_state;
+        /// <summary>
+        /// 帧间隔速率属性
+        /// </summary>
+        private SerializedProperty sp_transition_time;
+        /// <summary>
+        /// 转场名称属性
+        /// </summary>
+        private SerializedProperty sp_transition_name;
+        /// <summary>
+        /// 转场进行中状态属性
+        /// </summary>
+        private SerializedProperty sp_is_transiting;
+        /// <summary>
+        /// 转场结束状态属性
+        /// </summary>
+        private SerializedProperty sp_is_transiting_with_end;
+        /// <summary>
+        /// 转场开始状态属性
+        /// </summary>
+        private SerializedProperty sp_is_transiting_with_start;
+        /// <summary>
+        /// 转场进度属性
+        /// </summary>
+        private SerializedProperty sp_transition_progress;
+        /// <summary>
+        /// 当前帧属性
+        /// </summary>
+        private SerializedProperty sp_current_frame;
+        /// <summary>
+        /// 当前转场节点属性
+        /// </summary>
+        private SerializedProperty sp_current_transition_node;
+        /// <summary>
+        /// 转场播放按键属性
+        /// </summary>
+        private SerializedProperty sp_transition_play_key;
+        /// <summary>
+        /// 水平翻转按键属性
+        /// </summary>
+        private SerializedProperty sp_transition_flip_h_key;
+        /// <summary>
+        /// 垂直翻转按键属性
+        /// </summary>
+        private SerializedProperty sp_transition_flip_v_key;
+        /// <summary>
+        /// 转场修饰按键属性
+        /// </summary>
+        private SerializedProperty sp_transition_mode_key;
+        /// <summary>
+        /// 转场叠加颜色属性
+        /// </summary>
+        private SerializedProperty sp_transition_overlay_color;
+        /// <summary>
+        /// 转场透明度属性
+        /// </summary>
+        private SerializedProperty sp_transition_alpha;
+        /// <summary>
+        /// 接近转场起始帧比例属性
+        /// </summary>
+        private SerializedProperty sp_limite_frame_per_start;
+        /// <summary>
+        /// 接近转场结束帧比例属性
+        /// </summary>
+        private SerializedProperty sp_limite_frame_per_end;
+        /// <summary>
+        /// 水平翻转开关属性
+        /// </summary>
+        private SerializedProperty sp_flip_hor;
+        /// <summary>
+        /// 垂直翻转开关属性
+        /// </summary>
+        private SerializedProperty sp_flip_ver;
+        /// <summary>
+        /// 按键控制开关属性
+        /// </summary>
+        private SerializedProperty sp_use_key_control;
         #endregion
 
         #region 字段 - 图标
         /// <summary>
-        /// 本编辑器所使用的图标资源集合。
-        /// <para/>
-        /// <list type="bullet">
-        /// <item><description><c>icon_main</c>：标题主图标。</description></item>
-        /// <item><description><c>trans_state</c>：转场状态图标。</description></item>
-        /// <item><description><c>trans_first_frame / trans_end_frame</c>：首帧/尾帧图标。</description></item>
-        /// <item><description><c>openlib_r / openlib_p</c>：打开库按钮常态/按下图标。</description></item>
-        /// <item><description><c>update_r / update_p</c>：刷新按钮常态/按下图标。</description></item>
-        /// <item><description><c>locate_r / locate_p</c>：定位按钮常态/按下图标。</description></item>
-        /// </list>
+        /// 标题主图标
         /// </summary>
-        private Texture2D icon_main, trans_state, trans_first_frame, trans_end_frame, openlib_r, openlib_p, update_r, update_p, locate_r, locate_p;
+        private Texture2D icon_main;
+        /// <summary>
+        /// 转场状态图标
+        /// </summary>
+        private Texture2D trans_state;
+        /// <summary>
+        /// 转场首帧图标
+        /// </summary>
+        private Texture2D trans_first_frame;
+        /// <summary>
+        /// 转场尾帧图标
+        /// </summary>
+        private Texture2D trans_end_frame;
+        /// <summary>
+        /// 打开库按钮常态图标
+        /// </summary>
+        private Texture2D openlib_r;
+        /// <summary>
+        /// 打开库按钮按下图标
+        /// </summary>
+        private Texture2D openlib_p;
+        /// <summary>
+        /// 刷新按钮常态图标
+        /// </summary>
+        private Texture2D update_r;
+        /// <summary>
+        /// 刷新按钮按下图标
+        /// </summary>
+        private Texture2D update_p;
+        /// <summary>
+        /// 定位按钮常态图标
+        /// </summary>
+        private Texture2D locate_r;
+        /// <summary>
+        /// 定位按钮按下图标
+        /// </summary>
+        private Texture2D locate_p;
         #endregion
 
         #region 字段 - 选项文字
@@ -136,45 +238,46 @@ namespace SevenStrikeModules.XHud.Editor
         /// 批量选择脚本数组。
         /// <para/>
         /// <list type="bullet">
-        /// <item><description>在 <c>GetAllTargets</c> 中根据 <c>targets</c> 填充。</description></item>
+        /// <item><description>在 <c>Targets_Get</c> 中根据 <c>targets</c> 填充。</description></item>
         /// <item><description>单选时长度为 1，多选时长度等于选中对象数量。</description></item>
         /// </list>
         /// </summary>
-        XHud_TransitionController[] SelectedObjects;
+        XHud_TransitionController[] selected_objects;
         #endregion
 
         #region 生命周期    
         void OnEnable()
         {
-            BaseScript = (XHud_TransitionController)target;
+            base_script = (XHud_TransitionController)target;
+
             #region 获取序列化属性
-            TransitionImage = serializedObject.FindProperty("TransitionImage");
-            TransitionMat = serializedObject.FindProperty("TransitionMat");
-            Mode = serializedObject.FindProperty("Mode");
-            ModeSwitch = serializedObject.FindProperty("ModeSwitch");
-            TransitionTime = serializedObject.FindProperty("TransitionTime");
-            TransitionName = serializedObject.FindProperty("TransitionName");
-            IsTransiting = serializedObject.FindProperty("IsTransiting");
-            TransitionProgress = serializedObject.FindProperty("TransitionProgress");
-            CurrentFrame = serializedObject.FindProperty("CurrentFrame");
-            TransitionName = serializedObject.FindProperty("TransitionName");
-            CurrentTransitionNode = serializedObject.FindProperty("CurrentTransitionNode");
-            TransitionPlayKey = serializedObject.FindProperty("TransitionPlayKey");
-            TransitionFlip_H_Key = serializedObject.FindProperty("TransitionFlip_H_Key");
-            TransitionFlip_V_Key = serializedObject.FindProperty("TransitionFlip_V_Key");
-            TransitionMod_Key = serializedObject.FindProperty("TransitionMod_Key");
-            LimiteFramePer_Start = serializedObject.FindProperty("LimiteFramePer_Start");
-            LimiteFramePer_End = serializedObject.FindProperty("LimiteFramePer_End");
-            IsTransiting_WithEnd = serializedObject.FindProperty("IsTransiting_WithEnd");
-            IsTransiting_WithStart = serializedObject.FindProperty("IsTransiting_WithStart");
-            DebugState = serializedObject.FindProperty("DebugState");
-            TransitionOverlayColor = serializedObject.FindProperty("TransitionOverlayColor");
-            TransitionAlpha = serializedObject.FindProperty("TransitionAlpha");
-            Flip_Hor = serializedObject.FindProperty("Flip_Hor");
-            Flip_Ver = serializedObject.FindProperty("Flip_Ver");
-            UseKeyControl = serializedObject.FindProperty("UseKeyControl");
-            HudManager = XHud_Dashboard.get_manager();
+            sp_transition_image = serializedObject.FindProperty(nameof(XHud_TransitionController.transition_image));
+            sp_transition_mat = serializedObject.FindProperty(nameof(XHud_TransitionController.transition_mat));
+            sp_mode = serializedObject.FindProperty(nameof(XHud_TransitionController.mode));
+            sp_mode_switch = serializedObject.FindProperty(nameof(XHud_TransitionController.mode_switch));
+            sp_transition_time = serializedObject.FindProperty(nameof(XHud_TransitionController.transition_time));
+            sp_transition_name = serializedObject.FindProperty(nameof(XHud_TransitionController.transition_name));
+            sp_is_transiting = serializedObject.FindProperty(nameof(XHud_TransitionController.is_transiting));
+            sp_transition_progress = serializedObject.FindProperty(nameof(XHud_TransitionController.transition_progress));
+            sp_current_frame = serializedObject.FindProperty(nameof(XHud_TransitionController.current_frame));
+            sp_current_transition_node = serializedObject.FindProperty(nameof(XHud_TransitionController.current_transition_node));
+            sp_transition_play_key = serializedObject.FindProperty(nameof(XHud_TransitionController.transition_play_key));
+            sp_transition_flip_h_key = serializedObject.FindProperty(nameof(XHud_TransitionController.transition_flip_h_key));
+            sp_transition_flip_v_key = serializedObject.FindProperty(nameof(XHud_TransitionController.transition_flip_v_key));
+            sp_transition_mode_key = serializedObject.FindProperty(nameof(XHud_TransitionController.transition_mode_key));
+            sp_limite_frame_per_start = serializedObject.FindProperty(nameof(XHud_TransitionController.limite_frame_per_start));
+            sp_limite_frame_per_end = serializedObject.FindProperty(nameof(XHud_TransitionController.limite_frame_per_end));
+            sp_is_transiting_with_end = serializedObject.FindProperty(nameof(XHud_TransitionController.is_transiting_with_end));
+            sp_is_transiting_with_start = serializedObject.FindProperty(nameof(XHud_TransitionController.is_transiting_with_start));
+            sp_debug_state = serializedObject.FindProperty(nameof(XHud_TransitionController.debug_state));
+            sp_transition_overlay_color = serializedObject.FindProperty(nameof(XHud_TransitionController.transition_overlay_color));
+            sp_transition_alpha = serializedObject.FindProperty(nameof(XHud_TransitionController.transition_alpha));
+            sp_flip_hor = serializedObject.FindProperty(nameof(XHud_TransitionController.flip_hor));
+            sp_flip_ver = serializedObject.FindProperty(nameof(XHud_TransitionController.flip_ver));
+            sp_use_key_control = serializedObject.FindProperty(nameof(XHud_TransitionController.use_key_control));
+            hud_manager = XHud_Dashboard.get_manager();
             #endregion
+
             #region 获取图标
             icon_main = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_transition_controller/icon_main");
             trans_state = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_transition_controller/trans_state");
@@ -187,29 +290,31 @@ namespace SevenStrikeModules.XHud.Editor
             locate_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_transition_controller/locate_r");
             locate_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_transition_controller/locate_p");
             #endregion
+
             Targets_Get();
-            if ((Image)TransitionImage.objectReferenceValue == null)
+
+            if ((Image)sp_transition_image.objectReferenceValue == null)
             {
-                TransitionImage.objectReferenceValue = BaseScript.GetComponent<Image>();
-                TransitionImage.serializedObject.ApplyModifiedProperties();
+                sp_transition_image.objectReferenceValue = base_script.GetComponent<Image>();
+                sp_transition_image.serializedObject.ApplyModifiedProperties();
             }
-            if (TransitionMat.objectReferenceValue == null)
+            if (sp_transition_mat.objectReferenceValue == null)
             {
-                TransitionMat.objectReferenceValue = (Material)AssetDatabase.LoadAssetAtPath($"{XHud_Dashboard.Get_Path_XHUD_MATERIALS_Path()}Transitions/Transition.mat", typeof(Material));
+                sp_transition_mat.objectReferenceValue = (Material)AssetDatabase.LoadAssetAtPath($"{XHud_Dashboard.Get_Path_XHUD_MATERIALS_Path()}Transitions/Transition.mat", typeof(Material));
             }
-            if (TransitionMat.objectReferenceValue != null)
+            if (sp_transition_mat.objectReferenceValue != null)
             {
-                Material mat = TransitionMat.objectReferenceValue as Material;
-                TransitionOverlayColor.colorValue = mat.color;
-                TransitionOverlayColor.serializedObject.ApplyModifiedProperties();
+                Material mat = sp_transition_mat.objectReferenceValue as Material;
+                sp_transition_overlay_color.colorValue = mat.color;
+                sp_transition_overlay_color.serializedObject.ApplyModifiedProperties();
             }
-            if (string.IsNullOrEmpty(TransitionName.stringValue))
+            if (string.IsNullOrEmpty(sp_transition_name.stringValue))
             {
-                if (HudManager.Hud_TransitionLib != null && !HudManager.Hud_TransitionLib.TransitionLibrary_IsEmpty())
+                if (hud_manager.library_transitions != null && !hud_manager.library_transitions.TransitionLibrary_IsEmpty())
                 {
-                    TransitionName.stringValue = HudManager.Hud_TransitionLib.TransitionLibrary_GetAllNames()[0];
-                    TransitionName.serializedObject.ApplyModifiedProperties();
-                    BaseScript.CurrentTransitionNode = HudManager.Hud_TransitionLib.TransitionLibrary_Get(TransitionName.stringValue);
+                    sp_transition_name.stringValue = hud_manager.library_transitions.TransitionLibrary_GetAllNames()[0];
+                    sp_transition_name.serializedObject.ApplyModifiedProperties();
+                    base_script.current_transition_node = hud_manager.library_transitions.TransitionLibrary_Get(sp_transition_name.stringValue);
                 }
             }
         }
@@ -222,11 +327,9 @@ namespace SevenStrikeModules.XHud.Editor
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-            TextClipping clipping = TextClipping.Clip;
-#endif
+
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
+
             #region 标题
             XGUI.layout_banner(
              bg_fill: XGUIGroup.实体,
@@ -239,10 +342,12 @@ namespace SevenStrikeModules.XHud.Editor
              title_style: FontStyle.Normal,
              title_color: Color.white,
              title_size: XGUIFontSize.B,
-             title_clipping: clipping,
+             title_clipping: clipping_ellipsis,
              bg_margin: new RectOffset(0, 0, 5, 5));
             #endregion
+
             XGUI.layout_space(5);
+
             #region 快捷功能
             XGUI.layout_group_start(
                 type: XGUIContainerType.Horizontal,
@@ -254,6 +359,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(15, 15, 20, 15));
+
             #region 查看当前转场库
             if (XGUI.layout_button(
                 tooltip: "查看当前转场库",
@@ -267,7 +373,9 @@ namespace SevenStrikeModules.XHud.Editor
                 Editor_XHud_MenuItemsAction_OpenLibrary.open_transition();
             }
             #endregion
+
             GUILayout.FlexibleSpace();
+
             #region 快速刷新转场资源
             if (XGUI.layout_button(
                 tooltip: "快速刷新转场资源",
@@ -278,38 +386,40 @@ namespace SevenStrikeModules.XHud.Editor
                 width: 14,
                 height: 14))
             {
-                if (HudManager.Hud_TransitionLib == null)
+                if (hud_manager.library_transitions == null)
                     return;
-                if (HudManager.Hud_TransitionLib.TransitionLibrary_IsEmpty())
+                if (hud_manager.library_transitions.TransitionLibrary_IsEmpty())
                     return;
-                SerializedProperty sp_Name = CurrentTransitionNode.FindPropertyRelative("Name");
-                SerializedProperty sp_TotalFramesCount = CurrentTransitionNode.FindPropertyRelative("TotalFramesCount");
-                SerializedProperty sp_LastFrameIndex = CurrentTransitionNode.FindPropertyRelative("LastFrameIndex");
-                SerializedProperty sp_SkipFrame = CurrentTransitionNode.FindPropertyRelative("SkipFrame");
-                SerializedProperty sp_Res = CurrentTransitionNode.FindPropertyRelative("Res");
-                SerializedProperty sp_x_frames = CurrentTransitionNode.FindPropertyRelative("Frames");
-                XHud_LibraryArg_Transition node = HudManager.Hud_TransitionLib.TransitionLibrary_Get(TransitionName.stringValue);
-                sp_Name.stringValue = node.Name;
-                sp_TotalFramesCount.intValue = node.TotalFramesCount;
-                sp_LastFrameIndex.intValue = node.LastFrameIndex;
-                sp_SkipFrame.intValue = node.SkipFrame;
-                sp_Res.vector2IntValue = node.Res;
+                SerializedProperty sp_Name = sp_current_transition_node.FindPropertyRelative("Name");
+                SerializedProperty sp_TotalFramesCount = sp_current_transition_node.FindPropertyRelative("TotalFramesCount");
+                SerializedProperty sp_LastFrameIndex = sp_current_transition_node.FindPropertyRelative("LastFrameIndex");
+                SerializedProperty sp_SkipFrame = sp_current_transition_node.FindPropertyRelative("SkipFrame");
+                SerializedProperty sp_Res = sp_current_transition_node.FindPropertyRelative("Res");
+                SerializedProperty sp_x_frames = sp_current_transition_node.FindPropertyRelative("Frames");
+                XHud_LibraryArg_Transition node = hud_manager.library_transitions.TransitionLibrary_Get(sp_transition_name.stringValue);
+                sp_Name.stringValue = node.name;
+                sp_TotalFramesCount.intValue = node.total_frames_count;
+                sp_LastFrameIndex.intValue = node.last_frame_index;
+                sp_SkipFrame.intValue = node.skip_frame;
+                sp_Res.vector2IntValue = node.res;
                 sp_x_frames.ClearArray();
-                for (int i = 0; i < node.Frames.Count; i++)
+                for (int i = 0; i < node.frames.Count; i++)
                 {
                     sp_x_frames.InsertArrayElementAtIndex(i);
-                    sp_x_frames.GetArrayElementAtIndex(i).objectReferenceValue = node.Frames[i];
+                    sp_x_frames.GetArrayElementAtIndex(i).objectReferenceValue = node.frames[i];
                 }
-                TransitionProgress.floatValue = 0;
-                TransitionProgress.serializedObject.ApplyModifiedProperties();
+                sp_transition_progress.floatValue = 0;
+                sp_transition_progress.serializedObject.ApplyModifiedProperties();
                 UpdateTransition(sp_x_frames, sp_LastFrameIndex);
                 return;
             }
             #endregion
+
             XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             #endregion
+
             #region 选项         
-            BaseScript.fold_options = XGUI.layout_group_start(
+            base_script.fold_options = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -319,46 +429,47 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_options);
-            if (!BaseScript.fold_options)
+                foldout: base_script.fold_options);
+            if (!base_script.fold_options)
             {
-                DrawToggle("按键控制", UseKeyControl, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
-                DrawToggle("转场模式 (入场 & 出场)", ModeSwitch, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
+                DrawToggle("按键控制", sp_use_key_control, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                DrawToggle("转场模式 (入场 & 出场)", sp_mode_switch, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
                 {
-                    if (ModeSwitch.boolValue)
-                        Mode.enumValueIndex = (int)TransitionMode.出场;
+                    if (sp_mode_switch.boolValue)
+                        sp_mode.enumValueIndex = (int)TransitionMode.出场;
                     else
-                        Mode.enumValueIndex = (int)TransitionMode.入场;
-                    Mode.serializedObject.ApplyModifiedProperties();
-                    TransitionProgress.floatValue = 0;
-                    TransitionProgress.serializedObject.ApplyModifiedProperties();
+                        sp_mode.enumValueIndex = (int)TransitionMode.入场;
+                    sp_mode.serializedObject.ApplyModifiedProperties();
+                    sp_transition_progress.floatValue = 0;
+                    sp_transition_progress.serializedObject.ApplyModifiedProperties();
                 });
-                DrawToggle("水平翻转", Flip_Hor, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
+                DrawToggle("水平翻转", sp_flip_hor, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
                 {
-                    Material mat = (Material)TransitionMat.objectReferenceValue;
-                    mat.SetInt("_Flip_Hor", Flip_Hor.boolValue ? 1 : 0);
-                    TransitionMat.serializedObject.ApplyModifiedProperties();
+                    Material mat = (Material)sp_transition_mat.objectReferenceValue;
+                    mat.SetInt("_Flip_Hor", sp_flip_hor.boolValue ? 1 : 0);
+                    sp_transition_mat.serializedObject.ApplyModifiedProperties();
                 });
-                DrawToggle("垂直翻转", Flip_Ver, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
+                DrawToggle("垂直翻转", sp_flip_ver, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
                 {
-                    Material mat = (Material)TransitionMat.objectReferenceValue;
-                    mat.SetInt("_Flip_Ver", Flip_Ver.boolValue ? 1 : 0);
-                    TransitionMat.serializedObject.ApplyModifiedProperties();
+                    Material mat = (Material)sp_transition_mat.objectReferenceValue;
+                    mat.SetInt("_Flip_Ver", sp_flip_ver.boolValue ? 1 : 0);
+                    sp_transition_mat.serializedObject.ApplyModifiedProperties();
                 });
-                DrawToggle("状态调试", DebugState, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+                DrawToggle("状态调试", sp_debug_state, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) => { });
+
                 XGUI.layout_group_start(
                     type: XGUIContainerType.Horizontal,
                     absolute_margin: true,
                     absolute_padding: true,
                     padding: new RectOffset(0, 0, 0, 0),
                     margin: new RectOffset(0, 0, 0, 0));
-                string[] TransLibNames = HudManager.Hud_TransitionLib.TransitionLibrary_GetAllNames();
+                string[] TransLibNames = hud_manager.library_transitions.TransitionLibrary_GetAllNames();
                 XGUI.layout_string_popup(
                     title: "转场资源库",
                     title_width: 120,
                     title_size: XGUIFontSize.M,
                     title_anchor: TextAnchor.MiddleLeft,
-                    prop: TransitionName,
+                    prop: sp_transition_name,
                     options: TransLibNames,
                     opt_text_size: XGUIFontSize.M,
                     opt_text_color: Color.black,
@@ -374,25 +485,25 @@ namespace SevenStrikeModules.XHud.Editor
                     icon_arrow_color: Color.black,
                     act_on_changed: (d) =>
                     {
-                        SerializedProperty sp_Name = CurrentTransitionNode.FindPropertyRelative("Name");
-                        SerializedProperty sp_TotalFramesCount = CurrentTransitionNode.FindPropertyRelative("TotalFramesCount");
-                        SerializedProperty sp_LastFrameIndex = CurrentTransitionNode.FindPropertyRelative("LastFrameIndex");
-                        SerializedProperty sp_SkipFrame = CurrentTransitionNode.FindPropertyRelative("SkipFrame");
-                        SerializedProperty sp_Res = CurrentTransitionNode.FindPropertyRelative("Res");
-                        SerializedProperty sp_x_frames = CurrentTransitionNode.FindPropertyRelative("Frames");
-                        XHud_LibraryArg_Transition node = HudManager.Hud_TransitionLib.TransitionLibrary_Get(d);
-                        sp_Name.stringValue = node.Name;
-                        sp_TotalFramesCount.intValue = node.TotalFramesCount;
-                        sp_LastFrameIndex.intValue = node.LastFrameIndex;
-                        sp_SkipFrame.intValue = node.SkipFrame;
-                        sp_Res.vector2IntValue = node.Res;
+                        SerializedProperty sp_Name = sp_current_transition_node.FindPropertyRelative("Name");
+                        SerializedProperty sp_TotalFramesCount = sp_current_transition_node.FindPropertyRelative("TotalFramesCount");
+                        SerializedProperty sp_LastFrameIndex = sp_current_transition_node.FindPropertyRelative("LastFrameIndex");
+                        SerializedProperty sp_SkipFrame = sp_current_transition_node.FindPropertyRelative("SkipFrame");
+                        SerializedProperty sp_Res = sp_current_transition_node.FindPropertyRelative("Res");
+                        SerializedProperty sp_x_frames = sp_current_transition_node.FindPropertyRelative("Frames");
+                        XHud_LibraryArg_Transition node = hud_manager.library_transitions.TransitionLibrary_Get(d);
+                        sp_Name.stringValue = node.name;
+                        sp_TotalFramesCount.intValue = node.total_frames_count;
+                        sp_LastFrameIndex.intValue = node.last_frame_index;
+                        sp_SkipFrame.intValue = node.skip_frame;
+                        sp_Res.vector2IntValue = node.res;
                         sp_x_frames.ClearArray();
-                        for (int i = 0; i < node.Frames.Count; i++)
+                        for (int i = 0; i < node.frames.Count; i++)
                         {
                             sp_x_frames.InsertArrayElementAtIndex(i);
-                            sp_x_frames.GetArrayElementAtIndex(i).objectReferenceValue = node.Frames[i];
+                            sp_x_frames.GetArrayElementAtIndex(i).objectReferenceValue = node.frames[i];
                         }
-                        TransitionProgress.floatValue = 0;
+                        sp_transition_progress.floatValue = 0;
                         UpdateTransition(sp_x_frames, sp_LastFrameIndex);
                     });
                 if (!Targets_Selected())
@@ -412,7 +523,7 @@ namespace SevenStrikeModules.XHud.Editor
                         int index = 0;
                         for (int k = 0; k < TransLibNames.Length; k++)
                         {
-                            if (TransLibNames[k] == TransitionName.stringValue)
+                            if (TransLibNames[k] == sp_transition_name.stringValue)
                             {
                                 index = k;
                                 break;
@@ -421,15 +532,16 @@ namespace SevenStrikeModules.XHud.Editor
                         //定位到元素库中的对应当前资源
                         //打开目标转场库
                         Editor_XHud_MenuItemsAction_OpenLibrary.open_transition();
-                        HudManager.Hud_TransitionLib.TransitionLibrary_Location(TransLibNames[index]);
+                        hud_manager.library_transitions.TransitionLibrary_Location(TransLibNames[index]);
                     }
                 }
                 XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             #region 状态
-            BaseScript.fold_state = XGUI.layout_group_start(
+            base_script.fold_state = XGUI.layout_group_start(
               type: XGUIContainerType.Vertical,
               bg_fill: XGUIGroup.缺口纯色边框,
               bg_color: XGUIColor.亮白,
@@ -439,44 +551,47 @@ namespace SevenStrikeModules.XHud.Editor
               title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
               title_clipping: TextClipping.Clip,
               padding: new RectOffset(10, 10, 15, 15),
-              foldout: BaseScript.fold_state);
-            if (!BaseScript.fold_state)
+              foldout: base_script.fold_state);
+            if (!base_script.fold_state)
             {
                 #region 转场状态
                 XGUI.layout_state_displayer_text(
                     title: "转场状态",
                     title_size: XGUIFontSize.M,
-                    subtitle: IsTransiting.boolValue ? "正在转场中" : "等待转场",
+                    subtitle: sp_is_transiting.boolValue ? "正在转场中" : "等待转场",
                     subtitle_size: XGUIFontSize.M,
-                    subtitle_color: IsTransiting.boolValue ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray,
+                    subtitle_color: sp_is_transiting.boolValue ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray,
                     margin: new RectOffset(5, 5, 0, 5));
                 #endregion
+
                 #region 接近首帧状态
-                SerializedProperty sp_frames_co = CurrentTransitionNode.FindPropertyRelative("Frames");
-                int frameLimite_start = (int)Mathf.Floor(sp_frames_co.arraySize * LimiteFramePer_Start.floatValue);
+                SerializedProperty sp_frames_co = sp_current_transition_node.FindPropertyRelative("Frames");
+                int frameLimite_start = (int)Mathf.Floor(sp_frames_co.arraySize * sp_limite_frame_per_start.floatValue);
                 XGUI.layout_state_displayer_text(
                     title: "接近首帧状态",
                     title_size: XGUIFontSize.M,
-                    subtitle: IsTransiting_WithStart.boolValue ? $"接近首帧状态 ({frameLimite_start})" : $"等待转场 ({frameLimite_start})",
+                    subtitle: sp_is_transiting_with_start.boolValue ? $"接近首帧状态 ({frameLimite_start})" : $"等待转场 ({frameLimite_start})",
                     subtitle_size: XGUIFontSize.M,
-                    subtitle_color: IsTransiting_WithStart.boolValue ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray,
+                    subtitle_color: sp_is_transiting_with_start.boolValue ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray,
                     margin: new RectOffset(5, 5, 0, 5));
                 #endregion
+
                 #region 接近尾帧状态
-                int frameLimite_end = (int)Mathf.Floor(sp_frames_co.arraySize * LimiteFramePer_End.floatValue);
+                int frameLimite_end = (int)Mathf.Floor(sp_frames_co.arraySize * sp_limite_frame_per_end.floatValue);
                 XGUI.layout_state_displayer_text(
                     title: "接近尾帧状态",
                     title_size: XGUIFontSize.M,
-                    subtitle: IsTransiting_WithEnd.boolValue ? $"接近尾帧状态 ({frameLimite_end})" : $"等待转场 ({frameLimite_end})",
+                    subtitle: sp_is_transiting_with_end.boolValue ? $"接近尾帧状态 ({frameLimite_end})" : $"等待转场 ({frameLimite_end})",
                     subtitle_size: XGUIFontSize.M,
-                    subtitle_color: IsTransiting_WithEnd.boolValue ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray,
+                    subtitle_color: sp_is_transiting_with_end.boolValue ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray,
                     margin: new RectOffset(5, 5, 0, 5));
                 #endregion
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             #region 参数
-            BaseScript.fold_params = XGUI.layout_group_start(
+            base_script.fold_params = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -486,8 +601,8 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(5, 10, 15, 15),
-                foldout: BaseScript.fold_params);
-            if (!BaseScript.fold_params)
+                foldout: base_script.fold_params);
+            if (!base_script.fold_params)
             {
                 #region 转场组件
                 XGUI.layout_property_field(
@@ -495,9 +610,10 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: TransitionImage,
+                    prop: sp_transition_image,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
+
                 #region 转场材质
                 EditorGUI.BeginChangeCheck();
                 XGUI.layout_property_field(
@@ -505,15 +621,16 @@ namespace SevenStrikeModules.XHud.Editor
                   title_size: XGUIFontSize.M,
                   title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   title_width: 90,
-                  prop: TransitionMat,
+                  prop: sp_transition_mat,
                   prop_margin: new RectOffset(0, 0, 5, 0));
                 if (EditorGUI.EndChangeCheck())
                 {
-                    Image img = (Image)TransitionImage.objectReferenceValue;
-                    img.material = (Material)TransitionMat.objectReferenceValue;
-                    TransitionImage.serializedObject.ApplyModifiedProperties();
+                    Image img = (Image)sp_transition_image.objectReferenceValue;
+                    img.material = (Material)sp_transition_mat.objectReferenceValue;
+                    sp_transition_image.serializedObject.ApplyModifiedProperties();
                 }
                 #endregion
+
                 #region 转场叠加颜色
                 EditorGUI.BeginChangeCheck();
                 XGUI.layout_property_field(
@@ -521,29 +638,31 @@ namespace SevenStrikeModules.XHud.Editor
                   title_size: XGUIFontSize.M,
                   title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                   title_width: 90,
-                  prop: TransitionOverlayColor,
+                  prop: sp_transition_overlay_color,
                   prop_margin: new RectOffset(0, 0, 5, 0));
                 if (EditorGUI.EndChangeCheck())
                 {
-                    Image img = (Image)TransitionImage.objectReferenceValue;
+                    Image img = (Image)sp_transition_image.objectReferenceValue;
                     img.color = Color.white;
-                    img.material = (Material)TransitionMat.objectReferenceValue;
-                    img.material.SetColor("_Color", TransitionOverlayColor.colorValue);
-                    TransitionImage.serializedObject.ApplyModifiedProperties();
+                    img.material = (Material)sp_transition_mat.objectReferenceValue;
+                    img.material.SetColor("_Color", sp_transition_overlay_color.colorValue);
+                    sp_transition_image.serializedObject.ApplyModifiedProperties();
                 }
                 #endregion
+
                 #region 转场参数
                 XGUI.layout_property_field(
                     title: "转场参数",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: CurrentTransitionNode,
+                    prop: sp_current_transition_node,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
+
                 #region 转场进度
-                SerializedProperty sp_frames = CurrentTransitionNode.FindPropertyRelative("Frames");
-                SerializedProperty sp_lastframeindex = CurrentTransitionNode.FindPropertyRelative("LastFrameIndex");
+                SerializedProperty sp_frames = sp_current_transition_node.FindPropertyRelative("Frames");
+                SerializedProperty sp_lastframeindex = sp_current_transition_node.FindPropertyRelative("LastFrameIndex");
                 if (sp_frames != null && sp_frames.arraySize > 0)
                 {
                     EditorGUI.BeginChangeCheck();
@@ -552,7 +671,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                         title_width: 90,
-                        prop: TransitionProgress,
+                        prop: sp_transition_progress,
                         prop_margin: new RectOffset(0, 0, 5, 0));
                     if (EditorGUI.EndChangeCheck())
                     {
@@ -560,60 +679,66 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                 }
                 #endregion
+
                 #region 转场透明度            
                 EditorGUI.BeginChangeCheck();
-                TransitionAlpha.floatValue = XGUI.layout_slider(
+                sp_transition_alpha.floatValue = XGUI.layout_slider(
                     title: "透明度",
-                    prop: TransitionAlpha,
+                    prop: sp_transition_alpha,
                     left: 0,
                     right: 1,
                     title_width: 100,
                     title_size: XGUIFontSize.M,
                     title_anchor: TextAnchor.MiddleLeft,
                     prop_margin: new RectOffset(0, 0, 5, 0));
-                TransitionAlpha.serializedObject.ApplyModifiedProperties();
+                sp_transition_alpha.serializedObject.ApplyModifiedProperties();
                 if (EditorGUI.EndChangeCheck())
                 {
-                    BaseScript.Transition_Set_Alpha(TransitionAlpha.floatValue);
-                    if (TransitionMat.objectReferenceValue != null)
+                    base_script.Transition_Set_Alpha(sp_transition_alpha.floatValue);
+                    if (sp_transition_mat.objectReferenceValue != null)
                     {
-                        Material mat = TransitionMat.objectReferenceValue as Material;
-                        mat.SetFloat("_Alpha", TransitionAlpha.floatValue);
-                        TransitionOverlayColor.serializedObject.ApplyModifiedProperties();
+                        Material mat = sp_transition_mat.objectReferenceValue as Material;
+                        mat.SetFloat("_Alpha", sp_transition_alpha.floatValue);
+                        sp_transition_overlay_color.serializedObject.ApplyModifiedProperties();
                     }
                 }
                 #endregion
+
                 XGUI.layout_seperator(
                     thickness: 1,
                     color: Color.white * 0.5f,
                     margin: new RectOffset(15, 30, 15, 15));
+
                 #region 当前帧
                 XGUI.layout_property_field(
                     title: "当前帧",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: CurrentFrame,
+                    prop: sp_current_frame,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
+
                 #region 帧间隔速率
                 XGUI.layout_property_field(
                     title: "帧间隔速率",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: TransitionTime,
+                    prop: sp_transition_time,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
+
                 XGUI.layout_seperator(
                     thickness: 1,
                     color: Color.white * 0.5f,
                     margin: new RectOffset(15, 30, 15, 15));
+
                 #region 接近开始帧
                 xgui_minmax_value minmax = XGUI.layout_slider_min_max(
                  title: "接近转场",
-                 ref_min: ref BaseScript.LimiteFramePer_Start,
-                 ref_max: ref BaseScript.LimiteFramePer_End,
+                 ref_min: ref base_script.limite_frame_per_start,
+                 ref_max: ref base_script.limite_frame_per_end,
                  min_limite: 0,
                  max_limite: 1,
                  title_width: 100,
@@ -628,8 +753,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             #region 控制按键
-            BaseScript.fold_key = XGUI.layout_group_start(
+            base_script.fold_key = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -639,8 +765,8 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(5, 10, 15, 15),
-                foldout: BaseScript.fold_key);
-            if (!BaseScript.fold_key)
+                foldout: base_script.fold_key);
+            if (!base_script.fold_key)
             {
                 #region 转场模式
                 XGUI.layout_property_field(
@@ -648,41 +774,64 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: TransitionMod_Key,
+                    prop: sp_transition_mode_key,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
+
                 #region 按键转场
                 XGUI.layout_property_field(
                     title: "按键转场",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: TransitionPlayKey,
+                    prop: sp_transition_play_key,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
+
                 #region 水平翻转
                 XGUI.layout_property_field(
                     title: "水平翻转",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: TransitionFlip_H_Key,
+                    prop: sp_transition_flip_h_key,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
+
                 #region 垂直翻转
                 XGUI.layout_property_field(
                     title: "垂直翻转",
                     title_size: XGUIFontSize.M,
                     title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     title_width: 90,
-                    prop: TransitionFlip_V_Key,
+                    prop: sp_transition_flip_v_key,
                     prop_margin: new RectOffset(0, 0, 5, 0));
                 #endregion
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
+            #region 弹出菜单
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
+            {
+                // 创建右键菜单
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("Q (折叠编组)"), false, () =>
+                {
+                    base_script.GroupFold(true);
+                });
+                menu.AddItem(new GUIContent("W (展开编组)"), false, () =>
+                {
+                    base_script.GroupFold(false);
+                });
+                menu.ShowAsContext();
+
+                Event.current.Use();
+            }
+            #endregion
+
             #region 源脚本
-            BaseScript.fold_based = XGUI.layout_group_start(
+            base_script.fold_based = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -692,13 +841,14 @@ namespace SevenStrikeModules.XHud.Editor
                 title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 10, 15, 15),
-                foldout: BaseScript.fold_based);
-            if (!BaseScript.fold_based)
+                foldout: base_script.fold_based);
+            if (!base_script.fold_based)
             {
                 DrawDefaultInspector();
             }
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
+
             serializedObject.ApplyModifiedProperties();
         }
         #endregion
@@ -717,20 +867,20 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="sp_lastframeindex">最后一帧索引属性。</param>
         private void UpdateTransition(SerializedProperty sp_frames, SerializedProperty sp_lastframeindex)
         {
-            TransitionMode mode = (TransitionMode)Mode.enumValueIndex;
-            CurrentFrame.intValue = (int)(TransitionProgress.floatValue * sp_lastframeindex.intValue);
+            TransitionMode mode = (TransitionMode)sp_mode.enumValueIndex;
+            sp_current_frame.intValue = (int)(sp_transition_progress.floatValue * sp_lastframeindex.intValue);
             if (mode == TransitionMode.入场)
             {
-                BaseScript.Transition_Set_ChannelInvert(false);
+                base_script.Transition_Set_ChannelInvert(false);
             }
             else
             {
-                BaseScript.Transition_Set_ChannelInvert(true);
+                base_script.Transition_Set_ChannelInvert(true);
             }
             if (sp_frames.arraySize > 0)
             {
-                Texture2D tex = (Texture2D)sp_frames.GetArrayElementAtIndex(CurrentFrame.intValue).objectReferenceValue;
-                BaseScript.Transition_Set_MaskTexture(tex);
+                Texture2D tex = (Texture2D)sp_frames.GetArrayElementAtIndex(sp_current_frame.intValue).objectReferenceValue;
+                base_script.Transition_Set_MaskTexture(tex);
             }
         }
         #endregion
@@ -748,17 +898,17 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new XHud_TransitionController[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new XHud_TransitionController[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (XHud_TransitionController)t;
+                    selected_objects[i] = (XHud_TransitionController)t;
                 }
             }
             else
             {
-                SelectedObjects = new XHud_TransitionController[targets.Length];
-                SelectedObjects[0] = (XHud_TransitionController)target;
+                selected_objects = new XHud_TransitionController[targets.Length];
+                selected_objects[0] = (XHud_TransitionController)target;
             }
         }
         /// <summary>
@@ -772,9 +922,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// <returns>是否为多选状态。</returns>
         private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }

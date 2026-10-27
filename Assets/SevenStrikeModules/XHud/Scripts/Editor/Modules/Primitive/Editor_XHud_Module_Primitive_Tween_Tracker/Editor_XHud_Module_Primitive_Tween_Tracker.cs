@@ -366,10 +366,10 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 当前是否处于预览状态。
         /// <para/>
-        /// 直接读取 <see cref="target"/> 上的 <see cref="XHud_Module_Primitive_Tween.TweenIsPreviewing"/> 字段，
+        /// 直接读取 <see cref="target"/> 上的 <see cref="XHud_Module_Primitive_Tween.tween_is_previewing"/> 字段，
         /// 与 Inspector 共享同一个判断依据，无需额外同步。
         /// </summary>
-        private bool IsPreviewing => target != null && target.TweenIsPreviewing;
+        private bool IsPreviewing => target != null && target.tween_is_previewing;
         #endregion
 
         #region 字段：参数面板宽度拖拽状态
@@ -815,7 +815,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary> 
         ///当前动画器的动画节点列表（<see cref="target"/> 的快捷访问）
         ///</summary>
-        private List<TweenNode> Nodes => target.PrimitiveTweenNodes;
+        private List<TweenNode> Nodes => target.primitive_tween_nodes;
         /// <summary> 
         ///当前选中的动画节点索引-1 表示未选中，参数面板会显示提示文本
         ///</summary>
@@ -837,7 +837,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <para/>
         /// 与 <see cref="Nodes"/> 平行，无父子关系。
         /// </summary>
-        private List<TweenSound> Sounds => target.PrimitiveTweenSounds;
+        private List<TweenSound> Sounds => target.primitive_tween_sounds;
         /// <summary>
         /// 当前选中的轨道种类。
         /// <para/>
@@ -1025,8 +1025,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// 轨道种类，用于区分当前操作的是动画节点轨还是音效轨，
         /// 以及两类轨道之间的间距行。
         /// <para/>
-        /// - <see cref="Node"/>：对应 <see cref="XHud_Module_Primitive_Tween.PrimitiveTweenNodes"/>；
-        /// - <see cref="Sound"/>：对应 <see cref="XHud_Module_Primitive_Tween.PrimitiveTweenSounds"/>；
+        /// - <see cref="Node"/>：对应 <see cref="XHud_Module_Primitive_Tween.primitive_tween_nodes"/>；
+        /// - <see cref="Sound"/>：对应 <see cref="XHud_Module_Primitive_Tween.primitive_tween_sounds"/>；
         /// - <see cref="Gap"/>：动画与音效之间的间距行，无数据索引；
         /// - <see cref="无"/>：无选中。
         /// <para/>
@@ -1113,13 +1113,13 @@ namespace SevenStrikeModules.XHud.Editor
             if (tween.controller == null) return;
 
             // 取 Feature（优先 controller.pt_Feature，兜底 GetComponent）
-            XHud_Module_Primitive_Feature feature = tween.controller.pt_Feature;
+            XHud_Module_Primitive_Feature feature = tween.controller.pt_feature;
             if (feature == null)
             {
                 feature = tween.GetComponent<XHud_Module_Primitive_Feature>();
                 if (feature != null)
                 {
-                    tween.controller.pt_Feature = feature;
+                    tween.controller.pt_feature = feature;
                     feature.FindController();   // 反向绑定
                 }
             }
@@ -1127,7 +1127,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             // 无条件记录基线
             feature.PrimitiveFeature_Save();
-            feature.FirstSaveFeatures = true;
+            feature.first_save_features = true;
 
             // 标记脏，让改动持久化
             UnityEditor.EditorUtility.SetDirty(feature);
@@ -1505,8 +1505,8 @@ namespace SevenStrikeModules.XHud.Editor
             #region 空动画列表检测
             bool valid = target != null
                 && !target.Equals(null)
-                && target.PrimitiveTweenNodes != null
-                && target.PrimitiveTweenNodes.Count > 0;
+                && target.primitive_tween_nodes != null
+                && target.primitive_tween_nodes.Count > 0;
             #endregion
 
             #region 绘制：顶部工具栏
@@ -2011,7 +2011,7 @@ namespace SevenStrikeModules.XHud.Editor
                 if (selectedKind == TrackKind.Node && selectedIndex >= 0 && selectedIndex < Nodes.Count)
                 {
                     TweenNode node = Nodes[selectedIndex];
-                    Texture2D icon_type = GetTweenTypeIcon(node.Type, true);
+                    Texture2D icon_type = GetTweenTypeIcon(node.type, true);
                     DrawNodeParameterFields(scrollViewportRect, icon_type, node);
                 }
                 else if (selectedKind == TrackKind.Sound && selectedIndex >= 0 && selectedIndex < Sounds.Count)

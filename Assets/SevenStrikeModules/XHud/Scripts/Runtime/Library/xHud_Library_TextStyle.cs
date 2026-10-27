@@ -48,105 +48,105 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 样式名称
         /// </summary>
-        public string Name;
+        public string name;
         [SerializeField]
         /// <summary>
         /// 文字模版解释
         /// </summary>
-        public string Description;
+        public string description;
         [SerializeField]
         /// <summary>
         /// 文字组件类型
         /// </summary>
-        public xHud_TextType Type = xHud_TextType.Text;
+        public xHud_TextType type = xHud_TextType.Text;
         //----------------------------------------Text----------------------------------------//
         [SerializeField]
         /// <summary>
         /// 字体样式
         /// </summary>
-        public FontStyle Style = FontStyle.Normal;
+        public FontStyle style = FontStyle.Normal;
         [SerializeField]
         /// <summary>
         /// 文字组件锚点
         /// </summary>
-        public ContentAnchor ContentAnchor = ContentAnchor.中心;
+        public ContentAnchor content_anchor = ContentAnchor.中心;
         [SerializeField]
         /// <summary>
         /// 文字字体
         /// </summary>
-        public Font Font;
+        public Font font;
         [SerializeField]
         /// <summary>
         /// 文字字体路径
         /// </summary>
-        public string Font_AssetPath;
+        public string font_asset_path;
         [SerializeField]
         [Range(0, 300)]
         /// <summary>
         /// 文字尺寸
         /// </summary>
-        public float Size = 13;
+        public float size = 13;
         [SerializeField]
         /// <summary>
         /// 文字行高
         /// </summary>
-        public float LineHeight = 1;
+        public float line_height = 1;
         [SerializeField]
         /// <summary>
         /// 水平溢出
         /// </summary>
-        public HorizontalWrapMode Overflow_Horizon = HorizontalWrapMode.Wrap;
+        public HorizontalWrapMode overflow_horizon = HorizontalWrapMode.Wrap;
         [SerializeField]
         /// <summary>
         /// 垂直溢出
         /// </summary>
-        public VerticalWrapMode Overflow_Vertical = VerticalWrapMode.Truncate;
+        public VerticalWrapMode overflow_vertical = VerticalWrapMode.Truncate;
         [SerializeField]
         /// <summary>
         /// 富文本支持
         /// </summary>
-        public bool RichText = false;
+        public bool rich_text = false;
         [SerializeField]
         /// <summary>
         /// 几何对齐
         /// </summary>
-        public bool GeometreAlign = false;
+        public bool geometre_align = false;
         [SerializeField]
         /// <summary>
         /// 自动尺寸
         /// </summary>
-        public bool BestFit = false;
+        public bool best_fit = false;
         [SerializeField]
         /// <summary>
         /// 自动尺寸最小
         /// </summary>
-        public int Fit_Min = 1;
+        public int fit_min = 1;
         [SerializeField]
         /// <summary>
         /// 自动字体尺寸 最小 - 全局缩放倍增值
         /// </summary>
-        public float Fit_Min_GlobalScaled;
+        public float fit_min_global_scaled;
         [SerializeField]
         [Range(0, 300)]
         /// <summary>
         /// 自动尺寸最大
         /// </summary>
-        public int Fit_Max = 50;
+        public int fit_max = 50;
         [SerializeField]
         /// <summary>
         /// 自动字体尺寸 最大 - 全局缩放倍增值
         /// </summary>
-        public float Fit_Max_GlobalScaled;
+        public float fit_max_global_scaled;
         [SerializeField]
         /// <summary>
         /// 字体尺寸 - 全局缩放倍增值
         /// </summary>
-        public float Size_GlobalScaled;
+        public float size_global_scaled;
         [SerializeField]
         /// <summary>
         /// 字体颜色
         /// </summary>
-        public Color FontColor = Color.white;
+        public Color font_color = Color.white;
         //----------------------------------------Tmp Text----------------------------------------//
         [SerializeField]
         /// <summary>
@@ -218,12 +218,12 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// Tmp均分对齐
         /// </summary>
-        public float tmp_WrappingRatios;
+        public float tmp_wrapping_ratios;
         [SerializeField]
         /// <summary>
         /// Tmp内容边距
         /// </summary>
-        public Vector4 tmp_contentmargin;
+        public Vector4 tmp_content_margin;
         [SerializeField]
         /// <summary>
         /// Tmp字体颜色
@@ -233,12 +233,12 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// Tmp自动字体尺寸
         /// </summary>
-        public bool tmp_EnableAutoSizing = false;
+        public bool tmp_enable_auto_sizing = false;
         [SerializeField]
         /// <summary>
         /// Tmp自动字体 - 最小尺寸
         /// </summary>
-        public float tmp_FontSizeMin = 5;
+        public float tmp_font_size_min = 5;
         [SerializeField]
         /// <summary>
         /// Tmp自动字体 - 最小尺寸 - 全局缩放倍增值
@@ -248,7 +248,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// Tmp自动字体 - 最大尺寸
         /// </summary>
-        public float tmp_FontSizeMax = 100;
+        public float tmp_font_size_max = 100;
         [SerializeField]
         /// <summary>
         /// Tmp自动字体 - 最大尺寸 - 全局缩放倍增值
@@ -258,165 +258,165 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// Tmp自动字体 - 宽度百分比
         /// </summary>
-        public float tmp_CharWidthMaxAdj;
+        public float tmp_char_width_max_adj;
         [SerializeField]
         /// <summary>
         /// Tmp自动字体 - 最大行高矫正
         /// </summary>
-        public float tmp_LineSpacingMax;
+        public float tmp_line_spacing_max;
         //----------------------------------------Tmp Text GradientColor----------------------------------------//
         [SerializeField]
         /// <summary>
         /// 渐变色 A
         /// </summary>
-        public Color gra_A = Color.white;
+        public Color gra_a = Color.white;
         [SerializeField]
         /// <summary>
         /// 渐变色 B
         /// </summary>
-        public Color gra_B = Color.white;
+        public Color gra_b = Color.white;
         [SerializeField]
         /// <summary>
         /// 渐变色 C
         /// </summary>
-        public Color gra_C = Color.white;
+        public Color gra_c = Color.white;
         [SerializeField]
         /// <summary>
         /// 渐变色 D
         /// </summary>
-        public Color gra_D = Color.white;
+        public Color gra_d = Color.white;
         [SerializeField]
         /// <summary>
         /// 渐变色反转
         /// </summary>
-        public bool gra_Invert;
+        public bool gra_invert;
         [SerializeField]
         /// <summary>
         /// 渐变色开关
         /// </summary>
-        public bool gra_Used;
+        public bool gra_used;
         [SerializeField]
         /// <summary>
         /// 渐变色模式
         /// </summary>
-        public ColorMode gra_ColorMode;
+        public ColorMode gra_color_mode;
         [SerializeField]
         /// <summary>
         /// 渐变色模式名称
         /// </summary>
-        public string gra_ColorModeName;
+        public string gra_color_mode_name;
         //----------------------------------------Library Toggles----------------------------------------//
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 几何对齐
         /// </summary>
-        public bool LibStyle_Effect_geometre_align;
+        public bool lib_style_effect_geometre_align;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 对齐
         /// </summary>
-        public bool LibStyle_Effect_align;
+        public bool lib_style_effect_align;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 字体
         /// </summary>
-        public bool LibStyle_Effect_font;
+        public bool lib_style_effect_font;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 样式
         /// </summary>
-        public bool LibStyle_Effect_style;
+        public bool lib_style_effect_style;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 尺寸_Size
         /// </summary>
-        public bool LibStyle_Effect_size;
+        public bool lib_style_effect_size;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 颜色_Color
         /// </summary>
-        public bool LibStyle_Effect_color;
+        public bool lib_style_effect_color;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 富文本
         /// </summary>
-        public bool LibStyle_Effect_rich;
+        public bool lib_style_effect_rich;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 行高
         /// </summary>
-        public bool LibStyle_Effect_line;
+        public bool lib_style_effect_line;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 溢出水平
         /// </summary>
-        public bool LibStyle_Effect_overflow_h;
+        public bool lib_style_effect_overflow_h;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 溢出垂直
         /// </summary>
-        public bool LibStyle_Effect_overflow_v;
+        public bool lib_style_effect_overflow_v;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 溢出包裹
         /// </summary>
-        public bool LibStyle_Effect_wrap;
+        public bool lib_style_effect_wrap;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 包裹比例
         /// </summary>
-        public bool LibStyle_Effect_wrapratio;
+        public bool lib_style_effect_wrapratio;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 溢出模式
         /// </summary>
-        public bool LibStyle_Effect_overflow;
+        public bool lib_style_effect_overflow;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 边距
         /// </summary>
-        public bool LibStyle_Effect_margin;
+        public bool lib_style_effect_margin;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 间距
         /// </summary>
-        public bool LibStyle_Effect_space;
+        public bool lib_style_effect_space;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 最佳匹配
         /// </summary>
-        public bool LibStyle_Effect_bestfit;
+        public bool lib_style_effect_bestfit;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 渐变色
         /// </summary>
-        public bool LibStyle_Effect_gradientcolor;
+        public bool lib_style_effect_gradientcolor;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 自动字体尺寸
         /// </summary>
-        public bool LibStyle_Effect_autosizing;
+        public bool lib_style_effect_autosizing;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 射线检测
         /// </summary>
-        public bool LibStyle_Effect_raycast;
+        public bool lib_style_effect_raycast;
         [SerializeField]
         /// <summary>
         /// 库同步开关 - 遮罩
         /// </summary>
-        public bool LibStyle_Effect_maskable;
+        public bool lib_style_effect_maskable;
         //----------------------------------------Features----------------------------------------//
         [SerializeField]
         /// <summary>
         /// 射线检测
         /// </summary>
-        public bool Raycast;
+        public bool raycast;
         [SerializeField]
         /// <summary>
         /// 蒙版
         /// </summary>
-        public bool Maskable;
+        public bool maskable;
         #endregion
 
         /// <summary>
@@ -426,24 +426,24 @@ namespace SevenStrikeModules.XHud
         public void CopyData(XHud_LibraryArg_TextStyle target)
         {
             //----------------------------------------Based----------------------------------------//
-            Name = target.Name;
-            Description = target.Description;
-            Type = target.Type;
+            name = target.name;
+            description = target.description;
+            type = target.type;
             //----------------------------------------Text----------------------------------------//
-            Style = target.Style;
-            ContentAnchor = target.ContentAnchor;
-            GeometreAlign = target.GeometreAlign;
-            Font = target.Font;
-            Font_AssetPath = target.Font_AssetPath;
-            Size = target.Size;
-            LineHeight = target.LineHeight;
-            Overflow_Horizon = target.Overflow_Horizon;
-            Overflow_Vertical = target.Overflow_Vertical;
-            RichText = target.RichText;
-            BestFit = target.BestFit;
-            Fit_Min = target.Fit_Min;
-            Fit_Max = target.Fit_Max;
-            FontColor = target.FontColor;
+            style = target.style;
+            content_anchor = target.content_anchor;
+            geometre_align = target.geometre_align;
+            font = target.font;
+            font_asset_path = target.font_asset_path;
+            size = target.size;
+            line_height = target.line_height;
+            overflow_horizon = target.overflow_horizon;
+            overflow_vertical = target.overflow_vertical;
+            rich_text = target.rich_text;
+            best_fit = target.best_fit;
+            fit_min = target.fit_min;
+            fit_max = target.fit_max;
+            font_color = target.font_color;
             //----------------------------------------Tmp Text----------------------------------------//
             tmp_rich = target.tmp_rich;
             tmp_contentwrap = target.tmp_contentwrap;
@@ -458,49 +458,49 @@ namespace SevenStrikeModules.XHud
             tmp_space_word = target.tmp_space_word;
             tmp_space_lineheight = target.tmp_space_lineheight;
             tmp_space_paragraph = target.tmp_space_paragraph;
-            tmp_WrappingRatios = target.tmp_WrappingRatios;
-            tmp_contentmargin = target.tmp_contentmargin;
+            tmp_wrapping_ratios = target.tmp_wrapping_ratios;
+            tmp_content_margin = target.tmp_content_margin;
             tmp_color = target.tmp_color;
-            tmp_EnableAutoSizing = target.tmp_EnableAutoSizing;
-            tmp_FontSizeMin = target.tmp_FontSizeMin;
+            tmp_enable_auto_sizing = target.tmp_enable_auto_sizing;
+            tmp_font_size_min = target.tmp_font_size_min;
             tmp_FontSizeMin_globalscaled = target.tmp_FontSizeMin_globalscaled;
-            tmp_FontSizeMax = target.tmp_FontSizeMax;
+            tmp_font_size_max = target.tmp_font_size_max;
             tmp_FontSizeMax_globalscaled = target.tmp_FontSizeMax_globalscaled;
-            tmp_CharWidthMaxAdj = target.tmp_CharWidthMaxAdj;
-            tmp_LineSpacingMax = target.tmp_LineSpacingMax;
+            tmp_char_width_max_adj = target.tmp_char_width_max_adj;
+            tmp_line_spacing_max = target.tmp_line_spacing_max;
             //----------------------------------------Tmp Text GradientColor----------------------------------------//
-            gra_A = target.gra_A;
-            gra_B = target.gra_B;
-            gra_C = target.gra_C;
-            gra_D = target.gra_D;
-            gra_Invert = target.gra_Invert;
-            gra_Used = target.gra_Used;
-            gra_ColorMode = target.gra_ColorMode;
-            gra_ColorModeName = target.gra_ColorModeName;
+            gra_a = target.gra_a;
+            gra_b = target.gra_b;
+            gra_c = target.gra_c;
+            gra_d = target.gra_d;
+            gra_invert = target.gra_invert;
+            gra_used = target.gra_used;
+            gra_color_mode = target.gra_color_mode;
+            gra_color_mode_name = target.gra_color_mode_name;
             //----------------------------------------Library Toggles----------------------------------------//
-            LibStyle_Effect_align = target.LibStyle_Effect_align;
-            LibStyle_Effect_geometre_align = target.LibStyle_Effect_geometre_align;
-            LibStyle_Effect_font = target.LibStyle_Effect_font;
-            LibStyle_Effect_style = target.LibStyle_Effect_style;
-            LibStyle_Effect_size = target.LibStyle_Effect_size;
-            LibStyle_Effect_color = target.LibStyle_Effect_color;
-            LibStyle_Effect_rich = target.LibStyle_Effect_rich;
-            LibStyle_Effect_line = target.LibStyle_Effect_line;
-            LibStyle_Effect_overflow_h = target.LibStyle_Effect_overflow_h;
-            LibStyle_Effect_overflow_v = target.LibStyle_Effect_overflow_v;
-            LibStyle_Effect_wrap = target.LibStyle_Effect_wrap;
-            LibStyle_Effect_wrapratio = target.LibStyle_Effect_wrapratio;
-            LibStyle_Effect_overflow = target.LibStyle_Effect_overflow;
-            LibStyle_Effect_margin = target.LibStyle_Effect_margin;
-            LibStyle_Effect_space = target.LibStyle_Effect_space;
-            LibStyle_Effect_bestfit = target.LibStyle_Effect_bestfit;
-            LibStyle_Effect_gradientcolor = target.LibStyle_Effect_gradientcolor;
-            LibStyle_Effect_autosizing = target.LibStyle_Effect_autosizing;
-            LibStyle_Effect_raycast = target.LibStyle_Effect_raycast;
-            LibStyle_Effect_maskable = target.LibStyle_Effect_maskable;
+            lib_style_effect_align = target.lib_style_effect_align;
+            lib_style_effect_geometre_align = target.lib_style_effect_geometre_align;
+            lib_style_effect_font = target.lib_style_effect_font;
+            lib_style_effect_style = target.lib_style_effect_style;
+            lib_style_effect_size = target.lib_style_effect_size;
+            lib_style_effect_color = target.lib_style_effect_color;
+            lib_style_effect_rich = target.lib_style_effect_rich;
+            lib_style_effect_line = target.lib_style_effect_line;
+            lib_style_effect_overflow_h = target.lib_style_effect_overflow_h;
+            lib_style_effect_overflow_v = target.lib_style_effect_overflow_v;
+            lib_style_effect_wrap = target.lib_style_effect_wrap;
+            lib_style_effect_wrapratio = target.lib_style_effect_wrapratio;
+            lib_style_effect_overflow = target.lib_style_effect_overflow;
+            lib_style_effect_margin = target.lib_style_effect_margin;
+            lib_style_effect_space = target.lib_style_effect_space;
+            lib_style_effect_bestfit = target.lib_style_effect_bestfit;
+            lib_style_effect_gradientcolor = target.lib_style_effect_gradientcolor;
+            lib_style_effect_autosizing = target.lib_style_effect_autosizing;
+            lib_style_effect_raycast = target.lib_style_effect_raycast;
+            lib_style_effect_maskable = target.lib_style_effect_maskable;
             //----------------------------------------Features----------------------------------------//
-            Raycast = target.Raycast;
-            Maskable = target.Maskable;
+            raycast = target.raycast;
+            maskable = target.maskable;
         }
 
         /// <summary>
@@ -510,22 +510,22 @@ namespace SevenStrikeModules.XHud
         public void CopyData_WithoutType(XHud_LibraryArg_TextStyle target)
         {
             //----------------------------------------Based----------------------------------------//
-            Type = target.Type;
+            type = target.type;
             //----------------------------------------Text----------------------------------------//
-            Style = target.Style;
-            ContentAnchor = target.ContentAnchor;
-            GeometreAlign = target.GeometreAlign;
-            Font = target.Font;
-            Font_AssetPath = target.Font_AssetPath;
-            Size = target.Size;
-            LineHeight = target.LineHeight;
-            Overflow_Horizon = target.Overflow_Horizon;
-            Overflow_Vertical = target.Overflow_Vertical;
-            RichText = target.RichText;
-            BestFit = target.BestFit;
-            Fit_Min = target.Fit_Min;
-            Fit_Max = target.Fit_Max;
-            FontColor = target.FontColor;
+            style = target.style;
+            content_anchor = target.content_anchor;
+            geometre_align = target.geometre_align;
+            font = target.font;
+            font_asset_path = target.font_asset_path;
+            size = target.size;
+            line_height = target.line_height;
+            overflow_horizon = target.overflow_horizon;
+            overflow_vertical = target.overflow_vertical;
+            rich_text = target.rich_text;
+            best_fit = target.best_fit;
+            fit_min = target.fit_min;
+            fit_max = target.fit_max;
+            font_color = target.font_color;
             //----------------------------------------Tmp Text----------------------------------------//
             tmp_rich = target.tmp_rich;
             tmp_contentwrap = target.tmp_contentwrap;
@@ -540,49 +540,49 @@ namespace SevenStrikeModules.XHud
             tmp_space_word = target.tmp_space_word;
             tmp_space_lineheight = target.tmp_space_lineheight;
             tmp_space_paragraph = target.tmp_space_paragraph;
-            tmp_WrappingRatios = target.tmp_WrappingRatios;
-            tmp_contentmargin = target.tmp_contentmargin;
+            tmp_wrapping_ratios = target.tmp_wrapping_ratios;
+            tmp_content_margin = target.tmp_content_margin;
             tmp_color = target.tmp_color;
-            tmp_EnableAutoSizing = target.tmp_EnableAutoSizing;
-            tmp_FontSizeMin = target.tmp_FontSizeMin;
+            tmp_enable_auto_sizing = target.tmp_enable_auto_sizing;
+            tmp_font_size_min = target.tmp_font_size_min;
             tmp_FontSizeMin_globalscaled = target.tmp_FontSizeMin_globalscaled;
-            tmp_FontSizeMax = target.tmp_FontSizeMax;
+            tmp_font_size_max = target.tmp_font_size_max;
             tmp_FontSizeMax_globalscaled = target.tmp_FontSizeMax_globalscaled;
-            tmp_CharWidthMaxAdj = target.tmp_CharWidthMaxAdj;
-            tmp_LineSpacingMax = target.tmp_LineSpacingMax;
+            tmp_char_width_max_adj = target.tmp_char_width_max_adj;
+            tmp_line_spacing_max = target.tmp_line_spacing_max;
             //----------------------------------------Tmp Text GradientColor----------------------------------------//
-            gra_A = target.gra_A;
-            gra_B = target.gra_B;
-            gra_C = target.gra_C;
-            gra_D = target.gra_D;
-            gra_Invert = target.gra_Invert;
-            gra_Used = target.gra_Used;
-            gra_ColorMode = target.gra_ColorMode;
-            gra_ColorModeName = target.gra_ColorModeName;
+            gra_a = target.gra_a;
+            gra_b = target.gra_b;
+            gra_c = target.gra_c;
+            gra_d = target.gra_d;
+            gra_invert = target.gra_invert;
+            gra_used = target.gra_used;
+            gra_color_mode = target.gra_color_mode;
+            gra_color_mode_name = target.gra_color_mode_name;
             //----------------------------------------Library Toggles----------------------------------------//
-            LibStyle_Effect_align = target.LibStyle_Effect_align;
-            LibStyle_Effect_geometre_align = target.LibStyle_Effect_geometre_align;
-            LibStyle_Effect_font = target.LibStyle_Effect_font;
-            LibStyle_Effect_style = target.LibStyle_Effect_style;
-            LibStyle_Effect_size = target.LibStyle_Effect_size;
-            LibStyle_Effect_color = target.LibStyle_Effect_color;
-            LibStyle_Effect_rich = target.LibStyle_Effect_rich;
-            LibStyle_Effect_line = target.LibStyle_Effect_line;
-            LibStyle_Effect_overflow_h = target.LibStyle_Effect_overflow_h;
-            LibStyle_Effect_overflow_v = target.LibStyle_Effect_overflow_v;
-            LibStyle_Effect_wrap = target.LibStyle_Effect_wrap;
-            LibStyle_Effect_wrapratio = target.LibStyle_Effect_wrapratio;
-            LibStyle_Effect_overflow = target.LibStyle_Effect_overflow;
-            LibStyle_Effect_margin = target.LibStyle_Effect_margin;
-            LibStyle_Effect_space = target.LibStyle_Effect_space;
-            LibStyle_Effect_bestfit = target.LibStyle_Effect_bestfit;
-            LibStyle_Effect_gradientcolor = target.LibStyle_Effect_gradientcolor;
-            LibStyle_Effect_autosizing = target.LibStyle_Effect_autosizing;
-            LibStyle_Effect_raycast = target.LibStyle_Effect_raycast;
-            LibStyle_Effect_maskable = target.LibStyle_Effect_maskable;
+            lib_style_effect_align = target.lib_style_effect_align;
+            lib_style_effect_geometre_align = target.lib_style_effect_geometre_align;
+            lib_style_effect_font = target.lib_style_effect_font;
+            lib_style_effect_style = target.lib_style_effect_style;
+            lib_style_effect_size = target.lib_style_effect_size;
+            lib_style_effect_color = target.lib_style_effect_color;
+            lib_style_effect_rich = target.lib_style_effect_rich;
+            lib_style_effect_line = target.lib_style_effect_line;
+            lib_style_effect_overflow_h = target.lib_style_effect_overflow_h;
+            lib_style_effect_overflow_v = target.lib_style_effect_overflow_v;
+            lib_style_effect_wrap = target.lib_style_effect_wrap;
+            lib_style_effect_wrapratio = target.lib_style_effect_wrapratio;
+            lib_style_effect_overflow = target.lib_style_effect_overflow;
+            lib_style_effect_margin = target.lib_style_effect_margin;
+            lib_style_effect_space = target.lib_style_effect_space;
+            lib_style_effect_bestfit = target.lib_style_effect_bestfit;
+            lib_style_effect_gradientcolor = target.lib_style_effect_gradientcolor;
+            lib_style_effect_autosizing = target.lib_style_effect_autosizing;
+            lib_style_effect_raycast = target.lib_style_effect_raycast;
+            lib_style_effect_maskable = target.lib_style_effect_maskable;
             //----------------------------------------Features----------------------------------------//
-            Raycast = target.Raycast;
-            Maskable = target.Maskable;
+            raycast = target.raycast;
+            maskable = target.maskable;
         }
 
         /// <summary>
@@ -620,24 +620,24 @@ namespace SevenStrikeModules.XHud
         public void CopyData_Ignored_LibraryToggle(XHud_LibraryArg_TextStyle target)
         {
             //----------------------------------------Based----------------------------------------//
-            Name = target.Name;
-            Description = target.Description;
-            Type = target.Type;
+            name = target.name;
+            description = target.description;
+            type = target.type;
             //----------------------------------------Text----------------------------------------//
-            Style = target.Style;
-            ContentAnchor = target.ContentAnchor;
-            GeometreAlign = target.GeometreAlign;
-            Font = target.Font;
-            Font_AssetPath = target.Font_AssetPath;
-            Size = target.Size;
-            LineHeight = target.LineHeight;
-            Overflow_Horizon = target.Overflow_Horizon;
-            Overflow_Vertical = target.Overflow_Vertical;
-            RichText = target.RichText;
-            BestFit = target.BestFit;
-            Fit_Min = target.Fit_Min;
-            Fit_Max = target.Fit_Max;
-            FontColor = target.FontColor;
+            style = target.style;
+            content_anchor = target.content_anchor;
+            geometre_align = target.geometre_align;
+            font = target.font;
+            font_asset_path = target.font_asset_path;
+            size = target.size;
+            line_height = target.line_height;
+            overflow_horizon = target.overflow_horizon;
+            overflow_vertical = target.overflow_vertical;
+            rich_text = target.rich_text;
+            best_fit = target.best_fit;
+            fit_min = target.fit_min;
+            fit_max = target.fit_max;
+            font_color = target.font_color;
             //----------------------------------------Tmp Text----------------------------------------//
             tmp_rich = target.tmp_rich;
             tmp_contentwrap = target.tmp_contentwrap;
@@ -652,28 +652,28 @@ namespace SevenStrikeModules.XHud
             tmp_space_word = target.tmp_space_word;
             tmp_space_lineheight = target.tmp_space_lineheight;
             tmp_space_paragraph = target.tmp_space_paragraph;
-            tmp_WrappingRatios = target.tmp_WrappingRatios;
-            tmp_contentmargin = target.tmp_contentmargin;
+            tmp_wrapping_ratios = target.tmp_wrapping_ratios;
+            tmp_content_margin = target.tmp_content_margin;
             tmp_color = target.tmp_color;
-            tmp_EnableAutoSizing = target.tmp_EnableAutoSizing;
-            tmp_FontSizeMin = target.tmp_FontSizeMin;
+            tmp_enable_auto_sizing = target.tmp_enable_auto_sizing;
+            tmp_font_size_min = target.tmp_font_size_min;
             tmp_FontSizeMin_globalscaled = target.tmp_FontSizeMin_globalscaled;
-            tmp_FontSizeMax = target.tmp_FontSizeMax;
+            tmp_font_size_max = target.tmp_font_size_max;
             tmp_FontSizeMax_globalscaled = target.tmp_FontSizeMax_globalscaled;
-            tmp_CharWidthMaxAdj = target.tmp_CharWidthMaxAdj;
-            tmp_LineSpacingMax = target.tmp_LineSpacingMax;
+            tmp_char_width_max_adj = target.tmp_char_width_max_adj;
+            tmp_line_spacing_max = target.tmp_line_spacing_max;
             //----------------------------------------Tmp Text GradientColor----------------------------------------//
-            gra_A = target.gra_A;
-            gra_B = target.gra_B;
-            gra_C = target.gra_C;
-            gra_D = target.gra_D;
-            gra_Invert = target.gra_Invert;
-            gra_Used = target.gra_Used;
-            gra_ColorMode = target.gra_ColorMode;
-            gra_ColorModeName = target.gra_ColorModeName;
+            gra_a = target.gra_a;
+            gra_b = target.gra_b;
+            gra_c = target.gra_c;
+            gra_d = target.gra_d;
+            gra_invert = target.gra_invert;
+            gra_used = target.gra_used;
+            gra_color_mode = target.gra_color_mode;
+            gra_color_mode_name = target.gra_color_mode_name;
             //----------------------------------------Features----------------------------------------//
-            Raycast = target.Raycast;
-            Maskable = target.Maskable;
+            raycast = target.raycast;
+            maskable = target.maskable;
         }
 
         //------------------------通用参数设置
@@ -684,9 +684,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState"></param>
         public void gen_RayCastSet(bool state)
         {
-            if (Raycast == state)
+            if (raycast == state)
                 return;
-            Raycast = state;
+            raycast = state;
         }
 
         /// <summary>
@@ -695,9 +695,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState"></param>
         public void gen_Set_MaskableSet(bool state)
         {
-            if (Maskable == state)
+            if (maskable == state)
                 return;
-            Maskable = state;
+            maskable = state;
         }
 
         //------------------------Text参数设置
@@ -708,9 +708,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="style">样式</param>
         public void txt_Set_FontStyle(FontStyle style)
         {
-            if (Style == style)
+            if (this.style == style)
                 return;
-            Style = style;
+            this.style = style;
         }
 
         /// <summary>
@@ -719,9 +719,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="anchor">锚点位置_AnchoredPosition</param>
         public void txt_Set_Alignment(ContentAnchor anchor)
         {
-            if (ContentAnchor == anchor)
+            if (content_anchor == anchor)
                 return;
-            ContentAnchor = anchor;
+            content_anchor = anchor;
         }
 
         /// <summary>
@@ -730,9 +730,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState"></param>
         public void txt_Set_GeometreAlign(bool state)
         {
-            if (GeometreAlign == state)
+            if (geometre_align == state)
                 return;
-            GeometreAlign = state;
+            geometre_align = state;
         }
 
         /// <summary>
@@ -743,9 +743,9 @@ namespace SevenStrikeModules.XHud
         {
             if (font == null)
                 return;
-            if (font == Font)
+            if (font == this.font)
                 return;
-            Font = font;
+            this.font = font;
         }
 
         /// <summary>
@@ -754,9 +754,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="size">尺寸_Size</param>
         public void txt_Set_FontSize(float size)
         {
-            if (Size == size)
+            if (this.size == size)
                 return;
-            Size = size;
+            this.size = size;
         }
 
         /// <summary>
@@ -765,9 +765,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="height">尺寸_Size</param>
         public void txt_Set_FontLineHeight(float height)
         {
-            if (LineHeight == height)
+            if (line_height == height)
                 return;
-            LineHeight = height;
+            line_height = height;
         }
 
         /// <summary>
@@ -776,9 +776,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="mode"> Overflow = 溢出, Wrap = 包裹</param>
         public void txt_Set_Overflow(HorizontalWrapMode mode)
         {
-            if (Overflow_Horizon == mode)
+            if (overflow_horizon == mode)
                 return;
-            Overflow_Horizon = mode;
+            overflow_horizon = mode;
         }
 
         /// <summary>
@@ -787,9 +787,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="mode"> Overflow = 溢出, Truncate = 截断</param>
         public void txt_Set_Overflow(VerticalWrapMode mode)
         {
-            if (Overflow_Vertical == mode)
+            if (overflow_vertical == mode)
                 return;
-            Overflow_Vertical = mode;
+            overflow_vertical = mode;
         }
 
         /// <summary>
@@ -798,9 +798,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState"></param>
         public void txt_Set_RichTextEnabled(bool state)
         {
-            if (RichText == state)
+            if (rich_text == state)
                 return;
-            RichText = state;
+            rich_text = state;
         }
 
         /// <summary>
@@ -809,9 +809,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState"></param>
         public void txt_Set_BestFit(bool state)
         {
-            if (BestFit == state)
+            if (best_fit == state)
                 return;
-            BestFit = state;
+            best_fit = state;
         }
 
         /// <summary>
@@ -820,9 +820,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="size">尺寸_Size</param>
         public void txt_Set_FontFitSize_Min(int size)
         {
-            if (Fit_Min == size)
+            if (fit_min == size)
                 return;
-            Fit_Min = size;
+            fit_min = size;
         }
 
         /// <summary>
@@ -831,9 +831,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="size">尺寸_Size</param>
         public void txt_Set_FontFitSize_Max(int size)
         {
-            if (Fit_Max == size)
+            if (fit_max == size)
                 return;
-            Fit_Max = size;
+            fit_max = size;
         }
 
         /// <summary>
@@ -842,9 +842,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="color">颜色_Color</param>
         public void txt_Set_FontColor(Color color)
         {
-            if (FontColor == color)
+            if (font_color == color)
                 return;
-            FontColor = color;
+            font_color = color;
         }
 
         //------------------------TmpText参数设置
@@ -977,9 +977,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="val"></param>
         public void tmp_Set_WrappingRatios(float val)
         {
-            if (tmp_WrappingRatios == val)
+            if (tmp_wrapping_ratios == val)
                 return;
-            tmp_WrappingRatios = val;
+            tmp_wrapping_ratios = val;
         }
 
         /// <summary>
@@ -988,9 +988,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="value">边距值</param>
         public void tmp_Set_MarginSet(Vector4 value)
         {
-            if (tmp_contentmargin == value)
+            if (tmp_content_margin == value)
                 return;
-            tmp_contentmargin = value;
+            tmp_content_margin = value;
         }
 
         /// <summary>
@@ -1033,9 +1033,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void tmp_Set_EnableAutoSizing(bool state)
         {
-            if (tmp_EnableAutoSizing == state)
+            if (tmp_enable_auto_sizing == state)
                 return;
-            tmp_EnableAutoSizing = state;
+            tmp_enable_auto_sizing = state;
         }
 
         /// <summary>
@@ -1043,21 +1043,21 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void tmp_Set_FontAutoSize(Vector4 autosize)
         {
-            if (autosize.x != tmp_FontSizeMin)
+            if (autosize.x != tmp_font_size_min)
             {
-                tmp_FontSizeMin = autosize.x;
+                tmp_font_size_min = autosize.x;
             }
-            if (autosize.y != tmp_FontSizeMax)
+            if (autosize.y != tmp_font_size_max)
             {
-                tmp_FontSizeMax = autosize.y;
+                tmp_font_size_max = autosize.y;
             }
-            if (autosize.z != tmp_CharWidthMaxAdj)
+            if (autosize.z != tmp_char_width_max_adj)
             {
-                tmp_CharWidthMaxAdj = autosize.z;
+                tmp_char_width_max_adj = autosize.z;
             }
-            if (autosize.w != tmp_LineSpacingMax)
+            if (autosize.w != tmp_line_spacing_max)
             {
-                tmp_LineSpacingMax = autosize.w;
+                tmp_line_spacing_max = autosize.w;
             }
         }
 
@@ -1066,9 +1066,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void tmp_Set_FontAutoSize_FontSizeMin(float value)
         {
-            if (value != tmp_FontSizeMin)
+            if (value != tmp_font_size_min)
             {
-                tmp_FontSizeMin = value;
+                tmp_font_size_min = value;
             }
         }
 
@@ -1077,9 +1077,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void tmp_Set_FontAutoSize_FontSizeMax(float value)
         {
-            if (value != tmp_FontSizeMax)
+            if (value != tmp_font_size_max)
             {
-                tmp_FontSizeMax = value;
+                tmp_font_size_max = value;
             }
         }
 
@@ -1088,9 +1088,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void tmp_Set_FontAutoSize_CharWidthMaxAdj(float value)
         {
-            if (value != tmp_CharWidthMaxAdj)
+            if (value != tmp_char_width_max_adj)
             {
-                tmp_CharWidthMaxAdj = value;
+                tmp_char_width_max_adj = value;
             }
         }
 
@@ -1099,9 +1099,9 @@ namespace SevenStrikeModules.XHud
         /// </summary> 
         public void tmp_Set_FontAutoSize_LineSpacingMax(float value)
         {
-            if (value != tmp_LineSpacingMax)
+            if (value != tmp_line_spacing_max)
             {
-                tmp_LineSpacingMax = value;
+                tmp_line_spacing_max = value;
             }
         }
 
@@ -1111,9 +1111,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="col"></param>
         public void tmp_Set_GradientColor_A(Color col)
         {
-            if (gra_A == col)
+            if (gra_a == col)
                 return;
-            gra_A = col;
+            gra_a = col;
         }
 
         /// <summary>
@@ -1122,9 +1122,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="col"></param>
         public void tmp_Set_GradientColor_B(Color col)
         {
-            if (gra_B == col)
+            if (gra_b == col)
                 return;
-            gra_B = col;
+            gra_b = col;
         }
 
         /// <summary>
@@ -1133,9 +1133,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="col"></param>
         public void tmp_Set_GradientColor_C(Color col)
         {
-            if (gra_C == col)
+            if (gra_c == col)
                 return;
-            gra_C = col;
+            gra_c = col;
         }
 
         /// <summary>
@@ -1144,9 +1144,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="col"></param>
         public void tmp_Set_GradientColor_D(Color col)
         {
-            if (gra_D == col)
+            if (gra_d == col)
                 return;
-            gra_D = col;
+            gra_d = col;
         }
 
         /// <summary>
@@ -1155,9 +1155,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState"></param>
         public void tmp_Set_GradientColor_Invert(bool state)
         {
-            if (gra_Invert == state)
+            if (gra_invert == state)
                 return;
-            gra_Invert = state;
+            gra_invert = state;
         }
 
         /// <summary>
@@ -1166,9 +1166,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState"></param>
         public void tmp_Set_GradientColor_Enabled(bool state)
         {
-            if (gra_Used == state)
+            if (gra_used == state)
                 return;
-            gra_Used = state;
+            gra_used = state;
         }
 
         /// <summary>
@@ -1177,9 +1177,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="col"></param>
         public void tmp_Set_GradientMode(ColorMode mode)
         {
-            if (gra_ColorMode == mode)
+            if (gra_color_mode == mode)
                 return;
-            gra_ColorMode = mode;
+            gra_color_mode = mode;
         }
 
         /// <summary>
@@ -1188,67 +1188,94 @@ namespace SevenStrikeModules.XHud
         /// <param name="col"></param>
         public void tmp_Set_GradientModeName(string mode)
         {
-            if (gra_ColorModeName == mode)
+            if (gra_color_mode_name == mode)
                 return;
-            gra_ColorModeName = mode;
+            gra_color_mode_name = mode;
         }
     }
 
     [CreateAssetMenu(fileName = "XHud_Library_TextStyle", menuName = "XHud/CreateAssets (创建Hud资源库)/Library-TextStyle (文字样式库)", order = 0)]
     public class XHud_Library_TextStyle : ScriptableObject
     {
-        public string LibraryName = "NewTextStyleLibrary";
+        #region 字段 - 库基础信息
+        /// <summary>
+        /// 文字样式库名称
+        /// </summary>
+        public string library_name = "NewTextStyleLibrary";
+        /// <summary>
+        /// 文字样式库数据列表
+        /// </summary>
+        public List<XHud_LibraryArg_TextStyle> library_text_styles = new List<XHud_LibraryArg_TextStyle>();
+        /// <summary>
+        /// 文字样式变化时触发的事件
+        /// </summary>
+        public UnityAction act_on_text_style_changed;
+        #endregion
 
-        public List<XHud_LibraryArg_TextStyle> TextStyleLibrary = new List<XHud_LibraryArg_TextStyle>();
+        #region 字段 - 预览设置
+        /// <summary>
+        /// 预览字体
+        /// </summary>
+        public Font preview_font;
+        /// <summary>
+        /// 预览字体颜色
+        /// </summary>
+        public Color preview_font_color = Color.white;
+        /// <summary>
+        /// 预览内容
+        /// </summary>
+        public string preview_content = "XHud Sample Fonts";
+        /// <summary>
+        /// 预览文本类型
+        /// </summary>
+        public string preview_type_text = "Text";
+        /// <summary>
+        /// 预览字体样式
+        /// </summary>
+        public FontStyle preview_style = FontStyle.Normal;
+        #endregion
 
-        public Font Preview_Font;
-        public Color PreviewFontColor = Color.white;
-        public string PreviewContent = "XHud Sample Fonts";
-        public string PreviewTypeText = "Text";
-        public FontStyle PreviewStyle = FontStyle.Normal;
-
-
+        #region 字段 - 列表查询与筛选
         /// <summary>
         /// 名称项查找（精确匹配）
         /// </summary>
-        public string Find = "";
-
+        public string find = "";
         /// <summary>
-        /// Editor列表项高度
+        /// Editor 筛选名称
         /// </summary>
-        public float itemHeight = 61;
+        public string highlight;
+        #endregion
 
+        #region 字段 - 列表布局
+        /// <summary>
+        /// Editor 列表项高度
+        /// </summary>
+        public float item_height = 61;
         /// <summary>
         /// 可视区域显示的元素数量
         /// </summary>
-        public int visibleItemCount = 7;
-
+        public int visible_item_count = 7;
         /// <summary>
         /// 列表滚动位置
         /// </summary>
-        public Vector2 ColorInfoList_Original_Scroller;
+        public Vector2 color_info_list_original_scroller;
+        #endregion
 
+        #region 字段 - 选中与定位
         /// <summary>
-        /// Editor筛选名称
+        /// 定位选中项索引号（-1 表示无）
         /// </summary>
-        public string Highlight;
-
-        /// <summary>
-        /// 定位选中项索引号
-        /// </summary>
-        public int LocationSelectedIndex = -1;
-
+        public int location_selected_index = -1;
         /// <summary>
         /// 选中项索引号
         /// </summary>
-        public int SelectedIndex;
-
-        public UnityAction act_on_TextStyleChanged;
+        public int selected_index;
+        #endregion
 
         private void OnEnable()
         {
-            itemHeight = 61;
-            visibleItemCount = 7;
+            item_height = 61;
+            visible_item_count = 7;
         }
 
         // 确保内部名称与文件名一致
@@ -1272,7 +1299,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public int TextStyle_Library_GetCount()
         {
-            return TextStyleLibrary.Count;
+            return library_text_styles.Count;
         }
 
         /// <summary>
@@ -1282,9 +1309,9 @@ namespace SevenStrikeModules.XHud
         public int TextStyle_Library_GetCount(xHud_TextType type)
         {
             int count = 0;
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (TextStyleLibrary[i].Type == type)
+                if (library_text_styles[i].type == type)
                 {
                     count++;
                 }
@@ -1298,9 +1325,9 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public bool TextStyle_Library_IsEmpty()
         {
-            if (TextStyleLibrary != null)
+            if (library_text_styles != null)
             {
-                if (TextStyleLibrary.Count > 0)
+                if (library_text_styles.Count > 0)
                     return false;
                 else
                     return true;
@@ -1323,9 +1350,9 @@ namespace SevenStrikeModules.XHud
                 return false;
             }
             bool isrep = false;
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (name == TextStyleLibrary[i].Name)
+                if (name == library_text_styles[i].name)
                     isrep = true;
             }
             return isrep;
@@ -1337,7 +1364,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public void TextStyle_Library_Replace(int index, XHud_LibraryArg_TextStyle info)
         {
-            TextStyleLibrary[index].CopyData_Ignored_LibraryToggle(info);
+            library_text_styles[index].CopyData_Ignored_LibraryToggle(info);
         }
 
         /// <summary>
@@ -1353,19 +1380,19 @@ namespace SevenStrikeModules.XHud
             }
             bool ismatched = false;
             int xc = 0;
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (name == TextStyleLibrary[i].Name)
+                if (name == library_text_styles[i].name)
                 {
                     xc = i;
                     ismatched = true;
                 }
             }
             if (ismatched)
-                TextStyleLibrary.RemoveAt(xc);
+                library_text_styles.RemoveAt(xc);
 
-            if (act_on_TextStyleChanged != null)
-                act_on_TextStyleChanged();
+            if (act_on_text_style_changed != null)
+                act_on_text_style_changed();
         }
 
         /// <summary>
@@ -1374,9 +1401,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="info">文字样式信息类</param>
         public void TextStyle_Library_Add(XHud_LibraryArg_TextStyle info)
         {
-            TextStyleLibrary.Add(info);
-            if (act_on_TextStyleChanged != null)
-                act_on_TextStyleChanged();
+            library_text_styles.Add(info);
+            if (act_on_text_style_changed != null)
+                act_on_text_style_changed();
         }
 
         /// <summary>
@@ -1385,7 +1412,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public XHud_LibraryArg_TextStyle[] TextStyle_Library_GetAllStyle()
         {
-            return TextStyleLibrary.ToArray();
+            return library_text_styles.ToArray();
         }
 
         /// <summary>
@@ -1394,10 +1421,10 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public string[] TextStyle_Library_GetAllNames()
         {
-            string[] names = new string[TextStyleLibrary.Count];
+            string[] names = new string[library_text_styles.Count];
             for (int i = 0; i < names.Length; i++)
             {
-                names[i] = TextStyleLibrary[i].Name;
+                names[i] = library_text_styles[i].name;
             }
             return names;
         }
@@ -1409,10 +1436,10 @@ namespace SevenStrikeModules.XHud
         public XHud_LibraryArg_TextStyle[] TextStyle_Library_GetAllStyle_With_Text()
         {
             List<XHud_LibraryArg_TextStyle> info = new List<XHud_LibraryArg_TextStyle>();
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (TextStyleLibrary[i].Type == xHud_TextType.Text)
-                    info.Add(TextStyleLibrary[i]);
+                if (library_text_styles[i].type == xHud_TextType.Text)
+                    info.Add(library_text_styles[i]);
             }
             return info.ToArray();
         }
@@ -1424,10 +1451,10 @@ namespace SevenStrikeModules.XHud
         public string[] TextStyle_Library_GetAllNames_With_Text()
         {
             List<string> info = new List<string>();
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (TextStyleLibrary[i].Type == xHud_TextType.Text)
-                    info.Add(TextStyleLibrary[i].Name);
+                if (library_text_styles[i].type == xHud_TextType.Text)
+                    info.Add(library_text_styles[i].name);
             }
             return info.ToArray();
         }
@@ -1439,10 +1466,10 @@ namespace SevenStrikeModules.XHud
         public XHud_LibraryArg_TextStyle[] TextStyle_Library_GetAllStyle_With_TmpText()
         {
             List<XHud_LibraryArg_TextStyle> info = new List<XHud_LibraryArg_TextStyle>();
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (TextStyleLibrary[i].Type == xHud_TextType.TmpText)
-                    info.Add(TextStyleLibrary[i]);
+                if (library_text_styles[i].type == xHud_TextType.TmpText)
+                    info.Add(library_text_styles[i]);
             }
             return info.ToArray();
         }
@@ -1454,10 +1481,10 @@ namespace SevenStrikeModules.XHud
         public string[] TextStyle_Library_GetAllNames_With_TmpText()
         {
             List<string> info = new List<string>();
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (TextStyleLibrary[i].Type == xHud_TextType.TmpText)
-                    info.Add(TextStyleLibrary[i].Name);
+                if (library_text_styles[i].type == xHud_TextType.TmpText)
+                    info.Add(library_text_styles[i].name);
             }
             return info.ToArray();
         }
@@ -1469,10 +1496,10 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public XHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(int index)
         {
-            if (index < TextStyleLibrary.Count)
-                return TextStyleLibrary[index];
+            if (index < library_text_styles.Count)
+                return library_text_styles[index];
             else
-                return TextStyleLibrary[0];
+                return library_text_styles[0];
         }
 
         /// <summary>
@@ -1483,13 +1510,13 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public XHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(int index, xHud_TextType type)
         {
-            if (index < TextStyleLibrary.Count)
-                if (TextStyleLibrary[index].Type == type)
-                    return TextStyleLibrary[index];
+            if (index < library_text_styles.Count)
+                if (library_text_styles[index].type == type)
+                    return library_text_styles[index];
                 else
                     return null;
             else
-                return TextStyleLibrary[0];
+                return library_text_styles[0];
         }
 
         /// <summary>
@@ -1500,11 +1527,11 @@ namespace SevenStrikeModules.XHud
         public XHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(string name)
         {
             XHud_LibraryArg_TextStyle info = null;
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (TextStyleLibrary[i].Name == name)
+                if (library_text_styles[i].name == name)
                 {
-                    info = TextStyleLibrary[i];
+                    info = library_text_styles[i];
                 }
             }
             return info;
@@ -1519,11 +1546,11 @@ namespace SevenStrikeModules.XHud
         public XHud_LibraryArg_TextStyle TextStyle_Library_GetTextStyleInfo(string name, xHud_TextType type)
         {
             XHud_LibraryArg_TextStyle info = null;
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (TextStyleLibrary[i].Name == name && TextStyleLibrary[i].Type == type)
+                if (library_text_styles[i].name == name && library_text_styles[i].type == type)
                 {
-                    info = TextStyleLibrary[i];
+                    info = library_text_styles[i];
                 }
             }
             return info;
@@ -1537,10 +1564,10 @@ namespace SevenStrikeModules.XHud
         public XHud_LibraryArg_TextStyle TextStyle_Library_GetFirstStyleInfo_With_Type(xHud_TextType type)
         {
             List<XHud_LibraryArg_TextStyle> infos = new List<XHud_LibraryArg_TextStyle>();
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (TextStyleLibrary[i].Type == type)
-                    infos.Add(TextStyleLibrary[i]);
+                if (library_text_styles[i].type == type)
+                    infos.Add(library_text_styles[i]);
             }
             return infos[0];
         }
@@ -1552,9 +1579,9 @@ namespace SevenStrikeModules.XHud
         public bool TextStyle_Library_NameIsValid(string name)
         {
             bool sw = false;
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (TextStyleLibrary[i].Name == name)
+                if (library_text_styles[i].name == name)
                 {
                     sw = true;
                     break;
@@ -1570,9 +1597,9 @@ namespace SevenStrikeModules.XHud
         public bool TextStyle_Library_NameIsValid(string name, xHud_TextType type)
         {
             bool sw = false;
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (TextStyleLibrary[i].Name == name && TextStyleLibrary[i].Type == type)
+                if (library_text_styles[i].name == name && library_text_styles[i].type == type)
                 {
                     sw = true;
                     break;
@@ -1589,9 +1616,9 @@ namespace SevenStrikeModules.XHud
         {
             int index = 0;
 
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (TextStyleLibrary[i].Name == name)
+                if (library_text_styles[i].name == name)
                     index = i;
             }
 
@@ -1605,30 +1632,30 @@ namespace SevenStrikeModules.XHud
         public void TextStyleLibrary_Location(string name)
         {
             int index = TextStyle_Library_GetIndex(name);
-            SelectedIndex = index;
-            LocationSelectedIndex = index;
-            Highlight = name;
+            selected_index = index;
+            location_selected_index = index;
+            highlight = name;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (TextStyleLibrary[i].Name == name)
+                if (library_text_styles[i].name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = ColorInfoList_Original_Scroller;
+            Vector2 newscroll = color_info_list_original_scroller;
             newscroll.y = scrollval;
-            ColorInfoList_Original_Scroller = newscroll;
+            color_info_list_original_scroller = newscroll;
         }
 
         /// <summary>
@@ -1638,29 +1665,29 @@ namespace SevenStrikeModules.XHud
         public void TextStyleLibrary_Location_Find(string name)
         {
             int index = TextStyle_Library_GetIndex(name);
-            SelectedIndex = index;
-            LocationSelectedIndex = index;
+            selected_index = index;
+            location_selected_index = index;
 
             //计算列表滚动值
-            float scrollval = itemHeight;
-            for (int i = 0; i < TextStyleLibrary.Count; i++)
+            float scrollval = item_height;
+            for (int i = 0; i < library_text_styles.Count; i++)
             {
-                if (TextStyleLibrary[i].Name == name)
+                if (library_text_styles[i].name == name)
                 {
-                    if (i > visibleItemCount / 2)
-                        scrollval -= (visibleItemCount / 2) * itemHeight;
+                    if (i > visible_item_count / 2)
+                        scrollval -= (visible_item_count / 2) * item_height;
                     else
-                        scrollval -= itemHeight;
+                        scrollval -= item_height;
                     break;
                 }
                 else
                 {
-                    scrollval += itemHeight;
+                    scrollval += item_height;
                 }
             }
-            Vector2 newscroll = ColorInfoList_Original_Scroller;
+            Vector2 newscroll = color_info_list_original_scroller;
             newscroll.y = scrollval;
-            ColorInfoList_Original_Scroller = newscroll;
+            color_info_list_original_scroller = newscroll;
         }
     }
 }

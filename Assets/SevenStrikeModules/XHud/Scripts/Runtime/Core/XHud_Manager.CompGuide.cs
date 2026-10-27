@@ -49,124 +49,144 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// XHud画布-辅助构图锚点
         /// </summary>
-        public RectTransform CompGuide_AnchorRoot;
+        public RectTransform cg_anchor_root;
         [SerializeField]
         /// <summary>
         /// 布局构图参考线锚点集合
         /// </summary>
-        public AuxiliaryAnchor_Layout[] CompGuide_Anchors;
-        [SerializeField]
-        public string CompGuideMode = "水平对称";
-        [SerializeField]
-        private float GuideParam_CenterPointSize = 1f;
+        public AuxiliaryAnchor_Layout[] cg_anchors;
         /// <summary>
         /// 是否启用参考构图模式
         /// </summary>
-        public bool UseCompGuide;
+        public bool cg_use;
+        [SerializeField]
+        public string cg_mode = "水平对称";
+        [SerializeField]
+        private float cg_center_point_size = 1f;
+        public const string cg_editor_serializefield_center_point_size = nameof(cg_center_point_size);
 
         #region 左右对称构图
         [SerializeField]
         [Range(-1, 1)]
-        public float GuideParam_Mirror_LR_Offset;
+        public float cg_mirror_lr_offset;
         [SerializeField]
-        public string GuideParam_Mirror_LR_GoldenMode = "自定义对称分割";
+        public string cg_mirror_lr_golden_mode = "自定义对称分割";
         #endregion
 
         #region 上下对称构图
         [SerializeField]
         [Range(-1, 1)]
-        public float GuideParam_Mirror_UD_Offset;
+        public float cg_mirror_ud_offset;
         [SerializeField]
-        public string GuideParam_Mirror_UD_GoldenMode = "自定义对称分割";
+        public string cg_mirror_ud_golden_mode = "自定义对称分割";
         #endregion
 
         #region 黄金螺旋构图      
         [SerializeField]
-        public string GuideParam_Fibonacci_Mode = "右上";
+        public string cg_fibonacci_mode = "右上";
         private Vector3 previousPoint;
         #endregion
 
         #region 对角线构图      
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_CornerLookat_Offset_H;
+        private float cg_corner_lookat_offset_h;
+        public const string cg_editor_serializefield_corner_lookat_offset_h = nameof(cg_corner_lookat_offset_h);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_CornerLookat_Offset_V;
+        private float cg_corner_lookat_offset_v;
+        public const string cg_editor_serializefield_corner_lookat_offset_v = nameof(cg_corner_lookat_offset_v);
         #endregion
 
         #region 三分线构图      
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_Three_Offset_H = 0.5f;
+        private float cg_three_offset_h = 0.5f;
+        public const string cg_editor_serializefield_three_offset_h = nameof(cg_three_offset_h);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_Three_Offset_V = 0.5f;
+        private float cg_three_offset_v = 0.5f;
+        public const string cg_editor_serializefield_three_offset_v = nameof(cg_three_offset_v);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_Three_Offset_Coverage = 0.5f;
+        private float cg_three_offset_coverage = 0.5f;
+        public const string cg_editor_serializefield_three_offset_coverage = nameof(cg_three_offset_coverage);
         #endregion
 
         #region 引导线构图
         [SerializeField]
         [Range(-1, 1)]
-        private float GuideParam_GuideLine_BaseOffset = 0;
+        private float cg_guide_line_base_offset = 0;
+        public const string cg_editor_serializefield_guide_line_base_offset = nameof(cg_guide_line_base_offset);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_GuideLine_BaseHeight = 0.5f;
+        private float cg_guide_line_base_height = 0.5f;
+        public const string cg_editor_serializefield_guide_line_base_height = nameof(cg_guide_line_base_height);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_GuideLine_Offset_Far;
+        private float cg_guide_line_offset_far;
+        public const string cg_editor_serializefield_guide_line_offset_far = nameof(cg_guide_line_offset_far);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_GuideLine_Offset_Near;
+        private float cg_guide_line_offset_near;
+        public const string cg_editor_serializefield_guide_line_offset_near = nameof(cg_guide_line_offset_near);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_GuideLine_Offset_NearHeight;
+        private float cg_guide_line_offset_near_height;
+        public const string cg_editor_serializefield_guide_line_offset_near_height = nameof(cg_guide_line_offset_near_height);
         #endregion
 
         #region 三角构图
         [SerializeField]
         [Range(-1, 1)]
-        private float GuideParam_Triangle_TopOffset = 0f;
+        private float cg_triangle_top_offset = 0f;
+        public const string cg_editor_serializefield_triangle_top_offset = nameof(cg_triangle_top_offset);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_Triangle_BaseHeight = 0.8f;
+        private float cg_triangle_base_height = 0.8f;
+        public const string cg_editor_serializefield_triangle_base_height = nameof(cg_triangle_base_height);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_Triangle_BottomHeight = 0.2f;
+        private float cg_triangle_bottom_height = 0.2f;
+        public const string cg_editor_serializefield_guide_param_triangle_bottom_height = nameof(cg_triangle_bottom_height);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_Triangle_Offset_Left = 0.5f;
+        private float cg_triangle_offset_left = 0.5f;
+        public const string cg_editor_serializefield_triangle_offset_left = nameof(cg_triangle_offset_left);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_Triangle_Offset_Right = 0.5f;
+        private float cg_triangle_offset_right = 0.5f;
+        public const string cg_editor_serializefield_triangle_offset_right = nameof(cg_triangle_offset_right);
         #endregion
 
         #region 工字型
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_IShape_TopHeight = 0.8f;
+        private float cg_ishape_top_height = 0.8f;
+        public const string cg_editor_serializefield_ishape_top_height = nameof(cg_ishape_top_height);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_IShape_BottomHeight = 0.2f;
+        private float cg_ishape_bottom_height = 0.2f;
+        public const string cg_editor_serializefield_ishape_bottom_height = nameof(cg_ishape_bottom_height);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_IShape_Offset_Left = 0.5f;
+        private float cg_ishape_offset_left = 0.5f;
+        public const string cg_editor_serializefield_ishape_offset_left = nameof(cg_ishape_offset_left);
         [SerializeField]
         [Range(0, 1)]
-        private float GuideParam_IShape_Offset_Right = 0.5f;
+        private float cg_ishape_offset_right = 0.5f;
+        public const string cg_editor_serializefield_ishape_offset_right = nameof(cg_ishape_offset_right);
         #endregion
 
-        public Color GuideColor = new Color(0.5f, 0.5f, 0.5f, 0.2f);
-        public Color GuidePointColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
+        public Color cg_color = new Color(0.5f, 0.5f, 0.5f, 0.2f);
+        public Color cg_point_color = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
 
         /// <summary>
         /// 绘制屏幕构图参考线
         /// </summary>
         private void hm_CompGuide_Draw()
         {
-            switch (CompGuideMode)
+            switch (cg_mode)
             {
                 case "水平对称":
                     hm_CompGuide_h_Mirror();
@@ -200,7 +220,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void hm_CompGuide_v_Mirror()
         {
-            if (!UseCompGuide)
+            if (!cg_use)
                 return;
 
 
@@ -212,28 +232,28 @@ namespace SevenStrikeModules.XHud
             Vector3 start = Vector3.zero;
             Vector3 end = Vector3.zero;
 
-            if (GuideParam_Mirror_LR_GoldenMode == "自定义对称分割")
+            if (cg_mirror_lr_golden_mode == "自定义对称分割")
             {
-                start = rect_up.TransformPoint(rect_up.anchoredPosition3D + Vector3.right * GuideParam_Mirror_LR_Offset * ScreenRes.x / 2);
-                end = rect_down.TransformPoint(rect_down.anchoredPosition3D + Vector3.right * GuideParam_Mirror_LR_Offset * ScreenRes.x / 2);
+                start = rect_up.TransformPoint(rect_up.anchoredPosition3D + Vector3.right * cg_mirror_lr_offset * cv_screen_res.x / 2);
+                end = rect_down.TransformPoint(rect_down.anchoredPosition3D + Vector3.right * cg_mirror_lr_offset * cv_screen_res.x / 2);
             }
-            else if (GuideParam_Mirror_LR_GoldenMode == "靠右黄金比例")
+            else if (cg_mirror_lr_golden_mode == "靠右黄金比例")
             {
-                start = rect_leftup.TransformPoint(rect_leftup.anchoredPosition3D + Vector3.right * ScreenRes.x / 1.618f);
-                end = rect_leftdown.TransformPoint(rect_leftdown.anchoredPosition3D + Vector3.right * ScreenRes.x / 1.618f);
+                start = rect_leftup.TransformPoint(rect_leftup.anchoredPosition3D + Vector3.right * cv_screen_res.x / 1.618f);
+                end = rect_leftdown.TransformPoint(rect_leftdown.anchoredPosition3D + Vector3.right * cv_screen_res.x / 1.618f);
             }
-            else if (GuideParam_Mirror_LR_GoldenMode == "靠左黄金比例")
+            else if (cg_mirror_lr_golden_mode == "靠左黄金比例")
             {
-                float glod = ScreenRes.x / 1.618f;
-                start = rect_leftup.TransformPoint(rect_leftup.anchoredPosition3D + Vector3.right * (ScreenRes.x - glod));
-                end = rect_leftdown.TransformPoint(rect_leftdown.anchoredPosition3D + Vector3.right * (ScreenRes.x - glod));
+                float glod = cv_screen_res.x / 1.618f;
+                start = rect_leftup.TransformPoint(rect_leftup.anchoredPosition3D + Vector3.right * (cv_screen_res.x - glod));
+                end = rect_leftdown.TransformPoint(rect_leftdown.anchoredPosition3D + Vector3.right * (cv_screen_res.x - glod));
             }
 
-            Gizmos.color = GuidePointColor;
+            Gizmos.color = cg_point_color;
             Vector3 center = hm_CalculateMidpoint(start, end);
-            Gizmos.DrawSphere(center, GuideParam_CenterPointSize * 0.005f);
+            Gizmos.DrawSphere(center, cg_center_point_size * 0.005f);
 
-            Gizmos.color = GuideColor;
+            Gizmos.color = cg_color;
             Gizmos.DrawLine(start, end);
             Gizmos.color = Color.white;
         }
@@ -242,7 +262,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void hm_CompGuide_h_Mirror()
         {
-            if (!UseCompGuide)
+            if (!cg_use)
                 return;
 
 
@@ -254,28 +274,28 @@ namespace SevenStrikeModules.XHud
             Vector3 start = Vector3.zero;
             Vector3 end = Vector3.zero;
 
-            if (GuideParam_Mirror_UD_GoldenMode == "自定义对称分割")
+            if (cg_mirror_ud_golden_mode == "自定义对称分割")
             {
-                start = rect_left.TransformPoint(rect_left.anchoredPosition3D + Vector3.up * GuideParam_Mirror_UD_Offset * ScreenRes.y / 2);
-                end = rect_right.TransformPoint(rect_right.anchoredPosition3D + Vector3.up * GuideParam_Mirror_UD_Offset * ScreenRes.y / 2);
+                start = rect_left.TransformPoint(rect_left.anchoredPosition3D + Vector3.up * cg_mirror_ud_offset * cv_screen_res.y / 2);
+                end = rect_right.TransformPoint(rect_right.anchoredPosition3D + Vector3.up * cg_mirror_ud_offset * cv_screen_res.y / 2);
             }
-            else if (GuideParam_Mirror_UD_GoldenMode == "靠上黄金比例")
+            else if (cg_mirror_ud_golden_mode == "靠上黄金比例")
             {
-                float glod = ScreenRes.y / 1.618f;
-                start = rect_leftup.TransformPoint(rect_leftup.anchoredPosition3D - Vector3.up * (ScreenRes.y - glod));
-                end = rect_rightup.TransformPoint(rect_rightup.anchoredPosition3D - Vector3.up * (ScreenRes.y - glod));
+                float glod = cv_screen_res.y / 1.618f;
+                start = rect_leftup.TransformPoint(rect_leftup.anchoredPosition3D - Vector3.up * (cv_screen_res.y - glod));
+                end = rect_rightup.TransformPoint(rect_rightup.anchoredPosition3D - Vector3.up * (cv_screen_res.y - glod));
             }
-            else if (GuideParam_Mirror_UD_GoldenMode == "靠下黄金比例")
+            else if (cg_mirror_ud_golden_mode == "靠下黄金比例")
             {
-                start = rect_leftup.TransformPoint(rect_leftup.anchoredPosition3D - Vector3.up * ScreenRes.y / 1.618f);
-                end = rect_rightup.TransformPoint(rect_rightup.anchoredPosition3D - Vector3.up * ScreenRes.y / 1.618f);
+                start = rect_leftup.TransformPoint(rect_leftup.anchoredPosition3D - Vector3.up * cv_screen_res.y / 1.618f);
+                end = rect_rightup.TransformPoint(rect_rightup.anchoredPosition3D - Vector3.up * cv_screen_res.y / 1.618f);
             }
 
-            Gizmos.color = GuidePointColor;
+            Gizmos.color = cg_point_color;
             Vector3 center = hm_CalculateMidpoint(start, end);
-            Gizmos.DrawSphere(center, GuideParam_CenterPointSize * 0.005f);
+            Gizmos.DrawSphere(center, cg_center_point_size * 0.005f);
 
-            Gizmos.color = GuideColor;
+            Gizmos.color = cg_color;
             Gizmos.DrawLine(start, end);
             Gizmos.color = Color.white;
         }
@@ -284,16 +304,16 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void hm_CompGuide_GoldenSpiral()
         {
-            if (!UseCompGuide)
+            if (!cg_use)
                 return;
 
-            float scr_w = ScreenRes.x;
-            float scr_h = ScreenRes.y;
+            float scr_w = cv_screen_res.x;
+            float scr_h = cv_screen_res.y;
 
             float gold_w = scr_w / 1.618f;
             float gold_h = scr_h / 1.618f;
 
-            if (GuideParam_Fibonacci_Mode == "右上")
+            if (cg_fibonacci_mode == "右上")
             {
                 RectTransform rect_leftup = hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide.左上);
                 Vector3 start_pos = rect_leftup.anchoredPosition3D;
@@ -305,7 +325,7 @@ namespace SevenStrikeModules.XHud
                 Vector3 pos_e_v0 = pos_s_v0 + start_pos - (Vector3.up * scr_h);
                 Vector3 end_v0 = rect_leftup.TransformPoint(pos_e_v0);
 
-                Gizmos.color = GuideColor;
+                Gizmos.color = cg_color;
                 Gizmos.DrawLine(start_v0, end_v0);
 
                 Vector3 curve_calc_v0_p1 = start_pos - (Vector3.up * scr_h / 2);
@@ -506,7 +526,7 @@ namespace SevenStrikeModules.XHud
                 hm_DrawBezierCurve(end_v8, curve_v9_p1, curve_v9_p2, end_v9);
                 #endregion
             }
-            else if (GuideParam_Fibonacci_Mode == "右下")
+            else if (cg_fibonacci_mode == "右下")
             {
                 RectTransform rect_leftdown = hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide.左下);
                 Vector3 start_pos = rect_leftdown.anchoredPosition3D;
@@ -518,7 +538,7 @@ namespace SevenStrikeModules.XHud
                 Vector3 pos_e_v0 = pos_s_v0 + start_pos + (Vector3.up * scr_h);
                 Vector3 end_v0 = rect_leftdown.TransformPoint(pos_e_v0);
 
-                Gizmos.color = GuideColor;
+                Gizmos.color = cg_color;
                 Gizmos.DrawLine(start_v0, end_v0);
 
                 Vector3 curve_calc_v0_p1 = start_pos + (Vector3.up * scr_h / 2);
@@ -719,7 +739,7 @@ namespace SevenStrikeModules.XHud
                 hm_DrawBezierCurve(end_v8, curve_v9_p1, curve_v9_p2, end_v9);
                 #endregion
             }
-            else if (GuideParam_Fibonacci_Mode == "左下")
+            else if (cg_fibonacci_mode == "左下")
             {
                 RectTransform rect_rightdown = hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide.右下);
                 Vector3 start_pos = rect_rightdown.anchoredPosition3D;
@@ -731,7 +751,7 @@ namespace SevenStrikeModules.XHud
                 Vector3 pos_e_v0 = pos_s_v0 + start_pos + (Vector3.up * scr_h);
                 Vector3 end_v0 = rect_rightdown.TransformPoint(pos_e_v0);
 
-                Gizmos.color = GuideColor;
+                Gizmos.color = cg_color;
                 Gizmos.DrawLine(start_v0, end_v0);
 
                 Vector3 curve_calc_v0_p1 = start_pos + (Vector3.up * scr_h / 2);
@@ -932,7 +952,7 @@ namespace SevenStrikeModules.XHud
                 hm_DrawBezierCurve(end_v8, curve_v9_p1, curve_v9_p2, end_v9);
                 #endregion
             }
-            else if (GuideParam_Fibonacci_Mode == "左上")
+            else if (cg_fibonacci_mode == "左上")
             {
                 RectTransform rect_rightup = hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide.右上);
                 Vector3 start_pos = rect_rightup.anchoredPosition3D;
@@ -944,7 +964,7 @@ namespace SevenStrikeModules.XHud
                 Vector3 pos_e_v0 = pos_s_v0 + start_pos - (Vector3.up * scr_h);
                 Vector3 end_v0 = rect_rightup.TransformPoint(pos_e_v0);
 
-                Gizmos.color = GuideColor;
+                Gizmos.color = cg_color;
                 Gizmos.DrawLine(start_v0, end_v0);
 
                 Vector3 curve_calc_v0_p1 = start_pos - (Vector3.up * scr_h / 2);
@@ -1152,11 +1172,11 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void hm_CompGuide_DiagonalLine()
         {
-            if (!UseCompGuide)
+            if (!cg_use)
                 return;
 
-            float scr_w = ScreenRes.x;
-            float scr_h = ScreenRes.y;
+            float scr_w = cv_screen_res.x;
+            float scr_h = cv_screen_res.y;
 
             RectTransform rect_leftup = hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide.左上);
             RectTransform rect_rightdown = hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide.右下);
@@ -1164,17 +1184,17 @@ namespace SevenStrikeModules.XHud
             Vector3 start_pos = rect_leftup.anchoredPosition3D;
             Vector3 end_pos = rect_rightdown.anchoredPosition3D;
 
-            Vector3 calc_pos_start = start_pos + (Vector3.right * scr_w * GuideParam_CornerLookat_Offset_H) - (Vector3.up * scr_h * GuideParam_CornerLookat_Offset_V);
+            Vector3 calc_pos_start = start_pos + (Vector3.right * scr_w * cg_corner_lookat_offset_h) - (Vector3.up * scr_h * cg_corner_lookat_offset_v);
             Vector3 start = rect_leftup.TransformPoint(calc_pos_start);
 
-            Vector3 calc_pos_end = end_pos - (Vector3.right * scr_w * GuideParam_CornerLookat_Offset_H) + (Vector3.up * scr_h * GuideParam_CornerLookat_Offset_V);
+            Vector3 calc_pos_end = end_pos - (Vector3.right * scr_w * cg_corner_lookat_offset_h) + (Vector3.up * scr_h * cg_corner_lookat_offset_v);
             Vector3 end = rect_rightdown.TransformPoint(calc_pos_end);
 
-            Gizmos.color = GuidePointColor;
+            Gizmos.color = cg_point_color;
             Vector3 center = hm_CalculateMidpoint(start, end);
-            Gizmos.DrawSphere(center, GuideParam_CenterPointSize * 0.005f);
+            Gizmos.DrawSphere(center, cg_center_point_size * 0.005f);
 
-            Gizmos.color = GuideColor;
+            Gizmos.color = cg_color;
             Gizmos.DrawLine(start, end);
             Gizmos.color = Color.white;
         }
@@ -1183,13 +1203,13 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void hm_CompGuide_ThreeCut()
         {
-            if (!UseCompGuide)
+            if (!cg_use)
                 return;
 
-            float scr_w = ScreenRes.x;
-            float scr_h = ScreenRes.y;
+            float scr_w = cv_screen_res.x;
+            float scr_h = cv_screen_res.y;
 
-            Gizmos.color = GuideColor;
+            Gizmos.color = cg_color;
 
             #region 左分线
             RectTransform rect_leftup = hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide.左上);
@@ -1198,10 +1218,10 @@ namespace SevenStrikeModules.XHud
             Vector3 L_start_pos = rect_leftup.anchoredPosition3D;
             Vector3 L_end_pos = rect_leftdown.anchoredPosition3D;
 
-            Vector3 L_calc_pos_start = L_start_pos + (Vector3.right * scr_w * GuideParam_Three_Offset_H * 0.5f * GuideParam_Three_Offset_Coverage);
+            Vector3 L_calc_pos_start = L_start_pos + (Vector3.right * scr_w * cg_three_offset_h * 0.5f * cg_three_offset_coverage);
             Vector3 L_start = rect_leftup.TransformPoint(L_calc_pos_start);
 
-            Vector3 L_calc_pos_end = L_end_pos + (Vector3.right * scr_w * GuideParam_Three_Offset_H * 0.5f * GuideParam_Three_Offset_Coverage);
+            Vector3 L_calc_pos_end = L_end_pos + (Vector3.right * scr_w * cg_three_offset_h * 0.5f * cg_three_offset_coverage);
             Vector3 L_end = rect_leftdown.TransformPoint(L_calc_pos_end);
 
             Gizmos.DrawLine(L_start, L_end);
@@ -1214,10 +1234,10 @@ namespace SevenStrikeModules.XHud
             Vector3 R_start_pos = rect_rightup.anchoredPosition3D;
             Vector3 R_end_pos = rect_rightdown.anchoredPosition3D;
 
-            Vector3 R_calc_pos_start = R_start_pos - (Vector3.right * scr_w * GuideParam_Three_Offset_H * 0.5f * GuideParam_Three_Offset_Coverage);
+            Vector3 R_calc_pos_start = R_start_pos - (Vector3.right * scr_w * cg_three_offset_h * 0.5f * cg_three_offset_coverage);
             Vector3 R_start = rect_rightup.TransformPoint(R_calc_pos_start);
 
-            Vector3 R_calc_pos_end = R_end_pos - (Vector3.right * scr_w * GuideParam_Three_Offset_H * 0.5f * GuideParam_Three_Offset_Coverage);
+            Vector3 R_calc_pos_end = R_end_pos - (Vector3.right * scr_w * cg_three_offset_h * 0.5f * cg_three_offset_coverage);
             Vector3 R_end = rect_rightdown.TransformPoint(R_calc_pos_end);
 
             Gizmos.DrawLine(R_start, R_end);
@@ -1227,10 +1247,10 @@ namespace SevenStrikeModules.XHud
             Vector3 T_start_pos = rect_leftup.anchoredPosition3D;
             Vector3 T_end_pos = rect_rightup.anchoredPosition3D;
 
-            Vector3 T_calc_pos_start = T_start_pos - (Vector3.up * scr_h * GuideParam_Three_Offset_V * 0.5f * GuideParam_Three_Offset_Coverage);
+            Vector3 T_calc_pos_start = T_start_pos - (Vector3.up * scr_h * cg_three_offset_v * 0.5f * cg_three_offset_coverage);
             Vector3 T_start = rect_leftup.TransformPoint(T_calc_pos_start);
 
-            Vector3 T_calc_pos_end = T_end_pos - (Vector3.up * scr_h * GuideParam_Three_Offset_V * 0.5f * GuideParam_Three_Offset_Coverage);
+            Vector3 T_calc_pos_end = T_end_pos - (Vector3.up * scr_h * cg_three_offset_v * 0.5f * cg_three_offset_coverage);
             Vector3 T_end = rect_rightup.TransformPoint(T_calc_pos_end);
 
             Gizmos.DrawLine(T_start, T_end);
@@ -1240,10 +1260,10 @@ namespace SevenStrikeModules.XHud
             Vector3 D_start_pos = rect_leftdown.anchoredPosition3D;
             Vector3 D_end_pos = rect_rightdown.anchoredPosition3D;
 
-            Vector3 D_calc_pos_start = D_start_pos + (Vector3.up * scr_h * GuideParam_Three_Offset_V * 0.5f * GuideParam_Three_Offset_Coverage);
+            Vector3 D_calc_pos_start = D_start_pos + (Vector3.up * scr_h * cg_three_offset_v * 0.5f * cg_three_offset_coverage);
             Vector3 D_start = rect_leftdown.TransformPoint(D_calc_pos_start);
 
-            Vector3 D_calc_pos_end = D_end_pos + (Vector3.up * scr_h * GuideParam_Three_Offset_V * 0.5f * GuideParam_Three_Offset_Coverage);
+            Vector3 D_calc_pos_end = D_end_pos + (Vector3.up * scr_h * cg_three_offset_v * 0.5f * cg_three_offset_coverage);
             Vector3 D_end = rect_rightdown.TransformPoint(D_calc_pos_end);
 
             Gizmos.DrawLine(D_start, D_end);
@@ -1256,13 +1276,13 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void hm_CompGuide_GuideLineRef()
         {
-            if (!UseCompGuide)
+            if (!cg_use)
                 return;
 
-            float scr_w = ScreenRes.x;
-            float scr_h = ScreenRes.y;
+            float scr_w = cv_screen_res.x;
+            float scr_h = cv_screen_res.y;
 
-            Gizmos.color = GuideColor;
+            Gizmos.color = cg_color;
 
             RectTransform rect_down = hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide.下);
             RectTransform rect_leftdown = hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide.左下);
@@ -1271,10 +1291,10 @@ namespace SevenStrikeModules.XHud
             #region 水平高度
             Vector3 Start_pos = rect_down.anchoredPosition3D;
 
-            Vector3 BaseHeight_calc_pos_start = Start_pos + (Vector3.up * scr_h * GuideParam_GuideLine_BaseHeight) - (Vector3.right * (scr_w / 2));
+            Vector3 BaseHeight_calc_pos_start = Start_pos + (Vector3.up * scr_h * cg_guide_line_base_height) - (Vector3.right * (scr_w / 2));
             Vector3 BaseHeight_start = rect_down.TransformPoint(BaseHeight_calc_pos_start);
 
-            Vector3 BaseHeight_calc_pos_end = Start_pos + (Vector3.up * scr_h * GuideParam_GuideLine_BaseHeight) + (Vector3.right * (scr_w / 2));
+            Vector3 BaseHeight_calc_pos_end = Start_pos + (Vector3.up * scr_h * cg_guide_line_base_height) + (Vector3.right * (scr_w / 2));
             Vector3 BaseHeight_end = rect_down.TransformPoint(BaseHeight_calc_pos_end);
 
             Gizmos.DrawLine(BaseHeight_start, BaseHeight_end);
@@ -1283,10 +1303,10 @@ namespace SevenStrikeModules.XHud
             #region 左侧引导线
             Vector3 Start_pos_L = rect_leftdown.anchoredPosition3D;
 
-            Vector3 Near_calc_pos_start_L = Start_pos_L + (Vector3.right * (scr_w / 2) * (GuideParam_GuideLine_Offset_Near)) + (Vector3.up * scr_h * GuideParam_GuideLine_Offset_NearHeight);
+            Vector3 Near_calc_pos_start_L = Start_pos_L + (Vector3.right * (scr_w / 2) * (cg_guide_line_offset_near)) + (Vector3.up * scr_h * cg_guide_line_offset_near_height);
             Vector3 Near_start_L = rect_leftdown.TransformPoint(Near_calc_pos_start_L);
 
-            Vector3 Far_calc_pos_end_L = Start_pos + (Vector3.up * scr_h * GuideParam_GuideLine_BaseHeight) - (Vector3.right * (scr_w / 2) * (GuideParam_GuideLine_Offset_Far) - ((Vector3.right * (scr_w / 2) * GuideParam_GuideLine_BaseOffset)));
+            Vector3 Far_calc_pos_end_L = Start_pos + (Vector3.up * scr_h * cg_guide_line_base_height) - (Vector3.right * (scr_w / 2) * (cg_guide_line_offset_far) - ((Vector3.right * (scr_w / 2) * cg_guide_line_base_offset)));
             Vector3 Far_end_L = rect_down.TransformPoint(Far_calc_pos_end_L);
 
             Gizmos.DrawLine(Near_start_L, Far_end_L);
@@ -1295,18 +1315,18 @@ namespace SevenStrikeModules.XHud
             #region 右侧引导线            
             Vector3 Start_pos_R = rect_rightdown.anchoredPosition3D;
 
-            Vector3 Near_calc_pos_start_R = Start_pos_R - (Vector3.right * (scr_w / 2) * (GuideParam_GuideLine_Offset_Near)) + (Vector3.up * scr_h * GuideParam_GuideLine_Offset_NearHeight);
+            Vector3 Near_calc_pos_start_R = Start_pos_R - (Vector3.right * (scr_w / 2) * (cg_guide_line_offset_near)) + (Vector3.up * scr_h * cg_guide_line_offset_near_height);
             Vector3 Near_start_R = rect_rightdown.TransformPoint(Near_calc_pos_start_R);
 
-            Vector3 Far_calc_pos_end_R = Start_pos + (Vector3.up * scr_h * GuideParam_GuideLine_BaseHeight) + (Vector3.right * (scr_w / 2) * (GuideParam_GuideLine_Offset_Far) + ((Vector3.right * (scr_w / 2) * GuideParam_GuideLine_BaseOffset)));
+            Vector3 Far_calc_pos_end_R = Start_pos + (Vector3.up * scr_h * cg_guide_line_base_height) + (Vector3.right * (scr_w / 2) * (cg_guide_line_offset_far) + ((Vector3.right * (scr_w / 2) * cg_guide_line_base_offset)));
             Vector3 Far_end_R = rect_down.TransformPoint(Far_calc_pos_end_R);
 
             Gizmos.DrawLine(Near_start_R, Far_end_R);
             #endregion
 
-            Gizmos.color = GuidePointColor;
+            Gizmos.color = cg_point_color;
             Vector3 center = hm_CalculateMidpoint(BaseHeight_start, BaseHeight_end);
-            Gizmos.DrawSphere(center, GuideParam_CenterPointSize * 0.005f);
+            Gizmos.DrawSphere(center, cg_center_point_size * 0.005f);
 
             Gizmos.color = Color.white;
         }
@@ -1315,11 +1335,11 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void hm_CompGuide_Triangle()
         {
-            if (!UseCompGuide)
+            if (!cg_use)
                 return;
 
-            float scr_w = ScreenRes.x;
-            float scr_h = ScreenRes.y;
+            float scr_w = cv_screen_res.x;
+            float scr_h = cv_screen_res.y;
 
 
             RectTransform rect_down = hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide.下);
@@ -1329,19 +1349,19 @@ namespace SevenStrikeModules.XHud
             #region 顶部高度
             Vector3 Start_pos = rect_down.anchoredPosition3D;
 
-            Vector3 BaseHeight_calc_pos_start = Start_pos + (Vector3.up * scr_h * GuideParam_Triangle_BaseHeight) + (Vector3.right * (scr_w / 2) * GuideParam_Triangle_TopOffset);
+            Vector3 BaseHeight_calc_pos_start = Start_pos + (Vector3.up * scr_h * cg_triangle_base_height) + (Vector3.right * (scr_w / 2) * cg_triangle_top_offset);
             Vector3 BaseHeight_start = rect_down.TransformPoint(BaseHeight_calc_pos_start);
 
-            Vector3 BaseHeight_calc_pos_end = Start_pos + (Vector3.up * scr_h * GuideParam_Triangle_BottomHeight);
+            Vector3 BaseHeight_calc_pos_end = Start_pos + (Vector3.up * scr_h * cg_triangle_bottom_height);
             Vector3 BaseHeight_end = rect_down.TransformPoint(BaseHeight_calc_pos_end);
             #endregion
 
-            Gizmos.color = GuideColor;
+            Gizmos.color = cg_color;
 
             #region 左侧角点线
             Vector3 Start_pos_L = rect_down.anchoredPosition3D;
 
-            Vector3 Near_calc_pos_start_L = Start_pos_L - (Vector3.right * (scr_w / 2) * (GuideParam_Triangle_Offset_Left)) + BaseHeight_calc_pos_end;
+            Vector3 Near_calc_pos_start_L = Start_pos_L - (Vector3.right * (scr_w / 2) * (cg_triangle_offset_left)) + BaseHeight_calc_pos_end;
             Vector3 Near_start_L = rect_down.TransformPoint(Near_calc_pos_start_L);
 
             Vector3 Far_calc_pos_end_L = BaseHeight_calc_pos_start;
@@ -1353,7 +1373,7 @@ namespace SevenStrikeModules.XHud
             #region 右侧角点线
             Vector3 Start_pos_R = rect_down.anchoredPosition3D;
 
-            Vector3 Near_calc_pos_start_R = Start_pos_R + (Vector3.right * (scr_w / 2) * (GuideParam_Triangle_Offset_Right)) + BaseHeight_calc_pos_end;
+            Vector3 Near_calc_pos_start_R = Start_pos_R + (Vector3.right * (scr_w / 2) * (cg_triangle_offset_right)) + BaseHeight_calc_pos_end;
             Vector3 Near_start_R = rect_down.TransformPoint(Near_calc_pos_start_R);
 
             Vector3 Far_calc_pos_end_R = BaseHeight_calc_pos_start;
@@ -1364,9 +1384,9 @@ namespace SevenStrikeModules.XHud
 
             Gizmos.DrawLine(Near_start_L, Near_start_R);
 
-            Gizmos.color = GuidePointColor;
+            Gizmos.color = cg_point_color;
             Vector3 center = hm_CalculateCentroid(Near_start_L, Far_end_L, Near_start_R);
-            Gizmos.DrawSphere(center, GuideParam_CenterPointSize * 0.005f);
+            Gizmos.DrawSphere(center, cg_center_point_size * 0.005f);
 
             Gizmos.color = Color.white;
         }
@@ -1375,26 +1395,26 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void hm_CompGuide_IShape()
         {
-            if (!UseCompGuide)
+            if (!cg_use)
                 return;
 
-            float scr_w = ScreenRes.x;
-            float scr_h = ScreenRes.y;
+            float scr_w = cv_screen_res.x;
+            float scr_h = cv_screen_res.y;
 
 
             RectTransform rect_down = hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide.下);
             RectTransform rect_leftdown = hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide.左下);
             RectTransform rect_rightdown = hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide.右下);
 
-            Gizmos.color = GuideColor;
+            Gizmos.color = cg_color;
 
             #region 顶部
             Vector3 Start_pos = rect_down.anchoredPosition3D;
 
-            Vector3 Isp_top_calc_pos_start = Start_pos + (Vector3.up * scr_h * GuideParam_IShape_TopHeight) - (Vector3.right * (scr_w / 2));
+            Vector3 Isp_top_calc_pos_start = Start_pos + (Vector3.up * scr_h * cg_ishape_top_height) - (Vector3.right * (scr_w / 2));
             Vector3 Isp_top_start = rect_down.TransformPoint(Isp_top_calc_pos_start);
 
-            Vector3 Isp_top_calc_pos_end = Start_pos + (Vector3.up * scr_h * GuideParam_IShape_TopHeight) + (Vector3.right * (scr_w / 2));
+            Vector3 Isp_top_calc_pos_end = Start_pos + (Vector3.up * scr_h * cg_ishape_top_height) + (Vector3.right * (scr_w / 2));
             Vector3 Isp_top_end = rect_down.TransformPoint(Isp_top_calc_pos_end);
 
             Gizmos.DrawLine(Isp_top_start, Isp_top_end);
@@ -1402,41 +1422,41 @@ namespace SevenStrikeModules.XHud
 
             #region 底部
 
-            Vector3 Isp_bottom_calc_pos_start = Start_pos + (Vector3.up * scr_h * GuideParam_IShape_BottomHeight) - (Vector3.right * (scr_w / 2));
+            Vector3 Isp_bottom_calc_pos_start = Start_pos + (Vector3.up * scr_h * cg_ishape_bottom_height) - (Vector3.right * (scr_w / 2));
             Vector3 Isp_bottom_start = rect_down.TransformPoint(Isp_bottom_calc_pos_start);
 
-            Vector3 Isp_bottom_calc_pos_end = Start_pos + (Vector3.up * scr_h * GuideParam_IShape_BottomHeight) + (Vector3.right * (scr_w / 2));
+            Vector3 Isp_bottom_calc_pos_end = Start_pos + (Vector3.up * scr_h * cg_ishape_bottom_height) + (Vector3.right * (scr_w / 2));
             Vector3 Isp_bottom_end = rect_down.TransformPoint(Isp_bottom_calc_pos_end);
 
             Gizmos.DrawLine(Isp_bottom_start, Isp_bottom_end);
             #endregion
 
             #region 左侧线
-            Vector3 calc_pos_start_L = Start_pos + (Vector3.up * scr_h * GuideParam_IShape_TopHeight) - (Vector3.right * (scr_w / 2) * GuideParam_IShape_Offset_Left);
+            Vector3 calc_pos_start_L = Start_pos + (Vector3.up * scr_h * cg_ishape_top_height) - (Vector3.right * (scr_w / 2) * cg_ishape_offset_left);
             Vector3 start_L = rect_down.TransformPoint(calc_pos_start_L);
 
-            Vector3 calc_pos_end_L = Start_pos + (Vector3.up * scr_h * GuideParam_IShape_BottomHeight) - (Vector3.right * (scr_w / 2) * GuideParam_IShape_Offset_Left);
+            Vector3 calc_pos_end_L = Start_pos + (Vector3.up * scr_h * cg_ishape_bottom_height) - (Vector3.right * (scr_w / 2) * cg_ishape_offset_left);
             Vector3 end_L = rect_down.TransformPoint(calc_pos_end_L);
 
             Gizmos.DrawLine(start_L, end_L);
             #endregion
 
             #region 右侧线
-            Vector3 calc_pos_start_R = Start_pos + (Vector3.up * scr_h * GuideParam_IShape_TopHeight) + (Vector3.right * (scr_w / 2) * GuideParam_IShape_Offset_Right);
+            Vector3 calc_pos_start_R = Start_pos + (Vector3.up * scr_h * cg_ishape_top_height) + (Vector3.right * (scr_w / 2) * cg_ishape_offset_right);
             Vector3 start_R = rect_down.TransformPoint(calc_pos_start_R);
 
-            Vector3 calc_pos_end_R = Start_pos + (Vector3.up * scr_h * GuideParam_IShape_BottomHeight) + (Vector3.right * (scr_w / 2) * GuideParam_IShape_Offset_Right);
+            Vector3 calc_pos_end_R = Start_pos + (Vector3.up * scr_h * cg_ishape_bottom_height) + (Vector3.right * (scr_w / 2) * cg_ishape_offset_right);
             Vector3 end_R = rect_down.TransformPoint(calc_pos_end_R);
 
             Gizmos.DrawLine(start_R, end_R);
             #endregion
 
-            Gizmos.color = GuidePointColor;
+            Gizmos.color = cg_point_color;
             Vector3 center_top = hm_CalculateMidpoint(Isp_top_start, Isp_top_end);
-            Gizmos.DrawSphere(center_top, GuideParam_CenterPointSize * 0.005f);
+            Gizmos.DrawSphere(center_top, cg_center_point_size * 0.005f);
 
             Vector3 center_bottom = hm_CalculateMidpoint(Isp_bottom_start, Isp_bottom_end);
-            Gizmos.DrawSphere(center_bottom, GuideParam_CenterPointSize * 0.005f);
+            Gizmos.DrawSphere(center_bottom, cg_center_point_size * 0.005f);
             Gizmos.color = Color.white;
         }
         /// <summary>
@@ -1523,7 +1543,7 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public RectTransform hm_Auxiliary_GetAnchorRoot()
         {
-            return CompGuide_AnchorRoot;
+            return cg_anchor_root;
         }
         /// <summary>
         /// 获取布局构图参考锚点
@@ -1533,11 +1553,11 @@ namespace SevenStrikeModules.XHud
         public RectTransform hm_Auxiliary_GetAnchorRoot(HudAnchors_CompGuide anchortype)
         {
             RectTransform rect = null;
-            for (int i = 0; i < CompGuide_Anchors.Length; i++)
+            for (int i = 0; i < cg_anchors.Length; i++)
             {
-                if (CompGuide_Anchors[i].Type == anchortype)
+                if (cg_anchors[i].Type == anchortype)
                 {
-                    rect = CompGuide_Anchors[i].Anchor;
+                    rect = cg_anchors[i].Anchor;
                     break;
                 }
             }

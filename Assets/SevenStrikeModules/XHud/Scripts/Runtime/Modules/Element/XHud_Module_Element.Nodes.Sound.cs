@@ -33,7 +33,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 音效器
         /// </summary>
-        public XHud_Element_Sounder Sounder;
+        public XHud_Element_Sounder sounder;
     }
 
     public partial class XHud_Module_Element : MonoBehaviour
@@ -42,23 +42,23 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 元素音效容器
         /// </summary>
-        public List<ElementNode_Sound> SounderNodes;
+        public List<ElementNode_Sound> sounder_nodes;
         [SerializeField]
         /// <summary>
         /// 音效器列表折叠状态
         /// true表示折叠，false表示展开
         /// 用于控制Inspector中音效器列表的显示/隐藏
         /// </summary>
-        public bool SounderIsFold;
+        public bool sounder_is_fold;
 
         /// <summary>
         /// 将所有的音效器委托释放
         /// </summary>
         public void element_SounderUnRegisterAction()
         {
-            for (int i = 0; i < SounderNodes.Count; i++)
+            for (int i = 0; i < sounder_nodes.Count; i++)
             {
-                SounderNodes[i].Sounder.UnRegisterAction();
+                sounder_nodes[i].sounder.UnRegisterAction();
             }
         }
     }

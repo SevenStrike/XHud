@@ -78,8 +78,8 @@ namespace SevenStrikeModules.XHud.Editor
                 foreach (int i in selectedNodeIndices)
                 {
                     if (i < 0 || i >= Nodes.Count) continue;
-                    float d = Nodes[i].Delay;
-                    float e = Nodes[i].Delay + Nodes[i].Duration;
+                    float d = Nodes[i].delay;
+                    float e = Nodes[i].delay + Nodes[i].duration;
                     if (d < minDelaySel) minDelaySel = d;
                     if (e > maxEndSel) maxEndSel = e;
                 }
@@ -87,9 +87,9 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     if (i < 0 || i >= Sounds.Count) continue;
                     TweenSound s = Sounds[i];
-                    float len = s.Sound != null ? s.Sound.length : DefaultSoundClipSeconds;
-                    float d = s.Delay;
-                    float e = s.Delay + len;
+                    float len = s.sound != null ? s.sound.length : DefaultSoundClipSeconds;
+                    float d = s.delay;
+                    float e = s.delay + len;
                     if (d < minDelaySel) minDelaySel = d;
                     if (e > maxEndSel) maxEndSel = e;
                 }
@@ -128,23 +128,23 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 TweenNode node = Nodes[selectedIndex];
 
-                if (node.Duration <= 0.0001f) { ResetTimelineView(); return; }
+                if (node.duration <= 0.0001f) { ResetTimelineView(); return; }
 
                 float usableWidth = Mathf.Max(1f, availableWidth - padding * 2f);
-                float tempPixelsPerSecond = usableWidth / node.Duration;
+                float tempPixelsPerSecond = usableWidth / node.duration;
                 tempPixelsPerSecond = Mathf.Clamp(tempPixelsPerSecond, 1f, 20000f);
 
-                float delayPixels = node.Delay * tempPixelsPerSecond;
+                float delayPixels = node.delay * tempPixelsPerSecond;
                 if (delayPixels > padding)
                 {
                     pixelsPerSecond = tempPixelsPerSecond;
-                    scrollPos.x = node.Delay * pixelsPerSecond - padding;
+                    scrollPos.x = node.delay * pixelsPerSecond - padding;
                     ClampScrollX();   //  替换原来的 Mathf.Max(0f, ...)
                 }
                 else
                 {
                     usableWidth = Mathf.Max(1f, availableWidth - padding);
-                    pixelsPerSecond = usableWidth / node.Duration;
+                    pixelsPerSecond = usableWidth / node.duration;
                     pixelsPerSecond = Mathf.Clamp(pixelsPerSecond, 1f, 20000f);
                     scrollPos.x = 0f;   // ✅ 已经是 0
                 }
@@ -164,7 +164,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 TweenSound sound = Sounds[selectedIndex];
 
-                float len = sound.Sound != null ? sound.Sound.length : DefaultSoundClipSeconds;
+                float len = sound.sound != null ? sound.sound.length : DefaultSoundClipSeconds;
 
                 if (len <= 0.0001f) { ResetTimelineView(); return; }
 
@@ -172,11 +172,11 @@ namespace SevenStrikeModules.XHud.Editor
                 float tempPixelsPerSecond = usableWidth / len;
                 tempPixelsPerSecond = Mathf.Clamp(tempPixelsPerSecond, 1f, 20000f);
 
-                float delayPixels = sound.Delay * tempPixelsPerSecond;
+                float delayPixels = sound.delay * tempPixelsPerSecond;
                 if (delayPixels > padding)
                 {
                     pixelsPerSecond = tempPixelsPerSecond;
-                    scrollPos.x = sound.Delay * pixelsPerSecond - padding;
+                    scrollPos.x = sound.delay * pixelsPerSecond - padding;
                     ClampScrollX();   //  替换
                 }
                 else
@@ -201,7 +201,7 @@ namespace SevenStrikeModules.XHud.Editor
             // 动画节点最右端
             for (int i = 0; i < Nodes.Count; i++)
             {
-                float end = Nodes[i].Delay + Nodes[i].Duration;
+                float end = Nodes[i].delay + Nodes[i].duration;
                 if (end > maxEnd) maxEnd = end;
             }
 
@@ -209,8 +209,8 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = 0; i < Sounds.Count; i++)
             {
                 TweenSound s = Sounds[i];
-                float len = s.Sound != null ? s.Sound.length : DefaultSoundClipSeconds;
-                float end = s.Delay + len;
+                float len = s.sound != null ? s.sound.length : DefaultSoundClipSeconds;
+                float end = s.delay + len;
                 if (end > maxEnd) maxEnd = end;
             }
 
@@ -257,14 +257,14 @@ namespace SevenStrikeModules.XHud.Editor
         private void LoadPersistedViewState()
         {
             if (target == null) return;
-            pixelsPerSecond = Mathf.Clamp(target.Timeline_TrackPosition, 1f, 20000f);
-            scrollPos = Vector2.Max(Vector2.zero, target.Timeline_TrackScroll);
+            pixelsPerSecond = Mathf.Clamp(target.timeline_track_position, 1f, 20000f);
+            scrollPos = Vector2.Max(Vector2.zero, target.timeline_track_scroll);
             nameScroll.y = scrollPos.y;
 
-            trackHeight = Mathf.Clamp(target.Timeline_TrackHeight, MinTrackHeight, MaxTrackHeight);
-            snapEnabled = target.Timeline_TrackSnapEnabled;
-            soundPreviewer = target.Timeline_TrackSoundPreviewer;
-            playheadPreviewLoop = target.Timeline_TrackPreviewLoop;
+            trackHeight = Mathf.Clamp(target.timeline_track_height, MinTrackHeight, MaxTrackHeight);
+            snapEnabled = target.timeline_track_snap_enabled;
+            soundPreviewer = target.timeline_track_sound_previewer;
+            playheadPreviewLoop = target.timeline_track_preview_loop;
 
             nameColumnWidth = LoadClampedFloatPreference(PrefKey_NameWidthWidth, DefaultNameColumnWidth, MinNameColumnWidth, MaxNameColumnWidth);
             paramPanelWidth = LoadClampedFloatPreference(PrefKey_ParamWidthHeight, DefaultParamPanelWidth, MinParamPanelWidth, MaxParamPanelWidth);
@@ -275,12 +275,12 @@ namespace SevenStrikeModules.XHud.Editor
         private void SavePersistedViewState()
         {
             if (target == null) return;
-            target.Timeline_TrackPosition = pixelsPerSecond;
-            target.Timeline_TrackScroll = scrollPos;
-            target.Timeline_TrackSoundPreviewer = soundPreviewer;
-            target.Timeline_TrackHeight = trackHeight;
-            target.Timeline_TrackSnapEnabled = snapEnabled;
-            target.Timeline_TrackPreviewLoop = playheadPreviewLoop;
+            target.timeline_track_position = pixelsPerSecond;
+            target.timeline_track_scroll = scrollPos;
+            target.timeline_track_sound_previewer = soundPreviewer;
+            target.timeline_track_height = trackHeight;
+            target.timeline_track_snap_enabled = snapEnabled;
+            target.timeline_track_preview_loop = playheadPreviewLoop;
 
             XGUI.x_Editor_Data_Set_With_Float(PrefKey_NameWidthWidth, nameColumnWidth);
             XGUI.x_Editor_Data_Set_With_Float(PrefKey_ParamWidthHeight, paramPanelWidth);

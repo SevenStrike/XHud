@@ -34,7 +34,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 滑动条组件
         /// </summary>
-        public XHud_Module_Slider Slider;
+        public XHud_Module_Slider slider;
     }
 
     public partial class XHud_Module_Element : MonoBehaviour
@@ -43,14 +43,14 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 滑动条容器
         /// </summary>
-        public List<ElementNode_Slider> SliderNodes;
+        public List<ElementNode_Slider> slider_nodes;
         [SerializeField]
         /// <summary>
         /// 滑动条列表折叠状态
         /// true表示折叠，false表示展开
         /// 用于控制Inspector中滑动条列表的显示/隐藏
         /// </summary>
-        public bool SliderIsFold;
+        public bool slider_is_fold;
 
         /// <summary>
         /// 启用或禁用所有滑动条的交互
@@ -58,20 +58,20 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState">状态</param>
         public void element_Slider_InteractableSetAll(bool state)
         {
-            if (SliderNodes.Count <= 0)
+            if (slider_nodes.Count <= 0)
                 return;
-            for (int i = 0; i < SliderNodes.Count; i++)
+            for (int i = 0; i < slider_nodes.Count; i++)
             {
-                SliderNodes[i].Slider.interactable = state;
+                slider_nodes[i].slider.interactable = state;
             }
             if (state)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有滑动条交互！", XGUIMsgState.通知);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有滑动条交互！", XGUIMsgState.通知);
             }
         }
@@ -81,18 +81,18 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState">状态</param>
         public void element_Slider_EnableSetAll(bool state)
         {
-            for (int i = 0; i < SliderNodes.Count; i++)
+            for (int i = 0; i < slider_nodes.Count; i++)
             {
-                SliderNodes[i].Slider.enabled = state;
+                slider_nodes[i].slider.enabled = state;
             }
             if (state)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "启用元素下所有滑动条脚本！", XGUIMsgState.通知);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "禁用元素下所有滑动条脚本！", XGUIMsgState.通知);
             }
         }
@@ -103,21 +103,21 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Slider element_Slider_Get(string indicator)
         {
             XHud_Module_Slider sli = null;
-            for (int i = 0; i < SliderNodes.Count; i++)
+            for (int i = 0; i < slider_nodes.Count; i++)
             {
-                if (SliderNodes[i].Slider.Indicator == indicator)
+                if (slider_nodes[i].slider.Indicator == indicator)
                 {
-                    sli = SliderNodes[i].Slider;
+                    sli = slider_nodes[i].slider;
                 }
             }
             if (sli == null)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "未找到对应标识的滑动条！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到标识为 " + indicator + " 的滑动条！", XGUIMsgState.通知);
             }
             return sli;
@@ -128,19 +128,19 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Slider[] element_Slider_GetAll()
         {
             List<XHud_Module_Slider> sliderlist = new List<XHud_Module_Slider>();
-            for (int i = 0; i < SliderNodes.Count; i++)
+            for (int i = 0; i < slider_nodes.Count; i++)
             {
-                sliderlist.Add(SliderNodes[i].Slider);
+                sliderlist.Add(slider_nodes[i].slider);
             }
             if (sliderlist.Count <= 0)
             {
-                if (DebugState)
+                if (debug_state)
                     XGUI_Utilitys.Console("XHud - 元素控件通知", "获取的滑动条列表为空！", XGUIMsgState.错误);
             }
             else
             {
-                if (DebugState)
-                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + SliderNodes.Count + " 个滑动条！", XGUIMsgState.通知);
+                if (debug_state)
+                    XGUI_Utilitys.Console("XHud - 元素控件通知", "已获取到" + slider_nodes.Count + " 个滑动条！", XGUIMsgState.通知);
             }
             return sliderlist.ToArray();
         }
@@ -149,9 +149,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void element_Slider_EventsClear()
         {
-            for (int i = 0; i < SliderNodes.Count; i++)
+            for (int i = 0; i < slider_nodes.Count; i++)
             {
-                SliderNodes[i].Slider.sli_EventsClear();
+                slider_nodes[i].slider.sli_EventsClear();
             }
         }
         /// <summary>
@@ -159,9 +159,9 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void element_Slider_ActionsClear()
         {
-            for (int i = 0; i < SliderNodes.Count; i++)
+            for (int i = 0; i < slider_nodes.Count; i++)
             {
-                SliderNodes[i].Slider.sli_ActionsClear();
+                slider_nodes[i].slider.sli_ActionsClear();
             }
         }
         /// <summary>

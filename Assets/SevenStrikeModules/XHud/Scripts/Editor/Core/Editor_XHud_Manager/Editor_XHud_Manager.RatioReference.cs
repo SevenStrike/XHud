@@ -43,27 +43,27 @@ namespace SevenStrikeModules.XHud.Editor
         private void Draw_RatioReference()
         {
             #region 使用图例比例参考
-            DrawToggle("使用图例比例参考", UseRatioReference, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
+            DrawToggle("使用图例比例参考", sp_hmr_use_ratio_reference, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
             {
-                UseRatioReference.boolValue = b;
-                UseRatioReference.serializedObject.ApplyModifiedProperties();
+                sp_hmr_use_ratio_reference.boolValue = b;
+                sp_hmr_use_ratio_reference.serializedObject.ApplyModifiedProperties();
 
-                if (UseRatioReference.boolValue)
+                if (sp_hmr_use_ratio_reference.boolValue)
                 {
-                    if (BaseScript.Res_Part.sprite == null && BaseScript.Res_Full.sprite == null)
+                    if (base_script.hmr_res_part.sprite == null && base_script.hmr_res_full.sprite == null)
                     {
-                        UseRatioReference.boolValue = false;
-                        UseRatioReference.serializedObject.ApplyModifiedProperties();
+                        sp_hmr_use_ratio_reference.boolValue = false;
+                        sp_hmr_use_ratio_reference.serializedObject.ApplyModifiedProperties();
                         return;
                     }
 
                     //如果已经存在就不用创建
-                    if (sp_Reference_Image.objectReferenceValue != null)
+                    if (sp_hmr_reference_image.objectReferenceValue != null)
                         return;
 
-                    Sprite spr = BaseScript.Res_Part.sprite;
-                    if (!RatioReferenceIsPart.boolValue)
-                        spr = BaseScript.Res_Full.sprite;
+                    Sprite spr = base_script.hmr_res_part.sprite;
+                    if (!sp_hmr_ratio_reference_is_part.boolValue)
+                        spr = base_script.hmr_res_full.sprite;
 
                     xHud_RatioReference_Create(spr);
                 }
@@ -75,7 +75,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 使用局部比例
-            DrawToggle("使用局部模式", RatioReferenceIsPart, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
+            DrawToggle("使用局部模式", sp_hmr_ratio_reference_is_part, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
             {
                 xHud_RatioReference_Switch();
                 xHud_RatioReference_Update();
@@ -91,7 +91,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 200,
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: sp_PhysicsScreenSize,
+                prop: sp_hmr_physics_screen_size,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -101,15 +101,15 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 图例着色
             XGUI.layout_colorfield(
-                prop: sp_Reference_Image_Color,
+                prop: sp_hmr_reference_image_color,
                 title: "图例着色",
                 title_width: 80,
                 //title_color: Color.white,
                 //icon: "icon_field_status",
                 //icon_color: Color.red,
                 state_title: "Hex：",
-                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_Reference_Image_Color.colorValue)}",
-                state_value_color: sp_Reference_Image_Color.colorValue);
+                state_value: $"#{XGUI_Utilitys.Color_To_HexString(sp_hmr_reference_image_color.colorValue)}",
+                state_value_color: sp_hmr_reference_image_color.colorValue);
             #endregion
 
             XGUI.layout_seperator(
@@ -126,7 +126,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 140,
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: sp_Res_Full.FindPropertyRelative("size"),
+                prop: sp_hmr_res_full.FindPropertyRelative("size"),
                 prop_margin: new RectOffset(0, 0, 5, 0));
 
             XGUI.layout_space(5);
@@ -139,7 +139,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 140,
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: sp_Res_Full.FindPropertyRelative("sprite"),
+                prop: sp_hmr_res_full.FindPropertyRelative("sprite"),
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -157,7 +157,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 140,
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: sp_Res_Part.FindPropertyRelative("size"),
+                prop: sp_hmr_res_part.FindPropertyRelative("size"),
                 prop_margin: new RectOffset(0, 0, 5, 0));
 
             XGUI.layout_space(5);
@@ -170,7 +170,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 140,
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: sp_Res_Part.FindPropertyRelative("sprite"),
+                prop: sp_hmr_res_part.FindPropertyRelative("sprite"),
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -192,7 +192,7 @@ namespace SevenStrikeModules.XHud.Editor
                 //title_color: Color.white,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 140,
-                prop: sp_ReferShape_RatioSize,
+                prop: sp_hmr_refer_shape_ratio_size,
                 prop_margin: new RectOffset(0, 0, 10, 10));
 
             XGUI.layout_property_field(
@@ -201,7 +201,7 @@ namespace SevenStrikeModules.XHud.Editor
                 //title_color: Color.white,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 140,
-                prop: sp_ReferShape_RatioTolerance,
+                prop: sp_hmr_refer_shape_ratio_tolerance,
                 prop_margin: new RectOffset(0, 0, 10, 10));
             #endregion
 
@@ -221,7 +221,7 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0),
                 button_text_font: XGUI.GetFont("xg-medium")))
             {
-                xHud_CreateReferenceShape(sp_ReferShape_RatioSize.vector2Value.x, sp_ReferShape_RatioSize.vector2Value.y, sp_ReferShape_RatioTolerance.vector2Value.x, sp_ReferShape_RatioTolerance.vector2Value.y);
+                xHud_CreateReferenceShape(sp_hmr_refer_shape_ratio_size.vector2Value.x, sp_hmr_refer_shape_ratio_size.vector2Value.y, sp_hmr_refer_shape_ratio_tolerance.vector2Value.x, sp_hmr_refer_shape_ratio_tolerance.vector2Value.y);
                 return;
             }
         }
@@ -238,9 +238,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         public void xHud_RatioReference_Calculate()
         {
-            Vector2 res = ScreenRes.vector2Value;
-            Vector2 screen_size = sp_PhysicsScreenSize.vector2Value;
-            Vector2 refer_size = RatioReferenceIsPart.boolValue ? BaseScript.Res_Part.size : BaseScript.Res_Full.size;
+            Vector2 res = sp_cv_screen_res.vector2Value;
+            Vector2 screen_size = sp_hmr_physics_screen_size.vector2Value;
+            Vector2 refer_size = sp_hmr_ratio_reference_is_part.boolValue ? base_script.hmr_res_part.size : base_script.hmr_res_full.size;
 
             if (refer_size == Vector2.zero)
                 return;
@@ -251,7 +251,7 @@ namespace SevenStrikeModules.XHud.Editor
             float nw = pw * res.x;
             float nh = ph * res.y;
 
-            BaseScript.Reference_Image.rectTransform.sizeDelta = new Vector2(nw, nh);
+            base_script.hmr_reference_image.rectTransform.sizeDelta = new Vector2(nw, nh);
         }
         /// <summary>
         /// 比例参考标识物体 - 创建。
@@ -272,7 +272,7 @@ namespace SevenStrikeModules.XHud.Editor
             ref_hum_ima.maskable = false;
             ref_hum_ima.sprite = spr;
 
-            ref_hum_ima.rectTransform.SetParent(BaseScript.HudCanvas_Screen.transform);
+            ref_hum_ima.rectTransform.SetParent(base_script.cv_screen.transform);
             ref_hum_ima.rectTransform.SetAsLastSibling();
 
             ref_hum_ima.rectTransform.anchorMin = new Vector2(0.5f, 0);
@@ -284,17 +284,17 @@ namespace SevenStrikeModules.XHud.Editor
             ref_hum_ima.rectTransform.localEulerAngles = Vector3.zero;
             ref_hum_ima.rectTransform.anchoredPosition3D = Vector3.zero;
 
-            ref_hum_ima.color = sp_Reference_Image_Color.colorValue;
+            ref_hum_ima.color = sp_hmr_reference_image_color.colorValue;
 
             ref_hum_ima.SetNativeSize();
 
-            sp_Reference_Image.objectReferenceValue = ref_hum_ima;
-            sp_Reference_Image.serializedObject.ApplyModifiedProperties();
+            sp_hmr_reference_image.objectReferenceValue = ref_hum_ima;
+            sp_hmr_reference_image.serializedObject.ApplyModifiedProperties();
 
 
             // 记录撤销操作
             Undo.RegisterCreatedObjectUndo(ref_hum_ima_obj, "Create Image");
-            Undo.RecordObject(sp_Reference_Image.serializedObject.targetObject, "Update SerializedProperty");
+            Undo.RecordObject(sp_hmr_reference_image.serializedObject.targetObject, "Update SerializedProperty");
             xHud_RatioReference_Update();
         }
         /// <summary>
@@ -306,14 +306,14 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         public void xHud_RatioReference_Destroy()
         {
-            if (sp_Reference_Image.objectReferenceValue == null)
+            if (sp_hmr_reference_image.objectReferenceValue == null)
                 return;
 
-            Image img = sp_Reference_Image.objectReferenceValue as Image;
+            Image img = sp_hmr_reference_image.objectReferenceValue as Image;
 
             DestroyImmediate(img.gameObject, true);
-            sp_Reference_Image.objectReferenceValue = null;
-            sp_Reference_Image.serializedObject.ApplyModifiedProperties();
+            sp_hmr_reference_image.objectReferenceValue = null;
+            sp_hmr_reference_image.serializedObject.ApplyModifiedProperties();
         }
         /// <summary>
         /// 切换参考类型。
@@ -324,16 +324,16 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         public void xHud_RatioReference_Switch()
         {
-            if (sp_Reference_Image.objectReferenceValue != null)
+            if (sp_hmr_reference_image.objectReferenceValue != null)
             {
-                Sprite spr = BaseScript.Res_Part.sprite;
-                if (!RatioReferenceIsPart.boolValue)
-                    spr = BaseScript.Res_Full.sprite;
+                Sprite spr = base_script.hmr_res_part.sprite;
+                if (!sp_hmr_ratio_reference_is_part.boolValue)
+                    spr = base_script.hmr_res_full.sprite;
 
                 if (spr == null)
                     return;
 
-                Image img = sp_Reference_Image.objectReferenceValue as Image;
+                Image img = sp_hmr_reference_image.objectReferenceValue as Image;
 
                 img.sprite = spr;
             }
@@ -347,12 +347,12 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         public void xHud_RatioReference_Update()
         {
-            if (!UseRatioReference.boolValue)
+            if (!sp_hmr_use_ratio_reference.boolValue)
                 return;
-            if (sp_Reference_Image.objectReferenceValue != null)
+            if (sp_hmr_reference_image.objectReferenceValue != null)
             {
-                BaseScript.Reference_Image.color = sp_Reference_Image_Color.colorValue;
-                BaseScript.Reference_Image.rectTransform.anchoredPosition3D = Vector3.zero;
+                base_script.hmr_reference_image.color = sp_hmr_reference_image_color.colorValue;
+                base_script.hmr_reference_image.rectTransform.anchoredPosition3D = Vector3.zero;
                 xHud_RatioReference_Calculate();
             }
         }
@@ -380,13 +380,13 @@ namespace SevenStrikeModules.XHud.Editor
             height += tolerance_h;
 
             // 屏幕宽度（厘米）
-            float screenWidthCm = sp_PhysicsScreenSize.vector2Value.x;
+            float screenWidthCm = sp_hmr_physics_screen_size.vector2Value.x;
             // 屏幕高度（厘米）
-            float screenHeightCm = sp_PhysicsScreenSize.vector2Value.y;
+            float screenHeightCm = sp_hmr_physics_screen_size.vector2Value.y;
 
             // 获取屏幕分辨率
-            float screenWidthPx = ScreenRes.vector2Value.x;
-            float screenHeightPx = ScreenRes.vector2Value.y;
+            float screenWidthPx = sp_cv_screen_res.vector2Value.x;
+            float screenHeightPx = sp_cv_screen_res.vector2Value.y;
 
             // 计算目标宽度对应的像素值
             float imageWidthPx = (width / screenWidthCm) * screenWidthPx;
@@ -410,9 +410,9 @@ namespace SevenStrikeModules.XHud.Editor
             obj.name = $"RealWorldReferShape - {o_w} cm x {o_h} cm";
             obj.layer = LayerMask.NameToLayer("XHud");
             XHud_Module_Element obj_ele = obj.AddComponent<XHud_Module_Element>();
-            obj_ele.Indicator = "RealWorldReferShape";
+            obj_ele.indicator = "RealWorldReferShape";
             UnityEngine.RectTransform obj_ele_rect = obj.GetComponent<UnityEngine.RectTransform>();
-            obj_ele_rect.transform.SetParent(BaseScript.hm_ScreenElement_GetAnchored_RectTransform(XHudAnchor.顶层));
+            obj_ele_rect.transform.SetParent(base_script.hm_ScreenElement_GetAnchored_RectTransform(XHudAnchor.顶层));
             obj_ele_rect.anchoredPosition3D = Vector3.zero;
             obj_ele_rect.localEulerAngles = Vector3.zero;
             obj_ele_rect.localScale = Vector3.one;
@@ -451,17 +451,17 @@ namespace SevenStrikeModules.XHud.Editor
             rect.anchoredPosition3D = new Vector3(0, rect.anchoredPosition3D.y + img.rectTransform.sizeDelta.y / 2 + 30, 0);
 
             XHud_Module_Text hud_text = textobj.AddComponent<XHud_Module_Text>();
-            hud_text.TextStyleInfo.txt_Set_Alignment(ContentAnchor.中心);
+            hud_text.text_style_info.txt_Set_Alignment(ContentAnchor.中心);
             hud_text.alignment = TextAnchor.MiddleCenter;
             hud_text.text = $"{o_w} cm x {o_h} cm";
-            hud_text.TextStyleInfo.txt_Set_FontSize(18);
-            hud_text.TextStyleInfo.txt_Set_FontColor(Color.white);
-            hud_text.TextStyleInfo.txt_Set_Font(font);
+            hud_text.text_style_info.txt_Set_FontSize(18);
+            hud_text.text_style_info.txt_Set_FontColor(Color.white);
+            hud_text.text_style_info.txt_Set_Font(font);
             hud_text.font = font;
-            hud_text.TextStyleInfo.txt_Set_FontStyle(FontStyle.Normal);
-            hud_text.TextStyleInfo.txt_Set_Overflow(HorizontalWrapMode.Overflow);
-            hud_text.TextStyleInfo.txt_Set_Overflow(HorizontalWrapMode.Overflow);
-            hud_text.TextStyleInfo.gen_RayCastSet(false);
+            hud_text.text_style_info.txt_Set_FontStyle(FontStyle.Normal);
+            hud_text.text_style_info.txt_Set_Overflow(HorizontalWrapMode.Overflow);
+            hud_text.text_style_info.txt_Set_Overflow(HorizontalWrapMode.Overflow);
+            hud_text.text_style_info.gen_RayCastSet(false);
 
             Selection.activeObject = obj;
         }

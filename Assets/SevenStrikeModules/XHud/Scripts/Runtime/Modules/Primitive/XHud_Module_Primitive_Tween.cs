@@ -38,57 +38,57 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         ///音效参数 - 标识ID
         /// </summary>
-        public int ID;
+        public int id;
         /// <summary>
         /// 音效参数 - 音效剪辑
         /// </summary>
-        [SerializeField] public AudioClip Sound;
+        [SerializeField] public AudioClip sound;
         /// <summary>
         /// 音效参数 - 音效路径
         /// </summary>
-        [SerializeField] public string Path;
+        [SerializeField] public string path;
         /// <summary>
         /// 音效参数 - 音效Timings
         /// </summary>
-        [SerializeField] public string Timing;
+        [SerializeField] public string timing;
         /// <summary>
         /// 音效参数 - 音效延迟播放时间
         /// </summary>
-        [SerializeField] public float Delay;
+        [SerializeField] public float delay;
         /// <summary>
         /// 音效参数 - 音量
         /// </summary>
-        [SerializeField] public float Volume = 1f;
+        [SerializeField] public float volume = 1f;
         /// <summary>
         /// 音效参数 - 最大音高
         /// </summary>
-        [SerializeField] public float MaxPitch = 1f;
+        [SerializeField] public float max_pitch = 1f;
         /// <summary>
         /// 音效参数 - 最小音高
         /// </summary>
-        [SerializeField] public float MinPitch = 1f;
+        [SerializeField] public float min_pitch = 1f;
         /// <summary>
         /// 音效参数 - 静音开关
         /// </summary>
-        [SerializeField] public bool Mute;
+        [SerializeField] public bool mute;
 
         /// <summary>
         /// 动作 - 动画器音效 - 播放
         /// </summary>
-        public UnityAction<AudioClip> act_on_SoundPlay;
+        public UnityAction<AudioClip> act_on_sound_play;
 
         public TweenSound() { }
 
         public TweenSound(AudioClip sound, string path, float delay, float volume, float maxPitch, float minPitch, bool mute, string timing)
         {
-            Sound = sound;
-            Path = path;
-            Delay = delay;
-            Volume = volume;
-            MaxPitch = maxPitch;
-            MinPitch = minPitch;
-            Mute = mute;
-            Timing = timing;
+            this.sound = sound;
+            this.path = path;
+            this.delay = delay;
+            this.volume = volume;
+            max_pitch = maxPitch;
+            min_pitch = minPitch;
+            this.mute = mute;
+            this.timing = timing;
         }
 
         /// <summary>
@@ -98,8 +98,8 @@ namespace SevenStrikeModules.XHud
         /// <param name="max">最大音高</param>
         public void SetPitch(float min, float max)
         {
-            MinPitch = min;
-            MaxPitch = max;
+            min_pitch = min;
+            max_pitch = max;
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="vol">音量值</param>
         public void SetVolume(float vol)
         {
-            Volume = vol;
+            volume = vol;
         }
 
         /// <summary>
@@ -117,18 +117,18 @@ namespace SevenStrikeModules.XHud
         /// <param name="state">静音状态</param>
         public void SetMute(bool state)
         {
-            Mute = state;
+            mute = state;
         }
 
         public void GetSoundPath()
         {
 #if UNITY_EDITOR
-            if (Sound == null)
+            if (sound == null)
             {
-                Path = "";
+                path = "";
                 return;
             }
-            Path = AssetDatabase.GetAssetPath(Sound);
+            path = AssetDatabase.GetAssetPath(sound);
 #endif
         }
 
@@ -137,9 +137,9 @@ namespace SevenStrikeModules.XHud
         /// <para/>
         /// 克隆内容：
         /// <list type="bullet">
-        /// <item><description><see cref="Sound"/>：AudioClip 是资源引用，直接共享（不复制资源）</description></item>
-        /// <item><description><see cref="Path"/> / <see cref="Timing"/> / <see cref="Delay"/> / 
-        /// <see cref="Volume"/> / <see cref="MinPitch"/> / <see cref="MaxPitch"/> / <see cref="Mute"/>：值拷贝</description></item>
+        /// <item><description><see cref="sound"/>：AudioClip 是资源引用，直接共享（不复制资源）</description></item>
+        /// <item><description><see cref="path"/> / <see cref="timing"/> / <see cref="delay"/> / 
+        /// <see cref="volume"/> / <see cref="min_pitch"/> / <see cref="max_pitch"/> / <see cref="mute"/>：值拷贝</description></item>
         /// </list>
         /// <para/>
         /// 不克隆内容：
@@ -153,17 +153,17 @@ namespace SevenStrikeModules.XHud
             TweenSound sod = new TweenSound();
 
             // ID 不复制：由调用方通过 TweenSound_GenerateId() 重新分配，避免与原节点冲突
-            sod.Sound = this.Sound;               // AudioClip 是 UnityEngine.Object，引用共享即可
-            sod.Path = this.Path;
-            sod.Timing = this.Timing;
-            sod.Delay = this.Delay;
-            sod.Volume = this.Volume;
-            sod.MaxPitch = this.MaxPitch;
-            sod.MinPitch = this.MinPitch;
-            sod.Mute = this.Mute;
+            sod.sound = this.sound;               // AudioClip 是 UnityEngine.Object，引用共享即可
+            sod.path = this.path;
+            sod.timing = this.timing;
+            sod.delay = this.delay;
+            sod.volume = this.volume;
+            sod.max_pitch = this.max_pitch;
+            sod.min_pitch = this.min_pitch;
+            sod.mute = this.mute;
 
             // act_on_SoundPlay 委托不克隆，新副本需要重新绑定
-            sod.act_on_SoundPlay = null;
+            sod.act_on_sound_play = null;
 
             return sod;
         }
@@ -173,14 +173,14 @@ namespace SevenStrikeModules.XHud
             if (source == null) return;
 
             // ID 不复制：由调用方通过 TweenSound_GenerateId() 重新分配，避免与原节点冲突
-            source.Sound = this.Sound;
-            source.Delay = this.Delay;
-            source.Path = this.Path;
-            source.Volume = this.Volume;
-            source.MaxPitch = this.MaxPitch;
-            source.MinPitch = this.MinPitch;
-            source.Mute = this.Mute;
-            source.Timing = this.Timing;
+            source.sound = this.sound;
+            source.delay = this.delay;
+            source.path = this.path;
+            source.volume = this.volume;
+            source.max_pitch = this.max_pitch;
+            source.min_pitch = this.min_pitch;
+            source.mute = this.mute;
+            source.timing = this.timing;
         }
     }
 
@@ -191,309 +191,309 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 动画参数 - 标识ID
         /// </summary>
-        public int ID;
+        public int id;
         /// <summary>
         /// 动画参数 - 标识名称
         /// </summary>
-        public string Indicator = "NewTween";
+        public string indicator = "NewTween";
         /// <summary>
         /// 动画参数 - 可用性开关
         /// </summary>
-        public bool Enabled = true;
+        public bool enabled = true;
         /// <summary>
         /// 动画参数 - 动画类型
         /// </summary>
-        public TweenNodeType Type = TweenNodeType.a_位移;
+        public TweenNodeType type = TweenNodeType.a_位移;
         /// <summary>
         /// 动画参数 - 播放时机
         /// </summary>
-        public string Timings;
+        public string timings;
         /// <summary>
         /// 动画参数 - 动画耗时
         /// </summary>
-        public float Duration = 1f;
+        public float duration = 1f;
         /// <summary>
         /// 动画参数 - 延时
         /// </summary>
-        public float Delay = 0f;
+        public float delay = 0f;
         /// <summary>
         /// 动画参数 - 动画进度
         /// </summary>
-        public float Progress = 0f;
+        public float progress = 0f;
         /// <summary>
         /// 动画参数 - 文字动画光标字符闪烁速度
         /// </summary>
-        public float TextCursorBlinkSpeed = 0.5f;
+        public float text_cursor_blink_speed = 0.5f;
         /// <summary>
         /// 动画参数 - 文字动画光标字符
         /// </summary>
-        public string TextCursor = "|";
+        public string text_cursor = "|";
         /// <summary>
         /// 动画参数 - 文字动画的内容是否使用从当前延展，如果为False就是直接替换当前内容，否则就是在当前基础上继续延展文字内容
         /// </summary>
-        public bool TextExtended;
+        public bool text_extended;
         /// <summary>
         /// 动画参数 - 动画倒退后是否将值设为起始值
         /// </summary>
-        public bool Rewind_Set_Startvalue = true;
+        public bool rewind_set_startvalue = true;
         /// <summary>
         /// 动画参数 - 动画完成后是否将值设为结束值
         /// </summary>
-        public bool Complete_Set_Endvalue = true;
+        public bool complete_set_endvalue = true;
         /// <summary>
         /// 动画参数 - 缓动参数
         /// </summary>
-        public EaseMode Ease = EaseMode.InOutCubic;
-        public string AnimationCurveName = "";
+        public EaseMode ease = EaseMode.InOutCubic;
+        public string animation_curve_name = "";
         /// <summary>
         /// 数值模式索引
         /// </summary>
-        public int ValueModeIndex = 0;
-        public TweenValueMode TweenValueMode;
+        public int value_mode_index = 0;
+        public TweenValueMode tween_value_mode;
         /// <summary>
         /// 动画参数 - 曲线
         /// </summary>
-        public AnimationCurve Curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+        public AnimationCurve curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
         #region  原始值
         /// <summary>
         /// 动画参数 - 原始整形数值
         /// </summary>
-        public int Original_Int;
+        public int ori_int;
         /// <summary>
         /// 动画参数 - 原始浮点数值
         /// </summary>
-        public float Original_Float;
+        public float ori_float;
         /// <summary>
         /// 动画参数 - 原始2维向量值
         /// </summary>
-        public Vector2 Original_Vector2;
+        public Vector2 ori_vector2;
         /// <summary>
         /// 动画参数 - 原始3维向量值
         /// </summary>
-        public Vector3 Original_Vector3;
+        public Vector3 ori_vector3;
         /// <summary>
         /// 动画参数 - 原始4维向量值
         /// </summary>
-        public Vector4 Original_Vector4;
+        public Vector4 ori_vector4;
         /// <summary>
         /// 动画参数 - 原始颜色值
         /// </summary>
-        public Color Original_Color;
+        public Color ori_color;
         /// <summary>
         /// 动画参数 - 原始文字内容
         /// </summary>
-        public string Original_String = "";
+        public string ori_string = "";
         #endregion
 
         #region  起始值
         /// <summary>
         /// 动画参数 - 起始整形数值
         /// </summary>
-        public int From_Int;
+        public int from_int;
         /// <summary>
         /// 动画参数 - 起始浮点数值
         /// </summary>
-        public float From_Float;
+        public float from_float;
         /// <summary>
         /// 动画参数 - 起始2维向量值
         /// </summary>
-        public Vector2 From_Vector2;
+        public Vector2 from_vector2;
         /// <summary>
         /// 动画参数 - 起始3维向量值
         /// </summary>
-        public Vector3 From_Vector3;
+        public Vector3 from_vector3;
         /// <summary>
         /// 动画参数 - 起始4维向量值
         /// </summary>
-        public Vector4 From_Vector4;
+        public Vector4 from_vector4;
         /// <summary>
         /// 动画参数 - 起始颜色值
         /// </summary>
-        public Color From_Color;
+        public Color from_color;
         /// <summary>
         /// 动画参数 - 起始文字内容
         /// </summary>
-        public string From_String;
+        public string from_string;
         #endregion
 
         #region  结束值
         /// <summary>
         /// 动画参数 - 结束整形数值
         /// </summary>
-        public int End_Int;
+        public int end_int;
         /// <summary>
         /// 动画参数 - 结束浮点数值
         /// </summary>
-        public float End_Float;
+        public float end_float;
         /// <summary>
         /// 动画参数 - 结束2维向量值
         /// </summary>
-        public Vector2 End_Vector2;
+        public Vector2 end_vector2;
         /// <summary>
         /// 动画参数 - 结束3维向量值
         /// </summary>
-        public Vector3 End_Vector3;
+        public Vector3 end_vector3;
         /// <summary>
         /// 动画参数 - 结束4维向量值
         /// </summary>
-        public Vector4 End_Vector4;
+        public Vector4 end_vector4;
         /// <summary>
         /// 动画参数 - 结束颜色值
         /// </summary>
-        public Color End_Color;
+        public Color end_color;
         /// <summary>
         /// 动画参数 - 结束文字内容
         /// </summary>
-        public string End_String;
+        public string end_string;
         #endregion
 
         /// <summary>
         /// 动画参数 - 旋转模式
         /// </summary>
-        public XTweenRotationMode RotateMode = XTweenRotationMode.Normal;
+        public XTweenRotationMode rotate_mode = XTweenRotationMode.Normal;
         /// <summary>
         /// 动画参数 - 循环模式
         /// </summary>
-        public XTween_LoopType LoopType = XTween_LoopType.Restart;
+        public XTween_LoopType loop_type = XTween_LoopType.Restart;
         /// <summary>
         /// 动画参数 - 循环次数
         /// </summary>
-        public int LoopCount;
+        public int loop_count;
         /// <summary>
         /// 动画参数 - 动画器
         /// </summary>
-        public XTween_Interface Tweener;
+        public XTween_Interface tweener;
         /// <summary>
         /// 折叠
         /// </summary>
-        public bool IsFold;
+        public bool is_fold;
 
         #region UnityAction Int
         /// <summary>
         /// 委托事件 - 当 - 整形数值变化 - 时
         /// </summary>
-        public UnityAction<int> Act_On_Int_Changed;
+        public UnityAction<int> act_on_int_changed;
         /// <summary>
         /// 委托事件 - 当 - 整形数值倒退 - 时
         /// </summary>
-        public UnityAction<int> Act_On_Int_Rewind;
+        public UnityAction<int> act_on_int_rewind;
         /// <summary>
         /// 委托事件 - 当 - 整形数值准备就绪 - 时
         /// </summary>
-        public UnityAction<int> Act_On_Int_Ready;
+        public UnityAction<int> act_on_int_ready;
         #endregion
 
         #region UnityAction Float
         /// <summary>
         /// 委托事件 - 当 - 浮点数值变化 - 时
         /// </summary>
-        public UnityAction<float> Act_On_Float_Changed;
+        public UnityAction<float> act_on_float_changed;
         /// <summary>
         /// 委托事件 - 当 - 浮点数值倒退 - 时
         /// </summary>
-        public UnityAction<float> Act_On_Float_Rewind;
+        public UnityAction<float> act_on_float_rewind;
         /// <summary>
         /// 委托事件 - 当 - 浮点数值准备就绪 - 时
         /// </summary>
-        public UnityAction<float> Act_On_Float_Ready;
+        public UnityAction<float> act_on_float_ready;
         #endregion
 
         #region UnityAction Vector2
         /// <summary>
         /// 委托事件 - 当 - 2维向量变化 - 时
         /// </summary>
-        public UnityAction<Vector2> Act_On_Vector2_Changed;
+        public UnityAction<Vector2> act_on_vector2_changed;
         /// <summary>
         /// 委托事件 - 当 - 2维向量倒退 - 时
         /// </summary>
-        public UnityAction<Vector2> Act_On_Vector2_Rewind;
+        public UnityAction<Vector2> act_on_vector2_rewind;
         /// <summary>
         /// 委托事件 - 当 - 2维向量准备就绪 - 时
         /// </summary>
-        public UnityAction<Vector2> Act_On_Vector2_Ready;
+        public UnityAction<Vector2> act_on_vector2_ready;
         #endregion
 
         #region UnityAction Vector3
         /// <summary>
         /// 委托事件 - 当 - 3维向量变化 - 时
         /// </summary>
-        public UnityAction<Vector3> Act_On_Vector3_Changed;
+        public UnityAction<Vector3> act_on_vector3_changed;
         /// <summary>
         /// 委托事件 - 当 - 3维向量倒退 - 时
         /// </summary>
-        public UnityAction<Vector3> Act_On_Vector3_Rewind;
+        public UnityAction<Vector3> act_on_vector3_rewind;
         /// <summary>
         /// 委托事件 - 当 - 3维向量准备就绪 - 时
         /// </summary>
-        public UnityAction<Vector3> Act_On_Vector3_Ready;
+        public UnityAction<Vector3> act_on_vector3_ready;
         #endregion
 
         #region UnityAction Vector4
         /// <summary>
         /// 委托事件 - 当 - 4维向量变化 - 时
         /// </summary>
-        public UnityAction<Vector4> Act_On_Vector4_Changed;
+        public UnityAction<Vector4> act_on_vector4_changed;
         /// <summary>
         /// 委托事件 - 当 - 4维向量倒退 - 时
         /// </summary>
-        public UnityAction<Vector4> Act_On_Vector4_Rewind;
+        public UnityAction<Vector4> act_on_vector4_rewind;
         /// <summary>
         /// 委托事件 - 当 - 4维向量准备就绪 - 时
         /// </summary>
-        public UnityAction<Vector4> Act_On_Vector4_Ready;
+        public UnityAction<Vector4> act_on_vector4_ready;
         #endregion
 
         #region UnityAction Quaternion
         /// <summary>
         /// 委托事件 - 当 - 四元数变化时 - 时
         /// </summary>
-        public UnityAction<Quaternion> Act_On_Quaternion_Changed;
+        public UnityAction<Quaternion> act_on_quaternion_changed;
         /// <summary>
         /// 委托事件 - 当 - 四元数倒退 - 时
         /// </summary>
-        public UnityAction<Quaternion> Act_On_Quaternion_Rewind;
+        public UnityAction<Quaternion> act_on_quaternion_rewind;
         /// <summary>
         /// 委托事件 - 当 - 四元数准备就绪 - 时
         /// </summary>
-        public UnityAction<Quaternion> Act_On_Quaternion_Ready;
+        public UnityAction<Quaternion> act_on_quaternion_ready;
         #endregion
 
         #region UnityAction Color
         /// <summary>
         /// 委托事件 - 当 - 颜色值变化 - 时
         /// </summary>
-        public UnityAction<Color> Act_On_Color_Changed;
+        public UnityAction<Color> act_on_color_changed;
         /// <summary>
         /// 委托事件 - 当 - 颜色值倒退 - 时
         /// </summary>
-        public UnityAction<Color> Act_On_Color_Rewind;
+        public UnityAction<Color> act_on_color_rewind;
         /// <summary>
         /// 委托事件 - 当 - 颜色值准备就绪 - 时
         /// </summary>
-        public UnityAction<Color> Act_On_Color_Ready;
+        public UnityAction<Color> act_on_color_ready;
         #endregion
 
         #region UnityAction string
         /// <summary>
         /// 委托事件 - 当 - 文字内容变化 - 时
         /// </summary>
-        public UnityAction<string> Act_On_Text_Changed;
+        public UnityAction<string> act_on_text_changed;
         /// <summary>
         /// 委托事件 - 当 - 文字内容倒退 - 时
         /// </summary>
-        public UnityAction<string> Act_On_Text_Rewind;
+        public UnityAction<string> act_on_text_rewind;
         /// <summary>
         /// 委托事件 - 当 - 文字内容准备 - 时
         /// </summary>
-        public UnityAction<string> Act_On_Text_Ready;
+        public UnityAction<string> act_on_text_ready;
         #endregion
 
         #region UnityAction AudioClip
         /// <summary>
         /// 委托事件 - 当 - 动画器音效 - 播放 - 时
         /// </summary>
-        public UnityAction<AudioClip> Act_On_SoundPlayed;
+        public UnityAction<AudioClip> act_on_sound_played;
         #endregion
 
         /// <summary>
@@ -501,29 +501,29 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void ClearActions()
         {
-            Act_On_Int_Changed = null;
-            Act_On_Int_Rewind = null;
+            act_on_int_changed = null;
+            act_on_int_rewind = null;
 
-            Act_On_Float_Changed = null;
-            Act_On_Float_Rewind = null;
+            act_on_float_changed = null;
+            act_on_float_rewind = null;
 
-            Act_On_Vector2_Changed = null;
-            Act_On_Vector2_Rewind = null;
+            act_on_vector2_changed = null;
+            act_on_vector2_rewind = null;
 
-            Act_On_Vector3_Changed = null;
-            Act_On_Vector3_Rewind = null;
+            act_on_vector3_changed = null;
+            act_on_vector3_rewind = null;
 
-            Act_On_Vector4_Changed = null;
-            Act_On_Vector4_Rewind = null;
+            act_on_vector4_changed = null;
+            act_on_vector4_rewind = null;
 
-            Act_On_Quaternion_Changed = null;
-            Act_On_Quaternion_Rewind = null;
+            act_on_quaternion_changed = null;
+            act_on_quaternion_rewind = null;
 
-            Act_On_Color_Changed = null;
-            Act_On_Color_Rewind = null;
+            act_on_color_changed = null;
+            act_on_color_rewind = null;
 
-            Act_On_Text_Changed = null;
-            Act_On_Text_Rewind = null;
+            act_on_text_changed = null;
+            act_on_text_rewind = null;
         }
 
         /// <summary>
@@ -536,60 +536,60 @@ namespace SevenStrikeModules.XHud
 
             // ========== 基础属性 ==========
             // ID 不复制：由调用方通过 TweenNode_GenerateId() 重新分配，避免与原节点冲突
-            newNode.Indicator = this.Indicator;
-            newNode.Enabled = this.Enabled;
-            newNode.Type = this.Type;
-            newNode.Timings = this.Timings;
-            newNode.Duration = this.Duration;
-            newNode.Delay = this.Delay;
-            newNode.Progress = this.Progress;
-            newNode.Rewind_Set_Startvalue = this.Rewind_Set_Startvalue;
-            newNode.Complete_Set_Endvalue = this.Complete_Set_Endvalue;
+            newNode.indicator = this.indicator;
+            newNode.enabled = this.enabled;
+            newNode.type = this.type;
+            newNode.timings = this.timings;
+            newNode.duration = this.duration;
+            newNode.delay = this.delay;
+            newNode.progress = this.progress;
+            newNode.rewind_set_startvalue = this.rewind_set_startvalue;
+            newNode.complete_set_endvalue = this.complete_set_endvalue;
 
             // ========== 缓动参数 ==========
-            newNode.Ease = this.Ease;
-            newNode.AnimationCurveName = this.AnimationCurveName;
+            newNode.ease = this.ease;
+            newNode.animation_curve_name = this.animation_curve_name;
             // AnimationCurve 需要深拷贝，不能直接引用
-            newNode.Curve = new AnimationCurve(this.Curve.keys);
+            newNode.curve = new AnimationCurve(this.curve.keys);
 
             // ========== 原始值（值类型直接复制）==========
-            newNode.Original_Int = this.Original_Int;
-            newNode.Original_Float = this.Original_Float;
-            newNode.Original_Vector2 = this.Original_Vector2;
-            newNode.Original_Vector3 = this.Original_Vector3;
-            newNode.Original_Vector4 = this.Original_Vector4;
-            newNode.Original_Color = this.Original_Color;
-            newNode.Original_String = this.Original_String;
+            newNode.ori_int = this.ori_int;
+            newNode.ori_float = this.ori_float;
+            newNode.ori_vector2 = this.ori_vector2;
+            newNode.ori_vector3 = this.ori_vector3;
+            newNode.ori_vector4 = this.ori_vector4;
+            newNode.ori_color = this.ori_color;
+            newNode.ori_string = this.ori_string;
 
             // ========== 起始值 ==========
-            newNode.From_Int = this.From_Int;
-            newNode.From_Float = this.From_Float;
-            newNode.From_Vector2 = this.From_Vector2;
-            newNode.From_Vector3 = this.From_Vector3;
-            newNode.From_Vector4 = this.From_Vector4;
-            newNode.From_Color = this.From_Color;
-            newNode.From_String = this.From_String;
+            newNode.from_int = this.from_int;
+            newNode.from_float = this.from_float;
+            newNode.from_vector2 = this.from_vector2;
+            newNode.from_vector3 = this.from_vector3;
+            newNode.from_vector4 = this.from_vector4;
+            newNode.from_color = this.from_color;
+            newNode.from_string = this.from_string;
 
             // ========== 结束值 ==========
-            newNode.End_Int = this.End_Int;
-            newNode.End_Float = this.End_Float;
-            newNode.End_Vector2 = this.End_Vector2;
-            newNode.End_Vector3 = this.End_Vector3;
-            newNode.End_Vector4 = this.End_Vector4;
-            newNode.End_Color = this.End_Color;
-            newNode.End_String = this.End_String;
+            newNode.end_int = this.end_int;
+            newNode.end_float = this.end_float;
+            newNode.end_vector2 = this.end_vector2;
+            newNode.end_vector3 = this.end_vector3;
+            newNode.end_vector4 = this.end_vector4;
+            newNode.end_color = this.end_color;
+            newNode.end_string = this.end_string;
 
             // ========== 动画选项 ==========
-            newNode.RotateMode = this.RotateMode;
-            newNode.LoopType = this.LoopType;
-            newNode.LoopCount = this.LoopCount;
+            newNode.rotate_mode = this.rotate_mode;
+            newNode.loop_type = this.loop_type;
+            newNode.loop_count = this.loop_count;
 
             // ========== 数值模式索引 ==========
-            newNode.ValueModeIndex = this.ValueModeIndex;
-            newNode.TweenValueMode = this.TweenValueMode;
+            newNode.value_mode_index = this.value_mode_index;
+            newNode.tween_value_mode = this.tween_value_mode;
 
-            newNode.TextCursorBlinkSpeed = this.TextCursorBlinkSpeed;
-            newNode.TextCursor = this.TextCursor;
+            newNode.text_cursor_blink_speed = this.text_cursor_blink_speed;
+            newNode.text_cursor = this.text_cursor;
 
 
             // ========== 注意：以下字段不克隆 ==========
@@ -623,58 +623,58 @@ namespace SevenStrikeModules.XHud
             // 注意：ID 不复制，保持原节点的 ID 或由调用方重新生成
 
             // 基础属性
-            this.Indicator = source.Indicator;
-            this.Enabled = source.Enabled;
-            this.Type = source.Type;
-            this.Timings = source.Timings;
-            this.Duration = source.Duration;
-            this.Delay = source.Delay;
-            this.Rewind_Set_Startvalue = source.Rewind_Set_Startvalue;
-            this.Complete_Set_Endvalue = source.Complete_Set_Endvalue;
+            this.indicator = source.indicator;
+            this.enabled = source.enabled;
+            this.type = source.type;
+            this.timings = source.timings;
+            this.duration = source.duration;
+            this.delay = source.delay;
+            this.rewind_set_startvalue = source.rewind_set_startvalue;
+            this.complete_set_endvalue = source.complete_set_endvalue;
 
             // 缓动参数
-            this.Ease = source.Ease;
-            this.AnimationCurveName = source.AnimationCurveName;
-            this.Curve = new AnimationCurve(source.Curve.keys);
+            this.ease = source.ease;
+            this.animation_curve_name = source.animation_curve_name;
+            this.curve = new AnimationCurve(source.curve.keys);
 
             // 原始值
-            this.Original_Int = source.Original_Int;
-            this.Original_Float = source.Original_Float;
-            this.Original_Vector2 = source.Original_Vector2;
-            this.Original_Vector3 = source.Original_Vector3;
-            this.Original_Vector4 = source.Original_Vector4;
-            this.Original_Color = source.Original_Color;
-            this.Original_String = source.Original_String;
+            this.ori_int = source.ori_int;
+            this.ori_float = source.ori_float;
+            this.ori_vector2 = source.ori_vector2;
+            this.ori_vector3 = source.ori_vector3;
+            this.ori_vector4 = source.ori_vector4;
+            this.ori_color = source.ori_color;
+            this.ori_string = source.ori_string;
 
             // 起始值
-            this.From_Int = source.From_Int;
-            this.From_Float = source.From_Float;
-            this.From_Vector2 = source.From_Vector2;
-            this.From_Vector3 = source.From_Vector3;
-            this.From_Vector4 = source.From_Vector4;
-            this.From_Color = source.From_Color;
-            this.From_String = source.From_String;
+            this.from_int = source.from_int;
+            this.from_float = source.from_float;
+            this.from_vector2 = source.from_vector2;
+            this.from_vector3 = source.from_vector3;
+            this.from_vector4 = source.from_vector4;
+            this.from_color = source.from_color;
+            this.from_string = source.from_string;
 
             // 结束值
-            this.End_Int = source.End_Int;
-            this.End_Float = source.End_Float;
-            this.End_Vector2 = source.End_Vector2;
-            this.End_Vector3 = source.End_Vector3;
-            this.End_Vector4 = source.End_Vector4;
-            this.End_Color = source.End_Color;
-            this.End_String = source.End_String;
+            this.end_int = source.end_int;
+            this.end_float = source.end_float;
+            this.end_vector2 = source.end_vector2;
+            this.end_vector3 = source.end_vector3;
+            this.end_vector4 = source.end_vector4;
+            this.end_color = source.end_color;
+            this.end_string = source.end_string;
 
             // 动画选项
-            this.RotateMode = source.RotateMode;
-            this.LoopType = source.LoopType;
-            this.LoopCount = source.LoopCount;
+            this.rotate_mode = source.rotate_mode;
+            this.loop_type = source.loop_type;
+            this.loop_count = source.loop_count;
 
             // 数值模式索引
-            this.ValueModeIndex = source.ValueModeIndex;
-            this.TweenValueMode = source.TweenValueMode;
+            this.value_mode_index = source.value_mode_index;
+            this.tween_value_mode = source.tween_value_mode;
 
-            this.TextCursorBlinkSpeed = source.TextCursorBlinkSpeed;
-            this.TextCursor = source.TextCursor;
+            this.text_cursor_blink_speed = source.text_cursor_blink_speed;
+            this.text_cursor = source.text_cursor;
 
             // Tweener 不复制
             // 委托事件不复制
@@ -685,8 +685,8 @@ namespace SevenStrikeModules.XHud
     [System.Serializable]
     public class TweenNodeArray
     {
-        public List<TweenNode> TweenNodeList = new List<TweenNode>();
-        public List<TweenSound> TweenSoundList = new List<TweenSound>();
+        public List<TweenNode> tween_node_list = new List<TweenNode>();
+        public List<TweenSound> tween_sound_list = new List<TweenSound>();
     }
 
     public class XHud_Module_Primitive_Tween : MonoBehaviour
@@ -704,7 +704,7 @@ namespace SevenStrikeModules.XHud
         /// 勾选后，动画过程中所有音效触发点将被忽略，不播放任何音效
         /// 用途：批量关闭音效、测试环境静音、性能优化
         /// </summary>
-        [SerializeField] public bool MutePlay;
+        [SerializeField] public bool mute_play;
         /// <summary>
         /// 动画播放状态的中断模式开关（私有）
         /// 用于 TweenNode_IsAllAnimating() 中的边缘检测：
@@ -713,31 +713,31 @@ namespace SevenStrikeModules.XHud
         /// 状态由"播放中 → 已停止"切换时，触发一次 Complete 事件
         /// 设计目的：确保 Complete 事件只在状态切换的瞬间触发一次，而非每帧触发
         /// </summary>
-        [SerializeField] private bool AnimatingBreakState;
+        [SerializeField] private bool animating_break_state;
         /// <summary>
         /// 忽略上级 Element 控制的开关
         /// 勾选后，上级 Element 将不再控制该动画器的播放、复位、杀死等操作
         /// 用途：某些图元动画需要独立于父级元素的生命周期自行管理
         /// </summary>
-        [SerializeField] public bool IgnoreElementAnimationPlay;
+        [SerializeField] public bool ignore_element_animation_play;
         /// <summary>
         /// 预览动画开关（编辑器专用）
         /// 用于在编辑器模式下预览动画效果，运行时不影响实际逻辑
         /// </summary>
-        [SerializeField] public bool TweenIsPreviewing;
+        [SerializeField] public bool tween_is_previewing;
         /// <summary>
         /// 起始动画节点标识（Indicator 名称）
         /// 指定图元在 Element 系统调度时作为"主入口"优先播放的动画节点
         /// 通过 TweenNode_GetByIndicator(MainTweenNode) 定位
         /// </summary>
-        [SerializeField] public string MainTweenNode;
+        [SerializeField] public string main_tween_node;
         /// <summary>
         /// 动画节点列表
         /// 存储当前图元的所有动画配置与运行时状态
         /// 每个 TweenNode 代表一条独立的动画轨道（位移、旋转、缩放、颜色等）
         /// </summary>
-        [SerializeField] public List<TweenNode> PrimitiveTweenNodes = new List<TweenNode>();
-        [SerializeField] public List<TweenSound> PrimitiveTweenSounds = new List<TweenSound>();
+        [SerializeField] public List<TweenNode> primitive_tween_nodes = new List<TweenNode>();
+        [SerializeField] public List<TweenSound> primitive_tween_sounds = new List<TweenSound>();
         #endregion
 
         #region 成员 - 速率&时间
@@ -749,32 +749,32 @@ namespace SevenStrikeModules.XHud
         /// - 值 &lt; 1 ：加速播放（如 0.5 表示两倍速）
         /// - 值 &gt; 1 ：减速播放（如 2 表示半速）
         /// </summary>
-        [SerializeField] public float GlobalDuration = 1;
+        [SerializeField] public float global_duration = 1;
         /// <summary>
         /// 动画列表中筛选出的最短耗时（未乘全局速率）
         /// 由 TweenNode_GetTimers() 计算并缓存
         /// 单个节点耗时公式：Duration × Clamp(LoopCount, 1, int.MaxValue) + Delay
         /// 循环次数为 -1（无限循环）时按 1 次处理，避免结果无限大
         /// </summary>
-        [SerializeField] public float MinTimer;
+        [SerializeField] public float min_timer;
         /// <summary>
         /// 动画列表中筛选出的最长耗时（未乘全局速率）
         /// 由 TweenNode_GetTimers() 计算并缓存
         /// 用途：预估所有动画播放完毕所需的最长等待时间
         /// </summary>
-        [SerializeField] public float MaxTimer;
+        [SerializeField] public float max_timer;
         /// <summary>
         /// 应用全局速率后的最短耗时
         /// 计算公式：MinTimer × GlobalDuration
         /// 用途：UI 显示、调度预估时使用最终有效时长
         /// </summary>
-        [SerializeField] public float MinTimerWithGlobalDuration;
+        [SerializeField] public float min_timer_with_global_duration;
         /// <summary>
         /// 应用全局速率后的最长耗时
         /// 计算公式：MaxTimer × GlobalDuration
         /// 用途：协程等待所有动画完成时的最大等待时间
         /// </summary>
-        [SerializeField] public float MaxTimerWithGlobalDuration;
+        [SerializeField] public float max_timer_with_global_duration;
         #endregion
 
         #region 成员 - 动作
@@ -783,104 +783,104 @@ namespace SevenStrikeModules.XHud
         /// 触发时机：调用 Tween_Play(XTween_Interface tween) 时
         /// 用途：外部系统对底层动画实例进行监听
         /// </summary>
-        public UnityAction<XTween_Interface> act_on_Tween_Play;
+        public UnityAction<XTween_Interface> act_on_tween_play;
         /// <summary>
         /// 动作 - 动画播放时触发 - 参数为 TweenNode
         /// 触发时机：调用 Tween_Play(TweenNode node) 时
         /// 用途：以节点为单位监听播放事件
         /// </summary>
-        public UnityAction<TweenNode> act_on_Tween_Play_At_Node;
+        public UnityAction<TweenNode> act_on_tween_play_at_node;
         /// <summary>
         /// 动作 - 动画播放时触发 - 参数为动画 ID
         /// 触发时机：调用 Tween_Play(int id) 时
         /// 用途：通过 ID 精确追踪某条动画的播放
         /// </summary>
-        public UnityAction<int> act_on_Tween_Play_At_ID;
+        public UnityAction<int> act_on_tween_play_at_id;
         /// <summary>
         /// 动作 - 动画播放时触发 - 参数为动画标识名称
         /// 触发时机：调用 Tween_Play(string indicator) 时
         /// 用途：通过名称追踪某条动画的播放（名称可重名，不唯一）
         /// </summary>
-        public UnityAction<string> act_on_Tween_Play_At_Indicator;
+        public UnityAction<string> act_on_tween_play_at_indicator;
         /// <summary>
         /// 动作 - 全部动画播放时触发 - 无参数
         /// 触发时机：调用 Tweens_Play_With_Delay(...) 批量播放后
         /// 用途：批量播放完成后的统一回调
         /// </summary>
-        public UnityAction act_on_Tween_PlayAll;
+        public UnityAction act_on_tween_play_all;
         /// <summary>
         /// 动作 - 动画创建完成时触发 - 参数为 TweenNode
         /// 触发时机：Tween_CreateById(...) 创建动画实例后
         /// 用途：获取已创建动画节点的引用，绑定后续逻辑
         /// </summary>
-        public UnityAction<TweenNode> act_on_Tween_Create_At_ID;
+        public UnityAction<TweenNode> act_on_tween_create_at_id;
         /// <summary>
         /// 动作 - 动画创建完成时触发 - 参数为 TweenNode
         /// 触发时机：Tween_CreateByIndex(...) 创建动画实例后
         /// 用途：以索引方式创建后获取节点引用
         /// </summary>
-        public UnityAction<TweenNode> act_on_Tween_Create_At_Index;
+        public UnityAction<TweenNode> act_on_tween_create_at_index;
         /// <summary>
         /// 动作 - 动画创建完成时触发 - 参数为 TweenNode
         /// 触发时机：Tween_CreateByIndicator(...) 创建动画实例后
         /// 用途：以名称方式创建后获取节点引用
         /// </summary>
-        public UnityAction<TweenNode> act_on_Tween_Create_At_Indicator;
+        public UnityAction<TweenNode> act_on_tween_create_at_indicator;
         /// <summary>
         /// 动作 - 动画复位时触发 - 参数为 TweenNode
         /// 触发时机：调用 Tween_Rewind(node, ...) 时
         /// 用途：复位后的数值恢复、状态重置等后续处理
         /// </summary>
-        public UnityAction<TweenNode> act_on_Tween_Rewind;
+        public UnityAction<TweenNode> act_on_tween_rewind;
         /// <summary>
         /// 动作 - 全部动画复位时触发 - 无参数
         /// 触发时机：调用 Tween_RewindAll(...) 后
         /// 用途：批量复位后的统一回调
         /// </summary>
-        public UnityAction act_on_Tween_RewindAll;
+        public UnityAction act_on_tween_rewind_all;
         /// <summary>
         /// 动作 - 动画杀死时触发 - 参数为 TweenNode
         /// 触发时机：调用 Tween_Kill(node, ...) 时
         /// 用途：杀死动画（释放 Tweener 实例）后的清理回调
         /// </summary>
-        public UnityAction<TweenNode> act_on_Tween_Kill;
+        public UnityAction<TweenNode> act_on_tween_kill;
         /// <summary>
         /// 动作 - 全部动画杀死时触发 - 无参数
         /// 触发时机：调用 Tween_KillAll(...) 后
         /// 用途：批量杀死后的统一回调
         /// </summary>
-        public UnityAction act_on_Tween_KillAll;
+        public UnityAction act_on_tween_kill_all;
         /// <summary>
         /// 动作 - 动画准备就绪时触发 - 无参数
         /// 触发时机：动画系统初始化完成、可开始播放前
         /// 用途：外部系统在动画播放前进行前置准备
         /// </summary>
-        public UnityAction act_on_Tween_Ready;
+        public UnityAction act_on_tween_ready;
         /// <summary>
         /// 动作 - 所有动画完成时触发 - 无参数
         /// 触发时机：TweenNode_IsAllAnimating() 边缘检测到"播放中 → 已停止"时
         /// 特性：只在状态切换瞬间触发一次，不会每帧触发
         /// 用途：动画结束后的链式逻辑（播放下一段、切换 UI 状态等）
         /// </summary>
-        public UnityAction act_on_Tween_Complete;
+        public UnityAction act_on_tween_complete;
         /// <summary>
         /// 动作 - 动画器初始化完成时触发 - 无参数
         /// 触发时机：Awake() 中，进度重置之后
         /// 用途：外部系统在动画器首次可用时进行绑定
         /// </summary>
-        public UnityAction act_on_Tween_Initialized;
+        public UnityAction act_on_tween_initialized;
         /// <summary>
         /// 动作 - 音效触发播放时触发 - 参数为 AudioClip
         /// 触发时机：TweenNode_ProcessNodeSounds 达到触发点并调用 PlayTweenSound 时
         /// 用途：外部系统对音效播放进行二次处理（如字幕、震动、日志）
         /// </summary>
-        public UnityAction<AudioClip> act_on_Tween_SoundPlay;
+        public UnityAction<AudioClip> act_on_tween_sound_play;
         /// <summary>
         /// 动作 - 动画播放状态变化时触发 - 参数为 bool（true=正在播放）
         /// 触发时机：每帧在 TweenNode_IsAllAnimating() 中触发
         /// 用途：UI 交互禁用/启用、加载指示器显隐等
         /// </summary>
-        public UnityAction<bool> act_on_Tween_IsAnimating;
+        public UnityAction<bool> act_on_tween_is_animating;
         #endregion
 
         #region 成员 - 事件
@@ -889,103 +889,103 @@ namespace SevenStrikeModules.XHud
         /// 触发时机：Tween_Play(XTween_Interface tween)
         /// Inspector 绑定：可拖拽对象监听底层动画实例的播放
         /// </summary>
-        public UnityEvent<XTween_Interface> eve_on_Tween_Play;
+        public UnityEvent<XTween_Interface> eve_on_tween_play;
         /// <summary>
         /// 事件 - 动画播放时触发 - 参数为 TweenNode
         /// 触发时机：Tween_Play(TweenNode node)
         /// </summary>
-        public UnityEvent<TweenNode> eve_on_Tween_Play_At_Node;
+        public UnityEvent<TweenNode> eve_on_tween_play_at_node;
         /// <summary>
         /// 事件 - 动画播放时触发 - 参数为动画 ID
         /// 触发时机：Tween_Play(int id)
         /// </summary>
-        public UnityEvent<int> eve_on_Tween_Play_At_ID;
+        public UnityEvent<int> eve_on_tween_play_at_id;
         /// <summary>
         /// 事件 - 动画播放时触发 - 参数为动画标识名称
         /// 触发时机：Tween_Play(string indicator)
         /// </summary>
-        public UnityEvent<string> eve_on_Tween_Play_At_Indicator;
+        public UnityEvent<string> eve_on_tween_play_at_indicator;
         /// <summary>
         /// 事件 - 全部动画播放时触发 - 无参数
         /// 触发时机：Tweens_Play_With_Delay(...) 批量播放后
         /// </summary>
-        public UnityEvent eve_on_Tween_PlayAll;
+        public UnityEvent eve_on_tween_play_all;
         /// <summary>
         /// 事件 - 动画创建完成时触发 - 参数为 TweenNode
         /// 触发时机：Tween_CreateById(...) 创建后
         /// </summary>
-        public UnityEvent<TweenNode> eve_on_Tween_Create_At_ID;
+        public UnityEvent<TweenNode> eve_on_tween_create_at_id;
         /// <summary>
         /// 事件 - 动画创建完成时触发 - 参数为 TweenNode
         /// 触发时机：Tween_CreateByIndex(...) 创建后
         /// </summary>
-        public UnityEvent<TweenNode> eve_on_Tween_Create_At_Index;
+        public UnityEvent<TweenNode> eve_on_tween_create_at_index;
         /// <summary>
         /// 事件 - 动画创建完成时触发 - 参数为 TweenNode
         /// 触发时机：Tween_CreateByIndicator(...) 创建后
         /// </summary>
-        public UnityEvent<TweenNode> eve_on_Tween_Create_At_Indicator;
+        public UnityEvent<TweenNode> eve_on_tween_create_at_indicator;
         /// <summary>
         /// 事件 - 动画复位时触发 - 参数为 TweenNode
         /// 触发时机：Tween_Rewind(node, ...)
         /// </summary>
-        public UnityEvent<TweenNode> eve_on_Tween_Rewind;
+        public UnityEvent<TweenNode> eve_on_tween_rewind;
         /// <summary>
         /// 事件 - 全部动画复位时触发 - 无参数
         /// 触发时机：Tween_RewindAll(...)
         /// </summary>
-        public UnityEvent eve_on_Tween_RewindAll;
+        public UnityEvent eve_on_tween_rewind_all;
         /// <summary>
         /// 事件 - 动画杀死时触发 - 参数为 TweenNode
         /// 触发时机：Tween_Kill(node, ...)
         /// </summary>
-        public UnityEvent<TweenNode> eve_on_Tween_Kill;
+        public UnityEvent<TweenNode> eve_on_tween_kill;
         /// <summary>
         /// 事件 - 全部动画杀死时触发 - 无参数
         /// 触发时机：Tween_KillAll(...)
         /// </summary>
-        public UnityEvent eve_on_Tween_KillAll;
+        public UnityEvent eve_on_tween_kill_all;
         /// <summary>
         /// 事件 - 动画准备就绪时触发 - 无参数
         /// 触发时机：动画系统初始化完成、可开始播放前
         /// </summary>
-        public UnityEvent eve_on_Tween_Ready;
+        public UnityEvent eve_on_tween_ready;
         /// <summary>
         /// 事件 - 所有动画完成时触发 - 无参数
         /// 触发时机：TweenNode_IsAllAnimating() 检测到播放状态结束
         /// 特性：只在状态切换瞬间触发一次
         /// </summary>
-        public UnityEvent eve_on_Tween_Complete;
+        public UnityEvent eve_on_tween_complete;
         /// <summary>
         /// 事件 - 动画器初始化完成时触发 - 无参数
         /// 触发时机：Awake() 中，进度重置之后
         /// </summary>
-        public UnityEvent eve_on_Tween_Initialized;
+        public UnityEvent eve_on_tween_initialized;
         /// <summary>
         /// 事件 - 音效触发播放时触发 - 参数为 AudioClip
         /// 触发时机：PlayTweenSound(...) 实际播放音效时
         /// </summary>
-        public UnityEvent<AudioClip> eve_on_Tween_SoundPlay;
+        public UnityEvent<AudioClip> eve_on_tween_sound_play;
         /// <summary>
         /// 事件 - 动画播放状态变化时触发 - 参数为 bool（true=正在播放）
         /// 触发时机：每帧在 TweenNode_IsAllAnimating() 中触发
         /// 用途：与 act_on_Tween_IsAnimating 对应，供 Inspector 可视化绑定
         /// </summary>
-        public UnityEvent<bool> eve_on_Tween_AnimatingState;
+        public UnityEvent<bool> eve_on_tween_animating_state;
         #endregion
 
         #region 状态开关
         /// <summary>
         /// 调试开关
         /// </summary>
-        [SerializeField] public bool UseDebug;
+        [SerializeField] public bool use_debug;
         #endregion
 
         #region 预览时机
         /// <summary>
         /// 预览时机
         /// </summary>
-        [SerializeField] public string PreviewTiming;
+        [SerializeField] public string preview_timing;
         #endregion
 
         #region 折叠
@@ -1019,27 +1019,27 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 时间线编辑器 - 每秒像素数（缩放）
         /// </summary>
-        [SerializeField] public float Timeline_TrackPosition = 100f;
+        [SerializeField] public float timeline_track_position = 100f;
         /// <summary>
         /// 时间线编辑器 - 水平滚动量（像素）
         /// </summary>
-        [SerializeField] public Vector2 Timeline_TrackScroll = Vector2.zero;
+        [SerializeField] public Vector2 timeline_track_scroll = Vector2.zero;
         /// <summary>
         /// 时间线编辑器 - 轨道高度（像素）
         /// </summary>
-        [SerializeField] public float Timeline_TrackHeight = 0f;
+        [SerializeField] public float timeline_track_height = 0f;
         /// <summary>
         /// 时间线编辑器 - 轨道吸附
         /// </summary>
-        [SerializeField] public bool Timeline_TrackSnapEnabled = false;
+        [SerializeField] public bool timeline_track_snap_enabled = false;
         /// <summary>
         /// 时间线编辑器 - 拖拽飞梭经过音效Clip时自动播放音效
         /// </summary>
-        [SerializeField] public bool Timeline_TrackSoundPreviewer = true;
+        [SerializeField] public bool timeline_track_sound_previewer = true;
         /// <summary>
         /// 时间线编辑器 - 预览播放循环开关
         /// </summary>
-        [SerializeField] public bool Timeline_TrackPreviewLoop = false;
+        [SerializeField] public bool timeline_track_preview_loop = false;
         #endregion
 
         #region 运行时 - 音效批次
@@ -1060,7 +1060,7 @@ namespace SevenStrikeModules.XHud
         /// 运行时 - 当前活跃的所有音效批次
         /// <para/>同 timing 可叠加多个批次；KillAll/RewindAll/OnDestroy 时统一清空。
         /// </summary>
-        private List<SoundPlayBatch> SoundBatches = new List<SoundPlayBatch>();
+        private List<SoundPlayBatch> sound_batches = new List<SoundPlayBatch>();
         #endregion
 
         /*               Unity 引擎加载 GameObject
@@ -1129,8 +1129,8 @@ namespace SevenStrikeModules.XHud
             //   - 记录动画器创建时刻的日志/埋点
             // 
             // 注意：使用 UnityAction 无参委托，因此无参传递
-            if (act_on_Tween_Initialized != null)
-                act_on_Tween_Initialized();
+            if (act_on_tween_initialized != null)
+                act_on_tween_initialized();
 
             // ========== 3. 触发初始化事件（Inspector 可视化绑定） ==========
             // UnityEvent 内部已做空引用保护，无需外部判空
@@ -1142,7 +1142,7 @@ namespace SevenStrikeModules.XHud
             // 典型 Inspector 绑定场景：
             //   - 拖拽父级 Element 对象，调用其某个初始化方法
             //   - 拖拽音效管理器，播放"图元入场"音效
-            eve_on_Tween_Initialized.Invoke();
+            eve_on_tween_initialized.Invoke();
         }
 
         void Start()
@@ -1194,10 +1194,10 @@ namespace SevenStrikeModules.XHud
             TweenNode tn = new TweenNode();
 
             // 步骤 2：分配唯一 ID（避免与现有节点冲突）
-            tn.ID = TweenNode_GenerateId();
+            tn.id = TweenNode_GenerateId();
 
             // 步骤 3：加入节点列表，纳入统一管理
-            PrimitiveTweenNodes.Add(tn);
+            primitive_tween_nodes.Add(tn);
 
             // 返回引用，便于外部继续配置该节点
             return tn;
@@ -1230,10 +1230,10 @@ namespace SevenStrikeModules.XHud
         public TweenNode TweenNode_Create(TweenNode node)
         {
             // 覆盖原 ID，确保在本节点列表内唯一
-            node.ID = TweenNode_GenerateId();
+            node.id = TweenNode_GenerateId();
 
             // 直接引用加入列表
-            PrimitiveTweenNodes.Add(node);
+            primitive_tween_nodes.Add(node);
 
             // 返回传入的实例，便于链式调用
             return node;
@@ -1255,18 +1255,18 @@ namespace SevenStrikeModules.XHud
         public void TweenNode_RemoveByName(string name)
         {
             // 逆序遍历：删除后不影响未检查元素的索引
-            for (int i = PrimitiveTweenNodes.Count - 1; i >= 0; i--)
+            for (int i = primitive_tween_nodes.Count - 1; i >= 0; i--)
             {
-                if (PrimitiveTweenNodes[i].Indicator == name)
+                if (primitive_tween_nodes[i].indicator == name)
                 {
                     // 先杀死动画实例，避免幽灵动画与内存泄漏
-                    if (PrimitiveTweenNodes[i].Tweener != null)
+                    if (primitive_tween_nodes[i].tweener != null)
                     {
-                        PrimitiveTweenNodes[i].Tweener.Kill(false);
-                        PrimitiveTweenNodes[i].Tweener = null;
+                        primitive_tween_nodes[i].tweener.Kill(false);
+                        primitive_tween_nodes[i].tweener = null;
                     }
 
-                    PrimitiveTweenNodes.RemoveAt(i);
+                    primitive_tween_nodes.RemoveAt(i);
                 }
             }
         }
@@ -1287,18 +1287,18 @@ namespace SevenStrikeModules.XHud
         public void TweenNode_RemoveById(int id)
         {
             // 逆序遍历：删除后不影响未检查元素的索引
-            for (int i = PrimitiveTweenNodes.Count - 1; i >= 0; i--)
+            for (int i = primitive_tween_nodes.Count - 1; i >= 0; i--)
             {
-                if (PrimitiveTweenNodes[i].ID == id)
+                if (primitive_tween_nodes[i].id == id)
                 {
                     // 先杀死动画实例，避免幽灵动画与内存泄漏
-                    if (PrimitiveTweenNodes[i].Tweener != null)
+                    if (primitive_tween_nodes[i].tweener != null)
                     {
-                        PrimitiveTweenNodes[i].Tweener.Kill(false);
-                        PrimitiveTweenNodes[i].Tweener = null;
+                        primitive_tween_nodes[i].tweener.Kill(false);
+                        primitive_tween_nodes[i].tweener = null;
                     }
 
-                    PrimitiveTweenNodes.RemoveAt(i);
+                    primitive_tween_nodes.RemoveAt(i);
                 }
             }
         }
@@ -1326,7 +1326,7 @@ namespace SevenStrikeModules.XHud
         public TweenNode TweenNode_GetByIndex(int index)
         {
             // 直接按索引访问（无判空、无越界保护）
-            return PrimitiveTweenNodes[index];
+            return primitive_tween_nodes[index];
         }
         /// <summary>
         /// 获取动画节点 - 根据唯一 ID
@@ -1359,11 +1359,11 @@ namespace SevenStrikeModules.XHud
             TweenNode node = null;
 
             // 线性查找
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < primitive_tween_nodes.Count; i++)
             {
-                if (PrimitiveTweenNodes[i].ID == ID)
+                if (primitive_tween_nodes[i].id == ID)
                 {
-                    node = PrimitiveTweenNodes[i];
+                    node = primitive_tween_nodes[i];
                     break;  // ID 唯一，命中即可退出
                 }
             }
@@ -1402,11 +1402,11 @@ namespace SevenStrikeModules.XHud
             TweenNode node = null;
 
             // 线性查找
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < primitive_tween_nodes.Count; i++)
             {
-                if (PrimitiveTweenNodes[i].Indicator == indicator)
+                if (primitive_tween_nodes[i].indicator == indicator)
                 {
-                    node = PrimitiveTweenNodes[i];
+                    node = primitive_tween_nodes[i];
                     break;  // 命中首个匹配即退出
                 }
             }
@@ -1452,9 +1452,9 @@ namespace SevenStrikeModules.XHud
             // 用于后续 Contains 冲突检测
             // 注意：每次调用都重新构建列表，存在重复内存分配
             List<int> ids = new List<int>();
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < primitive_tween_nodes.Count; i++)
             {
-                ids.Add(PrimitiveTweenNodes[i].ID);
+                ids.Add(primitive_tween_nodes[i].id);
             }
 
             // ========== 步骤 2：首次尝试（4 位数范围） ==========
@@ -1484,7 +1484,7 @@ namespace SevenStrikeModules.XHud
         #region 音效节点列表操作
         /// <summary>
         /// 创建音效节点（无参重载）。
-        /// <para>【流程】new TweenSound() → 分配唯一 ID → 加入 <see cref="PrimitiveTweenSounds"/>。</para>
+        /// <para>【流程】new TweenSound() → 分配唯一 ID → 加入 <see cref="primitive_tween_sounds"/>。</para>
         /// <para>【用途】编辑器"新建音效"按钮、代码动态追加一条音效。</para>
         /// <para>【注意】新节点的 Sound、Path、Timing 均为空，需调用方自行配置；ID 由 <see cref="TweenSound_GenerateId"/> 保证在当前列表内唯一。</para>
         /// </summary>
@@ -1495,10 +1495,10 @@ namespace SevenStrikeModules.XHud
             TweenSound sod = new TweenSound();
 
             // 步骤 2：分配唯一 ID（避免与现有节点冲突）
-            sod.ID = TweenSound_GenerateId();
+            sod.id = TweenSound_GenerateId();
 
             // 步骤 3：加入节点列表，纳入统一管理
-            PrimitiveTweenSounds.Add(sod);
+            primitive_tween_sounds.Add(sod);
 
             // 返回引用，便于外部继续配置该节点
             return sod;
@@ -1515,10 +1515,10 @@ namespace SevenStrikeModules.XHud
         public TweenSound TweenSound_Create(TweenSound sod)
         {
             // 覆盖原 ID，确保在本节点列表内唯一
-            sod.ID = TweenSound_GenerateId();
+            sod.id = TweenSound_GenerateId();
 
             // 直接引用加入列表
-            PrimitiveTweenSounds.Add(sod);
+            primitive_tween_sounds.Add(sod);
 
             // 返回传入的实例，便于链式调用
             return sod;
@@ -1533,13 +1533,13 @@ namespace SevenStrikeModules.XHud
         public void TweenSound_RemoveByName(string name)
         {
             // 逆序遍历：删除后不影响未检查元素的索引
-            for (int i = PrimitiveTweenSounds.Count - 1; i >= 0; i--)
+            for (int i = primitive_tween_sounds.Count - 1; i >= 0; i--)
             {
-                TweenSound sod = PrimitiveTweenSounds[i];
-                if (sod.Sound != null && sod.Sound.name == name)
+                TweenSound sod = primitive_tween_sounds[i];
+                if (sod.sound != null && sod.sound.name == name)
                 {
                     TweenSound_SoundBatch_RemoveSound(sod);  // 新增
-                    PrimitiveTweenSounds.RemoveAt(i);
+                    primitive_tween_sounds.RemoveAt(i);
                 }
             }
         }
@@ -1553,12 +1553,12 @@ namespace SevenStrikeModules.XHud
         public void TweenSound_RemoveById(int id)
         {
             // 逆序遍历：删除后不影响未检查元素的索引
-            for (int i = PrimitiveTweenSounds.Count - 1; i >= 0; i--)
+            for (int i = primitive_tween_sounds.Count - 1; i >= 0; i--)
             {
-                if (PrimitiveTweenSounds[i].ID == id)
+                if (primitive_tween_sounds[i].id == id)
                 {
-                    TweenSound_SoundBatch_RemoveSound(PrimitiveTweenSounds[i]);  // 新增
-                    PrimitiveTweenSounds.RemoveAt(i);
+                    TweenSound_SoundBatch_RemoveSound(primitive_tween_sounds[i]);  // 新增
+                    primitive_tween_sounds.RemoveAt(i);
                 }
             }
         }
@@ -1569,18 +1569,18 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void TweenSound_SoundBatch_RemoveSound(TweenSound sod)
         {
-            if (sod == null || SoundBatches.Count == 0)
+            if (sod == null || sound_batches.Count == 0)
                 return;
 
-            for (int b = SoundBatches.Count - 1; b >= 0; b--)
+            for (int b = sound_batches.Count - 1; b >= 0; b--)
             {
-                SoundPlayBatch batch = SoundBatches[b];
+                SoundPlayBatch batch = sound_batches[b];
                 batch.Sounds.Remove(sod);
                 batch.Triggered.Remove(sod);
 
                 // 批次空了就移除，避免空批次残留
                 if (batch.Sounds.Count == 0)
-                    SoundBatches.RemoveAt(b);
+                    sound_batches.RemoveAt(b);
             }
         }
         /// <summary>
@@ -1594,7 +1594,7 @@ namespace SevenStrikeModules.XHud
         public TweenSound TweenSound_GetByIndex(int index)
         {
             // 直接按索引访问（无判空、无越界保护）
-            return PrimitiveTweenSounds[index];
+            return primitive_tween_sounds[index];
         }
         /// <summary>
         /// 获取音效节点（按唯一 ID）。
@@ -1609,11 +1609,11 @@ namespace SevenStrikeModules.XHud
             TweenSound node = null;
 
             // 线性查找
-            for (int i = 0; i < PrimitiveTweenSounds.Count; i++)
+            for (int i = 0; i < primitive_tween_sounds.Count; i++)
             {
-                if (PrimitiveTweenSounds[i].ID == ID)
+                if (primitive_tween_sounds[i].id == ID)
                 {
-                    node = PrimitiveTweenSounds[i];
+                    node = primitive_tween_sounds[i];
                     break;  // ID 唯一，命中即可退出
                 }
             }
@@ -1635,9 +1635,9 @@ namespace SevenStrikeModules.XHud
             // 用于后续 Contains 冲突检测
             // 注意：每次调用都重新构建列表，存在重复内存分配
             List<int> ids = new List<int>();
-            for (int i = 0; i < PrimitiveTweenSounds.Count; i++)
+            for (int i = 0; i < primitive_tween_sounds.Count; i++)
             {
-                ids.Add(PrimitiveTweenSounds[i].ID);
+                ids.Add(primitive_tween_sounds[i].id);
             }
 
             // ========== 步骤 2：首次尝试（4 位数范围） ==========
@@ -1676,17 +1676,17 @@ namespace SevenStrikeModules.XHud
         public string TweenNodeArray_ToJson()
         {
             TweenNodeArray t = new TweenNodeArray();
-            t.TweenNodeList = new List<TweenNode>();
-            t.TweenSoundList = new List<TweenSound>();
+            t.tween_node_list = new List<TweenNode>();
+            t.tween_sound_list = new List<TweenSound>();
 
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < primitive_tween_nodes.Count; i++)
             {
-                t.TweenNodeList.Add(PrimitiveTweenNodes[i]);
+                t.tween_node_list.Add(primitive_tween_nodes[i]);
             }
 
-            for (int i = 0; i < PrimitiveTweenSounds.Count; i++)
+            for (int i = 0; i < primitive_tween_sounds.Count; i++)
             {
-                t.TweenSoundList.Add(PrimitiveTweenSounds[i]);
+                t.tween_sound_list.Add(primitive_tween_sounds[i]);
             }
 
             string json = JsonUtility.ToJson(t);
@@ -1732,21 +1732,21 @@ namespace SevenStrikeModules.XHud
             List<TweenNode> tweenNodes = new List<TweenNode>();
             List<TweenSound> tweenSounds = new List<TweenSound>();
 
-            for (int s = 0; s < tnc.TweenNodeList.Count; s++)
+            for (int s = 0; s < tnc.tween_node_list.Count; s++)
             {
-                TweenNode node = tnc.TweenNodeList[s].Clone();
-                node.ID = TweenNode_GenerateId();
+                TweenNode node = tnc.tween_node_list[s].Clone();
+                node.id = TweenNode_GenerateId();
                 tweenNodes.Add(node);
             }
-            PrimitiveTweenNodes = tweenNodes;
+            primitive_tween_nodes = tweenNodes;
 
-            for (int s = 0; s < tnc.TweenSoundList.Count; s++)
+            for (int s = 0; s < tnc.tween_sound_list.Count; s++)
             {
-                TweenSound sod = tnc.TweenSoundList[s].Clone();
-                sod.ID = TweenSound_GenerateId();
+                TweenSound sod = tnc.tween_sound_list[s].Clone();
+                sod.id = TweenSound_GenerateId();
                 tweenSounds.Add(sod);
             }
-            PrimitiveTweenSounds = tweenSounds;
+            primitive_tween_sounds = tweenSounds;
         }
         #endregion
 
@@ -1784,7 +1784,7 @@ namespace SevenStrikeModules.XHud
             // 若找到控制器，则建立反向引用，形成双向绑定
             if (controller != null)
             {
-                controller.pt_Tween = this;
+                controller.pt_tween = this;
             }
         }
         /// <summary>
@@ -1816,18 +1816,18 @@ namespace SevenStrikeModules.XHud
         {
             // 获取所有动画节点中的最短耗时
             // 内部会遍历 PrimitiveTweenNodes 并缓存到 MinTimer 字段
-            MinTimer = TweenNode_GetTimerByType("min");
+            min_timer = TweenNode_GetTimerByType("min");
 
             // 获取所有动画节点中的最长耗时
             // 内部会遍历 PrimitiveTweenNodes 并缓存到 MaxTimer 字段
-            MaxTimer = TweenNode_GetTimerByType("max");
+            max_timer = TweenNode_GetTimerByType("max");
 
             // 应用动画器全局速率后的最短耗时
             // GlobalDuration 为时长倍率：<1 加速、>1 减速
-            MinTimerWithGlobalDuration = MinTimer * GlobalDuration;
+            min_timer_with_global_duration = min_timer * global_duration;
 
             // 应用动画器全局速率后的最长耗时
-            MaxTimerWithGlobalDuration = MaxTimer * GlobalDuration;
+            max_timer_with_global_duration = max_timer * global_duration;
         }
         /// <summary>
         /// 获取动画节点列表中的最大或最小耗时
@@ -1863,12 +1863,12 @@ namespace SevenStrikeModules.XHud
         {
             // ========== 空列表保护 ==========
             // 节点列表为空时，直接返回 0，并清空对应缓存
-            if (PrimitiveTweenNodes.Count <= 0)
+            if (primitive_tween_nodes.Count <= 0)
             {
                 if (type == "min")
-                    MinTimer = 0;
+                    min_timer = 0;
                 if (type == "max")
-                    MaxTimer = 0;
+                    max_timer = 0;
                 return 0;
             }
 
@@ -1877,9 +1877,9 @@ namespace SevenStrikeModules.XHud
             // - Clamp 确保 LoopCount 至少为 1（避免 0 或负数导致耗时为 0 或负数）
             // - 无限循环（-1）被 Clamp 到 1，按单次播放时长计算
             List<float> timers = new List<float>();
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < primitive_tween_nodes.Count; i++)
             {
-                float time = PrimitiveTweenNodes[i].Duration * Mathf.Clamp(PrimitiveTweenNodes[i].LoopCount, 1, int.MaxValue) + PrimitiveTweenNodes[i].Delay;
+                float time = primitive_tween_nodes[i].duration * Mathf.Clamp(primitive_tween_nodes[i].loop_count, 1, int.MaxValue) + primitive_tween_nodes[i].delay;
                 timers.Add(time);
             }
 
@@ -1887,14 +1887,14 @@ namespace SevenStrikeModules.XHud
             if (type == "min")
             {
                 // 取所有节点耗时中的最小值
-                MinTimer = XGUI_Utilitys.MinValue(timers.ToArray());
-                return MinTimer;
+                min_timer = XGUI_Utilitys.MinValue(timers.ToArray());
+                return min_timer;
             }
             else if (type == "max")
             {
                 // 取所有节点耗时中的最大值
-                MaxTimer = XGUI_Utilitys.MaxValue(timers.ToArray());
-                return MaxTimer;
+                max_timer = XGUI_Utilitys.MaxValue(timers.ToArray());
+                return max_timer;
             }
             else
             {
@@ -1944,17 +1944,17 @@ namespace SevenStrikeModules.XHud
 
             // ========== 1. 检查是否有动画正在播放 ==========
             // 遍历所有节点，只要发现一个在播放即可提前退出
-            if (PrimitiveTweenNodes != null && PrimitiveTweenNodes.Count > 0)
+            if (primitive_tween_nodes != null && primitive_tween_nodes.Count > 0)
             {
-                for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+                for (int i = 0; i < primitive_tween_nodes.Count; i++)
                 {
-                    TweenNode node = PrimitiveTweenNodes[i];
+                    TweenNode node = primitive_tween_nodes[i];
 
                     // 三重条件判定该节点正在播放：
                     // - Tweener != null  ：动画实例已创建
                     // - Tweener.IsActive ：动画未被杀死（生命周期有效）
                     // - Tweener.IsPlaying：动画处于播放状态
-                    if (node.Tweener != null && node.Tweener.IsActive && node.Tweener.IsPlaying)
+                    if (node.tweener != null && node.tweener.IsActive && node.tweener.IsPlaying)
                     {
                         animating = true;
                         break;  // 只要有一个在播放，就可以提前退出循环
@@ -1964,36 +1964,36 @@ namespace SevenStrikeModules.XHud
 
             // ========== 2. 触发动画播放状态事件（每帧） ==========
             // 委托版本（代码绑定）
-            if (act_on_Tween_IsAnimating != null)
-                act_on_Tween_IsAnimating(animating);
+            if (act_on_tween_is_animating != null)
+                act_on_tween_is_animating(animating);
 
             // 事件版本（Inspector 绑定，内部已判空）
-            eve_on_Tween_AnimatingState.Invoke(animating);
+            eve_on_tween_animating_state.Invoke(animating);
 
             // ========== 3. 边缘检测：动画完成时触发完成事件 ==========
             if (animating)
             {
                 // 当前正在播放：若之前是停止状态，则标记为"播放中"
                 // 这是"停止 → 播放"的上升沿，不需要触发完成事件
-                if (!AnimatingBreakState)
+                if (!animating_break_state)
                 {
-                    AnimatingBreakState = true;
+                    animating_break_state = true;
                 }
             }
             else
             {
                 // 当前已停止：若之前是播放状态，则触发完成事件
                 // 这是"播放 → 停止"的下降沿，需要触发一次完成事件
-                if (AnimatingBreakState)
+                if (animating_break_state)
                 {
-                    AnimatingBreakState = false;  // 重置标志位，避免重复触发
+                    animating_break_state = false;  // 重置标志位，避免重复触发
 
                     // 触发动画完成动作（代码绑定）
-                    if (act_on_Tween_Complete != null)
-                        act_on_Tween_Complete();
+                    if (act_on_tween_complete != null)
+                        act_on_tween_complete();
 
                     // 触发动画完成事件（Inspector 绑定）
-                    eve_on_Tween_Complete.Invoke();
+                    eve_on_tween_complete.Invoke();
                 }
             }
 
@@ -2017,13 +2017,13 @@ namespace SevenStrikeModules.XHud
         private void TweenNode_AllTweenProgress_Calculation()
         {
             // 安全检查：没有动画节点时直接返回
-            if (PrimitiveTweenNodes == null || PrimitiveTweenNodes.Count == 0)
+            if (primitive_tween_nodes == null || primitive_tween_nodes.Count == 0)
                 return;
 
             // 遍历所有动画节点
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < primitive_tween_nodes.Count; i++)
             {
-                TweenNode node = PrimitiveTweenNodes[i];
+                TweenNode node = primitive_tween_nodes[i];
 
                 // 更新该节点的播放进度
                 TweenNode_UpdateTweenProgress(node);
@@ -2056,12 +2056,12 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void TweenNode_AllTweenProgress_Reset()
         {
-            if (PrimitiveTweenNodes.Count <= 0)
+            if (primitive_tween_nodes.Count <= 0)
                 return;
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < primitive_tween_nodes.Count; i++)
             {
                 #region 确保动画存在不为空的情况下，每个动画的动画进度归零
-                PrimitiveTweenNodes[i].Progress = 0;
+                primitive_tween_nodes[i].progress = 0;
                 #endregion
             }
         }
@@ -2081,14 +2081,14 @@ namespace SevenStrikeModules.XHud
         private void TweenNode_UpdateTweenProgress(TweenNode node)
         {
             // 检查动画是否正在播放
-            if (node.Tweener == null || !node.Tweener.IsActive || !node.Tweener.IsPlaying)
+            if (node.tweener == null || !node.tweener.IsActive || !node.tweener.IsPlaying)
                 return;
 
             // 计算原始进度值
-            float rawProgress = node.Tweener.ElapsedTime / node.Tweener.Duration;
+            float rawProgress = node.tweener.ElapsedTime / node.tweener.Duration;
 
             // 精度修正：接近完成时直接设为 1
-            node.Progress = rawProgress > 0.985f ? 1f : rawProgress;
+            node.progress = rawProgress > 0.985f ? 1f : rawProgress;
         }
         #endregion
 
@@ -2101,30 +2101,30 @@ namespace SevenStrikeModules.XHud
         /// <param name="timing">时机名称（对应 TweenSound.Timing）</param>
         private void StartSoundBatch(string timing)
         {
-            if (MutePlay)
+            if (mute_play)
                 return;
-            if (PrimitiveTweenSounds == null || PrimitiveTweenSounds.Count == 0)
+            if (primitive_tween_sounds == null || primitive_tween_sounds.Count == 0)
                 return;
             if (string.IsNullOrEmpty(timing))
                 return;
 
             // 倍率快照：XHud管理器倍率 × 本动画器倍率
             float mul = 1f;
-            if (XHud_Manager.Instance != null && XHud_Manager.Instance.DurationMultiply > 0f)
-                mul = XHud_Manager.Instance.DurationMultiply;
-            mul *= GlobalDuration;
+            if (XHud_Manager.instance != null && XHud_Manager.instance.tween_global_duration > 0f)
+                mul = XHud_Manager.instance.tween_global_duration;
+            mul *= global_duration;
 
             SoundPlayBatch batch = new SoundPlayBatch();
             batch.StartTime = Time.time;
             batch.Mul = mul;
 
             // 筛选：时机匹配 + 未静音 + 有音频剪辑
-            for (int i = 0; i < PrimitiveTweenSounds.Count; i++)
+            for (int i = 0; i < primitive_tween_sounds.Count; i++)
             {
-                TweenSound sod = PrimitiveTweenSounds[i];
-                if (sod == null || sod.Sound == null || sod.Mute)
+                TweenSound sod = primitive_tween_sounds[i];
+                if (sod == null || sod.sound == null || sod.mute)
                     continue;
-                if (sod.Timing != timing)
+                if (sod.timing != timing)
                     continue;
                 batch.Sounds.Add(sod);
             }
@@ -2133,9 +2133,9 @@ namespace SevenStrikeModules.XHud
                 return;
 
             // 按实际触发时刻排序（Delay × Mul），便于后续顺序触发
-            batch.Sounds.Sort((a, b) => (a.Delay * mul).CompareTo(b.Delay * mul));
+            batch.Sounds.Sort((a, b) => (a.delay * mul).CompareTo(b.delay * mul));
 
-            SoundBatches.Add(batch);
+            sound_batches.Add(batch);
         }
         /// <summary>
         /// 每帧驱动：检查所有音效批次，按各自 Delay 触发到点的音效
@@ -2144,16 +2144,16 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void UpdateSoundBatches()
         {
-            if (SoundBatches.Count == 0)
+            if (sound_batches.Count == 0)
                 return;
-            if (MutePlay)
+            if (mute_play)
                 return;
 
             float now = Time.time;
 
-            for (int b = SoundBatches.Count - 1; b >= 0; b--)
+            for (int b = sound_batches.Count - 1; b >= 0; b--)
             {
-                SoundPlayBatch batch = SoundBatches[b];
+                SoundPlayBatch batch = sound_batches[b];
                 float elapsed = now - batch.StartTime;
 
                 for (int i = 0; i < batch.Sounds.Count; i++)
@@ -2162,7 +2162,7 @@ namespace SevenStrikeModules.XHud
                     if (batch.Triggered.Contains(sod))   //  改成引用比较
                         continue;
 
-                    float actualDelay = sod.Delay * batch.Mul;
+                    float actualDelay = sod.delay * batch.Mul;
                     if (elapsed >= actualDelay)
                     {
                         batch.Triggered.Add(sod);        //  改成引用
@@ -2171,7 +2171,7 @@ namespace SevenStrikeModules.XHud
                 }
 
                 if (batch.Triggered.Count >= batch.Sounds.Count)
-                    SoundBatches.RemoveAt(b);
+                    sound_batches.RemoveAt(b);
             }
         }
         /// <summary>
@@ -2180,7 +2180,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void StopAllSoundBatches()
         {
-            SoundBatches.Clear();
+            sound_batches.Clear();
         }
         /// <summary>
         /// 播放动画音效（通过 XHud_Manager 音效池）
@@ -2188,24 +2188,24 @@ namespace SevenStrikeModules.XHud
         private AudioSource PlayTweenSound(TweenSound sound)
         {
             // ========== 1. 静音检查 ==========
-            if (MutePlay)
+            if (mute_play)
                 return null;
 
             // ========== 2. 有效性检查 ==========
-            if (sound == null || sound.Sound == null)
+            if (sound == null || sound.sound == null)
             {
                 Debug.LogWarning("[XHud] PlayTweenSound: 音效或 AudioClip 为空，跳过播放");
                 return null;
             }
-            if (sound.Mute)
+            if (sound.mute)
                 return null;
 
             // ========== 3. 触发外部事件 ==========
-            act_on_Tween_SoundPlay?.Invoke(sound.Sound);
-            eve_on_Tween_SoundPlay.Invoke(sound.Sound);
+            act_on_tween_sound_play?.Invoke(sound.sound);
+            eve_on_tween_sound_play.Invoke(sound.sound);
 
             // ========== 4. 获取音效播放器 ==========
-            XHud_Manager manager = XHud_Manager.Instance;
+            XHud_Manager manager = XHud_Manager.instance;
             if (manager == null)
             {
                 Debug.LogWarning("[XHud] PlayTweenSound: XHud_Manager 实例不存在");
@@ -2220,13 +2220,13 @@ namespace SevenStrikeModules.XHud
             }
 
             // ========== 5. 配置并播放 ==========
-            player.clip = sound.Sound;
-            player.volume = (manager.Volume * 0.01f) * Mathf.Clamp01(sound.Volume);
-            player.mute = sound.Mute || manager.VolumeMute;
+            player.clip = sound.sound;
+            player.volume = (manager.global_volume * 0.01f) * Mathf.Clamp01(sound.volume);
+            player.mute = sound.mute || manager.global_volume_mute;
             player.time = 0f;
             // 音高：对称范围，避免 Min > Max 时 Random.Range 出错
-            float pMin = Mathf.Min(sound.MinPitch, sound.MaxPitch);
-            float pMax = Mathf.Max(sound.MinPitch, sound.MaxPitch);
+            float pMin = Mathf.Min(sound.min_pitch, sound.max_pitch);
+            float pMax = Mathf.Max(sound.min_pitch, sound.max_pitch);
             bool useRandomPitch = !Mathf.Approximately(pMin, 1f) || !Mathf.Approximately(pMax, 1f);
             player.pitch = useRandomPitch ? Random.Range(pMin, pMax) : 1f;
 
@@ -2280,7 +2280,7 @@ namespace SevenStrikeModules.XHud
             // 组件的起点写入由 tween 首次 Update 时完成
 
             // ========== 按类型分派 ==========
-            switch (node.Type)
+            switch (node.type)
             {
                 case TweenNodeType.a_位移:
                     twn = Tween_Create_Position(node, duration, delay, percentage_threshold, on_update, on_percentage, on_complete, on_rewind);
@@ -2299,11 +2299,11 @@ namespace SevenStrikeModules.XHud
                     break;
                 case TweenNodeType.w_打字机:
                     // 打字机动画根据实际文本组件类型自动选择实现
-                    if (controller.mod_Text != null)
+                    if (controller.mod_text != null)
                     {
                         twn = Tween_Create_Writer_Text(node, duration, delay, percentage_threshold, on_update, on_percentage, on_complete, on_rewind);
                     }
-                    else if (controller.mod_TmpText != null)
+                    else if (controller.mod_tmp_text != null)
                     {
                         twn = Tween_Create_Writer_TmpText(node, duration, delay, percentage_threshold, on_update, on_percentage, on_complete, on_rewind);
                     }
@@ -2342,7 +2342,7 @@ namespace SevenStrikeModules.XHud
         private XTween_Interface Tween_Create_Position(TweenNode node, float duration, float delay, float percentage_threshold, UnityAction on_update = null, UnityAction on_percentage = null, UnityAction on_complete = null, UnityAction on_rewind = null)
         {
             // 前置校验：缺少 RectTransform 则无法创建位移动画
-            if (controller.mod_Rect == null)
+            if (controller.mod_rect == null)
                 return null;
 
             XTween_Interface twn = null;
@@ -2353,29 +2353,29 @@ namespace SevenStrikeModules.XHud
             Vector3 from_value = default;   // 
 
             bool isfrom;
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    target_value = node.Original_Vector3;
-                    from_value = node.From_Vector3;
+                    target_value = node.ori_vector3;
+                    from_value = node.from_vector3;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
-                    target_value = node.End_Vector3;
-                    from_value = node.From_Vector3;
+                    target_value = node.end_vector3;
+                    from_value = node.from_vector3;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
-                    target_value = node.End_Vector3;
-                    from_value = node.Original_Vector3;   // 
+                    target_value = node.end_vector3;
+                    from_value = node.ori_vector3;   // 
                     isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
-                    target_value = node.End_Vector3;
+                    target_value = node.end_vector3;
                     isfrom = false;
                     break;
                 default:
-                    target_value = node.End_Vector3;
+                    target_value = node.end_vector3;
                     isfrom = false;
                     break;
             }
@@ -2388,15 +2388,15 @@ namespace SevenStrikeModules.XHud
             //   true                    : 使用局部坐标系
             //   Rewind_Set_Startvalue   : 回退时是否重置到起始值
             //   Complete_Set_Endvalue   : 完成时是否设为结束值
-            twn = controller.mod_Rect.xt_AnchoredPosition3D_To(
+            twn = controller.mod_rect.xt_AnchoredPosition3D_To(
                 target_value,
-                node.Duration * duration,
+                node.duration * duration,
                 false,
                 true,
-                node.Rewind_Set_Startvalue,
-                node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay * duration + delay)
-                .SetLoop(node.LoopCount, node.LoopType);
+                node.rewind_set_startvalue,
+                node.complete_set_endvalue)
+                .SetDelay(node.delay * duration + delay)
+                .SetLoop(node.loop_count, node.loop_type);
 
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
@@ -2404,21 +2404,21 @@ namespace SevenStrikeModules.XHud
                 twn = twn.SetFrom(from_value);
 
             // C-E 模式：动态起点
-            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
-                twn = twn.SetFromDynamic(() => controller.mod_Rect.anchoredPosition3D);
+            if (node.tween_value_mode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_rect.anchoredPosition3D);
 
             // ========== 缓动配置 ==========
             // Ease == None 时使用自定义曲线，否则使用预设缓动模式
-            if (node.Ease == EaseMode.None)
-                twn = twn.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                twn = twn.SetEase(node.curve);
             else
-                twn = twn.SetEase(node.Ease);
+                twn = twn.SetEase(node.ease);
 
             // ========== 更新回调 ==========
             twn = twn.OnUpdate<Vector3>((v, d, t) =>
             {
                 // 实时写入进度，供音效触发与外部读取
-                node.Progress = twn.ElapsedTime / twn.Duration;
+                node.progress = twn.ElapsedTime / twn.Duration;
 
                 // 阈值单次触发
                 if (twn.CurrentEasedProgress >= percentage_threshold)
@@ -2435,8 +2435,8 @@ namespace SevenStrikeModules.XHud
                     on_update();
 
                 // 触发节点自身的值变化回调（携带实际位置）
-                if (node.Act_On_Vector3_Changed != null)
-                    node.Act_On_Vector3_Changed(controller.mod_Rect.anchoredPosition3D);
+                if (node.act_on_vector3_changed != null)
+                    node.act_on_vector3_changed(controller.mod_rect.anchoredPosition3D);
             });
 
             // ========== 回退回调 ==========
@@ -2445,14 +2445,14 @@ namespace SevenStrikeModules.XHud
                 if (on_rewind != null)
                     on_rewind();
 
-                if (node.Act_On_Vector3_Rewind != null)
-                    node.Act_On_Vector3_Rewind(controller.mod_Rect.anchoredPosition3D);
+                if (node.act_on_vector3_rewind != null)
+                    node.act_on_vector3_rewind(controller.mod_rect.anchoredPosition3D);
             });
 
             // ========== 完成回调 ==========
             twn = twn.OnComplete((d) =>
             {
-                node.Progress = 0;  // 完成后重置进度（避免残留）
+                node.progress = 0;  // 完成后重置进度（避免残留）
                 if (on_complete != null)
                     on_complete();
             });
@@ -2473,7 +2473,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private XTween_Interface Tween_Create_Rotate(TweenNode node, float duration, float delay, float percentage_threshold, UnityAction on_update = null, UnityAction on_percentage = null, UnityAction on_complete = null, UnityAction on_rewind = null)
         {
-            if (controller.mod_Rect == null)
+            if (controller.mod_rect == null)
                 return null;
 
             XTween_Interface twn = null;
@@ -2483,43 +2483,43 @@ namespace SevenStrikeModules.XHud
             Vector3 from_value = default;   // 
 
             bool isfrom;
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    target_value = node.Original_Vector3;
-                    from_value = node.From_Vector3;
+                    target_value = node.ori_vector3;
+                    from_value = node.from_vector3;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
-                    target_value = node.End_Vector3;
-                    from_value = node.From_Vector3;
+                    target_value = node.end_vector3;
+                    from_value = node.from_vector3;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
-                    target_value = node.End_Vector3;
-                    from_value = node.Original_Vector3;   // 
+                    target_value = node.end_vector3;
+                    from_value = node.ori_vector3;   // 
                     isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
-                    target_value = node.End_Vector3;
+                    target_value = node.end_vector3;
                     isfrom = false;
                     break;
                 default:
-                    target_value = node.End_Vector3;
+                    target_value = node.end_vector3;
                     isfrom = false;
                     break;
             }
 
             // xt_Rotate_To 参数：目标欧拉角、时长、是否立即播放、是否使用局部、旋转空间、旋转模式
-            twn = controller.mod_Rect.xt_Rotate_To(
+            twn = controller.mod_rect.xt_Rotate_To(
                 target_value,
-                node.Duration * duration,
+                node.duration * duration,
                 false,
                 true,
                 XTweenRotationSpace.世界坐标,
-                node.RotateMode)
-                .SetDelay(node.Delay * duration + delay)
-                .SetLoop(node.LoopCount, node.LoopType);
+                node.rotate_mode)
+                .SetDelay(node.delay * duration + delay)
+                .SetLoop(node.loop_count, node.loop_type);
 
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
@@ -2527,17 +2527,17 @@ namespace SevenStrikeModules.XHud
                 twn = twn.SetFrom(from_value);
 
             // C-E 模式：动态起点
-            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
-                twn = twn.SetFromDynamic(() => controller.mod_Rect.localEulerAngles);
+            if (node.tween_value_mode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_rect.localEulerAngles);
 
-            if (node.Ease == EaseMode.None)
-                twn = twn.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                twn = twn.SetEase(node.curve);
             else
-                twn = twn.SetEase(node.Ease);
+                twn = twn.SetEase(node.ease);
 
             twn = twn.OnUpdate<Vector3>((v, d, t) =>
             {
-                node.Progress = twn.ElapsedTime / twn.Duration;
+                node.progress = twn.ElapsedTime / twn.Duration;
 
                 if (twn.CurrentEasedProgress >= percentage_threshold)
                 {
@@ -2553,8 +2553,8 @@ namespace SevenStrikeModules.XHud
                     on_update();
 
                 // 旋转动画回调携带四元数
-                if (node.Act_On_Quaternion_Changed != null)
-                    node.Act_On_Quaternion_Changed(controller.mod_Rect.rotation);
+                if (node.act_on_quaternion_changed != null)
+                    node.act_on_quaternion_changed(controller.mod_rect.rotation);
             });
 
             twn = twn.OnRewind(() =>
@@ -2562,13 +2562,13 @@ namespace SevenStrikeModules.XHud
                 if (on_rewind != null)
                     on_rewind();
 
-                if (node.Act_On_Quaternion_Rewind != null)
-                    node.Act_On_Quaternion_Rewind(controller.mod_Rect.rotation);
+                if (node.act_on_quaternion_rewind != null)
+                    node.act_on_quaternion_rewind(controller.mod_rect.rotation);
             });
 
             twn = twn.OnComplete((d) =>
             {
-                node.Progress = 0;
+                node.progress = 0;
                 if (on_complete != null)
                     on_complete();
             });
@@ -2584,7 +2584,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private XTween_Interface Tween_Create_Scale(TweenNode node, float duration, float delay, float percentage_threshold, UnityAction on_update = null, UnityAction on_percentage = null, UnityAction on_complete = null, UnityAction on_rewind = null)
         {
-            if (controller.mod_Rect == null)
+            if (controller.mod_rect == null)
                 return null;
 
             XTween_Interface twn = null;
@@ -2594,42 +2594,42 @@ namespace SevenStrikeModules.XHud
             Vector3 from_value = default;   // 
 
             bool isfrom;
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    target_value = node.Original_Vector3;
-                    from_value = node.From_Vector3;
+                    target_value = node.ori_vector3;
+                    from_value = node.from_vector3;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
-                    target_value = node.End_Vector3;
-                    from_value = node.From_Vector3;
+                    target_value = node.end_vector3;
+                    from_value = node.from_vector3;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
-                    target_value = node.End_Vector3;
-                    from_value = node.Original_Vector3;   // 
+                    target_value = node.end_vector3;
+                    from_value = node.ori_vector3;   // 
                     isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
-                    target_value = node.End_Vector3;
+                    target_value = node.end_vector3;
                     isfrom = false;
                     break;
                 default:
-                    target_value = node.End_Vector3;
+                    target_value = node.end_vector3;
                     isfrom = false;
                     break;
             }
 
-            twn = controller.mod_Rect.xt_Scale_To(
+            twn = controller.mod_rect.xt_Scale_To(
                 target_value,
-                node.Duration * duration,
+                node.duration * duration,
                 false,
                 true,
-                node.Rewind_Set_Startvalue,
-                node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay * duration + delay)
-                .SetLoop(node.LoopCount, node.LoopType);
+                node.rewind_set_startvalue,
+                node.complete_set_endvalue)
+                .SetDelay(node.delay * duration + delay)
+                .SetLoop(node.loop_count, node.loop_type);
 
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
@@ -2637,17 +2637,17 @@ namespace SevenStrikeModules.XHud
                 twn = twn.SetFrom(from_value);
 
             // C-E 模式：动态起点
-            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
-                twn = twn.SetFromDynamic(() => controller.mod_Rect.localScale);
+            if (node.tween_value_mode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_rect.localScale);
 
-            if (node.Ease == EaseMode.None)
-                twn = twn.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                twn = twn.SetEase(node.curve);
             else
-                twn = twn.SetEase(node.Ease);
+                twn = twn.SetEase(node.ease);
 
             twn = twn.OnUpdate<Vector3>((v, d, t) =>
             {
-                node.Progress = twn.ElapsedTime / twn.Duration;
+                node.progress = twn.ElapsedTime / twn.Duration;
 
                 if (twn.CurrentEasedProgress >= percentage_threshold)
                 {
@@ -2662,8 +2662,8 @@ namespace SevenStrikeModules.XHud
                 if (on_update != null)
                     on_update();
 
-                if (node.Act_On_Vector3_Changed != null)
-                    node.Act_On_Vector3_Changed(controller.mod_Rect.localScale);
+                if (node.act_on_vector3_changed != null)
+                    node.act_on_vector3_changed(controller.mod_rect.localScale);
             });
 
             twn = twn.OnRewind(() =>
@@ -2671,13 +2671,13 @@ namespace SevenStrikeModules.XHud
                 if (on_rewind != null)
                     on_rewind();
 
-                if (node.Act_On_Vector3_Rewind != null)
-                    node.Act_On_Vector3_Rewind(controller.mod_Rect.localScale);
+                if (node.act_on_vector3_rewind != null)
+                    node.act_on_vector3_rewind(controller.mod_rect.localScale);
             });
 
             twn = twn.OnComplete((d) =>
             {
-                node.Progress = 0;
+                node.progress = 0;
                 if (on_complete != null)
                     on_complete();
             });
@@ -2708,8 +2708,8 @@ namespace SevenStrikeModules.XHud
         {
             #region 接管判定
             bool IsTextColorSynching = false;
-            if ((controller.mod_Text && controller.mod_Text.StyleLibSynching && controller.mod_Text.TextStyleInfo.LibStyle_Effect_color) ||
-                (controller.mod_TmpText && controller.mod_TmpText.StyleLibSynching && controller.mod_TmpText.TextStyleInfo.LibStyle_Effect_color))
+            if ((controller.mod_text && controller.mod_text.style_library_synching && controller.mod_text.text_style_info.lib_style_effect_color) ||
+                (controller.mod_tmp_text && controller.mod_tmp_text.style_library_synching && controller.mod_tmp_text.text_style_info.lib_style_effect_color))
             {
                 IsTextColorSynching = true;
             }
@@ -2726,19 +2726,19 @@ namespace SevenStrikeModules.XHud
             }
 
             // 配色器接管状态检查：接管状态下无法通过动画改变颜色
-            if (controller.GetModuleType() == ModuleType.Image && controller.pt_Painting.SyncImageColor)
+            if (controller.GetModuleType() == ModuleType.Image && controller.pt_painting.sync_image_color)
             {
                 XGUI_Utilitys.Console("XHud - 图元动画器消息", "Image 图像颜色动画无法播放！请检查并关闭图元配色器的接管状态！", XGUIMsgState.警告);
                 return null;
             }
-            if (controller.GetModuleType() == ModuleType.RawImage && controller.pt_Painting.SyncImageColor)
+            if (controller.GetModuleType() == ModuleType.RawImage && controller.pt_painting.sync_image_color)
             {
                 XGUI_Utilitys.Console("XHud - 图元动画器消息", "RawImage 图像颜色动画无法播放！请检查并关闭图元配色器的接管状态！", XGUIMsgState.警告);
                 return null;
             }
             if (controller.GetModuleType() == ModuleType.Text)
             {
-                if (controller.mod_Text.TextColorOwner != TextColorOwner.Tween)
+                if (controller.mod_text.text_color_owner != TextColorOwner.Tween)
                 {
                     XGUI_Utilitys.Console("XHud - 图元动画器消息", "Text 文字颜色动画无法播放！请检查并确保 XHud_Module_Text 组件的颜色接管者为 Tween，并且关闭文字组件的实时匹配库开关！", XGUIMsgState.警告);
                     return null;
@@ -2746,7 +2746,7 @@ namespace SevenStrikeModules.XHud
             }
             if (controller.GetModuleType() == ModuleType.TmpText)
             {
-                if (controller.mod_TmpText.TextColorOwner != TextColorOwner.Tween)
+                if (controller.mod_tmp_text.text_color_owner != TextColorOwner.Tween)
                 {
                     XGUI_Utilitys.Console("XHud - 图元动画器消息", "TmpText 文字颜色动画无法播放！请检查并确保 XHud_Module_TmpText 组件的颜色接管者为 Tween，并且关闭文字组件的实时匹配库开关！", XGUIMsgState.警告);
                     return null;
@@ -2765,29 +2765,29 @@ namespace SevenStrikeModules.XHud
             Color from_value = default;   // 
 
             bool isfrom;
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    target_value = node.Original_Color;
-                    from_value = node.From_Color;
+                    target_value = node.ori_color;
+                    from_value = node.from_color;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
-                    target_value = node.End_Color;
-                    from_value = node.From_Color;
+                    target_value = node.end_color;
+                    from_value = node.from_color;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
-                    target_value = node.End_Color;
-                    from_value = node.Original_Color;   // 
+                    target_value = node.end_color;
+                    from_value = node.ori_color;   // 
                     isfrom = true;                       // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
-                    target_value = node.End_Color;
+                    target_value = node.end_color;
                     isfrom = false;
                     break;
                 default:
-                    target_value = node.End_Color;
+                    target_value = node.end_color;
                     isfrom = false;
                     break;
             }
@@ -2795,12 +2795,12 @@ namespace SevenStrikeModules.XHud
             // xt_Color_To 参数：目标颜色、时长、是否立即播放、回退重置、完成设置
             twn = gc.xt_Color_To(
                 target_value,
-                node.Duration * duration,
+                node.duration * duration,
                 true,
-                node.Rewind_Set_Startvalue,
-                node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay * duration + delay)
-                .SetLoop(node.LoopCount, node.LoopType);
+                node.rewind_set_startvalue,
+                node.complete_set_endvalue)
+                .SetDelay(node.delay * duration + delay)
+                .SetLoop(node.loop_count, node.loop_type);
 
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
@@ -2808,17 +2808,17 @@ namespace SevenStrikeModules.XHud
                 twn = twn.SetFrom(from_value);
 
             // C-E 模式：动态起点
-            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
+            if (node.tween_value_mode == TweenValueMode.当前到结束_C_E)
                 twn = twn.SetFromDynamic(() => gc.color);
 
-            if (node.Ease == EaseMode.None)
-                twn = twn.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                twn = twn.SetEase(node.curve);
             else
-                twn = twn.SetEase(node.Ease);
+                twn = twn.SetEase(node.ease);
 
             twn = twn.OnUpdate<Color>((v, d, t) =>
             {
-                node.Progress = twn.ElapsedTime / twn.Duration;
+                node.progress = twn.ElapsedTime / twn.Duration;
 
                 if (twn.CurrentEasedProgress >= percentage_threshold)
                 {
@@ -2833,8 +2833,8 @@ namespace SevenStrikeModules.XHud
                 if (on_update != null)
                     on_update();
 
-                if (node.Act_On_Color_Changed != null)
-                    node.Act_On_Color_Changed(gc.color);
+                if (node.act_on_color_changed != null)
+                    node.act_on_color_changed(gc.color);
             });
 
             twn = twn.OnRewind(() =>
@@ -2842,13 +2842,13 @@ namespace SevenStrikeModules.XHud
                 if (on_rewind != null)
                     on_rewind();
 
-                if (node.Act_On_Color_Rewind != null)
-                    node.Act_On_Color_Rewind(gc.color);
+                if (node.act_on_color_rewind != null)
+                    node.act_on_color_rewind(gc.color);
             });
 
             twn = twn.OnComplete((d) =>
             {
-                node.Progress = 0;
+                node.progress = 0;
                 if (on_complete != null)
                     on_complete();
             });
@@ -2868,7 +2868,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private XTween_Interface Tween_Create_Fader(TweenNode node, float duration, float delay, float percentage_threshold, UnityAction on_update = null, UnityAction on_percentage = null, UnityAction on_complete = null, UnityAction on_rewind = null)
         {
-            if (controller.mod_CanvasGroup == null)
+            if (controller.mod_canvas_group == null)
                 return null;
 
             XTween_Interface twn = null;
@@ -2878,41 +2878,41 @@ namespace SevenStrikeModules.XHud
             float from_value = 0f;
 
             bool isfrom;
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    target_value = node.Original_Float;
-                    from_value = node.From_Float;
+                    target_value = node.ori_float;
+                    from_value = node.from_float;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
-                    target_value = node.End_Float;
-                    from_value = node.From_Float;
+                    target_value = node.end_float;
+                    from_value = node.from_float;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
-                    target_value = node.End_Float;
-                    from_value = node.Original_Float;   // 
+                    target_value = node.end_float;
+                    from_value = node.ori_float;   // 
                     isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
-                    target_value = node.End_Float;
+                    target_value = node.end_float;
                     isfrom = false;
                     break;
                 default:
-                    target_value = node.End_Float;
+                    target_value = node.end_float;
                     isfrom = false;
                     break;
             }
 
-            twn = controller.mod_CanvasGroup.xt_Alpha_To(
+            twn = controller.mod_canvas_group.xt_Alpha_To(
                 target_value,
-                node.Duration * duration,
+                node.duration * duration,
                 true,
-                node.Rewind_Set_Startvalue,
-                node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay * duration + delay)
-                .SetLoop(node.LoopCount, node.LoopType);
+                node.rewind_set_startvalue,
+                node.complete_set_endvalue)
+                .SetDelay(node.delay * duration + delay)
+                .SetLoop(node.loop_count, node.loop_type);
 
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
@@ -2920,17 +2920,17 @@ namespace SevenStrikeModules.XHud
                 twn = twn.SetFrom(from_value);
 
             // C-E 模式：动态起点
-            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
-                twn = twn.SetFromDynamic(() => controller.mod_CanvasGroup.alpha);
+            if (node.tween_value_mode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_canvas_group.alpha);
 
-            if (node.Ease == EaseMode.None)
-                twn = twn.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                twn = twn.SetEase(node.curve);
             else
-                twn = twn.SetEase(node.Ease);
+                twn = twn.SetEase(node.ease);
 
             twn = twn.OnUpdate<float>((v, d, t) =>
             {
-                node.Progress = twn.ElapsedTime / twn.Duration;
+                node.progress = twn.ElapsedTime / twn.Duration;
 
                 if (twn.CurrentEasedProgress >= percentage_threshold)
                 {
@@ -2945,8 +2945,8 @@ namespace SevenStrikeModules.XHud
                 if (on_update != null)
                     on_update();
 
-                if (node.Act_On_Float_Changed != null)
-                    node.Act_On_Float_Changed(controller.mod_CanvasGroup.alpha);
+                if (node.act_on_float_changed != null)
+                    node.act_on_float_changed(controller.mod_canvas_group.alpha);
             });
 
             twn = twn.OnRewind(() =>
@@ -2954,13 +2954,13 @@ namespace SevenStrikeModules.XHud
                 if (on_rewind != null)
                     on_rewind();
 
-                if (node.Act_On_Float_Rewind != null)
-                    node.Act_On_Float_Rewind(controller.mod_CanvasGroup.alpha);
+                if (node.act_on_float_rewind != null)
+                    node.act_on_float_rewind(controller.mod_canvas_group.alpha);
             });
 
             twn = twn.OnComplete((d) =>
             {
-                node.Progress = 0;
+                node.progress = 0;
                 if (on_complete != null)
                     on_complete();
             });
@@ -2987,7 +2987,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private XTween_Interface Tween_Create_Writer_Text(TweenNode node, float duration, float delay, float percentage_threshold, UnityAction on_update = null, UnityAction on_percentage = null, UnityAction on_complete = null, UnityAction on_rewind = null)
         {
-            if (controller.mod_Text == null)
+            if (controller.mod_text == null)
             {
                 return null;
             }
@@ -3000,54 +3000,54 @@ namespace SevenStrikeModules.XHud
 
             bool isfrom;
 
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    target_value = node.Original_String;
-                    from_value = node.From_String;
+                    target_value = node.ori_string;
+                    from_value = node.from_string;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
-                    target_value = node.End_String;
-                    from_value = node.From_String;
+                    target_value = node.end_string;
+                    from_value = node.from_string;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
-                    target_value = node.End_String;
-                    from_value = node.Original_String;   // 
+                    target_value = node.end_string;
+                    from_value = node.ori_string;   // 
                     isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
-                    target_value = node.End_String;
+                    target_value = node.end_string;
                     isfrom = false;
                     break;
                 default:
-                    target_value = node.End_String;
+                    target_value = node.end_string;
                     isfrom = false;
                     break;
             }
 
-            twn = controller.mod_Text.xt_Text_To(
-                node.TextExtended,
-                node.TextCursor,
+            twn = controller.mod_text.xt_Text_To(
+                node.text_extended,
+                node.text_cursor,
                 target_value,
-                node.Duration * duration,
+                node.duration * duration,
                 true,
-                node.TextCursorBlinkSpeed > 0 ? node.TextCursorBlinkSpeed : 0.5f,
-                node.Rewind_Set_Startvalue,
-                node.Complete_Set_Endvalue,
+                node.text_cursor_blink_speed > 0 ? node.text_cursor_blink_speed : 0.5f,
+                node.rewind_set_startvalue,
+                node.complete_set_endvalue,
                 isfrom ? from_value : null)
-                .SetDelay(node.Delay * duration + delay)
-                .SetLoop(node.LoopCount, node.LoopType);
+                .SetDelay(node.delay * duration + delay)
+                .SetLoop(node.loop_count, node.loop_type);
 
-            if (node.Ease == EaseMode.None)
-                twn = twn.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                twn = twn.SetEase(node.curve);
             else
-                twn = twn.SetEase(node.Ease);
+                twn = twn.SetEase(node.ease);
 
             twn = twn.OnUpdate<string>((v, d, t) =>
             {
-                node.Progress = twn.ElapsedTime / twn.Duration;
+                node.progress = twn.ElapsedTime / twn.Duration;
 
                 if (twn.CurrentEasedProgress >= percentage_threshold)
                 {
@@ -3062,8 +3062,8 @@ namespace SevenStrikeModules.XHud
                 if (on_update != null)
                     on_update();
 
-                if (node.Act_On_Text_Changed != null)
-                    node.Act_On_Text_Changed(controller.mod_Text.text);
+                if (node.act_on_text_changed != null)
+                    node.act_on_text_changed(controller.mod_text.text);
             });
 
             twn = twn.OnRewind(() =>
@@ -3071,13 +3071,13 @@ namespace SevenStrikeModules.XHud
                 if (on_rewind != null)
                     on_rewind();
 
-                if (node.Act_On_Text_Rewind != null)
-                    node.Act_On_Text_Rewind(controller.mod_Text.text);
+                if (node.act_on_text_rewind != null)
+                    node.act_on_text_rewind(controller.mod_text.text);
             });
 
             twn = twn.OnComplete((d) =>
             {
-                node.Progress = 0;
+                node.progress = 0;
                 if (on_complete != null)
                     on_complete();
             });
@@ -3097,7 +3097,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private XTween_Interface Tween_Create_Writer_TmpText(TweenNode node, float duration, float delay, float percentage_threshold, UnityAction on_update = null, UnityAction on_percentage = null, UnityAction on_complete = null, UnityAction on_rewind = null)
         {
-            if (controller.mod_TmpText == null)
+            if (controller.mod_tmp_text == null)
             {
                 return null;
             }
@@ -3109,45 +3109,45 @@ namespace SevenStrikeModules.XHud
             string from_value = null;   //  改为 null
 
             bool isfrom;
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    target_value = node.Original_String;
-                    from_value = node.From_String;
+                    target_value = node.ori_string;
+                    from_value = node.from_string;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
-                    target_value = node.End_String;
-                    from_value = node.From_String;
+                    target_value = node.end_string;
+                    from_value = node.from_string;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
-                    target_value = node.End_String;
-                    from_value = node.Original_String;   // 
+                    target_value = node.end_string;
+                    from_value = node.ori_string;   // 
                     isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
-                    target_value = node.End_String;
+                    target_value = node.end_string;
                     isfrom = false;
                     break;
                 default:
-                    target_value = node.End_String;
+                    target_value = node.end_string;
                     isfrom = false;
                     break;
             }
 
-            twn = controller.mod_TmpText.xt_Text_To(
-                node.TextExtended,
-                node.TextCursor,
+            twn = controller.mod_tmp_text.xt_Text_To(
+                node.text_extended,
+                node.text_cursor,
                 target_value,
-                node.Duration * duration,
+                node.duration * duration,
                 true,
-                node.TextCursorBlinkSpeed,
-                node.Rewind_Set_Startvalue,
-                node.Complete_Set_Endvalue,
+                node.text_cursor_blink_speed,
+                node.rewind_set_startvalue,
+                node.complete_set_endvalue,
                 isfrom ? from_value : null)                //  显式起点
-                .SetDelay(node.Delay * duration + delay)   //  保留
-                .SetLoop(node.LoopCount, node.LoopType);   //  保留
+                .SetDelay(node.delay * duration + delay)   //  保留
+                .SetLoop(node.loop_count, node.loop_type);   //  保留
 
             //  删掉 SetFrom / SetFromDynamic（打字机不读 _StartValue）
             // if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
@@ -3158,14 +3158,14 @@ namespace SevenStrikeModules.XHud
             //         twn = twn.SetFrom(node.From_String);
             // }
 
-            if (node.Ease == EaseMode.None)
-                twn = twn.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                twn = twn.SetEase(node.curve);
             else
-                twn = twn.SetEase(node.Ease);
+                twn = twn.SetEase(node.ease);
 
             twn = twn.OnUpdate<string>((v, d, t) =>
             {
-                node.Progress = twn.ElapsedTime / twn.Duration;
+                node.progress = twn.ElapsedTime / twn.Duration;
 
                 if (twn.CurrentEasedProgress >= percentage_threshold)
                 {
@@ -3180,8 +3180,8 @@ namespace SevenStrikeModules.XHud
                 if (on_update != null)
                     on_update();
 
-                if (node.Act_On_Text_Changed != null)
-                    node.Act_On_Text_Changed(controller.mod_TmpText.text);
+                if (node.act_on_text_changed != null)
+                    node.act_on_text_changed(controller.mod_tmp_text.text);
             });
 
             twn = twn.OnRewind(() =>
@@ -3189,13 +3189,13 @@ namespace SevenStrikeModules.XHud
                 if (on_rewind != null)
                     on_rewind();
 
-                if (node.Act_On_Text_Rewind != null)
-                    node.Act_On_Text_Rewind(controller.mod_TmpText.text);
+                if (node.act_on_text_rewind != null)
+                    node.act_on_text_rewind(controller.mod_tmp_text.text);
             });
 
             twn = twn.OnComplete((d) =>
             {
-                node.Progress = 0;
+                node.progress = 0;
                 if (on_complete != null)
                     on_complete();
             });
@@ -3217,7 +3217,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private XTween_Interface Tween_Create_Size(TweenNode node, float duration, float delay, float percentage_threshold, UnityAction on_update = null, UnityAction on_percentage = null, UnityAction on_complete = null, UnityAction on_rewind = null)
         {
-            if (controller.mod_Rect == null)
+            if (controller.mod_rect == null)
                 return null;
 
             XTween_Interface twn = null;
@@ -3227,42 +3227,42 @@ namespace SevenStrikeModules.XHud
             Vector2 from_value = default;   // 
 
             bool isfrom;
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    target_value = node.Original_Vector2;
-                    from_value = node.From_Vector2;
+                    target_value = node.ori_vector2;
+                    from_value = node.from_vector2;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
-                    target_value = node.End_Vector2;
-                    from_value = node.From_Vector2;
+                    target_value = node.end_vector2;
+                    from_value = node.from_vector2;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
-                    target_value = node.End_Vector2;
-                    from_value = node.Original_Vector2;   //2
+                    target_value = node.end_vector2;
+                    from_value = node.ori_vector2;   //2
                     isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
-                    target_value = node.End_Vector2;
+                    target_value = node.end_vector2;
                     isfrom = false;
                     break;
                 default:
-                    target_value = node.End_Vector2;
+                    target_value = node.end_vector2;
                     isfrom = false;
                     break;
             }
 
-            twn = controller.mod_Rect.xt_Size_To(
+            twn = controller.mod_rect.xt_Size_To(
                 target_value,
-                node.Duration * duration,
+                node.duration * duration,
                 false,
                 true,
-                node.Rewind_Set_Startvalue,
-                node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay * duration + delay)
-                .SetLoop(node.LoopCount, node.LoopType);
+                node.rewind_set_startvalue,
+                node.complete_set_endvalue)
+                .SetDelay(node.delay * duration + delay)
+                .SetLoop(node.loop_count, node.loop_type);
 
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
@@ -3270,17 +3270,17 @@ namespace SevenStrikeModules.XHud
                 twn = twn.SetFrom(from_value);
 
             // C-E 模式：动态起点
-            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
-                twn = twn.SetFromDynamic(() => controller.mod_Rect.sizeDelta);
+            if (node.tween_value_mode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_rect.sizeDelta);
 
-            if (node.Ease == EaseMode.None)
-                twn = twn.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                twn = twn.SetEase(node.curve);
             else
-                twn = twn.SetEase(node.Ease);
+                twn = twn.SetEase(node.ease);
 
             twn = twn.OnUpdate<Vector2>((v, d, t) =>
             {
-                node.Progress = twn.ElapsedTime / twn.Duration;
+                node.progress = twn.ElapsedTime / twn.Duration;
 
                 if (twn.CurrentEasedProgress >= percentage_threshold)
                 {
@@ -3295,8 +3295,8 @@ namespace SevenStrikeModules.XHud
                 if (on_update != null)
                     on_update();
 
-                if (node.Act_On_Vector2_Changed != null)
-                    node.Act_On_Vector2_Changed(controller.mod_Rect.sizeDelta);
+                if (node.act_on_vector2_changed != null)
+                    node.act_on_vector2_changed(controller.mod_rect.sizeDelta);
             });
 
             twn = twn.OnRewind(() =>
@@ -3304,13 +3304,13 @@ namespace SevenStrikeModules.XHud
                 if (on_rewind != null)
                     on_rewind();
 
-                if (node.Act_On_Vector2_Rewind != null)
-                    node.Act_On_Vector2_Rewind(controller.mod_Rect.sizeDelta);
+                if (node.act_on_vector2_rewind != null)
+                    node.act_on_vector2_rewind(controller.mod_rect.sizeDelta);
             });
 
             twn = twn.OnComplete((d) =>
             {
-                node.Progress = 0;
+                node.progress = 0;
                 if (on_complete != null)
                     on_complete();
             });
@@ -3333,7 +3333,7 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private XTween_Interface Tween_Create_Fill(TweenNode node, float duration, float delay, float percentage_threshold, UnityAction on_update = null, UnityAction on_percentage = null, UnityAction on_complete = null, UnityAction on_rewind = null)
         {
-            if (controller.mod_Image == null)
+            if (controller.mod_image == null)
                 return null;
 
             XTween_Interface twn = null;
@@ -3343,42 +3343,42 @@ namespace SevenStrikeModules.XHud
             float from_value = 0f;
 
             bool isfrom;
-            switch (node.TweenValueMode)
+            switch (node.tween_value_mode)
             {
                 case TweenValueMode.起始到默认_S_D:
-                    target_value = node.Original_Float;
-                    from_value = node.From_Float;
+                    target_value = node.ori_float;
+                    from_value = node.from_float;
                     isfrom = true;
                     break;
                 case TweenValueMode.起始到结束_S_E:
-                    target_value = node.End_Float;
-                    from_value = node.From_Float;
+                    target_value = node.end_float;
+                    from_value = node.from_float;
                     isfrom = true;
                     break;
                 case TweenValueMode.默认到结束_D_E:
-                    target_value = node.End_Float;
-                    from_value = node.Original_Float;   // 
+                    target_value = node.end_float;
+                    from_value = node.ori_float;   // 
                     isfrom = true;                         // 
                     break;
                 case TweenValueMode.当前到结束_C_E:
-                    target_value = node.End_Float;
+                    target_value = node.end_float;
                     isfrom = false;
                     break;
                 default:
-                    target_value = node.End_Float;
+                    target_value = node.end_float;
                     isfrom = false;
                     break;
             }
 
             // 目标值 Clamp01 保证填充量合法
-            twn = controller.mod_Image.xt_Fill_To(
+            twn = controller.mod_image.xt_Fill_To(
                 Mathf.Clamp01(target_value),
-                node.Duration * duration,
+                node.duration * duration,
                 true,
-                node.Rewind_Set_Startvalue,
-                node.Complete_Set_Endvalue)
-                .SetDelay(node.Delay * duration + delay)
-                .SetLoop(node.LoopCount, node.LoopType);
+                node.rewind_set_startvalue,
+                node.complete_set_endvalue)
+                .SetDelay(node.delay * duration + delay)
+                .SetLoop(node.loop_count, node.loop_type);
 
             // 仅在需要 From 时设置起始值
             // S-* 模式：静态起点
@@ -3386,17 +3386,17 @@ namespace SevenStrikeModules.XHud
                 twn = twn.SetFrom(Mathf.Clamp01(from_value));
 
             // C-E 模式：动态起点
-            if (node.TweenValueMode == TweenValueMode.当前到结束_C_E)
-                twn = twn.SetFromDynamic(() => controller.mod_Image.fillAmount);
+            if (node.tween_value_mode == TweenValueMode.当前到结束_C_E)
+                twn = twn.SetFromDynamic(() => controller.mod_image.fillAmount);
 
-            if (node.Ease == EaseMode.None)
-                twn = twn.SetEase(node.Curve);
+            if (node.ease == EaseMode.None)
+                twn = twn.SetEase(node.curve);
             else
-                twn = twn.SetEase(node.Ease);
+                twn = twn.SetEase(node.ease);
 
             twn = twn.OnUpdate<float>((v, d, t) =>
             {
-                node.Progress = twn.ElapsedTime / twn.Duration;
+                node.progress = twn.ElapsedTime / twn.Duration;
 
                 if (twn.CurrentEasedProgress >= percentage_threshold)
                 {
@@ -3411,8 +3411,8 @@ namespace SevenStrikeModules.XHud
                 if (on_update != null)
                     on_update();
 
-                if (node.Act_On_Float_Changed != null)
-                    node.Act_On_Float_Changed(controller.mod_Image.fillAmount);
+                if (node.act_on_float_changed != null)
+                    node.act_on_float_changed(controller.mod_image.fillAmount);
             });
 
             twn = twn.OnRewind(() =>
@@ -3420,13 +3420,13 @@ namespace SevenStrikeModules.XHud
                 if (on_rewind != null)
                     on_rewind();
 
-                if (node.Act_On_Float_Rewind != null)
-                    node.Act_On_Float_Rewind(controller.mod_Image.fillAmount);
+                if (node.act_on_float_rewind != null)
+                    node.act_on_float_rewind(controller.mod_image.fillAmount);
             });
 
             twn = twn.OnComplete((d) =>
             {
-                node.Progress = 0;
+                node.progress = 0;
                 if (on_complete != null)
                     on_complete();
             });
@@ -3452,17 +3452,17 @@ namespace SevenStrikeModules.XHud
         /// <returns>创建成功的动画实例</returns>
         public XTween_Interface Tween_CreateByIndex(int index, float delay = 0, float percentage_threshold = 0.5f, UnityAction on_update = null, UnityAction on_percentage = null, UnityAction on_complete = null, UnityAction on_rewind = null)
         {
-            TweenNode arg = PrimitiveTweenNodes[index];
+            TweenNode arg = primitive_tween_nodes[index];
 
             // 全局速率倍率：管理器速率 × 本动画器速率
-            arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration, delay, percentage_threshold, on_update, on_percentage, on_complete, on_rewind);
+            arg.tweener = Tween_Create(arg, XHud_Manager.instance.tween_global_duration * global_duration, delay, percentage_threshold, on_update, on_percentage, on_complete, on_rewind);
 
             // 委托 + 事件双触发
-            if (act_on_Tween_Create_At_Index != null)
-                act_on_Tween_Create_At_Index(arg);
-            eve_on_Tween_Create_At_Index.Invoke(arg);
+            if (act_on_tween_create_at_index != null)
+                act_on_tween_create_at_index(arg);
+            eve_on_tween_create_at_index.Invoke(arg);
 
-            return arg.Tweener;
+            return arg.tweener;
         }
         /// <summary>
         /// 根据唯一 ID 创建动画
@@ -3485,13 +3485,13 @@ namespace SevenStrikeModules.XHud
         {
             TweenNode arg = TweenNode_GetByID(id);
 
-            arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration, delay, percentage_threshold, on_update, on_percentage, on_complete, on_rewind);
+            arg.tweener = Tween_Create(arg, XHud_Manager.instance.tween_global_duration * global_duration, delay, percentage_threshold, on_update, on_percentage, on_complete, on_rewind);
 
-            if (act_on_Tween_Create_At_ID != null)
-                act_on_Tween_Create_At_ID(arg);
-            eve_on_Tween_Create_At_ID.Invoke(arg);
+            if (act_on_tween_create_at_id != null)
+                act_on_tween_create_at_id(arg);
+            eve_on_tween_create_at_id.Invoke(arg);
 
-            return arg.Tweener;
+            return arg.tweener;
         }
         /// <summary>
         /// 根据名称标识创建动画
@@ -3515,13 +3515,13 @@ namespace SevenStrikeModules.XHud
         {
             TweenNode arg = TweenNode_GetByIndicator(indicator);
 
-            arg.Tweener = Tween_Create(arg, XHud_Manager.Instance.DurationMultiply * GlobalDuration, delay, percentage_threshold, on_update, on_percentage, on_complete, on_rewind);
+            arg.tweener = Tween_Create(arg, XHud_Manager.instance.tween_global_duration * global_duration, delay, percentage_threshold, on_update, on_percentage, on_complete, on_rewind);
 
-            if (act_on_Tween_Create_At_Indicator != null)
-                act_on_Tween_Create_At_Indicator(arg);
-            eve_on_Tween_Create_At_Indicator.Invoke(arg);
+            if (act_on_tween_create_at_indicator != null)
+                act_on_tween_create_at_indicator(arg);
+            eve_on_tween_create_at_indicator.Invoke(arg);
 
-            return arg.Tweener;
+            return arg.tweener;
         }
         /// <summary>
         /// 用于查验动画是否违反基础类型互斥规则
@@ -3534,12 +3534,12 @@ namespace SevenStrikeModules.XHud
 
             ModuleType m_type = controller.GetModuleType();
             if ((m_type == ModuleType.Text || m_type == ModuleType.TmpText) &&
-                node.Type == TweenNodeType.f_图像填充)
+                node.type == TweenNodeType.f_图像填充)
             {
                 sw = false;
             }
             if ((m_type != ModuleType.Text && m_type != ModuleType.TmpText) &&
-                node.Type == TweenNodeType.w_打字机)
+                node.type == TweenNodeType.w_打字机)
             {
                 sw = false;
             }
@@ -3553,14 +3553,14 @@ namespace SevenStrikeModules.XHud
         public void Tween_Play(TweenNode node)
         {
             // 直接调用底层动画实例的播放接口
-            node.Tweener.Play();
+            node.tweener.Play();
 
             // 触发代码绑定委托（需手动判空）
-            if (act_on_Tween_Play_At_Node != null)
-                act_on_Tween_Play_At_Node(node);
+            if (act_on_tween_play_at_node != null)
+                act_on_tween_play_at_node(node);
 
             // 触发 Inspector 绑定事件（内部已判空）
-            eve_on_Tween_Play_At_Node.Invoke(node);
+            eve_on_tween_play_at_node.Invoke(node);
         }
 
         public void Tween_Play(XTween_Interface tween)
@@ -3569,11 +3569,11 @@ namespace SevenStrikeModules.XHud
             tween.Play();
 
             // 触发代码绑定委托
-            if (act_on_Tween_Play != null)
-                act_on_Tween_Play(tween);
+            if (act_on_tween_play != null)
+                act_on_tween_play(tween);
 
             // 触发 Inspector 绑定事件
-            eve_on_Tween_Play.Invoke(tween);
+            eve_on_tween_play.Invoke(tween);
         }
 
         public void Tween_Create_And_Play(int id)
@@ -3582,11 +3582,11 @@ namespace SevenStrikeModules.XHud
             Tween_CreateById(id).Play();
 
             // 触发代码绑定委托（携带 ID）
-            if (act_on_Tween_Play_At_ID != null)
-                act_on_Tween_Play_At_ID(id);
+            if (act_on_tween_play_at_id != null)
+                act_on_tween_play_at_id(id);
 
             // 触发 Inspector 绑定事件（携带 ID）
-            eve_on_Tween_Play_At_ID.Invoke(id);
+            eve_on_tween_play_at_id.Invoke(id);
         }
 
         public void Tween_Create_And_Play(string indicator)
@@ -3595,11 +3595,11 @@ namespace SevenStrikeModules.XHud
             Tween_CreateByIndicator(indicator).Play();
 
             // 触发代码绑定委托（携带名称）
-            if (act_on_Tween_Play_At_Indicator != null)
-                act_on_Tween_Play_At_Indicator(indicator);
+            if (act_on_tween_play_at_indicator != null)
+                act_on_tween_play_at_indicator(indicator);
 
             // 触发 Inspector 绑定事件（携带名称）
-            eve_on_Tween_Play_At_Indicator.Invoke(indicator);
+            eve_on_tween_play_at_indicator.Invoke(indicator);
         }
         #endregion
 
@@ -3689,31 +3689,31 @@ namespace SevenStrikeModules.XHud
             // ========== 前置校验 ==========
             // 图元缺少 RectTransform 时无法承载大多数动画（位移动画等），直接返回
             // 注意：这也意味着淡化、颜色等其他类型动画会被一并跳过
-            if (controller.mod_Rect == null)
+            if (controller.mod_rect == null)
                 return;
 
             // ========== 遍历所有节点，逐个创建并播放 ==========
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < primitive_tween_nodes.Count; i++)
             {
-                if (!Tween_CreateRuleValidCheck(PrimitiveTweenNodes[i]))
+                if (!Tween_CreateRuleValidCheck(primitive_tween_nodes[i]))
                     continue;
 
                 // 跳过未启用的节点
-                if (PrimitiveTweenNodes[i].Enabled)
+                if (primitive_tween_nodes[i].enabled)
                 {
                     // ---------- 分支 A：按 Timings 筛选 ----------
                     if (MatchTiming)
                     {
                         // 仅播放 Timings 匹配的节点
-                        if (PrimitiveTweenNodes[i].Timings == tim)
+                        if (primitive_tween_nodes[i].timings == tim)
                         {
-                            TweenNode arg = PrimitiveTweenNodes[i];
+                            TweenNode arg = primitive_tween_nodes[i];
 
                             // 创建动画实例（内部会先 Rewind 或 Kill 旧实例）
                             // 时长 = 节点时长 × 管理器速率 × 本动画器速率 × 本次倍率
-                            arg.Tweener = Tween_Create(
+                            arg.tweener = Tween_Create(
                                 arg,
-                                XHud_Manager.Instance.DurationMultiply * GlobalDuration * dur,
+                                XHud_Manager.instance.tween_global_duration * global_duration * dur,
                                 delay,
                                 percentage_threshold,
                                 on_update,
@@ -3722,18 +3722,18 @@ namespace SevenStrikeModules.XHud
                                 on_rewind);
 
                             // 立即播放
-                            arg.Tweener.Play();
+                            arg.tweener.Play();
                         }
                     }
                     // ---------- 分支 B：播放全部 Enabled 节点 ----------
                     else
                     {
-                        TweenNode arg = PrimitiveTweenNodes[i];
+                        TweenNode arg = primitive_tween_nodes[i];
 
                         // 创建动画实例（同上）
-                        arg.Tweener = Tween_Create(
+                        arg.tweener = Tween_Create(
                             arg,
-                            XHud_Manager.Instance.DurationMultiply * GlobalDuration * dur,
+                            XHud_Manager.instance.tween_global_duration * global_duration * dur,
                             delay,
                             percentage_threshold,
                             on_update,
@@ -3742,7 +3742,7 @@ namespace SevenStrikeModules.XHud
                             on_rewind);
 
                         // 立即播放
-                        arg.Tweener.Play();
+                        arg.tweener.Play();
                     }
                 }
                 else
@@ -3755,11 +3755,11 @@ namespace SevenStrikeModules.XHud
 
             // ========== 触发"全部播放"事件 ==========
             // 代码绑定委托（需判空）
-            if (act_on_Tween_PlayAll != null)
-                act_on_Tween_PlayAll();
+            if (act_on_tween_play_all != null)
+                act_on_tween_play_all();
 
             // Inspector 绑定事件（内部判空）
-            eve_on_Tween_PlayAll.Invoke();
+            eve_on_tween_play_all.Invoke();
         }
         #endregion
 
@@ -3786,20 +3786,20 @@ namespace SevenStrikeModules.XHud
         public void Tween_RewindAll(bool complete = true)
         {
             ///--动画恢复初始
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < primitive_tween_nodes.Count; i++)
             {
                 // 逐个节点复位（内部含类型判别与值恢复）
-                Tween_Rewind(PrimitiveTweenNodes[i], complete);
+                Tween_Rewind(primitive_tween_nodes[i], complete);
             }
 
             StopAllSoundBatches();
 
             // 代码绑定委托（需判空）
-            if (act_on_Tween_RewindAll != null)
-                act_on_Tween_RewindAll();
+            if (act_on_tween_rewind_all != null)
+                act_on_tween_rewind_all();
 
             // Inspector 绑定事件（内部判空）
-            eve_on_Tween_RewindAll.Invoke();
+            eve_on_tween_rewind_all.Invoke();
         }
         /// <summary>
         /// 动画杀死（所有节点）
@@ -3833,20 +3833,20 @@ namespace SevenStrikeModules.XHud
         public void Tween_KillAll(bool complete = true)
         {
             ///--动画恢复初始
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < primitive_tween_nodes.Count; i++)
             {
                 // 逐个节点杀死动画实例
-                Tween_Kill(PrimitiveTweenNodes[i], complete);
+                Tween_Kill(primitive_tween_nodes[i], complete);
             }
 
             StopAllSoundBatches();
 
             // 代码绑定委托（需判空）
-            if (act_on_Tween_KillAll != null)
-                act_on_Tween_KillAll();
+            if (act_on_tween_kill_all != null)
+                act_on_tween_kill_all();
 
             // Inspector 绑定事件（内部判空）
-            eve_on_Tween_KillAll.Invoke();
+            eve_on_tween_kill_all.Invoke();
         }
         /// <summary>
         /// 动画清理（所有节点）
@@ -3876,10 +3876,10 @@ namespace SevenStrikeModules.XHud
         public void Tween_CleanAll()
         {
             ///--动画清理
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < primitive_tween_nodes.Count; i++)
             {
                 // 仅断开引用，不调用 Kill，不重置状态
-                PrimitiveTweenNodes[i].Tweener = null;
+                primitive_tween_nodes[i].tweener = null;
             }
         }
         /// <summary>
@@ -3934,181 +3934,181 @@ namespace SevenStrikeModules.XHud
             if (!Tween_CreateRuleValidCheck(arg))
                 return;
             /*如果动画方式为：当前 -> 结束则不执行退回动画，因为此方式是指让动画直接到达目标值（没有起始值，如果有也只是他的当前值），所以倒退对其没有意义*/
-            if (arg.TweenValueMode == TweenValueMode.当前到结束_C_E)
+            if (arg.tween_value_mode == TweenValueMode.当前到结束_C_E)
                 return;
 
             #region 杀死动画
             // 先 Kill 再 Rewind：Kill 停止播放并释放，Rewind 触发回退回调
             // 空值检查：未创建 Tweener 时跳过
-            if (arg.Tweener != null)
+            if (arg.tweener != null)
             {
-                arg.Tweener.Kill(complete);
-                arg.Tweener.Rewind(complete);
+                arg.tweener.Kill(complete);
+                arg.tweener.Rewind(complete);
             }
             #endregion
 
             // 重置进度（此处重复赋值，下一区域会再赋一次，疑似冗余）
-            arg.Progress = 0;
+            arg.progress = 0;
 
             // ========== 按动画类型恢复数值 ==========
-            if (arg.Type == TweenNodeType.a_位移)
+            if (arg.type == TweenNodeType.a_位移)
             {
                 // 起始类模式（S_D / S_E）：恢复到 From 值
-                if (arg.TweenValueMode == TweenValueMode.起始到默认_S_D ||
-                    arg.TweenValueMode == TweenValueMode.起始到结束_S_E)
+                if (arg.tween_value_mode == TweenValueMode.起始到默认_S_D ||
+                    arg.tween_value_mode == TweenValueMode.起始到结束_S_E)
                 {
-                    controller.mod_Rect.anchoredPosition3D = arg.From_Vector3;
-                    if (arg.Act_On_Vector3_Rewind != null)
-                        arg.Act_On_Vector3_Rewind(arg.From_Vector3);
+                    controller.mod_rect.anchoredPosition3D = arg.from_vector3;
+                    if (arg.act_on_vector3_rewind != null)
+                        arg.act_on_vector3_rewind(arg.from_vector3);
                 }
                 // 默认→结束模式（D_E）：恢复到 Original 值
-                else if (arg.TweenValueMode == TweenValueMode.默认到结束_D_E)
+                else if (arg.tween_value_mode == TweenValueMode.默认到结束_D_E)
                 {
-                    controller.mod_Rect.anchoredPosition3D = arg.Original_Vector3;
-                    if (arg.Act_On_Vector3_Rewind != null)
-                        arg.Act_On_Vector3_Rewind(arg.Original_Vector3);
+                    controller.mod_rect.anchoredPosition3D = arg.ori_vector3;
+                    if (arg.act_on_vector3_rewind != null)
+                        arg.act_on_vector3_rewind(arg.ori_vector3);
                 }
             }
-            else if (arg.Type == TweenNodeType.r_旋转)
+            else if (arg.type == TweenNodeType.r_旋转)
             {
-                if (arg.TweenValueMode == TweenValueMode.起始到默认_S_D ||
-                    arg.TweenValueMode == TweenValueMode.起始到结束_S_E)
+                if (arg.tween_value_mode == TweenValueMode.起始到默认_S_D ||
+                    arg.tween_value_mode == TweenValueMode.起始到结束_S_E)
                 {
-                    controller.mod_Rect.rotation = Quaternion.Euler(arg.From_Vector3);
-                    if (arg.Act_On_Quaternion_Rewind != null)
-                        arg.Act_On_Quaternion_Rewind(Quaternion.Euler(arg.From_Vector3));
+                    controller.mod_rect.rotation = Quaternion.Euler(arg.from_vector3);
+                    if (arg.act_on_quaternion_rewind != null)
+                        arg.act_on_quaternion_rewind(Quaternion.Euler(arg.from_vector3));
                 }
-                else if (arg.TweenValueMode == TweenValueMode.默认到结束_D_E)
+                else if (arg.tween_value_mode == TweenValueMode.默认到结束_D_E)
                 {
-                    controller.mod_Rect.rotation = Quaternion.Euler(arg.Original_Vector3);
-                    if (arg.Act_On_Quaternion_Rewind != null)
-                        arg.Act_On_Quaternion_Rewind(Quaternion.Euler(arg.Original_Vector3));
+                    controller.mod_rect.rotation = Quaternion.Euler(arg.ori_vector3);
+                    if (arg.act_on_quaternion_rewind != null)
+                        arg.act_on_quaternion_rewind(Quaternion.Euler(arg.ori_vector3));
                 }
             }
-            else if (arg.Type == TweenNodeType.s_缩放)
+            else if (arg.type == TweenNodeType.s_缩放)
             {
-                if (arg.TweenValueMode == TweenValueMode.起始到默认_S_D ||
-                    arg.TweenValueMode == TweenValueMode.起始到结束_S_E)
+                if (arg.tween_value_mode == TweenValueMode.起始到默认_S_D ||
+                    arg.tween_value_mode == TweenValueMode.起始到结束_S_E)
                 {
-                    controller.mod_Rect.localScale = arg.From_Vector3;
-                    if (arg.Act_On_Vector3_Rewind != null)
-                        arg.Act_On_Vector3_Rewind(arg.From_Vector3);
+                    controller.mod_rect.localScale = arg.from_vector3;
+                    if (arg.act_on_vector3_rewind != null)
+                        arg.act_on_vector3_rewind(arg.from_vector3);
                 }
-                else if (arg.TweenValueMode == TweenValueMode.默认到结束_D_E)
+                else if (arg.tween_value_mode == TweenValueMode.默认到结束_D_E)
                 {
-                    controller.mod_Rect.localScale = arg.Original_Vector3;
-                    if (arg.Act_On_Vector3_Rewind != null)
-                        arg.Act_On_Vector3_Rewind(arg.Original_Vector3);
+                    controller.mod_rect.localScale = arg.ori_vector3;
+                    if (arg.act_on_vector3_rewind != null)
+                        arg.act_on_vector3_rewind(arg.ori_vector3);
                 }
             }
-            else if (arg.Type == TweenNodeType.c_颜色)
+            else if (arg.type == TweenNodeType.c_颜色)
             {
                 Graphic gc = controller.RecognizeType();
                 if (gc == null)
                     return;
 
-                if (arg.TweenValueMode == TweenValueMode.起始到默认_S_D ||
-                    arg.TweenValueMode == TweenValueMode.起始到结束_S_E)
+                if (arg.tween_value_mode == TweenValueMode.起始到默认_S_D ||
+                    arg.tween_value_mode == TweenValueMode.起始到结束_S_E)
                 {
-                    gc.color = arg.From_Color;
-                    if (arg.Act_On_Color_Rewind != null)
-                        arg.Act_On_Color_Rewind(arg.From_Color);
+                    gc.color = arg.from_color;
+                    if (arg.act_on_color_rewind != null)
+                        arg.act_on_color_rewind(arg.from_color);
                 }
-                else if (arg.TweenValueMode == TweenValueMode.默认到结束_D_E)
+                else if (arg.tween_value_mode == TweenValueMode.默认到结束_D_E)
                 {
-                    gc.color = arg.Original_Color;
-                    if (arg.Act_On_Color_Rewind != null)
-                        arg.Act_On_Color_Rewind(arg.Original_Color);
+                    gc.color = arg.ori_color;
+                    if (arg.act_on_color_rewind != null)
+                        arg.act_on_color_rewind(arg.ori_color);
                 }
             }
-            else if (arg.Type == TweenNodeType.g_淡化)
+            else if (arg.type == TweenNodeType.g_淡化)
             {
-                if (controller.mod_CanvasGroup == null)
+                if (controller.mod_canvas_group == null)
                     return;
 
-                if (arg.TweenValueMode == TweenValueMode.起始到默认_S_D ||
-                    arg.TweenValueMode == TweenValueMode.起始到结束_S_E)
+                if (arg.tween_value_mode == TweenValueMode.起始到默认_S_D ||
+                    arg.tween_value_mode == TweenValueMode.起始到结束_S_E)
                 {
-                    controller.mod_CanvasGroup.alpha = arg.From_Float;
-                    if (arg.Act_On_Float_Rewind != null)
-                        arg.Act_On_Float_Rewind(arg.From_Float);
+                    controller.mod_canvas_group.alpha = arg.from_float;
+                    if (arg.act_on_float_rewind != null)
+                        arg.act_on_float_rewind(arg.from_float);
                 }
-                else if (arg.TweenValueMode == TweenValueMode.默认到结束_D_E)
+                else if (arg.tween_value_mode == TweenValueMode.默认到结束_D_E)
                 {
-                    controller.mod_CanvasGroup.alpha = arg.Original_Float;
-                    if (arg.Act_On_Float_Rewind != null)
-                        arg.Act_On_Float_Rewind(arg.Original_Float);
+                    controller.mod_canvas_group.alpha = arg.ori_float;
+                    if (arg.act_on_float_rewind != null)
+                        arg.act_on_float_rewind(arg.ori_float);
                 }
             }
-            else if (arg.Type == TweenNodeType.w_打字机)
+            else if (arg.type == TweenNodeType.w_打字机)
             {
-                if (controller.mod_Text == null && controller.mod_TmpText == null)
+                if (controller.mod_text == null && controller.mod_tmp_text == null)
                     return;
 
-                if (arg.TweenValueMode == TweenValueMode.起始到默认_S_D ||
-                    arg.TweenValueMode == TweenValueMode.起始到结束_S_E)
+                if (arg.tween_value_mode == TweenValueMode.起始到默认_S_D ||
+                    arg.tween_value_mode == TweenValueMode.起始到结束_S_E)
                 {
-                    if (controller.mod_Text != null)
-                        controller.mod_Text.txt_Set_Content(arg.From_String);
-                    if (controller.mod_TmpText != null)
-                        controller.mod_TmpText.SetText(arg.From_String);
-                    if (arg.Act_On_Text_Rewind != null)
-                        arg.Act_On_Text_Rewind(arg.From_String);
+                    if (controller.mod_text != null)
+                        controller.mod_text.txt_Set_Content(arg.from_string);
+                    if (controller.mod_tmp_text != null)
+                        controller.mod_tmp_text.SetText(arg.from_string);
+                    if (arg.act_on_text_rewind != null)
+                        arg.act_on_text_rewind(arg.from_string);
                 }
-                else if (arg.TweenValueMode == TweenValueMode.默认到结束_D_E)
+                else if (arg.tween_value_mode == TweenValueMode.默认到结束_D_E)
                 {
-                    if (controller.mod_Text != null)
-                        controller.mod_Text.txt_Set_Content(arg.Original_String);
-                    if (controller.mod_TmpText != null)
-                        controller.mod_TmpText.SetText(arg.Original_String);
-                    if (arg.Act_On_Text_Rewind != null)
-                        arg.Act_On_Text_Rewind(arg.Original_String);
-                }
-            }
-            else if (arg.Type == TweenNodeType.z_尺寸)
-            {
-                if (arg.TweenValueMode == TweenValueMode.起始到默认_S_D ||
-                    arg.TweenValueMode == TweenValueMode.起始到结束_S_E)
-                {
-                    controller.mod_Rect.sizeDelta = arg.From_Vector2;
-                    if (arg.Act_On_Vector2_Rewind != null)
-                        arg.Act_On_Vector2_Rewind(arg.From_Vector2);
-                }
-                else if (arg.TweenValueMode == TweenValueMode.默认到结束_D_E)
-                {
-                    controller.mod_Rect.sizeDelta = arg.Original_Vector2;
-                    if (arg.Act_On_Vector2_Rewind != null)
-                        arg.Act_On_Vector2_Rewind(arg.Original_Vector2);
+                    if (controller.mod_text != null)
+                        controller.mod_text.txt_Set_Content(arg.ori_string);
+                    if (controller.mod_tmp_text != null)
+                        controller.mod_tmp_text.SetText(arg.ori_string);
+                    if (arg.act_on_text_rewind != null)
+                        arg.act_on_text_rewind(arg.ori_string);
                 }
             }
-            else if (arg.Type == TweenNodeType.f_图像填充)
+            else if (arg.type == TweenNodeType.z_尺寸)
             {
-                if (controller.mod_Image == null)
+                if (arg.tween_value_mode == TweenValueMode.起始到默认_S_D ||
+                    arg.tween_value_mode == TweenValueMode.起始到结束_S_E)
+                {
+                    controller.mod_rect.sizeDelta = arg.from_vector2;
+                    if (arg.act_on_vector2_rewind != null)
+                        arg.act_on_vector2_rewind(arg.from_vector2);
+                }
+                else if (arg.tween_value_mode == TweenValueMode.默认到结束_D_E)
+                {
+                    controller.mod_rect.sizeDelta = arg.ori_vector2;
+                    if (arg.act_on_vector2_rewind != null)
+                        arg.act_on_vector2_rewind(arg.ori_vector2);
+                }
+            }
+            else if (arg.type == TweenNodeType.f_图像填充)
+            {
+                if (controller.mod_image == null)
                     return;
 
-                if (arg.TweenValueMode == TweenValueMode.起始到默认_S_D ||
-                    arg.TweenValueMode == TweenValueMode.起始到结束_S_E)
+                if (arg.tween_value_mode == TweenValueMode.起始到默认_S_D ||
+                    arg.tween_value_mode == TweenValueMode.起始到结束_S_E)
                 {
-                    controller.mod_Image.fillAmount = arg.From_Float;
-                    if (arg.Act_On_Float_Rewind != null)
-                        arg.Act_On_Float_Rewind(arg.From_Float);
+                    controller.mod_image.fillAmount = arg.from_float;
+                    if (arg.act_on_float_rewind != null)
+                        arg.act_on_float_rewind(arg.from_float);
                 }
-                else if (arg.TweenValueMode == TweenValueMode.默认到结束_D_E)
+                else if (arg.tween_value_mode == TweenValueMode.默认到结束_D_E)
                 {
-                    controller.mod_Image.fillAmount = arg.Original_Float;
-                    if (arg.Act_On_Float_Rewind != null)
-                        arg.Act_On_Float_Rewind(arg.Original_Float);
+                    controller.mod_image.fillAmount = arg.ori_float;
+                    if (arg.act_on_float_rewind != null)
+                        arg.act_on_float_rewind(arg.ori_float);
                 }
             }
 
 
             // 复位中断状态标志，确保 Complete 事件在下次播放时能正常触发
-            AnimatingBreakState = false;
+            animating_break_state = false;
 
             // 触发节点级 Rewind 事件（代码 + Inspector 双通道）
-            if (act_on_Tween_Rewind != null)
-                act_on_Tween_Rewind(arg);
-            eve_on_Tween_Rewind.Invoke(arg);
+            if (act_on_tween_rewind != null)
+                act_on_tween_rewind(arg);
+            eve_on_tween_rewind.Invoke(arg);
         }
         /// <summary>
         /// 杀死动画（单个节点）
@@ -4143,17 +4143,17 @@ namespace SevenStrikeModules.XHud
 
             #region 杀死动画
             // 空值检查：未创建 Tweener 时跳过
-            if (arg.Tweener != null)
+            if (arg.tweener != null)
             {
-                arg.Tweener.Kill(complete);
-                arg.Tweener = null;   // 断开引用，防止悬空访问
+                arg.tweener.Kill(complete);
+                arg.tweener = null;   // 断开引用，防止悬空访问
             }
             #endregion
 
             // 触发节点级 Kill 事件（代码 + Inspector 双通道）
-            if (act_on_Tween_Kill != null)
-                act_on_Tween_Kill(arg);
-            eve_on_Tween_Kill.Invoke(arg);
+            if (act_on_tween_kill != null)
+                act_on_tween_kill(arg);
+            eve_on_tween_kill.Invoke(arg);
         }
         /// <summary>
         /// 检查列表中是否存在与指定节点重复的节点
@@ -4185,17 +4185,17 @@ namespace SevenStrikeModules.XHud
         public bool TweenNode_IsDuplicated(TweenNode node)
         {
             // 空值保护
-            if (node == null || PrimitiveTweenNodes == null)
+            if (node == null || primitive_tween_nodes == null)
                 return false;
 
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < primitive_tween_nodes.Count; i++)
             {
                 // 跳过自身比较（引用相等）
-                if (PrimitiveTweenNodes[i] == node)
+                if (primitive_tween_nodes[i] == node)
                     continue;
 
                 // 同时检查 ID 与 Indicator 是否都相同
-                if (PrimitiveTweenNodes[i].ID == node.ID && PrimitiveTweenNodes[i].Indicator == node.Indicator)
+                if (primitive_tween_nodes[i].id == node.id && primitive_tween_nodes[i].indicator == node.indicator)
                     return true;
             }
 
@@ -4232,18 +4232,18 @@ namespace SevenStrikeModules.XHud
         public TweenNode TweenNode_GetDuplicate(TweenNode node)
         {
             // 空值保护
-            if (node == null || PrimitiveTweenNodes == null)
+            if (node == null || primitive_tween_nodes == null)
                 return null;
 
-            for (int i = 0; i < PrimitiveTweenNodes.Count; i++)
+            for (int i = 0; i < primitive_tween_nodes.Count; i++)
             {
                 // 跳过自身比较
-                if (PrimitiveTweenNodes[i] == node)
+                if (primitive_tween_nodes[i] == node)
                     continue;
 
                 // 同时匹配 ID 与 Indicator
-                if (PrimitiveTweenNodes[i].ID == node.ID && PrimitiveTweenNodes[i].Indicator == node.Indicator)
-                    return PrimitiveTweenNodes[i];
+                if (primitive_tween_nodes[i].id == node.id && primitive_tween_nodes[i].indicator == node.indicator)
+                    return primitive_tween_nodes[i];
             }
 
             return null;

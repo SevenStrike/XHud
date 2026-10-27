@@ -39,23 +39,23 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 音效池
         /// </summary>
-        public AudioPlayer[] Pool_Sounder;
+        public AudioPlayer[] pool_sounder;
         [Tooltip("音效池预加载数量")]
         /// <summary>
         /// 音效池预加载数量
         /// </summary>
-        public int SounderPoolCount;
+        public int pool_sounder_count;
         [Range(0, 100)]
         [Tooltip("影响所有UI的音效音量")]
         /// <summary>
         /// 音效音量
         /// </summary>        
-        public float Volume = 100;
+        public float global_volume = 100;
         [Tooltip("勾选后所有音效都会静音")]
         /// <summary>
         /// 音效静音
         /// </summary>
-        public bool VolumeMute;
+        public bool global_volume_mute;
 
         /// <summary>
         /// 初始化音效播放器池
@@ -88,7 +88,7 @@ namespace SevenStrikeModules.XHud
             if (count == 0)
                 return;
 
-            Pool_Sounder = new AudioPlayer[count];
+            pool_sounder = new AudioPlayer[count];
 
             GameObject PoolRoot = new GameObject();
             PoolRoot.name = "Pool_Sound";
@@ -97,7 +97,7 @@ namespace SevenStrikeModules.XHud
             PoolRoot.transform.localEulerAngles = Vector3.zero;
             PoolRoot.transform.localScale = Vector3.one;
 
-            for (int i = 0; i < Pool_Sounder.Length; i++)
+            for (int i = 0; i < pool_sounder.Length; i++)
             {
                 AudioPlayer ap = new AudioPlayer();
                 GameObject obj = new GameObject();
@@ -110,7 +110,7 @@ namespace SevenStrikeModules.XHud
                 ap.Player.minDistance = 0.1f;
                 ap.Player.maxDistance = 0.2f;
                 ap.Player.playOnAwake = false;
-                Pool_Sounder[i] = ap;
+                pool_sounder[i] = ap;
             }
         }
         /// <summary>
@@ -120,16 +120,16 @@ namespace SevenStrikeModules.XHud
         public AudioSource hm_LibrarySounds_GetSounder()
         {
             AudioSource aus = null;
-            if (Pool_Sounder == null && Pool_Sounder.Length <= 0)
+            if (pool_sounder == null && pool_sounder.Length <= 0)
             {
                 Debug.Log("您未指定音效池的数量！因此无法播放声音！请前往HudManager中配置音效池的数量！");
                 return null;
             }
-            for (int i = 0; i < Pool_Sounder.Length; i++)
+            for (int i = 0; i < pool_sounder.Length; i++)
             {
-                if (!Pool_Sounder[i].Player.isPlaying)
+                if (!pool_sounder[i].Player.isPlaying)
                 {
-                    aus = Pool_Sounder[i].Player;
+                    aus = pool_sounder[i].Player;
                     break;
                 }
             }
@@ -142,16 +142,16 @@ namespace SevenStrikeModules.XHud
         public int hm_LibrarySounds_GetSoundIndex(string name)
         {
             int index = -1;
-            for (int i = 0; i < Hud_Sounds.SoundLibrary.Count; i++)
+            for (int i = 0; i < library_sounds.library_sounds.Count; i++)
             {
-                if (Hud_Sounds.SoundLibrary[i].Name == name)
+                if (library_sounds.library_sounds[i].name == name)
                 {
                     index = i;
                 }
             }
             if (index == -1)
             {
-                if (UseDebug)
+                if (use_debug)
                     XGUI_Utilitys.Console("XHud - 管理器通知", "无法在音效库里找到目标名称的索引号！", XGUIMsgState.警告);
                 return 0;
             }
@@ -166,13 +166,13 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public string hm_LibrarySounds_GetSoundName(int index)
         {
-            if (Hud_Sounds.SoundLibrary_IndexIsValid(index))
+            if (library_sounds.SoundLibrary_IndexIsValid(index))
             {
-                return Hud_Sounds.SoundLibrary[index].Name;
+                return library_sounds.library_sounds[index].name;
             }
             else
             {
-                if (UseDebug)
+                if (use_debug)
                     XGUI_Utilitys.Console("XHud - 管理器通知", "无法在音效库里找到目标索引号的音效名称！", XGUIMsgState.警告);
                 return "";
             }
@@ -216,11 +216,11 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_LibrarySounds_Update()
         {
-            if (Pool_Sounder == null || Pool_Sounder.Length <= 0)
+            if (pool_sounder == null || pool_sounder.Length <= 0)
                 return;
-            for (int i = 0; i < Pool_Sounder.Length; i++)
+            for (int i = 0; i < pool_sounder.Length; i++)
             {
-                Pool_Sounder[i].IsPlaying = Pool_Sounder[i].Player.isPlaying;
+                pool_sounder[i].IsPlaying = pool_sounder[i].Player.isPlaying;
             }
         }
         /// <summary>
@@ -228,15 +228,15 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_LibrarySounds_Clean()
         {
-            for (int i = 0; i < Pool_Sounder.Length; i++)
+            for (int i = 0; i < pool_sounder.Length; i++)
             {
-                if (Pool_Sounder[i].Player.clip != null)
+                if (pool_sounder[i].Player.clip != null)
                 {
-                    Pool_Sounder[i].Player.clip = null;
+                    pool_sounder[i].Player.clip = null;
                 }
-                Pool_Sounder[i].Player.transform.localPosition = Vector3.zero;
-                Pool_Sounder[i].Player.transform.localEulerAngles = Vector3.zero;
-                Pool_Sounder[i].Player.transform.localScale = Vector3.one;
+                pool_sounder[i].Player.transform.localPosition = Vector3.zero;
+                pool_sounder[i].Player.transform.localEulerAngles = Vector3.zero;
+                pool_sounder[i].Player.transform.localScale = Vector3.one;
             }
         }
     }

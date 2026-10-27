@@ -30,38 +30,38 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 场景相机
         /// </summary>
-        public Camera SceneCamera;
+        public Camera camera_scene;
         [Tooltip("UI事件相机")]
         /// <summary>
         /// UI事件相机
         /// </summary>
-        public Camera HudCamera;
+        public Camera camera_ui;
         [Tooltip("近距剪切")]
         /// <summary>
         /// 近距剪切
         /// </summary>
-        public float CameraCutter_Near = 0.01f;
+        public float camera_ui_cutter_near = 0.01f;
         [Tooltip("远距剪切")]
         /// <summary>
         /// 远距剪切
         /// </summary>
-        public float CameraCutter_Far = 1f;
+        public float camera_ui_cutter_far = 1f;
         [Tooltip("是否使用正交投影")]
         /// <summary>
         /// 是否使用正交投影
         /// </summary>
-        public bool CameraOthograpicMode;
+        public bool camera_othograpic_mode;
         [Tooltip("正交投影尺寸")]
         /// <summary>
         /// 正交投影尺寸
         /// </summary>
-        public float CameraOrthographicSize = 1f;
+        public float camera_ui_orthographic_size = 1f;
         [Range(0, 180)]
         [Tooltip("透视投影尺寸")]
         /// <summary>
         /// 透视投影尺寸
         /// </summary>
-        public float CameraFov = 60f;
+        public float camera_ui_fov = 60f;
 
         #region 相机
         /// <summary>
@@ -71,10 +71,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="far">远距</param>
         public void hm_CameraCutterRange(float near, float far)
         {
-            if (HudCamera == null)
+            if (camera_ui == null)
                 return;
-            HudCamera.nearClipPlane = near;
-            HudCamera.farClipPlane = far;
+            camera_ui.nearClipPlane = near;
+            camera_ui.farClipPlane = far;
         }
         /// <summary>
         /// 相机投影方式设置
@@ -82,9 +82,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="treeState">投影方式</param>
         public void hm_CameraOrthographicProjection(bool state)
         {
-            if (HudCamera == null)
+            if (camera_ui == null)
                 return;
-            HudCamera.orthographic = state;
+            camera_ui.orthographic = state;
         }
         /// <summary>
         /// 相机正交投影尺寸
@@ -92,9 +92,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="size">相机正交尺寸</param>
         public void hm_CameraOrthographicSize(float size)
         {
-            if (HudCamera == null)
+            if (camera_ui == null)
                 return;
-            HudCamera.orthographicSize = size;
+            camera_ui.orthographicSize = size;
         }
         /// <summary>
         /// 相机透视投影尺寸
@@ -102,9 +102,9 @@ namespace SevenStrikeModules.XHud
         /// <param name="fov">透视角焦距</param>
         public void hm_CameraPerspectiveFov(float fov)
         {
-            if (HudCamera == null)
+            if (camera_ui == null)
                 return;
-            HudCamera.fieldOfView = fov;
+            camera_ui.fieldOfView = fov;
         }
         #endregion
 
@@ -122,7 +122,7 @@ namespace SevenStrikeModules.XHud
             bool sw = false;
             for (int i = 0; i < camdata.cameraStack.Count; i++)
             {
-                if (camdata.cameraStack[i] == HudCamera)
+                if (camdata.cameraStack[i] == camera_ui)
                 {
                     sw = true;
                     break;
@@ -130,7 +130,7 @@ namespace SevenStrikeModules.XHud
             }
             if (!sw)
             {
-                camdata.cameraStack.Add(HudCamera);
+                camdata.cameraStack.Add(camera_ui);
             }
         }
         #endregion
@@ -171,28 +171,28 @@ namespace SevenStrikeModules.XHud
             // 设置 UI 相机的近裁剪平面和远裁剪平面
             // 近裁剪平面：相机最近渲染距离，UI 相机通常设为较小的值（如 0.01）
             // 远裁剪平面：相机最远渲染距离，UI 相机通常设为较小的值（如 1）
-            hm_CameraCutterRange(CameraCutter_Near, CameraCutter_Far);
+            hm_CameraCutterRange(camera_ui_cutter_near, camera_ui_cutter_far);
 
             // ========== 2. 更新相机投影模式 ==========
             // 正交模式（Orthographic）：适用于 2D UI，物体大小不随距离变化
             // 透视模式（Perspective）：适用于 3D UI，有近大远小效果
-            hm_CameraOrthographicProjection(CameraOthograpicMode);
+            hm_CameraOrthographicProjection(camera_othograpic_mode);
 
             // ========== 3. 更新正交相机尺寸 ==========
             // 仅在正交模式下生效
             // 控制正交相机的视野范围，值越大看到的区域越大
-            hm_CameraOrthographicSize(CameraOrthographicSize);
+            hm_CameraOrthographicSize(camera_ui_orthographic_size);
 
             // ========== 4. 更新透视相机视野角度 ==========
             // 仅在透视模式下生效
             // 控制透视相机的视野范围，值越大看到的范围越广
-            hm_CameraPerspectiveFov(CameraFov);
+            hm_CameraPerspectiveFov(camera_ui_fov);
 
             // ========== 5. 检查并添加相机堆栈 ==========
             // 将 UI 相机添加到场景相机的渲染堆栈中
             // 确保 UI 相机与场景相机叠加渲染
             // 场景相机先渲染场景，UI 相机后渲染 UI
-            hm_SceneCam_CheckStack(SceneCamera);
+            hm_SceneCam_CheckStack(camera_scene);
         }
 
         /// <summary>
@@ -201,12 +201,12 @@ namespace SevenStrikeModules.XHud
         /// <param name="uac"></param>
         public void hm_AssignedCameraStack(UniversalAdditionalCameraData uac)
         {
-            if (HudCamera == null)
-                if (UseDebug)
+            if (camera_ui == null)
+                if (use_debug)
                     XGUI_Utilitys.Console("XHud - 管理器通知", "当前HudCamera为空，无法为指定的相机堆栈添加Hud叠加层", XGUIMsgState.警告);
-            if (!uac.cameraStack.Contains(HudCamera))
+            if (!uac.cameraStack.Contains(camera_ui))
             {
-                uac.cameraStack.Add(HudCamera);
+                uac.cameraStack.Add(camera_ui);
             }
         }
     }

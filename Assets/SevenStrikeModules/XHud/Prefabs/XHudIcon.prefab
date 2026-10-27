@@ -65,6 +65,9 @@ MonoBehaviour:
   mod_RawImage: {fileID: 0}
   mod_HudButton: {fileID: 0}
   Debug: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
   pt_Painting: {fileID: 0}
   pt_Feature: {fileID: 0}
   pt_Tween: {fileID: 0}
@@ -430,6 +433,9 @@ MonoBehaviour:
   mod_RawImage: {fileID: 0}
   mod_HudButton: {fileID: 0}
   Debug: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
   pt_Painting: {fileID: 0}
   pt_Feature: {fileID: 0}
   pt_Tween: {fileID: 0}
@@ -1171,6 +1177,9 @@ MonoBehaviour:
   mod_RawImage: {fileID: 0}
   mod_HudButton: {fileID: 0}
   Debug: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
   pt_Painting: {fileID: 0}
   pt_Feature: {fileID: 0}
   pt_Tween: {fileID: 0}
@@ -1542,6 +1551,9 @@ MonoBehaviour:
   mod_RawImage: {fileID: 0}
   mod_HudButton: {fileID: 0}
   Debug: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
   pt_Painting: {fileID: 0}
   pt_Feature: {fileID: 0}
   pt_Tween: {fileID: 0}
@@ -2213,6 +2225,9 @@ MonoBehaviour:
   mod_RawImage: {fileID: 0}
   mod_HudButton: {fileID: 0}
   Debug: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
   pt_Painting: {fileID: 0}
   pt_Feature: {fileID: 0}
   pt_Tween: {fileID: 0}
@@ -2657,6 +2672,9 @@ MonoBehaviour:
   mod_RawImage: {fileID: 0}
   mod_HudButton: {fileID: 0}
   Debug: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
   pt_Painting: {fileID: 0}
   pt_Feature: {fileID: 0}
   pt_Tween: {fileID: 0}
@@ -3027,6 +3045,9 @@ MonoBehaviour:
   mod_RawImage: {fileID: 0}
   mod_HudButton: {fileID: 0}
   Debug: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
   pt_Painting: {fileID: 0}
   pt_Feature: {fileID: 0}
   pt_Tween: {fileID: 0}
@@ -3094,6 +3115,9 @@ MonoBehaviour:
   mod_RawImage: {fileID: 0}
   mod_HudButton: {fileID: 0}
   Debug: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
   pt_Painting: {fileID: 0}
   pt_Feature: {fileID: 0}
   pt_Tween: {fileID: 0}
@@ -3463,6 +3487,9 @@ MonoBehaviour:
   mod_RawImage: {fileID: 0}
   mod_HudButton: {fileID: 0}
   Debug: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
   pt_Painting: {fileID: 0}
   pt_Feature: {fileID: 0}
   pt_Tween: {fileID: 0}
@@ -4128,6 +4155,9 @@ MonoBehaviour:
   mod_RawImage: {fileID: 0}
   mod_HudButton: {fileID: 0}
   Debug: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
   pt_Painting: {fileID: 0}
   pt_Feature: {fileID: 0}
   pt_Tween: {fileID: 0}
@@ -4419,6 +4449,9 @@ MonoBehaviour:
   mod_RawImage: {fileID: 0}
   mod_HudButton: {fileID: 0}
   Debug: 0
+  fold_param: 1
+  fold_option: 1
+  fold_based: 1
   pt_Painting: {fileID: 0}
   pt_Feature: {fileID: 0}
   pt_Tween: {fileID: 0}
@@ -4947,34 +4980,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427992cb4fdf0d4488fb77d4e7ae18af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ClearActions_With_Spawn: 1
-  Alpha: 1
-  CanvasGroup: {fileID: 5784393155914110519}
-  Indicator: "\u5143\u7D20"
-  OriginalName: 
-  OriginPoolName: 
-  DebugState: 0
-  RectTransform: {fileID: 7308388078530589608}
-  CurrentPivot: {x: 0, y: 0}
-  CreateState: 0
-  AnimateState: 0
-  ElementSpaceType: 0
-  CreatedSourceType: 0
-  Tween_Preview_IsPlaying: 0
-  Animating: 0
-  TweensPreivew_In_State: 0
-  TweensPreivew_Out_State: 0
-  AutoKillPreviewTweens: 1
-  RewindPreviewTweensWithKill: 1
-  ClearPreviewTweensWithKill: 1
-  Crc_Preview_Position: {x: 0, y: 0, z: 0}
-  Rec_Preview_Position: {x: 0, y: 0, z: 0}
-  PreviewIncludePrimitivesTween: 0
-  Crc_Preview_SetPosition: 0
-  Rec_Preview_SetPosition: 0
-  Crc_Lib_Name: 
-  Rec_Lib_Name: 
-  CreateArgs:
+  clear_actions_with_spawn: 1
+  alpha: 1
+  canvasgroup: {fileID: 4016231534562583080, guid: db17f898becf3154da3471122b978bc0, type: 3}
+  id: 0
+  indicator: 
+  original_name: 
+  origin_poolname: 
+  debug_state: 0
+  rect_transform: {fileID: 3141893240754762256, guid: db17f898becf3154da3471122b978bc0, type: 3}
+  current_pivot: {x: 0, y: 0}
+  create_state: 0
+  animate_state: 0
+  element_space_type: 0
+  created_source_type: 0
+  tween_preview_is_playing: 0
+  fold_param: 1
+  fold_preview: 1
+  fold_state: 1
+  fold_option: 1
+  fold_rms: 1
+  fold_list: 1
+  fold_statistic: 1
+  fold_based: 1
+  fold_component: 1
+  tweening: 0
+  tweens_preivew_in_state: 0
+  tweens_preivew_out_state: 0
+  autokill_preview_tweens: 1
+  rewind_preview_tweens_with_kill: 1
+  clear_preview_tweens_with_kill: 1
+  create_preview_position: {x: 0, y: 0, z: 0}
+  recycle_preview_position: {x: 0, y: 0, z: 0}
+  preview_include_primitives_tween: 0
+  create_preview_set_position: 0
+  recycle_preview_set_position: 0
+  motion_create_library_index_name: 
+  motion_recycle_library_index_name: 
+  motion_create_args:
     anchor: 5
     MotionAnimateEndState: 0
     Alpha:
@@ -5008,7 +5051,7 @@ MonoBehaviour:
       Ease: 10
     Movement:
       Movement: 1
-      Distance: 500
+      Distance: 100
       Duration: 1
       Delay: 0
       Curve:
@@ -5068,7 +5111,7 @@ MonoBehaviour:
         m_RotationOrder: 4
       CurveName: 
       Ease: 10
-  RecycleArgs:
+  motion_recycle_args:
     MotionAnimateEndState: 0
     Alpha:
       Duration: 1
@@ -5162,14 +5205,8 @@ MonoBehaviour:
       CurveName: 
       Ease: 10
   preview_motionArgs_fold: 0
-  create_fold_move: 1
-  create_fold_rotate: 0
-  create_fold_alpha: 0
-  recycle_fold_move: 0
-  recycle_fold_rotate: 0
-  recycle_fold_alpha: 0
-  EventIsFold: 0
-  ClearEvents_With_Spawn: 1
+  event_is_fold: 0
+  clear_events_with_spawn: 1
   eve_on_element_in_start:
     m_PersistentCalls:
       m_Calls: []
@@ -5182,66 +5219,33 @@ MonoBehaviour:
   eve_on_element_out_end:
     m_PersistentCalls:
       m_Calls: []
-  Highlighter: {fileID: 3395150966058704166}
-  ButtonNodes: []
-  ButtonIsFold: 0
-  ObjectTracker: {fileID: 0}
-  OptionNodes: []
-  OptionIsFold: 0
-  ProgressNodes: []
-  ProgressIsFold: 0
-  SliderNodes: []
-  SliderIsFold: 0
-  SounderNodes: []
-  SounderIsFold: 0
-  TextNodes: []
-  TextIsFold: 0
-  TmpTextNodes: []
-  TmpTextIsFold: 0
-  ToggleNodes: []
-  ToggleIsFold: 0
-  PrimitiveControllerNodes:
-  - Controller: {fileID: 717683467060324445}
-    TotalTime: 0
-    DelayTime: 0
-  - Controller: {fileID: 7888642258020244024}
-    TotalTime: 0
-    DelayTime: 0
-  - Controller: {fileID: 6446176208102141864}
-    TotalTime: 0
-    DelayTime: 0
-  - Controller: {fileID: 2230923558597637012}
-    TotalTime: 0
-    DelayTime: 0
-  - Controller: {fileID: 7321920420402667808}
-    TotalTime: 0
-    DelayTime: 0
-  - Controller: {fileID: 8298833279285080711}
-    TotalTime: 0
-    DelayTime: 0
-  - Controller: {fileID: 9014166737581027521}
-    TotalTime: 0
-    DelayTime: 0
-  - Controller: {fileID: 3111077054384088561}
-    TotalTime: 0
-    DelayTime: 0
-  - Controller: {fileID: 4344392714400494551}
-    TotalTime: 0
-    DelayTime: 0
-  - Controller: {fileID: 4027322624107386550}
-    TotalTime: 0
-    DelayTime: 0
-  - Controller: {fileID: 3090752960971795889}
-    TotalTime: 0
-    DelayTime: 0
-  PrimitivesIsFold: 0
-  PrimitivesTweenMaxDuration: 0
-  PrimitivesTweenGlobalDuration: 1
-  AutoPlayPrimitivesTween: 1
-  RMS_Enabled: 0
-  RMS_LayoutDatas: []
-  RMS_Name: 
-  TriggerAction: {fileID: 0}
+  highlighter: {fileID: 8857759656416062061, guid: db17f898becf3154da3471122b978bc0, type: 3}
+  button_nodes: []
+  button_is_fold: 0
+  object_tracker: {fileID: 0}
+  option_nodes: []
+  option_is_fold: 0
+  progress_nodes: []
+  progress_is_fold: 0
+  slider_nodes: []
+  slider_is_fold: 0
+  sounder_nodes: []
+  sounder_is_fold: 0
+  text_nodes: []
+  text_is_fold: 0
+  tmptext_nodes: []
+  tmptext_is_fold: 0
+  toggle_nodes: []
+  toggle_is_fold: 0
+  primitive_controller_nodes: []
+  primitives_is_fold: 0
+  primitives_tween_max_duration: 0
+  primitives_tween_global_duration: 1
+  autoplay_primitives_tween: 1
+  rms_enabled: 0
+  rms_layout_datas: []
+  rms_name: 
+  trigger_action: {fileID: 0}
 --- !u!222 &5628506130273834295
 CanvasRenderer:
   m_ObjectHideFlags: 0

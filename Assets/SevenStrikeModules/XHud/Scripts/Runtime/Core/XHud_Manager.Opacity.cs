@@ -30,50 +30,50 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         /// 屏幕内容透明度控制组件
         /// </summary>
-        public CanvasGroup HudCanvasGroup_Screen;
+        public CanvasGroup op_hud_canvas_group_screen;
         [Tooltip("世界内容透明度控制组件")]
         /// <summary>
         /// 世界内容透明度控制组件
         /// </summary>
-        public CanvasGroup HudCanvasGroup_World;
+        public CanvasGroup op_hud_canvas_group_world;
         [Range(0, 1)]
         [Tooltip("屏幕内容透明度")]
         /// <summary>
         /// 屏幕内容透明度
         /// </summary>
-        public float ContentOpacity_Screen = 1f;
+        public float op_content_opacity_screen = 1f;
         [Range(0, 1)]
         [Tooltip("世界内容透明度")]
         /// <summary>
         /// 世界内容透明度
         /// </summary>
-        public float ContentOpacity_World = 1f;
+        public float op_content_opacity_world = 1f;
         [Tooltip("世界内容透明度")]
         /// <summary>
         /// 世界内容透明度
         /// </summary>
-        private XTween_Interface twn_ContentOpacity_Screen;
+        private XTween_Interface twn_content_opacity_screen;
         [Tooltip("世界内容透明度")]
         /// <summary>
         /// 世界内容透明度
         /// </summary>
-        private XTween_Interface twn_ContentOpacity_World;
+        private XTween_Interface twn_content_opacity_world;
         /// <summary>
         /// 中断开关 - 屏幕内容透明度到达最大
         /// </summary>
-        private bool OpacityIsChangedToMax_Screen;
+        private bool opacity_is_changed_to_max_screen;
         /// <summary>
         /// 中断开关 - 屏幕内容透明度到达最小
         /// </summary>
-        private bool OpacityIsChangedToMin_Screen;
+        private bool opacity_is_changed_to_min_screen;
         /// <summary>
         /// 中断开关 - 世界内容透明度到达最大
         /// </summary>
-        private bool OpacityIsChangedToMax_World;
+        private bool opacity_is_changed_to_max_world;
         /// <summary>
         /// 中断开关 - 世界内容透明度到达最小
         /// </summary>
-        private bool OpacityIsChangedToMin_World;
+        private bool opacity_is_changed_to_min_world;
 
         /// <summary>
         /// 内容透明度更新
@@ -112,34 +112,34 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_Screen_ContentOpacity_Update()
         {
-            if (HudCanvasGroup_Screen == null)
+            if (op_hud_canvas_group_screen == null)
                 return;
 
-            HudCanvasGroup_Screen.alpha = ContentOpacity_Screen;
-            if (ContentOpacity_Screen >= 1)
+            op_hud_canvas_group_screen.alpha = op_content_opacity_screen;
+            if (op_content_opacity_screen >= 1)
             {
-                if (OpacityIsChangedToMax_Screen)
+                if (opacity_is_changed_to_max_screen)
                 {
-                    OpacityIsChangedToMax_Screen = false;
-                    if (Act_ContentOpacity_Screen_IsMax != null)
-                        Act_ContentOpacity_Screen_IsMax(ContentOpacity_Screen);
+                    opacity_is_changed_to_max_screen = false;
+                    if (act_content_opacity_screen_is_max != null)
+                        act_content_opacity_screen_is_max(op_content_opacity_screen);
                 }
             }
-            else if (ContentOpacity_Screen <= 0)
+            else if (op_content_opacity_screen <= 0)
             {
-                if (OpacityIsChangedToMin_Screen)
+                if (opacity_is_changed_to_min_screen)
                 {
-                    OpacityIsChangedToMin_Screen = false;
-                    if (Act_ContentOpacity_Screen_IsMin != null)
-                        Act_ContentOpacity_Screen_IsMin(ContentOpacity_Screen);
+                    opacity_is_changed_to_min_screen = false;
+                    if (act_content_opacity_screen_is_min != null)
+                        act_content_opacity_screen_is_min(op_content_opacity_screen);
                 }
             }
             else
             {
-                OpacityIsChangedToMax_Screen = true;
-                OpacityIsChangedToMin_Screen = true;
-                if (Act_ContentOpacity_Screen_Changed != null)
-                    Act_ContentOpacity_Screen_Changed(ContentOpacity_Screen);
+                opacity_is_changed_to_max_screen = true;
+                opacity_is_changed_to_min_screen = true;
+                if (act_content_opacity_screen_changed != null)
+                    act_content_opacity_screen_changed(op_content_opacity_screen);
             }
         }
         /// <summary>
@@ -178,33 +178,33 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void hm_World_ContentOpacity_Update()
         {
-            if (HudCanvasGroup_World != null)
+            if (op_hud_canvas_group_world != null)
             {
-                HudCanvasGroup_World.alpha = ContentOpacity_World;
-                if (ContentOpacity_World >= 1)
+                op_hud_canvas_group_world.alpha = op_content_opacity_world;
+                if (op_content_opacity_world >= 1)
                 {
-                    if (OpacityIsChangedToMax_World)
+                    if (opacity_is_changed_to_max_world)
                     {
-                        OpacityIsChangedToMax_World = false;
-                        if (Act_ContentOpacity_World_IsMax != null)
-                            Act_ContentOpacity_World_IsMax(ContentOpacity_World);
+                        opacity_is_changed_to_max_world = false;
+                        if (act_content_opacity_world_is_max != null)
+                            act_content_opacity_world_is_max(op_content_opacity_world);
                     }
                 }
-                else if (ContentOpacity_World <= 0)
+                else if (op_content_opacity_world <= 0)
                 {
-                    if (OpacityIsChangedToMin_World)
+                    if (opacity_is_changed_to_min_world)
                     {
-                        OpacityIsChangedToMin_World = false;
-                        if (Act_ContentOpacity_World_IsMin != null)
-                            Act_ContentOpacity_World_IsMin(ContentOpacity_World);
+                        opacity_is_changed_to_min_world = false;
+                        if (act_content_opacity_world_is_min != null)
+                            act_content_opacity_world_is_min(op_content_opacity_world);
                     }
                 }
                 else
                 {
-                    OpacityIsChangedToMax_World = true;
-                    OpacityIsChangedToMin_World = true;
-                    if (Act_ContentOpacity_World_Changed != null)
-                        Act_ContentOpacity_World_Changed(ContentOpacity_World);
+                    opacity_is_changed_to_max_world = true;
+                    opacity_is_changed_to_min_world = true;
+                    if (act_content_opacity_world_is_changed != null)
+                        act_content_opacity_world_is_changed(op_content_opacity_world);
                 }
             }
         }
@@ -219,10 +219,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="action_end">委托 - 结束时</param>
         public XTween_Interface hm_Screen_ContentOpacity_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_ContentOpacity_Screen != null && twn_ContentOpacity_Screen.IsActive)
-                if (twn_ContentOpacity_Screen.IsPlaying)
-                    twn_ContentOpacity_Screen.Kill();
-            twn_ContentOpacity_Screen = XTween.To(() => ContentOpacity_Screen, x => ContentOpacity_Screen = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            if (twn_content_opacity_screen != null && twn_content_opacity_screen.IsActive)
+                if (twn_content_opacity_screen.IsPlaying)
+                    twn_content_opacity_screen.Kill();
+            twn_content_opacity_screen = XTween.To(() => op_content_opacity_screen, x => op_content_opacity_screen = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
@@ -232,7 +232,7 @@ namespace SevenStrikeModules.XHud
                     action_end();
             });
 
-            return twn_ContentOpacity_Screen;
+            return twn_content_opacity_screen;
         }
         /// <summary>
         /// 屏幕内容透明度平滑到
@@ -245,10 +245,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="action_end">委托 - 结束时</param>
         public XTween_Interface hm_Screen_ContentOpacity_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_ContentOpacity_Screen != null && twn_ContentOpacity_Screen.IsActive)
-                if (twn_ContentOpacity_Screen.IsPlaying)
-                    twn_ContentOpacity_Screen.Kill();
-            twn_ContentOpacity_Screen = XTween.To(() => ContentOpacity_Screen, x => ContentOpacity_Screen = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            if (twn_content_opacity_screen != null && twn_content_opacity_screen.IsActive)
+                if (twn_content_opacity_screen.IsPlaying)
+                    twn_content_opacity_screen.Kill();
+            twn_content_opacity_screen = XTween.To(() => op_content_opacity_screen, x => op_content_opacity_screen = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
@@ -258,7 +258,7 @@ namespace SevenStrikeModules.XHud
                     action_end();
             });
 
-            return twn_ContentOpacity_Screen;
+            return twn_content_opacity_screen;
         }
         /// <summary>
         /// 屏幕内容透明度快速到
@@ -266,10 +266,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="val">目标透明度</param>
         public void hm_Screen_ContentOpacity_FastTo(float val)
         {
-            if (twn_ContentOpacity_Screen != null && twn_ContentOpacity_Screen.IsActive)
-                if (twn_ContentOpacity_Screen.IsPlaying)
-                    twn_ContentOpacity_Screen.Kill();
-            ContentOpacity_Screen = val;
+            if (twn_content_opacity_screen != null && twn_content_opacity_screen.IsActive)
+                if (twn_content_opacity_screen.IsPlaying)
+                    twn_content_opacity_screen.Kill();
+            op_content_opacity_screen = val;
         }
         /// <summary>
         /// 世界内容透明度平滑到
@@ -282,10 +282,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="action_end">委托 - 结束时</param>
         public XTween_Interface hm_World_ContentOpacity_To(float val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_ContentOpacity_World != null && twn_ContentOpacity_World.IsActive)
-                if (twn_ContentOpacity_World.IsPlaying)
-                    twn_ContentOpacity_World.Kill();
-            twn_ContentOpacity_World = XTween.To(() => ContentOpacity_World, x => ContentOpacity_World = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            if (twn_content_opacity_world != null && twn_content_opacity_world.IsActive)
+                if (twn_content_opacity_world.IsPlaying)
+                    twn_content_opacity_world.Kill();
+            twn_content_opacity_world = XTween.To(() => op_content_opacity_world, x => op_content_opacity_world = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
@@ -295,7 +295,7 @@ namespace SevenStrikeModules.XHud
                     action_end();
             });
 
-            return twn_ContentOpacity_World;
+            return twn_content_opacity_world;
         }
         /// <summary>
         /// 世界内容透明度平滑到
@@ -308,10 +308,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="action_end">委托 - 结束时</param>
         public XTween_Interface hm_World_ContentOpacity_To(float val, float dur, AnimationCurve ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_ContentOpacity_World != null && twn_ContentOpacity_World.IsActive)
-                if (twn_ContentOpacity_World.IsPlaying)
-                    twn_ContentOpacity_World.Kill();
-            twn_ContentOpacity_World = XTween.To(() => ContentOpacity_World, x => ContentOpacity_World = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            if (twn_content_opacity_world != null && twn_content_opacity_world.IsActive)
+                if (twn_content_opacity_world.IsPlaying)
+                    twn_content_opacity_world.Kill();
+            twn_content_opacity_world = XTween.To(() => op_content_opacity_world, x => op_content_opacity_world = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
@@ -321,7 +321,7 @@ namespace SevenStrikeModules.XHud
                     action_end();
             });
 
-            return twn_ContentOpacity_World;
+            return twn_content_opacity_world;
         }
         /// <summary>
         /// 世界内容透明度快速到
@@ -329,10 +329,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="val">目标透明度</param>
         public void hm_World_ContentOpacity_FastTo(float val)
         {
-            if (twn_ContentOpacity_World != null && twn_ContentOpacity_World.IsActive)
-                if (twn_ContentOpacity_World.IsPlaying)
-                    twn_ContentOpacity_World.Kill();
-            ContentOpacity_World = val;
+            if (twn_content_opacity_world != null && twn_content_opacity_world.IsActive)
+                if (twn_content_opacity_world.IsPlaying)
+                    twn_content_opacity_world.Kill();
+            op_content_opacity_world = val;
         }
     }
 }

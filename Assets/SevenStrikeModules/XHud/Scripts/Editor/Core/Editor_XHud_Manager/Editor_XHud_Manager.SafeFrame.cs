@@ -49,7 +49,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: Color_LayoutAnchorMark,
+                prop: sp_sf_color_layout_anchor_mark,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -59,7 +59,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: Color_CenterMark,
+                prop: sp_sf_color_center_mark,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -69,7 +69,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: Color_FrameLine,
+                prop: sp_sf_color_frame_line,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -79,7 +79,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: Color_SeperaterLine,
+                prop: sp_sf_color_seperater_line,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -94,7 +94,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: MarkSize,
+                prop: sp_sf_mark_size,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -104,7 +104,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: Safe_FrameLine_Width,
+                prop: sp_sf_safe_frame_line_width,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -114,7 +114,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: Safe_Seperater_Length,
+                prop: sp_sf_seperater_length,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -124,7 +124,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: Safe_FrameLine_Margins,
+                prop: sp_sf_line_margins,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -134,7 +134,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: Safe_CenterMarkDistance,
+                prop: sp_sf_center_mark_distance,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -144,7 +144,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: Safe_CenterMarkWidth,
+                prop: sp_sf_center_mark_width,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -154,7 +154,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_size: XGUIFontSize.M,
                 title_hover_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 title_width: 110,
-                prop: Safe_CenterMarkLength,
+                prop: sp_sf_center_mark_length,
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -177,17 +177,17 @@ namespace SevenStrikeModules.XHud.Editor
                 height: 25,
                 button_text_font: XGUI.GetFont("xg-medium")))
             {
-                Color_LayoutAnchorMark.colorValue = Color.white;
-                Color_CenterMark.colorValue = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
-                Color_FrameLine.colorValue = Color.white * 0.7f;
-                Color_SeperaterLine.colorValue = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
-                MarkSize.floatValue = 10;
-                Safe_FrameLine_Width.floatValue = 0.5f;
-                Safe_Seperater_Length.floatValue = 30f;
-                Safe_FrameLine_Margins.vector2Value = new Vector2(50, 50);
-                Safe_CenterMarkDistance.floatValue = 40f;
-                Safe_CenterMarkWidth.floatValue = 1f;
-                Safe_CenterMarkLength.floatValue = 12f;
+                sp_sf_color_layout_anchor_mark.colorValue = Color.white;
+                sp_sf_color_center_mark.colorValue = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
+                sp_sf_color_frame_line.colorValue = Color.white * 0.7f;
+                sp_sf_color_seperater_line.colorValue = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
+                sp_sf_mark_size.floatValue = 10;
+                sp_sf_safe_frame_line_width.floatValue = 0.5f;
+                sp_sf_seperater_length.floatValue = 30f;
+                sp_sf_line_margins.vector2Value = new Vector2(50, 50);
+                sp_sf_center_mark_distance.floatValue = 40f;
+                sp_sf_center_mark_width.floatValue = 1f;
+                sp_sf_center_mark_length.floatValue = 12f;
 
                 xHud_EditorUpdate_HelperVisual();
                 xHud_EditorUpdate_Canvas_Camera();
@@ -211,8 +211,8 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="state">为 <c>true</c> 时显示，为 <c>false</c> 时隐藏。</param>
         private void xHud_HiddenStructureDisplayer(bool state)
         {
-            Transform SafeFrame = (Transform)Safe_Frame.objectReferenceValue;
-            Transform BluePrintRoot = (Transform)BluePrint_root.objectReferenceValue;
+            Transform SafeFrame = (Transform)sp_sf_safeframe.objectReferenceValue;
+            Transform BluePrintRoot = (Transform)sp_bp_root.objectReferenceValue;
             if (!state)
             {
                 if (SafeFrame != null)
@@ -220,10 +220,10 @@ namespace SevenStrikeModules.XHud.Editor
                 if (BluePrintRoot != null)
                     BluePrintRoot.gameObject.hideFlags = HideFlags.HideInHierarchy;
 
-                if (Anchors_Layout_Screen != null && Anchors_Layout_Screen.arraySize > 0)
-                    for (int i = 0; i < Anchors_Layout_Screen.arraySize; i++)
+                if (sp_cv_anchors_layout_screen != null && sp_cv_anchors_layout_screen.arraySize > 0)
+                    for (int i = 0; i < sp_cv_anchors_layout_screen.arraySize; i++)
                     {
-                        SerializedProperty sp_anchorlay = Anchors_Layout_Screen.GetArrayElementAtIndex(i);
+                        SerializedProperty sp_anchorlay = sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i);
                         if (sp_anchorlay != null)
                         {
                             Image obj_anchorlay = (Image)sp_anchorlay.FindPropertyRelative("Mark").objectReferenceValue;
@@ -242,10 +242,10 @@ namespace SevenStrikeModules.XHud.Editor
                 if (BluePrintRoot != null)
                     BluePrintRoot.gameObject.hideFlags = HideFlags.None;
 
-                if (Anchors_Layout_Screen != null && Anchors_Layout_Screen.arraySize > 0)
-                    for (int i = 0; i < Anchors_Layout_Screen.arraySize; i++)
+                if (sp_cv_anchors_layout_screen != null && sp_cv_anchors_layout_screen.arraySize > 0)
+                    for (int i = 0; i < sp_cv_anchors_layout_screen.arraySize; i++)
                     {
-                        Image obj_anchorlay = (Image)Anchors_Layout_Screen.GetArrayElementAtIndex(i).FindPropertyRelative("Mark").objectReferenceValue;
+                        Image obj_anchorlay = (Image)sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Mark").objectReferenceValue;
 
                         if (obj_anchorlay != null)
                         {

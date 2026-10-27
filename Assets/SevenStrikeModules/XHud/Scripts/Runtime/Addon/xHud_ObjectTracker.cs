@@ -57,42 +57,77 @@ namespace SevenStrikeModules.XHud
     /// </summary>
     public class XHud_ObjectTracker : MonoBehaviour
     {
-        [SerializeField]
+        #region 字段 - 跟踪目标
         /// <summary>
-        /// 跟踪物体
+        /// 跟踪物体（自身）
         /// </summary>
-        public RectTransform SelfObject;
         [SerializeField]
+        public RectTransform self_object;
         /// <summary>
         /// 相对父物体
         /// </summary>
-        public RectTransform RelativeObject;
         [SerializeField]
+        public RectTransform relative_object;
         /// <summary>
         /// 被跟踪的物体
         /// </summary>
-        public Transform TargetObject;
+        [SerializeField]
+        public Transform target_object;
+        #endregion
+
+        #region 字段 - 平滑跟踪
         /// <summary>
-        /// 平滑跟踪
+        /// 是否启用平滑跟踪
         /// </summary>
-        public bool UseSmoothTracker;
+        public bool use_smooth_tracker;
         /// <summary>
         /// 平滑时间
         /// </summary>
-        public float SmoothTime = 5;
+        public float smooth_time = 5;
         /// <summary>
         /// 位置偏移
         /// </summary>
-        public Vector2 TrackerOffset;
-        private Vector2 GameScreen;
-        private Vector2 PositionWithConvert;
+        public Vector2 tracker_offset;
+        #endregion
 
-        public XTween_Interface twn_Offset;
+        #region 字段 - 运行时缓存
+        /// <summary>
+        /// 自身在屏幕空间中的位置缓存
+        /// </summary>
+        private Vector2 game_screen;
+        /// <summary>
+        /// 换算后的目标位置缓存
+        /// </summary>
+        private Vector2 position_with_convert;
+        #endregion
 
+        #region 字段 - 缓动接口
+        /// <summary>
+        /// 偏移量的缓动接口
+        /// </summary>
+        public XTween_Interface twn_offset;
+        #endregion
+
+        #region 折叠
         public bool
             fold_param = true,
-            fold_option= true,
+            fold_option = true,
             fold_based = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_param = state;
+            fold_option = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool param = true, bool option = true, bool based = true)
+        {
+            fold_param = param;
+            fold_option = option;
+            fold_based = based;
+        }
+        #endregion
 
         void Start()
         {
@@ -109,16 +144,16 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void Tracker_Update()
         {
-            if (TargetObject == null)
+            if (target_object == null)
                 return;
 
-            GameScreen = Camera.main.WorldToScreenPoint(TargetObject.transform.position);
-            bool isRect = RectTransformUtility.ScreenPointToLocalPointInRectangle(RelativeObject, GameScreen, XHud_Manager.Instance.HudCamera, out PositionWithConvert);
+            game_screen = Camera.main.WorldToScreenPoint(target_object.transform.position);
+            bool isRect = RectTransformUtility.ScreenPointToLocalPointInRectangle(relative_object, game_screen, XHud_Manager.instance.camera_ui, out position_with_convert);
 
-            if (!UseSmoothTracker)
-                SelfObject.anchoredPosition = PositionWithConvert + TrackerOffset;
+            if (!use_smooth_tracker)
+                self_object.anchoredPosition = position_with_convert + tracker_offset;
             else
-                SelfObject.anchoredPosition = Vector3.Lerp(SelfObject.anchoredPosition, PositionWithConvert + TrackerOffset, Time.deltaTime * SmoothTime);
+                self_object.anchoredPosition = Vector3.Lerp(self_object.anchoredPosition, position_with_convert + tracker_offset, Time.deltaTime * smooth_time);
         }
 
         /// <summary>
@@ -126,10 +161,10 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void Tracker_Update_FastAlign()
         {
-            if (TargetObject == null)
+            if (target_object == null)
                 return;
-            GameScreen = Camera.main.WorldToScreenPoint(TargetObject.transform.position);
-            SelfObject.anchoredPosition = PositionWithConvert + TrackerOffset;
+            game_screen = Camera.main.WorldToScreenPoint(target_object.transform.position);
+            self_object.anchoredPosition = position_with_convert + tracker_offset;
         }
 
         /// <summary>
@@ -138,10 +173,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="info">跟踪信息</param>
         public void Tracker_SetTrackerArgs(TrackerArgs info)
         {
-            SelfObject = info.SelfObject;
-            RelativeObject = (RectTransform)info.SelfObject.parent;
-            TargetObject = info.TargetObject;
-            TrackerOffset = info.Offset;
+            self_object = info.SelfObject;
+            relative_object = (RectTransform)info.SelfObject.parent;
+            target_object = info.TargetObject;
+            tracker_offset = info.Offset;
             Tracker_Update_FastAlign();
 
             StartCoroutine(Tracker_DelayEnableSmooth(info));
@@ -162,10 +197,10 @@ namespace SevenStrikeModules.XHud
             arg.TargetObject = target;
             arg.Offset = offset;
 
-            SelfObject = arg.SelfObject;
-            RelativeObject = (RectTransform)arg.SelfObject.parent;
-            TargetObject = arg.TargetObject;
-            TrackerOffset = arg.Offset;
+            self_object = arg.SelfObject;
+            relative_object = (RectTransform)arg.SelfObject.parent;
+            target_object = arg.TargetObject;
+            tracker_offset = arg.Offset;
             Tracker_Update_FastAlign();
 
             StartCoroutine(Tracker_DelayEnableSmooth(arg));
@@ -174,8 +209,8 @@ namespace SevenStrikeModules.XHud
         IEnumerator Tracker_DelayEnableSmooth(TrackerArgs info)
         {
             yield return new WaitForSeconds(0.5f);
-            UseSmoothTracker = info.UseSmoothTracker;
-            SmoothTime = info.SmoothTime;
+            use_smooth_tracker = info.UseSmoothTracker;
+            smooth_time = info.SmoothTime;
         }
 
         /// <summary>
@@ -184,7 +219,7 @@ namespace SevenStrikeModules.XHud
         /// <param name="offset">偏移值</param>
         public void Tracker_SetOffset(Vector2 offset)
         {
-            TrackerOffset = offset;
+            tracker_offset = offset;
         }
 
         /// <summary>
@@ -198,10 +233,10 @@ namespace SevenStrikeModules.XHud
         /// <param name="action_end">委托 - 结束时</param>
         public void Tracker_SetSmoothOffset(Vector2 val, float dur, EaseMode ease, float delay, UnityAction action_start = null, UnityAction action_end = null)
         {
-            if (twn_Offset != null && twn_Offset.IsActive)
-                if (twn_Offset.IsPlaying)
-                    twn_Offset.Kill();
-            twn_Offset = XTween.To(() => TrackerOffset, x => TrackerOffset = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
+            if (twn_offset != null && twn_offset.IsActive)
+                if (twn_offset.IsPlaying)
+                    twn_offset.Kill();
+            twn_offset = XTween.To(() => tracker_offset, x => tracker_offset = x, val, dur).SetEase(ease).SetAutoKill(true).SetDelay(delay).OnStart(() =>
             {
                 if (action_start != null)
                     action_start();
