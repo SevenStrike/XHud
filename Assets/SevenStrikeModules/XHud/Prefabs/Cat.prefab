@@ -570,7 +570,7 @@ MonoBehaviour:
     timings: "\u5143\u7D20\u8FDB\u5165\u65F6"
     duration: 1
     delay: 4.532
-    progress: 0
+    progress: 0.99261665
     text_cursor_blink_speed: 0.5
     text_cursor: '|'
     text_extended: 1
@@ -1371,7 +1371,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5755098906041804970}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -2042,7 +2042,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0.9999908}
   m_enableVertexGradient: 0
   m_colorMode: 0
   m_fontColorGradient:

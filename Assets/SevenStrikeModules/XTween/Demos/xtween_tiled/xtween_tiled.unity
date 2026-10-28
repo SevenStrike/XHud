@@ -482,7 +482,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 479, y: -101.951324}
+  m_AnchoredPosition: {x: 479, y: -101.951294}
   m_SizeDelta: {x: 752.1, y: 90.32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &558445481
@@ -1355,6 +1355,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8e691a6e0f17b499127133162297e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fold_buttons: 1
+  fold_statistic: 1
+  fold_tweenlist: 0
   EasePics:
   - {fileID: 2800000, guid: c1897147b30a9bb4d8a27509b6ffb670, type: 3}
   - {fileID: 2800000, guid: cf2640a0895d4884586e6ec5c25ec27e, type: 3}
@@ -1580,7 +1583,7 @@ MonoBehaviour:
   min_delay: 0
   max_delay: 1
   randomDelay: 0
-  easeMode: 10
+  easeMode: 24
   loop: -1
   loopType: 1
   loopDelay: 0.2

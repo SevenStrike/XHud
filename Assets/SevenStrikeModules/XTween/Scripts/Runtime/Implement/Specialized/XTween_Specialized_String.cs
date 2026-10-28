@@ -58,15 +58,43 @@ namespace SevenStrikeModules.XTween
 
         protected override string CalculateCurrentValue()
         {
-            // 端点容差：线性进度接近端点时，直接返回精确端点值
-            if (_CurrentLinearProgress >= 0.9999f)
-                return _EndValue;
-            if (_CurrentLinearProgress <= 0.0001f)
-                return string.Empty;
+            // ── 起点字符数 ──
+            // IsFromMode 时，以 _StartValue.Length 作为打字起始位置；
+            // 非 IsFromMode 时，从空字符串开始（打字机默认行为）。
+            // 注意：String 的 Substring 只能从头截取，如果 _StartValue 不是 _EndValue 的前缀，
+            // 视觉上会从 _EndValue 的前 startCharCount 个字符开始打字（不会崩，但不会匹配 _StartValue 内容）。
+            int startCharCount = 0;
+            if (_IsFromMode && !string.IsNullOrEmpty(_StartValue))
+            {
+                startCharCount = Mathf.Min(_StartValue.Length, _EndValue.Length);
+            }
 
-            // 原逻辑：按缓动进度切字符
-            float easedProgress = CalculateEasedProgress(_CurrentLinearProgress);
-            int charCount = Mathf.RoundToInt(easedProgress * _EndValue.Length);
+            bool isYoyoReversing = _loopType == XTween_LoopType.Yoyo && _IsReversing;
+            float progress = _CurrentLinearProgress;
+
+            // ── 端点精确返回 ──
+            if (progress >= 0.9999f)
+            {
+                // 正向终点 = 完整 _EndValue；反向终点 = 回退到起点字符数
+                return isYoyoReversing
+                    ? _EndValue.Substring(0, startCharCount)
+                    : _EndValue;
+            }
+            if (progress <= 0.0001f)
+            {
+                // 正向起点 = 起点字符数；反向起点 = 完整 _EndValue
+                return isYoyoReversing
+                    ? _EndValue
+                    : _EndValue.Substring(0, startCharCount);
+            }
+
+            // ── 中间段：按缓动进度计算当前字符数 ──
+            float easedProgress = CalculateEasedProgress(progress);
+            if (isYoyoReversing)
+                easedProgress = 1f - easedProgress;   // ← 补上反向翻转
+
+            int charCount = Mathf.RoundToInt(
+                Mathf.Lerp(startCharCount, _EndValue.Length, easedProgress));
             charCount = Mathf.Clamp(charCount, 0, _EndValue.Length);
 
             return _EndValue.Substring(0, charCount);
