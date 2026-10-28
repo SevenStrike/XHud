@@ -74,24 +74,25 @@ namespace SevenStrikeModules.XTween
             else
             {
                 XTween_Interface tweener;
-                tweener = new XTween_Specialized_Float(start.a, endValue, duration * XTween_Dashboard.DurationMultiply).OnUpdate((val, linearProgress, time) =>
-                {
-                    if (image == null)
-                        return;
-                    image.color = new Color(start.r, start.g, start.b, val);
-                }).OnRewind(() =>
-                {
-                    if (image == null)
-                        return;
-                    if (rewind_set_startvalue)
-                        image.color = start;
-                }).OnComplete((duration) =>
-                {
-                    if (image == null)
-                        return;
-                    if (complete_set_endvalue)
-                        image.color = new Color(start.r, start.g, start.b, endValue);
-                }).SetAutokill(false);
+                tweener = new XTween_Specialized_Float(start.a, endValue, duration * XTween_Dashboard.DurationMultiply)
+                    .OnUpdate((val, linearProgress, time) =>
+                    {
+                        if (image == null)
+                            return;
+                        image.color = new Color(start.r, start.g, start.b, val);
+                    }).OnRewind(() =>
+                    {
+                        if (image == null)
+                            return;
+                        if (rewind_set_startvalue)
+                            image.color = start;
+                    }).OnComplete((duration) =>
+                    {
+                        if (image == null)
+                            return;
+                        if (complete_set_endvalue)
+                            image.color = new Color(start.r, start.g, start.b, endValue);
+                    }).SetAutokill(false);
 
                 return tweener;
             }
@@ -636,24 +637,25 @@ namespace SevenStrikeModules.XTween
             else
             {
                 XTween_Interface tweener;
-                tweener = new XTween_Specialized_Float(start, endValue, duration * XTween_Dashboard.DurationMultiply).OnUpdate((val, linearProgres, time) =>
-                {
-                    if (canvasgroup == null)
-                        return;
-                    canvasgroup.alpha = val;
-                }).OnRewind(() =>
-                {
-                    if (canvasgroup == null)
-                        return;
-                    if (rewind_set_startvalue)
-                        canvasgroup.alpha = start;
-                }).OnComplete((duration) =>
-                {
-                    if (canvasgroup == null)
-                        return;
-                    if (complete_set_endvalue)
-                        canvasgroup.alpha = endValue;
-                }).SetAutokill(false);
+                tweener = new XTween_Specialized_Float(start, endValue, duration * XTween_Dashboard.DurationMultiply)
+                    .OnUpdate((val, linearProgres, time) =>
+                    {
+                        if (canvasgroup == null)
+                            return;
+                        canvasgroup.alpha = val;
+                    }).OnRewind(() =>
+                    {
+                        if (canvasgroup == null)
+                            return;
+                        if (rewind_set_startvalue)
+                            canvasgroup.alpha = start;
+                    }).OnComplete((duration) =>
+                    {
+                        if (canvasgroup == null)
+                            return;
+                        if (complete_set_endvalue)
+                            canvasgroup.alpha = endValue;
+                    }).SetAutokill(false);
 
                 return tweener;
             }

@@ -1520,10 +1520,10 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_LibrarySetTool_Motion window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_Motion>(true);
 
             window.titleContent = new GUIContent("XHud - 动效资源修改器");
-            XGUI.CenterEditorWindow(new Vector2Int(348, group.Type == HudElementMotionType.Creator ? 710 : 640), window);
-            window.set_motion_type(group.Type);
+            XGUI.CenterEditorWindow(new Vector2Int(348, group.type == HudElementMotionType.Creator ? 710 : 640), window);
+            window.set_motion_type(group.type);
             window.set_preedit_target_id(base_script.GetInstanceID().ToString());
-            window.set_motion(group.Creator, group.Recycler);
+            window.set_motion(group.motion_creator, group.motion_recycler);
             window.set_library_setter_mode(LibrarySetterMode.修改动效参数);
             window.set_button_text("更新");
 

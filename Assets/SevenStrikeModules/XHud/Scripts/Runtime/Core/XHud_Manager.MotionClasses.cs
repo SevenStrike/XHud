@@ -28,15 +28,15 @@ namespace SevenStrikeModules.XHud
     [System.Serializable]
     public class XHud_Arg_MotionGroup
     {
-        public HudElementMotionType Type;
+        public HudElementMotionType type;
         /// <summary>
         /// 参数模版 - 生成参数
         /// </summary>
-        public Motion_Creator Creator = new Motion_Creator();
+        public Motion_Creator motion_creator = new Motion_Creator();
         /// <summary>
         /// 参数模版 - 回收参数
         /// </summary>
-        public Motion_Recycler Recycler = new Motion_Recycler();
+        public Motion_Recycler motion_recycler = new Motion_Recycler();
 
         public XHud_Arg_MotionGroup()
         {
@@ -45,61 +45,61 @@ namespace SevenStrikeModules.XHud
 
         public XHud_Arg_MotionGroup(HudElementMotionType mode, Motion_Creator creator, Motion_Recycler recycler)
         {
-            Type = mode;
-            Creator = creator.Clone();
-            Recycler = recycler.Clone();
+            type = mode;
+            motion_creator = creator.Clone();
+            motion_recycler = recycler.Clone();
         }
 
         public XHud_Arg_MotionGroup(HudElementMotionType mode, Motion_Creator creator)
         {
-            Type = mode;
-            Creator = creator.Clone();
+            type = mode;
+            motion_creator = creator.Clone();
         }
 
         public XHud_Arg_MotionGroup(HudElementMotionType mode, Motion_Recycler recycler)
         {
-            Type = mode;
-            Recycler = recycler.Clone();
+            type = mode;
+            motion_recycler = recycler.Clone();
         }
 
         public XHud_Arg_MotionGroup(Motion_Creator creator, bool clone = true)
         {
-            Type = HudElementMotionType.Creator;
-            Creator = clone ? creator.Clone() : creator;
+            type = HudElementMotionType.Creator;
+            motion_creator = clone ? creator.Clone() : creator;
         }
 
         public XHud_Arg_MotionGroup(Motion_Recycler recycler, bool clone = true)
         {
-            Type = HudElementMotionType.Recycler;
-            Recycler = clone ? recycler.Clone() : recycler;
+            type = HudElementMotionType.Recycler;
+            motion_recycler = clone ? recycler.Clone() : recycler;
         }
 
         public XHud_Arg_MotionGroup(XHud_Arg_MotionGroup motion)
         {
-            Type = motion.Type;
+            type = motion.type;
 
             // 实例化 CRC
             Motion_Creator crc = new Motion_Creator();
-            crc.anchor = motion.Creator.anchor;
+            crc.anchor = motion.motion_creator.anchor;
             crc.Movement = new MotionNode_Movement();
-            crc.Movement.CopyData(motion.Creator.Movement);
+            crc.Movement.CopyData(motion.motion_creator.Movement);
             crc.Rotation = new MotionNode_Rotation();
-            crc.Rotation.CopyData(motion.Creator.Rotation);
+            crc.Rotation.CopyData(motion.motion_creator.Rotation);
             crc.Alpha = new MotionNode_Alpha();
-            crc.Alpha.CopyData(motion.Creator.Alpha);
-            crc.MotionAnimateEndState = motion.Creator.MotionAnimateEndState;
-            Creator = crc;
+            crc.Alpha.CopyData(motion.motion_creator.Alpha);
+            crc.MotionAnimateEndState = motion.motion_creator.MotionAnimateEndState;
+            motion_creator = crc;
 
             // 实例化 REC
             Motion_Recycler rec = new Motion_Recycler();
             rec.Movement = new MotionNode_Movement();
-            rec.Movement.CopyData(motion.Recycler.Movement);
+            rec.Movement.CopyData(motion.motion_recycler.Movement);
             rec.Rotation = new MotionNode_Rotation();
-            rec.Rotation.CopyData(motion.Recycler.Rotation);
+            rec.Rotation.CopyData(motion.motion_recycler.Rotation);
             rec.Alpha = new MotionNode_Alpha();
-            rec.Alpha.CopyData(motion.Recycler.Alpha);
-            rec.MotionAnimateEndState = motion.Recycler.MotionAnimateEndState;
-            Recycler = rec;
+            rec.Alpha.CopyData(motion.motion_recycler.Alpha);
+            rec.MotionAnimateEndState = motion.motion_recycler.MotionAnimateEndState;
+            motion_recycler = rec;
         }
     }
 

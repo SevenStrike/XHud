@@ -202,7 +202,7 @@ namespace SevenStrikeModules.XHud.Editor
                 margin: new RectOffset(15, 15, 15, 15));
 
             #region 相机投影
-            DrawToggle("相机投影方式", sp_camera_othograpic_mode, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
+            DrawToggle("正交相机投影", sp_camera_othograpic_mode, 120, XGUIToggleStyle.实体, XHud_Dashboard.themes_get_color(ThemeColorType.primary), Color.white * 0.65f, Color.white, Color.white, (b) =>
             {
                 sp_camera_othograpic_mode.boolValue = b;
                 sp_camera_othograpic_mode.serializedObject.ApplyModifiedProperties();

@@ -1405,4 +1405,9 @@ namespace SevenStrikeModules.XHud.Enums
         /// </summary>
         shift = 3,
     }
+    public enum LayoutSpawnerMotionTarget
+    {
+        自身动效 = 0,
+        列表项动效 = 1
+    }
 }

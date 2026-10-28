@@ -25,59 +25,9 @@ namespace SevenStrikeModules.XHud
     using SevenStrikeModules.XTween;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Resources;
     using UnityEngine;
     using UnityEngine.Events;
-
-    /// <summary>
-    /// 布局生成器参数配置类
-    /// </summary>
-    [System.Serializable]
-    public class XHud_LayoutSpawner_Args
-    {
-        /// <summary>元素库名称</summary>
-        public string libname;
-        /// <summary>待生成的元素项列表</summary>
-        public List<XHud_LayoutSpawner_Item> SpawnItemList = new List<XHud_LayoutSpawner_Item>();
-        /// <summary>生成器标识符</summary>
-        public string SpawnerIndicator;
-
-        /// <summary>生成动效参数</summary>
-        public Motion_Creator CreateArgs;
-        /// <summary>生成参数名称</summary>
-        public string CreateParamName;
-        /// <summary>CRC校验库名称</summary>
-        public string Crc_Lib_Name;
-
-        /// <summary>回收动效参数</summary>
-        public Motion_Recycler RecycleArgs;
-        /// <summary>回收参数名称</summary>
-        public string RecycleParamName;
-        /// <summary>回收库名称</summary>
-        public string Rec_Lib_Name;
-
-        /// <summary>生成快捷键</summary>
-        public KeyCode Key_Create = KeyCode.F7;
-        /// <summary>回收快捷键</summary>
-        public KeyCode Key_Recycle = KeyCode.F8;
-
-        /// <summary>是否使用手动按键控制</summary>
-        public bool UseManullyKey;
-        /// <summary>是否正在生成中</summary>
-        public bool IsSpawning;
-
-        /// <summary>生成动效-折叠移动效果</summary>
-        public bool create_fold_move;
-        /// <summary>生成动效-折叠旋转效果</summary>
-        public bool create_fold_rotate;
-        /// <summary>生成动效-折叠透明度效果</summary>
-        public bool create_fold_alpha;
-        /// <summary>回收动效-折叠移动效果</summary>
-        public bool recycle_fold_move;
-        /// <summary>回收动效-折叠旋转效果</summary>
-        public bool recycle_fold_rotate;
-        /// <summary>回收动效-折叠透明度效果</summary>
-        public bool recycle_fold_alpha;
-    }
 
     /// <summary>
     /// 布局生成器元素项配置类
@@ -124,7 +74,7 @@ namespace SevenStrikeModules.XHud
         /// <summary>生成的元素节点引用</summary>
         public XHudElementNode SpawnedElementNode;
         /// <summary>使用的动效源（"自身动效" 表示使用元素自身动效，否则使用生成器全局动效）</summary>
-        public string UseSpawnerMotion = "列表项动效";
+        public string MotionMode = "列表项动效";
         /// <summary>生成动效参数（当使用自身动效时生效）</summary>
         public Motion_Creator CreateArgs = new Motion_Creator();
         /// <summary>回收动效参数（当使用自身动效时生效）</summary>
@@ -156,32 +106,32 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         ///关联的元素库名称
         ///</summary>
-        [SerializeField] public string LibName;
+        [SerializeField] public string library_name;
         /// <summary>
         ///编辑器标记-屏幕空间布局是否已加载
         ///</summary>
-        [SerializeField] public bool IsLoadedLayout_Screen;
+        [SerializeField] public bool is_loaded_layout_screen;
         /// <summary>
         ///编辑器标记-世界空间布局是否已加载
         ///</summary>
-        [SerializeField] public bool IsLoadedLayout_World;
+        [SerializeField] public bool is_loaded_layout_world;
         /// <summary>
         ///屏幕空间待生成的元素项列表
         ///</summary>
-        [SerializeField] public List<XHud_LayoutSpawner_Item> SpawnItemList_Screen = new List<XHud_LayoutSpawner_Item>();
+        [SerializeField] public List<XHud_LayoutSpawner_Item> spawn_item_list_screen = new List<XHud_LayoutSpawner_Item>();
         /// <summary>
         ///世界空间待生成的元素项列表
         ///</summary>
-        [SerializeField] public List<XHud_LayoutSpawner_Item> SpawnItemList_World = new List<XHud_LayoutSpawner_Item>();
+        [SerializeField] public List<XHud_LayoutSpawner_Item> spawn_item_list_world = new List<XHud_LayoutSpawner_Item>();
         /// <summary>
         ///生成器标识符
         ///</summary>
-        [SerializeField] public string SpawnerIndicator;
+        [SerializeField] public string spawner_indicator;
         /// <summary>
         ///全局生成动效参数（当元素未使用自身动效时生效）
         ///</summary>
         [SerializeField]
-        public Motion_Creator CreateArgs = new Motion_Creator
+        public Motion_Creator motion_create_args = new Motion_Creator
         {
             anchor = XHudAnchor.中心,
             Movement = new MotionNode_Movement()
@@ -214,18 +164,14 @@ namespace SevenStrikeModules.XHud
             }
         };
         /// <summary>
-        ///生成参数名称
-        ///</summary>
-        [SerializeField] public string CreateParamName;
-        /// <summary>
         ///CRC校验库名称
         ///</summary>
-        [SerializeField] public string Crc_Lib_Name;
+        [SerializeField] public string motion_create_library_index_name;
         /// <summary>
         ///全局回收动效参数（当元素未使用自身动效时生效）
         ///</summary>
         [SerializeField]
-        public Motion_Recycler RecycleArgs = new Motion_Recycler
+        public Motion_Recycler motion_recycle_args = new Motion_Recycler
         {
             MotionAnimateEndState = MotionAnimateEndState.以_透明度为准,
             Movement = new MotionNode_Movement()
@@ -258,105 +204,70 @@ namespace SevenStrikeModules.XHud
             }
         };
         /// <summary>
-        ///回收参数名称
-        ///</summary>
-        [SerializeField] public string RecycleParamName;
-        /// <summary>
         ///回收库名称
         ///</summary>
-        [SerializeField] public string Rec_Lib_Name;
+        [SerializeField] public string motion_recycle_library_index_name;
         /// <summary>
         ///主功能键（组合键）
         ///</summary>
-        [SerializeField] public SpawnFunctionKey SpawnFunctionKey_Primary = SpawnFunctionKey.shift;
+        [SerializeField] public SpawnFunctionKey spawn_function_key_primary = SpawnFunctionKey.shift;
         /// <summary>
         ///辅助功能键（组合键）
         ///</summary>
-        [SerializeField] public SpawnFunctionKey SpawnFunctionKey_Secondary = SpawnFunctionKey.none;
+        [SerializeField] public SpawnFunctionKey spawn_function_key_secondary = SpawnFunctionKey.none;
         /// <summary>
         ///生成快捷键
         ///</summary>
-        [SerializeField] public KeyCode Key_Create = KeyCode.G;
+        [SerializeField] public KeyCode key_create = KeyCode.G;
         /// <summary>
         ///回收快捷键
         ///</summary>
-        [SerializeField] public KeyCode Key_Recycle = KeyCode.R;
+        [SerializeField] public KeyCode key_recycle = KeyCode.R;
         /// <summary>
         ///是否使用手动按键控制
         ///</summary>
-        [SerializeField] public bool UseManullyKey;
+        [SerializeField] public bool use_manully_key;
         /// <summary>
         ///是否启用调试日志
         ///</summary>
-        [SerializeField] public bool UseDebug;
+        [SerializeField] public bool use_debug;
         /// <summary>
         ///是否使用实例化模式（直接实例化而非从库中获取）
         ///</summary>
-        [SerializeField] public bool UseInstantiateMode = true;
+        [SerializeField] public bool use_instantiate_mode = true;
         /// <summary>
         ///是否启用屏幕空间的按键控制
         ///</summary>
-        [SerializeField] public bool KeyControl_Screen = true;
+        [SerializeField] public bool key_control_screen = true;
         /// <summary>
         ///是否启用世界空间的按键控制
         ///</summary>
-        [SerializeField] public bool KeyControl_World = true;
-        /// <summary>
-        ///编辑器-屏幕空间折叠状态
-        ///</summary>
-        [SerializeField] public bool FoldScreen = true;
-        /// <summary>
-        ///编辑器-世界空间折叠状态
-        ///</summary>
-        [SerializeField] public bool FoldWorld = true;
+        [SerializeField] public bool key_control_world = true;
         /// <summary>
         ///所有动效播放状态（是否有任何元素正在播放动效）
         ///</summary>
-        [SerializeField] private bool spawnerisRunning = false;
+        [SerializeField] private bool _spawner_is_running = false;
+        [SerializeField] public const string editor_seializedfield_spawnerisRunning = nameof(_spawner_is_running);
         /// <summary>
         ///动效播放状态属性（当状态改变时触发回调）
         ///</summary>
         [SerializeField]
-        public bool SpawnerisRunning
+        public bool spawner_is_running
         {
             get
             {
-                return spawnerisRunning;
+                return _spawner_is_running;
             }
             set
             {
-                if (value != spawnerisRunning)
+                if (value != _spawner_is_running)
                 {
-                    spawnerisRunning = value;
+                    _spawner_is_running = value;
                     if (act_on_motion_state_changed != null)
                         act_on_motion_state_changed(value);
                 }
             }
         }
-        /// <summary>
-        ///生成动效-折叠移动效果
-        ///</summary>
-        [SerializeField] public bool create_fold_move;
-        /// <summary>
-        ///生成动效-折叠旋转效果
-        ///</summary>
-        [SerializeField] public bool create_fold_rotate;
-        /// <summary>
-        ///生成动效-折叠透明度效果
-        ///</summary>
-        [SerializeField] public bool create_fold_alpha;
-        /// <summary>
-        ///回收动效-折叠移动效果
-        ///</summary>
-        [SerializeField] public bool recycle_fold_move;
-        /// <summary>
-        ///回收动效-折叠旋转效果
-        ///</summary>
-        [SerializeField] public bool recycle_fold_rotate;
-        /// <summary>
-        ///回收动效-折叠透明度效果
-        ///</summary>
-        [SerializeField] public bool recycle_fold_alpha;
         #endregion
 
         #region 委托
@@ -382,14 +293,50 @@ namespace SevenStrikeModules.XHud
         public UnityAction<bool> act_on_motion_state_changed;
         #endregion
 
+        #region 折叠
+        public bool
+            fold_state = true,
+            fold_option = true,
+            fold_param = true,
+            fold_screen = true,
+            fold_world = true,
+            fold_motion = true,
+            fold_libselector = true,
+            fold_based = true;
+
+        public void GroupFold(bool state)
+        {
+            fold_state = state;
+            fold_option = state;
+            fold_param = state;
+            fold_screen = state;
+            fold_world = state;
+            fold_motion = state;
+            fold_libselector = state;
+            fold_based = state;
+        }
+
+        public void GroupFold(bool state = true, bool option = true, bool param = true, bool screen = true, bool world = true, bool motion = true, bool libselector = true, bool based = true)
+        {
+            fold_state = state;
+            fold_option = option;
+            fold_param = param;
+            fold_screen = screen;
+            fold_world = world;
+            fold_motion = motion;
+            fold_libselector = libselector;
+            fold_based = based;
+        }
+        #endregion
+
         /// <summary>
         ///存储所有正在执行的生成协程
         ///</summary>
-        private List<Coroutine> SpawnCoroutines = new List<Coroutine>();
+        private List<Coroutine> coroutines_spawn = new List<Coroutine>();
         /// <summary>
         ///存储所有正在执行的回收协程
         ///</summary>
-        private List<Coroutine> DespawnCoroutines = new List<Coroutine>();
+        private List<Coroutine> coroutines_despawn = new List<Coroutine>();
 
         private void Awake()
         {
@@ -413,32 +360,32 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         private void StopSpawnCoroutines()
         {
-            for (int i = 0; i < SpawnCoroutines.Count; i++)
+            for (int i = 0; i < coroutines_spawn.Count; i++)
             {
-                Coroutine cor = SpawnCoroutines[i];
+                Coroutine cor = coroutines_spawn[i];
                 if (cor != null)
                     StopCoroutine(cor);
 
-                SpawnCoroutines[i] = null;
+                coroutines_spawn[i] = null;
             }
 
-            SpawnCoroutines.Clear();
+            coroutines_spawn.Clear();
         }
         /// <summary>
         /// 停止所有正在执行的回收协程
         /// </summary>
         private void StopDespawnCoroutines()
         {
-            for (int i = 0; i < DespawnCoroutines.Count; i++)
+            for (int i = 0; i < coroutines_despawn.Count; i++)
             {
-                Coroutine cor = DespawnCoroutines[i];
+                Coroutine cor = coroutines_despawn[i];
                 if (cor != null)
                     StopCoroutine(cor);
 
-                DespawnCoroutines[i] = null;
+                coroutines_despawn[i] = null;
             }
 
-            DespawnCoroutines.Clear();
+            coroutines_despawn.Clear();
         }
         #endregion
 
@@ -453,9 +400,9 @@ namespace SevenStrikeModules.XHud
 
             #region 清理回收元素项
 
-            for (int i = 0; i < (space == XHudSpace.屏幕空间 ? SpawnItemList_Screen.Count : SpawnItemList_World.Count); i++)
+            for (int i = 0; i < (space == XHudSpace.屏幕空间 ? spawn_item_list_screen.Count : spawn_item_list_world.Count); i++)
             {
-                XHud_LayoutSpawner_Item item = (space == XHudSpace.屏幕空间 ? SpawnItemList_Screen[i] : SpawnItemList_World[i]);
+                XHud_LayoutSpawner_Item item = (space == XHudSpace.屏幕空间 ? spawn_item_list_screen[i] : spawn_item_list_world[i]);
 
                 if (!item.Spawned && item.SpawnedElementNode.Element == null)
                     continue;
@@ -497,9 +444,9 @@ namespace SevenStrikeModules.XHud
 
             #region 启动多个协程执行列表中元素生成逻辑
 
-            for (int i = 0; i < (space == XHudSpace.屏幕空间 ? SpawnItemList_Screen.Count : SpawnItemList_World.Count); i++)
+            for (int i = 0; i < (space == XHudSpace.屏幕空间 ? spawn_item_list_screen.Count : spawn_item_list_world.Count); i++)
             {
-                XHud_LayoutSpawner_Item item = (space == XHudSpace.屏幕空间 ? SpawnItemList_Screen[i] : SpawnItemList_World[i]);
+                XHud_LayoutSpawner_Item item = (space == XHudSpace.屏幕空间 ? spawn_item_list_screen[i] : spawn_item_list_world[i]);
 
                 if (!item.isEnabled)
                     continue;
@@ -509,7 +456,7 @@ namespace SevenStrikeModules.XHud
                     continue;
 
                 // 启动生成后将此协程加入生成协程列表便于中断控制
-                SpawnCoroutines.Add(StartCoroutine(cor_Spawn(item, space)));
+                coroutines_spawn.Add(StartCoroutine(cor_Spawn(item, space)));
             }
 
             #endregion
@@ -545,29 +492,29 @@ namespace SevenStrikeModules.XHud
             XHud_Module_Element e = null;
 
             // 该方法是直接实例化元素（非从元素库中取元素）
-            if (UseInstantiateMode)
+            if (use_instantiate_mode)
             {
-                e = XHud_Manager.instance.hm_ElementLibrary_GetTargetLibrary(LibName).ElementsLibrary_GetTargetElement(item.SpawnName);
+                e = XHud_Manager.instance.hm_ElementLibrary_GetTargetLibrary(library_name).ElementsLibrary_GetTargetElement(item.SpawnName);
             }
 
             if (space == XHudSpace.屏幕空间)
             {
-                if (UseInstantiateMode) // 该方法是直接实例化元素
+                if (use_instantiate_mode) // 该方法是直接实例化元素
                 {
                     item.SpawnedElementNode = XHud_Manager.instance.hm_ScreenElement_Create(Instantiate(e));
                 }
                 else // 从库中找到匹配的元素则返回实例
-                    item.SpawnedElementNode = XHud_Manager.instance.hm_ScreenElement_Create(LibName, item.SpawnName);
+                    item.SpawnedElementNode = XHud_Manager.instance.hm_ScreenElement_Create(library_name, item.SpawnName);
             }
             else
             {
-                if (UseInstantiateMode) // 该方法是直接实例化元素
+                if (use_instantiate_mode) // 该方法是直接实例化元素
                 {
                     item.SpawnedElementNode = XHud_Manager.instance.hm_WorldElement_Create(Instantiate(e));
                 }
                 else // 从库中找到匹配的元素则返回实例
                 {
-                    item.SpawnedElementNode = XHud_Manager.instance.hm_WorldElement_Create(LibName, item.SpawnName);
+                    item.SpawnedElementNode = XHud_Manager.instance.hm_WorldElement_Create(library_name, item.SpawnName);
                 }
             }
 
@@ -575,16 +522,16 @@ namespace SevenStrikeModules.XHud
             #endregion
 
             // 动效源选择（自身动效 or 全局动效）
-            Motion_Creator arg = item.UseSpawnerMotion == "列表项动效" ? item.CreateArgs : item.UseSpawnerMotion == "元素自身动效" ? node.Element.motion_create_args : CreateArgs;
+            Motion_Creator arg = item.MotionMode == "列表项动效" ? item.CreateArgs : item.MotionMode == "元素自身动效" ? node.Element.motion_create_args : motion_create_args;
 
             // 如果无法再库中找到匹配的元素则返回一个空的实例
             if (node == null)
             {
-                if (UseDebug)
+                if (use_debug)
                 {
                     string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
-                    XGUI_Utilitys.Console("XHud - 布局元素生成器通知", $"未在元素库： <b><color={hex_col}>{LibName} </color></b>中找到：<b><color={hex_col}> {item.SpawnName} </color></b>元素！请检查目标元素库中是否存在该元素！", XGUIMsgState.通知);
+                    XGUI_Utilitys.Console("XHud - 布局元素生成器通知", $"未在元素库： <b><color={hex_col}>{library_name} </color></b>中找到：<b><color={hex_col}> {item.SpawnName} </color></b>元素！请检查目标元素库中是否存在该元素！", XGUIMsgState.通知);
                 }
                 node = new XHudElementNode();
                 item.Spawned = false;
@@ -778,15 +725,15 @@ namespace SevenStrikeModules.XHud
 
             #region 启动多个协程执行列表中元素回收逻辑
 
-            for (int i = 0; i < (space == XHudSpace.屏幕空间 ? SpawnItemList_Screen.Count : SpawnItemList_World.Count); i++)
+            for (int i = 0; i < (space == XHudSpace.屏幕空间 ? spawn_item_list_screen.Count : spawn_item_list_world.Count); i++)
             {
-                XHud_LayoutSpawner_Item item = (space == XHudSpace.屏幕空间 ? SpawnItemList_Screen[i] : SpawnItemList_World[i]);
+                XHud_LayoutSpawner_Item item = (space == XHudSpace.屏幕空间 ? spawn_item_list_screen[i] : spawn_item_list_world[i]);
 
                 if (!item.isEnabled)
                     continue;
 
                 // 启动回收协程列表
-                DespawnCoroutines.Add(StartCoroutine(cor_Despawn(item, space)));
+                coroutines_despawn.Add(StartCoroutine(cor_Despawn(item, space)));
             }
 
             #endregion
@@ -826,7 +773,7 @@ namespace SevenStrikeModules.XHud
                 if (ele != null)
                 {
                     // 有管理器负责的回收逻辑开始执行（根据动效源选择使用自身动效或全局动效）
-                    XHud_Manager.instance.hm_HudElement_RecycleAt(node.Element, item.UseSpawnerMotion == "列表项动效" ? item.RecycleArgs : item.UseSpawnerMotion == "元素自身动效" ? ele.motion_recycle_args : RecycleArgs, action_out_end: (ele) =>
+                    XHud_Manager.instance.hm_HudElement_RecycleAt(node.Element, item.MotionMode == "列表项动效" ? item.RecycleArgs : item.MotionMode == "元素自身动效" ? ele.motion_recycle_args : motion_recycle_args, action_out_end: (ele) =>
                     {
                         // 调用回收委托，并传递回收的元素结构以及回收项的ID号
                         // 便于附加的脚本对匹配的ID的元素结构中的元素中的控件进行数值绑定
@@ -849,29 +796,29 @@ namespace SevenStrikeModules.XHud
         {
             if (FunctionKey_Primary_Detect() && FunctionKey_Secondary_Detect())
             {
-                if (Input.GetKeyDown(Key_Create))
+                if (Input.GetKeyDown(key_create))
                 {
-                    if (!UseManullyKey)
+                    if (!use_manully_key)
                         return;
-                    if (KeyControl_Screen)
+                    if (key_control_screen)
                     {
                         Spawn(XHudSpace.屏幕空间);
                     }
-                    else if (KeyControl_World)
+                    else if (key_control_world)
                     {
                         Spawn(XHudSpace.世界空间);
                     }
                 }
 
-                if (Input.GetKeyDown(Key_Recycle))
+                if (Input.GetKeyDown(key_recycle))
                 {
-                    if (!UseManullyKey)
+                    if (!use_manully_key)
                         return;
-                    if (KeyControl_Screen)
+                    if (key_control_screen)
                     {
                         Despawn(XHudSpace.屏幕空间);
                     }
-                    else if (KeyControl_World)
+                    else if (key_control_world)
                     {
                         Despawn(XHudSpace.世界空间);
                     }
@@ -887,10 +834,10 @@ namespace SevenStrikeModules.XHud
             if (!Enabled)
                 return;
 
-            if (UseDebug)
+            if (use_debug)
             {
                 string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
-                string msg = $"coroutines_Spawn 列表统计：{SpawnerIndicator}  目前存在   <b><color={hex_col}>{SpawnCoroutines.Count}</color></b>   个";
+                string msg = $"coroutines_Spawn 列表统计：{spawner_indicator}  目前存在   <b><color={hex_col}>{coroutines_spawn.Count}</color></b>   个";
                 XGUI_Utilitys.Console("XHud - 布局元素生成器通知", msg, XGUIMsgState.警告);
             }
         }
@@ -901,7 +848,7 @@ namespace SevenStrikeModules.XHud
         private bool FunctionKey_Primary_Detect()
         {
             bool ispress = false;
-            switch (SpawnFunctionKey_Primary)
+            switch (spawn_function_key_primary)
             {
                 case SpawnFunctionKey.none:
                     ispress = true;
@@ -928,7 +875,7 @@ namespace SevenStrikeModules.XHud
         private bool FunctionKey_Secondary_Detect()
         {
             bool ispress = false;
-            switch (SpawnFunctionKey_Secondary)
+            switch (spawn_function_key_secondary)
             {
                 case SpawnFunctionKey.none:
                     ispress = true;
@@ -961,11 +908,11 @@ namespace SevenStrikeModules.XHud
         /// </summary>
         public void SyncLayoutItemsMotionArgs()
         {
-            if ((SpawnItemList_Screen == null && SpawnItemList_Screen.Count <= 0) || (SpawnItemList_World == null && SpawnItemList_World.Count <= 0))
+            if ((spawn_item_list_screen == null && spawn_item_list_screen.Count <= 0) || (spawn_item_list_world == null && spawn_item_list_world.Count <= 0))
                 return;
 
             // 匹配元素库
-            XHud_Library_Element ele_lib = Application.isPlaying ? XHud_Manager.instance.hm_ElementLibrary_GetTargetLibrary(LibName) : XHud_Dashboard.get_manager().hm_ElementLibrary_GetTargetLibrary(LibName);
+            XHud_Library_Element ele_lib = Application.isPlaying ? XHud_Manager.instance.hm_ElementLibrary_GetTargetLibrary(library_name) : XHud_Dashboard.get_manager().hm_ElementLibrary_GetTargetLibrary(library_name);
 
             if (ele_lib == null)
                 return;
@@ -980,9 +927,9 @@ namespace SevenStrikeModules.XHud
                     continue;
 
                 // 屏幕空间生成元素校验
-                for (int s = 0; s < SpawnItemList_Screen.Count; s++)
+                for (int s = 0; s < spawn_item_list_screen.Count; s++)
                 {
-                    XHud_LayoutSpawner_Item spawn_item = SpawnItemList_Screen[s];
+                    XHud_LayoutSpawner_Item spawn_item = spawn_item_list_screen[s];
                     if (spawn_item.SpawnName == lib_item.name)
                     {
                         // 这里明确先记录后恢复的原则
@@ -997,9 +944,9 @@ namespace SevenStrikeModules.XHud
                 }
 
                 // 世界空间生成元素校验
-                for (int s = 0; s < SpawnItemList_World.Count; s++)
+                for (int s = 0; s < spawn_item_list_world.Count; s++)
                 {
-                    XHud_LayoutSpawner_Item spawn_item = SpawnItemList_World[s];
+                    XHud_LayoutSpawner_Item spawn_item = spawn_item_list_world[s];
                     if (spawn_item.SpawnName == lib_item.name)
                     {
                         spawn_item.CreateArgs = lib_item.target.motion_create_args.Clone();
@@ -1028,7 +975,7 @@ namespace SevenStrikeModules.XHud
         private bool ProtectedActionState()
         {
             bool hasScreenMotion = false;
-            foreach (var item in SpawnItemList_Screen)
+            foreach (var item in spawn_item_list_screen)
             {
                 if (item.InMotion)
                 {
@@ -1038,7 +985,7 @@ namespace SevenStrikeModules.XHud
             }
 
             bool hasWorldMotion = false;
-            foreach (var item in SpawnItemList_World)
+            foreach (var item in spawn_item_list_world)
             {
                 if (item.InMotion)
                 {
@@ -1047,8 +994,8 @@ namespace SevenStrikeModules.XHud
                 }
             }
 
-            spawnerisRunning = hasScreenMotion || hasWorldMotion;
-            return spawnerisRunning;
+            _spawner_is_running = hasScreenMotion || hasWorldMotion;
+            return _spawner_is_running;
         }
         /// <summary>
         /// 检查世界空间布局列表是否为空
@@ -1056,7 +1003,7 @@ namespace SevenStrikeModules.XHud
         /// <returns>如果世界空间布局列表为空返回true，否则返回false</returns>
         private bool WroldLayoutIsEmpty()
         {
-            if (SpawnItemList_World.Count <= 0)
+            if (spawn_item_list_world.Count <= 0)
                 return true;
             else
                 return false;
@@ -1067,7 +1014,7 @@ namespace SevenStrikeModules.XHud
         /// <returns>如果屏幕空间布局列表为空返回true，否则返回false</returns>
         private bool ScreenLayoutIsEmpty()
         {
-            if (SpawnItemList_Screen.Count <= 0)
+            if (spawn_item_list_screen.Count <= 0)
                 return true;
             else
                 return false;
@@ -1079,7 +1026,7 @@ namespace SevenStrikeModules.XHud
         /// <returns>如果所有元素都已生成返回true，否则返回false</returns>
         public bool IsAllSpawned(XHudSpace space)
         {
-            List<XHud_LayoutSpawner_Item> targetList = space == XHudSpace.屏幕空间 ? SpawnItemList_Screen : SpawnItemList_World;
+            List<XHud_LayoutSpawner_Item> targetList = space == XHudSpace.屏幕空间 ? spawn_item_list_screen : spawn_item_list_world;
 
             if (targetList == null || targetList.Count == 0)
                 return false;
@@ -1100,7 +1047,7 @@ namespace SevenStrikeModules.XHud
         /// <returns>如果所有元素都未生成返回true，否则返回false</returns>
         public bool IsAllDespawned(XHudSpace space)
         {
-            List<XHud_LayoutSpawner_Item> targetList = space == XHudSpace.屏幕空间 ? SpawnItemList_Screen : SpawnItemList_World;
+            List<XHud_LayoutSpawner_Item> targetList = space == XHudSpace.屏幕空间 ? spawn_item_list_screen : spawn_item_list_world;
 
             if (targetList == null || targetList.Count == 0)
                 return false;
@@ -1124,19 +1071,19 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public XHud_Module_Element GetElement_With_ID(XHudSpace space, string id)
         {
-            for (int i = 0; i < (space == XHudSpace.屏幕空间 ? SpawnItemList_Screen.Count : SpawnItemList_World.Count); i++)
+            for (int i = 0; i < (space == XHudSpace.屏幕空间 ? spawn_item_list_screen.Count : spawn_item_list_world.Count); i++)
             {
-                if ((space == XHudSpace.屏幕空间 ? SpawnItemList_Screen[i].ID : SpawnItemList_World[i].ID) == id)
+                if ((space == XHudSpace.屏幕空间 ? spawn_item_list_screen[i].ID : spawn_item_list_world[i].ID) == id)
                 {
-                    if ((space == XHudSpace.屏幕空间 ? SpawnItemList_Screen[i].SpawnedElementNode.Element != null : SpawnItemList_World[i].SpawnedElementNode.Element != null))
+                    if ((space == XHudSpace.屏幕空间 ? spawn_item_list_screen[i].SpawnedElementNode.Element != null : spawn_item_list_world[i].SpawnedElementNode.Element != null))
                     {
-                        return (space == XHudSpace.屏幕空间 ? SpawnItemList_Screen[i].SpawnedElementNode.Element : SpawnItemList_World[i].SpawnedElementNode.Element);
+                        return (space == XHudSpace.屏幕空间 ? spawn_item_list_screen[i].SpawnedElementNode.Element : spawn_item_list_world[i].SpawnedElementNode.Element);
                     }
                     break;
                 }
             }
 
-            if (UseDebug)
+            if (use_debug)
             {
                 string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                 XGUI_Utilitys.Console("XHud - 布局元素生成器通知", $"未找到匹配ID的元素项！请确认生成器的<b><color={hex_col}>  {space.ToString()}  </b></color>列表中存在ID为：<b><color={hex_col}>  {id} </b></color>的元素项！", XGUIMsgState.通知);
@@ -1154,14 +1101,14 @@ namespace SevenStrikeModules.XHud
             bool finded = false;
 
             // 先在“屏幕空间”列表内找
-            for (int i = 0; i < SpawnItemList_Screen.Count; i++)
+            for (int i = 0; i < spawn_item_list_screen.Count; i++)
             {
-                if (SpawnItemList_Screen[i].ID == name)
+                if (spawn_item_list_screen[i].ID == name)
                 {
                     finded = true;
-                    if (SpawnItemList_Screen[i].SpawnedElementNode.Element != null)
+                    if (spawn_item_list_screen[i].SpawnedElementNode.Element != null)
                     {
-                        return SpawnItemList_Screen[i].SpawnedElementNode.Element;
+                        return spawn_item_list_screen[i].SpawnedElementNode.Element;
                     }
                     break;
                 }
@@ -1170,20 +1117,20 @@ namespace SevenStrikeModules.XHud
             // 如果没找到，再在“世界空间”列表内找
             if (!finded)
             {
-                for (int i = 0; i < SpawnItemList_World.Count; i++)
+                for (int i = 0; i < spawn_item_list_world.Count; i++)
                 {
-                    if (SpawnItemList_World[i].ID == name)
+                    if (spawn_item_list_world[i].ID == name)
                     {
-                        if (SpawnItemList_World[i].SpawnedElementNode.Element != null)
+                        if (spawn_item_list_world[i].SpawnedElementNode.Element != null)
                         {
-                            return SpawnItemList_World[i].SpawnedElementNode.Element;
+                            return spawn_item_list_world[i].SpawnedElementNode.Element;
                         }
                         break;
                     }
                 }
             }
 
-            if (UseDebug)
+            if (use_debug)
             {
                 string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                 XGUI_Utilitys.Console("XHud - 布局元素生成器通知", $"未找到匹配ID的元素项！请确认生成器的<b><color={hex_col}>  屏幕空间或是世界空间  </b></color>列表中存在ID为：<b><color={hex_col}>  {name} </b></color>的元素项！", XGUIMsgState.通知);
@@ -1198,19 +1145,19 @@ namespace SevenStrikeModules.XHud
         /// <returns></returns>
         public XHud_Module_Element GetElement_With_Name(XHudSpace space, string name)
         {
-            for (int i = 0; i < (space == XHudSpace.屏幕空间 ? SpawnItemList_Screen.Count : SpawnItemList_World.Count); i++)
+            for (int i = 0; i < (space == XHudSpace.屏幕空间 ? spawn_item_list_screen.Count : spawn_item_list_world.Count); i++)
             {
-                if ((space == XHudSpace.屏幕空间 ? SpawnItemList_Screen[i].SpawnName : SpawnItemList_World[i].SpawnName) == name)
+                if ((space == XHudSpace.屏幕空间 ? spawn_item_list_screen[i].SpawnName : spawn_item_list_world[i].SpawnName) == name)
                 {
-                    if ((space == XHudSpace.屏幕空间 ? SpawnItemList_Screen[i].SpawnedElementNode.Element != null : SpawnItemList_World[i].SpawnedElementNode.Element != null))
+                    if ((space == XHudSpace.屏幕空间 ? spawn_item_list_screen[i].SpawnedElementNode.Element != null : spawn_item_list_world[i].SpawnedElementNode.Element != null))
                     {
-                        return (space == XHudSpace.屏幕空间 ? SpawnItemList_Screen[i].SpawnedElementNode.Element : SpawnItemList_World[i].SpawnedElementNode.Element);
+                        return (space == XHudSpace.屏幕空间 ? spawn_item_list_screen[i].SpawnedElementNode.Element : spawn_item_list_world[i].SpawnedElementNode.Element);
                     }
                     break;
                 }
             }
 
-            if (UseDebug)
+            if (use_debug)
             {
                 string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                 XGUI_Utilitys.Console("XHud - 布局元素生成器通知", $"未找到匹配ID的元素项！请确认生成器的<b><color={hex_col}>  {space.ToString()}  </b></color>列表中存在名称为：<b><color={hex_col}>  {name} </b></color>的元素项！", XGUIMsgState.通知);
@@ -1227,14 +1174,14 @@ namespace SevenStrikeModules.XHud
             bool finded = false;
 
             // 先在“屏幕空间”列表内找
-            for (int i = 0; i < SpawnItemList_Screen.Count; i++)
+            for (int i = 0; i < spawn_item_list_screen.Count; i++)
             {
-                if (SpawnItemList_Screen[i].SpawnName == name)
+                if (spawn_item_list_screen[i].SpawnName == name)
                 {
                     finded = true;
-                    if (SpawnItemList_Screen[i].SpawnedElementNode.Element != null)
+                    if (spawn_item_list_screen[i].SpawnedElementNode.Element != null)
                     {
-                        return SpawnItemList_Screen[i].SpawnedElementNode.Element;
+                        return spawn_item_list_screen[i].SpawnedElementNode.Element;
                     }
                     break;
                 }
@@ -1243,20 +1190,20 @@ namespace SevenStrikeModules.XHud
             // 如果没找到，再在“世界空间”列表内找
             if (!finded)
             {
-                for (int i = 0; i < SpawnItemList_World.Count; i++)
+                for (int i = 0; i < spawn_item_list_world.Count; i++)
                 {
-                    if (SpawnItemList_World[i].SpawnName == name)
+                    if (spawn_item_list_world[i].SpawnName == name)
                     {
-                        if (SpawnItemList_World[i].SpawnedElementNode.Element != null)
+                        if (spawn_item_list_world[i].SpawnedElementNode.Element != null)
                         {
-                            return SpawnItemList_World[i].SpawnedElementNode.Element;
+                            return spawn_item_list_world[i].SpawnedElementNode.Element;
                         }
                         break;
                     }
                 }
             }
 
-            if (UseDebug)
+            if (use_debug)
             {
                 string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
                 XGUI_Utilitys.Console("XHud - 布局元素生成器通知", $"未找到匹配 SpawnName 的元素项！请确认生成器的<b><color={hex_col}>  屏幕空间或是世界空间  </b></color>列表中存在SpawnName为：<b><color={hex_col}>  {name} </b></color>的元素项！", XGUIMsgState.通知);

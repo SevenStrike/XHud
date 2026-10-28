@@ -100,6 +100,9 @@ namespace SevenStrikeModules.XHud.Editor
         /// 库设置模式（添加到库 / 修改库源参数 / 修改生成器项参数）。
         /// </summary>
         public LibrarySetterMode library_setter_mode;
+        public XHudSpace target_layout_spawner_space;
+        public LayoutSpawnerMotionTarget target_layout_spawner_motion_mode;
+        public int target_layout_spawner_listindex;
         #endregion
 
         #region 字段 - 图标
@@ -1130,6 +1133,18 @@ namespace SevenStrikeModules.XHud.Editor
         {
             library_setter_mode = mode;
         }
+        public void set_target_index(int index)
+        {
+            target_layout_spawner_listindex = index;
+        }
+        public void set_target_space(XHudSpace space)
+        {
+            target_layout_spawner_space = space;
+        }
+        public void set_target_motion_mode(LayoutSpawnerMotionTarget mode)
+        {
+            target_layout_spawner_motion_mode = mode;
+        }
         /// <summary>
         /// 设置目标元素动效库。
         /// </summary>
@@ -1322,7 +1337,47 @@ namespace SevenStrikeModules.XHud.Editor
                         // - XHud_LayoutSpawner
                         else if (target is XHud_LayoutSpawner layout_spawner)
                         {
+                            Undo.RecordObject(layout_spawner, "修改布局元素生成器动效参数");
 
+                            if (target_layout_spawner_motion_mode == LayoutSpawnerMotionTarget.自身动效)
+                            {
+                                layout_spawner.motion_create_args = motion_create_args.Clone();
+                                layout_spawner.motion_recycle_args = motion_recycle_args.Clone();
+                            }
+                            else
+                            {
+                                if (target_layout_spawner_space == XHudSpace.屏幕空间)
+                                {
+                                    layout_spawner.spawn_item_list_screen[target_layout_spawner_listindex].CreateArgs = motion_create_args.Clone();
+                                    layout_spawner.spawn_item_list_screen[target_layout_spawner_listindex].RecycleArgs = motion_recycle_args.Clone();
+                                }
+                                else
+                                {
+                                    layout_spawner.spawn_item_list_world[target_layout_spawner_listindex].CreateArgs = motion_create_args.Clone();
+                                    layout_spawner.spawn_item_list_world[target_layout_spawner_listindex].RecycleArgs = motion_recycle_args.Clone();
+                                }
+                            }
+                            EditorUtility.SetDirty(layout_spawner);
+
+                            if (PrefabUtility.IsPartOfPrefabInstance(layout_spawner))
+                                PrefabUtility.RecordPrefabInstancePropertyModifications(layout_spawner);
+
+                            EditorApplication.delayCall += () =>
+                            {
+                                string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
+
+                                string mode = target_layout_spawner_space == XHudSpace.屏幕空间 ? "屏幕元素列表项" : "世界元素列表项";
+
+                                XGUI.dialog(
+                                    type: XGUIDialogType.确认,
+                                    windowtitle: "XHud - 动效设置工具消息",
+                                    title: "动效更新完成",
+                                    msg: $"您刚刚更新了 <color={hexcol}>{layout_spawner.gameObject.name} {(string.IsNullOrEmpty(layout_spawner.spawner_indicator) ? "" : " - " + layout_spawner.spawner_indicator)} </color>布局元素生成器的 <color={hexcol}>{(target_layout_spawner_motion_mode == LayoutSpawnerMotionTarget.自身动效 ? type : "")} </color>{(target_layout_spawner_motion_mode == LayoutSpawnerMotionTarget.自身动效 ? "" : mode)}的动效参数！",
+                                    ok: "明白",
+                                    PrimaryIndex: 0,
+                                    usemodal: true,
+                                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                            };
                         }
 
                         // - XHud_Manager

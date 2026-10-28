@@ -39,7 +39,7 @@ namespace SevenStrikeModules.XHud
             Color cc = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
             cc.a = 0;
             highlighter.color = cc;
-            return highlighter.xt_Alpha_To(1, 0.16f, true, true, false).SetEase(EaseMode.InOutCubic).SetLoop(1, XTween_LoopType.Yoyo);
+            return highlighter.xt_Alpha_To(1, 0.5f, true, true, false).SetEase(EaseMode.InOutCubic).SetLoop(1, XTween_LoopType.Yoyo);
         }
     }
 }
