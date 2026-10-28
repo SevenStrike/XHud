@@ -104,6 +104,11 @@ namespace SevenStrikeModules.XTween
         /// </summary>
         public Action act_on_rewind;
         /// <summary>
+        /// 动作 - 动画 Yoyo 反向切换
+        /// 参数：翻转后是否处于反向状态（true=反向，false=正向）
+        /// </summary>
+        public Action<bool> act_on_yoyo_reverse;
+        /// <summary>
         /// 动作 - 动画延迟更新
         /// </summary>
         public Action<float> act_on_delayUpdate;

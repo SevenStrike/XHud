@@ -67,7 +67,9 @@ namespace SevenStrikeModules.XTween
         /// <returns>插值结果。</returns>
         protected override float Lerp(float a, float b, float t)
         {
-            return Mathf.Lerp(a, b, t);
+            // Mathf.Lerp 内部会 Clamp01(t)，导致 OutBack/Elastic 等超调缓动被吃掉
+            // 改用 LerpUnclamped，让 Float 与其他类型（Vector/Color/Quaternion）保持一致
+            return Mathf.LerpUnclamped(a, b, t);
         }
 
         /// <summary>

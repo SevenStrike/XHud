@@ -159,6 +159,11 @@ namespace SevenStrikeModules.XTween
         public Action<TArg, float, float> act_on_StepUpdateCallbacks;
         public Action<TArg, float> act_on_ProgressCallbacks;
         public Action<TArg, float> act_on_EaseProgressCallbacks;
+        /// <summary>
+        /// 动画 Yoyo 反向切换回调
+        /// 参数：翻转后是否处于反向状态（true=反向，false=正向）
+        /// </summary>
+        public Action<bool> act_on_YoyoReverseCallbacks;
         #endregion
 
         #region 受保护字段
@@ -834,8 +839,13 @@ namespace SevenStrikeModules.XTween
                 // === 修复：重置步长状态 ===
                 ResetStepState();
 
-                if (act_on_RewindCallbacks != null)
-                    act_on_RewindCallbacks();
+                //if (act_on_RewindCallbacks != null)
+                //    act_on_RewindCallbacks();
+
+                // ✅ 新增：触发 Yoyo 反向切换回调
+                if (act_on_YoyoReverseCallbacks != null)
+                    act_on_YoyoReverseCallbacks(_IsReversing);
+
                 return true;
             }
 
@@ -1166,6 +1176,7 @@ namespace SevenStrikeModules.XTween
             act_on_RewindCallbacks = null;
             act_on_DelayUpdateCallbacks = null;
             act_on_EaseProgressCallbacks = null;
+            act_on_YoyoReverseCallbacks = null;
         }
         /// <summary>
         /// 将动画求值定位到指定的已耗时位置，并触发一次 OnUpdate 回调。
@@ -1520,6 +1531,13 @@ namespace SevenStrikeModules.XTween
         XTween_Interface XTween_Interface.OnRewind(Action callback, XTweenActionOpration ActionOpration)
         {
             return OnRewind(callback, ActionOpration);
+        }
+        /// <summary>
+        /// 添加动画 Yoyo 反向切换时的回调函数
+        /// </summary>
+        XTween_Interface XTween_Interface.OnYoyoReverse(Action<bool> callback, XTweenActionOpration ActionOpration)
+        {
+            return OnYoyoReverse(callback, ActionOpration);
         }
         /// <summary>
         /// 添加动画延迟更新时的回调函数
@@ -2017,6 +2035,23 @@ namespace SevenStrikeModules.XTween
             return this;
         }
         /// <summary>
+        /// 添加动画 Yoyo 反向切换时的回调函数
+        /// <para/>每次 Yoyo 循环重置、方向翻转且循环继续时触发
+        /// </summary>
+        /// <param name="callback">回调函数，参数为翻转后是否处于反向状态（true=反向，false=正向）</param>
+        /// <returns>当前动画对象，支持链式调用</returns>
+        public XTween_Base<TArg> OnYoyoReverse(Action<bool> callback, XTweenActionOpration ActionOpration = XTweenActionOpration.Register)
+        {
+            if (callback != null)
+            {
+                if (ActionOpration == XTweenActionOpration.Register)
+                    act_on_YoyoReverseCallbacks += callback;
+                else
+                    act_on_YoyoReverseCallbacks -= callback;
+            }
+            return this;
+        }
+        /// <summary>
         /// 添加动画延迟更新时的回调函数
         /// 在动画的延迟阶段，此回调将被触发
         /// 回调函数接收一个参数，表示当前延迟的进度（范围为 [0, 1]）
@@ -2175,20 +2210,20 @@ namespace SevenStrikeModules.XTween
                 easedT = 1f - easedT;
             }
 
-            //  ③ 缓动进度接近 1 → 返回终点（新增）
-            if (easedT >= 0.9999f)
-            {
-                return _loopType == XTween_LoopType.Yoyo && _IsReversing
-                    ? (_IsFromMode ? _StartValue : _DefaultValue)
-                    : _EndValue;
-            }
-            //  ④ 缓动进度接近 0 → 返回起点（新增）
-            if (easedT <= 0.0001f)
-            {
-                return _loopType == XTween_LoopType.Yoyo && _IsReversing
-                    ? _EndValue
-                    : (_IsFromMode ? _StartValue : _DefaultValue);
-            }
+            ////  ③ 缓动进度接近 1 → 返回终点（新增）
+            //if (easedT >= 0.9999f)
+            //{
+            //    return _loopType == XTween_LoopType.Yoyo && _IsReversing
+            //        ? (_IsFromMode ? _StartValue : _DefaultValue)
+            //        : _EndValue;
+            //}
+            ////  ④ 缓动进度接近 0 → 返回起点（新增）
+            //if (easedT <= 0.0001f)
+            //{
+            //    return _loopType == XTween_LoopType.Yoyo && _IsReversing
+            //        ? _EndValue
+            //        : (_IsFromMode ? _StartValue : _DefaultValue);
+            //}
 
             TArg startVal = _IsFromMode ? _StartValue : _DefaultValue;
             return Lerp(startVal, _EndValue, easedT);

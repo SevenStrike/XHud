@@ -193,7 +193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3141893240754762256, guid: db17f898becf3154da3471122b978bc0, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 391
+      value: 390.99985
       objectReference: {fileID: 0}
     - target: {fileID: 3141893240754762256, guid: db17f898becf3154da3471122b978bc0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -207,6 +207,62 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: max_timer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: min_timer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: tween_is_previewing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: max_timer_with_global_duration
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: min_timer_with_global_duration
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: primitive_tween_nodes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: primitive_tween_sounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: primitive_tween_nodes.Array.data[1].delay
+      value: 1.996
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: primitive_tween_nodes.Array.data[0].progress
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: primitive_tween_nodes.Array.data[0].loop_type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: primitive_tween_nodes.Array.data[0].loop_count
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: primitive_tween_nodes.Array.data[1].tween_value_mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: primitive_tween_nodes.Array.data[1].value_mode_index
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3560793210975798503, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: primitive_tween_nodes.Array.data[0].complete_set_endvalue
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4016231534562583080, guid: db17f898becf3154da3471122b978bc0, type: 3}
       propertyPath: m_Alpha
       value: 1
@@ -217,7 +273,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5755098906041804970, guid: db17f898becf3154da3471122b978bc0, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: alpha
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: tweens_preivew_in_state
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197335552179945544, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: tween_is_previewing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197335552179945544, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: primitive_tween_nodes.Array.data[3].progress
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197335552179945544, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: primitive_tween_nodes.Array.data[4].progress
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197335552179945544, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: primitive_tween_nodes.Array.data[3].loop_type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197335552179945544, guid: db17f898becf3154da3471122b978bc0, type: 3}
+      propertyPath: primitive_tween_nodes.Array.data[3].loop_count
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1679,7 +1763,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 271.3, y: -165.2}
+  m_AnchoredPosition: {x: 438, y: -475}
   m_SizeDelta: {x: 509, y: 321}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1182277057
@@ -1703,7 +1787,7 @@ MonoBehaviour:
   RandomDelay:
     Min: 0
     Max: 0
-  EaseMode: 10
+  EaseMode: 24
   UseCurve: 0
   Curve:
     serializedVersion: 2
@@ -1730,7 +1814,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   LoopCount: -1
-  LoopDelay: 1
+  LoopDelay: 0
   LoopType: 1
   IsFromMode: 0
   IsRelative: 0
@@ -1757,7 +1841,7 @@ MonoBehaviour:
   FromValue_Int: 0
   FromValue_Float: 0
   FromValue_String: 
-  FromValue_Vector2: {x: 0, y: 0}
+  FromValue_Vector2: {x: 100, y: 100}
   FromValue_Vector3: {x: 0, y: 0, z: 0}
   FromValue_Vector4: {x: 0, y: 0, z: 0, w: 0}
   FromValue_Color: {r: 1, g: 1, b: 1, a: 1}

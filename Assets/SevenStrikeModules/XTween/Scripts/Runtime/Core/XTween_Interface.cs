@@ -404,6 +404,17 @@ namespace SevenStrikeModules.XTween
         /// <param name="callback">回调函数</param>
         /// <returns>当前动画对象</returns>
         XTween_Interface OnEaseProgress<TVal>(Action<TVal, float> callback, XTweenActionOpration ActionOpration = XTweenActionOpration.Register);
+        /// <summary>
+        /// 添加动画 Yoyo 反向切换时的回调函数
+        /// <para/>触发时机：Yoyo 每次循环重置、方向翻转且循环继续时（包含循环延迟期间）
+        /// <para/>注意：最后一次翻转（循环结束）不会触发；用户主动 Rewind / Restart 循环重置也不走此回调
+        /// </summary>
+        /// <param name="callback">回调函数，参数为翻转后是否处于反向状态：
+        /// - true：即将从终点向起点反向播放
+        /// - false：即将从起点向终点正向播放
+        /// </param>
+        /// <returns>当前动画对象</returns>
+        XTween_Interface OnYoyoReverse(Action<bool> callback, XTweenActionOpration ActionOpration = XTweenActionOpration.Register);
         #endregion
     }
 }

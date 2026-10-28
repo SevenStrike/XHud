@@ -75,6 +75,10 @@ namespace SevenStrikeModules.XTween
                     {
                         if (act_on_rewind != null)
                             act_on_rewind();
+                    }).OnYoyoReverse((isReversing) =>
+                    {
+                        if (act_on_yoyo_reverse != null)
+                            act_on_yoyo_reverse(isReversing);
                     }).OnComplete((duration) =>
                     {
                         if (act_on_complete != null)
@@ -122,6 +126,10 @@ namespace SevenStrikeModules.XTween
                     {
                         if (act_on_rewind != null)
                             act_on_rewind();
+                    }).OnYoyoReverse((isReversing) =>
+                    {
+                        if (act_on_yoyo_reverse != null)
+                            act_on_yoyo_reverse(isReversing);
                     }).OnComplete((duration) =>
                     {
                         if (act_on_complete != null)
@@ -169,6 +177,10 @@ namespace SevenStrikeModules.XTween
                     {
                         if (act_on_rewind != null)
                             act_on_rewind();
+                    }).OnYoyoReverse((isReversing) =>
+                    {
+                        if (act_on_yoyo_reverse != null)
+                            act_on_yoyo_reverse(isReversing);
                     }).OnComplete((duration) =>
                     {
                         if (act_on_complete != null)
@@ -212,6 +224,10 @@ namespace SevenStrikeModules.XTween
                     {
                         if (act_on_resume != null)
                             act_on_resume();
+                    }).OnYoyoReverse((isReversing) =>
+                    {
+                        if (act_on_yoyo_reverse != null)
+                            act_on_yoyo_reverse(isReversing);
                     }).OnRewind(() =>
                     {
                         if (act_on_rewind != null)
@@ -263,6 +279,10 @@ namespace SevenStrikeModules.XTween
                     {
                         if (act_on_rewind != null)
                             act_on_rewind();
+                    }).OnYoyoReverse((isReversing) =>
+                    {
+                        if (act_on_yoyo_reverse != null)
+                            act_on_yoyo_reverse(isReversing);
                     }).OnComplete((duration) =>
                     {
                         if (act_on_complete != null)
@@ -310,6 +330,10 @@ namespace SevenStrikeModules.XTween
                     {
                         if (act_on_rewind != null)
                             act_on_rewind();
+                    }).OnYoyoReverse((isReversing) =>
+                    {
+                        if (act_on_yoyo_reverse != null)
+                            act_on_yoyo_reverse(isReversing);
                     }).OnComplete((duration) =>
                     {
                         if (act_on_complete != null)
@@ -357,6 +381,10 @@ namespace SevenStrikeModules.XTween
                     {
                         if (act_on_rewind != null)
                             act_on_rewind();
+                    }).OnYoyoReverse((isReversing) =>
+                    {
+                        if (act_on_yoyo_reverse != null)
+                            act_on_yoyo_reverse(isReversing);
                     }).OnComplete((duration) =>
                     {
                         if (act_on_complete != null)
