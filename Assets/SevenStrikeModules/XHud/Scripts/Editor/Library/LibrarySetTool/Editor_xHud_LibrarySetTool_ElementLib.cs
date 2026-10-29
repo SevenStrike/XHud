@@ -336,11 +336,11 @@ namespace SevenStrikeModules.XHud.Editor
             if (element_librarys != null && element_librarys.Count > 0)
             {
                 SerializedProperty prop = sp_element_ibrarys.GetArrayElementAtIndex(selected_library_index);
-                SerializedProperty sp_lib_name = prop.FindPropertyRelative("lib_name");
-                SerializedProperty sp_lib_count = prop.FindPropertyRelative("lib_count");
-                SerializedProperty sp_lib_used_count = prop.FindPropertyRelative("lib_used_count");
-                SerializedProperty sp_lib_recycled_count = prop.FindPropertyRelative("lib_recycled_count");
-                SerializedProperty sp_lib_initiated_count = prop.FindPropertyRelative("lib_initiated_count");
+                SerializedProperty sp_lib_name = prop.FindPropertyRelative(nameof(ElementLibraryInfo.lib_name));
+                SerializedProperty sp_lib_count = prop.FindPropertyRelative(nameof(ElementLibraryInfo.lib_count));
+                SerializedProperty sp_lib_used_count = prop.FindPropertyRelative(nameof(ElementLibraryInfo.lib_used_count));
+                SerializedProperty sp_lib_recycled_count = prop.FindPropertyRelative(nameof(ElementLibraryInfo.lib_recycled_count));
+                SerializedProperty sp_lib_initiated_count = prop.FindPropertyRelative(nameof(ElementLibraryInfo.lib_initiated_count));
 
                 #region 名称
                 LibSelector_rect.Set(rect.x + (rect.width - 240), rect.y + 140, rect.width - 15, 20);
@@ -470,7 +470,7 @@ namespace SevenStrikeModules.XHud.Editor
             indicator_rect = new Rect(rect.x + 39, rect.y + 5, 180, 20);
 
             SerializedProperty prop = sp_element_ibrarys.GetArrayElementAtIndex(index);
-            SerializedProperty sp_lib_name = prop.FindPropertyRelative("lib_name");
+            SerializedProperty sp_lib_name = prop.FindPropertyRelative(nameof(ElementLibraryInfo.lib_name));
 
             #region 元素库索引号
             XGUI.gui_label(

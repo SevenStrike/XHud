@@ -229,9 +229,9 @@ namespace SevenStrikeModules.XHud.Editor
         }
         private void xHud_Themes_SliderValueSet(SerializedProperty prop, Color col)
         {
-            SerializedProperty H = prop.FindPropertyRelative("x");
-            SerializedProperty S = prop.FindPropertyRelative("y");
-            SerializedProperty L = prop.FindPropertyRelative("z");
+            SerializedProperty H = prop.FindPropertyRelative(nameof(Vector3.x));
+            SerializedProperty S = prop.FindPropertyRelative(nameof(Vector3.y));
+            SerializedProperty L = prop.FindPropertyRelative(nameof(Vector3.z));
 
             float eH;
             float eS;
@@ -260,9 +260,9 @@ namespace SevenStrikeModules.XHud.Editor
         #region 绘制 - 控件组
         private void xHud_ThemeControl(Rect rect, SerializedProperty prop, ThemeColorType type)
         {
-            SerializedProperty H = prop.FindPropertyRelative("x");
-            SerializedProperty S = prop.FindPropertyRelative("y");
-            SerializedProperty L = prop.FindPropertyRelative("z");
+            SerializedProperty H = prop.FindPropertyRelative(nameof(Vector3.x));
+            SerializedProperty S = prop.FindPropertyRelative(nameof(Vector3.y));
+            SerializedProperty L = prop.FindPropertyRelative(nameof(Vector3.z));
 
             XGUI.ChangedCheck_Start();
 

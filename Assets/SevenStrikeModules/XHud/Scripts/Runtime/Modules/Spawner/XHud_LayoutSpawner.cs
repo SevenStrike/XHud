@@ -804,7 +804,7 @@ namespace SevenStrikeModules.XHud
                     {
                         Spawn(XHudSpace.屏幕空间);
                     }
-                    else if (key_control_world)
+                    if (key_control_world)
                     {
                         Spawn(XHudSpace.世界空间);
                     }
@@ -818,7 +818,7 @@ namespace SevenStrikeModules.XHud
                     {
                         Despawn(XHudSpace.屏幕空间);
                     }
-                    else if (key_control_world)
+                    if (key_control_world)
                     {
                         Despawn(XHudSpace.世界空间);
                     }
@@ -894,66 +894,6 @@ namespace SevenStrikeModules.XHud
                     break;
             }
             return ispress;
-        }
-
-        /* SyncLayoutItemsMotionArgs 解释：
-         * -----------------
-         * 因为如果被布局元素生成器收集之后，更改了元素的动效参数，
-         * 则会通过此步骤进行应用启动前的更新以此确保生成的动效的同源同步        
-         */
-
-        /// <summary>
-        /// 从元素库同步动效参数到待生成的元素列表项
-        /// 确保在启动前将元素库中配置的动效参数同步到布局生成器中
-        /// </summary>
-        public void SyncLayoutItemsMotionArgs()
-        {
-            if ((spawn_item_list_screen == null && spawn_item_list_screen.Count <= 0) || (spawn_item_list_world == null && spawn_item_list_world.Count <= 0))
-                return;
-
-            // 匹配元素库
-            XHud_Library_Element ele_lib = Application.isPlaying ? XHud_Manager.instance.hm_ElementLibrary_GetTargetLibrary(library_name) : XHud_Dashboard.get_manager().hm_ElementLibrary_GetTargetLibrary(library_name);
-
-            if (ele_lib == null)
-                return;
-
-            for (int i = 0; i < ele_lib.library_elements.Count; i++)
-            {
-                XHud_LibraryArg_Element_Item lib_item = ele_lib.library_elements[i];
-                if (lib_item == null)
-                    continue;
-
-                if (lib_item.target == null)
-                    continue;
-
-                // 屏幕空间生成元素校验
-                for (int s = 0; s < spawn_item_list_screen.Count; s++)
-                {
-                    XHud_LayoutSpawner_Item spawn_item = spawn_item_list_screen[s];
-                    if (spawn_item.SpawnName == lib_item.name)
-                    {
-                        // 这里明确先记录后恢复的原则
-                        // 否则会导致布局生成器生成的元素的锚点被元素库的元素自身携带的锚点覆盖
-                        // 这样你生成出来的元素是在元素自身携带的生成动效锚点下，而不是布局记录的锚点下
-                        XHudAnchor anchor = spawn_item.CreateArgs.anchor;
-                        spawn_item.CreateArgs = lib_item.target.motion_create_args.Clone();
-                        spawn_item.CreateArgs.anchor = anchor;
-
-                        spawn_item.RecycleArgs = lib_item.target.motion_recycle_args.Clone();
-                    }
-                }
-
-                // 世界空间生成元素校验
-                for (int s = 0; s < spawn_item_list_world.Count; s++)
-                {
-                    XHud_LayoutSpawner_Item spawn_item = spawn_item_list_world[s];
-                    if (spawn_item.SpawnName == lib_item.name)
-                    {
-                        spawn_item.CreateArgs = lib_item.target.motion_create_args.Clone();
-                        spawn_item.RecycleArgs = lib_item.target.motion_recycle_args.Clone();
-                    }
-                }
-            }
         }
         /// <summary>
         /// 检查元素库是否为空

@@ -442,10 +442,10 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 水印边距
-            SerializedProperty sp_mar_x = sp_bp_mark_margin.FindPropertyRelative("x");
-            SerializedProperty sp_mar_y = sp_bp_mark_margin.FindPropertyRelative("y");
-            SerializedProperty sp_mar_z = sp_bp_mark_margin.FindPropertyRelative("z");
-            SerializedProperty sp_mar_w = sp_bp_mark_margin.FindPropertyRelative("w");
+            SerializedProperty sp_mar_x = sp_bp_mark_margin.FindPropertyRelative(nameof(Vector4.x));
+            SerializedProperty sp_mar_y = sp_bp_mark_margin.FindPropertyRelative(nameof(Vector4.y));
+            SerializedProperty sp_mar_z = sp_bp_mark_margin.FindPropertyRelative(nameof(Vector4.z));
+            SerializedProperty sp_mar_w = sp_bp_mark_margin.FindPropertyRelative(nameof(Vector4.w));
 
             XGUI.layout_property_field(
                 title: "水印 - 上边距",

@@ -285,7 +285,7 @@ namespace SevenStrikeModules.XHud.Editor
             }
             if (sp_use_custom_cursor.boolValue)
             {
-                SerializedProperty index_sprite = sp_current_cursor_style.FindPropertyRelative("Sprite");
+                SerializedProperty index_sprite = sp_current_cursor_style.FindPropertyRelative(nameof(MouseStyles.Sprite));
                 Sprite spr = (Sprite)index_sprite.objectReferenceValue;
                 #region 当前选择的光标图标
                 XGUI.layout_icon(
@@ -696,10 +696,10 @@ namespace SevenStrikeModules.XHud.Editor
             float baseheight = rect.y + (rect.height - 25);
             float current_width = XGUI.GetCurrentWindowWidth();
 
-            SerializedProperty sp_name = sp_mouse_styles.GetArrayElementAtIndex(index).FindPropertyRelative("Name");
-            SerializedProperty index_sprite = sp_mouse_styles.GetArrayElementAtIndex(index).FindPropertyRelative("Sprite");
+            SerializedProperty sp_name = sp_mouse_styles.GetArrayElementAtIndex(index).FindPropertyRelative(nameof(MouseStyles.Name));
+            SerializedProperty index_sprite = sp_mouse_styles.GetArrayElementAtIndex(index).FindPropertyRelative(nameof(MouseStyles.Sprite));
             Sprite spr = (Sprite)index_sprite.objectReferenceValue;
-            SerializedProperty pivot = sp_mouse_styles.GetArrayElementAtIndex(index).FindPropertyRelative("Pivot");
+            SerializedProperty pivot = sp_mouse_styles.GetArrayElementAtIndex(index).FindPropertyRelative(nameof(MouseStyles.Pivot));
 
             #region 光标名称
             if (current_width > 130)
@@ -755,7 +755,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_width: 60);
             }
             pivot.serializedObject.ApplyModifiedProperties();
-            SerializedProperty cur_sprite = sp_current_cursor_style.FindPropertyRelative("Sprite");
+            SerializedProperty cur_sprite = sp_current_cursor_style.FindPropertyRelative(nameof(MouseStyles.Sprite));
             Sprite cur_spr = (Sprite)cur_sprite.objectReferenceValue;
             if (cur_spr == spr)
             {
@@ -787,8 +787,8 @@ namespace SevenStrikeModules.XHud.Editor
         private void MouseStyles_OnAdd(ReorderableList list)
         {
             sp_mouse_styles.InsertArrayElementAtIndex(list.count);
-            sp_mouse_styles.GetArrayElementAtIndex(list.count - 1).FindPropertyRelative("Name").stringValue = "NewCursor";
-            sp_mouse_styles.GetArrayElementAtIndex(list.count - 1).FindPropertyRelative("Pivot").vector2Value = new Vector2(0, 1);
+            sp_mouse_styles.GetArrayElementAtIndex(list.count - 1).FindPropertyRelative(nameof(MouseStyles.Name)).stringValue = "NewCursor";
+            sp_mouse_styles.GetArrayElementAtIndex(list.count - 1).FindPropertyRelative(nameof(MouseStyles.Pivot)).vector2Value = new Vector2(0, 1);
         }
         /// <summary>
         /// 鼠标样式列表移除回调。
@@ -813,15 +813,16 @@ namespace SevenStrikeModules.XHud.Editor
         {
             SerializedProperty sp_style = sp_mouse_styles.GetArrayElementAtIndex(list.index);
             MouseStyles style = new MouseStyles();
-            style.Name = sp_style.FindPropertyRelative("Name").stringValue;
-            style.Pivot = sp_style.FindPropertyRelative("Pivot").vector2Value;
-            style.Sprite = (Sprite)sp_style.FindPropertyRelative("Sprite").objectReferenceValue;
-            sp_current_cursor_style.FindPropertyRelative("Name").stringValue = style.Name;
-            sp_current_cursor_style.FindPropertyRelative("Pivot").vector2Value = style.Pivot;
-            sp_current_cursor_style.FindPropertyRelative("Sprite").objectReferenceValue = style.Sprite;
+            style.Name = sp_style.FindPropertyRelative(nameof(MouseStyles.Name)).stringValue;
+            style.Pivot = sp_style.FindPropertyRelative(nameof(MouseStyles.Pivot)).vector2Value;
+            style.Sprite = (Sprite)sp_style.FindPropertyRelative(nameof(MouseStyles.Sprite)).objectReferenceValue;
+
+            sp_current_cursor_style.FindPropertyRelative(nameof(MouseStyles.Name)).stringValue = style.Name;
+            sp_current_cursor_style.FindPropertyRelative(nameof(MouseStyles.Pivot)).vector2Value = style.Pivot;
+            sp_current_cursor_style.FindPropertyRelative(nameof(MouseStyles.Sprite)).objectReferenceValue = style.Sprite;
             Image img = (Image)sp_cursor_imager.objectReferenceValue;
             img.sprite = style.Sprite;
-            img.rectTransform.pivot = sp_current_cursor_style.FindPropertyRelative("Pivot").vector2Value;
+            img.rectTransform.pivot = sp_current_cursor_style.FindPropertyRelative(nameof(MouseStyles.Pivot)).vector2Value;
         }
         /// <summary>
         /// 鼠标样式列表元素高度回调。

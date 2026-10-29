@@ -474,7 +474,7 @@ namespace SevenStrikeModules.XHud.Editor
         private void List_PreloadElementList_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty prop = sp_preload_elements.GetArrayElementAtIndex(index);
-            SerializedProperty sp_ele = prop.FindPropertyRelative("element");
+            SerializedProperty sp_ele = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Info.element));
 
             #region 预生成元素索引号
             XGUI.gui_label(

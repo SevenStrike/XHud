@@ -390,12 +390,12 @@ namespace SevenStrikeModules.XHud.Editor
                     return;
                 if (hud_manager.library_transitions.TransitionLibrary_IsEmpty())
                     return;
-                SerializedProperty sp_Name = sp_current_transition_node.FindPropertyRelative("Name");
-                SerializedProperty sp_TotalFramesCount = sp_current_transition_node.FindPropertyRelative("TotalFramesCount");
-                SerializedProperty sp_LastFrameIndex = sp_current_transition_node.FindPropertyRelative("LastFrameIndex");
-                SerializedProperty sp_SkipFrame = sp_current_transition_node.FindPropertyRelative("SkipFrame");
-                SerializedProperty sp_Res = sp_current_transition_node.FindPropertyRelative("Res");
-                SerializedProperty sp_x_frames = sp_current_transition_node.FindPropertyRelative("Frames");
+                SerializedProperty sp_Name = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.name));
+                SerializedProperty sp_TotalFramesCount = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.total_frames_count));
+                SerializedProperty sp_LastFrameIndex = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.last_frame_index));
+                SerializedProperty sp_SkipFrame = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.skip_frame));
+                SerializedProperty sp_Res = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.res));
+                SerializedProperty sp_x_frames = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.frames));
                 XHud_LibraryArg_Transition node = hud_manager.library_transitions.TransitionLibrary_Get(sp_transition_name.stringValue);
                 sp_Name.stringValue = node.name;
                 sp_TotalFramesCount.intValue = node.total_frames_count;
@@ -485,12 +485,12 @@ namespace SevenStrikeModules.XHud.Editor
                     icon_arrow_color: Color.black,
                     act_on_changed: (d) =>
                     {
-                        SerializedProperty sp_Name = sp_current_transition_node.FindPropertyRelative("Name");
-                        SerializedProperty sp_TotalFramesCount = sp_current_transition_node.FindPropertyRelative("TotalFramesCount");
-                        SerializedProperty sp_LastFrameIndex = sp_current_transition_node.FindPropertyRelative("LastFrameIndex");
-                        SerializedProperty sp_SkipFrame = sp_current_transition_node.FindPropertyRelative("SkipFrame");
-                        SerializedProperty sp_Res = sp_current_transition_node.FindPropertyRelative("Res");
-                        SerializedProperty sp_x_frames = sp_current_transition_node.FindPropertyRelative("Frames");
+                        SerializedProperty sp_Name = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.name));
+                        SerializedProperty sp_TotalFramesCount = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.total_frames_count));
+                        SerializedProperty sp_LastFrameIndex = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.last_frame_index));
+                        SerializedProperty sp_SkipFrame = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.skip_frame));
+                        SerializedProperty sp_Res = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.res));
+                        SerializedProperty sp_x_frames = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.frames));
                         XHud_LibraryArg_Transition node = hud_manager.library_transitions.TransitionLibrary_Get(d);
                         sp_Name.stringValue = node.name;
                         sp_TotalFramesCount.intValue = node.total_frames_count;
@@ -565,7 +565,7 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 接近首帧状态
-                SerializedProperty sp_frames_co = sp_current_transition_node.FindPropertyRelative("Frames");
+                SerializedProperty sp_frames_co = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.frames));
                 int frameLimite_start = (int)Mathf.Floor(sp_frames_co.arraySize * sp_limite_frame_per_start.floatValue);
                 XGUI.layout_state_displayer_text(
                     title: "接近首帧状态",
@@ -661,8 +661,8 @@ namespace SevenStrikeModules.XHud.Editor
                 #endregion
 
                 #region 转场进度
-                SerializedProperty sp_frames = sp_current_transition_node.FindPropertyRelative("Frames");
-                SerializedProperty sp_lastframeindex = sp_current_transition_node.FindPropertyRelative("LastFrameIndex");
+                SerializedProperty sp_frames = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.frames));
+                SerializedProperty sp_lastframeindex = sp_current_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.last_frame_index));
                 if (sp_frames != null && sp_frames.arraySize > 0)
                 {
                     EditorGUI.BeginChangeCheck();

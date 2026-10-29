@@ -1139,7 +1139,7 @@ namespace SevenStrikeModules.XHud.Editor
                             title_size: XGUIFontSize.M,
                             title_hover_color: Color.white,
                             title_width: 140,
-                            prop: prop_tmp_contentmargin.FindPropertyRelative("x"),
+                            prop: prop_tmp_contentmargin.FindPropertyRelative(nameof(Vector4.x)),
                             prop_padding: new RectOffset(0, 0, 0, 0),
                             prop_margin: new RectOffset(0, 0, 0, 10));
                         #endregion
@@ -1150,7 +1150,7 @@ namespace SevenStrikeModules.XHud.Editor
                             title_size: XGUIFontSize.M,
                             title_hover_color: Color.white,
                             title_width: 140,
-                            prop: prop_tmp_contentmargin.FindPropertyRelative("y"),
+                            prop: prop_tmp_contentmargin.FindPropertyRelative(nameof(Vector4.y)),
                             prop_padding: new RectOffset(0, 0, 0, 0),
                             prop_margin: new RectOffset(0, 0, 0, 10));
                         #endregion
@@ -1168,7 +1168,7 @@ namespace SevenStrikeModules.XHud.Editor
                             title_size: XGUIFontSize.M,
                             title_hover_color: Color.white,
                             title_width: 140,
-                            prop: prop_tmp_contentmargin.FindPropertyRelative("z"),
+                            prop: prop_tmp_contentmargin.FindPropertyRelative(nameof(Vector4.z)),
                             prop_padding: new RectOffset(0, 0, 0, 0),
                             prop_margin: new RectOffset(0, 0, 0, 10));
                         #endregion
@@ -1179,7 +1179,7 @@ namespace SevenStrikeModules.XHud.Editor
                             title_size: XGUIFontSize.M,
                             title_hover_color: Color.white,
                             title_width: 140,
-                            prop: prop_tmp_contentmargin.FindPropertyRelative("w"),
+                            prop: prop_tmp_contentmargin.FindPropertyRelative(nameof(Vector4.w)),
                             prop_padding: new RectOffset(0, 0, 0, 0),
                             prop_margin: new RectOffset(0, 0, 0, 10));
                         #endregion

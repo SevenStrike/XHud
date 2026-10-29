@@ -2593,7 +2593,7 @@ namespace SevenStrikeModules.XHud.Editor
             bool hasLoop = false;
             for (int i = 0; i < sp_primitive_tween_nodes.arraySize; i++)
             {
-                SerializedProperty sp_tween_loopcount = sp_primitive_tween_nodes.GetArrayElementAtIndex(i).FindPropertyRelative("LoopCount");
+                SerializedProperty sp_tween_loopcount = sp_primitive_tween_nodes.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(TweenNode.loop_count));
                 if (sp_tween_loopcount.intValue == -1)
                 {
                     hasLoop = true;

@@ -452,7 +452,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                         for (int i = 0; i < sp_library_transitions.arraySize; i++)
                         {
-                            SerializedProperty frames = sp_library_transitions.GetArrayElementAtIndex(i).FindPropertyRelative("frames");
+                            SerializedProperty frames = sp_library_transitions.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(XHud_LibraryArg_Transition.frames));
                             frames.ClearArray();
                             frames.serializedObject.ApplyModifiedProperties();
                         }
@@ -563,13 +563,13 @@ namespace SevenStrikeModules.XHud.Editor
         private void TransitionInfoList_Original_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty prop = sp_library_transitions.GetArrayElementAtIndex(index);
-            SerializedProperty sp_name = prop.FindPropertyRelative("name");
-            SerializedProperty sp_des = prop.FindPropertyRelative("description");
-            SerializedProperty sp_TotalFramesCount = prop.FindPropertyRelative("total_frames_count");
-            SerializedProperty sp_LastFrameIndex = prop.FindPropertyRelative("last_frame_index");
-            SerializedProperty sp_SkipFrame = prop.FindPropertyRelative("skip_frame");
-            SerializedProperty sp_Res = prop.FindPropertyRelative("res");
-            SerializedProperty sp_Frames = prop.FindPropertyRelative("frames");
+            SerializedProperty sp_name = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.name));
+            SerializedProperty sp_des = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.description));
+            SerializedProperty sp_TotalFramesCount = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.total_frames_count));
+            SerializedProperty sp_LastFrameIndex = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.last_frame_index));
+            SerializedProperty sp_SkipFrame = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.skip_frame));
+            SerializedProperty sp_Res = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.res));
+            SerializedProperty sp_Frames = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.frames));
 
 #if UNITY_6000_0_OR_NEWER
             TextClipping clipping = TextClipping.Ellipsis;
@@ -782,7 +782,7 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = startIndex; i < endIndex && i < transition_info_list.count; i++)
             {
                 SerializedProperty prop = sp_library_transitions.GetArrayElementAtIndex(i);
-                SerializedProperty sp_name = prop.FindPropertyRelative("name");
+                SerializedProperty sp_name = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.name));
 
                 item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
@@ -860,13 +860,13 @@ namespace SevenStrikeModules.XHud.Editor
                 prop = sp_library_transitions.GetArrayElementAtIndex(list.index);
             }
 
-            prop.FindPropertyRelative("name").stringValue = "NewTransition";
-            prop.FindPropertyRelative("res").vector2IntValue = Vector2Int.zero;
-            prop.FindPropertyRelative("frames").ClearArray();
-            prop.FindPropertyRelative("description").stringValue = "";
-            prop.FindPropertyRelative("total_frames_count").intValue = 0;
-            prop.FindPropertyRelative("last_frame_index").intValue = 0;
-            prop.FindPropertyRelative("skip_frame").intValue = 1;
+            prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.name)).stringValue = "NewTransition";
+            prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.res)).vector2IntValue = Vector2Int.zero;
+            prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.frames)).ClearArray();
+            prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.description)).stringValue = "";
+            prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.total_frames_count)).intValue = 0;
+            prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.last_frame_index)).intValue = 0;
+            prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.skip_frame)).intValue = 1;
 
             sp_library_transitions.serializedObject.ApplyModifiedProperties();
         }

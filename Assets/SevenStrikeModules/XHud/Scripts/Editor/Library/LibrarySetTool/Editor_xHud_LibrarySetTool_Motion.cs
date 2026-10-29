@@ -302,10 +302,10 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 动效结束基准状态
-            SerializedProperty sp_MotionAnimateEndState_crc = sp_motion_create_args.FindPropertyRelative("MotionAnimateEndState");
+            SerializedProperty sp_MotionAnimateEndState_crc = sp_motion_create_args.FindPropertyRelative(nameof(Motion_Creator.MotionAnimateEndState));
             MotionAnimateEndState maes_crc = (MotionAnimateEndState)sp_MotionAnimateEndState_crc.enumValueIndex;
 
-            SerializedProperty sp_MotionAnimateEndState_rec = sp_motion_recycle_args.FindPropertyRelative("MotionAnimateEndState");
+            SerializedProperty sp_MotionAnimateEndState_rec = sp_motion_recycle_args.FindPropertyRelative(nameof(Motion_Creator.MotionAnimateEndState));
             MotionAnimateEndState maes_rec = (MotionAnimateEndState)sp_MotionAnimateEndState_rec.enumValueIndex;
             #endregion
 
@@ -524,7 +524,7 @@ namespace SevenStrikeModules.XHud.Editor
                     title_size: XGUIFontSize.M,
                     title_hover_color: Color.white,
                     title_width: 60,
-                    prop: sp_motion_create_args.FindPropertyRelative("anchor"),
+                    prop: sp_motion_create_args.FindPropertyRelative(nameof(Motion_Creator.anchor)),
                     prop_padding: new RectOffset(0, 0, 0, 0),
                     prop_margin: new RectOffset(0, 0, 0, 10));
                 #endregion
@@ -583,7 +583,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Movement.Movement") : sp_motion_recycle_args.FindPropertyRelative("Movement.Movement"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Movement)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Movement)}.{nameof(MotionNode_Movement.Movement)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -594,7 +594,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Movement.Distance") : sp_motion_recycle_args.FindPropertyRelative("Movement.Distance"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Distance)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Movement)}.{nameof(MotionNode_Movement.Distance)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -605,7 +605,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Movement.Duration") : sp_motion_recycle_args.FindPropertyRelative("Movement.Duration"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Duration)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Movement)}.{nameof(MotionNode_Movement.Duration)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -616,7 +616,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Movement.Delay") : sp_motion_recycle_args.FindPropertyRelative("Movement.Delay"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Delay)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Movement)}.{nameof(MotionNode_Movement.Delay)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -627,7 +627,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Movement.Curve") : sp_motion_recycle_args.FindPropertyRelative("Movement.Curve"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Curve)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Movement)}.{nameof(MotionNode_Movement.Curve)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -638,7 +638,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Movement.Ease") : sp_motion_recycle_args.FindPropertyRelative("Movement.Ease"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Ease)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Movement)}.{nameof(MotionNode_Movement.Ease)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -651,7 +651,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Rotation.Rotation") : sp_motion_recycle_args.FindPropertyRelative("Rotation.Rotation"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Rotation)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Rotation)}.{nameof(MotionNode_Rotation.Rotation)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -662,7 +662,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Rotation.Degree") : sp_motion_recycle_args.FindPropertyRelative("Rotation.Degree"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Degree)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Rotation)}.{nameof(MotionNode_Rotation.Degree)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -673,7 +673,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Rotation.Duration") : sp_motion_recycle_args.FindPropertyRelative("Rotation.Duration"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Duration)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Rotation)}.{nameof(MotionNode_Rotation.Duration)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -684,7 +684,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Rotation.Delay") : sp_motion_recycle_args.FindPropertyRelative("Rotation.Delay"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Delay)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Rotation)}.{nameof(MotionNode_Rotation.Delay)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -695,7 +695,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Rotation.Curve") : sp_motion_recycle_args.FindPropertyRelative("Rotation.Curve"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Curve)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Rotation)}.{nameof(MotionNode_Rotation.Curve)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -706,7 +706,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Rotation.Ease") : sp_motion_recycle_args.FindPropertyRelative("Rotation.Ease"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Ease)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Rotation)}.{nameof(MotionNode_Rotation.Ease)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -719,7 +719,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Alpha.Duration") : sp_motion_recycle_args.FindPropertyRelative("Alpha.Duration"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Duration)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Alpha)}.{nameof(MotionNode_Alpha.Duration)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -730,7 +730,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Alpha.Delay") : sp_motion_recycle_args.FindPropertyRelative("Alpha.Delay"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Delay)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Alpha)}.{nameof(MotionNode_Alpha.Delay)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -741,7 +741,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Alpha.Curve") : sp_motion_recycle_args.FindPropertyRelative("Alpha.Curve"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Curve)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Alpha)}.{nameof(MotionNode_Alpha.Curve)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -752,7 +752,7 @@ namespace SevenStrikeModules.XHud.Editor
                         title_size: XGUIFontSize.M,
                         title_hover_color: Color.white,
                         title_width: 60,
-                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative("Alpha.Ease") : sp_motion_recycle_args.FindPropertyRelative("Alpha.Ease"),
+                        prop: type == HudElementMotionType.Creator ? sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Ease)}") : sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Alpha)}.{nameof(MotionNode_Alpha.Ease)}"),
                         prop_padding: new RectOffset(0, 0, 0, 0),
                         prop_margin: new RectOffset(0, 0, 0, 10));
                     #endregion
@@ -861,14 +861,14 @@ namespace SevenStrikeModules.XHud.Editor
             string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             SerializedProperty sp_ender = type == HudElementMotionType.Creator ?
-                sp_motion_create_args.FindPropertyRelative("MotionAnimateEndState") :
-                sp_motion_recycle_args.FindPropertyRelative("MotionAnimateEndState");
+                sp_motion_create_args.FindPropertyRelative(nameof(Motion_Creator.MotionAnimateEndState)) :
+                sp_motion_recycle_args.FindPropertyRelative(nameof(Motion_Creator.MotionAnimateEndState));
 
             MotionAnimateEndState state = type == HudElementMotionType.Creator ? (MotionAnimateEndState)sp_ender.enumValueIndex : (MotionAnimateEndState)sp_ender.enumValueIndex;
             switch (state)
             {
                 case MotionAnimateEndState.以_移动为准:
-                    HudMotion_Movement m_m = type == HudElementMotionType.Creator ? (HudMotion_Movement)sp_motion_create_args.FindPropertyRelative("Movement.Movement").enumValueIndex : (HudMotion_Movement)sp_motion_recycle_args.FindPropertyRelative("Movement.Movement").enumValueIndex;
+                    HudMotion_Movement m_m = type == HudElementMotionType.Creator ? (HudMotion_Movement)sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Movement)}").enumValueIndex : (HudMotion_Movement)sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Movement)}.{nameof(MotionNode_Movement.Movement)}").enumValueIndex;
 
                     if (m_m == HudMotion_Movement.A_无运动)
                     {
@@ -893,7 +893,7 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     break;
                 case MotionAnimateEndState.以_旋转为准:
-                    HudMotion_Rotation m_r = type == HudElementMotionType.Creator ? (HudMotion_Rotation)sp_motion_create_args.FindPropertyRelative("Rotation.Rotation").enumValueIndex : (HudMotion_Rotation)sp_motion_recycle_args.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
+                    HudMotion_Rotation m_r = type == HudElementMotionType.Creator ? (HudMotion_Rotation)sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Rotation)}").enumValueIndex : (HudMotion_Rotation)sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Recycler.Rotation)}.{nameof(MotionNode_Rotation.Rotation)}").enumValueIndex;
                     if (m_r == HudMotion_Rotation.A_无旋转)
                     {
                         if (type == HudElementMotionType.Creator)
@@ -1014,32 +1014,35 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void motion_reset(SerializedProperty prop)
         {
-            if (prop.type == "Motion_Creator")
-                prop.FindPropertyRelative("anchor").enumValueIndex = (int)XHudAnchor.中心;
+            bool creator_mode = true;
+            if (prop.type == nameof(Motion_Creator))
+                prop.FindPropertyRelative(nameof(Motion_Creator.anchor)).enumValueIndex = (int)XHudAnchor.中心;
+            else
+                creator_mode = false;
 
-            prop.FindPropertyRelative("Movement.Movement").enumValueIndex = prop.type == "Motion_Creator" ? (int)HudMotion_Movement.S_从下至上 : (int)HudMotion_Movement.D_从上至下;
-            prop.FindPropertyRelative("Movement.Distance").floatValue = 100;
-            prop.FindPropertyRelative("Movement.Duration").floatValue = 1;
-            prop.FindPropertyRelative("Movement.Delay").floatValue = 0;
-            prop.FindPropertyRelative("Movement.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
-            prop.FindPropertyRelative("Movement.CurveName").stringValue = "";
-            prop.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Movement) : nameof(Motion_Recycler.Movement))}.{nameof(MotionNode_Movement.Movement)}").enumValueIndex = prop.type == nameof(Motion_Creator) ? (int)HudMotion_Movement.S_从下至上 : (int)HudMotion_Movement.D_从上至下;
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Movement) : nameof(Motion_Recycler.Movement))}.{nameof(MotionNode_Movement.Distance)}").floatValue = 100;
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Movement) : nameof(Motion_Recycler.Movement))}.{nameof(MotionNode_Movement.Duration)}").floatValue = 1;
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Movement) : nameof(Motion_Recycler.Movement))}.{nameof(MotionNode_Movement.Delay)}").floatValue = 0;
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Movement) : nameof(Motion_Recycler.Movement))}.{nameof(MotionNode_Movement.Curve)}").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Movement) : nameof(Motion_Recycler.Movement))}.{nameof(MotionNode_Movement.CurveName)}").stringValue = "";
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Movement) : nameof(Motion_Recycler.Movement))}.{nameof(MotionNode_Movement.Ease)}").enumValueIndex = (int)EaseMode.InOutCubic;
 
-            prop.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)HudMotion_Rotation.A_无旋转;
-            prop.FindPropertyRelative("Rotation.Degree").floatValue = 0;
-            prop.FindPropertyRelative("Rotation.Duration").floatValue = 1;
-            prop.FindPropertyRelative("Rotation.Delay").floatValue = 0;
-            prop.FindPropertyRelative("Rotation.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
-            prop.FindPropertyRelative("Rotation.CurveName").stringValue = "";
-            prop.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Rotation) : nameof(Motion_Recycler.Rotation))}.{nameof(MotionNode_Rotation.Rotation)}").enumValueIndex = (int)HudMotion_Rotation.A_无旋转;
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Rotation) : nameof(Motion_Recycler.Rotation))}.{nameof(MotionNode_Rotation.Degree)}").floatValue = 0;
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Rotation) : nameof(Motion_Recycler.Rotation))}.{nameof(MotionNode_Rotation.Duration)}").floatValue = 1;
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Rotation) : nameof(Motion_Recycler.Rotation))}.{nameof(MotionNode_Rotation.Delay)}").floatValue = 0;
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Rotation) : nameof(Motion_Recycler.Rotation))}.{nameof(MotionNode_Rotation.Curve)}").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Rotation) : nameof(Motion_Recycler.Rotation))}.{nameof(MotionNode_Rotation.CurveName)}").stringValue = "";
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Rotation) : nameof(Motion_Recycler.Rotation))}.{nameof(MotionNode_Rotation.Ease)}").enumValueIndex = (int)EaseMode.InOutCubic;
 
-            prop.FindPropertyRelative("Alpha.Duration").floatValue = 1;
-            prop.FindPropertyRelative("Alpha.Delay").floatValue = 0;
-            prop.FindPropertyRelative("Alpha.Curve").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
-            prop.FindPropertyRelative("Alpha.CurveName").stringValue = "";
-            prop.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)EaseMode.InOutCubic;
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Alpha) : nameof(Motion_Recycler.Alpha))}.{nameof(MotionNode_Alpha.Duration)}").floatValue = 1;
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Alpha) : nameof(Motion_Recycler.Alpha))}.{nameof(MotionNode_Alpha.Delay)}").floatValue = 0;
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Alpha) : nameof(Motion_Recycler.Alpha))}.{nameof(MotionNode_Alpha.Curve)}").animationCurveValue = AnimationCurve.EaseInOut(0, 0, 1, 1);
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Alpha) : nameof(Motion_Recycler.Alpha))}.{nameof(MotionNode_Alpha.CurveName)}").stringValue = "";
+            prop.FindPropertyRelative($"{(creator_mode ? nameof(Motion_Creator.Alpha) : nameof(Motion_Recycler.Alpha))}.{nameof(MotionNode_Alpha.Ease)}").enumValueIndex = (int)EaseMode.InOutCubic;
 
-            prop.FindPropertyRelative("MotionAnimateEndState").enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
+            prop.FindPropertyRelative((creator_mode ? nameof(Motion_Creator.MotionAnimateEndState) : nameof(Motion_Recycler.MotionAnimateEndState))).enumValueIndex = (int)MotionAnimateEndState.以_透明度为准;
             prop.serializedObject.ApplyModifiedProperties();
         }
         #endregion

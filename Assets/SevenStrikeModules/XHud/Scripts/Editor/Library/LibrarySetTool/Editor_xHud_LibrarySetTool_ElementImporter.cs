@@ -557,8 +557,8 @@ namespace SevenStrikeModules.XHud.Editor
         private void DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty prop = sp_element_list.GetArrayElementAtIndex(index);
-            SerializedProperty prop_Info = prop.FindPropertyRelative("info");
-            SerializedProperty sp_name = prop_Info.FindPropertyRelative("name");
+            SerializedProperty prop_Info = prop.FindPropertyRelative(nameof(ReadyLibElement.info));
+            SerializedProperty sp_name = prop_Info.FindPropertyRelative(nameof(ReadyElementInfo.name));
 
             #region 预生成元素索引号
             XGUI.gui_label(

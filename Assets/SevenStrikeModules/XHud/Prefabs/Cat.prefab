@@ -1333,7 +1333,6 @@ GameObject:
   - component: {fileID: 8857759656416062061}
   - component: {fileID: 5955396475993730850}
   - component: {fileID: 3093053317171108072}
-  - component: {fileID: 1431417744207424815}
   m_Layer: 8
   m_Name: Cat
   m_TagString: Untagged
@@ -1371,7 +1370,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5755098906041804970}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -1440,7 +1439,7 @@ MonoBehaviour:
   element_space_type: 0
   created_source_type: 0
   tween_preview_is_playing: 0
-  fold_param: 1
+  fold_param: 0
   fold_preview: 0
   fold_state: 1
   fold_option: 1
@@ -1721,7 +1720,7 @@ MonoBehaviour:
   progress: {fileID: 0}
   option: {fileID: 0}
   button: {fileID: 0}
-  sound_name: DefaultSound
+  sound_name: "\u7535\u5B50\u6FC0\u5149\u58F011"
   delay_time: 0
   indicator: 
   timings: "\u65E0"
@@ -1736,230 +1735,6 @@ MonoBehaviour:
   fold_param: 0
   fold_option: 1
   fold_state: 1
-  fold_based: 1
---- !u!114 &1431417744207424815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5755098906041804970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e623c31c6fe2624eb7a4ebeb2a07f7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  element: {fileID: 5955396475993730850}
-  is_enabled: 1
-  debug_state: 0
-  key_element_in: 99
-  key_element_out: 118
-  motion_create_args:
-    anchor: 5
-    MotionAnimateEndState: 0
-    Alpha:
-      Duration: 1
-      Delay: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      CurveName: 
-      Ease: 10
-    Movement:
-      Movement: 1
-      Distance: 100
-      Duration: 1
-      Delay: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      CurveName: 
-      Ease: 10
-    Rotation:
-      Rotation: 0
-      Degree: 0
-      Duration: 1
-      Delay: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      CurveName: 
-      Ease: 10
-  motion_recycle_args:
-    MotionAnimateEndState: 0
-    Alpha:
-      Duration: 1
-      Delay: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      CurveName: 
-      Ease: 10
-    Movement:
-      Movement: 0
-      Distance: 100
-      Duration: 1
-      Delay: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      CurveName: 
-      Ease: 10
-    Rotation:
-      Rotation: 0
-      Degree: 0
-      Duration: 1
-      Delay: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        - serializedVersion: 3
-          time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      CurveName: 
-      Ease: 10
-  motion_create_library_index_name: 
-  motion_recycle_library_index_name: 
-  delay_with_in: 0
-  delay_with_out: 0
-  preset_position: {x: 0, y: 0, z: 0}
-  preset_euler: {x: 0, y: 0, z: 0}
-  duration_scaler: 1
-  hide_with_start: 1
-  rms_enabled: 0
-  rms_name: 
-  element_is_in: 1
-  m_preview_is_running: 0
-  fold_options: 1
-  fold_param: 0
-  fold_key: 0
-  fold_state: 0
-  fold_motion: 0
-  fold_preset_trans: 1
-  fold_rms: 1
   fold_based: 1
 --- !u!1 &7198499336320210616
 GameObject:

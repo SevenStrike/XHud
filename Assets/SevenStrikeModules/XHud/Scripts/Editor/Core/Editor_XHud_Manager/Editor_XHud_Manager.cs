@@ -1396,8 +1396,8 @@ namespace SevenStrikeModules.XHud.Editor
                             {
                                 UnityEngine.RectTransform obj = root.GetChild(i).GetComponent<UnityEngine.RectTransform>();
                                 sp_cv_anchors_layout_screen.InsertArrayElementAtIndex(sp_cv_anchors_layout_screen.arraySize);
-                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Name").stringValue = obj.name;
-                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Anchor").objectReferenceValue = obj;
+                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Name)).stringValue = obj.name;
+                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Anchor)).objectReferenceValue = obj;
                                 if (obj.childCount > 0)
                                 {
                                     for (int c = 0; c < obj.childCount; c++)
@@ -1405,7 +1405,7 @@ namespace SevenStrikeModules.XHud.Editor
                                         if (obj.GetChild(c).name == "Mark")
                                         {
                                             Image mark = obj.GetChild(c).GetComponent<Image>();
-                                            sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Mark").objectReferenceValue = mark;
+                                            sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Mark)).objectReferenceValue = mark;
                                         }
                                     }
                                 }

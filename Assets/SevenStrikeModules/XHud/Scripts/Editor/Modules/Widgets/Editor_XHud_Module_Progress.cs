@@ -28,30 +28,14 @@ namespace SevenStrikeModules.XHud.Editor
     using UnityEditorInternal;
     using UnityEngine;
 
-    public class XHud_ModuleArg_Progress
-    {
-        public string Indicator;
-        public bool DebugState;
-        public string con_title;
-        public string con_subtitle;
-        public int ProgressPrecision;
-        public string ProgressUnit;
-        public float ProgressTweenSpeedMultiply;
-        public bool EaseMotion;
-        public bool ProgressIsFinished;
-        public float ProgressValue;
-        public float sm_ProgressValue;
-        public float ProgressValueDuration;
-    }
-
     [CanEditMultipleObjects]
     [CustomEditor(typeof(XHud_Module_Progress), true)]
     public class Editor_XHud_Module_Progress : Editor
     {
         #region 组件 / 列表
-        private XHud_Module_Progress BaseScript;
+        private XHud_Module_Progress base_script;
         private ReorderableList PrimitivesTweenList;
-        private XHud_Manager HudManager;
+        private XHud_Manager hud_manager;
         #endregion
 
         #region 序列化属性
@@ -76,31 +60,31 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 批量化操作
-        XHud_Module_Progress[] SelectedObjects;
+        XHud_Module_Progress[] selected_objects;
 
         private void Targets_Get()
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new XHud_Module_Progress[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new XHud_Module_Progress[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (XHud_Module_Progress)t;
+                    selected_objects[i] = (XHud_Module_Progress)t;
                 }
             }
             else
             {
-                SelectedObjects = new XHud_Module_Progress[targets.Length];
-                SelectedObjects[0] = (XHud_Module_Progress)target;
+                selected_objects = new XHud_Module_Progress[targets.Length];
+                selected_objects[0] = (XHud_Module_Progress)target;
             }
         }
 
         private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }
@@ -124,19 +108,55 @@ namespace SevenStrikeModules.XHud.Editor
 
         void OnEnable()
         {
-            HudManager = XHud_Dashboard.get_manager();
+            hud_manager = XHud_Dashboard.get_manager();
 
-            BaseScript = (XHud_Module_Progress)target;
+            base_script = (XHud_Module_Progress)target;
 
-            RectTransform = serializedObject.FindProperty("RectTransform");
+            RectTransform = serializedObject.FindProperty(nameof(XHud_Module_Progress.RectTransform));
             if (RectTransform.objectReferenceValue == null)
             {
-                RectTransform.objectReferenceValue = BaseScript.GetComponent<RectTransform>();
+                RectTransform.objectReferenceValue = base_script.GetComponent<RectTransform>();
                 RectTransform.serializedObject.ApplyModifiedProperties();
             }
 
-            // 获取序列化属性
-            GetSerializeFields();
+            #region 获取序列化属性
+            sp_Indicator = serializedObject.FindProperty(nameof(XHud_Module_Progress.Indicator));
+            sp_debugstate = serializedObject.FindProperty(nameof(XHud_Module_Progress.DebugState));
+            eve_on_ValueChanged = serializedObject.FindProperty(nameof(XHud_Module_Progress.eve_on_ValueChanged));
+            eve_on_ValueStart = serializedObject.FindProperty(nameof(XHud_Module_Progress.eve_on_ValueStart));
+            eve_on_ValueEnd = serializedObject.FindProperty(nameof(XHud_Module_Progress.eve_on_ValueEnd));
+            pro_Text_Title = serializedObject.FindProperty(nameof(XHud_Module_Progress.pro_Text_Title));
+            pro_TmpText_Title = serializedObject.FindProperty(nameof(XHud_Module_Progress.pro_TmpText_Title));
+            pro_Text_Subtitle = serializedObject.FindProperty(nameof(XHud_Module_Progress.pro_Text_Subtitle));
+            pro_TmpText_Subtitle = serializedObject.FindProperty(nameof(XHud_Module_Progress.pro_TmpText_Subtitle));
+            pro_Text_Percent = serializedObject.FindProperty(nameof(XHud_Module_Progress.pro_Text_Percent));
+            pro_TmpText_Percent = serializedObject.FindProperty(nameof(XHud_Module_Progress.pro_TmpText_Percent));
+            pro_Bg = serializedObject.FindProperty(nameof(XHud_Module_Progress.pro_Bg));
+            pro_Fore = serializedObject.FindProperty(nameof(XHud_Module_Progress.pro_Fore));
+            pro_Icon = serializedObject.FindProperty(nameof(XHud_Module_Progress.pro_Icon));
+            pro_Handle = serializedObject.FindProperty(nameof(XHud_Module_Progress.pro_Handle));
+            ProgressValue = serializedObject.FindProperty(nameof(XHud_Module_Progress.ProgressValue));
+            ProgressValueDuration = serializedObject.FindProperty(nameof(XHud_Module_Progress.ProgressValueDuration));
+            ProgressPrecision = serializedObject.FindProperty(nameof(XHud_Module_Progress.ProgressPrecision));
+            con_title = serializedObject.FindProperty(nameof(XHud_Module_Progress.con_title));
+            con_subtitle = serializedObject.FindProperty(nameof(XHud_Module_Progress.con_subtitle));
+            LerpMotion = serializedObject.FindProperty(nameof(XHud_Module_Progress.LerpMotion));
+            ProgressUnit = serializedObject.FindProperty(nameof(XHud_Module_Progress.ProgressUnit));
+            EventIsFold = serializedObject.FindProperty(nameof(XHud_Module_Progress.EventIsFold));
+            AnimateState = serializedObject.FindProperty(nameof(XHud_Module_Progress.AnimateState));
+            AutoStopPreview = serializedObject.FindProperty(nameof(XHud_Module_Progress.AutoStopPreview));
+            Display_ProgressRect_Fore = serializedObject.FindProperty(nameof(XHud_Module_Progress.Display_ProgressRect_Fore));
+            Display_ProgressRect_Bg = serializedObject.FindProperty(nameof(XHud_Module_Progress.Display_ProgressRect_Bg));
+            Display_ProgressRect_Handle = serializedObject.FindProperty(nameof(XHud_Module_Progress.Display_ProgressRect_Handle));
+            Display_Icon = serializedObject.FindProperty(nameof(XHud_Module_Progress.Display_Icon));
+            Display_Title = serializedObject.FindProperty(nameof(XHud_Module_Progress.Display_Title));
+            Display_SubTitle = serializedObject.FindProperty(nameof(XHud_Module_Progress.Display_SubTitle));
+            Display_Value = serializedObject.FindProperty(nameof(XHud_Module_Progress.Display_Value));
+            PrimitiveControllerNodes = serializedObject.FindProperty(nameof(XHud_Module_Progress.PrimitiveControllerNodes));
+            PrimitivesTweenMaxDuration = serializedObject.FindProperty(nameof(XHud_Module_Progress.PrimitivesTweenMaxDuration));
+            PrimitivesTweenGlobalDuration = serializedObject.FindProperty(nameof(XHud_Module_Progress.PrimitivesTweenGlobalDuration));
+            PrimitivesIsFold = serializedObject.FindProperty(nameof(XHud_Module_Progress.PrimitivesIsFold));
+            #endregion
 
             #region 获取图标
             icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Progress/icon_main");
@@ -179,8 +199,8 @@ namespace SevenStrikeModules.XHud.Editor
                     float baseheight = rect.y + (rect.height - 25);
 
                     SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(index);
-                    SerializedProperty sp_node_con = PrimitiveControllerNodes.GetArrayElementAtIndex(index).FindPropertyRelative("Controller");
-                    SerializedProperty sp_delay = sp_node.FindPropertyRelative("DelayTime");
+                    SerializedProperty sp_node_con = PrimitiveControllerNodes.GetArrayElementAtIndex(index).FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
+                    SerializedProperty sp_delay = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.delay_time));
                     XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
 
                     if (sp_node_con.objectReferenceValue != null)
@@ -210,8 +230,8 @@ namespace SevenStrikeModules.XHud.Editor
                         SerializedObject so_anim = new SerializedObject(sp_con.pt_tween);
                         so_anim.Update();
 
-                        SerializedProperty sp_glodur = so_anim.FindProperty("GlobalDuration");
-                        SerializedProperty sp_maxdur = so_anim.FindProperty("MaxTimerWithGlobalDuration");
+                        SerializedProperty sp_glodur = so_anim.FindProperty(nameof(XHud_Module_Primitive_Tween.global_duration));
+                        SerializedProperty sp_maxdur = so_anim.FindProperty(nameof(XHud_Module_Primitive_Tween.max_timer_with_global_duration));
 
                         Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 50, rect.y + 4, 30, 19), "G", sp_glodur, 10, 40, LineHeight, 15);
 
@@ -233,7 +253,7 @@ namespace SevenStrikeModules.XHud.Editor
                     }
 
                     SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(list.index);
-                    SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                    SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
 
                     if (sp_node_con != null)
                     {
@@ -262,10 +282,10 @@ namespace SevenStrikeModules.XHud.Editor
         {
             serializedObject.Update();
 
-            if (string.IsNullOrEmpty(BaseScript.Indicator))
+            if (string.IsNullOrEmpty(base_script.Indicator))
                 Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 进度条", Color.white);
             else
-                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 进度条-> ( " + BaseScript.Indicator + " )", Color.white);
+                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "Hud - 进度条-> ( " + base_script.Indicator + " )", Color.white);
 
             #region 快捷功能
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "快捷功能", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
@@ -325,11 +345,11 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("状态调试", stroptions_debug, ref sp_debugstate, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("状态调试", stroptions_debug, ref sp_debugstate, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("自动停止预览", stroptions_enabled, ref AutoStopPreview, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("自动停止预览", stroptions_enabled, ref AutoStopPreview, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("平滑模式", stroptions_smooth, ref LerpMotion, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("平滑模式", stroptions_smooth, ref LerpMotion, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
             Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
@@ -371,8 +391,8 @@ namespace SevenStrikeModules.XHud.Editor
 
             if (EditorGUI.EndChangeCheck())
             {
-                BaseScript.pro_TitleSet(con_title.stringValue);
-                BaseScript.pro_SubTitleSet(con_subtitle.stringValue);
+                base_script.pro_TitleSet(con_title.stringValue);
+                base_script.pro_SubTitleSet(con_subtitle.stringValue);
                 UpdateProgress();
             }
             Editor_XHud_GUI.Gui_Layout_Space(10);
@@ -436,44 +456,44 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
             EditorGUI.BeginChangeCheck();
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("前景", stroptions_enabled, ref Display_ProgressRect_Fore, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("前景", stroptions_enabled, ref Display_ProgressRect_Fore, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("背景", stroptions_enabled, ref Display_ProgressRect_Bg, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("背景", stroptions_enabled, ref Display_ProgressRect_Bg, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("标记", stroptions_enabled, ref Display_ProgressRect_Handle, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("标记", stroptions_enabled, ref Display_ProgressRect_Handle, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("图标", stroptions_enabled, ref Display_Icon, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("图标", stroptions_enabled, ref Display_Icon, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("标题", stroptions_enabled, ref Display_Title, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("标题", stroptions_enabled, ref Display_Title, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("副标题", stroptions_enabled, ref Display_SubTitle, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("副标题", stroptions_enabled, ref Display_SubTitle, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("进度值", stroptions_enabled, ref Display_Value, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Progress>("进度值", stroptions_enabled, ref Display_Value, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
             if (EditorGUI.EndChangeCheck())
             {
                 if (Targets_Selected())
                 {
-                    for (int i = 0; i < SelectedObjects.Length; i++)
+                    for (int i = 0; i < selected_objects.Length; i++)
                     {
-                        SelectedObjects[i].pro_SetDisplay_ProgressRect_Fore(SelectedObjects[i].Display_ProgressRect_Fore);
-                        SelectedObjects[i].pro_SetDisplay_ProgressRect_Bg(SelectedObjects[i].Display_ProgressRect_Bg);
-                        SelectedObjects[i].pro_SetDisplay_ProgressRect_Handle(SelectedObjects[i].Display_ProgressRect_Handle);
-                        SelectedObjects[i].pro_SetDisplay_Icon(SelectedObjects[i].Display_Icon);
-                        SelectedObjects[i].pro_SetDisplay_Title(SelectedObjects[i].Display_Title);
-                        SelectedObjects[i].pro_SetDisplay_SubTitle(SelectedObjects[i].Display_SubTitle);
-                        SelectedObjects[i].pro_SetDisplay_Value(SelectedObjects[i].Display_Value);
+                        selected_objects[i].pro_SetDisplay_ProgressRect_Fore(selected_objects[i].Display_ProgressRect_Fore);
+                        selected_objects[i].pro_SetDisplay_ProgressRect_Bg(selected_objects[i].Display_ProgressRect_Bg);
+                        selected_objects[i].pro_SetDisplay_ProgressRect_Handle(selected_objects[i].Display_ProgressRect_Handle);
+                        selected_objects[i].pro_SetDisplay_Icon(selected_objects[i].Display_Icon);
+                        selected_objects[i].pro_SetDisplay_Title(selected_objects[i].Display_Title);
+                        selected_objects[i].pro_SetDisplay_SubTitle(selected_objects[i].Display_SubTitle);
+                        selected_objects[i].pro_SetDisplay_Value(selected_objects[i].Display_Value);
                     }
                 }
                 else
                 {
-                    BaseScript.pro_SetDisplay_ProgressRect_Fore(BaseScript.Display_ProgressRect_Fore);
-                    BaseScript.pro_SetDisplay_ProgressRect_Bg(BaseScript.Display_ProgressRect_Bg);
-                    BaseScript.pro_SetDisplay_ProgressRect_Handle(BaseScript.Display_ProgressRect_Handle);
-                    BaseScript.pro_SetDisplay_Icon(BaseScript.Display_Icon);
-                    BaseScript.pro_SetDisplay_Title(BaseScript.Display_Title);
-                    BaseScript.pro_SetDisplay_SubTitle(BaseScript.Display_SubTitle);
-                    BaseScript.pro_SetDisplay_Value(BaseScript.Display_Value);
+                    base_script.pro_SetDisplay_ProgressRect_Fore(base_script.Display_ProgressRect_Fore);
+                    base_script.pro_SetDisplay_ProgressRect_Bg(base_script.Display_ProgressRect_Bg);
+                    base_script.pro_SetDisplay_ProgressRect_Handle(base_script.Display_ProgressRect_Handle);
+                    base_script.pro_SetDisplay_Icon(base_script.Display_Icon);
+                    base_script.pro_SetDisplay_Title(base_script.Display_Title);
+                    base_script.pro_SetDisplay_SubTitle(base_script.Display_SubTitle);
+                    base_script.pro_SetDisplay_Value(base_script.Display_Value);
                 }
             }
 
@@ -506,7 +526,7 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 最大耗时        
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.tween_global_duration * PrimitivesTweenMaxDuration.floatValue).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (hud_manager.tween_global_duration * PrimitivesTweenMaxDuration.floatValue).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     #endregion
                 }
                 #endregion
@@ -518,27 +538,27 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 批量控件
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
-                if (Editor_XHud_GUI.Gui_Layout_Button($"{SelectedObjects[ProgressStatu_Index].name} ( {SelectedObjects[ProgressStatu_Index].Indicator} )", "", HudFilled.透明, HudColor.无, Color.gray, 20))
+                if (Editor_XHud_GUI.Gui_Layout_Button($"{selected_objects[ProgressStatu_Index].name} ( {selected_objects[ProgressStatu_Index].Indicator} )", "", HudFilled.透明, HudColor.无, Color.gray, 20))
                 {
-                    EditorGUIUtility.PingObject(SelectedObjects[ProgressStatu_Index]);
+                    EditorGUIUtility.PingObject(selected_objects[ProgressStatu_Index]);
                 }
                 Editor_XHud_GUI.Gui_Layout_FlexSpace();
                 if (Editor_XHud_GUI.Gui_Layout_Button(12, "", left_arrow_r, left_arrow_p))
                 {
                     if (ProgressStatu_Index <= 0)
                     {
-                        ProgressStatu_Index = SelectedObjects.Length - 1;
+                        ProgressStatu_Index = selected_objects.Length - 1;
                     }
                     else
                     {
                         ProgressStatu_Index--;
                     }
-                    EditorGUIUtility.PingObject(SelectedObjects[ProgressStatu_Index]);
+                    EditorGUIUtility.PingObject(selected_objects[ProgressStatu_Index]);
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(16);
                 if (Editor_XHud_GUI.Gui_Layout_Button(12, "", right_arrow_r, right_arrow_p))
                 {
-                    if (ProgressStatu_Index >= SelectedObjects.Length - 1)
+                    if (ProgressStatu_Index >= selected_objects.Length - 1)
                     {
                         ProgressStatu_Index = 0;
                     }
@@ -546,31 +566,31 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         ProgressStatu_Index++;
                     }
-                    EditorGUIUtility.PingObject(SelectedObjects[ProgressStatu_Index]);
+                    EditorGUIUtility.PingObject(selected_objects[ProgressStatu_Index]);
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(5);
                 Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 #endregion
 
                 #region 进度条状态
-                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "进度状态", 12, SelectedObjects[ProgressStatu_Index].ProgressValue.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "进度状态", 12, selected_objects[ProgressStatu_Index].ProgressValue.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                 #endregion
 
                 #region 动画相关
-                if (SelectedObjects[ProgressStatu_Index].PrimitiveControllerNodes != null && SelectedObjects[ProgressStatu_Index].PrimitiveControllerNodes.Count > 0)
+                if (selected_objects[ProgressStatu_Index].PrimitiveControllerNodes != null && selected_objects[ProgressStatu_Index].PrimitiveControllerNodes.Count > 0)
                 {
                     #region 动画状态     
-                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[ProgressStatu_Index].AnimateState == XHudElementAnimateState.Animating ? "动画中" : "静止状态", SelectedObjects[ProgressStatu_Index].AnimateState == XHudElementAnimateState.Animating ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, selected_objects[ProgressStatu_Index].AnimateState == XHudElementAnimateState.Animating ? "动画中" : "静止状态", selected_objects[ProgressStatu_Index].AnimateState == XHudElementAnimateState.Animating ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray, 11);
                     #endregion
 
-                    SelectedObjects[ProgressStatu_Index].PrimitivesTweenMaxDuration = PrimitiveTweens_MaxDuration_Get(SelectedObjects[ProgressStatu_Index].PrimitiveControllerNodes, SelectedObjects[ProgressStatu_Index].PrimitivesTweenGlobalDuration);
+                    selected_objects[ProgressStatu_Index].PrimitivesTweenMaxDuration = PrimitiveTweens_MaxDuration_Get(selected_objects[ProgressStatu_Index].PrimitiveControllerNodes, selected_objects[ProgressStatu_Index].PrimitivesTweenGlobalDuration);
 
                     #region 最大耗时     
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, SelectedObjects[ProgressStatu_Index].PrimitivesTweenMaxDuration.ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, selected_objects[ProgressStatu_Index].PrimitivesTweenMaxDuration.ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     #endregion
 
                     #region 最大耗时        
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.tween_global_duration * SelectedObjects[ProgressStatu_Index].PrimitivesTweenMaxDuration).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (hud_manager.tween_global_duration * selected_objects[ProgressStatu_Index].PrimitivesTweenMaxDuration).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     #endregion
                 }
                 #endregion
@@ -608,27 +628,27 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 批量控件
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
-                if (Editor_XHud_GUI.Gui_Layout_Button($"{SelectedObjects[ProgressStatistic_Index].name} ( {SelectedObjects[ProgressStatistic_Index].Indicator} )", "", HudFilled.透明, HudColor.无, Color.gray, 20))
+                if (Editor_XHud_GUI.Gui_Layout_Button($"{selected_objects[ProgressStatistic_Index].name} ( {selected_objects[ProgressStatistic_Index].Indicator} )", "", HudFilled.透明, HudColor.无, Color.gray, 20))
                 {
-                    EditorGUIUtility.PingObject(SelectedObjects[ProgressStatistic_Index]);
+                    EditorGUIUtility.PingObject(selected_objects[ProgressStatistic_Index]);
                 }
                 Editor_XHud_GUI.Gui_Layout_FlexSpace();
                 if (Editor_XHud_GUI.Gui_Layout_Button(12, "", left_arrow_r, left_arrow_p))
                 {
                     if (ProgressStatistic_Index <= 0)
                     {
-                        ProgressStatistic_Index = SelectedObjects.Length - 1;
+                        ProgressStatistic_Index = selected_objects.Length - 1;
                     }
                     else
                     {
                         ProgressStatistic_Index--;
                     }
-                    EditorGUIUtility.PingObject(SelectedObjects[ProgressStatistic_Index]);
+                    EditorGUIUtility.PingObject(selected_objects[ProgressStatistic_Index]);
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(16);
                 if (Editor_XHud_GUI.Gui_Layout_Button(12, "", right_arrow_r, right_arrow_p))
                 {
-                    if (ProgressStatistic_Index >= SelectedObjects.Length - 1)
+                    if (ProgressStatistic_Index >= selected_objects.Length - 1)
                     {
                         ProgressStatistic_Index = 0;
                     }
@@ -636,22 +656,22 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         ProgressStatistic_Index++;
                     }
-                    EditorGUIUtility.PingObject(SelectedObjects[ProgressStatistic_Index]);
+                    EditorGUIUtility.PingObject(selected_objects[ProgressStatistic_Index]);
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(5);
                 Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 #endregion
 
-                if (SelectedObjects[ProgressStatistic_Index].PrimitiveControllerNodes.Count <= 0)
+                if (selected_objects[ProgressStatistic_Index].PrimitiveControllerNodes.Count <= 0)
                 {
                     Editor_XHud_GUI.Gui_Layout_Labelfield("暂无统计数据", HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.阴影灰), TextAnchor.MiddleCenter);
                 }
                 else
                 {
                     #region 组件数量 - 图元动画器
-                    if (SelectedObjects[ProgressStatistic_Index].PrimitiveControllerNodes.Count > 0)
+                    if (selected_objects[ProgressStatistic_Index].PrimitiveControllerNodes.Count > 0)
                     {
-                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, SelectedObjects[ProgressStatistic_Index].PrimitiveControllerNodes.Count.ToString() + " 个", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, selected_objects[ProgressStatistic_Index].PrimitiveControllerNodes.Count.ToString() + " 个", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     }
                     #endregion
                 }
@@ -734,76 +754,10 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
+            #region 弹出菜单
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
             {
-                SerializedProperty sp_Indicator = serializedObject.FindProperty("Indicator");
-                SerializedProperty sp_debugstate = serializedObject.FindProperty("DebugState");
-                SerializedProperty sp_con_title = serializedObject.FindProperty("con_title");
-                SerializedProperty sp_con_subtitle = serializedObject.FindProperty("con_subtitle");
-                SerializedProperty sp_ProgressPrecision = serializedObject.FindProperty("ProgressPrecision");
-                SerializedProperty sp_ProgressUnit = serializedObject.FindProperty("ProgressUnit");
-                SerializedProperty sp_ProgressTweenSpeedMultiply = serializedObject.FindProperty("ProgressTweenSpeedMultiply");
-                SerializedProperty sp_ToggleTweenSpeedMultiply = serializedObject.FindProperty("ToggleTweenSpeedMultiply");
-                SerializedProperty sp_LerpMotion = serializedObject.FindProperty("LerpMotion");
-                SerializedProperty sp_ProgressIsFinished = serializedObject.FindProperty("ProgressIsFinished");
-                SerializedProperty sp_ProgressValue = serializedObject.FindProperty("ProgressValue");
-                SerializedProperty sp_sm_ProgressValue = serializedObject.FindProperty("sm_ProgressValue");
-                SerializedProperty sp_ProgressValueDuration = serializedObject.FindProperty("ProgressValueDuration");
-
-                // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
-                menu.AddDisabledItem(new GUIContent("脚本参数"));
-                if (!Targets_Selected())
-                {
-                    menu.AddItem(new GUIContent("C (拷贝)"), false, () =>
-                    {
-                        XHud_ModuleArg_Progress hpp = new XHud_ModuleArg_Progress();
-
-                        hpp.Indicator = sp_Indicator.stringValue;
-                        hpp.DebugState = sp_debugstate.boolValue;
-                        hpp.con_title = sp_con_title.stringValue;
-                        hpp.ProgressPrecision = sp_ProgressPrecision.intValue;
-                        hpp.ProgressUnit = sp_ProgressUnit.stringValue;
-                        hpp.ProgressTweenSpeedMultiply = sp_ProgressTweenSpeedMultiply.floatValue;
-                        hpp.EaseMotion = sp_LerpMotion.boolValue;
-                        hpp.ProgressIsFinished = sp_ProgressIsFinished.boolValue;
-                        hpp.ProgressValue = sp_ProgressValue.floatValue;
-                        hpp.sm_ProgressValue = sp_sm_ProgressValue.floatValue;
-                        hpp.ProgressValueDuration = sp_ProgressValueDuration.floatValue;
-
-                        string json = JsonUtility.ToJson(hpp);
-                        GUIUtility.systemCopyBuffer = json;
-                    });
-                }
-                menu.AddItem(new GUIContent("V (粘贴)"), false, () =>
-                {
-                    XHud_ModuleArg_Progress hpp = JsonUtility.FromJson<XHud_ModuleArg_Progress>(GUIUtility.systemCopyBuffer);
-
-                    sp_Indicator.stringValue = hpp.Indicator;
-                    sp_debugstate.boolValue = hpp.DebugState;
-                    sp_con_title.stringValue = hpp.con_title;
-                    sp_ProgressPrecision.intValue = hpp.ProgressPrecision;
-                    sp_ProgressUnit.stringValue = hpp.ProgressUnit;
-                    sp_ProgressTweenSpeedMultiply.floatValue = hpp.ProgressTweenSpeedMultiply;
-                    sp_LerpMotion.boolValue = hpp.EaseMotion;
-                    sp_ProgressIsFinished.boolValue = hpp.ProgressIsFinished;
-                    sp_ProgressValue.floatValue = hpp.ProgressValue;
-                    sp_sm_ProgressValue.floatValue = hpp.sm_ProgressValue;
-                    sp_ProgressValueDuration.floatValue = hpp.ProgressValueDuration;
-
-                    sp_Indicator.serializedObject.ApplyModifiedProperties();
-                    sp_debugstate.serializedObject.ApplyModifiedProperties();
-                    sp_con_title.serializedObject.ApplyModifiedProperties();
-                    sp_ProgressPrecision.serializedObject.ApplyModifiedProperties();
-                    sp_ProgressUnit.serializedObject.ApplyModifiedProperties();
-                    sp_ProgressTweenSpeedMultiply.serializedObject.ApplyModifiedProperties();
-                    sp_LerpMotion.serializedObject.ApplyModifiedProperties();
-                    sp_ProgressIsFinished.serializedObject.ApplyModifiedProperties();
-                    sp_ProgressValue.serializedObject.ApplyModifiedProperties();
-                    sp_sm_ProgressValue.serializedObject.ApplyModifiedProperties();
-                    sp_ProgressValueDuration.serializedObject.ApplyModifiedProperties();
-                });
-                menu.AddSeparator("");
                 menu.AddDisabledItem(new GUIContent("图元动画器"));
                 menu.AddItem(new GUIContent("X (扫描)"), false, () =>
                 {
@@ -816,16 +770,16 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     if (Targets_Selected())
                     {
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        for (int i = 0; i < selected_objects.Length; i++)
                         {
-                            XHud_Module_Progress btn = SelectedObjects[i];
+                            XHud_Module_Progress btn = selected_objects[i];
                             btn.Indicator = btn.gameObject.name;
                             EditorUtility.SetDirty(btn);
                         }
                     }
                     else
                     {
-                        sp_Indicator.stringValue = BaseScript.gameObject.name;
+                        sp_Indicator.stringValue = base_script.gameObject.name;
                         sp_Indicator.serializedObject.ApplyModifiedProperties();
                         Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 进度条消息", "标识自身", "将标识名称参数更改为物体的名称！", "明白");
                     }
@@ -865,6 +819,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 menu.ShowAsContext(); // 在鼠标位置显示右键菜单
             }
+            #endregion
 
             #region 源脚本
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 3, "源脚本", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
@@ -884,7 +839,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
-            PrimitiveTweens_MaxDuration_Calculate(BaseScript.PrimitiveControllerNodes, PrimitivesTweenGlobalDuration.floatValue);
+            PrimitiveTweens_MaxDuration_Calculate(base_script.PrimitiveControllerNodes, PrimitivesTweenGlobalDuration.floatValue);
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -894,17 +849,17 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    XHud_Module_Progress pro = SelectedObjects[i];
+                    XHud_Module_Progress pro = selected_objects[i];
                     pro.pro_SetProgressValue(pro.ProgressValue);
                     pro.UpdateProgressValueDisplay(true);
                 }
             }
             else
             {
-                BaseScript.pro_SetProgressValue(ProgressValue.floatValue);
-                BaseScript.UpdateProgressValueDisplay(true);
+                base_script.pro_SetProgressValue(ProgressValue.floatValue);
+                base_script.UpdateProgressValueDisplay(true);
             }
         }
         /// <summary>
@@ -915,7 +870,7 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = 0; i < PrimitiveControllerNodes.arraySize; i++)
             {
                 SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(i);
-                SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
 
                 if (sp_node_con.objectReferenceValue == null)
                 {
@@ -931,13 +886,13 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    if (SelectedObjects[i] == null)
+                    if (selected_objects[i] == null)
                         continue;
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_tweens_isfold = so_ele.FindProperty("PrimitivesIsFold");
-                    SerializedProperty sp_event_isfold = so_ele.FindProperty("EventIsFold");
+                    SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                    SerializedProperty sp_tweens_isfold = so_ele.FindProperty(nameof(XHud_Module_Progress.PrimitivesIsFold));
+                    SerializedProperty sp_event_isfold = so_ele.FindProperty(nameof(XHud_Module_Progress.EventIsFold));
                     so_ele.Update();
 
                     sp_tweens_isfold.boolValue = state;
@@ -997,7 +952,7 @@ namespace SevenStrikeModules.XHud.Editor
             List<int> loops = new List<int>();
             for (int i = 0; i < PrimitiveControllerNodes.arraySize; i++)
             {
-                SerializedProperty sp_node_con = PrimitiveControllerNodes.GetArrayElementAtIndex(i).FindPropertyRelative("Controller");
+                SerializedProperty sp_node_con = PrimitiveControllerNodes.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                 XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
                 if (sp_con == null)
                 {
@@ -1056,55 +1011,12 @@ namespace SevenStrikeModules.XHud.Editor
         {
             List<string> list = new List<string>();
 
-            for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+            for (int i = 0; i < base_script.PrimitiveControllerNodes.Count; i++)
             {
-                list.Add(BaseScript.PrimitiveControllerNodes[i].controller.id);
+                list.Add(base_script.PrimitiveControllerNodes[i].controller.id);
             }
 
             return list.ToArray();
-        }
-        /// <summary>
-        /// 获取序列化属性
-        /// </summary>
-        private void GetSerializeFields()
-        {
-            sp_Indicator = serializedObject.FindProperty("Indicator");
-            sp_debugstate = serializedObject.FindProperty("DebugState");
-            eve_on_ValueChanged = serializedObject.FindProperty("eve_on_ValueChanged");
-            eve_on_ValueStart = serializedObject.FindProperty("eve_on_ValueStart");
-            eve_on_ValueEnd = serializedObject.FindProperty("eve_on_ValueEnd");
-            pro_Text_Title = serializedObject.FindProperty("pro_Text_Title");
-            pro_TmpText_Title = serializedObject.FindProperty("pro_TmpText_Title");
-            pro_Text_Subtitle = serializedObject.FindProperty("pro_Text_Subtitle");
-            pro_TmpText_Subtitle = serializedObject.FindProperty("pro_TmpText_Subtitle");
-            pro_Text_Percent = serializedObject.FindProperty("pro_Text_Percent");
-            pro_TmpText_Percent = serializedObject.FindProperty("pro_TmpText_Percent");
-            pro_Bg = serializedObject.FindProperty("pro_Bg");
-            pro_Fore = serializedObject.FindProperty("pro_Fore");
-            pro_Icon = serializedObject.FindProperty("pro_Icon");
-            pro_Handle = serializedObject.FindProperty("pro_Handle");
-            ProgressValue = serializedObject.FindProperty("ProgressValue");
-            ProgressValueDuration = serializedObject.FindProperty("ProgressValueDuration");
-            ProgressPrecision = serializedObject.FindProperty("ProgressPrecision");
-            con_title = serializedObject.FindProperty("con_title");
-            con_subtitle = serializedObject.FindProperty("con_subtitle");
-            LerpMotion = serializedObject.FindProperty("LerpMotion");
-            ProgressUnit = serializedObject.FindProperty("ProgressUnit");
-            EventIsFold = serializedObject.FindProperty("EventIsFold");
-            AnimateState = serializedObject.FindProperty("AnimateState");
-            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
-            Display_ProgressRect_Fore = serializedObject.FindProperty("Display_ProgressRect_Fore");
-            Display_ProgressRect_Bg = serializedObject.FindProperty("Display_ProgressRect_Bg");
-            Display_ProgressRect_Handle = serializedObject.FindProperty("Display_ProgressRect_Handle");
-            Display_Icon = serializedObject.FindProperty("Display_Icon");
-            Display_Title = serializedObject.FindProperty("Display_Title");
-            Display_SubTitle = serializedObject.FindProperty("Display_SubTitle");
-            Display_Value = serializedObject.FindProperty("Display_Value");
-
-            PrimitiveControllerNodes = serializedObject.FindProperty("PrimitiveControllerNodes");
-            PrimitivesTweenMaxDuration = serializedObject.FindProperty("PrimitivesTweenMaxDuration");
-            PrimitivesTweenGlobalDuration = serializedObject.FindProperty("PrimitivesTweenGlobalDuration");
-            PrimitivesIsFold = serializedObject.FindProperty("PrimitivesIsFold");
         }
         #endregion
 
@@ -1116,12 +1028,12 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("PrimitiveControllerNodes");
+                    SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                    SerializedProperty sp_nodes = so_ele.FindProperty(nameof(XHud_Module_Progress.PrimitiveControllerNodes));
                     so_ele.Update();
-                    XHud_Module_Primitive_Controller[] cons = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Primitive_Controller>();
+                    XHud_Module_Primitive_Controller[] cons = selected_objects[i].GetComponentsInChildren<XHud_Module_Primitive_Controller>();
                     for (int x = 0; x < cons.Length; x++)
                     {
                         bool repeat = false;
@@ -1131,7 +1043,7 @@ namespace SevenStrikeModules.XHud.Editor
                             for (int s = 0; s < sp_nodes.arraySize; s++)
                             {
                                 SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                                SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                                 XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
                                 if (sp_con == cons[x])
                                     repeat = true;
@@ -1150,7 +1062,7 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_nodes.InsertArrayElementAtIndex(index);
 
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                            SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                             sp_node_con.objectReferenceValue = cons[x];
 
                             sp_node_con.serializedObject.ApplyModifiedProperties();
@@ -1163,9 +1075,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("PrimitiveControllerNodes");
+                SerializedProperty sp_nodes = serializedObject.FindProperty(nameof(XHud_Module_Progress.PrimitiveControllerNodes));
 
-                XHud_Module_Primitive_Controller[] cons = BaseScript.GetComponentsInChildren<XHud_Module_Primitive_Controller>();
+                XHud_Module_Primitive_Controller[] cons = base_script.GetComponentsInChildren<XHud_Module_Primitive_Controller>();
                 for (int i = 0; i < cons.Length; i++)
                 {
                     bool repeat = false;
@@ -1175,7 +1087,7 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int s = 0; s < sp_nodes.arraySize; s++)
                         {
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                            SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                             XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
                             if (sp_con == cons[i])
                                 repeat = true;
@@ -1194,7 +1106,7 @@ namespace SevenStrikeModules.XHud.Editor
                         sp_nodes.InsertArrayElementAtIndex(index);
 
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                        SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                         sp_node_con.objectReferenceValue = cons[i];
 
                         sp_node_con.serializedObject.ApplyModifiedProperties();
@@ -1213,9 +1125,9 @@ namespace SevenStrikeModules.XHud.Editor
             if (Targets_Selected())
             {
                 var s = targets;
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    XHud_Module_Progress progress = SelectedObjects[i];
+                    XHud_Module_Progress progress = selected_objects[i];
                     if (progress.PrimitiveControllerNodes.Count > 0)
                     {
                         for (int c = 0; c < progress.PrimitiveControllerNodes.Count; c++)
@@ -1234,15 +1146,15 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                if (BaseScript.PrimitiveControllerNodes.Count > 0)
+                if (base_script.PrimitiveControllerNodes.Count > 0)
                 {
-                    for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+                    for (int i = 0; i < base_script.PrimitiveControllerNodes.Count; i++)
                     {
                         XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
 
-                        dataitem.Title = $"{BaseScript.name} ( {BaseScript.Indicator} )";
+                        dataitem.Title = $"{base_script.name} ( {base_script.Indicator} )";
                         dataitem.SubTitle = $"扫描到动画器";
-                        dataitem.Message = $"{BaseScript.PrimitiveControllerNodes[i].controller.name} ( {BaseScript.PrimitiveControllerNodes[i].controller.indicator} )";
+                        dataitem.Message = $"{base_script.PrimitiveControllerNodes[i].controller.name} ( {base_script.PrimitiveControllerNodes[i].controller.indicator} )";
                         Datas.Add(dataitem);
                     }
                     Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 进度条消息", "扫描图元动画器组件", "以下是扫描到的所有图元动画器组件列表，请您检查核对：", "明白");

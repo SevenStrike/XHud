@@ -124,8 +124,8 @@ namespace SevenStrikeModules.XHud.Editor
         private void SoundsPool_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty sp_Soundlib = sp_pool_sounder.GetArrayElementAtIndex(index);
-            SerializedProperty player = sp_Soundlib.FindPropertyRelative("Player");
-            SerializedProperty isplaying = sp_Soundlib.FindPropertyRelative("IsPlaying");
+            SerializedProperty player = sp_Soundlib.FindPropertyRelative(nameof(AudioPlayer.Player));
+            SerializedProperty isplaying = sp_Soundlib.FindPropertyRelative(nameof(AudioPlayer.IsPlaying));
 
             XGUI.gui_icon(
                    rect: new Rect(rect.x + 5, rect.y + 6, 14, 14),

@@ -126,7 +126,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 140,
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: sp_hmr_res_full.FindPropertyRelative("size"),
+                prop: sp_hmr_res_full.FindPropertyRelative(nameof(XHudRatioReferenceRes.size)),
                 prop_margin: new RectOffset(0, 0, 5, 0));
 
             XGUI.layout_space(5);
@@ -139,7 +139,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 140,
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: sp_hmr_res_full.FindPropertyRelative("sprite"),
+                prop: sp_hmr_res_full.FindPropertyRelative(nameof(XHudRatioReferenceRes.sprite)),
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 
@@ -157,7 +157,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 140,
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: sp_hmr_res_part.FindPropertyRelative("size"),
+                prop: sp_hmr_res_part.FindPropertyRelative(nameof(XHudRatioReferenceRes.size)),
                 prop_margin: new RectOffset(0, 0, 5, 0));
 
             XGUI.layout_space(5);
@@ -170,7 +170,7 @@ namespace SevenStrikeModules.XHud.Editor
                 title_width: 140,
                 //status_icon: "icon_field_status",
                 //status_icon_color: CameraOrthographicSize.floatValue != 0 ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.red,
-                prop: sp_hmr_res_part.FindPropertyRelative("sprite"),
+                prop: sp_hmr_res_part.FindPropertyRelative(nameof(XHudRatioReferenceRes.sprite)),
                 prop_margin: new RectOffset(0, 0, 5, 0));
             #endregion
 

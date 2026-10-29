@@ -937,37 +937,37 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     UnityEngine.RectTransform obj = anchorRoot.GetChild(i).GetComponent<UnityEngine.RectTransform>();
                     sp_cg_anchors.InsertArrayElementAtIndex(sp_cg_anchors.arraySize);
-                    sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Anchor").objectReferenceValue = obj;
-                    sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Name").stringValue = obj.name;
+                    sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(AuxiliaryAnchor_Layout.Anchor)).objectReferenceValue = obj;
+                    sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(AuxiliaryAnchor_Layout.Name)).stringValue = obj.name;
                     string Type = anchorRoot.GetChild(i).name;
                     switch (Type)
                     {
                         case "Up":
-                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 0;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(AuxiliaryAnchor_Layout.Type)).enumValueIndex = 0;
                             break;
                         case "Down":
-                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 1;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(AuxiliaryAnchor_Layout.Type)).enumValueIndex = 1;
                             break;
                         case "Left":
-                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 2;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(AuxiliaryAnchor_Layout.Type)).enumValueIndex = 2;
                             break;
                         case "Right":
-                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 3;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(AuxiliaryAnchor_Layout.Type)).enumValueIndex = 3;
                             break;
                         case "Center":
-                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 4;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(AuxiliaryAnchor_Layout.Type)).enumValueIndex = 4;
                             break;
                         case "Left_Up":
-                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 5;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(AuxiliaryAnchor_Layout.Type)).enumValueIndex = 5;
                             break;
                         case "Left_Down":
-                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 6;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(AuxiliaryAnchor_Layout.Type)).enumValueIndex = 6;
                             break;
                         case "Right_Up":
-                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 7;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(AuxiliaryAnchor_Layout.Type)).enumValueIndex = 7;
                             break;
                         case "Right_Down":
-                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 8;
+                            sp_cg_anchors.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(AuxiliaryAnchor_Layout.Type)).enumValueIndex = 8;
                             break;
                     }
 

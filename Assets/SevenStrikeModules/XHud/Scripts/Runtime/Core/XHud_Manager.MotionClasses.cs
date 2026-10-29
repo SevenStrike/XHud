@@ -23,7 +23,6 @@ namespace SevenStrikeModules.XHud
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XTween;
     using UnityEngine;
-    using static UnityEditor.FilePathAttribute;
 
     [System.Serializable]
     public class XHud_Arg_MotionGroup

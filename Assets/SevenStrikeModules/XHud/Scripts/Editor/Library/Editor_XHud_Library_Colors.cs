@@ -675,8 +675,8 @@ namespace SevenStrikeModules.XHud.Editor
         {
             SerializedProperty prop = sp_library_colors.GetArrayElementAtIndex(index);
 
-            SerializedProperty sp_name = prop.FindPropertyRelative("name");
-            SerializedProperty sp_color = prop.FindPropertyRelative("color");
+            SerializedProperty sp_name = prop.FindPropertyRelative(nameof(xHud_LibraryArg_Color.name));
+            SerializedProperty sp_color = prop.FindPropertyRelative(nameof(xHud_LibraryArg_Color.color));
 
             #region 序号
             drawelement_rect.Set(rect.x + 20, rect.y + 4, 30, 20);
@@ -943,8 +943,8 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = startIndex; i < endIndex && i < color_info_list.count; i++)
             {
                 SerializedProperty prop = sp_library_colors.GetArrayElementAtIndex(i);
-                SerializedProperty sp_color = prop.FindPropertyRelative("color");
-                SerializedProperty sp_name = prop.FindPropertyRelative("name");
+                SerializedProperty sp_color = prop.FindPropertyRelative(nameof(xHud_LibraryArg_Color.color));
+                SerializedProperty sp_name = prop.FindPropertyRelative(nameof(xHud_LibraryArg_Color.name));
 
                 // 如果当前元素被选中，绘制选中效果
                 if (sp_name.stringValue.Contains(sp_highlight.stringValue))
@@ -1029,13 +1029,11 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 sp_library_colors.InsertArrayElementAtIndex(list.index);
                 SerializedProperty prop = sp_library_colors.GetArrayElementAtIndex(list.index);
-                SerializedProperty prop_name = prop.FindPropertyRelative("name");
-                SerializedProperty prop_color = prop.FindPropertyRelative("color");
-                SerializedProperty prop_des = prop.FindPropertyRelative("description");
+                SerializedProperty prop_name = prop.FindPropertyRelative(nameof(xHud_LibraryArg_Color.name));
+                SerializedProperty prop_color = prop.FindPropertyRelative(nameof(xHud_LibraryArg_Color.color));
 
                 prop_name.stringValue = "颜色" + sp_library_colors.arraySize;
                 prop_color.colorValue = Color.white;
-                prop_des.stringValue = "颜色文字说明";
 
                 prop.serializedObject.ApplyModifiedProperties();
             }
@@ -1179,8 +1177,8 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_library_colors.InsertArrayElementAtIndex(i + size);
 
                             SerializedProperty sp_item = sp_library_colors.GetArrayElementAtIndex(i + size);
-                            SerializedProperty sp_name = sp_item.FindPropertyRelative("name");
-                            SerializedProperty sp_color = sp_item.FindPropertyRelative("color");
+                            SerializedProperty sp_name = sp_item.FindPropertyRelative(nameof(xHud_LibraryArg_Color.name));
+                            SerializedProperty sp_color = sp_item.FindPropertyRelative(nameof(xHud_LibraryArg_Color.color));
 
                             sp_name.stringValue = lib.ColorsInfo[i].name;
                             sp_color.colorValue = XGUI_Utilitys.String_To_Color(lib.ColorsInfo[i].color, false);
@@ -1208,8 +1206,8 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_library_colors.InsertArrayElementAtIndex(i);
 
                             SerializedProperty sp_item = sp_library_colors.GetArrayElementAtIndex(i);
-                            SerializedProperty sp_name = sp_item.FindPropertyRelative("name");
-                            SerializedProperty sp_color = sp_item.FindPropertyRelative("color");
+                            SerializedProperty sp_name = sp_item.FindPropertyRelative(nameof(xHud_LibraryArg_Color.name));
+                            SerializedProperty sp_color = sp_item.FindPropertyRelative(nameof(xHud_LibraryArg_Color.color));
 
                             sp_name.stringValue = lib.ColorsInfo[i].name;
                             sp_color.colorValue = XGUI_Utilitys.String_To_Color(lib.ColorsInfo[i].color, false);

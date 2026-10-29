@@ -35,22 +35,212 @@ namespace SevenStrikeModules.XTween.Editor
     [CustomEditor(typeof(XTween_PathTool))]
     public class Editor_XTween_PathTool : Editor
     {
+        #region 字段 - 脚本与列表
         /// <summary>
         /// 当前正在编辑的路径工具实例
         /// </summary>
-        private XTween_PathTool BaseScript;
+        private XTween_PathTool base_script;
         /// <summary>
         /// 路径点列表
         /// </summary>
         private ReorderableList PathPoints;
+        #endregion
+
+        #region 字段 - 序列化属性
         /// <summary>
-        /// 序列化属性
+        /// 路径点列表属性
         /// </summary>
-        private SerializedProperty sp_PathPoints, sp_PathType, sp_PathOrientation, sp_PathOrientationVector, sp_LookAtObject, sp_LookAtPosition, sp_LookAtPoints, sp_IsWorldMode, sp_StartPosition, sp_PathLength, sp_SegmentsPerCurve, sp_IsClosed, sp_DisplayPath, sp_DisplayIndex, sp_Color_Path, sp_Color_PathPoint, sp_Color_PathPoint_Selected, sp_Color_BezierControl, sp_Color_BezierControl_Selected, sp_Color_Index, sp_Color_IndexLength, sp_Color_LookAtLine, sp_ControlLineStyle, sp_PathPointSize, sp_BezierControlSize, sp_PathWidth, sp_IndexSize, sp_IndexLengthHeight, sp_IndexOffset, sp_AddedDistance, sp_LookAtLine, sp_LookAtLineWidth, sp_PathMarksTexture, sp_PathMarksSize, sp_PathMarksSample, sp_PathMarksMode, sp_PathPointsIsFold, sp_IndexPathType, sp_IndexPathOrientation, sp_IndexPathOrientationVector, sp_IndexControlLineStyle, sp_IndexPathMarkMode, sp_PathLimitePercent, sp_PathParent, sp_PathMarksColor, sp_PathMarksGroup;
+        private SerializedProperty sp_PathPoints;
         /// <summary>
-        /// 图标
+        /// 路径类型属性
+        /// </summary>
+        private SerializedProperty sp_PathType;
+        /// <summary>
+        /// 路径朝向属性
+        /// </summary>
+        private SerializedProperty sp_PathOrientation;
+        /// <summary>
+        /// 路径朝向向量属性
+        /// </summary>
+        private SerializedProperty sp_PathOrientationVector;
+        /// <summary>
+        /// 注视目标物体属性
+        /// </summary>
+        private SerializedProperty sp_LookAtObject;
+        /// <summary>
+        /// 注视目标位置属性
+        /// </summary>
+        private SerializedProperty sp_LookAtPosition;
+        /// <summary>
+        /// 注视目标点列表属性
+        /// </summary>
+        private SerializedProperty sp_LookAtPoints;
+        /// <summary>
+        /// 是否世界模式属性
+        /// </summary>
+        private SerializedProperty sp_IsWorldMode;
+        /// <summary>
+        /// 起始位置属性
+        /// </summary>
+        private SerializedProperty sp_StartPosition;
+        /// <summary>
+        /// 路径长度属性
+        /// </summary>
+        private SerializedProperty sp_PathLength;
+        /// <summary>
+        /// 每段曲线采样数属性
+        /// </summary>
+        private SerializedProperty sp_SegmentsPerCurve;
+        /// <summary>
+        /// 是否闭合路径属性
+        /// </summary>
+        private SerializedProperty sp_IsClosed;
+        /// <summary>
+        /// 是否显示路径属性
+        /// </summary>
+        private SerializedProperty sp_DisplayPath;
+        /// <summary>
+        /// 是否显示索引属性
+        /// </summary>
+        private SerializedProperty sp_DisplayIndex;
+        /// <summary>
+        /// 路径颜色属性
+        /// </summary>
+        private SerializedProperty sp_Color_Path;
+        /// <summary>
+        /// 路径点颜色属性
+        /// </summary>
+        private SerializedProperty sp_Color_PathPoint;
+        /// <summary>
+        /// 选中路径点颜色属性
+        /// </summary>
+        private SerializedProperty sp_Color_PathPoint_Selected;
+        /// <summary>
+        /// 贝塞尔控制点颜色属性
+        /// </summary>
+        private SerializedProperty sp_Color_BezierControl;
+        /// <summary>
+        /// 选中贝塞尔控制点颜色属性
+        /// </summary>
+        private SerializedProperty sp_Color_BezierControl_Selected;
+        /// <summary>
+        /// 索引颜色属性
+        /// </summary>
+        private SerializedProperty sp_Color_Index;
+        /// <summary>
+        /// 索引长度颜色属性
+        /// </summary>
+        private SerializedProperty sp_Color_IndexLength;
+        /// <summary>
+        /// 注视线颜色属性
+        /// </summary>
+        private SerializedProperty sp_Color_LookAtLine;
+        /// <summary>
+        /// 控制线样式属性
+        /// </summary>
+        private SerializedProperty sp_ControlLineStyle;
+        /// <summary>
+        /// 路径点尺寸属性
+        /// </summary>
+        private SerializedProperty sp_PathPointSize;
+        /// <summary>
+        /// 贝塞尔控制点尺寸属性
+        /// </summary>
+        private SerializedProperty sp_BezierControlSize;
+        /// <summary>
+        /// 路径宽度属性
+        /// </summary>
+        private SerializedProperty sp_PathWidth;
+        /// <summary>
+        /// 索引尺寸属性
+        /// </summary>
+        private SerializedProperty sp_IndexSize;
+        /// <summary>
+        /// 索引长度高度属性
+        /// </summary>
+        private SerializedProperty sp_IndexLengthHeight;
+        /// <summary>
+        /// 索引偏移属性
+        /// </summary>
+        private SerializedProperty sp_IndexOffset;
+        /// <summary>
+        /// 附加距离属性
+        /// </summary>
+        private SerializedProperty sp_AddedDistance;
+        /// <summary>
+        /// 是否显示注视线属性
+        /// </summary>
+        private SerializedProperty sp_LookAtLine;
+        /// <summary>
+        /// 注视线宽度属性
+        /// </summary>
+        private SerializedProperty sp_LookAtLineWidth;
+        /// <summary>
+        /// 路径标记贴图属性
+        /// </summary>
+        private SerializedProperty sp_PathMarksTexture;
+        /// <summary>
+        /// 路径标记尺寸属性
+        /// </summary>
+        private SerializedProperty sp_PathMarksSize;
+        /// <summary>
+        /// 路径标记采样属性
+        /// </summary>
+        private SerializedProperty sp_PathMarksSample;
+        /// <summary>
+        /// 路径标记模式属性
+        /// </summary>
+        private SerializedProperty sp_PathMarksMode;
+        /// <summary>
+        /// 路径点列表折叠状态属性
+        /// </summary>
+        private SerializedProperty sp_PathPointsIsFold;
+        /// <summary>
+        /// 路径类型索引属性
+        /// </summary>
+        private SerializedProperty sp_IndexPathType;
+        /// <summary>
+        /// 路径朝向索引属性
+        /// </summary>
+        private SerializedProperty sp_IndexPathOrientation;
+        /// <summary>
+        /// 路径朝向向量索引属性
+        /// </summary>
+        private SerializedProperty sp_IndexPathOrientationVector;
+        /// <summary>
+        /// 控制线样式索引属性
+        /// </summary>
+        private SerializedProperty sp_IndexControlLineStyle;
+        /// <summary>
+        /// 路径标记模式索引属性
+        /// </summary>
+        private SerializedProperty sp_IndexPathMarkMode;
+        /// <summary>
+        /// 路径限制百分比属性
+        /// </summary>
+        private SerializedProperty sp_PathLimitePercent;
+        /// <summary>
+        /// 路径父物体属性
+        /// </summary>
+        private SerializedProperty sp_PathParent;
+        /// <summary>
+        /// 路径标记颜色属性
+        /// </summary>
+        private SerializedProperty sp_PathMarksColor;
+        /// <summary>
+        /// 路径标记分组属性
+        /// </summary>
+        private SerializedProperty sp_PathMarksGroup;
+        #endregion
+
+        #region 字段 - 图标
+        /// <summary>
+        /// 主图标
         /// </summary>
         private Texture2D icon_main;
+        #endregion
+
+        #region 字段 - 编辑状态
         /// <summary>
         /// 当前选中的锚点索引，用于路径点的编辑
         /// </summary>
@@ -60,49 +250,70 @@ namespace SevenStrikeModules.XTween.Editor
         /// </summary>
         private int selectedControlIndex = -1;
         /// <summary>
-        /// GUI单行高度
+        /// GUI 单行高度
         /// </summary>
         private float LineHeight;
         /// <summary>
         /// 是否正在编辑控制点
         /// </summary>
         private bool isInControl = false;
+        /// <summary>
+        /// 原始折叠状态
+        /// </summary>
         private bool fold_raw = false;
         /// <summary>
         /// 用于绘制路径点索引的样式
         /// </summary>
         private GUIStyle IndexStyle;
+        #endregion
 
+        #region 字段 - 枚举名称缓存
+        /// <summary>
+        /// 路径类型枚举名称缓存
+        /// </summary>
         string[] enums_name_path_type;
+        /// <summary>
+        /// 路径朝向枚举名称缓存
+        /// </summary>
         string[] enums_name_path_orient;
+        /// <summary>
+        /// 路径朝向向量枚举名称缓存
+        /// </summary>
         string[] enums_name_path_orient_vector;
+        /// <summary>
+        /// 控制线样式枚举名称缓存
+        /// </summary>
         string[] enums_name_line_style;
+        /// <summary>
+        /// 路径标记枚举名称缓存
+        /// </summary>
         string[] enums_name_path_marks;
+        #endregion
 
         #region 批量化操作
-        private XTween_PathTool[] SelectedObjects;
-        private void GetAllTargets()
+        private XTween_PathTool[] selected_objects;
+        private void Targets_Get()
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new XTween_PathTool[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new XTween_PathTool[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (XTween_PathTool)t;
+                    selected_objects[i] = (XTween_PathTool)t;
                 }
             }
             else
             {
-                SelectedObjects = new XTween_PathTool[targets.Length];
-                SelectedObjects[0] = (XTween_PathTool)target;
+                selected_objects = new XTween_PathTool[targets.Length];
+                selected_objects[0] = (XTween_PathTool)target;
             }
         }
-        private bool IsMultiSelected()
+        private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }
@@ -118,57 +329,57 @@ namespace SevenStrikeModules.XTween.Editor
         /// </summary>
         private void OnEnable()
         {
-            BaseScript = (XTween_PathTool)target;
+            base_script = (XTween_PathTool)target;
             SceneView.duringSceneGui -= DuringSceneGUI;
             SceneView.duringSceneGui += DuringSceneGUI;
 
             #region 获取序列化属性
-            sp_PathPoints = serializedObject.FindProperty("PathPoints");
-            sp_PathType = serializedObject.FindProperty("PathType");
-            sp_PathOrientation = serializedObject.FindProperty("PathOrientation");
-            sp_PathOrientationVector = serializedObject.FindProperty("PathOrientationVector");
-            sp_LookAtObject = serializedObject.FindProperty("LookAtObject");
-            sp_LookAtPosition = serializedObject.FindProperty("LookAtPosition");
-            sp_LookAtPoints = serializedObject.FindProperty("LookAtPoints");
-            sp_IsWorldMode = serializedObject.FindProperty("IsWorldMode");
-            sp_StartPosition = serializedObject.FindProperty("StartPosition");
-            sp_PathLength = serializedObject.FindProperty("PathLength");
-            sp_SegmentsPerCurve = serializedObject.FindProperty("SegmentsPerCurve");
-            sp_IsClosed = serializedObject.FindProperty("IsClosed");
-            sp_DisplayPath = serializedObject.FindProperty("DisplayPath");
-            sp_DisplayIndex = serializedObject.FindProperty("DisplayIndex");
-            sp_Color_Path = serializedObject.FindProperty("Color_Path");
-            sp_Color_PathPoint = serializedObject.FindProperty("Color_PathPoint");
-            sp_Color_PathPoint_Selected = serializedObject.FindProperty("Color_PathPoint_Selected");
-            sp_Color_BezierControl = serializedObject.FindProperty("Color_BezierControl");
-            sp_Color_BezierControl_Selected = serializedObject.FindProperty("Color_BezierControl_Selected");
-            sp_Color_Index = serializedObject.FindProperty("Color_Index");
-            sp_Color_IndexLength = serializedObject.FindProperty("Color_IndexLength");
-            sp_Color_LookAtLine = serializedObject.FindProperty("Color_LookAtLine");
-            sp_ControlLineStyle = serializedObject.FindProperty("ControlLineStyle");
-            sp_PathPointSize = serializedObject.FindProperty("PathPointSize");
-            sp_BezierControlSize = serializedObject.FindProperty("BezierControlSize");
-            sp_PathWidth = serializedObject.FindProperty("PathWidth");
-            sp_IndexSize = serializedObject.FindProperty("IndexSize");
-            sp_IndexLengthHeight = serializedObject.FindProperty("IndexLengthHeight");
-            sp_IndexOffset = serializedObject.FindProperty("IndexOffset");
-            sp_AddedDistance = serializedObject.FindProperty("AddedDistance");
-            sp_LookAtLine = serializedObject.FindProperty("LookAtLine");
-            sp_LookAtLineWidth = serializedObject.FindProperty("LookAtLineWidth");
-            sp_PathMarksTexture = serializedObject.FindProperty("PathMarksTexture");
-            sp_PathMarksSize = serializedObject.FindProperty("PathMarksSize");
-            sp_PathMarksSample = serializedObject.FindProperty("PathMarksSample");
-            sp_PathMarksMode = serializedObject.FindProperty("PathMarksMode");
-            sp_PathPointsIsFold = serializedObject.FindProperty("PathPointsIsFold");
-            sp_IndexPathType = serializedObject.FindProperty("IndexPathType");
-            sp_IndexPathOrientation = serializedObject.FindProperty("IndexPathOrientation");
-            sp_IndexPathOrientationVector = serializedObject.FindProperty("IndexPathOrientationVector");
-            sp_IndexControlLineStyle = serializedObject.FindProperty("IndexControlLineStyle");
-            sp_IndexPathMarkMode = serializedObject.FindProperty("IndexPathMarkMode");
-            sp_PathLimitePercent = serializedObject.FindProperty("PathLimitePercent");
-            sp_PathParent = serializedObject.FindProperty("PathParent");
-            sp_PathMarksColor = serializedObject.FindProperty("PathMarksColor");
-            sp_PathMarksGroup = serializedObject.FindProperty("PathMarksGroup");
+            sp_PathPoints = serializedObject.FindProperty(nameof(XTween_PathTool.PathPoints));
+            sp_PathType = serializedObject.FindProperty(nameof(XTween_PathTool.PathType));
+            sp_PathOrientation = serializedObject.FindProperty(nameof(XTween_PathTool.PathOrientation));
+            sp_PathOrientationVector = serializedObject.FindProperty(nameof(XTween_PathTool.PathOrientationVector));
+            sp_LookAtObject = serializedObject.FindProperty(nameof(XTween_PathTool.LookAtObject));
+            sp_LookAtPosition = serializedObject.FindProperty(nameof(XTween_PathTool.LookAtPosition));
+            sp_LookAtPoints = serializedObject.FindProperty(nameof(XTween_PathTool.LookAtPoints));
+            sp_IsWorldMode = serializedObject.FindProperty(nameof(XTween_PathTool.IsWorldMode));
+            sp_StartPosition = serializedObject.FindProperty(nameof(XTween_PathTool.StartPosition));
+            sp_PathLength = serializedObject.FindProperty(nameof(XTween_PathTool.PathLength));
+            sp_SegmentsPerCurve = serializedObject.FindProperty(nameof(XTween_PathTool.SegmentsPerCurve));
+            sp_IsClosed = serializedObject.FindProperty(nameof(XTween_PathTool.IsClosed));
+            sp_DisplayPath = serializedObject.FindProperty(nameof(XTween_PathTool.DisplayPath));
+            sp_DisplayIndex = serializedObject.FindProperty(nameof(XTween_PathTool.DisplayIndex));
+            sp_Color_Path = serializedObject.FindProperty(nameof(XTween_PathTool.Color_Path));
+            sp_Color_PathPoint = serializedObject.FindProperty(nameof(XTween_PathTool.Color_PathPoint));
+            sp_Color_PathPoint_Selected = serializedObject.FindProperty(nameof(XTween_PathTool.Color_PathPoint_Selected));
+            sp_Color_BezierControl = serializedObject.FindProperty(nameof(XTween_PathTool.Color_BezierControl));
+            sp_Color_BezierControl_Selected = serializedObject.FindProperty(nameof(XTween_PathTool.Color_BezierControl_Selected));
+            sp_Color_Index = serializedObject.FindProperty(nameof(XTween_PathTool.Color_Index));
+            sp_Color_IndexLength = serializedObject.FindProperty(nameof(XTween_PathTool.Color_IndexLength));
+            sp_Color_LookAtLine = serializedObject.FindProperty(nameof(XTween_PathTool.Color_LookAtLine));
+            sp_ControlLineStyle = serializedObject.FindProperty(nameof(XTween_PathTool.ControlLineStyle));
+            sp_PathPointSize = serializedObject.FindProperty(nameof(XTween_PathTool.PathPointSize));
+            sp_BezierControlSize = serializedObject.FindProperty(nameof(XTween_PathTool.BezierControlSize));
+            sp_PathWidth = serializedObject.FindProperty(nameof(XTween_PathTool.PathWidth));
+            sp_IndexSize = serializedObject.FindProperty(nameof(XTween_PathTool.IndexSize));
+            sp_IndexLengthHeight = serializedObject.FindProperty(nameof(XTween_PathTool.IndexLengthHeight));
+            sp_IndexOffset = serializedObject.FindProperty(nameof(XTween_PathTool.IndexOffset));
+            sp_AddedDistance = serializedObject.FindProperty(nameof(XTween_PathTool.AddedDistance));
+            sp_LookAtLine = serializedObject.FindProperty(nameof(XTween_PathTool.LookAtLine));
+            sp_LookAtLineWidth = serializedObject.FindProperty(nameof(XTween_PathTool.LookAtLineWidth));
+            sp_PathMarksTexture = serializedObject.FindProperty(nameof(XTween_PathTool.PathMarksTexture));
+            sp_PathMarksSize = serializedObject.FindProperty(nameof(XTween_PathTool.PathMarksSize));
+            sp_PathMarksSample = serializedObject.FindProperty(nameof(XTween_PathTool.PathMarksSample));
+            sp_PathMarksMode = serializedObject.FindProperty(nameof(XTween_PathTool.PathMarksMode));
+            sp_PathPointsIsFold = serializedObject.FindProperty(XTween_PathTool.editor_serializedfield_PathPointsIsFold);
+            sp_IndexPathType = serializedObject.FindProperty(XTween_PathTool.editor_serializedfield_IndexPathType);
+            sp_IndexPathOrientation = serializedObject.FindProperty(XTween_PathTool.editor_serializedfield_IndexPathOrientation);
+            sp_IndexPathOrientationVector = serializedObject.FindProperty(XTween_PathTool.editor_serializedfield_IndexPathOrientationVector);
+            sp_IndexControlLineStyle = serializedObject.FindProperty(XTween_PathTool.editor_serializedfield_IndexControlLineStyle);
+            sp_IndexPathMarkMode = serializedObject.FindProperty(XTween_PathTool.editor_serializedfield_IndexPathMarkMode);
+            sp_PathLimitePercent = serializedObject.FindProperty(nameof(XTween_PathTool.PathLimitePercent));
+            sp_PathParent = serializedObject.FindProperty(nameof(XTween_PathTool.PathParent));
+            sp_PathMarksColor = serializedObject.FindProperty(nameof(XTween_PathTool.PathMarksColor));
+            sp_PathMarksGroup = serializedObject.FindProperty(nameof(XTween_PathTool.PathMarksGroup));
             #endregion
 
             #region 图标获取
@@ -186,9 +397,9 @@ namespace SevenStrikeModules.XTween.Editor
             // 初始化索引样式
             IndexStyle = new GUIStyle();
             IndexStyle.font = AssetDatabase.LoadAssetAtPath<Font>(XTween_Dashboard.Get_XTween_GUIRoot_Path() + "EditorFonts/sx_bold.otf");
-            GetAllTargets();
+            Targets_Get();
 
-            sp_PathParent.objectReferenceValue = BaseScript.transform.parent;
+            sp_PathParent.objectReferenceValue = base_script.transform.parent;
             sp_PathParent.serializedObject.ApplyModifiedProperties();
 
             SetTransformCenter();
@@ -416,7 +627,7 @@ namespace SevenStrikeModules.XTween.Editor
             #endregion
 
             #region 路径列表
-            BaseScript.fold_points = XGUI.layout_group_start(
+            base_script.fold_points = XGUI.layout_group_start(
                  type: XGUIContainerType.Vertical,
                  bg_fill: XGUIGroup.缺口纯色边框,
                  bg_color: XGUIColor.亮白,
@@ -426,13 +637,13 @@ namespace SevenStrikeModules.XTween.Editor
                  title_text_color: XTween_Dashboard.Theme_Primary,
                  title_clipping: TextClipping.Clip,
                  padding: new RectOffset(5, 5, 10, 10),
-                 foldout: BaseScript.fold_points);
+                 foldout: base_script.fold_points);
 
-            if (BaseScript.fold_points)
+            if (base_script.fold_points)
             {
                 if (sp_PathPoints.arraySize > 0)
                 {
-                    if (IsMultiSelected())
+                    if (Targets_Selected())
                     {
                         XGUI.layout_helpbox(
                             state: XGUIHelboxState.警告,
@@ -487,7 +698,7 @@ namespace SevenStrikeModules.XTween.Editor
             #endregion
 
             #region 选项
-            BaseScript.fold_options = XGUI.layout_group_start(
+            base_script.fold_options = XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
                 bg_fill: XGUIGroup.缺口纯色边框,
                 bg_color: XGUIColor.亮白,
@@ -497,9 +708,9 @@ namespace SevenStrikeModules.XTween.Editor
                 title_text_color: XTween_Dashboard.Theme_Primary,
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 5, 15, 15),
-                foldout: BaseScript.fold_options);
+                foldout: base_script.fold_options);
 
-            if (!BaseScript.fold_options)
+            if (!base_script.fold_options)
             {
                 #region 动画类型           
                 XGUI.layout_string_popup(
@@ -554,7 +765,7 @@ namespace SevenStrikeModules.XTween.Editor
                 #endregion
 
                 #region 朝向轴向           
-                if (BaseScript.PathOrientation != XTween_PathOrientation.无)
+                if (base_script.PathOrientation != XTween_PathOrientation.无)
                 {
                     XGUI.layout_string_popup(
                    title: "朝向轴向",
@@ -688,7 +899,7 @@ namespace SevenStrikeModules.XTween.Editor
             #endregion
 
             #region 注视参数
-            if (BaseScript.PathOrientation == XTween_PathOrientation.注视目标物体 || BaseScript.PathOrientation == XTween_PathOrientation.注视目标位置)
+            if (base_script.PathOrientation == XTween_PathOrientation.注视目标物体 || base_script.PathOrientation == XTween_PathOrientation.注视目标位置)
             {
                 XGUI.layout_group_start(
                 type: XGUIContainerType.Vertical,
@@ -701,12 +912,12 @@ namespace SevenStrikeModules.XTween.Editor
                 title_clipping: TextClipping.Clip,
                 padding: new RectOffset(10, 5, 15, 15));
 
-                if (BaseScript.PathOrientation == XTween_PathOrientation.注视目标物体)
+                if (base_script.PathOrientation == XTween_PathOrientation.注视目标物体)
                 {
                     DrawParamField("目标物体", sp_LookAtObject, 100);
                 }
 
-                if (BaseScript.PathOrientation == XTween_PathOrientation.注视目标位置)
+                if (base_script.PathOrientation == XTween_PathOrientation.注视目标位置)
                 {
                     DrawParamField("目标位置", sp_LookAtPosition, 100);
                 }
@@ -720,7 +931,7 @@ namespace SevenStrikeModules.XTween.Editor
             #endregion
 
             #region 路径状态
-            BaseScript.fold_status = XGUI.layout_group_start(
+            base_script.fold_status = XGUI.layout_group_start(
                    type: XGUIContainerType.Vertical,
                    bg_fill: XGUIGroup.缺口纯色边框,
                    bg_color: XGUIColor.亮白,
@@ -730,9 +941,9 @@ namespace SevenStrikeModules.XTween.Editor
                    title_text_color: XTween_Dashboard.Theme_Primary,
                    title_clipping: TextClipping.Clip,
                    padding: new RectOffset(10, 5, 15, 15),
-                   foldout: BaseScript.fold_status);
+                   foldout: base_script.fold_status);
 
-            if (BaseScript.fold_status)
+            if (base_script.fold_status)
             {
                 XGUI.layout_state_displayer_text(
                     title: "世界状态",
@@ -772,7 +983,7 @@ namespace SevenStrikeModules.XTween.Editor
             #endregion
 
             #region 路径参数
-            BaseScript.fold_params = XGUI.layout_group_start(
+            base_script.fold_params = XGUI.layout_group_start(
             type: XGUIContainerType.Vertical,
             bg_fill: XGUIGroup.缺口纯色边框,
             bg_color: XGUIColor.亮白,
@@ -782,9 +993,9 @@ namespace SevenStrikeModules.XTween.Editor
             title_text_color: XTween_Dashboard.Theme_Primary,
             title_clipping: TextClipping.Clip,
             padding: new RectOffset(10, 5, 15, 15),
-            foldout: BaseScript.fold_params);
+            foldout: base_script.fold_params);
 
-            if (BaseScript.fold_params)
+            if (base_script.fold_params)
             {
                 DrawParamField("有效路径百分比", sp_PathLimitePercent, 100);
                 DrawParamField("路径步数细分", sp_SegmentsPerCurve, 100);
@@ -794,7 +1005,7 @@ namespace SevenStrikeModules.XTween.Editor
             #endregion
 
             #region 路径样式
-            BaseScript.fold_style = XGUI.layout_group_start(
+            base_script.fold_style = XGUI.layout_group_start(
                    type: XGUIContainerType.Vertical,
                    bg_fill: XGUIGroup.缺口纯色边框,
                    bg_color: XGUIColor.亮白,
@@ -804,9 +1015,9 @@ namespace SevenStrikeModules.XTween.Editor
                    title_text_color: XTween_Dashboard.Theme_Primary,
                    title_clipping: TextClipping.Clip,
                    padding: new RectOffset(10, 5, 15, 15),
-                   foldout: BaseScript.fold_style);
+                   foldout: base_script.fold_style);
 
-            if (BaseScript.fold_style)
+            if (base_script.fold_style)
             {
                 DrawParamField("路径点尺寸", sp_PathPointSize, 100);
                 DrawParamField("贝塞尔控制点尺寸", sp_BezierControlSize, 100);
@@ -829,7 +1040,7 @@ namespace SevenStrikeModules.XTween.Editor
             #endregion
 
             #region 路径标记生成
-            BaseScript.fold_marks = XGUI.layout_group_start(
+            base_script.fold_marks = XGUI.layout_group_start(
                    type: XGUIContainerType.Vertical,
                    bg_fill: XGUIGroup.缺口纯色边框,
                    bg_color: XGUIColor.亮白,
@@ -839,9 +1050,9 @@ namespace SevenStrikeModules.XTween.Editor
                    title_text_color: XTween_Dashboard.Theme_Primary,
                    title_clipping: TextClipping.Clip,
                    padding: new RectOffset(10, 5, 15, 15),
-                   foldout: BaseScript.fold_marks);
+                   foldout: base_script.fold_marks);
 
-            if (BaseScript.fold_marks)
+            if (base_script.fold_marks)
             {
                 DrawParamField("标记样式", sp_PathMarksTexture, 100);
                 DrawParamField("标记尺寸", sp_PathMarksSize, 100);
@@ -883,7 +1094,7 @@ namespace SevenStrikeModules.XTween.Editor
                             PrimaryIndex: 0);
                         if (res == "创建")
                         {
-                            BaseScript.PathMarks_Create();
+                            base_script.PathMarks_Create();
                         }
                     });
                 }
@@ -894,7 +1105,7 @@ namespace SevenStrikeModules.XTween.Editor
                         string res_de = XGUI.dialog(type: XGUIDialogType.警告, windowtitle: "XTweenPath消息", title: "已存在标记物", msg: "此操作会将当前的所有路径标记物全部清除！", ok: "清除", cancel: "暂不", PrimaryIndex: 0);
                         if (res_de == "清除")
                         {
-                            BaseScript.PathMarks_Clear();
+                            base_script.PathMarks_Clear();
                         }
                     });
                 }
@@ -938,13 +1149,13 @@ namespace SevenStrikeModules.XTween.Editor
         /// </summary>
         private void PathPoints_Add()
         {
-            Undo.RecordObject(BaseScript, "Add Path Point");
+            Undo.RecordObject(base_script, "Add Path Point");
 
             // 创建一个点位，如果路径点列表不是空的，那么就获取最后的点的坐标向右平移 0.3 单位的距离创建新点位，否则就创建在脚本物体的位置
-            Vector3 InitialPosition = BaseScript.PathPoints.Count > 0 ? BaseScript.Get_WorldPosition(BaseScript.PathPoints.Count - 1) + Vector3.right * BaseScript.AddedDistance : BaseScript.transform.position;
+            Vector3 InitialPosition = base_script.PathPoints.Count > 0 ? base_script.Get_WorldPosition(base_script.PathPoints.Count - 1) + Vector3.right * base_script.AddedDistance : base_script.transform.position;
 
             // 初始化一个点位的贝塞尔曲线类
-            Vector3 LocalPoint = BaseScript.transform.InverseTransformPoint(InitialPosition);
+            Vector3 LocalPoint = base_script.transform.InverseTransformPoint(InitialPosition);
             var newPoint = new XTween_BezierPathPoint(LocalPoint, Vector3.zero, Vector3.zero);
 
             // 如果当前路径模式为 手动贝塞尔 或 平衡贝塞尔 那么切线点要做相应的调整
@@ -952,19 +1163,19 @@ namespace SevenStrikeModules.XTween.Editor
             //{
 
             // 首先算出距离：0.2 除以自身的 正向X轴 轴缩放
-            float distance = 0.1f / BaseScript.transform.lossyScale.x;
+            float distance = 0.1f / base_script.transform.lossyScale.x;
             // 入点向左移动 distance 距离
             newPoint.bezier_in = Vector3.left * distance;
 
             // 如果是 Balance 模式那么出点为入点的反向位置，否则向右移动 distance 距离
-            newPoint.bezier_out = BaseScript.PathType == XTween_PathType.平衡贝塞尔 ? -newPoint.bezier_in : Vector3.right * distance;
+            newPoint.bezier_out = base_script.PathType == XTween_PathType.平衡贝塞尔 ? -newPoint.bezier_in : Vector3.right * distance;
 
             //}
 
             // 将新建的路径点加入列表中
-            BaseScript.PathPoints.Add(newPoint);
+            base_script.PathPoints.Add(newPoint);
             // 选中创建的点位
-            selectedAnchorIndex = BaseScript.PathPoints.Count - 1;
+            selectedAnchorIndex = base_script.PathPoints.Count - 1;
         }
         /// <summary>
         /// 清空路径点
@@ -982,8 +1193,8 @@ namespace SevenStrikeModules.XTween.Editor
                 themecolor: XTween_Dashboard.Theme_Primary);
             if (res == "清空")
             {
-                Undo.RecordObject(BaseScript, "Clear All Path Points");
-                BaseScript.PathPoints.Clear();
+                Undo.RecordObject(base_script, "Clear All Path Points");
+                base_script.PathPoints.Clear();
                 selectedAnchorIndex = -1;
                 selectedControlIndex = -1;
             }
@@ -1004,10 +1215,10 @@ namespace SevenStrikeModules.XTween.Editor
                 themecolor: XTween_Dashboard.Theme_Primary);
             if (res == "归零")
             {
-                Undo.RecordObject(BaseScript, "Path Points ResetToZero");
-                for (int i = 0; i < BaseScript.PathPoints.Count; i++)
+                Undo.RecordObject(base_script, "Path Points ResetToZero");
+                for (int i = 0; i < base_script.PathPoints.Count; i++)
                 {
-                    BaseScript.PathPoints[i].relative.z = 0;
+                    base_script.PathPoints[i].relative.z = 0;
                 }
             }
         }
@@ -1031,7 +1242,7 @@ namespace SevenStrikeModules.XTween.Editor
                     themecolor: XTween_Dashboard.Theme_Primary);
                 if (res_de == "清除")
                 {
-                    BaseScript.PathMarks_Clear();
+                    base_script.PathMarks_Clear();
                 }
             }
             else
@@ -1047,7 +1258,7 @@ namespace SevenStrikeModules.XTween.Editor
                     themecolor: XTween_Dashboard.Theme_Primary);
                 if (res == "创建")
                 {
-                    BaseScript.PathMarks_Create();
+                    base_script.PathMarks_Create();
                 }
             }
         }
@@ -1057,53 +1268,53 @@ namespace SevenStrikeModules.XTween.Editor
         /// </summary>
         private void DuringSceneGUI(SceneView sceneView)
         {
-            if (BaseScript.PathPoints == null)
+            if (base_script.PathPoints == null)
                 return;
 
             // 根据脚本物体转换出对应的 world 和 anchored 位置信息
-            if (!BaseScript.IsWorldMode)
-                BaseScript.ConvertPositions();
+            if (!base_script.IsWorldMode)
+                base_script.ConvertPositions();
 
             // 计算路径总长
-            BaseScript.PathLength = BaseScript.CalculateTotalLength();
+            base_script.PathLength = base_script.CalculateTotalLength();
 
             // 绘制路径点和线的可视化
             DrawPath();
 
             Event e = Event.current;
 
-            for (int i = 0; i < BaseScript.PathPoints.Count; i++)
+            for (int i = 0; i < base_script.PathPoints.Count; i++)
             {
                 DrawPoint_Path(i, e);
                 DrawPoints_TangentControl(i, e);
 
-                if (BaseScript.DisplayPath && BaseScript.DisplayIndex)
+                if (base_script.DisplayPath && base_script.DisplayIndex)
                 {
                     // 在每个锚点旁边绘制序号
-                    Vector3 pos = BaseScript.Get_WorldPosition(i);
+                    Vector3 pos = base_script.Get_WorldPosition(i);
                     // 字体设置
-                    IndexStyle.fontSize = BaseScript.IndexSize;
-                    IndexStyle.normal.textColor = BaseScript.Color_Index;
+                    IndexStyle.fontSize = base_script.IndexSize;
+                    IndexStyle.normal.textColor = base_script.Color_Index;
                     IndexStyle.alignment = TextAnchor.MiddleCenter;
-                    IndexStyle.contentOffset = new Vector2(BaseScript.IndexOffset.x, 1 - BaseScript.IndexOffset.y - 1);
+                    IndexStyle.contentOffset = new Vector2(base_script.IndexOffset.x, 1 - base_script.IndexOffset.y - 1);
                     // 显示路径点序号
                     Handles.Label(pos, $"X {i}", IndexStyle);
 
                     // 如果不是最后一个点，绘制线段长度
-                    if (i < BaseScript.PathPoints.Count - 1 || BaseScript.IsClosed)
+                    if (i < base_script.PathPoints.Count - 1 || base_script.IsClosed)
                     {
                         // 计算当前线段的长度
-                        int nextIndex = (i + 1) % BaseScript.PathPoints.Count;
-                        float segmentLength = BaseScript.CalculateSegmentLength(i, nextIndex, 10);
+                        int nextIndex = (i + 1) % base_script.PathPoints.Count;
+                        float segmentLength = base_script.CalculateSegmentLength(i, nextIndex, 10);
 
                         // 计算线段中点位置
-                        Vector3 midPoint = (BaseScript.Get_WorldPosition(i) + BaseScript.Get_WorldPosition(nextIndex)) * 0.5f;
+                        Vector3 midPoint = (base_script.Get_WorldPosition(i) + base_script.Get_WorldPosition(nextIndex)) * 0.5f;
 
-                        IndexStyle.fontSize = BaseScript.IndexSize - 2;
-                        IndexStyle.normal.textColor = BaseScript.Color_IndexLength;
-                        IndexStyle.contentOffset = new Vector2(BaseScript.IndexOffset.x, 1 - BaseScript.IndexOffset.y - 1 - BaseScript.IndexLengthHeight);
+                        IndexStyle.fontSize = base_script.IndexSize - 2;
+                        IndexStyle.normal.textColor = base_script.Color_IndexLength;
+                        IndexStyle.contentOffset = new Vector2(base_script.IndexOffset.x, 1 - base_script.IndexOffset.y - 1 - base_script.IndexLengthHeight);
 
-                        float per = segmentLength / BaseScript.PathLength * 100;
+                        float per = segmentLength / base_script.PathLength * 100;
                         // 显示线段长度（使用更友好的单位）
                         Handles.Label(pos, $"{segmentLength:F2} / {per:F1}%", IndexStyle);
                     }
@@ -1112,8 +1323,68 @@ namespace SevenStrikeModules.XTween.Editor
 
             PathPointKeyboardEdit(e);
 
-            if (BaseScript.act_on_pathChanged != null)
-                BaseScript.act_on_pathChanged?.Invoke();
+            if (base_script.act_on_pathChanged != null)
+                base_script.act_on_pathChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// 对路径点进行键盘操作，按下 Delete 键时删除选中的路径点或重置控制点
+        /// </summary>
+        /// <param name="e">当前事件</param>
+        private void PathPointKeyboardEdit(Event e)
+        {
+            if (!base_script.gameObject.activeSelf)
+                return;
+            if (base_script.IsWorldMode)
+                return;
+
+            if (e.type == EventType.KeyDown)
+            {
+                if (e.keyCode == KeyCode.Delete)
+                {
+                    if (selectedAnchorIndex >= 0)
+                    {
+                        Undo.RecordObject(base_script, "Delete Point");
+                        base_script.PathPoints.RemoveAt(selectedAnchorIndex);
+                        selectedAnchorIndex = Mathf.Clamp(selectedAnchorIndex, 0, base_script.PathPoints.Count - 1);
+                        e.Use();
+                    }
+                    else if (selectedControlIndex >= 0)
+                    {
+                        Undo.RecordObject(base_script, "Reset Control Point");
+                        if (isInControl)
+                        {
+                            base_script.PathPoints[selectedControlIndex].bezier_in = Vector3.zero;
+                            if (base_script.PathType == XTween_PathType.平衡贝塞尔)
+                                base_script.PathPoints[selectedControlIndex].bezier_out = Vector3.zero;
+                        }
+                        else
+                        {
+                            base_script.PathPoints[selectedControlIndex].bezier_out = Vector3.zero;
+                            if (base_script.PathType == XTween_PathType.平衡贝塞尔)
+                                base_script.PathPoints[selectedControlIndex].bezier_in = Vector3.zero;
+                        }
+                        e.Use();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 因为路径动画的特殊性必须将其轴心点设为中心对齐
+        /// </summary>
+        private void SetTransformCenter()
+        {
+            if (target == null)
+                return;
+            RectTransform rect = base_script.GetComponent<RectTransform>();
+            if (rect == null)
+                return;
+            Vector3 ori_pos = rect.localPosition;
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.localPosition = ori_pos;
         }
 
         #region 绘制类
@@ -1122,53 +1393,53 @@ namespace SevenStrikeModules.XTween.Editor
         /// </summary>
         private void DrawPath()
         {
-            if (!BaseScript.DisplayPath)
+            if (!base_script.DisplayPath)
                 return;
-            if (!BaseScript.gameObject.activeSelf)
+            if (!base_script.gameObject.activeSelf)
                 return;
-            if (BaseScript.PathPoints.Count < 2)
+            if (base_script.PathPoints.Count < 2)
                 return;
-            Handles.color = BaseScript.Color_Path;
+            Handles.color = base_script.Color_Path;
 
-            switch (BaseScript.PathType)
+            switch (base_script.PathType)
             {
                 case XTween_PathType.线性:
-                    Vector3[] linearPoints = new Vector3[BaseScript.PathPoints.Count + (BaseScript.IsClosed ? 1 : 0)];
-                    for (int i = 0; i < BaseScript.PathPoints.Count; i++)
+                    Vector3[] linearPoints = new Vector3[base_script.PathPoints.Count + (base_script.IsClosed ? 1 : 0)];
+                    for (int i = 0; i < base_script.PathPoints.Count; i++)
                     {
                         // 获取路径点（世界坐标）
-                        linearPoints[i] = BaseScript.Get_WorldPosition(i);
+                        linearPoints[i] = base_script.Get_WorldPosition(i);
                     }
-                    if (BaseScript.IsClosed)
+                    if (base_script.IsClosed)
                     {
-                        linearPoints[BaseScript.PathPoints.Count] = BaseScript.Get_WorldPosition(0);
+                        linearPoints[base_script.PathPoints.Count] = base_script.Get_WorldPosition(0);
                     }
                     // DrawAAPolyLine 填入的位置参数是世界坐标
-                    Handles.DrawAAPolyLine(BaseScript.PathWidth, linearPoints);
+                    Handles.DrawAAPolyLine(base_script.PathWidth, linearPoints);
                     break;
                 case XTween_PathType.自动贝塞尔:
-                    for (int i = 0; i < BaseScript.PathPoints.Count - 1; i++)
+                    for (int i = 0; i < base_script.PathPoints.Count - 1; i++)
                     {
-                        Vector3 start_before_tangent = (i > 0) ? BaseScript.Get_WorldPosition(i - 1) : (BaseScript.IsClosed ? BaseScript.Get_WorldPosition(BaseScript.PathPoints.Count - 1) : BaseScript.Get_WorldPosition(i));
-                        Vector3 start = BaseScript.Get_WorldPosition(i);
-                        Vector3 end = BaseScript.Get_WorldPosition(i + 1);
-                        Vector3 end_after_tangent = (i < BaseScript.PathPoints.Count - 2) ? BaseScript.Get_WorldPosition(i + 2) : (BaseScript.IsClosed ? BaseScript.Get_WorldPosition((i + 2) % BaseScript.PathPoints.Count) : end);
+                        Vector3 start_before_tangent = (i > 0) ? base_script.Get_WorldPosition(i - 1) : (base_script.IsClosed ? base_script.Get_WorldPosition(base_script.PathPoints.Count - 1) : base_script.Get_WorldPosition(i));
+                        Vector3 start = base_script.Get_WorldPosition(i);
+                        Vector3 end = base_script.Get_WorldPosition(i + 1);
+                        Vector3 end_after_tangent = (i < base_script.PathPoints.Count - 2) ? base_script.Get_WorldPosition(i + 2) : (base_script.IsClosed ? base_script.Get_WorldPosition((i + 2) % base_script.PathPoints.Count) : end);
 
                         Vector3 tangent_start = 0.5f * (end - start_before_tangent);
                         Vector3 tangent_end = 0.5f * (end_after_tangent - start);
 
                         // DrawBezier 的参数均为世界坐标数值
-                        Handles.DrawBezier(start, end, start + tangent_start * 0.3f, end - tangent_end * 0.3f, BaseScript.Color_Path, null, BaseScript.PathWidth);
+                        Handles.DrawBezier(start, end, start + tangent_start * 0.3f, end - tangent_end * 0.3f, base_script.Color_Path, null, base_script.PathWidth);
                     }
 
                     // 绘制闭合段
-                    if (BaseScript.IsClosed && BaseScript.PathPoints.Count > 2)
+                    if (base_script.IsClosed && base_script.PathPoints.Count > 2)
                     {
-                        int i = BaseScript.PathPoints.Count - 1;
-                        Vector3 start_before_tangent = BaseScript.Get_WorldPosition(i - 1);
-                        Vector3 start = BaseScript.Get_WorldPosition(i);
-                        Vector3 end = BaseScript.Get_WorldPosition(0);
-                        Vector3 end_after_tangent = BaseScript.Get_WorldPosition(1);
+                        int i = base_script.PathPoints.Count - 1;
+                        Vector3 start_before_tangent = base_script.Get_WorldPosition(i - 1);
+                        Vector3 start = base_script.Get_WorldPosition(i);
+                        Vector3 end = base_script.Get_WorldPosition(0);
+                        Vector3 end_after_tangent = base_script.Get_WorldPosition(1);
 
                         Vector3 tangent_start = 0.5f * (end - start_before_tangent);
                         Vector3 tangent_end = 0.5f * (end_after_tangent - start);
@@ -1178,41 +1449,41 @@ namespace SevenStrikeModules.XTween.Editor
                             start, end,
                             start + tangent_start * 0.3f,
                             end - tangent_end * 0.3f,
-                            BaseScript.Color_Path,
+                            base_script.Color_Path,
                             null,
-                            BaseScript.PathWidth
+                            base_script.PathWidth
                         );
                     }
                     break;
                 case XTween_PathType.手动贝塞尔:
                 case XTween_PathType.平衡贝塞尔:
-                    for (int i = 0; i < BaseScript.PathPoints.Count - 1; i++)
+                    for (int i = 0; i < base_script.PathPoints.Count - 1; i++)
                     {
                         // DrawBezier 的参数均为世界坐标数值
                         Handles.DrawBezier(
-                            BaseScript.Get_WorldPosition(i),
-                            BaseScript.Get_WorldPosition(i + 1),
-                            BaseScript.Get_Out_Position(i),
-                            BaseScript.Get_In_Position(i + 1),
-                            BaseScript.Color_Path,
+                            base_script.Get_WorldPosition(i),
+                            base_script.Get_WorldPosition(i + 1),
+                            base_script.Get_Out_Position(i),
+                            base_script.Get_In_Position(i + 1),
+                            base_script.Color_Path,
                             null,
-                            BaseScript.PathWidth
+                            base_script.PathWidth
                         );
                     }
 
                     // 绘制闭合段
-                    if (BaseScript.IsClosed && BaseScript.PathPoints.Count > 2)
+                    if (base_script.IsClosed && base_script.PathPoints.Count > 2)
                     {
-                        int i = BaseScript.PathPoints.Count - 1;
+                        int i = base_script.PathPoints.Count - 1;
                         // DrawBezier 的参数均为世界坐标数值
                         Handles.DrawBezier(
-                            BaseScript.Get_WorldPosition(i),
-                            BaseScript.Get_WorldPosition(0),
-                            BaseScript.Get_Out_Position(i),
-                            BaseScript.Get_In_Position(0),
-                            BaseScript.Color_Path,
+                            base_script.Get_WorldPosition(i),
+                            base_script.Get_WorldPosition(0),
+                            base_script.Get_Out_Position(i),
+                            base_script.Get_In_Position(0),
+                            base_script.Color_Path,
                             null,
-                            BaseScript.PathWidth
+                            base_script.PathWidth
                         );
                     }
                     break;
@@ -1225,20 +1496,20 @@ namespace SevenStrikeModules.XTween.Editor
         /// param name="e">当前事件</param>
         private void DrawPoint_Path(int index, Event e)
         {
-            if (!BaseScript.DisplayPath)
+            if (!base_script.DisplayPath)
                 return;
-            if (!BaseScript.gameObject.activeSelf)
+            if (!base_script.gameObject.activeSelf)
                 return;
-            if (BaseScript.IsWorldMode)
+            if (base_script.IsWorldMode)
                 return;
 
-            Vector3 w_pos = BaseScript.Get_WorldPosition(index);
+            Vector3 w_pos = base_script.Get_WorldPosition(index);
 
             bool isSelected = (index == selectedAnchorIndex);
-            Handles.color = isSelected ? BaseScript.Color_PathPoint_Selected : BaseScript.Color_PathPoint;
+            Handles.color = isSelected ? base_script.Color_PathPoint_Selected : base_script.Color_PathPoint;
 
             float handleSize = HandleUtility.GetHandleSize(w_pos);
-            float screenSize = handleSize * (BaseScript.PathPointSize * 0.1f) * 0.5f; // 关键调整：乘以0.5使视觉尺寸匹配碰撞检测
+            float screenSize = handleSize * (base_script.PathPointSize * 0.1f) * 0.5f; // 关键调整：乘以0.5使视觉尺寸匹配碰撞检测
 
             Handles.SphereHandleCap(
                 0,
@@ -1270,10 +1541,10 @@ namespace SevenStrikeModules.XTween.Editor
 
                 if (EditorGUI.EndChangeCheck())
                 {
-                    Undo.RecordObject(BaseScript, "MovePathPoint");
+                    Undo.RecordObject(base_script, "MovePathPoint");
                     // 拖动路径点的时候将点的世界坐标空间转换到 relative 局部坐标空间值中
-                    BaseScript.PathPoints[index].relative = BaseScript.transform.InverseTransformPoint(handle_pos);
-                    BaseScript.ConvertPositions();
+                    base_script.PathPoints[index].relative = base_script.transform.InverseTransformPoint(handle_pos);
+                    base_script.ConvertPositions();
                 }
             }
         }
@@ -1284,32 +1555,32 @@ namespace SevenStrikeModules.XTween.Editor
         /// <param name="e">当前事件</param>
         private void DrawPoints_TangentControl(int index, Event e)
         {
-            if (!BaseScript.DisplayPath)
+            if (!base_script.DisplayPath)
                 return;
-            if (!BaseScript.gameObject.activeSelf)
+            if (!base_script.gameObject.activeSelf)
                 return;
-            if (BaseScript.IsWorldMode)
+            if (base_script.IsWorldMode)
                 return;
-            if (BaseScript.PathType != XTween_PathType.手动贝塞尔 && BaseScript.PathType != XTween_PathType.平衡贝塞尔)
+            if (base_script.PathType != XTween_PathType.手动贝塞尔 && base_script.PathType != XTween_PathType.平衡贝塞尔)
                 return;
 
             // 绘制入控制点(对除第一个点外的所有点)
-            if (index > 0 || (BaseScript.IsClosed && index == 0))
+            if (index > 0 || (base_script.IsClosed && index == 0))
             {
                 DrawPoint_Tangent(
                     index,
-                    BaseScript.Get_In_Position(index),
+                    base_script.Get_In_Position(index),
                     isInControl: true,
                     e
                 );
             }
 
             // 绘制出控制点(对除最后一个点外的所有点，或闭合时的最后一个点)
-            if (index < BaseScript.PathPoints.Count - 1 || (BaseScript.IsClosed && index == BaseScript.PathPoints.Count - 1))
+            if (index < base_script.PathPoints.Count - 1 || (base_script.IsClosed && index == base_script.PathPoints.Count - 1))
             {
                 DrawPoint_Tangent(
                     index,
-                    BaseScript.Get_Out_Position(index),
+                    base_script.Get_Out_Position(index),
                     isInControl: false,
                     e
                 );
@@ -1324,21 +1595,21 @@ namespace SevenStrikeModules.XTween.Editor
         /// <param name="e">当前事件</param>
         private void DrawPoint_Tangent(int index, Vector3 pos, bool isInControl, Event e)
         {
-            if (!BaseScript.gameObject.activeSelf)
+            if (!base_script.gameObject.activeSelf)
                 return;
 
             bool isSelected = (index == selectedControlIndex) && ((isInControl && this.isInControl) || (!isInControl && !this.isInControl));
 
-            Handles.color = isSelected ? BaseScript.Color_BezierControl_Selected : BaseScript.Color_BezierControl;
+            Handles.color = isSelected ? base_script.Color_BezierControl_Selected : base_script.Color_BezierControl;
 
-            Vector3 anchorPos = BaseScript.Get_WorldPosition(index);
-            if (BaseScript.ControlLineStyle == XTween_LineStyle.虚线)
+            Vector3 anchorPos = base_script.Get_WorldPosition(index);
+            if (base_script.ControlLineStyle == XTween_LineStyle.虚线)
                 Handles.DrawDottedLine(anchorPos, pos, 2f);
             else
                 Handles.DrawAAPolyLine(anchorPos, pos);
 
             float handleSize = HandleUtility.GetHandleSize(anchorPos);
-            float screenSize = handleSize * (BaseScript.BezierControlSize * 0.1f) * 0.5f; // 关键调整：乘以0.5使视觉尺寸匹配碰撞检测
+            float screenSize = handleSize * (base_script.BezierControlSize * 0.1f) * 0.5f; // 关键调整：乘以0.5使视觉尺寸匹配碰撞检测
 
             int controlID = GUIUtility.GetControlID(FocusType.Passive);
             if (e.type == EventType.Layout)
@@ -1366,32 +1637,32 @@ namespace SevenStrikeModules.XTween.Editor
                 Vector3 pos_world = Handles.PositionHandle(pos, Quaternion.identity);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    Undo.RecordObject(BaseScript, "Move Control Point");
-                    Vector3 localAnchor = BaseScript.PathPoints[index].relative;
-                    Vector3 localPos = BaseScript.transform.InverseTransformPoint(pos_world);
+                    Undo.RecordObject(base_script, "Move Control Point");
+                    Vector3 localAnchor = base_script.PathPoints[index].relative;
+                    Vector3 localPos = base_script.transform.InverseTransformPoint(pos_world);
 
-                    if (BaseScript.PathType == XTween_PathType.平衡贝塞尔)
+                    if (base_script.PathType == XTween_PathType.平衡贝塞尔)
                     {
                         if (isInControl)
                         {
-                            BaseScript.PathPoints[index].bezier_in = localPos - localAnchor;
-                            BaseScript.PathPoints[index].bezier_out = -BaseScript.PathPoints[index].bezier_in;
+                            base_script.PathPoints[index].bezier_in = localPos - localAnchor;
+                            base_script.PathPoints[index].bezier_out = -base_script.PathPoints[index].bezier_in;
                         }
                         else
                         {
-                            BaseScript.PathPoints[index].bezier_out = localPos - localAnchor;
-                            BaseScript.PathPoints[index].bezier_in = -BaseScript.PathPoints[index].bezier_out;
+                            base_script.PathPoints[index].bezier_out = localPos - localAnchor;
+                            base_script.PathPoints[index].bezier_in = -base_script.PathPoints[index].bezier_out;
                         }
                     }
                     else
                     {
                         if (isInControl)
                         {
-                            BaseScript.PathPoints[index].bezier_in = localPos - localAnchor;
+                            base_script.PathPoints[index].bezier_in = localPos - localAnchor;
                         }
                         else
                         {
-                            BaseScript.PathPoints[index].bezier_out = localPos - localAnchor;
+                            base_script.PathPoints[index].bezier_out = localPos - localAnchor;
                         }
                     }
                 }
@@ -1454,65 +1725,5 @@ namespace SevenStrikeModules.XTween.Editor
                 font: XGUI.GetFont("xg-regular"));
         }
         #endregion
-
-        /// <summary>
-        /// 对路径点进行键盘操作，按下 Delete 键时删除选中的路径点或重置控制点
-        /// </summary>
-        /// <param name="e">当前事件</param>
-        private void PathPointKeyboardEdit(Event e)
-        {
-            if (!BaseScript.gameObject.activeSelf)
-                return;
-            if (BaseScript.IsWorldMode)
-                return;
-
-            if (e.type == EventType.KeyDown)
-            {
-                if (e.keyCode == KeyCode.Delete)
-                {
-                    if (selectedAnchorIndex >= 0)
-                    {
-                        Undo.RecordObject(BaseScript, "Delete Point");
-                        BaseScript.PathPoints.RemoveAt(selectedAnchorIndex);
-                        selectedAnchorIndex = Mathf.Clamp(selectedAnchorIndex, 0, BaseScript.PathPoints.Count - 1);
-                        e.Use();
-                    }
-                    else if (selectedControlIndex >= 0)
-                    {
-                        Undo.RecordObject(BaseScript, "Reset Control Point");
-                        if (isInControl)
-                        {
-                            BaseScript.PathPoints[selectedControlIndex].bezier_in = Vector3.zero;
-                            if (BaseScript.PathType == XTween_PathType.平衡贝塞尔)
-                                BaseScript.PathPoints[selectedControlIndex].bezier_out = Vector3.zero;
-                        }
-                        else
-                        {
-                            BaseScript.PathPoints[selectedControlIndex].bezier_out = Vector3.zero;
-                            if (BaseScript.PathType == XTween_PathType.平衡贝塞尔)
-                                BaseScript.PathPoints[selectedControlIndex].bezier_in = Vector3.zero;
-                        }
-                        e.Use();
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 因为路径动画的特殊性必须将其轴心点设为中心对齐
-        /// </summary>
-        private void SetTransformCenter()
-        {
-            if (target == null)
-                return;
-            RectTransform rect = BaseScript.GetComponent<RectTransform>();
-            if (rect == null)
-                return;
-            Vector3 ori_pos = rect.localPosition;
-            rect.anchorMin = new Vector2(0.5f, 0.5f);
-            rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.pivot = new Vector2(0.5f, 0.5f);
-            rect.localPosition = ori_pos;
-        }
     }
 }

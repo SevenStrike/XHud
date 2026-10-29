@@ -482,14 +482,17 @@ namespace SevenStrikeModules.XTween
         /// 索引 - 自动停止预览
         /// </summary>
         [SerializeField] private bool index_AutoKillPreviewTweens = true;
+        public const string editor_serializedfield_index_AutoKillPreviewTweens = nameof(index_AutoKillPreviewTweens);
         /// <summary>
         /// 索引 - 杀死或停止预览时是否先重置动画再停止或杀死
         /// </summary>
         [SerializeField] private bool index_RewindPreviewTweensWithKill = true;
+        public const string editor_serializedfield_index_RewindPreviewTweensWithKill = nameof(index_RewindPreviewTweensWithKill);
         /// <summary>
         /// 索引 - 停止预览后是否清空预览列表
         /// </summary>
         [SerializeField] private bool index_ClearPreviewTweensWithKill = true;
+        public const string editor_serializedfield_index_ClearPreviewTweensWithKill = nameof(index_ClearPreviewTweensWithKill);
 #pragma warning restore CS0414
         #endregion
 
@@ -504,40 +507,54 @@ namespace SevenStrikeModules.XTween
 
         #region 起源值
         [SerializeField] private int Target_Int;
+        public const string editor_serializedfield_Target_Int = nameof(Target_Int);
         [SerializeField] private float Target_Float;
+        public const string editor_serializedfield_Target_Float = nameof(Target_Float);
         [SerializeField] private string Target_String;
+        public const string editor_serializedfield_Target_String = nameof(Target_String);
         [SerializeField] private Vector2 Target_Vector2;
+        public const string editor_serializedfield_Target_Vector2 = nameof(Target_Vector2);
         [SerializeField] private Vector3 Target_Vector3;
+        public const string editor_serializedfield_Target_Vector3 = nameof(Target_Vector3);
         [SerializeField] private Vector4 Target_Vector4;
+        public const string editor_serializedfield_Target_Vector4 = nameof(Target_Vector4);
         [SerializeField] private Color Target_Color = Color.white;
+        public const string editor_serializedfield_Target_Color = nameof(Target_Color);
         #endregion
 
         #region 控制按键
         [SerializeField] private bool keyControl_Enabled = true;
+        public const string editor_serializedfield_keyControl_Enabled = nameof(keyControl_Enabled);
         /// <summary>
         /// 按键控制 - 动画创建
         /// </summary>
         [SerializeField] private KeyCode keyControl_Tween_Create = KeyCode.C;
+        public const string editor_serializedfield_keyControl_Tween_Create = nameof(keyControl_Tween_Create);
         /// <summary>
         /// 按键控制 - 动画播放
         /// </summary>
         [SerializeField] private KeyCode keyControl_Tween_Play = KeyCode.W;
+        public const string editor_serializedfield_keyControl_Tween_Play = nameof(keyControl_Tween_Play);
         /// <summary>
         /// 按键控制 - 动画暂停&继续
         /// </summary>
         [SerializeField] private KeyCode keyControl_Tween_Pause_Resume = KeyCode.P;
+        public const string editor_serializedfield_keyControl_Tween_Pause_Resume = nameof(keyControl_Tween_Pause_Resume);
         /// <summary>
         /// 按键控制 - 动画倒退
         /// </summary>
         [SerializeField] private KeyCode keyControl_Tween_Rewind = KeyCode.R;
+        public const string editor_serializedfield_keyControl_Tween_Rewind = nameof(keyControl_Tween_Rewind);
         /// <summary>
         /// 按键控制 - 动画杀死
         /// </summary>
         [SerializeField] private KeyCode keyControl_Tween_Kill = KeyCode.E;
+        public const string editor_serializedfield_keyControl_Tween_Kill = nameof(keyControl_Tween_Kill);
         /// <summary>
         /// 按键控制 - 动画重播
         /// </summary>
         [SerializeField] private KeyCode keyControl_Tween_Replay = KeyCode.T;
+        public const string editor_serializedfield_keyControl_Tween_Replay = nameof(keyControl_Tween_Replay);
         #endregion
 
         #region 面板折叠

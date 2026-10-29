@@ -171,8 +171,8 @@ namespace SevenStrikeModules.XHud.Editor
         private void RMS_DrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty sp_node = sp_rms_nodes.GetArrayElementAtIndex(index);
-            SerializedProperty sp_node_indicator = sp_node.FindPropertyRelative("Indicator");
-            SerializedProperty sp_node_res = sp_node.FindPropertyRelative("Res");
+            SerializedProperty sp_node_indicator = sp_node.FindPropertyRelative(nameof(ScreenResolutionNode.indicator));
+            SerializedProperty sp_node_res = sp_node.FindPropertyRelative(nameof(ScreenResolutionNode.res));
             if (sp_node != null)
             {
                 if (XGUI.GetCurrentWindowWidth() > 120)
@@ -250,7 +250,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="list">列表实例。</param>
         private void RMS_OnSelect(ReorderableList list)
         {
-            SerializedProperty indicator = sp_rms_nodes.GetArrayElementAtIndex(list.index).FindPropertyRelative("Indicator");
+            SerializedProperty indicator = sp_rms_nodes.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(ScreenResolutionNode.indicator));
             sp_rms_current_solution.stringValue = indicator.stringValue;
             xHud_SwitchResolution(indicator.stringValue);
         }
@@ -284,8 +284,8 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = 0; i < sp_rms_nodes.arraySize; i++)
             {
                 SerializedProperty resroot = sp_rms_nodes.GetArrayElementAtIndex(i);
-                SerializedProperty x_res = resroot.FindPropertyRelative("Res");
-                SerializedProperty x_indicator = resroot.FindPropertyRelative("Indicator");
+                SerializedProperty x_res = resroot.FindPropertyRelative(nameof(ScreenResolutionNode.res));
+                SerializedProperty x_indicator = resroot.FindPropertyRelative(nameof(ScreenResolutionNode.indicator));
 
                 if (indicator == x_indicator.stringValue)
                 {

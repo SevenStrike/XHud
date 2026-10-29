@@ -399,7 +399,7 @@ namespace SevenStrikeModules.XHud.Editor
             sp_visible_item_count.serializedObject.ApplyModifiedProperties();
 
             #region ReorderableList - TransitionLibrary
-            TrasitionInfoList = new ReorderableList(base_object, sp_transition_node.FindPropertyRelative("frames"), true, true, true, true);
+            TrasitionInfoList = new ReorderableList(base_object, sp_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.frames)), true, true, true, true);
             TrasitionInfoList.drawElementCallback = TransitionInfoList_Original_DrawElementCallback;
             #endregion
         }
@@ -489,13 +489,13 @@ namespace SevenStrikeModules.XHud.Editor
                 clipping: clipping);
             #endregion
 
-            SerializedProperty sp_name = sp_transition_node.FindPropertyRelative("name");
-            SerializedProperty sp_des = sp_transition_node.FindPropertyRelative("description");
-            SerializedProperty sp_TotalFramesCount = sp_transition_node.FindPropertyRelative("total_frames_count");
-            SerializedProperty sp_LastFrameIndex = sp_transition_node.FindPropertyRelative("last_frame_index");
-            SerializedProperty sp_SkipFrame = sp_transition_node.FindPropertyRelative("skip_frame");
-            SerializedProperty sp_Res = sp_transition_node.FindPropertyRelative("res");
-            SerializedProperty sp_Frames = sp_transition_node.FindPropertyRelative("frames");
+            SerializedProperty sp_name = sp_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.name));
+            SerializedProperty sp_des = sp_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.description));
+            SerializedProperty sp_TotalFramesCount = sp_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.total_frames_count));
+            SerializedProperty sp_LastFrameIndex = sp_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.last_frame_index));
+            SerializedProperty sp_SkipFrame = sp_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.skip_frame));
+            SerializedProperty sp_Res = sp_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.res));
+            SerializedProperty sp_Frames = sp_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.frames));
 
             #region 数值关联
             if (sp_Frames.arraySize > 0)
@@ -1169,7 +1169,7 @@ namespace SevenStrikeModules.XHud.Editor
         private void TransitionInfoList_Original_DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty prop = sp_transition_node;
-            SerializedProperty sp_texlist = prop.FindPropertyRelative("frames");
+            SerializedProperty sp_texlist = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.frames));
             SerializedProperty sp_tex = sp_texlist.GetArrayElementAtIndex(index);
 
             Texture2D tex = sp_tex.objectReferenceValue as Texture2D;
@@ -1234,7 +1234,7 @@ namespace SevenStrikeModules.XHud.Editor
             // 只绘制可视区域内的元素
             for (int i = startIndex; i < endIndex && i < TrasitionInfoList.count; i++)
             {
-                SerializedProperty sp_texlist = sp_transition_node.FindPropertyRelative("frames");
+                SerializedProperty sp_texlist = sp_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.frames));
                 SerializedProperty sp_tex = sp_texlist.GetArrayElementAtIndex(i);
 
                 item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);

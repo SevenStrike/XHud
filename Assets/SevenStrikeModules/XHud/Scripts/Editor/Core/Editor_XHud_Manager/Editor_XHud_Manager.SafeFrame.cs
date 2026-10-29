@@ -226,7 +226,7 @@ namespace SevenStrikeModules.XHud.Editor
                         SerializedProperty sp_anchorlay = sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i);
                         if (sp_anchorlay != null)
                         {
-                            Image obj_anchorlay = (Image)sp_anchorlay.FindPropertyRelative("Mark").objectReferenceValue;
+                            Image obj_anchorlay = (Image)sp_anchorlay.FindPropertyRelative(nameof(Anchor_Layout.Mark)).objectReferenceValue;
                             //sp_DebugMode.Log(obj_anchorlay);
                             if (obj_anchorlay != null)
                             {
@@ -245,7 +245,7 @@ namespace SevenStrikeModules.XHud.Editor
                 if (sp_cv_anchors_layout_screen != null && sp_cv_anchors_layout_screen.arraySize > 0)
                     for (int i = 0; i < sp_cv_anchors_layout_screen.arraySize; i++)
                     {
-                        Image obj_anchorlay = (Image)sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Mark").objectReferenceValue;
+                        Image obj_anchorlay = (Image)sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Mark)).objectReferenceValue;
 
                         if (obj_anchorlay != null)
                         {

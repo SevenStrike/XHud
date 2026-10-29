@@ -794,43 +794,43 @@ namespace SevenStrikeModules.XHud.Editor
                                     {
                                         UnityEngine.RectTransform obj = anchorRoot.GetChild(i).GetComponent<UnityEngine.RectTransform>();
                                         sp_cv_anchors_layout_screen.InsertArrayElementAtIndex(sp_cv_anchors_layout_screen.arraySize);
-                                        sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Anchor").objectReferenceValue = obj;
-                                        sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Name").stringValue = obj.name;
+                                        sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Anchor)).objectReferenceValue = obj;
+                                        sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Name)).stringValue = obj.name;
                                         string Type = anchorRoot.GetChild(i).name;
                                         switch (Type)
                                         {
                                             case "B":
-                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 0;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Type)).enumValueIndex = 0;
                                                 break;
                                             case "U":
-                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 1;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Type)).enumValueIndex = 1;
                                                 break;
                                             case "D":
-                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 2;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Type)).enumValueIndex = 2;
                                                 break;
                                             case "L":
-                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 3;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Type)).enumValueIndex = 3;
                                                 break;
                                             case "R":
-                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 4;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Type)).enumValueIndex = 4;
                                                 break;
                                             case "C":
-                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 5;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Type)).enumValueIndex = 5;
                                                 break;
                                             case "L_U":
-                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 6;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Type)).enumValueIndex = 6;
                                                 break;
                                             case "L_D":
-                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 7;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Type)).enumValueIndex = 7;
                                                 break;
                                             case "R_U":
-                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 8;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Type)).enumValueIndex = 8;
                                                 break;
                                             case "R_D":
-                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 9;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Type)).enumValueIndex = 9;
                                                 break;
                                             case "T":
-                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative("Type").enumValueIndex = 10;
+                                                sp_cv_anchors_layout_screen.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(Anchor_Layout.Type)).enumValueIndex = 10;
                                                 break;
                                         }
 
@@ -847,14 +847,14 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_hmr_physics_screen_size.vector2Value = new Vector2(59.6f, 33.7f);
                             sp_hmr_physics_screen_size.serializedObject.ApplyModifiedProperties();
 
-                            SerializedProperty sp_res_full_sprite = sp_hmr_res_full.FindPropertyRelative("sprite");
-                            SerializedProperty sp_res_full_size = sp_hmr_res_full.FindPropertyRelative("size");
+                            SerializedProperty sp_res_full_sprite = sp_hmr_res_full.FindPropertyRelative(nameof(XHudRatioReferenceRes.sprite));
+                            SerializedProperty sp_res_full_size = sp_hmr_res_full.FindPropertyRelative(nameof(XHudRatioReferenceRes.size));
                             sp_res_full_sprite.objectReferenceValue = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_manager/HumanRefer/Body_Solid.png");
                             sp_res_full_size.vector2Value = new Vector2(47, 172);
                             sp_hmr_res_full.serializedObject.ApplyModifiedProperties();
 
-                            SerializedProperty sp_res_part_sprite = sp_hmr_res_part.FindPropertyRelative("sprite");
-                            SerializedProperty sp_res_part_size = sp_hmr_res_part.FindPropertyRelative("size");
+                            SerializedProperty sp_res_part_sprite = sp_hmr_res_part.FindPropertyRelative(nameof(XHudRatioReferenceRes.sprite));
+                            SerializedProperty sp_res_part_size = sp_hmr_res_part.FindPropertyRelative(nameof(XHudRatioReferenceRes.size));
                             sp_res_part_sprite.objectReferenceValue = AssetDatabase.LoadAssetAtPath<Sprite>($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_manager/HumanRefer/Head_Solid.png");
                             sp_res_part_size.vector2Value = new Vector2(19, 30);
                             sp_hmr_res_part.serializedObject.ApplyModifiedProperties();

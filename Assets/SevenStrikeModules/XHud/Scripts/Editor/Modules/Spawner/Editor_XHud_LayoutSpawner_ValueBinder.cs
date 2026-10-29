@@ -526,7 +526,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void GetSerializeFields()
         {
-            UseDebug = serializedObject.FindProperty("UseDebug");
+            UseDebug = serializedObject.FindProperty(nameof(XHud_LayoutSpawner.use_debug));
         }
     }
 }

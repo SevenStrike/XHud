@@ -16,7 +16,7 @@ MonoBehaviour:
   library_root: {fileID: 0}
   library_elements:
   - name: XHudIcon
-    initialize_count: 1
+    initialize_count: 2
     used_count: 0
     recycled_count: 0
     next_index: 0
@@ -24,7 +24,7 @@ MonoBehaviour:
     target: {fileID: 2484565434626366029, guid: 54cb949a8cef5ca44a27602c14cb9919, type: 3}
     preload_elements: []
   - name: Cat
-    initialize_count: 1
+    initialize_count: 2
     used_count: 0
     recycled_count: 0
     next_index: 0

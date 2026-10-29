@@ -628,8 +628,8 @@ namespace SevenStrikeModules.XHud.Editor
         {
             SerializedProperty prop = sp_library_curves.GetArrayElementAtIndex(index);
 
-            SerializedProperty sp_name = prop.FindPropertyRelative("name");
-            SerializedProperty sp_curve = prop.FindPropertyRelative("curve");
+            SerializedProperty sp_name = prop.FindPropertyRelative(nameof(xHud_LibraryArg_Curve.name));
+            SerializedProperty sp_curve = prop.FindPropertyRelative(nameof(xHud_LibraryArg_Curve.curve));
 
             #region 序号
             drawelement_rect.Set(rect.x + 16, rect.y + 4, 30, 20);
@@ -738,7 +738,7 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = startIndex; i < endIndex && i < curve_info_list.count; i++)
             {
                 SerializedProperty prop = sp_library_curves.GetArrayElementAtIndex(i);
-                SerializedProperty sp_name = prop.FindPropertyRelative("name");
+                SerializedProperty sp_name = prop.FindPropertyRelative(nameof(xHud_LibraryArg_Curve.name));
 
                 item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
@@ -816,7 +816,7 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 sp_library_curves.InsertArrayElementAtIndex(list.index);
                 SerializedProperty prop = sp_library_curves.GetArrayElementAtIndex(list.index);
-                SerializedProperty sp_name = prop.FindPropertyRelative("name");
+                SerializedProperty sp_name = prop.FindPropertyRelative(nameof(xHud_LibraryArg_Curve.name));
                 sp_name.stringValue = $"新曲线_{list.index}";
 
 
@@ -945,8 +945,8 @@ namespace SevenStrikeModules.XHud.Editor
 
                             sp_library_curves.InsertArrayElementAtIndex(i + size);
                             SerializedProperty sp_cur = sp_library_curves.GetArrayElementAtIndex(i + size);
-                            SerializedProperty sp_name = sp_cur.FindPropertyRelative("name");
-                            SerializedProperty sp_curve = sp_cur.FindPropertyRelative("curve");
+                            SerializedProperty sp_name = sp_cur.FindPropertyRelative(nameof(xHud_LibraryArg_Curve.name));
+                            SerializedProperty sp_curve = sp_cur.FindPropertyRelative(nameof(xHud_LibraryArg_Curve.curve));
 
                             sp_name.stringValue = info.name;
                             sp_curve.animationCurveValue = info.curve;
@@ -993,8 +993,8 @@ namespace SevenStrikeModules.XHud.Editor
 
                             sp_library_curves.InsertArrayElementAtIndex(i);
                             SerializedProperty sp_cur = sp_library_curves.GetArrayElementAtIndex(i);
-                            SerializedProperty sp_name = sp_cur.FindPropertyRelative("name");
-                            SerializedProperty sp_curve = sp_cur.FindPropertyRelative("curve");
+                            SerializedProperty sp_name = sp_cur.FindPropertyRelative(nameof(xHud_LibraryArg_Curve.name));
+                            SerializedProperty sp_curve = sp_cur.FindPropertyRelative(nameof(xHud_LibraryArg_Curve.curve));
 
                             sp_name.stringValue = info.name;
                             sp_curve.animationCurveValue = info.curve;

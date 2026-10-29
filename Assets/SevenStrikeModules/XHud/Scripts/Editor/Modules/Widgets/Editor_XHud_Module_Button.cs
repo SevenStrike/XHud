@@ -55,9 +55,9 @@ namespace SevenStrikeModules.XHud.Editor
     public class Editor_XHud_Module_Button : ButtonEditor
     {
         #region 组件 / 列表
-        private XHud_Module_Button BaseScript;
+        private XHud_Module_Button base_script;
         private ReorderableList PrimitivesTweenList;
-        private XHud_Manager HudManager;
+        private XHud_Manager hud_manager;
         #endregion
 
         #region 序列化属性
@@ -78,31 +78,31 @@ namespace SevenStrikeModules.XHud.Editor
         #endregion
 
         #region 批量化操作
-        XHud_Module_Button[] SelectedObjects;
+        XHud_Module_Button[] selected_objects;
 
         private void Targets_Get()
         {
             if (targets.Length > 1)
             {
-                SelectedObjects = new XHud_Module_Button[targets.Length];
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                selected_objects = new XHud_Module_Button[targets.Length];
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
                     var t = targets[i];
-                    SelectedObjects[i] = (XHud_Module_Button)t;
+                    selected_objects[i] = (XHud_Module_Button)t;
                 }
             }
             else
             {
-                SelectedObjects = new XHud_Module_Button[targets.Length];
-                SelectedObjects[0] = (XHud_Module_Button)target;
+                selected_objects = new XHud_Module_Button[targets.Length];
+                selected_objects[0] = (XHud_Module_Button)target;
             }
         }
 
         private bool Targets_Selected()
         {
-            if (SelectedObjects == null)
+            if (selected_objects == null)
                 return false;
-            if (SelectedObjects.Length > 1)
+            if (selected_objects.Length > 1)
             {
                 return true;
             }
@@ -132,12 +132,52 @@ namespace SevenStrikeModules.XHud.Editor
         {
             base.OnEnable();
 
-            BaseScript = (XHud_Module_Button)target;
+            base_script = (XHud_Module_Button)target;
 
-            HudManager = XHud_Dashboard.get_manager();
+            hud_manager = XHud_Dashboard.get_manager();
 
-            // 获取序列化属性
-            GetSerializeFields();
+            #region 获取序列化属性
+            Indicator = serializedObject.FindProperty(nameof(XHud_Module_Button.Indicator));
+            DebugState = serializedObject.FindProperty(nameof(XHud_Module_Button.DebugState));
+            IsOptionButton = serializedObject.FindProperty(nameof(XHud_Module_Button.IsOptionButton));
+            ClickDelayTimeThreadhold = serializedObject.FindProperty(nameof(XHud_Module_Button.ClickDelayTimeThreadhold));
+            eve_on_Deselect = serializedObject.FindProperty(nameof(XHud_Module_Button.eve_on_Deselect));
+            eve_on_Select = serializedObject.FindProperty(nameof(XHud_Module_Button.eve_on_Select));
+            eve_on_Click = serializedObject.FindProperty(nameof(XHud_Module_Button.eve_on_Click));
+            eve_on_Press = serializedObject.FindProperty(nameof(XHud_Module_Button.eve_on_Press));
+            eve_on_Enter = serializedObject.FindProperty(nameof(XHud_Module_Button.eve_on_Enter));
+            eve_on_Exit = serializedObject.FindProperty(nameof(XHud_Module_Button.eve_on_Exit));
+            eve_on_Release = serializedObject.FindProperty(nameof(XHud_Module_Button.eve_on_Release));
+            eve_on_LongPressed = serializedObject.FindProperty(nameof(XHud_Module_Button.eve_on_Longpressed));
+            eve_on_LongpressPer = serializedObject.FindProperty(nameof(XHud_Module_Button.eve_on_LongpressPer));
+            LongPress_Threshold = serializedObject.FindProperty(nameof(XHud_Module_Button.LongPress_Threshold));
+            LongPress_Percent = serializedObject.FindProperty(nameof(XHud_Module_Button.LongPress_Percent));
+            ButtonName = serializedObject.FindProperty(nameof(XHud_Module_Button.ButtonName));
+            ButtonText = serializedObject.FindProperty(nameof(XHud_Module_Button.ButtonText));
+            ButtonTmpText = serializedObject.FindProperty(nameof(XHud_Module_Button.ButtonTmpText));
+            LongPress_SmoothRewind = serializedObject.FindProperty(nameof(XHud_Module_Button.LongPress_SmoothRewind));
+            LongPress_UseRewind = serializedObject.FindProperty(nameof(XHud_Module_Button.LongPress_UseRewind));
+            TextColorSyncFade = serializedObject.FindProperty(nameof(XHud_Module_Button.TextColorSyncFade));
+            IconColorSyncFade = serializedObject.FindProperty(nameof(XHud_Module_Button.IconColorSyncFade));
+            IconImage = serializedObject.FindProperty(nameof(XHud_Module_Button.IconImage));
+            EventIsFold = serializedObject.FindProperty(nameof(XHud_Module_Button.EventIsFold));
+            ToggleOriginalIsFold = serializedObject.FindProperty(nameof(XHud_Module_Button.ToggleOriginalIsFold));
+            LongPress_Step = serializedObject.FindProperty(nameof(XHud_Module_Button.LongPress_Step));
+            ButtonActionTiming = serializedObject.FindProperty(nameof(XHud_Module_Button.ButtonActionTiming));
+            HudButtonState_Clicked = serializedObject.FindProperty(nameof(XHud_Module_Button.HudButtonState_Clicked));
+            HudButtonState_Selector = serializedObject.FindProperty(nameof(XHud_Module_Button.HudButtonState_Selector));
+            HudButtonState_Holder = serializedObject.FindProperty(nameof(XHud_Module_Button.HudButtonState_Holder));
+            HudButtonState_Pressed = serializedObject.FindProperty(nameof(XHud_Module_Button.HudButtonState_Pressed));
+            HudButtonState_LongPressed = serializedObject.FindProperty(nameof(XHud_Module_Button.HudButtonState_LongPressed));
+            AutoStopPreview = serializedObject.FindProperty(nameof(XHud_Module_Button.AutoStopPreview));
+            BgColorSyncFade = serializedObject.FindProperty(nameof(XHud_Module_Button.BgColorSyncFade));
+            BgImage = serializedObject.FindProperty(nameof(XHud_Module_Button.BgImage));
+            PrimitiveControllerNodes = serializedObject.FindProperty(nameof(XHud_Module_Button.PrimitiveControllerNodes));
+            PrimitivesTweenGlobalDuration = serializedObject.FindProperty(nameof(XHud_Module_Button.PrimitivesTweenGlobalDuration));
+            PrimitivesTweenMaxDuration = serializedObject.FindProperty(nameof(XHud_Module_Button.PrimitivesTweenMaxDuration));
+            PrimitivesTweenState = serializedObject.FindProperty(nameof(XHud_Module_Button.PrimitivesTweenState));
+            PrimitivesIsFold = serializedObject.FindProperty(nameof(XHud_Module_Button.PrimitivesIsFold));
+            #endregion
 
             #region 获取图标
             icon_main = Editor_XHud_GUI.GetIcon("Icons_XHud_Button/icon_main");
@@ -179,8 +219,8 @@ namespace SevenStrikeModules.XHud.Editor
                     float baseheight = rect.y + (rect.height - 25);
 
                     SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(index);
-                    SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
-                    SerializedProperty sp_delay = sp_node.FindPropertyRelative("DelayTime");
+                    SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
+                    SerializedProperty sp_delay = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.delay_time));
                     XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
 
                     if (sp_node_con.objectReferenceValue != null)
@@ -209,8 +249,8 @@ namespace SevenStrikeModules.XHud.Editor
                         SerializedObject so_anim = new SerializedObject(sp_con.pt_tween);
                         so_anim.Update();
 
-                        SerializedProperty sp_glodur = so_anim.FindProperty("GlobalDuration");
-                        SerializedProperty sp_maxdur = so_anim.FindProperty("MaxTimerWithGlobalDuration");
+                        SerializedProperty sp_glodur = so_anim.FindProperty(nameof(XHud_Module_Button.PrimitivesTweenGlobalDuration));
+                        SerializedProperty sp_maxdur = so_anim.FindProperty(nameof(XHud_Module_Button.PrimitivesTweenMaxDuration));
 
                         Editor_XHud_GUI.Gui_Property_Field(new Rect(rect.width - 50, rect.y + 4, 30, 19), "G", sp_glodur, 10, 40, LineHeight, 15);
 
@@ -234,7 +274,7 @@ namespace SevenStrikeModules.XHud.Editor
                     }
 
                     SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(list.index);
-                    SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                    SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
 
                     if (sp_node_con != null)
                     {
@@ -264,10 +304,10 @@ namespace SevenStrikeModules.XHud.Editor
         {
             serializedObject.Update();
 
-            if (string.IsNullOrEmpty(BaseScript.Indicator))
+            if (string.IsNullOrEmpty(base_script.Indicator))
                 Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 按钮", Color.white);
             else
-                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 按钮 -> ( " + BaseScript.Indicator + " )", Color.white);
+                Editor_XHud_GUI.Gui_Layout_Banner(icon_main, HudFilled.实体, HudColor.深空灰, "XHud - 按钮 -> ( " + base_script.Indicator + " )", Color.white);
 
             #region 快捷功能
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "快捷功能", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
@@ -331,26 +371,26 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 5, "选项", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
             Editor_XHud_GUI.Gui_Layout_Space(5);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("原生参数", stroptions_hide, ref ToggleOriginalIsFold, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("原生参数", stroptions_hide, ref ToggleOriginalIsFold, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("状态调试", stroptions_debug, ref DebugState, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("状态调试", stroptions_debug, ref DebugState, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("自动停止预览", stroptions_enabled, ref AutoStopPreview, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("自动停止预览", stroptions_enabled, ref AutoStopPreview, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("选项模式", stroptions_enabled, ref IsOptionButton, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("选项模式", stroptions_enabled, ref IsOptionButton, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
             if (IsOptionButton.boolValue)
-                Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Module_Button>("作为选项按钮激活条件", str_clickthreadhold, ref ButtonActionTiming, HudFilled.实体, 120, 22, SelectedObjects);
+                Editor_XHud_GUI.Gui_Layout_Popup<string, XHud_Module_Button>("作为选项按钮激活条件", str_clickthreadhold, ref ButtonActionTiming, HudFilled.实体, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("文字变色", stroptions_enabled, ref TextColorSyncFade, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("文字变色", stroptions_enabled, ref TextColorSyncFade, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("图标变色", stroptions_enabled, ref IconColorSyncFade, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("图标变色", stroptions_enabled, ref IconColorSyncFade, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("背景变色", stroptions_enabled, ref BgColorSyncFade, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("背景变色", stroptions_enabled, ref BgColorSyncFade, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("长按回退机制", stroptions_threholdback, ref LongPress_UseRewind, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("长按回退机制", stroptions_threholdback, ref LongPress_UseRewind, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
-            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("长按回退方式", stroptions_smoothback, ref LongPress_SmoothRewind, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, SelectedObjects);
+            Editor_XHud_GUI.Gui_Layout_Toggle<bool, XHud_Module_Button>("长按回退方式", stroptions_smoothback, ref LongPress_SmoothRewind, HudFilled.无, HudFilled.实体, Color.white * 0.9f, 120, 22, selected_objects);
 
             Editor_XHud_GUI.Gui_Layout_Space(10);
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
@@ -425,12 +465,12 @@ namespace SevenStrikeModules.XHud.Editor
             {
                 if (Targets_Selected())
                 {
-                    for (int i = 0; i < SelectedObjects.Length; i++)
+                    for (int i = 0; i < selected_objects.Length; i++)
                     {
-                        SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                        SerializedProperty ele_sp_ButtonName = so_ele.FindProperty("ButtonName");
-                        SerializedProperty ele_sp_ButtonText = so_ele.FindProperty("OptionItemText");
-                        SerializedProperty ele_sp_ButtonTmpText = so_ele.FindProperty("OptionItemTmpText");
+                        SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                        SerializedProperty ele_sp_ButtonName = so_ele.FindProperty(nameof(XHud_Module_Button.ButtonName));
+                        SerializedProperty ele_sp_ButtonText = so_ele.FindProperty(nameof(XHud_Module_Button.ButtonText));
+                        SerializedProperty ele_sp_ButtonTmpText = so_ele.FindProperty(nameof(XHud_Module_Button.ButtonTmpText));
 
                         so_ele.Update();
 
@@ -522,7 +562,7 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 最大耗时        
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.tween_global_duration * PrimitivesTweenMaxDuration.floatValue).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (hud_manager.tween_global_duration * PrimitivesTweenMaxDuration.floatValue).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     #endregion
                 }
                 #endregion
@@ -534,27 +574,27 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 批量控件
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
-                if (Editor_XHud_GUI.Gui_Layout_Button($"{SelectedObjects[ButtonStatu_Index].name} ( {SelectedObjects[ButtonStatu_Index].Indicator} )", "", HudFilled.透明, HudColor.无, Color.gray, 20))
+                if (Editor_XHud_GUI.Gui_Layout_Button($"{selected_objects[ButtonStatu_Index].name} ( {selected_objects[ButtonStatu_Index].Indicator} )", "", HudFilled.透明, HudColor.无, Color.gray, 20))
                 {
-                    EditorGUIUtility.PingObject(SelectedObjects[ButtonStatu_Index]);
+                    EditorGUIUtility.PingObject(selected_objects[ButtonStatu_Index]);
                 }
                 Editor_XHud_GUI.Gui_Layout_FlexSpace();
                 if (Editor_XHud_GUI.Gui_Layout_Button(12, "", left_arrow_r, left_arrow_p))
                 {
                     if (ButtonStatu_Index <= 0)
                     {
-                        ButtonStatu_Index = SelectedObjects.Length - 1;
+                        ButtonStatu_Index = selected_objects.Length - 1;
                     }
                     else
                     {
                         ButtonStatu_Index--;
                     }
-                    EditorGUIUtility.PingObject(SelectedObjects[ButtonStatu_Index]);
+                    EditorGUIUtility.PingObject(selected_objects[ButtonStatu_Index]);
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(16);
                 if (Editor_XHud_GUI.Gui_Layout_Button(12, "", right_arrow_r, right_arrow_p))
                 {
-                    if (ButtonStatu_Index >= SelectedObjects.Length - 1)
+                    if (ButtonStatu_Index >= selected_objects.Length - 1)
                     {
                         ButtonStatu_Index = 0;
                     }
@@ -562,35 +602,35 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         ButtonStatu_Index++;
                     }
-                    EditorGUIUtility.PingObject(SelectedObjects[ButtonStatu_Index]);
+                    EditorGUIUtility.PingObject(selected_objects[ButtonStatu_Index]);
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(5);
                 Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 #endregion
 
                 #region 按钮状态
-                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "点击状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_Clicked.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
-                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选择状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_Selector.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
-                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "按下状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_Pressed.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
-                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "悬停状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_Holder.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
-                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "长按状态", 12, SelectedObjects[ButtonStatu_Index].HudButtonState_LongPressed.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "点击状态", 12, selected_objects[ButtonStatu_Index].HudButtonState_Clicked.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "选择状态", 12, selected_objects[ButtonStatu_Index].HudButtonState_Selector.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "按下状态", 12, selected_objects[ButtonStatu_Index].HudButtonState_Pressed.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "悬停状态", 12, selected_objects[ButtonStatu_Index].HudButtonState_Holder.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                Editor_XHud_GUI.StatuDisplayer_text(icon_button, 12, new Vector2(0, 7), "长按状态", 12, selected_objects[ButtonStatu_Index].HudButtonState_LongPressed.ToString(), XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                 #endregion
 
                 #region 动画相关
-                if (SelectedObjects[ButtonStatu_Index].PrimitiveControllerNodes != null && SelectedObjects[ButtonStatu_Index].PrimitiveControllerNodes.Count > 0)
+                if (selected_objects[ButtonStatu_Index].PrimitiveControllerNodes != null && selected_objects[ButtonStatu_Index].PrimitiveControllerNodes.Count > 0)
                 {
                     #region 动画状态     
-                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, SelectedObjects[ButtonStatu_Index].PrimitivesTweenState == XHudElementAnimateState.Animating ? "动画中" : "静止状态", SelectedObjects[ButtonStatu_Index].PrimitivesTweenState == XHudElementAnimateState.Animating ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray, 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(animstate, 12, new Vector2(0, 7), "动画状态", 12, selected_objects[ButtonStatu_Index].PrimitivesTweenState == XHudElementAnimateState.Animating ? "动画中" : "静止状态", selected_objects[ButtonStatu_Index].PrimitivesTweenState == XHudElementAnimateState.Animating ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray, 11);
                     #endregion
 
-                    SelectedObjects[ButtonStatu_Index].PrimitivesTweenMaxDuration = PrimitiveTweens_MaxDuration_Get(SelectedObjects[ButtonStatu_Index].PrimitiveControllerNodes, SelectedObjects[ButtonStatu_Index].PrimitivesTweenGlobalDuration);
+                    selected_objects[ButtonStatu_Index].PrimitivesTweenMaxDuration = PrimitiveTweens_MaxDuration_Get(selected_objects[ButtonStatu_Index].PrimitiveControllerNodes, selected_objects[ButtonStatu_Index].PrimitivesTweenGlobalDuration);
 
                     #region 最大耗时     
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, SelectedObjects[ButtonStatu_Index].PrimitivesTweenMaxDuration.ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（速率倍增）</color>", 12, selected_objects[ButtonStatu_Index].PrimitivesTweenMaxDuration.ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     #endregion
 
                     #region 最大耗时        
-                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (HudManager.tween_global_duration * SelectedObjects[ButtonStatu_Index].PrimitivesTweenMaxDuration).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                    Editor_XHud_GUI.StatuDisplayer_text(dutation, 12, new Vector2(0, 7), "最大耗时<color=#909090>（XHUD倍增）</color>", 12, (hud_manager.tween_global_duration * selected_objects[ButtonStatu_Index].PrimitivesTweenMaxDuration).ToString() + "秒", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     #endregion
                 }
                 #endregion
@@ -628,27 +668,27 @@ namespace SevenStrikeModules.XHud.Editor
                 #region 批量控件
                 Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
                 Editor_XHud_GUI.Gui_Layout_Space(10);
-                if (Editor_XHud_GUI.Gui_Layout_Button($"{SelectedObjects[ButtonStatistic_Index].name} ( {SelectedObjects[ButtonStatistic_Index].Indicator} )", "", HudFilled.透明, HudColor.无, Color.gray, 20))
+                if (Editor_XHud_GUI.Gui_Layout_Button($"{selected_objects[ButtonStatistic_Index].name} ( {selected_objects[ButtonStatistic_Index].Indicator} )", "", HudFilled.透明, HudColor.无, Color.gray, 20))
                 {
-                    EditorGUIUtility.PingObject(SelectedObjects[ButtonStatistic_Index]);
+                    EditorGUIUtility.PingObject(selected_objects[ButtonStatistic_Index]);
                 }
                 Editor_XHud_GUI.Gui_Layout_FlexSpace();
                 if (Editor_XHud_GUI.Gui_Layout_Button(12, "", left_arrow_r, left_arrow_p))
                 {
                     if (ButtonStatistic_Index <= 0)
                     {
-                        ButtonStatistic_Index = SelectedObjects.Length - 1;
+                        ButtonStatistic_Index = selected_objects.Length - 1;
                     }
                     else
                     {
                         ButtonStatistic_Index--;
                     }
-                    EditorGUIUtility.PingObject(SelectedObjects[ButtonStatistic_Index]);
+                    EditorGUIUtility.PingObject(selected_objects[ButtonStatistic_Index]);
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(16);
                 if (Editor_XHud_GUI.Gui_Layout_Button(12, "", right_arrow_r, right_arrow_p))
                 {
-                    if (ButtonStatistic_Index >= SelectedObjects.Length - 1)
+                    if (ButtonStatistic_Index >= selected_objects.Length - 1)
                     {
                         ButtonStatistic_Index = 0;
                     }
@@ -656,22 +696,22 @@ namespace SevenStrikeModules.XHud.Editor
                     {
                         ButtonStatistic_Index++;
                     }
-                    EditorGUIUtility.PingObject(SelectedObjects[ButtonStatistic_Index]);
+                    EditorGUIUtility.PingObject(selected_objects[ButtonStatistic_Index]);
                 }
                 Editor_XHud_GUI.Gui_Layout_Space(5);
                 Editor_XHud_GUI.Gui_Layout_Horizontal_End();
                 #endregion
 
-                if (SelectedObjects[ButtonStatistic_Index].PrimitiveControllerNodes.Count <= 0)
+                if (selected_objects[ButtonStatistic_Index].PrimitiveControllerNodes.Count <= 0)
                 {
                     Editor_XHud_GUI.Gui_Layout_Labelfield("暂无统计数据", HudFilled.无, HudColor.无, Editor_XHud_GUI.GetColor(HudColor.阴影灰), TextAnchor.MiddleCenter);
                 }
                 else
                 {
                     #region 组件数量 - 图元动画器
-                    if (SelectedObjects[ButtonStatistic_Index].PrimitiveControllerNodes.Count > 0)
+                    if (selected_objects[ButtonStatistic_Index].PrimitiveControllerNodes.Count > 0)
                     {
-                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, SelectedObjects[ButtonStatistic_Index].PrimitiveControllerNodes.Count.ToString() + " 个", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
+                        Editor_XHud_GUI.StatuDisplayer_text(icon_anim, 12, new Vector2(0, 7), "图元动画器", 12, selected_objects[ButtonStatistic_Index].PrimitiveControllerNodes.Count.ToString() + " 个", XHud_Dashboard.themes_get_color(ThemeColorType.primary), 11);
                     }
                     #endregion
                 }
@@ -817,16 +857,16 @@ namespace SevenStrikeModules.XHud.Editor
                 SerializedProperty sp_col_disable = serializedObject.FindProperty("m_Colors.m_DisabledColor");
                 SerializedProperty sp_col_mul = serializedObject.FindProperty("m_Colors.m_ColorMultiplier");
                 SerializedProperty sp_col_dur = serializedObject.FindProperty("m_Colors.m_FadeDuration");
-                SerializedProperty sp_Indicator = serializedObject.FindProperty("Indicator");
-                SerializedProperty sp_DebugState = serializedObject.FindProperty("DebugState");
-                SerializedProperty sp_IsOptionButton = serializedObject.FindProperty("IsOptionButton");
-                SerializedProperty sp_ButtonName = serializedObject.FindProperty("ButtonName");
-                SerializedProperty sp_LongPress_Threshold = serializedObject.FindProperty("LongPress_Threshold");
-                SerializedProperty sp_LongPress_Percent = serializedObject.FindProperty("LongPress_Percent");
-                SerializedProperty sp_LongPress_SmoothRewind = serializedObject.FindProperty("LongPress_SmoothRewind");
-                SerializedProperty sp_LongPress_UseRewind = serializedObject.FindProperty("LongPress_UseRewind");
-                SerializedProperty sp_TextColorSyncFade = serializedObject.FindProperty("TextColorSyncFade");
-                SerializedProperty sp_IconColorSyncFade = serializedObject.FindProperty("IconColorSyncFade");
+                SerializedProperty sp_Indicator = serializedObject.FindProperty(nameof(XHud_Module_Button.Indicator));
+                SerializedProperty sp_DebugState = serializedObject.FindProperty(nameof(XHud_Module_Button.DebugState));
+                SerializedProperty sp_IsOptionButton = serializedObject.FindProperty(nameof(XHud_Module_Button.IsOptionButton));
+                SerializedProperty sp_ButtonName = serializedObject.FindProperty(nameof(XHud_Module_Button.ButtonName));
+                SerializedProperty sp_LongPress_Threshold = serializedObject.FindProperty(nameof(XHud_Module_Button.LongPress_Threshold));
+                SerializedProperty sp_LongPress_Percent = serializedObject.FindProperty(nameof(XHud_Module_Button.LongPress_Percent));
+                SerializedProperty sp_LongPress_SmoothRewind = serializedObject.FindProperty(nameof(XHud_Module_Button.LongPress_SmoothRewind));
+                SerializedProperty sp_LongPress_UseRewind = serializedObject.FindProperty(nameof(XHud_Module_Button.LongPress_UseRewind));
+                SerializedProperty sp_TextColorSyncFade = serializedObject.FindProperty(nameof(XHud_Module_Button.TextColorSyncFade));
+                SerializedProperty sp_IconColorSyncFade = serializedObject.FindProperty(nameof(XHud_Module_Button.IconColorSyncFade));
 
                 // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
@@ -905,9 +945,9 @@ namespace SevenStrikeModules.XHud.Editor
                     }
                     else
                     {
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        for (int i = 0; i < selected_objects.Length; i++)
                         {
-                            SerializedObject so_btn = new SerializedObject(SelectedObjects[i]);
+                            SerializedObject so_btn = new SerializedObject(selected_objects[i]);
 
                             SerializedProperty c_sp_col_normal = so_btn.FindProperty("m_Colors.m_NormalColor");
                             SerializedProperty c_sp_col_highlight = so_btn.FindProperty("m_Colors.m_HighlightedColor");
@@ -916,16 +956,16 @@ namespace SevenStrikeModules.XHud.Editor
                             SerializedProperty c_sp_col_disable = so_btn.FindProperty("m_Colors.m_DisabledColor");
                             SerializedProperty c_sp_col_mul = so_btn.FindProperty("m_Colors.m_ColorMultiplier");
                             SerializedProperty c_sp_col_dur = so_btn.FindProperty("m_Colors.m_FadeDuration");
-                            SerializedProperty c_sp_Indicator = so_btn.FindProperty("Indicator");
-                            SerializedProperty c_sp_DebugState = so_btn.FindProperty("DebugState");
-                            SerializedProperty c_sp_IsOptionButton = so_btn.FindProperty("IsOptionButton");
-                            SerializedProperty c_sp_ButtonName = so_btn.FindProperty("ButtonName");
-                            SerializedProperty c_sp_LongPress_Threshold = so_btn.FindProperty("LongPress_Threshold");
-                            SerializedProperty c_sp_LongPress_Percent = so_btn.FindProperty("LongPress_Percent");
-                            SerializedProperty c_sp_LongPress_SmoothRewind = so_btn.FindProperty("LongPress_SmoothRewind");
-                            SerializedProperty c_sp_LongPress_UseRewind = so_btn.FindProperty("LongPress_UseRewind");
-                            SerializedProperty c_sp_TextColorSyncFade = so_btn.FindProperty("TextColorSyncFade");
-                            SerializedProperty c_sp_IconColorSyncFade = so_btn.FindProperty("IconColorSyncFade");
+                            SerializedProperty c_sp_Indicator = so_btn.FindProperty(nameof(XHud_Module_Button.Indicator));
+                            SerializedProperty c_sp_DebugState = so_btn.FindProperty(nameof(XHud_Module_Button.DebugState));
+                            SerializedProperty c_sp_IsOptionButton = so_btn.FindProperty(nameof(XHud_Module_Button.IsOptionButton));
+                            SerializedProperty c_sp_ButtonName = so_btn.FindProperty(nameof(XHud_Module_Button.ButtonName));
+                            SerializedProperty c_sp_LongPress_Threshold = so_btn.FindProperty(nameof(XHud_Module_Button.LongPress_Threshold));
+                            SerializedProperty c_sp_LongPress_Percent = so_btn.FindProperty(nameof(XHud_Module_Button.LongPress_Percent));
+                            SerializedProperty c_sp_LongPress_SmoothRewind = so_btn.FindProperty(nameof(XHud_Module_Button.LongPress_SmoothRewind));
+                            SerializedProperty c_sp_LongPress_UseRewind = so_btn.FindProperty(nameof(XHud_Module_Button.LongPress_UseRewind));
+                            SerializedProperty c_sp_TextColorSyncFade = so_btn.FindProperty(nameof(XHud_Module_Button.TextColorSyncFade));
+                            SerializedProperty c_sp_IconColorSyncFade = so_btn.FindProperty(nameof(XHud_Module_Button.IconColorSyncFade));
 
                             c_sp_col_normal.colorValue = hbp.Color_Normal;
                             c_sp_col_highlight.colorValue = hbp.Color_Highlight;
@@ -983,16 +1023,16 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     if (Targets_Selected())
                     {
-                        for (int i = 0; i < SelectedObjects.Length; i++)
+                        for (int i = 0; i < selected_objects.Length; i++)
                         {
-                            XHud_Module_Button btn = SelectedObjects[i];
+                            XHud_Module_Button btn = selected_objects[i];
                             btn.Indicator = btn.gameObject.name;
                             EditorUtility.SetDirty(btn);
                         }
                     }
                     else
                     {
-                        Indicator.stringValue = BaseScript.gameObject.name;
+                        Indicator.stringValue = base_script.gameObject.name;
                         Indicator.serializedObject.ApplyModifiedProperties();
                         Editor_XHud_GUI.Open(XHud_DialogType.修改, "XHud - 按钮消息", "标识自身", "将标识名称参数更改为物体的名称！", "明白");
                     }
@@ -1053,7 +1093,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_GUI.Gui_Layout_Vertical_End();
             #endregion
 
-            PrimitiveTweens_MaxDuration_Calculate(BaseScript.PrimitiveControllerNodes, PrimitivesTweenGlobalDuration.floatValue);
+            PrimitiveTweens_MaxDuration_Calculate(base_script.PrimitiveControllerNodes, PrimitivesTweenGlobalDuration.floatValue);
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -1067,7 +1107,7 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = 0; i < PrimitiveControllerNodes.arraySize; i++)
             {
                 SerializedProperty sp_node = PrimitiveControllerNodes.GetArrayElementAtIndex(i);
-                SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
 
                 if (sp_node_con.objectReferenceValue == null)
                 {
@@ -1083,13 +1123,13 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    if (SelectedObjects[i] == null)
+                    if (selected_objects[i] == null)
                         continue;
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_tween_isfold = so_ele.FindProperty("PrimitivesIsFold");
-                    SerializedProperty sp_event_isfold = so_ele.FindProperty("EventIsFold");
+                    SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                    SerializedProperty sp_tween_isfold = so_ele.FindProperty(nameof(XHud_Module_Button.PrimitivesIsFold));
+                    SerializedProperty sp_event_isfold = so_ele.FindProperty(nameof(XHud_Module_Button.EventIsFold));
                     so_ele.Update();
 
                     sp_tween_isfold.boolValue = state;
@@ -1154,7 +1194,7 @@ namespace SevenStrikeModules.XHud.Editor
             List<int> loops = new List<int>();
             for (int i = 0; i < PrimitiveControllerNodes.arraySize; i++)
             {
-                SerializedProperty sp_node_con = PrimitiveControllerNodes.GetArrayElementAtIndex(i).FindPropertyRelative("Controller");
+                SerializedProperty sp_node_con = PrimitiveControllerNodes.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                 XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
                 if (sp_con == null)
                 {
@@ -1213,59 +1253,12 @@ namespace SevenStrikeModules.XHud.Editor
         {
             List<string> list = new List<string>();
 
-            for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+            for (int i = 0; i < base_script.PrimitiveControllerNodes.Count; i++)
             {
-                list.Add(BaseScript.PrimitiveControllerNodes[i].controller.id);
+                list.Add(base_script.PrimitiveControllerNodes[i].controller.id);
             }
 
             return list.ToArray();
-        }
-        /// <summary>
-        /// 获取序列化字段
-        /// </summary>
-        private void GetSerializeFields()
-        {
-            Indicator = serializedObject.FindProperty("Indicator");
-            DebugState = serializedObject.FindProperty("DebugState");
-            IsOptionButton = serializedObject.FindProperty("IsOptionButton");
-            ClickDelayTimeThreadhold = serializedObject.FindProperty("ClickDelayTimeThreadhold");
-            eve_on_Deselect = serializedObject.FindProperty("eve_on_Deselect");
-            eve_on_Select = serializedObject.FindProperty("eve_on_Select");
-            eve_on_Click = serializedObject.FindProperty("eve_on_Click");
-            eve_on_Press = serializedObject.FindProperty("eve_on_Press");
-            eve_on_Enter = serializedObject.FindProperty("eve_on_Enter");
-            eve_on_Exit = serializedObject.FindProperty("eve_on_Exit");
-            eve_on_Release = serializedObject.FindProperty("eve_on_Release");
-            eve_on_LongPressed = serializedObject.FindProperty("eve_on_Longpressed");
-            eve_on_LongpressPer = serializedObject.FindProperty("eve_on_LongpressPer");
-            LongPress_Threshold = serializedObject.FindProperty("LongPress_Threshold");
-            LongPress_Percent = serializedObject.FindProperty("LongPress_Percent");
-            ButtonName = serializedObject.FindProperty("ButtonName");
-            ButtonText = serializedObject.FindProperty("ButtonText");
-            ButtonTmpText = serializedObject.FindProperty("ButtonTmpText");
-            LongPress_SmoothRewind = serializedObject.FindProperty("LongPress_SmoothRewind");
-            LongPress_UseRewind = serializedObject.FindProperty("LongPress_UseRewind");
-            TextColorSyncFade = serializedObject.FindProperty("TextColorSyncFade");
-            IconColorSyncFade = serializedObject.FindProperty("IconColorSyncFade");
-            IconImage = serializedObject.FindProperty("IconImage");
-            EventIsFold = serializedObject.FindProperty("EventIsFold");
-            ToggleOriginalIsFold = serializedObject.FindProperty("ToggleOriginalIsFold");
-            LongPress_Step = serializedObject.FindProperty("LongPress_Step");
-            ButtonActionTiming = serializedObject.FindProperty("ButtonActionTiming");
-            HudButtonState_Clicked = serializedObject.FindProperty("HudButtonState_Clicked");
-            HudButtonState_Selector = serializedObject.FindProperty("HudButtonState_Selector");
-            HudButtonState_Holder = serializedObject.FindProperty("HudButtonState_Holder");
-            HudButtonState_Pressed = serializedObject.FindProperty("HudButtonState_Pressed");
-            HudButtonState_LongPressed = serializedObject.FindProperty("HudButtonState_LongPressed");
-            AutoStopPreview = serializedObject.FindProperty("AutoStopPreview");
-            BgColorSyncFade = serializedObject.FindProperty("BgColorSyncFade");
-            BgImage = serializedObject.FindProperty("BgImage");
-
-            PrimitiveControllerNodes = serializedObject.FindProperty("PrimitiveControllerNodes");
-            PrimitivesTweenGlobalDuration = serializedObject.FindProperty("PrimitivesTweenGlobalDuration");
-            PrimitivesTweenMaxDuration = serializedObject.FindProperty("PrimitivesTweenMaxDuration");
-            PrimitivesTweenState = serializedObject.FindProperty("PrimitivesTweenState");
-            PrimitivesIsFold = serializedObject.FindProperty("PrimitivesIsFold");
         }
         #endregion
 
@@ -1277,13 +1270,13 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (Targets_Selected())
             {
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    SerializedObject so_ele = new SerializedObject(SelectedObjects[i]);
-                    SerializedProperty sp_nodes = so_ele.FindProperty("PrimitiveControllerNodes");
+                    SerializedObject so_ele = new SerializedObject(selected_objects[i]);
+                    SerializedProperty sp_nodes = so_ele.FindProperty(nameof(XHud_Module_Button.PrimitiveControllerNodes));
                     so_ele.Update();
                     sp_nodes.ClearArray();
-                    XHud_Module_Primitive_Controller[] sp_cons = SelectedObjects[i].GetComponentsInChildren<XHud_Module_Primitive_Controller>();
+                    XHud_Module_Primitive_Controller[] sp_cons = selected_objects[i].GetComponentsInChildren<XHud_Module_Primitive_Controller>();
                     for (int x = 0; x < sp_cons.Length; x++)
                     {
                         bool repeat = false;
@@ -1293,7 +1286,7 @@ namespace SevenStrikeModules.XHud.Editor
                             for (int s = 0; s < sp_nodes.arraySize; s++)
                             {
                                 SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                                SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                                SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                                 XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
                                 if (sp_con == sp_cons[x])
                                     repeat = true;
@@ -1312,7 +1305,7 @@ namespace SevenStrikeModules.XHud.Editor
                             sp_nodes.InsertArrayElementAtIndex(index);
 
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                            SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                            SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                             sp_node_con.objectReferenceValue = sp_cons[x];
 
                             sp_node_con.serializedObject.ApplyModifiedProperties();
@@ -1325,9 +1318,9 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                SerializedProperty sp_nodes = serializedObject.FindProperty("PrimitiveControllerNodes");
+                SerializedProperty sp_nodes = serializedObject.FindProperty(nameof(XHud_Module_Button.PrimitiveControllerNodes));
                 sp_nodes.ClearArray();
-                XHud_Module_Primitive_Controller[] sp_cons = BaseScript.GetComponentsInChildren<XHud_Module_Primitive_Controller>();
+                XHud_Module_Primitive_Controller[] sp_cons = base_script.GetComponentsInChildren<XHud_Module_Primitive_Controller>();
                 for (int i = 0; i < sp_cons.Length; i++)
                 {
                     bool repeat = false;
@@ -1337,7 +1330,7 @@ namespace SevenStrikeModules.XHud.Editor
                         for (int s = 0; s < sp_nodes.arraySize; s++)
                         {
                             SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(s);
-                            SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                            SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                             XHud_Module_Primitive_Controller sp_con = (XHud_Module_Primitive_Controller)sp_node_con.objectReferenceValue;
                             if (sp_con == sp_cons[i])
                                 repeat = true;
@@ -1356,7 +1349,7 @@ namespace SevenStrikeModules.XHud.Editor
                         sp_nodes.InsertArrayElementAtIndex(index);
 
                         SerializedProperty sp_node = sp_nodes.GetArrayElementAtIndex(index);
-                        SerializedProperty sp_node_con = sp_node.FindPropertyRelative("Controller");
+                        SerializedProperty sp_node_con = sp_node.FindPropertyRelative(nameof(PrimitiveControllerNode.controller));
                         sp_node_con.objectReferenceValue = sp_cons[i];
 
                         sp_node_con.serializedObject.ApplyModifiedProperties();
@@ -1375,9 +1368,9 @@ namespace SevenStrikeModules.XHud.Editor
             if (Targets_Selected())
             {
                 var s = targets;
-                for (int i = 0; i < SelectedObjects.Length; i++)
+                for (int i = 0; i < selected_objects.Length; i++)
                 {
-                    XHud_Module_Button btn = SelectedObjects[i];
+                    XHud_Module_Button btn = selected_objects[i];
                     if (btn.PrimitiveControllerNodes.Count > 0)
                     {
                         for (int c = 0; c < btn.PrimitiveControllerNodes.Count; c++)
@@ -1396,15 +1389,15 @@ namespace SevenStrikeModules.XHud.Editor
             }
             else
             {
-                if (BaseScript.PrimitiveControllerNodes.Count > 0)
+                if (base_script.PrimitiveControllerNodes.Count > 0)
                 {
-                    for (int i = 0; i < BaseScript.PrimitiveControllerNodes.Count; i++)
+                    for (int i = 0; i < base_script.PrimitiveControllerNodes.Count; i++)
                     {
                         XHud_GUI_Dialog_ListDatas dataitem = new XHud_GUI_Dialog_ListDatas();
 
-                        dataitem.Title = $"{BaseScript.name} ( {BaseScript.Indicator} )";
+                        dataitem.Title = $"{base_script.name} ( {base_script.Indicator} )";
                         dataitem.SubTitle = $"扫描到图元动画器";
-                        dataitem.Message = $"{BaseScript.PrimitiveControllerNodes[i].controller.name} ( {BaseScript.PrimitiveControllerNodes[i].controller.indicator} )";
+                        dataitem.Message = $"{base_script.PrimitiveControllerNodes[i].controller.name} ( {base_script.PrimitiveControllerNodes[i].controller.indicator} )";
                         Datas.Add(dataitem);
                     }
                     Editor_XHud_GUI.Open(Datas.ToArray(), XHud_DialogType.确认, "XHud - 按钮消息", "扫描图元动画器组件", "以下是扫描到的所有图元动画器组件列表，请您检查核对：", "明白");

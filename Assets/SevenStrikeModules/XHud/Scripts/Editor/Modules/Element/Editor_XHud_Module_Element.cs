@@ -3529,32 +3529,32 @@ foldout: base_script.fold_component);
                     {
                         case "生成"://生成
                             Motion_Creator crc = new Motion_Creator();
-                            crc.anchor = (XHudAnchor)sp_motion_create_args.FindPropertyRelative("anchor").enumValueIndex;
+                            crc.anchor = (XHudAnchor)sp_motion_create_args.FindPropertyRelative(nameof(Motion_Creator.anchor)).enumValueIndex;
 
                             M = new MotionNode_Movement();
-                            M.Movement = (HudMotion_Movement)sp_motion_create_args.FindPropertyRelative("Movement.Movement").enumValueIndex;
-                            M.Distance = sp_motion_create_args.FindPropertyRelative("Movement.Distance").floatValue;
-                            M.Duration = sp_motion_create_args.FindPropertyRelative("Movement.Duration").floatValue;
-                            M.Delay = sp_motion_create_args.FindPropertyRelative("Movement.Delay").floatValue;
-                            M.Ease = (EaseMode)sp_motion_create_args.FindPropertyRelative("Movement.Ease").enumValueIndex;
-                            M.Curve = sp_motion_create_args.FindPropertyRelative("Movement.Curve").animationCurveValue;
-                            M.CurveName = sp_motion_create_args.FindPropertyRelative("Movement.CurveName").stringValue;
+                            M.Movement = (HudMotion_Movement)sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Movement)}").enumValueIndex;
+                            M.Distance = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Distance)}").floatValue;
+                            M.Duration = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Duration)}").floatValue;
+                            M.Delay = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Delay)}").floatValue;
+                            M.Ease = (EaseMode)sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Ease)}").enumValueIndex;
+                            M.Curve = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Curve)}").animationCurveValue;
+                            M.CurveName = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.CurveName)}").stringValue;
 
                             R = new MotionNode_Rotation();
-                            R.Rotation = (HudMotion_Rotation)sp_motion_create_args.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
-                            R.Degree = sp_motion_create_args.FindPropertyRelative("Rotation.Degree").floatValue;
-                            R.Duration = sp_motion_create_args.FindPropertyRelative("Rotation.Duration").floatValue;
-                            R.Delay = sp_motion_create_args.FindPropertyRelative("Rotation.Delay").floatValue;
-                            R.Ease = (EaseMode)sp_motion_create_args.FindPropertyRelative("Rotation.Ease").enumValueIndex;
-                            R.Curve = sp_motion_create_args.FindPropertyRelative("Rotation.Curve").animationCurveValue;
-                            R.CurveName = sp_motion_create_args.FindPropertyRelative("Rotation.CurveName").stringValue;
+                            R.Rotation = (HudMotion_Rotation)sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Rotation)}").enumValueIndex;
+                            R.Degree = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Degree)}").floatValue;
+                            R.Duration = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Duration)}").floatValue;
+                            R.Delay = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Delay)}").floatValue;
+                            R.Ease = (EaseMode)sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Ease)}").enumValueIndex;
+                            R.Curve = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Curve)}").animationCurveValue;
+                            R.CurveName = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.CurveName)}").stringValue;
 
                             A = new MotionNode_Alpha();
-                            A.Duration = sp_motion_create_args.FindPropertyRelative("Alpha.Duration").floatValue;
-                            A.Curve = sp_motion_create_args.FindPropertyRelative("Alpha.Curve").animationCurveValue;
-                            A.CurveName = sp_motion_create_args.FindPropertyRelative("Alpha.CurveName").stringValue;
-                            A.Ease = (EaseMode)sp_motion_create_args.FindPropertyRelative("Alpha.Ease").enumValueIndex;
-                            A.Delay = sp_motion_create_args.FindPropertyRelative("Alpha.Delay").floatValue;
+                            A.Duration = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Duration)}").floatValue;
+                            A.Curve = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Curve)}").animationCurveValue;
+                            A.CurveName = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.CurveName)}").stringValue;
+                            A.Ease = (EaseMode)sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Ease)}").enumValueIndex;
+                            A.Delay = sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Delay)}").floatValue;
 
                             crc.Movement = M;
                             crc.Rotation = R;
@@ -3567,29 +3567,29 @@ foldout: base_script.fold_component);
                             Motion_Recycler rec = new Motion_Recycler();
 
                             M = new MotionNode_Movement();
-                            M.Movement = (HudMotion_Movement)sp_motion_recycle_args.FindPropertyRelative("Movement.Movement").enumValueIndex;
-                            M.Distance = sp_motion_recycle_args.FindPropertyRelative("Movement.Distance").floatValue;
-                            M.Duration = sp_motion_recycle_args.FindPropertyRelative("Movement.Duration").floatValue;
-                            M.Delay = sp_motion_recycle_args.FindPropertyRelative("Movement.Delay").floatValue;
-                            M.Ease = (EaseMode)sp_motion_recycle_args.FindPropertyRelative("Movement.Ease").enumValueIndex;
-                            M.Curve = sp_motion_recycle_args.FindPropertyRelative("Movement.Curve").animationCurveValue;
-                            M.CurveName = sp_motion_recycle_args.FindPropertyRelative("Movement.CurveName").stringValue;
+                            M.Movement = (HudMotion_Movement)sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Movement)}").enumValueIndex;
+                            M.Distance = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Distance)}").floatValue;
+                            M.Duration = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Duration)}").floatValue;
+                            M.Delay = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Delay)}").floatValue;
+                            M.Ease = (EaseMode)sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Ease)}").enumValueIndex;
+                            M.Curve = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Curve)}").animationCurveValue;
+                            M.CurveName = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.CurveName)}").stringValue;
 
                             R = new MotionNode_Rotation();
-                            R.Rotation = (HudMotion_Rotation)sp_motion_recycle_args.FindPropertyRelative("Rotation.Rotation").enumValueIndex;
-                            R.Degree = sp_motion_recycle_args.FindPropertyRelative("Rotation.Degree").floatValue;
-                            R.Duration = sp_motion_recycle_args.FindPropertyRelative("Rotation.Duration").floatValue;
-                            R.Delay = sp_motion_recycle_args.FindPropertyRelative("Rotation.Delay").floatValue;
-                            R.Ease = (EaseMode)sp_motion_recycle_args.FindPropertyRelative("Rotation.Ease").enumValueIndex;
-                            R.Curve = sp_motion_recycle_args.FindPropertyRelative("Rotation.Curve").animationCurveValue;
-                            R.CurveName = sp_motion_recycle_args.FindPropertyRelative("Rotation.CurveName").stringValue;
+                            R.Rotation = (HudMotion_Rotation)sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Rotation)}").enumValueIndex;
+                            R.Degree = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Degree)}").floatValue;
+                            R.Duration = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Duration)}").floatValue;
+                            R.Delay = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Delay)}").floatValue;
+                            R.Ease = (EaseMode)sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Ease)}").enumValueIndex;
+                            R.Curve = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Curve)}").animationCurveValue;
+                            R.CurveName = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.CurveName)}").stringValue;
 
                             A = new MotionNode_Alpha();
-                            A.Duration = sp_motion_recycle_args.FindPropertyRelative("Alpha.Duration").floatValue;
-                            A.Curve = sp_motion_recycle_args.FindPropertyRelative("Alpha.Curve").animationCurveValue;
-                            A.CurveName = sp_motion_recycle_args.FindPropertyRelative("Alpha.CurveName").stringValue;
-                            A.Ease = (EaseMode)sp_motion_recycle_args.FindPropertyRelative("Alpha.Ease").enumValueIndex;
-                            A.Delay = sp_motion_recycle_args.FindPropertyRelative("Alpha.Delay").floatValue;
+                            A.Duration = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Duration)}").floatValue;
+                            A.Curve = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Curve)}").animationCurveValue;
+                            A.CurveName = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.CurveName)}").stringValue;
+                            A.Ease = (EaseMode)sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Ease)}").enumValueIndex;
+                            A.Delay = sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Delay)}").floatValue;
 
                             rec.Movement = M;
                             rec.Rotation = R;
@@ -3637,29 +3637,29 @@ foldout: base_script.fold_component);
 
                         Motion_Creator crc = JsonUtility.FromJson<Motion_Creator>(buffer);
 
-                        sp_motion_create_args.FindPropertyRelative("anchor").enumValueIndex = (int)crc.anchor;
+                        sp_motion_create_args.FindPropertyRelative(nameof(Motion_Creator.anchor)).enumValueIndex = (int)crc.anchor;
 
-                        sp_motion_create_args.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)crc.Movement.Movement;
-                        sp_motion_create_args.FindPropertyRelative("Movement.Distance").floatValue = crc.Movement.Distance;
-                        sp_motion_create_args.FindPropertyRelative("Movement.Duration").floatValue = crc.Movement.Duration;
-                        sp_motion_create_args.FindPropertyRelative("Movement.Delay").floatValue = crc.Movement.Delay;
-                        sp_motion_create_args.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)crc.Movement.Ease;
-                        sp_motion_create_args.FindPropertyRelative("Movement.Curve").animationCurveValue = crc.Movement.Curve;
-                        sp_motion_create_args.FindPropertyRelative("Movement.CurveName").stringValue = crc.Movement.CurveName;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Movement)}").enumValueIndex = (int)crc.Movement.Movement;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Distance)}").floatValue = crc.Movement.Distance;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Duration)}").floatValue = crc.Movement.Duration;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Delay)}").floatValue = crc.Movement.Delay;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Ease)}").enumValueIndex = (int)crc.Movement.Ease;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Curve)}").animationCurveValue = crc.Movement.Curve;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.CurveName)}").stringValue = crc.Movement.CurveName;
 
-                        sp_motion_create_args.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)crc.Rotation.Rotation;
-                        sp_motion_create_args.FindPropertyRelative("Rotation.Degree").floatValue = crc.Rotation.Degree;
-                        sp_motion_create_args.FindPropertyRelative("Rotation.Duration").floatValue = crc.Rotation.Duration;
-                        sp_motion_create_args.FindPropertyRelative("Rotation.Delay").floatValue = crc.Rotation.Delay;
-                        sp_motion_create_args.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)crc.Rotation.Ease;
-                        sp_motion_create_args.FindPropertyRelative("Rotation.Curve").animationCurveValue = crc.Rotation.Curve;
-                        sp_motion_create_args.FindPropertyRelative("Rotation.CurveName").stringValue = crc.Rotation.CurveName;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Rotation)}").enumValueIndex = (int)crc.Rotation.Rotation;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Degree)}").floatValue = crc.Rotation.Degree;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Duration)}").floatValue = crc.Rotation.Duration;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Delay)}").floatValue = crc.Rotation.Delay;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Ease)}").enumValueIndex = (int)crc.Rotation.Ease;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Curve)}").animationCurveValue = crc.Rotation.Curve;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.CurveName)}").stringValue = crc.Rotation.CurveName;
 
-                        sp_motion_create_args.FindPropertyRelative("Alpha.Duration").floatValue = crc.Alpha.Duration;
-                        sp_motion_create_args.FindPropertyRelative("Alpha.Curve").animationCurveValue = crc.Alpha.Curve;
-                        sp_motion_create_args.FindPropertyRelative("Alpha.CurveName").stringValue = crc.Alpha.CurveName;
-                        sp_motion_create_args.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)crc.Alpha.Ease;
-                        sp_motion_create_args.FindPropertyRelative("Alpha.Delay").floatValue = crc.Alpha.Delay;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Duration)}").floatValue = crc.Alpha.Duration;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Curve)}").animationCurveValue = crc.Alpha.Curve;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.CurveName)}").stringValue = crc.Alpha.CurveName;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Ease)}").enumValueIndex = (int)crc.Alpha.Ease;
+                        sp_motion_create_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Delay)}").floatValue = crc.Alpha.Delay;
 
                         sp_motion_create_args.serializedObject.ApplyModifiedProperties();
 
@@ -3691,27 +3691,27 @@ foldout: base_script.fold_component);
 
                         Motion_Recycler rec = JsonUtility.FromJson<Motion_Recycler>(buffer);
 
-                        sp_motion_recycle_args.FindPropertyRelative("Movement.Movement").enumValueIndex = (int)rec.Movement.Movement;
-                        sp_motion_recycle_args.FindPropertyRelative("Movement.Distance").floatValue = rec.Movement.Distance;
-                        sp_motion_recycle_args.FindPropertyRelative("Movement.Duration").floatValue = rec.Movement.Duration;
-                        sp_motion_recycle_args.FindPropertyRelative("Movement.Delay").floatValue = rec.Movement.Delay;
-                        sp_motion_recycle_args.FindPropertyRelative("Movement.Ease").enumValueIndex = (int)rec.Movement.Ease;
-                        sp_motion_recycle_args.FindPropertyRelative("Movement.Curve").animationCurveValue = rec.Movement.Curve;
-                        sp_motion_recycle_args.FindPropertyRelative("Movement.CurveName").stringValue = rec.Movement.CurveName;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Movement)}").enumValueIndex = (int)rec.Movement.Movement;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Distance)}").floatValue = rec.Movement.Distance;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Duration)}").floatValue = rec.Movement.Duration;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Delay)}").floatValue = rec.Movement.Delay;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Ease)}").enumValueIndex = (int)rec.Movement.Ease;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.Curve)}").animationCurveValue = rec.Movement.Curve;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Movement)}.{nameof(MotionNode_Movement.CurveName)}").stringValue = rec.Movement.CurveName;
 
-                        sp_motion_recycle_args.FindPropertyRelative("Rotation.Rotation").enumValueIndex = (int)rec.Rotation.Rotation;
-                        sp_motion_recycle_args.FindPropertyRelative("Rotation.Degree").floatValue = rec.Rotation.Degree;
-                        sp_motion_recycle_args.FindPropertyRelative("Rotation.Duration").floatValue = rec.Rotation.Duration;
-                        sp_motion_recycle_args.FindPropertyRelative("Rotation.Delay").floatValue = rec.Rotation.Delay;
-                        sp_motion_recycle_args.FindPropertyRelative("Rotation.Ease").enumValueIndex = (int)rec.Rotation.Ease;
-                        sp_motion_recycle_args.FindPropertyRelative("Rotation.Curve").animationCurveValue = rec.Rotation.Curve;
-                        sp_motion_recycle_args.FindPropertyRelative("Rotation.CurveName").stringValue = rec.Rotation.CurveName;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Rotation)}").enumValueIndex = (int)rec.Rotation.Rotation;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Degree)}").floatValue = rec.Rotation.Degree;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Duration)}").floatValue = rec.Rotation.Duration;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Delay)}").floatValue = rec.Rotation.Delay;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Ease)}").enumValueIndex = (int)rec.Rotation.Ease;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.Curve)}").animationCurveValue = rec.Rotation.Curve;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Rotation)}.{nameof(MotionNode_Rotation.CurveName)}").stringValue = rec.Rotation.CurveName;
 
-                        sp_motion_recycle_args.FindPropertyRelative("Alpha.Duration").floatValue = rec.Alpha.Duration;
-                        sp_motion_recycle_args.FindPropertyRelative("Alpha.Curve").animationCurveValue = rec.Alpha.Curve;
-                        sp_motion_recycle_args.FindPropertyRelative("Alpha.CurveName").stringValue = rec.Alpha.CurveName;
-                        sp_motion_recycle_args.FindPropertyRelative("Alpha.Ease").enumValueIndex = (int)rec.Alpha.Ease;
-                        sp_motion_recycle_args.FindPropertyRelative("Alpha.Delay").floatValue = rec.Alpha.Delay;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Duration)}").floatValue = rec.Alpha.Duration;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Curve)}").animationCurveValue = rec.Alpha.Curve;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.CurveName)}").stringValue = rec.Alpha.CurveName;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Ease)}").enumValueIndex = (int)rec.Alpha.Ease;
+                        sp_motion_recycle_args.FindPropertyRelative($"{nameof(Motion_Creator.Alpha)}.{nameof(MotionNode_Alpha.Delay)}").floatValue = rec.Alpha.Delay;
 
                         sp_motion_recycle_args.serializedObject.ApplyModifiedProperties();
 

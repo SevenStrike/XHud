@@ -28,36 +28,153 @@ namespace SevenStrikeModules.XTween.Editor
 
     public class Editor_XTween_Configurator : EditorWindow
     {
-        private static Editor_XTween_Configurator window;
-
+        #region 字段 - 窗口与状态
         /// <summary>
-        /// 图标
+        /// 配置器窗口实例
         /// </summary>
-        private Texture2D
-            logo_bg,
-            liquid_style_pure_press,
-            liquid_style_scan_press,
-            liquid_style_dirty_press,
-            liquid_style_pure_released,
-            liquid_style_scan_released,
-            liquid_style_dirty_released,
-            liquid_bg_pure,
-            liquid_bg_scan,
-            liquid_bg_dirty,
-            liquid_status_playing,
-            liquid_status_idle,
-            liquid_status_performance_idle,
-            liquid_status_performance_playing,
-            liquid_highlight,
-            liquid_plug,
-            liquid_metal_grid;
-
+        private static Editor_XTween_Configurator window;
+        /// <summary>
+        /// 是否处于按下状态
+        /// </summary>
         public bool IsPressed;
-
+        /// <summary>
+        /// 缓动配置数据
+        /// </summary>
         public XTween_Config Config;
+        #endregion
 
+        #region 字段 - 序列化对象
+        /// <summary>
+        /// 用于序列化当前窗口的序列化对象
+        /// </summary>
         SerializedObject serializedobject;
-        SerializedProperty sp_LiquidColor_Idle, sp_LiquidColor_Playing, sp_Theme_Primary, sp_Theme_Group, sp_Theme_SeperateLine, sp_PoolCount_Int, sp_PoolCount_Float, sp_PoolCount_String, sp_PoolCount_Vector2, sp_PoolCount_Vector3, sp_PoolCount_Vector4, sp_PoolCount_Quaternion, sp_PoolCount_Color;
+        #endregion
+
+        #region 字段 - 序列化属性
+        /// <summary>
+        /// 空闲状态液体颜色属性
+        /// </summary>
+        SerializedProperty sp_LiquidColor_Idle;
+        /// <summary>
+        /// 播放状态液体颜色属性
+        /// </summary>
+        SerializedProperty sp_LiquidColor_Playing;
+        /// <summary>
+        /// 主题主色调属性
+        /// </summary>
+        SerializedProperty sp_Theme_Primary;
+        /// <summary>
+        /// 主题编组色属性
+        /// </summary>
+        SerializedProperty sp_Theme_Group;
+        /// <summary>
+        /// 主题分割线色属性
+        /// </summary>
+        SerializedProperty sp_Theme_SeperateLine;
+        /// <summary>
+        /// 对象池数量（Int）属性
+        /// </summary>
+        SerializedProperty sp_PoolCount_Int;
+        /// <summary>
+        /// 对象池数量（Float）属性
+        /// </summary>
+        SerializedProperty sp_PoolCount_Float;
+        /// <summary>
+        /// 对象池数量（String）属性
+        /// </summary>
+        SerializedProperty sp_PoolCount_String;
+        /// <summary>
+        /// 对象池数量（Vector2）属性
+        /// </summary>
+        SerializedProperty sp_PoolCount_Vector2;
+        /// <summary>
+        /// 对象池数量（Vector3）属性
+        /// </summary>
+        SerializedProperty sp_PoolCount_Vector3;
+        /// <summary>
+        /// 对象池数量（Vector4）属性
+        /// </summary>
+        SerializedProperty sp_PoolCount_Vector4;
+        /// <summary>
+        /// 对象池数量（Quaternion）属性
+        /// </summary>
+        SerializedProperty sp_PoolCount_Quaternion;
+        /// <summary>
+        /// 对象池数量（Color）属性
+        /// </summary>
+        SerializedProperty sp_PoolCount_Color;
+        #endregion
+
+        #region 字段 - 图标
+        /// <summary>
+        /// Logo 背景
+        /// </summary>
+        private Texture2D logo_bg;
+        /// <summary>
+        /// 液体样式 - 纯色按下图标
+        /// </summary>
+        private Texture2D liquid_style_pure_press;
+        /// <summary>
+        /// 液体样式 - 扫描按下图标
+        /// </summary>
+        private Texture2D liquid_style_scan_press;
+        /// <summary>
+        /// 液体样式 - 脏污按下图标
+        /// </summary>
+        private Texture2D liquid_style_dirty_press;
+        /// <summary>
+        /// 液体样式 - 纯色常态图标
+        /// </summary>
+        private Texture2D liquid_style_pure_released;
+        /// <summary>
+        /// 液体样式 - 扫描常态图标
+        /// </summary>
+        private Texture2D liquid_style_scan_released;
+        /// <summary>
+        /// 液体样式 - 脏污常态图标
+        /// </summary>
+        private Texture2D liquid_style_dirty_released;
+        /// <summary>
+        /// 液体背景 - 纯色
+        /// </summary>
+        private Texture2D liquid_bg_pure;
+        /// <summary>
+        /// 液体背景 - 扫描
+        /// </summary>
+        private Texture2D liquid_bg_scan;
+        /// <summary>
+        /// 液体背景 - 脏污
+        /// </summary>
+        private Texture2D liquid_bg_dirty;
+        /// <summary>
+        /// 液体状态 - 播放中
+        /// </summary>
+        private Texture2D liquid_status_playing;
+        /// <summary>
+        /// 液体状态 - 空闲
+        /// </summary>
+        private Texture2D liquid_status_idle;
+        /// <summary>
+        /// 液体状态 - 性能空闲
+        /// </summary>
+        private Texture2D liquid_status_performance_idle;
+        /// <summary>
+        /// 液体状态 - 性能播放中
+        /// </summary>
+        private Texture2D liquid_status_performance_playing;
+        /// <summary>
+        /// 高亮图标
+        /// </summary>
+        private Texture2D liquid_highlight;
+        /// <summary>
+        /// 液体插头图标
+        /// </summary>
+        private Texture2D liquid_plug;
+        /// <summary>
+        /// 液体金属网格图标
+        /// </summary>
+        private Texture2D liquid_metal_grid;
+        #endregion
 
         [MenuItem("Assets/XTween/C 配置面板（Configurator)")]
         public static void Editor_Open_XTween_Configurator()
@@ -176,28 +293,20 @@ namespace SevenStrikeModules.XTween.Editor
         {
             #region 图标获取
             logo_bg = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/logo");
-
             liquid_style_pure_press = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_style_pure_press");
             liquid_style_pure_released = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_style_pure_released");
-
             liquid_style_scan_press = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_style_scan_press");
             liquid_style_scan_released = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_style_scan_released");
-
             liquid_style_dirty_press = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_style_dirty_press");
             liquid_style_dirty_released = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_style_dirty_released");
-
             liquid_bg_pure = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_bg_pure");
             liquid_bg_scan = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_bg_scan");
             liquid_bg_dirty = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_bg_dirty");
-
             liquid_status_playing = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_status_playing");
             liquid_status_idle = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_status_idle");
-
             liquid_status_performance_idle = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_status_performance_idle");
             liquid_status_performance_playing = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_status_performance_playing");
-
             liquid_highlight = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_config/liquid_highlight");
-
             liquid_plug = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_liquid/plug/liquid_plug_red");
             liquid_metal_grid = XGUI.GetCustomIcon($"{XTween_Dashboard.Get_XTween_GUIRoot_Path()}gui_liquid/liquid_metal_grid");
             #endregion
@@ -213,19 +322,21 @@ namespace SevenStrikeModules.XTween.Editor
 
             serializedobject = new SerializedObject(Config);
 
-            sp_LiquidColor_Idle = serializedobject.FindProperty("Datas").FindPropertyRelative("LiquidColor_Idle");
-            sp_LiquidColor_Playing = serializedobject.FindProperty("Datas").FindPropertyRelative("LiquidColor_Playing");
-            sp_Theme_Primary = serializedobject.FindProperty("Datas").FindPropertyRelative("Theme_Primary");
-            sp_Theme_Group = serializedobject.FindProperty("Datas").FindPropertyRelative("Theme_Group");
-            sp_Theme_SeperateLine = serializedobject.FindProperty("Datas").FindPropertyRelative("Theme_SeperateLine");
-            sp_PoolCount_Int = serializedobject.FindProperty("Datas").FindPropertyRelative("PoolCount_Int");
-            sp_PoolCount_Float = serializedobject.FindProperty("Datas").FindPropertyRelative("PoolCount_Float");
-            sp_PoolCount_String = serializedobject.FindProperty("Datas").FindPropertyRelative("PoolCount_String");
-            sp_PoolCount_Vector2 = serializedobject.FindProperty("Datas").FindPropertyRelative("PoolCount_Vector2");
-            sp_PoolCount_Vector3 = serializedobject.FindProperty("Datas").FindPropertyRelative("PoolCount_Vector3");
-            sp_PoolCount_Vector4 = serializedobject.FindProperty("Datas").FindPropertyRelative("PoolCount_Vector4");
-            sp_PoolCount_Quaternion = serializedobject.FindProperty("Datas").FindPropertyRelative("PoolCount_Quaternion");
-            sp_PoolCount_Color = serializedobject.FindProperty("Datas").FindPropertyRelative("PoolCount_Color");
+            #region 获取序列化属性
+            sp_LiquidColor_Idle = serializedobject.FindProperty(nameof(XTween_Config.Datas)).FindPropertyRelative(nameof(ConfigDatas.LiquidColor_Idle));
+            sp_LiquidColor_Playing = serializedobject.FindProperty(nameof(XTween_Config.Datas)).FindPropertyRelative(nameof(ConfigDatas.LiquidColor_Playing));
+            sp_Theme_Primary = serializedobject.FindProperty(nameof(XTween_Config.Datas)).FindPropertyRelative(nameof(ConfigDatas.Theme_Primary));
+            sp_Theme_Group = serializedobject.FindProperty(nameof(XTween_Config.Datas)).FindPropertyRelative(nameof(ConfigDatas.Theme_Group));
+            sp_Theme_SeperateLine = serializedobject.FindProperty(nameof(XTween_Config.Datas)).FindPropertyRelative(nameof(ConfigDatas.Theme_SeperateLine));
+            sp_PoolCount_Int = serializedobject.FindProperty(nameof(XTween_Config.Datas)).FindPropertyRelative(nameof(ConfigDatas.PoolCount_Int));
+            sp_PoolCount_Float = serializedobject.FindProperty(nameof(XTween_Config.Datas)).FindPropertyRelative(nameof(ConfigDatas.PoolCount_Float));
+            sp_PoolCount_String = serializedobject.FindProperty(nameof(XTween_Config.Datas)).FindPropertyRelative(nameof(ConfigDatas.PoolCount_String));
+            sp_PoolCount_Vector2 = serializedobject.FindProperty(nameof(XTween_Config.Datas)).FindPropertyRelative(nameof(ConfigDatas.PoolCount_Vector2));
+            sp_PoolCount_Vector3 = serializedobject.FindProperty(nameof(XTween_Config.Datas)).FindPropertyRelative(nameof(ConfigDatas.PoolCount_Vector3));
+            sp_PoolCount_Vector4 = serializedobject.FindProperty(nameof(XTween_Config.Datas)).FindPropertyRelative(nameof(ConfigDatas.PoolCount_Vector4));
+            sp_PoolCount_Quaternion = serializedobject.FindProperty(nameof(XTween_Config.Datas)).FindPropertyRelative(nameof(ConfigDatas.PoolCount_Quaternion));
+            sp_PoolCount_Color = serializedobject.FindProperty(nameof(XTween_Config.Datas)).FindPropertyRelative(nameof(ConfigDatas.PoolCount_Color));
+            #endregion
         }
 
         private void OnDisable()

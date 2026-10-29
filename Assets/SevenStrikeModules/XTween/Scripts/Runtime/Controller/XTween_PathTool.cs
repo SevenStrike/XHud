@@ -362,11 +362,17 @@ namespace SevenStrikeModules.XTween
         #region Editor
 #pragma warning disable CS0414
         [SerializeField] private bool PathPointsIsFold;
+        public const string editor_serializedfield_PathPointsIsFold = nameof(PathPointsIsFold);
         [SerializeField] private string IndexPathType = "线性";
+        public const string editor_serializedfield_IndexPathType = nameof(IndexPathType);
         [SerializeField] private string IndexPathOrientation = "无";
+        public const string editor_serializedfield_IndexPathOrientation = nameof(IndexPathOrientation);
         [SerializeField] private string IndexPathOrientationVector = "正向X轴";
+        public const string editor_serializedfield_IndexPathOrientationVector = nameof(IndexPathOrientationVector);
         [SerializeField] private string IndexControlLineStyle = "虚线";
+        public const string editor_serializedfield_IndexControlLineStyle = nameof(IndexControlLineStyle);
         [SerializeField] private string IndexPathMarkMode = "根据路径线条";
+        public const string editor_serializedfield_IndexPathMarkMode = nameof(IndexPathMarkMode);
 #pragma warning restore CS0414
 
         public bool fold_options;

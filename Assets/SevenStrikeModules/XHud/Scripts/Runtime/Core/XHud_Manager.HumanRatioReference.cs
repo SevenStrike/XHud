@@ -24,7 +24,7 @@ namespace SevenStrikeModules.XHud
     using UnityEngine.UI;
 
     [System.Serializable]
-    public struct XHUdRatioReferenceRes
+    public struct XHudRatioReferenceRes
     {
         [SerializeField]
         public Vector2 size;
@@ -61,7 +61,7 @@ namespace SevenStrikeModules.XHud
         /// 帮助判断 UI 元素与完整物理参考物的比例关系
         /// </summary>
         [SerializeField]
-        public XHUdRatioReferenceRes hmr_res_full;
+        public XHudRatioReferenceRes hmr_res_full;
         /// <summary>
         /// 局部参考比例标识资源
         /// 当 RatioReferenceIsPart = true 时使用此资源
@@ -70,7 +70,7 @@ namespace SevenStrikeModules.XHud
         /// 示例：头部参考图用于判断头像框大小是否合理
         /// </summary>
         [SerializeField]
-        public XHUdRatioReferenceRes hmr_res_part;
+        public XHudRatioReferenceRes hmr_res_part;
         /// <summary>
         /// 参考形状的比例尺寸
         /// 定义物理参考标识在屏幕上的显示尺寸（相对于屏幕宽高比）

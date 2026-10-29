@@ -461,7 +461,7 @@ namespace SevenStrikeModules.XHud.Editor
 
                         for (int i = 0; i < sp_library_elements.arraySize; i++)
                         {
-                            SerializedProperty preloads = sp_library_elements.GetArrayElementAtIndex(i).FindPropertyRelative("preload_elements");
+                            SerializedProperty preloads = sp_library_elements.GetArrayElementAtIndex(i).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.preload_elements));
                             preloads.ClearArray();
                             preloads.serializedObject.ApplyModifiedProperties();
                         }
@@ -596,7 +596,7 @@ namespace SevenStrikeModules.XHud.Editor
                             for (int s = 0; s < sp_library_elements.arraySize; s++)
                             {
                                 SerializedProperty ser = sp_library_elements.GetArrayElementAtIndex(s);
-                                SerializedProperty ser_target = ser.FindPropertyRelative("target");
+                                SerializedProperty ser_target = ser.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.target));
                                 if (ser_target.objectReferenceValue.name == el.name)
                                 {
                                     isExist = true;
@@ -622,9 +622,9 @@ namespace SevenStrikeModules.XHud.Editor
 
                                 sp_library_elements.InsertArrayElementAtIndex(sp_library_elements.arraySize);
                                 SerializedProperty root = sp_library_elements.GetArrayElementAtIndex(sp_library_elements.arraySize - 1);
-                                SerializedProperty sp_target = root.FindPropertyRelative("target");
-                                SerializedProperty sp_Initiacount = root.FindPropertyRelative("initialize_count");
-                                SerializedProperty sp_Name = root.FindPropertyRelative("name");
+                                SerializedProperty sp_target = root.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.target));
+                                SerializedProperty sp_Initiacount = root.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.initialize_count));
+                                SerializedProperty sp_Name = root.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.name));
                                 sp_target.objectReferenceValue = it.target;
                                 sp_Initiacount.intValue = it.initialize_count;
                                 sp_Name.stringValue = it.name;
@@ -670,11 +670,11 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = 0; i < sp_library_elements.arraySize; i++)
             {
                 SerializedProperty prop = sp_library_elements.GetArrayElementAtIndex(i);
-                SerializedProperty preloads = prop.FindPropertyRelative("preload_elements");
-                SerializedProperty UsedCount = prop.FindPropertyRelative("used_count");
-                SerializedProperty RecycledCount = prop.FindPropertyRelative("recycled_count");
-                SerializedProperty NextIndex = prop.FindPropertyRelative("next_index");
-                SerializedProperty Root = prop.FindPropertyRelative("root");
+                SerializedProperty preloads = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.preload_elements));
+                SerializedProperty UsedCount = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.used_count));
+                SerializedProperty RecycledCount = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.recycled_count));
+                SerializedProperty NextIndex = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.next_index));
+                SerializedProperty Root = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.root));
 
                 UsedCount.intValue = 0;
                 RecycledCount.intValue = 0;
@@ -728,12 +728,12 @@ namespace SevenStrikeModules.XHud.Editor
             XHud_Manager mgr = XHud_Dashboard.get_manager();
 
             SerializedProperty prop = sp_library_elements.GetArrayElementAtIndex(index);
-            SerializedProperty sp_name = prop.FindPropertyRelative("name");
-            SerializedProperty sp_initalcount = prop.FindPropertyRelative("initialize_count");
-            SerializedProperty sp_usedcount = prop.FindPropertyRelative("used_count");
-            SerializedProperty sp_recyclecount = prop.FindPropertyRelative("recycled_count");
-            SerializedProperty sp_Index = prop.FindPropertyRelative("next_index");
-            SerializedProperty sp_target = prop.FindPropertyRelative("target");
+            SerializedProperty sp_name = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.name));
+            SerializedProperty sp_initalcount = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.initialize_count));
+            SerializedProperty sp_usedcount = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.used_count));
+            SerializedProperty sp_recyclecount = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.recycled_count));
+            SerializedProperty sp_Index = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.next_index));
+            SerializedProperty sp_target = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.target));
 
             if (sp_target.objectReferenceValue != null)
             {
@@ -865,7 +865,7 @@ namespace SevenStrikeModules.XHud.Editor
                 // 创建右键菜单
                 menu.AddItem(new GUIContent("F (定位元素源)"), false, () =>
                 {
-                    EditorGUIUtility.PingObject(prop.FindPropertyRelative("target").objectReferenceValue);
+                    EditorGUIUtility.PingObject(prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.target)).objectReferenceValue);
                 });
                 // 显示右键菜单
                 menu.ShowAsContext();
@@ -935,7 +935,7 @@ namespace SevenStrikeModules.XHud.Editor
             for (int i = startIndex; i < endIndex && i < element_info_list.count; i++)
             {
                 SerializedProperty prop = sp_library_elements.GetArrayElementAtIndex(i);
-                SerializedProperty sp_name = prop.FindPropertyRelative("name");
+                SerializedProperty sp_name = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.name));
 
                 item_rect.Set(0, i * sp_item_height.floatValue, scrollview_rect.width, sp_item_height.floatValue);
 
@@ -1004,17 +1004,17 @@ namespace SevenStrikeModules.XHud.Editor
             if (sp_library_elements.arraySize <= 0)
             {
                 sp_library_elements.InsertArrayElementAtIndex(0);
-                sp_library_elements.GetArrayElementAtIndex(0).FindPropertyRelative("name").stringValue = "NewElement";
-                sp_library_elements.GetArrayElementAtIndex(0).FindPropertyRelative("target").objectReferenceValue = null;
-                sp_library_elements.GetArrayElementAtIndex(0).FindPropertyRelative("initialize_count").intValue = 1;
+                sp_library_elements.GetArrayElementAtIndex(0).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.name)).stringValue = "NewElement";
+                sp_library_elements.GetArrayElementAtIndex(0).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.target)).objectReferenceValue = null;
+                sp_library_elements.GetArrayElementAtIndex(0).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.initialize_count)).intValue = 1;
             }
             else
             {
                 sp_library_elements.InsertArrayElementAtIndex(list.index);
 
-                sp_library_elements.GetArrayElementAtIndex(list.index).FindPropertyRelative("name").stringValue = "NewElement";
-                sp_library_elements.GetArrayElementAtIndex(list.index).FindPropertyRelative("target").objectReferenceValue = null;
-                sp_library_elements.GetArrayElementAtIndex(list.index).FindPropertyRelative("initialize_count").intValue = 1;
+                sp_library_elements.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.name)).stringValue = "NewElement";
+                sp_library_elements.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.target)).objectReferenceValue = null;
+                sp_library_elements.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.initialize_count)).intValue = 1;
             }
             sp_library_elements.serializedObject.ApplyModifiedProperties();
         }

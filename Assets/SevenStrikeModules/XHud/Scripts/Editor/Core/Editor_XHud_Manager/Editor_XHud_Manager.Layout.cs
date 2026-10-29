@@ -41,10 +41,10 @@ namespace SevenStrikeModules.XHud.Editor
         private void Draw_Layout()
         {
             #region 边距
-            SerializedProperty sp_mar_x = sp_cv_margins.FindPropertyRelative("x");
-            SerializedProperty sp_mar_y = sp_cv_margins.FindPropertyRelative("y");
-            SerializedProperty sp_mar_z = sp_cv_margins.FindPropertyRelative("z");
-            SerializedProperty sp_mar_w = sp_cv_margins.FindPropertyRelative("w");
+            SerializedProperty sp_mar_x = sp_cv_margins.FindPropertyRelative(nameof(Vector4.x));
+            SerializedProperty sp_mar_y = sp_cv_margins.FindPropertyRelative(nameof(Vector4.y));
+            SerializedProperty sp_mar_z = sp_cv_margins.FindPropertyRelative(nameof(Vector4.z));
+            SerializedProperty sp_mar_w = sp_cv_margins.FindPropertyRelative(nameof(Vector4.w));
 
             XGUI.layout_property_field(
                 title: "上边距",

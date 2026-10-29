@@ -273,11 +273,7 @@ namespace SevenStrikeModules.XGUI.Editor
 
         private void OnGUI()
         {
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             Rect rect = new Rect(0, 0, position.width, position.height);
 
@@ -312,7 +308,7 @@ namespace SevenStrikeModules.XGUI.Editor
                 text: new GUIContent(Title),
                 text_color: Color.white,
                 size: XGUIFontSize.L,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 anchor: TextAnchor.MiddleLeft,
                 offset: new Vector2(0, 0),
                 font_style: FontStyle.Bold,
@@ -348,7 +344,7 @@ namespace SevenStrikeModules.XGUI.Editor
               text: new GUIContent(DateTime.Now.ToString("yyyy-MM-dd  HH:mm:ss:ff")),
               text_color: DateTimeColor,
               size: XGUIFontSize.M,
-              clipping: clipping,
+              clipping: clipping_ellipsis,
               anchor: TextAnchor.MiddleRight,
               offset: new Vector2(0, 0),
               font_style: FontStyle.Normal);
@@ -383,7 +379,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     text: new GUIContent(Text_Submit_Name_Text),
                     text_color: Color.white,
                     size: XGUIFontSize.B,
-                    clipping: clipping,
+                    clipping: clipping_ellipsis,
                     anchor: TextAnchor.MiddleLeft,
                     offset: new Vector2(0, 0),
                     wrap: true,
@@ -413,7 +409,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     text: new GUIContent(Text_Submit_Data_Text),
                     text_color: Color.white,
                     size: XGUIFontSize.B,
-                    clipping: clipping,
+                    clipping: clipping_ellipsis,
                     anchor: TextAnchor.MiddleLeft,
                     offset: new Vector2(0, 0),
                     wrap: true,
@@ -441,7 +437,7 @@ namespace SevenStrikeModules.XGUI.Editor
                     text: new GUIContent(" 项"),
                     text_color: Color.white * 0.7f,
                     size: XGUIFontSize.M,
-                    clipping: clipping,
+                    clipping: clipping_ellipsis,
                     anchor: TextAnchor.MiddleRight,
                     offset: new Vector2(0, 0),
                     font_style: FontStyle.Normal);

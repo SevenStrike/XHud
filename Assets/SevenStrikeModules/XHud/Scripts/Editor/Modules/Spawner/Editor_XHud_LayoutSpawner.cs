@@ -382,7 +382,7 @@ namespace SevenStrikeModules.XHud.Editor
                 draggable = false,
                 drawElementBackgroundCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
                 {
-                    if (selected_Screen == index)
+                    if (selected_Screen != -1 && selected_Screen == index)
                     {
                         // 高亮标记表示选中
                         item_rect_screen.Set(rect.x - 1, rect.y + 4, 3, 36);
@@ -671,6 +671,9 @@ namespace SevenStrikeModules.XHud.Editor
 
                         if (element != null)
                         {
+                            //  停止预览
+                            XTween_Preview_Stop();
+
                             EditorGUIUtility.PingObject(element);
                             // 元素高亮闪烁
                             XTween_Preview_Start(new XTween_Interface[] { element.element_Highlight() }, XHudSpace.屏幕空间, false);
@@ -686,7 +689,7 @@ namespace SevenStrikeModules.XHud.Editor
                 draggable = false,
                 drawElementBackgroundCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
                 {
-                    if (selected_World == index)
+                    if (selected_World != -1 && selected_World == index)
                     {
                         // 高亮标记表示选中
                         item_rect_world.Set(rect.x - 1, rect.y + 4, 3, 36);
@@ -708,7 +711,7 @@ namespace SevenStrikeModules.XHud.Editor
                     SerializedProperty sp_InMotion = prop.FindPropertyRelative(nameof(XHud_LayoutSpawner_Item.InMotion));
                     SerializedProperty sp_Spawned = prop.FindPropertyRelative(nameof(XHud_LayoutSpawner_Item.Spawned));
                     SerializedProperty sp_MotionPercentage = prop.FindPropertyRelative(nameof(XHud_LayoutSpawner_Item.MotionPercentage));
-                    SerializedProperty sp_UseSpawnerMotion = prop.FindPropertyRelative(nameof(XHud_LayoutSpawner_Item.MotionMode));
+                    SerializedProperty sp_MotionMode = prop.FindPropertyRelative(nameof(XHud_LayoutSpawner_Item.MotionMode));
                     SerializedProperty sp_Position = prop.FindPropertyRelative(nameof(XHud_LayoutSpawner_Item.Position));
                     SerializedProperty sp_Euler = prop.FindPropertyRelative(nameof(XHud_LayoutSpawner_Item.Euler));
                     SerializedProperty sp_Offset = prop.FindPropertyRelative(nameof(XHud_LayoutSpawner_Item.Offset));
@@ -840,7 +843,7 @@ namespace SevenStrikeModules.XHud.Editor
                     GUI.backgroundColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
                     drawelement_world_rect.Set(rect.width - 95, rect.y + 35, 88, 12);
                     if (EditorGUIUtility.currentViewWidth >= 210)
-                        Editor_XHud_GUI.Gui_PopupWithString(drawelement_world_rect, ref sp_UseSpawnerMotion, new string[2] { "自身动效", "生成器动效" }, HudFilled.无, HudColor.亮白, Color.white * 0.85f);
+                        Editor_XHud_GUI.Gui_PopupWithString(drawelement_world_rect, ref sp_MotionMode, new string[3] { "元素自身动效", "列表项动效", "生成器动效" }, HudFilled.无, HudColor.亮白, Color.white * 0.85f);
                     GUI.backgroundColor = Color.white;
                     #endregion
 
@@ -910,7 +913,7 @@ namespace SevenStrikeModules.XHud.Editor
                         GenericMenu menu = new GenericMenu();
                         menu.AddItem(new GUIContent("E 修改动效"), false, () =>
                         {
-                            if (!sp_is_loaded_layout_world.boolValue && sp_UseSpawnerMotion.stringValue == "元素自身动效")
+                            if (!sp_is_loaded_layout_world.boolValue && sp_MotionMode.stringValue == "元素自身动效")
                             {
                                 XGUI.dialog(
                                     type: XGUIDialogType.警告,
@@ -969,6 +972,9 @@ namespace SevenStrikeModules.XHud.Editor
 
                         if (element != null)
                         {
+                            //  停止预览
+                            XTween_Preview_Stop();
+
                             EditorGUIUtility.PingObject(element);
                             // 元素高亮闪烁
                             XTween_Preview_Start(new XTween_Interface[] { element.element_Highlight() }, XHudSpace.世界空间, false);
@@ -977,9 +983,6 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             };
             #endregion
-
-            //// 从元素库中同步动效参数
-            //BaseScript.SyncLayoutItemsMotionArgs();
         }
 
         private void OnDisable()
@@ -1014,6 +1017,8 @@ namespace SevenStrikeModules.XHud.Editor
             XHud_Manager mgr = XHud_Dashboard.get_manager();
 
             serializedObject.Update();
+
+            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
@@ -1273,682 +1278,931 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
-            #region 元素项
-            string hexcol = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
+            #region 元素项 - 屏幕空间
+            base_script.fold_screen = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIGroup.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
+                title: "元素项 - 屏幕空间",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: base_script.fold_screen);
 
-            #region 屏幕空间
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "元素项 - 屏幕空间", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
-            Editor_XHud_GUI.Gui_Layout_Space(15);
-
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-
-            #region 收集 & 重置
-            if (sp_spawn_item_list_screen.arraySize <= 0)
+            if (!base_script.fold_screen)
             {
-                #region 收集布局                
-                if (Editor_XHud_GUI.Gui_Layout_Button(15, "收集当前在LayoutScreen锚点下的所有屏幕元素部署布局", icon_scan_r, icon_scan_p))
+
+                #region 快捷按钮
+                XGUI.layout_group_start(
+                 type: XGUIContainerType.Horizontal,
+                 title_clipping: TextClipping.Clip,
+                 absolute_padding: true,
+                 absolute_margin: true,
+                 margin: new RectOffset(0, 0, 12, 0),
+                 padding: new RectOffset(5, 10, 0, 0));
+
+                #region 收集 & 重置
+                if (sp_spawn_item_list_screen.arraySize <= 0)
                 {
-                    if (string.IsNullOrEmpty(sp_library_name.stringValue))
+                    #region 收集布局      
+                    if (XGUI.layout_button(
+                        tooltip: "收集当前在LayoutScreen锚点下的所有屏幕元素部署布局",
+                        tex_release: icon_scan_r,
+                        tex_press: icon_scan_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: icon_scan_r.width,
+                        height: icon_scan_r.height))
                     {
-                        Editor_XHud_GUI.Open(XHud_DialogType.警告, $"XHud - 布局元素生成器消息", "收集元素异常", $"请先指定目标元素库！", "明白", 0);
-                        return;
-                    }
-                    if (hud_manager == null)
-                        return;
-
-                    ClearSpawnItemList_Screen();
-                    HudElementInfo ele_info_s = AnchorElementInfosGet_Screen();
-
-                    //无效名称列表
-                    List<XHud_GUI_Dialog_ListDatas> DialogDatas = new List<XHud_GUI_Dialog_ListDatas>();
-
-                    //---获取元素
-                    for (int i = 0; i < ele_info_s.elements.Count; i++)
-                    {
-                        string item_name = PrefabUtility.GetCorrespondingObjectFromOriginalSource(ele_info_s.elements[i]).name;
-                        if (!IsInLibrary(item_name))
+                        if (string.IsNullOrEmpty(sp_library_name.stringValue))
                         {
-                            #region 加入非库中元素名称列表
-                            string s = item_name;
-                            XHud_GUI_Dialog_ListDatas data = new XHud_GUI_Dialog_ListDatas();
-                            data.Title = sp_spawner_indicator.stringValue;
-                            data.SubTitle = "非库中元素";
-                            data.Message = s;
-                            DialogDatas.Add(data);
-                            #endregion
-                            continue;
+                            XGUI.dialog(
+                                type: XGUIDialogType.警告,
+                                windowtitle: "XHud - 布局元素生成器消息",
+                                title: "收集元素异常",
+                                msg: "请先指定目标元素库！",
+                                ok: "明白",
+                                PrimaryIndex: 0,
+                                usemodal: true,
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                            return;
+                        }
+                        if (hud_manager == null)
+                            return;
+
+                        ClearSpawnItemList_Screen();
+                        HudElementInfo ele_info_s = AnchorElementInfosGet_Screen();
+
+                        //无效名称列表
+                        List<XGUIDialogListDatas> DialogDatas = new List<XGUIDialogListDatas>();
+
+                        //---获取元素
+                        for (int i = 0; i < ele_info_s.elements.Count; i++)
+                        {
+                            string item_name = PrefabUtility.GetCorrespondingObjectFromOriginalSource(ele_info_s.elements[i]).name;
+                            if (!IsInLibrary(item_name))
+                            {
+                                #region 加入非库中元素名称列表
+                                string s = item_name;
+                                XGUIDialogListDatas data = new XGUIDialogListDatas();
+                                data.Title = sp_spawner_indicator.stringValue;
+                                data.SubTitle = "非库中元素";
+                                data.Message = s;
+                                DialogDatas.Add(data);
+                                #endregion
+                                continue;
+                            }
+                            else
+                            {
+                                #region 新建一个生成项，用于快速收集目标元素的基础信息（坐标、缩放、尺寸）
+                                XHud_LayoutSpawner_Item item = new XHud_LayoutSpawner_Item();
+                                item.SpawnName = item_name;
+                                item.isEnabled = true;
+                                item.isFold = true;
+                                item.Position = ele_info_s.elements[i].rect_transform.anchoredPosition3D;
+                                item.Scale = ele_info_s.elements[i].rect_transform.localScale;
+                                item.Euler = ele_info_s.elements[i].rect_transform.localEulerAngles;
+                                item.Size = ele_info_s.elements[i].rect_transform.sizeDelta;
+                                item.Pivot = ele_info_s.elements[i].rect_transform.pivot;
+                                item.Anchor_Min = ele_info_s.elements[i].rect_transform.anchorMin;
+                                item.Anchor_Max = ele_info_s.elements[i].rect_transform.anchorMax;
+                                #endregion
+
+                                #region 判断收集的元素在哪个锚点下
+                                XHudAnchor anchor = XHudAnchor.中心;
+                                string ele_parent_name = ele_info_s.elements[i].rect_transform.parent.name;
+
+                                if (ele_parent_name == "Anchor_B")
+                                {
+                                    anchor = XHudAnchor.底层;
+                                }
+                                if (ele_parent_name == "Anchor_C")
+                                {
+                                    anchor = XHudAnchor.中心;
+                                }
+                                if (ele_parent_name == "Anchor_L")
+                                {
+                                    anchor = XHudAnchor.左;
+                                }
+                                if (ele_parent_name == "Anchor_R")
+                                {
+                                    anchor = XHudAnchor.右;
+                                }
+                                if (ele_parent_name == "Anchor_U")
+                                {
+                                    anchor = XHudAnchor.上;
+                                }
+                                if (ele_parent_name == "Anchor_D")
+                                {
+                                    anchor = XHudAnchor.下;
+                                }
+                                if (ele_parent_name == "Anchor_L_U")
+                                {
+                                    anchor = XHudAnchor.左上;
+                                }
+                                if (ele_parent_name == "Anchor_L_D")
+                                {
+                                    anchor = XHudAnchor.左下;
+                                }
+                                if (ele_parent_name == "Anchor_R_U")
+                                {
+                                    anchor = XHudAnchor.右上;
+                                }
+                                if (ele_parent_name == "Anchor_R_D")
+                                {
+                                    anchor = XHudAnchor.右下;
+                                }
+                                if (ele_parent_name == "Anchor_T")
+                                {
+                                    anchor = XHudAnchor.顶层;
+                                }
+                                item.CreateArgs.anchor = anchor;
+                                #endregion
+
+                                //加入屏幕列表中
+                                AddedSpawnItem_Screen(item);
+                            }
+                        }
+
+                        #region 异常提示
+                        //如果获取到无效元素名称
+                        if (DialogDatas.Count > 0)
+                        {
+                            string res = XGUI.dialog_listview(
+                                datas: DialogDatas.ToArray(),
+                                type: XGUIDialogType.警告,
+                                windowtitle: "XHud - 布局元素生成器消息",
+                                title: "元素物体异常",
+                                msg: $"检测到以下不合理的物体，原因：未加入到元素池中。解决方法：如果您想让这些元素被记录到部署布局中，请将其加入元素池！",
+                                ok: "明白",
+                                PrimaryIndex: 0,
+                                usemodal: true,
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                        }
+
+                        //如果获取到非预制体元素名称
+                        if (ele_info_s.notPrefabsList.Count > 0)
+                        {
+                            DialogDatas.Clear();
+                            for (int w = 0; w < ele_info_s.notPrefabsList.Count; w++)
+                            {
+                                string s = ele_info_s.notPrefabsList[w].name;
+
+                                #region 加入非预制体元素名称列表
+                                XGUIDialogListDatas data = new XGUIDialogListDatas();
+                                data.Title = sp_spawner_indicator.stringValue;
+                                data.SubTitle = "非预制体元素";
+                                data.Message = s;
+                                DialogDatas.Add(data);
+                                #endregion
+                            }
+
+                            string res = XGUI.dialog_listview(
+                               datas: DialogDatas.ToArray(),
+                               type: XGUIDialogType.警告,
+                               windowtitle: "XHud - 布局元素生成器消息",
+                               title: "元素物体异常",
+                               msg: $"检测到以下不合理的物体，原因：物体虽然是HudElement元素但未将其制成预制体。解决方法：如果您想让这些元素被记录到部署布局中，请将其制成预制体！",
+                               ok: "明白",
+                               cancel: "选中",
+                               PrimaryIndex: 0,
+                               usemodal: true,
+                               themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                            if (res == "选中")
+                            {
+                                Selection.objects = ele_info_s.notPrefabsList.ToArray();
+                            }
+                        }
+                        #endregion
+
+                        #region 记录后处理元素方式
+                        if (ele_info_s.elements.Count > 0)
+                        {
+                            string res = XGUI.dialog(
+                                type: XGUIDialogType.确认,
+                                windowtitle: "XHud - 布局元素生成器消息",
+                                title: "元素物体处理",
+                                msg: $"如何处理场景中被记录的屏幕UI的HudElement元素物体？",
+                                ok: "不做处理",
+                                cancel: "移除",
+                                alt: "隐藏",
+                                PrimaryIndex: 0,
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                            if (res == "不做处理")
+                            {
+
+                            }
+                            else if (res == "移除")
+                            {
+                                for (int i = 0; i < ele_info_s.elements.Count; i++)
+                                {
+                                    Undo.DestroyObjectImmediate(ele_info_s.elements[i].gameObject);
+                                }
+                            }
+                            else if (res == "隐藏")
+                            {
+                                for (int i = 0; i < ele_info_s.elements.Count; i++)
+                                {
+                                    Undo.RecordObject(ele_info_s.elements[i].gameObject, "HideOriginalElementPrefab_" + i);
+                                    ele_info_s.elements[i].gameObject.SetActive(false);
+                                }
+                            }
                         }
                         else
                         {
-                            #region 新建一个生成项，用于快速收集目标元素的基础信息（坐标、缩放、尺寸）
-                            XHud_LayoutSpawner_Item item = new XHud_LayoutSpawner_Item();
-                            item.SpawnName = item_name;
-                            item.isEnabled = true;
-                            item.isFold = true;
-                            item.Position = ele_info_s.elements[i].rect_transform.anchoredPosition3D;
-                            item.Scale = ele_info_s.elements[i].rect_transform.localScale;
-                            item.Euler = ele_info_s.elements[i].rect_transform.localEulerAngles;
-                            item.Size = ele_info_s.elements[i].rect_transform.sizeDelta;
-                            item.Pivot = ele_info_s.elements[i].rect_transform.pivot;
-                            item.Anchor_Min = ele_info_s.elements[i].rect_transform.anchorMin;
-                            item.Anchor_Max = ele_info_s.elements[i].rect_transform.anchorMax;
-                            item.CreateArgs = ele_info_s.elements[i].motion_create_args.Clone();
-                            item.RecycleArgs = ele_info_s.elements[i].motion_recycle_args.Clone();
-                            #endregion
-
-                            #region 判断收集的元素在哪个锚点下
-                            XHudAnchor anchor = XHudAnchor.中心;
-                            string ele_parent_name = ele_info_s.elements[i].rect_transform.parent.name;
-
-                            if (ele_parent_name == "Anchor_B")
-                            {
-                                anchor = XHudAnchor.底层;
-                            }
-                            if (ele_parent_name == "Anchor_C")
-                            {
-                                anchor = XHudAnchor.中心;
-                            }
-                            if (ele_parent_name == "Anchor_L")
-                            {
-                                anchor = XHudAnchor.左;
-                            }
-                            if (ele_parent_name == "Anchor_R")
-                            {
-                                anchor = XHudAnchor.右;
-                            }
-                            if (ele_parent_name == "Anchor_U")
-                            {
-                                anchor = XHudAnchor.上;
-                            }
-                            if (ele_parent_name == "Anchor_D")
-                            {
-                                anchor = XHudAnchor.下;
-                            }
-                            if (ele_parent_name == "Anchor_L_U")
-                            {
-                                anchor = XHudAnchor.左上;
-                            }
-                            if (ele_parent_name == "Anchor_L_D")
-                            {
-                                anchor = XHudAnchor.左下;
-                            }
-                            if (ele_parent_name == "Anchor_R_U")
-                            {
-                                anchor = XHudAnchor.右上;
-                            }
-                            if (ele_parent_name == "Anchor_R_D")
-                            {
-                                anchor = XHudAnchor.右下;
-                            }
-                            if (ele_parent_name == "Anchor_T")
-                            {
-                                anchor = XHudAnchor.顶层;
-                            }
-                            item.CreateArgs.anchor = anchor;
-                            #endregion
-
-                            //加入屏幕列表中
-                            AddedSpawnItem_Screen(item);
+                            XGUI.dialog(
+                                type: XGUIDialogType.确认,
+                                windowtitle: "XHud - 布局元素生成器消息",
+                                title: "元素物体收集",
+                                msg: $"未发现<color={hexcol}> 屏幕根节点 </color>下存在任何Hud元素物体！",
+                                ok: "明白",
+                                PrimaryIndex: 0);
                         }
-                    }
-
-                    #region 异常提示
-                    //如果获取到无效元素名称
-                    if (DialogDatas.Count > 0)
-                    {
-                        Editor_XHud_GUI.Open(DialogDatas.ToArray(), XHud_DialogType.警告, "XHud - 布局元素生成器消息", "元素物体异常", $"检测到以下不合理的物体，原因：未加入到元素池中。解决方法：如果您想让这些元素被记录到部署布局中，请将其加入元素池！", "明白", 0, true);
-                    }
-
-                    //如果获取到非预制体元素名称
-                    if (ele_info_s.notPrefabsList.Count > 0)
-                    {
-                        DialogDatas.Clear();
-                        for (int w = 0; w < ele_info_s.notPrefabsList.Count; w++)
-                        {
-                            string s = ele_info_s.notPrefabsList[w].name;
-
-                            #region 加入非预制体元素名称列表
-                            XHud_GUI_Dialog_ListDatas data = new XHud_GUI_Dialog_ListDatas();
-                            data.Title = sp_spawner_indicator.stringValue;
-                            data.SubTitle = "非预制体元素";
-                            data.Message = s;
-                            DialogDatas.Add(data);
-                            #endregion
-                        }
-
-                        string res = Editor_XHud_GUI.Open(DialogDatas.ToArray(), XHud_DialogType.警告, "XHud - 布局元素生成器消息", "元素物体异常", $"检测到以下不合理的物体，原因：物体虽然是HudElement元素但未将其制成预制体。解决方法：如果您想让这些元素被记录到部署布局中，请将其制成预制体！", "明白", "选中", 0, true);
-                        if (res == "选中")
-                        {
-                            Selection.objects = ele_info_s.notPrefabsList.ToArray();
-                        }
-                    }
-                    #endregion
-
-                    #region 记录后处理元素方式
-                    if (ele_info_s.elements.Count > 0)
-                    {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 布局元素生成器消息", "元素物体处理", $"如何处理场景中被记录的屏幕UI的HudElement元素物体？", "不做处理", "移除", "隐藏", 0, true);
-                        if (res == "不做处理")
-                        {
-
-                        }
-                        else if (res == "移除")
-                        {
-                            for (int i = 0; i < ele_info_s.elements.Count; i++)
-                            {
-                                Undo.DestroyObjectImmediate(ele_info_s.elements[i].gameObject);
-                            }
-                        }
-                        else if (res == "隐藏")
-                        {
-                            for (int i = 0; i < ele_info_s.elements.Count; i++)
-                            {
-                                Undo.RecordObject(ele_info_s.elements[i].gameObject, "HideOriginalElementPrefab_" + i);
-                                ele_info_s.elements[i].gameObject.SetActive(false);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素生成器消息", "元素物体收集", $"未发现<color={hexcol}> 屏幕根节点 </color>下存在任何Hud元素物体！", "明白", 0);
-                    }
-                    #endregion
-                    return;
-                }
-                #endregion
-            }
-            else
-            {
-                #region 重置清空
-                if (Editor_XHud_GUI.Gui_Layout_Button(15, "将当前的元素部署布局列表清空", icon_reset_r, icon_reset_p))
-                {
-                    EditorApplication.delayCall += () =>
-                    {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素生成器消息", "重置元素列表", "确定要将元素列表重置吗？您将丢失当前的所有元素记录和他们的延迟（生成 & 回收）参数！", "重置", "暂不", 0);
-                        if (res == "暂不")
-                            return;
-
-                        if (hud_manager == null)
-                            return;
-
-                        sp_is_loaded_layout_screen.boolValue = false;
-                        sp_is_loaded_layout_screen.serializedObject.ApplyModifiedProperties();
-                        for (int i = 0; i < sp_spawn_item_list_screen.arraySize; i++)
-                        {
-                            UnLoadSpawnItem_Screen(base_script.spawn_item_list_screen[i]);
-                        }
-                        ClearSpawnItemList_Screen();
-                    };
-                }
-                #endregion
-
-                Editor_XHud_GUI.Gui_Layout_Space(40);
-
-                #region 重新生成ID
-                if (Editor_XHud_GUI.Gui_Layout_Button(15, "为当前的元素列表中的项重新创建ID", icon_recreate_id_r, icon_recreate_id_p))
-                {
-                    EditorApplication.delayCall += () =>
-                    {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素生成器消息", "元素ID刷新", "确定要将元素列表中的所有项的ID进行重新生成吗？您将丢失所有元素的当前ID！我们并不建议您这么做，因为会导致您其他脚本在获取元素时发生\" 无法找到目标元素 \"的异常！", "重新生成", "暂不", 0);
-                        if (res == "暂不")
-                            return;
-
-                        Undo.RecordObject(base_script, "刷新所有元素项ID");
-                        for (int i = 0; i < base_script.spawn_item_list_screen.Count; i++)
-                        {
-                            base_script.spawn_item_list_screen[i].ID = XGUI_Utilitys.GenerateUniqueId(CollectIDs(XHudSpace.屏幕空间));
-                        }
-                    };
-                }
-                #endregion
-            }
-            #endregion
-
-            Editor_XHud_GUI.Gui_Layout_Space(40);
-
-            #region 加载 & 卸载布局 & 预览
-            if (sp_spawn_item_list_screen.arraySize > 0)
-            {
-                #region 加载 & 卸载布局 
-                if (!sp_is_loaded_layout_screen.boolValue)
-                {
-                    #region 加载
-                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "根据元素列表中的信息重建元素部署布局到LayoutScreen锚点下", icon_load_r, icon_load_p))
-                    {
-                        if (hud_manager == null)
-                            return;
-                        if (sp_is_loaded_layout_screen.boolValue)
-                            return;
-                        sp_is_loaded_layout_screen.boolValue = true;
-                        sp_is_loaded_layout_screen.serializedObject.ApplyModifiedProperties();
-
-                        for (int i = 0; i < sp_spawn_item_list_screen.arraySize; i++)
-                        {
-                            LoadSpawnItem_Screen(base_script.spawn_item_list_screen[i]);
-                        }
-
-                        // 从元素库中同步动效参数
-                        //BaseScript.SyncLayoutItemsMotionArgs();
-
-                        if (base_script.act_on_spawn != null)
-                            base_script.act_on_spawn(XHudSpace.屏幕空间);
+                        #endregion
+                        return;
                     }
                     #endregion
                 }
                 else
                 {
-                    #region 卸载
-                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "将当前重建的元素部署布局清空", icon_unload_r, icon_unload_p))
+                    #region 清空布局    
+                    if (XGUI.layout_button(
+                        tooltip: "将当前的元素部署布局列表清空",
+                        tex_release: icon_reset_r,
+                        tex_press: icon_reset_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: icon_reset_r.width,
+                        height: icon_reset_r.height))
                     {
-                        if (hud_manager == null)
-                            return;
-
-                        if (!sp_is_loaded_layout_screen.boolValue)
-                            return;
-                        sp_is_loaded_layout_screen.boolValue = false;
-                        sp_is_loaded_layout_screen.serializedObject.ApplyModifiedProperties();
-
-                        //  停止预览
-                        XTween_Preview_Stop();
-
-                        for (int i = 0; i < sp_spawn_item_list_screen.arraySize; i++)
+                        EditorApplication.delayCall += () =>
                         {
-                            UnLoadSpawnItem_Screen(base_script.spawn_item_list_screen[i]);
-                        }
+                            string res = XGUI.dialog(
+                                type: XGUIDialogType.警告,
+                                windowtitle: "XHud - 布局元素生成器消息",
+                                title: "重置元素列表",
+                                msg: "确定要将元素列表重置吗？您将丢失当前的所有元素记录和他们的延迟（生成 & 回收）参数！",
+                                ok: "重置",
+                                cancel: "暂不",
+                                PrimaryIndex: 0,
+                                usemodal: true,
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                            if (res == "暂不")
+                                return;
 
-                        // 从元素库中同步动效参数
-                        //BaseScript.SyncLayoutItemsMotionArgs();
+                            if (hud_manager == null)
+                                return;
 
-                        if (base_script.act_on_despawn != null)
-                            base_script.act_on_despawn(XHudSpace.屏幕空间);
+                            sp_is_loaded_layout_screen.boolValue = false;
+                            sp_is_loaded_layout_screen.serializedObject.ApplyModifiedProperties();
+                            for (int i = 0; i < sp_spawn_item_list_screen.arraySize; i++)
+                            {
+                                UnLoadSpawnItem_Screen(base_script.spawn_item_list_screen[i]);
+                            }
+                            ClearSpawnItemList_Screen();
+                        };
+                    }
+                    #endregion
+
+                    XGUI.layout_flexspace();
+
+                    #region 重新生成ID
+                    if (XGUI.layout_button(
+                      tooltip: "为当前的元素列表中的项重新创建ID",
+                      tex_release: icon_recreate_id_r,
+                      tex_press: icon_recreate_id_p,
+                      tex_gui_color: Color.white,
+                      border: new RectOffset(0, 0, 0, 0),
+                      width: icon_recreate_id_r.width,
+                      height: icon_recreate_id_r.height))
+                    {
+                        EditorApplication.delayCall += () =>
+                        {
+                            string res = XGUI.dialog(
+                                type: XGUIDialogType.警告,
+                                windowtitle: "XHud - 布局元素生成器消息",
+                                title: "元素ID刷新",
+                                msg: "确定要将元素列表中的所有项的ID进行重新生成吗？您将丢失所有元素的当前ID！我们并不建议您这么做，因为会导致您其他脚本在获取元素时发生\" 无法找到目标元素 \"的异常！",
+                                ok: "重新生成",
+                                cancel: "暂不",
+                                PrimaryIndex: 0,
+                                usemodal: true,
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+
+                            if (res == "暂不")
+                                return;
+
+                            Undo.RecordObject(base_script, "刷新所有元素项ID");
+                            for (int i = 0; i < base_script.spawn_item_list_screen.Count; i++)
+                            {
+                                base_script.spawn_item_list_screen[i].ID = XGUI_Utilitys.GenerateUniqueId(CollectIDs(XHudSpace.屏幕空间));
+                            }
+                        };
                     }
                     #endregion
                 }
                 #endregion
 
-                Editor_XHud_GUI.Gui_Layout_Space(40);
+                XGUI.layout_flexspace();
 
-                #region 动画预览        
-                if (sp_is_loaded_layout_screen.boolValue)
+                #region 加载 & 卸载布局 & 预览
+                if (sp_spawn_item_list_screen.arraySize > 0)
                 {
-                    #region 预览播放 - 生成
-                    if (!IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "预览当前加载的元素的 - 生成 - 动效", icon_preview_in_r, icon_preview_in_p))
+                    #region 加载 & 卸载布局 
+                    if (!sp_is_loaded_layout_screen.boolValue)
                     {
-                        if (hud_manager == null)
-                            return;
+                        #region 加载
+                        if (XGUI.layout_button(
+                            tooltip: "根据元素列表中的信息重建元素部署布局到LayoutScreen锚点下",
+                            tex_release: icon_load_r,
+                            tex_press: icon_load_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: icon_load_r.width,
+                            height: icon_load_r.height))
+                        {
+                            if (hud_manager == null)
+                                return;
+                            if (sp_is_loaded_layout_screen.boolValue)
+                                return;
+                            sp_is_loaded_layout_screen.boolValue = true;
+                            sp_is_loaded_layout_screen.serializedObject.ApplyModifiedProperties();
 
-                        IsPreviewing = true;
-                        LayoutsTweenPreview(XHudSpace.屏幕空间, XHudElementCreateState.Created);
+                            for (int i = 0; i < sp_spawn_item_list_screen.arraySize; i++)
+                            {
+                                LoadSpawnItem_Screen(base_script.spawn_item_list_screen[i]);
+                            }
+
+                            if (base_script.act_on_spawn != null)
+                                base_script.act_on_spawn(XHudSpace.屏幕空间);
+
+                            return;
+                        }
+                        #endregion
+                    }
+                    else
+                    {
+                        #region 卸载
+                        if (XGUI.layout_button(
+                           tooltip: "将当前重建的元素部署布局清空",
+                           tex_release: icon_unload_r,
+                           tex_press: icon_unload_p,
+                           tex_gui_color: Color.white,
+                           border: new RectOffset(0, 0, 0, 0),
+                           width: icon_unload_r.width,
+                           height: icon_unload_r.height))
+                        {
+                            if (hud_manager == null)
+                                return;
+
+                            if (!sp_is_loaded_layout_screen.boolValue)
+                                return;
+                            sp_is_loaded_layout_screen.boolValue = false;
+                            sp_is_loaded_layout_screen.serializedObject.ApplyModifiedProperties();
+
+                            //  停止预览
+                            XTween_Preview_Stop();
+
+                            for (int i = 0; i < sp_spawn_item_list_screen.arraySize; i++)
+                            {
+                                UnLoadSpawnItem_Screen(base_script.spawn_item_list_screen[i]);
+                            }
+
+                            if (base_script.act_on_despawn != null)
+                                base_script.act_on_despawn(XHudSpace.屏幕空间);
+                        }
+                        #endregion
                     }
                     #endregion
 
-                    #region 预览停止 - 生成
-                    if (IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "停止预览当前播放的元素的 - 生成 - 动效", icon_stoppreview_r, icon_stoppreview_p))
+                    XGUI.layout_flexspace();
+
+                    #region 动画预览        
+                    if (sp_is_loaded_layout_screen.boolValue)
                     {
-                        if (hud_manager == null)
-                            return;
+                        #region 预览播放 - 生成
+                        if (!IsPreviewing && XGUI.layout_button(
+                            tooltip: "预览当前加载的元素的 - 生成 - 动效",
+                            tex_release: icon_preview_in_r,
+                            tex_press: icon_preview_in_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: icon_preview_in_r.width,
+                            height: icon_preview_in_r.height))
+                        {
+                            if (hud_manager == null)
+                                return;
 
-                        IsPreviewing = false;
-                        XTween_Preview_Kill(XHudSpace.屏幕空间);
-                    }
-                    #endregion
+                            IsPreviewing = true;
+                            LayoutsTweenPreview(XHudSpace.屏幕空间, XHudElementCreateState.Created);
+                        }
+                        #endregion
 
-                    Editor_XHud_GUI.Gui_Layout_Space(40);
+                        #region 预览停止 - 生成
+                        if (IsPreviewing && XGUI.layout_button(
+                            tooltip: "停止预览当前播放的元素的 - 生成 - 动效",
+                            tex_release: icon_stoppreview_r,
+                            tex_press: icon_stoppreview_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: icon_stoppreview_r.width,
+                            height: icon_stoppreview_r.height))
+                        {
+                            if (hud_manager == null)
+                                return;
 
-                    #region 预览播放 - 回收
-                    if (!IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "预览当前加载的元素的 - 回收 - 动效", icon_preview_out_r, icon_preview_out_p))
-                    {
-                        if (hud_manager == null)
-                            return;
+                            IsPreviewing = false;
+                            XTween_Preview_Kill(XHudSpace.屏幕空间);
+                        }
+                        #endregion
 
-                        IsPreviewing = true;
-                        LayoutsTweenPreview(XHudSpace.屏幕空间, XHudElementCreateState.Recycled);
-                    }
-                    #endregion
+                        XGUI.layout_flexspace();
 
-                    #region 预览停止 - 回收
-                    if (IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "停止预览当前播放的元素的 - 回收 - 动效", icon_stoppreview_r, icon_stoppreview_p))
-                    {
-                        if (hud_manager == null)
-                            return;
+                        #region 预览播放 - 回收
+                        if (!IsPreviewing && XGUI.layout_button(
+                            tooltip: "预览当前加载的元素的 - 回收 - 动效",
+                            tex_release: icon_preview_out_r,
+                            tex_press: icon_preview_out_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: icon_preview_out_r.width,
+                            height: icon_preview_out_r.height))
+                        {
+                            if (hud_manager == null)
+                                return;
 
-                        IsPreviewing = false;
-                        XTween_Preview_Kill(XHudSpace.屏幕空间);
+                            IsPreviewing = true;
+                            LayoutsTweenPreview(XHudSpace.屏幕空间, XHudElementCreateState.Recycled);
+                        }
+                        #endregion
+
+                        #region 预览停止 - 回收
+                        if (IsPreviewing && XGUI.layout_button(
+                            tooltip: "停止预览当前播放的元素的 - 回收 - 动效",
+                            tex_release: icon_stoppreview_r,
+                            tex_press: icon_stoppreview_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: icon_stoppreview_r.width,
+                            height: icon_stoppreview_r.height))
+                        {
+                            if (hud_manager == null)
+                                return;
+
+                            IsPreviewing = false;
+                            XTween_Preview_Kill(XHudSpace.屏幕空间);
+                        }
+                        #endregion
                     }
                     #endregion
                 }
+                #endregion                
+
+                XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
                 #endregion
-            }
-            #endregion
 
-            Editor_XHud_GUI.Gui_Layout_FlexSpace();
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-
-            sp_fold_screen.boolValue = EditorGUILayout.Foldout(sp_fold_screen.boolValue, new GUIContent("元素项列表"), true);
-            if (sp_fold_screen.boolValue)
-            {
-                Editor_XHud_GUI.Gui_Layout_Space(5);
+                XGUI.layout_space(15);
                 element_list_screen.DoLayoutList();
             }
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
-            #region 世界空间
-            Editor_XHud_GUI.Gui_Layout_Vertical_Start(HudFilled.纯色边框, HudColor.亮白, 0, "元素项 - 世界空间", XHud_Dashboard.themes_get_color(ThemeColorType.primary));
-            Editor_XHud_GUI.Gui_Layout_Space(10);
+            #region 元素项 - 世界空间
+            base_script.fold_world = XGUI.layout_group_start(
+                type: XGUIContainerType.Vertical,
+                bg_fill: XGUIGroup.缺口纯色边框,
+                bg_color: XGUIColor.亮白,
+                bg_color_gui: XHud_Dashboard.themes_get_color(ThemeColorType.group),
+                title: "元素项 - 世界空间",
+                title_size: XGUIFontSize.M,
+                title_text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
+                title_clipping: TextClipping.Clip,
+                padding: new RectOffset(10, 10, 15, 15),
+                foldout: base_script.fold_world);
 
-            Editor_XHud_GUI.Gui_Layout_Horizontal_Start(HudFilled.无, HudColor.无, 0);
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-
-            #region 收集 & 重置
-            if (sp_spawn_item_list_world.arraySize <= 0)
+            if (!base_script.fold_world)
             {
-                #region 收集布局
-                if (Editor_XHud_GUI.Gui_Layout_Button(15, "收集当前在LayoutScreen锚点下的所有屏幕元素部署布局", icon_scan_r, icon_scan_p))
+                #region 快捷按钮
+                XGUI.layout_group_start(
+                 type: XGUIContainerType.Horizontal,
+                 title_clipping: TextClipping.Clip,
+                 absolute_padding: true,
+                 absolute_margin: true,
+                 margin: new RectOffset(0, 0, 12, 0),
+                 padding: new RectOffset(5, 10, 0, 0));
+
+                #region 收集 & 重置
+                if (sp_spawn_item_list_world.arraySize <= 0)
                 {
-                    if (string.IsNullOrEmpty(sp_library_name.stringValue))
+                    #region 收集布局      
+                    if (XGUI.layout_button(
+                        tooltip: "收集当前在LayoutWorld锚点下的所有世界元素部署布局",
+                        tex_release: icon_scan_r,
+                        tex_press: icon_scan_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: icon_scan_r.width,
+                        height: icon_scan_r.height))
                     {
-                        Editor_XHud_GUI.Open(XHud_DialogType.警告, $"XHud - 布局元素生成器消息", "收集元素异常", $"请先指定目标元素库！", "明白", 0);
-                        return;
-                    }
-
-                    if (hud_manager == null)
-                        return;
-
-                    if (!hud_manager.cv_support_world_ui)
-                    {
-                        string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
-                        Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素生成器消息", "收集世界元素布局", $"暂未支持世界元素！请检查XHud 管理器中是否开启了<b><color={hex_col}> 支持世界元素 </color></b>选项？", "明白", 0);
-                        return;
-                    }
-
-                    ClearSpawnItemList_World();
-                    HudElementInfo ele_info_w = AnchorElementInfosGet_World();
-
-                    //无效名称列表
-                    List<XHud_GUI_Dialog_ListDatas> DialogDatas = new List<XHud_GUI_Dialog_ListDatas>();
-
-                    //---获取
-                    for (int i = 0; i < ele_info_w.elements.Count; i++)
-                    {
-                        string item_name = PrefabUtility.GetCorrespondingObjectFromOriginalSource(ele_info_w.elements[i]).name;
-                        if (!IsInLibrary(item_name))
+                        if (string.IsNullOrEmpty(sp_library_name.stringValue))
                         {
-                            #region 加入非库中元素名称列表
-                            string s = item_name;
-                            XHud_GUI_Dialog_ListDatas data = new XHud_GUI_Dialog_ListDatas();
-                            data.Title = sp_spawner_indicator.stringValue;
-                            data.SubTitle = "非库中元素";
-                            data.Message = s;
-                            DialogDatas.Add(data);
-                            #endregion
-                            continue;
+                            XGUI.dialog(
+                               type: XGUIDialogType.警告,
+                               windowtitle: "XHud - 布局元素生成器消息",
+                               title: "收集元素异常",
+                               msg: "请先指定目标元素库！",
+                               ok: "明白",
+                               PrimaryIndex: 0,
+                               usemodal: true,
+                               themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                            return;
+                        }
+                        if (hud_manager == null)
+                            return;
+
+                        ClearSpawnItemList_World();
+                        HudElementInfo ele_info_w = AnchorElementInfosGet_World();
+
+                        //无效名称列表
+                        List<XGUIDialogListDatas> DialogDatas = new List<XGUIDialogListDatas>();
+
+                        //---获取元素
+                        for (int i = 0; i < ele_info_w.elements.Count; i++)
+                        {
+                            string item_name = PrefabUtility.GetCorrespondingObjectFromOriginalSource(ele_info_w.elements[i]).name;
+                            if (!IsInLibrary(item_name))
+                            {
+                                #region 加入非库中元素名称列表
+                                string s = item_name;
+                                XGUIDialogListDatas data = new XGUIDialogListDatas();
+                                data.Title = sp_spawner_indicator.stringValue;
+                                data.SubTitle = "非库中元素";
+                                data.Message = s;
+                                DialogDatas.Add(data);
+                                #endregion
+                                continue;
+                            }
+                            else
+                            {
+                                #region 新建一个生成项，用于快速收集目标元素的基础信息（坐标、缩放、尺寸）
+                                XHud_LayoutSpawner_Item item = new XHud_LayoutSpawner_Item();
+                                item.SpawnName = item_name;
+                                item.Position = ele_info_w.elements[i].rect_transform.position;
+                                item.Scale = ele_info_w.elements[i].rect_transform.localScale;
+                                item.Euler = ele_info_w.elements[i].rect_transform.localEulerAngles;
+                                item.Size = ele_info_w.elements[i].rect_transform.sizeDelta;
+                                item.Pivot = ele_info_w.elements[i].rect_transform.pivot;
+                                item.Anchor_Min = ele_info_w.elements[i].rect_transform.anchorMin;
+                                item.Anchor_Max = ele_info_w.elements[i].rect_transform.anchorMax;
+                                AddedSpawnItem_World(item);
+                                #endregion
+                            }
+                        }
+
+                        #region 异常提示
+                        //如果获取到无效元素名称
+                        if (DialogDatas.Count > 0)
+                        {
+                            string res = XGUI.dialog_listview(
+                                datas: DialogDatas.ToArray(),
+                                type: XGUIDialogType.警告,
+                                windowtitle: "XHud - 布局元素生成器消息",
+                                title: "元素物体异常",
+                                msg: $"检测到以下不合理的物体，原因：未加入到元素池中。解决方法：如果您想让这些元素被记录到部署布局中，请将其加入元素池！",
+                                ok: "明白",
+                                PrimaryIndex: 0,
+                                usemodal: true,
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                        }
+
+                        if (ele_info_w.notPrefabsList.Count > 0)
+                        {
+                            DialogDatas.Clear();
+                            for (int w = 0; w < ele_info_w.notPrefabsList.Count; w++)
+                            {
+                                string s = ele_info_w.notPrefabsList[w].name;
+
+                                #region 加入非预制体元素名称列表
+                                XGUIDialogListDatas data = new XGUIDialogListDatas();
+                                data.Title = sp_spawner_indicator.stringValue;
+                                data.SubTitle = "非预制体元素";
+                                data.Message = s;
+                                DialogDatas.Add(data);
+                                #endregion
+                            }
+
+                            string res = XGUI.dialog_listview(
+                               datas: DialogDatas.ToArray(),
+                               type: XGUIDialogType.警告,
+                               windowtitle: "XHud - 布局元素生成器消息",
+                               title: "元素物体异常",
+                               msg: $"检测到以下不合理的物体，原因：物体虽然是HudElement元素但未将其制成预制体。解决方法：如果您想让这些元素被记录到部署布局中，请将其制成预制体！",
+                               ok: "明白",
+                               cancel: "选中",
+                               PrimaryIndex: 0,
+                               usemodal: true,
+                               themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                            if (res == "选中")
+                            {
+                                Selection.objects = ele_info_w.notPrefabsList.ToArray();
+                            }
+                        }
+                        #endregion
+
+                        #region 记录后处理元素方式
+                        if (ele_info_w.elements.Count > 0)
+                        {
+                            string res = XGUI.dialog(
+                                type: XGUIDialogType.确认,
+                                windowtitle: "XHud - 布局元素生成器消息",
+                                title: "元素物体处理",
+                                msg: $"如何处理场景中被记录的世界UI的HudElement元素物体？",
+                                ok: "不做处理",
+                                cancel: "移除",
+                                alt: "隐藏",
+                                PrimaryIndex: 0,
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                            if (res == "不做处理")
+                            {
+
+                            }
+                            else if (res == "移除")
+                            {
+                                for (int i = 0; i < ele_info_w.elements.Count; i++)
+                                {
+                                    Undo.DestroyObjectImmediate(ele_info_w.elements[i].gameObject);
+                                }
+                            }
+                            else if (res == "隐藏")
+                            {
+                                for (int i = 0; i < ele_info_w.elements.Count; i++)
+                                {
+                                    Undo.RecordObject(ele_info_w.elements[i].gameObject, "HideOriginalElementPrefab_" + i);
+                                    ele_info_w.elements[i].gameObject.SetActive(false);
+                                }
+                            }
                         }
                         else
                         {
-                            #region 新建一个生成项，用于快速收集目标元素的基础信息（坐标、缩放、尺寸）
-                            XHud_LayoutSpawner_Item item = new XHud_LayoutSpawner_Item();
-                            item.SpawnName = item_name;
-                            item.Position = ele_info_w.elements[i].rect_transform.position;
-                            item.Scale = ele_info_w.elements[i].rect_transform.localScale;
-                            item.Euler = ele_info_w.elements[i].rect_transform.localEulerAngles;
-                            item.Size = ele_info_w.elements[i].rect_transform.sizeDelta;
-                            item.CreateArgs = ele_info_w.elements[i].motion_create_args.Clone();
-                            item.RecycleArgs = ele_info_w.elements[i].motion_recycle_args.Clone();
-                            AddedSpawnItem_World(item);
-                            #endregion
+                            XGUI.dialog(
+                                type: XGUIDialogType.确认,
+                                windowtitle: "XHud - 布局元素生成器消息",
+                                title: "元素物体收集",
+                                msg: $"未发现<color={hexcol}> 世界根节点 </color>下存在任何Hud元素物体！",
+                                ok: "明白",
+                                PrimaryIndex: 0);
                         }
-                    }
-
-                    #region 异常提示
-                    //如果获取到无效元素名称
-                    if (DialogDatas.Count > 0)
-                    {
-                        Editor_XHud_GUI.Open(DialogDatas.ToArray(), XHud_DialogType.警告, "XHud - 布局元素生成器消息", "元素物体异常", $"检测到以下不合理的物体，原因：未加入到元素池中。解决方法：如果您想让这些元素被记录到部署布局中，请将其加入元素池！", "明白", 0, true);
-                    }
-
-                    //如果获取到非预制体元素名称
-                    if (ele_info_w.notPrefabsList.Count > 0)
-                    {
-                        DialogDatas.Clear();
-                        for (int w = 0; w < ele_info_w.notPrefabsList.Count; w++)
-                        {
-                            string s = ele_info_w.notPrefabsList[w].name;
-
-                            #region 加入非预制体元素名称列表
-                            XHud_GUI_Dialog_ListDatas data = new XHud_GUI_Dialog_ListDatas();
-                            data.Title = sp_spawner_indicator.stringValue;
-                            data.SubTitle = "非预制体元素";
-                            data.Message = s;
-                            DialogDatas.Add(data);
-                            #endregion
-                        }
-
-                        string res = Editor_XHud_GUI.Open(DialogDatas.ToArray(), XHud_DialogType.警告, "XHud - 布局元素生成器消息", "元素物体异常", $"检测到以下不合理的物体，原因：物体虽然是HudElement元素但未将其制成预制体。解决方法：如果您想让这些元素被记录到部署布局中，请将其制成预制体！", "明白", "选中", 0, true);
-                        if (res == "选中")
-                        {
-                            Selection.objects = ele_info_w.notPrefabsList.ToArray();
-                        }
-                    }
-                    #endregion
-
-                    #region 记录后处理元素方式
-                    if (ele_info_w.elements.Count > 0)
-                    {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.帮助, "XHud - 布局元素生成器消息", "元素物体处理", $"如何处理场景中被记录的世界UI的HudElement元素物体？", "不做处理", "移除", "隐藏", 0, true);
-                        if (res == "不做处理")
-                        {
-
-                        }
-                        else if (res == "移除")
-                        {
-                            for (int i = 0; i < ele_info_w.elements.Count; i++)
-                            {
-                                Undo.DestroyObjectImmediate(ele_info_w.elements[i].gameObject);
-                            }
-                        }
-                        else if (res == "隐藏")
-                        {
-                            for (int i = 0; i < ele_info_w.elements.Count; i++)
-                            {
-                                Undo.RecordObject(ele_info_w.elements[i].gameObject, "HideOriginalElementPrefab_" + i);
-                                ele_info_w.elements[i].gameObject.SetActive(false);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素生成器消息", "元素物体收集", $"未发现<color={hexcol}> 世界根节点 </color>下存在任何Hud元素物体！", "明白", 0);
-                    }
-                    #endregion               
-                    return;
-                }
-                #endregion
-            }
-            else
-            {
-                #region 重置清空
-                if (Editor_XHud_GUI.Gui_Layout_Button(15, "将当前的元素部署布局列表清空", icon_reset_r, icon_reset_p))
-                {
-                    EditorApplication.delayCall += () =>
-                    {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素生成器消息", "重置元素列表", "确定要将元素列表重置吗？您将丢失当前的所有元素记录和他们的延迟（生成 & 回收）参数！", "重置", "暂不", 0);
-                        if (res == "暂不")
-                            return;
-
-                        if (hud_manager == null)
-                            return;
-
-                        sp_is_loaded_layout_world.boolValue = false;
-                        sp_is_loaded_layout_world.serializedObject.ApplyModifiedProperties();
-                        for (int i = 0; i < sp_spawn_item_list_world.arraySize; i++)
-                        {
-                            UnLoadSpawnItem_World(base_script.spawn_item_list_world[i]);
-                        }
-                        ClearSpawnItemList_World();
-                    };
-                }
-                #endregion
-
-                Editor_XHud_GUI.Gui_Layout_Space(40);
-
-                #region 重新生成ID
-                if (Editor_XHud_GUI.Gui_Layout_Button(15, "为当前的元素列表中的项重新创建ID", icon_recreate_id_r, icon_recreate_id_p))
-                {
-                    EditorApplication.delayCall += () =>
-                    {
-                        string res = Editor_XHud_GUI.Open(XHud_DialogType.警告, "XHud - 布局元素生成器消息", "元素ID刷新", "确定要将元素列表中的所有项的ID进行重新生成吗？您将丢失所有元素的当前ID！我们并不建议您这么做，因为会导致您其他脚本在获取元素时发生\" 无法找到目标元素 \"的异常！", "重新生成", "暂不", 0);
-                        if (res == "暂不")
-                            return;
-
-                        Undo.RecordObject(base_script, "刷新所有元素项ID");
-                        for (int i = 0; i < base_script.spawn_item_list_world.Count; i++)
-                        {
-                            base_script.spawn_item_list_world[i].ID = XGUI_Utilitys.GenerateUniqueId(CollectIDs(XHudSpace.世界空间));
-                        }
-                    };
-                }
-                #endregion
-            }
-            #endregion
-
-            Editor_XHud_GUI.Gui_Layout_Space(40);
-
-            #region 加载 & 卸载布局 & 预览
-            if (sp_spawn_item_list_world.arraySize > 0)
-            {
-                #region 加载 & 卸载布局 
-                if (!sp_is_loaded_layout_world.boolValue)
-                {
-                    #region 加载
-                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "根据元素列表中的信息重建元素部署布局到LayoutScreen锚点下", icon_load_r, icon_load_p))
-                    {
-                        if (hud_manager == null)
-                            return;
-                        if (sp_is_loaded_layout_world.boolValue)
-                            return;
-                        sp_is_loaded_layout_world.boolValue = true;
-                        sp_is_loaded_layout_world.serializedObject.ApplyModifiedProperties();
-
-                        for (int i = 0; i < sp_spawn_item_list_world.arraySize; i++)
-                        {
-                            LoadSpawnItem_World(base_script.spawn_item_list_world[i]);
-                        }
-
-                        // 从元素库中同步动效参数
-                        //BaseScript.SyncLayoutItemsMotionArgs();
-
-                        if (base_script.act_on_spawn != null)
-                            base_script.act_on_spawn(XHudSpace.世界空间);
+                        #endregion
+                        return;
                     }
                     #endregion
                 }
                 else
                 {
-                    #region 卸载
-                    if (Editor_XHud_GUI.Gui_Layout_Button(15, "将当前重建的元素部署布局清空", icon_unload_r, icon_unload_p))
+                    #region 清空布局    
+                    if (XGUI.layout_button(
+                        tooltip: "将当前的元素部署布局列表清空",
+                        tex_release: icon_reset_r,
+                        tex_press: icon_reset_p,
+                        tex_gui_color: Color.white,
+                        border: new RectOffset(0, 0, 0, 0),
+                        width: icon_reset_r.width,
+                        height: icon_reset_r.height))
                     {
-                        if (hud_manager == null)
-                            return;
-
-                        if (!sp_is_loaded_layout_world.boolValue)
-                            return;
-                        sp_is_loaded_layout_world.boolValue = false;
-                        sp_is_loaded_layout_world.serializedObject.ApplyModifiedProperties();
-
-                        //  停止预览
-                        XTween_Preview_Stop();
-
-                        for (int i = 0; i < sp_spawn_item_list_world.arraySize; i++)
+                        EditorApplication.delayCall += () =>
                         {
-                            UnLoadSpawnItem_World(base_script.spawn_item_list_world[i]);
-                        }
+                            string res = XGUI.dialog(
+                                type: XGUIDialogType.警告,
+                                windowtitle: "XHud - 布局元素生成器消息",
+                                title: "重置元素列表",
+                                msg: "确定要将元素列表重置吗？您将丢失当前的所有元素记录和他们的延迟（生成 & 回收）参数！",
+                                ok: "重置",
+                                cancel: "暂不",
+                                PrimaryIndex: 0,
+                                usemodal: true,
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                            if (res == "暂不")
+                                return;
 
-                        // 从元素库中同步动效参数
-                        //BaseScript.SyncLayoutItemsMotionArgs();
+                            if (hud_manager == null)
+                                return;
 
-                        if (base_script.act_on_despawn != null)
-                            base_script.act_on_despawn(XHudSpace.世界空间);
+                            sp_is_loaded_layout_screen.boolValue = false;
+                            sp_is_loaded_layout_screen.serializedObject.ApplyModifiedProperties();
+                            for (int i = 0; i < sp_spawn_item_list_world.arraySize; i++)
+                            {
+                                UnLoadSpawnItem_World(base_script.spawn_item_list_world[i]);
+                            }
+                            ClearSpawnItemList_World();
+                        };
+                    }
+                    #endregion
+
+                    XGUI.layout_flexspace();
+
+                    #region 重新生成ID
+                    if (XGUI.layout_button(
+                      tooltip: "为当前的元素列表中的项重新创建ID",
+                      tex_release: icon_recreate_id_r,
+                      tex_press: icon_recreate_id_p,
+                      tex_gui_color: Color.white,
+                      border: new RectOffset(0, 0, 0, 0),
+                      width: icon_recreate_id_r.width,
+                      height: icon_recreate_id_r.height))
+                    {
+                        EditorApplication.delayCall += () =>
+                        {
+                            string res = XGUI.dialog(
+                                type: XGUIDialogType.警告,
+                                windowtitle: "XHud - 布局元素生成器消息",
+                                title: "元素ID刷新",
+                                msg: "确定要将元素列表中的所有项的ID进行重新生成吗？您将丢失所有元素的当前ID！我们并不建议您这么做，因为会导致您其他脚本在获取元素时发生\" 无法找到目标元素 \"的异常！",
+                                ok: "重新生成",
+                                cancel: "暂不",
+                                PrimaryIndex: 0,
+                                usemodal: true,
+                                themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+
+                            if (res == "暂不")
+                                return;
+
+                            Undo.RecordObject(base_script, "刷新所有元素项ID");
+                            for (int i = 0; i < base_script.spawn_item_list_world.Count; i++)
+                            {
+                                base_script.spawn_item_list_world[i].ID = XGUI_Utilitys.GenerateUniqueId(CollectIDs(XHudSpace.世界空间));
+                            }
+                        };
                     }
                     #endregion
                 }
                 #endregion
 
-                Editor_XHud_GUI.Gui_Layout_Space(40);
+                XGUI.layout_flexspace();
 
-                #region 动画预览      
-                if (sp_is_loaded_layout_world.boolValue)
+                #region 加载 & 卸载布局 & 预览
+                if (sp_spawn_item_list_world.arraySize > 0)
                 {
-                    #region 预览播放 - 生成
-                    if (!IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "预览当前加载的元素的 - 生成 - 动效", icon_preview_in_r, icon_preview_in_p))
+                    #region 加载 & 卸载布局 
+                    if (!sp_is_loaded_layout_world.boolValue)
                     {
-                        if (hud_manager == null)
-                            return;
+                        #region 加载
+                        if (XGUI.layout_button(
+                            tooltip: "根据元素列表中的信息重建元素部署布局到LayoutScreen锚点下",
+                            tex_release: icon_load_r,
+                            tex_press: icon_load_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: icon_load_r.width,
+                            height: icon_load_r.height))
+                        {
+                            if (hud_manager == null)
+                                return;
+                            if (sp_is_loaded_layout_world.boolValue)
+                                return;
+                            sp_is_loaded_layout_world.boolValue = true;
+                            sp_is_loaded_layout_world.serializedObject.ApplyModifiedProperties();
 
-                        IsPreviewing = true;
-                        LayoutsTweenPreview(XHudSpace.世界空间, XHudElementCreateState.Created);
+                            for (int i = 0; i < sp_spawn_item_list_world.arraySize; i++)
+                            {
+                                LoadSpawnItem_World(base_script.spawn_item_list_world[i]);
+                            }
+
+                            if (base_script.act_on_spawn != null)
+                                base_script.act_on_spawn(XHudSpace.世界空间);
+
+                            return;
+                        }
+                        #endregion
+                    }
+                    else
+                    {
+                        #region 卸载
+                        if (XGUI.layout_button(
+                           tooltip: "将当前重建的元素部署布局清空",
+                           tex_release: icon_unload_r,
+                           tex_press: icon_unload_p,
+                           tex_gui_color: Color.white,
+                           border: new RectOffset(0, 0, 0, 0),
+                           width: icon_unload_r.width,
+                           height: icon_unload_r.height))
+                        {
+                            if (hud_manager == null)
+                                return;
+
+                            if (!sp_is_loaded_layout_world.boolValue)
+                                return;
+                            sp_is_loaded_layout_world.boolValue = false;
+                            sp_is_loaded_layout_world.serializedObject.ApplyModifiedProperties();
+
+                            //  停止预览
+                            XTween_Preview_Stop();
+
+                            for (int i = 0; i < sp_spawn_item_list_world.arraySize; i++)
+                            {
+                                UnLoadSpawnItem_World(base_script.spawn_item_list_world[i]);
+                            }
+
+                            if (base_script.act_on_despawn != null)
+                                base_script.act_on_despawn(XHudSpace.世界空间);
+                        }
+                        #endregion
                     }
                     #endregion
 
-                    #region 预览停止 - 生成
-                    if (IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "停止预览当前播放的元素的 - 生成 - 动效", icon_stoppreview_r, icon_stoppreview_p))
+                    XGUI.layout_flexspace();
+
+                    #region 动画预览        
+                    if (sp_is_loaded_layout_world.boolValue)
                     {
-                        if (hud_manager == null)
-                            return;
+                        #region 预览播放 - 生成
+                        if (!IsPreviewing && XGUI.layout_button(
+                            tooltip: "预览当前加载的元素的 - 生成 - 动效",
+                            tex_release: icon_preview_in_r,
+                            tex_press: icon_preview_in_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: icon_preview_in_r.width,
+                            height: icon_preview_in_r.height))
+                        {
+                            if (hud_manager == null)
+                                return;
 
-                        IsPreviewing = false;
-                        XTween_Preview_Kill(XHudSpace.世界空间);
-                    }
-                    #endregion
+                            IsPreviewing = true;
+                            LayoutsTweenPreview(XHudSpace.世界空间, XHudElementCreateState.Created);
+                        }
+                        #endregion
 
-                    Editor_XHud_GUI.Gui_Layout_Space(40);
+                        #region 预览停止 - 生成
+                        if (IsPreviewing && XGUI.layout_button(
+                            tooltip: "停止预览当前播放的元素的 - 生成 - 动效",
+                            tex_release: icon_stoppreview_r,
+                            tex_press: icon_stoppreview_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: icon_stoppreview_r.width,
+                            height: icon_stoppreview_r.height))
+                        {
+                            if (hud_manager == null)
+                                return;
 
-                    #region 预览播放 - 回收
-                    if (!IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "预览当前加载的元素的 - 回收 - 动效", icon_preview_out_r, icon_preview_out_p))
-                    {
-                        if (hud_manager == null)
-                            return;
+                            IsPreviewing = false;
+                            XTween_Preview_Kill(XHudSpace.世界空间);
+                        }
+                        #endregion
 
-                        IsPreviewing = true;
-                        LayoutsTweenPreview(XHudSpace.世界空间, XHudElementCreateState.Recycled);
-                    }
-                    #endregion
+                        XGUI.layout_flexspace();
 
-                    #region 预览停止 - 回收
-                    if (IsPreviewing && Editor_XHud_GUI.Gui_Layout_Button(15, "停止预览当前播放的元素的 - 回收 - 动效", icon_stoppreview_r, icon_stoppreview_p))
-                    {
-                        if (hud_manager == null)
-                            return;
+                        #region 预览播放 - 回收
+                        if (!IsPreviewing && XGUI.layout_button(
+                            tooltip: "预览当前加载的元素的 - 回收 - 动效",
+                            tex_release: icon_preview_out_r,
+                            tex_press: icon_preview_out_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: icon_preview_out_r.width,
+                            height: icon_preview_out_r.height))
+                        {
+                            if (hud_manager == null)
+                                return;
 
-                        IsPreviewing = false;
-                        XTween_Preview_Kill(XHudSpace.世界空间);
+                            IsPreviewing = true;
+                            LayoutsTweenPreview(XHudSpace.世界空间, XHudElementCreateState.Recycled);
+                        }
+                        #endregion
+
+                        #region 预览停止 - 回收
+                        if (IsPreviewing && XGUI.layout_button(
+                            tooltip: "停止预览当前播放的元素的 - 回收 - 动效",
+                            tex_release: icon_stoppreview_r,
+                            tex_press: icon_stoppreview_p,
+                            tex_gui_color: Color.white,
+                            border: new RectOffset(0, 0, 0, 0),
+                            width: icon_stoppreview_r.width,
+                            height: icon_stoppreview_r.height))
+                        {
+                            if (hud_manager == null)
+                                return;
+
+                            IsPreviewing = false;
+                            XTween_Preview_Kill(XHudSpace.世界空间);
+                        }
+                        #endregion
                     }
                     #endregion
                 }
+                #endregion                
+
+                XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
                 #endregion
-            }
-            #endregion            
 
-            Editor_XHud_GUI.Gui_Layout_FlexSpace();
-            Editor_XHud_GUI.Gui_Layout_Horizontal_End();
-
-            Editor_XHud_GUI.Gui_Layout_Space(10);
-
-            sp_fold_world.boolValue = EditorGUILayout.Foldout(sp_fold_world.boolValue, new GUIContent("元素项列表"), true);
-            if (sp_fold_world.boolValue)
-            {
-                Editor_XHud_GUI.Gui_Layout_Space(5);
+                XGUI.layout_space(15);
                 element_list_world.DoLayoutList();
             }
 
-            Editor_XHud_GUI.Gui_Layout_Space(5);
-            Editor_XHud_GUI.Gui_Layout_Vertical_End();
-            #endregion
+            XGUI.layout_group_end(type: XGUIContainerType.Vertical);
             #endregion
 
             #region 动效参数
@@ -2326,8 +2580,8 @@ namespace SevenStrikeModules.XHud.Editor
             #region 弹出菜单
             if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
             {
-                SerializedProperty sp_CreateArgs = serializedObject.FindProperty("CreateArgs");
-                SerializedProperty sp_RecycleArgs = serializedObject.FindProperty("RecycleArgs");
+                SerializedProperty sp_CreateArgs = serializedObject.FindProperty(nameof(XHud_LayoutSpawner.motion_create_args));
+                SerializedProperty sp_RecycleArgs = serializedObject.FindProperty(nameof(XHud_LayoutSpawner.motion_recycle_args));
 
                 // 创建右键菜单
                 GenericMenu menu = new GenericMenu();
