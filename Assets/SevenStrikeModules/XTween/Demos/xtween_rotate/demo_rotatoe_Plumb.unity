@@ -830,7 +830,7 @@ MonoBehaviour:
   min_delay: 0
   max_delay: 1
   randomDelay: 0
-  easeMode: 3
+  easeMode: 4
   loop: 0
   loopType: 0
   loopDelay: 0
@@ -863,14 +863,14 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   debug: 0
-  ShortID: -Pz5sl3j
+  ShortID: tDr2jenL
   rect_target: {fileID: 1987522241}
   btn_start: {fileID: 1111566763}
   btn_reset: {fileID: 221403570}
   RotationMode: 0
   initialAngle: 30
-  decayFactor: 0.78
-  swingCount: 18
+  decayFactor: 0.96
+  swingCount: 70
 --- !u!1 &574303994
 GameObject:
   m_ObjectHideFlags: 0
@@ -1353,6 +1353,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8e691a6e0f17b499127133162297e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fold_buttons: 1
+  fold_statistic: 1
+  fold_tweenlist: 0
   EasePics:
   - {fileID: 2800000, guid: 1f3f0a016f854564394383a20b328091, type: 3}
   - {fileID: 2800000, guid: 85a5ea9cb44a4af47afd7a3dedcaf104, type: 3}

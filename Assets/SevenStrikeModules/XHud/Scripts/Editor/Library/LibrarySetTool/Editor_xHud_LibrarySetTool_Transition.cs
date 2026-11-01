@@ -439,11 +439,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             base_object.Update();
 
-#if UNITY_6000_0_OR_NEWERdddd
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-            TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             string colorhex = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
@@ -466,7 +462,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent(Title),
                 text_color: Color.white,
                 size: XGUIFontSize.L,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 font: XGUI.GetFont("xg-heavy"));
 
             // 分割线
@@ -486,7 +482,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text_color: Color.white * 0.7f,
                 size: XGUIFontSize.M,
                 anchor: TextAnchor.UpperLeft,
-                clipping: clipping);
+                clipping: clipping_ellipsis);
             #endregion
 
             SerializedProperty sp_name = sp_transition_node.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.name));
@@ -974,7 +970,7 @@ namespace SevenStrikeModules.XHud.Editor
                     text_color: Color.black,
                     size: XGUIFontSize.M,
                     offset: new Vector2(0, -2),
-                    clipping: clipping,
+                    clipping: clipping_ellipsis,
                     anchor: TextAnchor.MiddleCenter,
                     font_style: FontStyle.Bold);
                 #endregion
@@ -1019,7 +1015,7 @@ namespace SevenStrikeModules.XHud.Editor
                     text: new GUIContent("请先添加序列帧图像"),
                     text_color: Color.gray,
                     size: XGUIFontSize.B,
-                    clipping: clipping,
+                    clipping: clipping_ellipsis,
                     anchor: TextAnchor.MiddleCenter,
                     font: XGUI.GetFont("xg-heavy"));
             }
@@ -1174,11 +1170,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             Texture2D tex = sp_tex.objectReferenceValue as Texture2D;
 
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             #region 序号
             drawelement_rect.Set(rect.x + 15, rect.y + 3, 30, 20);
@@ -1187,7 +1179,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent(index.ToString("D2")),
                 text_color: Color.gray,
                 size: XGUIFontSize.S,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 anchor: TextAnchor.MiddleLeft,
                 offset: new Vector2(0, 0),
                 font_style: FontStyle.Normal);
@@ -1200,7 +1192,7 @@ namespace SevenStrikeModules.XHud.Editor
              text: new GUIContent(tex.name),
              text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
              size: XGUIFontSize.M,
-             clipping: clipping,
+             clipping: clipping_ellipsis,
              anchor: TextAnchor.MiddleLeft,
              offset: new Vector2(0, 0),
              font_style: FontStyle.Normal);

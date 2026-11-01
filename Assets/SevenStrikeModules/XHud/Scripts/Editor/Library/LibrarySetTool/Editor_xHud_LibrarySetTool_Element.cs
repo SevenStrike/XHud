@@ -98,6 +98,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// 名称属性
         /// </summary>
         private SerializedProperty sp_name;
+        private SerializedProperty sp_element_uid;
         #endregion
 
         #region 字段 - 列表
@@ -183,6 +184,7 @@ namespace SevenStrikeModules.XHud.Editor
             sp_used_count = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.used_count));
             sp_initialize_count = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.initialize_count));
             sp_name = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.name));
+            sp_element_uid = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.element_uid));
             #endregion
 
             #region 获取图标
@@ -262,16 +264,16 @@ namespace SevenStrikeModules.XHud.Editor
             #region 预生成元素列表
             if (sp_preload_elements.arraySize > 0)
             {
-                XGUI.layout_space(100);
+                XGUI.layout_space(120);
                 List_PreloadElementList_Drawer();
                 XGUI.layout_space(60);
             }
             else
             {
-                XGUI.layout_space(380);
+                XGUI.layout_space(400);
 
                 XGUI.gui_box(
-                    rect: new Rect(rect.x + 18, rect.y + 100, 220, 310),
+                    rect: new Rect(rect.x + 18, rect.y + 100, 220, 330),
                     bg_color: Color.black * 0.15f);
 
                 XGUI.gui_label(
@@ -289,13 +291,29 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region 参数
 
-            string colorhex_value = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
             string colorhex_title = XGUI_Utilitys.Color_To_HexString(Color.white * 0.65f, true);
+            string colorhex_value = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             Rect rect_xs = rect;
 
+            #region 目标元素名称（可编辑）
+            rect_xs.Set(rect.width - 241, rect.y + 140, 215, 20);
+            XGUI.ChangedCheck_Start();
+            XGUI.SetEnabled(!Application.isPlaying);
+            XGUI.gui_property_field(
+                rect: rect_xs,
+                prop: sp_name);
+            XGUI.SetEnabled(true);
+            if (XGUI.ChangedCheck_End())
+            {
+                // 修改名称后立即标脏库资产，确保 Inspector 列表同步刷新
+                if (target_lib != null)
+                    EditorUtility.SetDirty(target_lib);
+            }
+            #endregion
+
             #region 目标元素名称
-            rect_xs.Set(rect.width - 240, rect.y + 100, 215, 20);
+            rect_xs.Set(rect.width - 240, rect.y + 97, 215, 20);
             XGUI.gui_label(
                 rect: rect_xs,
                 text: new GUIContent(sp_name.stringValue),
@@ -309,7 +327,7 @@ namespace SevenStrikeModules.XHud.Editor
             #endregion
 
             #region 分割线
-            rect_xs.Set(rect.width - 240, rect.y + 135, 215, 1);
+            rect_xs.Set(rect.width - 240, rect.y + 130, 215, 1);
             XGUI.gui_seperator(
                 rect: rect_xs,
                 thickness: 1,
@@ -318,7 +336,7 @@ namespace SevenStrikeModules.XHud.Editor
                 padding: new RectOffset(0, 0, 0, 0));
             #endregion
 
-            float AddedHeight = 40;
+            float AddedHeight = 60;
 
             if (Application.isPlaying)
                 XGUI.SetEnabled(false);
@@ -340,7 +358,9 @@ namespace SevenStrikeModules.XHud.Editor
                 if (sp_target.objectReferenceValue != null)
                 {
                     XHud_Module_Element element = (XHud_Module_Element)sp_target.objectReferenceValue as XHud_Module_Element;
-                    sp_name.stringValue = element.name;
+                    //  仅当名称为空时才自动填充，避免覆盖用户手动改的名字
+                    if (string.IsNullOrEmpty(sp_name.stringValue))
+                        sp_name.stringValue = element.name;
                 }
                 else
                 {
@@ -431,6 +451,19 @@ namespace SevenStrikeModules.XHud.Editor
                 wrap: true,
                 font_style: FontStyle.Normal);
             #endregion
+
+            #region uid
+            rect_xs.Set(rect.width - 240, rect.y + 300 + AddedHeight, 215, 16);
+            XGUI.gui_label(
+                rect: rect_xs,
+                text: new GUIContent($"<b><color={colorhex_title}>UID：</color></b> <color={colorhex_value}>{sp_element_uid.stringValue}</color>"),
+                text_color: Color.white,
+                size: XGUIFontSize.S,
+                clipping: TextClipping.Ellipsis,
+                anchor: TextAnchor.MiddleLeft,
+                font_style: FontStyle.Normal);
+            #endregion
+
             #endregion
 
             Repaint();
@@ -670,11 +703,13 @@ namespace SevenStrikeModules.XHud.Editor
         /// </summary>
         private void Save()
         {
-            #region 更新元素库目标元素参数
+            Undo.RecordObject(target_lib, "刷新所有元素项ID");
 
+            if (string.IsNullOrEmpty(library_item.element_uid))
+                library_item.element_uid = System.Guid.NewGuid().ToString("N");
+
+            // 更新元素库目标元素参数
             target_lib.ElementsLibrary_ReplaceElement(modified_index, library_item);
-
-            #endregion
 
             Close();
             return;

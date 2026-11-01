@@ -253,6 +253,9 @@ namespace SevenStrikeModules.XHud.Editor
             if (!Application.isPlaying)
             {
                 ClearLibraryPreloads();
+
+                // 老数据迁移：为缺失 UID 的库条目补发 UID
+                base_script.ElementsLibrary_EnsureUIDs();
             }
 
             #region ReorderableList
@@ -590,6 +593,7 @@ namespace SevenStrikeModules.XHud.Editor
                         GameObject el = (GameObject)item;
                         XHud_LibraryArg_Element_Item it = new XHud_LibraryArg_Element_Item();
                         it.target = el.GetComponent<XHud_Module_Element>();
+
                         if (it.target != null)
                         {
                             bool isExist = false;
@@ -597,7 +601,8 @@ namespace SevenStrikeModules.XHud.Editor
                             {
                                 SerializedProperty ser = sp_library_elements.GetArrayElementAtIndex(s);
                                 SerializedProperty ser_target = ser.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.target));
-                                if (ser_target.objectReferenceValue.name == el.name)
+                                //  改为引用比对：不仅不能是 null，而且要引用绝对相等
+                                if (ser_target.objectReferenceValue != null && ser_target.objectReferenceValue == it.target)
                                 {
                                     isExist = true;
                                     break;
@@ -608,8 +613,8 @@ namespace SevenStrikeModules.XHud.Editor
                                 XGUI.dialog(
                                     type: XGUIDialogType.警告,
                                     windowtitle: "XHud - 元素库消息",
-                                    title: "清空元素项",
-                                    msg: $"此元素预制体已存在于该库中！请勿重复添加！预制体名称： {el.name}  标识名称： {it.target.indicator}",
+                                    title: "拖入元素项",
+                                    msg: $"此元素预制体已存在于该库中！请勿重复添加！预制体名称： {el.name}{(!string.IsNullOrEmpty(it.target.indicator) ? $"标识名称： {it.target.indicator}" : "")}",
                                     ok: "明白",
                                     PrimaryIndex: 0,
                                     usemodal: true,
@@ -624,12 +629,16 @@ namespace SevenStrikeModules.XHud.Editor
                                 SerializedProperty root = sp_library_elements.GetArrayElementAtIndex(sp_library_elements.arraySize - 1);
                                 SerializedProperty sp_target = root.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.target));
                                 SerializedProperty sp_Initiacount = root.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.initialize_count));
-                                SerializedProperty sp_Name = root.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.name));
+                                SerializedProperty sp_name = root.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.name));
+                                // 新增：UID 属性
+                                SerializedProperty sp_uid = root.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.element_uid));
+
                                 sp_target.objectReferenceValue = it.target;
                                 sp_Initiacount.intValue = it.initialize_count;
-                                sp_Name.stringValue = it.name;
+                                sp_name.stringValue = it.name;
+                                sp_uid.stringValue = System.Guid.NewGuid().ToString("N");   // 新增
 
-                                valids.Add(new XGUIDialogListDatas("添加到元素库", sp_Name.stringValue, "成功添加"));
+                                valids.Add(new XGUIDialogListDatas("添加到元素库", sp_name.stringValue, "成功添加"));
                             }
                         }
                     }
@@ -735,11 +744,6 @@ namespace SevenStrikeModules.XHud.Editor
             SerializedProperty sp_Index = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.next_index));
             SerializedProperty sp_target = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.target));
 
-            if (sp_target.objectReferenceValue != null)
-            {
-                sp_name.stringValue = sp_target.objectReferenceValue.name;
-            }
-
             #region 序号
             drawelement_rect.Set(rect.x + 15, rect.y + 5, 30, 20);
             XGUI.gui_label(
@@ -816,6 +820,10 @@ namespace SevenStrikeModules.XHud.Editor
                 menu.AddItem(new GUIContent("D (克隆元素)"), false, () =>
                 {
                     sp_library_elements.InsertArrayElementAtIndex(index);
+                    // 克隆出来的条目必须换新 UID，避免与原条目冲突
+                    sp_library_elements.GetArrayElementAtIndex(index)
+                        .FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.element_uid))
+                        .stringValue = System.Guid.NewGuid().ToString("N");
                     sp_library_elements.serializedObject.ApplyModifiedProperties();
                 });
                 menu.AddSeparator("");
@@ -856,6 +864,12 @@ namespace SevenStrikeModules.XHud.Editor
                             usemodal: true,
                             themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
                     }
+                });
+                menu.AddSeparator("");
+                SerializedProperty sp_uid = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.element_uid));
+                menu.AddItem(new GUIContent("I (拷贝元素 uid)"), false, () =>
+                {
+                    GUIUtility.systemCopyBuffer = sp_uid.stringValue;
                 });
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("C (拷贝元素名称)"), false, () =>
@@ -1007,6 +1021,7 @@ namespace SevenStrikeModules.XHud.Editor
                 sp_library_elements.GetArrayElementAtIndex(0).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.name)).stringValue = "NewElement";
                 sp_library_elements.GetArrayElementAtIndex(0).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.target)).objectReferenceValue = null;
                 sp_library_elements.GetArrayElementAtIndex(0).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.initialize_count)).intValue = 1;
+                sp_library_elements.GetArrayElementAtIndex(0).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.element_uid)).stringValue = System.Guid.NewGuid().ToString("N");
             }
             else
             {
@@ -1015,6 +1030,7 @@ namespace SevenStrikeModules.XHud.Editor
                 sp_library_elements.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.name)).stringValue = "NewElement";
                 sp_library_elements.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.target)).objectReferenceValue = null;
                 sp_library_elements.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.initialize_count)).intValue = 1;
+                sp_library_elements.GetArrayElementAtIndex(list.index).FindPropertyRelative(nameof(XHud_LibraryArg_Element_Item.element_uid)).stringValue = System.Guid.NewGuid().ToString("N");
             }
             sp_library_elements.serializedObject.ApplyModifiedProperties();
         }
@@ -1033,7 +1049,7 @@ namespace SevenStrikeModules.XHud.Editor
             Editor_XHud_LibrarySetTool_Element window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_Element>(true);
 
             window.titleContent = new GUIContent("XHud 元素项修改器");
-            XGUI.CenterEditorWindow(new Vector2Int(500, 440), window);
+            XGUI.CenterEditorWindow(new Vector2Int(500, 450), window);
             window.SetLibraryItem(item);
             window.SetTargetLibName(sp_library_name.stringValue);
             window.SetTargetLib(base_script);

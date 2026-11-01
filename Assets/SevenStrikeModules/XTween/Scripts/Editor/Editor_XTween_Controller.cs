@@ -731,15 +731,8 @@ namespace SevenStrikeModules.XTween.Editor
             else
                 tween_playing = false;
 
-            #region 差异化参数 - TextClipping
-#if UNITY_6000_0_OR_NEWER
-            // Unity 6+ 使用 Ellipsis
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    // Unity 2021.1 之前使用 Clip
-    TextClipping clipping = TextClipping.Clip;
-#endif
-            #endregion
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
+
 
             if (!base_script.fold_status)
             {
@@ -878,7 +871,7 @@ namespace SevenStrikeModules.XTween.Editor
                             text: new GUIContent(liquid_title),
                             text_color: Color.black,
                             size: XGUIFontSize.L,
-                            clipping: clipping,
+                            clipping: clipping_ellipsis,
                             font: XGUI.GetFont("xg-medium"));
                         #endregion
 
@@ -893,7 +886,7 @@ namespace SevenStrikeModules.XTween.Editor
                          text: new GUIContent($"ID :  {(base_script.CurrentTweener == null ? "-" : base_script.CurrentTweener.UniqueId.ToString())}"),
                          text_color: Color.black,
                          size: XGUIFontSize.M,
-                         clipping: clipping);
+                         clipping: clipping_ellipsis);
                         #endregion
 
                         #region 短 ID 显示
@@ -907,7 +900,7 @@ namespace SevenStrikeModules.XTween.Editor
                         text: new GUIContent($"短 ID :  {(base_script.CurrentTweener == null ? "-" : base_script.CurrentTweener.ShortId)}"),
                         text_color: Color.black,
                         size: XGUIFontSize.M,
-                        clipping: clipping);
+                        clipping: clipping_ellipsis);
                         #endregion
 
                         float margin = 152;
@@ -1049,7 +1042,7 @@ namespace SevenStrikeModules.XTween.Editor
                                     text_color: Color.black * 0.5f,
                                     size: XGUIFontSize.S,
                                     font_style: FontStyle.Bold,
-                                    clipping: clipping);
+                                    clipping: clipping_ellipsis);
                             }
                         }
                         #endregion
@@ -1100,7 +1093,7 @@ namespace SevenStrikeModules.XTween.Editor
                                     text_color: Color.white,
                                     size: XGUIFontSize.S,
                                     font_style: FontStyle.Bold,
-                                    clipping: clipping);
+                                    clipping: clipping_ellipsis);
                             }
                         }
                         #endregion
@@ -1126,7 +1119,7 @@ namespace SevenStrikeModules.XTween.Editor
                             size: XGUIFontSize.M,
                             text_color: Color.white * 0.8f,
                             margin: new RectOffset(15, 0, 10, 0),
-                            clipping: clipping,
+                            clipping: clipping_ellipsis,
                             font_style: FontStyle.Normal,
                             anchor: TextAnchor.MiddleLeft);
 
@@ -1135,7 +1128,7 @@ namespace SevenStrikeModules.XTween.Editor
                             size: XGUIFontSize.M,
                             text_color: Color.white * 0.8f,
                             margin: new RectOffset(15, 0, 10, 0),
-                            clipping: clipping,
+                            clipping: clipping_ellipsis,
                             font_style: FontStyle.Normal,
                             anchor: TextAnchor.MiddleLeft);
 
@@ -1144,7 +1137,7 @@ namespace SevenStrikeModules.XTween.Editor
                             size: XGUIFontSize.M,
                             text_color: Color.white,
                             margin: new RectOffset(15, 0, 10, 0),
-                            clipping: clipping,
+                            clipping: clipping_ellipsis,
                             font_style: FontStyle.Normal,
                             anchor: TextAnchor.MiddleLeft);
 

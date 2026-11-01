@@ -571,11 +571,7 @@ namespace SevenStrikeModules.XHud.Editor
             SerializedProperty sp_Res = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.res));
             SerializedProperty sp_Frames = prop.FindPropertyRelative(nameof(XHud_LibraryArg_Transition.frames));
 
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             #region 序号
             drawelement_rect.Set(rect.x + 15, rect.y + 5, 30, 20);
@@ -584,7 +580,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent(index.ToString("D2")),
                 text_color: Color.gray,
                 size: XGUIFontSize.S,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 anchor: TextAnchor.MiddleLeft,
                 offset: new Vector2(0, 0),
                 font_style: FontStyle.Normal);
@@ -597,7 +593,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent(sp_name.stringValue),
                 text_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                 size: XGUIFontSize.M,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 anchor: TextAnchor.MiddleLeft,
                 offset: new Vector2(0, 0),
                 font_style: FontStyle.Normal);
@@ -610,7 +606,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent(sp_des.stringValue),
                 text_color: Color.white * 0.65f,
                 size: XGUIFontSize.M,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 anchor: TextAnchor.MiddleLeft,
                 offset: new Vector2(0, 0),
                 font_style: FontStyle.Normal);
@@ -645,7 +641,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent(sp_TotalFramesCount.intValue.ToString()),
                 text_color: Color.white,
                 size: XGUIFontSize.M,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 anchor: TextAnchor.MiddleLeft,
                 offset: new Vector2(0, 0),
                 font_style: FontStyle.Normal);
@@ -656,7 +652,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent(sp_LastFrameIndex.intValue.ToString()),
                 text_color: Color.white,
                 size: XGUIFontSize.M,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 anchor: TextAnchor.MiddleLeft,
                 offset: new Vector2(0, 0),
                 font_style: FontStyle.Normal);
@@ -667,7 +663,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent(sp_SkipFrame.intValue.ToString()),
                 text_color: Color.white,
                 size: XGUIFontSize.M,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 anchor: TextAnchor.MiddleLeft,
                 offset: new Vector2(0, 0),
                 font_style: FontStyle.Normal);
@@ -686,7 +682,7 @@ namespace SevenStrikeModules.XHud.Editor
                     text: content,
                     text_color: Color.white,
                     size: XGUIFontSize.M,
-                    clipping: clipping,
+                    clipping: clipping_ellipsis,
                     anchor: TextAnchor.MiddleLeft,
                     offset: new Vector2(0, 0),
                     font_style: FontStyle.Normal);

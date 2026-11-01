@@ -1636,7 +1636,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XHud_Library_Element lib_element = ScriptableObject.CreateInstance<XHud_Library_Element>();
                 lib_element.library_name = $"NewElementLibrary";
                 Transform obj_XHudSample = AssetDatabase.LoadAssetAtPath<Transform>($"{XHud_Dashboard.Get_Path_XHUD_PREFABS_Path()}XHudIcon.prefab");
-                lib_element.ElementsLibrary_Add(new XHud_LibraryArg_Element_Item(1, obj_XHudSample.GetComponent<XHud_Module_Element>()));
+                lib_element.ElementsLibrary_Add(obj_XHudSample.GetComponent<XHud_Module_Element>(), 1);
 
                 //创建字体库
                 XHud_Library_TextStyle lib_textstyle = ScriptableObject.CreateInstance<XHud_Library_TextStyle>();

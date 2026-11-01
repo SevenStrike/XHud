@@ -344,7 +344,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -337, y: 73}
+  m_AnchoredPosition: {x: -397, y: 73}
   m_SizeDelta: {x: 12.27002, y: 63.369995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &182439196
@@ -1931,7 +1931,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 478.99997, y: -101.9512}
+  m_AnchoredPosition: {x: 479, y: -101.95117}
   m_SizeDelta: {x: 752.1, y: 90.32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &969771684
@@ -2978,7 +2978,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -205, y: 73}
+  m_AnchoredPosition: {x: -235, y: 73}
   m_SizeDelta: {x: 12.27002, y: 63.369995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1271889924
@@ -3164,6 +3164,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8e691a6e0f17b499127133162297e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fold_buttons: 1
+  fold_statistic: 1
+  fold_tweenlist: 0
   EasePics:
   - {fileID: 2800000, guid: 1f3f0a016f854564394383a20b328091, type: 3}
   - {fileID: 2800000, guid: 85a5ea9cb44a4af47afd7a3dedcaf104, type: 3}

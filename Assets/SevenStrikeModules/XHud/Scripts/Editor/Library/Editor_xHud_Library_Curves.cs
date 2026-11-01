@@ -863,7 +863,7 @@ namespace SevenStrikeModules.XHud.Editor
                 lib.nodes.Add(Node);
             }
 
-            string path = EditorUtility.SaveFilePanel("", Application.dataPath, "HudCurves", "json");
+            string path = EditorUtility.SaveFilePanel("", Application.dataPath, "XHudCurves", "json");
 
             if (string.IsNullOrEmpty(path))
                 return;

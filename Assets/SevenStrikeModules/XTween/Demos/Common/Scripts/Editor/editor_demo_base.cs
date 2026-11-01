@@ -10,7 +10,7 @@ using Debug = UnityEngine.Debug;
 [CustomEditor(typeof(demo_base), true)]
 public class editor_demo_base : Editor
 {
-    internal demo_base demo_base;
+    public demo_base base_script;
     /// <summary>
     /// 附加的预览动画列表
     /// </summary>
@@ -18,7 +18,7 @@ public class editor_demo_base : Editor
 
     public virtual void OnEnable()
     {
-        demo_base = target as demo_base;
+        base_script = target as demo_base;
     }
 
     private void OnDisable()
@@ -92,23 +92,23 @@ public class editor_demo_base : Editor
         // 如果在运行
         if (Application.isPlaying)
         {
-            if (demo_base.currentTweener == null)
+            if (base_script.currentTweener == null)
             {   // 创建动画
-                demo_base.Tween_Create();
+                base_script.Tween_Create();
             }
             else
             {
                 // 倒退动画
-                demo_base.Tween_Rewind();
+                base_script.Tween_Rewind();
             }
             // 播放动画
-            demo_base.Tween_Play();
+            base_script.Tween_Play();
         }
         //如果没运行
         else
         {
             // 创建动画
-            demo_base.Tween_Create();
+            base_script.Tween_Create();
             // 预览动画
             Preview_Start();
         }
@@ -121,7 +121,7 @@ public class editor_demo_base : Editor
         // 如果在运行
         if (Application.isPlaying)
         {
-            demo_base.Tween_Rewind();
+            base_script.Tween_Rewind();
         }
         //如果没运行
         else
@@ -137,7 +137,7 @@ public class editor_demo_base : Editor
         // 如果在运行
         if (Application.isPlaying)
         {
-            demo_base.Tween_Pause_Or_Resume();
+            base_script.Tween_Pause_Or_Resume();
         }
     }
     /// <summary>
@@ -148,7 +148,7 @@ public class editor_demo_base : Editor
         // 如果在运行
         if (Application.isPlaying)
         {
-            demo_base.Tween_Kill();
+            base_script.Tween_Kill();
         }
         //如果没运行
         else
@@ -233,10 +233,10 @@ public class editor_demo_base : Editor
             return;
         Editor_XTween_Previewer.Rewind();
 
-        if (demo_base.debug)
+        if (base_script.debug)
         {
             Debug.Log($"Tween Rewind");
-            XTween_Pool.LogStatistics(demo_base.debug);
+            XTween_Pool.LogStatistics(base_script.debug);
         }
     }
     /// <summary>
@@ -248,24 +248,24 @@ public class editor_demo_base : Editor
             return;
         if (useCurrentTween)
         {
-            if (demo_base.currentTweener == null)
+            if (base_script.currentTweener == null)
                 return;
         }
 
-        demo_base.ShortID = null;
+        base_script.ShortID = null;
 
         Editor_XTween_Previewer.act_on_editor_autokill -= OnAutoKillPreview;
 
         Editor_XTween_Previewer.Kill(Editor_XTween_Previewer.AfterKillClear, Editor_XTween_Previewer.BeforeKillRewind, () =>
         {
-            demo_base.currentTweener = null;
+            base_script.currentTweener = null;
             PreviewListAddon.Clear();
         });
 
-        if (demo_base.debug)
+        if (base_script.debug)
         {
             Debug.Log($"Tween Kill");
-            XTween_Pool.LogStatistics(demo_base.debug);
+            XTween_Pool.LogStatistics(base_script.debug);
         }
     }
     /// <summary>
@@ -280,16 +280,16 @@ public class editor_demo_base : Editor
 
         if (useCurrentTween)
         {
-            if (demo_base.currentTweener == null)
+            if (base_script.currentTweener == null)
                 return;
 
             // 当动画预览器为根据动画耗时自动杀死的情况下
-            if (demo_base.currentTweener.AutoKill)
+            if (base_script.currentTweener.AutoKill)
             {
                 Editor_XTween_Previewer.AfterKillClear = true;
                 Editor_XTween_Previewer.BeforeKillRewind = true;
             }
-            Editor_XTween_Previewer.Append(demo_base.currentTweener);
+            Editor_XTween_Previewer.Append(base_script.currentTweener);
         }
 
         #region 添加至预览器并播放
@@ -297,13 +297,13 @@ public class editor_demo_base : Editor
         {
             Editor_XTween_Previewer.Append(PreviewListAddon[i]);
         }
-        Editor_XTween_Previewer.Play(null, demo_base.debug);
+        Editor_XTween_Previewer.Play(null, base_script.debug);
         #endregion
 
-        if (demo_base.debug)
+        if (base_script.debug)
         {
             Debug.Log($"Tween Play");
-            XTween_Pool.LogStatistics(demo_base.debug);
+            XTween_Pool.LogStatistics(base_script.debug);
         }
     }
 
@@ -317,8 +317,8 @@ public class editor_demo_base : Editor
     /// </summary>
     private void OnAutoKillPreview()
     {
-        if (demo_base.currentTweener != null)
-            demo_base.currentTweener = null;
+        if (base_script.currentTweener != null)
+            base_script.currentTweener = null;
         PreviewListAddon.Clear();
         Editor_XTween_Previewer.act_on_editor_autokill -= OnAutoKillPreview;
     }

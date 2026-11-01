@@ -981,16 +981,16 @@
                 {
                     var e_binder = valuebinders[i];
 
-                    if (e_binder.ID != item.ID)
+                    if (e_binder.ID != item.id)
                         continue;
 
                     // 过滤掉无效的 binder
                     var validBinders = new List<PrimitiveBinder>();
                     foreach (var binder in e_binder.binders)
                     {
-                        if (item.SpawnedElementNode.Element != null)
+                        if (item.spawned_element_node.element != null)
                         {
-                            var con = item.SpawnedElementNode.Element.GetPrimitiveController_With_ID(binder.ID);
+                            var con = item.spawned_element_node.element.GetPrimitiveController_With_ID(binder.ID);
                             if (con != null)
                                 validBinders.Add(binder);
                         }
@@ -1187,7 +1187,7 @@
         /// <param name="item"></param>
         public void BindValue_Element(XHud_LayoutSpawner_Item item)
         {
-            XHud_Module_Element ele = item.SpawnedElementNode.Element;
+            XHud_Module_Element ele = item.spawned_element_node.element;
             string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             // 用于覆盖原数据
@@ -1200,10 +1200,10 @@
                 BindList.Add(ele_binder);
 
                 // 如果绑定了那么久完善未绑定的图元
-                if (ele_binder.ID == item.ID)
+                if (ele_binder.ID == item.id)
                 {
-                    if (string.IsNullOrEmpty(ele_binder.Name) || ele_binder.Name != item.SpawnName)
-                        ele_binder.Name = item.SpawnName;
+                    if (string.IsNullOrEmpty(ele_binder.Name) || ele_binder.Name != item.spawn_name)
+                        ele_binder.Name = item.spawn_name;
 
                     if (ele != null)
                     {
@@ -1229,11 +1229,11 @@
 
                     if (ele_binder.binders.Length <= 0)
                     {
-                        XGUI_Utilitys.Console("XHud - 布局元素数据绑定器通知", $"注意！ID为：<b><color={hex_col}> {item.ID} </b></color>的目标元素项已经绑定，<b><color={hex_col}>请勿重复绑定！</b></color>此操作已被跳过！", XGUIMsgState.通知);
+                        XGUI_Utilitys.Console("XHud - 布局元素数据绑定器通知", $"注意！ID为：<b><color={hex_col}> {item.id} </b></color>的目标元素项已经绑定，<b><color={hex_col}>请勿重复绑定！</b></color>此操作已被跳过！", XGUIMsgState.通知);
                     }
                     else
                     {
-                        XGUI_Utilitys.Console("XHud - 布局元素数据绑定器通知", $"注意！ID为：<b><color={hex_col}> {item.ID} </b></color>的目标元素项已经绑定，<b><color={hex_col}>因为您之前绑定过该元素ID</b></color>，但当时可能其下并没有任何图元！所以完善了对ID为：<b><color={hex_col}> {item.ID} </b></color>的元素其下的图元ID的绑定！</b></color>", XGUIMsgState.通知);
+                        XGUI_Utilitys.Console("XHud - 布局元素数据绑定器通知", $"注意！ID为：<b><color={hex_col}> {item.id} </b></color>的目标元素项已经绑定，<b><color={hex_col}>因为您之前绑定过该元素ID</b></color>，但当时可能其下并没有任何图元！所以完善了对ID为：<b><color={hex_col}> {item.id} </b></color>的元素其下的图元ID的绑定！</b></color>", XGUIMsgState.通知);
                     }
 
                     return;
@@ -1249,7 +1249,7 @@
             // 能执行到此处则表示没有任何图元被绑定
 
             // 加入绑定列表
-            ElementBinder x_ele_binder = AddBinder_Element(item.ID, item.SpawnName);
+            ElementBinder x_ele_binder = AddBinder_Element(item.id, item.spawn_name);
 
             // AddNewBinder 已经添加了项并设置了 foldoutStates，但需要确保展开
             int newIndex = valuebinders.Count - 1;
@@ -1259,9 +1259,9 @@
                 foldoutStates.Add(newIndex, true);
 
             // 如果元素未载入，只绑定元素项自身ID，后续不处理元素下的图元数据绑定，否则则跳过这一步判断
-            if (item.SpawnedElementNode.Element == null)
+            if (item.spawned_element_node.element == null)
             {
-                XGUI_Utilitys.Console("XHud - 布局元素数据绑定器通知", $"注意！ID为：<b><color={hex_col}> {item.ID} </b></color>的目标元素项的元素并未加载！所以只能绑定元素项而不能绑定元素下的图元控制器的ID！", XGUIMsgState.警告);
+                XGUI_Utilitys.Console("XHud - 布局元素数据绑定器通知", $"注意！ID为：<b><color={hex_col}> {item.id} </b></color>的目标元素项的元素并未加载！所以只能绑定元素项而不能绑定元素下的图元控制器的ID！", XGUIMsgState.警告);
                 return;
             }
 

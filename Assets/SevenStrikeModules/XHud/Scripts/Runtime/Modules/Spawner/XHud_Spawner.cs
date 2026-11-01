@@ -545,7 +545,7 @@ namespace SevenStrikeModules.XHud
                           eve_on_element_spawn_end.Invoke();
                           if (opt_protected_spawn_action)
                               opt_is_spawing = false;
-                      }).Element;
+                      }).element;
                 }
                 else
                 {
@@ -574,7 +574,7 @@ namespace SevenStrikeModules.XHud
 
                             if (opt_protected_spawn_action)
                                 opt_is_spawing = false;
-                        }).Element;
+                        }).element;
                 }
             }
             else
@@ -602,7 +602,7 @@ namespace SevenStrikeModules.XHud
                         eve_on_element_spawn_end.Invoke();
                         if (opt_protected_spawn_action)
                             opt_is_spawing = false;
-                    }).Element;
+                    }).element;
             }
 
             if (opt_auto_in)

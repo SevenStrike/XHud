@@ -568,7 +568,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 263614742}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 03c73a30e07760a4882951222a07e604, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 794f97d98c6a19a42b52e8b1b668134c, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -582,12 +582,14 @@ VideoPlayer:
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 0
-  m_TargetAudioSources: []
-  m_DirectAudioVolumes: []
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
   m_Url: 
-  m_EnabledAudioTracks: 
-  m_DirectAudioMutes: 
-  m_ControlledAudioTrackCount: 0
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
   m_Looping: 1
@@ -1780,6 +1782,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8e691a6e0f17b499127133162297e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fold_buttons: 1
+  fold_statistic: 1
+  fold_tweenlist: 0
   EasePics:
   - {fileID: 2800000, guid: c1897147b30a9bb4d8a27509b6ffb670, type: 3}
   - {fileID: 2800000, guid: cf2640a0895d4884586e6ec5c25ec27e, type: 3}

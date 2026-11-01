@@ -78,6 +78,11 @@ namespace SevenStrikeModules.XHud
     public class XHud_LibraryArg_Element_Item
     {
         /// <summary>
+        /// 元素唯一识别码（入库时分配，永不变）
+        /// 作为库内定位主键，替代易变的 name
+        /// </summary>
+        public string element_uid;
+        /// <summary>
         /// 标识
         /// </summary>
         public string name;
@@ -105,6 +110,7 @@ namespace SevenStrikeModules.XHud
         /// 元素
         /// </summary>
         public XHud_Module_Element target;
+
         [SerializeField]
         /// <summary>
         /// 预生成的元素信息列表
@@ -127,8 +133,6 @@ namespace SevenStrikeModules.XHud
             this.target = target;
             preload_elements = new List<XHud_LibraryArg_Element_Info>();
         }
-
-
 
         /// <summary>
         /// 更新已使用的数量
@@ -162,8 +166,14 @@ namespace SevenStrikeModules.XHud
             recycled_count = count;
         }
 
+        public string GetUID()
+        {
+            return element_uid;
+        }
+
         public void Copy(XHud_LibraryArg_Element_Item item)
         {
+            element_uid = item.element_uid;
             name = item.name;
             initialize_count = item.initialize_count;
             used_count = item.used_count;
@@ -172,6 +182,20 @@ namespace SevenStrikeModules.XHud
             root = item.root;
             target = item.target;
             preload_elements = item.preload_elements;
+        }
+
+        public void Clone()
+        {
+            XHud_LibraryArg_Element_Item item = new XHud_LibraryArg_Element_Item();
+            item.element_uid = element_uid;
+            item.name = name;
+            item.initialize_count = initialize_count;
+            item.used_count = used_count;
+            item.recycled_count = recycled_count;
+            item.next_index = next_index;
+            item.root = root;
+            item.target = target;
+            item.preload_elements = preload_elements;
         }
     }
 
@@ -264,10 +288,13 @@ namespace SevenStrikeModules.XHud
                 {
                     library_elements[i].target = paramObject;
                     library_elements[i].name = paramObject.transform.name;
+
+                    // 防御：老数据可能没有 UID，替换时顺手补发
+                    if (string.IsNullOrEmpty(library_elements[i].element_uid))
+                        library_elements[i].element_uid = System.Guid.NewGuid().ToString("N");
                 }
             }
         }
-
         /// <summary>
         /// 替换元素
         /// </summary>
@@ -275,9 +302,20 @@ namespace SevenStrikeModules.XHud
         /// <param name="paramObject"></param>
         public void ElementsLibrary_ReplaceElement(int index, XHud_LibraryArg_Element_Item item)
         {
+            // 防御1：index 越界保护
+            if (index < 0 || index >= library_elements.Count)
+                return;
+
+            // 防御2：工作副本 UID 为空时，沿用库中原条目的 UID
+            if (string.IsNullOrEmpty(item.element_uid))
+                item.element_uid = library_elements[index].element_uid;
+
+            // 防御3：原条目也没有 UID（老数据）时，补发一个
+            if (string.IsNullOrEmpty(item.element_uid))
+                item.element_uid = System.Guid.NewGuid().ToString("N");
+
             library_elements[index] = item;
         }
-
         /// <summary>
         /// 增加一个元素项
         /// </summary>
@@ -286,22 +324,13 @@ namespace SevenStrikeModules.XHud
         public void ElementsLibrary_Add(XHud_Module_Element element, int count)
         {
             XHud_LibraryArg_Element_Item item = new XHud_LibraryArg_Element_Item();
+            item.element_uid = System.Guid.NewGuid().ToString("N");
             item.target = element;
             item.initialize_count = count;
             item.name = element.transform.name;
+
             library_elements.Add(item);
         }
-
-        /// <summary>
-        /// 增加一个元素项
-        /// </summary>
-        /// <param name="item">元素项</param>
-        /// <param name="count">数量</param>
-        public void ElementsLibrary_Add(XHud_LibraryArg_Element_Item item)
-        {
-            library_elements.Add(item);
-        }
-
         /// <summary>
         /// 移除指定索引的元素
         /// </summary>
@@ -310,7 +339,6 @@ namespace SevenStrikeModules.XHud
         {
             library_elements.RemoveAt(index);
         }
-
         /// <summary>
         /// 修改库名称
         /// </summary>
@@ -319,7 +347,6 @@ namespace SevenStrikeModules.XHud
         {
             library_name = name;
         }
-
         /// <summary>
         /// 获取所有元素名称
         /// </summary>
@@ -334,7 +361,6 @@ namespace SevenStrikeModules.XHud
 
             return names;
         }
-
         /// <summary>
         /// 获取所有元素数量
         /// </summary>
@@ -343,7 +369,6 @@ namespace SevenStrikeModules.XHud
         {
             return library_elements.Count;
         }
-
         /// <summary>
         /// 获取所有正在使用的元素数量
         /// </summary>
@@ -359,7 +384,6 @@ namespace SevenStrikeModules.XHud
 
             return count;
         }
-
         /// <summary>
         /// 获取所有初始化的元素数量
         /// </summary>
@@ -375,7 +399,6 @@ namespace SevenStrikeModules.XHud
 
             return count;
         }
-
         /// <summary>
         /// 获取所有已回收的元素数量
         /// </summary>
@@ -391,7 +414,6 @@ namespace SevenStrikeModules.XHud
 
             return count;
         }
-
         /// <summary>
         /// 获取指定标识名称的元素
         /// </summary>
@@ -408,7 +430,6 @@ namespace SevenStrikeModules.XHud
 
             return ele;
         }
-
         /// <summary>
         /// 获取指定名称的元素项
         /// </summary>
@@ -425,7 +446,6 @@ namespace SevenStrikeModules.XHud
 
             return item;
         }
-
         /// <summary>
         /// 获取指定标识名称的元素的初始化数量
         /// </summary>
@@ -439,7 +459,6 @@ namespace SevenStrikeModules.XHud
                     library_elements[i].initialize_count = Count;
             }
         }
-
         /// <summary>
         /// 回收所有元素
         /// </summary>
@@ -467,7 +486,6 @@ namespace SevenStrikeModules.XHud
                 item.next_index = 0;
             }
         }
-
         /// <summary>
         /// 元素库是否是空的
         /// </summary>
@@ -479,7 +497,6 @@ namespace SevenStrikeModules.XHud
             else
                 return true;
         }
-
         /// <summary>
         /// 已存在
         /// </summary>
@@ -498,7 +515,26 @@ namespace SevenStrikeModules.XHud
             }
             return isexist;
         }
+        /// <summary>
+        /// 检查库中是否已经存在指定的元素预制体（基于引用精确比对）
+        /// </summary>
+        public bool ElementLibrary_IsExist(XHud_Module_Element target)
+        {
+            if (target == null) return false;
 
+            for (int i = 0; i < library_elements.Count; i++)
+            {
+                if (library_elements[i] != null && library_elements[i].target != null)
+                {
+                    // 判断引用是否绝对相等
+                    if (library_elements[i].target == target)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         /// <summary>
         /// 根据名称获取索引号
         /// </summary>
@@ -517,7 +553,6 @@ namespace SevenStrikeModules.XHud
             }
             return isexist;
         }
-
         /// <summary>
         /// 元素库ID是否是有效的
         /// </summary>
@@ -529,7 +564,6 @@ namespace SevenStrikeModules.XHud
             else
                 return false;
         }
-
         /// <summary>
         /// 列表定位并滚动到目标 - 定位
         /// </summary>
@@ -562,7 +596,6 @@ namespace SevenStrikeModules.XHud
             newscroll.y = scrollval;
             element_info_list_original_scroller = newscroll;
         }
-
         /// <summary>
         /// 列表定位并滚动到目标 - 查找
         /// </summary>
@@ -594,5 +627,62 @@ namespace SevenStrikeModules.XHud
             newscroll.y = scrollval;
             element_info_list_original_scroller = newscroll;
         }
+
+        #region UID
+        /// <summary>
+        /// 按 UID 获取元素预制体（主键查询）
+        /// </summary>
+        public XHud_Module_Element GetTargetElement_WithUID(string uid)
+        {
+            if (string.IsNullOrEmpty(uid)) return null;
+            for (int i = 0; i < library_elements.Count; i++)
+                if (library_elements[i].element_uid == uid)
+                    return library_elements[i].target;
+            return null;
+        }
+        /// <summary>
+        /// 按 UID 判断元素是否存在于库中
+        /// </summary>
+        public bool IsExist_WithUID(string uid)
+        {
+            if (string.IsNullOrEmpty(uid)) return false;
+            for (int i = 0; i < library_elements.Count; i++)
+                if (library_elements[i].element_uid == uid)
+                    return true;
+            return false;
+        }
+        /// <summary>
+        /// 按名字反查 UID（用于老数据回填 / 自愈）
+        /// </summary>
+        public string GetUID_WithName(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return null;
+            for (int i = 0; i < library_elements.Count; i++)
+                if (library_elements[i].name == name)
+                    return library_elements[i].element_uid;
+            return null;
+        }
+        /// <summary>
+        /// 为所有缺失 UID 的库条目补发 UID（老数据迁移）
+        /// 返回补发的条目数量，0 表示无需迁移
+        /// </summary>
+        public int ElementsLibrary_EnsureUIDs()
+        {
+            int fixedCount = 0;
+            for (int i = 0; i < library_elements.Count; i++)
+            {
+                if (string.IsNullOrEmpty(library_elements[i].element_uid))
+                {
+                    library_elements[i].element_uid = System.Guid.NewGuid().ToString("N");
+                    fixedCount++;
+                }
+            }
+#if UNITY_EDITOR
+            if (fixedCount > 0)
+                UnityEditor.EditorUtility.SetDirty(this);
+#endif
+            return fixedCount;
+        }
+        #endregion
     }
 }

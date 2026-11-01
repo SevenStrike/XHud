@@ -146,7 +146,7 @@ namespace SevenStrikeModules.XHud.Editor
                     usableWidth = Mathf.Max(1f, availableWidth - padding);
                     pixelsPerSecond = usableWidth / node.duration;
                     pixelsPerSecond = Mathf.Clamp(pixelsPerSecond, 1f, 20000f);
-                    scrollPos.x = 0f;   // ✅ 已经是 0
+                    scrollPos.x = 0f;   //  已经是 0
                 }
 
                 scrollPos.y = 0f;
@@ -184,7 +184,7 @@ namespace SevenStrikeModules.XHud.Editor
                     usableWidth = Mathf.Max(1f, availableWidth - padding);
                     pixelsPerSecond = usableWidth / len;
                     pixelsPerSecond = Mathf.Clamp(pixelsPerSecond, 1f, 20000f);
-                    scrollPos.x = 0f;   // ✅ 已经是 0
+                    scrollPos.x = 0f;   //  已经是 0
                 }
 
                 scrollPos.y = 0f;

@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f37a79528fd6b243945098c5e1d4982, type: 3}
   m_Name: Lib_Element
   m_EditorClassIdentifier: 
-  library_name: NewElementsLibrary
+  library_name: Lib_Element
   library_root: {fileID: 0}
   library_elements:
-  - name: XHudIcon
+  - element_uid: 33365e4b859746fe80206cdc69ffa9d9
+    name: XHudIcon
     initialize_count: 2
     used_count: 0
     recycled_count: 0
@@ -23,7 +24,8 @@ MonoBehaviour:
     root: {fileID: 0}
     target: {fileID: 2484565434626366029, guid: 54cb949a8cef5ca44a27602c14cb9919, type: 3}
     preload_elements: []
-  - name: Cat
+  - element_uid: 97d47f1b1e5146b68647475e4951c922
+    name: Scope
     initialize_count: 2
     used_count: 0
     recycled_count: 0

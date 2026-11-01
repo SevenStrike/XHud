@@ -1147,12 +1147,12 @@ namespace SevenStrikeModules.XGUI.Editor
         /// <returns>适用于当前 Unity 版本的 <see cref="TextClipping"/> 枚举值。</returns>
         public static TextClipping TryEllipsisClipping()
         {
+            TextClipping clipping;
 #if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
+            clipping = TextClipping.Ellipsis;
 #else
-    TextClipping clipping = TextClipping.Clip;
+            clipping = TextClipping.Clip;
 #endif
-
             return clipping;
         }
         #endregion
@@ -1223,7 +1223,7 @@ namespace SevenStrikeModules.XGUI.Editor
             switch (pathType)
             {
                 case XGUIPathType.文件:
-                    // ✅ 使用 BuildFileFilter 构建完整过滤器
+                    //  使用 BuildFileFilter 构建完整过滤器
                     return EditorUtility.OpenFilePanel("选择文件", initialDirectory, filter);
 
                 case XGUIPathType.文件夹:

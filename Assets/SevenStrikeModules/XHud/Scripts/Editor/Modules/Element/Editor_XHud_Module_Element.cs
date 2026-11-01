@@ -1595,7 +1595,7 @@ namespace SevenStrikeModules.XHud.Editor
                     #endregion
 
                     #region 透明度
-                    XGUI.ChangedCheck_Start();
+                    //XGUI.ChangedCheck_Start();
                     XGUI.layout_property_field(
                         title: "透明度",
                         title_size: XGUIFontSize.M,
@@ -1603,10 +1603,10 @@ namespace SevenStrikeModules.XHud.Editor
                         title_width: 90,
                         prop: sp_alpha,
                         prop_margin: new RectOffset(0, 0, 5, 0));
-                    if (XGUI.ChangedCheck_End())
-                    {
-                        ChangeAlpha();
-                    }
+                    ChangeAlpha();
+                    //if (XGUI.ChangedCheck_End())
+                    //{
+                    //}
                     #endregion
 
                     #region 速率倍增
@@ -4003,6 +4003,10 @@ foldout: base_script.fold_component);
             if (!sp_tweens_preivew_in_state.boolValue && !sp_tweens_preivew_out_state.boolValue)
                 PrimitiveTweens_MaxDuration_Calculate();
 
+        }
+        public override bool HasPreviewGUI()
+        {
+            return false;
         }
         #endregion
 

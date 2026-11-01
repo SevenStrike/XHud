@@ -673,11 +673,7 @@ namespace SevenStrikeModules.XTween.Editor
                 bool shrink = currentWidth <= 248;
                 List<XTween_Interface> active_tweens = BaseScript.Get_ActiveTweens();
 
-#if UNITY_6000_0_OR_NEWER
-                TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+                TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
                 if (!XTween_Dashboard.XTweenConfig.Datas.PerformanceLiquidMode)
                 {
@@ -783,7 +779,7 @@ namespace SevenStrikeModules.XTween.Editor
                                    size: XGUIFontSize.M,
                                    anchor: TextAnchor.MiddleLeft,
                                    font: XGUI.GetFont("xg-bold"),
-                                   clipping: clipping);
+                                   clipping: clipping_ellipsis);
 
                                // Args
                                rect_content.Set(rect.x + 10, rect.y + 25, rect.width - (shrink ? 20 : EasePicBg.width), XGUI.GetSingleLineHeight());
@@ -793,7 +789,7 @@ namespace SevenStrikeModules.XTween.Editor
                                   text_color: Color.black * 0.8f,
                                   size: XGUIFontSize.S,
                                   anchor: TextAnchor.MiddleLeft,
-                                  clipping: clipping);
+                                  clipping: clipping_ellipsis);
 
                                // 进度条 - 背景 - Ease
                                rect_content.Set(rect.x + 10, rect.y + 45, rect.width - 10 - (shrink ? 0 : EasePicBg.width) - (shrink ? 20 : 0), 2);
@@ -837,7 +833,7 @@ namespace SevenStrikeModules.XTween.Editor
                                            size: XGUIFontSize.XS,
                                            anchor: TextAnchor.MiddleLeft,
                                            font: XGUI.GetFont("xg-heavy"),
-                                           clipping: clipping);
+                                           clipping: clipping_ellipsis);
                                    }
                                    else
                                    {
@@ -879,7 +875,7 @@ namespace SevenStrikeModules.XTween.Editor
                             text_color: Color.black * 0.5f,
                             size: XGUIFontSize.M,
                             anchor: TextAnchor.MiddleCenter,
-                            clipping: clipping);
+                            clipping: clipping_ellipsis);
                     }
                 }
                 else
@@ -926,7 +922,7 @@ namespace SevenStrikeModules.XTween.Editor
                                    size: XGUIFontSize.M,
                                    anchor: TextAnchor.MiddleLeft,
                                    font: XGUI.GetFont("xg-bold"),
-                                   clipping: clipping);
+                                   clipping: clipping_ellipsis);
 
                                // Args
                                rect_content.Set(rect.x + 10, rect.y + 25, rect.width - (shrink ? 20 : EasePicBg.width), XGUI.GetSingleLineHeight());
@@ -936,7 +932,7 @@ namespace SevenStrikeModules.XTween.Editor
                                   text_color: Color.white * 0.8f,
                                   size: XGUIFontSize.S,
                                   anchor: TextAnchor.MiddleLeft,
-                                  clipping: clipping);
+                                  clipping: clipping_ellipsis);
 
                                // 进度条 - 背景 - Ease
                                rect_content.Set(rect.x + 10, rect.y + 45, rect.width - 10 - (shrink ? 0 : EasePicBg.width) - (shrink ? 20 : 0), 2);
@@ -980,7 +976,7 @@ namespace SevenStrikeModules.XTween.Editor
                                            size: XGUIFontSize.XS,
                                            anchor: TextAnchor.MiddleLeft,
                                            font: XGUI.GetFont("xg-heavy"),
-                                           clipping: clipping);
+                                           clipping: clipping_ellipsis);
                                    }
                                    else
                                    {
@@ -1022,7 +1018,7 @@ namespace SevenStrikeModules.XTween.Editor
                             text_color: Color.white * 0.65f,
                             size: XGUIFontSize.M,
                             anchor: TextAnchor.MiddleCenter,
-                            clipping: clipping);
+                            clipping: clipping_ellipsis);
                     }
                 }
             }

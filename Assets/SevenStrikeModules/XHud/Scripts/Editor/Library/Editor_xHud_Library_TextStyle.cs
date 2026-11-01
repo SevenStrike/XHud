@@ -648,11 +648,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             xHud_TextType ttype = (xHud_TextType)sp_type.enumValueIndex;
 
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             #region 序号
             drawelement_rect.Set(rect.x + 15, rect.y + 8, 30, 20);
@@ -661,7 +657,7 @@ namespace SevenStrikeModules.XHud.Editor
               text: new GUIContent(index.ToString("D2")),
               text_color: Color.gray,
               size: XGUIFontSize.S,
-              clipping: clipping,
+              clipping: clipping_ellipsis,
               anchor: TextAnchor.MiddleLeft,
               offset: new Vector2(0, 0),
               font_style: FontStyle.Normal);
@@ -678,7 +674,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent($"<b><color={(ttype == xHud_TextType.Text ? t_color : m_color)}>{(ttype == xHud_TextType.Text ? "T " : "M")}</color></b>    <color=#ffffff>|</color>    <color={h_color}>{sp_name.stringValue}</color>"),
                 text_color: Color.white,
                 size: XGUIFontSize.M,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 anchor: TextAnchor.MiddleLeft,
                 offset: new Vector2(0, 0),
                 font_style: FontStyle.Normal);
@@ -691,7 +687,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent(sp_descrpt.stringValue),
                 text_color: Color.white * 0.75f,
                 size: XGUIFontSize.S,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 anchor: TextAnchor.MiddleLeft,
                 offset: new Vector2(0, 0),
                 font_style: FontStyle.Normal);
@@ -1346,18 +1342,14 @@ namespace SevenStrikeModules.XHud.Editor
         /// <param name="background">背景样式</param>
         public override void OnInteractivePreviewGUI(Rect r, GUIStyle background)
         {
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             XGUI.gui_label(
                 rect: new Rect(r.x, r.y - 15, r.width, r.height),
                 text: new GUIContent(sp_preview_content.stringValue),
                 text_color: sp_preview_font_color.colorValue,
                 size: XGUIFontSize.XL,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 anchor: TextAnchor.MiddleCenter,
                 offset: new Vector2(0, 0),
                 font_style: FontStyle.Normal,
@@ -1371,7 +1363,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent(sp_preview_type_text.stringValue),
                 text_color: Color.white * 0.75f,
                 size: XGUIFontSize.S,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 anchor: TextAnchor.MiddleCenter,
                 offset: new Vector2(0, -2),
                 font_style: FontStyle.Normal);

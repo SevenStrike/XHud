@@ -31,7 +31,7 @@ MonoBehaviour:
     PoolCount_Color: 250
     PoolRecyleAllOnSceneUnloaded: 1
     PoolRecyleAllOnSceneLoaded: 0
-    PerformanceLiquidMode: 0
+    PerformanceLiquidMode: 1
     PreviewOption_AutoKillPreviewTweens: 1
     PreviewOption_RewindPreviewTweensWithKill: 1
     PreviewOption_ClearPreviewTweensWithKill: 1

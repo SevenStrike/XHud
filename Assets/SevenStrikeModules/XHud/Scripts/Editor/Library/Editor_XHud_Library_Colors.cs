@@ -93,7 +93,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// <summary>
         /// 色卡信息列表。
         /// </summary>
-        public List<ExportItem> ColorsInfo;
+        public List<ExportItem> colors_info;
     }
     #endregion
 
@@ -701,11 +701,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             BlockGUI(sp_name.stringValue);
 
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             #region 名称
             drawelement_rect.Set(rect.x + 42, rect.y + 4, rect.width - 160, 20);
@@ -714,7 +710,7 @@ namespace SevenStrikeModules.XHud.Editor
               text: new GUIContent(sp_name.stringValue),
               text_color: sp_color.colorValue,
               size: XGUIFontSize.M,
-              clipping: clipping,
+              clipping: clipping_ellipsis,
               anchor: TextAnchor.MiddleLeft,
               offset: new Vector2(0, 0),
               font_style: FontStyle.Normal);
@@ -1095,7 +1091,7 @@ namespace SevenStrikeModules.XHud.Editor
                 Pallet.Apply();
 
                 byte[] PalletData = Pallet.EncodeToPNG();
-                string path = EditorUtility.SaveFilePanel("", Application.dataPath, "Pallet", "png");
+                string path = EditorUtility.SaveFilePanel("", Application.dataPath, "XHudPallet", "png");
 
                 if (string.IsNullOrEmpty(path))
                     return;
@@ -1111,7 +1107,7 @@ namespace SevenStrikeModules.XHud.Editor
                 }
 
                 ExportColorLib lib = new ExportColorLib();
-                lib.ColorsInfo = new List<ExportItem>();
+                lib.colors_info = new List<ExportItem>();
 
                 for (int i = 0; i < base_script.library_colors.Count; i++)
                 {
@@ -1120,7 +1116,7 @@ namespace SevenStrikeModules.XHud.Editor
                     item.hex = XGUI_Utilitys.Color_To_HexString(base_script.library_colors[i].color);
                     item.name = base_script.library_colors[i].name;
 
-                    lib.ColorsInfo.Add(item);
+                    lib.colors_info.Add(item);
                 }
 
                 string json = JsonUtility.ToJson(lib, true);
@@ -1168,7 +1164,7 @@ namespace SevenStrikeModules.XHud.Editor
                         string json = File.ReadAllText(path);
 
                         ExportColorLib lib = JsonUtility.FromJson<ExportColorLib>(json);
-                        int count = lib.ColorsInfo.Count;
+                        int count = lib.colors_info.Count;
 
                         int size = sp_library_colors.arraySize;
 
@@ -1180,8 +1176,8 @@ namespace SevenStrikeModules.XHud.Editor
                             SerializedProperty sp_name = sp_item.FindPropertyRelative(nameof(xHud_LibraryArg_Color.name));
                             SerializedProperty sp_color = sp_item.FindPropertyRelative(nameof(xHud_LibraryArg_Color.color));
 
-                            sp_name.stringValue = lib.ColorsInfo[i].name;
-                            sp_color.colorValue = XGUI_Utilitys.String_To_Color(lib.ColorsInfo[i].color, false);
+                            sp_name.stringValue = lib.colors_info[i].name;
+                            sp_color.colorValue = XGUI_Utilitys.String_To_Color(lib.colors_info[i].color, false);
 
                             sp_name.serializedObject.ApplyModifiedProperties();
                             sp_color.serializedObject.ApplyModifiedProperties();
@@ -1199,7 +1195,7 @@ namespace SevenStrikeModules.XHud.Editor
                         string json = File.ReadAllText(path);
 
                         ExportColorLib lib = JsonUtility.FromJson<ExportColorLib>(json);
-                        int count = lib.ColorsInfo.Count;
+                        int count = lib.colors_info.Count;
 
                         for (int i = 0; i < count; i++)
                         {
@@ -1209,8 +1205,8 @@ namespace SevenStrikeModules.XHud.Editor
                             SerializedProperty sp_name = sp_item.FindPropertyRelative(nameof(xHud_LibraryArg_Color.name));
                             SerializedProperty sp_color = sp_item.FindPropertyRelative(nameof(xHud_LibraryArg_Color.color));
 
-                            sp_name.stringValue = lib.ColorsInfo[i].name;
-                            sp_color.colorValue = XGUI_Utilitys.String_To_Color(lib.ColorsInfo[i].color, false);
+                            sp_name.stringValue = lib.colors_info[i].name;
+                            sp_color.colorValue = XGUI_Utilitys.String_To_Color(lib.colors_info[i].color, false);
                             sp_name.serializedObject.ApplyModifiedProperties();
                             sp_color.serializedObject.ApplyModifiedProperties();
                             sp_item.serializedObject.ApplyModifiedProperties();

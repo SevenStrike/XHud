@@ -1760,6 +1760,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8e691a6e0f17b499127133162297e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fold_buttons: 1
+  fold_statistic: 1
+  fold_tweenlist: 0
   EasePics:
   - {fileID: 2800000, guid: 1f3f0a016f854564394383a20b328091, type: 3}
   - {fileID: 2800000, guid: 85a5ea9cb44a4af47afd7a3dedcaf104, type: 3}
@@ -2564,7 +2567,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   debug: 0
-  ShortID: X2Tht0q4
+  ShortID: 
   easeimg: {fileID: 1361961126}
   image_lastColor: {fileID: 975997738}
   image_currentColor: {fileID: 735846119}
@@ -2572,7 +2575,7 @@ MonoBehaviour:
   EaseName: {fileID: 1631846619}
   Duration: {fileID: 1616871169}
   col_last: {r: 1, g: 1, b: 1, a: 0}
-  col_target: {r: 1, g: 1, b: 1, a: 0}
+  col_target: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &1890655791
 GameObject:
   m_ObjectHideFlags: 0
@@ -2778,7 +2781,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.6166267, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2867,7 +2870,6 @@ MonoBehaviour:
   AutoStart: 0
   IsPaused: 0
   RotationSpace: 1
-  EaseGraph: {fileID: 2800000, guid: 7844eb514d3b45849b997edebdec9f7f, type: 3}
   EndValue_Int: 0
   EndValue_Float: 0
   EndValue_String: 
@@ -2901,7 +2903,7 @@ MonoBehaviour:
   index_TweenTypes_Text: "\u6587\u5B57\u5C3A\u5BF8_FontSize"
   index_TweenTypes_TmpText: "\u6587\u5B57\u5C3A\u5BF8_FontSize"
   index_TweenTypes_To: "\u6574\u6570_Int"
-  index_AutoKillPreviewTweens: 0
+  index_AutoKillPreviewTweens: 1
   index_RewindPreviewTweensWithKill: 1
   index_ClearPreviewTweensWithKill: 1
   Target_RectTransform: {fileID: 1924599820}
@@ -2924,6 +2926,15 @@ MonoBehaviour:
   keyControl_Tween_Rewind: 114
   keyControl_Tween_Kill: 101
   keyControl_Tween_Replay: 116
+  fold_params: 1
+  fold_preset: 1
+  fold_status: 0
+  fold_type: 0
+  fold_endvalue: 0
+  fold_current_or_components: 0
+  fold_option: 1
+  fold_keycontrol: 1
+  fold_basescript: 1
   references:
     version: 2
     RefIds:

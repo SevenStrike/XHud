@@ -58,7 +58,7 @@ namespace SevenStrikeModules.XGUI.Editor
         InBounce,
         OutBounce,
         InOutBounce,
-        // ✅ Shake & Flash 系列
+        //  Shake & Flash 系列
         Shake,
         ShakeX,
         ShakeY,
@@ -67,7 +67,7 @@ namespace SevenStrikeModules.XGUI.Editor
         SmoothShake,
         SharpFlash,
         Glitch,
-        // ✅ 新增：闪光渐暗
+        //  新增：闪光渐暗
         FlashThenFade,      // 先闪光后渐暗
         FlashThenFadeOut,   // 先闪光后淡出
         BrightPulse,        // 明亮脉冲

@@ -182,5 +182,70 @@ namespace SevenStrikeModules.XGUI.Editor
 
             return sw;
         }
+
+        /// <summary>
+        /// 绘制一个使用自定义纹理作为背景的图标按钮。
+        /// </summary>
+        /// <param name="rect">按钮的位置和尺寸。传入 <see cref="Rect"/> 默认值时使用自动布局。</param>
+        /// <param name="tooltip">按钮的提示文本，鼠标悬停时显示。</param>
+        /// <param name="tex_release">按钮正常状态下的背景纹理。</param>
+        /// <param name="tex_press">按钮按下状态下的背景纹理。</param>
+        /// <param name="tex_gui_color">按钮背景的叠加颜色。传入 <see cref="Color.clear"/> 时使用白色。</param>
+        /// <param name="margin">按钮的外边距，叠加到样式默认边距上。</param>
+        /// <param name="padding">按钮的内边距，叠加到样式默认内边距上。</param>
+        /// <param name="width">按钮的固定宽度。为 0 时使用样式默认宽度。</param>
+        /// <param name="height">按钮的固定高度。为 0 时使用样式默认高度。</param>
+        /// <param name="focus_name">按钮的控件名称，用于 <see cref="GUI.FocusControl"/> 和键盘导航。</param>
+        /// <returns>如果按钮被点击则返回 <c>true</c>，否则返回 <c>false</c>。</returns>
+        /// <remarks>
+        /// 该方法适用于纯图标按钮的场景，通过 <paramref name="tex_release"/> 和 <paramref name="tex_press"/>
+        /// 分别指定正常和按下状态的背景纹理。不显示文本内容，仅显示工具提示。
+        /// </remarks>
+        public static bool gui_button_with_style(Rect rect = default, string tooltip = "clicked", Texture2D tex_release = null, Texture2D tex_press = null, Color tex_gui_color = default, RectOffset margin = default, RectOffset border = default, RectOffset padding = default, float width = 0, float height = 0, string focus_name = null, GUIStyle s_style = default)
+        {
+            if (tex_gui_color == Color.clear)
+                tex_gui_color = Color.white;
+
+            if (margin == null)
+                margin = new RectOffset(0, 0, 0, 0);
+
+            if (padding == null)
+                padding = new RectOffset(0, 0, 0, 0);
+
+            if (border == null)
+                border = new RectOffset(0, 0, 0, 0);
+
+            GUIStyle style = new GUIStyle(s_style == null ? style_xg_button : s_style);
+            if (tex_release != null)
+                style.normal.background = tex_release;
+
+            if (tex_press != null)
+                style.active.background = tex_press;
+
+            RectOffset _p = style.padding;
+            RectOffset _m = style.margin;
+
+            style.padding = new RectOffset(_p.left + padding.left, _p.right + padding.right, _p.top + padding.top, _p.bottom + padding.bottom);
+
+            style.margin = new RectOffset(_m.left + margin.left, _m.right + margin.right, _m.top + margin.top, _m.bottom + margin.bottom);
+
+            if (width != 0)
+                style.fixedWidth = width;
+            if (height != 0)
+                style.fixedHeight = height;
+            style.border = border;
+            GUIContent content = new GUIContent();
+            content.tooltip = tooltip;
+
+            // 分配GUIControl名称
+            GUI.SetNextControlName(focus_name);
+
+            Color col = GUI.backgroundColor;
+            GUI.backgroundColor = tex_gui_color;
+            bool sw = GUI.Button(rect, content, style);
+            GUI.backgroundColor = col;
+
+            return sw;
+        }
     }
 }

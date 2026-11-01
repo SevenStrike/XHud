@@ -248,14 +248,14 @@ namespace SevenStrikeModules.XHud.Editor
                 {
                     ref var e_binder = ref BaseScript.valuebinders[i];
 
-                    if (e_binder.ID != item.ID)
+                    if (e_binder.ID != item.id)
                         continue;
 
                     // 过滤掉无效的 binder
                     var validBinders = new List<PrimitiveBinder>();
                     foreach (var binder in e_binder.binders)
                     {
-                        var con = item.SpawnedElementNode.Element.GetPrimitiveController_With_ID(binder.ID);
+                        var con = item.spawned_element_node.element.GetPrimitiveController_With_ID(binder.ID);
                         if (con != null)
                             validBinders.Add(binder);
                     }
@@ -302,7 +302,7 @@ namespace SevenStrikeModules.XHud.Editor
 
         public void BindValue_Element(XHud_LayoutSpawner_Item item)
         {
-            XHud_Module_Element ele = item.SpawnedElementNode.Element;
+            XHud_Module_Element ele = item.spawned_element_node.element;
             string hex_col = XGUI_Utilitys.Color_To_HexString(XHud_Dashboard.themes_get_color(ThemeColorType.primary), true);
 
             // 用于覆盖原数据
@@ -316,10 +316,10 @@ namespace SevenStrikeModules.XHud.Editor
                 BindList.Add(ele_binder);
 
                 // 如果绑定了那么就完善未绑定的图元
-                if (ele_binder.ID == item.ID)
+                if (ele_binder.ID == item.id)
                 {
-                    if (string.IsNullOrEmpty(ele_binder.Name) || ele_binder.Name != item.SpawnName)
-                        ele_binder.Name = item.SpawnName;
+                    if (string.IsNullOrEmpty(ele_binder.Name) || ele_binder.Name != item.spawn_name)
+                        ele_binder.Name = item.spawn_name;
 
                     if (ele != null)
                     {
@@ -330,11 +330,11 @@ namespace SevenStrikeModules.XHud.Editor
 
                     if (ele_binder.binders.Length <= 0)
                     {
-                        XGUI_Utilitys.Console("XHud - 布局元素数据绑定器通知", $"注意！ID为：<b><color={hex_col}> {item.ID} </b></color>的目标布局元素数据已经绑定，<b><color={hex_col}>请勿重复绑定！</b></color>此操作已被跳过！", XGUIMsgState.通知);
+                        XGUI_Utilitys.Console("XHud - 布局元素数据绑定器通知", $"注意！ID为：<b><color={hex_col}> {item.id} </b></color>的目标布局元素数据已经绑定，<b><color={hex_col}>请勿重复绑定！</b></color>此操作已被跳过！", XGUIMsgState.通知);
                     }
                     else
                     {
-                        XGUI_Utilitys.Console("XHud - 布局元素数据绑定器通知", $"注意！ID为：<b><color={hex_col}> {item.ID} </b></color>的目标布局元素数据已经绑定，<b><color={hex_col}>因为您之前绑定过该元素ID</b></color>，但当时可能其下并没有任何图元！所以完善了其下的图元数据的绑定！</b></color>", XGUIMsgState.通知);
+                        XGUI_Utilitys.Console("XHud - 布局元素数据绑定器通知", $"注意！ID为：<b><color={hex_col}> {item.id} </b></color>的目标布局元素数据已经绑定，<b><color={hex_col}>因为您之前绑定过该元素ID</b></color>，但当时可能其下并没有任何图元！所以完善了其下的图元数据的绑定！</b></color>", XGUIMsgState.通知);
                     }
 
                     return;
@@ -347,13 +347,13 @@ namespace SevenStrikeModules.XHud.Editor
             ElementBinder x_ele_binder = new ElementBinder();
 
             // 新建的绑定器的ID为拖入的元素项的加载的元素的ID
-            x_ele_binder.ID = item.ID;
-            x_ele_binder.Name = item.SpawnName;
+            x_ele_binder.ID = item.id;
+            x_ele_binder.Name = item.spawn_name;
 
             // 如果元素未载入，只绑定元素项自身ID，后续不处理元素下的图元数据绑定，否则则跳过这一步判断
-            if (item.SpawnedElementNode.Element == null && UseDebug.boolValue)
+            if (item.spawned_element_node.element == null && UseDebug.boolValue)
             {
-                XGUI_Utilitys.Console("XHud - 布局元素数据绑定器通知", $"注意！ID为：<b><color={hex_col}> {item.ID} </b></color>的目标布局元素并未加载到场景！所以只能绑定元素基础信息而不能绑定元素下的图元控制器数据！", XGUIMsgState.警告);
+                XGUI_Utilitys.Console("XHud - 布局元素数据绑定器通知", $"注意！ID为：<b><color={hex_col}> {item.id} </b></color>的目标布局元素并未加载到场景！所以只能绑定元素基础信息而不能绑定元素下的图元控制器数据！", XGUIMsgState.警告);
                 return;
             }
 

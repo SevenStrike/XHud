@@ -696,7 +696,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// 执行流程：
         /// <list type="number">
         /// <item><description>获取目标元素库；</description></item>
-        /// <item><description>遍历待入库元素，重复项弹窗询问更新替换或跳过；</description></item>
+        /// <item><description>遍历待入库元素，精确按引用查重，重复项弹窗询问更新替换或跳过；</description></item>
         /// <item><description>收集操作结果并在结束时弹窗显示。</description></item>
         /// </list>
         /// </summary>
@@ -710,15 +710,27 @@ namespace SevenStrikeModules.XHud.Editor
             for (int s = 0; s < element_list.Count; s++)
             {
                 XGUIDialogListDatas item = new XGUIDialogListDatas();
+                XHud_Module_Element currentElement = element_list[s].element;
 
-
-                if (target_library.ElementLibrary_IsExist(element_list[s].element.name))
+                //  1. 按引用查找库中是否已存在该预制体
+                int existIndex = -1;
+                for (int i = 0; i < target_library.library_elements.Count; i++)
                 {
+                    if (target_library.library_elements[i].target == currentElement)
+                    {
+                        existIndex = i;
+                        break;
+                    }
+                }
+
+                if (existIndex != -1)
+                {
+                    //  2. 确实重复了（同一个预制体），询问是否更新替换
                     string res = XGUI.dialog(
                                 type: XGUIDialogType.通知,
                                 windowtitle: "XHud - 元素库添加器消息",
-                                title: "存在重复元素名称",
-                                msg: $"名称为<color={colorhex}> {element_list[s].element.transform.name} </color>的元素已经存在于<color={colorhex}> \" {sp_library_name.stringValue} \" </color>元素库中，是否以当前元素更新替换库中的元素？",
+                                title: "存在重复元素预制体",
+                                msg: $"预制体<color={colorhex}> {currentElement.transform.name} </color>已经存在于<color={colorhex}> \" {sp_library_name.stringValue} \" </color>元素库中，是否以当前元素更新替换库中的元素？",
                                 ok: "更新替换",
                                 cancel: "跳过",
                                 PrimaryIndex: 1,
@@ -726,9 +738,20 @@ namespace SevenStrikeModules.XHud.Editor
 
                     if (res == "更新替换")
                     {
-                        target_library.ElementsLibrary_ReplaceElement(element_list[s].element);
+                        //  3. 手动构造一个新的 item（也可以基于原有 item 克隆），修改名称与初始化数量
+                        XHud_LibraryArg_Element_Item newItem = new XHud_LibraryArg_Element_Item();
+                        newItem.target = currentElement;
+                        newItem.name = currentElement.transform.name;
+                        newItem.initialize_count = 1;
+                        newItem.used_count = 0;
+                        newItem.recycled_count = 0;
+                        newItem.next_index = 0;
+                        //  不在这里生成 UID，交给 ReplaceElement 内部三层防御去保留原 UID（或补发）
 
-                        item.Title = element_list[s].element.transform.name;
+                        //  4. 按精确索引调用替换重载，保留原 UID
+                        target_library.ElementsLibrary_ReplaceElement(existIndex, newItem);
+
+                        item.Title = currentElement.transform.name;
                         item.SubTitle = "替换库中元素";
                         item.Message = sp_library_name.stringValue;
                         valids.Add(item);
@@ -736,9 +759,10 @@ namespace SevenStrikeModules.XHud.Editor
                 }
                 else
                 {
-                    target_library.ElementsLibrary_Add(element_list[s].element, 1);
+                    //  5. 引用不相等，视为新元素，直接新增（库层会分配新 UID）
+                    target_library.ElementsLibrary_Add(currentElement, 1);
 
-                    item.Title = element_list[s].element.transform.name;
+                    item.Title = currentElement.transform.name;
                     item.SubTitle = "新增元素到库";
                     item.Message = sp_library_name.stringValue;
 

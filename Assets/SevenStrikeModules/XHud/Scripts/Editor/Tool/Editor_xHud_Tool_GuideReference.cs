@@ -325,11 +325,7 @@ namespace SevenStrikeModules.XHud.Editor
                 border: new RectOffset(0, 0, 0, 0),
                 color: Color.white);
 
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             // 大标题
             Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
@@ -338,7 +334,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent("XHud 构图参考说明书"),
                 text_color: Color.white,
                 size: XGUIFontSize.L,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 font: XGUI.GetFont("xg-heavy"));
 
             // 分割线
@@ -427,7 +423,7 @@ namespace SevenStrikeModules.XHud.Editor
                 text: new GUIContent($"{guide_type}    <size=11>( <color={hexcol}>{abbr}</color> )</size>"),
                 text_color: Color.white,
                 size: XGUIFontSize.M,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 anchor: TextAnchor.MiddleCenter,
                 offset: new Vector2(0, 0),
                 font_style: FontStyle.Normal);

@@ -1334,7 +1334,7 @@ GameObject:
   - component: {fileID: 5955396475993730850}
   - component: {fileID: 3093053317171108072}
   m_Layer: 8
-  m_Name: Cat
+  m_Name: Scope
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -729,6 +729,9 @@ MonoBehaviour:
   trans_custom_transition: 0
   ele_library_elements:
   - {fileID: 11400000, guid: 213ed0d480072b54cb5c30e8a726b2d0, type: 2}
+  - {fileID: 11400000, guid: d9195ae0ee40f9f4696b204759e54234, type: 2}
+  - {fileID: 11400000, guid: e4cba14c58d834940920513efa2b0d31, type: 2}
+  - {fileID: 11400000, guid: 830e6b16e2775f84a90ab50d2d0b56b6, type: 2}
   global_motion_create_args:
     anchor: 5
     MotionAnimateEndState: 0
@@ -1064,144 +1067,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6829dcedd0687784aa69616b00d5a78b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  library_name: NewElementsLibrary
+  library_name: Lib_Element
+  library_mode: 1
   is_loaded_layout_screen: 0
   is_loaded_layout_world: 0
   spawn_item_list_screen:
-  - SpawnName: Cat
-    Indicator: Indicator_Cat
-    ID: nazh
-    ClearEvents: 0
-    ClearActions: 0
-    Delay_Spawn: 0
-    Delay_Despawn: 0
-    Position: {x: 275, y: -920.99994, z: 0}
-    Euler: {x: 0, y: 0, z: 0}
-    Offset: {x: 0, y: 0, z: 0}
-    Scale: {x: 1, y: 1, z: 1}
-    Size: {x: 485.6, y: 536.9}
-    Pivot: {x: 0.5, y: 0.5}
-    Anchor_Min: {x: 0.5, y: 0.5}
-    Anchor_Max: {x: 0.5, y: 0.5}
-    AutoIn: "\u81EA\u52A8 In"
-    InMotion: 0
-    Spawned: 0
-    SpawnedElementNode:
-      Indicator: 
-      ModuleName: 
-      ID: 0
-      Element: {fileID: 0}
-      IsAnimating: 0
-    MotionMode: "\u5217\u8868\u9879\u52A8\u6548"
-    CreateArgs:
-      anchor: 6
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 10
-      Movement:
-        Movement: 2
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 10
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 10
-    RecycleArgs:
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 10
-      Movement:
-        Movement: 2
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 10
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 0
-          m_PostInfinity: 0
-          m_RotationOrder: 0
-        CurveName: 
-        Ease: 10
-    MotionPercentage: 0
-    isFold: 1
-    isEnabled: 1
-  spawn_item_list_world:
-  - SpawnName: Cat
-    Indicator: Indicator_Cat
-    ID: rm54
-    ClearEvents: 0
-    ClearActions: 0
-    Delay_Spawn: 0
-    Delay_Despawn: 0
-    Position: {x: -0.01, y: 1.8199999, z: -0.14999999}
-    Euler: {x: 29.79585, y: 322.7943, z: 350.23633}
-    Offset: {x: 0, y: 0, z: 0}
-    Scale: {x: 1, y: 1, z: 1}
-    Size: {x: 485.6, y: 536.9}
-    Pivot: {x: 0, y: 0}
-    Anchor_Min: {x: 0, y: 0}
-    Anchor_Max: {x: 0, y: 0}
-    AutoIn: "\u81EA\u52A8 In"
-    InMotion: 0
-    Spawned: 0
-    SpawnedElementNode:
-      Indicator: 
-      ModuleName: 
-      ID: 0
-      Element: {fileID: 0}
-      IsAnimating: 0
-    MotionMode: "\u5217\u8868\u9879\u52A8\u6548"
-    CreateArgs:
+  - spawn_name: Scoper
+    element_uid: 476efe06b8b04a96b5e34401469d7007
+    library_name: Lib_A
+    indicator: Indicator_Scoper
+    id: nppe
+    clear_events: 0
+    clear_actions: 0
+    delay_spawn: 0
+    delay_despawn: 0
+    position: {x: 0, y: 0, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    offset: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    size: {x: 480, y: 520}
+    pivot: {x: 0.5, y: 0.5}
+    anchor_min: {x: 0.5, y: 0.5}
+    anchor_max: {x: 0.5, y: 0.5}
+    auto_in: "\u81EA\u52A8 In"
+    in_motion: 0
+    spawned: 0
+    spawned_element_node:
+      indicator: 
+      module_name: 
+      id: 0
+      element: {fileID: 0}
+      is_animating: 0
+    motion_mode: "\u5217\u8868\u9879\u52A8\u6548"
+    motion_create_args:
       anchor: 5
       MotionAnimateEndState: 0
       Alpha:
@@ -1210,48 +1108,9 @@ MonoBehaviour:
         Curve:
           serializedVersion: 2
           m_Curve: []
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        CurveName: 
-        Ease: 10
-      Movement:
-        Movement: 19
-        Distance: 100
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        CurveName: 
-        Ease: 10
-      Rotation:
-        Rotation: 0
-        Degree: 0
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        CurveName: 
-        Ease: 10
-    RecycleArgs:
-      MotionAnimateEndState: 0
-      Alpha:
-        Duration: 1
-        Delay: 0
-        Curve:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
         CurveName: 
         Ease: 10
       Movement:
@@ -1262,9 +1121,9 @@ MonoBehaviour:
         Curve:
           serializedVersion: 2
           m_Curve: []
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
         CurveName: 
         Ease: 10
       Rotation:
@@ -1275,14 +1134,272 @@ MonoBehaviour:
         Curve:
           serializedVersion: 2
           m_Curve: []
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
         CurveName: 
         Ease: 10
-    MotionPercentage: 0
-    isFold: 1
-    isEnabled: 1
+    motion_recycle_args:
+      MotionAnimateEndState: 0
+      Alpha:
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+      Movement:
+        Movement: 2
+        Distance: 100
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+      Rotation:
+        Rotation: 0
+        Degree: 0
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+    motion_percentage: 0
+    is_fold: 1
+    is_enabled: 1
+  - spawn_name: Scoper
+    element_uid: d71a7ca73ed441b5b8a5ec90a0d350cf
+    library_name: Lib_B
+    indicator: Indicator_Scoper
+    id: e7f5
+    clear_events: 0
+    clear_actions: 0
+    delay_spawn: 0
+    delay_despawn: 0
+    position: {x: 624, y: 388.99963, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    offset: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    size: {x: 480, y: 520}
+    pivot: {x: 0.5, y: 0.5}
+    anchor_min: {x: 0.5, y: 0.5}
+    anchor_max: {x: 0.5, y: 0.5}
+    auto_in: "\u81EA\u52A8 In"
+    in_motion: 0
+    spawned: 0
+    spawned_element_node:
+      indicator: 
+      module_name: 
+      id: 0
+      element: {fileID: 0}
+      is_animating: 0
+    motion_mode: "\u5217\u8868\u9879\u52A8\u6548"
+    motion_create_args:
+      anchor: 5
+      MotionAnimateEndState: 0
+      Alpha:
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+      Movement:
+        Movement: 2
+        Distance: 100
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+      Rotation:
+        Rotation: 0
+        Degree: 0
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+    motion_recycle_args:
+      MotionAnimateEndState: 0
+      Alpha:
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+      Movement:
+        Movement: 2
+        Distance: 100
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+      Rotation:
+        Rotation: 0
+        Degree: 0
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+    motion_percentage: 0
+    is_fold: 1
+    is_enabled: 1
+  - spawn_name: Scoper
+    element_uid: 48187d5f539f40e3845bbf8596e9416e
+    library_name: Lib_C
+    indicator: Indicator_Scoper
+    id: babx
+    clear_events: 0
+    clear_actions: 0
+    delay_spawn: 0
+    delay_despawn: 0
+    position: {x: 908, y: -189.00008, z: 0}
+    euler: {x: 0, y: 0, z: 0}
+    offset: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    size: {x: 480, y: 520}
+    pivot: {x: 0.5, y: 0.5}
+    anchor_min: {x: 0.5, y: 0.5}
+    anchor_max: {x: 0.5, y: 0.5}
+    auto_in: "\u81EA\u52A8 In"
+    in_motion: 0
+    spawned: 0
+    spawned_element_node:
+      indicator: 
+      module_name: 
+      id: 0
+      element: {fileID: 0}
+      is_animating: 0
+    motion_mode: "\u5217\u8868\u9879\u52A8\u6548"
+    motion_create_args:
+      anchor: 5
+      MotionAnimateEndState: 0
+      Alpha:
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+      Movement:
+        Movement: 2
+        Distance: 100
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+      Rotation:
+        Rotation: 0
+        Degree: 0
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+    motion_recycle_args:
+      MotionAnimateEndState: 0
+      Alpha:
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+      Movement:
+        Movement: 2
+        Distance: 100
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+      Rotation:
+        Rotation: 0
+        Degree: 0
+        Duration: 1
+        Delay: 0
+        Curve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        CurveName: 
+        Ease: 10
+    motion_percentage: 0
+    is_fold: 1
+    is_enabled: 1
+  spawn_item_list_world: []
   spawner_indicator: 
   motion_create_args:
     anchor: 5
@@ -1377,9 +1494,9 @@ MonoBehaviour:
   _spawner_is_running: 0
   fold_state: 0
   fold_option: 0
-  fold_param: 0
+  fold_param: 1
   fold_screen: 0
-  fold_world: 0
+  fold_world: 1
   fold_motion: 1
   fold_libselector: 0
   fold_based: 1
@@ -1721,7 +1838,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!224 &1172745807
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2070,7 +2187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8826b5e8635bbc140b99f14edc55d272, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target_library_name: NewElementsLibrary
+  target_library_name: Lib_Element
   target_spawn_name: Cat
   target_spawn_indicator: Indicator_Cat
   spawner_indicator: 

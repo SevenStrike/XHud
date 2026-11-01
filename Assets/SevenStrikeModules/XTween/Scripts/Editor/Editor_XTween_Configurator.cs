@@ -341,7 +341,7 @@ namespace SevenStrikeModules.XTween.Editor
 
         private void OnDisable()
         {
-            // ✅ 销毁临时对象
+            //  销毁临时对象
             if (Config != null)
             {
                 DestroyImmediate(Config, true);
@@ -370,11 +370,7 @@ namespace SevenStrikeModules.XTween.Editor
                 border: new RectOffset(0, 0, 0, 0),
                 color: Color.white);
 
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             // 大标题
             Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
@@ -383,7 +379,7 @@ namespace SevenStrikeModules.XTween.Editor
                 text: new GUIContent("XTween 配置面板"),
                 text_color: Color.white,
                 size: XGUIFontSize.L,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 font: XGUI.GetFont("xg-heavy"));
 
             // 分割线
@@ -402,7 +398,7 @@ namespace SevenStrikeModules.XTween.Editor
                 text: new GUIContent("此面板可管理XTween的外观以及配置参数！"),
                 text_color: Color.white * 0.7f,
                 size: XGUIFontSize.M,
-                clipping: clipping);
+                clipping: clipping_ellipsis);
             #endregion
 
             Event ce = Event.current;
@@ -852,7 +848,7 @@ namespace SevenStrikeModules.XTween.Editor
         /// </summary>
         private void SaveConfig()
         {
-            // ✅ 更安全的方式
+            //  更安全的方式
             var original = XTween_Dashboard.GetXTweenConfig();
             if (original != null)
             {

@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f37a79528fd6b243945098c5e1d4982, type: 3}
+  m_Name: Lib_B
+  m_EditorClassIdentifier: 
+  library_name: Lib_B
+  library_root: {fileID: 0}
+  library_elements:
+  - element_uid: 33365e4b859746fe80206cdc69ffa9d9
+    name: XHudIcon
+    initialize_count: 2
+    used_count: 0
+    recycled_count: 0
+    next_index: 0
+    root: {fileID: 0}
+    target: {fileID: 2484565434626366029, guid: 54cb949a8cef5ca44a27602c14cb9919, type: 3}
+    preload_elements: []
+  - element_uid: 97d47f1b1e5146b68647475e4951c922
+    name: Scope
+    initialize_count: 2
+    used_count: 0
+    recycled_count: 0
+    next_index: 0
+    root: {fileID: 0}
+    target: {fileID: 5955396475993730850, guid: db17f898becf3154da3471122b978bc0, type: 3}
+    preload_elements: []
+  - element_uid: d71a7ca73ed441b5b8a5ec90a0d350cf
+    name: Scoper
+    initialize_count: 2
+    used_count: 0
+    recycled_count: 0
+    next_index: 0
+    root: {fileID: 0}
+    target: {fileID: 7994333697140640106, guid: 3f5fa392ab496054ca62694ae0fd9a77, type: 3}
+    preload_elements: []
+  find: 
+  highlight: 
+  item_height: 50
+  visible_item_count: 9
+  element_info_list_original_scroller: {x: 0, y: 0}
+  selected_index: -1
+  location_selected_index: -1

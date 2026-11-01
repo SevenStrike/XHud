@@ -553,13 +553,7 @@ namespace SevenStrikeModules.XGUI.Editor
             SerializedProperty sp_sub = prop.FindPropertyRelative("SubTitle");
             SerializedProperty sp_msg = prop.FindPropertyRelative("Message");
 
-#if UNITY_6000_0_OR_NEWER
-            // Unity 6+ 使用 Ellipsis
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    // Unity 2021.1 之前使用 Clip
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             // 列表项 - 序号
             if (show_index)
@@ -568,7 +562,7 @@ namespace SevenStrikeModules.XGUI.Editor
                       text: new GUIContent(index.ToString("D2")),
                       text_color: ThemePrimaryColor,
                       size: XGUIFontSize.M,
-                      clipping: clipping,
+                      clipping: clipping_ellipsis,
                       anchor: TextAnchor.MiddleLeft,
                       offset: new Vector2(0, 0),
                       font_style: FontStyle.Normal);
@@ -578,7 +572,7 @@ namespace SevenStrikeModules.XGUI.Editor
                   text: new GUIContent(sp_title.stringValue),
                   text_color: Color.white,
                   size: XGUIFontSize.M,
-                  clipping: clipping,
+                  clipping: clipping_ellipsis,
                   anchor: TextAnchor.MiddleLeft,
                   offset: new Vector2(0, 0),
                   font_style: FontStyle.Normal);
@@ -588,7 +582,7 @@ namespace SevenStrikeModules.XGUI.Editor
                   text: new GUIContent(sp_sub.stringValue),
                   text_color: Color.white * 0.7f,
                   size: XGUIFontSize.M,
-                  clipping: clipping,
+                  clipping: clipping_ellipsis,
                   anchor: TextAnchor.MiddleCenter,
                   offset: new Vector2(0, 0),
                   font_style: FontStyle.Normal);
@@ -598,7 +592,7 @@ namespace SevenStrikeModules.XGUI.Editor
                   text: new GUIContent(sp_msg.stringValue),
                   text_color: ThemePrimaryColor,
                   size: XGUIFontSize.M,
-                  clipping: clipping,
+                  clipping: clipping_ellipsis,
                   anchor: TextAnchor.MiddleRight,
                   offset: new Vector2(0, 0),
                   font_style: FontStyle.Normal);

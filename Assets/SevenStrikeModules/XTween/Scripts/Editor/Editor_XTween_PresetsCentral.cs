@@ -323,11 +323,7 @@ namespace SevenStrikeModules.XTween.Editor
                 color: Color.white);
             #endregion
 
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             #region 大标题
             Rect rect_title = new Rect(rect.x + 78, rect.y + 10, rect.width - 80, 30);
@@ -336,7 +332,7 @@ namespace SevenStrikeModules.XTween.Editor
                 text: new GUIContent("XTween 预设中心"),
                 text_color: Color.white,
                 size: XGUIFontSize.L,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 font: XGUI.GetFont("xg-heavy"));
             #endregion
 
@@ -856,20 +852,15 @@ namespace SevenStrikeModules.XTween.Editor
                     else
                         rect_title = new Rect(itemRect.x + dis, itemRect.y + 5, itemRect.width / 2, 25);
 
-#if UNITY_6000_0_OR_NEWER
-                // Unity 6+ 使用 Ellipsis
-                TextClipping clipping = TextClipping.Ellipsis;
-#else
-            // Unity 2021.1 之前使用 Clip
-            TextClipping clipping = TextClipping.Clip;
-#endif
+                TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
+
                 XGUI.gui_label(
                     rect: rect_title,
                     text: new GUIContent(pret.preset.Name),
                     text_color: Color.white,
                     size: XGUIFontSize.BX,
                     anchor: TextAnchor.MiddleLeft,
-                    clipping: clipping,
+                    clipping: clipping_ellipsis,
                     font: XGUI.GetFont("xg-medium"));
 
                 // 绘制解释
@@ -888,7 +879,7 @@ namespace SevenStrikeModules.XTween.Editor
                     text_color: Color.white * 0.75f,
                     size: XGUIFontSize.B,
                     anchor: TextAnchor.MiddleLeft,
-                    clipping: clipping,
+                    clipping: clipping_ellipsis,
                     font: XGUI.GetFont("xg-regular"));
                 #endregion
 
@@ -1035,13 +1026,7 @@ namespace SevenStrikeModules.XTween.Editor
                 return;
             }
 
-#if UNITY_6000_0_OR_NEWER
-            // Unity 6+ 使用 Ellipsis
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-            // Unity 2021.1 之前使用 Clip
-            TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             #region 名称
             Rect rect_pre_name = new Rect(rect_info.x + left_margin, rect_info.y + 12, rect_info.width - 40, 30);
@@ -1064,7 +1049,7 @@ namespace SevenStrikeModules.XTween.Editor
                text_color: Color.white,
                wrap: true,
                size: XGUIFontSize.M,
-               clipping: clipping,
+               clipping: clipping_ellipsis,
                anchor: TextAnchor.UpperLeft,
                font_style: FontStyle.Normal,
                font: XGUI.GetFont("xg-regular"));
@@ -2850,7 +2835,7 @@ namespace SevenStrikeModules.XTween.Editor
                         // 从json中移除
                         XTween_PresetManager.preset_Container_DeletePreset(pre_type, pre_name);
 
-                        // ✅ 重新加载当前类型的预设列表
+                        //  重新加载当前类型的预设列表
                         if (!isFavouriteMode)
                         {
                             XTweenPresetContainer container = XTween_PresetManager.preset_Container_Load(pre_type);

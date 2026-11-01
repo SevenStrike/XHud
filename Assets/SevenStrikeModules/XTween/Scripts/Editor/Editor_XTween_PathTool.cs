@@ -422,20 +422,14 @@ namespace SevenStrikeModules.XTween.Editor
                     SerializedProperty sp_root = sp_PathPoints.GetArrayElementAtIndex(index);
                     if (sp_root != null)
                     {
-#if UNITY_6000_0_OR_NEWER
-                        // Unity 6+ 使用 Ellipsis
-                        TextClipping clipping = TextClipping.Ellipsis;
-#else
-    // Unity 2021.1 之前使用 Clip
-    TextClipping clipping = TextClipping.Clip;
-#endif
+                        TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
                         XGUI.gui_label(
                             rect: new Rect(rect.x + 25, titleheight - 3.5f, (rect.width * 0.45f) - 20, LineHeight),
                             text: new GUIContent($"#  路径点 {index.ToString()}"),
                             text_color: Color.white,
                             size: XGUIFontSize.M,
-                            clipping: clipping,
+                            clipping: clipping_ellipsis,
                             anchor: TextAnchor.MiddleLeft,
                             offset: new Vector2(0, 0),
                             font_style: FontStyle.Bold,
@@ -461,37 +455,37 @@ namespace SevenStrikeModules.XTween.Editor
                         DrawPointInfo(
                             rect: new Rect(rect.x + 5, titleheight + 20, rect.width - 15, 19),
                             info: $"<color={hexcol}> -   Relative   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_relative.vector3Value) + "</color>",
-                            clipping: clipping);
+                            clipping: clipping_ellipsis);
 
                         DrawPointInfo(
                             rect: new Rect(rect.x + 5, titleheight + 40, rect.width - 15, 19),
                             info: $"<color=#c2c2c2> -   World   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_world.vector3Value) + "</color>",
-                            clipping: clipping);
+                            clipping: clipping_ellipsis);
 
                         DrawPointInfo(
                             rect: new Rect(rect.x + 5, titleheight + 60, rect.width - 15, 19),
                             info: $"<color={hexcol}> -   Anchored   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_anchored.vector3Value) + "</color>",
-                            clipping: clipping);
+                            clipping: clipping_ellipsis);
 
                         DrawPointInfo(
                             rect: new Rect(rect.x + 5, titleheight + 80, rect.width - 15, 19),
                             info: $"<color=#c2c2c2> -   Bezier_In   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_bezier_in.vector3Value) + "</color>",
-                            clipping: clipping);
+                            clipping: clipping_ellipsis);
 
                         DrawPointInfo(
                             rect: new Rect(rect.x + 5, titleheight + 100, rect.width - 15, 19),
                             info: $"<color={hexcol}> -   Bezier_Out   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_bezier_out.vector3Value) + "</color>",
-                            clipping: clipping);
+                            clipping: clipping_ellipsis);
 
                         DrawPointInfo(
                             rect: new Rect(rect.x + 5, titleheight + 120, rect.width - 15, 19),
                             info: $"<color=#c2c2c2> -   BezierWorld_In   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_bezier_in_world.vector3Value) + "</color>",
-                            clipping: clipping);
+                            clipping: clipping_ellipsis);
 
                         DrawPointInfo(
                             rect: new Rect(rect.x + 5, titleheight + 140, rect.width - 15, 19),
                             info: $"<color={hexcol}> -   BezierWorld_Out   :   </color><color=#c2c2c2>" + XGUI_Utilitys.Vector3_To_String(sp_bezier_out_world.vector3Value) + "</color>",
-                            clipping: clipping);
+                            clipping: clipping_ellipsis);
                         #endregion
                     }
                 },

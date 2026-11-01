@@ -433,7 +433,7 @@ namespace SevenStrikeModules.XHud
                 {
                     for (int s = 0; s < XHud_Manager.instance.cv_anchors_layout_screen[i].HudElementInfos.Count; s++)
                     {
-                        if (this.ID == XHud_Manager.instance.cv_anchors_layout_screen[i].HudElementInfos[s].ID)
+                        if (this.ID == XHud_Manager.instance.cv_anchors_layout_screen[i].HudElementInfos[s].id)
                             XHud_Manager.instance.cv_anchors_layout_screen[i].HudElementInfos.RemoveAt(s);
                     }
                 }

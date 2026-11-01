@@ -308,7 +308,7 @@ namespace SevenStrikeModules.XHud
             List<int> ids = new List<int>();
             for (int i = 0; i < ElementNodes.Length; i++)
             {
-                ids.Add(ElementNodes[i].ID);
+                ids.Add(ElementNodes[i].id);
             }
 
             int ran_id = Random.Range(1111, 9999);

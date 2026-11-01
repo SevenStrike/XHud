@@ -1351,13 +1351,13 @@ namespace SevenStrikeModules.XHud.Editor
                             {
                                 if (target_layout_spawner_space == XHudSpace.屏幕空间)
                                 {
-                                    layout_spawner.spawn_item_list_screen[target_layout_spawner_listindex].CreateArgs = motion_create_args.Clone();
-                                    layout_spawner.spawn_item_list_screen[target_layout_spawner_listindex].RecycleArgs = motion_recycle_args.Clone();
+                                    layout_spawner.spawn_item_list_screen[target_layout_spawner_listindex].motion_create_args = motion_create_args.Clone();
+                                    layout_spawner.spawn_item_list_screen[target_layout_spawner_listindex].motion_recycle_args = motion_recycle_args.Clone();
                                 }
                                 else
                                 {
-                                    layout_spawner.spawn_item_list_world[target_layout_spawner_listindex].CreateArgs = motion_create_args.Clone();
-                                    layout_spawner.spawn_item_list_world[target_layout_spawner_listindex].RecycleArgs = motion_recycle_args.Clone();
+                                    layout_spawner.spawn_item_list_world[target_layout_spawner_listindex].motion_create_args = motion_create_args.Clone();
+                                    layout_spawner.spawn_item_list_world[target_layout_spawner_listindex].motion_recycle_args = motion_recycle_args.Clone();
                                 }
                             }
                             EditorUtility.SetDirty(layout_spawner);

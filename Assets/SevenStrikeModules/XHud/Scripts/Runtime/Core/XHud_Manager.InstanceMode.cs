@@ -48,7 +48,7 @@ namespace SevenStrikeModules.XHud
             {
                 if (_instance == null)
                 {
-                    XGUI_Utilitys.Console("XHud - 管理器通知", "HudManager 还没有被实例化！", XGUIMsgState.确认);
+                    //XGUI_Utilitys.Console("XHud - 管理器通知", "HudManager 还没有被实例化！", XGUIMsgState.确认);
                 }
                 return _instance;
             }

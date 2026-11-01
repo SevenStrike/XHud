@@ -20,9 +20,12 @@
  */
 namespace SevenStrikeModules.XHud.Editor
 {
+    using SevenStrikeModules.XGUI.Editor;
+    using SevenStrikeModules.XGUI.Runtime;
+    using SevenStrikeModules.XHud.Enums;
+    using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
-    using System.Collections.Generic;
 
     /// <summary>
     /// 预制体创建监听器
@@ -79,6 +82,8 @@ namespace SevenStrikeModules.XHud.Editor
             // 记录待处理的预制体
             pending_prefabs[assetPath] = Time.realtimeSinceStartup;
 
+
+
             // 触发创建事件
             on_prefab_created?.Invoke(assetPath);
         }
@@ -128,7 +133,29 @@ namespace SevenStrikeModules.XHud.Editor
                     return;
                 }
 
-                Debug.Log($"[XHUD] 预制体已就绪: {assetPath}");
+                XHud_Module_Element ele = prefab.GetComponent<XHud_Module_Element>();
+                if (ele != null)
+                {
+                    XGUI.dialog(
+                          type: XGUIDialogType.帮助,
+                          windowtitle: "XHud - 元素生成器消息",
+                          title: "推送元素入库",
+                          msg: $"检测到您创建了元素预制体\" {ele.transform.name}{(string.IsNullOrEmpty(ele.indicator) ? "" : $" ( {ele.indicator} )")} \"，是否立即将其推送至元素库？",
+                          ok: "推送",
+                          cancel: "暂不",
+                          PrimaryIndex: 0,
+                          usemodal: true,
+                          themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
+                          on_selected: (d) =>
+                          {
+                              if (d == "推送")
+                              {
+
+                              }
+                          });
+
+                    Debug.Log($"[XHUD] 预制体已创建: {assetPath}");
+                }
 
                 // 触发就绪事件
                 on_prefab_ready?.Invoke(prefab);

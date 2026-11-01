@@ -138,11 +138,7 @@ namespace SevenStrikeModules.XTween.Editor
                 border: new RectOffset(0, 0, 0, 0),
                 color: Color.white);
 
-#if UNITY_6000_0_OR_NEWER
-            TextClipping clipping = TextClipping.Ellipsis;
-#else
-    TextClipping clipping = TextClipping.Clip;
-#endif
+            TextClipping clipping_ellipsis = XGUI.TryEllipsisClipping();
 
             // 大标题
             Rect rect_title = new Rect(rect.x + 70, rect.y + 10, rect.width - 80, 30);
@@ -151,7 +147,7 @@ namespace SevenStrikeModules.XTween.Editor
                 text: new GUIContent("XTween 动画池分析仪"),
                 text_color: Color.white,
                 size: XGUIFontSize.L,
-                clipping: clipping,
+                clipping: clipping_ellipsis,
                 font: XGUI.GetFont("xg-heavy"));
 
             // 分割线
@@ -170,7 +166,7 @@ namespace SevenStrikeModules.XTween.Editor
                 text: new GUIContent("此面板可监控并管理XTween动画池的使用状态以及参数！"),
                 text_color: Color.white * 0.7f,
                 size: XGUIFontSize.M,
-                clipping: clipping);
+                clipping: clipping_ellipsis);
             #endregion
 
             CollectPoolData();

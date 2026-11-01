@@ -132,7 +132,7 @@ public class editor_demo_scale_machine : editor_demo_base
         // 如果在运行
         if (Application.isPlaying)
         {
-            demo_base.Tween_Kill();
+            base_script.Tween_Kill();
         }
         //如果没运行
         else
