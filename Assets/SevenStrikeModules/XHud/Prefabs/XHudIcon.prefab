@@ -53,24 +53,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 5g84
-  Indicator: 
-  IsInitial: 0
-  ModuleType: 0
-  mod_CanvasGroup: {fileID: 0}
-  mod_Rect: {fileID: 8286591565222436596}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 0}
-  mod_RawImage: {fileID: 0}
-  mod_HudButton: {fileID: 0}
-  Debug: 0
+  id: 
+  indicator: 
+  is_initial: 0
+  module_type: 0
+  mod_canvas_group: {fileID: 0}
+  mod_rect: {fileID: 0}
+  mod_tmp_text: {fileID: 0}
+  mod_text: {fileID: 0}
+  mod_image: {fileID: 0}
+  mod_raw_image: {fileID: 0}
+  mod_hud_button: {fileID: 0}
+  debug: 0
   fold_param: 1
   fold_option: 1
   fold_based: 1
-  pt_Painting: {fileID: 0}
-  pt_Feature: {fileID: 0}
-  pt_Tween: {fileID: 0}
+  pt_painting: {fileID: 0}
+  pt_feature: {fileID: 0}
+  pt_tween: {fileID: 0}
 --- !u!1 &361977510357631113
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,24 +421,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: oazu
-  Indicator: 
-  IsInitial: 0
-  ModuleType: 0
-  mod_CanvasGroup: {fileID: 0}
-  mod_Rect: {fileID: 5420441563924274871}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 0}
-  mod_RawImage: {fileID: 0}
-  mod_HudButton: {fileID: 0}
-  Debug: 0
+  id: 
+  indicator: 
+  is_initial: 0
+  module_type: 0
+  mod_canvas_group: {fileID: 0}
+  mod_rect: {fileID: 0}
+  mod_tmp_text: {fileID: 0}
+  mod_text: {fileID: 0}
+  mod_image: {fileID: 0}
+  mod_raw_image: {fileID: 0}
+  mod_hud_button: {fileID: 0}
+  debug: 0
   fold_param: 1
   fold_option: 1
   fold_based: 1
-  pt_Painting: {fileID: 0}
-  pt_Feature: {fileID: 0}
-  pt_Tween: {fileID: 0}
+  pt_painting: {fileID: 0}
+  pt_feature: {fileID: 0}
+  pt_tween: {fileID: 0}
 --- !u!1 &852573081020667472
 GameObject:
   m_ObjectHideFlags: 0
@@ -1165,24 +1165,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: kwz0
-  Indicator: 
-  IsInitial: 0
-  ModuleType: 0
-  mod_CanvasGroup: {fileID: 0}
-  mod_Rect: {fileID: 5948074807685539882}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 0}
-  mod_RawImage: {fileID: 0}
-  mod_HudButton: {fileID: 0}
-  Debug: 0
+  id: 
+  indicator: 
+  is_initial: 0
+  module_type: 0
+  mod_canvas_group: {fileID: 0}
+  mod_rect: {fileID: 0}
+  mod_tmp_text: {fileID: 0}
+  mod_text: {fileID: 0}
+  mod_image: {fileID: 0}
+  mod_raw_image: {fileID: 0}
+  mod_hud_button: {fileID: 0}
+  debug: 0
   fold_param: 1
   fold_option: 1
   fold_based: 1
-  pt_Painting: {fileID: 0}
-  pt_Feature: {fileID: 0}
-  pt_Tween: {fileID: 0}
+  pt_painting: {fileID: 0}
+  pt_feature: {fileID: 0}
+  pt_tween: {fileID: 0}
 --- !u!1 &2317113644006193741
 GameObject:
   m_ObjectHideFlags: 0
@@ -1539,24 +1539,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 9ctv
-  Indicator: 
-  IsInitial: 0
-  ModuleType: 0
-  mod_CanvasGroup: {fileID: 0}
-  mod_Rect: {fileID: 0}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 0}
-  mod_RawImage: {fileID: 0}
-  mod_HudButton: {fileID: 0}
-  Debug: 0
+  id: 
+  indicator: 
+  is_initial: 0
+  module_type: 0
+  mod_canvas_group: {fileID: 0}
+  mod_rect: {fileID: 0}
+  mod_tmp_text: {fileID: 0}
+  mod_text: {fileID: 0}
+  mod_image: {fileID: 0}
+  mod_raw_image: {fileID: 0}
+  mod_hud_button: {fileID: 0}
+  debug: 0
   fold_param: 1
   fold_option: 1
   fold_based: 1
-  pt_Painting: {fileID: 0}
-  pt_Feature: {fileID: 0}
-  pt_Tween: {fileID: 0}
+  pt_painting: {fileID: 0}
+  pt_feature: {fileID: 0}
+  pt_tween: {fileID: 0}
 --- !u!1 &2794305734805400380
 GameObject:
   m_ObjectHideFlags: 0
@@ -2213,24 +2213,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: f4ro
-  Indicator: 
-  IsInitial: 0
-  ModuleType: 0
-  mod_CanvasGroup: {fileID: 0}
-  mod_Rect: {fileID: 8286202808063678801}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 0}
-  mod_RawImage: {fileID: 0}
-  mod_HudButton: {fileID: 0}
-  Debug: 0
+  id: 
+  indicator: 
+  is_initial: 0
+  module_type: 0
+  mod_canvas_group: {fileID: 0}
+  mod_rect: {fileID: 0}
+  mod_tmp_text: {fileID: 0}
+  mod_text: {fileID: 0}
+  mod_image: {fileID: 0}
+  mod_raw_image: {fileID: 0}
+  mod_hud_button: {fileID: 0}
+  debug: 0
   fold_param: 1
   fold_option: 1
   fold_based: 1
-  pt_Painting: {fileID: 0}
-  pt_Feature: {fileID: 0}
-  pt_Tween: {fileID: 0}
+  pt_painting: {fileID: 0}
+  pt_feature: {fileID: 0}
+  pt_tween: {fileID: 0}
 --- !u!1 &3590263275242094308
 GameObject:
   m_ObjectHideFlags: 0
@@ -2660,24 +2660,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: xcpk
-  Indicator: 
-  IsInitial: 0
-  ModuleType: 0
-  mod_CanvasGroup: {fileID: 0}
-  mod_Rect: {fileID: 8300517935633839599}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 0}
-  mod_RawImage: {fileID: 0}
-  mod_HudButton: {fileID: 0}
-  Debug: 0
+  id: 
+  indicator: 
+  is_initial: 0
+  module_type: 0
+  mod_canvas_group: {fileID: 0}
+  mod_rect: {fileID: 0}
+  mod_tmp_text: {fileID: 0}
+  mod_text: {fileID: 0}
+  mod_image: {fileID: 0}
+  mod_raw_image: {fileID: 0}
+  mod_hud_button: {fileID: 0}
+  debug: 0
   fold_param: 1
   fold_option: 1
   fold_based: 1
-  pt_Painting: {fileID: 0}
-  pt_Feature: {fileID: 0}
-  pt_Tween: {fileID: 0}
+  pt_painting: {fileID: 0}
+  pt_feature: {fileID: 0}
+  pt_tween: {fileID: 0}
 --- !u!1 &3854005670423367335
 GameObject:
   m_ObjectHideFlags: 0
@@ -3033,24 +3033,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: t6rh
-  Indicator: 
-  IsInitial: 0
-  ModuleType: 0
-  mod_CanvasGroup: {fileID: 0}
-  mod_Rect: {fileID: 8254474862350728010}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 0}
-  mod_RawImage: {fileID: 0}
-  mod_HudButton: {fileID: 0}
-  Debug: 0
+  id: 
+  indicator: 
+  is_initial: 0
+  module_type: 0
+  mod_canvas_group: {fileID: 0}
+  mod_rect: {fileID: 0}
+  mod_tmp_text: {fileID: 0}
+  mod_text: {fileID: 0}
+  mod_image: {fileID: 0}
+  mod_raw_image: {fileID: 0}
+  mod_hud_button: {fileID: 0}
+  debug: 0
   fold_param: 1
   fold_option: 1
   fold_based: 1
-  pt_Painting: {fileID: 0}
-  pt_Feature: {fileID: 0}
-  pt_Tween: {fileID: 0}
+  pt_painting: {fileID: 0}
+  pt_feature: {fileID: 0}
+  pt_tween: {fileID: 0}
 --- !u!1 &4246158332709641285
 GameObject:
   m_ObjectHideFlags: 0
@@ -3103,24 +3103,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: bxpv
-  Indicator: 
-  IsInitial: 0
-  ModuleType: 0
-  mod_CanvasGroup: {fileID: 0}
-  mod_Rect: {fileID: 0}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 0}
-  mod_RawImage: {fileID: 0}
-  mod_HudButton: {fileID: 0}
-  Debug: 0
+  id: 
+  indicator: 
+  is_initial: 0
+  module_type: 0
+  mod_canvas_group: {fileID: 0}
+  mod_rect: {fileID: 0}
+  mod_tmp_text: {fileID: 0}
+  mod_text: {fileID: 0}
+  mod_image: {fileID: 0}
+  mod_raw_image: {fileID: 0}
+  mod_hud_button: {fileID: 0}
+  debug: 0
   fold_param: 1
   fold_option: 1
   fold_based: 1
-  pt_Painting: {fileID: 0}
-  pt_Feature: {fileID: 0}
-  pt_Tween: {fileID: 0}
+  pt_painting: {fileID: 0}
+  pt_feature: {fileID: 0}
+  pt_tween: {fileID: 0}
 --- !u!1 &4602436938852828969
 GameObject:
   m_ObjectHideFlags: 0
@@ -3475,24 +3475,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: xb7b
-  Indicator: 
-  IsInitial: 0
-  ModuleType: 0
-  mod_CanvasGroup: {fileID: 0}
-  mod_Rect: {fileID: 0}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 0}
-  mod_RawImage: {fileID: 0}
-  mod_HudButton: {fileID: 0}
-  Debug: 0
+  id: 
+  indicator: 
+  is_initial: 0
+  module_type: 0
+  mod_canvas_group: {fileID: 0}
+  mod_rect: {fileID: 0}
+  mod_tmp_text: {fileID: 0}
+  mod_text: {fileID: 0}
+  mod_image: {fileID: 0}
+  mod_raw_image: {fileID: 0}
+  mod_hud_button: {fileID: 0}
+  debug: 0
   fold_param: 1
   fold_option: 1
   fold_based: 1
-  pt_Painting: {fileID: 0}
-  pt_Feature: {fileID: 0}
-  pt_Tween: {fileID: 0}
+  pt_painting: {fileID: 0}
+  pt_feature: {fileID: 0}
+  pt_tween: {fileID: 0}
 --- !u!1 &5351661698999678641
 GameObject:
   m_ObjectHideFlags: 0
@@ -4143,24 +4143,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: yxkn
-  Indicator: 
-  IsInitial: 0
-  ModuleType: 0
-  mod_CanvasGroup: {fileID: 0}
-  mod_Rect: {fileID: 0}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 0}
-  mod_RawImage: {fileID: 0}
-  mod_HudButton: {fileID: 0}
-  Debug: 0
+  id: 
+  indicator: 
+  is_initial: 0
+  module_type: 0
+  mod_canvas_group: {fileID: 0}
+  mod_rect: {fileID: 0}
+  mod_tmp_text: {fileID: 0}
+  mod_text: {fileID: 0}
+  mod_image: {fileID: 0}
+  mod_raw_image: {fileID: 0}
+  mod_hud_button: {fileID: 0}
+  debug: 0
   fold_param: 1
   fold_option: 1
   fold_based: 1
-  pt_Painting: {fileID: 0}
-  pt_Feature: {fileID: 0}
-  pt_Tween: {fileID: 0}
+  pt_painting: {fileID: 0}
+  pt_feature: {fileID: 0}
+  pt_tween: {fileID: 0}
 --- !u!1 &7203690108418458278
 GameObject:
   m_ObjectHideFlags: 0
@@ -4437,24 +4437,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a7baee229fe946a876d3c30467f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 2hn4
-  Indicator: 
-  IsInitial: 0
-  ModuleType: 0
-  mod_CanvasGroup: {fileID: 0}
-  mod_Rect: {fileID: 6970552637656029610}
-  mod_TmpText: {fileID: 0}
-  mod_Text: {fileID: 0}
-  mod_Image: {fileID: 0}
-  mod_RawImage: {fileID: 0}
-  mod_HudButton: {fileID: 0}
-  Debug: 0
+  id: 
+  indicator: 
+  is_initial: 0
+  module_type: 0
+  mod_canvas_group: {fileID: 0}
+  mod_rect: {fileID: 0}
+  mod_tmp_text: {fileID: 0}
+  mod_text: {fileID: 0}
+  mod_image: {fileID: 0}
+  mod_raw_image: {fileID: 0}
+  mod_hud_button: {fileID: 0}
+  debug: 0
   fold_param: 1
   fold_option: 1
   fold_based: 1
-  pt_Painting: {fileID: 0}
-  pt_Feature: {fileID: 0}
-  pt_Tween: {fileID: 0}
+  pt_painting: {fileID: 0}
+  pt_feature: {fileID: 0}
+  pt_tween: {fileID: 0}
 --- !u!1 &7928141175527030714
 GameObject:
   m_ObjectHideFlags: 0

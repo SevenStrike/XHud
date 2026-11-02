@@ -752,7 +752,7 @@ namespace SevenStrikeModules.XHud.Editor
                         XHud_LibraryArg_Element_Item newItem = new XHud_LibraryArg_Element_Item();
                         newItem.target = currentElement;
                         newItem.name = currentElement.transform.name;
-                        newItem.initialize_count = 1;
+                        newItem.initialize_count = 2;
                         newItem.used_count = 0;
                         newItem.recycled_count = 0;
                         newItem.next_index = 0;
@@ -770,7 +770,7 @@ namespace SevenStrikeModules.XHud.Editor
                 else
                 {
                     //  5. 引用不相等，视为新元素，直接新增（库层会分配新 UID）
-                    target_library.ElementsLibrary_Add(currentElement, 1);
+                    target_library.ElementsLibrary_Add(currentElement, 2);
 
                     item.Title = currentElement.transform.name;
                     item.SubTitle = "新增元素到库";
