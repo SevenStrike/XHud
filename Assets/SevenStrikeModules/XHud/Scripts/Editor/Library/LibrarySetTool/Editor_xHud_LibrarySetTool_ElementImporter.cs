@@ -206,21 +206,40 @@ namespace SevenStrikeModules.XHud.Editor
                 return false;
             }
         }
+
         /// <summary>
-        /// 打开元素库添加器窗口。
-        /// <para/>
-        /// 执行流程：
-        /// <list type="number">
-        /// <item><description>校验 XHud 管理器与元素库是否配置；</description></item>
-        /// <item><description>收集所有选中对象上的 <see cref="XHud_Module_Element"/>；</description></item>
-        /// <item><description>打开并初始化添加器窗口。</description></item>
-        /// </list>
+        /// 打开元素库添加器窗口（右键菜单入口）。
         /// </summary>
         [MenuItem("Assets/XHud/SendToElementLibrary (将元素预制体添加到元素库)", priority = 3000)]
         private static void OpenElementLibrarySetter()
         {
-            XHud_Manager mgr = XHud_Dashboard.get_manager();
+            Transform[] sel_ele_objs = Selection.GetTransforms(SelectionMode.Unfiltered);
 
+            List<XHud_Module_Element> hudElements = new List<XHud_Module_Element>();
+            for (int i = 0; i < sel_ele_objs.Length; i++)
+            {
+                XHud_Module_Element sel_ele = sel_ele_objs[i].GetComponent<XHud_Module_Element>();
+                if (sel_ele != null) // 加上判空，避免往列表塞 null
+                    hudElements.Add(sel_ele);
+            }
+
+            // 调用公共方法
+            OpenWithElements(hudElements);
+        }
+
+        /// <summary>
+        /// 【新增】通过指定元素列表打开元素库添加器窗口。
+        /// <para/>
+        /// 供外部（如预制体创建监听器）在拿到元素引用后直接调用，不依赖 Selection 状态。
+        /// </summary>
+        /// <param name="elements">要入库的元素组件列表</param>
+        /// <returns>成功打开返回 true</returns>
+        public static bool OpenWithElements(List<XHud_Module_Element> elements)
+        {
+            if (elements == null || elements.Count == 0)
+                return false;
+
+            XHud_Manager mgr = XHud_Dashboard.get_manager();
             if (mgr == null)
             {
                 XGUI.dialog(
@@ -231,30 +250,20 @@ namespace SevenStrikeModules.XHud.Editor
                     ok: "明白",
                     PrimaryIndex: 0,
                     themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
-                return;
+                return false;
             }
-            Transform[] sel_ele_objs = Selection.GetTransforms(SelectionMode.Unfiltered);
 
-            List<XHud_Module_Element> Hud_Elements = new List<XHud_Module_Element>();
-
-            for (int i = 0; i < sel_ele_objs.Length; i++)
+            if (mgr.hm_ElementLibrary_GetCount() <= 0)
             {
-                XHud_Module_Element sel_ele = sel_ele_objs[i].GetComponent<XHud_Module_Element>();
-
-                if (mgr.hm_ElementLibrary_GetCount() <= 0)
-                {
-                    XGUI.dialog(
-                        type: XGUIDialogType.通知,
-                        windowtitle: "XHud - 元素库添加器消息",
-                        title: "元素库未配置",
-                        msg: "您未在HudManager中配置元素库！请先至少指定一个元素库后再执行此操作！ ",
-                        ok: "明白",
-                        PrimaryIndex: 0,
-                        themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
-                    return;
-                }
-
-                Hud_Elements.Add(sel_ele);
+                XGUI.dialog(
+                    type: XGUIDialogType.通知,
+                    windowtitle: "XHud - 元素库添加器消息",
+                    title: "元素库未配置",
+                    msg: "您未在HudManager中配置元素库！请先至少指定一个元素库后再执行此操作！",
+                    ok: "明白",
+                    PrimaryIndex: 0,
+                    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                return false;
             }
 
             Editor_XHud_LibrarySetTool_ElementImporter window = EditorWindow.GetWindow<Editor_XHud_LibrarySetTool_ElementImporter>(true);
@@ -262,8 +271,9 @@ namespace SevenStrikeModules.XHud.Editor
             XGUI.CenterEditorWindow(new Vector2Int(500, 440), window);
 
             // 将要存入元素库的物体信息发送至窗口
-            window.SetElements(Hud_Elements);
+            window.SetElements(elements);
             window.Show();
+            return true;
         }
         #endregion
 

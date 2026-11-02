@@ -31,7 +31,7 @@ namespace SevenStrikeModules.XHud.Editor
     /// 预制体创建监听器
     /// 封装了通过拖拽创建预制体时的监听功能
     /// </summary>
-    public static class Editor_XHud_PrefabCreationMonitor
+    public static class Editor_XHud_Tool_PrefabCreationMonitor
     {
         // 存储待处理的预制体信息
         private static readonly Dictionary<string, float> pending_prefabs = new Dictionary<string, float>();
@@ -67,7 +67,7 @@ namespace SevenStrikeModules.XHud.Editor
             // 订阅播放模式变化，避免播放时干扰
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
 
-            Debug.Log("[XHUD] 元素预制体创建与覆盖监听器已初始化");
+            XGUI_Utilitys.Console("XHud 元素预制体监听工具消息", "元素预制体创建与覆盖监听器已就绪！", XGUIMsgState.确认);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (!assetPath.EndsWith(".prefab")) return;
 
-            Debug.Log($"[XHUD] 检测到预制体创建: {assetPath}");
+            XGUI_Utilitys.Console("XHud 元素预制体监听工具消息", $"检测到预制体创建: {assetPath}", XGUIMsgState.通知);
 
             // 记录待处理的预制体
             pending_prefabs[assetPath] = Time.realtimeSinceStartup;
@@ -125,44 +125,42 @@ namespace SevenStrikeModules.XHud.Editor
         {
             try
             {
-                // 加载预制体
                 GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
                 if (prefab == null)
                 {
-                    Debug.LogWarning($"[XHUD] 无法加载预制体: {assetPath}");
+                    XGUI_Utilitys.Console("XHud 元素预制体监听工具消息", $"无法加载预制体: {assetPath}", XGUIMsgState.错误);
                     return;
                 }
 
                 XHud_Module_Element ele = prefab.GetComponent<XHud_Module_Element>();
                 if (ele != null)
                 {
-                    XGUI.dialog(
-                          type: XGUIDialogType.帮助,
-                          windowtitle: "XHud - 元素生成器消息",
-                          title: "推送元素入库",
-                          msg: $"检测到您创建了元素预制体\" {ele.transform.name}{(string.IsNullOrEmpty(ele.indicator) ? "" : $" ( {ele.indicator} )")} \"，是否立即将其推送至元素库？",
-                          ok: "推送",
-                          cancel: "暂不",
-                          PrimaryIndex: 0,
-                          usemodal: true,
-                          themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
-                          on_selected: (d) =>
-                          {
-                              if (d == "推送")
-                              {
+                    //XGUI.dialog(
+                    //    type: XGUIDialogType.帮助,
+                    //    windowtitle: "XHud - 元素生成器消息",
+                    //    title: "推送元素入库",
+                    //    msg: $"检测到您创建了元素预制体\" {ele.transform.name}{(string.IsNullOrEmpty(ele.indicator) ? "" : $" ( {ele.indicator} )")} \"，是否立即将其推送至元素库？",
+                    //    ok: "推送",
+                    //    cancel: "暂不",
+                    //    PrimaryIndex: 0,
+                    //    usemodal: true,
+                    //    themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
+                    //    on_selected: (d) =>
+                    //    {
+                    //        if (d == "推送")
+                    //        {
 
-                              }
-                          });
+                    //        }
+                    //    });
 
-                    Debug.Log($"[XHUD] 预制体已创建: {assetPath}");
+                    XGUI_Utilitys.Console("XHud 元素预制体监听工具消息", $"预制体已创建: {assetPath}", XGUIMsgState.确认);
                 }
 
-                // 触发就绪事件
                 on_prefab_ready?.Invoke(prefab);
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"[XHUD] 处理预制体时出错: {assetPath}\n{e}");
+                XGUI_Utilitys.Console("XHud 元素预制体监听工具消息", $"处理预制体时出错: {assetPath}\n{e}", XGUIMsgState.错误);
             }
         }
 
@@ -186,14 +184,14 @@ namespace SevenStrikeModules.XHud.Editor
         {
             if (!assetPath.EndsWith(".prefab"))
             {
-                Debug.LogWarning($"[XHUD] 不是预制体文件: {assetPath}");
+                XGUI_Utilitys.Console("XHud 元素预制体监听工具消息", $"不是预制体文件: {assetPath}", XGUIMsgState.警告);
                 return;
             }
 
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
             if (prefab == null)
             {
-                Debug.LogWarning($"[XHUD] 无法加载预制体: {assetPath}");
+                XGUI_Utilitys.Console("XHud 元素预制体监听工具消息", $"无法加载预制体: {assetPath}", XGUIMsgState.警告);
                 return;
             }
 
@@ -214,7 +212,7 @@ namespace SevenStrikeModules.XHud.Editor
             pending_prefabs.Clear();
             isInitialized = false;
 
-            Debug.Log("[XHUD] 预制体监听器已清理");
+            XGUI_Utilitys.Console("XHud 元素预制体监听工具消息", $"预制体监听器已清理！", XGUIMsgState.警告);
         }
     }
 

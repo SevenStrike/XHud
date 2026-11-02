@@ -852,7 +852,7 @@ namespace SevenStrikeModules.XHud
 
                     if (item.target == null)
                     {
-                        XGUI_Utilitys.Console("XHud - 管理器通知", $"库元素 \" {item.name} \" 的目标预制体 \"已丢失\"，预生成元素过程将  \"跳过\"  此元素！", XGUIMsgState.错误);
+                        XGUI_Utilitys.Console("XHud - 管理器通知", $"库名为：\" {Lib.library_name} \" 的内部元素项  \" {item.name} \" 的目标预制体引用已丢失！预生成元素过程将  \"跳过\"  此元素！", XGUIMsgState.错误);
                         continue;
                     }
 
