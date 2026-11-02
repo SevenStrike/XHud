@@ -35,7 +35,7 @@ namespace SevenStrikeModules.XHud
         ///  ID编号
         /// </summary>
         private int id;
-        public const string editor_serializefield_id = nameof(id);
+        public const string editor_serializedfield_id = nameof(id);
         [SerializeField]
         /// <summary>
         /// ID编号

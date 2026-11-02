@@ -23,7 +23,10 @@ namespace SevenStrikeModules.XHud.Editor
     using SevenStrikeModules.XGUI.Editor;
     using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
+    using SevenStrikeModules.XTween;
+    using SevenStrikeModules.XTween.Editor;
     using System;
+    using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
 
@@ -36,6 +39,14 @@ namespace SevenStrikeModules.XHud.Editor
         /// 当前正在编辑的 XHud_Spawner 实例（单选时的主目标）
         /// </summary>
         private XHud_Spawner base_script;
+        private XHud_Manager hud_manager;
+        #endregion
+
+        #region 字段 - 预览
+        /// <summary>
+        /// 是否正在预览动画
+        /// </summary>
+        private bool is_previewing = false;
         #endregion
 
         #region 序列化属性
@@ -55,6 +66,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// 生成器是否处于生成中状态
         /// </summary>
         private SerializedProperty sp_m_opt_is_spawing;
+        private SerializedProperty sp_m_opt_is_despawing;
         /// <summary>
         /// RMS 布局模式开关
         /// </summary>
@@ -143,6 +155,7 @@ namespace SevenStrikeModules.XHud.Editor
         /// 回收动效库索引名称
         /// </summary>
         private SerializedProperty sp_motion_recycle_library_index_name;
+        private SerializedProperty sp_target_spawn_uid;
         #endregion
 
         #region 选项文字
@@ -197,6 +210,46 @@ namespace SevenStrikeModules.XHud.Editor
         /// 编辑按钮按下图标
         /// </summary>
         private Texture2D edit_p;
+        /// <summary>
+        /// 预览入场按钮常态图标
+        /// </summary>
+        private Texture2D icon_preview_in_r;
+        /// <summary>
+        /// 预览入场按钮按下图标
+        /// </summary>
+        private Texture2D icon_preview_in_p;
+        /// <summary>
+        /// 预览出场按钮常态图标
+        /// </summary>
+        private Texture2D icon_preview_out_r;
+        /// <summary>
+        /// 预览出场按钮按下图标
+        /// </summary>
+        private Texture2D icon_preview_out_p;
+        /// <summary>
+        /// 停止预览按钮常态图标
+        /// </summary>
+        private Texture2D icon_stoppreview_r;
+        /// <summary>
+        /// 停止预览按钮按下图标
+        /// </summary>
+        private Texture2D icon_stoppreview_p;
+        /// <summary>
+        /// 加载按钮常态图标
+        /// </summary>
+        private Texture2D icon_load_r;
+        /// <summary>
+        /// 加载按钮按下图标
+        /// </summary>
+        private Texture2D icon_load_p;
+        /// <summary>
+        /// 卸载按钮常态图标
+        /// </summary>
+        private Texture2D icon_unload_r;
+        /// <summary>
+        /// 卸载按钮按下图标
+        /// </summary>
+        private Texture2D icon_unload_p;
         #endregion
 
         #region 批量化操作
@@ -253,6 +306,8 @@ namespace SevenStrikeModules.XHud.Editor
         {
             base_script = (XHud_Spawner)target;
 
+            hud_manager = XHud_Dashboard.get_manager();
+
             #region 获取序列化属性
             sp_target_library_name = serializedObject.FindProperty(nameof(XHud_Spawner.target_library_name));
             sp_target_spawn_name = serializedObject.FindProperty(nameof(XHud_Spawner.target_spawn_name));
@@ -279,13 +334,15 @@ namespace SevenStrikeModules.XHud.Editor
             sp_opt_auto_in = serializedObject.FindProperty(nameof(XHud_Spawner.opt_auto_in));
             sp_opt_use_element_motion = serializedObject.FindProperty(nameof(XHud_Spawner.opt_use_element_motion));
 
-            sp_m_opt_is_spawing = serializedObject.FindProperty(nameof(XHud_Spawner.editor_serializefield_m_opt_is_spawing));
+            sp_m_opt_is_spawing = serializedObject.FindProperty(XHud_Spawner.editor_serializedfield_m_opt_is_spawing);
+            sp_m_opt_is_despawing = serializedObject.FindProperty(XHud_Spawner.editor_serializedfield_m_opt_is_despawing);
 
             sp_motion_create_library_index_name = serializedObject.FindProperty(nameof(XHud_Spawner.motion_create_library_index_name));
             sp_motion_recycle_library_index_name = serializedObject.FindProperty(nameof(XHud_Spawner.motion_recycle_library_index_name));
             sp_rms_index_name = serializedObject.FindProperty(nameof(XHud_Spawner.rms_index_name));
 
             sp_opt_protected_spawn_action = serializedObject.FindProperty(nameof(XHud_Spawner.opt_protected_spawn_action));
+            sp_target_spawn_uid = serializedObject.FindProperty(nameof(XHud_Spawner.target_spawn_uid));
             #endregion
 
             #region 获取图标
@@ -298,6 +355,16 @@ namespace SevenStrikeModules.XHud.Editor
             reset_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_spawner/reset_p");
             edit_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_spawner/edit_r");
             edit_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_spawner/edit_p");
+            icon_preview_in_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_spawner/icon_preview_in_r");
+            icon_preview_in_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_spawner/icon_preview_in_p");
+            icon_preview_out_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_spawner/icon_preview_out_r");
+            icon_preview_out_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_spawner/icon_preview_out_p");
+            icon_stoppreview_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_spawner/icon_stoppreview_r");
+            icon_stoppreview_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_spawner/icon_stoppreview_p");
+            icon_load_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_spawner/icon_load_r");
+            icon_load_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_spawner/icon_load_p");
+            icon_unload_r = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_spawner/icon_unload_r");
+            icon_unload_p = XGUI.GetCustomIcon($"{XHud_Dashboard.Get_Path_XHUD_GUIROOT_Path()}gui_module_spawner/icon_unload_p");
             #endregion
 
             Targets_Get();
@@ -342,13 +409,14 @@ namespace SevenStrikeModules.XHud.Editor
                 }
             }
             #endregion
+
         }
         /// <summary>
         /// Inspector 禁用时调用（当前无额外清理逻辑）
         /// </summary>
         private void OnDisable()
         {
-
+            XTween_Preview_Kill();
         }
         #endregion
 
@@ -457,15 +525,33 @@ namespace SevenStrikeModules.XHud.Editor
                             icon_arrow_color: Color.black,
                             act_on_changed: (d) =>
                             {
-                                sp_target_library_name.stringValue = d;
-                                sp_target_library_name.serializedObject.ApplyModifiedProperties();
+                                var targetLib = mgr.hm_ElementLibrary_GetTargetLibrary(d);
 
-                                //如果切换库名后之前指定的目标元素不存在则使用切换后的库的首个元素名称来指定元素
-                                if (!mgr.hm_ElementLibrary_GetTargetLibrary(d).ElementLibrary_IsExist(sp_target_spawn_name.stringValue))
+                                // 1. 必须先把库名更新到序列化属性里
+                                sp_target_library_name.stringValue = d;
+
+                                // 2. 判断原元素是否存在于新库
+                                if (!targetLib.ElementLibrary_IsExist(sp_target_spawn_name.stringValue))
                                 {
-                                    sp_target_spawn_name.stringValue = mgr.hm_ElementLibrary_GetTargetLibrary(d).library_elements[0].name;
-                                    sp_target_spawn_name.serializedObject.ApplyModifiedProperties();
+                                    if (targetLib.library_elements.Count > 0)
+                                    {
+                                        // 3. 如果不存在，直接调用组件方法（一步到位改名字、标识、UID）
+                                        base_script.SetTargetElement(targetLib.library_elements[0].name);
+                                    }
                                 }
+                                else
+                                {
+                                    // 4. 如果存在，调用切库接口
+                                    base_script.SetTargetLibrary(d);
+                                }
+
+                                // 5. 将组件内的最新数据强行写回序列化属性，刷新面板
+                                serializedObject.Update();
+                                sp_target_spawn_name.stringValue = base_script.target_spawn_name;
+                                sp_target_spawn_indicator.stringValue = base_script.target_spawn_indicator;
+                                sp_target_spawn_uid.stringValue = base_script.target_spawn_uid; // 保证隐藏的 UID 同步刷新
+
+                                serializedObject.ApplyModifiedProperties();
                             });
 
                         string[] ele_names = mgr.hm_ElementLibrary_GetTargetLibrary(sp_target_library_name.stringValue).ElementsLibrary_GetAllElementsNames();
@@ -490,14 +576,123 @@ namespace SevenStrikeModules.XHud.Editor
                             icon_arrow_color: Color.black,
                             act_on_changed: (d) =>
                             {
-                                sp_target_spawn_name.stringValue = d;
-                                sp_target_spawn_name.serializedObject.ApplyModifiedProperties();
+                                // 调用组件方法，内部会自动同步 UID
+                                base_script.SetTargetElement(d);
 
-                                sp_target_spawn_indicator.stringValue = "Indicator_" + d;
-                                sp_target_spawn_indicator.serializedObject.ApplyModifiedProperties();
+                                // 刷新面板
+                                serializedObject.Update();
+                                sp_target_spawn_indicator.stringValue = base_script.target_spawn_indicator;
+                                serializedObject.ApplyModifiedProperties();
                             });
 
                         XGUI.layout_space(5);
+
+                        #region 操作按钮（加载 / 卸载 / 预览）
+                        if (!Application.isPlaying)
+                        {
+                            XGUI.layout_group_start(
+                                type: XGUIContainerType.Horizontal,
+                                title_clipping: TextClipping.Clip,
+                                absolute_padding: true,
+                                absolute_margin: true,
+                                margin: new RectOffset(0, 0, 5, 0),
+                                padding: new RectOffset(5, 5, 0, 0));
+
+                            if (base_script.spawned_element == null)
+                            {
+                                #region 加载
+                                if (XGUI.layout_button(
+                                    tooltip: "将目标元素实例化到场景中",
+                                    tex_release: icon_load_r,
+                                    tex_press: icon_load_p,
+                                    tex_gui_color: Color.white,
+                                    border: new RectOffset(0, 0, 0, 0),
+                                    width: icon_preview_out_r.width,
+                                    height: icon_preview_out_r.height))
+                                {
+                                    Editor_LoadElement();
+                                    return;
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 卸载
+                                if (XGUI.layout_button(
+                                     tooltip: "移除场景中的目标元素",
+                                    tex_release: icon_unload_r,
+                                    tex_press: icon_unload_p,
+                                    tex_gui_color: Color.white,
+                                    border: new RectOffset(0, 0, 0, 0),
+                                    width: icon_unload_r.width,
+                                    height: icon_unload_r.height))
+                                {
+                                    Editor_UnloadElement();
+                                    return;
+                                }
+                                #endregion
+                            }
+
+                            XGUI.layout_flexspace();
+
+                            // --- 2. 预览入场 / 出场 / 停止 ---
+                            if (!is_previewing)
+                            {
+                                XGUI.SetEnabled(base_script.spawned_element != null);
+                                #region 预览入场
+                                if (XGUI.layout_button(
+                                    tooltip: "播放元素的入场动画",
+                                    tex_release: icon_preview_in_r,
+                                    tex_press: icon_preview_in_p,
+                                    tex_gui_color: Color.white,
+                                    border: new RectOffset(0, 0, 0, 0),
+                                    width: icon_preview_in_r.width,
+                                    height: icon_preview_in_r.height))
+                                {
+                                    Editor_LayoutsTweenPreview(XHudElementCreateState.Created);
+                                    return;
+                                }
+                                #endregion
+
+                                XGUI.layout_flexspace();
+
+                                #region 预览出场
+                                if (XGUI.layout_button(
+                                    tooltip: "播放元素的出场动画",
+                                    tex_release: icon_preview_out_r,
+                                    tex_press: icon_preview_out_p,
+                                    tex_gui_color: Color.white,
+                                    border: new RectOffset(0, 0, 0, 0),
+                                    width: icon_preview_out_r.width,
+                                    height: icon_preview_out_r.height))
+                                {
+                                    Editor_LayoutsTweenPreview(XHudElementCreateState.Recycled);
+                                    return;
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                XGUI.SetEnabled(base_script.spawned_element != null && is_previewing);
+                                #region 停止预览（当处于预览状态时，展示此按钮）
+                                if (XGUI.layout_button(
+                                    tooltip: "停止当前播放的动效并复位元素",
+                                    tex_release: icon_stoppreview_r,
+                                    tex_press: icon_stoppreview_p,
+                                    tex_gui_color: Color.white,
+                                    border: new RectOffset(0, 0, 0, 0),
+                                    width: icon_stoppreview_r.width,
+                                    height: icon_stoppreview_r.height))
+                                {
+                                    XTween_Preview_Kill();
+                                    return;
+                                }
+                                #endregion
+                            }
+                            XGUI.SetEnabled(true);
+                            XGUI.layout_group_end(type: XGUIContainerType.Horizontal);
+                        }
+                        #endregion
                     }
                 }
             }
@@ -520,12 +715,27 @@ namespace SevenStrikeModules.XHud.Editor
             if (!base_script.fold_state)
             {
                 #region 生成状态
+                string stateTitle = "生成状态";
+                string stateSubtitle = "待命中";
+                Color stateColor = Color.gray;
+
+                if (sp_m_opt_is_spawing.boolValue)
+                {
+                    stateSubtitle = "生成中";
+                    stateColor = XHud_Dashboard.themes_get_color(ThemeColorType.primary);
+                }
+                else if (sp_m_opt_is_despawing.boolValue)
+                {
+                    stateSubtitle = "回收中";
+                    stateColor = Color.yellow; // 或者你喜欢的警示色/辅助色
+                }
+
                 XGUI.layout_state_displayer_text(
-                    title: "生成状态",
+                    title: stateTitle,
                     title_size: XGUIFontSize.M,
-                    subtitle: sp_m_opt_is_spawing.boolValue ? "生成中" : "待命中",
+                    subtitle: stateSubtitle,
                     subtitle_size: XGUIFontSize.M,
-                    subtitle_color: sp_m_opt_is_spawing.boolValue ? XHud_Dashboard.themes_get_color(ThemeColorType.primary) : Color.gray,
+                    subtitle_color: stateColor,
                     margin: new RectOffset(5, 5, 0, 5));
                 #endregion
             }
@@ -1311,7 +1521,7 @@ namespace SevenStrikeModules.XHud.Editor
                 SerializedProperty motion_recycle_library_index_name = serializedObject.FindProperty(nameof(XHud_Spawner.motion_recycle_library_index_name));
                 SerializedProperty sp_rms_index_name = serializedObject.FindProperty(nameof(XHud_Spawner.rms_index_name));
 
-                SerializedProperty sp_spawner_running = serializedObject.FindProperty(XHud_Spawner.editor_serializefield_m_opt_is_spawing);
+                SerializedProperty sp_spawner_running = serializedObject.FindProperty(XHud_Spawner.editor_serializedfield_m_opt_is_spawing);
                 #endregion
 
                 // 创建右键菜单
@@ -1532,6 +1742,300 @@ namespace SevenStrikeModules.XHud.Editor
 
             //window.ShowModal();
             window.Show();
+        }
+        #endregion
+
+        #region 预览元素
+        /// <summary>
+        /// 编辑器下实例化目标元素到场景中
+        /// </summary>
+        private void Editor_LoadElement()
+        {
+            if (Application.isPlaying || base_script.spawned_element != null) return;
+
+            // 查找库和条目（这里直接用 Editor 手段拿预制体）
+            var mgr = XHud_Dashboard.get_manager();
+            if (mgr == null) return;
+
+            XHud_Library_Element lib = mgr.hm_ElementLibrary_GetTargetLibrary(base_script.target_library_name);
+            XHud_Module_Element target_ele = null;
+            if (lib != null)
+            {
+                // 优先 UID，后名字
+                if (!string.IsNullOrEmpty(base_script.target_spawn_uid))
+                    target_ele = lib.GetTargetElement_WithUID(base_script.target_spawn_uid);
+
+                if (target_ele == null)
+                    target_ele = lib.ElementsLibrary_GetTargetElement(base_script.target_spawn_name);
+            }
+
+            if (target_ele == null)
+            {
+                XGUI.dialog(type: XGUIDialogType.警告, windowtitle: "XHud - 元素生成器", title: "加载失败", msg: "未在库中找到该元素！", ok: "明白", PrimaryIndex: 0, themecolor: XHud_Dashboard.themes_get_color(ThemeColorType.primary));
+                return;
+            }
+
+            // 实例化预制体到场景
+            XHud_Module_Element Element = (XHud_Module_Element)PrefabUtility.InstantiatePrefab(target_ele);
+
+            // 设置锚点（屏幕空间/世界空间）
+            RectTransform Root = base_script.opt_create_world
+                ? mgr.hm_GetAnchorRoot(XHudSpace.世界空间)
+                : mgr.hm_ScreenElement_GetAnchored_RectTransform(base_script.motion_create_args.anchor);
+
+            Element.rect_transform.SetParent(Root);
+
+            if (base_script.opt_create_world)
+            {
+                Element.rect_transform.position = base_script.preset_element_world_position;
+                Element.rect_transform.localScale = base_script.preset_element_world_scale;
+                Element.rect_transform.localEulerAngles = base_script.preset_element_world_rotation;
+            }
+            else
+            {
+                Element.rect_transform.anchoredPosition3D = base_script.preset_element_offset;
+                Element.rect_transform.localScale = base_script.preset_element_scale;
+            }
+
+            Element.rect_transform.sizeDelta = base_script.preset_element_size;
+            Element.element_AlphaSet(1);
+
+            base_script.spawned_element = Element;
+            EditorUtility.SetDirty(base_script);
+        }
+
+        /// <summary>
+        /// 编辑器下卸载场景中的元素
+        /// </summary>
+        private void Editor_UnloadElement()
+        {
+            if (Application.isPlaying || base_script.spawned_element == null) return;
+
+            // 强制停止预览
+            Editor_XTween_Previewer.Kill(true, true, null);
+            is_previewing = false;
+
+            DestroyImmediate(base_script.spawned_element.gameObject);
+            base_script.spawned_element = null;
+            EditorUtility.SetDirty(base_script);
+        }
+
+        /// <summary>
+        /// 预览逻辑（单元素版）
+        /// </summary>
+        private void Editor_LayoutsTweenPreview(XHudElementCreateState state)
+        {
+            if (Application.isPlaying || base_script.spawned_element == null) return;
+
+            // 先杀掉之前的预览
+            XTween_Preview_Kill();
+
+            XHud_Module_Element ele = base_script.spawned_element;
+            List<XTween_Interface> preview_twns = new List<XTween_Interface>();
+
+            // 1. 根据动效源选择参数
+            Motion_Creator arg = base_script.opt_use_element_motion ? ele.motion_create_args : base_script.motion_create_args;
+            Motion_Recycler argOut = base_script.opt_use_element_motion ? ele.motion_recycle_args : base_script.motion_recycle_args;
+
+            switch (state)
+            {
+                case XHudElementCreateState.Created:
+                    ele.ElementTweens_Creator(arg, null, true);
+                    break;
+                case XHudElementCreateState.Recycled:
+                    ele.ElementTweens_Recycler(argOut, null, true);
+                    break;
+            }
+
+            // 2. 收集自身的三项基础动画（透明度、位移、旋转）
+            if (ele.tween_alpha != null) preview_twns.Add(ele.tween_alpha);
+            if (ele.tween_move != null) preview_twns.Add(ele.tween_move);
+            if (ele.tween_rotation != null) preview_twns.Add(ele.tween_rotation);
+
+            // 3. 收集图元动画和音效（如果有）
+            if (ele.preview_include_primitives_tween)
+            {
+                for (int c = 0; c < ele.primitive_controller_nodes.Count; c++)
+                {
+                    if (ele.primitive_controller_nodes[c].controller.pt_tween == null)
+                        continue;
+
+                    XTween_Interface[] primitive_tweens = Preview_PrimitiveTweens_Collected(
+                        ele.primitive_controller_nodes[c].controller.pt_tween,
+                        state == XHudElementCreateState.Created ? "元素进入时" : "元素退出时",
+                        ele.primitives_tween_global_duration,
+                        ele.primitive_controller_nodes[c].delay_time);
+
+                    for (int s = 0; s < primitive_tweens.Length; s++)
+                    {
+                        preview_twns.Add(primitive_tweens[s]);
+                    }
+
+                    // 音效预览
+                    Preview_PrimitiveTween_Sound(
+                        ele.primitive_controller_nodes[c].controller.pt_tween,
+                        state == XHudElementCreateState.Created ? "元素进入时" : "元素退出时",
+                        ele.primitives_tween_global_duration,
+                        ele.primitive_controller_nodes[c].delay_time);
+                }
+            }
+
+            // 4. 启动预览
+            XTween_Preview_Start(preview_twns.ToArray());
+        }
+
+        /// <summary>
+        /// 预览的启动器
+        /// </summary>
+        public void XTween_Preview_Start(XTween_Interface[] tweens)
+        {
+            if (Application.isPlaying) return;
+
+            Editor_XTween_Previewer.AfterKillClear = true;
+            Editor_XTween_Previewer.BeforeKillRewind = true;
+            Editor_XTween_Previewer.AutoKillWithDuration = true;
+
+            Editor_XTween_Previewer.act_on_editor_autokill += XTween_OnAutoKillPreview;
+
+            for (int i = 0; i < tweens.Length; i++)
+            {
+                Editor_XTween_Previewer.Append(tweens[i]);
+            }
+
+            Editor_XTween_Previewer.Play(null);
+
+            is_previewing = true;
+
+            Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(
+                state: true,
+                x_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
+                x_title: "Seven Strike Media",
+                x_msg: "元素动效预览中...",
+                x_anchor: XHudSceneActivateMarkAnchor.左下);
+        }
+
+        /// <summary>
+        /// 杀死当前预览
+        /// </summary>
+        private void XTween_Preview_Kill()
+        {
+            if (Application.isPlaying) return;
+
+            Editor_XTween_Previewer.Kill(true, true, null);
+            Editor_XTween_Previewer.act_on_editor_autokill -= XTween_OnAutoKillPreview;
+
+            if (base_script.spawned_element != null)
+            {
+                // 特性复位
+                for (int s = 0; s < base_script.spawned_element.primitive_controller_nodes.Count; s++)
+                {
+                    PrimitiveControllerNode node = base_script.spawned_element.primitive_controller_nodes[s];
+                    if (node.controller.pt_feature == null) continue;
+                    node.controller.pt_feature.PrimitiveFeature_Load();
+                }
+
+                // 杀死并清空元素动画
+                base_script.spawned_element.ElementTweens_Kill();
+                base_script.spawned_element.ElementTweens_Clear();
+            }
+
+            XGUI.EditorPlayer_Sound.Stop();
+            Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
+            is_previewing = false;
+        }
+
+        /// <summary>
+        /// 自动杀死回调
+        /// </summary>
+        private void XTween_OnAutoKillPreview()
+        {
+            if (base_script.spawned_element != null)
+            {
+                for (int s = 0; s < base_script.spawned_element.primitive_controller_nodes.Count; s++)
+                {
+                    PrimitiveControllerNode node = base_script.spawned_element.primitive_controller_nodes[s];
+                    if (node.controller.pt_feature == null) continue;
+                    node.controller.pt_feature.PrimitiveFeature_Load();
+                }
+
+                base_script.spawned_element.ElementTweens_Kill();
+                base_script.spawned_element.ElementTweens_Clear();
+            }
+
+            Editor_XTween_Previewer.act_on_editor_autokill -= XTween_OnAutoKillPreview;
+
+            is_previewing = false;
+            XGUI.EditorPlayer_Sound.Stop();
+            Editor_XHud_Tool_SceneView_Activate_Mark.SetEnabled(false);
+        }
+
+        /// <summary>
+        /// 收集图元动画（从 LayoutSpawner 移植）
+        /// </summary>
+        private XTween_Interface[] Preview_PrimitiveTweens_Collected(XHud_Module_Primitive_Tween tweener, string tim, float dur, float delay)
+        {
+            List<XTween_Interface> tweens = new List<XTween_Interface>();
+            for (int i = 0; i < tweener.primitive_tween_nodes.Count; i++)
+            {
+                if (!tweener.primitive_tween_nodes[i].enabled) continue;
+                if (tweener.primitive_tween_nodes[i].timings != tim) continue;
+                if (!tweener.Tween_CreateRuleValidCheck(tweener.primitive_tween_nodes[i])) continue;
+
+                XTween_Interface tween = tweener.Tween_Create(tweener.primitive_tween_nodes[i], tweener.global_duration * hud_manager.tween_global_duration * dur);
+                if (tween == null) continue;
+
+                tween.SetDelay(tween.Delay + delay);
+                tweens.Add(tween);
+            }
+            return tweens.ToArray();
+        }
+
+        /// <summary>
+        /// 音效预览（从 LayoutSpawner 移植）
+        /// </summary>
+        private void Preview_PrimitiveTween_Sound(XHud_Module_Primitive_Tween tweener, string timing, float globalDuration, float nodeDelay)
+        {
+            if (tweener == null || tweener.mute_play || EditorUtility.audioMasterMute || string.IsNullOrEmpty(timing)) return;
+
+            for (int s = 0; s < tweener.primitive_tween_sounds.Count; s++)
+            {
+                TweenSound sod = tweener.primitive_tween_sounds[s];
+                if (sod == null || sod.mute || sod.timing != timing) continue;
+
+                AudioClip clip = Resolve_PrimitiveSoundClip(sod);
+                if (clip == null) continue;
+
+                float mul = 1f;
+                if (hud_manager != null && hud_manager.tween_global_duration > 0f) mul = hud_manager.tween_global_duration;
+                mul *= globalDuration;
+
+                float delay = Mathf.Max(0f, sod.delay * mul + nodeDelay);
+                float masterVol = (hud_manager != null) ? hud_manager.global_volume * 0.01f : 1f;
+                bool masterMute = (hud_manager != null) && hud_manager.global_volume_mute;
+                float volume = masterVol * Mathf.Clamp01(sod.volume);
+                bool mute = masterMute;
+
+                float pMin = Mathf.Min(sod.min_pitch, sod.max_pitch);
+                float pMax = Mathf.Max(sod.min_pitch, sod.max_pitch);
+                bool useRandomPitch = !Mathf.Approximately(pMin, 1f) || !Mathf.Approximately(pMax, 1f);
+
+                XGUI.EditorPlayer_Sound.Enqueue(clip, delay, volume, mute, useRandomPitch, pMin, pMax);
+            }
+        }
+
+        private AudioClip Resolve_PrimitiveSoundClip(TweenSound sod)
+        {
+            if (sod == null || sod.sound == null) return null;
+            if (hud_manager != null && hud_manager.library_sounds != null)
+            {
+                string soundName = sod.sound.name;
+                if (!string.IsNullOrEmpty(soundName))
+                {
+                    AudioClip clip = hud_manager.library_sounds.SoundLibrary_GetSound(soundName);
+                    if (clip != null) return clip;
+                }
+            }
+            return sod.sound;
         }
         #endregion
 

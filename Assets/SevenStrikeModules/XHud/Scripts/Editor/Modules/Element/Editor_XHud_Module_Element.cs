@@ -553,7 +553,7 @@ namespace SevenStrikeModules.XHud.Editor
 
             #region Based
             sp_debug_state = serializedObject.FindProperty(nameof(XHud_Module_Element.debug_state));
-            sp_editor_serializefield_id = serializedObject.FindProperty(XHud_Module_Element.editor_serializefield_id);
+            sp_editor_serializefield_id = serializedObject.FindProperty(XHud_Module_Element.editor_serializedfield_id);
             sp_indicator = serializedObject.FindProperty(nameof(XHud_Module_Element.indicator));
             sp_original_name = serializedObject.FindProperty(nameof(XHud_Module_Element.original_name));
             sp_origin_poolname = serializedObject.FindProperty(nameof(XHud_Module_Element.origin_poolname));

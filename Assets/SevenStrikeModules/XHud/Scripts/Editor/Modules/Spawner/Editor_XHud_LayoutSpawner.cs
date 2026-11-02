@@ -104,7 +104,7 @@ namespace SevenStrikeModules.XHud.Editor
         [NonSerialized]
         private SerializedProperty sp_fold_world;
         [SerializeField]
-        private SerializedProperty sp_editor_seializedfield_spawnerisRunning;
+        private SerializedProperty sp_editor_seializedfield_spawner_is_spawning;
         [SerializeField]
         private SerializedProperty sp_use_instantiate_mode;
         [SerializeField]
@@ -308,7 +308,7 @@ namespace SevenStrikeModules.XHud.Editor
             sp_key_control_world = serializedObject.FindProperty(nameof(XHud_LayoutSpawner.key_control_world));
             sp_fold_screen = serializedObject.FindProperty(nameof(XHud_LayoutSpawner.fold_screen));
             sp_fold_world = serializedObject.FindProperty(nameof(XHud_LayoutSpawner.fold_world));
-            sp_editor_seializedfield_spawnerisRunning = serializedObject.FindProperty(XHud_LayoutSpawner.editor_seializedfield_spawnerisRunning);
+            sp_editor_seializedfield_spawner_is_spawning = serializedObject.FindProperty(XHud_LayoutSpawner.editor_seializedfield_spawner_is_spawning);
             sp_use_instantiate_mode = serializedObject.FindProperty(nameof(XHud_LayoutSpawner.use_instantiate_mode));
             sp_use_debug = serializedObject.FindProperty(nameof(XHud_LayoutSpawner.use_debug));
             #endregion
@@ -1513,7 +1513,7 @@ namespace SevenStrikeModules.XHud.Editor
                 XGUI.layout_state_displayer_text(
                     title: "生成状态",
                     title_size: XGUIFontSize.M,
-                    subtitle: sp_editor_seializedfield_spawnerisRunning.boolValue ? "运行中" : "待命中",
+                    subtitle: sp_editor_seializedfield_spawner_is_spawning.boolValue ? "运行中" : "待命中",
                     subtitle_size: XGUIFontSize.M,
                     subtitle_color: XHud_Dashboard.themes_get_color(ThemeColorType.primary),
                     margin: new RectOffset(5, 5, 0, 5));

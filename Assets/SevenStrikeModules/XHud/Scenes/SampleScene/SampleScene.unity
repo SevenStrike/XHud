@@ -1491,14 +1491,14 @@ MonoBehaviour:
   use_instantiate_mode: 0
   key_control_screen: 1
   key_control_world: 1
-  _spawner_is_running: 0
-  fold_state: 0
+  _spawner_is_spawning: 0
+  fold_state: 1
   fold_option: 0
   fold_param: 1
   fold_screen: 0
   fold_world: 1
   fold_motion: 1
-  fold_libselector: 0
+  fold_libselector: 1
   fold_based: 1
 --- !u!4 &682118621
 Transform:
@@ -2187,17 +2187,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8826b5e8635bbc140b99f14edc55d272, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target_library_name: Lib_Element
-  target_spawn_name: Cat
-  target_spawn_indicator: Indicator_Cat
+  target_library_name: Lib_C
+  target_spawn_name: Scope
+  target_spawn_indicator: Indicator_XHudIcon
   spawner_indicator: 
   spawned_element: {fileID: 0}
+  target_spawn_uid: 
   fold_param: 0
   fold_trans: 1
   fold_trans_world: 1
   fold_trans_world_refer: 0
   fold_motion: 0
-  fold_state: 1
+  fold_state: 0
   fold_option: 0
   fold_target: 0
   fold_based: 1
@@ -2407,6 +2408,7 @@ MonoBehaviour:
   opt_auto_in: 1
   opt_use_element_motion: 1
   m_opt_is_spawing: 0
+  m_opt_is_despawing: 0
   motion_create_library_index_name: 
   motion_recycle_library_index_name: 
   rms_index_name: 

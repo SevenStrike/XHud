@@ -348,23 +348,23 @@ namespace SevenStrikeModules.XHud
         /// <summary>
         ///所有动效播放状态（是否有任何元素正在播放动效）
         ///</summary>
-        [SerializeField] private bool _spawner_is_running = false;
-        [SerializeField] public const string editor_seializedfield_spawnerisRunning = nameof(_spawner_is_running);
+        [SerializeField] private bool _spawner_is_spawning = false;
+        [SerializeField] public const string editor_seializedfield_spawner_is_spawning = nameof(_spawner_is_spawning);
         /// <summary>
         ///动效播放状态属性（当状态改变时触发回调）
         ///</summary>
         [SerializeField]
-        public bool spawner_is_running
+        public bool spawner_is_spawning
         {
             get
             {
-                return _spawner_is_running;
+                return _spawner_is_spawning;
             }
             set
             {
-                if (value != _spawner_is_running)
+                if (value != _spawner_is_spawning)
                 {
-                    _spawner_is_running = value;
+                    _spawner_is_spawning = value;
                     if (act_on_motion_state_changed != null)
                         act_on_motion_state_changed(value);
                 }
@@ -1098,8 +1098,8 @@ namespace SevenStrikeModules.XHud
                 }
             }
 
-            _spawner_is_running = hasScreenMotion || hasWorldMotion;
-            return _spawner_is_running;
+            _spawner_is_spawning = hasScreenMotion || hasWorldMotion;
+            return _spawner_is_spawning;
         }
         /// <summary>
         /// 检查世界空间布局列表是否为空

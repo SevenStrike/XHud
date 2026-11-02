@@ -20,6 +20,7 @@
  */
 namespace SevenStrikeModules.XHud
 {
+    using SevenStrikeModules.XGUI.Runtime;
     using SevenStrikeModules.XHud.Enums;
     using SevenStrikeModules.XTween;
     using UnityEngine;
@@ -62,6 +63,11 @@ namespace SevenStrikeModules.XHud
         /// 保存通过此生成器创建的元素对象引用
         /// </summary>
         public XHud_Module_Element spawned_element;
+        [SerializeField]
+        /// <summary>
+        /// 目标元素的稳定唯一识别码（底层寻址主键）
+        /// </summary>
+        public string target_spawn_uid;
         #endregion
 
         #region 折叠
@@ -285,8 +291,9 @@ namespace SevenStrikeModules.XHud
 
         #region 运行时状态
         [SerializeField]
-        private bool m_opt_is_spawing;
-        public const string editor_serializefield_m_opt_is_spawing = nameof(m_opt_is_spawing);
+        public bool m_opt_is_spawing;
+        [SerializeField]
+        public const string editor_serializedfield_m_opt_is_spawing = nameof(m_opt_is_spawing);
         [SerializeField]
         /// <summary>
         /// 操作运行状态
@@ -304,6 +311,36 @@ namespace SevenStrikeModules.XHud
                 if (value != m_opt_is_spawing)
                 {
                     m_opt_is_spawing = value;
+
+                    if (act_on_element_state_changed != null)
+                        act_on_element_state_changed(value);
+
+                    if (eve_on_element_state_changed != null)
+                    {
+                        eve_on_element_state_changed.Invoke(value);
+                    }
+                }
+            }
+        }
+        [SerializeField]
+        public bool m_opt_is_despawing;
+        [SerializeField]
+        public const string editor_serializedfield_m_opt_is_despawing = nameof(m_opt_is_despawing);
+        /// <summary>
+        /// 回收运行状态
+        /// 标识当前生成器是否正在执行回收操作（播放回收动画中）
+        /// </summary>
+        public bool opt_is_despawing
+        {
+            get
+            {
+                return m_opt_is_despawing;
+            }
+            set
+            {
+                if (value != m_opt_is_despawing)
+                {
+                    m_opt_is_despawing = value;
 
                     if (act_on_element_state_changed != null)
                         act_on_element_state_changed(value);
@@ -508,48 +545,83 @@ namespace SevenStrikeModules.XHud
         public XHud_Module_Element hsp_spawn(string IndicatorName = "", Motion_Creator CreateParam = null)
         {
             XHud_Module_Element element = null;
-
             Motion_Creator arg = CreateParam == null ? this.motion_create_args : CreateParam;
-
             string indicator = string.IsNullOrEmpty(IndicatorName) ? target_spawn_indicator : IndicatorName;
-            // 从元素库中获取目标元素本体
-            XHud_Module_Element target_ele = XHud_Manager.instance.hm_ElementLibrary_GetTargetLibrary(target_library_name).ElementsLibrary_GetTargetElement(target_spawn_name);
 
-            ///---如果UI渲染模式为世界空间则使用世界空间专用的方法
+            //  防御1：生成前进行 UID 一致性校验
+            if (string.IsNullOrEmpty(target_spawn_uid))
+            {
+                RefreshTargetSpawnUID();
+            }
+            else if (XHud_Manager.instance != null)
+            {
+                var checkLib = XHud_Manager.instance.hm_ElementLibrary_GetTargetLibrary(target_library_name);
+                if (checkLib != null)
+                {
+                    var itemByUID = checkLib.GetTargetElement_WithUID(target_spawn_uid);
+                    // 如果 UID 查不到东西，或者查出来的预制体名字和当前要求的不一致，强制刷新
+                    if (itemByUID == null || itemByUID.name != target_spawn_name)
+                    {
+                        RefreshTargetSpawnUID();
+                    }
+                }
+            }
+
+            //  防御2：获取目标元素本体（优先 UID，后名字）
+            XHud_Module_Element target_ele = null;
+            var targetLib = XHud_Manager.instance.hm_ElementLibrary_GetTargetLibrary(target_library_name);
+
+            if (targetLib != null)
+            {
+                if (!string.IsNullOrEmpty(target_spawn_uid))
+                    target_ele = targetLib.GetTargetElement_WithUID(target_spawn_uid);
+
+                if (target_ele == null)
+                    target_ele = targetLib.ElementsLibrary_GetTargetElement(target_spawn_name);
+            }
+
+            if (target_ele == null)
+            {
+                XGUI_Utilitys.Console("XHud - 元素生成器", $"生成失败：目标库 {target_library_name} 中未找到 UID 或名称为 {target_spawn_name} 的元素！", XGUIMsgState.错误);
+                return null;
+            }
+
+            //  底层创建元素（优先 UID 通道）
             if (opt_create_world)
             {
-                ///---如果参考物体存在则生成的UI的坐标信息则参考这个物体的坐标信息
                 if (preset_element_referobject != null)
                 {
-                    element = XHud_Manager.instance.hm_WorldElement_Create(target_library_name, target_spawn_name)
-                      .SetAlpha(0)
-                      .SetAnchored_World(indicator)
-                      .SetPosition_World(preset_element_referobject.position)
-                      .SetRotation_World(Quaternion.Euler(preset_element_referobject.eulerAngles))
-                      .SetOffset(preset_element_offset)
-                      .SetScale(preset_element_referobject.localScale)
-                      .SetSize(preset_element_size)
-                      .On_In_Start((e) =>
-                      {
-                          ///--------当元素 - 进入 - 开始时
-                          if (act_on_element_in_start != null)
-                              act_on_element_in_start();
-                          eve_on_element_spawn_start.Invoke();
-                          if (opt_protected_spawn_action)
-                              opt_is_spawing = true;
-                      }).On_In_End((e) =>
-                      {
-                          ///--------当元素 - 进入 - 结束时
-                          if (act_on_element_in_end != null)
-                              act_on_element_in_end();
-                          eve_on_element_spawn_end.Invoke();
-                          if (opt_protected_spawn_action)
-                              opt_is_spawing = false;
-                      }).element;
+                    element = (!string.IsNullOrEmpty(target_spawn_uid)
+                        ? XHud_Manager.instance.hm_WorldElement_Create_WithUID(target_library_name, target_spawn_uid)
+                        : XHud_Manager.instance.hm_WorldElement_Create(target_library_name, target_spawn_name))
+                        .SetAlpha(0)
+                        .SetAnchored_World(indicator)
+                        .SetPosition_World(preset_element_referobject.position)
+                        .SetRotation_World(Quaternion.Euler(preset_element_referobject.eulerAngles))
+                        .SetOffset(preset_element_offset)
+                        .SetScale(preset_element_referobject.localScale)
+                        .SetSize(preset_element_size)
+                        .On_In_Start((e) =>
+                        {
+                            if (act_on_element_in_start != null) act_on_element_in_start();
+                            eve_on_element_spawn_start.Invoke();
+                            if (opt_protected_spawn_action)
+                            {
+                                opt_is_spawing = true;
+                                opt_is_despawing = false;
+                            }
+                        }).On_In_End((e) =>
+                        {
+                            if (act_on_element_in_end != null) act_on_element_in_end();
+                            eve_on_element_spawn_end.Invoke();
+                            if (opt_protected_spawn_action) opt_is_spawing = false;
+                        }).element;
                 }
                 else
                 {
-                    element = XHud_Manager.instance.hm_WorldElement_Create(target_library_name, target_spawn_name)
+                    element = (!string.IsNullOrEmpty(target_spawn_uid)
+                        ? XHud_Manager.instance.hm_WorldElement_Create_WithUID(target_library_name, target_spawn_uid)
+                        : XHud_Manager.instance.hm_WorldElement_Create(target_library_name, target_spawn_name))
                         .SetAlpha(0)
                         .SetAnchored_World(indicator)
                         .SetPosition_World(preset_element_world_position)
@@ -559,27 +631,30 @@ namespace SevenStrikeModules.XHud
                         .SetSize(preset_element_size)
                         .On_In_Start((e) =>
                         {
-                            ///--------当元素 - 进入 - 开始时
-                            if (act_on_element_in_start != null)
-                                act_on_element_in_start();
+                            if (act_on_element_in_start != null) act_on_element_in_start();
                             eve_on_element_spawn_start.Invoke();
                             if (opt_protected_spawn_action)
+                            {
                                 opt_is_spawing = true;
+                                opt_is_despawing = false;
+                            }
                         }).On_In_End((e) =>
                         {
-                            ///--------当元素 - 进入 - 结束时
-                            if (act_on_element_in_end != null)
-                                act_on_element_in_end();
+                            if (act_on_element_in_end != null) act_on_element_in_end();
                             eve_on_element_spawn_end.Invoke();
-
                             if (opt_protected_spawn_action)
+                            {
                                 opt_is_spawing = false;
+                                opt_is_despawing = false;
+                            }
                         }).element;
                 }
             }
             else
             {
-                element = XHud_Manager.instance.hm_ScreenElement_Create(target_library_name, target_spawn_name)
+                element = (!string.IsNullOrEmpty(target_spawn_uid)
+                    ? XHud_Manager.instance.hm_ScreenElement_Create_WithUID(target_library_name, target_spawn_uid)
+                    : XHud_Manager.instance.hm_ScreenElement_Create(target_library_name, target_spawn_name))
                     .SetAlpha(0)
                     .SetAnchored_Screen(opt_use_element_motion ? target_ele.motion_create_args.anchor : arg.anchor, indicator)
                     .SetOffset(preset_element_offset)
@@ -588,20 +663,22 @@ namespace SevenStrikeModules.XHud
                     .SetRMS(opt_rms_mode, rms_index_name)
                     .On_In_Start((e) =>
                     {
-                        ///--------当元素 - 进入 - 开始时
-                        if (act_on_element_in_start != null)
-                            act_on_element_in_start();
+                        if (act_on_element_in_start != null) act_on_element_in_start();
                         eve_on_element_spawn_start.Invoke();
                         if (opt_protected_spawn_action)
+                        {
                             opt_is_spawing = true;
+                            opt_is_despawing = false;
+                        }
                     }).On_In_End((e) =>
                     {
-                        ///--------当元素 - 进入 - 结束时
-                        if (act_on_element_in_end != null)
-                            act_on_element_in_end();
+                        if (act_on_element_in_end != null) act_on_element_in_end();
                         eve_on_element_spawn_end.Invoke();
                         if (opt_protected_spawn_action)
+                        {
                             opt_is_spawing = false;
+                            opt_is_despawing = false;
+                        }
                     }).element;
             }
 
@@ -610,6 +687,7 @@ namespace SevenStrikeModules.XHud
 
             if (act_on_element_spawn != null)
                 act_on_element_spawn(element);
+
             spawned_element = element;
             return element;
         }
@@ -629,7 +707,10 @@ namespace SevenStrikeModules.XHud
                         act_on_element_out_start();
                     eve_on_element_despawn_start.Invoke();
                     if (opt_protected_spawn_action)
-                        opt_is_spawing = true;
+                    {
+                        opt_is_despawing = true;
+                        opt_is_spawing = false;
+                    }
                 }
             : actionstart,
                 null, actionend == null ? (ele) =>
@@ -642,6 +723,7 @@ namespace SevenStrikeModules.XHud
                     if (opt_protected_spawn_action)
                     {
                         spawned_element = null;
+                        opt_is_despawing = false;
                         opt_is_spawing = false;
                     }
                 }
@@ -676,6 +758,49 @@ namespace SevenStrikeModules.XHud
                     sw = true;
             }
             return sw;
+        }
+        #endregion
+
+        #region 对外接口 & 自愈
+        /// <summary>
+        /// 动态设置目标元素库名称（供外部脚本调用）
+        /// </summary>
+        public void SetTargetLibrary(string newLibraryName)
+        {
+            if (string.IsNullOrEmpty(newLibraryName) || target_library_name == newLibraryName) return;
+
+            target_library_name = newLibraryName;
+            // 切库后，之前的元素可能不在新库中，强制尝试刷新 UID
+            RefreshTargetSpawnUID();
+        }
+        /// <summary>
+        /// 动态设置目标元素名称（供外部脚本调用）
+        /// </summary>
+        public void SetTargetElement(string newElementName)
+        {
+            if (string.IsNullOrEmpty(newElementName) || target_spawn_name == newElementName) return;
+
+            target_spawn_name = newElementName;
+            target_spawn_indicator = "Indicator_" + newElementName;
+            RefreshTargetSpawnUID();
+        }
+        /// <summary>
+        /// 强制将当前目标元素的 UID 与库中真实的 UID 对齐
+        /// </summary>
+        public void RefreshTargetSpawnUID()
+        {
+            target_spawn_uid = null; // 先清空，防止残留错误
+            if (XHud_Manager.instance == null) return;
+
+            var lib = XHud_Manager.instance.hm_ElementLibrary_GetTargetLibrary(target_library_name);
+            if (lib != null && !string.IsNullOrEmpty(target_spawn_name))
+            {
+                var item = lib.ElementsLibrary_GetTargetLibraryItem(target_spawn_name);
+                if (item != null)
+                {
+                    target_spawn_uid = item.element_uid;
+                }
+            }
         }
         #endregion
 
